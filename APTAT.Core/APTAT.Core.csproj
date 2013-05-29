@@ -10,12 +10,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>APTAT.Core</RootNamespace>
     <AssemblyName>APTAT.Core</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,11 +33,397 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentPackageHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AptAtManager.cs" />
+    <Compile Include="Descent\ActiveDirectorySearcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\AgentDescentWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\BaseDescentWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\ComputerDescentResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\ComputerDescentWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\ComputerWatchersContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentMod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentProgressItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentWatcherFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\DescentWatcherParams.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\IActiveDirectorySearcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\IComputerWatchersContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\IDescentProgressItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\IDescentQueryResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\IDescentSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\IDescentWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\IDescentWatcherFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\ImpersonationHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\InstallPackageInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\LimitedConcurrencyLevelTaskScheduler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\ActionDeferredListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\AgentControlActionStartedListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\AgentDescentCompletedListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\CisUninstallCompletedListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\ComputerConnectedListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\DescentCompletedListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\IncompatibleUninstallCompletedListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\Listeners\PackageInstallCompletedListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\MsiTools.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\NetworkHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\OperationDescentResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\RemoteAgentInformation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\ServiceHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\TargetUidComputerPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Descent\WatcherType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DirectoryResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DirectorySubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Directory\ActiveDirectoryObserver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Discovery\DiscoverySubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DsaKeyLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EntityModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExtendedResourceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\CommandFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\DeployAgentCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\EnumerateWorkgroupsCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\FindDomainTargetsCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\FindEndpointTargetsCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\FindWorkgroupTargetsCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\GetDeploymentResultsCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\GetDescentErrorMessageCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\GetTargetsSummaryCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\ICommandFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\IIPSatretegySelectionProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\IPSatretegySelectionProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\IServiceCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\ServiceCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\Commands\TargetsHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\CisComponents.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\CompletedStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\CompletedStepsCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\CompletionStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentResultsCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\DeploymentTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\DeploymentTargetsCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\DomainEntryType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\DomainTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\EndpointTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\ManagedTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\TargetStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\DeploymentTargets\WorkgroupTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\InstallPackageInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\DomainSearchCriterion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\EndpointAddress\BaseEndpointAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\EndpointAddress\DnsNameAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\EndpointAddress\EndpointAddressCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\EndpointAddress\IPRangeAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\EndpointAddress\SingleIPAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\EndpointAddress\SubnetAddress.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\EndpointSearchCriterion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\TargetsSearchCriterion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\SearchCriteria\WorkgroupSearchCriterion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\DataContracts\UninstallCompletedStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\BeginCommandResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\DeployAgentRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\DeployAgentResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\EndCommandRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\EnumerateWorkgroupsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\FindTargetsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\FindTargetsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\GetDeploymentResultsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\GetDeploymentResultsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\GetDescentErrorMessageRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\GetDescentErrorMessageResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facade\Descent\MessageContracts\GetTargetsSummary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FormattedText.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IActiveDirectoryObserver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Messages\MessagingSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MsiNative.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NetHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NetworkBrowser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProductManagementSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProductManagementTools.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProductSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\ServerSideMessagesResources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ResourceText.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Storage\Storage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystemCatalog.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystemFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SystemKind.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tasks\Actions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tasks\TaskSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\HostResolverProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\ServerSideMessagesResources.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
