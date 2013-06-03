@@ -1,0 +1,68 @@
+﻿<Models:BasePage xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"  x:Class="APTAT.Application.MainView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
+      d:DesignHeight="480" d:DesignWidth="640"
+	Title="APT Assesment Tool">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <telerik:RadToolBar VerticalAlignment="Top" Height="30" Margin="1">
+            <telerik:RadButton Content="Start Scanning" Click="OnStartScanningClick" />
+            <telerik:RadToolBarSeparator/>
+            <telerik:RadButton Content="Stop Scanning"/>
+            <telerik:RadToolBarSeparator/>
+            <telerik:RadButton Content="Properites" Click="OnPropertiesClick" />
+            <telerik:RadToolBarSeparator/>
+            <telerik:RadButton Content="Build Report" />
+            <telerik:RadToolBarSeparator/>
+            <telerik:RadButton Content="About" />
+        </telerik:RadToolBar>
+        
+    
+        <telerik:RadTreeListView   Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" >
+            <telerik:RadTreeListView.Resources>
+                <DataTemplate x:Key="NameTemplate">
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock
+                            Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
+                            Text="{Binding Progress, StringFormat='({0}%)'}" Grid.Column="1" HorizontalAlignment="Right"/>
+                    </Grid>
+                </DataTemplate>
+            </telerik:RadTreeListView.Resources>
+            <telerik:RadTreeListView.ChildTableDefinitions>
+                <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
+            </telerik:RadTreeListView.ChildTableDefinitions>
+            <telerik:RadTreeListView.Columns>
+                <telerik:GridViewColumn 
+                    Width="*" 
+                    CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name" />
+                <telerik:GridViewDataColumn 
+                    DataMemberBinding="{Binding Type}"
+                    Header="Type"  
+                    
+                    IsFilterable="False"
+                    Width="*"/>
+                <telerik:GridViewDataColumn 
+                    DataMemberBinding="{Binding Size}"
+                    IsFilterable="False"
+                    Header="Size"  
+                    Width="*"/>
+            </telerik:RadTreeListView.Columns>
+        </telerik:RadTreeListView>
+        <StackPanel Orientation="Horizontal" Height="35" Grid.Row="2">
+            
+        </StackPanel>
+    </Grid>
+</Models:BasePage>
