@@ -1,4 +1,5 @@
 ﻿using System;
+using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using Esm.Server.Facade.Descent.Commands;
@@ -7,6 +8,13 @@ namespace APTAT.Core.Facade.Descent.Commands
 {
 	public class CommandFactory : ICommandFactory
 	{
+	    private readonly IDescentSubSystem _descentSubSystem;
+
+	    public CommandFactory(IDescentSubSystem descentSubSystem)
+	    {
+	        _descentSubSystem = descentSubSystem;
+	    }
+
 		public IServiceCommand CreateCommand( object request )
 		{
 			throw new NotImplementedException( "Not implemented yet." );
@@ -47,7 +55,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 			}
             else if( request is DeployAgentRequest )
             {
-                command = ( IServiceCommand<TResponse> )new DeployAgentCommand( ( DeployAgentRequest )request );
+                command = (IServiceCommand<TResponse>)new DeployAgentCommand((DeployAgentRequest)request, _descentSubSystem);
             }
 			else if( request is GetDeploymentResultsRequest )
 			{

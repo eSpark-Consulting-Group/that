@@ -121,6 +121,7 @@ namespace APTAT.Core.Descent
 		{
 			private readonly IDescentQueryResult _queryResult;
 			private readonly IProductManagementSubSystem _productManagement;
+		    private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;
 			private readonly IComputer _computer;
 			private readonly bool _isUndescent;
 			//private bool _disposed;
@@ -130,11 +131,13 @@ namespace APTAT.Core.Descent
 			public RemoteInstallerJob(
 				IDescentQueryResult queryResult,
 				IProductManagementSubSystem productManagement,
+                IChangeTrackingSubSystem changeTrackingSubSystem,
 				IComputer computer,
 				bool isUndescent )
 			{
 				_queryResult = queryResult;
 				_productManagement = productManagement;
+			    _changeTrackingSubSystem = changeTrackingSubSystem;
 				_computer = computer;
 				_isUndescent = isUndescent;
 				IsCompleted = false;
@@ -147,7 +150,17 @@ namespace APTAT.Core.Descent
 				private set;
 			}
 
-			public static FormattedText GetDescentStatusInformation( ResourceText errorFormat, DescentStatus status, int win32Error, string errorString, out FormattedText shortMessage )
+		    public IDescentQueryResult QueryResult
+		    {
+		        get { return _queryResult; }
+		    }
+
+		    public IChangeTrackingSubSystem ChangeTrackingSubSystem
+		    {
+		        get { return _changeTrackingSubSystem; }
+		    }
+
+		    public static FormattedText GetDescentStatusInformation( ResourceText errorFormat, DescentStatus status, int win32Error, string errorString, out FormattedText shortMessage )
 			{
 				try
 				{
@@ -327,11 +340,11 @@ namespace APTAT.Core.Descent
 						text = new FormattedText( ServerSideMessagesResources.DescentInstallAgentSuccessUpdated );
 					}
 
-					if( _queryResult != null )
+					if( QueryResult != null )
 					{
                         // TODO: Commented
 						//_computer.AgentVersion = _productManagement.AgentVersionProvider.GetCurrentVersionParsed(_computer.SystemKind);
-						_queryResult.OnDescendOperationEvent( true, _computer, text, text, status.ToString(), win32Error, response );
+						QueryResult.OnDescendOperationEvent( true, _computer, text, text, status.ToString(), win32Error, response );
 					}
 				}
 				else
@@ -348,9 +361,10 @@ namespace APTAT.Core.Descent
 					}
 					catch { }
 
-					if( messageText != null && _queryResult != null )
+					if( messageText != null && QueryResult != null )
 					{
-						_queryResult.OnDescendOperationEvent( false, _computer, messageText, shortMessage, status.ToString(), win32Error, response );
+						QueryResult.OnDescendOperationEvent( false, _computer, messageText, shortMessage, status.ToString(), win32Error, response );
+                        _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, QueryResult.OperationUid, new FormattedText(new ResourceText("null", "Scan failed: {0}"), messageText.ToString()), AptScanStage.ScanFailed)), false);
 					}
 				}
 			}
@@ -466,11 +480,12 @@ namespace APTAT.Core.Descent
 		private void ProceedDescendOperation( bool descend, IDescentQueryResult queryResult, IComputer computer, string login, string password, bool skipNotificationsForThisSession )
 		{
 			RemoteHostInfo ri = new RemoteHostInfo();
-			ri._hostName = ( computer.IPAddress != null ) ? computer.IPAddress.ToString() : computer.DnsName;
-			ri._login = login;
-			ri._password = password;
+			ri.HostName = ( computer.IPAddress != null ) ? computer.IPAddress.ToString() : computer.DnsName;
+			ri.Login = login;
+			ri.Password = password;
+		    ri.TargetUid = computer.Uid;
 
-			var job = new RemoteInstallerJob( queryResult, _productManagement, computer, !descend );
+			var job = new RemoteInstallerJob( queryResult, _productManagement, _tracker, computer, !descend );
 
 			if( descend )
 				_descentMod.InstallAgent( ri, job, computer.Uid, GetSocketPortForAgent(), queryResult.OperationUid );
@@ -962,14 +977,12 @@ namespace APTAT.Core.Descent
 			{
 				LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent, "DescentCompleted event raised. Operation UID: {0}", result.OperationUid );
 
-                // TODO: Commented
-				//_tracker.UnregisterListener( result );
+				_tracker.UnregisterListener( result );
 				result.DescentCompleted -= wholeDescentCompletedDelegate;
 			};
 			#endregion
 
-            // TODO: Commented
-			//_tracker.RegisterListener( result );
+			_tracker.RegisterListener( result );
 			result.DescentCompleted += wholeDescentCompletedDelegate;
 
 			var descentTargets = computers.Where( item => !( item.State is Exception ) ).Select( item => item.Computer ).ToArray();
@@ -1036,7 +1049,7 @@ namespace APTAT.Core.Descent
             //_directory = catalog.Find<IDirectorySubSystem>();
             //_discovery = catalog.Find<IDiscoverySubSystem>();
             //_tasks = catalog.Find<ITasksSubSystem>();
-            //_tracker = catalog.Find<IChangeTrackingSubSystem>();
+            _tracker = catalog.Find<IChangeTrackingSubSystem>();
             //_productManagement = catalog.Find<IProductManagementSubSystem>();
             //_dal = catalog.Find<IEntityStorage>();
 

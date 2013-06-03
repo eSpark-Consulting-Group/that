@@ -14,11 +14,12 @@ namespace APTAT.Core.Descent
 
 		public class DescentHelper
 		{
-			private List<string> _filesToDeleteOnQuit = new List<string>();
-			private ServiceHelper _serviceHelper = new ServiceHelper();
+			private readonly List<string> _filesToDeleteOnQuit = new List<string>();
+			private readonly ServiceHelper _serviceHelper = new ServiceHelper();
 
-            private readonly string _descentAgentFileName = "ScannerService.exe";//"CesmHelper.exe";
-			private readonly string _descentAgentResponseFileName = "status.txt";
+            private const string ScannerServiceFileName = "ScannerService.exe";
+			private const string ScanStatusFileName = "scan_status.txt";
+            private const string ScanResultsFileName = "out.xml";
 
 			private RemoteHostInfo _remoteHostInfo;
 			private string _oldRemoteHostName; // old name without changing it to IP address
@@ -26,18 +27,10 @@ namespace APTAT.Core.Descent
 			private string _remoteWorkingDirectory;
 			private string _remoteHost;
 
-			private string _esmInstallerTempFolderName = "ComodoESMHelper";
-			private string _remoteWorkingDirectoryAsLocal = @"%SYSTEMROOT%\ComodoESMHelper";
+			private const string AptScannerTempFolderName = "ComodoAptAtScanner";
+            private const string RemoteWorkingDirectoryAsLocal = @"%SYSTEMROOT%\ComodoAptAtScanner";
 
-			public string RemoteInstallerTempFolderName
-			{
-				get
-				{
-					return _esmInstallerTempFolderName;
-				}
-			}
-
-			private NetworkHelper _networkHelper = new NetworkHelper();
+			private readonly NetworkHelper _networkHelper = new NetworkHelper();
 
 			public class RemoteResponse
 			{
@@ -62,15 +55,15 @@ namespace APTAT.Core.Descent
 			public DescentHelper( RemoteHostInfo info )
 			{
 				_remoteHostInfo = info;
-				_oldRemoteHostName = info._hostName;
+				_oldRemoteHostName = info.HostName;
 				InitPaths();
 			}
 
 			private void InitPaths()
 			{
-				_remoteHost = string.Format( @"\\{0}", _remoteHostInfo._hostName );
-				_remoteAdminPath = string.Format( @"\\{0}\ADMIN$", _remoteHostInfo._hostName );
-				_remoteWorkingDirectory = _remoteAdminPath + @"\" + _esmInstallerTempFolderName;
+				_remoteHost = string.Format( @"\\{0}", _remoteHostInfo.HostName );
+				_remoteAdminPath = string.Format( @"\\{0}\ADMIN$", _remoteHostInfo.HostName );
+				_remoteWorkingDirectory = _remoteAdminPath + @"\" + AptScannerTempFolderName;
 			}
 
 			private static bool ExtractUserNameAndDomain( string login, out string userName, out string domain )
@@ -105,7 +98,7 @@ namespace APTAT.Core.Descent
 				{
 					_networkHelper.GrantNetworkAccessToRemoteComputer(
 						login,
-						_remoteHostInfo._password,
+						_remoteHostInfo.Password,
 						_remoteAdminPath,
 						impersonateAsNetworkService );
 				}
@@ -122,7 +115,7 @@ namespace APTAT.Core.Descent
 			{
 				// Try alternative way
 				// HostName\\Login
-				string login = _remoteHostInfo._hostName + '\\' + _remoteHostInfo._login;
+				string login = _remoteHostInfo.HostName + '\\' + _remoteHostInfo.Login;
 				return TryLogin(impersonateAsNetworkService, login);
 			}
 
@@ -130,14 +123,14 @@ namespace APTAT.Core.Descent
 			{
 				// Try alternative way
 				// Login@HostName
-				string login = _remoteHostInfo._login + "@" + _remoteHostInfo._hostName;
+				string login = _remoteHostInfo.Login + "@" + _remoteHostInfo.HostName;
 				return TryLogin( impersonateAsNetworkService, login );
 			}
 
 			private void InitializeInternal( bool impersonateAsNetworkService )
 			{
 				string userName, domain;
-				if ( ExtractUserNameAndDomain( _remoteHostInfo._login, out userName, out domain ) )
+				if ( ExtractUserNameAndDomain( _remoteHostInfo.Login, out userName, out domain ) )
 				{
 					string login;
 
@@ -149,9 +142,9 @@ namespace APTAT.Core.Descent
 					if (TryLogin(impersonateAsNetworkService, login))
 						return;
 
-					if ( _remoteHostInfo._login != login )
+					if ( _remoteHostInfo.Login != login )
 					{
-						if ( TryLogin( impersonateAsNetworkService, _remoteHostInfo._login ) )
+						if ( TryLogin( impersonateAsNetworkService, _remoteHostInfo.Login ) )
 							return;
 					}
 				}
@@ -163,7 +156,7 @@ namespace APTAT.Core.Descent
 					if (TryAlternativeLogin2(impersonateAsNetworkService))
 						return;
 
-					if(TryLogin( impersonateAsNetworkService, _remoteHostInfo._login ))
+					if(TryLogin( impersonateAsNetworkService, _remoteHostInfo.Login ))
 						return;
 				}
 
@@ -176,7 +169,7 @@ namespace APTAT.Core.Descent
 
 			private void SetHostName( string hostName )
 			{
-				_remoteHostInfo._hostName = hostName;
+				_remoteHostInfo.HostName = hostName;
 				InitPaths();
 			}
 
@@ -190,21 +183,20 @@ namespace APTAT.Core.Descent
 				}
 				catch( DescentException ex )
 				{
-					if( ex._win32error != NetworkHelper.ERROR_DUP_NAME )
+				    if( ex._win32error != NetworkHelper.ERROR_DUP_NAME )
 						throw;
-					else
-						dnsResolvingNeeded = true;
+				    dnsResolvingNeeded = true;
 				}
 
-				if( dnsResolvingNeeded )
+			    if( dnsResolvingNeeded )
 				{
 					// try to avoid specific network problem
 					// Just using IP address instead of computer name
-					IPAddress[] ips = NetHelp.SafeResolveDns( _remoteHostInfo._hostName );
+					IPAddress[] ips = NetHelp.SafeResolveDns( _remoteHostInfo.HostName );
 					if( ips == null || ips.Length == 0 )
 					{
 						throw new DescentException( DescentStatus.status_cannot_resolve_remote_hostname,
-							_remoteHostInfo._hostName, 0 );
+							_remoteHostInfo.HostName, 0 );
 					}
 
 					SetHostName( ips[0].ToString() );
@@ -212,7 +204,7 @@ namespace APTAT.Core.Descent
 					InvokeRemotelyConnected( EventArgs.Empty );
 				}
 
-				InitializeDescentAgentService( _descentAgentFileName );
+				InitializeDescentAgentService( ScannerServiceFileName );
 			}
 
 			public event EventHandler RemotelyConnected;
@@ -243,17 +235,68 @@ namespace APTAT.Core.Descent
 				if( handler != null )
 					handler( this, e );
 			}
-
+            
 			private void InvokeDescentHelperStarted( EventArgs e )
 			{
 				EventHandler handler = DescentHelperStarted;
 				if (handler != null) handler(this, e);
 			}
 
+            //======================================================================
+            // New events
+		    public EventHandler<EventArgs> ScanStarted;
+            private void InvokeScanStarted(EventArgs e)
+            {
+                EventHandler<EventArgs> temp = ScanStarted;
+                if (temp != null)
+                    temp(this, e);
+            }
+
+            public EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
+            private void InvokeScanProgressChanged(ScanProgressChangedEventArgs e)
+            {
+                EventHandler<ScanProgressChangedEventArgs> temp = ScanProgressChanged;
+                if (temp != null)
+                    temp(this, e);
+            }
+            public class ScanProgressChangedEventArgs : EventArgs
+            {
+                public int TotalFilesScanned { get; set; }
+                public int UnknownFilesFound { get; set; }
+            }
+
+            public EventHandler<ScanFailedEventArgs> ScanFailed;
+            private void InvokeScanFailed(ScanFailedEventArgs e)
+            {
+                EventHandler<ScanFailedEventArgs> temp = ScanFailed;
+                if (temp != null)
+                    temp(this, e);
+            }
+            public class ScanFailedEventArgs : EventArgs
+            {
+                public DescentStatus Status { get; set; }
+                public int TotalFilesScanned { get; set; }
+                public int UnknownFilesFound { get; set; }
+            }
+
+            public EventHandler<ScanCompletedEventArgs> ScanCompleted;
+            private void InvokeScanCompleted(ScanCompletedEventArgs e)
+            {
+                EventHandler<ScanCompletedEventArgs> temp = ScanCompleted;
+                if (temp != null)
+                    temp(this, e);
+            }
+            public class ScanCompletedEventArgs : EventArgs
+            {
+                public int TotalFilesScanned { get; set; }
+                public int UnknownFilesFound { get; set; }
+            }
+            //======================================================================
+
 			private void Init( bool impersonateAsNetworkService )
 			{
 				SetHostName( _oldRemoteHostName );
-				DescentException originalException = null;
+				DescentException originalException;
 				try
 				{
 					InitWithHostName( impersonateAsNetworkService );
@@ -284,7 +327,7 @@ namespace APTAT.Core.Descent
 			public void Init( ImpersonationHelper.Logon32LogonType logonType )
 			{
 				_networkHelper.LogonType = logonType;
-				DescentException originalException = null;
+				DescentException originalException;
 				// First, try traditional impersonation as network service
                 try
                 {
@@ -332,37 +375,37 @@ namespace APTAT.Core.Descent
 				_networkHelper.Release();
 			}
 			// ===============================================================
-			private void PutServerCredentialsOnTheAgentComputer()
-			{
-				const bool deleteFilesAfterSessionEnded = false; // do not delete for debug purposes
+            // TODO: Commented
+            //private void PutServerCredentialsOnTheAgentComputer()
+            //{
+            //    const bool deleteFilesAfterSessionEnded = false; // do not delete for debug purposes
 
-				// Get public key
-				byte[] publicKey, privateKey;
-				DsaKeysLoader.GetDsaKeys( out privateKey, out publicKey );
+            //    // Get public key
+            //    byte[] publicKey, privateKey;
+            //    DsaKeysLoader.GetDsaKeys( out privateKey, out publicKey );
 
-				// Store server connection settings
-				FileStream fs = CreateRemoteFile( "server.ini", deleteFilesAfterSessionEnded );
-				StreamWriter writer = new StreamWriter( fs );
+            //    // Store server connection settings
+            //    FileStream fs = CreateRemoteFile( "server.ini", deleteFilesAfterSessionEnded );
+            //    StreamWriter writer = new StreamWriter( fs );
 
-				writer.WriteLine( "[General]" );
+            //    writer.WriteLine( "[General]" );
 
-				// Server public key in Base64
-				writer.WriteLine( "PublicKey={0}", Convert.ToBase64String( publicKey ) );
+            //    // Server public key in Base64
+            //    writer.WriteLine( "PublicKey={0}", Convert.ToBase64String( publicKey ) );
 
-                string[] addresses = NetHelp.GetSupportedExternalAddresses(false);
+            //    string[] addresses = NetHelp.GetSupportedExternalAddresses(false);
 
-				// Host name
-                writer.WriteLine( "SERVERHOST={0}", addresses[0] );
+            //    // Host name
+            //    writer.WriteLine( "SERVERHOST={0}", addresses[0] );
 
-				// Alternative ip addresses
-				for (int index = 1; index < addresses.Length; index++)
-			    {
-			        string address = addresses[index];
-			        writer.WriteLine( "Address{0}={1}", index, address );
-			    }
-			    writer.Close();
-			}
-
+            //    // Alternative ip addresses
+            //    for (int index = 1; index < addresses.Length; index++)
+            //    {
+            //        string address = addresses[index];
+            //        writer.WriteLine( "Address{0}={1}", index, address );
+            //    }
+            //    writer.Close();
+            //}
 
 			private void InitializeDescentAgentService( string descentAgentPath )
 			{
@@ -375,12 +418,12 @@ namespace APTAT.Core.Descent
 
 					_serviceHelper.InitializeService(
 						_remoteHost,
-						_remoteWorkingDirectoryAsLocal + @"\" + Path.GetFileName( descentAgentPath ),
+						RemoteWorkingDirectoryAsLocal + @"\" + Path.GetFileName( descentAgentPath ),
                         "ScannerService.exe",
 						"Comodo APT Scanner"
 						);
 
-                    InvokeDescentHelperStarted( EventArgs.Empty );
+                    //InvokeDescentHelperStarted( EventArgs.Empty );
 				}
 				catch ( Win32Exception ex )
 				{
@@ -406,16 +449,18 @@ namespace APTAT.Core.Descent
 			{
 				List<string> args = new List<string>();
 
-				string responseFilePathForRemoteComputer = _esmInstallerTempFolderName + @"\" + _descentAgentResponseFileName;
-				string responseFilePathForCurrentComputer = _remoteWorkingDirectory + @"\" + _descentAgentResponseFileName;
-				string responseFileCopiedToLocalComputer = Path.GetTempPath() + @"\" + _descentAgentResponseFileName;
-                string resultsFile = _remoteWorkingDirectory + @"\" + "out.xml";
+				const string responseFilePathForRemoteComputer = AptScannerTempFolderName + @"\" + ScanStatusFileName;
+				string responseFilePathForCurrentComputer = _remoteWorkingDirectory + @"\" + ScanStatusFileName;
+                string resultsFile = _remoteWorkingDirectory + @"\" + ScanResultsFileName;
 
 				// Delete response file if it exists
 				if( File.Exists( responseFilePathForCurrentComputer ) )
 					File.Delete( responseFilePathForCurrentComputer );
 
-				args.Add( _descentAgentFileName ); // file name
+                args.Add(responseFilePathForCurrentComputer);
+                args.Add(resultsFile);
+
+				args.Add( ScannerServiceFileName ); // file name
 				args.Add( "process_response_action" ); // command
 				args.Add( actionName ); // action name
 				args.Add( responseFilePathForRemoteComputer ); // response file name
@@ -437,7 +482,7 @@ namespace APTAT.Core.Descent
 				}
 
 
-                int attemptsCount = 60;
+                int attemptsCount = 600;
                 while (attemptsCount > 0)
                 {
                     --attemptsCount;
@@ -450,17 +495,40 @@ namespace APTAT.Core.Descent
                             string data = Encoding.Unicode.GetString(buf);
                             if(String.IsNullOrEmpty(data))
                                 throw new Exception("Response file is empty");
-                            
-                            int status;
-                            Int32.TryParse(data, out status);
 
-                            if (status == 100)
+                            string[] temp = data.Split(';');
+                            if(temp.Length != 3)
+                                throw new Exception("Response file header is not valid");
+
+                            int status;
+                            Int32.TryParse(temp[0], out status);
+
+                            int totalFiles;
+                            Int32.TryParse(temp[1], out totalFiles);
+
+                            int unknownFiles;
+                            Int32.TryParse(temp[2], out unknownFiles);
+
+                            _response.Status = (DescentStatus)status;
+
+                            if(status == 0) // In progress
                             {
-                                File.Copy(resultsFile, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _remoteHostInfo._hostName + "out.xml"));
+                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs(){TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles});
+                            }
+                            else if(status == 1) // Completed
+                            {
+                                File.Copy(resultsFile, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml")), true);
+                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 break;
                             }
+                            else if(status == 2) // Error (>=2)
+                            {
+                                //InvokeScanFailed(new ScanFailedEventArgs() { Status = (DescentStatus)status });
+                                throw new DescentException((DescentStatus)status, "Error returned from a remote computer. See the status for details.", 0);
+                                //break;
+                            }
                             
-                            Thread.Sleep(5000);
+                            Thread.Sleep(1000);
                         }
                         
 
@@ -510,8 +578,9 @@ namespace APTAT.Core.Descent
                         if (attemptsCount == 0)
                         {
                             // unless attempts count is zero...
-                            throw new DescentException(DescentStatus.status_remote_invalid_response,
-                                ex.Message, 0);
+                            const DescentStatus status = DescentStatus.status_remote_invalid_response;
+                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status });
+                            throw new DescentException(status, ex.Message, 0);
                         }
                         else
                         {
@@ -521,8 +590,9 @@ namespace APTAT.Core.Descent
                     }
                     catch (Exception ex)
                     {
-                        throw new DescentException(DescentStatus.status_remote_invalid_response,
-                            ex.Message, 0);
+                        const DescentStatus status = DescentStatus.status_remote_invalid_response;
+                        InvokeScanFailed(new ScanFailedEventArgs() { Status = status });
+                        throw new DescentException(status, ex.Message, 0);
                     }
                 }
 

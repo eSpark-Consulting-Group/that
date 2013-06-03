@@ -16,13 +16,15 @@ namespace APTAT.Core.Facade.Descent.Commands
         //private IDirectoryResolver _resolver;
         //private IEntityStorageSubsystem _storage;
         //private ILicenseSubSystem _license;
+	    private readonly IDescentSubSystem _descentSubSystem;
 
-		public DeployAgentCommand( DeployAgentRequest request )
+		public DeployAgentCommand( DeployAgentRequest request, IDescentSubSystem descentSubSystem )
 			: base( request )
 		{
-			//_resolver = SubSystemFactory.Current.Catalog.Find<IDirectoryResolver>();
-			//_storage = SubSystemFactory.Current.Catalog.Find<IEntityStorageSubsystem>();
-			//_license = SubSystemFactory.Current.Catalog.Find<ILicenseSubSystem>();
+		    _descentSubSystem = descentSubSystem;
+		    //_resolver = SubSystemFactory.Current.Catalog.Find<IDirectoryResolver>();
+		    //_storage = SubSystemFactory.Current.Catalog.Find<IEntityStorageSubsystem>();
+		    //_license = SubSystemFactory.Current.Catalog.Find<ILicenseSubSystem>();
 		}
 
 		public override void Execute()
@@ -39,8 +41,8 @@ namespace APTAT.Core.Facade.Descent.Commands
             //    managedComputers = _storage.GetObjects<IComputer>(licensedFilter);
             //}
 
-            var descentSubsystem = new DescentSubSystem(); //SubSystemFactory.Current.GetSubSystem<IDescentSubSystem>();
-            descentSubsystem.Init(new SubSystemCatalog());
+            //var descentSubsystem = SubSystemFactory.Current.GetSubSystem<IDescentSubSystem>();
+
 			//var directorySubsystem = SubSystemFactory.Current.GetSubSystem<IDirectorySubSystem>();
 			List<TargetUidComputerPair> computers = new List<TargetUidComputerPair>();
 			foreach( var target in Request.Targets )
@@ -98,7 +100,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                     Name = target.Name,
                     DnsName = !String.IsNullOrEmpty(target.DnsName) ? target.DnsName : target.Name,
                     IPAddress = targetAddress,
-                    Uid = Guid.NewGuid(),
+                    Uid = target.TargetUid, //Guid.NewGuid(),
                 };
                 computers.Add(new TargetUidComputerPair(target.TargetUid, computer));
 			}
@@ -140,7 +142,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 
 			Guid operationUid;
             InstallPackageInfo install = null;
-			descentSubsystem.DoDescentOperationOnNotExistingComputers( computers, Request.Login, Request.Password, false, install, out operationUid );
+            _descentSubSystem.DoDescentOperationOnNotExistingComputers(computers, Request.Login, Request.Password, false, install, out operationUid);
 
 			Response.OperationUid = operationUid;
 		}

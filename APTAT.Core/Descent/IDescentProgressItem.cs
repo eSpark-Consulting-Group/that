@@ -8,5 +8,10 @@ namespace APTAT.Core.Descent
 		Guid OperationUid { get; }
 		int ProgressPercentage { get; }
 		FormattedText StatusMessage { get; }
+	    AptScanStage ScanStage { get; }
+	    int TotalFilesCount { get; }
+	    int UnknownFilesCount { get; }
+	    int MalwaresCount { get; }
+	    int SafeFilesCount { get; }
 	}
 }

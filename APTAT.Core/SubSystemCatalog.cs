@@ -118,6 +118,11 @@ namespace APTAT.Core
         private static readonly Guid SubSystemId = new Guid(@"{8E8C8B2B-1E58-4fa0-A7D4-90132CCAEB8B}");
         private const string SubSystemName = @"ChangesTracking";
 
+        public ChangeTrackingSubSystem()
+        {
+            int temp = 0;
+        }
+
         #region ISubSystem Members
 
         public string Name

@@ -80,6 +80,13 @@ namespace APTAT.Core.Descent
 			StartTime = DateTime.UtcNow;
 		}
 
+        public ComputerDescentResult GetComputerDescentResult(Guid computerUid)
+        {
+            ComputerDescentResult result;
+            _resultsByUid.TryGetValue(computerUid, out result);
+            return result;
+        }
+
 		public ComputerDescentResult[] ComputerResults
 		{
 			get

@@ -25,7 +25,7 @@ namespace APTAT.Core.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:05:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:03:00")]
         public global::System.TimeSpan AgentDescentingTimeout {
             get {
                 return ((global::System.TimeSpan)(this["AgentDescentingTimeout"]));
