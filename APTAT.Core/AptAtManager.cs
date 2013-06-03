@@ -68,6 +68,7 @@ namespace APTAT.Core
             catch (Exception ex)
             {
                 args.Error = ex;
+                args.State = context.State;
             }
             finally
             {
@@ -161,6 +162,7 @@ namespace APTAT.Core
             catch (Exception ex)
             {
                 args.Error = ex;
+                args.State = context.State;
             }
             finally
             {
@@ -192,6 +194,88 @@ namespace APTAT.Core
     {
         public Exception Error { get; set; }
         public DeploymentTarget[] Targets { get; set; }
+        public object State { get; set; }
+    }
+
+
+    public interface IAptScanner
+    {
+        void BeginScan(object state = null);
+        event EventHandler<ScanStartedEventArgs> ScanStarted;
+    }
+
+    internal class AptScanner : IAptScanner
+    {
+        private IServiceCommand<DeployAgentResponse> _command;
+        public event EventHandler<ScanStartedEventArgs> ScanStarted;
+
+        public AptScanner()
+        {
+        }
+
+        public AptScanner(IServiceCommand<DeployAgentResponse> command)
+        {
+            _command = command;
+        }
+
+        public void BeginScan(object state = null)
+        {
+            if(_command != null)
+            {
+                Action action = _command.Execute;
+                Context context = new Context(){Action = action, State = state};
+                action.BeginInvoke(BeginScanCallback, context);
+            }
+        }
+
+        private void BeginScanCallback(IAsyncResult ar)
+        {
+            Context context = ar.AsyncState as Context;
+            if (context == null)
+                return;
+
+            ScanStartedEventArgs args = new ScanStartedEventArgs();
+            try
+            {
+                context.Action.EndInvoke(ar);
+                args.OperationUid = _command.Response.OperationUid;
+                args.State = context.State;
+            }
+            catch (Exception ex)
+            {
+                args.Error = ex;
+                args.State = context.State;
+            }
+            finally
+            {
+                OnScanStarted(args);
+            }
+        }
+
+        protected virtual void OnScanStarted(ScanStartedEventArgs args)
+        {
+            EventHandler<ScanStartedEventArgs> temp = ScanStarted;
+            if (temp != null)
+                temp(this, args);
+        }
+
+        public IServiceCommand<DeployAgentResponse> Command
+        {
+            get { return _command; }
+            set { _command = value; }
+        }
+
+        internal class Context
+        {
+            internal Action Action { get; set; }
+            internal object State { get; set; }
+        }
+    }
+
+    public class ScanStartedEventArgs : EventArgs
+    {
+        public Exception Error { get; set; }
+        public Guid OperationUid { get; set; }
         public object State { get; set; }
     }
 
@@ -282,6 +366,18 @@ namespace APTAT.Core
             var command = GetDomainTargetsResolverCommand(targets);
             command.Execute();
             return command.Response.Targets;
+        }
+
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password)
+        {
+            DeployAgentRequest request = new DeployAgentRequest
+                                             {
+                                                 Targets = targets,
+                                                 Login = login,
+                                                 Password = password
+                                             };
+            var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
+            return new AptScanner(command);
         }
     }
 }
