@@ -12,9 +12,10 @@
     <AssemblyName>APTAT.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SccProjectName>%24/ComodoESM SME/Sources/APTAT/APTAT.Core</SccProjectName>
     <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>http://pss05v:8080/tfs/defaultcollection</SccAuxPath>
+    <SccAuxPath>http://192.168.71.245:8080/tfs/defaultcollection</SccAuxPath>
     <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -50,6 +51,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AptAtManager.cs" />
+    <Compile Include="AptScanStage.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -421,6 +423,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
