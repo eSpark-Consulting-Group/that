@@ -13,6 +13,8 @@ namespace APTAT.Application.Models
 
         public Boolean IsRootItem { get; set; }
 
+        public Boolean IsOnline { get; set; }
+
         public String Name { get; set; }
 
         public String Size { get; set; }

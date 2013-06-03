@@ -37,8 +37,6 @@ namespace APTAT.Application.Models
         public Boolean FromRoot { get; set; }
 
         public DirectoryItem Parent { get; set; }
-
-        public IServiceCommand<FindTargetsResponse> Command { get; set; }
     }
 
     public class AptService : IAptService, IChangeTrackingListener
@@ -48,6 +46,8 @@ namespace APTAT.Application.Models
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
 
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
+
+        public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
 
         private AptAtManager _manager;
 
@@ -83,6 +83,7 @@ namespace APTAT.Application.Models
                         Target = deploymentTarget,
                         Name = deploymentTarget.Name,
                         IsRootItem = true,
+                        IsOnline =  deploymentTarget.Online
                     };
 
                     result.Add(infoItem);
@@ -220,8 +221,12 @@ namespace APTAT.Application.Models
      
         public void Changed(params ChangesTrackingItem[] items)
         {
+            
+            
            // throw new NotImplementedException();
         }
+
+        
 
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
@@ -279,6 +284,11 @@ namespace APTAT.Application.Models
 
             return collection;
         }
-     
+
+
+        public void BeginScan(Object userState)
+        {
+            
+        }
     }
 }

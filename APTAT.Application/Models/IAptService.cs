@@ -36,16 +36,24 @@ namespace APTAT.Application.Models
         }
     }
 
+    public class BeginScanCompletedEventArgs : DomainEventArgs
+    {
+        
+    }
+
     public interface IAptService
     {
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
+        event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
 
         void  GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
 
         void GetDirectoryRoot(String domainController, String admin, String password, Object userState);
 
         void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState);
+
+        void BeginScan(Object userState);
     }
 }

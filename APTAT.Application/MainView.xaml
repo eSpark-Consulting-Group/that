@@ -42,12 +42,14 @@
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="(Offline)" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
                         <TextBlock
                             Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
-                            Text="{Binding Progress, StringFormat='({0}%)'}" Grid.Column="1" HorizontalAlignment="Right"/>
+                            Text="{Binding Progress, StringFormat='({0}%)'}" Grid.Column="2" HorizontalAlignment="Right"/>
                     </Grid>
                 </DataTemplate>
             </telerik:RadTreeListView.Resources>
@@ -76,6 +78,6 @@
             <TextBlock Text="Computers Count:" VerticalAlignment="Center" Margin="30,5,5,5"/>
             <TextBlock Text="{Binding ItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent"/>
+        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Processing..." Background="Transparent"    BorderBrush="Transparent"/>
     </Grid>
 </Models:BasePage>
