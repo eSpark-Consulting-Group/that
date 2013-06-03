@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -138,13 +139,33 @@ namespace APTAT.Application
             {
                 e.PreparedItem.IsExpanded = true;
             }
-
-            
         }
 
         private void OnChecked(Object sender, RadRoutedEventArgs e)
         {
-            _viewModel.CheckItemsCommand.Execute(domainTree.CheckedItems);
+            RadTreeViewItem treeViewItem = (RadTreeViewItem) e.OriginalSource;
+            if(treeViewItem.CheckState == ToggleState.On)
+            {
+                _viewModel.CheckItemCommand.Execute(treeViewItem.Item);
+            }
+            else
+            {
+                _viewModel.UncheckItemCommand.Execute(treeViewItem.Item);
+            }
+            
+        }
+
+        private void OnUnchecked(Object sender, RadRoutedEventArgs e)
+        {
+            RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
+            if (treeViewItem.CheckState == ToggleState.On)
+            {
+                _viewModel.CheckItemCommand.Execute(treeViewItem.Item);
+            }
+            else
+            {
+                _viewModel.UncheckItemCommand.Execute(treeViewItem.Item);
+            }
         }
 
     }

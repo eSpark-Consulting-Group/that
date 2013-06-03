@@ -111,6 +111,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToOpacityConverter.cs" />
     <Compile Include="Converters\DirectoryItemTypeToOpacityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Models\AptService.cs" />
     <Compile Include="Models\BasePage.cs" />
     <Compile Include="Models\DirectoryItem.cs" />

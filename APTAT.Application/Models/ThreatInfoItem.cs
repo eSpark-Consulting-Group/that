@@ -7,19 +7,19 @@ using System.Text;
 
 namespace APTAT.Application.Models
 {
-    public class ThreatInfoItem : INotifyPropertyChanged
+    public class ThreatInfoItem : DomainObject
     {
         private Int32 _progress;
 
         public Boolean IsRootItem { get; set; }
-
-        public Int64 Id { get; set; }
 
         public String Name { get; set; }
 
         public String Size { get; set; }
 
         public String Type { get; set; }
+
+        public Object Target { get; set; }
 
         public Int32 Progress
         {
@@ -32,17 +32,5 @@ namespace APTAT.Application.Models
         }
 
         public ObservableCollection<ThreatInfoItem> Items { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void RaisePropertyChanged(String name)
-        {
-            
-
-            if(PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
     }
 }

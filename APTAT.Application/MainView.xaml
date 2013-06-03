@@ -13,20 +13,30 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <telerik:RadToolBar VerticalAlignment="Top" Height="30" Margin="1">
-            <telerik:RadButton Content="Start Scanning" Click="OnStartScanningClick" />
-            <telerik:RadToolBarSeparator/>
-            <telerik:RadButton Content="Stop Scanning"/>
-            <telerik:RadToolBarSeparator/>
-            <telerik:RadButton Content="Properites" Click="OnPropertiesClick" />
-            <telerik:RadToolBarSeparator/>
-            <telerik:RadButton Content="Build Report" />
-            <telerik:RadToolBarSeparator/>
-            <telerik:RadButton Content="About" />
+       
+            
+ 
+        <telerik:RadToolBar Margin="-1" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" >
+            <telerik:RadToolBarSeparator  Margin="26,0,0,0"/>
+            <telerik:RadButton Margin="3,3,3,3" Height="35" Content="Start Scanning"
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                               Click="OnStartScanningClick" />
+            
+            <telerik:RadButton Margin="3" Height="35" Content="Stop Scanning"
+                               IsEnabled="{Binding IsScanInProgress}"/>
+            <telerik:RadToolBarSeparator Margin="0"/>
+            <telerik:RadButton Margin="3" Height="35" Content="Properites"
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}" 
+                               Click="OnPropertiesClick" />
+            <telerik:RadToolBarSeparator Margin="0"/>
+            <telerik:RadButton Margin="3" Height="35" Content="Build Report"
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"/>
+            <telerik:RadToolBarSeparator Margin="0"/>
+            <telerik:RadButton Margin="3" Height="35" Content="About" />
         </telerik:RadToolBar>
-        
-    
-        <telerik:RadTreeListView   Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" >
+
+      
+        <telerik:RadTreeListView CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}" >
             <telerik:RadTreeListView.Resources>
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch">
@@ -46,7 +56,8 @@
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
-                    Width="*" 
+                    Header="Name"
+                    Width="318" 
                     CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name" />
                 <telerik:GridViewDataColumn 
                     DataMemberBinding="{Binding Type}"
@@ -61,8 +72,10 @@
                     Width="*"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
-        <StackPanel Orientation="Horizontal" Height="35" Grid.Row="2">
-            
+        <StackPanel Orientation="Horizontal" Height="44" Grid.Row="2">
+            <TextBlock Text="Computers Count:" VerticalAlignment="Center" Margin="30,5,5,5"/>
+            <TextBlock Text="{Binding ItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
+        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent"/>
     </Grid>
 </Models:BasePage>

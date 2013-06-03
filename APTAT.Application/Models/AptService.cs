@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Threading;
+using APTAT.Core;
 using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
@@ -13,7 +14,7 @@ using APTAT.Core.Facade.Descent.MessageContracts;
 
 namespace APTAT.Application.Models
 {
-    public class GetDirectoryItemRequest
+    public class GetDirectoryItemsContext
     {
         public DirectoryItem Parent { get; set; }
 
@@ -40,30 +41,201 @@ namespace APTAT.Application.Models
         public IServiceCommand<FindTargetsResponse> Command { get; set; }
     }
 
-    public class AptService : IAptService
+    public class AptService : IAptService, IChangeTrackingListener
     {
-        private readonly CommandFactory _commandFactory;
-        private static DirectoryItem _rootItem;
-        private static Int64 _identity;
-        private static Random rand = new Random(DateTime.Now.Millisecond);
-
+        public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
+        
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
 
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
 
+        private AptAtManager _manager;
+
+        private Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
+
+        public Guid SessionId
+        {
+            get { return _sessionGuid; }
+        }
+  
+        public AptService()
+        {
+           _manager = new AptAtManager(this);
+        }
+
+        public void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState)
+        {
+            DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
+            IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets);
+            resolver.TargetsResolved += OnTargetsResolved;  
+            resolver.BeginResolve(userState);
+        }
+
+        private void OnTargetsResolved(Object sender, DomainTargetsResolverEventArgs e)
+        {
+            if(e.Error == null)
+            {
+                List<ThreatInfoItem> result = new List<ThreatInfoItem>(e.Targets.Length);
+                foreach (DeploymentTarget deploymentTarget in e.Targets)
+                {
+                    ThreatInfoItem infoItem = new ThreatInfoItem
+                    {
+                        Target = deploymentTarget,
+                        Name = deploymentTarget.Name,
+                        IsRootItem = true,
+                    };
+
+                    result.Add(infoItem);
+                }
+
+                DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(result.ToArray(), e.State);
+                Action action = () =>
+                {
+                    if (DirectoryItemsResolved != null)
+                    {
+                        DirectoryItemsResolved(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+            }
+            else
+            {
+                DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(null, e.State, e.Error);
+                Action action = () =>
+                {
+                    if (DirectoryItemsResolved != null)
+                    {
+                        DirectoryItemsResolved(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+            }
+        }
+
+        public void GetDirectoryRoot(String domainController, String admin, String password, Object userState)
+        {
+            IDomainDiscoverer d = _manager.GetDomainDiscoverer(null, true, domainController, admin, password);
+            d.Discovered += OnRootDiscovered;
+            d.BeginDiscover(userState);
+        }
+
+        private void OnRootDiscovered(Object sender, DomainDiscovererEventArgs e)
+        {
+            if(e.Error == null)
+            {
+                DomainTarget domainRoot = (DomainTarget) e.Targets[0];
+                DirectoryItem root = new DirectoryItem
+                {
+                    DnsName = domainRoot.DnsName,
+                    Name = domainRoot.Name,
+                    LdapPath = domainRoot.LdapPath,
+                    TargetUid = domainRoot.TargetUid,
+                    Type = FromDomainEntryType(domainRoot.EntryType)
+                };
+                DirectoryItem[] result = new[] { root };
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, result, e.State);
+                Action action = () =>
+                {
+                    if (GetDirectoryRootCompleted != null)
+                    {
+                        GetDirectoryRootCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+            }
+            else
+            {
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null, e.State, e.Error);
+                Action action = () =>
+                {
+                    if (GetDirectoryRootCompleted != null)
+                    {
+                        GetDirectoryRootCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+            }
+        }
+
+        public void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState)
+        {
+            GetDirectoryItemsContext context = new GetDirectoryItemsContext
+            {
+                Parent = parent,
+                UserState = userState
+            };
+            IDomainDiscoverer d = _manager.GetDomainDiscoverer(parent.LdapPath, false, domainController, admin, password);
+            d.Discovered += OnDiscovered;
+            d.BeginDiscover(context);
+        }
+
+        
+
+        private void OnDiscovered(Object sender, DomainDiscovererEventArgs e)
+        {
+            GetDirectoryItemsContext context = (GetDirectoryItemsContext)e.State;
+            if (e.Error == null)
+            {
+                DeploymentTarget[] targets = e.Targets;
+                DirectoryItem[] result = new DirectoryItem[targets.Length];
+                for (Int32 i = 0; i < targets.Length; ++i)
+                {
+                    DomainTarget target = (DomainTarget)targets[i];
+
+                    result[i] = new DirectoryItem
+                    {
+                        DnsName = target.DnsName,
+                        Name = target.Name,
+                        LdapPath = target.LdapPath,
+                        TargetUid = target.TargetUid,
+                        Type = FromDomainEntryType(target.EntryType)
+                    };
+                }
+
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, result, context.UserState);
+                Action action = () =>
+                {
+                    if (GetDirectoryItemsCompleted != null)
+                    {
+                        GetDirectoryItemsCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+                
+            }
+            else
+            {
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, null, context.UserState, e.Error);
+                Action action = () =>
+                {
+                    if (GetDirectoryItemsCompleted != null)
+                    {
+                        GetDirectoryItemsCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);   
+            }
+        }
+
+     
+        public void Changed(params ChangesTrackingItem[] items)
+        {
+           // throw new NotImplementedException();
+        }
+
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
-            if(type == DomainEntryType.Root)
+            if (type == DomainEntryType.Root)
             {
                 return DirectoryItemType.Root;
             }
-            
-            if(type == DomainEntryType.OrganizationUnit)
+
+            if (type == DomainEntryType.OrganizationUnit)
             {
                 return DirectoryItemType.OrgUnit;
             }
 
-            if(type == DomainEntryType.Computer)
+            if (type == DomainEntryType.Computer)
             {
                 return DirectoryItemType.Computer;
             }
@@ -71,287 +243,42 @@ namespace APTAT.Application.Models
             throw new ArgumentException("type");
         }
 
-        static void BuildTreeRecursive(DirectoryItem parent, Int32 level)
+        private DomainEntryType FromDirectoryItemType(DirectoryItemType type)
         {
-            if(level == 2)
+            if (type == DirectoryItemType.Root)
             {
-                return;
+                return DomainEntryType.Root;
             }
 
-            if (parent.Items == null)
+            if (type == DirectoryItemType.OrgUnit)
             {
-                parent.Items = new ObservableCollection<DirectoryItem>();
+                return DomainEntryType.OrganizationUnit;
             }
 
-            Int32 random = rand.Next();
-            if(random % 2 == 0 && parent != _rootItem)
+            if (type == DirectoryItemType.Computer)
             {
-                return;
+                return DomainEntryType.Computer;
             }
 
-            random = 100 + rand.Next() % 100;
-            for (Int32 i = 0; i < random; ++i)
-            {
-                DirectoryItem directoryItem = new DirectoryItem
-                {
-                    Id = ++_identity,
-                   // TargetId = ++_identity
-                };
-
-                if(rand.Next() % 2 == 0)
-                {
-                    directoryItem.Type = DirectoryItemType.Computer;
-                   // directoryItem.Name = "Computer " + directoryItem.TargetId;
-                    parent.Items.Add(directoryItem);
-                }
-                else
-                {
-                    directoryItem.Type = DirectoryItemType.OrgUnit;
-                   // directoryItem.Name = "OrgUnit " + directoryItem.TargetId;
-                    parent.Items.Add(directoryItem);
-                    BuildTreeRecursive(directoryItem, level + 1);
-                }
-
-              
-            }
+            throw new ArgumentException("type");
         }
 
-        static DirectoryItem[] Children(DirectoryItem directoryItem, Int64 directoryItemId)
+        private DeploymentTargetsCollection ToDeploymentTargetsCollection(DirectoryItem[] directoryItems)
         {
-            if(directoryItem.Id == directoryItemId)
+            DeploymentTargetsCollection collection = new DeploymentTargetsCollection(directoryItems.Length);
+            foreach (DirectoryItem item in directoryItems)
             {
-                if(directoryItem.Items == null)
-                {
-                    return new DirectoryItem[0];
-                }
-                return directoryItem.Items.ToArray();
+                DomainTarget deploymentTarget = new DomainTarget();
+                deploymentTarget.LdapPath = item.LdapPath;
+                deploymentTarget.EntryType = FromDirectoryItemType(item.Type);
+                deploymentTarget.DnsName = item.DnsName;
+                deploymentTarget.Name = item.Name;
+                deploymentTarget.TargetUid = item.TargetUid;
+                collection.Add(deploymentTarget);
             }
 
-            if(directoryItem.Items != null)
-            {
-                foreach (DirectoryItem item in directoryItem.Items)
-                {
-                    DirectoryItem[] children = Children(item, directoryItemId);
-                    if (children != null)
-                    {
-                        return children;
-                    }
-                }
-            }
-         
-            return null;
+            return collection;
         }
-
-        static AptService()
-        {
-            _rootItem = new DirectoryItem();
-            _rootItem.Name = "Root";
-            _rootItem.Type = DirectoryItemType.Root;
-            _rootItem.Id = ++_identity;
-
-
-            BuildTreeRecursive(_rootItem, 0);
-        }
-        
-  
-        public AptService()
-        {
-           _commandFactory  = new CommandFactory();
-        }
-
-        private void FindDomainTargets(String domainController, String login, String password, String path, Boolean fromRoot, DirectoryItem parent, Object userState)
-        {
-            FindTargetsRequest findTargetsRequest = new FindTargetsRequest();
-            
-            var searchCriterion = new DomainSearchCriterion();
-            if (fromRoot)
-            {
-                searchCriterion.FromRoot = true;
-            }
-            else
-            {
-                if (String.IsNullOrEmpty(path))
-                    throw new ArgumentException("Path is not specified.");
-            }
-
-            searchCriterion.Login = login;
-            searchCriterion.Domain = domainController;
-            searchCriterion.Password = password;
-            searchCriterion.ParentAddress = path;
-
-            findTargetsRequest.SearchCriterion = searchCriterion;
-            IServiceCommand<FindTargetsResponse> command = _commandFactory.CreateCommand<FindTargetsResponse>(findTargetsRequest);
-
-            Action action = command.Execute;
-            GetDomainTargetsContext context = new GetDomainTargetsContext { Action = action, Command = command, FromRoot = fromRoot, Parent = parent, UserState = userState };
-            action.BeginInvoke(GetTargetsCallback, context);
-            
-        }
-
-        private void GetTargetsCallback(IAsyncResult ar)
-        {
-
-            GetDomainTargetsContext context = ar.AsyncState as GetDomainTargetsContext;
-            if (context != null)
-            {
-                try
-                {
-                    context.Action.EndInvoke(ar);
-                    FindTargetsResponse response = context.Command.Response;
-
-                    if(context.FromRoot)
-                    {
-                        DomainTarget domainRoot = (DomainTarget) response.Targets[0];
-                        DirectoryItem root = new DirectoryItem
-                        {
-                            Name = domainRoot.Name,
-                            LdapPath = domainRoot.LdapPath,
-                            TargetUid = domainRoot.TargetUid,
-                            Type = FromDomainEntryType(domainRoot.EntryType)
-                        };
-                        DirectoryItem[] result = new[] { root };
-                        if (GetDirectoryRootCompleted != null)
-                        {
-                            Action action = () => GetDirectoryRootCompleted(this, new GetDirectoryItemsEventArgs(null, result, context.UserState));
-                            DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Normal, action);
-                        }  
-                    }
-                    else
-                    {
-                        DeploymentTargetsCollection targets = response.Targets;
-
-                        DirectoryItem[] result = new DirectoryItem[targets.Count];
-                        for (Int32 i = 0; i < targets.Count; ++i)
-                        {
-                            DomainTarget target = (DomainTarget) targets[i];
-
-                            result[i] = new DirectoryItem
-                            {
-                                Name = target.Name,
-                                LdapPath = target.LdapPath,
-                                TargetUid = target.TargetUid,
-                                Type = FromDomainEntryType(target.EntryType)
-                            };
-                        }
-
-                        GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, result, context.UserState);
-                        if (GetDirectoryItemsCompleted != null)
-                        {
-                            Action action = () => GetDirectoryItemsCompleted(this, args);
-                            DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Normal, action);
-                        }
-
-                    }
-
-                }
-                catch (Exception ex)
-                {
-
-                    if (context.FromRoot)
-                    {
-                        if (GetDirectoryRootCompleted != null)
-                        {
-                            Action action = () => GetDirectoryRootCompleted(this, new GetDirectoryItemsEventArgs(null, null, context.UserState, ex.Message));
-                            DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Normal, action);
-                        }
-                    }
-                    else
-                    {
-                      
-                    }
-                }
-            }
-
-        }
-
-
-
-        public void GetDirectoryRoot(String domainController, String admin, String password, Object userState)
-        {
-
-            FindDomainTargets(domainController, admin, password, null, true, null, userState);
-            //BackgroundWorker worker = new BackgroundWorker();
-            // worker.DoWork += OnDoWork;
-            //worker.RunWorkerCompleted += OnGetDirectoryRootCompleted;
-            //worker.RunWorkerAsync(new GetDirectoryRootRequest { Name = domainController, UserState = userState });
-
-
-            // FindDomainTargets()
-        }
-
-        //private void OnGetDirectoryRootCompleted(Object sender, RunWorkerCompletedEventArgs e)
-        //{
-        //    GetDirectoryRootRequest request = (GetDirectoryRootRequest)e.Result;
-        //    DirectoryItem[] result = null;
-
-        //    if(request.Name == _rootItem.Name)
-        //    {
-        //        DirectoryItem root = new DirectoryItem
-        //        {
-        //            Id = _rootItem.Id,
-        //            Name = _rootItem.Name,
-        //            TargetId = _rootItem.TargetId,
-        //            Type = _rootItem.Type
-        //        };
-        //        result = new[] { root };
-
-        //        if (GetDirectoryRootCompleted != null)
-        //        {
-        //            GetDirectoryRootCompleted(this, new GetDirectoryItemsEventArgs(null, result, request.UserState));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (GetDirectoryRootCompleted != null)
-        //        {
-        //            GetDirectoryRootCompleted(this, new GetDirectoryItemsEventArgs(null, null, request.UserState, "Domain Not Found"));
-        //        }
-        //    }           
-        //}
-
-        public void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState)
-        {
-            FindDomainTargets(domainController, admin, password, parent.LdapPath, false, parent, userState);
-        //    BackgroundWorker worker = new BackgroundWorker();
-        //    worker.DoWork += OnDoWork;
-        //    worker.RunWorkerCompleted += OnGetDirectoryItemsCompleted;
-        //    worker.RunWorkerAsync(new GetDirectoryItemRequest { Parent = parent, UserState = userState});
-        }
-
-        //private void OnGetDirectoryItemsCompleted(Object sender, RunWorkerCompletedEventArgs e)
-        //{
-        //    GetDirectoryItemRequest request = (GetDirectoryItemRequest)e.Result;
-
-        //    DirectoryItem[] result = Children(_rootItem, request.Parent.Id);
-        //    DirectoryItem[] realResult = new DirectoryItem[result.Length];
-        //    for(Int32 i = 0; i < result.Length; ++i)
-        //    {
-        //        realResult[i] = new DirectoryItem
-        //                            {
-        //                                Id = result[i].Id,
-        //                                Name = result[i].Name,
-        //                                TargetId = result[i].TargetId,
-        //                                Type = result[i].Type
-        //                            };
-        //    }
-
-
-        //    GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(request.Parent, realResult, request.UserState);
-
-        //    if(GetDirectoryItemsCompleted != null)
-        //    {
-        //        GetDirectoryItemsCompleted(this, args);
-        //    }
-
-        //}
-
-        private void OnDoWork(Object sender, DoWorkEventArgs e)
-        {
-            Thread.Sleep(1000);
-            e.Result = e.Argument;
-        }
-
-
-        
+     
     }
 }

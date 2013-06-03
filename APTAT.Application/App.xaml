@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows7;component/Themes/Telerik.Windows.Controls.GridView.xaml"/>
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows7;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <Converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
             <Converters:BoolToOpacityConverter Inverse="True" x:Key="InverseBoolToOpacityConverter"/>
             <Converters:DirectoryItemTypeToOpacityConverter x:Key="DirectoryItemTypeToOpacityConverter"/>

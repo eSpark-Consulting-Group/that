@@ -21,6 +21,8 @@ namespace APTAT.Application.Models
 
         public String Name { get; set; }
 
+        public String DnsName { get; set; }
+
         public Guid TargetUid { get; set; }
 
         public DirectoryItemType Type { get; set; }

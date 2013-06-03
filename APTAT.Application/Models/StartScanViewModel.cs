@@ -47,7 +47,7 @@ namespace APTAT.Application.Models
         private IStorageService _storage = new StorageService();
         private Int32 _step;
         private DirectoryItem[] _items;
-        private ICollection<Object> _chekedItems;
+        private ICollection<Object> _checkedItems;
         private String _domainController;
         private String _administrator;
         private String _password;
@@ -114,13 +114,18 @@ namespace APTAT.Application.Models
 
         public DelegateCommand ExpandCommand { get; private set; }
 
-        public DelegateCommand CheckItemsCommand { get; private set; }
+        public DelegateCommand CheckItemCommand { get; private set; }
+
+        public DelegateCommand UncheckItemCommand { get; private set; }
 
         public StartScanViewModel()
         {
             ExpandCommand = new DelegateCommand(InvokeExpand);
-            CheckItemsCommand = new DelegateCommand(InvokeCheckItems);
+            CheckItemCommand = new DelegateCommand(InvokeCheckItem);
+            UncheckItemCommand = new DelegateCommand(InvokeUncheckItem);
             ChangeStepCommand = new DelegateCommand(InvokeChangeStep);
+            
+            _checkedItems = new Collection<Object>();
         }
 
         private void InvokeChangeStep(Object arg)
@@ -139,13 +144,13 @@ namespace APTAT.Application.Models
             }
             else if(commandContext.Step == 2)
             {
-                if(_chekedItems == null || _chekedItems.Count == 0)
+                if(_checkedItems == null || _checkedItems.Count == 0)
                 {
                     Error = "Select at least one item";
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _chekedItems);
+                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                     _step = commandContext.Step;
                     commandContext.RaiseCompleted();
                 }
@@ -158,10 +163,15 @@ namespace APTAT.Application.Models
             _service.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, commandContext);    
         }
 
-        private void InvokeCheckItems(Object arg)
+        private void InvokeCheckItem(Object arg)
         {
-            _chekedItems = (ICollection<Object>) arg;
+            _checkedItems.Add(arg);
             Error = null;
+        }
+
+        private void InvokeUncheckItem(Object arg)
+        {
+            _checkedItems.Remove(arg);
         }
 
         protected override void InvokeViewLoaded(Object arg)
@@ -186,7 +196,7 @@ namespace APTAT.Application.Models
             IsBusy = false;
             ChangeStepCommandContext commandContext = (ChangeStepCommandContext)e.UserState;
             Items = e.Items;
-            if(e.Error == null)
+            if(e.Exception == null)
             {
                 if (Items != null && Items.Length > 0)
                 {
@@ -198,7 +208,7 @@ namespace APTAT.Application.Models
             }
             else
             {
-                Error = e.Error;
+                Error = e.Exception.Message;
             }
             commandContext.RaiseCompleted();
             

@@ -10,12 +10,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition  Height="Auto"/>
+            <RowDefinition  Height="43"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="txtSpecifyADInfo" Text="Specify AD Information" FontSize="18" Foreground="#FF555555" Margin="20,8"/>
-        <TextBlock x:Name="txtSelectComputers" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF555555" Margin="20,8"/>
+        <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF555555" Margin="20,8"/>
+        <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF555555" Margin="20,8"/>
         <Grid x:Name="panelSelectDomain" Grid.Row="1" Background="White" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -65,6 +65,7 @@
                                  IsOptionElementsEnabled="True"
                                  IsTriStateMode="True"
                                  Checked="OnChecked"
+                                 Unchecked="OnUnchecked"
                                  ItemPrepared="OnItemPrepared"
                                  ItemTemplate="{StaticResource DomainTreeItemTemplate}"
                                  LoadOnDemand="OnLoadOnDemand" 
@@ -81,13 +82,13 @@
             </Border.Background>
             <TextBlock Foreground="White" Text="{Binding Error}" Margin="20,5"/>
         </Border>
-       
-        
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="5" HorizontalAlignment="Right">
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Height="36"  Margin="5" HorizontalAlignment="Right">
             <Button x:Name="btnBack" Content="Back" Margin="5" Width="70" Click="OnBackClick" />
             <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5" Width="70"/>
-            <Button x:Name="btnNext" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolToOpacityConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick" />
-            <Button x:Name="btnFinish"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolToOpacityConverter}}"  Content="Finish" Click="OnFinishClick" Margin="5" Width="70"/>
+            <Button x:Name="btnNext" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick" />
+            <Button x:Name="btnFinish"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Finish" Click="OnFinishClick" Margin="5" Width="70"/>
         </StackPanel>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent"/>
     </Grid>
