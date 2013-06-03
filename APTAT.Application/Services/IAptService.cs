@@ -1,6 +1,7 @@
 ﻿using System;
+using APTAT.Application.Models;
 
-namespace APTAT.Application.Models
+namespace APTAT.Application.Services
 {
     public class DomainEventArgs : EventArgs
     {
@@ -38,7 +39,11 @@ namespace APTAT.Application.Models
 
     public class BeginScanCompletedEventArgs : DomainEventArgs
     {
-        
+        public BeginScanCompletedEventArgs(Object userState, Exception error = null)
+        {
+            UserState = userState;
+            Exception = error;
+        }
     }
 
     public interface IAptService
@@ -54,6 +59,6 @@ namespace APTAT.Application.Models
 
         void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState);
 
-        void BeginScan(Object userState);
+        void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState);
     }
 }

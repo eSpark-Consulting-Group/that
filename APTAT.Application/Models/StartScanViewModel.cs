@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
@@ -43,11 +43,11 @@ namespace APTAT.Application.Models
 
     public class StartScanViewModel : ViewModel
     {
-        private IAptService _service = new AptService();
-        private IStorageService _storage = new StorageService();
+        private readonly IAptService _service = new AptService();
+        private readonly IStorageService _storage = new StorageService();
         private Int32 _step;
         private DirectoryItem[] _items;
-        private ICollection<Object> _checkedItems;
+        private readonly ICollection<Object> _checkedItems;
         private String _domainController;
         private String _administrator;
         private String _password;
@@ -151,6 +151,8 @@ namespace APTAT.Application.Models
                 else
                 {
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
+                    _storage.SetValue(KnownKeys.Login, _administrator);
+                    _storage.SetValue(KnownKeys.Password, _password);
                     _step = commandContext.Step;
                     commandContext.RaiseCompleted();
                 }

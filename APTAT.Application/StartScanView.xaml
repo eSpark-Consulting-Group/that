@@ -88,7 +88,7 @@
             <Button x:Name="btnBack" Content="Back" Margin="5" Width="70" Click="OnBackClick" />
             <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5" Width="70"/>
             <Button x:Name="btnNext" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick" />
-            <Button x:Name="btnFinish"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Finish" Click="OnFinishClick" Margin="5" Width="70"/>
+            <Button x:Name="btnFinish"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Scan" Click="OnFinishClick" Margin="5" Width="70"/>
         </StackPanel>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent"/>
     </Grid>

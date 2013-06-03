@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Threading;
+﻿using APTAT.Application.Models;
 using APTAT.Core;
-using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
-using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
-using APTAT.Core.Facade.Descent.MessageContracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace APTAT.Application.Models
+namespace APTAT.Application.Services
 {
     public class GetDirectoryItemsContext
     {
@@ -49,9 +42,9 @@ namespace APTAT.Application.Models
 
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
 
-        private AptAtManager _manager;
+        private readonly AptAtManager _manager;
 
-        private Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
+        private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
 
         public Guid SessionId
         {
@@ -61,6 +54,27 @@ namespace APTAT.Application.Models
         public AptService()
         {
            _manager = new AptAtManager(this);
+        }
+
+        public void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState)
+        {
+            DomainTarget[] targets = items.Select(item => item.Target).OfType<DomainTarget>().ToArray();
+            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password);
+            scanner.ScanStarted += OnScanStarted;
+            scanner.BeginScan(userState);
+        }
+
+        private void OnScanStarted(Object sender, ScanStartedEventArgs e)
+        {
+            BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.State, e.Error);
+            Action action = () =>
+            {
+                if (BeginScanCompleted != null)
+                {
+                    BeginScanCompleted(this, args);
+                }
+            };
+            DispatcherHelper.Current.BeginInvoke(action);
         }
 
         public void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState)
@@ -170,8 +184,6 @@ namespace APTAT.Application.Models
             d.BeginDiscover(context);
         }
 
-        
-
         private void OnDiscovered(Object sender, DomainDiscovererEventArgs e)
         {
             GetDirectoryItemsContext context = (GetDirectoryItemsContext)e.State;
@@ -221,12 +233,8 @@ namespace APTAT.Application.Models
      
         public void Changed(params ChangesTrackingItem[] items)
         {
-            
-            
            // throw new NotImplementedException();
         }
-
-        
 
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
@@ -283,12 +291,6 @@ namespace APTAT.Application.Models
             }
 
             return collection;
-        }
-
-
-        public void BeginScan(Object userState)
-        {
-            
         }
     }
 }

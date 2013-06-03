@@ -41,12 +41,12 @@
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Name}"/>
-                        <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="(Offline)" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
+                        <TextBlock Grid.Column="1" Margin="5,0,5,0" Text="(Offline)" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
                         <TextBlock
                             Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
                             Text="{Binding Progress, StringFormat='({0}%)'}" Grid.Column="2" HorizontalAlignment="Right"/>
@@ -78,6 +78,6 @@
             <TextBlock Text="Computers Count:" VerticalAlignment="Center" Margin="30,5,5,5"/>
             <TextBlock Text="{Binding ItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Processing..." Background="Transparent"    BorderBrush="Transparent"/>
+        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
     </Grid>
 </Models:BasePage>

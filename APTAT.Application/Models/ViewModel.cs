@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
@@ -8,7 +7,6 @@ namespace APTAT.Application.Models
     {
         private Boolean _isBusy;
    
-
         public Boolean IsBusy
         {
             get { return _isBusy; }
@@ -18,9 +16,6 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsBusy");
             }
         }
-
-  
-
 
         public DelegateCommand ViewLoadedCommand { get; private set; }
 
