@@ -44,6 +44,7 @@ namespace APTAT.Core.Descent
 		private const string DescentSubSystemName = @"Descent";
 
 		private readonly Dictionary<Guid, DescentResult> _descentResults = new Dictionary<Guid, DescentResult>();
+        private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults = new ConcurrentDictionary<Guid, ScanResult>();
 		private IDirectoryResolver _resolver;
 		private IMessagesListener _messages;
 		private IMessagingSubSystem _messaging;
@@ -187,109 +188,10 @@ namespace APTAT.Core.Descent
 			public static FormattedText GetDescentStatusDescription( DescentStatus status, string[] extensionTexts,CultureInfo cultureInfo, 
                 IMessageTranslatorCollection messageTranslatorCollection, out FormattedText shortMessage )
 			{
-				ResourceText suggestion = ResourceText.Empty;
+				ResourceText suggestion;
 				ResourceText description;
 				// Format description
-				switch( status )
-				{
-					case DescentStatus.status_error:
-						description = ServerSideMessagesResources.UnknownErrorMessage;
-						break;
-					case DescentStatus.status_cannot_resolve_remote_hostname:
-						description = ServerSideMessagesResources.CannotResolveHostMessage;
-						suggestion = ServerSideMessagesResources.CannotResolveHostSuggestionMessage;
-						break;
-					case DescentStatus.status_login_problem:
-						description = ServerSideMessagesResources.LoginProblemMessage;
-						suggestion = ServerSideMessagesResources.LoginProblemSuggestionMessage;
-						break;
-					case DescentStatus.status_login_invalid_username_or_bad_password:
-						description = ServerSideMessagesResources.InvalidUserNameOrPasswordMessage;
-						suggestion = ServerSideMessagesResources.LoginProblemSuggestionMessage;
-						break;
-					case DescentStatus.status_login_invalid_username:
-						description = ServerSideMessagesResources.InvalidUserNameMessage;
-						break;
-					case DescentStatus.status_login_trusted_relationship_failure:
-						description = ServerSideMessagesResources.TrustedRelationshipFailureMessage;
-						break;
-					case DescentStatus.status_agent_is_already_installed:
-						description = ServerSideMessagesResources.AgentIsAlreadyInstalledMessage;
-						break;
-					case DescentStatus.status_agent_is_already_installed_and_server_differs:
-						description = ServerSideMessagesResources.AgentIsAlreadyInstalledAndServerDiffersMessage;
-						suggestion = ServerSideMessagesResources.AgentIsAlreadyInstalledAndServerDiffersSuggestionMessage;
-						break;
-					case DescentStatus.status_agent_is_not_installed:
-						description = ServerSideMessagesResources.AgentIsNotInstalledMessage;
-						break;
-					case DescentStatus.status_installer_unknown_product:
-						description = ServerSideMessagesResources.UnknownProductMessage;
-						break;
-					case DescentStatus.status_installer_fatal_error:
-						description = ServerSideMessagesResources.FatalInstallationErrorMessage;
-						break;
-					case DescentStatus.status_installer_install_already_running:
-						description = ServerSideMessagesResources.AnotherInstallationInProgressMessage;
-						suggestion = ServerSideMessagesResources.AnotherInstallationInProgressSuggestionMessage;
-						break;
-					case DescentStatus.status_installer_product_already_installed:
-						description = ServerSideMessagesResources.ProductAlreadyInstalledMessage;
-						break;
-					case DescentStatus.status_uninstall_incompatible_products_not_supported:
-						description = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedMessage;
-						suggestion = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedSuggestionMessage;
-						break;
-					case DescentStatus.status_uninstall_incompatible_products_partially_not_supported:
-						description = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedMessage;
-						suggestion = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedSuggestionMessage;
-						break;
-					case DescentStatus.status_host_is_not_accessible_from_remote_pc:
-						description = ServerSideMessagesResources.HostNotAccessibleMessage;
-						suggestion = ServerSideMessagesResources.HostNotAccessibleSuggestionMessage;
-						break;
-					case DescentStatus.status_no_compatible_msi_found:
-						description = ServerSideMessagesResources.NoCompatibleMsiFoundMessage;
-						break;
-					case DescentStatus.status_package_file_hash_is_invalid:
-						description = ServerSideMessagesResources.PackageFileIsCorruptedOrIsNotTheOriginalOneFormat;
-						break;
-					case DescentStatus.status_remote_cannot_copy_file:
-						description = ServerSideMessagesResources.CannotCopyFileMessage;
-						suggestion = ServerSideMessagesResources.CannotCopyFileSuggestionMessage;
-						break;
-					case DescentStatus.status_remote_cannot_setup_descent_service:
-						description = ServerSideMessagesResources.CannotSetupDescentServiceMessage;
-						suggestion = ServerSideMessagesResources.CannotSetupDescentServiceSuggestionMessage;
-						break;
-					case DescentStatus.status_remote_cannot_cleanup_descent_service:
-						description = ServerSideMessagesResources.CannotRemoveRemoteServiceMessage;
-						break;
-					case DescentStatus.status_remote_cannot_run_descent_service:
-						description = ServerSideMessagesResources.CannotStartRemoteServiceMessage;
-						break;
-					case DescentStatus.status_remote_invalid_response:
-						description = ServerSideMessagesResources.InvalidResponseMessage;
-						break;
-					case DescentStatus.status_bad_admin_netpath:
-						description = ServerSideMessagesResources.TargetComputerNotRespondingMessage;
-						suggestion = ServerSideMessagesResources.TargetComputerNotRespondingSuggestionMessage;
-						break;
-					case DescentStatus.status_agent_timeout:
-						description = ServerSideMessagesResources.AgentDescentTimeoutMessage;
-						suggestion = ServerSideMessagesResources.AgentDescentTimeoutSuggestionMessage;
-						break;
-					case DescentStatus.status_package_timeout:
-						description = ServerSideMessagesResources.PackageDescentTimeoutMessage;
-						suggestion = ServerSideMessagesResources.AgentDescentTimeoutSuggestionMessage;
-						break;
-					case DescentStatus.status_managed_target_not_found:
-						description = ServerSideMessagesResources.TargetComputerNotManagedMessage;
-						break;
-					default:
-						description = ServerSideMessagesResources.UnsupportedErrorMessage;
-						break;
-				}
+			    GetDescriptionAndSuggestionByStatus(status, out description, out suggestion);
 
 				shortMessage = new FormattedText( description );
 
@@ -310,6 +212,110 @@ namespace APTAT.Core.Descent
                 return new FormattedText(format, description, new FormattedText(suggestion, extensionTexts));
 			}
 
+            private static void GetDescriptionAndSuggestionByStatus(DescentStatus status, out ResourceText description, out ResourceText suggestion)
+            {
+                suggestion = ResourceText.Empty;
+                switch (status)
+                {
+                    case DescentStatus.status_error:
+                        description = ServerSideMessagesResources.UnknownErrorMessage;
+                        break;
+                    case DescentStatus.status_cannot_resolve_remote_hostname:
+                        description = ServerSideMessagesResources.CannotResolveHostMessage;
+                        suggestion = ServerSideMessagesResources.CannotResolveHostSuggestionMessage;
+                        break;
+                    case DescentStatus.status_login_problem:
+                        description = ServerSideMessagesResources.LoginProblemMessage;
+                        suggestion = ServerSideMessagesResources.LoginProblemSuggestionMessage;
+                        break;
+                    case DescentStatus.status_login_invalid_username_or_bad_password:
+                        description = ServerSideMessagesResources.InvalidUserNameOrPasswordMessage;
+                        suggestion = ServerSideMessagesResources.LoginProblemSuggestionMessage;
+                        break;
+                    case DescentStatus.status_login_invalid_username:
+                        description = ServerSideMessagesResources.InvalidUserNameMessage;
+                        break;
+                    case DescentStatus.status_login_trusted_relationship_failure:
+                        description = ServerSideMessagesResources.TrustedRelationshipFailureMessage;
+                        break;
+                    case DescentStatus.status_agent_is_already_installed:
+                        description = ServerSideMessagesResources.AgentIsAlreadyInstalledMessage;
+                        break;
+                    case DescentStatus.status_agent_is_already_installed_and_server_differs:
+                        description = ServerSideMessagesResources.AgentIsAlreadyInstalledAndServerDiffersMessage;
+                        suggestion = ServerSideMessagesResources.AgentIsAlreadyInstalledAndServerDiffersSuggestionMessage;
+                        break;
+                    case DescentStatus.status_agent_is_not_installed:
+                        description = ServerSideMessagesResources.AgentIsNotInstalledMessage;
+                        break;
+                    case DescentStatus.status_installer_unknown_product:
+                        description = ServerSideMessagesResources.UnknownProductMessage;
+                        break;
+                    case DescentStatus.status_installer_fatal_error:
+                        description = ServerSideMessagesResources.FatalInstallationErrorMessage;
+                        break;
+                    case DescentStatus.status_installer_install_already_running:
+                        description = ServerSideMessagesResources.AnotherInstallationInProgressMessage;
+                        suggestion = ServerSideMessagesResources.AnotherInstallationInProgressSuggestionMessage;
+                        break;
+                    case DescentStatus.status_installer_product_already_installed:
+                        description = ServerSideMessagesResources.ProductAlreadyInstalledMessage;
+                        break;
+                    case DescentStatus.status_uninstall_incompatible_products_not_supported:
+                        description = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedMessage;
+                        suggestion = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedSuggestionMessage;
+                        break;
+                    case DescentStatus.status_uninstall_incompatible_products_partially_not_supported:
+                        description = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedMessage;
+                        suggestion = ServerSideMessagesResources.DescentUninstallIncompatibleUnsupportedSuggestionMessage;
+                        break;
+                    case DescentStatus.status_host_is_not_accessible_from_remote_pc:
+                        description = ServerSideMessagesResources.HostNotAccessibleMessage;
+                        suggestion = ServerSideMessagesResources.HostNotAccessibleSuggestionMessage;
+                        break;
+                    case DescentStatus.status_no_compatible_msi_found:
+                        description = ServerSideMessagesResources.NoCompatibleMsiFoundMessage;
+                        break;
+                    case DescentStatus.status_package_file_hash_is_invalid:
+                        description = ServerSideMessagesResources.PackageFileIsCorruptedOrIsNotTheOriginalOneFormat;
+                        break;
+                    case DescentStatus.status_remote_cannot_copy_file:
+                        description = ServerSideMessagesResources.CannotCopyFileMessage;
+                        suggestion = ServerSideMessagesResources.CannotCopyFileSuggestionMessage;
+                        break;
+                    case DescentStatus.status_remote_cannot_setup_descent_service:
+                        description = ServerSideMessagesResources.CannotSetupDescentServiceMessage;
+                        suggestion = ServerSideMessagesResources.CannotSetupDescentServiceSuggestionMessage;
+                        break;
+                    case DescentStatus.status_remote_cannot_cleanup_descent_service:
+                        description = ServerSideMessagesResources.CannotRemoveRemoteServiceMessage;
+                        break;
+                    case DescentStatus.status_remote_cannot_run_descent_service:
+                        description = ServerSideMessagesResources.CannotStartRemoteServiceMessage;
+                        break;
+                    case DescentStatus.status_remote_invalid_response:
+                        description = ServerSideMessagesResources.InvalidResponseMessage;
+                        break;
+                    case DescentStatus.status_bad_admin_netpath:
+                        description = ServerSideMessagesResources.TargetComputerNotRespondingMessage;
+                        suggestion = ServerSideMessagesResources.TargetComputerNotRespondingSuggestionMessage;
+                        break;
+                    case DescentStatus.status_agent_timeout:
+                        description = ServerSideMessagesResources.AgentDescentTimeoutMessage;
+                        suggestion = ServerSideMessagesResources.AgentDescentTimeoutSuggestionMessage;
+                        break;
+                    case DescentStatus.status_package_timeout:
+                        description = ServerSideMessagesResources.PackageDescentTimeoutMessage;
+                        suggestion = ServerSideMessagesResources.AgentDescentTimeoutSuggestionMessage;
+                        break;
+                    case DescentStatus.status_managed_target_not_found:
+                        description = ServerSideMessagesResources.TargetComputerNotManagedMessage;
+                        break;
+                    default:
+                        description = ServerSideMessagesResources.UnsupportedErrorMessage;
+                        break;
+                }
+            }
 
 			public void OnDescentCallback( DescentStatus status, int win32Error, string response )
 			{
@@ -345,6 +351,7 @@ namespace APTAT.Core.Descent
                         // TODO: Commented
 						//_computer.AgentVersion = _productManagement.AgentVersionProvider.GetCurrentVersionParsed(_computer.SystemKind);
 						QueryResult.OnDescendOperationEvent( true, _computer, text, text, status.ToString(), win32Error, response );
+                        //_changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, QueryResult.OperationUid, new FormattedText(new ResourceText("null", "Completed")), AptScanStage.OperationCompleted)), false);
 					}
 				}
 				else
@@ -364,7 +371,12 @@ namespace APTAT.Core.Descent
 					if( messageText != null && QueryResult != null )
 					{
 						QueryResult.OnDescendOperationEvent( false, _computer, messageText, shortMessage, status.ToString(), win32Error, response );
-                        _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, QueryResult.OperationUid, new FormattedText(new ResourceText("null", "Scan failed: {0}"), messageText.ToString()), AptScanStage.ScanFailed)), false);
+					    FormattedText formattedText;
+                        if(status == DescentStatus.status_error)
+                            formattedText = new FormattedText(new ResourceText("null", "Failed: {0}"), response);
+                        else
+                            formattedText = new FormattedText(new ResourceText("null", "Failed: {0}. {1}"), shortMessage, response);
+					    _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, QueryResult.OperationUid, formattedText, AptScanStage.OperationFailed)), false);
 					}
 				}
 			}
@@ -1040,7 +1052,12 @@ namespace APTAT.Core.Descent
 			get { return DescentSubSystemIdentifier; }
 		}
 
-		public void Init( ISubSystemCatalog catalog )
+	    public ConcurrentDictionary<Guid, ScanResult> ScanResults
+	    {
+	        get { return _scanResults; }
+	    }
+
+	    public void Init( ISubSystemCatalog catalog )
 		{
             // TODO: Commented
             //_resolver = catalog.Find<IDirectoryResolver>();
@@ -1062,7 +1079,7 @@ namespace APTAT.Core.Descent
 			_macosPackageHelper = new MacOSAgentPackageHelper(Settings.Default.WebRootFolder, socketPortNumber, publicKey);
 
 			DescentWatcherFactory = new DescentWatcherFactory();
-			_descentMod = new DescentMod( DescentWatcherFactory, _catalog );
+			_descentMod = new DescentMod( DescentWatcherFactory, _catalog, _scanResults );
 			_descentResultsCleanupTimer = new Timer( DescentResultsCleanupTimerCallback, null, Settings.Default.DescentResultLifetime, TimeSpan.FromMilliseconds( Timeout.Infinite ) );
 		}
 

@@ -9,6 +9,9 @@
         StartingScanner,
         ScanInProgress,
         ScanCompleted,
-        ScanFailed
+        ScanFailed,
+        ScanResultsProcessing,
+        OperationCompleted,
+        OperationFailed
     }
 }

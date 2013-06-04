@@ -58,7 +58,7 @@ namespace APTAT.Application.Services
 
         public void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState)
         {
-            DomainTarget[] targets = items.Select(item => item.Target).OfType<DomainTarget>().ToArray();
+            DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password);
             scanner.ScanStarted += OnScanStarted;
             scanner.BeginScan(userState);

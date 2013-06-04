@@ -379,5 +379,12 @@ namespace APTAT.Core
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
             return new AptScanner(command);
         }
+
+        public ScanResult GetScanResultByTargetUid(Guid targetUid)
+        {
+            ScanResult scanResult;
+            _descentSubSystem.ScanResults.TryGetValue(targetUid, out scanResult);
+            return scanResult;
+        }
     }
 }

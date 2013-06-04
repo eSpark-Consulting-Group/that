@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using CRM.SrvCore.Descent;
@@ -35,5 +36,6 @@ namespace APTAT.Core.Descent
 		ushort GetSocketPortForAgent();
 		bool CreateAgentInstallers();
 		DescentResult GetDescentResult( Guid operationUid );
+	    ConcurrentDictionary<Guid, ScanResult> ScanResults { get; }
 	}
 }

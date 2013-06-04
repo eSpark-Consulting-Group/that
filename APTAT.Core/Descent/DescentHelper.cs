@@ -291,6 +291,21 @@ namespace APTAT.Core.Descent
                 public int TotalFilesScanned { get; set; }
                 public int UnknownFilesFound { get; set; }
             }
+
+            public EventHandler<ScanResultsFileReceivedEventArgs> ScanResultsFileReceived;
+            private void InvokeScanResultsFileReceived(ScanResultsFileReceivedEventArgs e)
+            {
+                EventHandler<ScanResultsFileReceivedEventArgs> temp = ScanResultsFileReceived;
+                if (temp != null)
+                    temp(this, e);
+            }
+            public class ScanResultsFileReceivedEventArgs : EventArgs
+            {
+                public Guid TargetUid { get; set; }
+                public string FileName { get; set; }
+                public int TotalFilesScanned { get; set; }
+                public int UnknownFilesFound { get; set; }
+            }
             //======================================================================
 
 			private void Init( bool impersonateAsNetworkService )
@@ -344,11 +359,13 @@ namespace APTAT.Core.Descent
 				{
 					Init( false );
 				}
-				catch( DescentException )
-				{
-					// Failed. Throw original exception to not to confuse user
-					throw originalException;
-				}
+                catch (DescentException exception)
+                {
+                    throw;
+                    // TODO: Commented
+                    //// Failed. Throw original exception to not to confuse user
+                    //throw originalException;
+                }
 			}
 
 
@@ -517,8 +534,10 @@ namespace APTAT.Core.Descent
                             }
                             else if(status == 1) // Completed
                             {
-                                File.Copy(resultsFile, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml")), true);
-                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                                string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
+                                File.Copy(resultsFile, resultsFileLocal, true);
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                                //InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 break;
                             }
                             else if(status == 2) // Error (>=2)

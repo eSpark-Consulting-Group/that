@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,11 +41,12 @@ namespace APTAT.Core.Descent
     {
         private static TaskFactory _taskFactory;
 		private readonly IChangeTrackingSubSystem _tracker;
+        private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults;
 
 		public const string TimeoutAbortString = "OH SHI--";
 	    private const int E_FAIL = unchecked((int) 0x80004005);
 
-		public DescentMod( IDescentWatcherFactory watcherFactory, ISubSystemCatalog catalog )
+		public DescentMod( IDescentWatcherFactory watcherFactory, ISubSystemCatalog catalog, ConcurrentDictionary<Guid, ScanResult> scanResults )
 		{
 			_taskFactory = new TaskFactory( 
 				CancellationToken.None, 
@@ -55,6 +57,8 @@ namespace APTAT.Core.Descent
 			_tracker = catalog.Find<IChangeTrackingSubSystem>();
 
 			DescentWatcherFactory = watcherFactory;
+
+		    _scanResults = scanResults;
 		}
 
 		public IDescentWatcherFactory DescentWatcherFactory
@@ -134,7 +138,7 @@ namespace APTAT.Core.Descent
         {
             UninstallAgentThreadParams tp = (UninstallAgentThreadParams)obj;
             DescentHelper dh = new DescentHelper(tp.RemoteHostInfo);
-
+            
             try
             {
 			//	try
@@ -235,6 +239,7 @@ namespace APTAT.Core.Descent
 			using( tp.InformOperationStart( Thread.CurrentThread ) )
 			{
 				DescentHelper dh = new DescentHelper( tp.RemoteHostInfo );
+                ScanResultsProcessor resultsProcessor = new ScanResultsProcessor();
 
 				EventHandler onRemotelyConnected = null;
 				onRemotelyConnected = (sender, args) =>
@@ -302,6 +307,17 @@ namespace APTAT.Core.Descent
                     var text = new ResourceText("null", String.Format("Scan failed: {0}.", args.Status));
                     NotifyProgressChanged(tp.OperationUid, tp.AgentIdentity, text, AptScanStage.ScanFailed, args.TotalFilesScanned, args.UnknownFilesFound);
                 };
+
+                EventHandler<DescentHelper.ScanResultsFileReceivedEventArgs> onScanResultsFileReceived = null;
+                onScanResultsFileReceived = (sender, args) =>
+                {
+                    // ReSharper disable AccessToModifiedClosure
+                    dh.ScanResultsFileReceived -= onScanResultsFileReceived;
+                    dh.ScanProgressChanged -= onScanProgressChanged;
+                    // ReSharper restore AccessToModifiedClosure
+
+                    _scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
+                };
                 //==========================================================================
 
 
@@ -317,6 +333,7 @@ namespace APTAT.Core.Descent
 			    dh.ScanProgressChanged += onScanProgressChanged;
                 dh.ScanCompleted += onScanCompleted;
                 dh.ScanFailed += onScanFailed;
+			    dh.ScanResultsFileReceived += onScanResultsFileReceived;
 
 				try
 				{
@@ -329,7 +346,20 @@ namespace APTAT.Core.Descent
 					dh.Init( impersonationLogonType );
 					dh.ExecuteAction("action_install_agent_check", new string[] { tp.HostPort.ToString() }, 0 );
 
-					if( dh.Response.Status != DescentStatus.status_success &&
+                    ScanResult result;
+                    _scanResults.TryGetValue(tp.AgentIdentity, out result);
+                    if (result != null)
+                    {
+                        var text = new ResourceText("null", String.Format("Scan results received. Total files scanned: {0}. Unknown files detected: {1}", result.TotalFilesCount, result.UnknownFilesCount));
+                        NotifyProgressChanged(tp.OperationUid, tp.AgentIdentity, text, AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount);
+
+                        if(!resultsProcessor.TryParse(ref result))
+                            throw new DescentException(DescentStatus.status_error, "Cannot process scan results.", 0);
+
+                        NotifyProgressChanged(tp.OperationUid, tp.AgentIdentity, new ResourceText("null", String.Format("Completed. Total files scanned: {0}. Unknown files detected: {1}", result.TotalFilesCount, result.UnknownFilesCount)), AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount);
+                    }
+
+				    if( dh.Response.Status != DescentStatus.status_success &&
 						dh.Response.Status != DescentStatus.status_agent_is_already_installed &&
 						dh.Response.Status != DescentStatus.status_agent_is_already_installed_and_server_differs
 						)
