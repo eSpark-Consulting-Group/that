@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using System.Diagnostics;
 
@@ -31,7 +29,7 @@ namespace APTAT.Core
             }
             catch (Exception ex)
             {
-                LogHelper.Trace(TraceEventType.Error, "Cannot parse the scan results file from {0} endpoint: {1}", result.TargetUid, ex.Message);
+                LogHelper.Trace(TraceEventType.Error, "Cannot parse the scan results file from '{0}({1})' endpoint: {2}", result.HostName, result.TargetUid, ex.Message);
                 return false;
             }
         }

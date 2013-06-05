@@ -316,7 +316,7 @@ namespace APTAT.Core.Descent
                     dh.ScanProgressChanged -= onScanProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
 
-                    _scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
+                    _scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, HostName = args.HostName, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
                 };
                 //==========================================================================
 
@@ -443,15 +443,15 @@ namespace APTAT.Core.Descent
 				{
 					if( (ex.ExceptionState as string) == TimeoutAbortString )
 					{
-						LogHelper.TraceInColor(ConsoleColor.Red, TraceEventType.Verbose, TraceCategory.Descent,
+						LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
 							"Descent operation timed out for computer {0}. Thread terminated with exception: ", tp.RemoteHostInfo.HostName);
-						LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, ex.ToString());
+						//LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, ex.ToString());
 						Thread.ResetAbort();
 					}
 				}
 				catch( Exception x )
 				{
-					LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, "{0} occurred in descent thread: {1}", x.GetType().Name, x.Message);
+					LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, "{0} occurred in descent thread: {1}", x.GetType().Name, x.Message);
 					if (tp.DescentCallback != null)
 						tp.DescentCallback.OnDescentCallback(DescentStatus.status_error, GetHResult(x).GetValueOrDefault(E_FAIL), x.Message);
 				}

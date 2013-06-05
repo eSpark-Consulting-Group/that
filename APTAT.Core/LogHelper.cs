@@ -89,7 +89,7 @@ namespace APTAT.Core
                     System.Diagnostics.Trace.TraceInformation(format, args);
                     break;
 		    }
-		    
+		    System.Diagnostics.Trace.Flush();
 
             //var writer = EnterpriseLibraryContainer.Current.GetInstance<LogWriter>();
             //if (writer.IsLoggingEnabled())

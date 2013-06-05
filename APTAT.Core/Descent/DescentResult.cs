@@ -448,9 +448,9 @@ namespace APTAT.Core.Descent
 						ComputerDescentResult newResult = new ComputerDescentResult( originalResult, progressItem.StatusMessage, progressItem.StatusMessage, progressItem.ProgressPercentage );
                         Guid uid = GetComputerOriginalUid(originalResult.Computer);
 
-						LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
-							"Change tracking reported descent IDescentProgressItem changed{0} computer name: {1}{0} computer UID: {2}{0} completion message: {3}{0} completion progress: {4}{0}",
-							Environment.NewLine, originalResult.Computer.Name, uid, progressItem.StatusMessage, progressItem.ProgressPercentage );
+                        //LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
+                        //    "Change tracking reported descent IDescentProgressItem changed{0} computer name: {1}{0} computer UID: {2}{0} completion message: {3}{0} completion progress: {4}{0}",
+                        //    Environment.NewLine, originalResult.Computer.Name, uid, progressItem.StatusMessage, progressItem.ProgressPercentage );
 
 						_resultsByUid[progressItem.ComputerUid] = newResult;
 					}

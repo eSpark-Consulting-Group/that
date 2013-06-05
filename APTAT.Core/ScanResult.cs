@@ -7,6 +7,7 @@ namespace APTAT.Core
 {
     public class ScanResult
     {
+        public string HostName { get; set; }
         public Guid TargetUid { get; set; }
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }

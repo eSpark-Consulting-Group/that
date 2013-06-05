@@ -243,6 +243,14 @@ namespace APTAT.Core.Descent
 			}
 
             //======================================================================
+            public class AptScanEventArgs : EventArgs
+            {
+                public string HostName { get; set; }
+                public Guid TargetUid { get; set; }
+                public int TotalFilesScanned { get; set; }
+                public int UnknownFilesFound { get; set; }
+            }
+
             // New events
 		    public EventHandler<EventArgs> ScanStarted;
             private void InvokeScanStarted(EventArgs e)
@@ -259,10 +267,8 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanProgressChangedEventArgs : EventArgs
+            public class ScanProgressChangedEventArgs : AptScanEventArgs
             {
-                public int TotalFilesScanned { get; set; }
-                public int UnknownFilesFound { get; set; }
             }
 
             public EventHandler<ScanFailedEventArgs> ScanFailed;
@@ -272,11 +278,9 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanFailedEventArgs : EventArgs
+            public class ScanFailedEventArgs : AptScanEventArgs
             {
                 public DescentStatus Status { get; set; }
-                public int TotalFilesScanned { get; set; }
-                public int UnknownFilesFound { get; set; }
             }
 
             public EventHandler<ScanCompletedEventArgs> ScanCompleted;
@@ -286,10 +290,8 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanCompletedEventArgs : EventArgs
+            public class ScanCompletedEventArgs : AptScanEventArgs
             {
-                public int TotalFilesScanned { get; set; }
-                public int UnknownFilesFound { get; set; }
             }
 
             public EventHandler<ScanResultsFileReceivedEventArgs> ScanResultsFileReceived;
@@ -299,12 +301,9 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanResultsFileReceivedEventArgs : EventArgs
+            public class ScanResultsFileReceivedEventArgs : AptScanEventArgs
             {
-                public Guid TargetUid { get; set; }
                 public string FileName { get; set; }
-                public int TotalFilesScanned { get; set; }
-                public int UnknownFilesFound { get; set; }
             }
             //======================================================================
 
@@ -530,13 +529,13 @@ namespace APTAT.Core.Descent
 
                             if(status == 0) // In progress
                             {
-                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs(){TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles});
+                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                             }
                             else if(status == 1) // Completed
                             {
                                 string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
                                 File.Copy(resultsFile, resultsFileLocal, true);
-                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 //InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 break;
                             }
@@ -598,7 +597,7 @@ namespace APTAT.Core.Descent
                         {
                             // unless attempts count is zero...
                             const DescentStatus status = DescentStatus.status_remote_invalid_response;
-                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status });
+                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid});
                             throw new DescentException(status, ex.Message, 0);
                         }
                         else
@@ -610,7 +609,7 @@ namespace APTAT.Core.Descent
                     catch (Exception ex)
                     {
                         const DescentStatus status = DescentStatus.status_remote_invalid_response;
-                        InvokeScanFailed(new ScanFailedEventArgs() { Status = status });
+                        InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid });
                         throw new DescentException(status, ex.Message, 0);
                     }
                 }
