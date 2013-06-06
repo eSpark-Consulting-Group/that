@@ -165,7 +165,7 @@ namespace APTAT.Application.Models
                }
                for (Int32 j = 0; j < _onlineItems.Length; ++j)
                {
-                   ThreatInfoItem infoItem = Items[j];
+                   ThreatInfoItem infoItem = _onlineItems[j];
                    if(infoItem.ComputerGuid == scanProgress.ComputerGuid)
                    {
                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;

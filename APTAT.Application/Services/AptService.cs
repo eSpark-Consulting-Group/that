@@ -1,4 +1,5 @@
-﻿using System.Windows.Threading;
+﻿using System.IO;
+using System.Windows.Threading;
 using APTAT.Application.Models;
 using APTAT.Core;
 using APTAT.Core.Descent;
@@ -236,19 +237,18 @@ namespace APTAT.Application.Services
             }
         }
 
-        
-     
         public void Changed(params ChangesTrackingItem[] arg)
         {
-        
-            Action<ChangesTrackingItem[]> action = (items) =>
+            Action<ChangesTrackingItem[]> action = items =>
             {
-               
-                ScanProgressItem[] scanProgressItems = new ScanProgressItem[items.Length];
+                ScanProgressItem[] scanProgressItems =
+                    new ScanProgressItem[items.Length];
                 for (Int32 i = 0; i < items.Length; ++i)
                 {
                     ChangesTrackingItem changesTrackingItem = items[i];
-                    DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
+                    DescentProgressItem descentProgressItem =
+                        changesTrackingItem.ChangedItem as
+                        DescentProgressItem;
                     if (descentProgressItem != null)
                     {
                         ScanProgressItem progressItem = new ScanProgressItem();
@@ -264,12 +264,11 @@ namespace APTAT.Application.Services
 
                 if (ScanStatusChanged != null)
                 {
-                    ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null, null));
+                    ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
                 }
             };
 
             DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Send, action, arg);
-
         }
 
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
