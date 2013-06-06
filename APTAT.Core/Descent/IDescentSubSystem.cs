@@ -16,6 +16,8 @@ namespace APTAT.Core.Descent
 		IAgentPackageHelper GetAgentPackageHelper(SystemKind systemKind);
 		IAgentPackageHelper GetAgentPackageHelper(Guid pluginUid);
 
+	    void AbortThreadByTargetUid(Guid uid);
+
 		///// <summary>
 		///// Descent agent to all computers in Persistent group
 		///// </summary>

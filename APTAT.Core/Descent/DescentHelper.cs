@@ -452,6 +452,14 @@ namespace APTAT.Core.Descent
 			{
 				try
 				{
+                    try
+                    {
+                        _serviceHelper.StopService();
+                    }
+                    catch (Win32Exception exception)
+                    {
+                    }
+
 					_serviceHelper.DeleteService();
 				}
 				catch ( Win32Exception ex )
@@ -498,10 +506,12 @@ namespace APTAT.Core.Descent
 				}
 
 
-                int attemptsCount = 600;
-                while (attemptsCount > 0)
+                int attemptsCount = 20;
+                while (true/*attemptsCount > 0*/)
                 {
-                    --attemptsCount;
+                    if (attemptsCount > 0)
+                        --attemptsCount;
+
                     try
                     {
                         using(FileStream fs = new FileStream(responseFilePathForCurrentComputer, FileMode.Open, FileAccess.Read, FileShare.Write))
@@ -533,10 +543,12 @@ namespace APTAT.Core.Descent
                             }
                             else if(status == 1) // Completed
                             {
+                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                                
                                 string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
                                 File.Copy(resultsFile, resultsFileLocal, true);
+                                
                                 InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
-                                //InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 break;
                             }
                             else if(status == 2) // Error (>=2)
@@ -701,6 +713,10 @@ namespace APTAT.Core.Descent
 				}
 			}
 
+            public void StopService()
+            {
+                _serviceHelper.StopService();
+            }
 
 			// Copy file to remote host (to c:\windows\ComodoESMAgent\)
 			public string CopyFile( string filePath, bool deleteOnQuit )

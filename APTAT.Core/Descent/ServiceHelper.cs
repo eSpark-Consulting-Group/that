@@ -329,6 +329,25 @@ namespace APTAT.Core.Descent
             SERVICE_DISABLED = 0x00000004,
         }
 
+        [Flags]
+        public enum SERVICE_CONTROL : uint
+        {
+            STOP = 0x00000001,
+            PAUSE = 0x00000002,
+            CONTINUE = 0x00000003,
+            INTERROGATE = 0x00000004,
+            SHUTDOWN = 0x00000005,
+            PARAMCHANGE = 0x00000006,
+            NETBINDADD = 0x00000007,
+            NETBINDREMOVE = 0x00000008,
+            NETBINDENABLE = 0x00000009,
+            NETBINDDISABLE = 0x0000000A,
+            DEVICEEVENT = 0x0000000B,
+            HARDWAREPROFILECHANGE = 0x0000000C,
+            POWEREVENT = 0x0000000D,
+            SESSIONCHANGE = 0x0000000E
+        }
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SERVICE_STATUS
@@ -386,6 +405,10 @@ namespace APTAT.Core.Descent
         [DllImport("advapi32", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool StartService(IntPtr hService, int dwNumServiceArgs, string[] lpServiceArgVectors);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ControlService(IntPtr hService, SERVICE_CONTROL dwControl, ref SERVICE_STATUS lpServiceStatus);
 
         [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         static extern IntPtr CreateService(
@@ -498,6 +521,17 @@ namespace APTAT.Core.Descent
             m_serviceHandle = IntPtr.Zero;
         }
 
+        public void StopService()
+        {
+            SERVICE_STATUS ss = new SERVICE_STATUS();
+
+            if(QueryServiceStatus(m_serviceHandle, ref ss))
+            {
+                if (ss.currentState != (int)SERVICE_STATE.SERVICE_STOPPED)
+                    if (!ControlService(m_serviceHandle, SERVICE_CONTROL.STOP, ref ss))
+                        throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+        }
 
         public void RunService(string[] Parameters, bool waitToStop, int waitTimeoutMs)
         {

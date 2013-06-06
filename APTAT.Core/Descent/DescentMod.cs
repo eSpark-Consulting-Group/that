@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -231,12 +232,26 @@ namespace APTAT.Core.Descent
             _tracker.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(computerUid, operationUid, formattedText, scanStage, totalFilesCount, unknownFilesCount, malwaresCount, safeFilesCount)), false);
         }
 
+        private ConcurrentDictionary<Guid, Thread> _threads = new ConcurrentDictionary<Guid, Thread>();
+        public void AbortThreadByTargetUid(Guid uid)
+        {
+            Thread thread;
+            if(_threads.TryGetValue(uid, out thread))
+            {
+                if(thread != null)
+                    thread.Abort();
+            }
+           
+        }
+
 		private void InstallAgentThread( object obj )
 		{
 			InstallAgentThreadParams tp = ( InstallAgentThreadParams )obj;
             //RemoteInstallerJob remoteInstallerJob = tp._cb as RemoteInstallerJob;
 
-			using( tp.InformOperationStart( Thread.CurrentThread ) )
+            _threads.TryAdd(tp.AgentIdentity, Thread.CurrentThread);
+
+            using (tp.InformOperationStart(Thread.CurrentThread))
 			{
 				DescentHelper dh = new DescentHelper( tp.RemoteHostInfo );
                 ScanResultsProcessor resultsProcessor = new ScanResultsProcessor();
@@ -458,6 +473,9 @@ namespace APTAT.Core.Descent
 				finally
 				{
 					dh.Release();
+
+				    Thread thread;
+                    _threads.TryRemove(tp.AgentIdentity, out thread);
 				}
 			}
 		}

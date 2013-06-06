@@ -1083,6 +1083,14 @@ namespace APTAT.Core.Descent
 			_descentResultsCleanupTimer = new Timer( DescentResultsCleanupTimerCallback, null, Settings.Default.DescentResultLifetime, TimeSpan.FromMilliseconds( Timeout.Infinite ) );
 		}
 
+        public void AbortThreadByTargetUid(Guid uid)
+        {
+            if (_descentMod == null)
+                return;
+            
+            _descentMod.AbortThreadByTargetUid(uid);
+        } 
+
 		private void DescentResultsCleanupTimerCallback( object state )
 		{
 			try

@@ -386,5 +386,10 @@ namespace APTAT.Core
             _descentSubSystem.ScanResults.TryGetValue(targetUid, out scanResult);
             return scanResult;
         }
+
+        public void StopScan(Guid targetUid)
+        {
+            _descentSubSystem.AbortThreadByTargetUid(targetUid);
+        }
     }
 }
