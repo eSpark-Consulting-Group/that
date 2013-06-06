@@ -112,6 +112,7 @@
     <Compile Include="Converters\BoolToOpacityConverter.cs" />
     <Compile Include="Converters\DirectoryItemTypeToOpacityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Models\ScanProgressItem.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\BasePage.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
@@ -129,6 +130,9 @@
     </Compile>
     <Compile Include="ThreatDetailsView.xaml.cs">
       <DependentUpon>ThreatDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ThreatDetailsWindow.xaml.cs">
+      <DependentUpon>ThreatDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainView.xaml">
       <SubType>Designer</SubType>
@@ -154,6 +158,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThreatDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThreatDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

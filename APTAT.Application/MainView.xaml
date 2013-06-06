@@ -26,7 +26,7 @@
                                IsEnabled="{Binding IsScanInProgress}"/>
             <telerik:RadToolBarSeparator Margin="0"/>
             <telerik:RadButton Margin="3" Height="35" Content="Properites"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}" 
+                               IsEnabled="{Binding IsDetailsEnabled}" 
                                Click="OnPropertiesClick" />
             <telerik:RadToolBarSeparator Margin="0"/>
             <telerik:RadButton Margin="3" Height="35" Content="Build Report"
@@ -36,7 +36,7 @@
         </telerik:RadToolBar>
 
       
-        <telerik:RadTreeListView CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}" >
+        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}" >
             <telerik:RadTreeListView.Resources>
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch">
@@ -44,12 +44,22 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}"/>
-                        <TextBlock Grid.Column="1" Margin="5,0,5,0" Text="(Offline)" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
-                        <TextBlock
-                            Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
-                            Text="{Binding Progress, StringFormat='({0}%)'}" Grid.Column="2" HorizontalAlignment="Right"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Margin="0,5,5,0" Text="{Binding Name}"/>
+                        <TextBlock  Grid.Column="1" Margin="5" Text="(Offline)" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
+                        
+                        <TextBlock Margin="0,0,5,5"
+                                   ToolTip="{Binding StatusMessage}"
+                                   TextTrimming="CharacterEllipsis"
+                                   IsHitTestVisible="{Binding IsRootItem}"
+                                   Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
+                                   Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" Foreground="#666"/>
                     </Grid>
                 </DataTemplate>
             </telerik:RadTreeListView.Resources>
@@ -59,7 +69,7 @@
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
                     Header="Name"
-                    Width="318" 
+                    Width="400" 
                     CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name" />
                 <telerik:GridViewDataColumn 
                     DataMemberBinding="{Binding Type}"

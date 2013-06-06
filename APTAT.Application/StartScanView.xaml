@@ -60,8 +60,9 @@
                     </Grid>
                 </DataTemplate>
             </Grid.Resources>
+            <Border BorderBrush="LightGray" Margin="50" BorderThickness="1">
             <telerik:RadTreeView x:Name="domainTree" 
-                                 Margin="50"
+                                 
                                  IsOptionElementsEnabled="True"
                                  IsTriStateMode="True"
                                  Checked="OnChecked"
@@ -71,6 +72,7 @@
                                  LoadOnDemand="OnLoadOnDemand" 
                                  ItemsSource="{Binding Items}" 
                                  IsLoadOnDemandEnabled="True" />
+            </Border>
         </Grid>
 
         <Border Grid.Row="1" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Opacity="{Binding HasErrors, Converter={StaticResource BoolToOpacityConverter}}">    

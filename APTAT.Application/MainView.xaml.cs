@@ -117,7 +117,11 @@ namespace APTAT.Application
 
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/ThreatDetailsView.xaml", UriKind.Relative));
+           // NavigationService.Navigate(new Uri("/ThreatDetailsView.xaml", UriKind.Relative));
+
+            ThreatDetailsWindow details = new ThreatDetailsWindow();
+            details.Owner = App.Current.MainWindow;
+            details.ShowDialog();
         }
 
         private void OnStartScanningClick(object sender, RoutedEventArgs e)

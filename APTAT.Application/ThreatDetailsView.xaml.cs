@@ -17,8 +17,10 @@ namespace APTAT.Application
     /// <summary>
     /// Interaction logic for ThreatProperties.xaml
     /// </summary>
-    public partial class ThreatDetailsView 
+    public partial class ThreatDetailsView
     {
+        public event EventHandler BackClick;
+
         public ThreatDetailsView()
         {
             InitializeComponent();
@@ -26,7 +28,13 @@ namespace APTAT.Application
 
         private void OnBackClick(Object sender, RoutedEventArgs e)
         {
-            NavigationService.GoBack();
+           // NavigationService.GoBack();
+
+            if(BackClick != null)
+            {
+                BackClick(this, EventArgs.Empty);
+            }
+            
         }
     }
 }

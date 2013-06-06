@@ -153,6 +153,7 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
+                    _storage.SetValue(KnownKeys.Domain, _domainController);
                     _step = commandContext.Step;
                     commandContext.RaiseCompleted();
                 }
@@ -179,6 +180,17 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
+
+            _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
+            if(_administrator != null)
+            {
+                RaisePropertyChanged("Administrator");
+            }
+            _domainController = _storage.GetValue<String>(KnownKeys.Domain, false);
+            if (_domainController != null)
+            {
+                RaisePropertyChanged("DomainController");
+            }
 
             _service.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _service.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;

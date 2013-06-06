@@ -39,8 +39,25 @@ namespace APTAT.Application.Services
 
     public class BeginScanCompletedEventArgs : DomainEventArgs
     {
-        public BeginScanCompletedEventArgs(Object userState, Exception error = null)
+        public Guid OperationGuid { get; private set; }
+
+        public BeginScanCompletedEventArgs(Guid operationGuid, Object userState, Exception error = null)
         {
+            OperationGuid = operationGuid;
+            UserState = userState;
+            Exception = error;
+        }
+    }
+
+    public class ScanStatusChangedEventArgs : DomainEventArgs
+    {
+        public ScanProgressItem[] ScanProgress { get; private set; }
+
+        public Guid OperationGuid { get; private set; }
+
+        public ScanStatusChangedEventArgs(ScanProgressItem[] scanProgress,Object userState, Exception error = null)
+        {
+            ScanProgress = scanProgress;
             UserState = userState;
             Exception = error;
         }
@@ -52,6 +69,7 @@ namespace APTAT.Application.Services
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
+        event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
 
         void  GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
 

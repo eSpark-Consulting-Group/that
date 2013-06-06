@@ -1,5 +1,7 @@
-﻿using APTAT.Application.Models;
+﻿using System.Windows.Threading;
+using APTAT.Application.Models;
 using APTAT.Core;
+using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using System;
 using System.Collections.Generic;
@@ -42,6 +44,8 @@ namespace APTAT.Application.Services
 
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
 
+        public event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
+
         private readonly AptAtManager _manager;
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
@@ -54,6 +58,7 @@ namespace APTAT.Application.Services
         public AptService()
         {
            _manager = new AptAtManager(this);
+           
         }
 
         public void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState)
@@ -66,15 +71,15 @@ namespace APTAT.Application.Services
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-            BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.State, e.Error);
-            Action action = () =>
+            BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
+           // Action action = () =>
             {
                 if (BeginScanCompleted != null)
                 {
                     BeginScanCompleted(this, args);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);
+          //  DispatcherHelper.Current.BeginInvoke(action);
         }
 
         public void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState)
@@ -97,7 +102,8 @@ namespace APTAT.Application.Services
                         Target = deploymentTarget,
                         Name = deploymentTarget.Name,
                         IsRootItem = true,
-                        IsOnline =  deploymentTarget.Online
+                        IsOnline =  deploymentTarget.Online,
+                        ComputerGuid = deploymentTarget.TargetUid
                     };
 
                     result.Add(infoItem);
@@ -230,10 +236,40 @@ namespace APTAT.Application.Services
             }
         }
 
+        
      
-        public void Changed(params ChangesTrackingItem[] items)
+        public void Changed(params ChangesTrackingItem[] arg)
         {
-           // throw new NotImplementedException();
+        
+            Action<ChangesTrackingItem[]> action = (items) =>
+            {
+               
+                ScanProgressItem[] scanProgressItems = new ScanProgressItem[items.Length];
+                for (Int32 i = 0; i < items.Length; ++i)
+                {
+                    ChangesTrackingItem changesTrackingItem = items[i];
+                    DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
+                    if (descentProgressItem != null)
+                    {
+                        ScanProgressItem progressItem = new ScanProgressItem();
+                        progressItem.ComputerGuid = descentProgressItem.ComputerUid;
+                        progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
+                        progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
+                        progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
+                        progressItem.OperationUid = descentProgressItem.OperationUid;
+                        progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
+                        scanProgressItems[i] = progressItem;
+                    }
+                }
+
+                if (ScanStatusChanged != null)
+                {
+                    ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null, null));
+                }
+            };
+
+            DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Send, action, arg);
+
         }
 
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
@@ -276,6 +312,37 @@ namespace APTAT.Application.Services
             throw new ArgumentException("type");
         }
 
+        private ScanStage FromAptScanStage(AptScanStage stage)
+        {
+            switch (stage)
+            {
+                case AptScanStage.Pending:
+                    return ScanStage.Pending;
+                case AptScanStage.Connecting:
+                    return ScanStage.Connecting;
+                case AptScanStage.CopyingScanner:
+                    return ScanStage.CopyingScanner;
+                case AptScanStage.ConfiguringScanner:
+                    return ScanStage.ConfiguringScanner;
+                case AptScanStage.StartingScanner:
+                    return ScanStage.StartingScanner;
+                case AptScanStage.ScanInProgress:
+                    return ScanStage.ScanInProgress;
+                case AptScanStage.ScanCompleted:
+                    return ScanStage.ScanCompleted;
+                case AptScanStage.ScanFailed:
+                    return ScanStage.ScanFailed;
+                case AptScanStage.ScanResultsProcessing:
+                    return ScanStage.ScanResultsProcessing;
+                case AptScanStage.OperationCompleted:
+                    return ScanStage.OperationCompleted;
+                case AptScanStage.OperationFailed:
+                    return ScanStage.OperationFailed;
+                default:
+                    throw new ArgumentOutOfRangeException("stage");
+            }
+        }
+
         private DeploymentTargetsCollection ToDeploymentTargetsCollection(DirectoryItem[] directoryItems)
         {
             DeploymentTargetsCollection collection = new DeploymentTargetsCollection(directoryItems.Length);
@@ -292,5 +359,8 @@ namespace APTAT.Application.Services
 
             return collection;
         }
+
+
+       
     }
 }
