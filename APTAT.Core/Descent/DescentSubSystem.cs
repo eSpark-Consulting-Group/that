@@ -376,7 +376,7 @@ namespace APTAT.Core.Descent
                             formattedText = new FormattedText(new ResourceText("null", "Failed: {0}"), response);
                         else
                             formattedText = new FormattedText(new ResourceText("null", "Failed: {0}. {1}"), shortMessage, response);
-					    _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, QueryResult.OperationUid, formattedText, AptScanStage.OperationFailed)), false);
+					    _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, _computer.Name, QueryResult.OperationUid, formattedText, AptScanStage.OperationFailed)), false);
 					}
 				}
 			}
@@ -1089,6 +1089,7 @@ namespace APTAT.Core.Descent
                 return;
             
             _descentMod.AbortThreadByTargetUid(uid);
+
         } 
 
 		private void DescentResultsCleanupTimerCallback( object state )

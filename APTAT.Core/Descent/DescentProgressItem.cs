@@ -4,19 +4,20 @@ namespace APTAT.Core.Descent
 {
 	public class DescentProgressItem : IDescentProgressItem, IBusinessObject
 	{
-        public DescentProgressItem(Guid computerUid, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage)
-            : this(computerUid, operationUid,statusMessage, scanStage, 0, 0, 0, 0)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage)
+            : this(computerUid, hostName, operationUid,statusMessage, scanStage, 0, 0, 0, 0)
 		{
 		}
 
-        public DescentProgressItem(Guid computerUid, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount)
-            : this(computerUid, operationUid, statusMessage, scanStage, totalFilesCount, unknownFilesCount, 0, 0)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount)
+            : this(computerUid, hostName, operationUid, statusMessage, scanStage, totalFilesCount, unknownFilesCount, 0, 0)
         {
         }
 
-        public DescentProgressItem(Guid computerUid, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount)
         {
             ComputerUid = computerUid;
+            HostName = hostName;
             OperationUid = operationUid;
             StatusMessage = statusMessage;
             //ProgressPercentage = progressPercentage;
@@ -76,6 +77,7 @@ namespace APTAT.Core.Descent
 			private set;
 		}
 
+        public string HostName { get; private set; }
 	    public AptScanStage ScanStage { get; private set; }
 	    public int TotalFilesCount { get; private set; }
 	    public int UnknownFilesCount { get; private set; }

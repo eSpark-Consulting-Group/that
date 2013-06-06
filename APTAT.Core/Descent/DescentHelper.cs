@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
@@ -618,6 +619,16 @@ namespace APTAT.Core.Descent
                             Thread.Sleep(1000);
                         }
                     }
+                    //catch (ThreadAbortException ex)
+                    //{
+                    //    if ((ex.ExceptionState is bool) == true)
+                    //    {
+                    //        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
+                    //            "Operation canceled for computer {0}.", _remoteHostInfo.HostName);
+                    //        //LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, ex.ToString());
+                    //        Thread.ResetAbort();
+                    //    }
+                    //}
                     catch (Exception ex)
                     {
                         const DescentStatus status = DescentStatus.status_remote_invalid_response;
