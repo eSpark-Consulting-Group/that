@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
+                 xmlns:Models="clr-namespace:APTAT.Application.Models"
+                 xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors" mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
 	Title="APT Assesment Tool">
 
@@ -32,7 +33,7 @@
             <telerik:RadButton Margin="3" Height="35" Content="Build Report"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"/>
             <telerik:RadToolBarSeparator Margin="0"/>
-            <telerik:RadButton Margin="3" Height="35" Content="About" />
+            <telerik:RadButton Margin="3" Height="35" Content="About" IsEnabled="False" />
         </telerik:RadToolBar>
 
       
@@ -62,6 +63,12 @@
                                    Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" Foreground="#666"/>
                     </Grid>
                 </DataTemplate>
+                <DataTemplate x:Key="UnknownFileTemplate">
+                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                </DataTemplate>
+                <TemplateSelectors:MainViewNameTemplateSelector x:Key="NameTemplateSelector" 
+                                                                UnknownFileTemplate="{StaticResource UnknownFileTemplate}"
+                                                                ComputerTemplate="{StaticResource NameTemplate}"/>
             </telerik:RadTreeListView.Resources>
             <telerik:RadTreeListView.ChildTableDefinitions>
                 <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
@@ -70,11 +77,10 @@
                 <telerik:GridViewColumn 
                     Header="Name"
                     Width="400" 
-                    CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name" />
+                    CellTemplateSelector="{StaticResource NameTemplateSelector}" SortMemberPath="Name" />
                 <telerik:GridViewDataColumn 
                     DataMemberBinding="{Binding Type}"
                     Header="Type"  
-                    
                     IsFilterable="False"
                     Width="*"/>
                 <telerik:GridViewDataColumn 

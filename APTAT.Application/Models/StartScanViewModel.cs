@@ -126,6 +126,8 @@ namespace APTAT.Application.Models
             ChangeStepCommand = new DelegateCommand(InvokeChangeStep);
             
             _checkedItems = new Collection<Object>();
+
+            Password = String.Empty;
         }
 
         private void InvokeChangeStep(Object arg)

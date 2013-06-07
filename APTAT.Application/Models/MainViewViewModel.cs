@@ -33,12 +33,7 @@ namespace APTAT.Application.Models
 
         public Boolean IsDetailsEnabled
         {
-            get
-            {
-                return SelectedItem != null &&
-                       (SelectedItem.ScanStage == ScanStage.OperationCompleted ||
-                        SelectedItem.ScanStage == ScanStage.OperationFailed);
-            }
+            get { return SelectedItem != null && SelectedItem.IsRootItem == false; }
        
         }
 
@@ -76,8 +71,6 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("ItemsCount");
             }
         }
-
-        
         
         public MainViewViewModel()
         {
@@ -88,10 +81,11 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
-
+           
             _atpService.DirectoryItemsResolved += OnDirectoryItemsResolved;
             _atpService.BeginScanCompleted += OnBeginScanCompleted;
             _atpService.ScanStatusChanged += OnScanStatusChanged;
+            _atpService.GetScanResultCompleted += OnGetScanResultCompleted;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if(value != null)
@@ -114,6 +108,7 @@ namespace APTAT.Application.Models
             _atpService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
             _atpService.BeginScanCompleted -= OnBeginScanCompleted;
             _atpService.ScanStatusChanged -= OnScanStatusChanged;
+            _atpService.GetScanResultCompleted -= OnGetScanResultCompleted;
         }
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
@@ -171,6 +166,10 @@ namespace APTAT.Application.Models
                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                        infoItem.StatusMessage = scanProgress.StatusMessage;
+                       if(infoItem.ScanStage != ScanStage.OperationCompleted && scanProgress.ScanStage == ScanStage.OperationCompleted)
+                       {
+                           _atpService.GetScanResult(infoItem.ComputerGuid, this);    
+                       }
                        infoItem.ScanStage = scanProgress.ScanStage;
                        break;
                    }
@@ -185,11 +184,39 @@ namespace APTAT.Application.Models
                 {
                     completed++;
                 }
+
+            
+                
+                
             }
 
             if (completed == _onlineItems.Length)
             {
                 ScanCompleted();
+            }
+        }
+
+        private void OnGetScanResultCompleted(Object sender, GetScanResultCompletedEventArgs e)
+        {
+            ThreatInfoItem parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
+            if (parentItem != null)
+            {
+                ObservableCollection<ThreatInfoItem> items = new ObservableCollection<ThreatInfoItem>();        
+                if(e.ScanResult.UnknownFiles != null)
+                {
+                    foreach (UnknownFileItem unknownFile in e.ScanResult.UnknownFiles)
+                    {
+                        items.Add(new ThreatInfoItem
+                        {
+                            Name = unknownFile.Name,
+                            Size = unknownFile.Size / 1024 + " KB",
+                            IsRootItem = false,
+                            IsOnline = true
+                        });
+                    }    
+                }
+
+                parentItem.Items = items;
             }
         }
       

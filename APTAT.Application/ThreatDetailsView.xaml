@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
-	>
+	 Background="#CEE0F9">
 
     <Grid>
         <Grid.RowDefinitions>

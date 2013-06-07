@@ -63,6 +63,18 @@ namespace APTAT.Application.Services
         }
     }
 
+    public class GetScanResultCompletedEventArgs : DomainEventArgs
+    {
+        public ScanResultItem ScanResult { get; private set; }
+
+        public GetScanResultCompletedEventArgs(ScanResultItem scanResult, Object userState, Exception error = null)
+        {
+            ScanResult = scanResult;
+            UserState = userState;
+            Exception = error;
+        }
+    }
+
     public interface IAptService
     {
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
@@ -70,6 +82,7 @@ namespace APTAT.Application.Services
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
         event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
+        event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
 
         void  GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
 
@@ -78,5 +91,7 @@ namespace APTAT.Application.Services
         void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState);
 
         void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState);
+
+        void GetScanResult(Guid targetUid, Object userState);
     }
 }

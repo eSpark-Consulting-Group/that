@@ -113,6 +113,8 @@
     <Compile Include="Converters\DirectoryItemTypeToOpacityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Models\ScanProgressItem.cs" />
+    <Compile Include="Models\ScanResultItem.cs" />
+    <Compile Include="Models\UnknownFileItem.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\BasePage.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="StartScanView.xaml.cs">
       <DependentUpon>StartScanView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TemplateSelectors\MainViewNameTemplateSelector.cs" />
     <Compile Include="ThreatDetailsView.xaml.cs">
       <DependentUpon>ThreatDetailsView.xaml</DependentUpon>
     </Compile>

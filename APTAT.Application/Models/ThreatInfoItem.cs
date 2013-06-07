@@ -10,6 +10,7 @@ namespace APTAT.Application.Models
         private Int32 _unknownFilesCount;
         private String _statusMessage;
         private ScanStage _scanStage;
+        private ObservableCollection<ThreatInfoItem> _items;
 
         public Boolean IsRootItem { get; set; }
 
@@ -93,7 +94,15 @@ namespace APTAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Items { get; set; }
+        public ObservableCollection<ThreatInfoItem> Items
+        {
+            get { return _items; }
+            set
+            {
+                _items = value;
+                RaisePropertyChanged("Items");
+            }
+        }
 
         public ThreatInfoItem()
         {

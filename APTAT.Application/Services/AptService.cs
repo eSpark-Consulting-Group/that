@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Windows.Threading;
 using APTAT.Application.Models;
 using APTAT.Core;
@@ -47,6 +48,8 @@ namespace APTAT.Application.Services
 
         public event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
 
+        public event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
+
         private readonly AptAtManager _manager;
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
@@ -59,11 +62,13 @@ namespace APTAT.Application.Services
         public AptService()
         {
            _manager = new AptAtManager(this);
-           
         }
 
         public void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState)
         {
+
+            Debug.Assert(password != null);
+            
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password);
             scanner.ScanStarted += OnScanStarted;
@@ -87,6 +92,7 @@ namespace APTAT.Application.Services
         {
             DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
             IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets);
+
             resolver.TargetsResolved += OnTargetsResolved;  
             resolver.BeginResolve(userState);
         }
@@ -237,18 +243,48 @@ namespace APTAT.Application.Services
             }
         }
 
+
+        public void GetScanResult(Guid targetUid, Object userState)
+        {
+            ScanResult scanResult = _manager.GetScanResultByTargetUid(targetUid);
+            ScanResultItem resultItem = new ScanResultItem
+            {
+                TargetUid = scanResult.TargetUid,
+                TotalFilesCount = scanResult.TotalFilesCount,
+                UnknownFilesCount = scanResult.UnknownFilesCount
+            };
+
+            if (scanResult.UnknownFiles != null)
+            {
+                resultItem.UnknownFiles = new UnknownFileItem[scanResult.UnknownFiles.Count];
+                for (Int32 i = 0; i < scanResult.UnknownFiles.Count; ++i)
+                {
+                    UnknownFile unknownFile = scanResult.UnknownFiles[i];
+                    UnknownFileItem unknownFileItem = new UnknownFileItem
+                    {
+                        Name = unknownFile.Name,
+                        Size = unknownFile.Size
+                    };
+
+                    resultItem.UnknownFiles[i] = unknownFileItem;
+                }
+            }
+
+            if(GetScanResultCompleted != null)
+            {
+                GetScanResultCompleted(this, new GetScanResultCompletedEventArgs(resultItem, userState));
+            }
+        }
+
         public void Changed(params ChangesTrackingItem[] arg)
         {
             Action<ChangesTrackingItem[]> action = items =>
             {
-                ScanProgressItem[] scanProgressItems =
-                    new ScanProgressItem[items.Length];
+                ScanProgressItem[] scanProgressItems = new ScanProgressItem[items.Length];
                 for (Int32 i = 0; i < items.Length; ++i)
                 {
                     ChangesTrackingItem changesTrackingItem = items[i];
-                    DescentProgressItem descentProgressItem =
-                        changesTrackingItem.ChangedItem as
-                        DescentProgressItem;
+                    DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
                     if (descentProgressItem != null)
                     {
                         ScanProgressItem progressItem = new ScanProgressItem();
@@ -358,8 +394,5 @@ namespace APTAT.Application.Services
 
             return collection;
         }
-
-
-       
     }
 }
