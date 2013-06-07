@@ -10,8 +10,10 @@
         ScanInProgress,
         ScanCompleted,
         ScanFailed,
+        ScanResultsObtaning,
         ScanResultsProcessing,
         OperationCompleted,
-        OperationFailed
+        OperationFailed,
+        OperationCanceled
     }
 }

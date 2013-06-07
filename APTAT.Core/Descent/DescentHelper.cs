@@ -306,6 +306,14 @@ namespace APTAT.Core.Descent
             {
                 public string FileName { get; set; }
             }
+
+            public EventHandler<EventArgs> ReceivingResults;
+            private void InvokeReceivingResults(EventArgs e)
+            {
+                EventHandler<EventArgs> temp = ReceivingResults;
+                if (temp != null)
+                    temp(this, e);
+            }
             //======================================================================
 
 			private void Init( bool impersonateAsNetworkService )
@@ -515,7 +523,7 @@ namespace APTAT.Core.Descent
 
                     try
                     {
-                        using(FileStream fs = new FileStream(responseFilePathForCurrentComputer, FileMode.Open, FileAccess.Read, FileShare.Write))
+                        using(FileStream fs = new FileStream(responseFilePathForCurrentComputer, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             byte[] buf = new byte[fs.Length];
                             fs.Read(buf, 0, (int)fs.Length);
@@ -547,8 +555,11 @@ namespace APTAT.Core.Descent
                                 InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 
                                 string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
-                                File.Copy(resultsFile, resultsFileLocal, true);
+
+                                InvokeReceivingResults(EventArgs.Empty);
                                 
+                                File.Copy(resultsFile, resultsFileLocal, true);
+                                //File.Delete(resultsFile);
                                 InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 break;
                             }
@@ -619,16 +630,13 @@ namespace APTAT.Core.Descent
                             Thread.Sleep(1000);
                         }
                     }
-                    //catch (ThreadAbortException ex)
-                    //{
-                    //    if ((ex.ExceptionState is bool) == true)
-                    //    {
-                    //        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
-                    //            "Operation canceled for computer {0}.", _remoteHostInfo.HostName);
-                    //        //LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, ex.ToString());
-                    //        Thread.ResetAbort();
-                    //    }
-                    //}
+                    catch (ThreadAbortException ex)
+                    {
+                        if ((ex.ExceptionState is bool) == true)
+                        {
+                            throw new ScanCanceledException();
+                        }
+                    }
                     catch (Exception ex)
                     {
                         const DescentStatus status = DescentStatus.status_remote_invalid_response;

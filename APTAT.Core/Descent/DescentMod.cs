@@ -238,8 +238,19 @@ namespace APTAT.Core.Descent
             Thread thread;
             if(_threads.TryGetValue(uid, out thread))
             {
-                if(thread != null)
-                    thread.Abort(true);
+                if (thread != null)
+                {
+                    try
+                    {
+                        thread.Abort(true);
+                    }
+                    catch (ThreadStateException ex)
+                    {
+                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Thread abort exception occurred: {0}", ex);
+                        throw new InvalidOperationException("Cannot stop operation.");
+                    }
+                    
+                }
             }
            
         }
@@ -328,10 +339,20 @@ namespace APTAT.Core.Descent
                 {
                     // ReSharper disable AccessToModifiedClosure
                     dh.ScanResultsFileReceived -= onScanResultsFileReceived;
-                    dh.ScanProgressChanged -= onScanProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
 
                     _scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, HostName = args.HostName, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
+                };
+
+                EventHandler<EventArgs> onResultsReceiving = null;
+                onResultsReceiving = (sender, args) =>
+                {
+                    // ReSharper disable AccessToModifiedClosure
+                    dh.ReceivingResults -= onResultsReceiving;
+                    // ReSharper restore AccessToModifiedClosure
+
+                    var text = new ResourceText("null", "Obtaining results... ");
+                    NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanResultsObtaning);
                 };
                 //==========================================================================
 
@@ -349,6 +370,7 @@ namespace APTAT.Core.Descent
                 dh.ScanCompleted += onScanCompleted;
                 dh.ScanFailed += onScanFailed;
 			    dh.ScanResultsFileReceived += onScanResultsFileReceived;
+			    dh.ReceivingResults += onResultsReceiving;
 
 				try
 				{
@@ -445,7 +467,7 @@ namespace APTAT.Core.Descent
                     //    throw new DescentException( dh.Response );
                     //}
 
-					tp.DescentCallback.OnDescentCallback( DescentStatus.status_success, 0, "" );
+                    tp.DescentCallback.OnDescentCallback(DescentStatus.status_success, 0, String.Empty);
 				}
 				catch( DescentException ex )
 				{
@@ -454,6 +476,12 @@ namespace APTAT.Core.Descent
 						tp.DescentCallback.OnDescentCallback( ex._status, ex._win32error, ex._errorString );
 					}
 				}
+                catch( ScanCanceledException )
+                {
+                    LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
+                    if (tp.DescentCallback != null)
+                        tp.DescentCallback.OnDescentCallback(DescentStatus.status_operation_canceled, 0, String.Empty);
+                }
 				catch( ThreadAbortException ex )
 				{
 					if( (ex.ExceptionState as string) == TimeoutAbortString )
@@ -466,10 +494,10 @@ namespace APTAT.Core.Descent
 
                     if ((ex.ExceptionState is bool) == true)
                     {
-                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
-                            "Operation canceled for computer {0}.", tp.RemoteHostInfo.HostName);
-                        //LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, ex.ToString());
-                        Thread.ResetAbort();
+                        //Thread.ResetAbort();
+                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
+                        if (tp.DescentCallback != null)
+                            tp.DescentCallback.OnDescentCallback(DescentStatus.status_operation_canceled, 0, String.Empty);
                     }
 				}
 				catch( Exception x )

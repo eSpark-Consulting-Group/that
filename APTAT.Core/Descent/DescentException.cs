@@ -53,6 +53,8 @@ namespace APTAT.Core.Descent
 			status_package_timeout = 1001,
 			status_agent_timeout = 1002,
 			status_managed_target_not_found = 1003,
+
+            status_operation_canceled = 1004,
 		}
 
         public class DescentException : Exception

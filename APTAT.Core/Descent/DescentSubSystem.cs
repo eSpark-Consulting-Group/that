@@ -311,6 +311,9 @@ namespace APTAT.Core.Descent
                     case DescentStatus.status_managed_target_not_found:
                         description = ServerSideMessagesResources.TargetComputerNotManagedMessage;
                         break;
+                    case DescentStatus.status_operation_canceled:
+                        description = new ResourceText("null", "Scan operation was canceled.");
+                        break;
                     default:
                         description = ServerSideMessagesResources.UnsupportedErrorMessage;
                         break;
@@ -354,6 +357,16 @@ namespace APTAT.Core.Descent
                         //_changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, QueryResult.OperationUid, new FormattedText(new ResourceText("null", "Completed")), AptScanStage.OperationCompleted)), false);
 					}
 				}
+                else if(status == DescentStatus.status_operation_canceled)
+                {
+                    if (QueryResult != null)
+                    {
+                        FormattedText shortMessage;
+                        FormattedText description = GetDescentStatusDescription(status, null, null, null, out shortMessage);
+                        QueryResult.OnDescendOperationEvent(true, _computer, description, shortMessage, status.ToString(), win32Error, response);
+                        _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, _computer.Name, QueryResult.OperationUid, shortMessage, AptScanStage.OperationCanceled)), false);
+                    }
+                }
 				else
 				{
 					// Error occurred
