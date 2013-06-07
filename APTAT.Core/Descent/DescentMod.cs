@@ -252,7 +252,26 @@ namespace APTAT.Core.Descent
                     
                 }
             }
-           
+        }
+
+        public void AbortAllThreads()
+        {
+            foreach (var item in _threads)
+            {
+                if (item.Value != null)
+                {
+                    try
+                    {
+                        item.Value.Abort(true);
+                    }
+                    catch (ThreadStateException ex)
+                    {
+                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Thread abort exception occurred: {0}", ex);
+                        throw new InvalidOperationException("Cannot stop operation.");
+                    }
+
+                }
+            }
         }
 
 		private void InstallAgentThread( object obj )
@@ -393,7 +412,7 @@ namespace APTAT.Core.Descent
                         if(!resultsProcessor.TryParse(ref result))
                             throw new DescentException(DescentStatus.status_error, "Cannot process scan results.", 0);
 
-                        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, new ResourceText("null", String.Format("Completed. Total files scanned: {0}. Unknown files detected: {1}", result.TotalFilesCount, result.UnknownFilesCount)), AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount);
+                        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, new ResourceText("null", String.Format("Completed: Total files scanned: {0}. Unknown files detected: {1}", result.TotalFilesCount, result.UnknownFilesCount)), AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount);
                     }
 
 				    if( dh.Response.Status != DescentStatus.status_success &&

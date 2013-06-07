@@ -490,6 +490,10 @@ namespace APTAT.Core.Descent
 				if( File.Exists( responseFilePathForCurrentComputer ) )
 					File.Delete( responseFilePathForCurrentComputer );
 
+                // Delete response file if it exists
+                if (File.Exists(resultsFile))
+                    File.Delete(resultsFile);
+
                 args.Add(responseFilePathForCurrentComputer);
                 args.Add(resultsFile);
 

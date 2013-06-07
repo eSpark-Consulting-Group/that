@@ -1105,6 +1105,14 @@ namespace APTAT.Core.Descent
 
         } 
 
+        public void AbortAllThreads()
+        {
+            if (_descentMod == null)
+                return;
+
+            _descentMod.AbortAllThreads();
+        }
+
 		private void DescentResultsCleanupTimerCallback( object state )
 		{
 			try

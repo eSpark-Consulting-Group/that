@@ -391,5 +391,10 @@ namespace APTAT.Core
         {
             _descentSubSystem.AbortThreadByTargetUid(targetUid);
         }
+
+        public void StopScan()
+        {
+            _descentSubSystem.AbortAllThreads();
+        }
     }
 }

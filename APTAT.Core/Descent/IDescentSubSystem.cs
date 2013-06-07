@@ -39,5 +39,7 @@ namespace APTAT.Core.Descent
 		bool CreateAgentInstallers();
 		DescentResult GetDescentResult( Guid operationUid );
 	    ConcurrentDictionary<Guid, ScanResult> ScanResults { get; }
-	}
+
+        void AbortAllThreads();
+    }
 }
