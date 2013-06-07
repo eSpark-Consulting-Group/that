@@ -93,5 +93,7 @@ namespace APTAT.Application.Services
         void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState);
 
         void GetScanResult(Guid targetUid, Object userState);
+
+        void StopScan(Guid targetUid, Object userState);
     }
 }

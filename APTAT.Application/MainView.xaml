@@ -24,6 +24,7 @@
                                Click="OnStartScanningClick" />
             
             <telerik:RadButton Margin="3" Height="35" Content="Stop Scanning"
+                               Command="{Binding StopScanCommand}"
                                IsEnabled="{Binding IsScanInProgress}"/>
             <telerik:RadToolBarSeparator Margin="0"/>
             <telerik:RadButton Margin="3" Height="35" Content="Properites"

@@ -73,6 +73,8 @@ namespace APTAT.Application.Services
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password);
             scanner.ScanStarted += OnScanStarted;
             scanner.BeginScan(userState);
+
+            
         }
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
@@ -309,6 +311,11 @@ namespace APTAT.Application.Services
             DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Send, action, arg);
         }
 
+        public void StopScan(Guid targetUid, Object userState)
+        {
+            _manager.StopScan(targetUid);
+        }
+
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
             if (type == DomainEntryType.Root)
@@ -396,5 +403,8 @@ namespace APTAT.Application.Services
 
             return collection;
         }
+
+
+    
     }
 }

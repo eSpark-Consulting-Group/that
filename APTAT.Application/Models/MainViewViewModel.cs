@@ -123,11 +123,23 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsItemsEmpty");
             }
         }
+
+        public DelegateCommand StopScanCommand { get; private set; }
         
         public MainViewViewModel()
         {
             _atpService = new AptService();
             _storage = new StorageService();
+
+            StopScanCommand = new DelegateCommand(InvokeStopScan);
+        }
+
+        private void InvokeStopScan(Object arg)
+        {
+            foreach (ThreatInfoItem onlineItem in _onlineItems)
+            {
+                _atpService.StopScan(onlineItem.ComputerGuid, this);
+            }
         }
 
         protected override void InvokeViewLoaded(Object arg)
