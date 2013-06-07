@@ -113,6 +113,8 @@ namespace APTAT.Application.Services
                         ComputerGuid = deploymentTarget.TargetUid
                     };
 
+                
+
                     result.Add(infoItem);
                 }
 

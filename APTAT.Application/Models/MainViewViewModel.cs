@@ -17,6 +17,7 @@ namespace APTAT.Application.Models
 
 
         private Boolean _isScanInProgress;
+        private Int32 _scannedItemsCount;
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
         private ObservableCollection<ThreatInfoItem> _threatInfoItems;
@@ -28,6 +29,29 @@ namespace APTAT.Application.Models
             {
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
+            }
+        }
+
+        public Int32 ScannedItemsCount
+        {
+            get { return _scannedItemsCount; }
+            set
+            {
+                _scannedItemsCount = value;
+                RaisePropertyChanged("ScannedItemsCount");
+            }
+        }
+
+        public Int32 OnlineItemsCount
+        {
+            get
+            {
+                if(_onlineItems == null)
+                {
+                    return 0;
+                }
+
+                return _onlineItems.Length;
             }
         }
 
@@ -61,6 +85,13 @@ namespace APTAT.Application.Models
             }
         }
 
+
+        public Boolean IsItemsEmpty
+        {
+            get { return Items == null || Items.Count == 0; }
+        }
+
+
         public ObservableCollection<ThreatInfoItem> Items
         {
             get { return _threatInfoItems; }
@@ -69,6 +100,7 @@ namespace APTAT.Application.Models
                 _threatInfoItems = value;
                 RaisePropertyChanged("Items");
                 RaisePropertyChanged("ItemsCount");
+                RaisePropertyChanged("IsItemsEmpty");
             }
         }
         
@@ -113,19 +145,22 @@ namespace APTAT.Application.Models
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
+            _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
+            RaisePropertyChanged("OnlineItemsCount");
+
             Items = new ObservableCollection<ThreatInfoItem>(e.Items);
             IsBusy = false;
 
             String login = _storage.GetValue<String>(KnownKeys.Login, false);
             String password = _storage.GetValue<String>(KnownKeys.Password, true);
 
-            _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
+         
 
             foreach (ThreatInfoItem item in Items)
             {
                 if(item.IsOnline == false)
                 {
-                    item.StatusMessage = null;
+                    item.StatusMessage = "This computer is currently offline";
                 }
             }
 
@@ -184,13 +219,10 @@ namespace APTAT.Application.Models
                 {
                     completed++;
                 }
-
-            
-                
-                
             }
 
-            if (completed == _onlineItems.Length)
+            ScannedItemsCount = completed;
+            if (ScannedItemsCount == OnlineItemsCount)
             {
                 ScanCompleted();
             }
@@ -209,7 +241,8 @@ namespace APTAT.Application.Models
                         items.Add(new ThreatInfoItem
                         {
                             Name = unknownFile.Name,
-                            Size = unknownFile.Size / 1024 + " KB",
+                            Size = unknownFile.Size,
+                            SizeString = unknownFile.Size / 1024 + " KB",
                             IsRootItem = false,
                             IsOnline = true
                         });

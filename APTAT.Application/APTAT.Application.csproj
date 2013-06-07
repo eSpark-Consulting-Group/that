@@ -110,8 +110,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToOpacityConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DirectoryItemTypeToOpacityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\ScanStageToBrushConverter.cs" />
     <Compile Include="Models\ScanProgressItem.cs" />
     <Compile Include="Models\ScanResultItem.cs" />
     <Compile Include="Models\UnknownFileItem.cs" />

@@ -37,7 +37,8 @@
         </telerik:RadToolBar>
 
       
-        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}" >
+        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"  
+                                  >
             <telerik:RadTreeListView.Resources>
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch">
@@ -60,7 +61,8 @@
                                    TextTrimming="CharacterEllipsis"
                                    IsHitTestVisible="{Binding IsRootItem}"
                                    Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
-                                   Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" Foreground="#666"/>
+                                   Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" 
+                                   Foreground="{Binding ScanStage, Converter={StaticResource ScanStageToBrushConverter}}"/>
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="UnknownFileTemplate">
@@ -84,15 +86,31 @@
                     IsFilterable="False"
                     Width="*"/>
                 <telerik:GridViewDataColumn 
-                    DataMemberBinding="{Binding Size}"
+                    SortMemberPath="Size"
+                    DataMemberBinding="{Binding SizeString}"
                     IsFilterable="False"
                     Header="Size"  
                     Width="*"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
-        <StackPanel Orientation="Horizontal" Height="44" Grid.Row="2">
+        <TextBlock Text="No items to display. Press Start Scanning Button"
+                   Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
+                   Grid.Row="1"
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center"
+                   Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                    Orientation="Horizontal" Height="44" Grid.Row="2" 
+                    Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}">
             <TextBlock Text="Computers Count:" VerticalAlignment="Center" Margin="30,5,5,5"/>
             <TextBlock Text="{Binding ItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+        </StackPanel>
+        <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                    Orientation="Horizontal" Height="44" Grid.Row="2" Opacity="{Binding IsScanInProgress, Converter={StaticResource BoolToOpacityConverter}}">
+            <TextBlock Text="Scanned:" VerticalAlignment="Center" Margin="30,5,5,5"/>
+            <TextBlock Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text=" of " VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
     </Grid>
