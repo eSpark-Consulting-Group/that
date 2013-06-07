@@ -27,6 +27,25 @@ namespace APTAT.Application
             InitializeComponent();
 
             DispatcherHelper.Current = Dispatcher;
+
+            MouseDown += MainWindow_MouseDown;
+
+            //WindowResizer wr = new WindowResizer(this);
+
+            //xxxSizeGrip, where xxx corresponds to the equivilent border position
+            //wr.addResizerRight(rightSizeGrip);
+            //wr.addResizerLeft(leftSizeGrip);
+            //wr.addResizerUp(TopResizer);
+           // wr.addResizerDown(BottomResizer);
+            //wr.addResizerLeftUp(topLeftSizeGrip);
+            //wr.addResizerRightUp(topRightSizeGrip);
+            //wr.addResizerLeftDown(bottomLeftSizeGrip);
+            //wr.addResizerRightDown(bottomRightSizeGrip);
+        }
+
+        void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //DragMove();
         }
     }
 }

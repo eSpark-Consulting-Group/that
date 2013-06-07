@@ -1,4 +1,4 @@
-﻿<Models:BasePage xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"  x:Class="APTAT.Application.MainView"
+﻿<Models:BasePage xmlns:Primitives="clr-namespace:Telerik.Windows.Controls.RibbonView.Primitives;assembly=Telerik.Windows.Controls.RibbonView"  xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"  x:Class="APTAT.Application.MainView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -36,8 +36,8 @@
             <telerik:RadButton Margin="3" Height="35" Content="About" IsEnabled="False" />
         </telerik:RadToolBar>
 
-      
-        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"  
+        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"    
+                                 MouseDoubleClick="OnTreeDoubleClick"
                                   >
             <telerik:RadTreeListView.Resources>
                 <DataTemplate x:Key="NameTemplate">
@@ -113,5 +113,7 @@
             <TextBlock Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
+
+        
     </Grid>
 </Models:BasePage>

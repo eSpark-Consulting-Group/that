@@ -128,5 +128,14 @@ namespace APTAT.Application
         {
             NavigationService.Navigate(new Uri("/StartScanView.xaml", UriKind.Relative));
         }
+
+   
+
+        private void OnTreeDoubleClick(Object sender, MouseButtonEventArgs e)
+        {
+            ThreatDetailsWindow details = new ThreatDetailsWindow();
+            details.Owner = App.Current.MainWindow;
+            details.ShowDialog();
+        }
     }
 }
