@@ -362,26 +362,43 @@ namespace APTAT.Application.Services
             {
                 case AptScanStage.Pending:
                     return ScanStage.Pending;
+
                 case AptScanStage.Connecting:
                     return ScanStage.Connecting;
+
                 case AptScanStage.CopyingScanner:
                     return ScanStage.CopyingScanner;
+
                 case AptScanStage.ConfiguringScanner:
                     return ScanStage.ConfiguringScanner;
+
                 case AptScanStage.StartingScanner:
                     return ScanStage.StartingScanner;
+
                 case AptScanStage.ScanInProgress:
                     return ScanStage.ScanInProgress;
+
                 case AptScanStage.ScanCompleted:
                     return ScanStage.ScanCompleted;
+
                 case AptScanStage.ScanFailed:
                     return ScanStage.ScanFailed;
+
+                case AptScanStage.ScanResultsObtaning:
+                    return ScanStage.ScanResultsObtaning;
+
                 case AptScanStage.ScanResultsProcessing:
                     return ScanStage.ScanResultsProcessing;
+
                 case AptScanStage.OperationCompleted:
                     return ScanStage.OperationCompleted;
+
                 case AptScanStage.OperationFailed:
                     return ScanStage.OperationFailed;
+
+                case AptScanStage.OperationCanceled:
+                    return ScanStage.OperationCanceled;
+
                 default:
                     throw new ArgumentOutOfRangeException("stage");
             }

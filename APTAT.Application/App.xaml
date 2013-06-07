@@ -18,7 +18,7 @@
             <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <Converters:DirectoryItemTypeToOpacityConverter x:Key="DirectoryItemTypeToOpacityConverter"/>
             <Converters:ScanStageToBrushConverter x:Key="ScanStageToBrushConverter"
-                                                   CompletedBrush="Green" FailedBrush="#FFA11D1D" ProgressBrush="#666" OfflineBrush="#999"/>
+                                                   CompletedBrush="Green" FailedBrush="#FFA11D1D" CanceledBrush="#FFA11D1D" ProgressBrush="#666" OfflineBrush="#999"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

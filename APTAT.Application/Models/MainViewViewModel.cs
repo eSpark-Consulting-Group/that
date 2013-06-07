@@ -255,7 +255,7 @@ namespace APTAT.Application.Models
             for (Int32 j = 0; j < _onlineItems.Length; ++j)
             {
                 ThreatInfoItem infoItem = _onlineItems[j];
-                if(infoItem.ScanStage == ScanStage.OperationFailed || infoItem.ScanStage == ScanStage.OperationCompleted)
+                if (infoItem.ScanStage == ScanStage.OperationFailed || infoItem.ScanStage == ScanStage.OperationCompleted || infoItem.ScanStage == ScanStage.OperationCanceled)
                 {
                     completed++;
                 }

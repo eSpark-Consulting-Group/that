@@ -16,6 +16,8 @@ namespace APTAT.Application.Converters
 
         public Brush FailedBrush { get; set; }
 
+        public Brush CanceledBrush { get; set; }
+
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
             ScanStage item = (ScanStage)value;
@@ -29,6 +31,11 @@ namespace APTAT.Application.Converters
             if (item == ScanStage.OperationFailed)
             {
                 return FailedBrush;
+            }
+
+            if(item == ScanStage.OperationCanceled)
+            {
+                return CanceledBrush;
             }
 
             return ProgressBrush;
