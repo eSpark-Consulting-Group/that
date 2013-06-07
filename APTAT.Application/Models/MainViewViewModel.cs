@@ -18,6 +18,7 @@ namespace APTAT.Application.Models
 
         private Boolean _isScanInProgress;
         private Int32 _scannedItemsCount;
+        private Int32 _unknownFilesCount;
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
         private ObservableCollection<ThreatInfoItem> _threatInfoItems;
@@ -29,6 +30,16 @@ namespace APTAT.Application.Models
             {
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
+            }
+        }
+
+        public Int32 UnknownFilesCount
+        {
+            get { return _unknownFilesCount; }
+            set
+            {
+                _unknownFilesCount = value;
+                RaisePropertyChanged("UnknownFilesCount");
             }
         }
 
@@ -82,9 +93,18 @@ namespace APTAT.Application.Models
                 _selectedItem = value;
                 RaisePropertyChanged("SelectedItem");
                 RaisePropertyChanged("IsDetailsEnabled");
+
+                if(_selectedItem == null)
+                {
+                    _storage.SetValue(KnownKeys.UnknownFile, null);    
+                }
+                else
+                {
+                    _storage.SetValue(KnownKeys.UnknownFile, _selectedItem.UnknownFile);    
+                }
+                
             }
         }
-
 
         public Boolean IsItemsEmpty
         {
@@ -164,7 +184,14 @@ namespace APTAT.Application.Models
                 }
             }
 
-            _atpService.BeginScan(_onlineItems, login, password, this);
+            if(_onlineItems.Length > 0)
+            {
+                _atpService.BeginScan(_onlineItems, login, password, this);    
+            }
+            else
+            {
+                IsScanInProgress = false;
+            }
         }
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
@@ -203,7 +230,8 @@ namespace APTAT.Application.Models
                        infoItem.StatusMessage = scanProgress.StatusMessage;
                        if(infoItem.ScanStage != ScanStage.OperationCompleted && scanProgress.ScanStage == ScanStage.OperationCompleted)
                        {
-                           _atpService.GetScanResult(infoItem.ComputerGuid, this);    
+                           _atpService.GetScanResult(infoItem.ComputerGuid, this);
+                          
                        }
                        infoItem.ScanStage = scanProgress.ScanStage;
                        break;
@@ -233,6 +261,7 @@ namespace APTAT.Application.Models
             ThreatInfoItem parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
+                UnknownFilesCount += e.ScanResult.UnknownFiles.Length;
                 ObservableCollection<ThreatInfoItem> items = new ObservableCollection<ThreatInfoItem>();        
                 if(e.ScanResult.UnknownFiles != null)
                 {
@@ -244,7 +273,8 @@ namespace APTAT.Application.Models
                             Size = unknownFile.Size,
                             SizeString = unknownFile.Size / 1024 + " KB",
                             IsRootItem = false,
-                            IsOnline = true
+                            IsOnline = true,
+                            UnknownFile = unknownFile,
                         });
                     }    
                 }

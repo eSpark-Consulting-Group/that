@@ -78,13 +78,13 @@
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
                     Header="Name"
-                    Width="400" 
+                    Width="500" 
                     CellTemplateSelector="{StaticResource NameTemplateSelector}" SortMemberPath="Name" />
-                <telerik:GridViewDataColumn 
+                <!--<telerik:GridViewDataColumn 
                     DataMemberBinding="{Binding Type}"
                     Header="Type"  
                     IsFilterable="False"
-                    Width="*"/>
+                    Width="*"/>-->
                 <telerik:GridViewDataColumn 
                     SortMemberPath="Size"
                     DataMemberBinding="{Binding SizeString}"
@@ -102,8 +102,12 @@
         <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="44" Grid.Row="2" 
                     Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}">
-            <TextBlock Text="Computers Count:" VerticalAlignment="Center" Margin="30,5,5,5"/>
+            <TextBlock Text="Computers:" VerticalAlignment="Center" Margin="30,5,5,5"/>
             <TextBlock Text="{Binding ItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+            
+            <TextBlock Text=" (Unknown Files: " VerticalAlignment="Center" />
+            <TextBlock Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text=")" VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
         <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="44" Grid.Row="2" Opacity="{Binding IsScanInProgress, Converter={StaticResource BoolToOpacityConverter}}">

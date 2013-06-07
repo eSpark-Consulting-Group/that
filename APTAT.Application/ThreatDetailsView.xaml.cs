@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using APTAT.Application.Models;
 
 namespace APTAT.Application
 {
@@ -20,10 +21,13 @@ namespace APTAT.Application
     public partial class ThreatDetailsView
     {
         public event EventHandler BackClick;
+        private ThreatDetailsViewModel _viewModel;
 
         public ThreatDetailsView()
         {
             InitializeComponent();
+
+            DataContext = _viewModel = new ThreatDetailsViewModel();
         }
 
         private void OnBackClick(Object sender, RoutedEventArgs e)

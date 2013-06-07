@@ -106,6 +106,8 @@ namespace APTAT.Application.Models
             }
         }
 
+        public UnknownFileItem UnknownFile { get; set; }
+
         public ThreatInfoItem()
         {
             StatusMessage = "Initializing...";
