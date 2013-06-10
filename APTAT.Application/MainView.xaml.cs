@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using APTAT.Application.Models;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 
 namespace APTAT.Application
 {
@@ -55,6 +56,15 @@ namespace APTAT.Application
 
         private void OnTreeDoubleClick(Object sender, MouseButtonEventArgs e)
         {
+            if(e.OriginalSource != null)
+            {
+                FrameworkElement element = e.OriginalSource as FrameworkElement;
+                if(element != null && !(element.Parent is GridViewCell))
+                {
+                    return;
+                }
+            }
+
             if(_viewModel.SelectedItem != null && _viewModel.SelectedItem.IsRootItem == false)
             {
                 ThreatDetailsWindow details = new ThreatDetailsWindow();
