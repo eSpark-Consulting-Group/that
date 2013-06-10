@@ -220,18 +220,18 @@ namespace APTAT.Core
         public void NotifyChanged(ChangesTrackingItem[] items, bool exceptSelfSession)
         {
             List<Guid> failed = new List<Guid>();
-            GenericContextData<Guid> clientUID = CallContext.GetData(@"ClientUID") as GenericContextData<Guid>;
+            //GenericContextData<Guid> clientUID = CallContext.GetData(@"ClientUID") as GenericContextData<Guid>;
             lock (_syncObj)
             {
                 foreach (KeyValuePair<Guid, IChangeTrackingListener> pair in _listeners)
                 {
                     try
                     {
-                        if (exceptSelfSession && null != clientUID && pair.Key.Equals(clientUID.Data))
-                        {
-                            continue;
-                        }
-                        UpdateSessionInfo(items, clientUID);
+                        //if (exceptSelfSession && null != clientUID && pair.Key.Equals(clientUID.Data))
+                        //{
+                        //    continue;
+                        //}
+                        //UpdateSessionInfo(items, clientUID);
                         pair.Value.Changed(items);
                     }
                     catch (Exception)

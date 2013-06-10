@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -233,6 +234,7 @@ namespace APTAT.Core.Descent
             _tracker.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(computerUid, hostName, operationUid, formattedText, scanStage, totalFilesCount, unknownFilesCount, malwaresCount, safeFilesCount)), false);
         }
 
+        [SecurityPermissionAttribute(SecurityAction.Demand, ControlThread = true)]
         public void AbortThreadByTargetUid(Guid uid)
         {
             Thread thread;
@@ -331,12 +333,49 @@ namespace APTAT.Core.Descent
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanInProgress, args.TotalFilesScanned, args.UnknownFilesFound);
 			    };
 
+                EventHandler<DescentHelper.AptEnumeratingEventArgs> onEnumerationProgressChanged = null;
+                onEnumerationProgressChanged = (sender, args) =>
+                {
+                    bool notify = true;
+                    string fileTypes = String.Empty;
+                    AptScanStage scanStage = AptScanStage.Pending;
+                    switch(args.Stage)
+                    {
+                        case EnAptStage.EnApt_EnumeratingProcesses:
+                            fileTypes = "processes";
+                            scanStage = AptScanStage.EnumeratingProcesses;
+                            break;
+                        case EnAptStage.EnApt_EnumeratingDrivers:
+                            fileTypes = "drivers";
+                            scanStage = AptScanStage.EnumeratingDrivers;
+                            break;
+                        case EnAptStage.EnApt_EnumeratingAutoruns:
+                            fileTypes = "autoruns";
+                            scanStage = AptScanStage.EnumeratingAutoruns;
+                            break;
+                        case EnAptStage.EnApt_EnumeratingFolder:
+                            fileTypes = "folders";
+                            scanStage = AptScanStage.EnumeratingFolders;
+                            break;
+                        default:
+                            notify = false;
+                            break;
+                    }
+
+                    if (notify)
+                    {
+                        var text = new ResourceText("null", String.Format("Enumerating {0}: {1}", fileTypes, args.EnumeratedFilesCount));
+                        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, scanStage);
+                    }
+                };
+
                 EventHandler<DescentHelper.ScanCompletedEventArgs> onScanCompleted = null;
                 onScanCompleted = (sender, args) =>
                 {
                     // ReSharper disable AccessToModifiedClosure
                     dh.ScanCompleted -= onScanCompleted;
                     dh.ScanProgressChanged -= onScanProgressChanged;
+                    dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
                     var text = new ResourceText("null", String.Format("Scan completed. Total files scanned: {0}. Unknown files detected: {1}", args.TotalFilesScanned, args.UnknownFilesFound));
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanCompleted, args.TotalFilesScanned, args.UnknownFilesFound);
@@ -348,6 +387,7 @@ namespace APTAT.Core.Descent
                     // ReSharper disable AccessToModifiedClosure
                     dh.ScanFailed -= onScanFailed;
                     dh.ScanProgressChanged -= onScanProgressChanged;
+                    dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
                     var text = new ResourceText("null", String.Format("Scan failed: {0}.", args.Status));
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanFailed, args.TotalFilesScanned, args.UnknownFilesFound);
@@ -373,7 +413,8 @@ namespace APTAT.Core.Descent
                     var text = new ResourceText("null", "Obtaining results... ");
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanResultsObtaning);
                 };
-                //==========================================================================
+
+			    //==========================================================================
 
 
 				// 20% Copying remote deployment service package
@@ -390,6 +431,7 @@ namespace APTAT.Core.Descent
                 dh.ScanFailed += onScanFailed;
 			    dh.ScanResultsFileReceived += onScanResultsFileReceived;
 			    dh.ReceivingResults += onResultsReceiving;
+			    dh.EnumerationProgressChanged += onEnumerationProgressChanged;
 
 				try
 				{

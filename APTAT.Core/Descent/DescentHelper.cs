@@ -244,12 +244,21 @@ namespace APTAT.Core.Descent
 			}
 
             //======================================================================
-            public class AptScanEventArgs : EventArgs
+            public class AptEventArgs : EventArgs
             {
                 public string HostName { get; set; }
                 public Guid TargetUid { get; set; }
+                public int EnumeratedFilesCount { get; set; }
+                public long EnumeratedFilesSize { get; set; }
+            }
+
+            public class AptScanningEventArgs : AptEventArgs
+            {
                 public int TotalFilesScanned { get; set; }
                 public int UnknownFilesFound { get; set; }
+                public int SafeFilesFound { get; set; }
+                public int MalwaresFound { get; set; }
+                public long TotalFilesSize { get; set; }
             }
 
             // New events
@@ -268,7 +277,7 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanProgressChangedEventArgs : AptScanEventArgs
+            public class ScanProgressChangedEventArgs : AptScanningEventArgs
             {
             }
 
@@ -279,7 +288,7 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanFailedEventArgs : AptScanEventArgs
+            public class ScanFailedEventArgs : AptScanningEventArgs
             {
                 public DescentStatus Status { get; set; }
             }
@@ -291,7 +300,7 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanCompletedEventArgs : AptScanEventArgs
+            public class ScanCompletedEventArgs : AptScanningEventArgs
             {
             }
 
@@ -302,7 +311,7 @@ namespace APTAT.Core.Descent
                 if (temp != null)
                     temp(this, e);
             }
-            public class ScanResultsFileReceivedEventArgs : AptScanEventArgs
+            public class ScanResultsFileReceivedEventArgs : AptScanningEventArgs
             {
                 public string FileName { get; set; }
             }
@@ -313,6 +322,19 @@ namespace APTAT.Core.Descent
                 EventHandler<EventArgs> temp = ReceivingResults;
                 if (temp != null)
                     temp(this, e);
+            }
+
+            public EventHandler<AptEnumeratingEventArgs> EnumerationProgressChanged;
+            private void InvokeEnumerationProgressChanged(AptEnumeratingEventArgs e)
+            {
+                EventHandler<AptEnumeratingEventArgs> temp = EnumerationProgressChanged;
+                if (temp != null)
+                    temp(this, e);
+            }
+
+            public class AptEnumeratingEventArgs : AptEventArgs
+            {
+                public EnAptStage Stage { get; set; }
             }
             //======================================================================
 
@@ -536,44 +558,128 @@ namespace APTAT.Core.Descent
                                 throw new Exception("Response file is empty");
 
                             string[] temp = data.Split(';');
-                            if(temp.Length != 3)
+                            if (temp.Length != 9)
                                 throw new Exception("Response file header is not valid");
 
-                            int status;
-                            Int32.TryParse(temp[0], out status);
+                            int statusInt;
+                            Int32.TryParse(temp[0], out statusInt);
+
+                            int enumeratedCount;
+                            Int32.TryParse(temp[1], out enumeratedCount);
+
+                            long enumeratedSize;
+                            Int64.TryParse(temp[2], out enumeratedSize);
 
                             int totalFiles;
-                            Int32.TryParse(temp[1], out totalFiles);
+                            Int32.TryParse(temp[3], out totalFiles);
+
+                            long totalFilesSize;
+                            Int64.TryParse(temp[4], out totalFilesSize);
 
                             int unknownFiles;
-                            Int32.TryParse(temp[2], out unknownFiles);
+                            Int32.TryParse(temp[5], out unknownFiles);
 
-                            _response.Status = (DescentStatus)status;
+                            int safeFiles;
+                            Int32.TryParse(temp[6], out safeFiles);
 
-                            if(status == 0) // In progress
+                            int malwares;
+                            Int32.TryParse(temp[7], out malwares);
+
+                            string error = temp[8];
+
+                            EnAptStage status = (EnAptStage)statusInt;
+                            
+                            if( status == EnAptStage.EnApt_Pending)
                             {
-                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
-                            }
-                            else if(status == 1) // Completed
-                            {
-                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
                                 
+                            }
+                            else if( status == EnAptStage.EnApt_EnumeratingProcesses )
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs() { EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status });
+                            }
+                            else if( status == EnAptStage.EnApt_EnumeratingDrivers )
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs() { EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status });
+                            }
+                            else if( status == EnAptStage.EnApt_EnumeratingAutoruns )
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs() { EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status });
+                            }
+                            else if( status == EnAptStage.EnApt_EnumeratingFolder )
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs(){EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status});
+                            }
+                            else if( status == EnAptStage.EnApt_ScaningModules )
+                            {
+                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles, SafeFilesFound = safeFiles, MalwaresFound = malwares});
+                            }
+                            else if( status == EnAptStage.EnApt_WritingReport )
+                            {
+                                
+                            }
+                            else if( status == EnAptStage.EnApt_Complete )
+                            {
+                                _response.Status = DescentStatus.status_success;//(DescentStatus)status;
+
+                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+
                                 string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
 
                                 InvokeReceivingResults(EventArgs.Empty);
-                                
+
                                 File.Copy(resultsFile, resultsFileLocal, true);
                                 //File.Delete(resultsFile);
-                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles, SafeFilesFound = safeFiles, MalwaresFound = malwares });
                                 break;
                             }
-                            else if(status == 2) // Error (>=2)
+                            else if( status == EnAptStage.EnApt_Failed )
                             {
-                                //InvokeScanFailed(new ScanFailedEventArgs() { Status = (DescentStatus)status });
-                                throw new DescentException((DescentStatus)status, "Error returned from a remote computer. See the status for details.", 0);
-                                //break;
+                                throw new DescentException(DescentStatus.status_error, String.Format("Error returned from a remote computer: {0}", error), 0);
                             }
-                            
+                            else
+                            {
+                                throw new ArgumentException(String.Format("Unknown EnAptStage value: {0}", (int)status));
+                            }
+
+                            //string[] temp = data.Split(';');
+                            //if(temp.Length != 3)
+                            //    throw new Exception("Response file header is not valid");
+
+                            //int status;
+                            //Int32.TryParse(temp[0], out status);
+
+                            //int totalFiles;
+                            //Int32.TryParse(temp[1], out totalFiles);
+
+                            //int unknownFiles;
+                            //Int32.TryParse(temp[2], out unknownFiles);
+
+                            //_response.Status = (DescentStatus)status;
+
+                            //if(status == 0) // In progress
+                            //{
+                            //    InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                            //}
+                            //else if(status == 1) // Completed
+                            //{
+                            //    InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                                
+                            //    string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
+
+                            //    InvokeReceivingResults(EventArgs.Empty);
+                                
+                            //    File.Copy(resultsFile, resultsFileLocal, true);
+                            //    //File.Delete(resultsFile);
+                            //    InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                            //    break;
+                            //}
+                            //else if(status == 2) // Error (>=2)
+                            //{
+                            //    //InvokeScanFailed(new ScanFailedEventArgs() { Status = (DescentStatus)status });
+                            //    throw new DescentException((DescentStatus)status, "Error returned from a remote computer. See the status for details.", 0);
+                            //    //break;
+                            //}
+
                             Thread.Sleep(1000);
                         }
                         
