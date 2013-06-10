@@ -14,6 +14,12 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Border Background="#FFCEE0F9" BorderBrush="#FFB2C7E5" BorderThickness="0,0,0,1" >
+            
+        </Border>
+        <Border Background="#FFCEE0F9" BorderBrush="#FFB2C7E5" BorderThickness="0,1,0,0" Grid.Row="2" >
+
+        </Border>
         <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF555555" Margin="20,8"/>
         <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF555555" Margin="20,8"/>
         <Grid x:Name="panelSelectDomain" Grid.Row="1" Background="White" Visibility="Collapsed">
@@ -60,7 +66,9 @@
                     </Grid>
                 </DataTemplate>
             </Grid.Resources>
-            <Border BorderBrush="LightGray" Margin="50" BorderThickness="1">
+            
+            <Border BorderBrush="#FFB2C7E5" Margin="50" BorderThickness="1">
+                <Border BorderBrush="#FFE0E0E0" BorderThickness="0">
             <telerik:RadTreeView x:Name="domainTree" 
                                  
                                  IsOptionElementsEnabled="True"
@@ -72,6 +80,7 @@
                                  LoadOnDemand="OnLoadOnDemand" 
                                  ItemsSource="{Binding Items}" 
                                  IsLoadOnDemandEnabled="True" />
+            </Border>
             </Border>
         </Grid>
 
