@@ -251,6 +251,7 @@ namespace APTAT.Application.Services
         public void GetScanResult(Guid targetUid, Object userState)
         {
             ScanResult scanResult = _manager.GetScanResultByTargetUid(targetUid);
+            
             ScanResultItem resultItem = new ScanResultItem
             {
                 TargetUid = scanResult.TargetUid,
@@ -258,21 +259,36 @@ namespace APTAT.Application.Services
                 UnknownFilesCount = scanResult.UnknownFilesCount
             };
 
-            if (scanResult.UnknownFiles != null)
-            {
-                resultItem.UnknownFiles = new UnknownFileItem[scanResult.UnknownFiles.Count];
-                for (Int32 i = 0; i < scanResult.UnknownFiles.Count; ++i)
-                {
-                    UnknownFile unknownFile = scanResult.UnknownFiles[i];
-                    UnknownFileItem unknownFileItem = new UnknownFileItem
-                    {
-                        Name = unknownFile.Name,
-                        Size = unknownFile.Size
-                    };
 
-                    resultItem.UnknownFiles[i] = unknownFileItem;
+            UnknownFileItem[] unknownFileItems = null;
+            if (scanResult.AptReport != null)
+            {
+                if (scanResult.AptReport.Modules != null)
+                {
+                    unknownFileItems = scanResult.AptReport.Modules.Where(m => m.Cloud == CloudVerdict.Unknown)
+                        .Select(m => new UnknownFileItem
+                                         {
+                                             Name = m.Path,
+                                             Size = m.Size,
+                                             Accessed = m.Accessed,
+                                             Created = m.Created,
+                                             Modified = m.Modified,
+                                             Product = m.Product,
+                                             Copyright = m.Copyright,
+                                             Version = m.Version,
+                                             Description = m.Description,
+                                             Signer = m.Signer,
+                                             Attributes = m.Attributes,
+                                             Sha1 = m.Sha1
+                                         }
+                        ).ToArray();
+                        
+                    
                 }
             }
+
+            resultItem.UnknownFiles = unknownFileItems;
+            
 
             if(GetScanResultCompleted != null)
             {

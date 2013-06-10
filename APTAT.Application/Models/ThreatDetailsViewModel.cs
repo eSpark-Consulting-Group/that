@@ -154,19 +154,28 @@ namespace APTAT.Application.Models
             UnknownFileItem unknownFile = _storage.GetValue<UnknownFileItem>(KnownKeys.UnknownFile, false);
 
 
-
             FileName = Path.GetFileName(unknownFile.Name);
             Verdict = "unknown";
             Size = unknownFile.Size / 1024 + "KB";
-            Created = DateTime.Now;
-            Modified = DateTime.Now;
-            Accessed = DateTime.Now;
-            Hash = Guid.NewGuid().ToString();
-            Signer = "Microsoft";
-            Description = "Windows Explorer";
-            Version = "6.2.9200.16433";
-            Copyright = "© Microsoft Corporation";
-            Product = "Microsoft Windows Operating Systems";
+            Created = unknownFile.Created;
+            Modified = unknownFile.Modified;
+            Accessed = unknownFile.Accessed;
+            Hash = NAIfEmpty(unknownFile.Sha1);
+            Signer = NAIfEmpty(unknownFile.Signer);
+            Description = NAIfEmpty(unknownFile.Description);
+            Version = NAIfEmpty(unknownFile.Version);
+            Copyright = NAIfEmpty(unknownFile.Copyright);
+            Product = NAIfEmpty(unknownFile.Product);
+        }
+
+        private String NAIfEmpty(String str)
+        {
+            if(String.IsNullOrWhiteSpace(str))
+            {
+                return "n/a";
+            }
+
+            return str;
         }
 
         protected override void InvokeViewUnloaded(Object arg)
