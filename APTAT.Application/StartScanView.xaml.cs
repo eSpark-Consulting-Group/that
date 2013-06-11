@@ -23,7 +23,10 @@ namespace APTAT.Application
     /// </summary>
     public partial class StartScanView
     {
-        private StartScanViewModel _viewModel;
+        public event EventHandler CancelClick;
+        public event EventHandler FinishClick;
+
+        private readonly StartScanViewModel _viewModel;
 
         public StartScanView()
         {
@@ -31,12 +34,20 @@ namespace APTAT.Application
             InitializeComponent();
             UpdateButtonsVisibility();
 
+            Loaded += StartScanView_Loaded;
+        }
+
+        void StartScanView_Loaded(object sender, RoutedEventArgs e)
+        {
             txtDomainController.Focus();
         }
 
         private void OnCancelClick(Object sender, RoutedEventArgs e)
         {
-            NavigationService.GoBack();
+            if(CancelClick != null)
+            {
+                CancelClick(this, EventArgs.Empty);
+            }
         }
 
         private void OnFinishClick(Object sender, RoutedEventArgs e)
@@ -44,7 +55,13 @@ namespace APTAT.Application
             _viewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
                 Step = 2,
-                Completed = ctx => NavigationService.GoBack()
+                Completed = ctx =>
+                {
+                    if(FinishClick != null)
+                    {
+                        FinishClick(this, EventArgs.Empty);
+                    }
+                }
             }); 
         }
 

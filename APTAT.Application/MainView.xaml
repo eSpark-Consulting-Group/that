@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:Models="clr-namespace:APTAT.Application.Models"
-                 xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors" mc:Ignorable="d" 
+                 xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
+                   xmlns:Application="clr-namespace:APTAT.Application" mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
 	Title="APT Assesment Tool">
 
@@ -15,7 +16,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
        
-            
+        <Application:TitleUpdater Header="{Binding Header}"/>
  
         <telerik:RadToolBar Margin="-1" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" >
             <telerik:RadToolBarSeparator  Margin="26,0,0,0"/>
@@ -25,7 +26,7 @@
             
             <telerik:RadButton Margin="3" Height="35" Content="Stop Scanning"
                                Command="{Binding StopScanCommand}"
-                               IsEnabled="{Binding IsScanInProgress}"/>
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}"/>
             <telerik:RadToolBarSeparator Margin="0"/>
             <telerik:RadButton Margin="3" Height="35" Content="Properites"
                                IsEnabled="{Binding IsDetailsEnabled}" 
@@ -100,22 +101,27 @@
                    VerticalAlignment="Center" 
                    HorizontalAlignment="Center"
                    Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+        <!--<StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="44" Grid.Row="2" 
                     Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}">
-            <TextBlock Text="Computers:" VerticalAlignment="Center" Margin="30,5,5,5"/>
-            <TextBlock Text="{Binding ItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
-            
-            <TextBlock Text=" (Unknown Files: " VerticalAlignment="Center" />
-            <TextBlock Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="0,5"/>
-            <TextBlock Text=")" VerticalAlignment="Center" Margin="0,5"/>
-        </StackPanel>
-        <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                    Orientation="Horizontal" Height="44" Grid.Row="2" Opacity="{Binding IsScanInProgress, Converter={StaticResource BoolToOpacityConverter}}">
-            <TextBlock Text="Scanned:" VerticalAlignment="Center" Margin="30,5,5,5"/>
+            <TextBlock Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5"/>
+            <TextBlock Text=" unknown files detected (" VerticalAlignment="Center" Margin="0,5"/>
             <TextBlock Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
             <TextBlock Text=" of " VerticalAlignment="Center" Margin="0,5"/>
             <TextBlock Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text=" computers scanned)." VerticalAlignment="Center" Margin="0,5"/>
+        </StackPanel>-->
+
+        <!--Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"-->
+        <!--Opacity="{Binding IsScanInProgress, Converter={StaticResource BoolToOpacityConverter}}"-->
+        <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                    Orientation="Horizontal" Height="44" Grid.Row="2" >
+            <TextBlock Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5"/>
+            <TextBlock Text=" unknown files detected (" VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text=" of " VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+            <TextBlock Text=" computers scanned)." VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
 

@@ -13,9 +13,14 @@ namespace APTAT.Application.Converters
 
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
+            if(value == null)
+            {
+                return 0.0;
+            }
+
             if (Inverse)
             {
-                if ((Boolean) value)
+                if (value.Equals(true))
                 {
                     return 0.0;
                 }
@@ -23,7 +28,7 @@ namespace APTAT.Application.Converters
                 return 1.0;
             }
 
-            if ((Boolean) value)
+            if (value.Equals(true))
             {
                 return 1.0;
             }

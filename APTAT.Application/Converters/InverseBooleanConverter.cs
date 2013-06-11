@@ -11,7 +11,11 @@ namespace APTAT.Application.Converters
     {
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
-            return !(Boolean) value;
+            if(value == null)
+            {
+                return false;
+            }
+            return value.Equals(false);
         }
 
         public object ConvertBack(Object value, Type targetType, Object parameter, CultureInfo culture)

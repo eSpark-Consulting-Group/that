@@ -39,19 +39,21 @@ namespace APTAT.Application
 
             DataContext = _viewModel = new MainViewViewModel();
         }
-
-      
-
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {
             ThreatDetailsWindow details = new ThreatDetailsWindow();
-            details.Owner = App.Current.MainWindow;
+            details.Owner = System.Windows.Application.Current.MainWindow;
             details.ShowDialog();
         }
 
         private void OnStartScanningClick(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/StartScanView.xaml", UriKind.Relative));
+            StartScanWindow details = new StartScanWindow();
+            details.Owner = System.Windows.Application.Current.MainWindow;
+            if(details.ShowDialog() == true)
+            {
+                _viewModel.StartScanCommand.Execute(null);
+            }
         }
 
         private void OnTreeDoubleClick(Object sender, MouseButtonEventArgs e)

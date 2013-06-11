@@ -16,14 +16,15 @@ namespace APTAT.Application.Models
         private DirectoryItem[] _selectedTargets;
 
 
-        private Boolean _isScanInProgress;
+        private Boolean? _isScanInProgress;
         private Int32 _scannedItemsCount;
+        
         private Int32 _unknownFilesCount;
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
         private ObservableCollection<ThreatInfoItem> _threatInfoItems;
 
-        public Boolean IsScanInProgress
+        public Boolean? IsScanInProgress
         {
             get { return _isScanInProgress; }
             set
@@ -50,6 +51,18 @@ namespace APTAT.Application.Models
             {
                 _scannedItemsCount = value;
                 RaisePropertyChanged("ScannedItemsCount");
+            }
+        }
+
+        public String Header
+        {
+            get
+            {
+                if (IsScanInProgress == true && OnlineItemsCount > 1)
+                {
+                    return String.Format("APT Assesment Tool ({0}% scanning...)", Math.Round(ScannedItemsCount * 100.0 / OnlineItemsCount));
+                }
+                return "APT Assesment Tool";
             }
         }
 
@@ -124,44 +137,63 @@ namespace APTAT.Application.Models
             }
         }
 
+        public DelegateCommand StartScanCommand { get; private set; }
+
         public DelegateCommand StopScanCommand { get; private set; }
+
+     
         
         public MainViewViewModel()
         {
             _atpService = new AptService();
             _storage = new StorageService();
 
+            StartScanCommand = new DelegateCommand(InvokeStartScan);
             StopScanCommand = new DelegateCommand(InvokeStopScan);
+        }
+
+        private void InvokeStartScan(Object arg)
+        {
+            Items = new ObservableCollection<ThreatInfoItem>();
+            _onlineItems = new ThreatInfoItem[0];
+            SelectedItem = null;
+
+            ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
+            if (value != null)
+            {
+                _selectedTargets = value.OfType<DirectoryItem>().ToArray();
+                if (_selectedTargets.Length > 0)
+                {
+                    IsScanInProgress = null;
+                    IsBusy = true;
+                    _atpService.ResolveDirectoryItems(_selectedTargets, this);
+                }
+            }
         }
 
         private void InvokeStopScan(Object arg)
         {
             foreach (ThreatInfoItem onlineItem in _onlineItems)
             {
-                _atpService.StopScan(onlineItem.ComputerGuid, this);
+                if(onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed)
+                {
+                    onlineItem.StatusMessage = "Cancelling...";    
+                }
             }
+
+            _atpService.StopScan();
         }
 
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
+
+            IsScanInProgress = false;
            
             _atpService.DirectoryItemsResolved += OnDirectoryItemsResolved;
             _atpService.BeginScanCompleted += OnBeginScanCompleted;
             _atpService.ScanStatusChanged += OnScanStatusChanged;
             _atpService.GetScanResultCompleted += OnGetScanResultCompleted;
-
-            ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
-            if(value != null)
-            {
-                _selectedTargets = value.OfType<DirectoryItem>().ToArray();
-                if (_selectedTargets.Length > 0)
-                {
-                    IsScanInProgress = true;
-                    IsBusy = true;
-                    _atpService.ResolveDirectoryItems(_selectedTargets, this);
-                }    
-            }
         }
 
 
@@ -182,11 +214,10 @@ namespace APTAT.Application.Models
 
             Items = new ObservableCollection<ThreatInfoItem>(e.Items);
             IsBusy = false;
+            IsScanInProgress = true;
 
             String login = _storage.GetValue<String>(KnownKeys.Login, false);
             String password = _storage.GetValue<String>(KnownKeys.Password, true);
-
-         
 
             foreach (ThreatInfoItem item in Items)
             {
@@ -221,10 +252,13 @@ namespace APTAT.Application.Models
         private void ScanCompleted()
         {
             IsScanInProgress = false;
+
+            MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
         }
 
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
+          
             for(Int32 i = 0; i < e.ScanProgress.Length; ++i)
             {
                ScanProgressItem scanProgress = e.ScanProgress[i];
@@ -245,6 +279,8 @@ namespace APTAT.Application.Models
                            _atpService.GetScanResult(infoItem.ComputerGuid, this);
                           
                        }
+
+                       
                        infoItem.ScanStage = scanProgress.ScanStage;
                        break;
                    }
@@ -252,6 +288,8 @@ namespace APTAT.Application.Models
             }
 
             Int32 completed = 0;
+            Int32 scanned = 0;
+            Int32 unknownFiles = 0;
             for (Int32 j = 0; j < _onlineItems.Length; ++j)
             {
                 ThreatInfoItem infoItem = _onlineItems[j];
@@ -259,13 +297,26 @@ namespace APTAT.Application.Models
                 {
                     completed++;
                 }
+
+                if(infoItem.ScanStage == ScanStage.OperationCompleted)
+                {
+                    scanned++;
+                }
+
+
+                unknownFiles += infoItem.UnknownFilesCount;
+               
             }
 
-            ScannedItemsCount = completed;
-            if (ScannedItemsCount == OnlineItemsCount)
+            UnknownFilesCount = unknownFiles;
+            ScannedItemsCount = scanned;
+
+            if (completed == OnlineItemsCount)
             {
                 ScanCompleted();
             }
+
+            RaisePropertyChanged("Header");
         }
 
         private void OnGetScanResultCompleted(Object sender, GetScanResultCompletedEventArgs e)
@@ -273,7 +324,7 @@ namespace APTAT.Application.Models
             ThreatInfoItem parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-                UnknownFilesCount += e.ScanResult.UnknownFiles.Length;
+        
                 ObservableCollection<ThreatInfoItem> items = new ObservableCollection<ThreatInfoItem>();        
                 if(e.ScanResult.UnknownFiles != null)
                 {

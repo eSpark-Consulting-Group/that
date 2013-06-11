@@ -327,9 +327,9 @@ namespace APTAT.Application.Services
             DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Send, action, arg);
         }
 
-        public void StopScan(Guid targetUid, Object userState)
+        public void StopScan()
         {
-            _manager.StopScan(targetUid);
+            _manager.StopScan();
         }
 
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)

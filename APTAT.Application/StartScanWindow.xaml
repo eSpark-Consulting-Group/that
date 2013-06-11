@@ -1,0 +1,8 @@
+﻿<Window x:Class="APTAT.Application.StartScanWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
+        Title="Start Scanning Wizard" Height="600" Width="800" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Application:StartScanView FinishClick="OnFinishClick" CancelClick="OnCancelClick"/>
+    </Grid>
+</Window>

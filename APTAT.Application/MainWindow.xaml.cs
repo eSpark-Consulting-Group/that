@@ -41,6 +41,8 @@ namespace APTAT.Application
             //wr.addResizerRightUp(topRightSizeGrip);
             //wr.addResizerLeftDown(bottomLeftSizeGrip);
             //wr.addResizerRightDown(bottomRightSizeGrip);
+
+            
         }
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)

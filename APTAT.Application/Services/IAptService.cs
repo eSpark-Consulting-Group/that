@@ -94,6 +94,6 @@ namespace APTAT.Application.Services
 
         void GetScanResult(Guid targetUid, Object userState);
 
-        void StopScan(Guid targetUid, Object userState);
+        void StopScan();
     }
 }
