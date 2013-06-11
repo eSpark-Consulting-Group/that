@@ -416,7 +416,8 @@ namespace APTAT.Application.Services
                     return ScanStage.OperationCanceled;
 
                 default:
-                    throw new ArgumentOutOfRangeException("stage");
+                    return ScanStage.Unknown;
+                    //  throw new ArgumentOutOfRangeException("stage");
             }
         }
 

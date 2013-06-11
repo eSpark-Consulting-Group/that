@@ -7,6 +7,7 @@ namespace APTAT.Application.Models
 {
     public enum ScanStage
     {
+        Unknown,
         Pending,
         Connecting,
         CopyingScanner,
