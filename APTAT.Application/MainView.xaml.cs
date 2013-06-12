@@ -83,5 +83,12 @@ namespace APTAT.Application
                 details.ShowDialog();
             }
         }
+
+        private void OnBuildReportClick(Object sender, RoutedEventArgs e)
+        {
+            ReportWindow details = new ReportWindow();
+            details.Owner = System.Windows.Application.Current.MainWindow;
+            details.ShowDialog();
+        }
     }
 }

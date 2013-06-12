@@ -33,7 +33,8 @@
                                Click="OnPropertiesClick" />
             <telerik:RadToolBarSeparator Margin="0"/>
             <telerik:RadButton Margin="3" Height="35" Content="Build Report"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"/>
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                               Click="OnBuildReportClick"/>
             <telerik:RadToolBarSeparator Margin="0"/>
             <telerik:RadButton Margin="3" Height="35" Content="About" IsEnabled="False" />
         </telerik:RadToolBar>
