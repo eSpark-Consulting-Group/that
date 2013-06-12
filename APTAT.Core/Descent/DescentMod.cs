@@ -157,7 +157,6 @@ namespace APTAT.Core.Descent
                 // Install msi package
                 dh.ExecuteAction(
                     "action_uninstall_agent",
-                    new string[] {},
                     0);
 
                 if (dh.Response.Status != DescentStatus.status_success)
@@ -188,6 +187,7 @@ namespace APTAT.Core.Descent
             public uint HostPort;
 			public IDescentWatcherFactory DescentWatcherFactory;
 			public Guid OperationUid;
+            public string ScanScope;
 
 			public IDisposable InformOperationStart( Thread thread )
 			{
@@ -204,7 +204,7 @@ namespace APTAT.Core.Descent
 			}
 		}
 
-        public void InstallAgent(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity, uint hostPort, Guid operationUid)
+        public void InstallAgent(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity, uint hostPort, Guid operationUid, string scanScope)
         {
             InstallAgentThreadParams tp = new InstallAgentThreadParams();
             tp.RemoteHostInfo = remoteHostInfo;
@@ -213,6 +213,7 @@ namespace APTAT.Core.Descent
             tp.HostPort = hostPort;
             tp.DescentWatcherFactory = DescentWatcherFactory;
 			tp.OperationUid = operationUid;
+            tp.ScanScope = scanScope;
 
 			_taskFactory.StartNew( InstallAgentThread, tp ).ContinueWith( task => task.Dispose() );
             //ThreadPool.QueueUserWorkItem(InstallAgentThread_, tp);
@@ -442,7 +443,7 @@ namespace APTAT.Core.Descent
 					ImpersonationHelper.Logon32LogonType impersonationLogonType = ImpersonationHelper.Logon32LogonType.NewCredentials;
 
 					dh.Init( impersonationLogonType );
-					dh.ExecuteAction("action_install_agent_check", new string[] { tp.HostPort.ToString() }, 0 );
+					dh.ExecuteAction(tp.ScanScope, 0 );
 
                     ScanResult result;
                     _scanResults.TryGetValue(tp.AgentIdentity, out result);

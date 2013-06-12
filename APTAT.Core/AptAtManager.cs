@@ -374,7 +374,8 @@ namespace APTAT.Core
                                              {
                                                  Targets = targets,
                                                  Login = login,
-                                                 Password = password
+                                                 Password = password,
+                                                 ScanScope = "processes|drivers|autoruns"
                                              };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
             return new AptScanner(command);

@@ -26,7 +26,7 @@ namespace APTAT.Core.Descent
 		///// <param name="password">Password at target</param>
 		//void DescentOnGroup( IPersistentGroup group, string login, string password );
 		//void UnDescentOnGroup( IPersistentGroup group, string login, string password );
-		void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid );
+        void DoDescentOperationOnNotExistingComputers(IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope);
 	//	void AddDescentOperationOnNotExistingComputers( Guid operationUid, IEnumerable<IComputer> computers, string login, string password );
 	//	void FinishDelayedComputers( Guid operationUid );
 		string GetDescentErrorMessage( string errorCode, int systemCode, string systemMessage, string[] extensionTexts, bool isUninstall,CultureInfo cultureInfo );

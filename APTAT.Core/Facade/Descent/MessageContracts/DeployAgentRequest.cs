@@ -18,5 +18,7 @@ namespace APTAT.Core.Facade.Descent.MessageContracts
 		public InstallPackageInfo InstallPackage { get; set; }
 
 		public bool UpdateEndpoints { get; set; }
+
+        public string ScanScope { get; set; }
 	}
 }

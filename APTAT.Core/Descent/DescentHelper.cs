@@ -500,11 +500,11 @@ namespace APTAT.Core.Descent
 				}
 			}
 
-			public void ExecuteAction( string actionName, string[] parameters, int timeoutInMs )
+			public void ExecuteAction( string scanScope, int timeoutInMs )
 			{
 				List<string> args = new List<string>();
 
-				const string responseFilePathForRemoteComputer = AptScannerTempFolderName + @"\" + ScanStatusFileName;
+				//const string responseFilePathForRemoteComputer = AptScannerTempFolderName + @"\" + ScanStatusFileName;
 				string responseFilePathForCurrentComputer = _remoteWorkingDirectory + @"\" + ScanStatusFileName;
                 string resultsFile = _remoteWorkingDirectory + @"\" + ScanResultsFileName;
 
@@ -516,10 +516,11 @@ namespace APTAT.Core.Descent
                 if (File.Exists(resultsFile))
                     File.Delete(resultsFile);
 
+                args.Add(scanScope);
                 args.Add(responseFilePathForCurrentComputer);
                 args.Add(resultsFile);
 
-				args.Add( ScannerServiceFileName ); // file name
+				/*args.Add( ScannerServiceFileName ); // file name
 				args.Add( "process_response_action" ); // command
 				args.Add( actionName ); // action name
 				args.Add( responseFilePathForRemoteComputer ); // response file name
@@ -528,7 +529,7 @@ namespace APTAT.Core.Descent
 				foreach( string param in parameters )
 				{
 					args.Add( param );
-				}
+				}*/
 
 				try
 				{
@@ -749,6 +750,9 @@ namespace APTAT.Core.Descent
                     }
                     catch (Exception ex)
                     {
+                        if (ex is DescentException)
+                            throw;
+
                         const DescentStatus status = DescentStatus.status_remote_invalid_response;
                         InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid });
                         throw new DescentException(status, ex.Message, 0);

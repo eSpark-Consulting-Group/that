@@ -502,7 +502,7 @@ namespace APTAT.Core.Descent
         //    }
         //}
 
-		private void ProceedDescendOperation( bool descend, IDescentQueryResult queryResult, IComputer computer, string login, string password, bool skipNotificationsForThisSession )
+        private void ProceedDescendOperation(bool descend, IDescentQueryResult queryResult, IComputer computer, string login, string password, bool skipNotificationsForThisSession, string scanScope)
 		{
 			RemoteHostInfo ri = new RemoteHostInfo();
 			ri.HostName = ( computer.IPAddress != null ) ? computer.IPAddress.ToString() : computer.DnsName;
@@ -513,13 +513,13 @@ namespace APTAT.Core.Descent
 			var job = new RemoteInstallerJob( queryResult, _productManagement, _tracker, computer, !descend );
 
 			if( descend )
-				_descentMod.InstallAgent( ri, job, computer.Uid, GetSocketPortForAgent(), queryResult.OperationUid );
+				_descentMod.InstallAgent( ri, job, computer.Uid, GetSocketPortForAgent(), queryResult.OperationUid, scanScope );
 			else
 				_descentMod.UninstallAgent( ri, job );
 		}
 
 		private void ControlAgents( ActionFactoryAgentControl.DataInput.ControlAction controlAction, IDescentQueryResult queryResult,
-			IComputer[] computers, string login, string password, bool skipNotificationsForThisSession )
+			IComputer[] computers, string login, string password, bool skipNotificationsForThisSession, string scanScope )
 		{
 			// Find out which computers support agent control action and which don't
 			List<IComputer> computersByTask = new List<IComputer>();
@@ -555,7 +555,7 @@ namespace APTAT.Core.Descent
 
 			foreach( IComputer computer in computersByDescent )
 			{
-				ProceedDescendOperation( descend, queryResult, computer, login, password, skipNotificationsForThisSession );
+				ProceedDescendOperation( descend, queryResult, computer, login, password, skipNotificationsForThisSession, scanScope );
 			}
 
 			// Yes, computersByTask may be empty here - should execute anyway.
@@ -565,7 +565,7 @@ namespace APTAT.Core.Descent
 		#endregion
 
 		protected internal virtual void DoDescendOperation( IDescentQueryResult queryResult, bool descend,
-			IComputer[] computers, string login, string password, bool skipNotificationsForThisSession )
+			IComputer[] computers, string login, string password, bool skipNotificationsForThisSession, string scanScope )
 		{
 			if( login == null )
 				throw new ArgumentException( "Login name not specified.", "login" );
@@ -573,7 +573,7 @@ namespace APTAT.Core.Descent
 				throw new ArgumentException( "Password not specified.", "password" );
 
 			ControlAgents( descend ? ActionFactoryAgentControl.DataInput.ControlAction.Update : ActionFactoryAgentControl.DataInput.ControlAction.Uninstall,
-				queryResult, computers, login, password, skipNotificationsForThisSession );
+				queryResult, computers, login, password, skipNotificationsForThisSession, scanScope );
 		}
 
 		public IAgentPackageHelper GetAgentPackageHelper( SystemKind systemKind )
@@ -910,7 +910,7 @@ namespace APTAT.Core.Descent
         //    }
         //}
 
-		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid )
+		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope )
 		{
 			DescentResult result = new DescentResult( computers, withDelayedComputers, package );
 			operationUid = result.OperationUid;
@@ -1011,7 +1011,7 @@ namespace APTAT.Core.Descent
 			result.DescentCompleted += wholeDescentCompletedDelegate;
 
 			var descentTargets = computers.Where( item => !( item.State is Exception ) ).Select( item => item.Computer ).ToArray();
-			DoDescendOperation( result, true, descentTargets, login, password, false );
+			DoDescendOperation( result, true, descentTargets, login, password, false, scanScope );
 		}
 		
 		public string GetDescentErrorMessage( string errorCode, int systemCode, string systemMessage, string[] extensionTexts, bool isUninstall,CultureInfo cultureInfo )

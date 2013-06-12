@@ -523,6 +523,9 @@ namespace APTAT.Core.Descent
 
         public void StopService()
         {
+            if (m_databaseHandle == IntPtr.Zero || m_serviceHandle == IntPtr.Zero)
+                return;
+
             SERVICE_STATUS ss = new SERVICE_STATUS();
 
             if(QueryServiceStatus(m_serviceHandle, ref ss))
@@ -533,9 +536,9 @@ namespace APTAT.Core.Descent
             }
         }
 
-        public void RunService(string[] Parameters, bool waitToStop, int waitTimeoutMs)
+        public void RunService(string[] parameters, bool waitToStop, int waitTimeoutMs)
         {
-            if(!StartService(m_serviceHandle, Parameters.Length, Parameters))
+            if(!StartService(m_serviceHandle, parameters.Length, parameters))
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
             //int sleptTimeMs = 0;
