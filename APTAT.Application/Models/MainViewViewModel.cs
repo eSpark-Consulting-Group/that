@@ -10,6 +10,8 @@ namespace APTAT.Application.Models
 {
     public class MainViewViewModel : ViewModel
     {
+        public event EventHandler ScanProcessCompleted;
+
         private readonly IAptService _atpService;
         private readonly IStorageService _storage;
         private Guid _operationGuid;
@@ -157,6 +159,7 @@ namespace APTAT.Application.Models
             Items = new ObservableCollection<ThreatInfoItem>();
             _onlineItems = new ThreatInfoItem[0];
             SelectedItem = null;
+            UnknownFilesCount = 0;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
@@ -253,7 +256,8 @@ namespace APTAT.Application.Models
         {
             IsScanInProgress = false;
 
-            MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
+            ScanProcessCompleted(this, EventArgs.Empty);
+            // MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
         }
 
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
@@ -308,7 +312,11 @@ namespace APTAT.Application.Models
                
             }
 
-            UnknownFilesCount = unknownFiles;
+            if(unknownFiles > UnknownFilesCount)
+            {
+                UnknownFilesCount = unknownFiles;    
+            }
+            
             ScannedItemsCount = scanned;
 
             if (completed == OnlineItemsCount)

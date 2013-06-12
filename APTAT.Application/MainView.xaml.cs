@@ -38,6 +38,15 @@ namespace APTAT.Application
             InitializeComponent();
 
             DataContext = _viewModel = new MainViewViewModel();
+            _viewModel.ScanProcessCompleted += OnScanCompleted;
+        }
+
+        private void OnScanCompleted(Object sender, EventArgs e)
+        {
+            ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
+            scanCompletedWindow.Text.Text = String.Format("Scan completed! {0} Unknown Files Found.", _viewModel.UnknownFilesCount);
+            scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
+            scanCompletedWindow.ShowDialog();
         }
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {

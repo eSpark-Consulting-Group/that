@@ -108,6 +108,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ScanCompletedWindow.xaml.cs">
+      <DependentUpon>ScanCompletedWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BoolToOpacityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DirectoryItemTypeToOpacityConverter.cs" />
@@ -144,6 +147,10 @@
     </Compile>
     <Compile Include="TitleUpdater.cs" />
     <Compile Include="WindowResizer.cs" />
+    <Page Include="ScanCompletedWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
