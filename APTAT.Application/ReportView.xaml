@@ -7,26 +7,19 @@
              xmlns:converters="clr-namespace:Telerik.Windows.Documents.Converters;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
              x:Class="APTAT.Application.ReportView" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" >
+             d:DesignHeight="600" d:DesignWidth="800" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <telerik:RadToolBar DataContext="{Binding ElementName=pdfViewer, Path=Commands}">
+        <telerik:RadToolBar DataContext="{Binding ElementName=pdfViewer, Path=Commands}" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Margin="-1">
             <telerik:RadToolBar.Resources>
                 <converters:DoubleToStringPercentConverter x:Key="doubleToStringPercentConverter" />
                 <converters:FixedDocumentViewerModeConverter x:Key="ModeConverter" />
             </telerik:RadToolBar.Resources>
 
-            <telerik:RadButton Command="{Binding OpenPdfDocumentCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False">
-                <ToolTipService.ToolTip>
-                    <TextBlock Text="Open" />
-                </ToolTipService.ToolTip>
-                <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/open.png" Stretch="None" />
-            </telerik:RadButton>
-
-            <telerik:RadButton Command="{Binding PrintPdfDocumentCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False">
+            <telerik:RadButton Command="{Binding PrintPdfDocumentCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch"  Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False" Margin="30,2,2,2">
                 <ToolTipService.ToolTip>
                     <TextBlock Text="Print" />
                 </ToolTipService.ToolTip>
@@ -68,7 +61,7 @@
                 <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/zoom-out.png" Stretch="None" />
             </telerik:RadButton>
 
-            <telerik:RadComboBox IsEditable="True" Margin="2" MaxWidth="95" SelectedIndex="4" x:Name="cbScale"
+            <telerik:RadComboBox IsEditable="True" Margin="2" Width="70" SelectedIndex="4" x:Name="cbScale"
                          Text="{Binding FixedDocumentViewer.ScaleFactor, Converter={StaticResource doubleToStringPercentConverter}, Mode=TwoWay}">
                 <telerik:RadComboBoxItem Content="10%" />
                 <telerik:RadComboBoxItem Content="25%" />
