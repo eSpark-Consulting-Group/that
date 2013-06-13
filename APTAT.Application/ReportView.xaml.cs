@@ -32,7 +32,7 @@ namespace APTAT.Application
         {
             StreamResourceInfo stream =
                 System.Windows.Application.GetResourceStream(
-                    new Uri("pack://application:,,,/kwl.pdf", UriKind.RelativeOrAbsolute));
+                    new Uri("pack://application:,,,/Untitled2.pdf", UriKind.RelativeOrAbsolute));
             pdfViewer.DocumentSource = new PdfDocumentSource(stream.Stream);
         }
 
