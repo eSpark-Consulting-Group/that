@@ -18,28 +18,10 @@
        
         <Application:TitleUpdater Header="{Binding Header}"/>
  
-        <telerik:RadToolBar Margin="-1" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" >
-            <telerik:RadToolBarSeparator  Margin="26,0,0,0"/>
-            <telerik:RadButton Margin="3,3,3,3" Height="35" Content="Start Scanning"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
-                               Click="OnStartScanningClick" />
-            
-            <telerik:RadButton Margin="3" Height="35" Content="Stop Scanning"
-                               Command="{Binding StopScanCommand}"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}"/>
-            <telerik:RadToolBarSeparator Margin="0"/>
-            <telerik:RadButton Margin="3" Height="35" Content="Properites"
-                               IsEnabled="{Binding IsDetailsEnabled}" 
-                               Click="OnPropertiesClick" />
-            <telerik:RadToolBarSeparator Margin="0"/>
-            <telerik:RadButton Margin="3" Height="35" Content="Build Report"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
-                               Click="OnBuildReportClick"/>
-            <telerik:RadToolBarSeparator Margin="0"/>
-            <telerik:RadButton Margin="3" Height="35" Content="About" IsEnabled="False" />
-        </telerik:RadToolBar>
-
-        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"    
+     
+        
+        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"   
+                                 Margin="0,-2,0,0"
                                  MouseDoubleClick="OnTreeDoubleClick"
                                   >
             <telerik:RadTreeListView.Resources>
@@ -115,15 +97,59 @@
 
         <!--Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"-->
         <!--Opacity="{Binding IsScanInProgress, Converter={StaticResource BoolToOpacityConverter}}"-->
+        <telerik:RadToolBar Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" >
+            <!--<telerik:RadToolBarSeparator  Margin="26,0,0,0"/>-->
+
+            <Path Data="M56.74218,119.79565 L56.586849,119.96483 C53.280952,123.43725 49.149269,125.49999 44.667007,125.49999 C40.433758,125.49999 36.513214,123.66007 33.30571,120.5304 L32.885094,120.10449 L32.688538,120.56254 L32.449413,121.00439 L32.687317,121.35543 C35.672546,125.51665 39.907509,128.11449 44.604507,128.11449 C49.637001,128.11449 54.139099,125.13229 57.141972,120.44019 L57.340931,120.11076 L57.019234,119.97151 C56.936108,119.92673 56.856541,119.87805 56.780945,119.82583 z M55.917011,109.40305 C52.582436,112.20419 48.590359,113.83401 44.300003,113.83401 C40.545948,113.83401 37.020256,112.58617 33.963711,110.39778 L33.840958,110.3062 L34.078178,110.71724 C36.614326,114.86425 40.416687,117.50001 44.667004,117.50001 C49.200676,117.50001 53.224674,114.50111 55.745937,109.86802 L55.917011,109.53741 z M36.143906,102.72598 L36.31813,102.8754 C38.624947,104.74879 41.363171,105.83402 44.300003,105.83402 C47.046135,105.83402 49.61861,104.88515 51.82711,103.2303 L52.245617,102.89578 L51.67342,102.9892 C49.519928,103.31812 47.15229,103.5 44.667007,103.5 C41.871067,103.5 39.224014,103.26981 36.863258,102.85903 z M44.667007,53.511307 L44.609287,53.686661 C42.727928,59.049355 38.733006,62.75 34.108784,62.75 C33.053253,62.75 32.03051,62.557186 31.058212,62.195801 L30.811148,62.096012 L44.867176,88.57502 L58.616993,62.057991 L58.275803,62.195801 C57.303501,62.557186 56.280762,62.75 55.225231,62.75 C50.601009,62.75 46.606087,59.049355 44.724728,53.686661 z M52.989815,13.47982 C54.487408,13.405022 56.383595,13.961823 58.323414,15.167938 C62.203056,17.58017 64.788078,21.676224 64.097221,24.316742 C63.406368,26.957253 59.701252,27.142303 55.821613,24.730072 C51.941975,22.317841 49.356953,18.221779 50.047806,15.581268 C50.39323,14.261017 51.492226,13.554619 52.989815,13.47982 z M44.5,9.0511093 C24.893892,9.0511093 9,24.81012 9,44.249855 C9,55.184704 14.028927,64.954948 21.918701,71.410919 L22.674423,71.999756 L22.599472,71.999756 L22.881294,72.347717 C27.126823,77.719818 30.1488,84.093292 31.529701,91.05294 L31.782171,92.463242 L31.939087,92.403809 C33.974937,91.66864 36.496193,91.108757 39.314358,90.792229 L40.333134,90.697632 L20.334133,53.02314 C19.686756,51.8036 20.150585,50.290173 21.370125,49.642796 C21.751228,49.440491 22.161034,49.346703 22.564144,49.350582 C23.007561,49.354851 23.442875,49.477291 23.822968,49.703472 L23.890465,49.75 L24.899927,49.75 L24.941751,49.998901 C25.007404,50.349373 25.083429,50.694126 25.169355,51.032505 L25.444118,51.9855 L27.812019,56.446194 L28.265205,56.97728 C29.874332,58.714111 31.903481,59.75 34.108784,59.75 C38.519386,59.75 42.225372,55.606445 43.275814,49.998901 L43.317642,49.75 L46.016376,49.75 L46.058201,49.998901 C47.108639,55.606445 50.814629,59.75 55.225231,59.75 C57.430534,59.75 59.459682,58.714111 61.06881,56.97728 L61.53442,56.431637 L63.952557,51.768169 L64.164658,51.032505 C64.250587,50.694126 64.326614,50.349373 64.392265,49.998901 L64.434082,49.75 L65.92498,49.75 L66.187538,49.691967 C66.296486,49.675304 66.406754,49.665787 66.517586,49.663651 C66.920639,49.655884 67.331329,49.745712 67.714371,49.944328 C68.940102,50.579903 69.418518,52.088787 68.782944,53.314514 L49.380474,90.73288 L50.019657,90.792229 C52.837822,91.108757 55.359081,91.66864 57.394932,92.403809 L57.431438,92.417633 L57.69582,90.959679 C59.085098,84.036095 62.099056,77.695328 66.325722,72.347046 L66.606995,71.999756 L66.325577,71.999756 L67.081299,71.410919 C74.971077,64.954948 80,55.184704 80,44.249855 C80,24.81012 64.10611,9.0511093 44.5,9.0511093 z M44.5,0 C69.076668,0 89,19.811333 89,44.249855 C89,54.559853 85.454079,64.04631 79.508766,71.569138 L79.227486,71.916428 L79.508667,71.916428 L78.75296,72.505264 C70.863327,78.961266 65.834496,88.731552 65.834496,99.666443 C65.834496,100.52074 65.865189,101.36793 65.925545,102.20697 L65.992058,102.99933 L65.917007,102.99933 L65.917007,118.3183 C65.917007,118.45593 65.899521,118.59032 65.866219,118.7201 L65.816597,118.87399 L65.917007,118.87399 L65.812035,119.1891 C63.41695,126.14581 59.09536,131.71384 53.740761,134.71982 L53.654095,134.76607 L53.620541,135.01123 C53.159653,137.5325 49.326912,139.5 44.667007,139.5 C40.007107,139.5 36.174362,137.5325 35.713474,135.01123 L35.689735,134.8378 L35.277458,134.61139 C30.518639,131.87314 26.591806,127.10361 24.13294,121.13793 L23.933586,120.63296 L23.895481,120.56254 C23.741535,120.24442 23.614193,119.90771 23.516796,119.5562 L23.494808,119.46021 L23.39698,119.1891 L23.292007,118.87399 L23.37397,118.87399 L23.317822,118.46098 C23.300751,118.27229 23.292007,118.08084 23.292007,117.8871 L23.292007,103 L23.210358,103 L23.241707,102.7098 L23.292007,101.93223 L23.292007,100.1129 C23.292007,99.919159 23.300751,99.727707 23.317822,99.539017 L23.365627,99.187363 L23.357845,98.64521 C23.055416,88.124664 18.09713,78.760124 10.454052,72.505936 L9.6983452,71.917099 L9.773056,71.917099 L9.4912338,71.569138 C3.5459251,64.04631 0,54.559853 0,44.249855 C0,19.811333 19.923328,0 44.5,0 z" 
+                  Height="40" 
+                  Margin="30,5,5,5"
+                  StrokeStartLineCap="Round" 
+                  Stretch="Fill" 
+                  Fill="#FF888888"
+                  StrokeEndLineCap="Round"  StrokeThickness="0" StrokeLineJoin="Bevel" UseLayoutRounding="False" Width="26" >
+              
+            </Path>
+            
+            <telerik:RadButton Margin="10,5,5,5" Height="50" Content="Start Scanning"
+                               FontSize="18"
+                               Padding="10"
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                               Click="OnStartScanningClick" />
+
+            <telerik:RadButton Margin="5" Height="50" Content="Stop Scanning"
+                               Padding="10"
+                               FontSize="18"
+                               Command="{Binding StopScanCommand}"
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}"/>
+            <!--<telerik:RadToolBarSeparator Margin="0"/>-->
+            <telerik:RadButton Margin="5" Height="50" Content="Properites"
+                               FontSize="18"
+                               Padding="10"
+                               IsEnabled="{Binding IsDetailsEnabled}" 
+                               Click="OnPropertiesClick" />
+            <!--<telerik:RadToolBarSeparator Margin="0"/>-->
+            <telerik:RadButton Margin="5" Height="50" Content="Build Report"
+                               FontSize="18"
+                               Padding="10"
+                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                               Click="OnBuildReportClick"/>
+            <!--<telerik:RadToolBarSeparator Margin="0"/>-->
+            <telerik:RadButton Margin="5" 
+                               Padding="10"
+                               Height="50" Content="About" IsEnabled="False" FontSize="18"/>
+        </telerik:RadToolBar>
+
+        <Border Grid.Row="2" Background="#555555" Height="35">
         <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                    Orientation="Horizontal" Height="44" Grid.Row="2" >
-            <TextBlock Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5"/>
-            <TextBlock Text=" unknown files detected (" VerticalAlignment="Center" Margin="0,5"/>
-            <TextBlock Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
-            <TextBlock Text=" of " VerticalAlignment="Center" Margin="0,5"/>
-            <TextBlock Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
-            <TextBlock Text=" computers scanned)." VerticalAlignment="Center" Margin="0,5"/>
+                    Orientation="Horizontal" Height="35" >
+            <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5"/>
+                <TextBlock Foreground="White" Text=" unknown files detected (" VerticalAlignment="Center" Margin="0,5"/>
+                <TextBlock Foreground="White" Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+                <TextBlock Foreground="White" Text=" of " VerticalAlignment="Center" Margin="0,5"/>
+                <TextBlock Foreground="White" Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5"/>
+                <TextBlock  Foreground="White" Text=" computers scanned)." VerticalAlignment="Center" Margin="0,5"/>
         </StackPanel>
+        </Border>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
 
         

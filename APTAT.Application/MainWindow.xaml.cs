@@ -47,7 +47,17 @@ namespace APTAT.Application
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //DragMove();
+            DragMove();
+        }
+
+        private void OnCloseClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void OnMinimize(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
         }
     }
 }
