@@ -8,18 +8,14 @@
       d:DesignHeight="480" d:DesignWidth="640"
 	>
 
-    <Grid>
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition  Height="43"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border Background="#FFCEE0F9" BorderBrush="#FFB2C7E5" BorderThickness="0,0,0,1" >
-            
-        </Border>
-        <Border Background="#FFCEE0F9" BorderBrush="#FFB2C7E5" BorderThickness="0,1,0,0" Grid.Row="2" >
-
-        </Border>
+        <telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" >
+        </telerik:RadToolBar>
         <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF555555" Margin="20,8"/>
         <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF555555" Margin="20,8"/>
         <Grid x:Name="panelSelectDomain" Grid.Row="1" Background="White" Visibility="Collapsed">
@@ -67,8 +63,8 @@
                 </DataTemplate>
             </Grid.Resources>
             
-            <Border BorderBrush="#FFB2C7E5" Margin="30" BorderThickness="1">
-                <Border BorderBrush="#FFE0E0E0" BorderThickness="0">
+            <Border BorderBrush="LightGray" Margin="30" BorderThickness="0.5">
+               
             <telerik:RadTreeView x:Name="domainTree" 
                                  
                                  IsOptionElementsEnabled="True"
@@ -81,7 +77,7 @@
                                  ItemsSource="{Binding Items}" 
                                  IsLoadOnDemandEnabled="True" />
             </Border>
-            </Border>
+  
         </Grid>
 
         <Border Grid.Row="1" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Opacity="{Binding HasErrors, Converter={StaticResource BoolToOpacityConverter}}">    
@@ -95,12 +91,15 @@
         </Border>
 
 
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Height="36"  Margin="5" HorizontalAlignment="Right">
-            <Button x:Name="btnBack" Content="Back" Margin="5" Width="70" Click="OnBackClick" />
-            <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5" Width="70"/>
-            <Button x:Name="btnNext"  IsDefault="True" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick" />
-            <Button x:Name="btnFinish" IsDefault="True"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Scan" Click="OnFinishClick" Margin="5" Width="70"/>
-        </StackPanel>
+        <Border  Background="Transparent" Grid.Row="3"  Height="45">
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="35" Margin="0,0,10,0">
+                <Button x:Name="btnBack" Content="Back" Margin="5" Width="70" Click="OnBackClick" />
+                <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5" Width="70"/>
+                <Button x:Name="btnNext"  IsDefault="True" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick" />
+                <Button x:Name="btnFinish" IsDefault="True"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Scan" Click="OnFinishClick" Margin="5" Width="70"/>
+            </StackPanel>
+        </Border>
+     
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent"/>
     </Grid>
 </Models:BaseView>

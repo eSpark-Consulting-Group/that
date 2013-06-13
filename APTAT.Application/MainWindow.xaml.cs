@@ -1,4 +1,5 @@
-﻿using APTAT.Application.Models;
+﻿using System.ComponentModel;
+using APTAT.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,8 +43,27 @@ namespace APTAT.Application
             //wr.addResizerLeftDown(bottomLeftSizeGrip);
             //wr.addResizerRightDown(bottomRightSizeGrip);
 
+
+            Loaded += MainWindow_Loaded;
             
         }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(TitleProperty, typeof(Window));
+            if (dpd != null)
+            {
+                dpd.AddValueChanged(this, delegate
+                {
+                    if (txtTitle != null)
+                    {
+                        txtTitle.Text = Title;
+                    }
+                });
+            }
+        }
+
+        
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {

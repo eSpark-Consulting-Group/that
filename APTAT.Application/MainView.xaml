@@ -138,8 +138,8 @@
                                Padding="10"
                                Height="50" Content="About" IsEnabled="False" FontSize="18"/>
         </telerik:RadToolBar>
-
-        <Border Grid.Row="2" Background="#555555" Height="35">
+        <!--Background="#FFF38546"-->
+        <Border Grid.Row="2"  Background="#666" Height="35">
         <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="35" >
             <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5"/>

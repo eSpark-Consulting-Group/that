@@ -1,8 +1,37 @@
 ﻿<Window x:Class="APTAT.Application.StartScanWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
-        Title="Start Scanning Wizard" Height="600" Width="800" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
-    <Grid>
-        <Application:StartScanView FinishClick="OnFinishClick" CancelClick="OnCancelClick"/>
-    </Grid>
+        Title="Start Scanning Wizard" 
+        MinHeight="300" MinWidth="640"  Height="600" Width="800" WindowStyle="None"
+                AllowsTransparency="True" Background="Transparent" BorderThickness="3"
+                ResizeMode="CanResizeWithGrip" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+
+    <Border>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="5" Color="Black" Opacity="0.8" ShadowDepth="0.5" />
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#FF0090FF" Height="35">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Start Scanning Wizard" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                        <Button Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
+                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Application:StartScanView FinishClick="OnFinishClick" CancelClick="OnCancelClick" Grid.Row="1"/>
+        </Grid>
+    </Border>
 </Window>
