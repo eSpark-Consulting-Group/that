@@ -67,7 +67,15 @@ namespace APTAT.Application
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            DragMove();
+            try
+            {
+                DragMove();
+            }
+            catch (Exception)
+            {
+
+            }
+            
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)

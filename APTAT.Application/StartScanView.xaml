@@ -10,15 +10,16 @@
 
     <Grid Background="White">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition  Height="43"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" >
+        <telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Grid.Row="1" >
         </telerik:RadToolBar>
-        <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF555555" Margin="20,8"/>
-        <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF555555" Margin="20,8"/>
-        <Grid x:Name="panelSelectDomain" Grid.Row="1" Background="White" Visibility="Collapsed">
+        <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF555555" Margin="20,8" Grid.Row="1"/>
+        <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF555555" Margin="20,8" Grid.Row="1"/>
+        <Grid x:Name="panelSelectDomain" Grid.Row="2" Background="White" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -47,7 +48,7 @@
           
             </Grid>
         </Grid>
-        <Grid x:Name="panelSelectComputers" Grid.Row="1" Background="White">
+        <Grid x:Name="panelSelectComputers" Grid.Row="2" Background="White">
             <Grid.Resources>
                 <DataTemplate x:Key="DomainTreeItemTemplate">
                     <Grid>
@@ -80,7 +81,7 @@
   
         </Grid>
 
-        <Border Grid.Row="1" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Opacity="{Binding HasErrors, Converter={StaticResource BoolToOpacityConverter}}">    
+        <Border Grid.Row="0" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}}">    
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFA11D1D" Offset="0"/>
