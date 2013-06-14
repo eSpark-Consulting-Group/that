@@ -6,8 +6,8 @@
                  xmlns:Models="clr-namespace:APTAT.Application.Models"
                  xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
                    xmlns:Application="clr-namespace:APTAT.Application" mc:Ignorable="d" 
-      d:DesignHeight="480" d:DesignWidth="640"
-	Title="APT Assesment Tool">
+      d:DesignHeight="480" d:DesignWidth="1024"
+	Title="APT Assesment Tool" Background="White">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -22,6 +22,8 @@
         
         <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"   
                                  Margin="0,-2,0,0"
+                        
+                                 
                                  MouseDoubleClick="OnTreeDoubleClick"
                                   >
             <telerik:RadTreeListView.Resources>
@@ -63,7 +65,7 @@
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
                     Header="Name"
-                    Width="500" 
+                    Width="900" 
                     CellTemplateSelector="{StaticResource NameTemplateSelector}" SortMemberPath="Name" />
                 <!--<telerik:GridViewDataColumn 
                     DataMemberBinding="{Binding Type}"

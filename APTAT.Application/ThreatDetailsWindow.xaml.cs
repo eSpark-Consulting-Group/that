@@ -30,7 +30,7 @@ namespace APTAT.Application
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            DragMove();
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)

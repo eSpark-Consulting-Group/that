@@ -40,5 +40,10 @@ namespace APTAT.Application
             }
             
         }
+
+        private void BaseView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

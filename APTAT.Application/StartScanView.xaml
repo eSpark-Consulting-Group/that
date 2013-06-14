@@ -17,8 +17,8 @@
         </Grid.RowDefinitions>
         <telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Grid.Row="1" >
         </telerik:RadToolBar>
-        <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF555555" Margin="20,8" Grid.Row="1"/>
-        <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF555555" Margin="20,8" Grid.Row="1"/>
+        <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF0090FF" Margin="20,8" Grid.Row="1"/>
+        <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="19" Foreground="#FF0090FF" Margin="20,8" Grid.Row="1"/>
         <Grid x:Name="panelSelectDomain" Grid.Row="2" Background="White" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -101,6 +101,6 @@
             </StackPanel>
         </Border>
      
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent"/>
+        <telerik:RadBusyIndicator Grid.Row="2" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent" />
     </Grid>
 </Models:BaseView>
