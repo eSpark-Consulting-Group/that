@@ -26,7 +26,6 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Report" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                        <Button Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
                         <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
                     </StackPanel>
                 </Grid>
