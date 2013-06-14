@@ -7,6 +7,7 @@ using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.MessageContracts;
+using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core
 {
@@ -208,14 +209,39 @@ namespace APTAT.Core
     {
         private IServiceCommand<DeployAgentResponse> _command;
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
+        public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
 
-        public AptScanner()
-        {
-        }
-
-        public AptScanner(IServiceCommand<DeployAgentResponse> command)
+        internal AptScanner(IServiceCommand<DeployAgentResponse> command, IDescentSubSystem descentSubSystem)
         {
             _command = command;
+            if(descentSubSystem != null)
+                descentSubSystem.DescentCompleted += OnDescentCompleted;
+        }
+
+        private void OnDescentCompleted(object sender, DescentCompletedEventArgs e)
+        {
+            int total = 0;
+            int notPerformed = 0;
+            int succeeded = 0;
+            int failed = 0;
+            int calceled = 0;
+
+            var results = e.Results.Values;
+            total = results.Count;
+            var groupped = from result in results group result by result.ResultType into temp select temp;
+            foreach (var item in groupped)
+            {
+                if(item.Key == ScanResultType.NotPerformed)
+                    notPerformed = item.Count();
+                else if(item.Key == ScanResultType.Failed)
+                    failed = item.Count();
+                else if (item.Key == ScanResultType.Completed)
+                    succeeded = item.Count();
+                else if (item.Key == ScanResultType.Canceled)
+                    calceled = item.Count();
+            }
+
+            OnScanCompleted(new ScanCompletedEventArgs(){OperationUid = e.OperationUid, CalceledCount = calceled, FailedCount = failed, NotPerformedCount = notPerformed, SucceededCount = succeeded, TotalCount = total});
         }
 
         public void BeginScan(object state = null)
@@ -258,6 +284,13 @@ namespace APTAT.Core
             if (temp != null)
                 temp(this, args);
         }
+        
+        protected virtual void OnScanCompleted(ScanCompletedEventArgs args)
+        {
+            EventHandler<ScanCompletedEventArgs> temp = ScanCompleted;
+            if (temp != null)
+                temp(this, args);
+        }
 
         public IServiceCommand<DeployAgentResponse> Command
         {
@@ -277,6 +310,16 @@ namespace APTAT.Core
         public Exception Error { get; set; }
         public Guid OperationUid { get; set; }
         public object State { get; set; }
+    }
+
+    public class ScanCompletedEventArgs : EventArgs
+    {
+        public Guid OperationUid { get; set; }
+        public int TotalCount { get; set; }
+        public int NotPerformedCount { get; set; }
+        public int SucceededCount { get; set; }
+        public int FailedCount { get; set; }
+        public int CalceledCount { get; set; }
     }
 
     public class AptAtManager
@@ -300,6 +343,8 @@ namespace APTAT.Core
 
             if(listener != null)
                 _changeTrackingSubSystem.RegisterListener(listener);
+
+            //LocalReport localReport = new LocalReport();
         }
 
         public void RegisterChangeTrackingListener(IChangeTrackingListener listener)
@@ -378,13 +423,28 @@ namespace APTAT.Core
                                                  ScanScope = "processes|drivers|autoruns"
                                              };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
-            return new AptScanner(command);
+            return new AptScanner(command, _descentSubSystem);
+        }
+
+        public ScanResult GetScanResultByOperationAndTargetUid(Guid operationUid, Guid targetUid)
+        {
+            ScanResult scanResult = null;
+            var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
+            if(results != null)
+            {
+                results.TryGetValue(targetUid, out scanResult);
+            }
+            return scanResult;
         }
 
         public ScanResult GetScanResultByTargetUid(Guid targetUid)
         {
-            ScanResult scanResult;
-            _descentSubSystem.ScanResults.TryGetValue(targetUid, out scanResult);
+            ScanResult scanResult = null;
+            var results = _descentSubSystem.GetFirstScanResults();
+            if (results != null)
+            {
+                results.TryGetValue(targetUid, out scanResult);
+            }
             return scanResult;
         }
 

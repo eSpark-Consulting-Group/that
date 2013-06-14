@@ -44,7 +44,6 @@ namespace APTAT.Core.Descent
 		private const string DescentSubSystemName = @"Descent";
 
 		private readonly Dictionary<Guid, DescentResult> _descentResults = new Dictionary<Guid, DescentResult>();
-        private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults = new ConcurrentDictionary<Guid, ScanResult>();
 		private IDirectoryResolver _resolver;
 		private IMessagesListener _messages;
 		private IMessagingSubSystem _messaging;
@@ -910,6 +909,15 @@ namespace APTAT.Core.Descent
         //    }
         //}
 
+        private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, ScanResult>> _scanResultsPerOperation = new ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, ScanResult>>();
+        public event EventHandler<DescentCompletedEventArgs> DescentCompleted;
+        protected virtual void OnDescentCompleted(DescentCompletedEventArgs args)
+        {
+            EventHandler<DescentCompletedEventArgs> temp = DescentCompleted;
+            if (temp != null)
+                temp(this, args);
+        }
+
 		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope )
 		{
 			DescentResult result = new DescentResult( computers, withDelayedComputers, package );
@@ -918,6 +926,11 @@ namespace APTAT.Core.Descent
 			{
 				_descentResults[result.OperationUid] = result;
 			}
+
+            _scanResultsPerOperation.Clear();
+            var scanResults = new ConcurrentDictionary<Guid, ScanResult>();
+            _scanResultsPerOperation.TryAdd(result.OperationUid, scanResults);
+            _descentMod = new DescentMod(DescentWatcherFactory, _catalog, scanResults);
 
 			LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent,
 				"Deployment operation started{0} UID: {1}{0} computers count: {2}{0} with delayed targets: {3}{0}",
@@ -1002,6 +1015,8 @@ namespace APTAT.Core.Descent
 			{
 				LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent, "DescentCompleted event raised. Operation UID: {0}", result.OperationUid );
 
+                OnDescentCompleted(new DescentCompletedEventArgs() { OperationUid = result.OperationUid, Results = scanResults });
+
 				_tracker.UnregisterListener( result );
 				result.DescentCompleted -= wholeDescentCompletedDelegate;
 			};
@@ -1065,10 +1080,18 @@ namespace APTAT.Core.Descent
 			get { return DescentSubSystemIdentifier; }
 		}
 
-	    public ConcurrentDictionary<Guid, ScanResult> ScanResults
+	    public ConcurrentDictionary<Guid, ScanResult> GetScanResultsByOperationUid(Guid operationUid)
 	    {
-	        get { return _scanResults; }
+	        ConcurrentDictionary<Guid, ScanResult> results;
+	        _scanResultsPerOperation.TryGetValue(operationUid, out results);
+	        return results;
 	    }
+
+        public ConcurrentDictionary<Guid, ScanResult> GetFirstScanResults()
+        {
+            var keyValue = _scanResultsPerOperation.FirstOrDefault();
+            return keyValue.Value;
+        }
 
 	    public void Init( ISubSystemCatalog catalog )
 		{
@@ -1092,7 +1115,7 @@ namespace APTAT.Core.Descent
 			_macosPackageHelper = new MacOSAgentPackageHelper(Settings.Default.WebRootFolder, socketPortNumber, publicKey);
 
 			DescentWatcherFactory = new DescentWatcherFactory();
-			_descentMod = new DescentMod( DescentWatcherFactory, _catalog, _scanResults );
+			//_descentMod = new DescentMod( DescentWatcherFactory, _catalog, _scanResults );
 			_descentResultsCleanupTimer = new Timer( DescentResultsCleanupTimerCallback, null, Settings.Default.DescentResultLifetime, TimeSpan.FromMilliseconds( Timeout.Infinite ) );
 		}
 
@@ -1155,4 +1178,10 @@ namespace APTAT.Core.Descent
 
 		#endregion
 	}
+
+    public class DescentCompletedEventArgs : EventArgs
+    {
+        public Guid OperationUid { get; set; }
+        public ConcurrentDictionary<Guid, ScanResult> Results { get; set; }
+    }
 }

@@ -401,7 +401,15 @@ namespace APTAT.Core.Descent
                     dh.ScanResultsFileReceived -= onScanResultsFileReceived;
                     // ReSharper restore AccessToModifiedClosure
 
-                    _scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, HostName = args.HostName, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
+                    ScanResult result;
+                    _scanResults.TryGetValue(tp.AgentIdentity, out result);
+                    if (result != null)
+                    {
+                        result.FileName = args.FileName;
+                        result.TotalFilesCount = args.TotalFilesScanned;
+                        result.UnknownFilesCount = args.UnknownFilesFound;
+                    }
+                    //_scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, HostName = args.HostName, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
                 };
 
                 EventHandler<EventArgs> onResultsReceiving = null;
@@ -438,6 +446,7 @@ namespace APTAT.Core.Descent
 				{
 					// 5% Connecting to the target computer
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, ServerSideMessagesResources.DescentProgressAgentInstallConnectingToTarget, AptScanStage.Connecting);
+                    _scanResults.TryAdd(tp.AgentIdentity, new ScanResult() { TargetUid = tp.AgentIdentity, HostName = tp.RemoteHostInfo.HostName, ResultType = ScanResultType.NotPerformed});
 
 					// NewCredentials will use the impersonated user for network connections only.
 					ImpersonationHelper.Logon32LogonType impersonationLogonType = ImpersonationHelper.Logon32LogonType.NewCredentials;
@@ -455,6 +464,7 @@ namespace APTAT.Core.Descent
                         if(!resultsProcessor.TryParse(ref result))
                             throw new DescentException(DescentStatus.status_error, "Cannot process scan results.", 0);
 
+                        result.ResultType = ScanResultType.Completed;
                         NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, new ResourceText("null", String.Format("Completed: Total files scanned: {0}. Unknown files detected: {1}", result.TotalFilesCount, result.UnknownFilesCount)), AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount);
                     }
 
@@ -533,40 +543,38 @@ namespace APTAT.Core.Descent
 				}
 				catch( DescentException ex )
 				{
-					if( tp.DescentCallback != null )
-					{
-						tp.DescentCallback.OnDescentCallback( ex._status, ex._win32error, ex._errorString );
-					}
+					//if( tp.DescentCallback != null )
+					//	tp.DescentCallback.OnDescentCallback( ex._status, ex._win32error, ex._errorString );
+
+                    ProcessErrorOrCancel(ex._status, ex._win32error, ex._errorString, tp);
 				}
                 catch( ScanCanceledException )
                 {
+                    //ProcessScanCancelation(tp);
                     LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
-                    if (tp.DescentCallback != null)
-                        tp.DescentCallback.OnDescentCallback(DescentStatus.status_operation_canceled, 0, String.Empty);
+                    ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
                 }
 				catch( ThreadAbortException ex )
 				{
 					if( (ex.ExceptionState as string) == TimeoutAbortString )
 					{
-						LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
-							"Descent operation timed out for computer {0}. Thread terminated with exception: ", tp.RemoteHostInfo.HostName);
-						//LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, ex.ToString());
+						LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Descent operation timed out for computer {0}. Thread terminated with exception: ", tp.RemoteHostInfo.HostName);
 						Thread.ResetAbort();
 					}
 
                     if ((ex.ExceptionState is bool) == true)
                     {
-                        //Thread.ResetAbort();
+                        //ProcessScanCancelation(tp);
                         LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
-                        if (tp.DescentCallback != null)
-                            tp.DescentCallback.OnDescentCallback(DescentStatus.status_operation_canceled, 0, String.Empty);
+                        ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
                     }
 				}
-				catch( Exception x )
+				catch( Exception ex )
 				{
-					LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, "{0} occurred in descent thread: {1}", x.GetType().Name, x.Message);
-					if (tp.DescentCallback != null)
-						tp.DescentCallback.OnDescentCallback(DescentStatus.status_error, GetHResult(x).GetValueOrDefault(E_FAIL), x.Message);
+					LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, "{0} occurred in descent thread: {1}", ex.GetType().Name, ex.Message);
+					//if (tp.DescentCallback != null)
+					//	tp.DescentCallback.OnDescentCallback(DescentStatus.status_error, GetHResult(x).GetValueOrDefault(E_FAIL), x.Message);
+                    ProcessErrorOrCancel(DescentStatus.status_error, GetHResult(ex).GetValueOrDefault(E_FAIL), ex.Message, tp);
 				}
 				finally
 				{
@@ -577,6 +585,25 @@ namespace APTAT.Core.Descent
 				}
 			}
 		}
+
+        private void ProcessErrorOrCancel(DescentStatus descentStatus, int win32ErrorCode, string errorMessage, InstallAgentThreadParams tp)
+        {
+            ScanResult result;
+            _scanResults.TryGetValue(tp.AgentIdentity, out result);
+            if (result != null)
+            {
+                string errorText = errorMessage;
+                ScanResultType scanResultType = ScanResultType.Failed;
+                if (descentStatus == DescentStatus.status_operation_canceled)
+                    scanResultType = ScanResultType.Canceled;
+
+                result.ResultErrorText = errorText;
+                result.ResultType = scanResultType;
+            }
+
+            if (tp.DescentCallback != null)
+                tp.DescentCallback.OnDescentCallback(descentStatus, win32ErrorCode, errorMessage);
+        }
 
 		private int? GetHResult(Exception x)
 		{

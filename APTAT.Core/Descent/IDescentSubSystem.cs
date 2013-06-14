@@ -38,8 +38,11 @@ namespace APTAT.Core.Descent
 		ushort GetSocketPortForAgent();
 		bool CreateAgentInstallers();
 		DescentResult GetDescentResult( Guid operationUid );
-	    ConcurrentDictionary<Guid, ScanResult> ScanResults { get; }
+	    ConcurrentDictionary<Guid, ScanResult> GetScanResultsByOperationUid(Guid operationUid);
+        ConcurrentDictionary<Guid, ScanResult> GetFirstScanResults();
 
         void AbortAllThreads();
-    }
+
+	    event EventHandler<DescentCompletedEventArgs> DescentCompleted;
+	}
 }

@@ -21,6 +21,14 @@
         OperationCanceled
     }
 
+    public enum ScanResultType
+    {
+        NotPerformed,
+        Completed,
+        Failed,
+        Canceled
+    }
+
     public enum EnAptStage
     {
         EnApt_Pending = 0,
