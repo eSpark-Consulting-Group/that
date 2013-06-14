@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <telerik:RadToolBar DataContext="{Binding ElementName=pdfViewer, Path=Commands}" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Margin="-1">
+        <telerik:RadToolBar DataContext="{Binding ElementName=pdfViewer, Path=Commands}" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Margin="0">
             <telerik:RadToolBar.Resources>
                 <converters:DoubleToStringPercentConverter x:Key="doubleToStringPercentConverter" />
                 <converters:FixedDocumentViewerModeConverter x:Key="ModeConverter" />
