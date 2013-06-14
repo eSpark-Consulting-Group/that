@@ -27,5 +27,15 @@ namespace APTAT.Application
         {
             DialogResult = true;
         }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void OnCloseClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

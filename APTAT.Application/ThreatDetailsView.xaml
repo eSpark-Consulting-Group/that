@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
 
-	 Background="#CEE0F9">
+	 >
 
     <Grid>
         <Grid.RowDefinitions>
@@ -13,12 +13,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border Background="#FFCEE0F9" BorderBrush="#FFB2C7E5" Grid.Row="0" BorderThickness="0,0,0,1" >
-
-        </Border>
-        <Border Background="#FFCEE0F9" BorderBrush="#FFB2C7E5" Grid.Row="2" BorderThickness="0,1,0,0" >
-
-        </Border>
+      
         <StackPanel Height="43" Orientation="Horizontal">
             <Image Source="warning.png" Width="25" Height="25" HorizontalAlignment="Left" Margin="28,0,0,0"/>
             <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center"  Text="{Binding FileName}" FontSize="19" Foreground="#FF555555" Margin="8,8"/>

@@ -1,8 +1,37 @@
 ﻿<Window x:Class="APTAT.Application.ThreatDetailsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
-        Title="Details" Height="360" Width="720" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" >
-    <Grid>
-        <Application:ThreatDetailsView BackClick="OnBackClick"/>
-    </Grid>
+        Title="Details" Height="360" Width="720"
+        WindowStyle="None"
+                AllowsTransparency="True" Background="Transparent" BorderThickness="3"
+                ResizeMode="CanResizeWithGrip" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Border>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="5" Color="Black" Opacity="0.8" ShadowDepth="0.5" />
+        </Border.Effect>
+
+        <Grid Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#FF0090FF" Height="35">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Details" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Grid Grid.Row="1">
+                <Application:ThreatDetailsView BackClick="OnBackClick"/>
+            </Grid>
+        </Grid>
+    </Border>
 </Window>
