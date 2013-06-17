@@ -2373,9 +2373,10 @@
 									 telerik:StyleManager.Theme="{StaticResource Theme}"
 									 Grid.Column="3" Grid.Row="1"/>
 
-			<Border x:Name="PART_IndicatorPresenter"
+            <!-- !!!-->
+            <Border x:Name="PART_IndicatorPresenter"
 					Width="25" 
-					Visibility="{TemplateBinding RowIndicatorVisibility}" BorderBrush="{StaticResource AccentBrush}" BorderThickness="0,0,1,1"
+					Visibility="{TemplateBinding RowIndicatorVisibility}" BorderBrush="#DDD" BorderThickness="0,0,1,1"
 					grid:SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Grid.Row="1"/>
 
 			<grid:IndentPresenter x:Name="PART_IndentPresenter" Grid.Column="1" MinHeight="{TemplateBinding MinHeight}"
@@ -2414,8 +2415,9 @@
 	<Style x:Key="GridViewHeaderRowStyle" TargetType="grid:GridViewHeaderRow">
 		<Setter Property="Template" Value="{StaticResource GridViewHeaderRowTemplate}" />
 		<Setter Property="Background" Value="{StaticResource MainBrush}" />
-		<Setter Property="BorderThickness" Value="1,0,1,1"/>
-		<Setter Property="MinHeight" Value="30" />
+		<Setter Property="BorderThickness" Value="0,0,0,0"/>
+        <!--<Setter Property="BorderThickness" Value="1,0,1,1"/> REAL VALUE--> 
+        <Setter Property="MinHeight" Value="30" />
 		<Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
 		<Setter Property="VerticalContentAlignment" Value="Stretch" />
 		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -4415,7 +4417,7 @@
 						Background="{StaticResource MainBrush}">
 					<Grid>
 						<Grid x:Name="NavigatorIndicator" HorizontalAlignment="Center" VerticalAlignment="Center" Width="9" Height="9" Visibility="Collapsed" >
-							<Path x:Name="plus" Stretch="Fill" Width="8" Height="4" Data="M0,0 L8,2.3841858E-07 L4,4 z" RenderTransformOrigin="0.5,0.5"  Fill="{StaticResource AccentBrush}"  StrokeThickness="{TemplateBinding BorderThickness}" Margin="{TemplateBinding Padding}">
+							<Path x:Name="plus" Stretch="Fill" Width="8" Height="4" Data="M0,0 L8,2.3841858E-07 L4,4 z" RenderTransformOrigin="0.5,0.5"  Fill="#DDD"  StrokeThickness="{TemplateBinding BorderThickness}" Margin="{TemplateBinding Padding}">
 								<Path.RenderTransform>
 									<TransformGroup>
 										<ScaleTransform ScaleY="-1"/>
