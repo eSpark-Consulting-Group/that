@@ -38,7 +38,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="Text" Text="" Margin="10"/>
                 <StackPanel HorizontalAlignment="Center" Grid.Row="1">
-                    <Button Content="OK"  Margin="5" Width="70" Click="Button_Click"></Button>
+                    <Button Content="OK"  Margin="5" Width="70" Click="Button_Click" ></Button>
                 </StackPanel>
             </Grid>
         </Grid>
