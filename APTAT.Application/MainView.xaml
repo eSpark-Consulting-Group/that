@@ -30,24 +30,68 @@
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Margin="0,5,5,0" Text="{Binding Name}"/>
-                        <TextBlock  Grid.Column="1" Margin="5" Text="(Offline)" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
+
+                        <Border Opacity="{Binding IsOnline, Converter={StaticResource BoolToOpacityConverter}}"       Grid.RowSpan="2">
+                        <Path Data="M17.33847,15.754001 L23.3386,15.754001 L16.197102,22.754 L10.196973,22.754 z M9.9002953,8.75 L15.900425,8.75 L23.397556,15.75 L17.397427,15.75 z M16,4 C9.3725834,4 4,9.3725834 4,16 C4,22.627417 9.3725834,28 16,28 C22.627417,28 28,22.627417 28,16 C28,9.3725834 22.627417,4 16,4 z M16,0 C24.836555,0 32,7.163444 32,16 C32,24.836555 24.836555,32 16,32 C7.163444,32 0,24.836555 0,16 C0,7.163444 7.163444,0 16,0 z" 
+                              Fill="{StaticResource AccentBrush}" 
+                              Opacity="{Binding ScanStage, Converter={StaticResource ScanStageToOpacityConverter}}"
+                              HorizontalAlignment="Left" 
+                              Height="32" Stretch="Fill" 
                         
-                        <TextBlock Margin="0,0,5,5"
+                             Width="32"/>
+                        </Border>
+
+                        <Path Data="M22.495235,9.4483137 L25.323662,12.276741 L17.698162,19.902241 L17.70924,19.913317 L14.880813,22.741745 L7.5827637,15.443695 L10.411191,12.615268 L14.869736,17.073812 z M16,4 C9.3725834,4 4,9.3725834 4,16 C4,22.627417 9.3725834,28 16,28 C22.627417,28 28,22.627417 28,16 C28,9.3725834 22.627417,4 16,4 z M16,0 C24.836555,0 32,7.163444 32,16 C32,24.836555 24.836555,32 16,32 C7.163444,32 0,24.836555 0,16 C0,7.163444 7.163444,0 16,0 z" 
+                              Fill="Green" 
+                               Opacity="{Binding ScanStage, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationCompleted'}"
+                              HorizontalAlignment="Left" 
+                              Height="32" Stretch="Fill" 
+                              Grid.RowSpan="2"
+                             Width="32"/>
+
+                        <Path Data="M12.900754,9.6153288 L16.197998,12.912574 L19.495235,9.6153364 L22.323662,12.443764 L19.026424,15.741001 L22.323658,19.038235 L19.495232,21.866661 L16.197998,18.569427 L12.900757,21.866669 L10.07233,19.038242 L13.369572,15.741001 L10.072327,12.443756 z M16,4 C9.3725834,4 4,9.3725834 4,16 C4,22.627417 9.3725834,28 16,28 C22.627417,28 28,22.627417 28,16 C28,9.3725834 22.627417,4 16,4 z M16,0 C24.836555,0 32,7.163444 32,16 C32,24.836555 24.836555,32 16,32 C7.163444,32 0,24.836555 0,16 C0,7.163444 7.163444,0 16,0 z" 
+                              Fill="#FFA11D1D" 
+                              Opacity="{Binding ScanStage, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationFailed'}"
+                              HorizontalAlignment="Left" 
+                              Height="32" Stretch="Fill" 
+                              Grid.RowSpan="2"
+                             Width="32"/>
+
+                        <Path Data="M9.368988,13.906982 L22.694988,13.906982 L22.694988,17.906982 L9.368988,17.906982 z M16,4 C9.3725834,4 4,9.3725834 4,16 C4,22.627417 9.3725834,28 16,28 C22.627417,28 28,22.627417 28,16 C28,9.3725834 22.627417,4 16,4 z M16,0 C24.836555,0 32,7.163444 32,16 C32,24.836555 24.836555,32 16,32 C7.163444,32 0,24.836555 0,16 C0,7.163444 7.163444,0 16,0 z" 
+                              Fill="#FFA11D1D" 
+                              Opacity="{Binding ScanStage, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationCanceled'}"
+                              HorizontalAlignment="Left" 
+                              Height="32" Stretch="Fill" 
+                              Grid.RowSpan="2"
+                             Width="32"/>
+
+                        <Border Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"  Grid.RowSpan="2">
+                            <Path Data="M10,10.002014 L22,10.002014 L22,22.002014 L10,22.002014 z M16,4 C9.3725834,4 4,9.3725834 4,16 C4,22.627417 9.3725834,28 16,28 C22.627417,28 28,22.627417 28,16 C28,9.3725834 22.627417,4 16,4 z M16,0 C24.836555,0 32,7.163444 32,16 C32,24.836555 24.836555,32 16,32 C7.163444,32 0,24.836555 0,16 C0,7.163444 7.163444,0 16,0 z" 
+                              Fill="#FF888888" 
+                              Opacity="{Binding ScanStage, Converter={StaticResource ScanStageToOpacityConverter}}"
+                              HorizontalAlignment="Left" 
+                              Height="32" Stretch="Fill" 
+                             
+                             Width="32"/>
+                        </Border>
+
+
+                        <TextBlock Margin="8,8,0,0" Text="{Binding Name}" Grid.Column="1"/>
+                        <TextBlock  Grid.Column="2" Margin="0,8,0,0" Text="(Offline)" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
+                        <TextBlock Margin="8,0,0,8"
                                    ToolTip="{Binding StatusMessage}"
                                    TextTrimming="CharacterEllipsis"
                                    IsHitTestVisible="{Binding IsRootItem}"
                                    Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
+                                   Grid.Column="1"
                                    Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" 
                                    Foreground="{Binding ScanStage, Converter={StaticResource ScanStageToBrushConverter}}"/>
                     </Grid>
@@ -64,7 +108,7 @@
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
-                    Header="Name"
+                    Header="NAME"
                     Width="900" 
                     CellTemplateSelector="{StaticResource NameTemplateSelector}" SortMemberPath="Name" />
                 <!--<telerik:GridViewDataColumn 
@@ -76,7 +120,7 @@
                     SortMemberPath="Size"
                     DataMemberBinding="{Binding SizeString}"
                     IsFilterable="False"
-                    Header="Size"  
+                    Header="SIZE"  
                     Width="*"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>

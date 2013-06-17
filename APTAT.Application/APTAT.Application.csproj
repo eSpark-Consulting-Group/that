@@ -120,6 +120,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
+    <Compile Include="DesignTimeGrid.cs" />
     <Compile Include="ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
