@@ -10,7 +10,7 @@ namespace APTAT.Application.Models
 {
     public class MainViewViewModel : ViewModel
     {
-        public event EventHandler ScanProcessCompleted;
+        public event EventHandler<ScanCompletedEventArgs> ScanProcessCompleted;
 
         private readonly IAptService _atpService;
         private readonly IStorageService _storage;
@@ -143,7 +143,7 @@ namespace APTAT.Application.Models
 
         public DelegateCommand StopScanCommand { get; private set; }
 
-     
+        
         
         public MainViewViewModel()
         {
@@ -197,8 +197,8 @@ namespace APTAT.Application.Models
             _atpService.BeginScanCompleted += OnBeginScanCompleted;
             _atpService.ScanStatusChanged += OnScanStatusChanged;
             _atpService.GetScanResultCompleted += OnGetScanResultCompleted;
+            _atpService.ScanCompleted += OnScanCompleted;
         }
-
 
         protected override void InvokeViewUnloaded(Object arg)
         {
@@ -208,6 +208,15 @@ namespace APTAT.Application.Models
             _atpService.BeginScanCompleted -= OnBeginScanCompleted;
             _atpService.ScanStatusChanged -= OnScanStatusChanged;
             _atpService.GetScanResultCompleted -= OnGetScanResultCompleted;
+            _atpService.ScanCompleted -= OnScanCompleted;
+        }
+
+        private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
+        {
+            if(ScanProcessCompleted != null)
+            {
+                ScanProcessCompleted(this, e);    
+            }
         }
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
@@ -256,7 +265,7 @@ namespace APTAT.Application.Models
         {
             IsScanInProgress = false;
 
-            ScanProcessCompleted(this, EventArgs.Empty);
+  
             // MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
         }
 

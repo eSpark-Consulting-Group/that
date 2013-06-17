@@ -75,6 +75,17 @@ namespace APTAT.Application.Services
         }
     }
 
+    public class ScanCompletedEventArgs : DomainEventArgs
+    {
+        public Int32 SuccededCount { get; set; }
+
+        public Int32 FailedCount { get; set; }
+
+        public Int32 CanceledCount { get; set; }
+
+        public Int32 NotPerformedCount { get; set; }
+    }
+
     public interface IAptService
     {
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
@@ -82,6 +93,7 @@ namespace APTAT.Application.Services
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
         event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
+        event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
 
         void  GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);

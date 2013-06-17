@@ -50,6 +50,8 @@ namespace APTAT.Application.Services
 
         public event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
 
+        public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
+
         private readonly AptAtManager _manager;
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
@@ -72,6 +74,7 @@ namespace APTAT.Application.Services
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password);
             scanner.ScanStarted += OnScanStarted;
+            scanner.ScanCompleted += OnScanCompleted;
             scanner.BeginScan(userState);
 
             
@@ -80,7 +83,7 @@ namespace APTAT.Application.Services
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
             BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
-           // Action action = () =>
+         //  DispatcherHelper.Current.BeginInvoke(action);
             {
                 if (BeginScanCompleted != null)
                 {
@@ -88,6 +91,25 @@ namespace APTAT.Application.Services
                 }
             };
           //  DispatcherHelper.Current.BeginInvoke(action);
+        }
+
+        private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
+        {
+            ScanCompletedEventArgs args = new ScanCompletedEventArgs();
+            args.SuccededCount = e.SucceededCount;
+            args.CanceledCount = e.CalceledCount;
+            args.FailedCount = e.FailedCount;
+            args.NotPerformedCount = e.NotPerformedCount;
+
+            Action action = () =>
+            {
+                if (ScanCompleted != null)
+                {
+                    ScanCompleted(this, args);
+                }
+            };
+            DispatcherHelper.Current.BeginInvoke(action);
+
         }
 
         public void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState)
@@ -439,6 +461,8 @@ namespace APTAT.Application.Services
         }
 
 
-    
+
+
+
     }
 }

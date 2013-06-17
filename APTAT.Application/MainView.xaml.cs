@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using APTAT.Application.Models;
+using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 
@@ -41,10 +42,26 @@ namespace APTAT.Application
             _viewModel.ScanProcessCompleted += OnScanCompleted;
         }
 
-        private void OnScanCompleted(Object sender, EventArgs e)
+        private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
-            scanCompletedWindow.Text.Text = String.Format("Scan completed! {0} Unknown Files Found.", _viewModel.UnknownFilesCount);
+            scanCompletedWindow.Text.Text = String.Format("Scan completed! {0}- {1} Unknown Files Found", Environment.NewLine, _viewModel.UnknownFilesCount);
+            if(e.SuccededCount > 0)
+            {
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Successful Scans", Environment.NewLine, e.SuccededCount);
+            }
+            if (e.CanceledCount > 0)
+            {
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", Environment.NewLine, e.CanceledCount);
+            }
+            if (e.FailedCount > 0)
+            {
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
+            } 
+            if (e.NotPerformedCount > 0)
+            {
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
+            }
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             scanCompletedWindow.ShowDialog();
         }
