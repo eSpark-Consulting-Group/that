@@ -15,6 +15,8 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        
+        
         <telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Grid.Row="1" >
         </telerik:RadToolBar>
         <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="18" Foreground="#FF0090FF" Margin="20,8" Grid.Row="1"/>
@@ -94,13 +96,13 @@
 
         <Border  Background="Transparent" Grid.Row="3"  Height="45">
             <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="35" Margin="0,0,10,0">
-                <Button x:Name="btnBack" Content="Back" Margin="5" Width="70" Click="OnBackClick" />
-                <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5" Width="70"/>
-                <Button x:Name="btnNext"  IsDefault="True" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick" />
-                <Button x:Name="btnFinish" IsDefault="True"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Scan" Click="OnFinishClick" Margin="5" Width="70"/>
+                <Button x:Name="btnBack" Content="Back" Margin="5" Width="70" Click="OnBackClick" Style="{StaticResource ButtonHighlightStyle}" />
+                <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5" Width="70" Style="{StaticResource ButtonHighlightStyle}"/>
+                <Button x:Name="btnNext"  IsDefault="True" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick"  Style="{StaticResource ButtonHighlightStyle}" />
+                <Button x:Name="btnFinish" IsDefault="True"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Scan" Click="OnFinishClick" Margin="5" Width="70"  Style="{StaticResource ButtonHighlightStyle}" />
             </StackPanel>
         </Border>
-     
+        <Border Height="100" Width="10" Background="{StaticResource AccentBrush}" VerticalAlignment="Top" Margin="0,30,0,0" HorizontalAlignment="Left" Grid.Row="2"/>
         <telerik:RadBusyIndicator Grid.Row="2" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent" />
     </Grid>
 </Models:BaseView>

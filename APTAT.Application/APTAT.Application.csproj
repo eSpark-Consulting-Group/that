@@ -165,6 +165,10 @@
     </Compile>
     <Compile Include="TitleUpdater.cs" />
     <Compile Include="WindowResizer.cs" />
+    <Page Include="Assets\System.Windows.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
