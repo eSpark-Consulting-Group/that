@@ -203,6 +203,7 @@ namespace APTAT.Core
     {
         void BeginScan(object state = null);
         event EventHandler<ScanStartedEventArgs> ScanStarted;
+        event EventHandler<ScanCompletedEventArgs> ScanCompleted;
     }
 
     internal class AptScanner : IAptScanner
