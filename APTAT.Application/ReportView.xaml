@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <telerik:RadToolBar DataContext="{Binding ElementName=pdfViewer, Path=Commands}" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Margin="0">
             <telerik:RadToolBar.Resources>
@@ -112,6 +113,7 @@
             </telerik:RadButton>
         </telerik:RadToolBar>
         <telerik:RadPdfViewer HorizontalAlignment="Left"  x:Name="pdfViewer" Grid.Row="1"  />
-
+        <Border Grid.Row="2"  Background="#666" Height="35">
+        </Border>
     </Grid>
 </UserControl>

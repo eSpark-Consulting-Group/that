@@ -156,33 +156,33 @@
               
             </Path>
             
-            <telerik:RadButton Margin="10,5,5,5" Height="50" Content="Start Scanning"
+            <telerik:RadButton Margin="10,-1,5,-1"  Content="start scanning"
                                FontSize="18"
                                Padding="10"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                Click="OnStartScanningClick" />
 
-            <telerik:RadButton Margin="5" Height="50" Content="Stop Scanning"
+            <telerik:RadButton Margin="5,-1"  Content="stop scanning"
                                Padding="10"
                                FontSize="18"
                                Command="{Binding StopScanCommand}"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}"/>
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
-            <telerik:RadButton Margin="5" Height="50" Content="Properites"
+            <telerik:RadButton Margin="5,-1" Content="properites"
                                FontSize="18"
                                Padding="10"
                                IsEnabled="{Binding IsDetailsEnabled}" 
                                Click="OnPropertiesClick" />
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
-            <telerik:RadButton Margin="5" Height="50" Content="Build Report"
+            <telerik:RadButton Margin="5,-1" Content="build report"
                                FontSize="18"
                                Padding="10"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                Click="OnBuildReportClick"/>
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
-            <telerik:RadButton Margin="5" 
+            <telerik:RadButton Margin="5,-1" 
                                Padding="10"
-                               Height="50" Content="About" IsEnabled="False" FontSize="18"/>
+                               Content="about" IsEnabled="False" FontSize="18"/>
         </telerik:RadToolBar>
         <!--Background="#FFF38546"-->
         <Border Grid.Row="2"  Background="#666" Height="35">

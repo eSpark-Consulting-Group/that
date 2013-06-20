@@ -23,14 +23,15 @@
             <Converters:ScanStageToOpacityConverter x:Key="ScanStageToOpacityConverter"/>
 
             <Style  x:Key="ButtonHighlightStyle" TargetType="Button">
-                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="#EEEEEE"/>
+                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
-                <Setter Property="Background" Value="#666" />
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="FontFamily" Value="Segoe UI" />
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="3"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
