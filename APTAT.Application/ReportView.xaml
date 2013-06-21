@@ -113,7 +113,7 @@
             </telerik:RadButton>
         </telerik:RadToolBar>
         <telerik:RadPdfViewer HorizontalAlignment="Left"  x:Name="pdfViewer" Grid.Row="1"  />
-        <Border Grid.Row="2"  Background="#666" Height="35">
+        <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
         </Border>
     </Grid>
 </UserControl>

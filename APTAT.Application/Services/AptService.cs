@@ -83,14 +83,12 @@ namespace APTAT.Application.Services
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
             BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
-         //  DispatcherHelper.Current.BeginInvoke(action);
+
+            if (BeginScanCompleted != null)
             {
-                if (BeginScanCompleted != null)
-                {
-                    BeginScanCompleted(this, args);
-                }
-            };
-          //  DispatcherHelper.Current.BeginInvoke(action);
+                BeginScanCompleted(this, args);
+            }
+     
         }
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)

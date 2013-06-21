@@ -6,12 +6,13 @@
       xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
                  xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
+                 SnapsToDevicePixels="True"
 	>
 
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition  Height="60"/>
+            <RowDefinition  Height="80"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -19,15 +20,35 @@
         
         <!--<telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Grid.Row="1" >
         </telerik:RadToolBar>-->
-        <TextBlock x:Name="txtSpecifyADInfo" VerticalAlignment="Center"  Text="Specify AD Information" FontSize="21" Foreground="#FF0090FF" Margin="20,8" Grid.Row="1"/>
-        <TextBlock x:Name="txtSelectComputers" VerticalAlignment="Center" Visibility="Collapsed" Text="Select Computers" FontSize="21" Foreground="#FF0090FF" Margin="20,8" Grid.Row="1"/>
+
+
+        <Grid  Grid.Row="1" Margin="30,0,0,0" x:Name="txtSpecifyADInfo">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Height="35"  Width="35" Background="{StaticResource AccentBrush}" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalAlignment="Left" />
+            <TextBlock  Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center"   Text="Specify AD Information" FontSize="20"  Margin="30,8,20,8" Grid.Column="1"/>
+        </Grid>
+
+        <Grid  x:Name="txtSelectComputers" Grid.Row="1" Margin="30,0,0,0" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Height="35"  Width="35" Background="{StaticResource AccentBrush}" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalAlignment="Left" />
+
+            <TextBlock  Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center"  Text="Select Computers" FontSize="20" Margin="30,8,20,8" Grid.Column="1"/>
+        </Grid>
+
+        
         <Grid x:Name="panelSelectDomain" Grid.Row="2" Background="White" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
      
-            <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="450" >
+            <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -38,9 +59,9 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
-                <TextBlock VerticalAlignment="Center" Grid.Row="0" Margin="5" Text="Domain Controller:"/>
-                <TextBlock VerticalAlignment="Center" Grid.Row="1"  Margin="5" Text="Administrator:"/>
-                <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="2" Text="Password:"/>
+                <TextBlock VerticalAlignment="Center" Grid.Row="0" FontSize="14" Margin="5" Text="Domain Controller:"/>
+                <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="5" Text="Administrator:"/>
+                <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="2" Text="Password:"/>
                 
                 <TextBox x:Name="txtDomainController" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding DomainController, Mode=TwoWay, ValidatesOnExceptions=True}" >                 
                 </TextBox>
@@ -66,13 +87,14 @@
                 </DataTemplate>
             </Grid.Resources>
             
-            <Border BorderBrush="LightGray" Margin="30,0,30,30" BorderThickness="0.5">
+            <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
                
             <telerik:RadTreeView x:Name="domainTree" 
-                                 
+                                 SnapsToDevicePixels="True"
                                  IsOptionElementsEnabled="True"
                                  IsTriStateMode="True"
                                  Checked="OnChecked"
+                                 FontSize="14"
                                  Unchecked="OnUnchecked"
                                  ItemPrepared="OnItemPrepared"
                                  ItemTemplate="{StaticResource DomainTreeItemTemplate}"
@@ -94,15 +116,15 @@
         </Border>
 
 
-        <Border  BorderBrush="#CCC" Grid.Row="3"  Height="45" BorderThickness="0,1,0,0" >
-            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="35" Margin="0,0,10,0">
-                <Button x:Name="btnBack" Content="Back" Margin="5" Width="70" Click="OnBackClick" Style="{StaticResource ButtonHighlightStyle}" />
-                <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5" Width="70" Style="{StaticResource ButtonHighlightStyle}"/>
-                <Button x:Name="btnNext"  IsDefault="True" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Width="70" Click="OnNextClick"  Style="{StaticResource ButtonHighlightStyle}" />
-                <Button x:Name="btnFinish" IsDefault="True"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Scan" Click="OnFinishClick" Margin="5" Width="70"  Style="{StaticResource ButtonHighlightStyle}" />
+        <Border  BorderBrush="#CCC" Grid.Row="3"  Height="60" BorderThickness="0,0,0,0" >
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="50" Margin="0,0,25,0">
+                <Button x:Name="btnBack" Content="Back" Margin="5"  Click="OnBackClick" Style="{StaticResource ButtonNormalStyle}" />
+                <Button x:Name="btnCancel" Content="Cancel" Click="OnCancelClick" Margin="5"  Style="{StaticResource ButtonNormalStyle}"/>
+                <Button x:Name="btnNext"  IsDefault="True" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Next" Margin="5" Click="OnNextClick"  Style="{StaticResource ButtonHighlightStyle}" />
+                <Button x:Name="btnFinish" IsDefault="True"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  Content="Scan" Click="OnFinishClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
             </StackPanel>
         </Border>
-        <Border Height="60" Width="10" Background="{StaticResource AccentBrush}" VerticalAlignment="Top" Margin="0,0,0,0" HorizontalAlignment="Left" Grid.Row="2"/>
+        
         <telerik:RadBusyIndicator Grid.Row="2" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent" />
     </Grid>
 </Models:BaseView>

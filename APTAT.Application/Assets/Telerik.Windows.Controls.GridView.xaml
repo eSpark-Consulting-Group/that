@@ -12,7 +12,7 @@
     <telerik:Windows8Colors x:Key="Windows8Colors"/>
 	<External:Windows8ThemeExternal x:Key="Theme" />
 <SolidColorBrush x:Key="StrongBrush" Color="{Binding Path=Palette.StrongColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
-<SolidColorBrush x:Key="MainBrush" Color="{Binding Path=Palette.MainColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
+    <SolidColorBrush x:Key="MainBrush" Color="#FFF0F0F0" telerik:Windows8Colors.Color="BoundColor" />
 <SolidColorBrush x:Key="AccentBrush" Color="{Binding Path=Palette.AccentColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
 <SolidColorBrush x:Key="BasicBrush" Color="{Binding Path=Palette.BasicColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
 <grid:FilterOperatorConverter x:Key="FilterOperatorConverter" />
@@ -111,12 +111,14 @@
 	<Style x:Key="CommonColumnHeaderStyle" TargetType="grid:CommonColumnHeader">
 		<Setter Property="Template" Value="{StaticResource CommonColumnHeaderTemplate}" />
 		<Setter Property="Foreground" Value="{StaticResource StrongBrush}" />
-		<Setter Property="Background" Value="{StaticResource MainBrush}" />
+		<!--<Setter Property="Background" Value="{StaticResource MainBrush}" />-->
+        <Setter Property="Background" Value="#FFE3E3E3"/>
 		<Setter Property="BorderBrush" Value="#DDD"/>
 		<Setter Property="BorderThickness" Value="0,0,1,1"/>
 		<Setter Property="MinHeight" Value="30" />
 		<Setter Property="Padding" Value="5,0,3,0"/>
 		<Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontFamily" Value="Segoe UI"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 		
@@ -785,6 +787,8 @@
                 Margin="1 0 0 0"
 				Background="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"
 				BorderBrush="{TemplateBinding VerticalGridLinesBrush}"
+                    
+                    
 				BorderThickness="{Binding VerticalGridLinesWidth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GridLineWidthToThicknessConverter}, ConverterParameter=Right}" />
 
             <Border x:Name="Background_Over" Background="{StaticResource StrongBrush}" Opacity="0.2"
@@ -1016,8 +1020,9 @@
 
 		<Setter Property="Template" Value="{StaticResource GridViewHeaderCellTemplate}" />
 		<Setter Property="Foreground" Value="{StaticResource StrongBrush}" />
-		<Setter Property="Background" Value="{StaticResource MainBrush}" />
-		<Setter Property="BorderBrush" Value="#DDD"/>
+		<!--<Setter Property="Background" Value="{StaticResource MainBrush}" />-->
+        <Setter Property="Background" Value="#FFE3E3E3"/>
+        <Setter Property="BorderBrush" Value="#DDD"/>
 		<Setter Property="BorderThickness" Value="0,0,1,1"/>
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -4206,14 +4211,17 @@
 
 		<Setter Property="Template" Value="{StaticResource RadTreeListViewTemplate}" />
 
-		<Setter Property="Background" Value="{StaticResource MainBrush}" />
+        <!--<Setter Property="Background" Value="#FFF0F0F0"/>-->
+		<!--<Setter Property="Background" Value="{StaticResource MainBrush}" />-->
 		<Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
 		<Setter Property="Foreground" Value="{StaticResource StrongBrush}" />
-		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="GridLinesVisibility" Value="None"/>
-		<Setter Property="AlternateRowBackground" Value="#19767676" />
-		<Setter Property="VerticalGridLinesBrush" Value="{StaticResource BasicBrush}" />
-		<Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BasicBrush}"/>
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="GridLinesVisibility" Value="Horizontal"/>
+		<!--<Setter Property="AlternateRowBackground" Value="#19767676" />-->
+        <!--<Setter Property="AlternateRowBackground" Value="#FFF0F0F0" />-->
+        <Setter Property="RowIndicatorVisibility" Value="Collapsed"/>
+		<Setter Property="VerticalGridLinesBrush" Value="White" />
+		<Setter Property="HorizontalGridLinesBrush" Value="White"/>
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
 		<Setter Property="VerticalAlignment" Value="Stretch" />

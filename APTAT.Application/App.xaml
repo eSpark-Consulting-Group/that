@@ -11,6 +11,9 @@
                 <ResourceDictionary Source="/Assets/Telerik.Windows.Controls.GridView.xaml"/>
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="FooterDarkBrush" Color="#FF3C404B"/>
+            
             <Converters:NullableConverter x:Key="NullableConverter"/>
             <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <Converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
@@ -22,11 +25,24 @@
                                                    CompletedBrush="Green" FailedBrush="#FFA11D1D" CanceledBrush="#FFA11D1D" ProgressBrush="#666" OfflineBrush="#999"/>
             <Converters:ScanStageToOpacityConverter x:Key="ScanStageToOpacityConverter"/>
 
-            <Style  x:Key="ButtonHighlightStyle" TargetType="Button">
-                <Setter Property="Background" Value="#EEEEEE"/>
+            <Style TargetType="TextBlock" x:Key="HeaderTextBlock">
+                <Setter Property="FontFamily" Value="Segoe UI Light"/>
+            </Style>
+
+            <Style TargetType="TextBox">
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style TargetType="PasswordBox">
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+
+            <Style  x:Key="ButtonNormalStyle" TargetType="Button">
+                <Setter Property="Background" Value="#878787"/>
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="Height" Value="30"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
-                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Foreground" Value="White"/>
                 <Setter Property="FontFamily" Value="Segoe UI" />
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -54,6 +70,117 @@
                                                 </DoubleAnimationUsingKeyFrames>
                                                 <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Border" Storyboard.TargetProperty="Background" >
                                                     <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource BasicBrush}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimation To="-1" Duration="0:0:0" Storyboard.TargetName="Content" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0"  Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" To="0.3" />
+                                                <DoubleAnimation Duration="0"  Storyboard.TargetName="Content" Storyboard.TargetProperty="Opacity" To="0.3" />
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="FocusStatesGroup">
+                                        <VisualState x:Name="Unfocused">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusVisual" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:00.150">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <Visibility>Collapsed</Visibility>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="FocusVisual" Storyboard.TargetProperty="Opacity">
+                                                    <LinearDoubleKeyFrame KeyTime="00:00:00.150" Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Focused">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusVisual" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <Visibility>Visible</Visibility>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="FocusVisual" Storyboard.TargetProperty="Opacity">
+                                                    <LinearDoubleKeyFrame KeyTime="00:00:00.115" Value="0.2" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+
+                                <Border x:Name="Border" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}" />
+
+
+                                <ContentPresenter x:Name="Content" 
+								Margin="{TemplateBinding Padding}"
+								Content="{TemplateBinding Content}"
+								ContentTemplate="{TemplateBinding ContentTemplate}"
+								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+								RecognizesAccessKey="True"
+                                 >
+                                    <ContentPresenter.RenderTransform>
+                                        <TranslateTransform />
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+
+                                <!-- Focus -->
+                                <Border x:Name="CommonStatesWrapper">
+                                    <Border x:Name="FocusVisual" Visibility="Collapsed" Opacity="0" 
+                                    BorderThickness="1" BorderBrush="{StaticResource MarkerBrush}"  />
+                                </Border>
+
+
+                            </Grid>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--<SolidColorBrush Color="#4AF1FA" x:Key="ButtonMouseOverColor"/>-->
+            <Style  x:Key="ButtonHighlightStyle" TargetType="Button">
+                <Setter Property="Background" Value="#2A81BA"/>
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontFamily" Value="Segoe UI" />
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="3"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal"/>
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Border" Storyboard.TargetProperty="Background" >
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource AccentBrush}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CommonStatesWrapper" Storyboard.TargetProperty="Opacity">
+                                                    <DiscreteDoubleKeyFrame KeyTime="00:00:00.050" Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Border" Storyboard.TargetProperty="Background" >
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource AccentBrush}" />
                                                 </ObjectAnimationUsingKeyFrames>
                                                 <DoubleAnimation To="-1" Duration="0:0:0" Storyboard.TargetName="Content" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" />
                                             </Storyboard>

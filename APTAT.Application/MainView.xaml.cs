@@ -38,6 +38,8 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
+          
+
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
         }
@@ -45,7 +47,7 @@ namespace APTAT.Application
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
-            scanCompletedWindow.Text.Text = String.Format("Scan completed! {0}- {1} Unknown Files Found", Environment.NewLine, _viewModel.UnknownFilesCount);
+            scanCompletedWindow.Text.Text = String.Format("- {1} Unknown Files Found", Environment.NewLine, _viewModel.UnknownFilesCount);
             if(e.SuccededCount > 0)
             {
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Successful Scans", Environment.NewLine, e.SuccededCount);
