@@ -209,18 +209,23 @@ namespace APTAT.Core
     internal class AptScanner : IAptScanner
     {
         private IServiceCommand<DeployAgentResponse> _command;
+        private readonly IDescentSubSystem _descentSubSystem;
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
+
 
         internal AptScanner(IServiceCommand<DeployAgentResponse> command, IDescentSubSystem descentSubSystem)
         {
             _command = command;
-            if(descentSubSystem != null)
-                descentSubSystem.DescentCompleted += OnDescentCompleted;
+            _descentSubSystem = descentSubSystem;
+            if (_descentSubSystem != null)
+                _descentSubSystem.DescentCompleted += OnDescentCompleted;
         }
 
         private void OnDescentCompleted(object sender, DescentCompletedEventArgs e)
         {
+            _descentSubSystem.DescentCompleted -= OnDescentCompleted; 
+
             int total = 0;
             int notPerformed = 0;
             int succeeded = 0;

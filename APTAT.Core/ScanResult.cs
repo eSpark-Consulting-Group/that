@@ -14,6 +14,8 @@ namespace APTAT.Core
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
+        public int SafeFilesCount { get; set; }
+        public int MalwareFilesCount { get; set; }
         public string ResultErrorText { get; set; }
         public ScanResultType ResultType { get; set; }
 
@@ -100,13 +102,13 @@ namespace APTAT.Core
     public enum CloudVerdict
     {
         [XmlEnum("safe")]
-        Safe,
+        Safe = 0,
 
         [XmlEnum("unknown")]
-        Unknown,
+        Unknown = 1,
 
         [XmlEnum("malware")]
-        Malware,
+        Malware = 2,
     }
 
     [XmlType("Module")]
