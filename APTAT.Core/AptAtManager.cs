@@ -7,6 +7,7 @@ using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.MessageContracts;
+using APTAT.Core.Reports;
 using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core
@@ -326,6 +327,28 @@ namespace APTAT.Core
         public int SucceededCount { get; set; }
         public int FailedCount { get; set; }
         public int CalceledCount { get; set; }
+    }
+
+
+    public interface IAptReportBuilder
+    {
+        void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null);
+        event EventHandler<ReportCompletedEventArgs> ReportCompleted;
+    }
+
+    internal class AptReportBuilder : IAptReportBuilder
+    {
+        public void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event EventHandler<ReportCompletedEventArgs> ReportCompleted;
+    }
+
+    public class ReportCompletedEventArgs : EventArgs
+    {
+        
     }
 
     public class AptAtManager

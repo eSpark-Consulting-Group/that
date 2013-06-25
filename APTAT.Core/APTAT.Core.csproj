@@ -15,7 +15,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SccProjectName>%24/ComodoESM SME/Sources/APTAT/APTAT.Core</SccProjectName>
     <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>http://pss05v:8080/tfs/defaultcollection</SccAuxPath>
+    <SccAuxPath>http://192.168.71.245:8080/tfs/defaultcollection</SccAuxPath>
     <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -406,6 +406,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Reports\AptReportData.cs" />
+    <Compile Include="Reports\ReportBuilder.cs" />
+    <Compile Include="Reports\ReportType.cs" />
     <Compile Include="ResourceText.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -436,6 +439,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.AptReportData.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.DetailedBadFile.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.FileRatingInfo.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.MostWantedBadFileInfo.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.ScannedTarget.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.TargetRatingInfo.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.VulnerableDeviceInfoEx.datasource" />
+    <None Include="Properties\DataSources\Module.datasource" />
+    <None Include="Properties\DataSources\ScanResult.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -443,6 +455,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\ServerSideMessagesResources.resx" />
+    <EmbeddedResource Include="Reports\DetailedDevices.rdlc" />
+    <EmbeddedResource Include="Reports\DetailedPrograms.rdlc" />
+    <EmbeddedResource Include="Reports\Devices.rdlc" />
+    <EmbeddedResource Include="Reports\Devices_.rdlc" />
+    <EmbeddedResource Include="Reports\Executive.rdlc" />
+    <EmbeddedResource Include="Reports\MaliciousFiles.rdlc" />
+    <EmbeddedResource Include="Reports\UnknownFiles.rdlc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

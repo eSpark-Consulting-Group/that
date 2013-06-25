@@ -4,39 +4,173 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using APTAT.Core.Reports;
 
 namespace APTAT.Core
 {
     public class ScanResult
     {
+        private int _unknownFilesCount = -1;
+        private int _malwareFilesCount = -1;
+        private int _safeFilesCount = -1;
+
         public Guid TargetUid { get; set; }
         public string HostName { get; set; }
+        public string IpAddress { get; set; }
+        public string OsName { get; set; }
+        public string OrganizationUnit { get; set; }
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
-        public int UnknownFilesCount { get; set; }
-        public int SafeFilesCount { get; set; }
-        public int MalwareFilesCount { get; set; }
+        public int UnknownFilesCount
+        {
+            //get
+            //{
+            //    if (_unknownFilesCount == -1)
+            //        CalculateTotal();
+            //    return _unknownFilesCount;
+            //}
+            get; set; 
+        }
+        public int SafeFilesCount
+        {
+            //get
+            //{
+            //    if (_safeFilesCount == -1)
+            //        CalculateTotal();
+            //    return _safeFilesCount;
+            //}
+            get; set;
+        }
+        public int MalwareFilesCount
+        {
+            //get
+            //{
+            //    if (_malwareFilesCount == -1)
+            //        CalculateTotal();
+            //    return _malwareFilesCount;
+            //}
+            get; set;
+        }
         public string ResultErrorText { get; set; }
         public ScanResultType ResultType { get; set; }
 
-        public List<UnknownFile> UnknownFiles 
-        { 
+        public int BadFilesCount
+        {
+            get { return UnknownFilesCount + MalwareFilesCount; }
+        }
+
+        public TargetVerdict TargetVerdict
+        {
             get
             {
-                if(AptReport != null)
-                {
-                    if(AptReport.Modules != null)
-                    {
-                        var unknowns = from file in AptReport.Modules
-                                      where file.Cloud == CloudVerdict.Unknown
-                                      select new UnknownFile() {Name = file.Path, Size = file.Size};
-                        return new List<UnknownFile>(unknowns);
-                    }
-                }
-
-                return new List<UnknownFile>();
+                if (MalwareFilesCount > 0)
+                    return TargetVerdict.Infected;
+                if (UnknownFilesCount > 0)
+                    return TargetVerdict.Vulnerable;
+                return TargetVerdict.Safe;
             }
         }
+
+        public string TargetVerdictString
+        {
+            get
+            {
+                switch (TargetVerdict)
+                {
+                    case TargetVerdict.Unknown:
+                        return "Unknown";
+                    case TargetVerdict.Safe:
+                        return "Safe";
+                    case TargetVerdict.Infected:
+                        return "Infected";
+                    case TargetVerdict.Vulnerable:
+                        return "At Risk";
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        public Module[] Files
+        {
+            get
+            {
+                if (AptReport != null)
+                    return AptReport.Modules;
+                return null;
+            }
+        }
+
+        [Obsolete]
+        public List<UnknownFile> UnknownFiles
+        {
+            get
+            {
+                var unknownFiles = from file in GetFilesByStatus(CloudVerdict.Unknown) select new UnknownFile() {Name = file.Path, Size = file.Size};
+                return new List<UnknownFile>(unknownFiles);
+            }
+        }
+
+        public Module[] BadFiles
+        {
+            get
+            {
+                return GetBadFiles();
+            }
+        }
+
+        public Module[] GetFilesByStatus(CloudVerdict cloudVerdict)
+        {
+            return (from file in Files where file.Cloud == cloudVerdict select file).ToArray();
+        }
+
+        public Module[] GetBadFiles()
+        {
+            if (Files == null)
+                return new Module[0];
+            return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.Malware select file).ToArray();
+        }
+
+        private void CalculateTotal()
+        {
+            _unknownFilesCount = 0;
+            _malwareFilesCount = 0;
+
+            var groupped = from file in Files group file by file.Cloud into temp select temp;
+
+            foreach (var item in groupped)
+            {
+                if (item.Key == CloudVerdict.Unknown)
+                    _unknownFilesCount = item.Count();
+
+                if (item.Key == CloudVerdict.Malware)
+                    _malwareFilesCount = item.Count();
+            }
+
+            _safeFilesCount = TotalFilesCount - _unknownFilesCount - _malwareFilesCount;
+        }
+
+        public DetailedBadFile[] GetUniqueBadFiles()
+        {
+            Dictionary<string, DetailedBadFile> uniqueFiles = new Dictionary<string, DetailedBadFile>();
+
+            var allBadFiles = GetBadFiles();
+            foreach (var badFile in allBadFiles)
+            {
+                if (uniqueFiles.ContainsKey(badFile.Sha1))
+                {
+                    uniqueFiles[badFile.Sha1].Targets[0].BadFileInstances.Add(new DetailedBadFile.BadFileInstanceInfo(badFile));
+                }
+                else
+                {
+                    DetailedBadFile file = new DetailedBadFile(badFile, new ScannedTarget(this));
+                    uniqueFiles.Add(badFile.Sha1, file);
+                }
+            }
+
+            return uniqueFiles.Values.ToArray();
+        }
+
         public AptReport AptReport { get; set; }
     }
 
@@ -102,13 +236,19 @@ namespace APTAT.Core
     public enum CloudVerdict
     {
         [XmlEnum("safe")]
-        Safe = 0,
+        Safe,
 
         [XmlEnum("unknown")]
-        Unknown = 1,
+        Unknown,
 
         [XmlEnum("malware")]
-        Malware = 2,
+        Malware,
+
+        [XmlEnum("doesntexist")]
+        FirstSeen,
+
+        [XmlEnum("networkerror")]
+        NetworkError,
     }
 
     [XmlType("Module")]
@@ -169,10 +309,34 @@ namespace APTAT.Core
                 catch (Exception)
                 {
                 }
-                
+
                 return (FileAttributes)flags;
             }
-        } 
+        }
+
+        [XmlIgnore]
+        public string FileSizeFormatted
+        {
+            get { return SizeToString(Size); }
+        }
+
+        private static string SizeToString(long size)
+        {
+            if (size < 1024)
+                return String.Format("{0} KB ({1} bytes)", 1, size);
+            else //if (size < 1024 * 1024)
+                return String.Format("{0} KB ({1} bytes)", (int)(size / (double)1024), size);
+            //else if(size < 1024 * 1024 * 1024)
+            //    return String.Format("{0} MB", (int)(size / (double)(1024 * 1024)));
+            //else
+            //    return String.Format("{0} GB", (int)(size / (double)(1024 * 1024 * 1024)));
+        }
+
+        [XmlIgnore]
+        public string FileAge
+        {
+            get { return FileAgeFormatter.GetAge(Created); }
+        }
     }
 
     [XmlType("Process")]
@@ -241,5 +405,55 @@ namespace APTAT.Core
     {
         [XmlAttribute("ModuleRefId")]
         public string ModuleId { get; set; }
+    }
+
+
+    public class FileAgeFormatter
+    {
+        private const int DaysInYear = 365;
+        private const int DaysOnMonth = 30;
+        private static readonly int[] intervalsInDays = new[] { DaysInYear, DaysOnMonth };
+        private static readonly string[] oneCount = new[] { "Year", "Month" };
+        private static readonly string[] moreThanOneCount = new[] { "Years", "Months" };
+        private const string OneDay = "Day";
+        private const string OneMonth = "Month";
+        private const string OneYear = "Year";
+        private const string MoreThenOneDay = "Days";
+        private const string MoreThenOneMonth = "Months";
+        private const string MoreThenOneYear = "Years";
+        private const string OneHour = "Hour";
+        private const string MoreThenOneHour = "Hours";
+        private const string SpaceCharacter = " ";
+
+        public static string GetAge(DateTime fileCreation, bool shortDate = true)
+        {
+            var formatted = String.Empty;
+            var difference = DateTime.Now - fileCreation;
+            int days = difference.Days;
+            if (days == 0)
+                return Formatter((int)difference.TotalHours, OneHour, MoreThenOneHour);
+            for (var i = 0; i < intervalsInDays.Length; i++)
+            {
+                var intervalInDays = intervalsInDays[i];
+                var count = days / intervalInDays;
+                days %= intervalInDays;
+                if (count <= 0) continue;
+                formatted += Formatter(count, oneCount[i], moreThanOneCount[i]) + (days > 0 ? SpaceCharacter : string.Empty);
+                if (shortDate) return formatted;
+            }
+            formatted += Formatter(days, OneDay, MoreThenOneDay);
+            return formatted;
+        }
+
+        private static string Formatter(int count, string stringForOneCount, string stringForMoreThenOne)
+        {
+            if (count == 0)
+                return String.Empty;
+            if (count > 1)
+                return String.Format("{0} {1}", count, stringForMoreThenOne);
+            if (count == 1)
+                return String.Format("{0} {1}", count, stringForOneCount);
+            throw new ArgumentException("Incorrect input data");
+        }
     }
 }
