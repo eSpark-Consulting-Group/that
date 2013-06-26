@@ -19,6 +19,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE crap, LPSTR lpCmdLine, int nSh
 	else
 	{
 		bool ok = bootstrapper.PrepareFonts();
+		if(ok == false)
+		{
+			MessageBoxExW(nullptr, L"Fonts are not installed", L"Fonts", MB_OK, 0);
+		}
 		bootstrapper.LaunchApplication();
 	}
 

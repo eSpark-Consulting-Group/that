@@ -74,10 +74,38 @@ void Bootstrapper::LaunchApplication()
 	free(szCmdline);
 }
 
-bool Bootstrapper::PrepareFonts()
+bool  Bootstrapper::FileExists(LPCTSTR szPath)
 {
-	int numberOfFontsAdded = AddFontResource(FONT1);
-	numberOfFontsAdded += AddFontResource(FONT2);
-	numberOfFontsAdded += AddFontResource(FONT3);
-	return numberOfFontsAdded == 3;
+  DWORD dwAttrib = GetFileAttributes(szPath);
+
+  return (dwAttrib != INVALID_FILE_ATTRIBUTES && 
+         !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
+
+bool  Bootstrapper::InstallFont(LPCTSTR font)
+{
+	TCHAR path[MAX_PATH + MAX_PATH];
+	GetWindowsDirectory(path, MAX_PATH);
+
+	LPCWSTR fontpath = lstrcat(path, L"\\");
+	fontpath = lstrcat(path, font);
+
+	if(FileExists(fontpath))
+	{
+		return true;
+	}
+
+	 bool result = CopyFileEx(font, fontpath, nullptr, nullptr, FALSE, 0);
+	 DWORD err = GetLastError();
+	 return result;
+}
+
+bool Bootstrapper::PrepareFonts()
+{	
+	bool font1 = InstallFont(FONT1);
+	bool font2 = InstallFont(FONT2);
+	bool font3 = InstallFont(FONT3);
+
+	return font1 && font2 && font3;
+}
+
