@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text;
 using CRM.SrvCore.Descent;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Transport;
@@ -94,13 +96,16 @@ namespace APTAT.Core.Facade.Descent.Commands
 
                 // TODO: Added
                 IPAddress targetAddress;
-			    IPAddress.TryParse(target.IPAddress, out targetAddress);
+                IPAddress.TryParse(target.IPAddress, out targetAddress);
                 var computer = new DirectoryComputer
                 {
                     Name = target.Name,
                     DnsName = !String.IsNullOrEmpty(target.DnsName) ? target.DnsName : target.Name,
                     IPAddress = targetAddress,
                     Uid = target.TargetUid, //Guid.NewGuid(),
+                    IsOnline = target.Online,
+                    LdapPath = target.LdapPath,
+                    OrganizationUnit = GetOrganizationUnit(target.LdapPath),
                 };
                 computers.Add(new TargetUidComputerPair(target.TargetUid, computer));
 			}
@@ -142,10 +147,34 @@ namespace APTAT.Core.Facade.Descent.Commands
 
 			Guid operationUid;
             InstallPackageInfo install = null;
-            _descentSubSystem.DoDescentOperationOnNotExistingComputers(computers, Request.Login, Request.Password, false, install, out operationUid, Request.ScanScope);
+            _descentSubSystem.DoDescentOperationOnNotExistingComputers(computers, Request.Login, Request.Password, false, install, out operationUid, Request.ScanScope, Request.Domain);
 
 			Response.OperationUid = operationUid;
 		}
+
+        private static string GetOrganizationUnit(string ldapPath, bool firstParentOnly = false)
+        {
+            string[] parts = ldapPath.Split(',');
+            List<string> units = new List<string>();
+            foreach (var part in parts)
+            {
+                if (part.StartsWith("OU=", true, CultureInfo.InvariantCulture) && part.Length > 3)
+                    units.Add(part.Substring(3));
+            }
+
+            if (firstParentOnly && units.Count > 0)
+                return units[0];
+
+            units.Reverse();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var unit in units)
+            {
+                sb.Append(String.Concat(unit, "\\"));
+            }
+
+            return sb.ToString().TrimEnd('\\');
+        }
 
         // TODO: Commented
         //private IComputer CreateComputer( DeploymentTarget target, IDirectorySubSystem directorySubSystem )

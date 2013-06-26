@@ -17,6 +17,27 @@ using APTAT.Core.Tasks;
 
 namespace APTAT.Core.Descent
 {
+    public class AptScanOperationContext
+    {
+        private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults = new ConcurrentDictionary<Guid, ScanResult>();
+
+        public Guid OperationUid { get; set; }
+        public string TargetsSourceName { get; set; }
+        public DateTime Started { get; set; }
+        public DateTime Finished { get; set; }
+
+        public int TotalTargetsCount { get; set; }
+        public int NotPerformedTargetsCount { get; set; }
+        public int SucceededTargetsCount { get; set; }
+        public int FailedTargetsCount { get; set; }
+        public int CanceledTargetsCount { get; set; }
+
+        public ConcurrentDictionary<Guid, ScanResult> ScanResults
+        {
+            get { return _scanResults; }
+        }
+    }
+
     public class MarshalByRefNullLifetime : MarshalByRefObject
     {
         #region Overriden MarshalByRefObject's members
@@ -909,7 +930,7 @@ namespace APTAT.Core.Descent
         //    }
         //}
 
-        private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, ScanResult>> _scanResultsPerOperation = new ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, ScanResult>>();
+        private readonly ConcurrentDictionary<Guid, AptScanOperationContext> _scanResultsPerOperation = new ConcurrentDictionary<Guid, AptScanOperationContext>();
         public event EventHandler<DescentCompletedEventArgs> DescentCompleted;
         protected virtual void OnDescentCompleted(DescentCompletedEventArgs args)
         {
@@ -918,7 +939,7 @@ namespace APTAT.Core.Descent
                 temp(this, args);
         }
 
-		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope )
+		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope, string domain )
 		{
 			DescentResult result = new DescentResult( computers, withDelayedComputers, package );
 			operationUid = result.OperationUid;
@@ -928,9 +949,9 @@ namespace APTAT.Core.Descent
 			}
 
             _scanResultsPerOperation.Clear();
-            var scanResults = new ConcurrentDictionary<Guid, ScanResult>();
-            _scanResultsPerOperation.TryAdd(result.OperationUid, scanResults);
-            _descentMod = new DescentMod(DescentWatcherFactory, _catalog, scanResults);
+		    var operationContext = new AptScanOperationContext(){ OperationUid = result.OperationUid, Started = DateTime.UtcNow, TargetsSourceName = domain };
+            _scanResultsPerOperation.TryAdd(result.OperationUid, operationContext);
+            _descentMod = new DescentMod(DescentWatcherFactory, _catalog, operationContext.ScanResults);
 
 			LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent,
 				"Deployment operation started{0} UID: {1}{0} computers count: {2}{0} with delayed targets: {3}{0}",
@@ -1015,7 +1036,23 @@ namespace APTAT.Core.Descent
 			{
 				LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent, "DescentCompleted event raised. Operation UID: {0}", result.OperationUid );
 
-                OnDescentCompleted(new DescentCompletedEventArgs() { OperationUid = result.OperationUid, Results = scanResults });
+                // ===================================================================================================================
+                // Deployment finalization
+                int failed, notPerformed, succeeded, total, canceled;
+                CalculateOperationStatistics(operationContext.ScanResults.Values, out failed, out notPerformed, out succeeded, out total, out canceled);
+
+                if (operationContext.OperationUid == result.OperationUid)
+                {
+                    operationContext.Finished = DateTime.UtcNow;
+                    operationContext.TotalTargetsCount = total;
+                    operationContext.SucceededTargetsCount = succeeded;
+                    operationContext.FailedTargetsCount = failed;
+                    operationContext.NotPerformedTargetsCount = notPerformed;
+                    operationContext.CanceledTargetsCount = canceled;
+                }
+
+			    OnDescentCompleted(new DescentCompletedEventArgs() { OperationUid = result.OperationUid, Context = operationContext });
+                // ===================================================================================================================
 
 				_tracker.UnregisterListener( result );
 				result.DescentCompleted -= wholeDescentCompletedDelegate;
@@ -1026,8 +1063,56 @@ namespace APTAT.Core.Descent
 			result.DescentCompleted += wholeDescentCompletedDelegate;
 
 			var descentTargets = computers.Where( item => !( item.State is Exception ) ).Select( item => item.Computer ).ToArray();
-			DoDescendOperation( result, true, descentTargets, login, password, false, scanScope );
+
+            //===============================================================================================================================================
+            // Add not available (offline) computers into the ScanResults dictionary with "NotPerformed" status - means the scan won't be performed on them.
+            // They are required for statistics only
+		    operationContext.TotalTargetsCount = descentTargets.Length;
+            List<IComputer> onlineComputers = new List<IComputer>();
+		    foreach (var computer in descentTargets)
+		    {
+                if (computer.IsOnline)
+                {
+                    onlineComputers.Add(computer);
+                }
+                //else
+                //{
+                    operationContext.ScanResults.TryAdd(computer.Uid, new ScanResult()
+                                                                   {
+                                                                       HostName = computer.Name,
+                                                                       IpAddress = computer.IPAddress.ToString(),
+                                                                       ResultType = ScanResultType.NotPerformed,
+                                                                       TargetUid = computer.Uid,
+                                                                       OrganizationUnit = computer.OrganizationUnit
+                                                                   });
+                //}
+		    }
+            //===============================================================================================================================================
+
+            DoDescendOperation(result, true, onlineComputers.ToArray(), login, password, false, scanScope);
 		}
+
+        private static void CalculateOperationStatistics(IEnumerable<ScanResult> results, out int failed, out int notPerformed, out int succeeded, out int total, out int canceled)
+        {
+            notPerformed = 0;
+            succeeded = 0;
+            failed = 0;
+            canceled = 0;
+
+            total = results.Count();
+            var groupped = from result in results group result by result.ResultType into temp select temp;
+            foreach (var item in groupped)
+            {
+                if (item.Key == ScanResultType.NotPerformed)
+                    notPerformed = item.Count();
+                else if (item.Key == ScanResultType.Failed)
+                    failed = item.Count();
+                else if (item.Key == ScanResultType.Completed)
+                    succeeded = item.Count();
+                else if (item.Key == ScanResultType.Canceled)
+                    canceled = item.Count();
+            }
+        }
 		
 		public string GetDescentErrorMessage( string errorCode, int systemCode, string systemMessage, string[] extensionTexts, bool isUninstall,CultureInfo cultureInfo )
 		{
@@ -1080,14 +1165,14 @@ namespace APTAT.Core.Descent
 			get { return DescentSubSystemIdentifier; }
 		}
 
-	    public ConcurrentDictionary<Guid, ScanResult> GetScanResultsByOperationUid(Guid operationUid)
-	    {
-	        ConcurrentDictionary<Guid, ScanResult> results;
-	        _scanResultsPerOperation.TryGetValue(operationUid, out results);
-	        return results;
-	    }
+        public AptScanOperationContext GetScanResultsByOperationUid(Guid operationUid)
+        {
+            AptScanOperationContext results;
+            _scanResultsPerOperation.TryGetValue(operationUid, out results);
+            return results;
+        }
 
-        public ConcurrentDictionary<Guid, ScanResult> GetFirstScanResults()
+        public AptScanOperationContext GetFirstScanResults()
         {
             var keyValue = _scanResultsPerOperation.FirstOrDefault();
             return keyValue.Value;
@@ -1182,6 +1267,6 @@ namespace APTAT.Core.Descent
     public class DescentCompletedEventArgs : EventArgs
     {
         public Guid OperationUid { get; set; }
-        public ConcurrentDictionary<Guid, ScanResult> Results { get; set; }
+        public AptScanOperationContext Context { get; set; }
     }
 }

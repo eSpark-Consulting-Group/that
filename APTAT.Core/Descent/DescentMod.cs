@@ -408,6 +408,8 @@ namespace APTAT.Core.Descent
                         result.FileName = args.FileName;
                         result.TotalFilesCount = args.TotalFilesScanned;
                         result.UnknownFilesCount = args.UnknownFilesFound;
+                        result.SafeFilesCount = args.SafeFilesFound;
+                        result.MalwareFilesCount = args.MalwaresFound;
                     }
                     //_scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, HostName = args.HostName, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
                 };
@@ -446,7 +448,7 @@ namespace APTAT.Core.Descent
 				{
 					// 5% Connecting to the target computer
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, ServerSideMessagesResources.DescentProgressAgentInstallConnectingToTarget, AptScanStage.Connecting);
-                    _scanResults.TryAdd(tp.AgentIdentity, new ScanResult() { TargetUid = tp.AgentIdentity, HostName = tp.RemoteHostInfo.HostName, ResultType = ScanResultType.NotPerformed});
+                    //_scanResults.TryAdd(tp.AgentIdentity, new ScanResult() { TargetUid = tp.AgentIdentity, HostName = tp.RemoteHostInfo.HostName, ResultType = ScanResultType.NotPerformed});
 
 					// NewCredentials will use the impersonated user for network connections only.
 					ImpersonationHelper.Logon32LogonType impersonationLogonType = ImpersonationHelper.Logon32LogonType.NewCredentials;

@@ -225,30 +225,17 @@ namespace APTAT.Core
 
         private void OnDescentCompleted(object sender, DescentCompletedEventArgs e)
         {
-            _descentSubSystem.DescentCompleted -= OnDescentCompleted; 
+            _descentSubSystem.DescentCompleted -= OnDescentCompleted;
 
-            int total = 0;
-            int notPerformed = 0;
-            int succeeded = 0;
-            int failed = 0;
-            int calceled = 0;
-
-            var results = e.Results.Values;
-            total = results.Count;
-            var groupped = from result in results group result by result.ResultType into temp select temp;
-            foreach (var item in groupped)
-            {
-                if(item.Key == ScanResultType.NotPerformed)
-                    notPerformed = item.Count();
-                else if(item.Key == ScanResultType.Failed)
-                    failed = item.Count();
-                else if (item.Key == ScanResultType.Completed)
-                    succeeded = item.Count();
-                else if (item.Key == ScanResultType.Canceled)
-                    calceled = item.Count();
-            }
-
-            OnScanCompleted(new ScanCompletedEventArgs(){OperationUid = e.OperationUid, CalceledCount = calceled, FailedCount = failed, NotPerformedCount = notPerformed, SucceededCount = succeeded, TotalCount = total});
+            OnScanCompleted(new ScanCompletedEventArgs()
+                                {
+                                    OperationUid = e.OperationUid, 
+                                    CalceledCount = e.Context.CanceledTargetsCount, 
+                                    FailedCount = e.Context.FailedTargetsCount, 
+                                    NotPerformedCount = e.Context.NotPerformedTargetsCount, 
+                                    SucceededCount = e.Context.SucceededTargetsCount, 
+                                    TotalCount = e.Context.TotalTargetsCount
+                                });
         }
 
         public void BeginScan(object state = null)
@@ -333,22 +320,120 @@ namespace APTAT.Core
     public interface IAptReportBuilder
     {
         void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null);
+        void BeginBuildReport(AptScanOperationContext operationContext, ReportType reportType, object state = null);
         event EventHandler<ReportCompletedEventArgs> ReportCompleted;
     }
 
     internal class AptReportBuilder : IAptReportBuilder
     {
+        private readonly IDescentSubSystem _descentSubSystem;
+        private readonly ReportBuilder _reportBuilder = new ReportBuilder();
+
+        public AptReportBuilder(IDescentSubSystem descentSubSystem)
+        {
+            _descentSubSystem = descentSubSystem;
+        }
+
         public void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null)
         {
-            throw new NotImplementedException();
+            //data = GetFakeData();
+            var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
+            BeginBuildReport(results, reportType, state);
+        }
+
+        public void BeginBuildReport(AptScanOperationContext operationContext, ReportType reportType, object state = null)
+        {
+            if (operationContext != null)
+            {
+                AptReportData data = new AptReportData
+                                         {
+                                             ScanStarted = operationContext.Started,
+                                             ScanFinished = operationContext.Finished,
+                                             TargetsSource = operationContext.TargetsSourceName,
+                                             TargetsFailed = operationContext.FailedTargetsCount,
+                                             TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
+                                             TargetsScanned = operationContext.TotalTargetsCount,
+                                             TargetsSucceeded = operationContext.SucceededTargetsCount,
+                                             Targets = operationContext.ScanResults.Values.ToArray()
+                                         };
+
+                ReportBuilder.BuildReportDelegate action = new ReportBuilder.BuildReportDelegate(_reportBuilder.Build);
+                Context context = new Context() { Action = action, State = state };
+                action.BeginInvoke(data, reportType, BuildReportCallback, context);
+            }
+            else
+            {
+                throw new InvalidOperationException("Scan results not found.");
+            }
+        }
+
+        private static AptReportData GetFakeData()
+        {
+            AptReportData data = new AptReportData();
+            data.ScanFinished = DateTime.Now;
+            data.ScanStarted = DateTime.Now.AddHours(-1);
+            data.TargetsFailed = 1;
+            data.TargetsScanned = 50;
+            data.TargetsSource = "dev.comodo.od.ua";
+            data.TargetsSucceeded = 49;
+
+            var unknown = new Module() { Path = @"C:\Program Files (x86)\COMODO\Comodo Internet Security\cfp.exe", Accessed = DateTime.Now, Attributes = "", Cloud = CloudVerdict.Unknown, Copyright = "Microsoft", Created = DateTime.Now.AddYears(-1), Description = "blah-blah-blah", Id = "1", Modified = DateTime.Now, Product = "Windows", Sha1 = "432532907249321", Signer = "Microsoft", Size = 300, Version = "1.0.0.0" };
+            var malware = new Module() { Path = @"C:\Windows\svch0st.exe", Accessed = DateTime.Now, Attributes = "", Cloud = CloudVerdict.Malware, Copyright = "N/A", Created = DateTime.Now.AddYears(-2), Description = "blah-blah-blah", Id = "2", Modified = DateTime.Now, Product = "Windows", Sha1 = "432532907249322", Signer = "Microsoft", Size = 777, Version = "1.0.0.0" };
+            var svchost = new Module() { Path = @"D:\svch0st.exe", Accessed = DateTime.Now, Attributes = "", Cloud = CloudVerdict.Malware, Copyright = "N/A", Created = DateTime.Now.AddYears(-3), Description = "blah-blah-blah", Id = "4", Modified = DateTime.Now, Product = "Windows", Sha1 = "432532907249322", Signer = "Microsoft", Size = 777, Version = "1.0.0.0" };
+            var malware2 = new Module() { Path = @"C:\Windows\expl0rer.exe", Accessed = DateTime.Now, Attributes = "", Cloud = CloudVerdict.Malware, Copyright = "N/A", Created = DateTime.Now.AddYears(-5), Description = "blah-blah-blah", Id = "3", Modified = DateTime.Now, Product = "Windows", Sha1 = "432532907249323", Signer = "Microsoft", Size = 777, Version = "1.0.0.0" };
+
+            ScanResult result = new ScanResult() { HostName = "agubernskyy-new", IpAddress = "10.100.65.223", OrganizationUnit = "Dev", MalwareFilesCount = 3, UnknownFilesCount = 1, SafeFilesCount = 303, TotalFilesCount = 307, ResultType = ScanResultType.Completed, TargetUid = new Guid("{D0221479-370A-4429-AB3A-FAE96D11AD02}"), AptReport = new AptReport(){ Modules = new Module[] { /*new Module() { Path = "kernel32.dll", Cloud = CloudVerdict.Unknown },*/ unknown, malware, svchost, malware2 }} };
+            ScanResult result2 = new ScanResult() { HostName = "dkolomiyets", OrganizationUnit = "Dev", IpAddress = "10.100.65.3",  MalwareFilesCount = 2, UnknownFilesCount = 1, SafeFilesCount = 337, TotalFilesCount = 340, ResultType = ScanResultType.Completed, TargetUid = new Guid("{911DD54A-9714-4718-8DCC-2AA15A18E6A8}"), AptReport = new AptReport(){ Modules = new Module[] { malware, unknown, malware2 } } };
+            ScanResult result3 = new ScanResult() { HostName = "cesmuser", OrganizationUnit = "QA", IpAddress = "10.100.65.225", MalwareFilesCount = 0, UnknownFilesCount = 0, SafeFilesCount = 100, TotalFilesCount = 100, ResultType = ScanResultType.Completed, TargetUid = new Guid("{09B449D0-366B-47CF-A6CD-8EF15DAF9B9F}"), AptReport = new AptReport(){ Modules = new Module[] { /*new Module() { Path = "user32.dll", Cloud = CloudVerdict.Safe }*/ } } };
+
+            data.Targets = new ScanResult[] { result, result2, result3 };
+            return data;
+        }
+
+        private void BuildReportCallback(IAsyncResult ar)
+        {
+            Context context = ar.AsyncState as Context;
+            if (context == null)
+                return;
+
+            ReportCompletedEventArgs args = new ReportCompletedEventArgs();
+            try
+            {
+                string fileName = context.Action.EndInvoke(ar);
+                args.FileName = fileName;
+                args.State = context.State;
+            }
+            catch (Exception ex)
+            {
+                args.Error = ex;
+            }
+            finally
+            {
+                OnReportCompleted(args);
+            }
         }
 
         public event EventHandler<ReportCompletedEventArgs> ReportCompleted;
+
+        protected virtual void OnReportCompleted(ReportCompletedEventArgs args)
+        {
+            EventHandler<ReportCompletedEventArgs> temp = ReportCompleted;
+            if (temp != null)
+                temp(this, args);
+        }
+
+        internal class Context
+        {
+            internal ReportBuilder.BuildReportDelegate Action { get; set; }
+            internal object State { get; set; }
+        }
     }
 
     public class ReportCompletedEventArgs : EventArgs
     {
-        
+        public object State { get; set; }
+        public string FileName { get; set; }
+        public Exception Error { get; set; }
     }
 
     public class AptAtManager
@@ -442,17 +527,29 @@ namespace APTAT.Core
             return command.Response.Targets;
         }
 
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password)
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain = "[//TODO:targets_source]")
         {
             DeployAgentRequest request = new DeployAgentRequest
                                              {
                                                  Targets = targets,
                                                  Login = login,
                                                  Password = password,
-                                                 ScanScope = "processes|drivers|autoruns"
+                                                 ScanScope = "processes|drivers|autoruns",
+                                                 Domain = domain,
                                              };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
             return new AptScanner(command, _descentSubSystem);
+        }
+
+        public IAptReportBuilder GetAptReportBuilder()
+        {
+            IAptReportBuilder aptReportBuilder = new AptReportBuilder(_descentSubSystem);
+            return aptReportBuilder;
+        }
+
+        public AptScanOperationContext GetOperationContext(Guid operationUid)
+        {
+            return _descentSubSystem.GetScanResultsByOperationUid(operationUid);
         }
 
         public ScanResult GetScanResultByOperationAndTargetUid(Guid operationUid, Guid targetUid)
@@ -461,7 +558,7 @@ namespace APTAT.Core
             var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
             if(results != null)
             {
-                results.TryGetValue(targetUid, out scanResult);
+                results.ScanResults.TryGetValue(targetUid, out scanResult);
             }
             return scanResult;
         }
@@ -472,7 +569,7 @@ namespace APTAT.Core
             var results = _descentSubSystem.GetFirstScanResults();
             if (results != null)
             {
-                results.TryGetValue(targetUid, out scanResult);
+                results.ScanResults.TryGetValue(targetUid, out scanResult);
             }
             return scanResult;
         }

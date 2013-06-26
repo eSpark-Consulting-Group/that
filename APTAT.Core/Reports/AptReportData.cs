@@ -296,7 +296,7 @@ namespace APTAT.Core.Reports
                 StringBuilder sb = new StringBuilder();
                 foreach (var instance in BadFileInstances)
                 {
-                    string str = String.Format("{0}", instance.Path);
+                    string str = String.Format("{0}\n", instance.Path);
                     sb.AppendLine(str);
                 }
                 return sb.ToString();

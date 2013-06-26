@@ -59,6 +59,8 @@ namespace APTAT.Core.Facade.Descent.Commands
 									  Name = target.Name,
 									  DnsName = target.DnsName,
 									  IPAddress = domainTarget == null ? ParseIP(target.Name) : null,
+                                      IsOnline = target.Online,
+                                      LdapPath = domainTarget != null ? domainTarget.LdapPath : null,
 								  };
 
 			var computers = new List<IComputer>(targetComputers);
@@ -189,6 +191,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                                              DnsName = target.DnsName,
                                              IPAddress = ipAddress,
                                              Online = testTask != null ? testTask.Result.Item2 : false,
+                                             LdapPath = target.LdapPath
                                          };
 
                     deploymentTargets.AddRange(updatedTargets);
@@ -208,6 +211,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                               TargetUid = c.Uid,
                               Name = c.Name,
                               DnsName = c.DnsName ?? c.Name,
+                              LdapPath = c.LdapPath
                               // c.IPAddress is always null here
                           })
                           select rt.WithSideEffect(t =>

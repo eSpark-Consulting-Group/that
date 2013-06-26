@@ -13,5 +13,7 @@ namespace APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets
 		public bool Online { get; set; }
 
 		public string IPAddress { get; set; }
+
+        public string LdapPath { get; set; }
 	}
 }

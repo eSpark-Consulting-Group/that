@@ -110,7 +110,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.33009in</Height>
+              <Height>1.26759in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -126,7 +126,7 @@
                                   <Value>IP Address:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
@@ -159,7 +159,7 @@
                                   <Value>=Fields!IpAddress.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>DimGray</Color>
                                   </Style>
                                 </TextRun>
@@ -173,7 +173,7 @@
                           <Top>0.74389cm</Top>
                           <Left>3.80018cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>6.00788cm</Width>
+                          <Width>6.95156cm</Width>
                           <ZIndex>1</ZIndex>
                           <Style>
                             <Border>
@@ -192,10 +192,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Total Programs Scanned:</Value>
+                                  <Value>Programs Scanned:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
@@ -205,46 +205,10 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>0.74389cm</Top>
-                          <Left>9.98445cm</Left>
+                          <Left>10.92813cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>3.55916cm</Width>
+                          <Width>2.95062cm</Width>
                           <ZIndex>2</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox40">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!TotalFilesCount.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>9pt</FontSize>
-                                    <Color>DimGray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>0.74389cm</Top>
-                          <Left>13.61415cm</Left>
-                          <Height>0.55681cm</Height>
-                          <Width>2.5106cm</Width>
-                          <ZIndex>3</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -265,7 +229,7 @@
                                   <Value>Operating System:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
@@ -278,7 +242,7 @@
                           <Left>0.54948cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>2.76563cm</Width>
-                          <ZIndex>4</ZIndex>
+                          <ZIndex>3</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -299,7 +263,7 @@
                                   <Value>=Fields!OsName.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>DimGray</Color>
                                   </Style>
                                 </TextRun>
@@ -313,8 +277,8 @@
                           <Top>1.19855cm</Top>
                           <Left>3.80018cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>6.00788cm</Width>
-                          <ZIndex>5</ZIndex>
+                          <Width>6.95156cm</Width>
+                          <ZIndex>4</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -335,7 +299,7 @@
                                   <Value>Unknown Programs:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
@@ -345,46 +309,10 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>1.19855cm</Top>
-                          <Left>9.98445cm</Left>
+                          <Left>10.92813cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>3.55916cm</Width>
-                          <ZIndex>6</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox44">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!UnknownFilesCount.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>9pt</FontSize>
-                                    <Color>DimGray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>1.19855cm</Top>
-                          <Left>13.61415cm</Left>
-                          <Height>0.55681cm</Height>
-                          <Width>2.5106cm</Width>
-                          <ZIndex>7</ZIndex>
+                          <Width>2.95062cm</Width>
+                          <ZIndex>5</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -405,7 +333,7 @@
                                   <Value>OU:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
@@ -418,7 +346,7 @@
                           <Left>0.54949cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>2.76562cm</Width>
-                          <ZIndex>8</ZIndex>
+                          <ZIndex>6</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -439,7 +367,7 @@
                                   <Value>=Fields!OrganizationUnit.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>DimGray</Color>
                                   </Style>
                                 </TextRun>
@@ -453,8 +381,8 @@
                           <Top>1.6532cm</Top>
                           <Left>3.80018cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>6.00788cm</Width>
-                          <ZIndex>9</ZIndex>
+                          <Width>6.95156cm</Width>
+                          <ZIndex>7</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -475,7 +403,7 @@
                                   <Value>Malwares:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
@@ -485,46 +413,10 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>1.6532cm</Top>
-                          <Left>9.98446cm</Left>
+                          <Left>10.92814cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>3.55915cm</Width>
-                          <ZIndex>10</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox48">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!MalwareFilesCount.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>9pt</FontSize>
-                                    <Color>DimGray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>1.6532cm</Top>
-                          <Left>13.61417cm</Left>
-                          <Height>0.55681cm</Height>
-                          <Width>2.51059cm</Width>
-                          <ZIndex>11</ZIndex>
+                          <Width>2.95061cm</Width>
+                          <ZIndex>8</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -553,10 +445,10 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Left>0.00001cm</Left>
+                          <Left>0.54948cm</Left>
                           <Height>0.67334cm</Height>
-                          <Width>16.12476cm</Width>
-                          <ZIndex>12</ZIndex>
+                          <Width>15.57529cm</Width>
+                          <ZIndex>9</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -574,22 +466,132 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Instances on this device:</Value>
+                                  <Value>="Instances on this device (" &amp; Fields!InstancesCount.Value &amp; "):"</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>Gray</Color>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>2.08654cm</Top>
                           <Left>0.54948cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>8.05729cm</Width>
+                          <Width>5.35854cm</Width>
+                          <ZIndex>10</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox40">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!TotalFilesCount.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>DimGray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Top>0.74389cm</Top>
+                          <Left>13.61415cm</Left>
+                          <Height>0.55681cm</Height>
+                          <Width>2.5106cm</Width>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox44">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!UnknownFilesCount.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>DimGray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Top>1.19855cm</Top>
+                          <Left>13.61415cm</Left>
+                          <Height>0.55681cm</Height>
+                          <Width>2.5106cm</Width>
+                          <ZIndex>12</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox48">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!MalwareFilesCount.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <Color>DimGray</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Top>1.6532cm</Top>
+                          <Left>13.61417cm</Left>
+                          <Height>0.55681cm</Height>
+                          <Width>2.51059cm</Width>
                           <ZIndex>13</ZIndex>
                           <Style>
                             <Border>
@@ -611,7 +613,7 @@
                                   <Value>=Fields!Instances.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>9pt</FontSize>
+                                    <FontSize>8pt</FontSize>
                                     <Color>DimGray</Color>
                                   </Style>
                                 </TextRun>
@@ -622,7 +624,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>2.62229cm</Top>
+                          <Top>2.55879cm</Top>
                           <Left>3.80018cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>12.32457cm</Width>
@@ -631,6 +633,37 @@
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Top>0.23813cm</Top>
+                          <Left>0.1905cm</Left>
+                          <Height>0.16107cm</Height>
+                          <Width>0.16107cm</Width>
+                          <ZIndex>15</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BackgroundColor>#3f6ad1</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -670,7 +703,7 @@
         </TablixRowHierarchy>
         <DataSetName>ScannedTargetDataSet</DataSetName>
         <Top>0.93874cm</Top>
-        <Height>3.37843cm</Height>
+        <Height>3.21968cm</Height>
         <Width>16.12476cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
@@ -680,7 +713,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>1.73958in</Height>
+    <Height>1.66666in</Height>
     <Style />
   </Body>
   <ReportParameters>

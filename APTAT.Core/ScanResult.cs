@@ -17,7 +17,15 @@ namespace APTAT.Core
         public Guid TargetUid { get; set; }
         public string HostName { get; set; }
         public string IpAddress { get; set; }
-        public string OsName { get; set; }
+        public string OsName
+        {
+            get
+            {
+                if (AptReport != null && AptReport.Computer != null)
+                    return AptReport.Computer.Os;
+                return null;
+            }
+        }
         public string OrganizationUnit { get; set; }
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
@@ -31,6 +39,7 @@ namespace APTAT.Core
             //}
             get; set; 
         }
+        
         public int SafeFilesCount
         {
             //get
@@ -41,6 +50,7 @@ namespace APTAT.Core
             //}
             get; set;
         }
+        
         public int MalwareFilesCount
         {
             //get
@@ -51,6 +61,27 @@ namespace APTAT.Core
             //}
             get; set;
         }
+
+        public int RunningProgramsCount
+        {
+            get
+            {
+                if (AptReport != null && AptReport.Processes != null)
+                    return AptReport.Processes.Length;
+                return 0;
+            }
+        }
+
+        public int AutorunsCount
+        {
+            get
+            {
+                if (AptReport != null && AptReport.Autoruns != null)
+                    return AptReport.Autoruns.Length;
+                return 0;
+            }
+        }
+
         public string ResultErrorText { get; set; }
         public ScanResultType ResultType { get; set; }
 

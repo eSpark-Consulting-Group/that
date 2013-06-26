@@ -15,6 +15,8 @@ namespace APTAT.Core.Facade.Descent.MessageContracts
 
 		public string DomainAccessPassword { get; set; }
 
+        public string Domain { get; set; }
+
 		public InstallPackageInfo InstallPackage { get; set; }
 
 		public bool UpdateEndpoints { get; set; }

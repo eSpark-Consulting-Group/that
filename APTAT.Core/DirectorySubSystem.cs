@@ -18,6 +18,9 @@ namespace APTAT.Core
         IPAddress IPAddress { get; set; }
         bool IsLicensed { get; set; }
         Version AgentVersion { get; set; }
+        bool IsOnline { get; set; }
+        string OrganizationUnit { get; set; }
+        string LdapPath { get; set; }
     }
 
     public class DirectoryComputer : IComputer
@@ -33,6 +36,9 @@ namespace APTAT.Core
         public IPAddress IPAddress { get; set; }
         public bool IsLicensed { get; set; }
         public Version AgentVersion { get; set; }
+        public bool IsOnline { get; set; }
+        public string OrganizationUnit { get; set; }
+        public string LdapPath { get; set; }
     }
 
     public interface IDirectorySubSystem : ISubSystem

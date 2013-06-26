@@ -1245,6 +1245,7 @@
                         <FontFamily>Segoe UI</FontFamily>
                       </Style>
                     </ChartAxisTitle>
+                    <VariableAutoInterval>true</VariableAutoInterval>
                     <ChartMajorGridLines>
                       <Enabled>False</Enabled>
                       <Style>
@@ -1660,7 +1661,7 @@
                               <Top>1.73568cm</Top>
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>4.74979cm</Width>
+                              <Width>2.34209cm</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -1678,7 +1679,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!FileSizeFormatted.Value</Value>
+                                      <Value>=IIF(Fields!FileSizeFormatted.Value &lt;&gt; "", Fields!FileSizeFormatted.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -1692,9 +1693,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>1.73568cm</Top>
-                              <Left>5.98041cm</Left>
+                              <Left>3.57271cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>10.95609cm</Width>
+                              <Width>13.36379cm</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <Border>
@@ -1727,7 +1728,7 @@
                               <Top>2.23534cm</Top>
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>4.74979cm</Width>
+                              <Width>2.34209cm</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <Border>
@@ -1746,7 +1747,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Hash.Value</Value>
+                                      <Value>=IIF(Fields!Hash.Value &lt;&gt; "", Fields!Hash.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -1760,9 +1761,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>2.23534cm</Top>
-                              <Left>5.98041cm</Left>
+                              <Left>3.57271cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>10.95609cm</Width>
+                              <Width>13.36379cm</Width>
                               <ZIndex>3</ZIndex>
                               <Style>
                                 <Border>
@@ -1795,7 +1796,7 @@
                               <Top>2.76666cm</Top>
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>4.74979cm</Width>
+                              <Width>2.34209cm</Width>
                               <ZIndex>4</ZIndex>
                               <Style>
                                 <Border>
@@ -1814,7 +1815,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Signer.Value</Value>
+                                      <Value>=IIF(Fields!Signer.Value &lt;&gt; "", Fields!Signer.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -1828,9 +1829,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>2.76666cm</Top>
-                              <Left>5.98042cm</Left>
+                              <Left>3.57271cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>10.95608cm</Width>
+                              <Width>13.36379cm</Width>
                               <ZIndex>5</ZIndex>
                               <Style>
                                 <Border>
@@ -1863,7 +1864,7 @@
                               <Top>3.29798cm</Top>
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>4.74979cm</Width>
+                              <Width>2.34209cm</Width>
                               <ZIndex>6</ZIndex>
                               <Style>
                                 <Border>
@@ -1882,7 +1883,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Version.Value</Value>
+                                      <Value>=IIF(Fields!Version.Value &lt;&gt; "", Fields!Version.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -1896,9 +1897,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>3.29798cm</Top>
-                              <Left>5.98042cm</Left>
+                              <Left>3.57271cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>10.95609cm</Width>
+                              <Width>13.3638cm</Width>
                               <ZIndex>7</ZIndex>
                               <Style>
                                 <Border>
@@ -1931,7 +1932,7 @@
                               <Top>3.8293cm</Top>
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>4.74979cm</Width>
+                              <Width>2.34209cm</Width>
                               <ZIndex>8</ZIndex>
                               <Style>
                                 <Border>
@@ -1950,7 +1951,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Copyright.Value</Value>
+                                      <Value>=IIF(Fields!Copyright.Value &lt;&gt; "", Fields!Copyright.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -1964,9 +1965,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>3.8293cm</Top>
-                              <Left>5.98042cm</Left>
+                              <Left>3.57271cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>10.95608cm</Width>
+                              <Width>13.36379cm</Width>
                               <ZIndex>9</ZIndex>
                               <Style>
                                 <Border>
@@ -1999,7 +2000,7 @@
                               <Top>4.34024cm</Top>
                               <Left>1.05424cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>4.74979cm</Width>
+                              <Width>2.34208cm</Width>
                               <ZIndex>10</ZIndex>
                               <Style>
                                 <Border>
@@ -2018,7 +2019,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Product.Value</Value>
+                                      <Value>=IIF(Fields!Product.Value &lt;&gt; "", Fields!Product.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -2032,9 +2033,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>4.34024cm</Top>
-                              <Left>5.98042cm</Left>
+                              <Left>3.57271cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>10.95608cm</Width>
+                              <Width>13.36379cm</Width>
                               <ZIndex>11</ZIndex>
                               <Style>
                                 <Border>
@@ -2117,7 +2118,7 @@
                               <Top>1.23219cm</Top>
                               <Left>1.05424cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>4.74979cm</Width>
+                              <Width>2.34208cm</Width>
                               <ZIndex>14</ZIndex>
                               <Style>
                                 <Border>
@@ -2136,7 +2137,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!CloudString.Value</Value>
+                                      <Value>=IIF(Fields!CloudString.Value &lt;&gt; "", Fields!CloudString.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -2150,9 +2151,9 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>1.23219cm</Top>
-                              <Left>5.98042cm</Left>
+                              <Left>3.57271cm</Left>
                               <Height>0.55681cm</Height>
-                              <Width>10.95609cm</Width>
+                              <Width>13.3638cm</Width>
                               <ZIndex>15</ZIndex>
                               <Style>
                                 <Border>
