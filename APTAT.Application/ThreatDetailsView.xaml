@@ -21,8 +21,12 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Border Height="35"  Width="35" Background="Orange" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalAlignment="Left" />
-
+            <Canvas x:Name="Layer_2" Height="38" Canvas.Left="0" Canvas.Top="0" Width="38" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalAlignment="Left" >
+                <Path Data="F1M0,38L38,38L38,0L0,0z" Fill="#FFFFAA00" Height="38" Canvas.Left="0" Stretch="Fill" Canvas.Top="0" Width="38"/>
+                <Path Data="M17.001,8.133L20.999,8.133L20.999,21.667L17.001,21.667z" Fill="White" Height="13.534" Canvas.Left="17.001" Stretch="Fill" Canvas.Top="8.133" Width="3.998"/>
+                <Path Data="M19,24.661C20.438,24.661,21.603,25.826,21.603,27.264C21.603,28.702,20.438,29.867,19,29.867C17.562,29.867,16.397,28.702,16.397,27.264C16.397,25.826,17.562,24.661,19,24.661" Fill="White" Height="5.206" Canvas.Left="16.397" Stretch="Fill" Canvas.Top="24.661" Width="5.206"/>
+            </Canvas>
+            
             <TextBlock  x:Name="txtSelectComputers" Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center"  Text="{Binding FileName}" FontSize="20" Margin="30,8,20,8" Grid.Column="1"/>
         </Grid>
         <Grid Background="White" Grid.Row="1">
