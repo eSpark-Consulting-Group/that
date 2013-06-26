@@ -5,6 +5,10 @@ const wchar_t PATH[] = L"Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Clie
 const wchar_t KEY[]  = L"Install";
 const wchar_t FRAMEWORK_DOWNLOAD_LINK[] = L"http://go.microsoft.com/fwlink/?linkid=182804";
 const wchar_t APP[]  = L"APTAT.Application.exe";
+const wchar_t FONT1[] = L"Fonts\\segoeui.ttf";
+const wchar_t FONT2[] = L"Fonts\\segoeuil.ttf";
+const wchar_t FONT3[] = L"Fonts\\seguisb.ttf";
+
 
 Bootstrapper::Bootstrapper()
 {
@@ -68,4 +72,12 @@ void Bootstrapper::LaunchApplication()
 	LPWSTR szCmdline = _tcsdup(APP);
 	CreateProcess(NULL,szCmdline , NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 	free(szCmdline);
+}
+
+bool Bootstrapper::PrepareFonts()
+{
+	int numberOfFontsAdded = AddFontResource(FONT1);
+	numberOfFontsAdded += AddFontResource(FONT2);
+	numberOfFontsAdded += AddFontResource(FONT3);
+	return numberOfFontsAdded == 3;
 }

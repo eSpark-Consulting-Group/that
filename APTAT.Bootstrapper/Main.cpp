@@ -18,6 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE crap, LPSTR lpCmdLine, int nSh
 	}
 	else
 	{
+		bool ok = bootstrapper.PrepareFonts();
 		bootstrapper.LaunchApplication();
 	}
 

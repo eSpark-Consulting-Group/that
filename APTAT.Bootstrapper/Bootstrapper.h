@@ -11,6 +11,7 @@ class Bootstrapper
 		bool IsMinimumFrameworkVersionInstalled();
 		void DownloadPackage();
 		void LaunchApplication();
+		bool PrepareFonts();
 	private:
 		LONG GetDWORDRegKey(HKEY hKey, const std::wstring &strValueName, DWORD &nValue, DWORD nDefaultValue);
 };
