@@ -8,9 +8,35 @@
                    xmlns:Application="clr-namespace:APTAT.Application" mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="1024"
 	Title="APT Assesment Tool" Background="White">
-
+  
     <Grid>
-        <Grid.RowDefinitions>
+        <Grid.Resources>
+            <DataTemplate x:Key="ReportButtonContentTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Path Data="M8.078,2.445L12.921,2.445L12.921,18.555L8.078,18.555z M14.09,6.596L18.933,6.596L18.933,18.555L14.09,18.555z M2.067,11.241L6.91,11.241L6.91,18.555L2.067,18.555z"
+                              Fill="#FF595E6B" 
+                              Height="16.11" 
+                              Width="16.866"
+                              Margin="0,0,10,0"/>
+                    <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="18" Margin="0,0,5,0" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="ReportButtonListBoxItemTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                 
+                    <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="18" Margin="0,0,0,0" />
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+            <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
@@ -26,6 +52,7 @@
                                  MouseDoubleClick="OnTreeDoubleClick"
                                   >
             <telerik:RadTreeListView.Resources>
+         
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -211,7 +238,7 @@
                 </telerik:RadButton.Content>
             </telerik:RadButton>
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
-            <telerik:RadButton Margin="5,-1,30,-1"
+            <!--<telerik:RadButton Margin="5,-1,30,-1"
                                FontSize="18"
                               Padding="2,20"
                                IsEnabled="{Binding IsReportEnabled}"
@@ -230,24 +257,31 @@
                         <TextBlock Text="Build Report" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
                     </Grid>
                 </telerik:RadButton.Content>
-            </telerik:RadButton>
+            </telerik:RadButton>-->
+            <!--IsEnabled="{Binding IsReportEnabled}"-->
 
-            <!--<telerik:RadSplitButton 
-                    AutoOpenDelay="0:0:0.0"
-                    Content="ExecutiveReport"
-                    Margin="5,-1,30,-1"
-                    FontSize="18"
-                    Padding="2,20"
-                    IsEnabled="{Binding IsReportEnabled}"
-                    Click="OnBuildReportClick">
+
+            
+            <telerik:RadSplitButton HorizontalAlignment="Left" 
+                              Margin="5,-1,5,-1"
+                              FontSize="18"
+                            Style="{StaticResource RadSplitBtnStyle}"
+                              Padding="2,20"
+            IsEnabled="{Binding IsReportEnabled}"              
+                              Click="OnBuildReportClick"
+                              x:Name="ReportButton"
+                              VerticalAlignment="Top"
+                                    
+                        ContentTemplate="{StaticResource ReportButtonContentTemplate}"
+                        Content="{Binding Path=SelectedItem.Content, ElementName=ReportActions}">
                 <telerik:RadSplitButton.DropDownContent>
-                    <ListBox>
-                        <ListBoxItem Content="Item 1" />
-                        <ListBoxItem Content="Item 2" />
-                        <ListBoxItem Content="Item 3" />
+                    <ListBox x:Name="ReportActions" SelectionMode="Single" SelectionChanged="OnReportSelected">
+                        <ListBoxItem ContentTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Content="Executive Report" IsSelected="True"  PreviewMouseLeftButtonDown="OnListBoxItemPreviewMouseLeftButtonDown" />
+                        <ListBoxItem  ContentTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Content="Per Device Report"  PreviewMouseLeftButtonDown="OnListBoxItemPreviewMouseLeftButtonDown" />
+                        <ListBoxItem  ContentTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Content="Per Program Report"   PreviewMouseLeftButtonDown="OnListBoxItemPreviewMouseLeftButtonDown"/>
                     </ListBox>
                 </telerik:RadSplitButton.DropDownContent>
-            </telerik:RadSplitButton>-->
+            </telerik:RadSplitButton>
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
             <telerik:RadButton Margin="5,-1" 
                           Padding="2,20"

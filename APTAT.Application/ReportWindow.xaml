@@ -24,7 +24,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="REPORT" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
+                    <TextBlock x:Name="txtTitle" Text="REPORT" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
                         <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
                     </StackPanel>

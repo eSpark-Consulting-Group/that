@@ -33,15 +33,17 @@ namespace APTAT.Application
     public partial class MainView 
     {
         private MainViewViewModel _viewModel;
+        private IStorageService _storageService;
+        private Int32 _selectedReportIndex = -1;
 
         public MainView()
         {
             InitializeComponent();
-
-          
-
+            _storageService = new StorageService();
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
+
+            
         }
 
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
@@ -136,9 +138,68 @@ namespace APTAT.Application
 
         private void OnBuildReportClick(Object sender, RoutedEventArgs e)
         {
+            HandleSelectedReportChanged();
+
+            ShowReport();
+        }
+
+        private void OnReportSelected(Object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = (ListBox) sender;
+            
+            ReportButton.IsOpen = false;
+
+            if(_selectedReportIndex == -1)
+            {
+                _selectedReportIndex = listBox.SelectedIndex;
+            }
+            else
+            {
+                _selectedReportIndex = listBox.SelectedIndex;
+                HandleSelectedReportChanged();
+                ShowReport();
+            }
+        }
+
+
+        private void HandleSelectedReportChanged()
+        {
+            if (_selectedReportIndex == 0)
+            {
+                _storageService.SetValue(KnownKeys.ReportTKind, ReportKind.Executive);
+            }
+            else if (_selectedReportIndex == 1)
+            {
+                _storageService.SetValue(KnownKeys.ReportTKind, ReportKind.DetailedPerDevice);
+            }
+            else if (_selectedReportIndex == 2)
+            {
+                _storageService.SetValue(KnownKeys.ReportTKind, ReportKind.DetailedPerProgram);
+            }
+        }
+
+        private static void ShowReport()
+        {
             ReportWindow details = new ReportWindow();
             details.Owner = System.Windows.Application.Current.MainWindow;
             details.ShowDialog();
         }
+
+        private void OnListBoxItemPreviewMouseLeftButtonDown(Object sender, MouseButtonEventArgs e)
+        {
+
+            ((sender as ListBoxItem).Parent as ListBox).Items.IndexOf(sender);
+
+            ListBoxItem listBoxItem = (ListBoxItem) sender;
+            ListBox listBox = (ListBox)listBoxItem.Parent;
+
+            if(listBox.Items.IndexOf(listBoxItem) == listBox.SelectedIndex)
+            {
+                ReportButton.IsOpen = false;
+                ShowReport();
+            }
+        }
+
+
     }
 }

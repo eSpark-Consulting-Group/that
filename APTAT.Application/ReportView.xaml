@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              xmlns:converters="clr-namespace:Telerik.Windows.Documents.Converters;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
-             xmlns:Models="clr-namespace:APTAT.Application.Models" x:Class="APTAT.Application.ReportView" 
+             xmlns:Models="clr-namespace:APTAT.Application.Models" xmlns:Application="clr-namespace:APTAT.Application"
+             x:Class="APTAT.Application.ReportView" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800" >
     <Grid>
@@ -14,6 +15,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Application:TitleUpdater Header="{Binding Header}"/>
         <telerik:RadToolBar DataContext="{Binding ElementName=pdfViewer, Path=Commands}" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Margin="0">
             <telerik:RadToolBar.Resources>
                 <converters:DoubleToStringPercentConverter x:Key="doubleToStringPercentConverter" />
@@ -112,8 +114,10 @@
                 <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/find-next.png" Stretch="None" />
             </telerik:RadButton>
         </telerik:RadToolBar>
-        <telerik:RadPdfViewer HorizontalAlignment="Left"  x:Name="pdfViewer" Grid.Row="1"  />
+        <telerik:RadPdfViewer HorizontalAlignment="Left"  x:Name="pdfViewer" Grid.Row="1"   />
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
         </Border>
+        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" Grid.RowSpan="2"/>
+        
     </Grid>
 </Models:BaseView>

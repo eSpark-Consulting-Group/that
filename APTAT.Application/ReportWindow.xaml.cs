@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace APTAT.Application
         public ReportWindow()
         {
             InitializeComponent();
+
+             Loaded += OnLoaded;
         }
 
       
@@ -38,6 +41,24 @@ namespace APTAT.Application
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+        }
+
+                   
+  
+
+       private void OnLoaded(Object sender, RoutedEventArgs e)
+        {
+            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(TitleProperty, typeof(Window));
+            if (dpd != null)
+            {
+                dpd.AddValueChanged(this, delegate
+                {
+                    if (txtTitle != null)
+                    {
+                        txtTitle.Text = Title;
+                    }
+                });
+            }
         }
     }
 }

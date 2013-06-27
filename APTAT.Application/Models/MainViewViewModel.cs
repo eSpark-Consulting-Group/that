@@ -168,7 +168,7 @@ namespace APTAT.Application.Models
         
         public MainViewViewModel()
         {
-            _atpService = new AptService();
+            _atpService = AptService.Instance;
             _storage = new StorageService();
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);

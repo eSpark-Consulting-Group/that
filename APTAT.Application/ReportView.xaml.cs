@@ -15,6 +15,7 @@ using System.Windows.Resources;
 using System.Windows.Shapes;
 using APTAT.Application.Models;
 using Telerik.Windows.Documents.Fixed;
+using Telerik.Windows.Documents.Fixed.FormatProviders;
 
 namespace APTAT.Application
 {
@@ -30,6 +31,10 @@ namespace APTAT.Application
             InitializeComponent();
             DataContext = _viewModel = new ReportViewModel();
             _viewModel.ReportOpened += OnReportOpened;
+
+            
+
+            pdfViewer.DefaultFormatProviderSettings = FormatProviderSettings.ReadOnDemand;
         }
 
         private void OnReportOpened(Object sender, EventArgs e)

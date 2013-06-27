@@ -63,8 +63,23 @@ namespace APTAT.Application.Services
         {
             get { return _sessionGuid; }
         }
-  
-        public AptService()
+
+        private static IAptService _instance;
+
+        public static IAptService Instance
+        {
+            get
+            {
+                if(_instance == null)
+                {
+                    _instance = new AptService();
+                }
+
+                return _instance;
+            }
+        }
+
+        private AptService()
         {
            _manager = new AptAtManager(this);
         }
@@ -78,11 +93,18 @@ namespace APTAT.Application.Services
 
         private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
         {
-            BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.Error, e.State);   
-            if(BuildReportCompleted != null)
+            BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.Error, e.State);
+
+            Action action = () =>
             {
-                BuildReportCompleted(this, args);
-            }
+                if (BuildReportCompleted != null)
+                {
+                    BuildReportCompleted(this, args);
+                }
+            };
+            DispatcherHelper.Current.BeginInvoke(action);
+
+           
         }
 
         public void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState)

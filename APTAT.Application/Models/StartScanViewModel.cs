@@ -43,7 +43,7 @@ namespace APTAT.Application.Models
 
     public class StartScanViewModel : ViewModel
     {
-        private readonly IAptService _service = new AptService();
+        private readonly IAptService _service =  AptService.Instance;
         private readonly IStorageService _storage = new StorageService();
         private Int32 _step;
         private DirectoryItem[] _items;

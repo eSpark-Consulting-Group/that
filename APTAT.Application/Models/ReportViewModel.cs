@@ -8,11 +8,23 @@ namespace APTAT.Application.Models
     public class ReportViewModel : ViewModel
     {
         public event EventHandler ReportOpened;
+        
 
         private IStorageService storageService = new StorageService();
-        private IAptService _aptService = new AptService();
+        private IAptService _aptService = AptService.Instance;
+        private String _header = String.Empty;
 
         public Stream ReportStream { get; set; }
+
+        public String Header
+        {
+            get { return _header; }
+            set
+            {
+                _header = value;
+                RaisePropertyChanged("Header");
+            }
+        }
 
         protected override void InvokeViewLoaded(Object arg)
         {
@@ -21,8 +33,21 @@ namespace APTAT.Application.Models
             Guid operationGuid = storageService.GetValue<Guid>(KnownKeys.OperationGuid, false);
             ReportKind kind = storageService.GetValue<ReportKind>(KnownKeys.ReportTKind, false);
 
+            if(kind == ReportKind.DetailedPerProgram)
+            {
+                Header = "DETAILED REPORT";
+            }
+            else if(kind == ReportKind.DetailedPerDevice)
+            {
+                Header = "DETAILED REPORT";
+            }
+            else if(kind == ReportKind.Executive)
+            {
+                Header = "EXECUTIVE REPORT";
+            }
 
             _aptService.BuildReportCompleted += OnBuildReportCompleted;
+            IsBusy = true;
             _aptService.BuildReport(operationGuid, kind, this);
         }
 
@@ -40,11 +65,13 @@ namespace APTAT.Application.Models
 
         private void OnBuildReportCompleted(Object sender, BuildReportCompletedEventArgs e)
         {
+            IsBusy = false;
             if(e.Exception != null)
             {
                 return;
             }
 
+            
             ReportStream = File.Open(e.FileName, FileMode.Open);
             if(ReportOpened != null)
             {
