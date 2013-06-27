@@ -21,8 +21,8 @@ namespace APTAT.Core
         {
             get
             {
-                if (AptReport != null && AptReport.Computer != null)
-                    return AptReport.Computer.Os;
+                if (AptReport != null && AptReport.Computer != null && AptReport.Computer.Os != null)
+                    return AptReport.Computer.Os.ToString();
                 return null;
             }
         }
@@ -243,12 +243,48 @@ namespace APTAT.Core
         [XmlAttribute("SID")]
         public string Sid { get; set; }
 
-        [XmlAttribute("Os")]
-        public string Os { get; set; }
+        [XmlElement("OperatingSystem")]
+        public OperatingSystem Os { get; set; }
 
         [XmlArray("Connections")]
         [XmlArrayItem("Connection")]
         public Connection[] Connections { get; set; }
+    }
+
+    [XmlType("OperatingSystem")]
+    public class OperatingSystem
+    {
+        [XmlAttribute("BitSystem")]
+        public OsPlatform Platform { get; set; }
+
+        [XmlAttribute("ProductType")]
+        public int ProductType { get; set; }
+
+        [XmlAttribute("IsServerR2")]
+        public bool IsServerR2 { get; set; }
+
+        [XmlAttribute("SuiteMask")]
+        public int SuiteMask { get; set; }
+
+        [XmlAttribute("ServicePackMinor")]
+        public int ServicePackMinor { get; set; }
+
+        [XmlAttribute("ServicePackMajor")]
+        public int ServicePackMajor { get; set; }
+
+        [XmlAttribute("BuildNumber")]
+        public int BuildNumber { get; set; }
+
+        [XmlAttribute("MinorVer")]
+        public int MinorVer { get; set; }
+
+        [XmlAttribute("MajorVer")]
+        public int MajorVer { get; set; }
+
+        public override string ToString()
+        {
+            return OsInfoHelper.GetWindowsDisplayString(MajorVer, MinorVer, (OsInfoHelper.ProductType)ProductType, IsServerR2, SuiteMask, ServicePackMajor, ServicePackMinor, Platform);
+        }
     }
 
     [XmlType("Connection")]
@@ -260,8 +296,11 @@ namespace APTAT.Core
         [XmlAttribute("Type")]
         public string Type { get; set; }
 
-        [XmlAttribute("Ip")]
-        public string Ip { get; set; }
+        [XmlAttribute("IPv4")]
+        public string IPv4 { get; set; }
+
+        [XmlAttribute("IPv6")]
+        public string IPv6 { get; set; }
     }
 
     public enum CloudVerdict
@@ -282,6 +321,15 @@ namespace APTAT.Core
         NetworkError,
     }
 
+    public enum OsPlatform
+    {
+        [XmlEnum("64")]
+        X64 = 64,
+
+        [XmlEnum("32")]
+        X86 = 32
+    }
+
     [XmlType("Module")]
     public class Module
     {
@@ -293,6 +341,9 @@ namespace APTAT.Core
 
         [XmlAttribute("Cloud")]
         public CloudVerdict Cloud { get; set; }
+
+        [XmlAttribute("CloudDate")]
+        public DateTime CloudDate { get; set; }
 
         [XmlAttribute("Size")]
         public long Size { get; set; }
@@ -374,13 +425,16 @@ namespace APTAT.Core
     public class Process
     {
         [XmlAttribute("Pid")]
-        public string Pid { get; set; }
+        public int Pid { get; set; }
+
+        [XmlAttribute("ParentPid")]
+        public int ParentPid { get; set; }
 
         [XmlAttribute("ModuleRefId")]
         public string ModuleId { get; set; }
 
-        [XmlAttribute("State")]
-        public string State { get; set; }
+        //[XmlAttribute("State")]
+        //public string State { get; set; }
 
         [XmlAttribute("User")]
         public string User { get; set; }
@@ -394,22 +448,18 @@ namespace APTAT.Core
         [XmlAttribute("CpuTime")]
         public string CpuTime { get; set; }
 
-        [XmlAttribute("Platform")]
-        public string Platform { get; set; }
+        //[XmlAttribute("Platform")]
+        //public string Platform { get; set; }
 
         [XmlAttribute("Elevated")]
         public bool Elevated { get; set; }
 
         [XmlAttribute("UacVirtualization")]
-        public string UacVirtualization { get; set; }
+        public bool UacVirtualization { get; set; }
 
         [XmlArray("Modules")]
         [XmlArrayItem("Module")]
         public ModuleRef[] ModuleReferences { get; set; }
-
-        [XmlArray("Children")]
-        [XmlArrayItem("Process")]
-        public Process[] Children { get; set; }
     }
 
     [XmlType("ModuleRef")]

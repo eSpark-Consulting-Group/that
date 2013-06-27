@@ -18,7 +18,11 @@ namespace APTAT.Core.Descent
 			private readonly List<string> _filesToDeleteOnQuit = new List<string>();
 			private readonly ServiceHelper _serviceHelper = new ServiceHelper();
 
-            private const string ScannerServiceFileName = "ScannerService.exe";
+            private const string ScannerServiceX86FileName = "ScannerService.exe";
+            private const string ScannerServiceX64FileName = "ScannerService64.exe";
+            //private const string ScannerServiceX86FileName = "cmdapt86.exe";
+            //private const string ScannerServiceX64FileName = "cmdapt64.exe";
+            
 			private const string ScanStatusFileName = "scan_status.txt";
             private const string ScanResultsFileName = "out.xml";
 
@@ -151,14 +155,14 @@ namespace APTAT.Core.Descent
 				}
 				else
 				{
-					if (TryAlternativeLogin1(impersonateAsNetworkService))
-						return;
+                    //if (TryAlternativeLogin1(impersonateAsNetworkService))
+                    //    return;
 
-					if (TryAlternativeLogin2(impersonateAsNetworkService))
-						return;
+                    //if (TryAlternativeLogin2(impersonateAsNetworkService))
+                    //    return;
 
-					if(TryLogin( impersonateAsNetworkService, _remoteHostInfo.Login ))
-						return;
+                    if(TryLogin( impersonateAsNetworkService, _remoteHostInfo.Login ))
+                        return;
 				}
 
 				if ( _loginException != null )
@@ -205,7 +209,14 @@ namespace APTAT.Core.Descent
 					InvokeRemotelyConnected( EventArgs.Empty );
 				}
 
-				InitializeDescentAgentService( ScannerServiceFileName );
+                //========================================================================
+                // Define remote OS platform (x86/x64)
+			    string scannerFileName = ScannerServiceX86FileName;
+                if (System.IO.Directory.Exists(Path.Combine(_remoteAdminPath, "SysWOW64")))
+                    scannerFileName = ScannerServiceX64FileName;
+                //========================================================================
+
+                InitializeDescentAgentService(scannerFileName);
 			}
 
 			public event EventHandler RemotelyConnected;
@@ -371,12 +382,40 @@ namespace APTAT.Core.Descent
 
 			public void Init( ImpersonationHelper.Logon32LogonType logonType )
 			{
-				_networkHelper.LogonType = logonType;
-				DescentException originalException;
-				// First, try traditional impersonation as network service
+                //_networkHelper.LogonType = logonType;
+                //DescentException originalException;
+                //// First, try traditional impersonation as network service
+                //try
+                //{
+                //    Init(true);
+                //    return;
+                //}
+                //catch (DescentException exception)
+                //{
+                //    originalException = exception;
+                //}
+
+                //// We failed. Trying to impersonate as actual user
+                //try
+                //{
+                //    Init(false);
+                //}
+                //catch (DescentException exception)
+                //{
+                //    throw;
+                //    // TODO: Commented
+                //    //// Failed. Throw original exception to not to confuse user
+                //    //throw originalException;
+                //}
+
+
+                // Impersonation logic has been inverted as opposed to the code below.
+                _networkHelper.LogonType = logonType;
+                DescentException originalException;
+                // First, try impersonate as actual user
                 try
                 {
-                    Init(true);
+                    Init(false);
                     return;
                 }
                 catch (DescentException exception)
@@ -384,34 +423,39 @@ namespace APTAT.Core.Descent
                     originalException = exception;
                 }
 
-				// We failed. Trying to impersonate as actual user
-				try
-				{
-					Init( false );
-				}
+                // We failed. Trying to impersonate as network service
+                try
+                {
+                    Init(true);
+                }
                 catch (DescentException exception)
                 {
-                    throw;
+                    //throw;
                     // TODO: Commented
-                    //// Failed. Throw original exception to not to confuse user
-                    //throw originalException;
+                    // Failed. Throw original exception to not to confuse user
+                    throw originalException;
                 }
 			}
 
 
 			~DescentHelper()
 			{
-				Release();
+                if (!_objectDestroyed)
+				    Release();
 			}
 
+		    private bool _objectDestroyed = false;
 			public void Release()
 			{
 				try
 				{
-					foreach ( string targetPath in _filesToDeleteOnQuit )
-					{
-						File.Delete( targetPath );
-					}
+                    CleanUpRemoteContent();
+
+                    //foreach ( string targetPath in _filesToDeleteOnQuit )
+                    //{
+                    //    if(File.Exists(targetPath))
+                    //        File.Delete( targetPath );
+                    //}
 				}
 				catch ( Exception )
 				{
@@ -420,6 +464,8 @@ namespace APTAT.Core.Descent
 				DeleteDescentAgentService();
 				_serviceHelper.Release();
 				_networkHelper.Release();
+
+			    _objectDestroyed = true;
 			}
 			// ===============================================================
             // TODO: Commented
@@ -458,7 +504,8 @@ namespace APTAT.Core.Descent
 			{
 				try
 				{
-					CopyFile( descentAgentPath, false );
+				    CleanUpRemoteContent();
+					CopyFile( descentAgentPath, true ); // "true" means remove after operation is completed
 					InvokeDescentHelperCopied( EventArgs.Empty );
                     //PutServerCredentialsOnTheAgentComputer();
 					InvokeDescentHelperParametersCopied( EventArgs.Empty );
@@ -466,7 +513,7 @@ namespace APTAT.Core.Descent
 					_serviceHelper.InitializeService(
 						_remoteHost,
 						RemoteWorkingDirectoryAsLocal + @"\" + Path.GetFileName( descentAgentPath ),
-                        "ScannerService.exe",
+                        "ScannerService123.exe",
 						"Comodo APT Scanner"
 						);
 
@@ -478,6 +525,18 @@ namespace APTAT.Core.Descent
 						ex.Message, ex.NativeErrorCode );
 				}
 			}
+
+            private void CleanUpRemoteContent()
+            {
+                try
+                {
+                    if (System.IO.Directory.Exists(_remoteWorkingDirectory))
+                        System.IO.Directory.Delete(_remoteWorkingDirectory, true);
+                }
+                catch (Exception)
+                {
+                }
+            }
 
 			private void DeleteDescentAgentService()
 			{
@@ -507,8 +566,10 @@ namespace APTAT.Core.Descent
 				//const string responseFilePathForRemoteComputer = AptScannerTempFolderName + @"\" + ScanStatusFileName;
 				string responseFilePathForCurrentComputer = _remoteWorkingDirectory + @"\" + ScanStatusFileName;
                 string resultsFile = _remoteWorkingDirectory + @"\" + ScanResultsFileName;
+                //string responseFilePathForCurrentComputer = @"d:\" + ScanStatusFileName;
+                //string resultsFile = @"d:\" + ScanResultsFileName;
 
-				// Delete response file if it exists
+                // Delete response file if it exists
 				if( File.Exists( responseFilePathForCurrentComputer ) )
 					File.Delete( responseFilePathForCurrentComputer );
 
@@ -834,7 +895,7 @@ namespace APTAT.Core.Descent
 
 					if ( deleteOnQuit )
 					{
-						_filesToDeleteOnQuit.Add( targetPath );
+                        AddFileToRemoveList(targetPath);
 					}
 
 					return fs;
@@ -870,7 +931,7 @@ namespace APTAT.Core.Descent
 
 						if ( deleteOnQuit )
 						{
-							_filesToDeleteOnQuit.Add( targetPath );
+                            AddFileToRemoveList(targetPath);
 						}
 
 						return targetPath;
@@ -888,6 +949,11 @@ namespace APTAT.Core.Descent
 					}
 				}
 			}
+
+            private void AddFileToRemoveList(string fileName)
+            {
+                _filesToDeleteOnQuit.Add(fileName);
+            }
 		}
 	}
 }

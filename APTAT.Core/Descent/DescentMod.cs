@@ -330,7 +330,7 @@ namespace APTAT.Core.Descent
 			    EventHandler<DescentHelper.ScanProgressChangedEventArgs> onScanProgressChanged = null;
 			    onScanProgressChanged = (sender, args) =>
 			    {
-			        var text = new ResourceText("null", String.Format("Scanning... Total files scanned: {0}. Unknown files detected: {1}", args.TotalFilesScanned, args.UnknownFilesFound));
+			        var text = new ResourceText("null", String.Format("Scanning... Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound));
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanInProgress, args.TotalFilesScanned, args.UnknownFilesFound);
 			    };
 
@@ -378,7 +378,7 @@ namespace APTAT.Core.Descent
                     dh.ScanProgressChanged -= onScanProgressChanged;
                     dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
-                    var text = new ResourceText("null", String.Format("Scan completed. Total files scanned: {0}. Unknown files detected: {1}", args.TotalFilesScanned, args.UnknownFilesFound));
+                    var text = new ResourceText("null", String.Format("Scan completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound));
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanCompleted, args.TotalFilesScanned, args.UnknownFilesFound);
                 };
 
@@ -460,14 +460,14 @@ namespace APTAT.Core.Descent
                     _scanResults.TryGetValue(tp.AgentIdentity, out result);
                     if (result != null)
                     {
-                        var text = new ResourceText("null", String.Format("Scan results received. Total files scanned: {0}. Unknown files detected: {1}", result.TotalFilesCount, result.UnknownFilesCount));
+                        var text = new ResourceText("null", String.Format("Scan results received. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.", result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount));
                         NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount);
 
                         if(!resultsProcessor.TryParse(ref result))
                             throw new DescentException(DescentStatus.status_error, "Cannot process scan results.", 0);
 
                         result.ResultType = ScanResultType.Completed;
-                        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, new ResourceText("null", String.Format("Completed: Total files scanned: {0}. Unknown files detected: {1}", result.TotalFilesCount, result.UnknownFilesCount)), AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount);
+                        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, new ResourceText("null", String.Format("Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.", result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount)), AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount);
                     }
 
 				    if( dh.Response.Status != DescentStatus.status_success &&
