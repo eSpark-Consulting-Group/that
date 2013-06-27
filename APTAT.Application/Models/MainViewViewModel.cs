@@ -74,9 +74,9 @@ namespace APTAT.Application.Models
             {
                 if (IsScanInProgress == true && OnlineItemsCount > 1)
                 {
-                    return String.Format("APT ASSESMENT TOOL ({0}% scanning...)", Math.Round(ScannedItemsCount * 100.0 / OnlineItemsCount));
+                    return String.Format("APT ASSESSMENT TOOL ({0}% scanning...)", Math.Round(ScannedItemsCount * 100.0 / OnlineItemsCount));
                 }
-                return "APT ASSESMENT TOOL";
+                return "APT ASSESSMENT TOOL";
             }
         }
 
