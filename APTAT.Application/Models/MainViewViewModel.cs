@@ -17,11 +17,13 @@ namespace APTAT.Application.Models
         private Guid _operationGuid;
         private DirectoryItem[] _selectedTargets;
 
-
+        private Boolean _isReportEnabled;
         private Boolean? _isScanInProgress;
         private Int32 _scannedItemsCount;
         
         private Int32 _unknownFilesCount;
+        private Int32 _malwareFilesCount;
+
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
         private ObservableCollection<ThreatInfoItem> _threatInfoItems;
@@ -46,6 +48,16 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Int32 MalwareFilesCount
+        {
+            get { return _malwareFilesCount; }
+            set
+            {
+                _malwareFilesCount = value;
+                RaisePropertyChanged("MalwareFilesCount");
+            }
+        }
+
         public Int32 ScannedItemsCount
         {
             get { return _scannedItemsCount; }
@@ -62,9 +74,9 @@ namespace APTAT.Application.Models
             {
                 if (IsScanInProgress == true && OnlineItemsCount > 1)
                 {
-                    return String.Format("APT Assesment Tool ({0}% scanning...)", Math.Round(ScannedItemsCount * 100.0 / OnlineItemsCount));
+                    return String.Format("APT ASSESMENT TOOL ({0}% scanning...)", Math.Round(ScannedItemsCount * 100.0 / OnlineItemsCount));
                 }
-                return "APT Assesment Tool";
+                return "APT ASSESMENT TOOL";
             }
         }
 
@@ -84,7 +96,16 @@ namespace APTAT.Application.Models
         public Boolean IsDetailsEnabled
         {
             get { return SelectedItem != null && SelectedItem.IsRootItem == false; }
-       
+        }
+
+        public Boolean IsReportEnabled
+        {
+            get { return _isReportEnabled; }
+            set
+            {
+                _isReportEnabled = value;
+                RaisePropertyChanged("IsReportEnabled");
+            }
         }
 
         public Int32 ItemsCount
@@ -115,7 +136,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, _selectedItem.UnknownFile);    
+                    _storage.SetValue(KnownKeys.UnknownFile, _selectedItem.BadFile);    
                 }
                 
             }
@@ -241,7 +262,8 @@ namespace APTAT.Application.Models
 
             if(_onlineItems.Length > 0)
             {
-                _atpService.BeginScan(_onlineItems, login, password, this);    
+                IsReportEnabled = false;
+                _atpService.BeginScan(Items.ToArray(), login, password, this);    
             }
             else
             {
@@ -264,8 +286,9 @@ namespace APTAT.Application.Models
         private void ScanCompleted()
         {
             IsScanInProgress = false;
-
-  
+            IsReportEnabled = true;
+            
+            _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             // MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
         }
 
@@ -286,14 +309,14 @@ namespace APTAT.Application.Models
                    {
                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                       infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
                        infoItem.StatusMessage = scanProgress.StatusMessage;
                        if(infoItem.ScanStage != ScanStage.OperationCompleted && scanProgress.ScanStage == ScanStage.OperationCompleted)
                        {
                            _atpService.GetScanResult(infoItem.ComputerGuid, this);
                           
                        }
-
-                       
+           
                        infoItem.ScanStage = scanProgress.ScanStage;
                        break;
                    }
@@ -303,6 +326,7 @@ namespace APTAT.Application.Models
             Int32 completed = 0;
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
+            Int32 malwareFiles = 0;
             for (Int32 j = 0; j < _onlineItems.Length; ++j)
             {
                 ThreatInfoItem infoItem = _onlineItems[j];
@@ -316,14 +340,18 @@ namespace APTAT.Application.Models
                     scanned++;
                 }
 
-
                 unknownFiles += infoItem.UnknownFilesCount;
-               
+                malwareFiles += infoItem.MalwareFilesCount;
             }
 
             if(unknownFiles > UnknownFilesCount)
             {
                 UnknownFilesCount = unknownFiles;    
+            }
+
+            if(malwareFiles > MalwareFilesCount)
+            {
+                MalwareFilesCount = malwareFiles;
             }
             
             ScannedItemsCount = scanned;
@@ -343,18 +371,20 @@ namespace APTAT.Application.Models
             {
         
                 ObservableCollection<ThreatInfoItem> items = new ObservableCollection<ThreatInfoItem>();        
-                if(e.ScanResult.UnknownFiles != null)
+                if(e.ScanResult.BadFiles != null)
                 {
-                    foreach (UnknownFileItem unknownFile in e.ScanResult.UnknownFiles)
+                    foreach (BadFileItem badFile in e.ScanResult.BadFiles)
                     {
                         items.Add(new ThreatInfoItem
                         {
-                            Name = unknownFile.Name,
-                            Size = unknownFile.Size,
-                            SizeString = unknownFile.Size / 1024 + " KB",
+                            IsUnknown =  badFile.IsUnknown,
+                            IsMalware = badFile.IsMalware,
+                            Name = badFile.Name,
+                            Size = badFile.Size,
+                            SizeString = badFile.Size / 1024 + " KB",
                             IsRootItem = false,
                             IsOnline = true,
-                            UnknownFile = unknownFile,
+                            BadFile = badFile,
                         });
                     }    
                 }

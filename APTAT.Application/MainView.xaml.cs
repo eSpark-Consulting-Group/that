@@ -47,7 +47,8 @@ namespace APTAT.Application
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
-            scanCompletedWindow.Text.Text = String.Format("- {1} Unknown Files Found", Environment.NewLine, _viewModel.UnknownFilesCount);
+            scanCompletedWindow.Text.Text = String.Format("- {0} Unknown Files Found", _viewModel.UnknownFilesCount);
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malwares Found", Environment.NewLine, _viewModel.MalwareFilesCount);
             if(e.SuccededCount > 0)
             {
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Successful Scans", Environment.NewLine, e.SuccededCount);
@@ -84,23 +85,53 @@ namespace APTAT.Application
             }
         }
 
+        private ThreatInfoItem GetDataBoundItem(FrameworkElement element)
+        {
+            if(element == null)
+            {
+                return null;
+            }
+
+            if(element.Parent == null)
+            {
+                return null;
+            }
+
+            FrameworkElement parent = (FrameworkElement) element.Parent;
+            if(parent == null)
+            {
+                return null;
+            }
+
+            parent = (FrameworkElement) parent.Parent;
+            if(parent == null)
+            {
+                return null;
+            }
+
+            return parent.DataContext as ThreatInfoItem;
+        }
+
         private void OnTreeDoubleClick(Object sender, MouseButtonEventArgs e)
         {
             if(e.OriginalSource != null)
             {
                 FrameworkElement element = e.OriginalSource as FrameworkElement;
-                if(element != null && !(element.Parent is GridViewCell))
+                if(element == null)
                 {
                     return;
                 }
+
+                ThreatInfoItem item = GetDataBoundItem(element);
+                if (_viewModel.SelectedItem != null && _viewModel.SelectedItem.IsRootItem == false && _viewModel.SelectedItem == item)
+                {
+                    ThreatDetailsWindow details = new ThreatDetailsWindow();
+                    details.Owner = System.Windows.Application.Current.MainWindow;
+                    details.ShowDialog();
+                }
             }
 
-            if(_viewModel.SelectedItem != null && _viewModel.SelectedItem.IsRootItem == false)
-            {
-                ThreatDetailsWindow details = new ThreatDetailsWindow();
-                details.Owner = System.Windows.Application.Current.MainWindow;
-                details.ShowDialog();
-            }
+           
         }
 
         private void OnBuildReportClick(Object sender, RoutedEventArgs e)

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
+using APTAT.Application.Models;
 using Telerik.Windows.Documents.Fixed;
 
 namespace APTAT.Application
@@ -20,41 +21,41 @@ namespace APTAT.Application
     /// <summary>
     /// Interaction logic for ReportView.xaml
     /// </summary>
-    public partial class ReportView : UserControl
+    public partial class ReportView 
     {
+        private readonly ReportViewModel _viewModel;
+
         public ReportView()
         {
             InitializeComponent();
-            Loaded += ReportView_Loaded;
+            DataContext = _viewModel = new ReportViewModel();
+            _viewModel.ReportOpened += OnReportOpened;
         }
 
-        void ReportView_Loaded(object sender, RoutedEventArgs e)
+        private void OnReportOpened(Object sender, EventArgs e)
         {
-            StreamResourceInfo stream =
-                System.Windows.Application.GetResourceStream(
-                    new Uri("pack://application:,,,/Untitled2.pdf", UriKind.RelativeOrAbsolute));
-            pdfViewer.DocumentSource = new PdfDocumentSource(stream.Stream);
+            pdfViewer.DocumentSource = new PdfDocumentSource(_viewModel.ReportStream);
         }
 
-        private void tbCurrentPage_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void TbCurrentPageKeyDown(Object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (textBox != null)
             {
-                if (e.Key == System.Windows.Input.Key.Enter)
+                if (e.Key == Key.Enter)
                 {
                     textBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
                 }
             }
         }
 
-        private void tbFind_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void TbFindKeyDown(Object sender, KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 this.pdfViewer.Commands.FindCommand.Execute(this.tbFind.Text);
-                this.btnPrev.Visibility = System.Windows.Visibility.Visible;
-                this.btnNext.Visibility = System.Windows.Visibility.Visible;
+                this.btnPrev.Visibility = Visibility.Visible;
+                this.btnNext.Visibility = Visibility.Visible;
             }
         }
     }

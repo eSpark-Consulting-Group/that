@@ -10,6 +10,6 @@ namespace APTAT.Application.Models
 
         public Int32 UnknownFilesCount { get; set; }
 
-        public UnknownFileItem[] UnknownFiles { get; set; }
+        public BadFileItem[] BadFiles { get; set; }
     }
 }

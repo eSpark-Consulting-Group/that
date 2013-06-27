@@ -1,11 +1,11 @@
-﻿<UserControl
+﻿<Models:BaseView
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              xmlns:converters="clr-namespace:Telerik.Windows.Documents.Converters;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
-             x:Class="APTAT.Application.ReportView" 
+             xmlns:Models="clr-namespace:APTAT.Application.Models" x:Class="APTAT.Application.ReportView" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800" >
     <Grid>
@@ -43,7 +43,7 @@
                 <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/next.png" Stretch="None" />
             </telerik:RadButton>
 
-            <TextBox Width="30" Margin="2" Text="{Binding FixedDocumentViewer.CurrentPageNumber, Mode=TwoWay}" HorizontalContentAlignment="Center" x:Name="tbCurrentPage" KeyDown="tbCurrentPage_KeyDown"/>
+            <TextBox Width="30" Margin="2" Text="{Binding FixedDocumentViewer.CurrentPageNumber, Mode=TwoWay}" HorizontalContentAlignment="Center" x:Name="tbCurrentPage" KeyDown="TbCurrentPageKeyDown"/>
             <TextBlock VerticalAlignment="Center" Margin="2" Text="/" />
             <TextBlock VerticalAlignment="Center" Margin="2" Text="{Binding ElementName=pdfViewer, Path=Document.Pages.Count}" />
             <telerik:RadToolBarSeparator/>
@@ -92,7 +92,7 @@
             </telerik:RadToggleButton>
 
             <telerik:RadToolBarSeparator />
-            <telerik:RadWatermarkTextBox Margin="2" x:Name="tbFind" KeyDown="tbFind_KeyDown"  Width="100">
+            <telerik:RadWatermarkTextBox Margin="2" x:Name="tbFind" KeyDown="TbFindKeyDown"  Width="100">
                 <telerik:RadWatermarkTextBox.WatermarkContent>
                     <TextBlock Text="Find" FontStyle="Normal" />
                 </telerik:RadWatermarkTextBox.WatermarkContent>
@@ -116,4 +116,4 @@
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
         </Border>
     </Grid>
-</UserControl>
+</Models:BaseView>

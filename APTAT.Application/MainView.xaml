@@ -22,7 +22,7 @@
         
         <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"   
                                  Margin="20,0,20,20"
-                                 HierarchyIndent="38"
+                                 HierarchyIndent="14"
                                  MouseDoubleClick="OnTreeDoubleClick"
                                   >
             <telerik:RadTreeListView.Resources>
@@ -109,7 +109,15 @@
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="UnknownFileTemplate">
-                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Border Width="16" Height="16" Background="#FFD64333" Margin="0,0,8,0" Opacity="{Binding IsMalware, Converter={StaticResource BoolToOpacityConverter}}"/>
+                        <Border Width="16" Height="16" Background="Orange"  Margin="0,0,8,0" Opacity="{Binding IsUnknown, Converter={StaticResource BoolToOpacityConverter}}"/>
+                        <TextBlock Text="{Binding Name}" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                    </Grid>
                 </DataTemplate>
                 <TemplateSelectors:MainViewNameTemplateSelector x:Key="NameTemplateSelector" 
                                                                 UnknownFileTemplate="{StaticResource UnknownFileTemplate}"
@@ -206,7 +214,7 @@
             <telerik:RadButton Margin="5,-1,30,-1"
                                FontSize="18"
                               Padding="2,20"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                               IsEnabled="{Binding IsReportEnabled}"
                                Click="OnBuildReportClick">
                 <telerik:RadButton.Content>
                     <Grid>
@@ -223,6 +231,23 @@
                     </Grid>
                 </telerik:RadButton.Content>
             </telerik:RadButton>
+
+            <!--<telerik:RadSplitButton 
+                    AutoOpenDelay="0:0:0.0"
+                    Content="ExecutiveReport"
+                    Margin="5,-1,30,-1"
+                    FontSize="18"
+                    Padding="2,20"
+                    IsEnabled="{Binding IsReportEnabled}"
+                    Click="OnBuildReportClick">
+                <telerik:RadSplitButton.DropDownContent>
+                    <ListBox>
+                        <ListBoxItem Content="Item 1" />
+                        <ListBoxItem Content="Item 2" />
+                        <ListBoxItem Content="Item 3" />
+                    </ListBox>
+                </telerik:RadSplitButton.DropDownContent>
+            </telerik:RadSplitButton>-->
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
             <telerik:RadButton Margin="5,-1" 
                           Padding="2,20"
@@ -249,8 +274,10 @@
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
         <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="35" >
-            <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5" FontSize="14"/>
-                <TextBlock Foreground="White" Text=" unknown files detected (" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text=" unknown files detected, " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text=" malwares detected (" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text=" of " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>

@@ -8,9 +8,14 @@ namespace APTAT.Application.Models
         private Int32 _progress;
         private Int32 _totalFilesCount;
         private Int32 _unknownFilesCount;
+        private Int32 _malwareFilesCount;
         private String _statusMessage;
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
+
+        public Boolean IsUnknown { get; set; }
+
+        public Boolean IsMalware { get; set; }
 
         public Boolean IsRootItem { get; set; }
 
@@ -72,6 +77,21 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Int32 MalwareFilesCount
+        {
+            get { return _malwareFilesCount; }
+            set
+            {
+                if(_malwareFilesCount == value)
+                {
+                    return;
+                }
+
+                _malwareFilesCount = value;
+                RaisePropertyChanged("MalwareFilesCount");
+            }
+        }
+
         public Int32 TotalFilesCount
         {
             get { return _totalFilesCount; }
@@ -106,7 +126,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public UnknownFileItem UnknownFile { get; set; }
+        public BadFileItem BadFile { get; set; }
 
         public ThreatInfoItem()
         {

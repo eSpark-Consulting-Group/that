@@ -134,6 +134,7 @@
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
     <Compile Include="DesignGrid.cs" />
     <Compile Include="DesignTimeGrid.cs" />
+    <Compile Include="Models\ReportViewModel.cs" />
     <Compile Include="ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
@@ -150,7 +151,7 @@
     <Compile Include="Converters\ScanStageToBrushConverter.cs" />
     <Compile Include="Models\ScanProgressItem.cs" />
     <Compile Include="Models\ScanResultItem.cs" />
-    <Compile Include="Models\UnknownFileItem.cs" />
+    <Compile Include="Models\BadFileItem.cs" />
     <Compile Include="Converters\NullableConverter.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\BasePage.cs" />
@@ -261,7 +262,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <Resource Include="Untitled2.pdf" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

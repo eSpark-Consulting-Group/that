@@ -21,6 +21,8 @@ namespace APTAT.Application.Models
         private String _version;
         private String _copyright;
         private String _product;
+        private Boolean _isMalware;
+        private Boolean _isUnknown;
 
         public String FileName
         {
@@ -142,6 +144,28 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Boolean IsUnknown
+        {
+            get { return _isUnknown; }
+            set
+            {
+                _isUnknown = value;
+                RaisePropertyChanged("IsUnknown");
+            }
+        }
+
+        public Boolean IsMalware
+        {
+            get { return _isMalware; }
+            set
+            {
+                _isMalware = value;
+                RaisePropertyChanged("IsMalware");
+            }
+        }
+
+
+
         public ThreatDetailsViewModel()
         {
             _storage = new StorageService();
@@ -151,21 +175,23 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            UnknownFileItem unknownFile = _storage.GetValue<UnknownFileItem>(KnownKeys.UnknownFile, false);
+            BadFileItem badFile = _storage.GetValue<BadFileItem>(KnownKeys.UnknownFile, false);
 
 
-            FileName = Path.GetFileName(unknownFile.Name);
+            FileName = Path.GetFileName(badFile.Name);
             Verdict = "unknown";
-            Size = unknownFile.Size / 1024 + "KB";
-            Created = unknownFile.Created;
-            Modified = unknownFile.Modified;
-            Accessed = unknownFile.Accessed;
-            Hash = NAIfEmpty(unknownFile.Sha1);
-            Signer = NAIfEmpty(unknownFile.Signer);
-            Description = NAIfEmpty(unknownFile.Description);
-            Version = NAIfEmpty(unknownFile.Version);
-            Copyright = NAIfEmpty(unknownFile.Copyright);
-            Product = NAIfEmpty(unknownFile.Product);
+            Size = badFile.Size / 1024 + "KB";
+            Created = badFile.Created;
+            Modified = badFile.Modified;
+            Accessed = badFile.Accessed;
+            Hash = NAIfEmpty(badFile.Sha1);
+            Signer = NAIfEmpty(badFile.Signer);
+            Description = NAIfEmpty(badFile.Description);
+            Version = NAIfEmpty(badFile.Version);
+            Copyright = NAIfEmpty(badFile.Copyright);
+            Product = NAIfEmpty(badFile.Product);
+            IsMalware = badFile.IsMalware;
+            IsUnknown = badFile.IsUnknown;
         }
 
         private String NAIfEmpty(String str)

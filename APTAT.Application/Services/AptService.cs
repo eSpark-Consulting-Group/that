@@ -8,6 +8,7 @@ using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using APTAT.Core.Reports;
 
 namespace APTAT.Application.Services
 {
@@ -52,6 +53,8 @@ namespace APTAT.Application.Services
 
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
 
+        public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
+
         private readonly AptAtManager _manager;
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
@@ -66,9 +69,24 @@ namespace APTAT.Application.Services
            _manager = new AptAtManager(this);
         }
 
+        public void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState)
+        {
+            IAptReportBuilder reportBuilder =  _manager.GetAptReportBuilder();
+            reportBuilder.ReportCompleted += OnReportCompleted;
+            reportBuilder.BeginBuildReport(operationGuid, ToReportType(reportKind), userState);
+        }
+
+        private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
+        {
+            BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.Error, e.State);   
+            if(BuildReportCompleted != null)
+            {
+                BuildReportCompleted(this, args);
+            }
+        }
+
         public void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState)
         {
-
             Debug.Assert(password != null);
             
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
@@ -76,8 +94,6 @@ namespace APTAT.Application.Services
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             scanner.BeginScan(userState);
-
-            
         }
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
@@ -280,13 +296,13 @@ namespace APTAT.Application.Services
             };
 
 
-            UnknownFileItem[] unknownFileItems = null;
+            BadFileItem[] badFileItems = null;
             if (scanResult.AptReport != null)
             {
                 if (scanResult.AptReport.Modules != null)
                 {
-                    unknownFileItems = scanResult.AptReport.Modules.Where(m => m.Cloud == CloudVerdict.Unknown)
-                        .Select(m => new UnknownFileItem
+                    badFileItems = scanResult.BadFiles
+                        .Select(m => new BadFileItem
                                          {
                                              Name = m.Path,
                                              Size = m.Size,
@@ -299,7 +315,9 @@ namespace APTAT.Application.Services
                                              Description = m.Description,
                                              Signer = m.Signer,
                                              Attributes = m.Attributes,
-                                             Sha1 = m.Sha1
+                                             Sha1 = m.Sha1,
+                                             IsMalware = m.Cloud == CloudVerdict.Malware,
+                                             IsUnknown = m.Cloud == CloudVerdict.Unknown
                                          }
                         ).ToArray();
                         
@@ -307,7 +325,7 @@ namespace APTAT.Application.Services
                 }
             }
 
-            resultItem.UnknownFiles = unknownFileItems;
+            resultItem.BadFiles = badFileItems;
             
 
             if(GetScanResultCompleted != null)
@@ -332,6 +350,7 @@ namespace APTAT.Application.Services
                         progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
                         progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
                         progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
+                        progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
                         progressItem.OperationUid = descentProgressItem.OperationUid;
                         progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
                         scanProgressItems[i] = progressItem;
@@ -458,9 +477,24 @@ namespace APTAT.Application.Services
             return collection;
         }
 
+        private ReportType ToReportType(ReportKind kind)
+        {
+            if(kind == ReportKind.Executive)
+            {
+                return ReportType.Executive;
+            }
 
+            if(kind == ReportKind.DetailedPerProgram)
+            {
+                return ReportType.DetailedPerProgram;
+            }
 
+            if (kind == ReportKind.DetailedPerDevice)
+            {
+                return ReportType.DetailedPerDevice;
+            }
 
-
+            throw new ArgumentException("kind");
+        }
     }
 }

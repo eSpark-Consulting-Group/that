@@ -8,7 +8,9 @@ namespace APTAT.Application.Services
         public const String Login = "Login";
         public const String Password = "Password";
         public const String Domain = "Domain";
-        public const String UnknownFile = "UnknownFile";
+        public const String UnknownFile = "BadFile";
+        public const String OperationGuid = "OperationGuid";
+        public const String ReportTKind = "ReportKind";
     }
 
     public interface IStorageService

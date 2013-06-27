@@ -86,6 +86,25 @@ namespace APTAT.Application.Services
         public Int32 NotPerformedCount { get; set; }
     }
 
+    public class BuildReportCompletedEventArgs : DomainEventArgs
+    {
+        public String FileName { get; private set; }
+
+        public BuildReportCompletedEventArgs(String fileName, Exception e, Object userState)
+        {
+            FileName = fileName;
+            Exception = e;
+            UserState = userState;
+        }
+    }
+
+    public enum ReportKind
+    {
+        Executive,
+        DetailedPerDevice,
+        DetailedPerProgram
+    }
+
     public interface IAptService
     {
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
@@ -95,8 +114,11 @@ namespace APTAT.Application.Services
         event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
+        event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
 
-        void  GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
+        void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
+
+        void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
 
         void GetDirectoryRoot(String domainController, String admin, String password, Object userState);
 

@@ -35,6 +35,8 @@ namespace APTAT.Application.Models
 
         public Int32 UnknownFilesCount { get; set; }
 
+        public Int32 MalwareFilesCount { get; set; }
+
         public Guid OperationUid { get; set; }
 
         public Int32 Percentage { get; set; }
