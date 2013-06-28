@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Text;
 
 namespace APTAT.Core.Descent
 {
@@ -467,12 +468,18 @@ namespace APTAT.Core.Descent
             }
         }
 
-        public void InitializeService(string hostName, string binPath, string name, string displayName)
+        public void InitializeService(string hostName, string binPath, string name, string displayName, string[] parameters)
         {
             m_databaseHandle = OpenSCManager( hostName, null, ( uint )SCM_ACCESS.SC_MANAGER_ALL_ACCESS );
             if (m_databaseHandle == IntPtr.Zero)
             {
                 throw new Win32Exception( Marshal.GetLastWin32Error() );
+            }
+
+            StringBuilder cmdLine = new StringBuilder(String.Format("{0} /Service", binPath));
+            foreach (var parameter in parameters)
+            {
+                cmdLine.AppendFormat(" \"{0}\"", parameter);
             }
 
             m_serviceHandle = OpenService(m_databaseHandle, name, (uint)SERVICE_ACCESS.SERVICE_ALL_ACCESS);
@@ -483,7 +490,7 @@ namespace APTAT.Core.Descent
                                                 (uint)SERVICE_TYPE.SERVICE_WIN32_OWN_PROCESS,
                                                 (uint)SERVICE_START.SERVICE_DEMAND_START,
                                                 (uint)SERVICE_ERROR.SERVICE_ERROR_IGNORE,
-                                                binPath,
+                                                cmdLine.ToString(), //binPath,
                                                 null,
                                                 null,
                                                 null,

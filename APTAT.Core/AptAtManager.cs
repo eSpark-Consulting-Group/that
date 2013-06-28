@@ -205,15 +205,17 @@ namespace APTAT.Core
         void BeginScan(object state = null);
         event EventHandler<ScanStartedEventArgs> ScanStarted;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
+        event EventHandler<ScanInProgressEventArgs> ScanInProgress;
     }
 
     internal class AptScanner : IAptScanner
     {
+        private AptScanOperationContext _scanOperationContext;
         private IServiceCommand<DeployAgentResponse> _command;
         private readonly IDescentSubSystem _descentSubSystem;
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
-
+        public event EventHandler<ScanInProgressEventArgs> ScanInProgress;
 
         internal AptScanner(IServiceCommand<DeployAgentResponse> command, IDescentSubSystem descentSubSystem)
         {
@@ -226,6 +228,10 @@ namespace APTAT.Core
         private void OnDescentCompleted(object sender, DescentCompletedEventArgs e)
         {
             _descentSubSystem.DescentCompleted -= OnDescentCompleted;
+            if (_scanOperationContext != null)
+            {
+                _scanOperationContext.OperationProgressChanged -= scanOperationContext_OperationProgressChanged;
+            }
 
             OnScanCompleted(new ScanCompletedEventArgs()
                                 {
@@ -260,9 +266,17 @@ namespace APTAT.Core
                 context.Action.EndInvoke(ar);
                 args.OperationUid = _command.Response.OperationUid;
                 args.State = context.State;
+
+                _scanOperationContext = _descentSubSystem.GetScanResultsByOperationUid(args.OperationUid);
+                if (_scanOperationContext != null)
+                {
+                    _scanOperationContext.OperationProgressChanged += scanOperationContext_OperationProgressChanged;
+                }
             }
             catch (Exception ex)
             {
+                _descentSubSystem.DescentCompleted -= OnDescentCompleted;
+
                 args.Error = ex;
                 args.State = context.State;
             }
@@ -270,6 +284,11 @@ namespace APTAT.Core
             {
                 OnScanStarted(args);
             }
+        }
+
+        void scanOperationContext_OperationProgressChanged(object sender, AptScanOperationContext.OperationProgressChangedEventArgs e)
+        {
+            OnScanInProgress(new ScanInProgressEventArgs() { OperationUid = _scanOperationContext.OperationUid, Percentage = e.Percentage});
         }
 
         protected virtual void OnScanStarted(ScanStartedEventArgs args)
@@ -282,6 +301,13 @@ namespace APTAT.Core
         protected virtual void OnScanCompleted(ScanCompletedEventArgs args)
         {
             EventHandler<ScanCompletedEventArgs> temp = ScanCompleted;
+            if (temp != null)
+                temp(this, args);
+        }
+
+        protected virtual void OnScanInProgress(ScanInProgressEventArgs args)
+        {
+            EventHandler<ScanInProgressEventArgs> temp = ScanInProgress;
             if (temp != null)
                 temp(this, args);
         }
@@ -314,6 +340,12 @@ namespace APTAT.Core
         public int SucceededCount { get; set; }
         public int FailedCount { get; set; }
         public int CalceledCount { get; set; }
+    }
+
+    public class ScanInProgressEventArgs : EventArgs
+    {
+        public Guid OperationUid { get; set; }
+        public int Percentage { get; set; }
     }
 
 
@@ -352,7 +384,7 @@ namespace APTAT.Core
                                              TargetsSource = operationContext.TargetsSourceName,
                                              TargetsFailed = operationContext.FailedTargetsCount,
                                              TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
-                                             TargetsScanned = operationContext.TotalTargetsCount,
+                                             TotalTargetsCount = operationContext.TotalTargetsCount,
                                              TargetsSucceeded = operationContext.SucceededTargetsCount,
                                              Targets = operationContext.ScanResults.Values.ToArray()
                                          };
@@ -373,7 +405,7 @@ namespace APTAT.Core
             data.ScanFinished = DateTime.Now;
             data.ScanStarted = DateTime.Now.AddHours(-1);
             data.TargetsFailed = 1;
-            data.TargetsScanned = 50;
+            data.TotalTargetsCount = 50;
             data.TargetsSource = "dev.comodo.od.ua";
             data.TargetsSucceeded = 49;
 
@@ -534,7 +566,8 @@ namespace APTAT.Core
                                                  Targets = targets,
                                                  Login = login,
                                                  Password = password,
-                                                 ScanScope = "processes|drivers|autoruns",
+                                                 //ScanScope = "processes|drivers|autoruns",
+                                                 ScanScope = "processes",
                                                  Domain = domain,
                                              };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);

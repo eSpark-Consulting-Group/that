@@ -20,6 +20,10 @@
           <DataField>NetworkTrustLevel</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="NetworkTrustLevelString">
+          <DataField>NetworkTrustLevelString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="SafeFilesCount">
           <DataField>SafeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -62,6 +66,10 @@
         </Field>
         <Field Name="TotalFilesScanned">
           <DataField>TotalFilesScanned</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalTargetsCount">
+          <DataField>TotalTargetsCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="UnknownFilesFound">
@@ -849,7 +857,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!NetworkTrustLevel.Value, "AptReportDataSet") &amp; "%"</Value>
+                    <Value>=First(Fields!NetworkTrustLevelString.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -1093,6 +1101,7 @@
                 <Style>None</Style>
               </Border>
               <BackgroundColor>=Switch(
+					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "4", "Silver",
                       First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "3", "#c03a3a",
                       First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "2", "#f9cc08",
 					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "1", "#D03D15",
@@ -1412,9 +1421,12 @@
         <KeepTogether>true</KeepTogether>
         <Top>10.61778cm</Top>
         <Left>0.0635cm</Left>
-        <Height>10.54334cm</Height>
+        <Height>8.85001cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>3</ZIndex>
+        <Visibility>
+          <Hidden>=(First(Fields!TotalFilesScanned.Value, "AptReportDataSet") = 0)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1458,7 +1470,8 @@
                         <Color>=Switch(
                       Fields!TargetVerdict.Value = "2", "#b22222",
                       Fields!TargetVerdict.Value = "3", "#ffc000",
-                      Fields!TargetVerdict.Value = "1", "#3c963c")</Color>
+                      Fields!TargetVerdict.Value = "1", "#3c963c",
+					  Fields!TargetVerdict.Value = "0", "Silver")</Color>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1651,6 +1664,7 @@
                 <AutoFitTextDisabled>true</AutoFitTextDisabled>
                 <HeaderSeparatorColor>Black</HeaderSeparatorColor>
                 <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+                <TextWrapThreshold>30</TextWrapThreshold>
               </ChartLegend>
             </ChartLegends>
             <Palette>BrightPastel</Palette>

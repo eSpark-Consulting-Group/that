@@ -94,6 +94,8 @@ namespace APTAT.Core
         {
             get
             {
+                if (ResultType == ScanResultType.Failed || ResultType == ScanResultType.Canceled)
+                    return TargetVerdict.Unknown;
                 if (MalwareFilesCount > 0)
                     return TargetVerdict.Infected;
                 if (UnknownFilesCount > 0)
@@ -121,6 +123,8 @@ namespace APTAT.Core
                 }
             }
         }
+
+        public int ProgressPercenage { get; set; }
 
         public Module[] Files
         {
@@ -317,7 +321,7 @@ namespace APTAT.Core
         [XmlEnum("doesntexist")]
         FirstSeen,
 
-        [XmlEnum("networkerror")]
+        [XmlEnum("error")]
         NetworkError,
     }
 

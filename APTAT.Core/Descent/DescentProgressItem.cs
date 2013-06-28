@@ -4,23 +4,23 @@ namespace APTAT.Core.Descent
 {
 	public class DescentProgressItem : IDescentProgressItem, IBusinessObject
 	{
-        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage)
-            : this(computerUid, hostName, operationUid,statusMessage, scanStage, 0, 0, 0, 0)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int percentage)
+            : this(computerUid, hostName, operationUid, statusMessage, scanStage, 0, 0, 0, 0, percentage)
 		{
 		}
 
-        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount)
-            : this(computerUid, hostName, operationUid, statusMessage, scanStage, totalFilesCount, unknownFilesCount, 0, 0)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int percentage)
+            : this(computerUid, hostName, operationUid, statusMessage, scanStage, totalFilesCount, unknownFilesCount, 0, 0, percentage)
         {
         }
 
-        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, int percentage)
         {
             ComputerUid = computerUid;
             HostName = hostName;
             OperationUid = operationUid;
             StatusMessage = statusMessage;
-            //ProgressPercentage = progressPercentage;
+            ProgressPercentage = percentage;
             ScanStage = scanStage;
             TotalFilesCount = totalFilesCount;
             UnknownFilesCount = unknownFilesCount;

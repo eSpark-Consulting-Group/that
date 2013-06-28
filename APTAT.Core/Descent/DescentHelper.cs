@@ -18,10 +18,10 @@ namespace APTAT.Core.Descent
 			private readonly List<string> _filesToDeleteOnQuit = new List<string>();
 			private readonly ServiceHelper _serviceHelper = new ServiceHelper();
 
-            private const string ScannerServiceX86FileName = "ScannerService.exe";
-            private const string ScannerServiceX64FileName = "ScannerService64.exe";
-            //private const string ScannerServiceX86FileName = "cmdapt86.exe";
-            //private const string ScannerServiceX64FileName = "cmdapt64.exe";
+            //private const string ScannerServiceX86FileName = "ScannerService.exe";
+            //private const string ScannerServiceX64FileName = "ScannerService64.exe";
+            private const string ScannerServiceX86FileName = "cmdapt86.exe";
+            private const string ScannerServiceX64FileName = "cmdapt64.exe";
             
 			private const string ScanStatusFileName = "scan_status.txt";
             private const string ScanResultsFileName = "out.xml";
@@ -31,11 +31,14 @@ namespace APTAT.Core.Descent
 			private string _remoteAdminPath;
 			private string _remoteWorkingDirectory;
 			private string _remoteHost;
+            private string _responseFilePathForCurrentComputer;
+            private string _resultsFile;
 
 			private const string AptScannerTempFolderName = "ComodoAptAtScanner";
             private const string RemoteWorkingDirectoryAsLocal = @"%SYSTEMROOT%\ComodoAptAtScanner";
 
 			private readonly NetworkHelper _networkHelper = new NetworkHelper();
+            private readonly string _scanScope;
 
 			public class RemoteResponse
 			{
@@ -57,8 +60,9 @@ namespace APTAT.Core.Descent
 			}
 
 
-			public DescentHelper( RemoteHostInfo info )
+			public DescentHelper( RemoteHostInfo info, string scanScope )
 			{
+			    _scanScope = scanScope;
 				_remoteHostInfo = info;
 				_oldRemoteHostName = info.HostName;
 				InitPaths();
@@ -69,6 +73,8 @@ namespace APTAT.Core.Descent
 				_remoteHost = string.Format( @"\\{0}", _remoteHostInfo.HostName );
 				_remoteAdminPath = string.Format( @"\\{0}\ADMIN$", _remoteHostInfo.HostName );
 				_remoteWorkingDirectory = _remoteAdminPath + @"\" + AptScannerTempFolderName;
+                _responseFilePathForCurrentComputer = _remoteWorkingDirectory + @"\" + ScanStatusFileName;
+                _resultsFile = _remoteWorkingDirectory + @"\" + ScanResultsFileName;
 			}
 
 			private static bool ExtractUserNameAndDomain( string login, out string userName, out string domain )
@@ -270,6 +276,14 @@ namespace APTAT.Core.Descent
                 public int SafeFilesFound { get; set; }
                 public int MalwaresFound { get; set; }
                 public long TotalFilesSize { get; set; }
+
+                public int Percentage
+                {
+                    get
+                    {
+                        return (int)((double)TotalFilesScanned / EnumeratedFilesCount * 100);
+                    }
+                }
             }
 
             // New events
@@ -447,8 +461,15 @@ namespace APTAT.Core.Descent
 		    private bool _objectDestroyed = false;
 			public void Release()
 			{
-				try
-				{
+				DeleteDescentAgentService();
+				_serviceHelper.Release();
+				_networkHelper.Release();
+
+			    _objectDestroyed = true;
+
+                // Remove file system content
+                try
+                {
                     CleanUpRemoteContent();
 
                     //foreach ( string targetPath in _filesToDeleteOnQuit )
@@ -456,16 +477,10 @@ namespace APTAT.Core.Descent
                     //    if(File.Exists(targetPath))
                     //        File.Delete( targetPath );
                     //}
-				}
-				catch ( Exception )
-				{
-				}
-
-				DeleteDescentAgentService();
-				_serviceHelper.Release();
-				_networkHelper.Release();
-
-			    _objectDestroyed = true;
+                }
+                catch (Exception)
+                {
+                }
 			}
 			// ===============================================================
             // TODO: Commented
@@ -513,8 +528,9 @@ namespace APTAT.Core.Descent
 					_serviceHelper.InitializeService(
 						_remoteHost,
 						RemoteWorkingDirectoryAsLocal + @"\" + Path.GetFileName( descentAgentPath ),
-                        "ScannerService123.exe",
-						"Comodo APT Scanner"
+                        "ScannerService.exe",
+						"Comodo APT Scanner",
+                        GetServiceParams()
 						);
 
                     //InvokeDescentHelperStarted( EventArgs.Empty );
@@ -525,6 +541,11 @@ namespace APTAT.Core.Descent
 						ex.Message, ex.NativeErrorCode );
 				}
 			}
+
+            private string[] GetServiceParams()
+            {
+                return new string[] { _scanScope, _responseFilePathForCurrentComputer, _resultsFile };
+            }
 
             private void CleanUpRemoteContent()
             {
@@ -564,33 +585,21 @@ namespace APTAT.Core.Descent
 				List<string> args = new List<string>();
 
 				//const string responseFilePathForRemoteComputer = AptScannerTempFolderName + @"\" + ScanStatusFileName;
-				string responseFilePathForCurrentComputer = _remoteWorkingDirectory + @"\" + ScanStatusFileName;
-                string resultsFile = _remoteWorkingDirectory + @"\" + ScanResultsFileName;
+				
                 //string responseFilePathForCurrentComputer = @"d:\" + ScanStatusFileName;
                 //string resultsFile = @"d:\" + ScanResultsFileName;
 
                 // Delete response file if it exists
-				if( File.Exists( responseFilePathForCurrentComputer ) )
-					File.Delete( responseFilePathForCurrentComputer );
+				if( File.Exists( _responseFilePathForCurrentComputer ) )
+					File.Delete( _responseFilePathForCurrentComputer );
 
                 // Delete response file if it exists
-                if (File.Exists(resultsFile))
-                    File.Delete(resultsFile);
+                if (File.Exists(_resultsFile))
+                    File.Delete(_resultsFile);
 
-                args.Add(scanScope);
-                args.Add(responseFilePathForCurrentComputer);
-                args.Add(resultsFile);
-
-				/*args.Add( ScannerServiceFileName ); // file name
-				args.Add( "process_response_action" ); // command
-				args.Add( actionName ); // action name
-				args.Add( responseFilePathForRemoteComputer ); // response file name
-				args.Add( timeoutInMs.ToString() ); // timeout in ms
-
-				foreach( string param in parameters )
-				{
-					args.Add( param );
-				}*/
+                //args.Add(scanScope);
+                //args.Add(responseFilePathForCurrentComputer);
+                //args.Add(resultsFile);
 
 				try
 				{
@@ -611,7 +620,7 @@ namespace APTAT.Core.Descent
 
                     try
                     {
-                        using(FileStream fs = new FileStream(responseFilePathForCurrentComputer, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using(FileStream fs = new FileStream(_responseFilePathForCurrentComputer, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             byte[] buf = new byte[fs.Length];
                             fs.Read(buf, 0, (int)fs.Length);
@@ -689,7 +698,7 @@ namespace APTAT.Core.Descent
 
                                 InvokeReceivingResults(EventArgs.Empty);
 
-                                File.Copy(resultsFile, resultsFileLocal, true);
+                                File.Copy(_resultsFile, resultsFileLocal, true);
                                 //File.Delete(resultsFile);
                                 InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles, SafeFilesFound = safeFiles, MalwaresFound = malwares });
                                 break;

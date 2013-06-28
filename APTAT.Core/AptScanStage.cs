@@ -24,6 +24,7 @@
     public enum ScanResultType
     {
         NotPerformed,
+        InProgress,
         Completed,
         Failed,
         Canceled

@@ -19,8 +19,12 @@ namespace APTAT.Core.Reports
         public DateTime ScanStarted { get; set; }
         public DateTime ScanFinished { get; set; }
 
+        public int TotalTargetsCount { get; set; }
         public int TargetsNotPerformed { get; set; }
-        public int TargetsScanned { get; set; }
+        public int TargetsScanned
+        {
+            get { return TotalTargetsCount - TargetsNotPerformed; }
+        }
         public int TargetsSucceeded { get; set; }
         public int TargetsFailed { get; set; }
 
@@ -68,6 +72,8 @@ namespace APTAT.Core.Reports
         {
             get
             {
+                if (TargetsSucceeded == 0)
+                    return AptRiskAssessmentLevel.Unknown;
                 if (MalwareFilesFound > 0)
                     return AptRiskAssessmentLevel.High;
                 if (UnknownFilesFound > 0)
@@ -85,8 +91,15 @@ namespace APTAT.Core.Reports
         { 
             get
             {
+                if (TotalFilesScanned == 0)
+                    return -1;
                 return (int)((double) SafeFilesCount/TotalFilesScanned * 100);
             }
+        }
+
+        public string NetworkTrustLevelString
+        {
+            get { return NetworkTrustLevel >= 0 ? String.Format("{0} %", NetworkTrustLevel) : "Unknown"; }
         }
 
         public ScanResult[] Targets { get; set; }
@@ -97,12 +110,16 @@ namespace APTAT.Core.Reports
             _safeFilesCount = 0;
             _unknownFilesCount = 0;
             _malwareFilesCount = 0;
+            
             foreach (var scanResult in Targets)
             {
-                _totalFilesCound += scanResult.TotalFilesCount;
-                _safeFilesCount += scanResult.SafeFilesCount;
-                _unknownFilesCount += scanResult.UnknownFilesCount;
-                _malwareFilesCount += scanResult.MalwareFilesCount;
+                if (scanResult.ResultType == Core.ScanResultType.Completed)
+                {
+                    _totalFilesCound += scanResult.TotalFilesCount;
+                    _safeFilesCount += scanResult.SafeFilesCount;
+                    _unknownFilesCount += scanResult.UnknownFilesCount;
+                    _malwareFilesCount += scanResult.MalwareFilesCount;
+                }
             }
         }
 
@@ -140,7 +157,7 @@ namespace APTAT.Core.Reports
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe Devices"},
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "Devices At Risk"},
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected Devices"},
-                //new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Not Scanned Devices"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Failed/Canceled Devices"},
             };
         }
 
@@ -409,7 +426,8 @@ namespace APTAT.Core.Reports
         Ok = 0,
         Low = 1,
         Medium = 2,
-        High = 3
+        High = 3,
+        Unknown = 4
     }
 
     public enum ScanResultType

@@ -17,9 +17,15 @@ using APTAT.Core.Tasks;
 
 namespace APTAT.Core.Descent
 {
-    public class AptScanOperationContext
+    public class AptScanOperationContext : IChangeTrackingListener
     {
-        private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults = new ConcurrentDictionary<Guid, ScanResult>();
+        private Guid _sessionId = Guid.NewGuid();
+        private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults;
+
+        public AptScanOperationContext()
+        {
+            _scanResults = new ConcurrentDictionary<Guid, ScanResult>();
+        }
 
         public Guid OperationUid { get; set; }
         public string TargetsSourceName { get; set; }
@@ -35,6 +41,54 @@ namespace APTAT.Core.Descent
         public ConcurrentDictionary<Guid, ScanResult> ScanResults
         {
             get { return _scanResults; }
+        }
+
+        public void Changed(params ChangesTrackingItem[] items)
+        {
+            foreach (var item in items)
+            {
+                if(item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
+                {
+                    DescentProgressItem descentProgressItem = (DescentProgressItem) item.ChangedItem;
+                    _scanResults[descentProgressItem.ComputerUid].ProgressPercenage = descentProgressItem.ProgressPercentage;
+                }
+            }
+
+            OnOperationProgressChanged(new OperationProgressChangedEventArgs(){Percentage = CalculateTotalPercentage()});
+        }
+
+        public Guid SessionId
+        {
+            get { return _sessionId; }
+        }
+
+        private int CalculateTotalPercentage()
+        {
+            var onlineScanResults = from result in _scanResults.Values
+                                    where result.ResultType != ScanResultType.NotPerformed
+                                    select result;
+
+            int total = onlineScanResults.Count() * 100;
+            int current = 0;
+            foreach (var scanResult in onlineScanResults)
+            {
+                current += scanResult.ProgressPercenage;
+            }
+
+            return (int)((double)current / total * 100);
+        }
+
+        public event EventHandler<OperationProgressChangedEventArgs> OperationProgressChanged;
+        private void OnOperationProgressChanged(OperationProgressChangedEventArgs args)
+        {
+            EventHandler<OperationProgressChangedEventArgs> temp = OperationProgressChanged;
+            if (temp != null)
+                temp(this, args);
+        }
+
+        public class OperationProgressChangedEventArgs : EventArgs
+        {
+            public int Percentage { get; set; }
         }
     }
 
@@ -383,8 +437,9 @@ namespace APTAT.Core.Descent
                     {
                         FormattedText shortMessage;
                         FormattedText description = GetDescentStatusDescription(status, null, null, null, out shortMessage);
+                        _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, _computer.Name, QueryResult.OperationUid, shortMessage, AptScanStage.OperationCanceled, 100)), false);
+
                         QueryResult.OnDescendOperationEvent(true, _computer, description, shortMessage, status.ToString(), win32Error, response);
-                        _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, _computer.Name, QueryResult.OperationUid, shortMessage, AptScanStage.OperationCanceled)), false);
                     }
                 }
 				else
@@ -403,13 +458,14 @@ namespace APTAT.Core.Descent
 
 					if( messageText != null && QueryResult != null )
 					{
-						QueryResult.OnDescendOperationEvent( false, _computer, messageText, shortMessage, status.ToString(), win32Error, response );
-					    FormattedText formattedText;
+						FormattedText formattedText;
                         if(status == DescentStatus.status_error)
                             formattedText = new FormattedText(new ResourceText("null", "Failed: {0}"), response);
                         else
                             formattedText = new FormattedText(new ResourceText("null", "Failed: {0}. {1}"), shortMessage, response);
-					    _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, _computer.Name, QueryResult.OperationUid, formattedText, AptScanStage.OperationFailed)), false);
+					    _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid, _computer.Name, QueryResult.OperationUid, formattedText, AptScanStage.OperationFailed, 100)), false);
+
+                        QueryResult.OnDescendOperationEvent(false, _computer, messageText, shortMessage, status.ToString(), win32Error, response);
 					}
 				}
 			}
@@ -941,7 +997,10 @@ namespace APTAT.Core.Descent
 
 		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope, string domain )
 		{
-			DescentResult result = new DescentResult( computers, withDelayedComputers, package );
+            // This is done in order not to include offline computers into the DescentResult below. Optimization is needed!
+            var onlineTargetUidComputerPairs = (from pair in computers where pair.Computer.IsOnline && !(pair.State is Exception) select pair).ToArray();
+
+            DescentResult result = new DescentResult(onlineTargetUidComputerPairs, withDelayedComputers, package);
 			operationUid = result.OperationUid;
 			lock( _descentResults )
 			{
@@ -955,7 +1014,7 @@ namespace APTAT.Core.Descent
 
 			LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent,
 				"Deployment operation started{0} UID: {1}{0} computers count: {2}{0} with delayed targets: {3}{0}",
-				Environment.NewLine, operationUid, computers.Count(), withDelayedComputers );
+                Environment.NewLine, operationUid, onlineTargetUidComputerPairs.Count(), withDelayedComputers);
 
 			var watchers = new ConcurrentDictionary<Guid, IDescentWatcher<ComputerDescentWatcherParams>>();
 			var watchersContainer = new ComputerWatchersContainer( watchers );
@@ -1034,7 +1093,7 @@ namespace APTAT.Core.Descent
             System.Action wholeDescentCompletedDelegate = null;
 			wholeDescentCompletedDelegate = () =>
 			{
-				LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent, "DescentCompleted event raised. Operation UID: {0}", result.OperationUid );
+                LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, "DescentCompleted event raised. Operation UID: {0}", result.OperationUid);
 
                 // ===================================================================================================================
                 // Deployment finalization
@@ -1051,15 +1110,17 @@ namespace APTAT.Core.Descent
                     operationContext.CanceledTargetsCount = canceled;
                 }
 
-			    OnDescentCompleted(new DescentCompletedEventArgs() { OperationUid = result.OperationUid, Context = operationContext });
+                OnDescentCompleted(new DescentCompletedEventArgs() { OperationUid = result.OperationUid, Context = operationContext });
                 // ===================================================================================================================
 
-				_tracker.UnregisterListener( result );
-				result.DescentCompleted -= wholeDescentCompletedDelegate;
+                _tracker.UnregisterListener(result);
+                _tracker.UnregisterListener(operationContext);
+                result.DescentCompleted -= wholeDescentCompletedDelegate;
 			};
 			#endregion
 
 			_tracker.RegisterListener( result );
+            _tracker.RegisterListener( operationContext );
 			result.DescentCompleted += wholeDescentCompletedDelegate;
 
 			var descentTargets = computers.Where( item => !( item.State is Exception ) ).Select( item => item.Computer ).ToArray();
@@ -1068,31 +1129,32 @@ namespace APTAT.Core.Descent
             // Add not available (offline) computers into the ScanResults dictionary with "NotPerformed" status - means the scan won't be performed on them.
             // They are required for statistics only
 		    operationContext.TotalTargetsCount = descentTargets.Length;
-            List<IComputer> onlineComputers = new List<IComputer>();
+		    List<IComputer> onlineComputers = new List<IComputer>();
 		    foreach (var computer in descentTargets)
 		    {
+                ScanResultType scanResultType = ScanResultType.NotPerformed;
+
                 if (computer.IsOnline)
                 {
+                    scanResultType = ScanResultType.InProgress;
                     onlineComputers.Add(computer);
                 }
-                //else
-                //{
-                    operationContext.ScanResults.TryAdd(computer.Uid, new ScanResult()
-                                                                   {
-                                                                       HostName = computer.Name,
-                                                                       IpAddress = computer.IPAddress.ToString(),
-                                                                       ResultType = ScanResultType.NotPerformed,
-                                                                       TargetUid = computer.Uid,
-                                                                       OrganizationUnit = computer.OrganizationUnit
-                                                                   });
-                //}
+                operationContext.ScanResults.TryAdd(computer.Uid, new ScanResult() { HostName = computer.Name, IpAddress = computer.IPAddress.ToString(), ResultType = scanResultType, TargetUid = computer.Uid, OrganizationUnit = computer.OrganizationUnit });
 		    }
-            //===============================================================================================================================================
+
+            if (onlineComputers.Count == 0)
+            {
+                _tracker.UnregisterListener(result);
+                _tracker.UnregisterListener(operationContext);
+                result.DescentCompleted -= wholeDescentCompletedDelegate;
+                throw new NoAvailableTargetsException();
+            }
+		    //===============================================================================================================================================
 
             DoDescendOperation(result, true, onlineComputers.ToArray(), login, password, false, scanScope);
 		}
 
-        private static void CalculateOperationStatistics(IEnumerable<ScanResult> results, out int failed, out int notPerformed, out int succeeded, out int total, out int canceled)
+	    private static void CalculateOperationStatistics(IEnumerable<ScanResult> results, out int failed, out int notPerformed, out int succeeded, out int total, out int canceled)
         {
             notPerformed = 0;
             succeeded = 0;
