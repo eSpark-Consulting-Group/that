@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using APTAT.Application.Models;
 using APTAT.Application.Services;
+using Telerik.Windows;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 
@@ -136,45 +137,45 @@ namespace APTAT.Application
            
         }
 
-        private void OnBuildReportClick(Object sender, RoutedEventArgs e)
-        {
-            HandleSelectedReportChanged();
+        //private void OnBuildReportClick(Object sender, RoutedEventArgs e)
+        //{
+        //    HandleSelectedReportChanged();
 
-            ShowReport();
-        }
+        //    ShowReport();
+        //}
 
-        private void OnReportSelected(Object sender, SelectionChangedEventArgs e)
-        {
-            ListBox listBox = (ListBox) sender;
+        //private void OnReportSelected(Object sender, SelectionChangedEventArgs e)
+        //{
+        //    ListBox listBox = (ListBox) sender;
             
-            ReportButton.IsOpen = false;
+        //    ReportButton.IsOpen = false;
 
-            if(_selectedReportIndex == -1)
-            {
-                _selectedReportIndex = listBox.SelectedIndex;
-            }
-            else
-            {
-                _selectedReportIndex = listBox.SelectedIndex;
-                HandleSelectedReportChanged();
-                ShowReport();
-            }
-        }
+        //    if(_selectedReportIndex == -1)
+        //    {
+        //        _selectedReportIndex = listBox.SelectedIndex;
+        //    }
+        //    else
+        //    {
+        //        _selectedReportIndex = listBox.SelectedIndex;
+        //        HandleSelectedReportChanged();
+        //        ShowReport();
+        //    }
+        //}
 
 
         private void HandleSelectedReportChanged()
         {
             if (_selectedReportIndex == 0)
             {
-                _storageService.SetValue(KnownKeys.ReportTKind, ReportKind.Executive);
+                _storageService.SetValue(KnownKeys.ReportKind, ReportKind.Executive);
             }
             else if (_selectedReportIndex == 1)
             {
-                _storageService.SetValue(KnownKeys.ReportTKind, ReportKind.DetailedPerDevice);
+                _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerDevice);
             }
             else if (_selectedReportIndex == 2)
             {
-                _storageService.SetValue(KnownKeys.ReportTKind, ReportKind.DetailedPerProgram);
+                _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerProgram);
             }
         }
 
@@ -185,20 +186,44 @@ namespace APTAT.Application
             details.ShowDialog();
         }
 
-        private void OnListBoxItemPreviewMouseLeftButtonDown(Object sender, MouseButtonEventArgs e)
+  
+
+        private void OnExecutiveReportClick(Object sender, RadRoutedEventArgs e)
         {
-
-            ((sender as ListBoxItem).Parent as ListBox).Items.IndexOf(sender);
-
-            ListBoxItem listBoxItem = (ListBoxItem) sender;
-            ListBox listBox = (ListBox)listBoxItem.Parent;
-
-            if(listBox.Items.IndexOf(listBoxItem) == listBox.SelectedIndex)
-            {
-                ReportButton.IsOpen = false;
-                ShowReport();
-            }
+            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.Executive);
+            ReportButton.IsOpen = false;
+            ShowReport();
         }
+
+        private void OnPerDeviceReportClick(Object sender, RadRoutedEventArgs e)
+        {
+            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerDevice);
+            ReportButton.IsOpen = false;
+            ShowReport();
+        }
+
+        private void OnPerProgramReportClick(Object sender, RadRoutedEventArgs e)
+        {
+            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerProgram);
+            ReportButton.IsOpen = false;
+            ShowReport();
+            
+        }
+
+        //private void OnListBoxItemPreviewMouseLeftButtonDown(Object sender, MouseButtonEventArgs e)
+        //{
+
+        //    ((sender as ListBoxItem).Parent as ListBox).Items.IndexOf(sender);
+
+        //    ListBoxItem listBoxItem = (ListBoxItem) sender;
+        //    ListBox listBox = (ListBox)listBoxItem.Parent;
+
+        //    if(listBox.Items.IndexOf(listBoxItem) == listBox.SelectedIndex)
+        //    {
+        //        ReportButton.IsOpen = false;
+        //        ShowReport();
+        //    }
+        //}
 
 
     }

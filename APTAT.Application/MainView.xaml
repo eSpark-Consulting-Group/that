@@ -28,11 +28,11 @@
             <DataTemplate x:Key="ReportButtonListBoxItemTemplate">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="0" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="18" Margin="0,0,0,0" />
+                    <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="16" Margin="0,0,0,0" />
                 </Grid>
             </DataTemplate>
         </Grid.Resources>
@@ -177,7 +177,7 @@
 
             <telerik:RadButton Margin="20,-1,30,-1"  
                                FontSize="18"
-                               Padding="2,20"
+                               Padding="10,20"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                Click="OnStartScanningClick">
                 <telerik:RadButton.Content>
@@ -197,7 +197,7 @@
             </telerik:RadButton>
 
             <telerik:RadButton Margin="5,-1,30,-1"  
-                                  Padding="2,20"
+                                  Padding="10,20"
                                FontSize="18"
                                Command="{Binding StopScanCommand}"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}">
@@ -218,7 +218,7 @@
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
             <telerik:RadButton Margin="5,-1,30,-1"
                                FontSize="18"
-                                 Padding="2,20"
+                                 Padding="10,20"
                                IsEnabled="{Binding IsDetailsEnabled}" 
                                Click="OnPropertiesClick" >
                 <telerik:RadButton.Content>
@@ -262,11 +262,11 @@
 
 
 
-            <telerik:RadSplitButton HorizontalAlignment="Left" 
+            <!--<telerik:RadSplitButton HorizontalAlignment="Left" 
                               Margin="5,-1,5,-1"
                               FontSize="18"
                             Style="{StaticResource RadSplitBtnStyle}"
-                              Padding="2,20"
+                              Padding="10,20"
             IsEnabled="{Binding IsReportEnabled}"              
                               Click="OnBuildReportClick"
                               x:Name="ReportButton"
@@ -281,10 +281,31 @@
                         <ListBoxItem  ContentTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Content="Per Program Report"   PreviewMouseLeftButtonDown="OnListBoxItemPreviewMouseLeftButtonDown"/>
                     </ListBox>
                 </telerik:RadSplitButton.DropDownContent>
-            </telerik:RadSplitButton>
+            </telerik:RadSplitButton>-->
+            
+            <telerik:RadDropDownButton AutoOpenDelay="0:0:0.0"
+                           Content="Reports"
+                                      Style="{StaticResource RadDropDownButtonStyle2}"
+                                       Margin="5,-1,30,-1"
+                           ContentTemplate="{StaticResource ReportButtonContentTemplate}"            
+                          IsEnabled="{Binding IsReportEnabled}"
+                           x:Name="ReportButton"
+                           FontSize="18"
+                           Padding="10,20,10,20">
+                <telerik:RadDropDownButton.DropDownContent>
+
+                    <telerik:RadContextMenu IconColumnWidth="0" Width="124" BorderThickness="0">
+                        <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive" Click="OnExecutiveReportClick" />
+                        <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device" Click="OnPerDeviceReportClick" />
+                        <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Program" Click="OnPerProgramReportClick" />
+                    </telerik:RadContextMenu>
+                
+                </telerik:RadDropDownButton.DropDownContent>
+            </telerik:RadDropDownButton>
+
             <!--<telerik:RadToolBarSeparator Margin="0"/>-->
-            <telerik:RadButton Margin="5,-1" 
-                          Padding="2,20"
+            <!--<telerik:RadButton Margin="5,-1" 
+                          Padding="10,20"
                                IsEnabled="False" FontSize="18">
                 <telerik:RadButton.Content>
                     <Grid>
@@ -302,14 +323,14 @@
                         <TextBlock Text="About" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
                     </Grid>
                 </telerik:RadButton.Content>
-            </telerik:RadButton>
+            </telerik:RadButton>-->
         </telerik:RadToolBar>
         <!--Background="#FFF38546"-->
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
             <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="35" >
                 <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5" FontSize="14"/>
-                <TextBlock Foreground="White" Text=" unknown files detected, " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text=" unknown programs detected, " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text=" malwares detected (" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>

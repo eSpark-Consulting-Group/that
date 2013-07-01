@@ -74,7 +74,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                if (IsScanInProgress == true && OnlineItemsCount > 1)
+                if (IsScanInProgress == true )
                 {
                     return String.Format("APT ASSESSMENT TOOL ({0}% scanning...)", Percentage);
                 }
@@ -290,10 +290,10 @@ namespace APTAT.Application.Models
             }
         }
 
-        private void ScanCompleted()
+        private void ScanCompleted(Boolean enableReports)
         {
             IsScanInProgress = false;
-            IsReportEnabled = true;
+            IsReportEnabled = enableReports;
             Percentage = 100;
             
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
@@ -349,13 +349,13 @@ namespace APTAT.Application.Models
                 if (infoItem.ScanStage == ScanStage.OperationFailed || infoItem.ScanStage == ScanStage.OperationCompleted || infoItem.ScanStage == ScanStage.OperationCanceled)
                 {
                     completed++;
-                    scanned++;
+                    
                 }
 
-                //if(infoItem.ScanStage == ScanStage.OperationCompleted)
-                //{
-                //    scanned++;
-                //}
+                if(infoItem.ScanStage == ScanStage.OperationCompleted)
+                {
+                    scanned++;
+                }
 
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
@@ -370,12 +370,12 @@ namespace APTAT.Application.Models
             {
                 MalwareFilesCount = malwareFiles;
             }
-            
-            ScannedItemsCount = scanned;
+
+            ScannedItemsCount = completed;
 
             if (completed == OnlineItemsCount)
             {
-                ScanCompleted();
+                ScanCompleted(scanned > 0);
             }
 
             RaisePropertyChanged("Header");

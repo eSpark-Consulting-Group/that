@@ -31,7 +31,7 @@ namespace APTAT.Application.Models
             base.InvokeViewLoaded(arg);
 
             Guid operationGuid = storageService.GetValue<Guid>(KnownKeys.OperationGuid, false);
-            ReportKind kind = storageService.GetValue<ReportKind>(KnownKeys.ReportTKind, false);
+            ReportKind kind = storageService.GetValue<ReportKind>(KnownKeys.ReportKind, false);
 
             if(kind == ReportKind.DetailedPerProgram)
             {

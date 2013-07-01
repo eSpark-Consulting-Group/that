@@ -24,19 +24,19 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Border Background="#FF0090FF" Height="35">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="txtTitle" Text="APT ASSESMENT TOOL" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                        <Button Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
-                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
+        <Border Background="#2A81BA" Height="35">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="txtTitle" Text="APT ASSESMENT TOOL" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <Button Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
+                    <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
+                </StackPanel>
+            </Grid>
+        </Border>
         
         <Frame Source="/MainView.xaml"  Background="#CEE0F9" NavigationUIVisibility="Hidden"  Grid.Row="1">
         </Frame>

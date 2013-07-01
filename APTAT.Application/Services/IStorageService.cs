@@ -10,7 +10,7 @@ namespace APTAT.Application.Services
         public const String Domain = "Domain";
         public const String UnknownFile = "BadFile";
         public const String OperationGuid = "OperationGuid";
-        public const String ReportTKind = "ReportKind";
+        public const String ReportKind = "ReportKind";
     }
 
     public interface IStorageService
