@@ -2395,6 +2395,10 @@
               <Group Name="Details" />
               <SortExpressions>
                 <SortExpression>
+                  <Value>=Fields!BadFilesCount.Value</Value>
+                  <Direction>Descending</Direction>
+                </SortExpression>
+                <SortExpression>
                   <Value>=Fields!HostName.Value</Value>
                 </SortExpression>
               </SortExpressions>

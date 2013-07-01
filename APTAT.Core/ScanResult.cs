@@ -163,7 +163,7 @@ namespace APTAT.Core
         {
             if (Files == null)
                 return new Module[0];
-            return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.Malware select file).ToArray();
+            return (from file in Files where (file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.Malware || file.Cloud == CloudVerdict.FirstSeen) select file).ToArray();
         }
 
         private void CalculateTotal()

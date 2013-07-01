@@ -104,6 +104,11 @@ namespace APTAT.Core.Reports
 
         public ScanResult[] Targets { get; set; }
 
+        public ScanResult[] SucceededTargets
+        {
+            get { return (from t in Targets where t.ResultType == Core.ScanResultType.Completed select t).ToArray(); }
+        }
+
         private void CalculateTotal()
         {
             _totalFilesCound = 0;
@@ -163,7 +168,7 @@ namespace APTAT.Core.Reports
 
         public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()
         {
-            var top10 = (from target in Targets
+            var top10 = (from target in SucceededTargets
                         where target.BadFilesCount > 0
                         orderby target.BadFilesCount
                         select target).Take(10);
