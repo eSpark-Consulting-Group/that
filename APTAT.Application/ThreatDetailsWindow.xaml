@@ -17,7 +17,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Border Background="#FF0090FF" Height="35">
+            <Border Background="#2A81BA" Height="35">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
