@@ -8,7 +8,7 @@
                    xmlns:Application="clr-namespace:APTAT.Application" mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="1024"
 	Title="APT Assesment Tool" Background="White">
-  
+
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="ReportButtonContentTemplate">
@@ -31,28 +31,28 @@
                         <ColumnDefinition Width="16" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                 
+
                     <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="18" Margin="0,0,0,0" />
                 </Grid>
             </DataTemplate>
         </Grid.Resources>
-            <Grid.RowDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-       
+
         <Application:TitleUpdater Header="{Binding Header}"/>
- 
-     
-        
+
+
+
         <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"   
                                  Margin="20,0,20,20"
                                  HierarchyIndent="14"
                                  MouseDoubleClick="OnTreeDoubleClick"
                                   >
             <telerik:RadTreeListView.Resources>
-         
+
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -109,7 +109,7 @@
                               UseLayoutRounding="False" 
                               VerticalAlignment="Top" 
                               Width="28"/>
-                        
+
 
                         <Border Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"  Grid.RowSpan="2">
 
@@ -119,11 +119,11 @@
                                   Opacity="{Binding ScanStage, Converter={StaticResource ScanStageToOpacityConverter}}"
                                   Stretch="Fill"  
                                   Width="28"/>
-                            
+
                         </Border>
 
 
-                        <TextBlock Margin="8,8,0,0" Text="{Binding Name}" Grid.Column="1"/>
+                        <TextBlock Margin="8,8,0,0" Text="{Binding NameAndIpAddress}" Grid.Column="1"/>
                         <TextBlock  Grid.Column="2" Margin="0,8,0,0" Text="" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
                         <TextBlock Margin="8,0,0,8"
                                    ToolTip="{Binding StatusMessage}"
@@ -131,8 +131,8 @@
                                    IsHitTestVisible="{Binding IsRootItem}"
                                    Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
                                    Grid.Column="1"
-                                   Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" 
-                                   Foreground="{Binding ScanStage, Converter={StaticResource ScanStageToBrushConverter}}"/>
+                                   Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" />
+                        <!--Foreground="{Binding ScanStage, Converter={StaticResource ScanStageToBrushConverter}}"-->
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="UnknownFileTemplate">
@@ -172,9 +172,9 @@
                    VerticalAlignment="Center" 
                    HorizontalAlignment="Center"
                    Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        
+
         <telerik:RadToolBar Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
-       
+
             <telerik:RadButton Margin="20,-1,30,-1"  
                                FontSize="18"
                                Padding="2,20"
@@ -261,7 +261,7 @@
             <!--IsEnabled="{Binding IsReportEnabled}"-->
 
 
-            
+
             <telerik:RadSplitButton HorizontalAlignment="Left" 
                               Margin="5,-1,5,-1"
                               FontSize="18"
@@ -298,7 +298,7 @@
                               Stretch="Fill" 
                               Margin="0,0,10,0"
                               Width="20.115"/>
-                       
+
                         <TextBlock Text="About" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
                     </Grid>
                 </telerik:RadButton.Content>
@@ -306,7 +306,7 @@
         </telerik:RadToolBar>
         <!--Background="#FFF38546"-->
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
-        <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+            <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="35" >
                 <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="30,5,0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text=" unknown files detected, " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
@@ -316,11 +316,11 @@
                 <TextBlock Foreground="White" Text=" of " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding OnlineItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock  Foreground="White" Text=" computers scanned)." VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
-        </StackPanel>
+            </StackPanel>
         </Border>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
 
         <!--<Application:DesignGrid Grid.ColumnSpan="3" Grid.RowSpan="3" IsHitTestVisible="False" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
-        
+
     </Grid>
 </Models:BasePage>

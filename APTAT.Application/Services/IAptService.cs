@@ -98,6 +98,19 @@ namespace APTAT.Application.Services
         }
     }
 
+    public class ScanProgressChangedEventArgs : DomainEventArgs
+    {
+        public Int32 Percentage { get; private set; }
+
+        public Guid OperationGuid { get; private set; }
+
+        public ScanProgressChangedEventArgs(Int32 percent, Guid operationGuid)
+        {
+            Percentage = percent;
+            OperationGuid = operationGuid;
+        }
+    }
+
     public enum ReportKind
     {
         Executive,
@@ -115,6 +128,7 @@ namespace APTAT.Application.Services
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
+        event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
 
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
 
@@ -124,7 +138,7 @@ namespace APTAT.Application.Services
 
         void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState);
 
-        void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState);
+        void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState);
 
         void GetScanResult(Guid targetUid, Object userState);
 

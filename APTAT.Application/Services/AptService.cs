@@ -47,6 +47,8 @@ namespace APTAT.Application.Services
 
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
 
+        public event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
+
         public event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
 
         public event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
@@ -54,6 +56,8 @@ namespace APTAT.Application.Services
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
 
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
+
+
 
         private readonly AptAtManager _manager;
 
@@ -107,15 +111,29 @@ namespace APTAT.Application.Services
            
         }
 
-        public void BeginScan(ThreatInfoItem[] items, String login, String password, Object userState)
+        public void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState)
         {
             Debug.Assert(password != null);
             
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
-            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password);
+            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
+            scanner.ScanInProgress += OnScanInProgress;
             scanner.BeginScan(userState);
+        }
+
+        private void OnScanInProgress(Object sender, ScanInProgressEventArgs e)
+        {
+            ScanProgressChangedEventArgs args = new ScanProgressChangedEventArgs(e.Percentage, e.OperationUid);
+            Action action = () =>
+            {
+                if (ScanProgressChanged != null)
+                {
+                    ScanProgressChanged(this, args);
+                }
+            };
+            DispatcherHelper.Current.BeginInvoke(action);   
         }
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
@@ -125,6 +143,7 @@ namespace APTAT.Application.Services
             if (BeginScanCompleted != null)
             {
                 BeginScanCompleted(this, args);
+
             }
      
         }
@@ -168,12 +187,11 @@ namespace APTAT.Application.Services
                     {
                         Target = deploymentTarget,
                         Name = deploymentTarget.Name,
+                        IpAddress = deploymentTarget.IPAddress,
                         IsRootItem = true,
                         IsOnline =  deploymentTarget.Online,
                         ComputerGuid = deploymentTarget.TargetUid
                     };
-
-                
 
                     result.Add(infoItem);
                 }

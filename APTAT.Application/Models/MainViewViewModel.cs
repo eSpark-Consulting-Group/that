@@ -12,7 +12,7 @@ namespace APTAT.Application.Models
     {
         public event EventHandler<ScanCompletedEventArgs> ScanProcessCompleted;
 
-        private readonly IAptService _atpService;
+        private readonly IAptService _aptService;
         private readonly IStorageService _storage;
         private Guid _operationGuid;
         private DirectoryItem[] _selectedTargets;
@@ -68,13 +68,15 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Int32 Percentage { get; set; }
+
         public String Header
         {
             get
             {
                 if (IsScanInProgress == true && OnlineItemsCount > 1)
                 {
-                    return String.Format("APT ASSESSMENT TOOL ({0}% scanning...)", Math.Round(ScannedItemsCount * 100.0 / OnlineItemsCount));
+                    return String.Format("APT ASSESSMENT TOOL ({0}% scanning...)", Percentage);
                 }
                 return "APT ASSESSMENT TOOL";
             }
@@ -168,7 +170,7 @@ namespace APTAT.Application.Models
         
         public MainViewViewModel()
         {
-            _atpService = AptService.Instance;
+            _aptService = AptService.Instance;
             _storage = new StorageService();
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);
@@ -181,6 +183,7 @@ namespace APTAT.Application.Models
             _onlineItems = new ThreatInfoItem[0];
             SelectedItem = null;
             UnknownFilesCount = 0;
+            IsReportEnabled = false;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
@@ -189,8 +192,8 @@ namespace APTAT.Application.Models
                 if (_selectedTargets.Length > 0)
                 {
                     IsScanInProgress = null;
-                    IsBusy = true;
-                    _atpService.ResolveDirectoryItems(_selectedTargets, this);
+                    IsBusy = true;        
+                    _aptService.ResolveDirectoryItems(_selectedTargets, this);
                 }
             }
         }
@@ -205,7 +208,7 @@ namespace APTAT.Application.Models
                 }
             }
 
-            _atpService.StopScan();
+            _aptService.StopScan();
         }
 
         protected override void InvokeViewLoaded(Object arg)
@@ -214,22 +217,26 @@ namespace APTAT.Application.Models
 
             IsScanInProgress = false;
            
-            _atpService.DirectoryItemsResolved += OnDirectoryItemsResolved;
-            _atpService.BeginScanCompleted += OnBeginScanCompleted;
-            _atpService.ScanStatusChanged += OnScanStatusChanged;
-            _atpService.GetScanResultCompleted += OnGetScanResultCompleted;
-            _atpService.ScanCompleted += OnScanCompleted;
+            _aptService.DirectoryItemsResolved += OnDirectoryItemsResolved;
+            _aptService.BeginScanCompleted += OnBeginScanCompleted;
+            _aptService.ScanStatusChanged += OnScanStatusChanged;
+            _aptService.GetScanResultCompleted += OnGetScanResultCompleted;
+            _aptService.ScanCompleted += OnScanCompleted;
+            _aptService.ScanProgressChanged += OnScanProgressChanged;
         }
+
+    
 
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
 
-            _atpService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
-            _atpService.BeginScanCompleted -= OnBeginScanCompleted;
-            _atpService.ScanStatusChanged -= OnScanStatusChanged;
-            _atpService.GetScanResultCompleted -= OnGetScanResultCompleted;
-            _atpService.ScanCompleted -= OnScanCompleted;
+            _aptService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
+            _aptService.BeginScanCompleted -= OnBeginScanCompleted;
+            _aptService.ScanStatusChanged -= OnScanStatusChanged;
+            _aptService.GetScanResultCompleted -= OnGetScanResultCompleted;
+            _aptService.ScanCompleted -= OnScanCompleted;
+            _aptService.ScanProgressChanged -= OnScanProgressChanged;
         }
 
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
@@ -251,6 +258,7 @@ namespace APTAT.Application.Models
 
             String login = _storage.GetValue<String>(KnownKeys.Login, false);
             String password = _storage.GetValue<String>(KnownKeys.Password, true);
+            String domain = _storage.GetValue<String>(KnownKeys.Domain, false);
 
             foreach (ThreatInfoItem item in Items)
             {
@@ -262,8 +270,7 @@ namespace APTAT.Application.Models
 
             if(_onlineItems.Length > 0)
             {
-                IsReportEnabled = false;
-                _atpService.BeginScan(Items.ToArray(), login, password, this);    
+                _aptService.BeginScan(Items.ToArray(), domain, login, password, this);    
             }
             else
             {
@@ -287,14 +294,23 @@ namespace APTAT.Application.Models
         {
             IsScanInProgress = false;
             IsReportEnabled = true;
+            Percentage = 100;
             
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             // MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
         }
 
+        private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
+        {
+            if(_operationGuid == e.OperationGuid)
+            {
+                Percentage = e.Percentage;
+                RaisePropertyChanged("Header");
+            }
+        }
+
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
-          
             for(Int32 i = 0; i < e.ScanProgress.Length; ++i)
             {
                ScanProgressItem scanProgress = e.ScanProgress[i];
@@ -313,7 +329,7 @@ namespace APTAT.Application.Models
                        infoItem.StatusMessage = scanProgress.StatusMessage;
                        if(infoItem.ScanStage != ScanStage.OperationCompleted && scanProgress.ScanStage == ScanStage.OperationCompleted)
                        {
-                           _atpService.GetScanResult(infoItem.ComputerGuid, this);
+                           _aptService.GetScanResult(infoItem.ComputerGuid, this);
                           
                        }
            
@@ -333,12 +349,13 @@ namespace APTAT.Application.Models
                 if (infoItem.ScanStage == ScanStage.OperationFailed || infoItem.ScanStage == ScanStage.OperationCompleted || infoItem.ScanStage == ScanStage.OperationCanceled)
                 {
                     completed++;
-                }
-
-                if(infoItem.ScanStage == ScanStage.OperationCompleted)
-                {
                     scanned++;
                 }
+
+                //if(infoItem.ScanStage == ScanStage.OperationCompleted)
+                //{
+                //    scanned++;
+                //}
 
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;

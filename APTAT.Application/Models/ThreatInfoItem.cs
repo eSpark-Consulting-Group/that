@@ -23,6 +23,13 @@ namespace APTAT.Application.Models
 
         public String Name { get; set; }
 
+        public String IpAddress { get; set; }
+
+        public String NameAndIpAddress
+        {
+            get { return String.Format("{0} ({1})", Name, IpAddress); }
+        }
+
         public String SizeString { get; set; }
 
         public Int64 Size { get; set; }
