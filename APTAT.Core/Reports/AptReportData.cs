@@ -240,7 +240,8 @@ namespace APTAT.Core.Reports
                 }
             }
 
-            return (from file in globallyUniqueFiles.Values orderby file.Targets.Count descending select file).ToArray();
+            //return (from file in globallyUniqueFiles.Values orderby file.Targets.Count descending select file).ToArray();
+            return (from file in globallyUniqueFiles.Values select file).OrderByDescending(file => file.Targets.Count).ThenBy(file => file.Name).ToArray();
         }
     }
 
@@ -352,7 +353,7 @@ namespace APTAT.Core.Reports
                 Product = module.Product;
                 Cloud = module.Cloud;
                 FileSizeFormatted = module.FileSizeFormatted;
-                FileType = module.Cloud == CloudVerdict.Unknown ? BadFileType.Unknown : BadFileType.Infected;
+                FileType = module.Cloud == CloudVerdict.Unknown || module.Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
             }
 
             target.BadFileInstances.Add(new BadFileInstanceInfo(module));
@@ -376,7 +377,25 @@ namespace APTAT.Core.Reports
 
         public string CloudString
         {
-            get { return Cloud.ToString(); }
+            get
+            {
+                switch (Cloud)
+                {
+                    case CloudVerdict.Safe:
+                        return "Trusted";
+                    case CloudVerdict.Unknown:
+                        return "Unknown";
+                    case CloudVerdict.Malware:
+                        return "Malware";
+                    case CloudVerdict.FirstSeen:
+                        return "Unknown";
+                    case CloudVerdict.NetworkError:
+                        return "Error";
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                ;
+            }
         }
 
         public List<ScannedTarget> Targets

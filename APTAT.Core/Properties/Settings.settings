@@ -35,5 +35,8 @@
     <Setting Name="MaxEndpointsAvailabilityResolverConcurrentTasks" Type="System.UInt16" Scope="Application">
       <Value Profile="(Default)">260</Value>
     </Setting>
+    <Setting Name="ScanScope" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">processes|drivers|autoruns</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

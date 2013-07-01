@@ -127,7 +127,7 @@ namespace APTAT.Core.Reports
                             {
                                 ScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
                                 if (item != null)
-                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.GetFilesByStatus(CloudVerdict.Unknown)));
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.GetUnknownFiles()));
                             }
                         }
                     }

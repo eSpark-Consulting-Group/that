@@ -159,6 +159,11 @@ namespace APTAT.Core
             return (from file in Files where file.Cloud == cloudVerdict select file).ToArray();
         }
 
+        public Module[] GetUnknownFiles()
+        {
+            return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
+        }
+
         public Module[] GetBadFiles()
         {
             if (Files == null)

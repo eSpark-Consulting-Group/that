@@ -38,6 +38,8 @@ namespace APTAT.Core
         public SubSystemCatalog()
         {
             _subSystems.Add(_changeTrackingSubSystem);
+
+            _changeTrackingSubSystem.Init(this);
         }
 
         public void Register(ISubSystem subSystem)

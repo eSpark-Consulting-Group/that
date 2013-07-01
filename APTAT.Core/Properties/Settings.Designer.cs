@@ -121,5 +121,14 @@ namespace APTAT.Core.Properties {
                 return ((ushort)(this["MaxEndpointsAvailabilityResolverConcurrentTasks"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("processes|drivers|autoruns")]
+        public string ScanScope {
+            get {
+                return ((string)(this["ScanScope"]));
+            }
+        }
     }
 }

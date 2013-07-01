@@ -25,6 +25,14 @@ namespace APTAT.Core
                     result.AptReport = xs.Deserialize(fs) as AptReport;
                 }
 
+                try
+                {
+                    File.Delete(result.FileName);
+                }
+                catch
+                {
+                }
+
                 //XDocument xDocument = XDocument.Load(result.FileName);
                 //foreach (XElement element in xDocument.Descendants("File"))
                 //{

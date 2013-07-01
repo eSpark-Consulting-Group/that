@@ -370,6 +370,8 @@ namespace APTAT.Core
         {
             //data = GetFakeData();
             var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
+            if (results.Finished == DateTime.MinValue)
+                throw new DataNotReadyException();
             BeginBuildReport(results, reportType, state);
         }
 
@@ -379,8 +381,8 @@ namespace APTAT.Core
             {
                 AptReportData data = new AptReportData
                                          {
-                                             ScanStarted = operationContext.Started,
-                                             ScanFinished = operationContext.Finished,
+                                             ScanStarted = operationContext.Started.ToLocalTime(),
+                                             ScanFinished = operationContext.Finished.ToLocalTime(),
                                              TargetsSource = operationContext.TargetsSourceName,
                                              TargetsFailed = operationContext.FailedTargetsCount,
                                              TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
@@ -489,8 +491,6 @@ namespace APTAT.Core
 
             if(listener != null)
                 _changeTrackingSubSystem.RegisterListener(listener);
-
-            //LocalReport localReport = new LocalReport();
         }
 
         public void RegisterChangeTrackingListener(IChangeTrackingListener listener)
@@ -559,14 +559,16 @@ namespace APTAT.Core
             return command.Response.Targets;
         }
 
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain, string scanScope = "processes|drivers|autoruns")
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain, string scanScope = null)
         {
+            if (scanScope == null)
+                scanScope = Properties.Settings.Default.ScanScope;
+
             DeployAgentRequest request = new DeployAgentRequest
                                              {
                                                  Targets = targets,
                                                  Login = login,
                                                  Password = password,
-                                                 //ScanScope = "processes",
                                                  ScanScope = scanScope,
                                                  Domain = domain,
                                              };

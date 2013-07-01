@@ -62,12 +62,14 @@
     </Compile>
     <Compile Include="AptAtManager.cs" />
     <Compile Include="AptScanStage.cs" />
+    <Compile Include="DataNotReadyException.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\AgentDescentWatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Descent\AnotherScanIsInProgressException.cs" />
     <Compile Include="Descent\BaseDescentWatcher.cs">
       <SubType>Code</SubType>
     </Compile>

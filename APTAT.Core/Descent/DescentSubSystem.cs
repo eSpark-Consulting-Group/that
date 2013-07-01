@@ -19,7 +19,7 @@ namespace APTAT.Core.Descent
 {
     public class AptScanOperationContext : IChangeTrackingListener
     {
-        private Guid _sessionId = Guid.NewGuid();
+        private readonly Guid _sessionId = Guid.NewGuid();
         private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults;
 
         public AptScanOperationContext()
@@ -38,6 +38,8 @@ namespace APTAT.Core.Descent
         public int FailedTargetsCount { get; set; }
         public int CanceledTargetsCount { get; set; }
 
+        private readonly object _sync = new object();
+
         public ConcurrentDictionary<Guid, ScanResult> ScanResults
         {
             get { return _scanResults; }
@@ -50,7 +52,17 @@ namespace APTAT.Core.Descent
                 if(item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
                 {
                     DescentProgressItem descentProgressItem = (DescentProgressItem) item.ChangedItem;
-                    _scanResults[descentProgressItem.ComputerUid].ProgressPercenage = descentProgressItem.ProgressPercentage;
+                    ScanResult result;
+                    if(_scanResults.TryGetValue(descentProgressItem.ComputerUid, out result))
+                    {
+                        if(result != null)
+                        {
+                            lock(_sync)
+                            {
+                                result.ProgressPercenage = descentProgressItem.ProgressPercentage;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -997,6 +1009,13 @@ namespace APTAT.Core.Descent
 
 		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope, string domain )
 		{
+            if(_scanResultsPerOperation.Count > 0)
+            {
+                var item = _scanResultsPerOperation.FirstOrDefault();
+                if (item.Value.Finished == DateTime.MinValue)
+                    throw new AnotherScanIsInProgressException();
+            }
+
             // This is done in order not to include offline computers into the DescentResult below. Optimization is needed!
             var onlineTargetUidComputerPairs = (from pair in computers where pair.Computer.IsOnline && !(pair.State is Exception) select pair).ToArray();
 
