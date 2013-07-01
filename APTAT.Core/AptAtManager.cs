@@ -559,15 +559,15 @@ namespace APTAT.Core
             return command.Response.Targets;
         }
 
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain = "[//TODO:targets_source]")
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain, string scanScope = "processes|drivers|autoruns")
         {
             DeployAgentRequest request = new DeployAgentRequest
                                              {
                                                  Targets = targets,
                                                  Login = login,
                                                  Password = password,
-                                                 //ScanScope = "processes|drivers|autoruns",
-                                                 ScanScope = "processes",
+                                                 //ScanScope = "processes",
+                                                 ScanScope = scanScope,
                                                  Domain = domain,
                                              };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
