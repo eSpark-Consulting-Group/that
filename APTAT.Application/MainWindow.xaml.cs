@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.InteropServices;
 using APTAT.Application.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ using System.Windows.Shapes;
 
 namespace APTAT.Application
 {
+
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -31,18 +34,11 @@ namespace APTAT.Application
 
             MouseDown += MainWindow_MouseDown;
 
-            //WindowResizer wr = new WindowResizer(this);
-
-            //xxxSizeGrip, where xxx corresponds to the equivilent border position
-            //wr.addResizerRight(rightSizeGrip);
-            //wr.addResizerLeft(leftSizeGrip);
-            //wr.addResizerUp(TopResizer);
-           // wr.addResizerDown(BottomResizer);
-            //wr.addResizerLeftUp(topLeftSizeGrip);
-            //wr.addResizerRightUp(topRightSizeGrip);
-            //wr.addResizerLeftDown(bottomLeftSizeGrip);
-            //wr.addResizerRightDown(bottomRightSizeGrip);
-
+            SourceInitialized += (x, y) =>
+            {
+                this.HideMinimizeAndMaximizeButtons();
+            };
+            
 
             Loaded += MainWindow_Loaded;
             
@@ -69,14 +65,17 @@ namespace APTAT.Application
         {
             try
             {
+                WindowState = WindowState.Normal;
                 DragMove();
+               
             }
             catch (Exception)
             {
 
-            }
-            
+            }   
         }
+
+   
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {

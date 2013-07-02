@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.IO;
+using System.Windows.Forms;
 using APTAT.Application.Services;
 
 namespace APTAT.Application.Models
@@ -68,11 +69,25 @@ namespace APTAT.Application.Models
             IsBusy = false;
             if(e.Exception != null)
             {
+               // MessageBox.Show(e.Exception.ToString());
                 return;
             }
 
+           // MessageBox.Show(e.FileName);
+
+
+            try
+            {
+                ReportStream = File.Open(e.FileName, FileMode.Open);
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.ToString());    
+                throw;
+            }
             
-            ReportStream = File.Open(e.FileName, FileMode.Open);
+
+
             if(ReportOpened != null)
             {
                 ReportOpened(this, EventArgs.Empty);

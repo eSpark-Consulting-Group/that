@@ -13,6 +13,11 @@ namespace APTAT.Application.Models
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
 
+        public Boolean HasBadFiles
+        {
+            get { return UnknownFilesCount > 0 || MalwareFilesCount > 0; }
+        }
+
         public Boolean IsUnknown { get; set; }
 
         public Boolean IsMalware { get; set; }
@@ -81,6 +86,7 @@ namespace APTAT.Application.Models
                 }
                 _unknownFilesCount = value;
                 RaisePropertyChanged("UnknownFilesCount");
+                RaisePropertyChanged("HasBadFiles");
             }
         }
 
@@ -96,6 +102,7 @@ namespace APTAT.Application.Models
 
                 _malwareFilesCount = value;
                 RaisePropertyChanged("MalwareFilesCount");
+                RaisePropertyChanged("HasBadFiles");
             }
         }
 

@@ -22,7 +22,10 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            
+            SourceInitialized += (x, y) =>
+            {
+                this.HideMinimizeAndMaximizeButtons();
+            };
         }
 
         private void OnFinishClick(Object sender, EventArgs e)
