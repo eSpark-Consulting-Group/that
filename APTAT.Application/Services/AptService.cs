@@ -337,33 +337,28 @@ namespace APTAT.Application.Services
 
 
             BadFileItem[] badFileItems = null;
-            if (scanResult.AptReport != null)
-            {
-                if (scanResult.AptReport.Modules != null)
+
+            badFileItems = scanResult.BadFiles
+                .Select(m => new BadFileItem
                 {
-                    badFileItems = scanResult.BadFiles
-                        .Select(m => new BadFileItem
-                                         {
-                                             Name = m.Path,
-                                             Size = m.Size,
-                                             Accessed = m.Accessed,
-                                             Created = m.Created,
-                                             Modified = m.Modified,
-                                             Product = m.Product,
-                                             Copyright = m.Copyright,
-                                             Version = m.Version,
-                                             Description = m.Description,
-                                             Signer = m.Signer,
-                                             Attributes = m.Attributes,
-                                             Sha1 = m.Sha1,
-                                             IsMalware = m.Cloud == CloudVerdict.Malware,
-                                             IsUnknown = m.Cloud == CloudVerdict.Unknown || m.Cloud == CloudVerdict.FirstSeen
-                                         }
-                        ).ToArray();
-                        
-                    
+                    Name = m.Path,
+                    Size = m.Size,
+                    Accessed = m.Accessed,
+                    Created = m.Created,
+                    Modified = m.Modified,
+                    Product = m.Product,
+                    Copyright = m.Copyright,
+                    Version = m.Version,
+                    Description = m.Description,
+                    Signer = m.Signer,
+                    Attributes = m.Attributes,
+                    Sha1 = m.Sha1,
+                    IsMalware = m.Cloud == CloudVerdict.Malware,
+                    IsUnknown = m.Cloud == CloudVerdict.Unknown || m.Cloud == CloudVerdict.FirstSeen
                 }
-            }
+                ).ToArray();
+                        
+             
 
             resultItem.BadFiles = badFileItems;
             
