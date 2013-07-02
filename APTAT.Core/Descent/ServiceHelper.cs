@@ -508,7 +508,8 @@ namespace APTAT.Core.Descent
                                          (uint)SERVICE_TYPE.SERVICE_WIN32_OWN_PROCESS,
                                          (uint)SERVICE_START.SERVICE_DEMAND_START,
                                          (uint)SERVICE_ERROR.SERVICE_ERROR_IGNORE,
-                                         binPath, null,
+                                         cmdLine.ToString(),//binPath, 
+                                         null,
                                          IntPtr.Zero, null, null, null, null))
                 {
                     throw new Win32Exception( Marshal.GetLastWin32Error() );

@@ -207,7 +207,7 @@ namespace APTAT.Core.Reports
                                   Hash = file.Hash,
                                   Name = file.Name
                               }).Take(10);
-            return result.ToArray();
+            return result.Reverse().ToArray();
         }
 
         private DetailedBadFile[] GetAllBadFiles()

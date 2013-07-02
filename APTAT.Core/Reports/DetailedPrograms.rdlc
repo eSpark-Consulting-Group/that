@@ -1173,11 +1173,6 @@
                       <GroupExpression>=Fields!Hash.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!Count.Value</Value>
-                    </SortExpression>
-                  </SortExpressions>
                   <Label>=Fields!Name.Value</Label>
                 </ChartMember>
               </ChartMembers>
