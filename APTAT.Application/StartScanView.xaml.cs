@@ -76,7 +76,12 @@ namespace APTAT.Application
                 _viewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
                 {
                     Step = 1,
-                    Completed = ctx => UpdateButtonsVisibility()
+                    Completed = ctx =>
+                                    {
+                                        UpdateButtonsVisibility();
+                                        domainTree.Focus();
+
+                                    }
                 }); 
             }
         }

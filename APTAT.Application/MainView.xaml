@@ -157,13 +157,13 @@
                             </Canvas>
 
                         </Canvas>
-                        <Canvas x:Name="UnknownFilesFound" HorizontalAlignment="Left" Height="16" UseLayoutRounding="False" VerticalAlignment="Top" Width="16" Grid.Row="1" Margin="0,0,8,0" Opacity="{Binding IsUnknown, Converter={StaticResource BoolToOpacityConverter}}">
-                            <Canvas x:Name="Layer_3" Height="16" Canvas.Left="0" Canvas.Top="0" Width="16">
-                                <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FFFFAA00" Height="16" Canvas.Left="0" Stretch="Fill" Canvas.Top="0" Width="16"/>
-                                <Path Data="F1M7.049,11.103L8.945,11.103L8.945,12.999L7.049,12.999z M8.802,10.155L7.081,10.155C7.076,9.906,7.074,10.05,7.074,9.994C7.074,9.437,7.166,8.978,7.35,8.619C7.534,8.257,7.905,7.854,8.459,7.402C9.012,6.953,9.343,6.658,9.449,6.517C9.618,6.298,9.701,6.054,9.701,5.789C9.701,5.42,9.553,5.105,9.258,4.84C8.963,4.577,8.567,4.446,8.067,4.446C7.585,4.446,7.182,4.584,6.857,4.858C6.534,5.132,6.311,5.552,6.189,6.114L4.449,5.897C4.498,5.091,4.841,4.406,5.477,3.844C6.115,3.282,6.949,3.001,7.986,3.001C9.074,3.001,9.94,3.287,10.585,3.856C11.228,4.425,11.551,5.086,11.551,5.844C11.551,6.261,11.431,6.658,11.196,7.031C10.959,7.404,10.454,7.914,9.68,8.557C9.279,8.891,9.03,9.158,8.933,9.361C8.836,9.563,8.793,9.632,8.802,10.155" Fill="White" Height="9.998" Canvas.Left="4.449" Stretch="Fill" Canvas.Top="3.001" Width="7.102"/>
-                            </Canvas>
+                        
+                        <Canvas HorizontalAlignment="Left" Height="16" 
+                               VerticalAlignment="Top" Width="16" 
+                                Margin="0,0,8,0" Opacity="{Binding IsUnknown, Converter={StaticResource BoolToOpacityConverter}}">
+                            <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FFFFAA00" Height="16" Stretch="Fill" Width="16" UseLayoutRounding="False" VerticalAlignment="Top"/>
+                            <Path Data="M1.188,7.9370117 C1.8441142,7.9370117 2.3759999,8.4688978 2.3759999,9.1250114 C2.3759999,9.781126 1.8441142,10.313012 1.188,10.313012 C0.53188568,10.313012 -7.4505806E-09,9.781126 0,9.1250114 C-7.4505806E-09,8.4688978 0.53188568,7.9370117 1.188,7.9370117 z M0.10499457,0 L2.2299945,0 L2.2299945,6.5619998 L0.10499457,6.5619998 z" Fill="White" Height="10.313" Stretch="Fill" Width="2.376" UseLayoutRounding="False" Canvas.Left="6.811" Canvas.Top="2.687"/>
                         </Canvas>
-
                         <TextBlock Text="{Binding Name}" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
                     </Grid>
                 </DataTemplate>

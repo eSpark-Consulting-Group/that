@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 
@@ -232,7 +233,7 @@ namespace APTAT.Application.Models
 
         private void OnGetDirectoryItemsCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
-            e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items);
+            e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
 
             ExpandCommandContext context = e.UserState as ExpandCommandContext;
             if(context != null)

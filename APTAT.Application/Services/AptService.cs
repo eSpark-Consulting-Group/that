@@ -357,7 +357,7 @@ namespace APTAT.Application.Services
                                              Attributes = m.Attributes,
                                              Sha1 = m.Sha1,
                                              IsMalware = m.Cloud == CloudVerdict.Malware,
-                                             IsUnknown = m.Cloud == CloudVerdict.Unknown
+                                             IsUnknown = m.Cloud == CloudVerdict.Unknown || m.Cloud == CloudVerdict.FirstSeen
                                          }
                         ).ToArray();
                         

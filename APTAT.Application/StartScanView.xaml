@@ -111,6 +111,7 @@
             <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
                
             <telerik:RadTreeView x:Name="domainTree" 
+                               
                                  SnapsToDevicePixels="True"
                                  IsOptionElementsEnabled="True"
                                  IsTriStateMode="True"
