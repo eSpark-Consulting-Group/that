@@ -1,0 +1,8 @@
+﻿;!@Install@!UTF-8!
+
+Title="APTAT Setup"
+ErrorTitle="APTAT Setup"
+WarningTitle="APTAT Setup"
+RunProgram="APTAT.Bootstrapper.exe"
+
+;!@InstallEnd@!

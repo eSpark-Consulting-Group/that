@@ -2,10 +2,16 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Console", "APTAT.Console\APTAT.Console.csproj", "{A93AE9F8-EFB1-4E7F-B1E6-DA5E5F78A89D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F567299-6CB8-4F71-BA7E-D23FF1ACE430} = {9F567299-6CB8-4F71-BA7E-D23FF1ACE430}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core", "APTAT.Core\APTAT.Core.csproj", "{9E80A126-241C-4079-8975-E16204D03E8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Application", "APTAT.Application\APTAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F567299-6CB8-4F71-BA7E-D23FF1ACE430} = {9F567299-6CB8-4F71-BA7E-D23FF1ACE430}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "APTAT.Bootstrapper", "APTAT.Bootstrapper\APTAT.Bootstrapper.vcxproj", "{9F567299-6CB8-4F71-BA7E-D23FF1ACE430}"
 EndProject

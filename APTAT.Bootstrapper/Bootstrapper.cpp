@@ -95,7 +95,7 @@ bool  Bootstrapper::InstallFont(LPCTSTR font, LPCTSTR registryKey)
 	}
 
 	TCHAR fontPathBuffer[MAX_PATH];
-	wcscpy(fontPathBuffer, fontFolderPathBuffer);
+	wcscpy_s(fontPathBuffer, fontFolderPathBuffer);
 
 	LPCWSTR fontTargetPath = lstrcat(fontPathBuffer, L"\\");
 	fontTargetPath = lstrcat(fontPathBuffer, font);
@@ -105,7 +105,7 @@ bool  Bootstrapper::InstallFont(LPCTSTR font, LPCTSTR registryKey)
 	}
 
 	TCHAR sourcePathBuffer[MAX_PATH * 2];
-	wcscpy(sourcePathBuffer, FONTS_FOLDER);
+	wcscpy_s(sourcePathBuffer, FONTS_FOLDER);
 
 	LPCWSTR xcopyCmdLine = lstrcat(sourcePathBuffer, L"\\");
 	xcopyCmdLine = lstrcat(sourcePathBuffer, font);

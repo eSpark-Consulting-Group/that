@@ -254,6 +254,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="SfxPackage\7za.exe" />
+    <None Include="SfxPackage\CreateSfx.bat" />
+    <Resource Include="SfxPackage\config.txt" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -261,6 +264,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="SfxPackage\7zSD.sfx" />
     <Resource Include="CAPT_icon.ico" />
     <Content Include="Fonts\segoeui.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -313,6 +317,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>del "$(TargetDir)APTAT.exe"
+xcopy "$(SolutionDir)$(ConfigurationName)\APTAT.Bootstrapper.exe" "$(TargetDir)" /Y
+"$(ProjectDir)SfxPackage\7za.exe" a  "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)*.exe" "$(TargetDir)Fonts" || goto :error
+copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)APTAT.exe" || goto :error
+del  "$(TargetDir)archive.7z"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
