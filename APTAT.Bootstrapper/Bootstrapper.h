@@ -15,7 +15,7 @@ class Bootstrapper
 		bool PrepareFonts();
 	private:
 		bool FileExists(LPCTSTR szPath);
-		bool InstallFont(LPCTSTR font, LPCTSTR registryKey, LPCTSTR registryValue);
+		bool InstallFont(LPCTSTR font, LPCTSTR registryKey);
 		LONG GetDWORDRegKey(HKEY hKey, const std::wstring &strValueName, DWORD &nValue, DWORD nDefaultValue);
 
 };

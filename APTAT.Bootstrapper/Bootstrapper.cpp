@@ -1,17 +1,17 @@
 #include "Bootstrapper.h"
 #include <tchar.h>
+#include <Shlobj.h>
 
 const wchar_t PATH[] = L"Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Client";
 const wchar_t KEY[]  = L"Install";
 const wchar_t FRAMEWORK_DOWNLOAD_LINK[] = L"http://go.microsoft.com/fwlink/?linkid=182804";
 const wchar_t APP[]  = L"APTAT.Application.exe";
-const wchar_t FONT1[] = L"Fonts\\segoeui.ttf";
-const wchar_t FONT2[] = L"Fonts\\segoeuil.ttf";
-const wchar_t FONT3[] = L"Fonts\\seguisb.ttf";
 
-const wchar_t FONT_I1[] = L"Fonts\\segoeui.ttf C:\\Windows\\Fonts\\";
-const wchar_t FONT_I2[] = L"Fonts\\segoeuil.ttf C:\\Windows\\Fonts\\";
-const wchar_t FONT_I3[] = L"Fonts\\seguisb.ttf C:\\Windows\\Fonts\\";
+const wchar_t FONT_REGISTRY_KEY[] = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
+const wchar_t FONT1[] = L"segoeui.ttf";
+const wchar_t FONT2[] = L"segoeuil.ttf";
+const wchar_t FONT3[] = L"seguisb.ttf";
+const wchar_t FONTS_FOLDER[] = L"Fonts";
 
 
 Bootstrapper::Bootstrapper()
@@ -86,41 +86,57 @@ bool  Bootstrapper::FileExists(LPCTSTR szPath)
          !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-bool  Bootstrapper::InstallFont(LPCTSTR font, LPCTSTR registryKey, LPCTSTR registryValue)
+bool  Bootstrapper::InstallFont(LPCTSTR font, LPCTSTR registryKey)
 {
-	/*TCHAR path[MAX_PATH + MAX_PATH];
-	GetWindowsDirectory(path, MAX_PATH);
+	TCHAR fontFolderPathBuffer[MAX_PATH];
+	if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0,  fontFolderPathBuffer)) == false) 
+	{
+		return false;
+	}
 
-	LPCWSTR fontpath = lstrcat(path, L"\\");
-	fontpath = lstrcat(path, font);
+	TCHAR fontPathBuffer[MAX_PATH];
+	wcscpy(fontPathBuffer, fontFolderPathBuffer);
 
-	if(FileExists(fontpath))
+	LPCWSTR fontTargetPath = lstrcat(fontPathBuffer, L"\\");
+	fontTargetPath = lstrcat(fontPathBuffer, font);
+	if(FileExists(fontTargetPath))
 	{
 		return true;
 	}
-*/
-	int ret = (int)ShellExecute( NULL, L"open", L"xcopy", font, NULL, SW_SHOWNORMAL );
+
+	TCHAR sourcePathBuffer[MAX_PATH * 2];
+	wcscpy(sourcePathBuffer, FONTS_FOLDER);
+
+	LPCWSTR xcopyCmdLine = lstrcat(sourcePathBuffer, L"\\");
+	xcopyCmdLine = lstrcat(sourcePathBuffer, font);
+	xcopyCmdLine = lstrcat(sourcePathBuffer, L" ");
+	xcopyCmdLine = lstrcat(sourcePathBuffer, fontFolderPathBuffer);
+	
+	ShellExecute( NULL, L"open", L"xcopy", xcopyCmdLine, NULL, SW_HIDE);
 
 	HKEY   hkey;
 	DWORD  dwDisposition;
 	DWORD dwType, dwSize;
-	if(RegCreateKeyEx(HKEY_LOCAL_MACHINE, L"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", 0, NULL, 0, 0, NULL, &hkey, &dwDisposition) == ERROR_SUCCESS)
+	LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, FONT_REGISTRY_KEY, 0, KEY_WRITE | KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hkey);
+	if( r == ERROR_SUCCESS)
 	{	
 		dwType = REG_SZ;
-		dwSize = (_tcslen(registryValue) + 1) * sizeof(TCHAR);
-		RegSetValueEx(hkey, registryKey, 0, dwType,  (PBYTE)&registryValue, dwSize);
- 
-  RegCloseKey(hkey);
- }
+		dwSize = (_tcslen(font) + 1) * sizeof(TCHAR);
 
-	return true;
+		RegSetValueEx(hkey, registryKey, 0, dwType,  (LPBYTE)font, dwSize);
+		RegCloseKey(hkey);
+
+		return true;
+	}
+
+	return false;
 }
 
 bool Bootstrapper::PrepareFonts()
 {	
-	bool font1 = InstallFont(FONT_I1, L"Segoe UI (TrueType)", L"segoeui.ttf");
-	bool font2 = InstallFont(FONT_I2, L"Segoe UI Light (TrueType)", L"segoeuil.ttf");
-	bool font3 = InstallFont(FONT_I3, L"Segoe UI SemiBold (TrueType)", L"seguisb.ttf");
+	bool font1 = InstallFont(FONT1, L"Segoe UI (TrueType)");
+	bool font2 = InstallFont(FONT2, L"Segoe UI Light (TrueType)");
+	bool font3 = InstallFont(FONT3, L"Segoe UI SemiBold (TrueType)");
 
 	return font1 && font2 && font3;
 }
