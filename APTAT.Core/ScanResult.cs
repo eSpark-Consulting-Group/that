@@ -131,7 +131,11 @@ namespace APTAT.Core
             get
             {
                 if (AptReport != null)
-                    return AptReport.Modules;
+                {
+                    // Sort out empty files (size = 0 and hash = 000000000...)
+                    var notEmptyFiles = from file in AptReport.Modules where file.Size > 0 select file;
+                    return notEmptyFiles.ToArray();
+                }
                 return null;
             }
         }
@@ -166,9 +170,10 @@ namespace APTAT.Core
 
         public Module[] GetBadFiles()
         {
-            if (Files == null)
+            var files = Files;
+            if (files == null)
                 return new Module[0];
-            return (from file in Files where (file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.Malware || file.Cloud == CloudVerdict.FirstSeen) select file).ToArray();
+            return (from file in files where (file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.Malware || file.Cloud == CloudVerdict.FirstSeen) select file).ToArray();
         }
 
         private void CalculateTotal()

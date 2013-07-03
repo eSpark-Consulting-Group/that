@@ -1158,7 +1158,7 @@ namespace APTAT.Core.Descent
                     scanResultType = ScanResultType.InProgress;
                     onlineComputers.Add(computer);
                 }
-                operationContext.ScanResults.TryAdd(computer.Uid, new ScanResult() { HostName = computer.Name, IpAddress = computer.IPAddress.ToString(), ResultType = scanResultType, TargetUid = computer.Uid, OrganizationUnit = computer.OrganizationUnit });
+                operationContext.ScanResults.TryAdd(computer.Uid, new ScanResult() { HostName = computer.Name, IpAddress = computer.IPAddress != null ? computer.IPAddress.ToString() : String.Empty, ResultType = scanResultType, TargetUid = computer.Uid, OrganizationUnit = computer.OrganizationUnit });
 		    }
 
             if (onlineComputers.Count == 0)

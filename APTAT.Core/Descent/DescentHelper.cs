@@ -470,7 +470,7 @@ namespace APTAT.Core.Descent
                 // Remove file system content
                 try
                 {
-                    CleanUpRemoteContent();
+                    //CleanUpRemoteContent();
 
                     //foreach ( string targetPath in _filesToDeleteOnQuit )
                     //{
@@ -629,7 +629,7 @@ namespace APTAT.Core.Descent
                                 throw new Exception("Response file is empty");
 
                             string[] temp = data.Split(';');
-                            if (temp.Length != 9)
+                            if (temp.Length != 12)
                                 throw new Exception("Response file header is not valid");
 
                             int statusInt;
@@ -650,14 +650,24 @@ namespace APTAT.Core.Descent
                             int unknownFiles;
                             Int32.TryParse(temp[5], out unknownFiles);
 
+                            int newFiles;
+                            Int32.TryParse(temp[6], out newFiles);
+
+                            int errorFiles;
+                            Int32.TryParse(temp[7], out errorFiles);
+
+                            int emptyFiles;
+                            Int32.TryParse(temp[8], out emptyFiles);
+
                             int safeFiles;
-                            Int32.TryParse(temp[6], out safeFiles);
+                            Int32.TryParse(temp[9], out safeFiles);
 
                             int malwares;
-                            Int32.TryParse(temp[7], out malwares);
+                            Int32.TryParse(temp[10], out malwares);
 
-                            string error = temp[8];
+                            string error = temp[11];
 
+                            int unknownFilesTotal = unknownFiles + newFiles;
                             EnAptStage status = (EnAptStage)statusInt;
                             
                             if( status == EnAptStage.EnApt_Pending)
@@ -682,7 +692,7 @@ namespace APTAT.Core.Descent
                             }
                             else if( status == EnAptStage.EnApt_ScaningModules )
                             {
-                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles, SafeFilesFound = safeFiles, MalwaresFound = malwares});
+                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares });
                             }
                             else if( status == EnAptStage.EnApt_WritingReport )
                             {
@@ -692,15 +702,15 @@ namespace APTAT.Core.Descent
                             {
                                 _response.Status = DescentStatus.status_success;//(DescentStatus)status;
 
-                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
+                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFilesTotal });
 
-                                string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
+                                string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("{0}_{1:yyyyMMddHHmmss}.xml", _remoteHostInfo.HostName, DateTime.Now));
 
                                 InvokeReceivingResults(EventArgs.Empty);
 
                                 File.Copy(_resultsFile, resultsFileLocal, true);
                                 //File.Delete(resultsFile);
-                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles, SafeFilesFound = safeFiles, MalwaresFound = malwares });
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares });
                                 break;
                             }
                             else if( status == EnAptStage.EnApt_Failed )
