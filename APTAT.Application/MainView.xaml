@@ -95,6 +95,7 @@
                                   Fill="Orange" 
                                   Opacity="{Binding ScanStage, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationCompleted'}"
                                   Height="28" 
+                                  Grid.RowSpan="2" 
                                   Canvas.Left="0"
                                   Stretch="Fill" Canvas.Top="0" 
                                   Width="28"/>
@@ -116,7 +117,7 @@
                               Stretch="Fill" 
                                 Grid.RowSpan="2"
                               UseLayoutRounding="False" 
-                              VerticalAlignment="Top" 
+                              VerticalAlignment="Center" 
                               Width="28"/>
 
 

@@ -307,9 +307,9 @@
                                 <Path 
                                   x:Name="path"
                                   Data="M0,0 L17,0 L17,6 L0,6 z" 
-                                Margin="10,0,5,0"
-                                  Fill="White" HorizontalAlignment="Right" Height="3.167" 
-                                  Stretch="Fill" Stroke="Black" StrokeThickness="0" VerticalAlignment="Center" Width="12" UseLayoutRounding="False"/>
+                                Margin="10,0,5,12"
+                                  Fill="White" HorizontalAlignment="Right" Height="3.167"  
+                                  Stretch="Fill" Stroke="Black" StrokeThickness="0" VerticalAlignment="Bottom" Width="12" UseLayoutRounding="False"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
