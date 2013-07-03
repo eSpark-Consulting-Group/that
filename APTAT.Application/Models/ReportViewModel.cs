@@ -17,6 +17,8 @@ namespace APTAT.Application.Models
 
         public Stream ReportStream { get; set; }
 
+        public String FileName { get; set; }
+
         public String Header
         {
             get { return _header; }
@@ -36,11 +38,11 @@ namespace APTAT.Application.Models
 
             if(kind == ReportKind.DetailedPerProgram)
             {
-                Header = "DETAILED PER PROGRAM REPORT";
+                Header = "DETAILED REPORT PER PROGRAM ";
             }
             else if(kind == ReportKind.DetailedPerDevice)
             {
-                Header = "DETAILED PER DEVICE REPORT";
+                Header = "DETAILED REPORT PER DEVICE";
             }
             else if(kind == ReportKind.Executive)
             {
@@ -78,6 +80,7 @@ namespace APTAT.Application.Models
 
             try
             {
+                FileName = e.FileName;
                 ReportStream = File.Open(e.FileName, FileMode.Open);
             }
             catch (Exception ex)

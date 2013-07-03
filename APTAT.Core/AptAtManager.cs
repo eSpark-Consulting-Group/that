@@ -366,6 +366,27 @@ namespace APTAT.Core
             _descentSubSystem = descentSubSystem;
         }
 
+        /* FAKE DATA
+        public void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null)
+        {
+            //data = GetFakeData();
+            var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
+            // if (results.Finished == DateTime.MinValue)
+            //     throw new DataNotReadyException();
+            BeginBuildReport(results, reportType, state);
+        }
+
+        public void BeginBuildReport(AptScanOperationContext operationContext, ReportType reportType, object state = null)
+        {
+
+            AptReportData data = GetFakeData();
+
+            ReportBuilder.BuildReportDelegate action = new ReportBuilder.BuildReportDelegate(_reportBuilder.Build);
+            Context context = new Context() { Action = action, State = state };
+            action.BeginInvoke(data, reportType, BuildReportCallback, context);
+
+        }
+        */
         public void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null)
         {
             //data = GetFakeData();

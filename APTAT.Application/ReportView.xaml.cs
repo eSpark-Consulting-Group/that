@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -58,10 +59,15 @@ namespace APTAT.Application
         {
             if (e.Key == Key.Enter)
             {
-                this.pdfViewer.Commands.FindCommand.Execute(this.tbFind.Text);
-                this.btnPrev.Visibility = Visibility.Visible;
-                this.btnNext.Visibility = Visibility.Visible;
+                pdfViewer.Commands.FindCommand.Execute(this.tbFind.Text);
+                btnPrev.Visibility = Visibility.Visible;
+                btnNext.Visibility = Visibility.Visible;
             }
+        }
+
+        private void OnShowInFolder(Object sender, RoutedEventArgs e)
+        {
+            Process.Start(@"Explorer.exe", @"/select," + _viewModel.FileName);
         }
     }
 }
