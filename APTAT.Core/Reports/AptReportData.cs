@@ -170,7 +170,7 @@ namespace APTAT.Core.Reports
         {
             var top10 = (from target in SucceededTargets
                         where target.BadFilesCount > 0
-                        orderby target.BadFilesCount
+                        orderby target.BadFilesCount descending 
                         select target).Take(10);
 
             List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();

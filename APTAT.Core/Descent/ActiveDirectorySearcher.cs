@@ -61,7 +61,8 @@ namespace APTAT.Core.Descent
 							  select new DirectoryComputer
 							  {
 								  Name = entry.Name,
-								  DnsName = entry.DnsName
+								  DnsName = entry.DnsName,
+                                  LdapPath = entry.FullPath
 							  } ).ToArray();
 			}
 

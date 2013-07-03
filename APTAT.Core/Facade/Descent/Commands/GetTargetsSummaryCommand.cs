@@ -78,6 +78,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 										  Uid = Guid.NewGuid(), // Comp was not found on console, give it a new GUID as a temp storage for TargetUid
 										  Name = fc.Name,
 										  DnsName = fc.DnsName,
+                                          LdapPath = fc.LdapPath
 									  });
 								  }
 							  })

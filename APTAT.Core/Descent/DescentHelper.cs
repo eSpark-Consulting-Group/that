@@ -470,7 +470,7 @@ namespace APTAT.Core.Descent
                 // Remove file system content
                 try
                 {
-                    //CleanUpRemoteContent();
+                    CleanUpRemoteContent();
 
                     //foreach ( string targetPath in _filesToDeleteOnQuit )
                     //{

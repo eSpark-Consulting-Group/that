@@ -154,6 +154,9 @@ namespace APTAT.Core.Facade.Descent.Commands
 
         private static string GetOrganizationUnit(string ldapPath, bool firstParentOnly = false)
         {
+            if (String.IsNullOrEmpty(ldapPath))
+                return null;
+
             string[] parts = ldapPath.Split(',');
             List<string> units = new List<string>();
             foreach (var part in parts)

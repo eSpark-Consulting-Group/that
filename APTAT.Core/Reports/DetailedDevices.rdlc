@@ -1203,6 +1203,7 @@
                     </SortExpression>
                     <SortExpression>
                       <Value>=Fields!Name.Value</Value>
+                      <Direction>Descending</Direction>
                     </SortExpression>
                   </SortExpressions>
                   <Label>=Fields!Name.Value</Label>
