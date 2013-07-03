@@ -50,11 +50,10 @@ namespace APTAT.Application
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
-            scanCompletedWindow.Text.Text = String.Format("- {0} Unknown Files Found", _viewModel.UnknownFilesCount);
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malwares Found", Environment.NewLine, _viewModel.MalwareFilesCount);
+            scanCompletedWindow.Text.Text = String.Empty;
             if(e.SuccededCount > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Successful Scans", Environment.NewLine, e.SuccededCount);
+                scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans",  e.SuccededCount);
             }
             if (e.CanceledCount > 0)
             {
@@ -68,6 +67,8 @@ namespace APTAT.Application
             {
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
             }
+
+            //scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total Scans", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             scanCompletedWindow.ShowDialog();
         }
