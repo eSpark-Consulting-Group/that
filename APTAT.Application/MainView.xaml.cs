@@ -44,8 +44,9 @@ namespace APTAT.Application
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
 
-            
         }
+
+
 
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {

@@ -21,7 +21,15 @@
                               Fill="#FF595E6B" 
                               Height="16.11" 
                               Width="16.866"
+                              Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource InverseBoolToOpacityConverter}}"
                               Margin="0,0,10,0"/>
+                    <Path Data="M8.078,2.445L12.921,2.445L12.921,18.555L8.078,18.555z M14.09,6.596L18.933,6.596L18.933,18.555L14.09,18.555z M2.067,11.241L6.91,11.241L6.91,18.555L2.067,18.555z"
+                              Fill="White" 
+                              Height="16.11" 
+                              Width="16.866"
+                              Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource BoolToOpacityConverter}}"
+                              Margin="0,0,10,0"/>
+                    
                     <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="18" Margin="0,0,5,0" />
                 </Grid>
             </DataTemplate>
@@ -188,12 +196,22 @@
                     Width="*"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
-        <TextBlock Text="No items to display. Press Start Scanning Button"
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
+                   HorizontalAlignment="Center" Grid.Row="1">
+
+            <TextBlock Text="No items to display."
                    Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
-                   Grid.Row="1"
-                   VerticalAlignment="Center" 
-                   HorizontalAlignment="Center"
-                   Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                   FontSize="21"
+                   FontFamily="Segoe UI Light"/>
+
+            <Button Margin="10,0,0,0" 
+                    Style="{StaticResource LinkButton}" 
+                    Content="Start Scanning Now!" FontSize="21" FontFamily="Segoe UI Light"
+                    Click="OnStartScanningClick"/>
+            
+
+
+        </StackPanel>
 
         <telerik:RadToolBar Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
 
@@ -304,13 +322,14 @@
                     </ListBox>
                 </telerik:RadSplitButton.DropDownContent>
             </telerik:RadSplitButton>-->
-            
+            <!---->
             <telerik:RadDropDownButton AutoOpenDelay="0:0:0.0"
                            Content="Reports"
+                                       IsEnabled="{Binding IsReportEnabled}"
                                       Style="{StaticResource RadDropDownButtonStyle2}"
                                        Margin="5,-1,30,-1"
                            ContentTemplate="{StaticResource ReportButtonContentTemplate}"            
-                         IsEnabled="{Binding IsReportEnabled}"
+                       
                            x:Name="ReportButton"
                            FontSize="18"
                            Padding="10,20,10,20">
