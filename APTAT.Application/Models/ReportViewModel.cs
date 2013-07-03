@@ -36,11 +36,11 @@ namespace APTAT.Application.Models
 
             if(kind == ReportKind.DetailedPerProgram)
             {
-                Header = "DETAILED REPORT";
+                Header = "DETAILED PER PROGRAM REPORT";
             }
             else if(kind == ReportKind.DetailedPerDevice)
             {
-                Header = "DETAILED REPORT";
+                Header = "DETAILED PER DEVICE REPORT";
             }
             else if(kind == ReportKind.Executive)
             {

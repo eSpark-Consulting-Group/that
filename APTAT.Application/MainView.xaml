@@ -221,7 +221,7 @@
             <telerik:RadButton Margin="5,-1,30,-1"  
                                   Padding="10,20"
                                FontSize="18"
-                               Command="{Binding StopScanCommand}"
+                               Click="OnStopScanClick"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}">
                 <telerik:RadButton.Content>
                     <Grid>

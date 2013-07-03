@@ -53,19 +53,19 @@ namespace APTAT.Application
             scanCompletedWindow.Text.Text = String.Empty;
             if(e.SuccededCount > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans",  e.SuccededCount);
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Successful Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.SuccededCount);
             }
             if (e.CanceledCount > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", Environment.NewLine, e.CanceledCount);
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.CanceledCount);
             }
             if (e.FailedCount > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.FailedCount);
             } 
             if (e.NotPerformedCount > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.NotPerformedCount);
             }
 
             //scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total Scans", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
@@ -138,47 +138,7 @@ namespace APTAT.Application
            
         }
 
-        //private void OnBuildReportClick(Object sender, RoutedEventArgs e)
-        //{
-        //    HandleSelectedReportChanged();
 
-        //    ShowReport();
-        //}
-
-        //private void OnReportSelected(Object sender, SelectionChangedEventArgs e)
-        //{
-        //    ListBox listBox = (ListBox) sender;
-            
-        //    ReportButton.IsOpen = false;
-
-        //    if(_selectedReportIndex == -1)
-        //    {
-        //        _selectedReportIndex = listBox.SelectedIndex;
-        //    }
-        //    else
-        //    {
-        //        _selectedReportIndex = listBox.SelectedIndex;
-        //        HandleSelectedReportChanged();
-        //        ShowReport();
-        //    }
-        //}
-
-
-        private void HandleSelectedReportChanged()
-        {
-            if (_selectedReportIndex == 0)
-            {
-                _storageService.SetValue(KnownKeys.ReportKind, ReportKind.Executive);
-            }
-            else if (_selectedReportIndex == 1)
-            {
-                _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerDevice);
-            }
-            else if (_selectedReportIndex == 2)
-            {
-                _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerProgram);
-            }
-        }
 
         private static void ShowReport()
         {
@@ -211,21 +171,15 @@ namespace APTAT.Application
             
         }
 
-        //private void OnListBoxItemPreviewMouseLeftButtonDown(Object sender, MouseButtonEventArgs e)
-        //{
-
-        //    ((sender as ListBoxItem).Parent as ListBox).Items.IndexOf(sender);
-
-        //    ListBoxItem listBoxItem = (ListBoxItem) sender;
-        //    ListBox listBox = (ListBox)listBoxItem.Parent;
-
-        //    if(listBox.Items.IndexOf(listBoxItem) == listBox.SelectedIndex)
-        //    {
-        //        ReportButton.IsOpen = false;
-        //        ShowReport();
-        //    }
-        //}
-
-
+        private void OnStopScanClick(Object sender, RoutedEventArgs e)
+        {
+            ConfirmationWindow confirmation = new ConfirmationWindow();
+            confirmation.Owner = System.Windows.Application.Current.MainWindow;
+            
+            if(confirmation.ShowDialog() == true)
+            {
+                _viewModel.StopScanCommand.Execute(null);
+            }
+        }
     }
 }

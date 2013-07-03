@@ -22,7 +22,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            this.SourceInitialized += (x, y) =>
+            SourceInitialized += (x, y) =>
             {
                 this.HideMinimizeAndMaximizeButtons();
             };
@@ -38,10 +38,6 @@ namespace APTAT.Application
             Close();
         }
 
-        private void OnMinimize(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
