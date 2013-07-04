@@ -76,6 +76,7 @@
                 <TextBox x:Name="txtAdministrator" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
                 <PasswordBox x:Name="password"  BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
                 
+                <!--
                 <TextBlock Grid.Row="3" Grid.ColumnSpan="2"  TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,100,0,0" FontSize="11" Foreground="#222" FontFamily="Segoe UI"> 
                 <Run>NOTE: In order to successfully scan endpoint(s) the following should be done at target computers:</Run>
                 <LineBreak/>
@@ -85,7 +86,7 @@
                 <LineBreak/>
                 <Run>- set HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy DWORD to 1.</Run>
                 <LineBreak/>
-                </TextBlock>
+                </TextBlock>-->
 
 
             </Grid>

@@ -43,7 +43,7 @@ namespace APTAT.Application
             _storageService = new StorageService();
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
-
+  
         }
 
 
@@ -180,6 +180,32 @@ namespace APTAT.Application
             if(confirmation.ShowDialog() == true)
             {
                 _viewModel.StopScanCommand.Execute(null);
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            treeList.Rebind();
+        }
+
+     
+        private void treeList_RowLoaded(object sender, RowLoadedEventArgs e)
+        {
+            var row = e.Row as GridViewRow;
+            if (row != null)
+            {
+                ThreatInfoItem threatInfo = (ThreatInfoItem)row.DataContext;
+                row.IsExpandable = threatInfo.HasBadFiles && threatInfo.ScanStage == ScanStage.OperationCompleted;
+            }
+        }
+
+        private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
+        {
+            var row = e.Row;
+            if(row != null)
+            {
+                ThreatInfoItem threatInfo = (ThreatInfoItem)row.DataContext;
+                threatInfo.Items = threatInfo.Items;
             }
         }
     }

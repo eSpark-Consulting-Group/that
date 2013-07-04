@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Telerik.Windows.Data;
 
 namespace APTAT.Application.Models
 {
@@ -11,7 +12,7 @@ namespace APTAT.Application.Models
         private Int32 _malwareFilesCount;
         private String _statusMessage;
         private ScanStage _scanStage;
-        private ObservableCollection<ThreatInfoItem> _items;
+        private RadObservableCollection<ThreatInfoItem> _items;
 
         public Boolean HasBadFiles
         {
@@ -130,7 +131,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Items
+        public RadObservableCollection<ThreatInfoItem> Items
         {
             get { return _items; }
             set

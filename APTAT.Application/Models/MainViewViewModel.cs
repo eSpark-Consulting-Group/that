@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Data;
 
 namespace APTAT.Application.Models
 {
@@ -17,6 +18,7 @@ namespace APTAT.Application.Models
         private Guid _operationGuid;
         private DirectoryItem[] _selectedTargets;
 
+       // private Boolean _resolvingTargets;
         private Boolean _isReportEnabled;
         private Boolean? _isScanInProgress;
         private Int32 _scannedItemsCount;
@@ -27,6 +29,16 @@ namespace APTAT.Application.Models
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
         private ObservableCollection<ThreatInfoItem> _threatInfoItems;
+
+        //public Boolean ResolvingTargets
+        //{
+        //    get { return _resolvingTargets; }
+        //    set
+        //    {
+        //        _resolvingTargets = value;
+        //        RaisePropertyChanged("ResolvingTargets");
+        //    }
+        //}
 
         public Boolean? IsScanInProgress
         {
@@ -166,8 +178,6 @@ namespace APTAT.Application.Models
 
         public DelegateCommand StopScanCommand { get; private set; }
 
-        
-        
         public MainViewViewModel()
         {
             _aptService = AptService.Instance;
@@ -194,6 +204,7 @@ namespace APTAT.Application.Models
                     IsScanInProgress = null;
                     IsBusy = true;        
                     _aptService.ResolveDirectoryItems(_selectedTargets, this);
+                    //ResolvingTargets = true;
                 }
             }
         }
@@ -249,12 +260,17 @@ namespace APTAT.Application.Models
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
+            //ResolvingTargets = false;
+
             _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
 
             Items = new ObservableCollection<ThreatInfoItem>(e.Items);
+            
             IsBusy = false;
             IsScanInProgress = true;
+
+           
 
             String login = _storage.GetValue<String>(KnownKeys.Login, false);
             String password = _storage.GetValue<String>(KnownKeys.Password, true);
@@ -386,8 +402,8 @@ namespace APTAT.Application.Models
             ThreatInfoItem parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-        
-                ObservableCollection<ThreatInfoItem> items = new ObservableCollection<ThreatInfoItem>();        
+
+                RadObservableCollection<ThreatInfoItem> items = new RadObservableCollection<ThreatInfoItem>();        
                 if(e.ScanResult.BadFiles != null)
                 {
                     foreach (BadFileItem badFile in e.ScanResult.BadFiles)
