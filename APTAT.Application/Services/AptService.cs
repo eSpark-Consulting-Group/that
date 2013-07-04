@@ -113,8 +113,9 @@ namespace APTAT.Application.Services
 
         public void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState)
         {
-            Debug.Assert(password != null);
-            
+            Logger.Clear();
+            Logger.WriteLog("================= Begin Scan");
+
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain);
             scanner.ScanStarted += OnScanStarted;
@@ -138,6 +139,8 @@ namespace APTAT.Application.Services
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
+            Logger.WriteLog("Scan Started");
+
             BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
 
             if (BeginScanCompleted != null)
@@ -150,6 +153,7 @@ namespace APTAT.Application.Services
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
         {
+            Logger.WriteLog("Scan Completed");
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
             args.CanceledCount = e.CalceledCount;
@@ -358,7 +362,9 @@ namespace APTAT.Application.Services
                 }
                 ).ToArray();
                         
-             
+            Logger.WriteLog( "scanResult.BadFiles Count:" + scanResult.BadFiles.Length);
+            Logger.WriteLog("badFileItems Length:" + badFileItems.Length);
+
 
             resultItem.BadFiles = badFileItems;
             
