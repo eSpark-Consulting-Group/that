@@ -35,7 +35,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                     <Image Source="/Assets/comodo_white.png" Height="16" Margin="10,0,0,0"/>
-                    <TextBlock x:Name="txtTitle" Text="APT ASSESMENT TOOL" FontSize="18" Foreground="White" Margin="10,5,5,5" Grid.Column="1"/>
+                    <TextBlock x:Name="txtTitle" Text="APT ASSESSMENT TOOL" FontSize="18" Foreground="White" Margin="10,5,5,5" Grid.Column="1"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2">
                     <Button Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
                     
