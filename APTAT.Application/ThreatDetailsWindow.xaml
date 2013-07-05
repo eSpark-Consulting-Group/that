@@ -4,7 +4,7 @@
         Title="DETAILS"
         MaxWidth="850" 
         MaxHeight="420"
-        MinWidth="850" 
+        MinWidth="915" 
         MinHeight="420"
         WindowStyle="None"
                 AllowsTransparency="True" Background="Transparent" BorderThickness="3"
@@ -27,7 +27,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="DETAILS" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
+                    <TextBlock Text="Details" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
                         <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
                     </StackPanel>

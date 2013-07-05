@@ -38,15 +38,15 @@ namespace APTAT.Application.Models
 
             if(kind == ReportKind.DetailedPerProgram)
             {
-                Header = "DETAILED REPORT PER PROGRAM ";
+                Header = "Detailed Report Per Program";
             }
             else if(kind == ReportKind.DetailedPerDevice)
             {
-                Header = "DETAILED REPORT PER DEVICE";
+                Header = "Detailed Report Per Device";
             }
             else if(kind == ReportKind.Executive)
             {
-                Header = "EXECUTIVE REPORT";
+                Header = "Executive Report";
             }
 
             _aptService.BuildReportCompleted += OnBuildReportCompleted;

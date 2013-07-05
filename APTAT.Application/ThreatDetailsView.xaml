@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
                  FontSize="14"
+                 Foreground="#555"
             SnapsToDevicePixels="True"
 	 >
 
@@ -38,7 +39,7 @@
         
             <TextBlock  x:Name="txtSelectComputers" Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center"  Text="{Binding FileName}" FontSize="20" Margin="30,8,20,8" Grid.Column="1"/>
         </Grid>
-        <Grid Background="White" Grid.Row="1">
+        <Grid Background="White" Grid.Row="1" Margin="65,0,0,0">
             <ScrollViewer  BorderThickness="0,0,0,0">
             <Grid x:Name="gridProperties" Margin="5, 0"  VerticalAlignment="Top" HorizontalAlignment="Left"  >
                 <Grid.Resources>

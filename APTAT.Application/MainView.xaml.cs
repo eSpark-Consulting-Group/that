@@ -52,24 +52,11 @@ namespace APTAT.Application
         {
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
             scanCompletedWindow.Text.Text = String.Empty;
-            if(e.SuccededCount > 0)
-            {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Successful Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.SuccededCount);
-            }
-            if (e.CanceledCount > 0)
-            {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.CanceledCount);
-            }
-            if (e.FailedCount > 0)
-            {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.FailedCount);
-            } 
-            if (e.NotPerformedCount > 0)
-            {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", scanCompletedWindow.Text.Text != String.Empty ? Environment.NewLine : String.Empty, e.NotPerformedCount);
-            }
-
-            //scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total Scans", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
+            scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", Environment.NewLine, e.CanceledCount);
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             scanCompletedWindow.ShowDialog();
         }

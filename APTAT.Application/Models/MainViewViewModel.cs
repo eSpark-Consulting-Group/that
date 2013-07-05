@@ -88,9 +88,9 @@ namespace APTAT.Application.Models
             {
                 if (IsScanInProgress == true )
                 {
-                    return String.Format("APT ASSESSMENT TOOL ({0}% scanning...)", Percentage);
+                    return String.Format("APT Assessment Tool ({0}% scanning...)", Percentage);
                 }
-                return "APT ASSESSMENT TOOL";
+                return "APTAssessment Tool";
             }
         }
 

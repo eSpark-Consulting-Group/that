@@ -33,7 +33,15 @@ namespace APTAT.Application.Models
 
         public String NameAndIpAddress
         {
-            get { return String.Format("{0} ({1})", Name, IpAddress); }
+            get
+            {
+                if(String.IsNullOrWhiteSpace(IpAddress) == false)
+                {
+                    return String.Format("{0} ({1})", Name, IpAddress);    
+                }
+
+                return Name;
+            }
         }
 
         public String SizeString { get; set; }

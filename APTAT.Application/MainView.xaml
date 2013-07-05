@@ -153,7 +153,7 @@
                                    Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
                                    Grid.Column="1"
                                    Grid.Row="1" Grid.ColumnSpan="5" Text="{Binding StatusMessage}" FontSize="12" />
-                        <!--Foreground="{Binding ScanStage, Converter={StaticResource ScanStageToBrushConverter}}"-->
+                   
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="UnknownFileTemplate">
@@ -177,8 +177,11 @@
                             <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FFFFAA00" Height="16" Stretch="Fill" Width="16" UseLayoutRounding="False" VerticalAlignment="Top"/>
                             <Path Data="M1.188,7.9370117 C1.8441142,7.9370117 2.3759999,8.4688978 2.3759999,9.1250114 C2.3759999,9.781126 1.8441142,10.313012 1.188,10.313012 C0.53188568,10.313012 -7.4505806E-09,9.781126 0,9.1250114 C-7.4505806E-09,8.4688978 0.53188568,7.9370117 1.188,7.9370117 z M0.10499457,0 L2.2299945,0 L2.2299945,6.5619998 L0.10499457,6.5619998 z" Fill="White" Height="10.313" Stretch="Fill" Width="2.376" UseLayoutRounding="False" Canvas.Left="6.811" Canvas.Top="2.687"/>
                         </Canvas>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                        <TextBlock Text="{Binding Name}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
                     </Grid>
+                </DataTemplate>
+                <DataTemplate x:Key="SizeColumn">
+                    <TextBlock Text="{Binding SizeString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Size}"/>
                 </DataTemplate>
                 <TemplateSelectors:MainViewNameTemplateSelector x:Key="NameTemplateSelector" 
                                                                 UnknownFileTemplate="{StaticResource UnknownFileTemplate}"
@@ -188,15 +191,14 @@
                 <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
-                <!--CellTemplate="{StaticResource NameTemplate}"-->
                 <telerik:GridViewColumn 
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="NAME"
                     Width="850" 
                  SortMemberPath="Name" />
-                <telerik:GridViewDataColumn 
+                <telerik:GridViewColumn 
+                    CellTemplate="{StaticResource SizeColumn}"
                     SortMemberPath="Size"
-                    DataMemberBinding="{Binding SizeString}"
                     IsFilterable="False"
                     Header="SIZE"  
                     Width="*"/>
@@ -262,7 +264,7 @@
                     </Grid>
                 </telerik:RadButton.Content>
             </telerik:RadButton>
-            <!--<telerik:RadToolBarSeparator Margin="0"/>-->
+     
             <telerik:RadButton Margin="5,-1,30,-1"
                                FontSize="18"
                                  Padding="10,20"
@@ -284,52 +286,7 @@
                     </Grid>
                 </telerik:RadButton.Content>
             </telerik:RadButton>
-            <!--<telerik:RadToolBarSeparator Margin="0"/>-->
-            <!--<telerik:RadButton Margin="5,-1,30,-1"
-                               FontSize="18"
-                              Padding="2,20"
-                               IsEnabled="{Binding IsReportEnabled}"
-                               Click="OnBuildReportClick">
-                <telerik:RadButton.Content>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Path Data="M8.078,2.445L12.921,2.445L12.921,18.555L8.078,18.555z M14.09,6.596L18.933,6.596L18.933,18.555L14.09,18.555z M2.067,11.241L6.91,11.241L6.91,18.555L2.067,18.555z"
-                              Fill="#FF595E6B" 
-                              Height="16.11" 
-                              Width="16.866"
-                              Margin="0,0,10,0"/>
-                        <TextBlock Text="Build Report" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
-                    </Grid>
-                </telerik:RadButton.Content>
-            </telerik:RadButton>-->
-            <!--IsEnabled="{Binding IsReportEnabled}"-->
-
-
-
-            <!--<telerik:RadSplitButton HorizontalAlignment="Left" 
-                              Margin="5,-1,5,-1"
-                              FontSize="18"
-                            Style="{StaticResource RadSplitBtnStyle}"
-                              Padding="10,20"
-            IsEnabled="{Binding IsReportEnabled}"              
-                              Click="OnBuildReportClick"
-                              x:Name="ReportButton"
-                              VerticalAlignment="Top"
-                                    
-                        ContentTemplate="{StaticResource ReportButtonContentTemplate}"
-                        Content="{Binding Path=SelectedItem.Content, ElementName=ReportActions}">
-                <telerik:RadSplitButton.DropDownContent>
-                    <ListBox x:Name="ReportActions" SelectionMode="Single" SelectionChanged="OnReportSelected">
-                        <ListBoxItem ContentTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Content="Executive Report" IsSelected="True"  PreviewMouseLeftButtonDown="OnListBoxItemPreviewMouseLeftButtonDown" />
-                        <ListBoxItem  ContentTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Content="Per Device Report"  PreviewMouseLeftButtonDown="OnListBoxItemPreviewMouseLeftButtonDown" />
-                        <ListBoxItem  ContentTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Content="Per Program Report"   PreviewMouseLeftButtonDown="OnListBoxItemPreviewMouseLeftButtonDown"/>
-                    </ListBox>
-                </telerik:RadSplitButton.DropDownContent>
-            </telerik:RadSplitButton>-->
-            <!---->
+           
             <telerik:RadDropDownButton AutoOpenDelay="0:0:0.0"
                            Content="Reports"
                                        IsEnabled="{Binding IsReportEnabled}"
@@ -351,29 +308,9 @@
                 </telerik:RadDropDownButton.DropDownContent>
             </telerik:RadDropDownButton>
 
-            <!--<telerik:RadToolBarSeparator Margin="0"/>-->
-            <!--<telerik:RadButton Margin="5,-1" 
-                          Padding="10,20"
-                               IsEnabled="False" FontSize="18">
-                <telerik:RadButton.Content>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Path Data="F1M16.1997,4.8006C14.7417,3.3456,12.7257,2.4436,10.4997,2.4436C8.2737,2.4436,6.2577,3.3456,4.8007,4.8006C3.3447,6.2586,2.4437,8.2746,2.4437,10.4996C2.4437,12.7266,3.3447,14.7416,4.8007,16.1996C6.2577,17.6546,8.2737,18.5556,10.4997,18.5556C12.7257,18.5556,14.7417,17.6546,16.1997,16.1996C17.6547,14.7416,18.5567,12.7266,18.5567,10.4996C18.5567,8.2746,17.6547,6.2586,16.1997,4.8006 M10.4997,7.9836C9.5867,7.9836,8.8467,7.2436,8.8467,6.3306C8.8467,5.4176,9.5867,4.6766,10.4997,4.6766C11.4127,4.6766,12.1537,5.4176,12.1537,6.3306C12.1537,7.2436,11.4127,7.9836,10.4997,7.9836 M12.0017,16.3236L8.9987,16.3236L8.9987,9.4836L12.0017,9.4836z M10.4997,0.4426C13.2737,0.4426,15.7887,1.5696,17.6077,3.3876L17.6127,3.3926C19.4307,5.2116,20.5577,7.7266,20.5577,10.4996C20.5577,13.2746,19.4307,15.7886,17.6127,17.6076L17.6077,17.6126C15.7887,19.4306,13.2737,20.5566,10.4997,20.5566C7.7247,20.5566,5.2117,19.4306,3.3927,17.6126L3.3877,17.6076C1.5697,15.7886,0.4427,13.2746,0.4427,10.4996C0.4427,7.7266,1.5697,5.2116,3.3877,3.3926L3.3927,3.3876C5.2117,1.5696,7.7247,0.4426,10.4997,0.4426"
-                              Fill="#FF595E6B" 
-                              Height="20.114" 
-                              Stretch="Fill" 
-                              Margin="0,0,10,0"
-                              Width="20.115"/>
-
-                        <TextBlock Text="About" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
-                    </Grid>
-                </telerik:RadButton.Content>
-            </telerik:RadButton>-->
+   
         </telerik:RadToolBar>
-        <!--Background="#FFF38546"-->
+  
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
             <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="35" >
