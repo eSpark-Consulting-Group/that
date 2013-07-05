@@ -22,7 +22,9 @@ namespace APTAT.Core.Reports
             if (data == null)
                 return null;
 
-            _fileName = GetFileName(reportType);
+            _fileName = GetFileName(data.OperationUid, reportType);
+            if (File.Exists(_fileName))
+                return _fileName;
 
             switch (reportType)
             {
@@ -44,8 +46,8 @@ namespace APTAT.Core.Reports
 
         private static void BuildExecutiveReport(string fileName, AptReportData data)
         {
-            Microsoft.Reporting.WinForms.ReportDataSource fileRatingDataSource = new Microsoft.Reporting.WinForms.ReportDataSource("FileRatingDataSet", data.GetFileRatingCollection());
-            Microsoft.Reporting.WinForms.ReportDataSource devicesRatingDataSource = new Microsoft.Reporting.WinForms.ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
+            ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollection());
+            ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
 
             GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.Executive.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
         }
@@ -72,16 +74,16 @@ namespace APTAT.Core.Reports
 
         private static void GenerateExecutiveReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters, params ReportDataSource[] additionDataSource)
         {
-            try
+            using (LocalReport localReport = new LocalReport())
             {
-                LocalReport localReport = new LocalReport();
-                Stream reportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
+                Stream reportContentStream =
+                    Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
                 localReport.LoadReportDefinition(reportContentStream);
 
                 //ReportParameter languageParam = new Microsoft.Reporting.WinForms.ReportParameter("Language", cultureInfo.Name);
                 //ReportParameter dateCreated = new Microsoft.Reporting.WinForms.ReportParameter("DateCreated", TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZone).ToString());
                 ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
-                localReport.SetParameters(new[] { reportDateParam });
+                localReport.SetParameters(new[] {reportDateParam});
 
                 if (parameters != null && parameters.Count() > 0)
                     localReport.SetParameters(parameters);
@@ -98,17 +100,12 @@ namespace APTAT.Core.Reports
 
                 ExportToFile(path, localReport);
             }
-            catch (Exception ex)
-            {
-                //MessageBox.Show(ex.Message);
-            }
         }
 
         private static void GenerateDetailedPerDevicesReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters, IEnumerable<ReportDataSource> additionDataSource, IEnumerable<SubReportContext> subReports)
         {
-            try
+            using (LocalReport localReport = new LocalReport())
             {
-                LocalReport localReport = new LocalReport();
 
                 //===========================================================================
                 SubreportProcessingEventHandler subReportProcessingDelegate = null;
@@ -176,19 +173,14 @@ namespace APTAT.Core.Reports
                 }
 
 
-                ExportToFile(path, localReport);
-            }
-            catch (Exception ex)
-            {
-                //MessageBox.Show(ex.Message);
+                ExportToFile(path, localReport, subReportProcessingDelegate);
             }
         }
 
         private static void GenerateDetailedPerProgramReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters, IEnumerable<ReportDataSource> additionDataSource, IEnumerable<SubReportContext> subReports)
         {
-            try
+            using (LocalReport localReport = new LocalReport())
             {
-                LocalReport localReport = new LocalReport();
 
                 //===========================================================================
                 SubreportProcessingEventHandler subReportProcessingDelegate = null;
@@ -241,15 +233,11 @@ namespace APTAT.Core.Reports
                 }
 
 
-                ExportToFile(path, localReport);
-            }
-            catch (Exception ex)
-            {
-                //MessageBox.Show(ex.Message);
+                ExportToFile(path, localReport, subReportProcessingDelegate);
             }
         }
 
-        private static void ExportToFile(string path, LocalReport localReport)
+        private static void ExportToFile(string path, LocalReport localReport, SubreportProcessingEventHandler subReportProcessingDelegate = null)
         {
             const string exportType = "PDF";
 
@@ -268,7 +256,11 @@ namespace APTAT.Core.Reports
                 out streams,
                 out warnings);
 
-            localReport.Dispose();
+            localReport.DataSources.Clear();
+            localReport.SetParameters(new ReportParameter[0]);
+            if (subReportProcessingDelegate != null)
+                localReport.SubreportProcessing -= subReportProcessingDelegate;
+            localReport.ReleaseSandboxAppDomain();
 
             using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
@@ -276,18 +268,17 @@ namespace APTAT.Core.Reports
             }
         }
 
-        private static string GetFileName(ReportType reportType)
+        private static string GetFileName(Guid operatationUid, ReportType reportType)
         {
-            const string fileFormatString = "{0}{1:yyyyMMddHHmmssffff}.pdf";
-            DateTime reportDate = DateTime.Now;
+            const string fileFormatString = "{0}{1}.pdf";
             switch (reportType)
             {
                 case ReportType.Executive:
-                   return String.Format(fileFormatString, ExecutiveReportName, reportDate);
+                    return String.Format(fileFormatString, ExecutiveReportName, operatationUid);
                 case ReportType.DetailedPerDevice:
-                   return String.Format(fileFormatString, DetailedPerDeviceReportName, reportDate);
+                    return String.Format(fileFormatString, DetailedPerDeviceReportName, operatationUid);
                 case ReportType.DetailedPerProgram:
-                   return String.Format(fileFormatString, DetailedPerProgramReportName, reportDate);
+                    return String.Format(fileFormatString, DetailedPerProgramReportName, operatationUid);
                 default:
                     throw new ArgumentOutOfRangeException("reportType");
             }

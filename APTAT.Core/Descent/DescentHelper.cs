@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Net;
 using APTAT.Core;
+using APTAT.Core.Descent;
 
 namespace APTAT.Core.Descent
 {
@@ -275,6 +276,7 @@ namespace APTAT.Core.Descent
                 public int UnknownFilesFound { get; set; }
                 public int SafeFilesFound { get; set; }
                 public int MalwaresFound { get; set; }
+                public int EmptyFilesFound { get; set; }
                 public long TotalFilesSize { get; set; }
 
                 public int Percentage
@@ -612,11 +614,12 @@ namespace APTAT.Core.Descent
 				}
 
 
-                int attemptsCount = 20;
+                int findFileAttemptsCount = 20;
+                int readFileAttemptsCount = 20;
                 while (true/*attemptsCount > 0*/)
                 {
-                    if (attemptsCount > 0)
-                        --attemptsCount;
+                    if (findFileAttemptsCount > 0)
+                        --findFileAttemptsCount;
 
                     try
                     {
@@ -625,8 +628,13 @@ namespace APTAT.Core.Descent
                             byte[] buf = new byte[fs.Length];
                             fs.Read(buf, 0, (int)fs.Length);
                             string data = Encoding.Unicode.GetString(buf);
-                            if(String.IsNullOrEmpty(data))
-                                throw new Exception("Response file is empty");
+                            if (String.IsNullOrEmpty(data))
+                            {
+                                if (readFileAttemptsCount > 0)
+                                    --readFileAttemptsCount;
+                                throw new StatusFileEmptyException();
+                            }
+                            readFileAttemptsCount = 20;
 
                             string[] temp = data.Split(';');
                             if (temp.Length != 12)
@@ -710,7 +718,7 @@ namespace APTAT.Core.Descent
 
                                 File.Copy(_resultsFile, resultsFileLocal, true);
                                 //File.Delete(resultsFile);
-                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares });
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, EmptyFilesFound = emptyFiles});
                                 break;
                             }
                             else if( status == EnAptStage.EnApt_Failed )
@@ -808,11 +816,27 @@ namespace APTAT.Core.Descent
                     catch (FileNotFoundException ex)
                     {
                         // If file is not found, we can sleep and try again
-                        if (attemptsCount == 0)
+                        if (findFileAttemptsCount == 0)
                         {
                             // unless attempts count is zero...
                             const DescentStatus status = DescentStatus.status_remote_invalid_response;
                             InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid});
+                            throw new DescentException(status, ex.Message, 0);
+                        }
+                        else
+                        {
+                            // sleep and try again
+                            Thread.Sleep(1000);
+                        }
+                    }
+                    catch(StatusFileEmptyException ex)
+                    {
+                        // If file is not found, we can sleep and try again
+                        if (readFileAttemptsCount == 0)
+                        {
+                            // unless attempts count is zero...
+                            const DescentStatus status = DescentStatus.status_remote_invalid_response;
+                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid });
                             throw new DescentException(status, ex.Message, 0);
                         }
                         else

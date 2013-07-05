@@ -22,16 +22,16 @@ namespace APTAT.Core
                 using (FileStream fs = new FileStream(result.FileName, FileMode.Open))
                 {
                     XmlSerializer xs = new XmlSerializer(typeof(AptReport));
-                    result.AptReport = xs.Deserialize(fs) as AptReport;
+                    result.SetAptReportInstance(xs.Deserialize(fs) as AptReport);
                 }
 
-                try
-                {
-                    File.Delete(result.FileName);
-                }
-                catch
-                {
-                }
+                //try
+                //{
+                //    File.Delete(result.FileName);
+                //}
+                //catch
+                //{
+                //}
 
                 //XDocument xDocument = XDocument.Load(result.FileName);
                 //foreach (XElement element in xDocument.Descendants("File"))

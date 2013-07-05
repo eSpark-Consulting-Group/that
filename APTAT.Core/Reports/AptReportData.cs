@@ -13,7 +13,9 @@ namespace APTAT.Core.Reports
         private int _safeFilesCount = -1;
         private int _unknownFilesCount = -1;
         private int _malwareFilesCount = -1;
+        private int _emptyFilesCount = -1;
 
+        public Guid OperationUid { get; set; }
         public string TargetsSource { get; set; }
 
         public DateTime ScanStarted { get; set; }
@@ -67,6 +69,16 @@ namespace APTAT.Core.Reports
                 return _malwareFilesCount;
             }
         }
+
+        public int EmptyFilesFound
+        {
+            get
+            {
+                if (_emptyFilesCount == -1)
+                    CalculateTotal();
+                return _emptyFilesCount;
+            }
+        }
         
         public AptRiskAssessmentLevel TargetsSafetyLevel
         {
@@ -93,7 +105,12 @@ namespace APTAT.Core.Reports
             {
                 if (TotalFilesScanned == 0)
                     return -1;
-                return (int)((double) SafeFilesCount/TotalFilesScanned * 100);
+
+                int total = TotalTargetsCount - EmptyFilesFound;
+                if (total <= 0)
+                    return -1;
+
+                return (int)((double)SafeFilesCount / total * 100);
             }
         }
 
@@ -115,6 +132,7 @@ namespace APTAT.Core.Reports
             _safeFilesCount = 0;
             _unknownFilesCount = 0;
             _malwareFilesCount = 0;
+            _emptyFilesCount = 0;
             
             foreach (var scanResult in Targets)
             {
@@ -124,6 +142,7 @@ namespace APTAT.Core.Reports
                     _safeFilesCount += scanResult.SafeFilesCount;
                     _unknownFilesCount += scanResult.UnknownFilesCount;
                     _malwareFilesCount += scanResult.MalwareFilesCount;
+                    _emptyFilesCount += scanResult.EmptyFilesCount;
                 }
             }
         }

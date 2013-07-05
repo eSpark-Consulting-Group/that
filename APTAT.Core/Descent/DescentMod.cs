@@ -410,6 +410,7 @@ namespace APTAT.Core.Descent
                         result.UnknownFilesCount = args.UnknownFilesFound;
                         result.SafeFilesCount = args.SafeFilesFound;
                         result.MalwareFilesCount = args.MalwaresFound;
+                        result.EmptyFilesCount = args.EmptyFilesFound;
                     }
                     //_scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, HostName = args.HostName, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
                 };

@@ -21,8 +21,8 @@ namespace APTAT.Core
         {
             get
             {
-                if (AptReport != null && AptReport.Computer != null && AptReport.Computer.Os != null)
-                    return AptReport.Computer.Os.ToString();
+                if (_aptReport != null && _aptReport.Computer != null && _aptReport.Computer.Os != null)
+                    return _aptReport.Computer.Os.ToString();
                 return null;
             }
         }
@@ -62,24 +62,28 @@ namespace APTAT.Core
             get; set;
         }
 
+        public int EmptyFilesCount { get; set; }
+
         public int RunningProgramsCount
         {
-            get
-            {
-                if (AptReport != null && AptReport.Processes != null)
-                    return AptReport.Processes.Length;
-                return 0;
-            }
+            //get
+            //{
+            //    if (_aptReport != null && _aptReport.Processes != null)
+            //        return _aptReport.Processes.Length;
+            //    return 0;
+            //}
+            get; set;
         }
 
         public int AutorunsCount
         {
-            get
-            {
-                if (AptReport != null && AptReport.Autoruns != null)
-                    return AptReport.Autoruns.Length;
-                return 0;
-            }
+            //get
+            //{
+            //    if (_aptReport != null && _aptReport.Autoruns != null)
+            //        return _aptReport.Autoruns.Length;
+            //    return 0;
+            //}
+            get; set;
         }
 
         public string ResultErrorText { get; set; }
@@ -130,10 +134,10 @@ namespace APTAT.Core
         {
             get
             {
-                if (AptReport != null)
+                if (_aptReport != null)
                 {
                     // Sort out empty files (size = 0 and hash = 000000000...)
-                    var notEmptyFiles = from file in AptReport.Modules where file.Size > 0 select file;
+                    var notEmptyFiles = from file in _aptReport.Modules where /*file.Size > 0*/ !file.Sha1.StartsWith("0000000000000000000000000000000000000000") select file;
                     return notEmptyFiles.ToArray();
                 }
                 return null;
@@ -216,7 +220,22 @@ namespace APTAT.Core
             return uniqueFiles.Values.ToArray();
         }
 
-        public AptReport AptReport { get; set; }
+        public void SetAptReportInstance(AptReport report)
+        {
+            _aptReport = report;
+
+            if (_aptReport != null)
+            {
+                RunningProgramsCount = _aptReport.Processes != null ? _aptReport.Processes.Length : 0;
+                AutorunsCount = _aptReport.Autoruns != null ? _aptReport.Autoruns.Length : 0;
+
+                // TODO: Remove this if Processes and Autoruns data is needed.
+                _aptReport.Processes = null;
+                _aptReport.Autoruns = null;
+            }
+        }
+
+        private AptReport _aptReport;
     }
 
     public class UnknownFile
