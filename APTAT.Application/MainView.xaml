@@ -207,7 +207,7 @@
         <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
                    HorizontalAlignment="Center" Grid.Row="1">
 
-            <TextBlock Text="There is no scans have been preformed yet."
+            <TextBlock Text="There are no scans have been preformed yet."
                    Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                    FontSize="21"
                    FontFamily="Segoe UI Light"/>
