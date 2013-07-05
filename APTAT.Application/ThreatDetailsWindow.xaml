@@ -28,8 +28,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Details" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3" Height="50"  Margin="5,5,30,5" HorizontalAlignment="Right" >
+                        <Button Content="Close" Margin="5"  Click="OnBackClick" Style="{StaticResource ButtonNormalStyle}"/>
                     </StackPanel>
                 </Grid>
             </Border>

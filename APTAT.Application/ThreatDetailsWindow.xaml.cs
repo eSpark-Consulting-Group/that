@@ -38,9 +38,6 @@ namespace APTAT.Application
             DragMove();
         }
 
-        private void OnCloseClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+ 
     }
 }

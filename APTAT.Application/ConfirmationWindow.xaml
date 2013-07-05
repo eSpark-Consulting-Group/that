@@ -63,9 +63,7 @@
                     <Button Content="No"  Margin="5,5,5,15" Click="NoClick"  Style="{StaticResource ButtonHighlightStyle}" ></Button>
                 </StackPanel>
             </Grid>
-            <!--<Border Height="60" Width="10" Background="{StaticResource AccentBrush}"
-                   
-                    VerticalAlignment="Top" Margin="0,20,0,0" HorizontalAlignment="Left" Grid.Row="2"/>-->
+
         </Grid>
 
 

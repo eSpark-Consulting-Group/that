@@ -195,5 +195,12 @@ namespace APTAT.Application
                 threatInfo.Items = threatInfo.Items;
             }
         }
+
+        private void AboutClick(Object sender, RoutedEventArgs e)
+        {
+            AboutWindow about = new AboutWindow();
+            about.Owner = System.Windows.Application.Current.MainWindow;
+            about.ShowDialog();
+        }
     }
 }
