@@ -33,9 +33,16 @@ namespace APTAT.Application
             DataContext = _viewModel = new ReportViewModel();
             _viewModel.ReportOpened += OnReportOpened;
 
-            
+            Unloaded += OnUnloaded;
 
             pdfViewer.DefaultFormatProviderSettings = FormatProviderSettings.ReadOnDemand;
+        }
+
+        private void OnUnloaded(Object sender, RoutedEventArgs e)
+        {
+            _viewModel.ReportOpened -= OnReportOpened;
+            pdfViewer.DocumentSource = null;
+            DataContext = null;
         }
 
         private void OnReportOpened(Object sender, EventArgs e)
