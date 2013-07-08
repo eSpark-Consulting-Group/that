@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
 using APTAT.Application.Models;
+using Telerik.Windows.Controls;
 using Telerik.Windows.Documents.Fixed;
 using Telerik.Windows.Documents.Fixed.FormatProviders;
 
@@ -40,6 +41,21 @@ namespace APTAT.Application
 
         private void OnUnloaded(Object sender, RoutedEventArgs e)
         {
+            btnPrintPdfDocument.Command = null;
+            btnPageDown.Command = null;
+            btnPageUp.Command = null;
+            btnNext.Command = null;
+            btnPrev.Command = null;
+            btnZoomIn.Command = null;
+            btnZoomOut.Command = null;
+            tbFind.Text = null;
+            tbPagesCount.Text = null;
+
+            BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
+            BindingOperations.ClearBinding(cbScale, RadComboBox.TextProperty);
+            BindingOperations.ClearBinding(btnTogglePan, RadToggleButton.IsCheckedProperty);
+            BindingOperations.ClearBinding(btnToggleTextSelection, RadToggleButton.IsCheckedProperty);
+
             _viewModel.ReportOpened -= OnReportOpened;
             pdfViewer.DocumentSource = null;
             DataContext = null;

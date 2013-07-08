@@ -24,14 +24,13 @@ namespace APTAT.Application
             InitializeComponent();
 
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
 
             SourceInitialized += (x, y) =>
             {
                 this.HideMinimizeAndMaximizeButtons();
             };
         }
-
-      
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
@@ -43,18 +42,29 @@ namespace APTAT.Application
             DragMove();
         }
 
-       private void OnLoaded(Object sender, RoutedEventArgs e)
+        private void OnUnloaded(Object sender, RoutedEventArgs e)
+        {
+            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(TitleProperty, typeof (Window));
+            if (dpd != null)
+            {
+                dpd.RemoveValueChanged(this, Changed);
+            }
+        }
+
+        private void OnLoaded(Object sender, RoutedEventArgs e)
         {
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(TitleProperty, typeof(Window));
             if (dpd != null)
             {
-                dpd.AddValueChanged(this, delegate
-                {
-                    if (txtTitle != null)
-                    {
-                        txtTitle.Text = Title;
-                    }
-                });
+                dpd.AddValueChanged(this, Changed);
+            }
+        }
+
+        private void Changed(Object sender, EventArgs e)
+        {
+            if (txtTitle != null)
+            {
+                txtTitle.Text = Title;
             }
         }
     }

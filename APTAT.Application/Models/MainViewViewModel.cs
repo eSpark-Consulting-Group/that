@@ -90,7 +90,7 @@ namespace APTAT.Application.Models
                 {
                     return String.Format("APT Assessment Tool ({0}% scanning...)", Percentage);
                 }
-                return "APTAssessment Tool";
+                return "APT Assessment Tool";
             }
         }
 
