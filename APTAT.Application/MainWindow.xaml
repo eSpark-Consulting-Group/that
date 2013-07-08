@@ -6,7 +6,7 @@
                 WindowStyle="None"
          
                 AllowsTransparency="True" Background="Transparent" BorderThickness="3"
-                ResizeMode="CanResizeWithGrip" Icon="CAPT_icon.ico"
+                ResizeMode="CanResizeWithGrip" 
         
         
         >

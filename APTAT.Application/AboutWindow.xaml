@@ -37,7 +37,7 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image Source="/Assets/AboutLogo.png" Stretch="None" HorizontalAlignment="Left" Margin="5"/>
+                <Image Source="/Assets/AboutLogo.png" Stretch="None" HorizontalAlignment="Left" Margin="10"/>
                 <StackPanel Grid.Row="1">
                     <TextBlock Text="Product Version:       1.0.0.0" FontFamily="Segoe UI Light" Grid.Row="1" Margin="15,0,10,5" Foreground="#555" FontSize="13"></TextBlock>
                     <TextBlock Text="© 2013 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI Light" Grid.Row="1" Margin="15,0,10,0" Foreground="#555" FontSize="13"></TextBlock>

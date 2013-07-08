@@ -55,7 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>CAPT_icon.ico</ApplicationIcon>
+    <ApplicationIcon>APT.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -271,6 +271,7 @@
     </Compile>
     <Resource Include="Assets\comodo_white.png" />
     <Resource Include="Assets\AboutLogo.png" />
+    <Resource Include="APT.ico" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -288,7 +289,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="SfxPackage\7zSD.sfx" />
-    <Resource Include="CAPT_icon.ico" />
     <Content Include="Fonts\segoeui.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
