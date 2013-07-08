@@ -74,8 +74,12 @@ void Bootstrapper::LaunchApplication()
     PROCESS_INFORMATION pi;
 
 	LPWSTR szCmdline = _tcsdup(APP);
+	
 	CreateProcess(NULL,szCmdline , NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+
 	free(szCmdline);
+
+	WaitForSingleObject(pi.hProcess, INFINITE);
 }
 
 bool  Bootstrapper::FileExists(LPCTSTR szPath)
