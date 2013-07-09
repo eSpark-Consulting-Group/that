@@ -10,12 +10,12 @@ namespace APTAT.Application
     {
         public static void Clear()
         {
-            File.Delete("APTAT.Application.Log.txt");
+           // File.Delete("APTAT.Application.Log.txt");
         }
 
         public static void WriteLog(String text)
         {
-            File.AppendAllText("APTAT.Application.Log.txt",  text + Environment.NewLine);
+           // File.AppendAllText("APTAT.Application.Log.txt",  text + Environment.NewLine);
         }
     }
 }

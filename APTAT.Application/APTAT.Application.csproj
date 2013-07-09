@@ -138,8 +138,6 @@
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
-    <Compile Include="DesignGrid.cs" />
-    <Compile Include="DesignTimeGrid.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
     <Compile Include="ReportView.xaml.cs">

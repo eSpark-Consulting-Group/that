@@ -50,6 +50,7 @@ namespace APTAT.Application
 
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
+            
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
             scanCompletedWindow.Text.Text = String.Empty;
             scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
@@ -62,6 +63,7 @@ namespace APTAT.Application
         }
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {
+           
             ThreatDetailsWindow details = new ThreatDetailsWindow();
             details.Owner = System.Windows.Application.Current.MainWindow;
             details.ShowDialog();

@@ -113,8 +113,8 @@ namespace APTAT.Application.Services
 
         public void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState)
         {
-            Logger.Clear();
-            Logger.WriteLog("================= Begin Scan");
+            //Logger.Clear();
+            //Logger.WriteLog("================= Begin Scan");
 
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain);
@@ -139,7 +139,7 @@ namespace APTAT.Application.Services
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-            Logger.WriteLog("Scan Started");
+            //Logger.WriteLog("Scan Started");
 
             BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
 
@@ -153,7 +153,7 @@ namespace APTAT.Application.Services
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
         {
-            Logger.WriteLog("Scan Completed");
+            //Logger.WriteLog("Scan Completed");
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
             args.CanceledCount = e.CalceledCount;
@@ -340,7 +340,7 @@ namespace APTAT.Application.Services
             };
 
 
-            BadFileItem[] badFileItems = null;
+            BadFileItem[] badFileItems;
 
             badFileItems = scanResult.BadFiles
                 .Select(m => new BadFileItem
@@ -361,10 +361,7 @@ namespace APTAT.Application.Services
                     IsUnknown = m.Cloud == CloudVerdict.Unknown || m.Cloud == CloudVerdict.FirstSeen
                 }
                 ).ToArray();
-                        
-            Logger.WriteLog( "scanResult.BadFiles Count:" + scanResult.BadFiles.Length);
-            Logger.WriteLog("badFileItems Length:" + badFileItems.Length);
-
+        
 
             resultItem.BadFiles = badFileItems;
             
@@ -377,34 +374,34 @@ namespace APTAT.Application.Services
 
         public void Changed(params ChangesTrackingItem[] arg)
         {
-            Action<ChangesTrackingItem[]> action = items =>
+            ScanProgressItem[] scanProgressItems = new ScanProgressItem[arg.Length];
+            for (Int32 i = 0; i < arg.Length; ++i)
             {
-                ScanProgressItem[] scanProgressItems = new ScanProgressItem[items.Length];
-                for (Int32 i = 0; i < items.Length; ++i)
+                ChangesTrackingItem changesTrackingItem = arg[i];
+                DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
+                if (descentProgressItem != null)
                 {
-                    ChangesTrackingItem changesTrackingItem = items[i];
-                    DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
-                    if (descentProgressItem != null)
-                    {
-                        ScanProgressItem progressItem = new ScanProgressItem();
-                        progressItem.ComputerGuid = descentProgressItem.ComputerUid;
-                        progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
-                        progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
-                        progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
-                        progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
-                        progressItem.OperationUid = descentProgressItem.OperationUid;
-                        progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
-                        scanProgressItems[i] = progressItem;
-                    }
+                    ScanProgressItem progressItem = new ScanProgressItem();
+                    progressItem.ComputerGuid = descentProgressItem.ComputerUid;
+                    progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
+                    progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
+                    progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
+                    progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
+                    progressItem.OperationUid = descentProgressItem.OperationUid;
+                    progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
+                    scanProgressItems[i] = progressItem;
                 }
+            }
 
+            Action action = () =>
+            {
                 if (ScanStatusChanged != null)
                 {
                     ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
                 }
             };
 
-            DispatcherHelper.Current.BeginInvoke(DispatcherPriority.Send, action, arg);
+            DispatcherHelper.Current.BeginInvoke(action);
         }
 
         public void StopScan()
