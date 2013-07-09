@@ -338,7 +338,7 @@
   <PropertyGroup>
     <PostBuildEvent>del "$(TargetDir)APTAT.exe"
 xcopy "$(SolutionDir)$(ConfigurationName)\APTAT.Bootstrapper.exe" "$(TargetDir)" /Y
-"$(ProjectDir)SfxPackage\7za.exe" a  "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)*.exe" "$(TargetDir)Fonts" || goto :error
+"$(ProjectDir)SfxPackage\7za.exe" a  "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)*.exe" "$(TargetDir)*.config" "$(TargetDir)Fonts" || goto :error
 copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)APTAT.exe" || goto :error
 del  "$(TargetDir)archive.7z"</PostBuildEvent>
   </PropertyGroup>
