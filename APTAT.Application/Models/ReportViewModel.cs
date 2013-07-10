@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.IO;
-using System.Windows.Forms;
 using APTAT.Application.Services;
 
 namespace APTAT.Application.Models

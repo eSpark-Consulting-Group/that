@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Forms;
+using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
@@ -262,36 +262,50 @@ namespace APTAT.Application.Models
         {
             //ResolvingTargets = false;
 
-            _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
-            RaisePropertyChanged("OnlineItemsCount");
-
-            Items = new ObservableCollection<ThreatInfoItem>(e.Items);
-            
-            IsBusy = false;
-            IsScanInProgress = true;
-
-           
-
-            String login = _storage.GetValue<String>(KnownKeys.Login, false);
-            String password = _storage.GetValue<String>(KnownKeys.Password, true);
-            String domain = _storage.GetValue<String>(KnownKeys.Domain, false);
-
-            foreach (ThreatInfoItem item in Items)
+            if(e.Exception != null)
             {
-                if(item.IsOnline == false)
+                MessageBox.Show(e.Exception.ToString());
+            }
+
+            try
+            {
+                _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
+                RaisePropertyChanged("OnlineItemsCount");
+
+                Items = new ObservableCollection<ThreatInfoItem>(e.Items);
+
+                IsBusy = false;
+                IsScanInProgress = true;
+
+
+
+                String login = _storage.GetValue<String>(KnownKeys.Login, false);
+                String password = _storage.GetValue<String>(KnownKeys.Password, true);
+                String domain = _storage.GetValue<String>(KnownKeys.Domain, false);
+
+                foreach (ThreatInfoItem item in Items)
                 {
-                    item.StatusMessage = "This computer is currently offline";
+                    if (item.IsOnline == false)
+                    {
+                        item.StatusMessage = "This computer is currently offline";
+                    }
+                }
+
+                if (_onlineItems.Length > 0)
+                {
+                    _aptService.BeginScan(Items.ToArray(), domain, login, password, this);
+                }
+                else
+                {
+                    IsScanInProgress = false;
                 }
             }
-
-            if(_onlineItems.Length > 0)
+            catch (Exception exc)
             {
-                _aptService.BeginScan(Items.ToArray(), domain, login, password, this);    
+                MessageBox.Show(exc.ToString());
+                throw;
             }
-            else
-            {
-                IsScanInProgress = false;
-            }
+        
         }
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
