@@ -24,6 +24,13 @@ namespace APTAT.Application
         {
             // Global exception handling  
             System.Windows.Application.Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            File.AppendAllText("UnhandledExceptions.txt", e.ExceptionObject + (e.ExceptionObject is Exception && ((Exception)e.ExceptionObject).InnerException != null ? "\n" + ((Exception)e.ExceptionObject).InnerException : null));
         }
 
         private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
