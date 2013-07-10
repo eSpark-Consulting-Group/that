@@ -49,7 +49,7 @@ namespace APTAT.Application
         private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)
         {
             ErrorWindow error = new ErrorWindow();
-            error.Text.Text = e.Exception.ToString();
+            error.Text.Text = e.Exception.Message;
             error.Owner = System.Windows.Application.Current.MainWindow;
             error.ShowDialog();          
         }
