@@ -548,6 +548,7 @@ namespace APTAT.Core.Descent
 				{
 					//if( tp.DescentCallback != null )
 					//	tp.DescentCallback.OnDescentCallback( ex._status, ex._win32error, ex._errorString );
+                    LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, "{0} occurred in descent thread: {1}", ex.GetType().Name, ex.Message);
 
                     ProcessErrorOrCancel(ex._status, ex._win32error, ex._errorString, tp);
 				}
