@@ -327,74 +327,88 @@ namespace APTAT.Application.Models
 
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
-            for(Int32 i = 0; i < e.ScanProgress.Length; ++i)
+            try
             {
-               ScanProgressItem scanProgress = e.ScanProgress[i];
-               if (scanProgress.OperationUid != _operationGuid)
-               {
-                   continue;
-               }
-               for (Int32 j = 0; j < _onlineItems.Length; ++j)
-               {
-                   ThreatInfoItem infoItem = _onlineItems[j];
-                   if(infoItem.ComputerGuid == scanProgress.ComputerGuid)
-                   {
-                       infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                       infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
-                       infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                       infoItem.StatusMessage = scanProgress.StatusMessage;
-                       if(infoItem.ScanStage != ScanStage.OperationCompleted && scanProgress.ScanStage == ScanStage.OperationCompleted)
-                       {
-                           _aptService.GetScanResult(infoItem.ComputerGuid, this);
-                          
-                       }
-           
-                       infoItem.ScanStage = scanProgress.ScanStage;
-                       break;
-                   }
-               }
-            }
-
-            Int32 completed = 0;
-            Int32 scanned = 0;
-            Int32 unknownFiles = 0;
-            Int32 malwareFiles = 0;
-            for (Int32 j = 0; j < _onlineItems.Length; ++j)
-            {
-                ThreatInfoItem infoItem = _onlineItems[j];
-                if (infoItem.ScanStage == ScanStage.OperationFailed || infoItem.ScanStage == ScanStage.OperationCompleted || infoItem.ScanStage == ScanStage.OperationCanceled)
+                for (Int32 i = 0; i < e.ScanProgress.Length; ++i)
                 {
-                    completed++;
-                    
+                    ScanProgressItem scanProgress = e.ScanProgress[i];
+                    if (scanProgress.OperationUid != _operationGuid)
+                    {
+                        continue;
+                    }
+                    for (Int32 j = 0; j < _onlineItems.Length; ++j)
+                    {
+                        ThreatInfoItem infoItem = _onlineItems[j];
+                        if (infoItem.ComputerGuid == scanProgress.ComputerGuid)
+                        {
+                            infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                            infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                            infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                            infoItem.StatusMessage = scanProgress.StatusMessage;
+                            if (infoItem.ScanStage != ScanStage.OperationCompleted && scanProgress.ScanStage == ScanStage.OperationCompleted)
+                            {
+                                _aptService.GetScanResult(infoItem.ComputerGuid, this);
+
+                            }
+
+                            infoItem.ScanStage = scanProgress.ScanStage;
+                            break;
+                        }
+                    }
                 }
 
-                if(infoItem.ScanStage == ScanStage.OperationCompleted)
+                Int32 completed = 0;
+                Int32 scanned = 0;
+                Int32 unknownFiles = 0;
+                Int32 malwareFiles = 0;
+                for (Int32 j = 0; j < _onlineItems.Length; ++j)
                 {
-                    scanned++;
+                    ThreatInfoItem infoItem = _onlineItems[j];
+                    if (infoItem.ScanStage == ScanStage.OperationFailed || infoItem.ScanStage == ScanStage.OperationCompleted || infoItem.ScanStage == ScanStage.OperationCanceled)
+                    {
+                        completed++;
+
+                    }
+
+                    if (infoItem.ScanStage == ScanStage.OperationCompleted)
+                    {
+                        scanned++;
+                    }
+
+                    unknownFiles += infoItem.UnknownFilesCount;
+                    malwareFiles += infoItem.MalwareFilesCount;
                 }
 
-                unknownFiles += infoItem.UnknownFilesCount;
-                malwareFiles += infoItem.MalwareFilesCount;
-            }
+                if (unknownFiles > UnknownFilesCount)
+                {
+                    UnknownFilesCount = unknownFiles;
+                }
 
-            if(unknownFiles > UnknownFilesCount)
+                if (malwareFiles > MalwareFilesCount)
+                {
+                    MalwareFilesCount = malwareFiles;
+                }
+
+                ScannedItemsCount = completed;
+
+                if (completed == OnlineItemsCount)
+                {
+                    ScanCompleted(scanned > 0);
+                }
+
+                RaisePropertyChanged("Header");
+            }
+            catch (Exception exc)
             {
-                UnknownFilesCount = unknownFiles;    
+                MessageBox.Show(exc.ToString());
+                if(exc.InnerException != null)
+                {
+                    MessageBox.Show(exc.InnerException.ToString());
+                }
+
+               // throw;
             }
-
-            if(malwareFiles > MalwareFilesCount)
-            {
-                MalwareFilesCount = malwareFiles;
-            }
-
-            ScannedItemsCount = completed;
-
-            if (completed == OnlineItemsCount)
-            {
-                ScanCompleted(scanned > 0);
-            }
-
-            RaisePropertyChanged("Header");
+          
         }
 
         private void OnGetScanResultCompleted(Object sender, GetScanResultCompletedEventArgs e)
@@ -428,3 +442,4 @@ namespace APTAT.Application.Models
       
     }
 }
+;

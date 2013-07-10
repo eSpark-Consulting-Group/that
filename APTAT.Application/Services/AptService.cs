@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using System.Windows.Threading;
 using APTAT.Application.Models;
 using APTAT.Core;
@@ -374,34 +375,55 @@ namespace APTAT.Application.Services
 
         public void Changed(params ChangesTrackingItem[] arg)
         {
-            ScanProgressItem[] scanProgressItems = new ScanProgressItem[arg.Length];
-            for (Int32 i = 0; i < arg.Length; ++i)
+            try
             {
-                ChangesTrackingItem changesTrackingItem = arg[i];
-                DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
-                if (descentProgressItem != null)
+                ScanProgressItem[] scanProgressItems = new ScanProgressItem[arg.Length];
+                for (Int32 i = 0; i < arg.Length; ++i)
                 {
-                    ScanProgressItem progressItem = new ScanProgressItem();
-                    progressItem.ComputerGuid = descentProgressItem.ComputerUid;
-                    progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
-                    progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
-                    progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
-                    progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
-                    progressItem.OperationUid = descentProgressItem.OperationUid;
-                    progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
-                    scanProgressItems[i] = progressItem;
+                    ChangesTrackingItem changesTrackingItem = arg[i];
+                    DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
+                    if (descentProgressItem != null)
+                    {
+                        ScanProgressItem progressItem = new ScanProgressItem();
+                        progressItem.ComputerGuid = descentProgressItem.ComputerUid;
+                        progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
+                        progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
+                        progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
+                        progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
+                        progressItem.OperationUid = descentProgressItem.OperationUid;
+                        progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
+                        scanProgressItems[i] = progressItem;
+                    }
                 }
+
+                Action action = () =>
+                {
+                    if (ScanStatusChanged != null)
+                    {
+                        ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
+                    }
+                };
+
+                DispatcherHelper.Current.BeginInvoke(action);
             }
-
-            Action action = () =>
+            catch (Exception exc)
             {
-                if (ScanStatusChanged != null)
-                {
-                    ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
-                }
-            };
 
-            DispatcherHelper.Current.BeginInvoke(action);
+                Action action = () =>
+                {
+                    MessageBox.Show(exc.ToString());
+                    if (exc.InnerException != null)
+                    {
+                        MessageBox.Show(exc.InnerException.ToString());
+                    }
+                };
+
+                DispatcherHelper.Current.BeginInvoke(action);
+                //throw;
+            }
+            
+
+
         }
 
         public void StopScan()
