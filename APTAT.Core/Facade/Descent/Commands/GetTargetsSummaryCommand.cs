@@ -40,75 +40,88 @@ namespace APTAT.Core.Facade.Descent.Commands
 
 		public override void Execute()
 		{
-			if (Request.Targets.Count == 0)
+            if (Request.Targets.Count == 0)
                 //throw new FaultException<TargetsNotFoundFault>(new TargetsNotFoundFault(),"Targets list is empty.");
                 throw new InvalidOperationException("Targets list is empty.");
 
-			Func<string, IPAddress> ParseIP = source =>
-			{
-				IPAddress result;
-				return source != null && IPAddress.TryParse(source, out result) ? result : null;
-			};
+            Func<string, IPAddress> ParseIP = source =>
+            {
+                IPAddress result;
+                return source != null && IPAddress.TryParse(source, out result) ? result : null;
+            };
 
-			var targetComputers = from target in Request.Targets
-								  let domainTarget = target as DomainTarget
-								  where domainTarget == null || domainTarget.EntryType == DomainEntryType.Computer
-								  select new DirectoryComputer
-								  {
-									  Uid = target.TargetUid, // Use DirectoryComputer.Uid as a temp storage for TargetUid
-									  Name = target.Name,
-									  DnsName = target.DnsName,
-									  IPAddress = domainTarget == null ? ParseIP(target.Name) : null,
-                                      IsOnline = target.Online,
-                                      LdapPath = domainTarget != null ? domainTarget.LdapPath : null,
-								  };
+            var targetComputers = from target in Request.Targets
+                                    let domainTarget = target as DomainTarget
+                                    where domainTarget == null || domainTarget.EntryType == DomainEntryType.Computer
+                                    select new DirectoryComputer
+                                    {
+                                        Uid = target.TargetUid, // Use DirectoryComputer.Uid as a temp storage for TargetUid
+                                        Name = target.Name,
+                                        DnsName = target.DnsName,
+                                        IPAddress = domainTarget == null ? ParseIP(target.Name) : null,
+                                        IsOnline = target.Online,
+                                        LdapPath = domainTarget != null ? domainTarget.LdapPath : null,
+                                    };
 
-			var computers = new List<IComputer>(targetComputers);
-			//var directory = SubSystemFactory.Current.GetSubSystem<IDirectorySubSystem>();
+            var computers = new List<IComputer>(targetComputers);
+            //var directory = SubSystemFactory.Current.GetSubSystem<IDirectorySubSystem>();
             var searcher = new ActiveDirectorySearcher(_activeDirectoryObserver, Request.DomainAccessLogin, Request.DomainAccessPassword);
 
-			var searchTasks = from dt in Request.Targets.OfType<DomainTarget>()
-							  where dt.EntryType != DomainEntryType.Computer
-							  let asyncResult = searcher.BeginSearch(dt.LdapPath, foundComputers =>
-							  {
-								  lock (computers)
-								  {
-									  computers.AddRange(from fc in foundComputers select new DirectoryComputer
-									  {
-										  Uid = Guid.NewGuid(), // Comp was not found on console, give it a new GUID as a temp storage for TargetUid
-										  Name = fc.Name,
-										  DnsName = fc.DnsName,
-                                          LdapPath = fc.LdapPath
-									  });
-								  }
-							  })
-							  select _taskFactory.FromAsync(asyncResult, searcher.EndSearch);
+            var searchTasks = from dt in Request.Targets.OfType<DomainTarget>()
+                                where dt.EntryType != DomainEntryType.Computer
+                                let asyncResult = searcher.BeginSearch(dt.LdapPath, foundComputers =>
+                                {
+                                    lock (computers)
+                                    {
+                                        computers.AddRange(from fc in foundComputers
+                                                            select new DirectoryComputer
+                                                            {
+                                                                Uid = Guid.NewGuid(), // Comp was not found on console, give it a new GUID as a temp storage for TargetUid
+                                                                Name = fc.Name,
+                                                                DnsName = fc.DnsName,
+                                                                LdapPath = fc.LdapPath
+                                                            });
+                                    }
+                                })
+                                select _taskFactory.FromAsync(asyncResult, searcher.EndSearch);
 
-			searchTasks = searchTasks.ToArray();
-			if (searchTasks.Count() > 0)
-			{
-				using (var completeTask = _taskFactory.ContinueWhenAll((Task[]) searchTasks, completedTasks => ResolveAndTest(computers)))
-				{
-					try
-					{
-						completeTask.Wait();
-					}
-					catch (AggregateException x)
-					{
+            searchTasks = searchTasks.ToArray();
+
+		        
+
+            if (searchTasks.Count() > 0)
+            {
+                using (var completeTask = _taskFactory.ContinueWhenAll((Task[])searchTasks, completedTasks => ResolveAndTest(computers)))
+                {
+                    try
+                    {
+                        completeTask.Wait();
+
+                        // Looking for exceptions...
+                        foreach (var searchTask in searchTasks)
+                        {
+                            LogHelper.Trace(TraceEventType.Error, "GetTargetsSummaryCommand enumerating tasks exceptions: {0}.\n", searchTask.Exception != null ? searchTask.Exception.ToString() : String.Empty);
+                            if (searchTask.Exception != null && searchTask.Exception.InnerException != null)
+                                throw searchTask.Exception.InnerException;
+                        }
+                    }
+                    catch (AggregateException x)
+                    {
+                        LogHelper.Trace(TraceEventType.Error, "GetTargetsSummaryCommand AggregateException: {0}. Rethrowing the exception...", x.Message);
                         // TODO: Commented
-						//if (x.InnerException is FaultException)
-						//	throw x.InnerException;
-						//else
-							throw;
-					}
-				}
-			}
-			else
-			{
-				ResolveAndTest(computers);
-			}
+                        //if (x.InnerException is FaultException)
+                        //	throw x.InnerException;
+                        //else
+                        throw;
+                    }
+                }
+            }
+            else
+            {
+                ResolveAndTest(computers);
+            }
 
-			Response.IsCompleted = true;
+            Response.IsCompleted = true;
 		}
 
         private void ResolveAndTest(IEnumerable<IComputer> sourceComputers)
