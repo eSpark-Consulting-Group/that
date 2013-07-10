@@ -264,7 +264,7 @@ namespace APTAT.Application.Models
 
             if(e.Exception != null)
             {
-                MessageBox.Show(e.Exception.ToString());
+                MessageBox.Show(e.Exception + "\n innerException:\n" + (e.Exception.InnerException != null ? e.Exception.InnerException.ToString() : null));
             }
 
             try

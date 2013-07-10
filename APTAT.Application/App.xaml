@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Converters="clr-namespace:APTAT.Application.Converters"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             Startup="Application_Startup"
              xmlns:sys="clr-namespace:System;assembly=mscorlib" StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
