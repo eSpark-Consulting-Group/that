@@ -264,6 +264,10 @@ namespace APTAT.Application.Models
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
+            IsBusy = false;
+            IsScanInProgress = true;
+            ScannedItemsCount = 0;
+
             if (e.Exception != null)
             {
                 if (DomainTargetsResolveFailure != null)
@@ -284,9 +288,7 @@ namespace APTAT.Application.Models
 
             Items = new ObservableCollection<ThreatInfoItem>(e.Items);
 
-            IsBusy = false;
-            IsScanInProgress = true;
-            ScannedItemsCount = 0;
+           
 
 
             String login = _storage.GetValue<String>(KnownKeys.Login, false);

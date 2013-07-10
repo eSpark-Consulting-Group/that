@@ -184,7 +184,7 @@ namespace APTAT.Application.Services
         private void OnTargetsResolved(Object sender, DomainTargetsResolverEventArgs e)
         {
 
-            File.AppendAllText("OnTargetsResolved.txt", String.Format("Error {0}; Targets {1}", e.Error, e.Targets != null ? e.Targets.Length.ToString() : "e.Targets == null"));
+            //File.AppendAllText("OnTargetsResolved.txt", String.Format("Error {0}; Targets {1}", e.Error, e.Targets != null ? e.Targets.Length.ToString() : "e.Targets == null"));
 
             if(e.Error == null)
             {
