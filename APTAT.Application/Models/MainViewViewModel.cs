@@ -267,8 +267,15 @@ namespace APTAT.Application.Models
                 MessageBox.Show(e.Exception + "\n innerException:\n" + (e.Exception.InnerException != null ? e.Exception.InnerException.ToString() : null));
             }
 
+            if(e.Items == null)
+            {
+                return;
+            }
+
             try
             {
+
+
                 _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
                 RaisePropertyChanged("OnlineItemsCount");
 
@@ -276,7 +283,7 @@ namespace APTAT.Application.Models
 
                 IsBusy = false;
                 IsScanInProgress = true;
-
+                ScannedItemsCount = 0;
 
 
                 String login = _storage.GetValue<String>(KnownKeys.Login, false);
