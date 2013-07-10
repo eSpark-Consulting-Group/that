@@ -7,7 +7,7 @@ namespace APTAT.Application.Services
     {
         public Object UserState { get; protected set; }
 
-        public Exception Exception { get; protected set; }
+        public Exception Exception { get; set; }
     }
 
     public class GetDirectoryItemsEventArgs : DomainEventArgs

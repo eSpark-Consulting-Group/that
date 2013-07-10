@@ -43,10 +43,16 @@ namespace APTAT.Application
             _storageService = new StorageService();
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
-  
+            _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
         }
 
-
+        private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)
+        {
+            ErrorWindow error = new ErrorWindow();
+            error.Text.Text = e.Exception.ToString();
+            error.Owner = System.Windows.Application.Current.MainWindow;
+            error.ShowDialog();          
+        }
 
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
