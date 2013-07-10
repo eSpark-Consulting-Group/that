@@ -48,7 +48,7 @@
 
 
                 <StackPanel Grid.Row="1">
-                    <TextBlock x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10,0, 0" Grid.Row="1" LineHeight="28" Foreground="#555"
+                    <TextBlock x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10,30, 0" Grid.Row="1" LineHeight="28" Foreground="#555"
                            TextWrapping="Wrap">
                     <Run>
                         Scan Failed.

@@ -274,6 +274,7 @@ namespace APTAT.Application.Models
                 {
                     DomainTargetsResolveFailure(this, new DomainEventArgs {Exception = e.Exception});
                 }
+                IsScanInProgress = false;
                 return;
             }
 
