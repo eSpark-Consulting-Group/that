@@ -233,13 +233,22 @@ namespace APTAT.Application.Models
 
         private void OnGetDirectoryItemsCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
-            e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
+            if(e.Exception == null)
+            {
+                e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name)); 
+            }
+            else
+            {
+                e.Parent.Items = new ObservableCollection<DirectoryItem>(); 
+                Error = e.Exception.Message;
+            }
 
             ExpandCommandContext context = e.UserState as ExpandCommandContext;
-            if(context != null)
+            if (context != null)
             {
-                context.RaiseCompleted();    
-            }
+                context.RaiseCompleted();
+            }   
+
         }
 
 
