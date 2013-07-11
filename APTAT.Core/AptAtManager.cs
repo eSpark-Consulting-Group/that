@@ -579,24 +579,24 @@ namespace APTAT.Core
             return command.Response.Targets;
         }
 
-        public IDomainTargetsResolver GetDomainTargetsResolver(DeploymentTargetsCollection targets)
+        public IDomainTargetsResolver GetDomainTargetsResolver(DeploymentTargetsCollection targets, string login, string password)
         {
-            IServiceCommand<GetTargetsSummaryResponse> command = GetDomainTargetsResolverCommand(targets);
+            IServiceCommand<GetTargetsSummaryResponse> command = GetDomainTargetsResolverCommand(targets, login, password);
             return new DomainTargetsResolver(command);
         }
 
-        private IServiceCommand<GetTargetsSummaryResponse> GetDomainTargetsResolverCommand(DeploymentTargetsCollection targets)
+        private IServiceCommand<GetTargetsSummaryResponse> GetDomainTargetsResolverCommand(DeploymentTargetsCollection targets, string login, string password)
         {
             if (targets == null || targets.Count == 0)
                 throw new ArgumentException("Targets list is empty.");
 
-            GetTargetsSummaryRequest request = new GetTargetsSummaryRequest {Targets = targets};
+            GetTargetsSummaryRequest request = new GetTargetsSummaryRequest {Targets = targets, DomainAccessLogin = login, DomainAccessPassword = password};
             return _commandFactory.CreateCommand<GetTargetsSummaryResponse>(request);
         }
 
-        public DeploymentTargetsCollection CheckTargetsAvailability(DeploymentTargetsCollection targets)
+        public DeploymentTargetsCollection CheckTargetsAvailability(DeploymentTargetsCollection targets, string login, string password)
         {
-            var command = GetDomainTargetsResolverCommand(targets);
+            var command = GetDomainTargetsResolverCommand(targets, login, password);
             command.Execute();
             return command.Response.Targets;
         }

@@ -85,9 +85,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                                 })
                                 select _taskFactory.FromAsync(asyncResult, searcher.EndSearch);
 
-            searchTasks = searchTasks.ToArray();
-
-		        
+            searchTasks = searchTasks.ToArray(); 
 
             if (searchTasks.Count() > 0)
             {
@@ -97,13 +95,23 @@ namespace APTAT.Core.Facade.Descent.Commands
                     {
                         completeTask.Wait();
 
+                        Exception temp = null;
                         // Looking for exceptions...
                         foreach (var searchTask in searchTasks)
                         {
-                            LogHelper.Trace(TraceEventType.Error, "GetTargetsSummaryCommand enumerating tasks exceptions: {0}.\n", searchTask.Exception != null ? searchTask.Exception.ToString() : String.Empty);
-                            if (searchTask.Exception != null && searchTask.Exception.InnerException != null)
-                                throw searchTask.Exception.InnerException;
+                            if (searchTask.Exception != null && searchTask.Exception.InnerExceptions != null)
+                            {
+                                foreach (var innerException in searchTask.Exception.InnerExceptions)
+                                {
+                                    if(innerException != null)
+                                        temp = innerException;
+                                }
+                            }
                         }
+
+                        // Throw one of exceptions (no matter which)
+                        if (temp != null)
+                            throw temp;
                     }
                     catch (AggregateException x)
                     {
