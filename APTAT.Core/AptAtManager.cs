@@ -72,12 +72,12 @@ namespace APTAT.Core
             catch (DirectoryServicesCOMException ex)
             {
                 LogHelper.Trace(TraceEventType.Error, "AptManager BeginDiscoverCallback DirectoryServicesCOMException: {0}.", ex.Message);
-                args.Error = new Exception(String.Format("An error occured while discovering Active Directory: {0}.", ex.Message));
+                args.Error = new Exception(String.Format("An error occured while discovering Active Directory: {0}", ex.Message));
                 args.State = context.State;
             }
             catch (Exception ex)
             {
-                LogHelper.Trace(TraceEventType.Error, "AptManager BeginDiscoverCallback error: {0}.", ex.Message);
+                LogHelper.Trace(TraceEventType.Error, "AptManager BeginDiscoverCallback error: {0}", ex.Message);
                 args.Error = ex;
                 args.State = context.State;
             }
@@ -173,12 +173,12 @@ namespace APTAT.Core
             catch (DirectoryServicesCOMException ex)
             {
                 LogHelper.Trace(TraceEventType.Error, "AptManager BeginDiscoverCallback DirectoryServicesCOMException: {0}.", ex.Message);
-                args.Error = new Exception(String.Format("An error occured while discovering Active Directory: {0}.", ex.Message));
+                args.Error = new Exception(String.Format("An error occured while discovering Active Directory: {0}", ex.Message));
                 args.State = context.State;
             }
             catch (Exception ex)
             {
-                LogHelper.Trace(TraceEventType.Error, "AptManager BeginDiscoverCallback error: {0}.", ex.Message);
+                LogHelper.Trace(TraceEventType.Error, "AptManager BeginDiscoverCallback error: {0}", ex.Message);
                 args.Error = ex;
                 args.State = context.State;
             }
