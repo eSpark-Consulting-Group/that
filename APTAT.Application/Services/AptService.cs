@@ -172,10 +172,10 @@ namespace APTAT.Application.Services
 
         }
 
-        public void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState)
+        public void ResolveDirectoryItems(DirectoryItem[] directoryItems, String admin, String password, Object userState)
         {
             DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
-            IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets);
+            IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets, admin, password);
 
             resolver.TargetsResolved += OnTargetsResolved;  
             resolver.BeginResolve(userState);

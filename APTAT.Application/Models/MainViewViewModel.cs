@@ -15,7 +15,9 @@ namespace APTAT.Application.Models
     {
         public event EventHandler<ScanCompletedEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
-        
+
+        private String _login;
+        private String _password;
 
         private readonly IAptService _aptService;
         private readonly IStorageService _storage;
@@ -206,8 +208,16 @@ namespace APTAT.Application.Models
                 if (_selectedTargets.Length > 0)
                 {
                     IsScanInProgress = null;
-                    IsBusy = true;        
-                    _aptService.ResolveDirectoryItems(_selectedTargets, this);
+                    IsBusy = true;
+                    _login = _storage.GetValue<String>(KnownKeys.Login, false);
+                    _password = _storage.GetValue<String>(KnownKeys.Password, true);
+                    if(_login == null || _password == null)
+                    {
+                        throw new InvalidOperationException("specify login and password");
+                    }
+
+                    _aptService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
+         
                     //ResolvingTargets = true;
                 }
             }
@@ -290,10 +300,7 @@ namespace APTAT.Application.Models
             Items = new ObservableCollection<ThreatInfoItem>(e.Items);
 
            
-
-
-            String login = _storage.GetValue<String>(KnownKeys.Login, false);
-            String password = _storage.GetValue<String>(KnownKeys.Password, true);
+    
             String domain = _storage.GetValue<String>(KnownKeys.Domain, false);
 
             foreach (ThreatInfoItem item in Items)
@@ -306,7 +313,13 @@ namespace APTAT.Application.Models
 
             if (_onlineItems.Length > 0)
             {
-                _aptService.BeginScan(Items.ToArray(), domain, login, password, this);
+                if (_login == null || _password == null)
+                {
+                    throw new InvalidOperationException("specify login and password");
+                }
+                _aptService.BeginScan(Items.ToArray(), domain, _login, _password, this);
+                _login = null;
+                _password = null;
             }
             else
             {

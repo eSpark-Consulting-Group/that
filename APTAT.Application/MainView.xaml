@@ -181,7 +181,7 @@
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="SizeColumn">
-                    <TextBlock Text="{Binding SizeString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Size}"/>
+                    <TextBlock Text="{Binding SizeString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding SizeString}"/>
                 </DataTemplate>
                 <TemplateSelectors:MainViewNameTemplateSelector x:Key="NameTemplateSelector" 
                                                                 UnknownFileTemplate="{StaticResource UnknownFileTemplate}"

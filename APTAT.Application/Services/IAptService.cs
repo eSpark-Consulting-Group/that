@@ -136,7 +136,7 @@ namespace APTAT.Application.Services
 
         void GetDirectoryRoot(String domainController, String admin, String password, Object userState);
 
-        void ResolveDirectoryItems(DirectoryItem[] directoryItems, Object userState);
+        void ResolveDirectoryItems(DirectoryItem[] directoryItems, String admin, String password, Object userState);
 
         void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState);
 
