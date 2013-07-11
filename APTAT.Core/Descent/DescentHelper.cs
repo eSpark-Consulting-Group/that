@@ -168,8 +168,14 @@ namespace APTAT.Core.Descent
                     //if (TryAlternativeLogin2(impersonateAsNetworkService))
                     //    return;
 
-                    if(TryLogin( impersonateAsNetworkService, _remoteHostInfo.Login ))
-                        return;
+				    int attemptsCount = 3;
+                    while (attemptsCount > 0)
+                    {
+                        if (TryLogin(impersonateAsNetworkService, _remoteHostInfo.Login))
+                            return;
+                        attemptsCount--;
+                        Thread.Sleep(1000);
+                    }
 				}
 
 				if ( _loginException != null )
@@ -616,6 +622,7 @@ namespace APTAT.Core.Descent
 
                 int findFileAttemptsCount = 20;
                 int readFileAttemptsCount = 20;
+			    int checkFileHeaderAttemptsCount = 20;
                 while (true/*attemptsCount > 0*/)
                 {
                     if (findFileAttemptsCount > 0)
@@ -638,7 +645,13 @@ namespace APTAT.Core.Descent
 
                             string[] temp = data.Split(';');
                             if (temp.Length != 12)
-                                throw new Exception("Response file header is not valid");
+                            {
+                                if (checkFileHeaderAttemptsCount > 0)
+                                    --checkFileHeaderAttemptsCount;
+                                throw new ResponseFileHeaderInvalidException();
+                                //throw new Exception("Response file header is not valid");
+                            }
+                            checkFileHeaderAttemptsCount = 20;
 
                             int statusInt;
                             Int32.TryParse(temp[0], out statusInt);
@@ -821,6 +834,22 @@ namespace APTAT.Core.Descent
                             // unless attempts count is zero...
                             const DescentStatus status = DescentStatus.status_remote_invalid_response;
                             InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid});
+                            throw new DescentException(status, ex.Message, 0);
+                        }
+                        else
+                        {
+                            // sleep and try again
+                            Thread.Sleep(1000);
+                        }
+                    }
+                    catch(ResponseFileHeaderInvalidException ex)
+                    {
+                        // If file is not found, we can sleep and try again
+                        if (checkFileHeaderAttemptsCount == 0)
+                        {
+                            // unless attempts count is zero...
+                            const DescentStatus status = DescentStatus.status_remote_invalid_response;
+                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid });
                             throw new DescentException(status, ex.Message, 0);
                         }
                         else

@@ -70,7 +70,7 @@ namespace APTAT.Core.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
         public int DescentMaximumConcurrencyLevel {
             get {
                 return ((int)(this["DescentMaximumConcurrencyLevel"]));

@@ -12,4 +12,15 @@ namespace APTAT.Core.Descent
             }
         }
     }
+
+    public class ResponseFileHeaderInvalidException : Exception
+    {
+        public override string Message
+        {
+            get
+            {
+                return "Response file header is not valid";
+            }
+        }
+    }
 }
