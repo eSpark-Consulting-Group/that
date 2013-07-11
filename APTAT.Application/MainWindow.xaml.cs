@@ -32,7 +32,7 @@ namespace APTAT.Application
 
             DispatcherHelper.Current = Dispatcher;
 
-            MouseDown += MainWindow_MouseDown;
+            MouseLeftButtonDown += MainWindow_MouseDown;
 
             SourceInitialized += (x, y) =>
             {
@@ -63,16 +63,11 @@ namespace APTAT.Application
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            try
-            {
+           
                 WindowState = WindowState.Normal;
                 DragMove();
                
-            }
-            catch (Exception)
-            {
-
-            }   
+           
         }
 
    
