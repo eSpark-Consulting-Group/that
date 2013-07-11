@@ -227,7 +227,7 @@ namespace APTAT.Application.Models
         {
             foreach (ThreatInfoItem onlineItem in _onlineItems)
             {
-                if(onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed)
+                if(onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed && onlineItem.ScanStage != ScanStage.OperationCanceled)
                 {
                     onlineItem.StatusMessage = "Cancelling...";    
                 }
