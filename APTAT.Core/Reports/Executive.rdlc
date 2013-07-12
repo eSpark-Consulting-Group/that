@@ -1384,6 +1384,7 @@
                 <AutoFitTextDisabled>true</AutoFitTextDisabled>
                 <HeaderSeparatorColor>Black</HeaderSeparatorColor>
                 <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+                <TextWrapThreshold>30</TextWrapThreshold>
               </ChartLegend>
             </ChartLegends>
             <Palette>BrightPastel</Palette>

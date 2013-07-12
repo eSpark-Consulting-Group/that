@@ -106,7 +106,7 @@ namespace APTAT.Core.Reports
                 if (TotalFilesScanned == 0)
                     return -1;
 
-                int total = TotalTargetsCount - EmptyFilesFound;
+                int total = TotalFilesScanned - EmptyFilesFound;
                 if (total <= 0)
                     return -1;
 
