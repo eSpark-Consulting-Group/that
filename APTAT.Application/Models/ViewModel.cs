@@ -5,6 +5,7 @@ namespace APTAT.Application.Models
 {
     public class ViewModel : DomainObject
     {
+        private String _keyword;
         private Boolean _isBusy;
    
         public Boolean IsBusy
@@ -14,6 +15,18 @@ namespace APTAT.Application.Models
             {
                 _isBusy = value;
                 RaisePropertyChanged("IsBusy");
+            }
+        }
+
+        public String Keyword
+        {
+            get { return _keyword; }
+            set
+            {
+                String oldValue = _keyword;
+                _keyword = value;
+                RaisePropertyChanged("Keyword");
+                OnKeywordChanged(oldValue, _keyword);
             }
         }
 
@@ -33,6 +46,11 @@ namespace APTAT.Application.Models
         }
 
         protected virtual void InvokeViewUnloaded(Object arg)
+        {
+            
+        }
+
+        protected virtual void OnKeywordChanged(String oldValue, String newValue)
         {
             
         }

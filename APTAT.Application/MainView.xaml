@@ -5,7 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:Models="clr-namespace:APTAT.Application.Models"
                  xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
-                   xmlns:Application="clr-namespace:APTAT.Application" mc:Ignorable="d" 
+                   xmlns:Application="clr-namespace:APTAT.Application"
+                   xmlns:Controls="clr-namespace:APTAT.Application.Controls"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="1024"
 	Title="APT Assesment Tool" Background="White">
 
@@ -56,9 +58,13 @@
 
         <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"   
                                  Margin="20,0,20,20"
+                                 TabIndex="1"
                                  HierarchyIndent="14"
+                                 DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                 EnableRowVirtualization="True"
                                  RowLoaded="treeList_RowLoaded"
+                                 FilterOperatorsLoading="OnRadGridViewFilterOperatorsLoading"
+                              
                                  RowIsExpandedChanged="treeList_RowIsExpandedChanged"
                                  MouseDoubleClick="OnTreeDoubleClick"
                                   >
@@ -192,6 +198,9 @@
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
+                    IsFilterable="False"
+                    FilterMemberPath="ScanStage"
+                    ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="NAME"
                     Width="850" 
@@ -222,11 +231,18 @@
 
         </StackPanel>
 
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        
         <telerik:RadToolBar Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
 
             <telerik:RadButton Margin="20,-1,30,-1"  
                                FontSize="18"
                                Padding="10,20"
+                               IsTabStop="True"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                Click="OnStartScanningClick">
                 <telerik:RadButton.Content>
@@ -330,7 +346,21 @@
                 </telerik:RadButton.Content>
             </telerik:RadButton>
         </telerik:RadToolBar>
-  
+            <Controls:RadMaskedTextBoxEx
+            
+            Style="{StaticResource SearchBoxStyle}"
+     
+            AcceptReturn="False"
+             
+                Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"  TabIndex="0"
+                                  UpdateValueEvent="PropertyChanged"
+                                   EmptyContent="Search"   Margin="20" Width="140"  IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll">
+                <i:Interaction.Behaviors>
+                    <Controls:RadMaskedTextBoxUpdateSourceBehavior Delay="True" Value="{Binding Keyword, Mode=TwoWay}"/>
+                </i:Interaction.Behaviors>
+            </Controls:RadMaskedTextBoxEx>
+        </Grid>
+
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35">
             <StackPanel Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                     Orientation="Horizontal" Height="35" >

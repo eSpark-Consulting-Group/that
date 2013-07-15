@@ -34,7 +34,8 @@ namespace APTAT.Application.Models
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
-        private ObservableCollection<ThreatInfoItem> _threatInfoItems;
+        private ObservableCollection<ThreatInfoItem> _items;
+        private ObservableCollection<ThreatInfoItem> _cache;
 
         //public Boolean ResolvingTargets
         //{
@@ -170,10 +171,10 @@ namespace APTAT.Application.Models
 
         public ObservableCollection<ThreatInfoItem> Items
         {
-            get { return _threatInfoItems; }
+            get { return _items; }
             set
             {
-                _threatInfoItems = value;
+                _items = value;
                 RaisePropertyChanged("Items");
                 RaisePropertyChanged("ItemsCount");
                 RaisePropertyChanged("IsItemsEmpty");
@@ -196,6 +197,7 @@ namespace APTAT.Application.Models
         private void InvokeStartScan(Object arg)
         {
             Items = new ObservableCollection<ThreatInfoItem>();
+            _cache = new ObservableCollection<ThreatInfoItem>();
             _onlineItems = new ThreatInfoItem[0];
             SelectedItem = null;
             UnknownFilesCount = 0;
@@ -297,13 +299,15 @@ namespace APTAT.Application.Models
             _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
 
-            Items = new ObservableCollection<ThreatInfoItem>(e.Items);
-
+            _cache = new ObservableCollection<ThreatInfoItem>(e.Items);
+            Items =
+                new ObservableCollection<ThreatInfoItem>(
+                    _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
            
     
             String domain = _storage.GetValue<String>(KnownKeys.Domain, false);
 
-            foreach (ThreatInfoItem item in Items)
+            foreach (ThreatInfoItem item in _cache)
             {
                 if (item.IsOnline == false)
                 {
@@ -317,7 +321,7 @@ namespace APTAT.Application.Models
                 {
                     throw new InvalidOperationException("specify login and password");
                 }
-                _aptService.BeginScan(Items.ToArray(), domain, _login, _password, this);
+                _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this);
                 _login = null;
                 _password = null;
             }
@@ -462,7 +466,19 @@ namespace APTAT.Application.Models
                 parentItem.Items = items;
             }
         }
+
+        protected override void OnKeywordChanged(string oldValue, string newValue)
+        {
+            base.OnKeywordChanged(oldValue, newValue);
+
+            if(_cache != null)
+            {
+                Items =
+                   new ObservableCollection<ThreatInfoItem>(
+                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
+                SelectedItem = null;    
+            }
+        }
       
     }
 }
-;

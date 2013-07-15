@@ -71,6 +71,10 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\APTAT.Libraries\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -136,6 +140,8 @@
     <Compile Include="ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RadMaskedTextBoxEx.cs" />
+    <Compile Include="Controls\RadMaskedTextBoxUpdateSourceBehavior.cs" />
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
     <Compile Include="ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
@@ -160,6 +166,7 @@
     <Compile Include="Models\ScanResultItem.cs" />
     <Compile Include="Models\BadFileItem.cs" />
     <Compile Include="Converters\NullableConverter.cs" />
+    <Compile Include="SearchHelper.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\BasePage.cs" />
     <Compile Include="Models\DirectoryItem.cs" />

@@ -210,5 +210,19 @@ namespace APTAT.Application
             about.Owner = System.Windows.Application.Current.MainWindow;
             about.ShowDialog();
         }
+
+        private void OnRadGridViewDistinctValuesLoading(object sender, Telerik.Windows.Controls.GridView.GridViewDistinctValuesLoadingEventArgs e)
+        {
+            e.ItemsSource = ((Telerik.Windows.Controls.RadTreeListView)sender).GetDistinctValues(e.Column, false);
+        }
+
+        private void OnRadGridViewFilterOperatorsLoading(Object sender, FilterOperatorsLoadingEventArgs e)
+        {
+       
+        }
+
+      
+
+      
     }
 }
