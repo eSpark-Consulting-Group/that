@@ -330,7 +330,7 @@
                                         </Path>
                                     </Canvas>
 
-                                    <Button x:Name="ClearTextButton" SnapsToDevicePixels="True"  Height="15" Style="{StaticResource ClearTextButton}" Grid.Column="1" VerticalAlignment="Center" Margin="5" Visibility="Collapsed"/>
+                                    <Button x:Name="ClearTextButton" SnapsToDevicePixels="True"  Height="10" Style="{StaticResource ClearTextButton}" Grid.Column="1" VerticalAlignment="Center" Margin="5" Visibility="Collapsed"/>
                                 </Grid>
 
                                 <Border x:Name="FocusedVisual" Opacity="0" BorderBrush="{StaticResource MarkerBrush}"

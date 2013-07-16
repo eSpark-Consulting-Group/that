@@ -473,9 +473,22 @@ namespace APTAT.Application.Models
 
             if(_cache != null)
             {
+                foreach (ThreatInfoItem threatInfoItem in Items)
+                {
+                    threatInfoItem.IsCompletedSubItem = false;
+                    if(threatInfoItem.Items != null)
+                    {
+                        foreach (ThreatInfoItem item in threatInfoItem.Items)
+                        {
+                            item.IsCompletedSubItem = false;
+                        }    
+                    }
+                }
                 Items =
                    new ObservableCollection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword) || item.StatusMessage.Contains(Keyword)));
+
+                
                 SelectedItem = null;    
             }
         }
