@@ -45,14 +45,14 @@ namespace APTAT.Application.Models
             if(obj is ScanStatus)
             {
                 ScanStatus status = (ScanStatus) obj;
-                if(status._value == ScanStatusEnum.SubItem && _value == ScanStatusEnum.Completed)
-                {
-                    return true;
-                }
-                if (_value == ScanStatusEnum.SubItem && status._value == ScanStatusEnum.Completed)
-                {
-                    return true;
-                }
+                //if(status._value == ScanStatusEnum.SubItem && _value == ScanStatusEnum.Completed)
+                //{
+                //    return true;
+                //}
+                //if (_value == ScanStatusEnum.SubItem && status._value == ScanStatusEnum.Completed)
+                //{
+                //    return true;
+                //}
 
                 if(status._value == _value)
                 {
@@ -78,6 +78,7 @@ namespace APTAT.Application.Models
         private Int32 _malwareFilesCount;
         private String _statusMessage;
 
+        private Boolean _isCompletedSubItem;
         private ScanStage _scanStage;
         private RadObservableCollection<ThreatInfoItem> _items;
 
@@ -121,14 +122,36 @@ namespace APTAT.Application.Models
 
         public Object Target { get; set; }
 
+
+
+        public Boolean IsCompletedSubItem
+        {
+            get { return _isCompletedSubItem; }
+            set
+            {
+                _isCompletedSubItem = value;
+                RaisePropertyChanged("ScanStatus");
+            }
+        }
+
         public ScanStatus ScanStatus
         {
             get
             {
+                
+
                 if(IsRootItem == false)
                 {
-                    return new ScanStatus(ScanStatusEnum.SubItem);
+                    if (IsCompletedSubItem)
+                    {
+                        return new ScanStatus(ScanStatusEnum.Completed);
+                    }
+                    else
+                    {
+                        return new ScanStatus(ScanStatusEnum.SubItem);    
+                    }
                 }
+               
 
                 if(IsOnline == false)
                 {

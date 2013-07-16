@@ -59,7 +59,8 @@
         <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"   
                                  Margin="20,0,20,20"
                                  TabIndex="1"
-                                 AutoExpandItems="True"
+                                 AutoExpandItems="False"
+                                  RowHeight="50"
                                  HierarchyIndent="14"
                                  Filtering="treeList_Filtering"
                                  DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
@@ -233,8 +234,8 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="180"/>
             </Grid.ColumnDefinitions>
         
         <telerik:RadToolBar Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
@@ -346,15 +347,15 @@
                 </telerik:RadButton.Content>
             </telerik:RadButton>
         </telerik:RadToolBar>
-            <Controls:RadMaskedTextBoxEx
+            <Controls:RadMaskedTextBoxEx 
             
             Style="{StaticResource SearchBoxStyle}"
      
             AcceptReturn="False"
              
-                Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"  TabIndex="0"
+                Grid.Column="1" VerticalAlignment="Center"   TabIndex="0"
                                   UpdateValueEvent="PropertyChanged"
-                                   EmptyContent="Search"   Margin="20" Width="140"  IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll">
+                                   EmptyContent="Search"   Margin="20" HorizontalAlignment="Stretch"  IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll">
                 <i:Interaction.Behaviors>
                     <Controls:RadMaskedTextBoxUpdateSourceBehavior Delay="True" Value="{Binding Keyword, Mode=TwoWay}"/>
                 </i:Interaction.Behaviors>

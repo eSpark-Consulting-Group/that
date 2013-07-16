@@ -193,16 +193,56 @@ namespace APTAT.Application
             {
                 ThreatInfoItem threatInfo = (ThreatInfoItem)row.DataContext;
                 row.IsExpandable = threatInfo.HasBadFiles && threatInfo.ScanStage == ScanStage.OperationCompleted;
+                if (threatInfo.Items != null && threatInfo.Items.Count > 0)
+                {
+                    if (treeList.FilterDescriptors.Count == 0)
+                    {
+                        threatInfo.IsCompletedSubItem = true;
+                    }
+                    if (threatInfo.IsCompletedSubItem == false)
+                    {
+                        threatInfo.IsCompletedSubItem = true;
+                        treeList.CollapseHierarchyItem(threatInfo);
+                        return;
+                    }
+                }
             }
         }
 
         private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
         {
+            
             var row = e.Row;
             if(row != null)
             {
                 ThreatInfoItem threatInfo = (ThreatInfoItem)row.DataContext;
+                if (threatInfo.Items != null && threatInfo.Items.Count > 0)
+                {
+                    if (treeList.FilterDescriptors.Count == 0)
+                    {
+                        threatInfo.IsCompletedSubItem = true;
+                    }
+                    if (threatInfo.IsCompletedSubItem == false)
+                    {
+                        threatInfo.IsCompletedSubItem = true;
+                        treeList.CollapseHierarchyItem(threatInfo);
+                        return;
+                    }
+
+                 
+                }
+               
+
+                if(threatInfo.Items != null)
+                {
+                    foreach (ThreatInfoItem infoItem in threatInfo.Items)
+                    {
+                        infoItem.IsCompletedSubItem = true;
+                    }     
+                }
+                
                 threatInfo.Items = threatInfo.Items;
+                
             }
         }
 
