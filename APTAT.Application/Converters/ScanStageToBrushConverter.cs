@@ -20,20 +20,20 @@ namespace APTAT.Application.Converters
 
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
-            ScanStage item = (ScanStage)value;
+            ScanStatus item = (ScanStatus)value;
 
 
-            if (item == ScanStage.OperationCompleted)
+            if (item.Equals(new ScanStatus(ScanStatusEnum.Completed)))
             {
                 return CompletedBrush;
             }
 
-            if (item == ScanStage.OperationFailed)
+            if (item.Equals(new ScanStatus(ScanStatusEnum.Failed)))
             {
                 return FailedBrush;
             }
 
-            if(item == ScanStage.OperationCanceled)
+            if (item.Equals(new ScanStatus(ScanStatusEnum.Cancelled)))
             {
                 return CanceledBrush;
             }

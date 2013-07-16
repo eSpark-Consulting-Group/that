@@ -17,12 +17,12 @@ namespace APTAT.Application.Converters
     
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
-            ScanStage item = (ScanStage)value;
+            ScanStatus item = (ScanStatus)value;
             String param = (String) parameter;
 
             if(param == "OperationCompleted")
             {
-                if (item == ScanStage.OperationCompleted)
+                if (item.Equals(new ScanStatus(ScanStatusEnum.Completed)))
                 {
                     return 1.0;
                 }
@@ -30,7 +30,7 @@ namespace APTAT.Application.Converters
             }
             if (param == "OperationFailed")
             {
-                if(item == ScanStage.OperationFailed)
+                if (item.Equals(new ScanStatus(ScanStatusEnum.Failed)))
                 {
                     return 1.0;
                 }
@@ -38,16 +38,31 @@ namespace APTAT.Application.Converters
             }
             if (param == "OperationCanceled")
             {
-                if (item == ScanStage.OperationCanceled)
+                if (item.Equals(new ScanStatus(ScanStatusEnum.Cancelled)))
                 {
                     return 1.0;
                 }
                 return 0.0;
             }
 
-            if (item != ScanStage.OperationCompleted && item != ScanStage.OperationCanceled && item != ScanStage.OperationFailed)
+            if (param == "Offline")
             {
-                return 1.0;
+                if (item.Equals(new ScanStatus(ScanStatusEnum.Offline)))
+                {
+                    return 1.0;
+                }
+
+                return 0.0;
+            }
+
+            if (param == "InProgress")
+            {
+                if (item.Equals(new ScanStatus(ScanStatusEnum.InProgress)))
+                {
+                    return 1.0;
+                }
+
+                return 0.0;
             }
 
             return 0.0;

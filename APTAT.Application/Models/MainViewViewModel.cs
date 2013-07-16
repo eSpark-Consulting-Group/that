@@ -165,7 +165,7 @@ namespace APTAT.Application.Models
 
         public Boolean IsItemsEmpty
         {
-            get { return Items == null || Items.Count == 0; }
+            get { return _cache == null || _cache.Count == 0; }
         }
 
 
@@ -475,7 +475,7 @@ namespace APTAT.Application.Models
             {
                 Items =
                    new ObservableCollection<ThreatInfoItem>(
-                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
+                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword) || item.StatusMessage.Contains(Keyword)));
                 SelectedItem = null;    
             }
         }

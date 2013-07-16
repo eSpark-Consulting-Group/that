@@ -4,6 +4,72 @@ using Telerik.Windows.Data;
 
 namespace APTAT.Application.Models
 {
+    public enum ScanStatusEnum
+    {
+        Offline,
+        InProgress,
+        Cancelled,
+        Completed,
+        Failed,
+        SubItem,
+    }
+
+    public struct ScanStatus : IComparable
+    {
+        private ScanStatusEnum _value;
+
+
+        public ScanStatus(ScanStatusEnum value)
+        {
+            _value = value;
+        }
+
+        public override string ToString()
+        {
+            if(_value == ScanStatusEnum.InProgress)
+            {
+                return "In Progress";
+            }
+
+
+            return _value.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            if(obj is ScanStatus)
+            {
+                ScanStatus status = (ScanStatus) obj;
+                if(status._value == ScanStatusEnum.SubItem && _value == ScanStatusEnum.Completed)
+                {
+                    return true;
+                }
+                if (_value == ScanStatusEnum.SubItem && status._value == ScanStatusEnum.Completed)
+                {
+                    return true;
+                }
+
+                if(status._value == _value)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        public int CompareTo(object obj)
+        {
+            return 0;
+        }
+    }
+
     public class ThreatInfoItem : DomainObject
     {
         private Int32 _progress;
@@ -11,6 +77,7 @@ namespace APTAT.Application.Models
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
         private String _statusMessage;
+
         private ScanStage _scanStage;
         private RadObservableCollection<ThreatInfoItem> _items;
 
@@ -54,6 +121,39 @@ namespace APTAT.Application.Models
 
         public Object Target { get; set; }
 
+        public ScanStatus ScanStatus
+        {
+            get
+            {
+                if(IsRootItem == false)
+                {
+                    return new ScanStatus(ScanStatusEnum.SubItem);
+                }
+
+                if(IsOnline == false)
+                {
+                    return new ScanStatus(ScanStatusEnum.Offline);
+                }
+
+                if(ScanStage == ScanStage.OperationCompleted)
+                {
+                    return new ScanStatus(ScanStatusEnum.Completed);
+                }
+
+                if(ScanStage == ScanStage.OperationFailed)
+                {
+                    return new ScanStatus(ScanStatusEnum.Failed);
+                }
+
+                if(ScanStage == ScanStage.OperationCanceled)
+                {
+                    return new ScanStatus(ScanStatusEnum.Cancelled);
+                }
+
+                return new ScanStatus(ScanStatusEnum.InProgress);
+            }
+        }
+
         public ScanStage ScanStage
         {
             get { return _scanStage; }
@@ -66,6 +166,7 @@ namespace APTAT.Application.Models
 
                 _scanStage = value;
                 RaisePropertyChanged("ScanStage");
+                RaisePropertyChanged("ScanStatus");
             }
         }
 

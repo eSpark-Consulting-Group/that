@@ -4,7 +4,7 @@ namespace APTAT.Application
 {
     public static class SearchHelper
     {
-        public static Boolean ContainsString(this String s, String value)
+        public static Boolean ContainsString(this String s, String value, Boolean ignoreCase = true)
         {
             if(value == null)
             {
@@ -16,7 +16,7 @@ namespace APTAT.Application
                 return false;
             }
 
-            return s.Contains(value);
+            return s.ToLower().Contains(value.ToLower());
         }
     }
 }

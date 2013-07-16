@@ -44,6 +44,8 @@ namespace APTAT.Application
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
+
+  
         }
 
         private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)
@@ -211,14 +213,33 @@ namespace APTAT.Application
             about.ShowDialog();
         }
 
-        private void OnRadGridViewDistinctValuesLoading(object sender, Telerik.Windows.Controls.GridView.GridViewDistinctValuesLoadingEventArgs e)
+        private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
         {
-            e.ItemsSource = ((Telerik.Windows.Controls.RadTreeListView)sender).GetDistinctValues(e.Column, false);
+            e.ItemsSource = 
+                
+                new []
+                                {
+                                    new ScanStatus(ScanStatusEnum.Cancelled),
+                                    new ScanStatus(ScanStatusEnum.Completed),
+                                    new ScanStatus(ScanStatusEnum.InProgress),
+                                    new ScanStatus(ScanStatusEnum.Failed),
+                                    new ScanStatus(ScanStatusEnum.Offline)
+                                };
+
+          //   ((Telerik.Windows.Controls.RadTreeListView)sender).GetDistinctValues(e.Column, false);
+
+            
         }
 
         private void OnRadGridViewFilterOperatorsLoading(Object sender, FilterOperatorsLoadingEventArgs e)
         {
        
+        }
+
+        private void treeList_Filtering(object sender, GridViewFilteringEventArgs e)
+        {
+            
+            //e.ColumnFilterDescriptor
         }
 
       
