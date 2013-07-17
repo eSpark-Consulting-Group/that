@@ -212,9 +212,10 @@ namespace APTAT.Application
         private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
         {
             
-            var row = e.Row;
+            var row = e.Row as GridViewRow;
             if(row != null)
             {
+                
                 ThreatInfoItem threatInfo = (ThreatInfoItem)row.DataContext;
                 if (threatInfo.Items != null && threatInfo.Items.Count > 0)
                 {
@@ -279,8 +280,21 @@ namespace APTAT.Application
         private void treeList_Filtering(object sender, GridViewFilteringEventArgs e)
         {
             
+            foreach (ThreatInfoItem infoItem in treeList.Items)
+            {
+                infoItem.IsCompletedSubItem = true;
+                if(infoItem.Items != null)
+                {
+                    foreach (ThreatInfoItem item in infoItem.Items)
+                    {
+                        infoItem.IsCompletedSubItem = false;
+                    }
+                }
+            }  
             //e.ColumnFilterDescriptor
         }
+
+     
 
       
 

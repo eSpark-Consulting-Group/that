@@ -66,6 +66,7 @@
                                  DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                 EnableRowVirtualization="True"
                                  RowLoaded="treeList_RowLoaded"
+                            
                                  FilterOperatorsLoading="OnRadGridViewFilterOperatorsLoading"
                               
                                  RowIsExpandedChanged="treeList_RowIsExpandedChanged"
