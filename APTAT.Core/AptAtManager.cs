@@ -8,36 +8,44 @@ using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
+using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using APTAT.Core.Reports;
 using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core
 {
-    public interface IDomainDiscoverer
+    public interface ITargetsDiscoverer
     {
         DeploymentTargetsCollection Discover();
         void BeginDiscover(object state = null);
-        event EventHandler<DomainDiscovererEventArgs> Discovered;
+        event EventHandler<TargetsDiscovererEventArgs> Discovered;
     }
 
-    internal class DomainDiscoverer : IDomainDiscoverer
+    public class TargetsDiscovererEventArgs : EventArgs
+    {
+        public Exception Error { get; set; }
+        public DeploymentTarget[] Targets { get; set; }
+        public object State { get; set; }
+    }
+
+    internal abstract class TargetsDiscoverer : ITargetsDiscoverer
     {
         private IServiceCommand<FindTargetsResponse> _command;
-        public event EventHandler<DomainDiscovererEventArgs> Discovered;
+        public event EventHandler<TargetsDiscovererEventArgs> Discovered;
 
-        internal DomainDiscoverer()
+        internal TargetsDiscoverer()
         {
         }
 
-        internal DomainDiscoverer(IServiceCommand<FindTargetsResponse> command)
+        internal TargetsDiscoverer(IServiceCommand<FindTargetsResponse> command)
         {
             _command = command;
         }
 
         public DeploymentTargetsCollection Discover()
         {
-            if(_command != null)
+            if (_command != null)
             {
                 _command.Execute();
                 return _command.Response.Targets;
@@ -62,7 +70,7 @@ namespace APTAT.Core
             if (context == null)
                 return;
 
-            DomainDiscovererEventArgs args = new DomainDiscovererEventArgs();
+            TargetsDiscovererEventArgs args = new TargetsDiscovererEventArgs();
             try
             {
                 context.Action.EndInvoke(ar);
@@ -87,14 +95,14 @@ namespace APTAT.Core
             }
         }
 
-        protected virtual void OnDiscovered(DomainDiscovererEventArgs args)
+        protected virtual void OnDiscovered(TargetsDiscovererEventArgs args)
         {
-            EventHandler<DomainDiscovererEventArgs> temp = Discovered;
+            EventHandler<TargetsDiscovererEventArgs> temp = Discovered;
             if (temp != null)
                 temp(this, args);
         }
 
-        public IServiceCommand<FindTargetsResponse> Command 
+        public IServiceCommand<FindTargetsResponse> Command
         {
             get { return _command; }
             set { _command = value; }
@@ -107,25 +115,70 @@ namespace APTAT.Core
         }
     }
 
-    public class DomainDiscovererEventArgs : EventArgs
+    public interface IDomainDiscoverer : ITargetsDiscoverer
     {
-        public Exception Error { get; set; }
-        public DeploymentTarget[] Targets { get; set; }
-        public object State { get; set; }
     }
 
+    internal class DomainDiscoverer : TargetsDiscoverer, IDomainDiscoverer
+    {
+        internal DomainDiscoverer()
+        {
+        }
 
-    public interface IDomainTargetsResolver
+        internal DomainDiscoverer(IServiceCommand<FindTargetsResponse> command)
+            : base(command)
+        {
+        }
+    }
+
+    public interface IWorkgroupDiscoverer : ITargetsDiscoverer
+    {
+    }
+
+    internal class WorkgroupDiscoverer : TargetsDiscoverer, IWorkgroupDiscoverer
+    {
+        internal WorkgroupDiscoverer()
+        {
+        }
+
+        internal WorkgroupDiscoverer(IServiceCommand<FindTargetsResponse> command)
+            : base(command)
+        {
+        }
+    }
+
+    public interface IIpAddressDiscoverer : ITargetsDiscoverer
+    {
+    }
+
+    internal class IpAddressDiscoverer : TargetsDiscoverer, IIpAddressDiscoverer
+    {
+        internal IpAddressDiscoverer()
+        {
+        }
+
+        internal IpAddressDiscoverer(IServiceCommand<FindTargetsResponse> command)
+            : base(command)
+        {
+        }
+    }
+
+    
+    public interface ITargetsResolver
     {
         DeploymentTargetsCollection Resolve();
         void BeginResolve(object state = null);
-        event EventHandler<DomainTargetsResolverEventArgs> TargetsResolved;
+        event EventHandler<TargetsResolverEventArgs> TargetsResolved;
+    }
+
+    public interface IDomainTargetsResolver : ITargetsResolver
+    {
     }
 
     internal class DomainTargetsResolver : IDomainTargetsResolver
     {
         private IServiceCommand<GetTargetsSummaryResponse> _command;
-        public event EventHandler<DomainTargetsResolverEventArgs> TargetsResolved;
+        public event EventHandler<TargetsResolverEventArgs> TargetsResolved;
 
         public DomainTargetsResolver()
         {
@@ -163,7 +216,7 @@ namespace APTAT.Core
             if (context == null)
                 return;
 
-            DomainTargetsResolverEventArgs args = new DomainTargetsResolverEventArgs();
+            TargetsResolverEventArgs args = new TargetsResolverEventArgs();
             try
             {
                 context.Action.EndInvoke(ar);
@@ -188,9 +241,9 @@ namespace APTAT.Core
             }
         }
 
-        protected virtual void OnTargetsResolved(DomainTargetsResolverEventArgs args)
+        protected virtual void OnTargetsResolved(TargetsResolverEventArgs args)
         {
-            EventHandler<DomainTargetsResolverEventArgs> temp = TargetsResolved;
+            EventHandler<TargetsResolverEventArgs> temp = TargetsResolved;
             if (temp != null)
                 temp(this, args);
         }
@@ -208,7 +261,7 @@ namespace APTAT.Core
         }
     }
 
-    public class DomainTargetsResolverEventArgs : EventArgs
+    public class TargetsResolverEventArgs : EventArgs
     {
         public Exception Error { get; set; }
         public DeploymentTarget[] Targets { get; set; }
@@ -256,7 +309,8 @@ namespace APTAT.Core
                                     FailedCount = e.Context.FailedTargetsCount, 
                                     NotPerformedCount = e.Context.NotPerformedTargetsCount, 
                                     SucceededCount = e.Context.SucceededTargetsCount, 
-                                    TotalCount = e.Context.TotalTargetsCount
+                                    TotalCount = e.Context.TotalTargetsCount,
+                                    FilesStatistics = e.Context.CalculateFilesStatistics()
                                 });
         }
 
@@ -356,6 +410,8 @@ namespace APTAT.Core
         public int SucceededCount { get; set; }
         public int FailedCount { get; set; }
         public int CalceledCount { get; set; }
+
+        public FilesStatistics FilesStatistics { get; set; }
     }
 
     public class ScanInProgressEventArgs : EventArgs
@@ -568,6 +624,40 @@ namespace APTAT.Core
             searchCriterion.Password = password;
             searchCriterion.ParentAddress = ldapPath;
             
+            findTargetsRequest.SearchCriterion = searchCriterion;
+            return _commandFactory.CreateCommand<FindTargetsResponse>(findTargetsRequest);
+        }
+
+        public IWorkgroupDiscoverer GetWorkgroupDiscoverer(string workgroupName)
+        {
+            IServiceCommand<FindTargetsResponse> command = GetWorkgroupDiscoveryCommand(workgroupName);
+            return new WorkgroupDiscoverer(command);
+        }
+
+        private IServiceCommand<FindTargetsResponse> GetWorkgroupDiscoveryCommand(string workgroupName)
+        {
+            FindTargetsRequest findTargetsRequest = new FindTargetsRequest();
+            WorkgroupSearchCriterion searchCriterion = new WorkgroupSearchCriterion();
+
+            searchCriterion.WorkgroupName = workgroupName;
+
+            findTargetsRequest.SearchCriterion = searchCriterion;
+            return _commandFactory.CreateCommand<FindTargetsResponse>(findTargetsRequest);
+        }
+
+        public IIpAddressDiscoverer GetIpAddressDiscoverer(EndpointAddressCollection addresses)
+        {
+            IServiceCommand<FindTargetsResponse> command = GetIpAddressDiscoveryCommand(addresses);
+            return new IpAddressDiscoverer(command);
+        }
+
+        private IServiceCommand<FindTargetsResponse> GetIpAddressDiscoveryCommand(EndpointAddressCollection addresses)
+        {
+            FindTargetsRequest findTargetsRequest = new FindTargetsRequest();
+            EndpointSearchCriterion searchCriterion = new EndpointSearchCriterion();
+            
+            searchCriterion.EndpointAddresses = addresses;
+
             findTargetsRequest.SearchCriterion = searchCriterion;
             return _commandFactory.CreateCommand<FindTargetsResponse>(findTargetsRequest);
         }

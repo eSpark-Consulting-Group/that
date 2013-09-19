@@ -421,6 +421,7 @@
     <Compile Include="ScanCanceledException.cs" />
     <Compile Include="ScanResult.cs" />
     <Compile Include="ScanResultsProcessor.cs" />
+    <Compile Include="StatisticsCalculator.cs" />
     <Compile Include="Storage\Storage.cs">
       <SubType>Code</SubType>
     </Compile>

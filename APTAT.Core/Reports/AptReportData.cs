@@ -128,23 +128,25 @@ namespace APTAT.Core.Reports
 
         private void CalculateTotal()
         {
-            _totalFilesCound = 0;
-            _safeFilesCount = 0;
-            _unknownFilesCount = 0;
-            _malwareFilesCount = 0;
-            _emptyFilesCount = 0;
-            
-            foreach (var scanResult in Targets)
-            {
-                if (scanResult.ResultType == Core.ScanResultType.Completed)
-                {
-                    _totalFilesCound += scanResult.TotalFilesCount;
-                    _safeFilesCount += scanResult.SafeFilesCount;
-                    _unknownFilesCount += scanResult.UnknownFilesCount;
-                    _malwareFilesCount += scanResult.MalwareFilesCount;
-                    _emptyFilesCount += scanResult.EmptyFilesCount;
-                }
-            }
+            var statistics = StatisticsCalculator.Calculate(Targets);
+
+            _totalFilesCound = statistics.TotalFilesCound;
+            _safeFilesCount = statistics.SafeFilesCount;
+            _unknownFilesCount = statistics.UnknownFilesCount;
+            _malwareFilesCount = statistics.MalwareFilesCount;
+            _emptyFilesCount = statistics.EmptyFilesCount;
+
+            //foreach (var scanResult in Targets)
+            //{
+            //    if (scanResult.ResultType == Core.ScanResultType.Completed)
+            //    {
+            //        _totalFilesCound += scanResult.TotalFilesCount;
+            //        _safeFilesCount += scanResult.SafeFilesCount;
+            //        _unknownFilesCount += scanResult.UnknownFilesCount;
+            //        _malwareFilesCount += scanResult.MalwareFilesCount;
+            //        _emptyFilesCount += scanResult.EmptyFilesCount;
+            //    }
+            //}
         }
 
         public ItemRatingInfo[] GetFileRatingCollection()

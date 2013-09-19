@@ -181,7 +181,7 @@ namespace APTAT.Application.Services
             resolver.BeginResolve(userState);
         }
 
-        private void OnTargetsResolved(Object sender, DomainTargetsResolverEventArgs e)
+        private void OnTargetsResolved(Object sender, TargetsResolverEventArgs e)
         {
 
             //File.AppendAllText("OnTargetsResolved.txt", String.Format("Error {0}; Targets {1}", e.Error, e.Targets != null ? e.Targets.Length.ToString() : "e.Targets == null"));
@@ -235,7 +235,7 @@ namespace APTAT.Application.Services
             d.BeginDiscover(userState);
         }
 
-        private void OnRootDiscovered(Object sender, DomainDiscovererEventArgs e)
+        private void OnRootDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
             if(e.Error == null)
             {
@@ -285,7 +285,7 @@ namespace APTAT.Application.Services
             d.BeginDiscover(context);
         }
 
-        private void OnDiscovered(Object sender, DomainDiscovererEventArgs e)
+        private void OnDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
             GetDirectoryItemsContext context = (GetDirectoryItemsContext)e.State;
             if (e.Error == null)

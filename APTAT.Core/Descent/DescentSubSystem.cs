@@ -102,6 +102,11 @@ namespace APTAT.Core.Descent
         {
             public int Percentage { get; set; }
         }
+
+        public FilesStatistics CalculateFilesStatistics()
+        {
+            return StatisticsCalculator.Calculate(_scanResults.Values);
+        }
     }
 
     public class MarshalByRefNullLifetime : MarshalByRefObject
