@@ -20,6 +20,7 @@ using APTAT.Application.Services;
 using Telerik.Windows;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
+using System.Diagnostics;
 
 namespace APTAT.Application
 {
@@ -33,6 +34,10 @@ namespace APTAT.Application
     /// </summary>
     public partial class MainView 
     {
+        private Boolean _filteringDone = false;
+        private List<ThreatInfoItem> _collapseItems = new List<ThreatInfoItem>();
+        private List<ThreatInfoItem> _collapseFilteringItems = new List<ThreatInfoItem>();
+
         private MainViewViewModel _viewModel;
         private IStorageService _storageService;
         private Int32 _selectedReportIndex = -1;
@@ -44,9 +49,26 @@ namespace APTAT.Application
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
-
-  
+            treeList.Filtered += treeList_Filtered;
+            treeList.LayoutUpdated += treeList_LayoutUpdated;
         }
+
+        private void treeList_LayoutUpdated(object sender, EventArgs e)
+        {
+            var rows = this.treeList.ChildrenOfType<GridViewRow>();
+            foreach (GridViewRow row in rows)
+            {
+                if (row != null)
+                {
+                    ThreatInfoItem threatInfo = row.DataContext as ThreatInfoItem;
+                    if (threatInfo != null)
+                    {
+                        row.IsExpandable = threatInfo.TempItems != null && threatInfo.TempItems.Count > 0 && threatInfo.ScanStage == ScanStage.OperationCompleted;
+                    }
+                }
+            }
+        }
+
 
         private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)
         {
@@ -132,11 +154,7 @@ namespace APTAT.Application
                     details.ShowDialog();
                 }
             }
-
-           
         }
-
-
 
         private static void ShowReport()
         {
@@ -144,8 +162,6 @@ namespace APTAT.Application
             details.Owner = System.Windows.Application.Current.MainWindow;
             details.ShowDialog();
         }
-
-  
 
         private void OnExecutiveReportClick(Object sender, RadRoutedEventArgs e)
         {
@@ -180,71 +196,40 @@ namespace APTAT.Application
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            treeList.Rebind();
-        }
-
-     
-        private void treeList_RowLoaded(object sender, RowLoadedEventArgs e)
-        {
-            var row = e.Row as GridViewRow;
-            if (row != null)
-            {
-                ThreatInfoItem threatInfo = (ThreatInfoItem)row.DataContext;
-                row.IsExpandable = threatInfo.HasBadFiles && threatInfo.ScanStage == ScanStage.OperationCompleted;
-                if (threatInfo.Items != null && threatInfo.Items.Count > 0)
-                {
-                    if (treeList.FilterDescriptors.Count == 0)
-                    {
-                        threatInfo.IsCompletedSubItem = true;
-                    }
-                    if (threatInfo.IsCompletedSubItem == false)
-                    {
-                        threatInfo.IsCompletedSubItem = true;
-                        treeList.CollapseHierarchyItem(threatInfo);
-                        return;
-                    }
-                }
-            }
-        }
-
+        
         private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
         {
-            
             var row = e.Row as GridViewRow;
-            if(row != null)
+            if (row.IsExpanded)
             {
-                
-                ThreatInfoItem threatInfo = (ThreatInfoItem)row.DataContext;
-                if (threatInfo.Items != null && threatInfo.Items.Count > 0)
+                if (row != null)
                 {
-                    if (treeList.FilterDescriptors.Count == 0)
-                    {
-                        threatInfo.IsCompletedSubItem = true;
-                    }
-                    if (threatInfo.IsCompletedSubItem == false)
-                    {
-                        threatInfo.IsCompletedSubItem = true;
-                        treeList.CollapseHierarchyItem(threatInfo);
-                        return;
-                    }
+                    ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
 
-                 
-                }
-               
-
-                if(threatInfo.Items != null)
-                {
-                    foreach (ThreatInfoItem infoItem in threatInfo.Items)
+                    if (item.ScanStage == ScanStage.OperationCompleted)
                     {
-                        infoItem.IsCompletedSubItem = true;
-                    }     
+                        item.Items = item.TempItems;
+
+                        foreach (ThreatInfoItem subItem in item.Items)
+                        {
+                            subItem.IsCompletedSubItem = true;
+                        }
+                    }
                 }
-                
-                threatInfo.Items = threatInfo.Items;
-                
             }
+            else
+            {
+                ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
+                if (item.Items != null)
+                {
+                    foreach (ThreatInfoItem subItem in item.Items)
+                    {
+                        subItem.IsCompletedSubItem = false;
+                    }
+                }
+            
+               // item.Items = null;
+            } 
         }
 
         private void AboutClick(Object sender, RoutedEventArgs e)
@@ -256,48 +241,20 @@ namespace APTAT.Application
 
         private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
         {
-            e.ItemsSource = 
-                
-                new []
-                                {
-                                    new ScanStatus(ScanStatusEnum.Cancelled),
-                                    new ScanStatus(ScanStatusEnum.Completed),
-                                    new ScanStatus(ScanStatusEnum.InProgress),
-                                    new ScanStatus(ScanStatusEnum.Failed),
-                                    new ScanStatus(ScanStatusEnum.Offline)
-                                };
-
-          //   ((Telerik.Windows.Controls.RadTreeListView)sender).GetDistinctValues(e.Column, false);
-
-            
-        }
-
-        private void OnRadGridViewFilterOperatorsLoading(Object sender, FilterOperatorsLoadingEventArgs e)
-        {
-       
-        }
-
-        private void treeList_Filtering(object sender, GridViewFilteringEventArgs e)
-        {
-            
-            foreach (ThreatInfoItem infoItem in treeList.Items)
+            e.ItemsSource = new[]
             {
-                infoItem.IsCompletedSubItem = true;
-                if(infoItem.Items != null)
-                {
-                    foreach (ThreatInfoItem item in infoItem.Items)
-                    {
-                        infoItem.IsCompletedSubItem = false;
-                    }
-                }
-            }  
-            //e.ColumnFilterDescriptor
+                new ScanStatus(ScanStatusEnum.Cancelled),
+                new ScanStatus(ScanStatusEnum.Completed),
+                new ScanStatus(ScanStatusEnum.InProgress),
+                new ScanStatus(ScanStatusEnum.Failed),
+                new ScanStatus(ScanStatusEnum.Offline)
+            };
+
         }
 
-     
-
-      
-
-      
+        private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
+        {
+         //   treeList.CollapseAllHierarchyItems();
+        }
     }
 }

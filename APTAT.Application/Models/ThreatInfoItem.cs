@@ -72,6 +72,8 @@ namespace APTAT.Application.Models
 
     public class ThreatInfoItem : DomainObject
     {
+        private Boolean _autoExpandHandled;
+
         private Int32 _progress;
         private Int32 _totalFilesCount;
         private Int32 _unknownFilesCount;
@@ -80,7 +82,13 @@ namespace APTAT.Application.Models
 
         private Boolean _isCompletedSubItem;
         private ScanStage _scanStage;
-        private RadObservableCollection<ThreatInfoItem> _items;
+        private ObservableCollection<ThreatInfoItem> _items;
+
+        public Boolean AutoExpandHandled
+        {
+            get { return _autoExpandHandled; }
+            set { _autoExpandHandled = value; }
+        }
 
         public Boolean HasBadFiles
         {
@@ -263,7 +271,14 @@ namespace APTAT.Application.Models
             }
         }
 
-        public RadObservableCollection<ThreatInfoItem> Items
+        
+        public ObservableCollection<ThreatInfoItem> TempItems
+        {
+            get;
+            set;
+        }
+
+        public ObservableCollection<ThreatInfoItem> Items
         {
             get { return _items; }
             set

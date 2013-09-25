@@ -6,6 +6,7 @@ using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
+using System.Threading;
 
 namespace APTAT.Application.Models
 {
@@ -213,17 +214,102 @@ namespace APTAT.Application.Models
                     IsBusy = true;
                     _login = _storage.GetValue<String>(KnownKeys.Login, false);
                     _password = _storage.GetValue<String>(KnownKeys.Password, true);
-                    if(_login == null || _password == null)
+                    if (_login == null || _password == null)
                     {
                         throw new InvalidOperationException("specify login and password");
                     }
 
                     _aptService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
-         
-                    //ResolvingTargets = true;
+
+
                 }
             }
+
+            //var items = new ObservableCollection<ThreatInfoItem>();
+            //for (int i = 0; i < 100; ++i)
+            //{
+            //    ThreatInfoItem item = new ThreatInfoItem();
+            //    item.Name = "Test " + i;
+            //    items.Add(item);
+            //    item.IsRootItem = true;
+            //    item.IsOnline = true;
+            //    item.ScanStage = ScanStage.ScanInProgress;
+            //    item.Items = new RadObservableCollection<ThreatInfoItem>();
+
+
+                
+            //}
+
+            //Items = items;
+            //_cache = items;
+
+
+
+            //Thread t = new Thread(T);
+            //t.Start();
         }
+
+        //void T()
+        //{
+            
+
+
+           
+        //    Action<Int32> action = (index) =>
+        //    {
+
+
+
+        //        ThreatInfoItem item = _cache[index];
+        //        item.TempItems = new ObservableCollection<ThreatInfoItem>();
+
+
+        //            for (Int32 j = 0; j < 5; ++j)
+        //            {
+        //                item.TempItems.Add(new ThreatInfoItem
+        //                {
+        //                    IsOnline = true,
+
+                            
+        //                    BadFile = new BadFileItem
+        //                    {
+        //                        Name = "Bad",
+        //                    },
+        //                    IsCompletedSubItem = false,
+        //                    Name = "Bad File",
+        //                    IsUnknown = true,
+        //                });
+        //            }
+
+        //            item.ScanStage = ScanStage.OperationCompleted;
+        //            item.UnknownFilesCount = 5;
+
+        //            Int32 itemIndex = Items.IndexOf(item);
+        //            if (itemIndex != -1)
+        //            {
+        //                Items.Remove(item);
+        //                Items.Insert(itemIndex, item);
+        //            }
+                    
+                
+               
+                
+        //    };
+
+        //    for (Int32 i = 0; i < 100; i+= 2)
+        //    {
+        //        Thread.Sleep(500);
+        //        DispatcherHelper.Current.BeginInvoke(action, i);
+        //    }
+
+        //    for (Int32 i = 1; i < 100; i += 2)
+        //    {
+        //        Thread.Sleep(500);
+        //        DispatcherHelper.Current.BeginInvoke(action, i);
+        //    }
+            
+
+        //}
 
         private void InvokeStopScan(Object arg)
         {
@@ -385,10 +471,22 @@ namespace APTAT.Application.Models
                             scanProgress.ScanStage == ScanStage.OperationCompleted)
                         {
                             _aptService.GetScanResult(infoItem.ComputerGuid, this);
-
                         }
 
-                        infoItem.ScanStage = scanProgress.ScanStage;
+                        if (infoItem.ScanStage != scanProgress.ScanStage)
+                        {
+                            infoItem.ScanStage = scanProgress.ScanStage;
+                            Int32 itemIndex = Items.IndexOf(infoItem);
+                            if (itemIndex != -1)
+                            {
+                                Items.Remove(infoItem);
+                                Items.Insert(itemIndex, infoItem);
+                            }
+                        }
+                        else
+                        {
+                            infoItem.ScanStage = scanProgress.ScanStage;
+                        }
                         break;
                     }
                 }
@@ -463,7 +561,7 @@ namespace APTAT.Application.Models
                     }    
                 }
 
-                parentItem.Items = items;
+                parentItem.TempItems = items;
             }
         }
 
@@ -471,18 +569,17 @@ namespace APTAT.Application.Models
         {
             base.OnKeywordChanged(oldValue, newValue);
 
-            if(_cache != null)
+            if (Items != null)
             {
                 foreach (ThreatInfoItem threatInfoItem in Items)
                 {
-                    threatInfoItem.IsCompletedSubItem = false;
                     if(threatInfoItem.Items != null)
                     {
                         foreach (ThreatInfoItem item in threatInfoItem.Items)
                         {
                             item.IsCompletedSubItem = false;
                         }    
-                    }
+                    }      
                 }
                 Items =
                    new ObservableCollection<ThreatInfoItem>(

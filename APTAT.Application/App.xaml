@@ -269,13 +269,13 @@
                                                         </DiscreteObjectKeyFrame.Value>
                                                     </DiscreteObjectKeyFrame>
                                                 </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames
+                                                <!--<ObjectAnimationUsingKeyFrames
 												    Storyboard.TargetName="PART_ExtendedTextBox"
 												    Storyboard.TargetProperty="Opacity">
                                                     <DiscreteObjectKeyFrame KeyTime="0" Value="0.0">
                                                  
                                                     </DiscreteObjectKeyFrame>
-                                                </ObjectAnimationUsingKeyFrames>
+                                                </ObjectAnimationUsingKeyFrames>-->
                                             </Storyboard>
                                         </VisualState>
                                     </VisualStateGroup>

@@ -59,17 +59,18 @@
         <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" CanUserFreezeColumns="False"  Grid.Row="1" x:Name="treeList" AutoGenerateColumns="False" IsReadOnly="True" ItemsSource="{Binding Items}"   
                                  Margin="20,0,20,20"
                                  TabIndex="1"
+                                 
                                  AutoExpandItems="False"
                                   RowHeight="50"
                                  HierarchyIndent="14"
-                                 Filtering="treeList_Filtering"
+                                  RowIsExpandedChanged="treeList_RowIsExpandedChanged"
                                  DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                 EnableRowVirtualization="True"
-                                 RowLoaded="treeList_RowLoaded"
+                           
                             
-                                 FilterOperatorsLoading="OnRadGridViewFilterOperatorsLoading"
+                                 
                               
-                                 RowIsExpandedChanged="treeList_RowIsExpandedChanged"
+                
                                  MouseDoubleClick="OnTreeDoubleClick"
                                   >
             <telerik:RadTreeListView.Resources>
