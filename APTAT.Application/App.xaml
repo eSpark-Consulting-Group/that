@@ -19,7 +19,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="FooterDarkBrush" Color="#FF3C404B"/>
-            
+
+            <Converters:StringToVisibiltyConverter x:Key="StringToVisibiltyConverter"/>
             <Converters:NullableConverter x:Key="NullableConverter"/>
             <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <Converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>

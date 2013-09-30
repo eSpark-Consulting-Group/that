@@ -18,6 +18,14 @@ using Telerik.Windows.Controls;
 
 namespace APTAT.Application
 {
+    public class Steps
+    {
+        public const Int32 InitialStep = 0;
+        public const Int32 SettingsStep = 1;
+        public const Int32 FinishStep = 2;
+    }
+
+
     /// <summary>
     /// Interaction logic for StartScanView.xaml
     /// </summary>
@@ -26,20 +34,22 @@ namespace APTAT.Application
         public event EventHandler CancelClick;
         public event EventHandler FinishClick;
 
-        private readonly StartScanViewModel _viewModel;
+        //private readonly StartScanViewModel _viewModel;
+        private readonly WizardViewModel _scanDomainViewModel;
+        private readonly WizardViewModel _scanWorkgroupViewModel;
+        private readonly WizardViewModel _scanByIpViewModel;
+
+        private WizardViewModel _currentViewModel;
 
         public StartScanView()
         {
-            DataContext = _viewModel = new StartScanViewModel();
             InitializeComponent();
-            UpdateButtonsVisibility();
 
-            Loaded += StartScanView_Loaded;
-        }
+            _scanDomainViewModel = new StartScanDomainViewModel();
+            _scanWorkgroupViewModel = new StartScanWorkgroupViewModel();
+            _scanByIpViewModel = new StartScanByIpViewModel();
 
-        void StartScanView_Loaded(object sender, RoutedEventArgs e)
-        {
-            txtDomainController.Focus();
+            Unloaded += OnUnloaded;
         }
 
         private void OnCancelClick(Object sender, RoutedEventArgs e)
@@ -52,145 +62,119 @@ namespace APTAT.Application
 
         private void OnFinishClick(Object sender, RoutedEventArgs e)
         {
-            _viewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
+
+            _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
-                Step = 2,
+                Step = _currentViewModel.CurrentStepIndex + 1,
                 Completed = ctx =>
                 {
-                    if(FinishClick != null)
-                    {
-                        FinishClick(this, EventArgs.Empty);
-                    }
                 }
-            }); 
+            });
         }
 
         private void OnNextClick(Object sender, RoutedEventArgs e)
         {
-            txtDomainController.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-            txtAdministrator.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-
-            if( Validation.GetHasError(txtDomainController) == false && 
-                Validation.GetHasError(txtAdministrator) == false )
+            _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
-                _viewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
+                Step = _currentViewModel.CurrentStepIndex + 1,
+                Completed = ctx =>
                 {
-                    Step = 1,
-                    Completed = ctx =>
-                                    {
-                                        UpdateButtonsVisibility();
-                                        domainTree.Focus();
-
-                                    }
-                }); 
-            }
+                   // if(_currentViewModel.CurrentStep = 
+                }
+            });
         }
+
+        //private void OnNextClick(Object sender, RoutedEventArgs e)
+        //{
+        //    txtDomainController.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        //    txtAdministrator.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+
+        //    if (Validation.GetHasError(txtDomainController) == false &&
+        //        Validation.GetHasError(txtAdministrator) == false)
+        //    {
+        //        _viewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
+        //        {
+        //            Step = 1,
+        //            Completed = ctx =>
+        //            {
+        //                UpdateButtonsVisibility();
+                      
+
+        //            }
+        //        });
+        //    }
+        //}
 
         private void OnBackClick(Object sender, RoutedEventArgs e)
         {
-            _viewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
+            _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
-                Step = 0,
-                Completed = ctx => { UpdateButtonsVisibility(); }
+                Step = _currentViewModel.CurrentStepIndex - 1,
+                Completed = ctx =>
+                {
+                }
             });
-           
+        
         }
 
-        private void UpdateButtonsVisibility()
+        private void OnActiveDirectoryClick(object sender, RoutedEventArgs e)
         {
-            if (_viewModel.Step == 0)
-            {
-                btnBack.Visibility = Visibility.Collapsed;
-                btnFinish.Visibility = Visibility.Collapsed;
-                btnNext.Visibility = Visibility.Visible;
-                btnCancel.Visibility = Visibility.Visible;
-                panelSelectDomain.Visibility = Visibility.Visible;
-                panelSelectComputers.Visibility = Visibility.Collapsed;
-                txtSelectComputers.Visibility = Visibility.Collapsed;
-                txtSpecifyADInfo.Visibility = Visibility.Visible;
-            }
-            else if (_viewModel.Step == 1)
-            {
-                btnBack.Visibility = Visibility.Visible;
-                btnFinish.Visibility = Visibility.Visible;
-                btnNext.Visibility = Visibility.Collapsed;
-                btnCancel.Visibility = Visibility.Visible;
-                panelSelectDomain.Visibility = Visibility.Collapsed;
-                panelSelectComputers.Visibility = Visibility.Visible;
-                txtSelectComputers.Visibility = Visibility.Visible;
-                txtSpecifyADInfo.Visibility = Visibility.Collapsed;
-            }
+            SetCurrentViewModel(_scanDomainViewModel);
         }
 
-        private void OnPasswordChanged(Object sender, RoutedEventArgs e)
+        private void OnWorkgroupClick(object sender, RoutedEventArgs e)
         {
-            _viewModel.Password = password.Password;
+            SetCurrentViewModel(_scanWorkgroupViewModel);
         }
 
-    
-        private void OnLoadOnDemand(Object sender, RadRoutedEventArgs e)
+        private void OnIpClick(object sender, RoutedEventArgs e)
         {
-            RadTreeViewItem clickedItem = e.OriginalSource as RadTreeViewItem;  
-            _viewModel.ExpandCommand.Execute(new ExpandCommandContext
-            {
-                DirectoryItem = clickedItem.Item,
-                TreeItem = clickedItem,
-                Completed = OnExpandCompleted
-            });
+            SetCurrentViewModel(_scanByIpViewModel);
         }
 
-        private void OnExpandCompleted(ExpandCommandContext context)
+
+        private void SetCurrentViewModel(WizardViewModel viewModel)
         {
-            RadTreeViewItem treeViewItem = (RadTreeViewItem)context.TreeItem;
+            DataContext = viewModel;
 
-            DirectoryItem directoryItem = (DirectoryItem) context.DirectoryItem;
-
-            treeViewItem.ItemsSource = directoryItem.Items;
-
-            treeViewItem.IsLoadOnDemandEnabled = false;
+            if (_currentViewModel != null)
+            {
+                _currentViewModel.ViewUnloadedCommand.Execute(null);
+                _currentViewModel.Completed -= OnWizardCompleted;
+                _currentViewModel.Cancelled -= OnWizardCancelled;
+            }
+            _currentViewModel = viewModel;
+            if (_currentViewModel != null)
+            {
+                wizardBorder.Visibility = Visibility.Visible;
+                pathSelector.Visibility = Visibility.Collapsed;
+                _currentViewModel.ViewLoadedCommand.Execute(null);
+                _currentViewModel.Completed += OnWizardCompleted;
+                _currentViewModel.Cancelled += OnWizardCancelled;
+            }
         }
 
-        private void OnItemPrepared(object sender, RadTreeViewItemPreparedEventArgs e)
+        private void OnWizardCancelled(Object sender, EventArgs e)
         {
-            DirectoryItem directoryItem = (DirectoryItem)e.PreparedItem.Item;
-            if (directoryItem.Type == DirectoryItemType.Computer)
-            {
-                e.PreparedItem.IsLoadOnDemandEnabled = false;
-            }
-            else if (directoryItem.Type == DirectoryItemType.Root)
-            {
-                e.PreparedItem.IsExpanded = true;
-            }
+            SetCurrentViewModel(null);
+            wizardBorder.Visibility = Visibility.Collapsed;
+            pathSelector.Visibility = Visibility.Visible;
         }
 
-        private void OnChecked(Object sender, RadRoutedEventArgs e)
+        private void OnWizardCompleted(Object sender, EventArgs e)
         {
-            RadTreeViewItem treeViewItem = (RadTreeViewItem) e.OriginalSource;
-            if(treeViewItem.CheckState == ToggleState.On)
+            if (FinishClick != null)
             {
-                _viewModel.CheckItemCommand.Execute(treeViewItem.Item);
+                FinishClick(this, EventArgs.Empty);
             }
-            else
-            {
-                _viewModel.UncheckItemCommand.Execute(treeViewItem.Item);
-            }
-            
         }
 
-        private void OnUnchecked(Object sender, RadRoutedEventArgs e)
+        private void OnUnloaded(Object sender, RoutedEventArgs e)
         {
-            RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
-            if (treeViewItem.CheckState == ToggleState.On)
+            if (_currentViewModel != null)
             {
-                _viewModel.CheckItemCommand.Execute(treeViewItem.Item);
-            }
-            else
-            {
-                _viewModel.UncheckItemCommand.Execute(treeViewItem.Item);
+                _currentViewModel.ViewUnloadedCommand.Execute(null);
             }
         }
-
     }
-
-    
 }

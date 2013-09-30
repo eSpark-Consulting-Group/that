@@ -1,50 +1,18 @@
-﻿using System;
+﻿using APTAT.Application.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using APTAT.Application.Services;
+using System.Text;
+using System.Windows.Controls;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
 {
-
-    public class ExpandCommandContext
+    public class StartScanDomainViewModel : WizardViewModel
     {
-        public Object DirectoryItem { get; set; }
-
-        public Action<ExpandCommandContext> Completed { get; set; }
-
-        public Object TreeItem { get; set; }
-
-        public void RaiseCompleted()
-        {
-            if(Completed != null)
-            {
-                Completed(this);
-            }
-        }
-    }
-
-    public class ChangeStepCommandContext
-    {
-        public Int32 Step { get; set; }
-
-        public Action<ChangeStepCommandContext> Completed { get; set; }
-
-        public Boolean Cancel { get; set; }
-
-        public void RaiseCompleted()
-        {
-            if(Completed != null)
-            {
-                Completed(this);
-            }
-        }
-    }
-
-    public class StartScanViewModel : ViewModel
-    {
-        private readonly IAptService _service =  AptService.Instance;
+        private readonly IAptService _service = AptService.Instance;
         private readonly IStorageService _storage = new StorageService();
         private Int32 _step;
         private DirectoryItem[] _items;
@@ -53,6 +21,9 @@ namespace APTAT.Application.Models
         private String _administrator;
         private String _password;
 
+      
+        public const String SelectDomain = "SelectDomain";
+        public const String SelectTargets = "SelectTargets";
 
         public DirectoryItem[] Items
         {
@@ -64,11 +35,6 @@ namespace APTAT.Application.Models
             }
         }
 
-        public Int32 Step
-        {
-            get { return _step; }
-        }
-
         public String DomainController
         {
             get { return _domainController; }
@@ -76,9 +42,9 @@ namespace APTAT.Application.Models
             {
                 _domainController = value;
 
-                if(String.IsNullOrWhiteSpace(_domainController))
+                if (String.IsNullOrWhiteSpace(_domainController))
                 {
-                    RaiseValidationError("DomainController", "Please Specify Domain Controller");    
+                    RaiseValidationError("DomainController", "Please Specify Domain Controller");
                 }
                 else
                 {
@@ -94,9 +60,9 @@ namespace APTAT.Application.Models
             {
                 _administrator = value;
 
-                if(String.IsNullOrWhiteSpace(_administrator))
+                if (String.IsNullOrWhiteSpace(_administrator))
                 {
-                    RaiseValidationError("Administrator", "Please Specify Administrator Login");    
+                    RaiseValidationError("Administrator", "Please Specify Administrator Login");
                 }
                 else
                 {
@@ -111,62 +77,27 @@ namespace APTAT.Application.Models
             set { _password = value; }
         }
 
-        public DelegateCommand ChangeStepCommand { get; private set; }
-
         public DelegateCommand ExpandCommand { get; private set; }
 
         public DelegateCommand CheckItemCommand { get; private set; }
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
-        public StartScanViewModel()
+        public StartScanDomainViewModel()
         {
+            SetSteps(new[] { null, SelectDomain, SelectTargets });
+
             ExpandCommand = new DelegateCommand(InvokeExpand);
             CheckItemCommand = new DelegateCommand(InvokeCheckItem);
             UncheckItemCommand = new DelegateCommand(InvokeUncheckItem);
-            ChangeStepCommand = new DelegateCommand(InvokeChangeStep);
-            
+
             _checkedItems = new Collection<Object>();
-
-            Password = String.Empty;
-        }
-
-        private void InvokeChangeStep(Object arg)
-        {
-            Error = null;
-            ChangeStepCommandContext commandContext = (ChangeStepCommandContext) arg;
-            if(commandContext.Step == 0)
-            {
-                _step = commandContext.Step;
-                commandContext.RaiseCompleted();
-            }
-            else if (commandContext.Step == 1)
-            {
-                IsBusy = true;
-                _service.GetDirectoryRoot(DomainController, Administrator, Password, commandContext);
-            }
-            else if(commandContext.Step == 2)
-            {
-                if(_checkedItems == null || _checkedItems.Count == 0)
-                {
-                    Error = "Select at least one item";
-                }
-                else
-                {
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
-                    _storage.SetValue(KnownKeys.Login, _administrator);
-                    _storage.SetValue(KnownKeys.Password, _password);
-                    _storage.SetValue(KnownKeys.Domain, _domainController);
-                    _step = commandContext.Step;
-                    commandContext.RaiseCompleted();
-                }
-            }
         }
 
         private void InvokeExpand(Object arg)
         {
-            ExpandCommandContext commandContext = (ExpandCommandContext) arg;
-            _service.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, commandContext);    
+            ExpandCommandContext commandContext = (ExpandCommandContext)arg;
+            _service.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, commandContext);
         }
 
         private void InvokeCheckItem(Object arg)
@@ -180,12 +111,64 @@ namespace APTAT.Application.Models
             _checkedItems.Remove(arg);
         }
 
+        protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
+        {
+
+
+            if (previousStep == SelectDomain && context.IsForward(CurrentStepIndex))
+            {
+                try
+                {
+                    DomainController = DomainController;
+                    Administrator = Administrator;
+                    Password = Password;
+                }
+                catch (ValidationException e)
+                {
+                    return;
+                }
+               
+
+                IsBusy = true;
+                _service.GetDirectoryRoot(DomainController, Administrator, Password, success);
+            }
+            else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
+            {
+                if (_checkedItems == null || _checkedItems.Count == 0)
+                {
+                    Error = "Select at least one item";
+                }
+                else
+                {
+                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
+                    _storage.SetValue(KnownKeys.Login, _administrator);
+                    _storage.SetValue(KnownKeys.Password, _password);
+                    _storage.SetValue(KnownKeys.Domain, _domainController);
+                    success();
+                }
+            }
+            else
+            {
+                if (context.IsBackward(CurrentStepIndex))
+                {
+                    Error = null;
+                }
+
+                base.OnStepChanging(success, previousStep, context);
+            }
+        }
+
+        protected override void OnStepChanged()
+        {
+            
+        }
+
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
 
             _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
-            if(_administrator != null)
+            if (_administrator != null)
             {
                 RaisePropertyChanged("Administrator");
             }
@@ -207,39 +190,38 @@ namespace APTAT.Application.Models
             _service.GetDirectoryRootCompleted -= OnGetDirectoryRootCompleted;
         }
 
-      
+
         private void OnGetDirectoryRootCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
             IsBusy = false;
-            ChangeStepCommandContext commandContext = (ChangeStepCommandContext)e.UserState;
+            Action success = (Action)e.UserState;
             Items = e.Items;
-            if(e.Exception == null)
+            if (e.Exception == null)
             {
                 if (Items != null && Items.Length > 0)
                 {
                     _service.GetDirectoryItems(DomainController, Administrator, Password, Items[0], this);
                 }
 
-                _step = commandContext.Step;   
+               // _step = commandContext.Step;
                 Error = null;
+                success();
             }
             else
             {
                 Error = e.Exception.Message;
             }
-            commandContext.RaiseCompleted();
-            
         }
 
         private void OnGetDirectoryItemsCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
-            if(e.Exception == null)
+            if (e.Exception == null)
             {
-                e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name)); 
+                e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
             }
             else
             {
-                e.Parent.Items = new ObservableCollection<DirectoryItem>(); 
+                e.Parent.Items = new ObservableCollection<DirectoryItem>();
                 Error = e.Exception.Message;
             }
 
@@ -247,12 +229,9 @@ namespace APTAT.Application.Models
             if (context != null)
             {
                 context.RaiseCompleted();
-            }   
+            }
 
         }
 
-
-
-      
     }
 }

@@ -143,11 +143,16 @@
     <Compile Include="Controls\RadMaskedTextBoxEx.cs" />
     <Compile Include="Controls\RadMaskedTextBoxUpdateSourceBehavior.cs" />
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
+    <Compile Include="Converters\StringToVisibiltyConverter.cs" />
     <Compile Include="ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
+    <Compile Include="Models\StartScanByIpViewModel.cs" />
+    <Compile Include="Models\StartScanDomainViewModel.cs" />
+    <Compile Include="Models\StartScanWorkgroupViewModel.cs" />
+    <Compile Include="Models\WizardViewModel.cs" />
     <Compile Include="ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
@@ -167,6 +172,7 @@
     <Compile Include="Models\BadFileItem.cs" />
     <Compile Include="Converters\NullableConverter.cs" />
     <Compile Include="SearchHelper.cs" />
+    <Compile Include="SelectorButton.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\BasePage.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
@@ -174,16 +180,24 @@
     <Compile Include="Services\IAptService.cs" />
     <Compile Include="Services\IStorageService.cs" />
     <Compile Include="Models\MainViewViewModel.cs" />
-    <Compile Include="Models\StartScanViewModel.cs" />
     <Compile Include="Services\StorageService.cs" />
     <Compile Include="Models\ThreatDetailsViewModel.cs" />
     <Compile Include="Models\ThreatInfoItem.cs" />
     <Compile Include="Models\ViewModel.cs" />
+    <Compile Include="StartScanByIpView.xaml.cs">
+      <DependentUpon>StartScanByIpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StartScanDomainView.xaml.cs">
+      <DependentUpon>StartScanDomainView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StartScanView.xaml.cs">
       <DependentUpon>StartScanView.xaml</DependentUpon>
     </Compile>
     <Compile Include="StartScanWindow.xaml.cs">
       <DependentUpon>StartScanWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StartScanWorkgroupView.xaml.cs">
+      <DependentUpon>StartScanWorkgroupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplateSelectors\MainViewNameTemplateSelector.cs" />
     <Compile Include="ThreatDetailsView.xaml.cs">
@@ -242,6 +256,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="StartScanByIpView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StartScanDomainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="StartScanView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -253,6 +275,10 @@
     <Page Include="Assets\Telerik.Windows.Controls.GridView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StartScanWorkgroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThreatDetailsView.xaml">
       <SubType>Designer</SubType>
