@@ -23,7 +23,7 @@ namespace APTAT.Application.Models
         private readonly IAptService _aptService;
         private readonly IStorageService _storage;
         private Guid _operationGuid;
-        private DirectoryItem[] _selectedTargets;
+        private DeploymentItem[] _selectedTargets;
 
        // private Boolean _resolvingTargets;
         private Boolean _isReportEnabled;
@@ -207,7 +207,7 @@ namespace APTAT.Application.Models
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
             {
-                _selectedTargets = value.OfType<DirectoryItem>().ToArray();
+                _selectedTargets = value.OfType<DeploymentItem>().ToArray();
                 if (_selectedTargets.Length > 0)
                 {
                     IsScanInProgress = null;
@@ -220,7 +220,6 @@ namespace APTAT.Application.Models
                     }
 
                     _aptService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
-
 
                 }
             }

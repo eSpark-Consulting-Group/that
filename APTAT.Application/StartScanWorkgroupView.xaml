@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -59,7 +60,7 @@
                 <TextBlock VerticalAlignment="Center" Grid.Row="0" FontSize="14" Margin="5" Text="Workgroup:"/>
                 <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="5" Text="Administrator:"/>
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="2" Text="Password:"/>
-                <TextBox x:Name="txtWorkgroup" BorderThickness="0" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding DomainController, Mode=TwoWay, ValidatesOnExceptions=True}" >
+                <TextBox x:Name="txtWorkgroup" BorderThickness="0" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Workgroup, Mode=TwoWay, ValidatesOnExceptions=True}" >
                 </TextBox>
                 <TextBox x:Name="txtAdministrator" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
                 <PasswordBox x:Name="password"  BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
@@ -70,12 +71,39 @@
         </Grid>
         <Grid x:Name="panelSelectComputers" Grid.Row="2" Background="White" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
             <Grid.Resources>
-    
+               
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 
+                                
             </Grid.Resources>
+            <telerik:RadGridView 
+                x:Name="computersGrid"
+                CanUserFreezeColumns="False" 
+                AutoGenerateColumns="False" 
+                CanUserResizeColumns="False"
+                IsReadOnly="True"
+                TabIndex="1"
+                IsFilteringAllowed="False"
+                EnableRowVirtualization="True"
+                SelectionChanged="OnSelectionChanged"
+                Margin="20,0,20,20"
+                SelectionMode="Extended"
+                ItemsSource="{Binding Items}">
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewSelectColumn />
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="" Width="*"/>
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>
+            <!--<Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
+                
+            </Border>-->
             
-            <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
-
-            </Border>
+            
 
         </Grid>
     </Grid>

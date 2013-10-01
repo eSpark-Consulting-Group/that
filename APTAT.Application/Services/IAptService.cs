@@ -10,6 +10,18 @@ namespace APTAT.Application.Services
         public Exception Exception { get; set; }
     }
 
+    public class GetWorkgroupEventArgs : DomainEventArgs
+    {
+        public DeploymentItem[] Items { get; private set; }
+
+        public GetWorkgroupEventArgs(DeploymentItem[] items, Object userState, Exception error = null)
+        {
+            Items = items;
+            UserState = userState;
+            Exception = error;
+        }
+    }
+
     public class GetDirectoryItemsEventArgs : DomainEventArgs
     {
         public DirectoryItem Parent { get; private set; }
@@ -129,6 +141,10 @@ namespace APTAT.Application.Services
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
+        event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
+
+
+        void GetWorkgroup(String workgroupName, Object userState);
 
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
 
@@ -136,7 +152,7 @@ namespace APTAT.Application.Services
 
         void GetDirectoryRoot(String domainController, String admin, String password, Object userState);
 
-        void ResolveDirectoryItems(DirectoryItem[] directoryItems, String admin, String password, Object userState);
+        void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState);
 
         void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState);
 

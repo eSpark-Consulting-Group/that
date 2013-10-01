@@ -13,17 +13,20 @@ namespace APTAT.Application.Models
         Computer
     }
 
-    public class DirectoryItem : DomainObject
+    public class DeploymentItem : DomainObject
+    {
+        public String Name { get; set; }
+
+        public Guid TargetUid { get; set; }
+    }
+
+    public class DirectoryItem : DeploymentItem
     {
         private ObservableCollection<DirectoryItem> _items;
 
         public String LdapPath { get; set; }
 
-        public String Name { get; set; }
-
         public String DnsName { get; set; }
-
-        public Guid TargetUid { get; set; }
 
         public DirectoryItemType Type { get; set; }
 

@@ -3848,25 +3848,34 @@
 	<Style x:Key="RadGridViewStyle"
 		TargetType="controls:RadGridView">
 
-		<Setter Property="Template" Value="{StaticResource RadGridViewTemplate}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="RowIndicatorVisibility" Value="Collapsed"/>
+        <Setter Property="VerticalGridLinesBrush" Value="White" />
+        <Setter Property="HorizontalGridLinesBrush" Value="White"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+        
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        
+        <Setter Property="Template" Value="{StaticResource RadGridViewTemplate}" />
 		<Setter Property="Background" Value="{StaticResource MainBrush}" />
 		<Setter Property="Foreground" Value="{StaticResource MarkerBrush}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
-		<Setter Property="BorderThickness" Value="1" />
 		<Setter Property="AlternateRowBackground" Value="#19767676" />
-		<Setter Property="GridLinesVisibility" Value="None"/>
-		<Setter Property="VerticalGridLinesBrush" Value="{StaticResource BasicBrush}" />
-		<Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BasicBrush}" />		
-		<Setter Property="GroupPanelBackground" Value="{StaticResource AccentBrush}"/>
+        <Setter Property="ShowGroupPanel" Value="False"/>
+
+        <Setter Property="GroupPanelBackground" Value="{StaticResource AccentBrush}"/>
 		<Setter Property="GroupPanelForeground" Value="{StaticResource MainBrush}"/>
-		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+		
 		<Setter Property="VerticalAlignment" Value="Stretch" />
 		<Setter Property="HorizontalAlignment" Value="Stretch" />
-		<Setter Property="FontFamily" Value="Segoe UI" />
+		
 		<Setter Property="FontSize" Value="12" />
 		
-		<Setter Property="SnapsToDevicePixels" Value="True" />
 		
 	</Style>
 
@@ -4213,12 +4222,12 @@
 
         <!--<Setter Property="Background" Value="#FFF0F0F0"/>-->
 		<!--<Setter Property="Background" Value="{StaticResource MainBrush}" />-->
-		<Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
+        <!--<Setter Property="AlternateRowBackground" Value="#19767676" />-->
+        <!--<Setter Property="AlternateRowBackground" Value="#FFF0F0F0" />-->
+        <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
 		<Setter Property="Foreground" Value="{StaticResource StrongBrush}" />
 		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="GridLinesVisibility" Value="Horizontal"/>
-		<!--<Setter Property="AlternateRowBackground" Value="#19767676" />-->
-        <!--<Setter Property="AlternateRowBackground" Value="#FFF0F0F0" />-->
         <Setter Property="RowIndicatorVisibility" Value="Collapsed"/>
 		<Setter Property="VerticalGridLinesBrush" Value="White" />
 		<Setter Property="HorizontalGridLinesBrush" Value="White"/>

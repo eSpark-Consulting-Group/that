@@ -58,7 +58,7 @@ namespace APTAT.Application.Services
 
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
 
-
+        public event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
 
         private readonly AptAtManager _manager;
 
@@ -172,10 +172,12 @@ namespace APTAT.Application.Services
 
         }
 
-        public void ResolveDirectoryItems(DirectoryItem[] directoryItems, String admin, String password, Object userState)
+        public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState)
         {
             DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
             IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets, admin, password);
+
+         
 
             resolver.TargetsResolved += OnTargetsResolved;  
             resolver.BeginResolve(userState);
@@ -378,9 +380,6 @@ namespace APTAT.Application.Services
 
         public void Changed(params ChangesTrackingItem[] arg)
         {
-
-        
-
             Action action = () =>
             {
                 ScanProgressItem[] scanProgressItems = new ScanProgressItem[arg.Length];
@@ -508,18 +507,29 @@ namespace APTAT.Application.Services
             }
         }
 
-        private DeploymentTargetsCollection ToDeploymentTargetsCollection(DirectoryItem[] directoryItems)
+        private DeploymentTargetsCollection ToDeploymentTargetsCollection(DeploymentItem[] deploymentItems)
         {
-            DeploymentTargetsCollection collection = new DeploymentTargetsCollection(directoryItems.Length);
-            foreach (DirectoryItem item in directoryItems)
+            DeploymentTargetsCollection collection = new DeploymentTargetsCollection(deploymentItems.Length);
+            foreach (DeploymentItem item in deploymentItems)
             {
-                DomainTarget deploymentTarget = new DomainTarget();
-                deploymentTarget.LdapPath = item.LdapPath;
-                deploymentTarget.EntryType = FromDirectoryItemType(item.Type);
-                deploymentTarget.DnsName = item.DnsName;
-                deploymentTarget.Name = item.Name;
-                deploymentTarget.TargetUid = item.TargetUid;
-                collection.Add(deploymentTarget);
+                if (item is DirectoryItem)
+                {
+                    DirectoryItem directoryItem = (DirectoryItem)item;
+                    DomainTarget deploymentTarget = new DomainTarget();
+                    deploymentTarget.LdapPath = directoryItem.LdapPath;
+                    deploymentTarget.EntryType = FromDirectoryItemType(directoryItem.Type);
+                    deploymentTarget.DnsName = directoryItem.DnsName;
+                    deploymentTarget.Name = item.Name;
+                    deploymentTarget.TargetUid = item.TargetUid;
+                    collection.Add(deploymentTarget);
+                }
+                else
+                {
+                    DeploymentTarget deploymentTarget = new DeploymentTarget();
+                    deploymentTarget.Name = item.Name;
+                    deploymentTarget.TargetUid = item.TargetUid;
+                    collection.Add(deploymentTarget);
+                }
             }
 
             return collection;
@@ -544,5 +554,55 @@ namespace APTAT.Application.Services
 
             throw new ArgumentException("kind");
         }
+
+        public void GetWorkgroup(String workgroupName, Object userState)
+        {
+            IWorkgroupDiscoverer discoverer = _manager.GetWorkgroupDiscoverer(workgroupName);
+            discoverer.Discovered += OnWorkgroupDiscovered;
+            discoverer.BeginDiscover(userState);
+        }
+
+        private void OnWorkgroupDiscovered(Object sender, TargetsDiscovererEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                DeploymentTarget[] targets = e.Targets;
+                DeploymentItem[] result = new DeploymentItem[targets.Length];
+                for (Int32 i = 0; i < targets.Length; ++i)
+                {
+                    DeploymentTarget target = targets[i];
+                    result[i] = new DeploymentItem
+                    {
+                        Name = target.Name,
+                        TargetUid = target.TargetUid,
+                    };
+                }
+
+                GetWorkgroupEventArgs args = new GetWorkgroupEventArgs(result, e.State);
+                Action action = () =>
+                {
+                    if (GetWorkgroupCompleted != null)
+                    {
+                        GetWorkgroupCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+
+            }
+            else
+            {
+                GetWorkgroupEventArgs args = new GetWorkgroupEventArgs(null, e.State, e.Error);
+                Action action = () =>
+                {
+                    if (GetWorkgroupCompleted != null)
+                    {
+                        GetWorkgroupCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+            }
+        }
+
+  
     }
 }

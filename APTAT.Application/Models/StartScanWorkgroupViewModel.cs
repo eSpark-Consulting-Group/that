@@ -1,7 +1,11 @@
-﻿using System;
+﻿using APTAT.Application.Services;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
 {
@@ -10,10 +14,173 @@ namespace APTAT.Application.Models
         public const String SelectWorkgroup = "SelectWorkgroup";
         public const String SelectTargets = "SelectTargets";
 
+        private readonly IAptService _service = AptService.Instance;
+        private readonly IStorageService _storage = new StorageService();
+
+        private String _workgroup;
+        private String _administrator;
+        private String _password;
+
+        private ObservableCollection<DeploymentItem> _items;
+
+        public ICollection<Object> CheckedItems
+        {
+            get;
+            set;
+        }
+
+        public ObservableCollection<DeploymentItem> Items
+        {
+            get { return _items; }
+            set
+            {
+                _items = value;
+                RaisePropertyChanged("Items");
+            }
+        }
+
+        public String Workgroup
+        {
+            get { return _workgroup; }
+            set
+            {
+                _workgroup = value;
+
+                if (String.IsNullOrWhiteSpace(_workgroup))
+                {
+                    RaiseValidationError("Workgroup", "Please Specify Workgroup");
+                }
+                else
+                {
+                    ClearError("Workgroup");
+                }
+            }
+        }
+
+        public String Administrator
+        {
+            get { return _administrator; }
+            set
+            {
+                _administrator = value;
+
+                if (String.IsNullOrWhiteSpace(_administrator))
+                {
+                    RaiseValidationError("Administrator", "Please Specify Administrator Login");
+                }
+                else
+                {
+                    ClearError("Administrator");
+                }
+            }
+        }
+
+        public String Password
+        {
+            get { return _password; }
+            set { _password = value; }
+        }
+
+        public DelegateCommand CheckItemCommand { get; private set; }
+
+        public DelegateCommand UncheckItemCommand { get; private set; }
+
         public StartScanWorkgroupViewModel()
         {
             SetSteps(new[] { null, SelectWorkgroup, SelectTargets });
+        }
 
+        protected override void InvokeViewLoaded(object arg)
+        {
+            base.InvokeViewLoaded(arg);
+            _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
+            if (_administrator != null)
+            {
+                RaisePropertyChanged("Administrator");
+            }
+            _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
+            if (_workgroup != null)
+            {
+                RaisePropertyChanged("Workgroup");
+            }
+
+            _service.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
+           
+        }
+
+        protected override void InvokeViewUnloaded(Object arg)
+        {
+            base.InvokeViewUnloaded(arg);
+
+            _service.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
+        }
+
+        protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
+        {
+            if (previousStep == SelectWorkgroup && context.IsForward(CurrentStepIndex))
+            {
+                try
+                {
+                    Workgroup = Workgroup;
+                    Administrator = Administrator;
+                    Password = Password;
+                }
+                catch (ValidationException e)
+                {
+                    return;
+                }
+
+
+                IsBusy = true;
+                _service.GetWorkgroup(Workgroup, success);
+            }
+            else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
+            {
+                if (CheckedItems == null || CheckedItems.Count == 0)
+                {
+                    Error = "Select at least one item";
+                }
+                else
+                {
+                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
+                    _storage.SetValue(KnownKeys.Login, _administrator);
+                    _storage.SetValue(KnownKeys.Password, _password);
+                    _storage.SetValue(KnownKeys.Workgroup, _workgroup);
+                    success();
+                }
+            }
+            else
+            {
+                if (context.IsBackward(CurrentStepIndex))
+                {
+                    Error = null;
+                }
+
+                base.OnStepChanging(success, previousStep, context);
+            }
+        }
+
+        protected override void OnStepChanged()
+        {
+
+        }
+
+        private void OnGetWorkgroupCompleted(Object sender, GetWorkgroupEventArgs e)
+        {
+           IsBusy = false;
+            if (e.Exception == null)
+            {
+               Items = new ObservableCollection<DeploymentItem>(e.Items.OrderBy(o => o.Name));
+            }
+            else
+            {
+                Items = new ObservableCollection<DeploymentItem>();
+                Error = e.Exception.Message;
+            }
+
+            Action success = (Action)e.UserState;
+            success();
+         
         }
     }
 }
