@@ -7,9 +7,12 @@ namespace APTAT.Application.Models
 {
     public class StartScanByIpViewModel : WizardViewModel
     {
+        public const String SelectIp = "SelectIp";
+        public const String SelectTargets = "SelectTargets";
+
         public StartScanByIpViewModel()
         {
-            SetSteps(new[] { "" });
+            SetSteps(new[] { null, SelectIp, SelectTargets });
 
         }
     }

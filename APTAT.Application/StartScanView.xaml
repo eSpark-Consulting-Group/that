@@ -29,7 +29,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="App:SelectorButton">
-                                    <Grid>
+                                    <Grid Background="Transparent">
                                  
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
@@ -146,6 +146,8 @@
         <Border x:Name="wizardBorder" Visibility="Collapsed" Grid.Row="1" >
             <Grid>
                 <App:StartScanDomainView x:Name="viewScanDomain"  />
+                <App:StartScanWorkgroupView x:Name="viewScanWorkgroup"/>
+                <App:StartScanByIpView x:Name="viewScanByIp"/>
             </Grid>
         </Border>
         <Border Grid.Row="0" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}">    

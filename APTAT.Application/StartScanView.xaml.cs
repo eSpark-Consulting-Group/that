@@ -120,16 +120,19 @@ namespace APTAT.Application
         private void OnActiveDirectoryClick(object sender, RoutedEventArgs e)
         {
             SetCurrentViewModel(_scanDomainViewModel);
+            UpdateViewVisibility();
         }
 
         private void OnWorkgroupClick(object sender, RoutedEventArgs e)
         {
             SetCurrentViewModel(_scanWorkgroupViewModel);
+            UpdateViewVisibility();
         }
 
         private void OnIpClick(object sender, RoutedEventArgs e)
         {
             SetCurrentViewModel(_scanByIpViewModel);
+            UpdateViewVisibility();
         }
 
 
@@ -174,6 +177,30 @@ namespace APTAT.Application
             if (_currentViewModel != null)
             {
                 _currentViewModel.ViewUnloadedCommand.Execute(null);
+            }
+        }
+
+        private void UpdateViewVisibility()
+        {
+            viewScanByIp.Visibility = Visibility.Collapsed;
+            viewScanDomain.Visibility = Visibility.Collapsed;
+            viewScanWorkgroup.Visibility = Visibility.Collapsed;    
+            if(_currentViewModel == null)
+            {
+                return;
+            }
+
+            if (_currentViewModel is StartScanDomainViewModel)
+            {
+                viewScanDomain.Visibility = Visibility.Visible;
+            }
+            else if (_currentViewModel is StartScanWorkgroupViewModel)
+            {
+                viewScanWorkgroup.Visibility = Visibility.Visible;    
+            }
+            else if (_currentViewModel is StartScanByIpViewModel)
+            {
+                viewScanByIp.Visibility = Visibility.Visible;
             }
         }
     }

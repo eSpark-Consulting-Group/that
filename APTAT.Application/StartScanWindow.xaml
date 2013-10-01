@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
         Title="START SCANNING WIZARD" 
     
-        MinHeight="300" MinWidth="640"  Height="600" Width="800" WindowStyle="None"
+        MinHeight="600" MinWidth="640"  Height="600" Width="800" WindowStyle="None"
                 AllowsTransparency="True" Background="Transparent" BorderThickness="3"
                 ResizeMode="CanResizeWithGrip" MouseLeftButtonDown="Window_MouseLeftButtonDown"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False">

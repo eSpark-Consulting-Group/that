@@ -7,9 +7,12 @@ namespace APTAT.Application.Models
 {
     public class StartScanWorkgroupViewModel : WizardViewModel
     {
+        public const String SelectWorkgroup = "SelectWorkgroup";
+        public const String SelectTargets = "SelectTargets";
+
         public StartScanWorkgroupViewModel()
         {
-            SetSteps(new[] { "" });
+            SetSteps(new[] { null, SelectWorkgroup, SelectTargets });
 
         }
     }

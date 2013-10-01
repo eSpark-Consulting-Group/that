@@ -23,5 +23,10 @@ namespace APTAT.Application
         {
             InitializeComponent();
         }
+
+        private void OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
