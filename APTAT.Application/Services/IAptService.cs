@@ -1,5 +1,6 @@
 ﻿using System;
 using APTAT.Application.Models;
+using System.Collections.Generic;
 
 namespace APTAT.Application.Services
 {
@@ -8,6 +9,18 @@ namespace APTAT.Application.Services
         public Object UserState { get; protected set; }
 
         public Exception Exception { get; set; }
+    }
+
+    public class GetByIpAddressEventArgs : DomainEventArgs
+    {
+        public DeploymentItem[] Items { get; private set; }
+
+        public GetByIpAddressEventArgs(DeploymentItem[] items, Object userState, Exception error = null)
+        {
+            Items = items;
+            UserState = userState;
+            Exception = error;
+        }
     }
 
     public class GetWorkgroupEventArgs : DomainEventArgs
@@ -142,7 +155,9 @@ namespace APTAT.Application.Services
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
         event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
+        event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
 
+        void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState);
 
         void GetWorkgroup(String workgroupName, Object userState);
 

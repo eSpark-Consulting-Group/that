@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:local="clr-namespace:APTAT.Application"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid>
@@ -41,6 +43,14 @@
 
 
             <Grid x:Name="panelSelectWorkgroup" Grid.Row="2" Background="White" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectIp, FallbackValue=Collapsed}">
+                <Grid.Resources>
+                    <DataTemplate x:Key="ItemTemplate">
+
+                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding FormattedText}"  VerticalAlignment="Center"/>
+
+                    </DataTemplate>
+                </Grid.Resources>
+                    
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition />
@@ -50,55 +60,62 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="115"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock  Grid.Row="0"  FontSize="14" Margin="5" VerticalAlignment="Top"  Text="Network Address:"/>
-                    <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="5" Text="Administrator:"/>
-                    <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="2" Text="Password:"/>
-                    <Grid Grid.Row="0" Grid.Column="1"> 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                       
-                        <ListBox Grid.Row="1" Margin="5">
-                            
-                        </ListBox>
-                        <TextBox x:Name="txtInput" BorderThickness="0" VerticalAlignment="Top" Margin="5"  Text="{Binding DomainController, Mode=TwoWay, ValidatesOnExceptions=True}" >
-                        </TextBox>
-                    </Grid>
-                  
-                    <StackPanel Grid.Column="2">
-                        <!--Style="{StaticResource ButtonHighlightStyle}"-->
-                        <!--Style="{StaticResource ButtonNormalStyle}"-->
-                        <Button Content="Add" Grid.Column="1" Margin="5,5,0,5" Width="120"  />
-                        <Button Content="Remove" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Margin="5,5,0,5" Width="120"  />
-                    </StackPanel>
-                    
-                    <TextBox x:Name="txtAdministrator" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
-                    <PasswordBox x:Name="password"  BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
+
+                    <local:TextEntryListView Margin="5,0,0,10" 
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        AddCommand="{Binding AddIpCommand}"
+                        RemoveCommand="{Binding DeleteIpCommand}"
+                        ItemTemplate="{StaticResource ItemTemplate}"
+                        ItemsSource="{Binding IpAddresses}"/>
+
+
+                    <TextBlock VerticalAlignment="Top" Grid.Row="0"  FontSize="14" Margin="20,5,5,5"  Text="Network Address:"/>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="20,5,5,5" Text="Login:"/>
+                    <TextBlock VerticalAlignment="Center" Margin="20,5,5,5" FontSize="14" Grid.Row="2" Text="Password:"/>
+
+                    <TextBox x:Name="txtAdministrator" BorderThickness="0" Margin="5"
+                             
+                             Grid.Row="1" 
+                             Grid.Column="1" 
+                             Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
+                    <PasswordBox x:Name="password" 
+                                 BorderThickness="0"
+                                 Margin="5" 
+                                 Grid.Row="2" 
+                                 Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
 
                 </Grid>
-
-
+           
+                <!--Tip="{Binding DeployAgentWizard_IpAddressTip, Source={StaticResource LocalizedStrings}}"-->
             </Grid>
             <Grid x:Name="panelSelectComputers" Grid.Row="2" Background="White" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
-                <Grid.Resources>
-
-                </Grid.Resources>
-
-                <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
-
-                </Border>
+                
+                <telerik:RadGridView 
+                x:Name="computersGrid"
+                CanUserFreezeColumns="False" 
+                AutoGenerateColumns="False" 
+                CanUserResizeColumns="False"
+                IsReadOnly="True"
+                TabIndex="1"
+                IsFilteringAllowed="False"
+                EnableRowVirtualization="True"
+                SelectionChanged="OnSelectionChanged"
+                Margin="20,0,20,20"
+                SelectionMode="Extended"
+                ItemsSource="{Binding Items}">
+                    <telerik:RadGridView.Columns>
+                        <telerik:GridViewSelectColumn />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="" Width="*"/>
+                    </telerik:RadGridView.Columns>
+                </telerik:RadGridView>
 
             </Grid>
         </Grid>

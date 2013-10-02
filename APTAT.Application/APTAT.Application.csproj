@@ -62,6 +62,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="FluentValidation">
+      <HintPath>..\APTAT.Libraries\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -137,17 +140,22 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CancelItemArgs.cs" />
     <Compile Include="ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RadMaskedTextBoxEx.cs" />
     <Compile Include="Controls\RadMaskedTextBoxUpdateSourceBehavior.cs" />
+    <Compile Include="Converters\EmptyStringToBoolConverter.cs" />
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
+    <Compile Include="Converters\SelectedIndexToBoolConverter.cs" />
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
     <Compile Include="ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logger.cs" />
+    <Compile Include="Models\DelegateCommand.cs" />
+    <Compile Include="Models\IpAddressItem.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
     <Compile Include="Models\StartScanByIpViewModel.cs" />
     <Compile Include="Models\StartScanDomainViewModel.cs" />
@@ -200,6 +208,9 @@
       <DependentUpon>StartScanWorkgroupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplateSelectors\MainViewNameTemplateSelector.cs" />
+    <Compile Include="TextEntryListView.xaml.cs">
+      <DependentUpon>TextEntryListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ThreatDetailsView.xaml.cs">
       <DependentUpon>ThreatDetailsView.xaml</DependentUpon>
     </Compile>
@@ -279,6 +290,10 @@
     <Page Include="StartScanWorkgroupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TextEntryListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ThreatDetailsView.xaml">
       <SubType>Designer</SubType>

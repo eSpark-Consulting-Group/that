@@ -172,14 +172,14 @@
                         Click="OnCancelClick" Margin="5"  Style="{StaticResource ButtonNormalStyle}"/>
                 <Button x:Name="btnNext"  
                         Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                        IsDefault="True" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
+                        IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
                         Content="Next" 
                         Margin="5" 
                         Click="OnNextClick"  
                         Style="{StaticResource ButtonHighlightStyle}" />
                 <Button x:Name="btnFinish"
                         Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                        IsDefault="True"  
+                        IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
                         IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
                         Content="Scan" 
                         Click="OnFinishClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />

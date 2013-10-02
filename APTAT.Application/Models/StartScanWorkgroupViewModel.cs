@@ -167,7 +167,7 @@ namespace APTAT.Application.Models
 
         private void OnGetWorkgroupCompleted(Object sender, GetWorkgroupEventArgs e)
         {
-           IsBusy = false;
+            IsBusy = false;
             if (e.Exception == null)
             {
                Items = new ObservableCollection<DeploymentItem>(e.Items.OrderBy(o => o.Name));
@@ -180,7 +180,6 @@ namespace APTAT.Application.Models
 
             Action success = (Action)e.UserState;
             success();
-         
         }
     }
 }

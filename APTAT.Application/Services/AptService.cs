@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using APTAT.Core.Reports;
+using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 
 namespace APTAT.Application.Services
 {
@@ -59,6 +60,8 @@ namespace APTAT.Application.Services
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
 
         public event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
+
+        public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
 
         private readonly AptAtManager _manager;
 
@@ -597,6 +600,59 @@ namespace APTAT.Application.Services
                     if (GetWorkgroupCompleted != null)
                     {
                         GetWorkgroupCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+            }
+        }
+
+        public void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState)
+        {
+            EndpointAddressCollection ipAddressCollection = new EndpointAddressCollection();
+            foreach(IpAddressWrapper ipAddress in ipAddresses)
+            {
+                ipAddressCollection.Add(ipAddress.GetEndpointAddress().BaseEntity);
+            }
+
+            IIpAddressDiscoverer discoverer = _manager.GetIpAddressDiscoverer(ipAddressCollection);
+            discoverer.Discovered += OnComputersByIpAddressesDiscovered;
+            discoverer.BeginDiscover(userState);
+        }
+
+        private void OnComputersByIpAddressesDiscovered(Object sender, TargetsDiscovererEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                DeploymentTarget[] targets = e.Targets;
+                DeploymentItem[] result = new DeploymentItem[targets.Length];
+                for (Int32 i = 0; i < targets.Length; ++i)
+                {
+                    DeploymentTarget target = targets[i];
+                    result[i] = new DeploymentItem
+                    {
+                        Name = target.Name,
+                        TargetUid = target.TargetUid,
+                    };
+                }
+
+                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(result, e.State);
+                Action action = () =>
+                {
+                    if (GetByIpAddressesCompleted != null)
+                    {
+                        GetByIpAddressesCompleted(this, args);
+                    }
+                };
+                DispatcherHelper.Current.BeginInvoke(action);
+            }
+            else
+            {
+                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(null, e.State, e.Error);
+                Action action = () =>
+                {
+                    if (GetByIpAddressesCompleted != null)
+                    {
+                        GetByIpAddressesCompleted(this, args);
                     }
                 };
                 DispatcherHelper.Current.BeginInvoke(action);

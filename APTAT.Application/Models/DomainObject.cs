@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using FluentValidation.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -106,6 +108,29 @@ namespace APTAT.Application.Models
                 Error = null;
             }
             
+        }
+
+        protected void ValidatePropertyThrow(String propertyName, FluentValidation.IValidator validator)
+        {
+            FluentValidation.Results.ValidationResult result = validator.Validate(new FluentValidation.ValidationContext(this, new PropertyChain(), new MemberNameValidatorSelector(new[] { propertyName })));
+            if (result.IsValid == false)
+            {
+                throw new ValidationException(result.Errors[0].ErrorMessage);
+            }
+
+                
+        }
+
+        protected Boolean ValidateProperty(Object instance, String propertyName, FluentValidation.IValidator validator)
+        {
+            FluentValidation.Results.ValidationResult result = validator.Validate(new FluentValidation.ValidationContext(instance, new PropertyChain(), new MemberNameValidatorSelector(new[] { propertyName })));
+            if (result.IsValid == false)
+            {
+                Error = result.Errors[0].ErrorMessage;
+                return false;
+            }
+
+            return true;
         }
 
   
