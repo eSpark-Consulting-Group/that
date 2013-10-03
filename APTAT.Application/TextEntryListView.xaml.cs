@@ -79,6 +79,8 @@ namespace APTAT.Application
 		private static void TipPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var view = (TextEntryListView) d;
+
+            ToolTipService.SetToolTip(view.ToolTipIcon, e.NewValue);
 			//view.TipText.Content = e.NewValue;
 		}
 

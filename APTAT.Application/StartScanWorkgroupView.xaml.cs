@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 
 namespace APTAT.Application
 {
@@ -36,6 +37,27 @@ namespace APTAT.Application
         {
             StartScanWorkgroupViewModel viewModel = (StartScanWorkgroupViewModel)DataContext;
             viewModel.CheckedItems = computersGrid.SelectedItems;
+        }
+
+      
+        private void OnRowLoaded(object sender, RowLoadedEventArgs e)
+        {
+            if (e.Row is GridViewRow && !(e.Row is GridViewNewRow))
+            {
+                DeploymentItem item = e.DataElement as DeploymentItem;
+                var chk = e.Row.ChildrenOfType<GridViewCell>().ToList();
+                foreach (var c in chk)
+                {
+                    if (item.IsOnline)
+                    {
+                        c.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        c.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
         }
     }
 }

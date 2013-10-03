@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 
 namespace APTAT.Application
 {
@@ -24,6 +25,8 @@ namespace APTAT.Application
         public StartScanByIpView()
         {
             InitializeComponent();
+
+      
         }
 
         private void OnPasswordChanged(Object sender, RoutedEventArgs e)
@@ -34,8 +37,14 @@ namespace APTAT.Application
 
         private void OnSelectionChanged(Object sender, SelectionChangeEventArgs e)
         {
+           
             StartScanByIpViewModel viewModel = (StartScanByIpViewModel)DataContext;
             viewModel.CheckedItems = computersGrid.SelectedItems;
+        }
+
+
+        private void OnSelectionChanging(Object sender, GridViewSelectedCellsChangingEventArgs e)
+        {
         }
     }
 }

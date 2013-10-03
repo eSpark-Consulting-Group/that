@@ -9,6 +9,8 @@ using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
 {
+ 
+
     public class StartScanByIpViewModel : WizardViewModel
     {
         public const String SelectIp = "SelectIp";
@@ -60,7 +62,11 @@ namespace APTAT.Application.Models
         public String Password
         {
             get { return _password; }
-            set { _password = value; }
+            set 
+            {
+                _password = value;
+          
+            }
         }
 
         public ObservableCollection<IpAddressWrapper> IpAddresses { get; private set; }
@@ -102,7 +108,7 @@ namespace APTAT.Application.Models
 
         public StartScanByIpViewModel()
         {
-            SetSteps(new[] { null, SelectIp, SelectTargets });
+            SetSteps(new[] { null, SelectIp });
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
             DeleteIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
@@ -111,17 +117,13 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
+            
             _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
-            if (_administrator != null)
-            {
-                RaisePropertyChanged("Administrator");
-            }
+            RaisePropertyChanged("Administrator");
 
             _service.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
-
         }
 
-    
 
         protected override void InvokeViewUnloaded(Object arg)
         {
@@ -149,6 +151,7 @@ namespace APTAT.Application.Models
 
         private void InvokeAddIpCommand(Object e)
         {
+            Error = null;
             CancelItemArgs args = (CancelItemArgs)e;
             var ipAddress = new IpAddressWrapper();
             try
@@ -165,7 +168,7 @@ namespace APTAT.Application.Models
             {
                 if (IpAddresses.Any(o => o.Text == ipAddress.Text))
                 {
-                    Error = "Duplicate data entered";
+                    Error = "The same network address was already added";
                     args.Cancel = true;
                 }
                 else
@@ -192,20 +195,21 @@ namespace APTAT.Application.Models
                     return;
                 }
 
-                try
+                if(String.IsNullOrEmpty(Administrator))
                 {
-
-                    Administrator = Administrator;
-                    Password = Password;
+                    Error = "Please Specify Administrator Login";
+                    return;
                 }
-                catch (ValidationException e)
+
+                if (String.IsNullOrEmpty(Password))
                 {
+                    Error = "Please Specify Password";
                     return;
                 }
 
 
                 IsBusy = true;
-                _service.GetByIpAddresses(IpAddresses, success);
+                _service.GetByIpAddresses(IpAddresses, new OperationContext { Success = success, UserState = this });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -219,7 +223,6 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
-                    //_storage.SetValue(KnownKeys.Workgroup, _workgroup);
                     success();
                 }
             }
@@ -236,20 +239,28 @@ namespace APTAT.Application.Models
 
         private void OnGetByIpAddressesCompleted(Object sender, GetByIpAddressEventArgs e)
         {
+            OperationContext context = (OperationContext)e.UserState;
+            if (context.UserState != this)
+            {
+                return;
+            }
+            
             EnableDefaultButtons = true;
             IsBusy = false;
             if (e.Exception == null)
             {
-                Items = new ObservableCollection<DeploymentItem>(e.Items.OrderBy(o => o.Name));
+                CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
+                _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
+                _storage.SetValue(KnownKeys.Login, _administrator);
+                _storage.SetValue(KnownKeys.Password, _password);
+                context.Success();
             }
             else
             {
-                Items = new ObservableCollection<DeploymentItem>();
+                //Items = new ObservableCollection<DeploymentItem>();
                 Error = e.Exception.Message;
             }
 
-            Action success = (Action)e.UserState;
-            success();
         }
     }
 }

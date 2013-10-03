@@ -9,6 +9,7 @@ using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
 {
+
     public class StartScanWorkgroupViewModel : WizardViewModel
     {
         public const String SelectWorkgroup = "SelectWorkgroup";
@@ -78,28 +79,30 @@ namespace APTAT.Application.Models
         public String Password
         {
             get { return _password; }
-            set { _password = value; }
+            set
+            {
+                _password = value;
+            }
         }
-
         public DelegateCommand CheckItemCommand { get; private set; }
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
         public StartScanWorkgroupViewModel()
         {
-            SetSteps(new[] { null, SelectWorkgroup, SelectTargets });
+            SetSteps(new[] { null, SelectWorkgroup });
         }
 
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
             _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
-            if (_administrator != null)
+            //if (_administrator != null)
             {
                 RaisePropertyChanged("Administrator");
             }
             _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
-            if (_workgroup != null)
+            //if (_workgroup != null)
             {
                 RaisePropertyChanged("Workgroup");
             }
@@ -119,20 +122,26 @@ namespace APTAT.Application.Models
         {
             if (previousStep == SelectWorkgroup && context.IsForward(CurrentStepIndex))
             {
-                try
+                if (String.IsNullOrEmpty(Workgroup))
                 {
-                    Workgroup = Workgroup;
-                    Administrator = Administrator;
-                    Password = Password;
-                }
-                catch (ValidationException e)
-                {
+                    Error = "Please Specify Workgroup";
                     return;
                 }
 
+                if (String.IsNullOrEmpty(Administrator))
+                {
+                    Error = "Please Specify Administrator Login";
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(Password))
+                {
+                    Error = "Please Specify Password";
+                    return;
+                }
 
                 IsBusy = true;
-                _service.GetWorkgroup(Workgroup, success);
+                _service.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -167,19 +176,29 @@ namespace APTAT.Application.Models
 
         private void OnGetWorkgroupCompleted(Object sender, GetWorkgroupEventArgs e)
         {
+            OperationContext context = (OperationContext)e.UserState;
+            if (context.UserState != this)
+            {
+                return;
+            }
+
             IsBusy = false;
             if (e.Exception == null)
             {
-               Items = new ObservableCollection<DeploymentItem>(e.Items.OrderBy(o => o.Name));
+                CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
+                _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
+                _storage.SetValue(KnownKeys.Login, _administrator);
+                _storage.SetValue(KnownKeys.Password, _password);
+                _storage.SetValue(KnownKeys.Workgroup, _workgroup);
+               context.Success();
             }
             else
             {
-                Items = new ObservableCollection<DeploymentItem>();
+              //  Items = new ObservableCollection<DeploymentItem>();
                 Error = e.Exception.Message;
             }
 
-            Action success = (Action)e.UserState;
-            success();
+           
         }
     }
 }

@@ -18,6 +18,12 @@ namespace APTAT.Application.Models
         public String Name { get; set; }
 
         public Guid TargetUid { get; set; }
+
+        public String IPAddress { get; set; }
+
+        public String Status { get; set; }
+
+        public Boolean IsOnline { get; set; }
     }
 
     public class DirectoryItem : DeploymentItem

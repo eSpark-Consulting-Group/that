@@ -49,7 +49,13 @@ namespace APTAT.Application
             _scanWorkgroupViewModel = new StartScanWorkgroupViewModel();
             _scanByIpViewModel = new StartScanByIpViewModel();
 
+            viewScanByIp.DataContext = _scanByIpViewModel;
+            viewScanDomain.DataContext = _scanDomainViewModel;
+            viewScanWorkgroup.DataContext = _scanWorkgroupViewModel;
+
             Unloaded += OnUnloaded;
+
+      
         }
 
         private void OnCancelClick(Object sender, RoutedEventArgs e)
@@ -112,6 +118,7 @@ namespace APTAT.Application
                 Step = _currentViewModel.CurrentStepIndex - 1,
                 Completed = ctx =>
                 {
+                    
                 }
             });
         
@@ -162,6 +169,7 @@ namespace APTAT.Application
             SetCurrentViewModel(null);
             wizardBorder.Visibility = Visibility.Collapsed;
             pathSelector.Visibility = Visibility.Visible;
+            ToolTipIcon.Visibility = Visibility.Collapsed;
         }
 
         private void OnWizardCompleted(Object sender, EventArgs e)
@@ -184,7 +192,9 @@ namespace APTAT.Application
         {
             viewScanByIp.Visibility = Visibility.Collapsed;
             viewScanDomain.Visibility = Visibility.Collapsed;
-            viewScanWorkgroup.Visibility = Visibility.Collapsed;    
+            viewScanWorkgroup.Visibility = Visibility.Collapsed;
+            ToolTipIcon.Visibility = Visibility.Collapsed;
+
             if(_currentViewModel == null)
             {
                 return;
@@ -200,7 +210,14 @@ namespace APTAT.Application
             }
             else if (_currentViewModel is StartScanByIpViewModel)
             {
+                ToolTipIcon.Visibility = Visibility.Visible;
                 viewScanByIp.Visibility = Visibility.Visible;
+                ToolTipService.SetToolTip(ToolTipIcon,
+    @"Note: The following templates of IP addresses or hostnames are allowed (for example).
+IP             : 10.0.0.1
+IP Range  : 10.0.0.1-10.0.0.5
+IP Subnet : 10.0.0.0/24 -or- 10.0.0.0/255.255.255.0
+Computer Name: HomeComputer");
             }
         }
     }

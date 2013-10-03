@@ -83,7 +83,7 @@
                 </Grid.RowDefinitions>
                 <App:SelectorButton Header="Active Directory" Content="Scan computers by selecting them from active directory" Click="OnActiveDirectoryClick">
                     <App:SelectorButton.RenderTransform>
-                        <TranslateTransform x:Name="translate1" X="-800" />
+                        <TranslateTransform x:Name="translate1" X="800" />
                     </App:SelectorButton.RenderTransform>
                     <App:SelectorButton.Triggers>
                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -103,7 +103,7 @@
                 </App:SelectorButton>
                 <App:SelectorButton x:Name="WgButton" Grid.Row="1" Header="Workgroup" Content="Scan computers by selecting them from workground" Click="OnWorkgroupClick">
                     <App:SelectorButton.RenderTransform>
-                        <TranslateTransform x:Name="translate2" X="-900" />
+                        <TranslateTransform x:Name="translate2" X="900" />
                     </App:SelectorButton.RenderTransform>
                     <App:SelectorButton.Triggers>
                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -123,7 +123,7 @@
                 </App:SelectorButton>
                 <App:SelectorButton x:Name="IpButton"  Grid.Row="2" Header="Network Addresses"  Content="Scan computers by specifying IP addresses or hostnames manually" Click="OnIpClick">
                     <App:SelectorButton.RenderTransform>
-                        <TranslateTransform x:Name="translate3" X="-1000" />
+                        <TranslateTransform x:Name="translate3" X="1000" />
                     </App:SelectorButton.RenderTransform>
                     <App:SelectorButton.Triggers>
                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -145,9 +145,9 @@
         </Border>
         <Border x:Name="wizardBorder" Visibility="Collapsed" Grid.Row="1" >
             <Grid>
-                <App:StartScanDomainView x:Name="viewScanDomain"  />
-                <App:StartScanWorkgroupView x:Name="viewScanWorkgroup"/>
-                <App:StartScanByIpView x:Name="viewScanByIp"/>
+                <App:StartScanDomainView x:Name="viewScanDomain" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
+                <App:StartScanWorkgroupView x:Name="viewScanWorkgroup"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
+                <App:StartScanByIpView x:Name="viewScanByIp"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
             </Grid>
         </Border>
         <Border Grid.Row="0" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}">    
@@ -162,30 +162,45 @@
 
 
         <Border  BorderBrush="#CCC" Grid.Row="2"  Height="60" BorderThickness="0,0,0,0" >
-            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="50" Margin="0,0,25,0">
-                <Button x:Name="btnBack" Content="Back" Margin="5" 
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
-                        Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
-                        Click="OnBackClick" Style="{StaticResource ButtonNormalStyle}" />
-                <Button x:Name="btnCancel" Content="Cancel" 
+            <Grid>
+
+
+                <Canvas x:Name="ToolTipIcon" Visibility="Collapsed"  ToolTipService.HorizontalOffset="-5"  Background="Transparent"  Margin="30,20, 5, 20" Width="24" Height="24" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1"  Grid.Column="1"  >
+
+
+                    <Ellipse  Fill="White" HorizontalAlignment="Left" Height="24" Stroke="#878787" VerticalAlignment="Top" Width="24" StrokeThickness="2"/>
+                    <Path Data="M0,5 L4,5 L4,14 L0,14 z M2,0 C3.10457,0 4,0.895431 4,2 C4,3.10457 3.10457,4 2,4 C0.895431,4 0,3.10457 0,2 C0,0.895431 0.895431,0 2,0 z" Fill="#878787" HorizontalAlignment="Left" Height="14" Stretch="Fill" Stroke="#FF767676" StrokeThickness="0" UseLayoutRounding="False" VerticalAlignment="Top" Width="4" Canvas.Left="10" Canvas.Top="5" />
+
+
+
+                </Canvas>
+
+                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="50" Margin="0,0,25,0">
+                    <Button x:Name="btnCancel" Content="Cancel" 
                         Visibility="{Binding IsCancelEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}"
                         Click="OnCancelClick" Margin="5"  Style="{StaticResource ButtonNormalStyle}"/>
-                <Button x:Name="btnNext"  
+                    <Button x:Name="btnBack" Content="Back" Margin="5" 
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
+                        Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
+                        Click="OnBackClick" Style="{StaticResource ButtonNormalStyle}"/>
+                    <Button x:Name="btnNext"  
                         Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
                         IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
                         Content="Next" 
                         Margin="5" 
                         Click="OnNextClick"  
                         Style="{StaticResource ButtonHighlightStyle}" />
-                <Button x:Name="btnFinish"
+                    <Button x:Name="btnFinish"
                         Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
                         IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
                         IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
                         Content="Scan" 
                         Click="OnFinishClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
-            </StackPanel>
+                </StackPanel>
+            </Grid>
+            
         </Border>
         
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent" />
+        <telerik:RadBusyIndicator Grid.Row="1" Margin="0,60,0,0" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent" />
     </Grid>
 </Models:BaseView>

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:local="clr-namespace:APTAT.Application"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -78,15 +79,17 @@
                 CanUserResizeColumns="False"
                 IsReadOnly="True"
                 TabIndex="1"
-                IsFilteringAllowed="False"
+                
                 EnableRowVirtualization="True"
                 SelectionChanged="OnSelectionChanged"
-                Margin="20,0,20,20"
+                Margin="30,0,30,30"
                 SelectionMode="Extended"
                 ItemsSource="{Binding Items}">
                 <telerik:RadGridView.Columns>
                     <telerik:GridViewSelectColumn />
-                    <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="" Width="*"/>
+                    <telerik:GridViewDataColumn  IsFilterable="True" DataMemberBinding="{Binding Name}" Header="COMPUTER" Width="*"/>
+                    <telerik:GridViewDataColumn  IsFilterable="True" DataMemberBinding="{Binding IPAddress}" Header="IP ADDRESS" Width="*"/>
+                    <telerik:GridViewDataColumn  IsFilterable="True" DataMemberBinding="{Binding Status}" Header="STATUS" Width="*"/>
                 </telerik:RadGridView.Columns>
             </telerik:RadGridView>
             <!--<Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">

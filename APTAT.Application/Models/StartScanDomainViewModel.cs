@@ -74,7 +74,11 @@ namespace APTAT.Application.Models
         public String Password
         {
             get { return _password; }
-            set { _password = value; }
+            set
+            {
+                _password = value;
+              
+            }
         }
 
         public DelegateCommand ExpandCommand { get; private set; }
@@ -97,7 +101,7 @@ namespace APTAT.Application.Models
         private void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
-            _service.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, commandContext);
+            _service.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, new OperationContext { UserState = this, Arg = commandContext });
         }
 
         private void InvokeCheckItem(Object arg)
@@ -117,20 +121,28 @@ namespace APTAT.Application.Models
 
             if (previousStep == SelectDomain && context.IsForward(CurrentStepIndex))
             {
-                try
+                if (String.IsNullOrEmpty(DomainController))
                 {
-                    DomainController = DomainController;
-                    Administrator = Administrator;
-                    Password = Password;
+                    Error = "Please Specify Domain Controller";
+                    return;
                 }
-                catch (ValidationException e)
+
+                if (String.IsNullOrEmpty(Administrator))
                 {
+                    Error = "Please Specify Administrator Login";
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(Password))
+                {
+                    Error = "Please Specify Password";
                     return;
                 }
                
 
                 IsBusy = true;
-                _service.GetDirectoryRoot(DomainController, Administrator, Password, success);
+
+                _service.GetDirectoryRoot(DomainController, Administrator, Password, new OperationContext { UserState = this, Success = success });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -168,12 +180,12 @@ namespace APTAT.Application.Models
             base.InvokeViewLoaded(arg);
 
             _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
-            if (_administrator != null)
+            //if (_administrator != null)
             {
                 RaisePropertyChanged("Administrator");
             }
             _domainController = _storage.GetValue<String>(KnownKeys.Domain, false);
-            if (_domainController != null)
+            //if (_domainController != null)
             {
                 RaisePropertyChanged("DomainController");
             }
@@ -193,19 +205,24 @@ namespace APTAT.Application.Models
 
         private void OnGetDirectoryRootCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
+            OperationContext context = (OperationContext)e.UserState;
+            if (context.UserState != this)
+            {
+                return;
+            }
+
             IsBusy = false;
-            Action success = (Action)e.UserState;
+            
             Items = e.Items;
             if (e.Exception == null)
             {
                 if (Items != null && Items.Length > 0)
                 {
-                    _service.GetDirectoryItems(DomainController, Administrator, Password, Items[0], this);
+                    _service.GetDirectoryItems(DomainController, Administrator, Password, Items[0], new OperationContext { UserState = this, Arg = this });
                 }
 
-               // _step = commandContext.Step;
                 Error = null;
-                success();
+                context.Success();
             }
             else
             {
@@ -215,6 +232,12 @@ namespace APTAT.Application.Models
 
         private void OnGetDirectoryItemsCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
+            OperationContext context = (OperationContext)e.UserState;
+            if (context.UserState != this)
+            {
+                return;
+            }
+
             if (e.Exception == null)
             {
                 e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
@@ -225,10 +248,10 @@ namespace APTAT.Application.Models
                 Error = e.Exception.Message;
             }
 
-            ExpandCommandContext context = e.UserState as ExpandCommandContext;
-            if (context != null)
+            ExpandCommandContext cmdContext = context.Arg as ExpandCommandContext;
+            if (cmdContext != null)
             {
-                context.RaiseCompleted();
+                cmdContext.RaiseCompleted();
             }
 
         }

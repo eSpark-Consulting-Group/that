@@ -578,6 +578,9 @@ namespace APTAT.Application.Services
                     {
                         Name = target.Name,
                         TargetUid = target.TargetUid,
+                        IPAddress = target.IPAddress == null ? "Unknown" : target.IPAddress,
+                        Status = target.Online ? "Ready" : "Offline",
+                        IsOnline = target.Online
                     };
                 }
 
@@ -632,6 +635,9 @@ namespace APTAT.Application.Services
                     {
                         Name = target.Name,
                         TargetUid = target.TargetUid,
+                        IPAddress = target.IPAddress == null ? "Unknown" : target.IPAddress,
+                        Status = target.Online ? "Ready" : "Offline",
+                        IsOnline = target.Online
                     };
                 }
 
