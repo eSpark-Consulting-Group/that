@@ -320,9 +320,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Resource Include="Assets\comodo_white.png" />
     <Resource Include="Assets\AboutLogo.png" />
     <Resource Include="APT.ico" />
+    <Resource Include="Assets\comodo_dark.png" />
+    <Resource Include="Assets\comodo_cto_200_40.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -331,6 +332,7 @@
     </Content>
     <Content Include="SfxPackage\7za.exe" />
     <None Include="SfxPackage\CreateSfx.bat" />
+    <Resource Include="Assets\comodo_white.png" />
     <Resource Include="SfxPackage\config.txt" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

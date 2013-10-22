@@ -24,8 +24,6 @@ namespace APTAT.Application
     /// </summary>
     public partial class MainWindow
     {
-      
-
         public MainWindow()
         {
             InitializeComponent();
@@ -37,11 +35,9 @@ namespace APTAT.Application
             SourceInitialized += (x, y) =>
             {
                 this.HideMinimizeAndMaximizeButtons();
-            };
-            
+            };            
 
             Loaded += MainWindow_Loaded;
-            
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -63,11 +59,8 @@ namespace APTAT.Application
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-           
                 WindowState = WindowState.Normal;
                 DragMove();
-               
-           
         }
 
    

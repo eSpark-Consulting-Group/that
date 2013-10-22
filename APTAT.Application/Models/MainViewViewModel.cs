@@ -94,11 +94,15 @@ namespace APTAT.Application.Models
         {
             get
             {
+                var commonHeaderName = (string)System.Windows.Application.Current.FindResource("APTApplicationTitle");
+                if (commonHeaderName == null)
+                    throw new ArgumentNullException("Failed to obtain window header value from application resources");
+
                 if (IsScanInProgress == true )
-                {
-                    return String.Format("APT Assessment Tool ({0}% scanning...)", Percentage);
+                {                    
+                    return String.Format("{0} ({1}% scanning...)", commonHeaderName, Percentage);
                 }
-                return "APT Assessment Tool";
+                return commonHeaderName;
             }
         }
 

@@ -18,6 +18,9 @@
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+
+            <sys:String x:Key="APTApplicationTitle">APT/Unknown Risk Assessment Tool</sys:String>
+            
             <SolidColorBrush x:Key="FooterDarkBrush" Color="#FF3C404B"/>
 
             <Converters:StringToVisibiltyConverter x:Key="StringToVisibiltyConverter"/>
