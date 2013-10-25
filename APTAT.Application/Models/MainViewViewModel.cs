@@ -75,6 +75,7 @@ namespace APTAT.Application.Models
             {
                 _malwareFilesCount = value;
                 RaisePropertyChanged("MalwareFilesCount");
+                RaisePropertyChanged("IsMalwaresFound");
             }
         }
 
@@ -173,6 +174,10 @@ namespace APTAT.Application.Models
             get { return _cache == null || _cache.Count == 0; }
         }
 
+        public Boolean IsMalwaresFound
+        {
+            get { return MalwareFilesCount > 0; }
+        }
 
         public ObservableCollection<ThreatInfoItem> Items
         {
@@ -469,7 +474,7 @@ namespace APTAT.Application.Models
                         infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                         infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                         infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                        infoItem.StatusMessage = scanProgress.StatusMessage;
+                        infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.")?scanProgress.StatusMessage.Replace("Malwares found: 0.", ""):scanProgress.StatusMessage;
                         if (infoItem.ScanStage != ScanStage.OperationCompleted &&
                             scanProgress.ScanStage == ScanStage.OperationCompleted)
                         {

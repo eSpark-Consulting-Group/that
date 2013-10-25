@@ -151,12 +151,22 @@ namespace APTAT.Core.Reports
 
         public ItemRatingInfo[] GetFileRatingCollection()
         {
-            return new ItemRatingInfo[]
+            var itemRatingInfoList = new List<ItemRatingInfo>()
             {
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = "Trusted Programs"},
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = "Unknown Programs"},
-                new FileRatingInfo(){CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares"}
+                //**
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" }
             };
+
+            //if (MalwareFilesFound > 0)
+            //{
+            //    itemRatingInfoList.Add(
+            //        new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" }
+            //        );
+            //}
+
+            return itemRatingInfoList.ToArray();
         }
 
         public ItemRatingInfo[] GetDevicesRatingCollection()

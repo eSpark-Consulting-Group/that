@@ -1,143 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="APTReportTest">
-      <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
-        <ConnectString>/* Local Connection */</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>01be3dfa-75da-4237-93fb-54f33092e5bd</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="AptReportDataSet">
-      <Fields>
-        <Field Name="MalwareFilesFound">
-          <DataField>MalwareFilesFound</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NetworkTrustLevel">
-          <DataField>NetworkTrustLevel</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NetworkTrustLevelString">
-          <DataField>NetworkTrustLevelString</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SafeFilesCount">
-          <DataField>SafeFilesCount</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ScanFinished">
-          <DataField>ScanFinished</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ScanStarted">
-          <DataField>ScanStarted</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="TargetsFailed">
-          <DataField>TargetsFailed</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetsNotPerformed">
-          <DataField>TargetsNotPerformed</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSafetyLevel">
-          <DataField>TargetsSafetyLevel</DataField>
-          <rd:TypeName>APTAT.Core.Reports.AptRiskAssessmentLevel</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSafetyLevelString">
-          <DataField>TargetsSafetyLevelString</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TargetsScanned">
-          <DataField>TargetsScanned</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSource">
-          <DataField>TargetsSource</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSucceeded">
-          <DataField>TargetsSucceeded</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TotalFilesScanned">
-          <DataField>TotalFilesScanned</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TotalTargetsCount">
-          <DataField>TotalTargetsCount</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="UnknownFilesFound">
-          <DataField>UnknownFilesFound</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>APTReportTest</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
-        <rd:TableName>AptReportData</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="FileRatingDataSet">
-      <Fields>
-        <Field Name="CloudVerdict">
-          <DataField>CloudVerdict</DataField>
-          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
-        </Field>
-        <Field Name="Count">
-          <DataField>Count</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Value">
-          <DataField>Value</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>APTReportTest</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
-        <rd:TableName>FileRatingInfo</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.FileRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="DevicesRatingDataSet">
-      <Fields>
-        <Field Name="Count">
-          <DataField>Count</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetVerdict">
-          <DataField>TargetVerdict</DataField>
-          <rd:TypeName>APTAT.Core.Reports.TargetVerdict</rd:TypeName>
-        </Field>
-        <Field Name="Value">
-          <DataField>Value</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>APTReportTest</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
-        <rd:TableName>TargetRatingInfo</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.TargetRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Textbox Name="Textbox6">
@@ -459,6 +321,9 @@
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
             <ZIndex>7</ZIndex>
+            <Visibility>
+              <Hidden>=iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -772,6 +637,9 @@
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
             <ZIndex>16</ZIndex>
+            <Visibility>
+              <Hidden>=iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1257,6 +1125,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1291,6 +1162,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartCategoryAxes>
                 <ChartValueAxes>
@@ -1325,6 +1199,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1358,6 +1235,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartValueAxes>
                 <Style>
@@ -1538,6 +1418,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1572,6 +1455,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartCategoryAxes>
                 <ChartValueAxes>
@@ -1606,6 +1492,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1639,6 +1528,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartValueAxes>
                 <Style>
@@ -1749,14 +1641,6 @@
     <Height>11.7985in</Height>
     <Style />
   </Body>
-  <ReportParameters>
-    <ReportParameter Name="ReportDate">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
   <Width>17cm</Width>
   <Page>
     <PageHeader>
@@ -1978,6 +1862,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0in</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
@@ -2064,6 +1949,153 @@
     <ColumnSpacing>0.13cm</ColumnSpacing>
     <Style />
   </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="APTReportTest">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>01be3dfa-75da-4237-93fb-54f33092e5bd</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="AptReportDataSet">
+      <Query>
+        <DataSourceName>APTReportTest</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="MalwareFilesFound">
+          <DataField>MalwareFilesFound</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NetworkTrustLevel">
+          <DataField>NetworkTrustLevel</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NetworkTrustLevelString">
+          <DataField>NetworkTrustLevelString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SafeFilesCount">
+          <DataField>SafeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ScanFinished">
+          <DataField>ScanFinished</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ScanStarted">
+          <DataField>ScanStarted</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="TargetsFailed">
+          <DataField>TargetsFailed</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetsNotPerformed">
+          <DataField>TargetsNotPerformed</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSafetyLevel">
+          <DataField>TargetsSafetyLevel</DataField>
+          <rd:TypeName>APTAT.Core.Reports.AptRiskAssessmentLevel</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSafetyLevelString">
+          <DataField>TargetsSafetyLevelString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TargetsScanned">
+          <DataField>TargetsScanned</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSource">
+          <DataField>TargetsSource</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSucceeded">
+          <DataField>TargetsSucceeded</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalFilesScanned">
+          <DataField>TotalFilesScanned</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalTargetsCount">
+          <DataField>TotalTargetsCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="UnknownFilesFound">
+          <DataField>UnknownFilesFound</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>AptReportData</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="FileRatingDataSet">
+      <Query>
+        <DataSourceName>APTReportTest</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="CloudVerdict">
+          <DataField>CloudVerdict</DataField>
+          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
+        </Field>
+        <Field Name="Count">
+          <DataField>Count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Value">
+          <DataField>Value</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>FileRatingInfo</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.FileRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="DevicesRatingDataSet">
+      <Query>
+        <DataSourceName>APTReportTest</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Count">
+          <DataField>Count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetVerdict">
+          <DataField>TargetVerdict</DataField>
+          <rd:TypeName>APTAT.Core.Reports.TargetVerdict</rd:TypeName>
+        </Field>
+        <Field Name="Value">
+          <DataField>Value</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>TargetRatingInfo</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.TargetRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="ReportDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="comodo">
       <MIMEType>image/jpeg</MIMEType>
@@ -2114,6 +2146,6 @@ TxOVwtU9DmcZkMTXR6vJR5OiqaCqTRJJC2unqo4pl0zRMhuOGUj6g+/de6b/AH7r3WWCCepmjp6aGWoq
 okm5Nlby2bUmj3ftLc21KwNoNLuTA5XBVIe8g0mDKUtLKGvE3Fr+k/0Pv3Xukz7917r3v3XuhQ2l0j3Lv6SGLZHU/ZG7WnZFjbbuydyZiH1/R5Kihxs8EMIAJaR2VFUEkgAn37r3R9Oof5R/yt7EqKWo3pjdv9O7elZXmrt3ZakyuealI5kodr7aqMlU/dK/HhyE+NNgTqHp1e691eH8Wv5dPQfxhlo9yUlDP2L2dTjUvYG8KeneXFzEIGO0tvxGXGbaAKXWe9TkV1uv3RjbQPde6Pz7917r3v3Xuv/R3+Pfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+690X/vT/mFv/I3/wDIj37r3Rf/AH7r3RsOoP8AjzYP+1hX/wDWxffuvdCh7917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de6C/t//AI82f/tYUH/WxvfuvdFP9+690YDov/mKf/IJ/wDJf37r3RgPfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3XvfuvdM+4f+LBnP+1Pk/wD3Cn9+690Rf37r3QkdT/8AH743/qHyP/uDP7917o3Hv3Xuve/de697917r3v3Xuve/de6//9k=</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
-  <rd:ReportID>d1b88eed-e1f7-48af-99ce-9356a2c2e98f</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>d1b88eed-e1f7-48af-99ce-9356a2c2e98f</rd:ReportID>
 </Report>

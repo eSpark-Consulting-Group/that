@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +27,8 @@ namespace APTAT.Application
             {
                 this.HideMinimizeAndMaximizeButtons();
             };
+
+            txtProductVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void Window_MouseLeftButtonDown(Object sender, MouseButtonEventArgs e)

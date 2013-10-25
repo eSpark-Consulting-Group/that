@@ -91,6 +91,7 @@ namespace APTAT.Application
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             scanCompletedWindow.ShowDialog();
         }
+        
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {
            
