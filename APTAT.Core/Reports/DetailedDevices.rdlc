@@ -1038,9 +1038,9 @@
                         <Style />
                       </ChartDataLabel>
                       <Style>
-                        <Color>=IIF(Fields!BadFileType.Value = 0, "#ff9900", "Maroon")</Color>
+                        <Color>="Maroon"</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
-                        <BackgroundGradientEndColor>=IIF(Fields!BadFileType.Value = 0, "#ffc64c", "#c03a3a")</BackgroundGradientEndColor>
+                        <BackgroundGradientEndColor>="#c03a3a"</BackgroundGradientEndColor>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1407,7 +1407,7 @@
                               <Value>=Fields!UnknownFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>8.19611cm</Top>
+                          <Top>8.16089cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2044,7 +2044,7 @@
                                 </Border>
                                 <BackgroundColor>=Switch(
                       Fields!TargetVerdict.Value = "2", "#c03a3a",
-                      Fields!TargetVerdict.Value = "3", "#f9cc08",
+                      Fields!TargetVerdict.Value = "3", "#c03a3a",
 					  Fields!TargetVerdict.Value = "0", "#D03D15",
                       Fields!TargetVerdict.Value = "1", "#3c963c")</BackgroundColor>
                               </Style>
@@ -2172,7 +2172,7 @@
                               <Value>=Fields!MalwareFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>7.24748cm</Top>
+                          <Top>7.27249cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>

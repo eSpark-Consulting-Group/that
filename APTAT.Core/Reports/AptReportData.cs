@@ -419,7 +419,7 @@ namespace APTAT.Core.Reports
                     case CloudVerdict.Malware:
                         return "Malware";
                     case CloudVerdict.FirstSeen:
-                        return "Unknown";
+                        return "Unknown (FirstSeen)";
                     case CloudVerdict.NetworkError:
                         return "Error";
                     default:

@@ -164,6 +164,9 @@ namespace APTAT.Application.Services
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
 
+            args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
+
+
             Action action = () =>
             {
                 if (ScanCompleted != null)

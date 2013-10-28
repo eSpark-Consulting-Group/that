@@ -938,7 +938,7 @@
               <BackgroundColor>=Switch(
 					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "4", "Silver",
                       First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "3", "#c03a3a",
-                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "2", "#f9cc08",
+                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "2", "#c03a3a",
 					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "1", "#D03D15",
                       First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "0", "#3c963c")</BackgroundColor>
             </Style>
@@ -1024,9 +1024,9 @@
                         <Style />
                       </ChartDataLabel>
                       <Style>
-                        <Color>=IIF(Fields!BadFileType.Value = 0, "#ff9900", "Maroon")</Color>
+                        <Color>="Maroon"</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
-                        <BackgroundGradientEndColor>=IIF(Fields!BadFileType.Value = 0, "#ffc64c", "#c03a3a")</BackgroundGradientEndColor>
+                        <BackgroundGradientEndColor>="#c03a3a"</BackgroundGradientEndColor>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1297,100 +1297,6 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Textbox Name="Textbox36">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Unknown</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox36</rd:DefaultName>
-            <Top>2.30259cm</Top>
-            <Left>15.2688cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.57396cm</Width>
-            <ZIndex>3</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox56">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Malicious</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox36</rd:DefaultName>
-            <Top>2.69798cm</Top>
-            <Left>15.2688cm</Left>
-            <Height>0.6cm</Height>
-            <Width>1.57396cm</Width>
-            <ZIndex>4</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Rectangle Name="Rectangle10">
-            <KeepTogether>true</KeepTogether>
-            <Top>2.82998cm</Top>
-            <Left>14.63297cm</Left>
-            <Height>0.2775cm</Height>
-            <Width>0.52437cm</Width>
-            <ZIndex>5</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <BackgroundColor>#951515</BackgroundColor>
-            </Style>
-          </Rectangle>
-          <Rectangle Name="Rectangle8">
-            <KeepTogether>true</KeepTogether>
-            <Top>2.43459cm</Top>
-            <Left>14.63297cm</Left>
-            <Height>0.2775cm</Height>
-            <Width>0.52437cm</Width>
-            <ZIndex>6</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <BackgroundColor>#ffa70f</BackgroundColor>
-            </Style>
-          </Rectangle>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>9.26006cm</Top>
@@ -1900,9 +1806,9 @@
                                   <Style>None</Style>
                                 </Border>
                                 <BackgroundColor>=Switch(
-					  Fields!Cloud.Value = "3", "#f9cc08",
+					  Fields!Cloud.Value = "3", "#c03a3a",
                       Fields!Cloud.Value = "2", "#c03a3a",
-                      Fields!Cloud.Value = "1", "#f9cc08",
+                      Fields!Cloud.Value = "1", "#c03a3a",
                       Fields!Cloud.Value = "0", "#3c963c")</BackgroundColor>
                               </Style>
                             </Rectangle>

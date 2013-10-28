@@ -1058,7 +1058,7 @@
                       <Style>
                         <Color>=Switch(
                       Fields!CloudVerdict.Value = "2", "#b22222",
-                      Fields!CloudVerdict.Value = "1", "#ffc000",
+                      Fields!CloudVerdict.Value = "1", "#b22222",
                       Fields!CloudVerdict.Value = "0", "#3c963c")</Color>
                       </Style>
                       <ChartMarker>
@@ -1862,7 +1862,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0in</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
