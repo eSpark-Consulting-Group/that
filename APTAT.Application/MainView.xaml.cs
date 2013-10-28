@@ -83,10 +83,10 @@ namespace APTAT.Application
             
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
             scanCompletedWindow.Text.Text = String.Empty;
-            scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", Environment.NewLine, e.CanceledCount);
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
+            if (e.SuccededCount > 0) scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
+            if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", Environment.NewLine, e.CanceledCount);
+            if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
+            if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
             if (e.MalwaresFound > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malewares found", Environment.NewLine, e.MalwaresFound);
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
