@@ -493,6 +493,7 @@ namespace APTAT.Core
         [XmlArray("Modules")]
         [XmlArrayItem("Module")]
         public ModuleRef[] ModuleReferences { get; set; }
+               
     }
 
     [XmlType("ModuleRef")]

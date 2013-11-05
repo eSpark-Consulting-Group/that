@@ -84,6 +84,7 @@ namespace APTAT.Application.Models
                 _password = value;
             }
         }
+      
         public DelegateCommand CheckItemCommand { get; private set; }
 
         public DelegateCommand UncheckItemCommand { get; private set; }

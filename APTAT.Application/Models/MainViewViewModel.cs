@@ -211,7 +211,11 @@ namespace APTAT.Application.Models
             _onlineItems = new ThreatInfoItem[0];
             SelectedItem = null;
             UnknownFilesCount = 0;
+            MalwareFilesCount = 0;
+            ScannedItemsCount = 0;
+            Percentage = 0;
             IsReportEnabled = false;
+
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)

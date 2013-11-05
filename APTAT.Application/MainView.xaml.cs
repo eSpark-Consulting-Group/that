@@ -81,14 +81,14 @@ namespace APTAT.Application
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
             
-            ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
+            ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow(_viewModel);
             scanCompletedWindow.Text.Text = String.Empty;
             if (e.SuccededCount > 0) scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
             if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", Environment.NewLine, e.CanceledCount);
             if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
             if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
-            if (e.MalwaresFound > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malewares found", Environment.NewLine, e.MalwaresFound);
+            if (e.MalwaresFound > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Maleware(s) found", Environment.NewLine, e.MalwaresFound);
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             scanCompletedWindow.ShowDialog();
         }
@@ -102,7 +102,7 @@ namespace APTAT.Application
         }
 
         private void OnStartScanningClick(object sender, RoutedEventArgs e)
-        {
+        {            
             StartScanWindow details = new StartScanWindow();
             details.Owner = System.Windows.Application.Current.MainWindow;
             if(details.ShowDialog() == true)
@@ -257,6 +257,12 @@ namespace APTAT.Application
         private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
         {
          //   treeList.CollapseAllHierarchyItems();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

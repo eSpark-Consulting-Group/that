@@ -19,7 +19,11 @@
             </ResourceDictionary.MergedDictionaries>
 
 
+            <sys:String x:Key="CESMLink">http://www.comodo.com/business-enterprise/cesm3/index_v2.php</sys:String>
+            <sys:String x:Key="BuyCesSmallText">You are under APT!</sys:String>            
+                        
             <sys:String x:Key="APTApplicationTitle">APT/Unknown Risk Assessment Tool</sys:String>
+            
             
             <SolidColorBrush x:Key="FooterDarkBrush" Color="#FF3C404B"/>
 
@@ -34,6 +38,7 @@
             <Converters:ScanStageToBrushConverter x:Key="ScanStageToBrushConverter"
                                                    CompletedBrush="Green" FailedBrush="#FFD64333" CanceledBrush="#FFD64333" ProgressBrush="#666" OfflineBrush="#999"/>
             <Converters:ScanStageToOpacityConverter x:Key="ScanStageToOpacityConverter"/>
+            <Converters:StringToHyperlinkConverter x:Key="StringToHyperlinkConverter" />
 
             <Style TargetType="TextBlock" x:Key="HeaderTextBlock">
                 <Setter Property="FontFamily" Value="Segoe UI Light"/>
