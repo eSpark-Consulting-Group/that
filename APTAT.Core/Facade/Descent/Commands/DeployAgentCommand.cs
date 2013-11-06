@@ -147,7 +147,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 
 			Guid operationUid;
             InstallPackageInfo install = null;
-            _descentSubSystem.DoDescentOperationOnNotExistingComputers(computers, Request.Login, Request.Password, false, install, out operationUid, Request.ScanScope, Request.Domain);
+            _descentSubSystem.DoDescentOperationOnNotExistingComputers(computers, Request.Login, Request.Password, false, install, out operationUid, Request.ScanScope, Request.Domain, Request.DevicesSourceDescription);
 
 			Response.OperationUid = operationUid;
 		}

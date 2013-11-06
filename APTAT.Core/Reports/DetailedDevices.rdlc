@@ -360,7 +360,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Active Directory (" &amp; First(Fields!TargetsSource.Value, "AptReportDataSet") &amp; ")"</Value>
+                    <Value>=First(Fields!DevicesSourceDescriptionString.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -373,9 +373,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>0.0173cm</Top>
+            <Top>0cm</Top>
             <Left>7.10622cm</Left>
-            <Height>0.55681cm</Height>
+            <Height>0.76183cm</Height>
             <Width>9.48254cm</Width>
             <ZIndex>10</ZIndex>
             <Style>
@@ -2441,6 +2441,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0in</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
@@ -2544,6 +2545,18 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
+        <Field Name="DevicesSourceDescription">
+          <DataField>DevicesSourceDescription</DataField>
+          <rd:TypeName>APTAT.Core.DevicesSourceDescription</rd:TypeName>
+        </Field>
+        <Field Name="DevicesSourceDescriptionString">
+          <DataField>DevicesSourceDescriptionString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EmptyFilesFound">
+          <DataField>EmptyFilesFound</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="MalwareFilesFound">
           <DataField>MalwareFilesFound</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -2555,6 +2568,10 @@
         <Field Name="NetworkTrustLevelString">
           <DataField>NetworkTrustLevelString</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OperationUid">
+          <DataField>OperationUid</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
         </Field>
         <Field Name="SafeFilesCount">
           <DataField>SafeFilesCount</DataField>
@@ -2612,7 +2629,7 @@
       <rd:DataSetInfo>
         <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
         <rd:TableName>AptReportData</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.1.28680, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="VulnerableDeviceExDataSet">

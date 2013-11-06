@@ -32,6 +32,8 @@ namespace APTAT.Core.Descent
         public DateTime Started { get; set; }
         public DateTime Finished { get; set; }
 
+        public DevicesSourceDescription DevicesSourceDescription { get; set; }
+
         public int TotalTargetsCount { get; set; }
         public int NotPerformedTargetsCount { get; set; }
         public int SucceededTargetsCount { get; set; }
@@ -1012,7 +1014,7 @@ namespace APTAT.Core.Descent
                 temp(this, args);
         }
 
-		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope, string domain )
+		public void DoDescentOperationOnNotExistingComputers( IEnumerable<TargetUidComputerPair> computers, string login, string password, bool withDelayedComputers, InstallPackageInfo package, out Guid operationUid, string scanScope, string domain, DevicesSourceDescription devicesSrcDescr)
 		{
             if(_scanResultsPerOperation.Count > 0)
             {
@@ -1032,7 +1034,14 @@ namespace APTAT.Core.Descent
 			}
 
             _scanResultsPerOperation.Clear();
-		    var operationContext = new AptScanOperationContext(){ OperationUid = result.OperationUid, Started = DateTime.UtcNow, TargetsSourceName = domain };
+		    var operationContext = new AptScanOperationContext()
+            { 
+                OperationUid = result.OperationUid, 
+                Started = DateTime.UtcNow, 
+                TargetsSourceName = domain, 
+                DevicesSourceDescription = devicesSrcDescr 
+            };
+
             _scanResultsPerOperation.TryAdd(result.OperationUid, operationContext);
             _descentMod = new DescentMod(DescentWatcherFactory, _catalog, operationContext.ScanResults);
 

@@ -1,4 +1,5 @@
 ﻿using APTAT.Application.Services;
+using APTAT.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -112,6 +113,8 @@ namespace APTAT.Application.Models
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
             DeleteIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
+
+            _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, true);
         }
 
         protected override void InvokeViewLoaded(object arg)
@@ -223,6 +226,7 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
+
                     success();
                 }
             }
@@ -253,6 +257,10 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                 _storage.SetValue(KnownKeys.Login, _administrator);
                 _storage.SetValue(KnownKeys.Password, _password);
+                
+                _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription() { Type = TargetsDiscovererType.NetworkAddresses });
+
                 context.Success();
             }
             else

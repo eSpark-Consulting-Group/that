@@ -17,6 +17,24 @@ namespace APTAT.Core.Reports
 
         public Guid OperationUid { get; set; }
         public string TargetsSource { get; set; }
+        public DevicesSourceDescription DevicesSourceDescription { get; set; }
+        public string DevicesSourceDescriptionString 
+        { 
+            get 
+            {
+                switch (DevicesSourceDescription.Type)
+                {
+                    case TargetsDiscovererType.ActiveDirectory:
+                        return string.Format("Active Directory ({0})", (string)(DevicesSourceDescription.Description));
+                    case TargetsDiscovererType.NetworkAddresses:
+                        return string.Format("Network Addresses");
+                    case TargetsDiscovererType.Workgroup:
+                        return string.Format("Workgroup ({0})", (string)(DevicesSourceDescription.Description));
+                    default:
+                        return string.Empty;
+                }
+            } 
+        }
 
         public DateTime ScanStarted { get; set; }
         public DateTime ScanFinished { get; set; }

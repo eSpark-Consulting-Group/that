@@ -8,6 +8,7 @@ using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
 using System.Threading;
 
+
 namespace APTAT.Application.Models
 {
     
@@ -194,6 +195,8 @@ namespace APTAT.Application.Models
         public DelegateCommand StartScanCommand { get; private set; }
 
         public DelegateCommand StopScanCommand { get; private set; }
+
+        public APTAT.Core.DevicesSourceDescription DevicesSourceDescription;
 
         public MainViewViewModel()
         {
@@ -419,9 +422,16 @@ namespace APTAT.Application.Models
                 {
                     throw new InvalidOperationException("specify login and password");
                 }
+
+                DevicesSourceDescription = _storage.GetValue<APTAT.Core.DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
+
+                if(DevicesSourceDescription == null)
+                    throw new InvalidOperationException("Devices Source Description was not correctly initialised");
+                
                 _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this);
                 _login = null;
                 _password = null;
+                DevicesSourceDescription = null;
             }
             else
             {

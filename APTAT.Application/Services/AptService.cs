@@ -120,8 +120,10 @@ namespace APTAT.Application.Services
             //Logger.Clear();
             //Logger.WriteLog("================= Begin Scan");
 
+            var devicesSourceDescr = ((MainViewViewModel)userState).DevicesSourceDescription;
+
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
-            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain);
+            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain, devicesSourceDescr);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;
@@ -182,9 +184,7 @@ namespace APTAT.Application.Services
         {
             DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
             IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets, admin, password);
-
-         
-
+            
             resolver.TargetsResolved += OnTargetsResolved;  
             resolver.BeginResolve(userState);
         }

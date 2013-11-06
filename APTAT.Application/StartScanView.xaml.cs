@@ -55,6 +55,7 @@ namespace APTAT.Application
 
             Unloaded += OnUnloaded;
 
+            
       
         }
 
@@ -68,7 +69,6 @@ namespace APTAT.Application
 
         private void OnFinishClick(Object sender, RoutedEventArgs e)
         {
-
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
                 Step = _currentViewModel.CurrentStepIndex + 1,

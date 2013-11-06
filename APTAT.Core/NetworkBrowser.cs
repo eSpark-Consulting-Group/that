@@ -449,7 +449,8 @@ namespace APTAT.Core
         NERR_Success = 0,
         ERROR_NO_BROWSER_SERVERS_FOUND = 6118,
         ERROR_MORE_DATA = 234,
-        ERROR_INVALID_PARAMETER = 87
+        ERROR_INVALID_PARAMETER = 87,
+        UNKNOWN_ERROR = 1326
     }
     #endregion NetServerEnumResults
 

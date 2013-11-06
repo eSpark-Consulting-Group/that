@@ -15,6 +15,19 @@ using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core
 {
+    public enum TargetsDiscovererType
+    {
+        ActiveDirectory,
+        NetworkAddresses,
+        Workgroup
+    }
+
+    public class DevicesSourceDescription
+    {
+        public TargetsDiscovererType Type { get; set; }
+        public object Description { get; set; }
+    }
+
     public interface ITargetsDiscoverer
     {
         DeploymentTargetsCollection Discover();
@@ -482,7 +495,8 @@ namespace APTAT.Core
                                              TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
                                              TotalTargetsCount = operationContext.TotalTargetsCount,
                                              TargetsSucceeded = operationContext.SucceededTargetsCount,
-                                             Targets = operationContext.ScanResults.Values.ToArray()
+                                             Targets = operationContext.ScanResults.Values.ToArray(),
+                                             DevicesSourceDescription = operationContext.DevicesSourceDescription
                                          };
 
                 ReportBuilder.BuildReportDelegate action = new ReportBuilder.BuildReportDelegate(_reportBuilder.Build);
@@ -691,7 +705,7 @@ namespace APTAT.Core
             return command.Response.Targets;
         }
 
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain, string scanScope = null)
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain, DevicesSourceDescription devicesSourceDescr, string scanScope = null)
         {
             if (scanScope == null)
                 scanScope = Properties.Settings.Default.ScanScope;
@@ -703,6 +717,7 @@ namespace APTAT.Core
                                                  Password = password,
                                                  ScanScope = scanScope,
                                                  Domain = domain,
+                                                 DevicesSourceDescription = devicesSourceDescr
                                              };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
             return new AptScanner(command, _descentSubSystem);

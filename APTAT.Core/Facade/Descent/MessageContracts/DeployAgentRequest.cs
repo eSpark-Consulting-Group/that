@@ -22,5 +22,7 @@ namespace APTAT.Core.Facade.Descent.MessageContracts
 		public bool UpdateEndpoints { get; set; }
 
         public string ScanScope { get; set; }
+
+        public DevicesSourceDescription DevicesSourceDescription { get; set; }
 	}
 }

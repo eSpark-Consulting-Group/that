@@ -42,9 +42,9 @@ namespace APTAT.Core.Facade.Descent.Commands
 				//throw new FaultException<WorkgroupQueryFault>( new WorkgroupQueryFault { WorkgroupName = criteria.WorkgroupName }, "Too many items are in the workgroup." );
                 throw new InvalidOperationException("Too many items are in the workgroup.");
 			}
-            else
+            else if (result == NetServerEnumResults.UNKNOWN_ERROR)
             {
-                throw new InvalidOperationException(string.Format("Unknown error occured. Code: {0}.", (int)result));
+                throw new InvalidOperationException("Unknown error occured.");
             }
 
 			Response.Targets.AddRange( from name in computers select new WorkgroupTarget { TargetUid = Guid.NewGuid(), Name = name, SmbName = name } );
