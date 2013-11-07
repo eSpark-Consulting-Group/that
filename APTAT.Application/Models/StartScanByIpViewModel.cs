@@ -257,9 +257,14 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                 _storage.SetValue(KnownKeys.Login, _administrator);
                 _storage.SetValue(KnownKeys.Password, _password);
-                
+
+                var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                    new DevicesSourceDescription() { Type = TargetsDiscovererType.NetworkAddresses });
+                    new DevicesSourceDescription() 
+                    { 
+                        Type = TargetsDiscovererType.NetworkAddresses, 
+                        Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString) 
+                    });
 
                 context.Success();
             }

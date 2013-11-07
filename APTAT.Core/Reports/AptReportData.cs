@@ -27,7 +27,7 @@ namespace APTAT.Core.Reports
                     case TargetsDiscovererType.ActiveDirectory:
                         return string.Format("Active Directory ({0})", (string)(DevicesSourceDescription.Description));
                     case TargetsDiscovererType.NetworkAddresses:
-                        return string.Format("Network Addresses");
+                        return string.Format("Network Addresses ({0}) ", (string)(DevicesSourceDescription.Description));
                     case TargetsDiscovererType.Workgroup:
                         return string.Format("Workgroup ({0})", (string)(DevicesSourceDescription.Description));
                     default:
