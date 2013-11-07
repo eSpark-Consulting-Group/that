@@ -40,7 +40,7 @@ namespace APTAT.Application
         private readonly WizardViewModel _scanByIpViewModel;
 
         private WizardViewModel _currentViewModel;
-
+        ToolTip tooltip;
         public StartScanView()
         {
             InitializeComponent();
@@ -212,13 +212,29 @@ namespace APTAT.Application
             {
                 ToolTipIcon.Visibility = Visibility.Visible;
                 viewScanByIp.Visibility = Visibility.Visible;
-                ToolTipService.SetToolTip(ToolTipIcon,
-    @"Note: The following templates of IP addresses or hostnames are allowed (for example).
+    
+                string toolTipText = @"Note: The following templates of IP addresses or hostnames are allowed (for example).
 IP             : 10.0.0.1
 IP Range  : 10.0.0.1-10.0.0.5
 IP Subnet : 10.0.0.0/24 -or- 10.0.0.0/255.255.255.0
-Computer Name: HomeComputer");
+Computer Name: HomeComputer";
+
+                //ToolTipService.SetToolTip(ToolTipIcon, toolTipText);
+
+                tooltip = new ToolTip { Content = toolTipText };
+                tooltip.IsOpen = true;
+                tooltip.PlacementTarget = ToolTipIcon;
+                tooltip.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+
+                ToolTipIcon.ToolTip = tooltip;
             }
+        }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (tooltip != null)
+                tooltip.IsOpen = false;
+
         }
     }
 }
