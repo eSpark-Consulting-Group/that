@@ -16,7 +16,9 @@ namespace APTAT.Core.Reports
         private int _emptyFilesCount = -1;
 
         public Guid OperationUid { get; set; }
+
         public string TargetsSource { get; set; }
+
         public DevicesSourceDescription DevicesSourceDescription { get; set; }
         public string DevicesSourceDescriptionString 
         { 
@@ -35,6 +37,7 @@ namespace APTAT.Core.Reports
                 }
             } 
         }
+        public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == TargetsDiscovererType.ActiveDirectory; } }
 
         public DateTime ScanStarted { get; set; }
         public DateTime ScanFinished { get; set; }

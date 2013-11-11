@@ -67,9 +67,14 @@ namespace APTAT.Core.Reports
             var allBadFilesData = data.GetAllBadFilesSorted();
             ReportDataSource allBadFilesDataSource = new ReportDataSource("DetailedBadFileDataSet", allBadFilesData);
             ReportDataSource mostWantedProgramsExDataSource = new ReportDataSource("MostWantedBadFileDataSet", data.GetTop10PopularBadFiles());
-            SubReportContext devicesSubReportDataSeource = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ScannedTargetDataSet", FileName = "APTAT.Core.Reports.Devices.rdlc", ReportName = "Devices" };
+            SubReportContext devicesSubReportDataSource = new SubReportContext() 
+            { Data = allBadFilesData, DataSourceName = "ScannedTargetDataSet", FileName = "APTAT.Core.Reports.Devices.rdlc", ReportName = "Devices" };
 
-            GenerateDetailedPerProgramReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedPrograms.rdlc", null, new ReportDataSource[] { allBadFilesDataSource, mostWantedProgramsExDataSource }, new SubReportContext[] { devicesSubReportDataSeource });
+            GenerateDetailedPerProgramReportFile(fileName, "AptReportDataSet", 
+                new AptReportData[] { data }, "APTAT.Core.Reports.DetailedPrograms.rdlc", 
+                null, 
+                new ReportDataSource[] { allBadFilesDataSource, mostWantedProgramsExDataSource }, 
+                new SubReportContext[] { devicesSubReportDataSource });
         }
 
         private static void GenerateExecutiveReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters, params ReportDataSource[] additionDataSource)
@@ -181,7 +186,6 @@ namespace APTAT.Core.Reports
         {
             using (LocalReport localReport = new LocalReport())
             {
-
                 //===========================================================================
                 SubreportProcessingEventHandler subReportProcessingDelegate = null;
                 subReportProcessingDelegate = delegate(object sender, SubreportProcessingEventArgs e)

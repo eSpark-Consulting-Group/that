@@ -152,21 +152,64 @@ namespace APTAT.Core.Facade.Descent.Commands
 			Response.OperationUid = operationUid;
 		}
 
-        private static string GetOrganizationUnit(string ldapPath, bool firstParentOnly = false)
+        //private static string GetOrganizationUnit(string ldapPath, bool firstParentOnly = false)
+        //{
+            //if (String.IsNullOrEmpty(ldapPath))
+            //    return null;
+
+            //string[] parts = ldapPath.Split(',');
+            //List<string> units = new List<string>();
+            //foreach (var part in parts)
+            //{
+            //    if (part.StartsWith("OU=", true, CultureInfo.InvariantCulture) && part.Length > 3)
+            //        units.Add(part.Substring(3));
+            //}
+
+            //if (firstParentOnly && units.Count > 0)
+            //    return units[0];
+
+            //units.Reverse();
+
+            //StringBuilder sb = new StringBuilder();
+            //foreach (var unit in units)
+            //{
+            //    sb.Append(String.Concat(unit, "\\"));
+            //}
+
+            //return sb.ToString().TrimEnd('\\');
+        //}
+
+        public static string GetOrganizationUnit(string ldapPath /*, out string firstParent*/ )
         {
+            //firstParent = null;
+            string firstParent;
             if (String.IsNullOrEmpty(ldapPath))
                 return null;
 
             string[] parts = ldapPath.Split(',');
             List<string> units = new List<string>();
+            List<string> containers = new List<string>();
             foreach (var part in parts)
             {
+                if (part.StartsWith("CN=", true, CultureInfo.InvariantCulture) && part.Length > 3)
+                    containers.Add(part.Substring(3));
+
                 if (part.StartsWith("OU=", true, CultureInfo.InvariantCulture) && part.Length > 3)
                     units.Add(part.Substring(3));
             }
 
-            if (firstParentOnly && units.Count > 0)
-                return units[0];
+            if (units.Count > 0)
+            {
+                firstParent = units[0];
+            }
+            else
+            {
+                if (containers.Count > 0)
+                {
+                    firstParent = containers[0];
+                    return firstParent;
+                }
+            }
 
             units.Reverse();
 

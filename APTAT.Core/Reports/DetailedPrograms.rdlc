@@ -1374,7 +1374,7 @@
                               <Value>=Fields!TargetsCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>5.20631cm</Top>
+                          <Top>5.22865cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2197,7 +2197,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0in</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
@@ -2313,6 +2312,10 @@
           <DataField>EmptyFilesFound</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="IsActiveDirectoryDevicesSource">
+          <DataField>IsActiveDirectoryDevicesSource</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
         <Field Name="MalwareFilesFound">
           <DataField>MalwareFilesFound</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -2385,7 +2388,7 @@
       <rd:DataSetInfo>
         <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
         <rd:TableName>AptReportData</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.1.28680, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.1.21796, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="MostWantedBadFileDataSet">
