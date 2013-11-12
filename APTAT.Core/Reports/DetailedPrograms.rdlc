@@ -1373,6 +1373,9 @@
                             <Parameter Name="Count">
                               <Value>=Fields!TargetsCount.Value</Value>
                             </Parameter>
+                            <Parameter Name="IsActiveDirectorySource">
+                              <Value>=Parameters!IsActiveDirectorySource.Value</Value>
+                            </Parameter>
                           </Parameters>
                           <Top>5.22865cm</Top>
                           <Left>0.62125cm</Left>
@@ -2487,6 +2490,10 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="IsActiveDirectorySource">
+      <DataType>Boolean</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

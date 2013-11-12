@@ -426,6 +426,7 @@ namespace APTAT.Core.Reports
         {
             get { return Targets.Count; }
         }
+        
 
         public string CloudString
         {
