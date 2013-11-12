@@ -185,6 +185,9 @@ namespace APTAT.Application
             if (_currentViewModel != null)
             {
                 _currentViewModel.ViewUnloadedCommand.Execute(null);
+
+                if (tooltip != null)
+                    tooltip.IsOpen = false;
             }
         }
 
