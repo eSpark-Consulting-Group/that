@@ -39,25 +39,51 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="20,15,10,10">
-                    <Canvas HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="38">
-                        <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FF2A81BA" Height="38" Stretch="Fill" Width="38" UseLayoutRounding="False"/>
-                        <Path Data="M33.063763,0.00029530161 C33.960186,0.011159729 34.858345,0.32191291 35.596252,0.94608212 L35.626793,0.97191292 C35.732208,1.0610793 35.831856,1.1545329 35.925705,1.2517986 C37.333382,2.7107966 37.434978,5.0278573 36.09742,6.6091065 L19.475761,26.259159 C18.584061,27.313326 17.263781,27.790968 15.987189,27.652649 L15.813902,27.629641 L15.804477,27.629295 C14.846323,27.571163 13.905938,27.17 13.183233,26.428385 L1.1352502,14.065191 C-0.40652844,12.483078 -0.37378308,9.9506483 1.2083752,8.4088469 L1.2370236,8.380929 C2.8191845,6.8391294 5.3516369,6.871809 6.8934131,8.4539213 L16.054495,17.854687 L29.959003,1.4168409 C30.761536,0.46809176 31.911217,-0.013673776 33.063763,0.00029530161 z" Fill="White" Height="15.842" Stretch="Fill" Stroke="Black" StrokeThickness="0" UseLayoutRounding="False" Width="21.684" Canvas.Left="8.666" Canvas.Top="10.667"/>
-                    </Canvas>
+                    <Grid>
+                        <Canvas x:Name="SuccessfulScanIcon" HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="38"
+                                Opacity="{Binding IsMalwaresFound, Converter={StaticResource InverseBoolToOpacityConverter}}">
+                            <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" 
+                                  Fill="#FF2A81BA" Height="38" Stretch="Fill" Width="38" UseLayoutRounding="False"/>
+                            <Path Data="M33.063763,0.00029530161 C33.960186,0.011159729 34.858345,0.32191291 35.596252,0.94608212 L35.626793,0.97191292 C35.732208,1.0610793 35.831856,1.1545329 35.925705,1.2517986 C37.333382,2.7107966 37.434978,5.0278573 36.09742,6.6091065 L19.475761,26.259159 C18.584061,27.313326 17.263781,27.790968 15.987189,27.652649 L15.813902,27.629641 L15.804477,27.629295 C14.846323,27.571163 13.905938,27.17 13.183233,26.428385 L1.1352502,14.065191 C-0.40652844,12.483078 -0.37378308,9.9506483 1.2083752,8.4088469 L1.2370236,8.380929 C2.8191845,6.8391294 5.3516369,6.871809 6.8934131,8.4539213 L16.054495,17.854687 L29.959003,1.4168409 C30.761536,0.46809176 31.911217,-0.013673776 33.063763,0.00029530161 z" 
+                                  Fill="White" Height="15.842" Stretch="Fill" Stroke="Black" StrokeThickness="0" UseLayoutRounding="False" Width="21.684" Canvas.Left="8.666" Canvas.Top="10.667"/>
+                        </Canvas>
+
+                        <Canvas x:Name="MalwaresFoundScanIcon" HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="38"
+                                Opacity="{Binding IsMalwaresFound, Converter={StaticResource BoolToOpacityConverter}}">
+                            <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" 
+                                  Fill="#FFE54C3C" Height="37.833" Stretch="Fill" Width="39.083" UseLayoutRounding="False"/>
+                            <Path Data="M1.188,7.9370117 C1.8441142,7.9370117 2.3759999,8.4688978 2.3759999,9.1250114 C2.3759999,9.781126 1.8441142,10.313012 1.188,10.313012 C0.53188568,10.313012 -7.4505806E-09,9.781126 0,9.1250114 C-7.4505806E-09,8.4688978 0.53188568,7.9370117 1.188,7.9370117 z M0.10499457,0 L2.2299945,0 L2.2299945,6.5619998 L0.10499457,6.5619998 z" 
+                                  Fill="White" Height="24.386" Stretch="Fill" Width="5.804" UseLayoutRounding="False" Canvas.Left="16.931" Canvas.Top="5.833" />
+                        </Canvas>
+                    </Grid>
+
                     <TextBlock Text="Scan Completed!" VerticalAlignment="Center" Margin="15,0,0,0" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}"/>
                 </StackPanel>
 
 
-                <TextBlock x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10" Grid.Row="1" LineHeight="28" Foreground="#555">    
+                <TextBlock x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10" Grid.Row="1" LineHeight="28" Foreground="#555">
                 </TextBlock>
-                <TextBlock x:Name="BuyCesText" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10" Grid.Row="2" LineHeight="28" Foreground="#555"
-                           Visibility="{Binding IsMalwaresFound, Converter={StaticResource BoolToVisibilityConverter}}">
-                    Buy CES!
-                    <Hyperlink x:Name="cesmHyperLink"
-                                   NavigateUri="{Binding Mode=OneWay, Source={StaticResource CESMLink}, Converter={StaticResource StringToHyperlinkConverter}}"
-                                   RequestNavigate="Hyperlink_RequestNavigate" FontWeight="Bold" >
-                            Click to buy CES/ESM
-                        </Hyperlink>
-                </TextBlock>
+
+                <StackPanel Grid.Row="2" 
+                            Height="Auto" HorizontalAlignment="Center"
+                            Visibility="{Binding IsMalwaresFound, Converter={StaticResource BoolToVisibilityConverter}}" >
+                    <Border Background="#FFDCE48A" BorderBrush="Gray" BorderThickness="0.5" Opacity="0.85">
+                        <StackPanel Margin="20,0">
+                            <TextBlock x:Name="BuyCesText" 
+                                   HorizontalAlignment="Center"   Margin="0,10,0,0"  LineHeight="28" Foreground="#555"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Text="{Binding Source={StaticResource BuyCesBigText}}"/>
+                            <TextBlock HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="14">
+                            <Hyperlink x:Name="cesmHyperLink"
+                                       NavigateUri="{Binding Mode=OneWay, Source={StaticResource CESMLink}, Converter={StaticResource StringToHyperlinkConverter}}"
+                                       RequestNavigate="Hyperlink_RequestNavigate" FontWeight="Bold" >
+                                Get Endpoint Security Manager
+                            </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
                 <StackPanel HorizontalAlignment="Center" Grid.Row="3" Margin="0,10,0,0">
                     <Button Content="OK"  Margin="5,5,5,15" Click="Button_Click"  Style="{StaticResource ButtonHighlightStyle}" ></Button>
                 </StackPanel>
@@ -66,7 +92,7 @@
                    
                     VerticalAlignment="Top" Margin="0,20,0,0" HorizontalAlignment="Left" Grid.Row="2"/>-->
         </Grid>
-        
-        
+
+
     </Border>
 </Window>
