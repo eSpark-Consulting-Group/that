@@ -40,7 +40,24 @@ namespace APTAT.Application
         private readonly WizardViewModel _scanByIpViewModel;
 
         private WizardViewModel _currentViewModel;
+
         ToolTip tooltip;
+        public bool IsTooltipOpen 
+        {
+            get
+            {
+                if (tooltip != null)
+                    return tooltip.IsOpen;
+                else
+                    return false;
+            }
+            set
+            {
+                if (tooltip != null)
+                    tooltip.IsOpen = value;
+            }
+        }
+
         public StartScanView()
         {
             InitializeComponent();
@@ -113,6 +130,8 @@ namespace APTAT.Application
 
         private void OnBackClick(Object sender, RoutedEventArgs e)
         {
+            IsTooltipOpen = false;
+
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
                 Step = _currentViewModel.CurrentStepIndex - 1,
@@ -186,8 +205,7 @@ namespace APTAT.Application
             {
                 _currentViewModel.ViewUnloadedCommand.Execute(null);
 
-                if (tooltip != null)
-                    tooltip.IsOpen = false;
+                IsTooltipOpen = false;
             }
         }
 

@@ -217,7 +217,7 @@
         <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
                    HorizontalAlignment="Center" Grid.Row="1">
 
-            <TextBlock Text="There are no scans have been preformed yet."
+            <TextBlock Text="There are no scans have been performed yet."
                    Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                    FontSize="21"
                    FontFamily="Segoe UI Light"/>
@@ -299,7 +299,7 @@
                               Stretch="Fill" 
                               Margin="0,0,10,0"
                               Width="20.385"/>
-                            <TextBlock Text="Properties" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
+                            <TextBlock Text="Properties" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" HorizontalAlignment="Right" Width="76"/>
                         </Grid>
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
@@ -391,7 +391,7 @@
                     <TextBlock VerticalAlignment="Center" FontSize="15" Margin="5,0,0,0"  >
                         <Hyperlink x:Name="cesmHyperLink"
                                    NavigateUri="{Binding Mode=OneWay, Source={StaticResource CESMLink}, Converter={StaticResource StringToHyperlinkConverter}}"
-                                   RequestNavigate="Hyperlink_RequestNavigate" FontWeight="SemiBold" >
+                                   RequestNavigate="Hyperlink_RequestNavigate" FontWeight="SemiBold" Foreground="#FF65F0F5" >
                             get Endpoint Security Manager
                         </Hyperlink>
                     </TextBlock>

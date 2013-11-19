@@ -84,7 +84,7 @@ namespace APTAT.Application
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow(_viewModel);
             scanCompletedWindow.Text.Text = String.Empty;
             if (e.SuccededCount > 0) scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
-            if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Cancelled Scans", Environment.NewLine, e.CanceledCount);
+            if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Canceled Scans", Environment.NewLine, e.CanceledCount);
             if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
             if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
