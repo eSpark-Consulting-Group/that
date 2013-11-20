@@ -66,6 +66,8 @@ namespace APTAT.Application.Models
             {
                 _unknownFilesCount = value;
                 RaisePropertyChanged("UnknownFilesCount");
+                RaisePropertyChanged("IsUnknownFound");
+                RaisePropertyChanged("IsProtected");
             }
         }
 
@@ -77,6 +79,8 @@ namespace APTAT.Application.Models
                 _malwareFilesCount = value;
                 RaisePropertyChanged("MalwareFilesCount");
                 RaisePropertyChanged("IsMalwaresFound");
+                RaisePropertyChanged("IsProtected");
+
             }
         }
 
@@ -178,6 +182,22 @@ namespace APTAT.Application.Models
         public Boolean IsMalwaresFound
         {
             get { return MalwareFilesCount > 0; }
+        }
+
+        public bool IsUnknownFound 
+        { 
+            get { return UnknownFilesCount > 0; } 
+        }
+
+        public bool IsProtected 
+        {
+            get 
+            {
+                if (!IsMalwaresFound && !IsUnknownFound)
+                    return true;
+                else
+                    return false;
+            }
         }
 
         public ObservableCollection<ThreatInfoItem> Items
