@@ -162,8 +162,12 @@ namespace APTAT.Core.Reports
                 }
 
 
+                //ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                //localReport.SetParameters(new[] { reportDateParam });
+
                 ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
-                localReport.SetParameters(new[] { reportDateParam });
+                ReportParameter reportDirectotyParam = new ReportParameter("IsActiveDirectorySource", ((AptReportData[])data)[0].IsActiveDirectoryDevicesSource.ToString());
+                localReport.SetParameters(new[] { reportDateParam, reportDirectotyParam });
 
                 if (parameters != null && parameters.Count() > 0)
                     localReport.SetParameters(parameters);
