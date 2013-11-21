@@ -104,7 +104,11 @@ namespace APTAT.Core
                     return TargetVerdict.Infected;
                 if (UnknownFilesCount > 0)
                     return TargetVerdict.Vulnerable;
+                if (ResultType == ScanResultType.NotPerformed)
+                    return TargetVerdict.NotScanned;
+                
                 return TargetVerdict.Safe;
+                
             }
         }
 

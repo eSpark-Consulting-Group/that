@@ -1320,11 +1320,16 @@
             <ChartCategoryHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Group Name="Chart3_CategoryGroup1">
+                  <Group Name="Chart3_CategoryGroup">
                     <GroupExpressions>
                       <GroupExpression>=Fields!TargetVerdict.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!TargetVerdict.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
                   <Label>=Fields!TargetVerdict.Value</Label>
                 </ChartMember>
               </ChartMembers>
@@ -1349,10 +1354,10 @@
                       </ChartDataLabel>
                       <Style>
                         <Color>=Switch(
-                      Fields!TargetVerdict.Value = "2", "#b22222",
-                      Fields!TargetVerdict.Value = "3", "#ffc000",
-                      Fields!TargetVerdict.Value = "1", "#3c963c",
-					  Fields!TargetVerdict.Value = "0", "Silver")</Color>
+        Fields!TargetVerdict.Value = "3", "#ffc000",
+		Fields!TargetVerdict.Value = "2", "#b22222",        
+        Fields!TargetVerdict.Value = "1", "#3c963c",
+		Fields!TargetVerdict.Value = "0", "Silver")</Color>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1862,7 +1867,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0in</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>

@@ -192,10 +192,11 @@ namespace APTAT.Core.Reports
 
         public ItemRatingInfo[] GetDevicesRatingCollection()
         {
-            int safe = 0;
+            int safe = 0; 
             int vulnerable = 0;
             int infected = 0;
             int unknown = 0;
+            //int notscanned = 0;
             var groupped = from target in Targets group target by target.TargetVerdict into temp select temp;
             foreach (var item in groupped)
             {
@@ -520,6 +521,7 @@ namespace APTAT.Core.Reports
         Unknown = 0,
         Safe = 1,
         Infected = 2,
-        Vulnerable = 3
+        Vulnerable = 3,
+        NotScanned = 4
     }
 }
