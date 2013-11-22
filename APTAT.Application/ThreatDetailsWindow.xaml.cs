@@ -41,6 +41,7 @@ namespace APTAT.Application
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
             DataContext = false;
+            DialogResult = true;
         }
 
  

@@ -230,7 +230,7 @@ namespace APTAT.Application
                     }
                 }
             
-               // item.Items = null;
+                item.Items = null;
             } 
         }
 
@@ -256,7 +256,7 @@ namespace APTAT.Application
 
         private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
         {
-         //   treeList.CollapseAllHierarchyItems();
+            treeList.CollapseAllHierarchyItems();
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
