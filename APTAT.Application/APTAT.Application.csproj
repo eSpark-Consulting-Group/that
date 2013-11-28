@@ -144,6 +144,7 @@
     <Compile Include="ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CollapseTreeViewAction.cs" />
     <Compile Include="Controls\RadMaskedTextBoxEx.cs" />
     <Compile Include="Controls\RadMaskedTextBoxUpdateSourceBehavior.cs" />
     <Compile Include="Converters\EmptyStringToBoolConverter.cs" />

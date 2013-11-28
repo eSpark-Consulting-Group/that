@@ -59,5 +59,10 @@ namespace APTAT.Application
                 }
             }
         }
+
+        public void ClearPasswordBox()
+        {
+            password.Password = "";
+        }
     }
 }

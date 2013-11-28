@@ -45,7 +45,11 @@ namespace APTAT.Application
             ViewModel.Password = password.Password;
         }
 
-    
+        public void ClearPasswordBox()
+        {
+            password.Password = "";
+        }
+
         private void OnLoadOnDemand(Object sender, RadRoutedEventArgs e)
         {
             RadTreeViewItem clickedItem = e.OriginalSource as RadTreeViewItem;

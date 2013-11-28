@@ -124,6 +124,31 @@ namespace APTAT.Application.Models
             _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
             RaisePropertyChanged("Administrator");
 
+            // restore IP addresses list 
+            ObservableCollection<IpAddressWrapper> storedIpAddresses = _storage.GetValue<ObservableCollection<IpAddressWrapper>>(KnownKeys.IpAddresses, false);
+            if (storedIpAddresses != null)
+            {
+                if (IpAddresses.Count != 0)
+                {
+                    foreach (var item in storedIpAddresses)
+                    {
+                        if (!IpAddresses.Contains(item))
+                        {
+                            IpAddresses.Add(item);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in storedIpAddresses)
+                    {
+                        IpAddresses.Add(item);
+                    }
+                }
+
+                RaisePropertyChanged("IpAddresses");                
+            }
+
             _service.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
         }
 
@@ -226,6 +251,7 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
+                    _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
 
                     success();
                 }
@@ -236,6 +262,9 @@ namespace APTAT.Application.Models
                 {
                     Error = null;
                 }
+
+                _storage.SetValue(KnownKeys.Login, _administrator);
+                _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
 
                 base.OnStepChanging(success, previousStep, context);
             }
@@ -262,7 +291,7 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription() 
                     { 
-                        Type = TargetsDiscovererType.NetworkAddresses, 
+                        Type = ETargetsDiscovererType.NetworkAddresses, 
                         Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString) 
                     });
 

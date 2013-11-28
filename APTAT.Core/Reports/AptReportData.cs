@@ -26,18 +26,18 @@ namespace APTAT.Core.Reports
             {
                 switch (DevicesSourceDescription.Type)
                 {
-                    case TargetsDiscovererType.ActiveDirectory:
+                    case ETargetsDiscovererType.ActiveDirectory:
                         return string.Format("Active Directory ({0})", (string)(DevicesSourceDescription.Description));
-                    case TargetsDiscovererType.NetworkAddresses:
+                    case ETargetsDiscovererType.NetworkAddresses:
                         return string.Format("Network Addresses ({0}) ", (string)(DevicesSourceDescription.Description));
-                    case TargetsDiscovererType.Workgroup:
+                    case ETargetsDiscovererType.Workgroup:
                         return string.Format("Workgroup ({0})", (string)(DevicesSourceDescription.Description));
                     default:
                         return string.Empty;
                 }
             } 
         }
-        public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == TargetsDiscovererType.ActiveDirectory; } }
+        public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == ETargetsDiscovererType.ActiveDirectory; } }
 
         public DateTime ScanStarted { get; set; }
         public DateTime ScanFinished { get; set; }

@@ -40,7 +40,7 @@ namespace APTAT.Application
         private readonly WizardViewModel _scanByIpViewModel;
 
         private WizardViewModel _currentViewModel;
-
+        
         ToolTip tooltip;
         public bool IsTooltipOpen 
         {
@@ -71,9 +71,6 @@ namespace APTAT.Application
             viewScanWorkgroup.DataContext = _scanWorkgroupViewModel;
 
             Unloaded += OnUnloaded;
-
-            
-      
         }
 
         private void OnCancelClick(Object sender, RoutedEventArgs e)
@@ -132,6 +129,8 @@ namespace APTAT.Application
         {
             IsTooltipOpen = false;
 
+            ClearPasswordBox();
+
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
                 Step = _currentViewModel.CurrentStepIndex - 1,
@@ -141,6 +140,16 @@ namespace APTAT.Application
                 }
             });
         
+        }
+
+        private void ClearPasswordBox()
+        {
+            if (viewScanDomain.Visibility == Visibility.Visible)
+                viewScanDomain.ClearPasswordBox();
+            else if (viewScanByIp.Visibility == Visibility.Visible)
+                viewScanByIp.ClearPasswordBox();
+            else if (viewScanWorkgroup.Visibility == Visibility.Visible)
+                viewScanWorkgroup.ClearPasswordBox();
         }
 
         private void OnActiveDirectoryClick(object sender, RoutedEventArgs e)

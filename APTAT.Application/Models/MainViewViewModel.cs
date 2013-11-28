@@ -352,7 +352,7 @@ namespace APTAT.Application.Models
             {
                 if(onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed && onlineItem.ScanStage != ScanStage.OperationCanceled)
                 {
-                    onlineItem.StatusMessage = "Cancelling...";    
+                    onlineItem.StatusMessage = "Canceling...";    
                 }
             }
 
@@ -627,10 +627,10 @@ namespace APTAT.Application.Models
                    new ObservableCollection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword) || item.StatusMessage.Contains(Keyword)));
 
-                
                 SelectedItem = null;    
             }
         }
+
       
     }
 }

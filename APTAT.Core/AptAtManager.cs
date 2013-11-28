@@ -15,7 +15,7 @@ using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core
 {
-    public enum TargetsDiscovererType
+    public enum ETargetsDiscovererType
     {
         ActiveDirectory,
         NetworkAddresses,
@@ -24,7 +24,7 @@ namespace APTAT.Core
 
     public class DevicesSourceDescription
     {
-        public TargetsDiscovererType Type { get; set; }
+        public ETargetsDiscovererType Type { get; set; }
         public object Description { get; set; }
 
         public static string GetNetworkDescription(string[] ipAddressesStringArray)

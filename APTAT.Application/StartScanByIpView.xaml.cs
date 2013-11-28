@@ -46,5 +46,10 @@ namespace APTAT.Application
         private void OnSelectionChanging(Object sender, GridViewSelectedCellsChangingEventArgs e)
         {
         }
+
+        public void ClearPasswordBox()
+        {
+            password.Password = "";
+        }
     }
 }

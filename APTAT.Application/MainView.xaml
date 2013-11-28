@@ -348,14 +348,13 @@
                 </telerik:RadButton>
             </telerik:RadToolBar>
             <Controls:RadMaskedTextBoxEx 
-            
-            Style="{StaticResource SearchBoxStyle}"
-     
-            AcceptReturn="False"
-             
+                Style="{StaticResource SearchBoxStyle}"
+                AcceptReturn="False"
+                x:Name="SearchTextBox" 
                 Grid.Column="1" VerticalAlignment="Center"   TabIndex="0"
-                                  UpdateValueEvent="PropertyChanged"
-                                   EmptyContent="Search"   Margin="20" HorizontalAlignment="Stretch"  IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll">
+                UpdateValueEvent="PropertyChanged"
+                EmptyContent="Search"   Margin="20" HorizontalAlignment="Stretch"  
+                IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll">
                 <i:Interaction.Behaviors>
                     <Controls:RadMaskedTextBoxUpdateSourceBehavior Delay="True" Value="{Binding Keyword, Mode=TwoWay}"/>
                 </i:Interaction.Behaviors>

@@ -169,6 +169,9 @@ namespace APTAT.Application.Models
                     Error = null;
                 }
 
+                _storage.SetValue(KnownKeys.Login, _administrator);
+                _storage.SetValue(KnownKeys.Workgroup, _workgroup);
+
                 base.OnStepChanging(success, previousStep, context);
             }
         }
@@ -196,7 +199,7 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.Workgroup, _workgroup);
 
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                    new DevicesSourceDescription() { Type = TargetsDiscovererType.Workgroup, Description = _workgroup });
+                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });
 
                context.Success();
             }

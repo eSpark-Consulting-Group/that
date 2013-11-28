@@ -34,13 +34,17 @@ namespace APTAT.Application
     /// </summary>
     public partial class MainView 
     {
-        private Boolean _filteringDone = false;
+        //private Boolean _filteringDone = false;
+        bool IsSearchPerformed = false;
+
         private List<ThreatInfoItem> _collapseItems = new List<ThreatInfoItem>();
         private List<ThreatInfoItem> _collapseFilteringItems = new List<ThreatInfoItem>();
 
         private MainViewViewModel _viewModel;
         private IStorageService _storageService;
         private Int32 _selectedReportIndex = -1;
+
+        
 
         public MainView()
         {
@@ -51,6 +55,15 @@ namespace APTAT.Application
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
             treeList.Filtered += treeList_Filtered;
             treeList.LayoutUpdated += treeList_LayoutUpdated;
+            SearchTextBox.ValueChanged += SearchTextBox_ValueChanged;
+           
+        }
+
+        void SearchTextBox_ValueChanged(object sender, RadRoutedEventArgs e)
+        {
+            //var searchTextBox = (APTAT.Application.Controls.RadMaskedTextBoxEx)sender;
+            //IsSearchPerformed = !searchTextBox.IsEmpty;
+            IsSearchPerformed = true;
         }
 
         private void treeList_LayoutUpdated(object sender, EventArgs e)
@@ -198,40 +211,48 @@ namespace APTAT.Application
             }
         }
 
-        
+
         private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
         {
             var row = e.Row as GridViewRow;
-            if (row.IsExpanded)
-            {
-                if (row != null)
+                if (row.IsExpanded)
                 {
-                    ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
-
-                    if (item.ScanStage == ScanStage.OperationCompleted)
+                    if (row != null)
                     {
-                        item.Items = item.TempItems;
+                        ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
 
-                        foreach (ThreatInfoItem subItem in item.Items)
+                        if (item.ScanStage == ScanStage.OperationCompleted)
                         {
-                            subItem.IsCompletedSubItem = true;
+                            if (item.TempItems.Count > 0)
+                            {
+                                item.Items = item.TempItems;
+
+                                //if (!IsSearchPerformed)
+                                //{
+                                    foreach (ThreatInfoItem subItem in item.Items)
+                                    {
+                                        subItem.IsCompletedSubItem = true;
+                                    }
+                                //}
+                                //else
+                                //    IsSearchPerformed = false;
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
-                if (item.Items != null)
+                else
                 {
-                    foreach (ThreatInfoItem subItem in item.Items)
+                    ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
+                    if (item.Items != null)
                     {
-                        subItem.IsCompletedSubItem = false;
+                        foreach (ThreatInfoItem subItem in item.Items)
+                        {
+                            subItem.IsCompletedSubItem = false;
+                        }
                     }
-                }
-            
-                item.Items = null;
-            } 
+
+                    //item.Items = null;
+                }            
         }
 
         private void AboutClick(Object sender, RoutedEventArgs e)

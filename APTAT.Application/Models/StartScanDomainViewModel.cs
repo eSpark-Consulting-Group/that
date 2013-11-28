@@ -158,7 +158,7 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.Password, _password);
                     _storage.SetValue(KnownKeys.Domain, _domainController);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                        new DevicesSourceDescription() { Type = TargetsDiscovererType.ActiveDirectory, Description = _domainController });
+                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
                     success();
                 }
             }
@@ -168,6 +168,9 @@ namespace APTAT.Application.Models
                 {
                     Error = null;
                 }
+
+                _storage.SetValue(KnownKeys.Login, _administrator);
+                _storage.SetValue(KnownKeys.Domain, _domainController);
 
                 base.OnStepChanging(success, previousStep, context);
             }
@@ -192,7 +195,7 @@ namespace APTAT.Application.Models
             {
                 RaisePropertyChanged("DomainController");
             }
-
+            
             _service.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _service.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
         }
