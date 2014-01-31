@@ -332,7 +332,7 @@ namespace APTAT.Core.Descent
 			    EventHandler<DescentHelper.ScanProgressChangedEventArgs> onScanProgressChanged = null;
 			    onScanProgressChanged = (sender, args) =>
 			    {
-			        var text = new ResourceText("null", String.Format("{0} of {3} programs scanned. Unknown programs found: {1}. Malwares found: {2}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.EnumeratedFilesCount));
+			        var text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage));
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanInProgress, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, args.Percentage);
 			    };
 
@@ -413,6 +413,7 @@ namespace APTAT.Core.Descent
                         result.SafeFilesCount = args.SafeFilesFound;
                         result.MalwareFilesCount = args.MalwaresFound;
                         result.EmptyFilesCount = args.EmptyFilesFound;
+                        result.SkippedFilesCount = args.SkippedFilesCount;
                     }
                     //_scanResults.TryAdd(args.TargetUid, new ScanResult(){TargetUid = args.TargetUid, HostName = args.HostName, FileName = args.FileName, TotalFilesCount = args.TotalFilesScanned, UnknownFilesCount = args.UnknownFilesFound});
                 };

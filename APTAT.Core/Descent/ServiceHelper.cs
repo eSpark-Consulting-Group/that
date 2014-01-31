@@ -476,10 +476,10 @@ namespace APTAT.Core.Descent
                 throw new Win32Exception( Marshal.GetLastWin32Error() );
             }
 
-            StringBuilder cmdLine = new StringBuilder(String.Format("{0} /Service", binPath));
+            StringBuilder cmdLine = new StringBuilder(String.Format("{0} --service", binPath));
             foreach (var parameter in parameters)
             {
-                cmdLine.AppendFormat(" \"{0}\"", parameter);
+                cmdLine.AppendFormat(" {0}", parameter);
             }
 
             m_serviceHandle = OpenService(m_databaseHandle, name, (uint)SERVICE_ACCESS.SERVICE_ALL_ACCESS);

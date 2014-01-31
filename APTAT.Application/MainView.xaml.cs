@@ -101,7 +101,7 @@ namespace APTAT.Application
             if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
             if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
-            if (e.MalwaresFound > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Maleware(s) found", Environment.NewLine, e.MalwaresFound);
+            if (e.MalwaresFound > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware(s) found", Environment.NewLine, e.MalwaresFound);
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             scanCompletedWindow.ShowDialog();
         }

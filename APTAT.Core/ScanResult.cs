@@ -64,6 +64,8 @@ namespace APTAT.Core
 
         public int EmptyFilesCount { get; set; }
 
+        public int SkippedFilesCount { get; set; }
+
         public int RunningProgramsCount
         {
             //get
