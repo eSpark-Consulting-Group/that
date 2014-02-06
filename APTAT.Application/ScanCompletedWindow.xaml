@@ -67,20 +67,24 @@
                 <StackPanel Grid.Row="2" 
                             Height="Auto" HorizontalAlignment="Center"
                             Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}" >
-                    <Border Background="#FFDCE48A" BorderBrush="Gray" BorderThickness="0.5" Opacity="0.85">
-                        <StackPanel Margin="20,0">
-                            <TextBlock x:Name="BuyCesText" 
-                                   HorizontalAlignment="Center"   Margin="0,10,0,0"  LineHeight="28" Foreground="#555"
-                                   FontSize="14" FontWeight="SemiBold"
+                    <Border Background="#FFF7F7F7" BorderBrush="Gray" BorderThickness="0" Opacity="1">
+                        <Grid>
+                            <StackPanel Margin="20,0">
+                                <TextBlock x:Name="BuyCesText" 
+                                   HorizontalAlignment="Center"   Margin="0,10,0,0"  LineHeight="28" Foreground="#FF8A00"
+                                   FontSize="14" 
                                    Text="{Binding Source={StaticResource BuyCesBigText}}"/>
-                            <TextBlock HorizontalAlignment="Center" Margin="0,0,0,10" FontSize="14">
+                                <TextBlock HorizontalAlignment="Center" Margin="0,0,0,15" FontSize="14">
                             <Hyperlink x:Name="cesmHyperLink"
                                        NavigateUri="{Binding Mode=OneWay, Source={StaticResource CESMLink}, Converter={StaticResource StringToHyperlinkConverter}}"
-                                       RequestNavigate="Hyperlink_RequestNavigate" FontWeight="Bold" >
+                                       RequestNavigate="Hyperlink_RequestNavigate" Foreground="#FF2471A0">
                                 Get Endpoint Security Manager
                             </Hyperlink>
-                            </TextBlock>
-                        </StackPanel>
+                                </TextBlock>
+                            </StackPanel>
+                            <Rectangle RadiusX="0" RadiusY="0" Margin="4" Opacity="0.4" StrokeDashArray="4, 2" Stroke="Gray" />
+                        </Grid>
+                        
                     </Border>
                 </StackPanel>
 

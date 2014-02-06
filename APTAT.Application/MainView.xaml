@@ -364,7 +364,7 @@
         <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85">
             <DockPanel  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" Height="35" >
 
-                <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="5,5,0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="10,5,0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text=" unknown programs detected" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
 
                 <StackPanel  Orientation="Horizontal" Visibility="{Binding IsMalwaresFound, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -384,14 +384,16 @@
                             Margin="0,0,5,0"
                             Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                     <TextBlock VerticalAlignment="Center" Margin="0,5" 
-                               FontSize="15"
+                               FontSize="14"
                                Text="{Binding Source={StaticResource BuyCesSmallText}}" 
-                               Foreground="Goldenrod" />
-                    <TextBlock VerticalAlignment="Center" FontSize="15" Margin="5,0,0,0"  >
+                               Foreground="White" />
+                    <Image Source="Assets/arrows.png" Margin="5,0" Stretch="None" />
+                
+                    <TextBlock VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0"  >
                         <Hyperlink x:Name="cesmHyperLink"
                                    NavigateUri="{Binding Mode=OneWay, Source={StaticResource CESMLink}, Converter={StaticResource StringToHyperlinkConverter}}"
-                                   RequestNavigate="Hyperlink_RequestNavigate" FontWeight="SemiBold" Foreground="#FF65F0F5" >
-                            get Endpoint Security Manager
+                                   RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFB6E0FD" >
+                            Get Endpoint Security Manager
                         </Hyperlink>
                     </TextBlock>
 

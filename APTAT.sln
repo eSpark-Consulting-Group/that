@@ -14,7 +14,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://pss05v.dev.comodo.od.ua:8080/tfs/defaultcollection
+		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = APTAT.Core\\APTAT.Core.csproj
 		SccProjectName1 = APTAT.Core

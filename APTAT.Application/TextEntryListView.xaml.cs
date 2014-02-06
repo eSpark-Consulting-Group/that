@@ -132,11 +132,16 @@ namespace APTAT.Application
 			ItemsList.KeyDown += ItemsList_KeyDown;
 		}
 
-		public override void OnApplyTemplate()
-		{
-			base.OnApplyTemplate();
-			InputTextBox.Focus();
-		}
+		private void ListLoaded(object sender, RoutedEventArgs e)
+        {
+            Action focus = () => 
+                {
+                    Keyboard.Focus(InputTextBox);
+                    InputTextBox.Focus();
+                };
+
+            Dispatcher.BeginInvoke(focus);
+        }
 
 		private void AddButton_Click(object sender, RoutedEventArgs e)
 		{

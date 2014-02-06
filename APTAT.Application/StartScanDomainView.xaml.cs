@@ -27,17 +27,10 @@ namespace APTAT.Application
         {
             get { return (StartScanDomainViewModel)DataContext; }
         }
-        
+
         public StartScanDomainView()
         {
             InitializeComponent();
-            Loaded += StartScanView_Loaded;            
-
-        }
-
-        private void StartScanView_Loaded(Object sender, RoutedEventArgs e)
-        {
-             txtDomainController.Focus();
         }
 
         private void OnPasswordChanged(Object sender, RoutedEventArgs e)
