@@ -331,7 +331,7 @@
     </Content>
     <Resource Include="APT.ico" />
     <Resource Include="Assets\comodo_dark.png" />
-    <Resource Include="Assets\comodo_cto_200_40.png" />
+    <Resource Include="Assets\comodo_cto.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -53,7 +53,7 @@
 
                 </StackPanel>
                 
-                <Image Source="Assets/comodo_cto_200_40.png" Stretch="None" HorizontalAlignment="Left"
+                <Image Source="Assets/comodo_cto.png" Stretch="None" HorizontalAlignment="Left"
                     	Margin="15,0,0,16" SnapsToDevicePixels="True" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2"/>
                 
                 <TextBlock Text="Product Name:" 

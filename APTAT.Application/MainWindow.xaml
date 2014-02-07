@@ -3,7 +3,7 @@
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns:Application="clr-namespace:APTAT.Application"
-				Title="APT/Unknown Risk Assessment Tool" MinHeight="300" MinWidth="640"  Height="768" Width="1024" 
+				Title="APT/Unknown Risk Assessment Tool" MinHeight="300" MinWidth="845"  Height="768" Width="1024" 
                 WindowStyle="None"
          
                 AllowsTransparency="True" Background="Transparent" BorderThickness="3"
