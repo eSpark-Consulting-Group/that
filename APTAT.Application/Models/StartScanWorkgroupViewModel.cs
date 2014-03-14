@@ -145,6 +145,7 @@ namespace APTAT.Application.Models
                 }
 
                 IsBusy = true;
+                _storage.SetValue(KnownKeys.Workgroup, Workgroup);
                 _service.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))

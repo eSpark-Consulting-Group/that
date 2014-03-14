@@ -142,7 +142,7 @@ namespace APTAT.Application.Models
                
 
                 IsBusy = true;
-
+                _storage.SetValue(KnownKeys.Domain, DomainController);
                 _service.GetDirectoryRoot(DomainController, Administrator, Password, new OperationContext { UserState = this, Success = success });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
