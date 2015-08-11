@@ -48,7 +48,7 @@ namespace APTAT.Valkyrie.Client.Contracts
         public string SubmitToken { get; set; }
 
         [JsonProperty("verdict")]
-        public VerdictEnum Verdict { get; set; }
+        public InfoVerdictEnum Verdict { get; set; }
 
         [JsonProperty("verdict_source")]
         public string VerdictSource { get; set; }

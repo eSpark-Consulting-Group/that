@@ -1,6 +1,8 @@
 ﻿using APTAT.Valkyrie.Client.Contracts;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net;
 namespace APTAT.Valkyrie.Client
 {
@@ -28,8 +30,15 @@ namespace APTAT.Valkyrie.Client
             return result;
         } 
 
-        private static T CallValkyrie<T>(Uri apiUri, RequestBase request)
+        public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {
+            var result = CallValkyrie<ManualStatusResponse>(ValkyrieApiUrls.SubmitToManual, request);
+            return result;
+        }
+
+        private static T CallValkyrie<T>(Uri apiUri, object request)
+        {
+            
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
             {                                

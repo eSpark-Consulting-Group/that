@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -12,18 +13,14 @@ namespace APTAT.Valkyrie.Client
     {
         public static NameValueCollection ToNameValueCollection(this Object obj)
         {
-            var properties = obj.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-.ToDictionary(prop => prop.Name, prop => prop.GetValue(obj, null));
-
-
-            NameValueCollection result = new NameValueCollection();
-            foreach (var item in properties)
+            var jsonText = JsonConvert.SerializeObject(obj);
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonText);
+            var nameValueCollection = new NameValueCollection(dict.Count);
+            foreach (var kvp in dict)
             {
-                result.Add(item.Key.ToLower(), item.Value.ToString());
-
+                nameValueCollection.Add(kvp.Key.ToString(), kvp.Value.ToString());
             }
-            return result;
+            return nameValueCollection;
         }
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="Contracts\SubmitToAutomaticResponse.cs" />
     <Compile Include="Contracts\SubmitToManualRequest.cs" />
     <Compile Include="Contracts\SubmitToManualResponse.cs" />
+    <Compile Include="Enums\ErrorCodesEnum.cs" />
     <Compile Include="Enums\AnalysisStatusEnum.cs" />
     <Compile Include="Enums\VerdictEnum.cs" />
     <Compile Include="Extensions\NameValueCollectionExt.cs" />

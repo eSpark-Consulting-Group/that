@@ -21,13 +21,13 @@ namespace APTAT.Valkyrie.Client.Contracts
         public AnalysisStatusEnum AnalysisStatus { get; set; }
 
         [JsonProperty("analysis_verdict")]
-        public VerdictEnum AnalysisVerdict { get; set; }
+        public InfoVerdictEnum AnalysisVerdict { get; set; }
 
         [JsonProperty("manual_analysis_id")]
         public string ManualAnalysisId { get; set; }
 
         [JsonProperty("return_code")]
-        public FVSStatusCode ReturnCode { get; set; }
+        public ErrorCodesEnum ReturnCode { get; set; }
         public string sha1 { get; set; }
     }
 

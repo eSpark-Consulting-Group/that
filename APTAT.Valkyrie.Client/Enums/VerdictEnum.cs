@@ -1,6 +1,6 @@
 ﻿namespace APTAT.Valkyrie.Client.Enums
 {
-    public enum VerdictEnum
+    public enum InfoVerdictEnum
     {
         /// <summary>
         /// means clean and its source is either Trusted Application or Manual Analysis
