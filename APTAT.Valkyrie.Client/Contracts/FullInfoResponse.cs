@@ -75,7 +75,7 @@ namespace APTAT.Valkyrie.Client.Contracts
         public string name { get; set; }
     }
 
-    public class Basic_File_Info
+    public class BasicFileInfo
     {
         public int file_size { get; set; }
         public string file_type { get; set; }
@@ -85,7 +85,7 @@ namespace APTAT.Valkyrie.Client.Contracts
         public string sha256 { get; set; }
     }
 
-    public class Behavioral_Info
+    public class BehavioralInfo
     {
         public string[] CreateFile { get; set; }
         public string[] CreateMutex { get; set; }
@@ -99,7 +99,7 @@ namespace APTAT.Valkyrie.Client.Contracts
         public string[] ipAddresses { get; set; }
     }
 
-    public class Component_Analysis_Results
+    public class ComponentAnalysisResults
     {
         public Anomalies anomalies { get; set; }
         public Camas camas { get; set; }
