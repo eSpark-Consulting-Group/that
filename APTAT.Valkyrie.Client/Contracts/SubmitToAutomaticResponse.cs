@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APTAT.Valkyrie.Client.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace APTAT.Valkyrie.Client.Contracts
         public string last_analysis_date { get; set; }
         public float malware_probability { get; set; }
         public int number_of_seen_before { get; set; }
-        public int return_code { get; set; }
+        public ErrorCodesEnum return_code { get; set; }
         public string sha1 { get; set; }
         public int verdict { get; set; }
         public string verdict_source { get; set; }

@@ -14,22 +14,50 @@ namespace APTAT.Valkyrie.ClientTest
         static void Main(string[] args)
         {
             var infoRequeast = new InfoRequest() { Client_id = "MY_CLIENT", SHA1 = "2a171a332e9beb640e2682404f04ee54" };
-            BasicInfoResponse result = ValkyrieClient.GetBasicInfo(infoRequeast);                        
-            FullInfoResponse fullInfo = ValkyrieClient.GetFullInfo(infoRequeast);
+            BasicInfoResponse basicInfo = ValkyrieClient.GetBasicInfo(infoRequeast);                        
+            FullInfoResponse  fullInfo = ValkyrieClient.GetFullInfo(infoRequeast);
 
-
-             var mTest = TestSubmitToManual();
             
-            //curl - F "file_data=@/path/to/virus_3.ex$" - F "client_id=MY_CLIENT" - F "submit_token=b190a47b0cbfe25385b0cc8d02cd702b01b123f9-6a203f2b-7914-4899-ba2f-9a3aa4eef07f" - F "priority=3" "https://10.100.130.204/fvs_submit_manual"
+            var aTest = TestSubmitToAutomatic(basicInfo.SubmitToken);
+
+            if (aTest.return_code != Client.Enums.ErrorCodesEnum.Success)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(aTest.return_code);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
+
+            var mTest = TestSubmitToManual(basicInfo.SubmitToken);
+
+            if (mTest.return_code != Client.Enums.ErrorCodesEnum.Success)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(mTest.result_description);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            Console.WriteLine("Press any key to close console");
+
             Console.ReadKey();
         }
 
-        private static SubmitToManualResponse TestSubmitToManual()
+        private static SubmitToAutomaticResponse TestSubmitToAutomatic(string submitToken)
         {
             string virusPath = @"C:\Vir\vir\Gunpack_MiniSamples\Yzpack\24.exe";
             SubmitToManualRequest req = new SubmitToManualRequest();
             req.Client_id = "MY_CLIENT";
-            req.SubmitToken = "b190a47b0cbfe25385b0cc8d02cd702b01b123f9-6a203f2b-7914-4899-ba2f-9a3aa4eef07f";
+            req.SubmitToken = submitToken;
+            req.FileData = File.ReadAllBytes(virusPath);
+            req.Priority = 3;
+            var response = ValkyrieClient.SubmitToAutomaticAnalysis(req);
+            return response;
+        }
+        private static SubmitToManualResponse TestSubmitToManual(string submitToken)
+        {
+            string virusPath = @"C:\Vir\vir\Gunpack_MiniSamples\Yzpack\24.exe";
+            SubmitToManualRequest req = new SubmitToManualRequest();
+            req.Client_id = "MY_CLIENT";
+            req.SubmitToken = submitToken;
             req.FileData = File.ReadAllBytes(virusPath);
             req.Priority = 3;
             var response = ValkyrieClient.SubmitToManualAnalysis(req);

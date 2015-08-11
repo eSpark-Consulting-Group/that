@@ -13,8 +13,8 @@ namespace APTAT.Valkyrie.Client
 
         public static Uri BasicInfo { get; private set; }
         public static Uri FullInfo { get; private set; }
-        public static Uri SubmitToManual { get; private set; }
-        public static Uri SubmitToAuto { get; private set; }
+        public static Uri SubmitToManualAnalysis { get; private set; }
+        public static Uri SubmitToAutomaticAnalysis { get; private set; }
         public static Uri ManualStatus { get; private set; }
 
         static ValkyrieApiUrls()
@@ -22,8 +22,8 @@ namespace APTAT.Valkyrie.Client
             var baseUri = GetBaseUri();
             BasicInfo = new Uri(baseUri, basicInfo);
             FullInfo = new Uri(baseUri, fullInfo);
-            SubmitToManual = new Uri(baseUri, submitToManual);
-            SubmitToAuto = new Uri(baseUri, submitToAuto);
+            SubmitToManualAnalysis = new Uri(baseUri, submitToManual);
+            SubmitToAutomaticAnalysis = new Uri(baseUri, submitToAuto);
             ManualStatus = new Uri(baseUri, manualStatus);
         }
         private static Uri GetBaseUri()

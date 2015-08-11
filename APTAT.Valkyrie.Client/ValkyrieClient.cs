@@ -26,13 +26,20 @@ namespace APTAT.Valkyrie.Client
 
         public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request)
         {
-            var result = CallValkyrie<SubmitToManualResponse>(ValkyrieApiUrls.SubmitToManual, request);
+            var result = CallValkyrie<SubmitToManualResponse>(ValkyrieApiUrls.SubmitToManualAnalysis, request);
             return result;
-        } 
+        }
+
+
+        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request)
+        {
+            var result = CallValkyrie<SubmitToAutomaticResponse>(ValkyrieApiUrls.SubmitToAutomaticAnalysis, request);
+            return result;
+        }
 
         public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {
-            var result = CallValkyrie<ManualStatusResponse>(ValkyrieApiUrls.SubmitToManual, request);
+            var result = CallValkyrie<ManualStatusResponse>(ValkyrieApiUrls.ManualStatus, request);
             return result;
         }
 
