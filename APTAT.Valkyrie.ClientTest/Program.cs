@@ -43,12 +43,11 @@ namespace APTAT.Valkyrie.ClientTest
 
         private static SubmitToAutomaticResponse TestSubmitToAutomatic(string submitToken)
         {
-            string virusPath = @"C:\Vir\vir\Gunpack_MiniSamples\Yzpack\24.exe";
-            SubmitToManualRequest req = new SubmitToManualRequest();
+            string virusPath = @"C:\Vir\vir\Gunpack_MiniSamples\Yzpack\24.ex$";
+            SubmitToAutomaticRequest req = new SubmitToAutomaticRequest();
             req.Client_id = "MY_CLIENT";
             req.SubmitToken = submitToken;
-            req.FileData = File.ReadAllBytes(virusPath);
-            req.Priority = 3;
+            req.FileData = File.ReadAllBytes(virusPath);            
             var response = ValkyrieClient.SubmitToAutomaticAnalysis(req);
             return response;
         }
