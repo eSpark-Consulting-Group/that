@@ -10,9 +10,9 @@ namespace APTAT.Valkyrie.Client.Contracts
     public class SubmitToAutomaticResponse
     {
         public AdditionalFileInfo additional_file_info { get; set; }
-        public Basic_File_Info basic_file_info { get; set; }
-        public Behavioral_Info behavioral_info { get; set; }
-        public Component_Analysis_Results component_analysis_results { get; set; }
+        public BasicFileInfo basic_file_info { get; set; }
+        public BehavioralInfo behavioral_info { get; set; }
+        public ComponentAnalysisResults component_analysis_results { get; set; }
         public string first_analysis_date { get; set; }
         public string last_analysis_date { get; set; }
         public float malware_probability { get; set; }
