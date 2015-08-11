@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace APTAT.Valkyrie.Client.Contracts
 {
     public class SubmitToManualRequest: SubmitToAutomaticRequest
     {
-        public int priority { get; set; }
+        [JsonProperty("priority")]
+        public int Priority { get; set; }
     }
 }

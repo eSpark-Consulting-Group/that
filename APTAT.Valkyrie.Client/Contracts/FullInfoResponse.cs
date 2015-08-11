@@ -1,4 +1,6 @@
-﻿using System;
+﻿using APTAT.Valkyrie.Client.Enums;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,15 +15,23 @@ namespace APTAT.Valkyrie.Client.Contracts
         public Basic_File_Info basic_file_info { get; set; }
         public Behavioral_Info behavioral_info { get; set; }
         public Component_Analysis_Results component_analysis_results { get; set; }
-        public string first_analysis_date { get; set; }
-        public string last_analysis_date { get; set; }
+
+        [JsonProperty("first_analysis_date")]
+        public DateTime FirstAnalysisDate { get; set; }
+
+        [JsonProperty("last_analysis_date")]
+        public string LastAnalysisDate { get; set; }
+
+
         public float malware_probability { get; set; }
         public int number_of_seen_before { get; set; }
         public int presence { get; set; }
         public int return_code { get; set; }
         public string sha1 { get; set; }
         public string submit_token { get; set; }
-        public int verdict { get; set; }
+
+        [JsonProperty("verdict")]
+        public VerdictEnum Verdict { get; set; }
         public string verdict_source { get; set; }
         public int white_listed { get; set; }
     }

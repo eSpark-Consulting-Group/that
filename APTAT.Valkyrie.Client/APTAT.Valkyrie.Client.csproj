@@ -49,9 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\BasicInfoRequest.cs" />
+    <Compile Include="Contracts\InfoRequest.cs" />
     <Compile Include="Contracts\BasicInfoResponse.cs" />
-    <Compile Include="Contracts\FullInfoRequest.cs" />
     <Compile Include="Contracts\FullInfoResponse.cs" />
     <Compile Include="Contracts\ManualStatusRequest.cs" />
     <Compile Include="Contracts\ManualStatusResponse.cs" />
@@ -60,6 +59,7 @@
     <Compile Include="Contracts\SubmitToAutomaticResponse.cs" />
     <Compile Include="Contracts\SubmitToManualRequest.cs" />
     <Compile Include="Contracts\SubmitToManualResponse.cs" />
+    <Compile Include="Enums\AnalysisStatusEnum.cs" />
     <Compile Include="Enums\VerdictEnum.cs" />
     <Compile Include="Extensions\NameValueCollectionExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
