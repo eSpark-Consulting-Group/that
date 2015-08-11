@@ -11,32 +11,54 @@ namespace APTAT.Valkyrie.Client.Contracts
 
     public class FullInfoResponse
     {
-        public Additional_File_Info additional_file_info { get; set; }
-        public Basic_File_Info basic_file_info { get; set; }
-        public Behavioral_Info behavioral_info { get; set; }
-        public Component_Analysis_Results component_analysis_results { get; set; }
+        [JsonProperty("additional_file_info")]
+        public AdditionalFileInfo AdditionalFileInfo { get; set; }
+
+        [JsonProperty("basic_file_info")]
+        public BasicFileInfo BasicFileInfo { get; set; }
+
+        [JsonProperty("behavioral_info")]
+        public BehavioralInfo BehavioralInfo { get; set; }
+
+        [JsonProperty("component_analysis_results")]
+        public ComponentAnalysisResults ComponentAnalysisResults { get; set; }
 
         [JsonProperty("first_analysis_date")]
-        public DateTime FirstAnalysisDate { get; set; }
+        public DateTime? FirstAnalysisDate { get; set; }
 
         [JsonProperty("last_analysis_date")]
-        public string LastAnalysisDate { get; set; }
+        public DateTime? LastAnalysisDate { get; set; }
 
+        [JsonProperty("malware_probability")]
+        public float MalwareProbability { get; set; }
 
-        public float malware_probability { get; set; }
-        public int number_of_seen_before { get; set; }
-        public int presence { get; set; }
-        public int return_code { get; set; }
-        public string sha1 { get; set; }
-        public string submit_token { get; set; }
+        [JsonProperty("number_of_seen_before")]
+        public int NumberOfSeenBefore { get; set; }
+
+        [JsonProperty("presense")]
+        public bool Presence { get; set; }
+
+        [JsonProperty("return_code")]
+        public int ReturnCode { get; set; }
+
+        [JsonProperty("sha1")]
+        public string SHA1 { get; set; }
+
+        [JsonProperty("submit_token")]
+        public string SubmitToken { get; set; }
 
         [JsonProperty("verdict")]
         public VerdictEnum Verdict { get; set; }
-        public string verdict_source { get; set; }
-        public int white_listed { get; set; }
+
+        [JsonProperty("verdict_source")]
+        public string VerdictSource { get; set; }
+
+        [JsonProperty("white_listed")]
+        public bool WhiteListed { get; set; }
     }
 
-    public class Additional_File_Info
+    
+    public class AdditionalFileInfo
     {
         public string compilation_time_stamp { get; set; }
         public string entry_point { get; set; }
