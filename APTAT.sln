@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core", "APTAT.Core\APTAT.Core.csproj", "{9E80A126-241C-4079-8975-E16204D03E8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Application", "APTAT.Application\APTAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
@@ -10,22 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Application", "APTAT.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "APTAT.Bootstrapper", "APTAT.Bootstrapper\APTAT.Bootstrapper.vcxproj", "{9F567299-6CB8-4F71-BA7E-D23FF1ACE430}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie.Client", "APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj", "{851E6095-DD19-4C19-8F9C-20E134FB6F5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie.ClientTest", "APTAT.Valkyrie.ClientTest\APTAT.Valkyrie.ClientTest.csproj", "{D653354D-6289-45A2-B37F-A032BF3AE377}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = APTAT.Core\\APTAT.Core.csproj
-		SccProjectName1 = APTAT.Core
-		SccLocalPath1 = APTAT.Core
-		SccProjectUniqueName2 = APTAT.Application\\APTAT.Application.csproj
-		SccProjectName2 = APTAT.Application
-		SccLocalPath2 = APTAT.Application
-		SccProjectUniqueName3 = APTAT.Bootstrapper\\APTAT.Bootstrapper.vcxproj
-		SccProjectName3 = APTAT.Bootstrapper
-		SccLocalPath3 = APTAT.Bootstrapper
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -77,8 +68,61 @@ Global
 		{9F567299-6CB8-4F71-BA7E-D23FF1ACE430}.Release|Win32.Build.0 = Release|Win32
 		{9F567299-6CB8-4F71-BA7E-D23FF1ACE430}.Release|x86.ActiveCfg = Release|Win32
 		{9F567299-6CB8-4F71-BA7E-D23FF1ACE430}.Release|x86.Build.0 = Release|Win32
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Win32.Build.0 = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|x86.Build.0 = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Win32.Build.0 = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|x86.ActiveCfg = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|x86.Build.0 = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|Win32.Build.0 = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Debug|x86.Build.0 = Debug|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|Win32.Build.0 = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|x86.ActiveCfg = Release|Any CPU
+		{D653354D-6289-45A2-B37F-A032BF3AE377}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = APTAT.Core\\APTAT.Core.csproj
+		SccProjectName1 = APTAT.Core
+		SccLocalPath1 = APTAT.Core
+		SccProjectUniqueName2 = APTAT.Application\\APTAT.Application.csproj
+		SccProjectName2 = APTAT.Application
+		SccLocalPath2 = APTAT.Application
+		SccProjectUniqueName3 = APTAT.Bootstrapper\\APTAT.Bootstrapper.vcxproj
+		SccProjectName3 = APTAT.Bootstrapper
+		SccLocalPath3 = APTAT.Bootstrapper
+		SccProjectUniqueName4 = APTAT.Valkyrie.Client\\APTAT.Valkyrie.Client.csproj
+		SccProjectName4 = APTAT.Valkyrie.Client
+		SccLocalPath4 = APTAT.Valkyrie.Client
+		SccProjectUniqueName5 = APTAT.Valkyrie.ClientTest\\APTAT.Valkyrie.ClientTest.csproj
+		SccProjectName5 = APTAT.Valkyrie.ClientTest
+		SccLocalPath5 = APTAT.Valkyrie.ClientTest
 	EndGlobalSection
 EndGlobal
