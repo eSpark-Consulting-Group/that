@@ -30,10 +30,10 @@ namespace APTAT.Valkyrie.ClientTest
 
             var mTest = TestSubmitToManual(basicInfo.SubmitToken);
 
-            if (mTest.return_code != Client.Enums.ErrorCodesEnum.Success)
+            if (mTest.ReturnCode!= Client.Enums.ErrorCodesEnum.Success)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(mTest.result_description);
+                Console.WriteLine(mTest.ResultDescription);
                 Console.ForegroundColor = ConsoleColor.White;
             }
             Console.WriteLine("Press any key to close console");
