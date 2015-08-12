@@ -61,18 +61,27 @@ namespace APTAT.Valkyrie.Client.Contracts
     public class AdditionalFileInfo
     {
         public string compilation_time_stamp { get; set; }
-        public string entry_point { get; set; }
-        public int number_of_sections { get; set; }
-        public Pe_Imports[] pe_imports { get; set; }
+
+        [JsonProperty("entry_point")]
+        public string EntryPoint { get; set; }
+
+        [JsonProperty("number_of_sections")]
+        public int NumberOfSections { get; set; }
+
+        [JsonProperty("pe_imports")]
+        public PEImports[] PEImports { get; set; }
         public string[] pe_resources { get; set; }
         public string[][] pe_sections { get; set; }
         public string target_machine { get; set; }
     }
 
-    public class Pe_Imports
+    public class PEImports
     {
-        public string[] imports { get; set; }
-        public string name { get; set; }
+        [JsonProperty("imports")]
+        public string[] Imports { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 
     public class BasicFileInfo

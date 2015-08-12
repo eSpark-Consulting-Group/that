@@ -10,6 +10,7 @@ namespace APTAT.Valkyrie.Client.Contracts
 
     public class SubmitToAutomaticResponse
     {
+
         public AdditionalFileInfo additional_file_info { get; set; }
         public BasicFileInfo basic_file_info { get; set; }
         public BehavioralInfo behavioral_info { get; set; }
