@@ -51,7 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="virusFiles\24.ex%24" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
