@@ -1,4 +1,5 @@
 ﻿using APTAT.Valkyrie.Client.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,50 @@ namespace APTAT.Valkyrie.Client.Contracts
     public class SubmitToAutomaticResponse
     {
 
-        public AdditionalFileInfo additional_file_info { get; set; }
-        public BasicFileInfo basic_file_info { get; set; }
-        public BehavioralInfo behavioral_info { get; set; }
-        public ComponentAnalysisResults component_analysis_results { get; set; }
-        public string first_analysis_date { get; set; }
-        public string last_analysis_date { get; set; }
-        public float malware_probability { get; set; }
-        public int? number_of_seen_before { get; set; }
-        public ErrorCodesEnum return_code { get; set; }
-        public string sha1 { get; set; }
-        public int? verdict { get; set; }
-        public string verdict_source { get; set; }
-        public int? white_listed { get; set; }
+        [JsonProperty("additional_file_info")]
+        public AdditionalFileInfo AdditionalFileInfo { get; set; }
+
+        [JsonProperty("basic_file_info")]
+        public BasicFileInfo BasicFileInfo { get; set; }
+
+        [JsonProperty("behavioral_info")]
+        public BehavioralInfo BehavioralInfo { get; set; }
+
+        [JsonProperty("component_analysis_results")]
+        public ComponentAnalysisResults ComponentAnalysisResults { get; set; }
+
+        [JsonProperty("first_analysis_date")]
+        public DateTime? FirstAnalysisDate { get; set; }
+
+        [JsonProperty("last_analysis_date")]
+        public DateTime? LastAnalysisDate { get; set; }
+
+        [JsonProperty("malware_probability")]
+        public float MalwareProbability { get; set; }
+
+        [JsonProperty("number_of_seen_before")]
+        public int? NumberOfSeenBefore { get; set; }
+
+        [JsonProperty("return_code")]
+        public ErrorCodesEnum ReturnCode { get; set; }
+
+        [JsonProperty("sha1")]
+        public string SHA1 { get; set; }
+
+        [JsonProperty("verdict")]
+        public InfoVerdictEnum Verdict { get; set; }
+
+        [JsonProperty("verdict_source")]
+        public string VerdictSource { get; set; }
+
+        [JsonProperty("white_listed")]
+        public bool IsWhiteListed { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("SHA1: {0} Verdict: {1}", BasicFileInfo.SHA1, Verdict);
+            
+        }
     }
 
 }

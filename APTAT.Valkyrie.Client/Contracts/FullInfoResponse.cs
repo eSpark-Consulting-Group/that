@@ -86,12 +86,23 @@ namespace APTAT.Valkyrie.Client.Contracts
 
     public class BasicFileInfo
     {
-        public int file_size { get; set; }
-        public string file_type { get; set; }
-        public string magic_literal { get; set; }
-        public string md5 { get; set; }
-        public string sha1 { get; set; }
-        public string sha256 { get; set; }
+        [JsonProperty("file_size")]
+        public int FileSize { get; set; }
+
+        [JsonProperty("file_type")]
+        public string FileType { get; set; }
+
+        [JsonProperty("magic_literal")]
+        public string MagicLiteral { get; set; }
+
+        [JsonProperty("md5")]
+        public string MD5 { get; set; }
+
+        [JsonProperty("sha1")]
+        public string SHA1 { get; set; }
+
+        [JsonProperty("sha256")]
+        public string SHA256 { get; set; }
     }
 
     public class BehavioralInfo
@@ -112,7 +123,7 @@ namespace APTAT.Valkyrie.Client.Contracts
     {
         public Anomalies[] anomalies { get; set; }
         public Camas camas { get; set; }
-        public string end_date { get; set; }
+        public DateTime? end_date { get; set; }
         public Fs fs { get; set; }
         public string md5 { get; set; }
         public Ml ml { get; set; }

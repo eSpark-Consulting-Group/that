@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JsonConverters\Class1.cs" />
     <Compile Include="UploadExt.cs" />
     <Compile Include="Contracts\InfoRequest.cs" />
     <Compile Include="Contracts\BasicInfoResponse.cs" />
