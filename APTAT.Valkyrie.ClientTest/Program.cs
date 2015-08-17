@@ -21,11 +21,19 @@ namespace APTAT.Valkyrie.ClientTest
             
             var aTest = TestSubmitToAutomatic(basicInfo.SubmitToken);
 
-            if (aTest.return_code != Client.Enums.ErrorCodesEnum.Success)
+            if (aTest.ReturnCode != Client.Enums.ErrorCodesEnum.Success)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(aTest.return_code);
+                Console.WriteLine(aTest.ReturnCode);
                 Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                
+                Console.WriteLine( aTest);
+                
+
             }
 
 
