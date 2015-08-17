@@ -11,8 +11,9 @@ namespace APTAT.Valkyrie.Client.Contracts
     {
         [JsonProperty("submit_token")]
         public string SubmitToken { get; set; }
+              
 
-        [JsonProperty("file_data")]
-        public byte[] FileData { get; set; }
+        [JsonProperty("file_path")]
+        public string FilePath { get; set; }
     }
 }

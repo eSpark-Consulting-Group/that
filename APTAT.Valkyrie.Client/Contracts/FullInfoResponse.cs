@@ -66,7 +66,7 @@ namespace APTAT.Valkyrie.Client.Contracts
         public string EntryPoint { get; set; }
 
         [JsonProperty("number_of_sections")]
-        public int NumberOfSections { get; set; }
+        public int? NumberOfSections { get; set; }
 
         [JsonProperty("pe_imports")]
         public PEImports[] PEImports { get; set; }
@@ -110,7 +110,7 @@ namespace APTAT.Valkyrie.Client.Contracts
 
     public class ComponentAnalysisResults
     {
-        public Anomalies anomalies { get; set; }
+        public Anomalies[] anomalies { get; set; }
         public Camas camas { get; set; }
         public string end_date { get; set; }
         public Fs fs { get; set; }

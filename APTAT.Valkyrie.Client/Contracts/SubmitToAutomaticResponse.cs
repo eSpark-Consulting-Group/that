@@ -18,12 +18,12 @@ namespace APTAT.Valkyrie.Client.Contracts
         public string first_analysis_date { get; set; }
         public string last_analysis_date { get; set; }
         public float malware_probability { get; set; }
-        public int number_of_seen_before { get; set; }
+        public int? number_of_seen_before { get; set; }
         public ErrorCodesEnum return_code { get; set; }
         public string sha1 { get; set; }
-        public int verdict { get; set; }
+        public int? verdict { get; set; }
         public string verdict_source { get; set; }
-        public int white_listed { get; set; }
+        public int? white_listed { get; set; }
     }
 
 }

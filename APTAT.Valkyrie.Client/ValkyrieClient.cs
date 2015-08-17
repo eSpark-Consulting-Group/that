@@ -13,13 +13,13 @@ namespace APTAT.Valkyrie.Client
         /// This request will be used to get Basic Info of a file that FVS have already analyzed before. 
         /// </summary>             
         public static BasicInfoResponse GetBasicInfo(InfoRequest request)
-        {                     
+        {
             var response = CallValkyrie<BasicInfoResponse>(ValkyrieApiUrls.BasicInfo, request);
             return response;
         }
 
         public static FullInfoResponse GetFullInfo(InfoRequest request)
-        {            
+        {
             var result = CallValkyrie<FullInfoResponse>(ValkyrieApiUrls.FullInfo, request);
             return result;
         }
@@ -33,7 +33,9 @@ namespace APTAT.Valkyrie.Client
 
         public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request)
         {
-            var result = CallValkyrie<SubmitToAutomaticResponse>(ValkyrieApiUrls.SubmitToAutomaticAnalysis, request);
+            var payload = request.ToNameValueCollection();       
+            var uploadResult = UploadExt.UploadFileHelper(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri,  payload);            
+            var result = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);            
             return result;
         }
 
@@ -43,16 +45,17 @@ namespace APTAT.Valkyrie.Client
             return result;
         }
 
+
         private static T CallValkyrie<T>(Uri apiUri, object request)
         {
-            
+
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
-            {                                
+            {
 #if DEBUG
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 #endif
-                byte[] response = client.UploadValues(apiUri, payload);                
+                byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;

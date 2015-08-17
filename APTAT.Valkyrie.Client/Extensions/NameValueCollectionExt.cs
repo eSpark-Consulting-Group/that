@@ -18,7 +18,7 @@ namespace APTAT.Valkyrie.Client
             var nameValueCollection = new NameValueCollection(dict.Count);
             foreach (var kvp in dict)
             {
-                nameValueCollection.Add(kvp.Key.ToString(), kvp.Value.ToString());
+                nameValueCollection.Add(kvp.Key.ToString(), (kvp.Value ?? String.Empty).ToString());
             }
             return nameValueCollection;
         }
