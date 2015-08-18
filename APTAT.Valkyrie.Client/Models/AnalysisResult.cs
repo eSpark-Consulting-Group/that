@@ -38,9 +38,9 @@ namespace APTAT.Valkyrie.Client
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
 
-        internal static AnalysisResult CreateSkipInfo(string reason)
+        internal static AnalysisResult CreateSkipInfo(string sha1, string reason)
         {
-            return new AnalysisResult() { IsSkipped = true, SkipReason = reason };
+            return new AnalysisResult() { IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict=InfoVerdictEnum.NotReady,IsWhiteListed=false, LastAnalysisDate= null };
         }
     }
 }

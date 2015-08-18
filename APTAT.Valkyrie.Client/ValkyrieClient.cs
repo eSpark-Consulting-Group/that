@@ -27,7 +27,7 @@ namespace APTAT.Valkyrie.Client
                 double progress = 0;
                 if (FilesCount > 0)
                 {
-                    progress = ((double)_fileScanned / (double)FilesCount)*100;
+                    progress = ((double)_fileScanned / (double)FilesCount) * 100;
 
                 }
                 tmp(this, new InProgressEventArgs() { Percentage = Convert.ToInt32(progress), TotalFileCount = FilesCount, ProcessedFileCount = _fileScanned });
@@ -72,26 +72,27 @@ namespace APTAT.Valkyrie.Client
         public void SubmitFolderToAutomatic(string clientID, string folderPath)
         {
 
+            var exceptions = new ConcurrentQueue<Exception>();
 
             var files = Directory.EnumerateFiles(folderPath);
             FilesCount = files.Count();
-            try
+
+            Parallel.ForEach(files, (filePath) =>
             {
-                Parallel.ForEach(files, (filePath) =>
+                try
                 {
                     UploadFile(clientID, filePath);
-                });
-            }
-            catch (AggregateException ex)
-            {
-                foreach (var item in ex.InnerExceptions)
-                {
-                    Console.WriteLine(item.Message);
                 }
+                catch (Exception e)
+                {
+                    
+                    AddResult(AnalysisResult.CreateSkipInfo(filePath, e.Message));
+                    exceptions.Enqueue(e);
+                }
+            });
 
-                throw ex;
-            }
-            
+            if (exceptions.Count > 0) throw new AggregateException(exceptions);
+
 
             //foreach (var filePath in files)
             //{
@@ -107,13 +108,13 @@ namespace APTAT.Valkyrie.Client
             FileInfo f = new FileInfo(filePath);
             if (f.Length > maxFileLenght)
             {
-                AddResult(AnalysisResult.CreateSkipInfo("Maximum file size per upload to 25 MB."));
+                AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB."));
                 return;
             }
 
             var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1 };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
- 
+
             if (basicInfo.Presence)
             {
                 AnalysisResult result = AnalysisResult.Create(basicInfo);
@@ -128,12 +129,13 @@ namespace APTAT.Valkyrie.Client
 
 
                 var payload = request.ToNameValueCollection();
+
                 var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
                 var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
-
-                //var response = ValkyrieService.SubmitToAutomaticAnalysis(request);
                 var result = AnalysisResult.Create(response);
                 AddResult(result);
+
+
             }
         }
 

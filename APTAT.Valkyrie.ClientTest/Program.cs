@@ -17,13 +17,25 @@ namespace APTAT.Valkyrie.ClientTest
         static void Main(string[] args)
         {
 
-            string folderPath = @"C:\Tools\sampleFiles";
+            string folderPath = @"C:\Program Files\LibreOffice 5\program";
             Console.WriteLine("Starting uploading files to Valkyrie...");
             Stopwatch sw = new Stopwatch();
             sw.Start();
             var valkyrie = new ValkyrieClient();
             valkyrie.InProgress += Valkyrie_InProgress;
-            valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
+            try
+            {
+                valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
+            }
+            catch (AggregateException ex)
+            {
+
+                foreach (var item in ex.InnerExceptions)
+                {
+                    Console.WriteLine(item.Message);
+                }
+            }
+            
 
             sw.Stop();
 
@@ -31,14 +43,36 @@ namespace APTAT.Valkyrie.ClientTest
             Console.WriteLine(String.Format("Upload to Valkyrie completed. Uploaded files {0}. Skipped files {1}", result.Where(f => f.IsSkipped == false).Count(), result.Where(f => f.IsSkipped).Count()));
             Console.WriteLine("Total Time elapsed: {0}", sw.Elapsed);
 
+            ShowResult(result);
 
+            Console.WriteLine("\n\nPress any key to close");
+            Console.ReadKey();
+        }
+
+        private static void ShowResult(System.Collections.Concurrent.ConcurrentBag<AnalysisResult> result)
+        {
             foreach (var item in result)
             {
-                Console.WriteLine(String.Format("{0} {1} {2} IsWhiteListed:{3}", item.SHA1, item.Verdict, item.LastAnalysisDate, item.IsWhiteListed));
+                Console.WriteLine("-----------------------------------------------------------------------------------------");
+                if (item.IsSkipped)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(String.Format("{0} {1} {2}  {3}", item.SHA1, "Skipped", item.LastAnalysisDate, item.SkipReason));
+                }
+                else
+                {
+                    if (item.Verdict == Client.Enums.InfoVerdictEnum.Malware)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    Console.WriteLine(String.Format("{0} {1} {2}  Whitelisted: {3}", item.SHA1, item.Verdict, item.LastAnalysisDate, item.IsWhiteListed));
+                }
+                Console.ForegroundColor = ConsoleColor.White;
             }
-
-            Console.WriteLine("Press any key to close");
-            Console.ReadKey();
         }
 
         private static void Valkyrie_InProgress(object sender, InProgressEventArgs e)
