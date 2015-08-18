@@ -2,19 +2,20 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
-using System.Net.Cache;
-using System.Reflection;
 using System.Text;
 using System.Web;
 
 namespace APTAT.Valkyrie.Client
 {
-    public static class UploadExt
+    public static class MultipartPostHelper
     {
-        public static string UploadFileHelper(string uploadfile, string url,  NameValueCollection payload)
-        {            
+        public static string Post(string uploadfile, string url, NameValueCollection payload, string fileFormFieldName = "file_data")
+        {
             Uri uri = new Uri(url);
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
+            webrequest.Timeout = 1000 * 180;
+            webrequest.ServerCertificateValidationCallback += null;
+                        
             string boundary = "----WebKitFormBoundary" + DateTime.Now.Ticks.ToString("x");
             webrequest.ContentType = "multipart/form-data; boundary=" + boundary;
             webrequest.Method = "POST";
@@ -28,7 +29,7 @@ namespace APTAT.Valkyrie.Client
                 }
             }
 
-            BuildFileUploadHeaderEntry(uploadfile, "file_data", boundary, sb);
+            BuildFileUploadHeaderEntry(uploadfile, fileFormFieldName, boundary, sb);
 
             string postHeader = sb.ToString();
             return SubmitFormData(uploadfile, webrequest, boundary, postHeader);

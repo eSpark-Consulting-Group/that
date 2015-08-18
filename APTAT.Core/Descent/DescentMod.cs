@@ -404,6 +404,7 @@ namespace APTAT.Core.Descent
                     // ReSharper restore AccessToModifiedClosure
 
                     ScanResult result;
+
                     _scanResults.TryGetValue(tp.AgentIdentity, out result);
                     if (result != null)
                     {

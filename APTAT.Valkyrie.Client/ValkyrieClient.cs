@@ -1,65 +1,147 @@
 ﻿using APTAT.Valkyrie.Client.Contracts;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Net;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace APTAT.Valkyrie.Client
 {
 
-    public static class ValkyrieClient
+    public sealed class ValkyrieClient
     {
-        /// <summary>
-        /// This request will be used to get Basic Info of a file that FVS have already analyzed before. 
-        /// </summary>             
-        public static BasicInfoResponse GetBasicInfo(InfoRequest request)
+        private int _fileScanned;
+
+        public event EventHandler<EventArgs> ScanCompleted;
+        public event EventHandler<InProgressEventArgs> InProgress;
+
+        private void OnInProgress()
         {
-            var response = CallValkyrie<BasicInfoResponse>(ValkyrieApiUrls.BasicInfo, request);
-            return response;
-        }
-
-        public static FullInfoResponse GetFullInfo(InfoRequest request)
-        {
-            var result = CallValkyrie<FullInfoResponse>(ValkyrieApiUrls.FullInfo, request);
-            return result;
-        }
-
-        public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request)
-        {
-            var result = CallValkyrie<SubmitToManualResponse>(ValkyrieApiUrls.SubmitToManualAnalysis, request);
-            return result;
-        }
-
-
-        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request)
-        {
-            var payload = request.ToNameValueCollection();       
-            var uploadResult = UploadExt.UploadFileHelper(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri,  payload);            
-            var result = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);            
-            return result;
-        }
-
-        public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
-        {
-            var result = CallValkyrie<ManualStatusResponse>(ValkyrieApiUrls.ManualStatus, request);
-            return result;
-        }
-
-
-        private static T CallValkyrie<T>(Uri apiUri, object request)
-        {
-
-            var payload = request.ToNameValueCollection();
-            using (WebClient client = new WebClient())
+            var tmp = InProgress;
+            if (tmp != null)
             {
-#if DEBUG
-                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-#endif
-                byte[] response = client.UploadValues(apiUri, payload);
-                string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
-                var result = JsonConvert.DeserializeObject<T>(responseEncoded);
-                return result;
+                double progress = 0;
+                if (FilesCount > 0)
+                {
+                    progress = ((double)_fileScanned / (double)FilesCount)*100;
+
+                }
+                tmp(this, new InProgressEventArgs() { Percentage = Convert.ToInt32(progress), TotalFileCount = FilesCount, ProcessedFileCount = _fileScanned });
             }
+        }
+        public int FilesCount { get; private set; }
+
+        public int FileScanned
+        {
+            get
+            {
+                return _fileScanned;
+            }
+
+            set
+            {
+                _fileScanned = value;
+            }
+        }
+
+        public ConcurrentBag<AnalysisResult> AnalysisResults
+        {
+            get
+            {
+                return _analysisResults;
+            }
+
+            set
+            {
+                _analysisResults = value;
+            }
+        }
+
+
+        private ConcurrentBag<AnalysisResult> _analysisResults;
+
+        public ValkyrieClient()
+        {
+            AnalysisResults = new ConcurrentBag<AnalysisResult>();
+        }
+        const Int32 maxFileLenght = 26214400;
+        public void SubmitFolderToAutomatic(string clientID, string folderPath)
+        {
+
+
+            var files = Directory.EnumerateFiles(folderPath);
+            FilesCount = files.Count();
+            try
+            {
+                Parallel.ForEach(files, (filePath) =>
+                {
+                    UploadFile(clientID, filePath);
+                });
+            }
+            catch (AggregateException ex)
+            {
+                foreach (var item in ex.InnerExceptions)
+                {
+                    Console.WriteLine(item.Message);
+                }
+
+                throw ex;
+            }
+            
+
+            //foreach (var filePath in files)
+            //{
+            //    UploadFile(clientID, filePath);
+            //}
+
+
+        }
+
+        private void UploadFile(string clientID, string filePath)
+        {
+            var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
+            FileInfo f = new FileInfo(filePath);
+            if (f.Length > maxFileLenght)
+            {
+                AddResult(AnalysisResult.CreateSkipInfo("Maximum file size per upload to 25 MB."));
+                return;
+            }
+
+            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1 };
+            BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
+ 
+            if (basicInfo.Presence)
+            {
+                AnalysisResult result = AnalysisResult.Create(basicInfo);
+                AddResult(result);
+            }
+            else
+            {
+                var request = new SubmitToAutomaticRequest();
+                request.Client_id = clientID;
+                request.SubmitToken = basicInfo.SubmitToken;
+                request.FilePath = filePath;
+
+
+                var payload = request.ToNameValueCollection();
+                var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
+                var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
+
+                //var response = ValkyrieService.SubmitToAutomaticAnalysis(request);
+                var result = AnalysisResult.Create(response);
+                AddResult(result);
+            }
+        }
+
+        private void AddResult(AnalysisResult result)
+        {
+            AnalysisResults.Add(result);
+            Interlocked.Increment(ref _fileScanned);
+            OnInProgress();
         }
     }
 }

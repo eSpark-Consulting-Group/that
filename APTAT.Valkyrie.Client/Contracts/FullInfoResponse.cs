@@ -121,6 +121,7 @@ namespace APTAT.Valkyrie.Client.Contracts
 
     public class ComponentAnalysisResults
     {
+        [JsonConverter(typeof(ObjectToArrayConverter<Anomalies>))]
         public Anomalies[] anomalies { get; set; }
         public Camas camas { get; set; }
         public DateTime? end_date { get; set; }

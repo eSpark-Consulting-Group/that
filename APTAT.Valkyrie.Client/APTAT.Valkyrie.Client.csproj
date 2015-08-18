@@ -50,7 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UploadExt.cs" />
+    <Compile Include="Helpers\HashCalculator.cs" />
+    <Compile Include="Models\AnalysisResult.cs" />
+    <Compile Include="Helpers\ObjectToArrayConverter.cs" />
+    <Compile Include="Helpers\MultipartPostHelper.cs" />
     <Compile Include="Contracts\InfoRequest.cs" />
     <Compile Include="Contracts\BasicInfoResponse.cs" />
     <Compile Include="Contracts\FullInfoResponse.cs" />
@@ -66,8 +69,10 @@
     <Compile Include="Enums\VerdictEnum.cs" />
     <Compile Include="Extensions\NameValueCollectionExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScanInProgressEventArgs.cs" />
     <Compile Include="ValkyrieApiUrls.cs" />
     <Compile Include="ValkyrieClient.cs" />
+    <Compile Include="ValkyrieService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

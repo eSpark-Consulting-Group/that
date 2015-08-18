@@ -2,8 +2,10 @@
 using APTAT.Valkyrie.Client.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,54 +13,40 @@ namespace APTAT.Valkyrie.ClientTest
 {
     class Program
     {
+
         static void Main(string[] args)
-        { 
-            
-            var infoRequeast = new InfoRequest() { Client_id = "MY_CLIENT", SHA1 = "2fe398f1ebced166087362626241b95efeaab407" };
-            BasicInfoResponse basicInfo = ValkyrieClient.GetBasicInfo(infoRequeast);                        
-            FullInfoResponse  fullInfo = ValkyrieClient.GetFullInfo(infoRequeast);
+        {
 
-            
-            var aTest = TestSubmitToAutomatic(basicInfo.SubmitToken);
+            string folderPath = @"C:\Tools\sampleFiles";
+            Console.WriteLine("Starting uploading files to Valkyrie...");
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var valkyrie = new ValkyrieClient();
+            valkyrie.InProgress += Valkyrie_InProgress;
+            valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
 
-            if (aTest.ReturnCode != Client.Enums.ErrorCodesEnum.Success)
+            sw.Stop();
+
+            var result = valkyrie.AnalysisResults;
+            Console.WriteLine(String.Format("Upload to Valkyrie completed. Uploaded files {0}. Skipped files {1}", result.Where(f => f.IsSkipped == false).Count(), result.Where(f => f.IsSkipped).Count()));
+            Console.WriteLine("Total Time elapsed: {0}", sw.Elapsed);
+
+
+            foreach (var item in result)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(aTest.ReturnCode);
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                
-                Console.WriteLine( aTest);
-                
-
+                Console.WriteLine(String.Format("{0} {1} {2} IsWhiteListed:{3}", item.SHA1, item.Verdict, item.LastAnalysisDate, item.IsWhiteListed));
             }
 
-
-//            var mTest = TestSubmitToManual(basicInfo.SubmitToken);
-
-            //if (mTest.ReturnCode!= Client.Enums.ErrorCodesEnum.Success)
-            //{
-            //    Console.ForegroundColor = ConsoleColor.Red;
-            //    Console.WriteLine(mTest.ResultDescription);
-            //    Console.ForegroundColor = ConsoleColor.White;
-            //}
-            //Console.WriteLine("Press any key to close console");
-
+            Console.WriteLine("Press any key to close");
             Console.ReadKey();
         }
 
-        private static SubmitToAutomaticResponse TestSubmitToAutomatic(string submitToken)
-        {            
-            SubmitToAutomaticRequest req = new SubmitToAutomaticRequest();
-            req.Client_id = "MY_CLIENT";
-            req.SubmitToken = submitToken;            
-            req.FilePath = @"C:\Tools\ReadMe.txt";
-            var response = ValkyrieClient.SubmitToAutomaticAnalysis(req);
-            return response;
+        private static void Valkyrie_InProgress(object sender, InProgressEventArgs e)
+        {
+            Console.WriteLine(String.Format("Processed {0,3} from {1,3}\t{2:P}", e.ProcessedFileCount, e.TotalFileCount, ((double)e.Percentage / 100)));
         }
+
+
 
         //private static SubmitToManualResponse TestSubmitToManual(string submitToken)
         //{
