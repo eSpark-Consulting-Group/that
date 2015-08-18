@@ -477,7 +477,10 @@ namespace APTAT.Application.Models
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
             Percentage = 100;
+
             
+            BadFileItem[] badFiles = Items.SelectMany(c => c.TempItems).Select(i => i.BadFile).Distinct(new BadFileItemComparer()).ToArray();
+
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             // MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
         }
