@@ -449,8 +449,8 @@ namespace APTAT.Application.Models
                     throw new InvalidOperationException("Devices Source Description was not correctly initialised");
                 
                 _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this);
-                _login = null;
-                _password = null;
+                //_login = null;
+                //_password = null;
                 DevicesSourceDescription = null;
             }
             else
@@ -481,8 +481,29 @@ namespace APTAT.Application.Models
             
             BadFileItem[] badFiles = Items.SelectMany(c => c.TempItems).Select(i => i.BadFile).Distinct(new BadFileItemComparer()).ToArray();
 
+            foreach (var badFile in badFiles)
+            {
+                GetRemoteFile(badFile, _login, _password);
+
+            }
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             // MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
+        }
+
+        private void GetRemoteFile(BadFileItem badFile, string login, string password)
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            var host = "\\\\" + Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
+            var target = host + "\\" + System.IO.Path.GetPathRoot(badFile.Name).Replace(":\\", "$");
+            string destination = @"D:\temp\" + badFile.Sha1;
+            string source = target + badFile.Name.Remove(0, 2);
+            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}.tmp", target, password, login, source, destination);
+
+            process.StartInfo = startInfo;
+            process.Start();
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
