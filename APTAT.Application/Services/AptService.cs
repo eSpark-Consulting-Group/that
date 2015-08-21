@@ -424,6 +424,10 @@ namespace APTAT.Application.Services
             _manager.StopScan();
         }
 
+        public void StartValkyrieAnalysis(string login, string password)
+        {
+            _manager.StartValkyrieAnalysis(login, password);
+        }
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
             if (type == DomainEntryType.Root)
@@ -668,6 +672,6 @@ namespace APTAT.Application.Services
             }
         }
 
-  
+        
     }
 }

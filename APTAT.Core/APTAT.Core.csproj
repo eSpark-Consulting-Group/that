@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="AptAtManager.cs" />
     <Compile Include="AptScanStage.cs" />
+    <Compile Include="SHA1Comparer.cs" />
     <Compile Include="DataNotReadyException.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
@@ -443,6 +444,7 @@
     <Compile Include="Transport\HostResolverProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ValkyrieFileInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -470,6 +472,12 @@
     <EmbeddedResource Include="Reports\Executive.rdlc" />
     <EmbeddedResource Include="Reports\MaliciousFiles.rdlc" />
     <EmbeddedResource Include="Reports\UnknownFiles.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj">
+      <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
+      <Name>APTAT.Valkyrie.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

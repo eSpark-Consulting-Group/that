@@ -13,19 +13,27 @@ namespace APTAT.Valkyrie.ClientTest
 {
     class Program
     {
+     
 
         static void Main(string[] args)
         {
 
-            string folderPath = @"C:\Program Files\LibreOffice 5\program";
+            string folderPath = @"C:\Tools\sampleFiles\";
             Console.WriteLine("Starting uploading files to Valkyrie...");
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var valkyrie = new ValkyrieClient();
+            var valkyrie = new ValkyrieClient("MY_CLIENT");
             valkyrie.InProgress += Valkyrie_InProgress;
             try
             {
-                valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
+                //valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
+
+
+                List<string> files = GetDuplicatedCollection(folderPath);
+
+                valkyrie.UploadFilesToValkyrie("MY_CLIENT", files);
+
+
             }
             catch (AggregateException ex)
             {
@@ -47,6 +55,23 @@ namespace APTAT.Valkyrie.ClientTest
 
             Console.WriteLine("\n\nPress any key to close");
             Console.ReadKey();
+        }
+
+        private static List<string> GetDuplicatedCollection(string folderPath)
+        {
+            var files = Directory.EnumerateFiles(folderPath).ToList();
+            var f = files.First();
+
+            var duplicatedList = new List<String>();
+            duplicatedList.Add(f);
+            duplicatedList.Add(f);
+            duplicatedList.Add(f);
+            duplicatedList.Add(f);
+            duplicatedList.Add(f);
+            var collection1 = files.Take(5).ToList();
+            files.AddRange(collection1);
+            files.AddRange(duplicatedList);
+            return files;
         }
 
         private static void ShowResult(System.Collections.Concurrent.ConcurrentBag<AnalysisResult> result)

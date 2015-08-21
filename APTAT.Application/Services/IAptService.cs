@@ -177,5 +177,7 @@ namespace APTAT.Application.Services
         void GetScanResult(Guid targetUid, Object userState);
 
         void StopScan();
+                
+        void StartValkyrieAnalysis(string _login, string _password);
     }
 }

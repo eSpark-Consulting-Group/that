@@ -14,7 +14,7 @@ namespace APTAT.Valkyrie.Client
             Uri uri = new Uri(url);
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
             webrequest.Timeout = 1000 * 300;
-            webrequest.ServerCertificateValidationCallback += null;
+         //   webrequest.ServerCertificateValidationCallback += null;
                         
             string boundary = "----WebKitFormBoundary" + DateTime.Now.Ticks.ToString("x");
             webrequest.ContentType = "multipart/form-data; boundary=" + boundary;

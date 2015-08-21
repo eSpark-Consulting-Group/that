@@ -31,7 +31,7 @@ namespace APTAT.Core
         {
             if (ipAddressesStringArray == null)
                 throw new InvalidOperationException("Could not get Network Description");
-            
+
             int maxElementsInResultString = 3;
 
             var resultAddrAray = ipAddressesStringArray.Take(maxElementsInResultString).ToArray();
@@ -192,7 +192,7 @@ namespace APTAT.Core
         }
     }
 
-    
+
     public interface ITargetsResolver
     {
         DeploymentTargetsCollection Resolve();
@@ -234,7 +234,7 @@ namespace APTAT.Core
             if (_command != null)
             {
                 Action action = _command.Execute;
-                Context context = new Context(){ Action = action, State = state };
+                Context context = new Context() { Action = action, State = state };
                 action.BeginInvoke(BeginResolveCallback, context);
             }
         }
@@ -276,7 +276,7 @@ namespace APTAT.Core
             if (temp != null)
                 temp(this, args);
         }
-        
+
         public IServiceCommand<GetTargetsSummaryResponse> Command
         {
             get { return _command; }
@@ -332,23 +332,23 @@ namespace APTAT.Core
             }
 
             OnScanCompleted(new ScanCompletedEventArgs()
-                                {
-                                    OperationUid = e.OperationUid, 
-                                    CalceledCount = e.Context.CanceledTargetsCount, 
-                                    FailedCount = e.Context.FailedTargetsCount, 
-                                    NotPerformedCount = e.Context.NotPerformedTargetsCount, 
-                                    SucceededCount = e.Context.SucceededTargetsCount, 
-                                    TotalCount = e.Context.TotalTargetsCount,
-                                    FilesStatistics = e.Context.CalculateFilesStatistics()
-                                });
+            {
+                OperationUid = e.OperationUid,
+                CalceledCount = e.Context.CanceledTargetsCount,
+                FailedCount = e.Context.FailedTargetsCount,
+                NotPerformedCount = e.Context.NotPerformedTargetsCount,
+                SucceededCount = e.Context.SucceededTargetsCount,
+                TotalCount = e.Context.TotalTargetsCount,
+                FilesStatistics = e.Context.CalculateFilesStatistics()
+            });
         }
 
         public void BeginScan(object state = null)
         {
-            if(_command != null)
+            if (_command != null)
             {
                 Action action = _command.Execute;
-                Context context = new Context(){Action = action, State = state};
+                Context context = new Context() { Action = action, State = state };
                 action.BeginInvoke(BeginScanCallback, context);
             }
         }
@@ -387,7 +387,7 @@ namespace APTAT.Core
 
         void scanOperationContext_OperationProgressChanged(object sender, AptScanOperationContext.OperationProgressChangedEventArgs e)
         {
-            OnScanInProgress(new ScanInProgressEventArgs() { OperationUid = _scanOperationContext.OperationUid, Percentage = e.Percentage});
+            OnScanInProgress(new ScanInProgressEventArgs() { OperationUid = _scanOperationContext.OperationUid, Percentage = e.Percentage });
         }
 
         protected virtual void OnScanStarted(ScanStartedEventArgs args)
@@ -396,7 +396,7 @@ namespace APTAT.Core
             if (temp != null)
                 temp(this, args);
         }
-        
+
         protected virtual void OnScanCompleted(ScanCompletedEventArgs args)
         {
             EventHandler<ScanCompletedEventArgs> temp = ScanCompleted;
@@ -502,18 +502,18 @@ namespace APTAT.Core
             if (operationContext != null)
             {
                 AptReportData data = new AptReportData
-                                         {
-                                             OperationUid = operationContext.OperationUid,
-                                             ScanStarted = operationContext.Started.ToLocalTime(),
-                                             ScanFinished = operationContext.Finished.ToLocalTime(),
-                                             TargetsSource = operationContext.TargetsSourceName,
-                                             TargetsFailed = operationContext.FailedTargetsCount,
-                                             TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
-                                             TotalTargetsCount = operationContext.TotalTargetsCount,
-                                             TargetsSucceeded = operationContext.SucceededTargetsCount,
-                                             Targets = operationContext.ScanResults.Values.ToArray(),
-                                             DevicesSourceDescription = operationContext.DevicesSourceDescription
-                                         };
+                {
+                    OperationUid = operationContext.OperationUid,
+                    ScanStarted = operationContext.Started.ToLocalTime(),
+                    ScanFinished = operationContext.Finished.ToLocalTime(),
+                    TargetsSource = operationContext.TargetsSourceName,
+                    TargetsFailed = operationContext.FailedTargetsCount,
+                    TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
+                    TotalTargetsCount = operationContext.TotalTargetsCount,
+                    TargetsSucceeded = operationContext.SucceededTargetsCount,
+                    Targets = operationContext.ScanResults.Values.ToArray(),
+                    DevicesSourceDescription = operationContext.DevicesSourceDescription
+                };
 
                 ReportBuilder.BuildReportDelegate action = new ReportBuilder.BuildReportDelegate(_reportBuilder.Build);
                 Context context = new Context() { Action = action, State = state };
@@ -540,9 +540,9 @@ namespace APTAT.Core
             var svchost = new Module() { Path = @"D:\svch0st.exe", Accessed = DateTime.Now, Attributes = "", Cloud = CloudVerdict.Malware, Copyright = "N/A", Created = DateTime.Now.AddYears(-3), Description = "blah-blah-blah", Id = "4", Modified = DateTime.Now, Product = "Windows", Sha1 = "432532907249322", Signer = "Microsoft", Size = 777, Version = "1.0.0.0" };
             var malware2 = new Module() { Path = @"C:\Windows\expl0rer.exe", Accessed = DateTime.Now, Attributes = "", Cloud = CloudVerdict.Malware, Copyright = "N/A", Created = DateTime.Now.AddYears(-5), Description = "blah-blah-blah", Id = "3", Modified = DateTime.Now, Product = "Windows", Sha1 = "432532907249323", Signer = "Microsoft", Size = 777, Version = "1.0.0.0" };
 
-            ScanResult result = new ScanResult() { HostName = "agubernskyy-new", IpAddress = "10.100.65.223", OrganizationUnit = "Dev", MalwareFilesCount = 3, UnknownFilesCount = 1, SafeFilesCount = 303, TotalFilesCount = 307, ResultType = ScanResultType.Completed, TargetUid = new Guid("{D0221479-370A-4429-AB3A-FAE96D11AD02}")};
+            ScanResult result = new ScanResult() { HostName = "agubernskyy-new", IpAddress = "10.100.65.223", OrganizationUnit = "Dev", MalwareFilesCount = 3, UnknownFilesCount = 1, SafeFilesCount = 303, TotalFilesCount = 307, ResultType = ScanResultType.Completed, TargetUid = new Guid("{D0221479-370A-4429-AB3A-FAE96D11AD02}") };
             result.SetAptReportInstance(new AptReport() { Modules = new Module[] { /*new Module() { Path = "kernel32.dll", Cloud = CloudVerdict.Unknown },*/ unknown, malware, svchost, malware2 } });
-            ScanResult result2 = new ScanResult() { HostName = "dkolomiyets", OrganizationUnit = "Dev", IpAddress = "10.100.65.3",  MalwareFilesCount = 2, UnknownFilesCount = 1, SafeFilesCount = 337, TotalFilesCount = 340, ResultType = ScanResultType.Completed, TargetUid = new Guid("{911DD54A-9714-4718-8DCC-2AA15A18E6A8}") };
+            ScanResult result2 = new ScanResult() { HostName = "dkolomiyets", OrganizationUnit = "Dev", IpAddress = "10.100.65.3", MalwareFilesCount = 2, UnknownFilesCount = 1, SafeFilesCount = 337, TotalFilesCount = 340, ResultType = ScanResultType.Completed, TargetUid = new Guid("{911DD54A-9714-4718-8DCC-2AA15A18E6A8}") };
             result2.SetAptReportInstance(new AptReport() { Modules = new Module[] { malware, unknown, malware2 } });
             ScanResult result3 = new ScanResult() { HostName = "cesmuser", OrganizationUnit = "QA", IpAddress = "10.100.65.225", MalwareFilesCount = 0, UnknownFilesCount = 0, SafeFilesCount = 100, TotalFilesCount = 100, ResultType = ScanResultType.Completed, TargetUid = new Guid("{09B449D0-366B-47CF-A6CD-8EF15DAF9B9F}") };
             result3.SetAptReportInstance(new AptReport() { Modules = new Module[] { /*new Module() { Path = "user32.dll", Cloud = CloudVerdict.Safe }*/ } });
@@ -617,7 +617,7 @@ namespace APTAT.Core
             _commandFactory = new CommandFactory(_descentSubSystem);
             _changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
 
-            if(listener != null)
+            if (listener != null)
                 _changeTrackingSubSystem.RegisterListener(listener);
         }
 
@@ -648,12 +648,12 @@ namespace APTAT.Core
                 searchCriterion.FromRoot = true;
             else
                 if (String.IsNullOrEmpty(ldapPath))
-                    throw new ArgumentException("Ldap path is not specified.");
+                throw new ArgumentException("Ldap path is not specified.");
             searchCriterion.Domain = domain;
             searchCriterion.Login = login;
             searchCriterion.Password = password;
             searchCriterion.ParentAddress = ldapPath;
-            
+
             findTargetsRequest.SearchCriterion = searchCriterion;
             return _commandFactory.CreateCommand<FindTargetsResponse>(findTargetsRequest);
         }
@@ -685,7 +685,7 @@ namespace APTAT.Core
         {
             FindTargetsRequest findTargetsRequest = new FindTargetsRequest();
             EndpointSearchCriterion searchCriterion = new EndpointSearchCriterion();
-            
+
             searchCriterion.EndpointAddresses = addresses;
 
             findTargetsRequest.SearchCriterion = searchCriterion;
@@ -710,7 +710,7 @@ namespace APTAT.Core
             if (targets == null || targets.Count == 0)
                 throw new ArgumentException("Targets list is empty.");
 
-            GetTargetsSummaryRequest request = new GetTargetsSummaryRequest {Targets = targets, DomainAccessLogin = login, DomainAccessPassword = password};
+            GetTargetsSummaryRequest request = new GetTargetsSummaryRequest { Targets = targets, DomainAccessLogin = login, DomainAccessPassword = password };
             return _commandFactory.CreateCommand<GetTargetsSummaryResponse>(request);
         }
 
@@ -727,14 +727,14 @@ namespace APTAT.Core
                 scanScope = Properties.Settings.Default.ScanScope;
 
             DeployAgentRequest request = new DeployAgentRequest
-                                             {
-                                                 Targets = targets,
-                                                 Login = login,
-                                                 Password = password,
-                                                 ScanScope = scanScope,
-                                                 Domain = domain,
-                                                 DevicesSourceDescription = devicesSourceDescr
-                                             };
+            {
+                Targets = targets,
+                Login = login,
+                Password = password,
+                ScanScope = scanScope,
+                Domain = domain,
+                DevicesSourceDescription = devicesSourceDescr
+            };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
             return new AptScanner(command, _descentSubSystem);
         }
@@ -754,13 +754,29 @@ namespace APTAT.Core
         {
             ScanResult scanResult = null;
             var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
-            if(results != null)
+            if (results != null)
             {
                 results.ScanResults.TryGetValue(targetUid, out scanResult);
             }
             return scanResult;
         }
 
+
+        private static void GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress)
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            var host = "\\\\" + ipAddress; //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
+            var target = host + "\\" + System.IO.Path.GetPathRoot(fileName).Replace(":\\", "$");
+            string destination = @"C:\Temp\" + sha1;
+            string source = target + fileName.Remove(0, 2);
+            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}.tmp", target, password, login, source, destination);
+
+            process.StartInfo = startInfo;
+            process.Start();
+        }
         public ScanResult GetScanResultByTargetUid(Guid targetUid)
         {
             ScanResult scanResult = null;
@@ -769,6 +785,7 @@ namespace APTAT.Core
             {
                 results.ScanResults.TryGetValue(targetUid, out scanResult);
             }
+
             return scanResult;
         }
 
@@ -780,6 +797,35 @@ namespace APTAT.Core
         public void StopScan()
         {
             _descentSubSystem.AbortAllThreads();
+        }
+
+        public void StartValkyrieAnalysis(string login, string password)
+        {
+            var results = _descentSubSystem.GetFirstScanResults();
+            Dictionary<string, ScanResult> scanResults = results.ScanResults.Select(r => r.Value).ToDictionary(t => t.IpAddress);
+
+            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
+            foreach (var scanResult in scanResults)
+            {
+                foreach (var badFile in scanResult.Value.BadFiles)
+                {
+                    if (!files.Any(f => f.Sha1 == badFile.Sha1))
+                    {
+                        files.Add(new ValkyrieFileInfo() { Ip = scanResult.Value.IpAddress, Path = badFile.Path, Sha1 = badFile.Sha1 });
+                    }
+                }
+            }
+
+            CopyFiles(files, login, password);
+
+        }
+
+        private void CopyFiles(List<ValkyrieFileInfo> badFiles, string login, string password)
+        {
+            foreach (var file in badFiles)
+            {
+                GetRemoteFile(file.Path, file.Sha1, login, password, file.Ip);
+            }
         }
     }
 }

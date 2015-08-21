@@ -9,6 +9,10 @@ namespace APTAT.Valkyrie.Client.Contracts
     public class ManualStatusRequest
     {
         [JsonProperty("manual_analysis_id")]
-        public string ManualAnalysisId { get; }
+        public string ManualAnalysisId
+        {
+            get;
+            set;
+        }
     }
 }

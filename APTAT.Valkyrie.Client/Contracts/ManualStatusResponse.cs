@@ -12,10 +12,10 @@ namespace APTAT.Valkyrie.Client.Contracts
     public class ManualStatusResponse
     {
         [JsonProperty("analysis_detail")]
-        public string AnalysisDetail { get; }
+        public string AnalysisDetail { get; set; }
 
         [JsonProperty("analysis_result_attachment_link")]
-        public string AnalysisResultAttachmentLink { get; }
+        public string AnalysisResultAttachmentLink { get; set; }
 
         [JsonProperty("analysis_status")]
         public AnalysisStatusEnum AnalysisStatus { get; set; }
