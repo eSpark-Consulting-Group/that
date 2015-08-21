@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using APTAT.Valkyrie.Client.Helpers;
 
 namespace APTAT.Valkyrie.Client
 {
@@ -64,37 +65,34 @@ namespace APTAT.Valkyrie.Client
 
         private ConcurrentBag<AnalysisResult> _analysisResults;
 
-        public ValkyrieClient(string clientID)
+        public ValkyrieClient(string cientID)
         {
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
-            _proxy = new ValkyrieProxy(clientID);
+            _clientID = cientID;
         }
         const Int32 maxFileLenght = 26214400;
-        private ValkyrieProxy _proxy;
+        private string _clientID;
 
-        public void UploadFilesToValkyrie(string clientID, IEnumerable<string> files)
+
+        public void AskValkyrie(List<ValkyrieFileInfo> badFiles, string login, string password)
         {
+            var folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
+            SubmitFolderToAutomatic(_clientID, folderPath);
+        }
+
+        public void SubmitFolderToAutomatic(string clientID, string folderPath)
+        {
+
             var exceptions = new ConcurrentQueue<Exception>();
 
-            
+            var files = Directory.EnumerateFiles(folderPath);
             FilesCount = files.Count();
-            List<String> used = new List<string>();
+
             Parallel.ForEach(files, (filePath) =>
             {
                 try
                 {
-                    var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
-                    if (used.Contains(sha1))
-                    {
-                        Thread.Sleep(100);
-                    }
-                    else
-                    {
-                        used.Add(sha1);
-                    }
-
-                    var result = _proxy.AskValkyrie(filePath, sha1);
-                    AddResult(result);
+                    UploadFile(clientID, filePath);
                 }
                 catch (Exception e)
                 {
@@ -104,10 +102,53 @@ namespace APTAT.Valkyrie.Client
                 }
             });
 
-            if (exceptions.Count > 0) throw new AggregateException(exceptions);                    
+            if (exceptions.Count > 0) throw new AggregateException(exceptions);
+
+
+            //foreach (var filePath in files)
+            //{
+            //    UploadFile(clientID, filePath);
+            //}
+
 
         }
 
+        private void UploadFile(string clientID, string filePath)
+        {
+            var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
+            FileInfo f = new FileInfo(filePath);
+            if (f.Length > maxFileLenght)
+            {
+                AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB."));
+                return;
+            }
+
+            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1 };
+            BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
+
+            if (basicInfo.Presence)
+            {
+                AnalysisResult result = AnalysisResult.Create(basicInfo);
+                AddResult(result);
+            }
+            else
+            {
+                var request = new SubmitToAutomaticRequest();
+                request.Client_id = clientID;
+                request.SubmitToken = basicInfo.SubmitToken;
+                request.FilePath = filePath;
+
+
+                var payload = request.ToNameValueCollection();
+
+                var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
+                var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
+                var result = AnalysisResult.Create(response);
+                AddResult(result);
+
+
+            }
+        }
 
         private void AddResult(AnalysisResult result)
         {

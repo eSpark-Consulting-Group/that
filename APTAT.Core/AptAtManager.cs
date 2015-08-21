@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
+using System.IO;
 using System.Linq;
 using System.Text;
 using APTAT.Core.Descent;
@@ -11,6 +12,7 @@ using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using APTAT.Core.Reports;
+using APTAT.Valkyrie.Client;
 using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core
@@ -759,24 +761,8 @@ namespace APTAT.Core
                 results.ScanResults.TryGetValue(targetUid, out scanResult);
             }
             return scanResult;
-        }
-
-
-        private static void GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress)
-        {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            var host = "\\\\" + ipAddress; //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
-            var target = host + "\\" + System.IO.Path.GetPathRoot(fileName).Replace(":\\", "$");
-            string destination = @"C:\Temp\" + sha1;
-            string source = target + fileName.Remove(0, 2);
-            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}.tmp", target, password, login, source, destination);
-
-            process.StartInfo = startInfo;
-            process.Start();
-        }
+        }        
+        
         public ScanResult GetScanResultByTargetUid(Guid targetUid)
         {
             ScanResult scanResult = null;
@@ -802,6 +788,62 @@ namespace APTAT.Core
         public void StartValkyrieAnalysis(string login, string password)
         {
             var results = _descentSubSystem.GetFirstScanResults();
+            List<ValkyrieFileInfo> files = GetDistinctResult(results);
+            
+            CallValkyrie(files, login, password);
+        }
+
+        private void CallValkyrie(List<ValkyrieFileInfo> files, string login, string password)
+        {
+         
+            ValkyrieClient client = new Valkyrie.Client.ValkyrieClient("MY_CLIENT");
+            
+            client.InProgress+=ValkyrieOnProgressChanged ;
+            try
+            {
+                client.AskValkyrie(files, login, password);
+            }
+            catch (AggregateException ex)
+            {
+
+                foreach (var item in ex.InnerExceptions)
+                {
+                    Console.WriteLine(item.Message);
+                }
+            }
+            var result = client.AnalysisResults;
+
+            UpdateFilesInformation(result);
+
+            var results = _descentSubSystem.GetFirstScanResults();
+           // var malwares = results.ScanResults.Values.SelectMany(s => s.BadFiles).Where(f => f.ValkyrieAnalysisResult.Verdict == Valkyrie.Client.Enums.InfoVerdictEnum.Malware).ToArray();
+        }
+
+        private void UpdateFilesInformation(IEnumerable<AnalysisResult> valkyrieResult)
+        {
+            var results = _descentSubSystem.GetFirstScanResults();
+     
+            foreach (var scanResult in results.ScanResults)
+            {
+                foreach (var badFile in scanResult.Value.BadFiles)
+                {
+                   var vResult = valkyrieResult.Where(v => v.SHA1.ToUpper() == badFile.Sha1.ToUpper()).FirstOrDefault();
+                   if (vResult != null)
+                   {
+                       badFile.ValkyrieAnalysisResult = vResult;
+                   }
+                }
+            }            
+            
+        }
+
+        private void ValkyrieOnProgressChanged(object sender, Valkyrie.Client.InProgressEventArgs e)
+        {
+        //    throw new NotImplementedException();
+        }
+
+        private static List<ValkyrieFileInfo> GetDistinctResult(AptScanOperationContext results)
+        {
             Dictionary<string, ScanResult> scanResults = results.ScanResults.Select(r => r.Value).ToDictionary(t => t.IpAddress);
 
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
@@ -815,17 +857,8 @@ namespace APTAT.Core
                     }
                 }
             }
-
-            CopyFiles(files, login, password);
-
+            return files;
         }
-
-        private void CopyFiles(List<ValkyrieFileInfo> badFiles, string login, string password)
-        {
-            foreach (var file in badFiles)
-            {
-                GetRemoteFile(file.Path, file.Sha1, login, password, file.Ip);
-            }
-        }
+               
     }
 }

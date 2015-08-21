@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\HashCalculator.cs" />
+    <Compile Include="Helpers\RemoteFileCopyHelper.cs" />
     <Compile Include="Models\AnalysisResult.cs" />
     <Compile Include="Helpers\ObjectToArrayConverter.cs" />
     <Compile Include="Helpers\MultipartPostHelper.cs" />
@@ -70,9 +71,11 @@
     <Compile Include="Enums\AnalysisStatusEnum.cs" />
     <Compile Include="Enums\VerdictEnum.cs" />
     <Compile Include="Extensions\NameValueCollectionExt.cs" />
+    <Compile Include="Models\ValkyrieFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanInProgressEventArgs.cs" />
     <Compile Include="ValkyrieApiUrls.cs" />
+    <Compile Include="ValkyrieClientWithProxy.cs" />
     <Compile Include="ValkyrieClient.cs" />
     <Compile Include="ValkyrieProxy.cs" />
     <Compile Include="ValkyrieService.cs" />

@@ -12,7 +12,8 @@
     <AssemblyName>APTAT.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <SccProjectName>%24/ComodoESM SME/Sources/APTAT/APTAT.Core</SccProjectName>
     <SccLocalPath>.</SccLocalPath>
     <SccAuxPath>http://pss05v:8080/tfs/defaultcollection</SccAuxPath>
@@ -62,7 +63,6 @@
     </Compile>
     <Compile Include="AptAtManager.cs" />
     <Compile Include="AptScanStage.cs" />
-    <Compile Include="SHA1Comparer.cs" />
     <Compile Include="DataNotReadyException.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
@@ -444,7 +444,6 @@
     <Compile Include="Transport\HostResolverProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ValkyrieFileInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

@@ -18,7 +18,7 @@ namespace APTAT.Valkyrie.ClientTest
         static void Main(string[] args)
         {
 
-            string folderPath = @"C:\Tools\sampleFiles\";
+            string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
             Console.WriteLine("Starting uploading files to Valkyrie...");
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -26,12 +26,12 @@ namespace APTAT.Valkyrie.ClientTest
             valkyrie.InProgress += Valkyrie_InProgress;
             try
             {
-                //valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
+                valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
+                
+                
+                //List<string> files = GetDuplicatedCollection(folderPath);
 
-
-                List<string> files = GetDuplicatedCollection(folderPath);
-
-                valkyrie.UploadFilesToValkyrie("MY_CLIENT", files);
+                //valkyrie.UploadFilesToValkyrie("MY_CLIENT", files);
 
 
             }

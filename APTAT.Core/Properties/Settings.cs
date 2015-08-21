@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace APTAT.Core.Properties
 {
-    public sealed partial class Settings
+    internal sealed partial class Settings
     {
         public string[] SupportedDnsNamesList
         {

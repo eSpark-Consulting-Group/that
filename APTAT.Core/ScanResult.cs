@@ -458,6 +458,9 @@ namespace APTAT.Core
         {
             get { return FileAgeFormatter.GetAge(Created); }
         }
+
+        [XmlIgnore]
+        public Valkyrie.Client.AnalysisResult ValkyrieAnalysisResult { get; set; }
     }
 
     [XmlType("Process")]
