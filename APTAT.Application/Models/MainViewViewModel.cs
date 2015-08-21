@@ -7,6 +7,7 @@ using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
 using System.Threading;
+using System.Windows.Controls;
 
 
 namespace APTAT.Application.Models
@@ -48,6 +49,20 @@ namespace APTAT.Application.Models
         //        RaisePropertyChanged("ResolvingTargets");
         //    }
         //}
+
+        private UserControl _currentViewControl;
+        public UserControl CurrentViewControl
+        {
+            get 
+            {
+                return _currentViewControl;
+            }
+            set 
+            {
+                _currentViewControl = value;
+                RaisePropertyChanged("CurrentViewControl");
+            }
+        }
 
         public Boolean? IsScanInProgress
         {
@@ -225,6 +240,8 @@ namespace APTAT.Application.Models
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);
             StopScanCommand = new DelegateCommand(InvokeStopScan);
+            CurrentViewControl = new ScanInfoTreeView(this);
+
         }
 
         private void InvokeStartScan(Object arg)
@@ -239,7 +256,7 @@ namespace APTAT.Application.Models
             Percentage = 0;
             IsReportEnabled = false;
 
-
+           
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
             {
@@ -480,25 +497,10 @@ namespace APTAT.Application.Models
             
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             _aptService.StartValkyrieAnalysis(_login, _password);
+          //  this.CurrentViewControl = new ValkyrieResultUserControl();
            //     MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
             
-        }
-
-        //private void GetRemoteFile(BadFileItem badFile, string login, string password)
-        //{
-        //    System.Diagnostics.Process process = new System.Diagnostics.Process();
-        //    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-        //    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-        //    startInfo.FileName = "cmd.exe";
-        //    var host = "\\\\" + Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
-        //    var target = host + "\\" + System.IO.Path.GetPathRoot(badFile.Name).Replace(":\\", "$");
-        //    string destination = @"D:\temp\" + badFile.Sha1;
-        //    string source = target + badFile.Name.Remove(0, 2);
-        //    startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}.tmp", target, password, login, source, destination);
-
-        //    process.StartInfo = startInfo;
-        //    process.Start();
-        //}
+        }        
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
         {
@@ -602,7 +604,8 @@ namespace APTAT.Application.Models
             if (parentItem != null)
             {
 
-                RadObservableCollection<ThreatInfoItem> items = new RadObservableCollection<ThreatInfoItem>();        
+                RadObservableCollection<ThreatInfoItem> items = new RadObservableCollection<ThreatInfoItem>();
+                
                 if(e.ScanResult.BadFiles != null)
                 {
                     foreach (BadFileItem badFile in e.ScanResult.BadFiles)

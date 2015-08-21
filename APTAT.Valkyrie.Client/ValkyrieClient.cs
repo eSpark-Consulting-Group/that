@@ -19,7 +19,7 @@ namespace APTAT.Valkyrie.Client
 
         public event EventHandler<EventArgs> ScanCompleted;
         public event EventHandler<InProgressEventArgs> InProgress;
-
+       
         private void OnInProgress()
         {
             var tmp = InProgress;
@@ -72,6 +72,7 @@ namespace APTAT.Valkyrie.Client
         }
         const Int32 maxFileLenght = 26214400;
         private string _clientID;
+        private string _apiKey = "B5191D23-7BB3-4871-9094-9416D6025C7A";
 
 
         public void AskValkyrie(List<ValkyrieFileInfo> badFiles, string login, string password)
@@ -123,7 +124,7 @@ namespace APTAT.Valkyrie.Client
                 return;
             }
 
-            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1 };
+            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1 , ApiKey = _apiKey};
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
 
             if (basicInfo.Presence)
@@ -135,6 +136,7 @@ namespace APTAT.Valkyrie.Client
             {
                 var request = new SubmitToAutomaticRequest();
                 request.Client_id = clientID;
+                request.ApiKey = _apiKey;
                 request.SubmitToken = basicInfo.SubmitToken;
                 request.FilePath = filePath;
 

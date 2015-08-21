@@ -184,6 +184,9 @@
     <Compile Include="Models\ScanResultItem.cs" />
     <Compile Include="Models\BadFileItem.cs" />
     <Compile Include="Converters\NullableConverter.cs" />
+    <Compile Include="ScanInfoTreeView.xaml.cs">
+      <DependentUpon>ScanInfoTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SearchHelper.cs" />
     <Compile Include="SelectorButton.cs" />
     <Compile Include="Services\AptService.cs" />
@@ -223,6 +226,9 @@
       <DependentUpon>ThreatDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TitleUpdater.cs" />
+    <Compile Include="ValkyrieResultUserControl.xaml.cs">
+      <DependentUpon>ValkyrieResultUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowExtensions.cs" />
     <Compile Include="WindowResizer.cs" />
     <Page Include="AboutWindow.xaml">
@@ -272,6 +278,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ScanInfoTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="StartScanByIpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -305,6 +315,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThreatDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ValkyrieResultUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

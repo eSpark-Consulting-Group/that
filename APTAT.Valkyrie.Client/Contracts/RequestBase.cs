@@ -11,5 +11,8 @@ namespace APTAT.Valkyrie.Client.Contracts
     {
         [JsonProperty("client_id")]
         public string Client_id { get; set; }
+
+        [JsonProperty("api_key")]
+        public string ApiKey { get; set; }
     }
 }

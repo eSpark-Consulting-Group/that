@@ -814,20 +814,17 @@ namespace APTAT.Core
             var result = client.AnalysisResults;
 
             UpdateFilesInformation(result);
-
-            var results = _descentSubSystem.GetFirstScanResults();
-           // var malwares = results.ScanResults.Values.SelectMany(s => s.BadFiles).Where(f => f.ValkyrieAnalysisResult.Verdict == Valkyrie.Client.Enums.InfoVerdictEnum.Malware).ToArray();
         }
 
         private void UpdateFilesInformation(IEnumerable<AnalysisResult> valkyrieResult)
         {
-            var results = _descentSubSystem.GetFirstScanResults();
+            var scanResults = _descentSubSystem.GetFirstScanResults().ScanResults;
      
-            foreach (var scanResult in results.ScanResults)
+            foreach (var scanResult in scanResults)
             {
                 foreach (var badFile in scanResult.Value.BadFiles)
                 {
-                   var vResult = valkyrieResult.Where(v => v.SHA1.ToUpper() == badFile.Sha1.ToUpper()).FirstOrDefault();
+                   var vResult = valkyrieResult.Where(v=>v.SHA1 != null).Where(v => v.SHA1.ToUpper() == badFile.Sha1.ToUpper()).FirstOrDefault();
                    if (vResult != null)
                    {
                        badFile.ValkyrieAnalysisResult = vResult;

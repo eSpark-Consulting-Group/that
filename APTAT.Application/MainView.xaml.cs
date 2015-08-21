@@ -53,8 +53,8 @@ namespace APTAT.Application
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
-            treeList.Filtered += treeList_Filtered;
-            treeList.LayoutUpdated += treeList_LayoutUpdated;
+            //treeList.Filtered += treeList_Filtered;
+            //treeList.LayoutUpdated += treeList_LayoutUpdated;
             SearchTextBox.ValueChanged += SearchTextBox_ValueChanged;
            
         }
@@ -66,21 +66,21 @@ namespace APTAT.Application
             IsSearchPerformed = true;
         }
 
-        private void treeList_LayoutUpdated(object sender, EventArgs e)
-        {
-            var rows = this.treeList.ChildrenOfType<GridViewRow>();
-            foreach (GridViewRow row in rows)
-            {
-                if (row != null)
-                {
-                    ThreatInfoItem threatInfo = row.DataContext as ThreatInfoItem;
-                    if (threatInfo != null)
-                    {
-                        row.IsExpandable = threatInfo.TempItems != null && threatInfo.TempItems.Count > 0 && threatInfo.ScanStage == ScanStage.OperationCompleted;
-                    }
-                }
-            }
-        }
+        //private void treeList_LayoutUpdated(object sender, EventArgs e)
+        //{
+        //    var rows = this.treeList.ChildrenOfType<GridViewRow>();
+        //    foreach (GridViewRow row in rows)
+        //    {
+        //        if (row != null)
+        //        {
+        //            ThreatInfoItem threatInfo = row.DataContext as ThreatInfoItem;
+        //            if (threatInfo != null)
+        //            {
+        //                row.IsExpandable = threatInfo.TempItems != null && threatInfo.TempItems.Count > 0 && threatInfo.ScanStage == ScanStage.OperationCompleted;
+        //            }
+        //        }
+        //    }
+        //}
 
 
         private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)
@@ -212,48 +212,48 @@ namespace APTAT.Application
         }
 
 
-        private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
-        {
-            var row = e.Row as GridViewRow;
-                if (row.IsExpanded)
-                {
-                    if (row != null)
-                    {
-                        ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
+        //private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
+        //{
+        //    var row = e.Row as GridViewRow;
+        //        if (row.IsExpanded)
+        //        {
+        //            if (row != null)
+        //            {
+        //                ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
 
-                        if (item.ScanStage == ScanStage.OperationCompleted)
-                        {
-                            if (item.TempItems.Count > 0)
-                            {
-                                item.Items = item.TempItems;
+        //                if (item.ScanStage == ScanStage.OperationCompleted)
+        //                {
+        //                    if (item.TempItems.Count > 0)
+        //                    {
+        //                        item.Items = item.TempItems;
 
-                                //if (!IsSearchPerformed)
-                                //{
-                                    foreach (ThreatInfoItem subItem in item.Items)
-                                    {
-                                        subItem.IsCompletedSubItem = true;
-                                    }
-                                //}
-                                //else
-                                //    IsSearchPerformed = false;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
-                    if (item.Items != null)
-                    {
-                        foreach (ThreatInfoItem subItem in item.Items)
-                        {
-                            subItem.IsCompletedSubItem = false;
-                        }
-                    }
+        //                        //if (!IsSearchPerformed)
+        //                        //{
+        //                            foreach (ThreatInfoItem subItem in item.Items)
+        //                            {
+        //                                subItem.IsCompletedSubItem = true;
+        //                            }
+        //                        //}
+        //                        //else
+        //                        //    IsSearchPerformed = false;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
+        //            if (item.Items != null)
+        //            {
+        //                foreach (ThreatInfoItem subItem in item.Items)
+        //                {
+        //                    subItem.IsCompletedSubItem = false;
+        //                }
+        //            }
 
-                    //item.Items = null;
-                }            
-        }
+        //            //item.Items = null;
+        //        }            
+        //}
 
         private void AboutClick(Object sender, RoutedEventArgs e)
         {
@@ -262,23 +262,23 @@ namespace APTAT.Application
             about.ShowDialog();
         }
 
-        private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
-        {
-            e.ItemsSource = new[]
-            {
-                new ScanStatus(ScanStatusEnum.Cancelled),
-                new ScanStatus(ScanStatusEnum.Completed),
-                new ScanStatus(ScanStatusEnum.InProgress),
-                new ScanStatus(ScanStatusEnum.Failed),
-                new ScanStatus(ScanStatusEnum.Offline)
-            };
+        //private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
+        //{
+        //    e.ItemsSource = new[]
+        //    {
+        //        new ScanStatus(ScanStatusEnum.Cancelled),
+        //        new ScanStatus(ScanStatusEnum.Completed),
+        //        new ScanStatus(ScanStatusEnum.InProgress),
+        //        new ScanStatus(ScanStatusEnum.Failed),
+        //        new ScanStatus(ScanStatusEnum.Offline)
+        //    };
 
-        }
+        //}
 
-        private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
-        {
-            treeList.CollapseAllHierarchyItems();
-        }
+        //private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
+        //{
+        //    treeList.CollapseAllHierarchyItems();
+        //}
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
