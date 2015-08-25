@@ -25,8 +25,22 @@ namespace APTAT.Valkyrie.Client.Helpers
             var valkyrieFolder = Path.Combine(usrTempFolder, "ValkyrieTmp");
             bool exists = System.IO.Directory.Exists(valkyrieFolder);
             if (!exists)
+            {
                 System.IO.Directory.CreateDirectory(valkyrieFolder);
+            }
+            else
+            {
+                System.IO.DirectoryInfo downloadedMessageInfo = new DirectoryInfo(valkyrieFolder);
 
+                foreach (FileInfo file in downloadedMessageInfo.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in downloadedMessageInfo.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
             return valkyrieFolder;
         }
 
