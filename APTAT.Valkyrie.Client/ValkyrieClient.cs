@@ -72,7 +72,7 @@ namespace APTAT.Valkyrie.Client
         }
         const Int32 maxFileLenght = 26214400;
         private string _clientID;
-        private string _apiKey = "B5191D23-7BB3-4871-9094-9416D6025C7A";
+        private string _apiKey = "d552623a-47d5-4dab-81d8-039f596c241f";
 
 
         public void AskValkyrie(List<ValkyrieFileInfo> badFiles, string login, string password)

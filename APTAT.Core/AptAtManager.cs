@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.DirectoryServices;
-using System.IO;
 using System.Linq;
-using System.Text;
 using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
@@ -12,8 +10,6 @@ using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using APTAT.Core.Reports;
-using APTAT.Valkyrie.Client;
-using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core
 {
@@ -604,8 +600,7 @@ namespace APTAT.Core
     {
         private readonly CommandFactory _commandFactory;
         private readonly IDescentSubSystem _descentSubSystem;
-        private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;
-
+        private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;        
         public AptAtManager()
             : this(null)
         {
@@ -614,6 +609,7 @@ namespace APTAT.Core
         public AptAtManager(IChangeTrackingListener listener)
         {
             var catalog = new SubSystemCatalog();
+
             _descentSubSystem = new DescentSubSystem();
             _descentSubSystem.Init(catalog);
             _commandFactory = new CommandFactory(_descentSubSystem);
@@ -650,7 +646,7 @@ namespace APTAT.Core
                 searchCriterion.FromRoot = true;
             else
                 if (String.IsNullOrEmpty(ldapPath))
-                throw new ArgumentException("Ldap path is not specified.");
+                    throw new ArgumentException("Ldap path is not specified.");
             searchCriterion.Domain = domain;
             searchCriterion.Login = login;
             searchCriterion.Password = password;
@@ -761,8 +757,8 @@ namespace APTAT.Core
                 results.ScanResults.TryGetValue(targetUid, out scanResult);
             }
             return scanResult;
-        }        
-        
+        }
+
         public ScanResult GetScanResultByTargetUid(Guid targetUid)
         {
             ScanResult scanResult = null;
@@ -785,77 +781,11 @@ namespace APTAT.Core
             _descentSubSystem.AbortAllThreads();
         }
 
-        public void StartValkyrieAnalysis(string login, string password)
+        public ConcurrentDictionary<Guid,ScanResult> GetFirstScanReslts()
         {
-            var results = _descentSubSystem.GetFirstScanResults();
-            List<ValkyrieFileInfo> files = GetDistinctResult(results);
-            
-            CallValkyrie(files, login, password);
+            return _descentSubSystem.GetFirstScanResults().ScanResults;
         }
-
-        private void CallValkyrie(List<ValkyrieFileInfo> files, string login, string password)
-        {
-         
-            ValkyrieClient client = new Valkyrie.Client.ValkyrieClient("MY_CLIENT");
-            
-            client.InProgress+=ValkyrieOnProgressChanged ;
-            try
-            {
-                client.AskValkyrie(files, login, password);
-            }
-            catch (AggregateException ex)
-            {
-
-                foreach (var item in ex.InnerExceptions)
-                {
-                    Console.WriteLine(item.Message);
-                }
-            }
-            var result = client.AnalysisResults;
-
-            UpdateFilesInformation(result);
-        }
-
-        private void UpdateFilesInformation(IEnumerable<AnalysisResult> valkyrieResult)
-        {
-            var scanResults = _descentSubSystem.GetFirstScanResults().ScanResults;
-     
-            foreach (var scanResult in scanResults)
-            {
-                foreach (var badFile in scanResult.Value.BadFiles)
-                {
-                   var vResult = valkyrieResult.Where(v=>v.SHA1 != null).Where(v => v.SHA1.ToUpper() == badFile.Sha1.ToUpper()).FirstOrDefault();
-                   if (vResult != null)
-                   {
-                       badFile.ValkyrieAnalysisResult = vResult;
-                   }
-                }
-            }            
-            
-        }
-
-        private void ValkyrieOnProgressChanged(object sender, Valkyrie.Client.InProgressEventArgs e)
-        {
-        //    throw new NotImplementedException();
-        }
-
-        private static List<ValkyrieFileInfo> GetDistinctResult(AptScanOperationContext results)
-        {
-            Dictionary<string, ScanResult> scanResults = results.ScanResults.Select(r => r.Value).ToDictionary(t => t.IpAddress);
-
-            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
-            foreach (var scanResult in scanResults)
-            {
-                foreach (var badFile in scanResult.Value.BadFiles)
-                {
-                    if (!files.Any(f => f.Sha1 == badFile.Sha1))
-                    {
-                        files.Add(new ValkyrieFileInfo() { Ip = scanResult.Value.IpAddress, Path = badFile.Path, Sha1 = badFile.Sha1 });
-                    }
-                }
-            }
-            return files;
-        }
-               
     }
+
+
 }

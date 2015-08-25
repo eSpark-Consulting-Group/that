@@ -8,15 +8,17 @@ using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
 using System.Threading;
 using System.Windows.Controls;
+using APTAT.Valkyrie.Client;
+using APTAT.Core;
 
 
 namespace APTAT.Application.Models
 {
-    
+
 
     public class MainViewViewModel : ViewModel
     {
-        public event EventHandler<ScanCompletedEventArgs> ScanProcessCompleted;
+        public event EventHandler<APTAT.Application.Services.ScanCompletedEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
 
         private String _login;
@@ -27,17 +29,18 @@ namespace APTAT.Application.Models
         private Guid _operationGuid;
         private DeploymentItem[] _selectedTargets;
 
-       // private Boolean _resolvingTargets;
+        // private Boolean _resolvingTargets;
         private Boolean _isReportEnabled;
         private Boolean? _isScanInProgress;
         private Int32 _scannedItemsCount;
-        
+
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
         private ObservableCollection<ThreatInfoItem> _items;
+        private ObservableCollection<FileResult> _itemsValkyrie;
         private ObservableCollection<ThreatInfoItem> _cache;
 
         //public Boolean ResolvingTargets
@@ -53,11 +56,11 @@ namespace APTAT.Application.Models
         private UserControl _currentViewControl;
         public UserControl CurrentViewControl
         {
-            get 
+            get
             {
                 return _currentViewControl;
             }
-            set 
+            set
             {
                 _currentViewControl = value;
                 RaisePropertyChanged("CurrentViewControl");
@@ -119,8 +122,8 @@ namespace APTAT.Application.Models
                 if (commonHeaderName == null)
                     throw new ArgumentNullException("Failed to obtain window header value from application resources");
 
-                if (IsScanInProgress == true )
-                {                    
+                if (IsScanInProgress == true)
+                {
                     return String.Format("{0} ({1}% scanning...)", commonHeaderName, Percentage);
                 }
                 return commonHeaderName;
@@ -131,7 +134,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                if(_onlineItems == null)
+                if (_onlineItems == null)
                 {
                     return 0;
                 }
@@ -159,12 +162,22 @@ namespace APTAT.Application.Models
         {
             get
             {
-               if(Items == null)
-               {
-                   return 0;
-               }
+                if (Items == null)
+                {
+                    return 0;
+                }
 
                 return Items.Count;
+            }
+        }
+
+        public FileResult SelectedItemValkyrie
+        {
+            get { return _selectedItemValkyrie; }
+            set
+            {
+                _selectedItemValkyrie = value;
+                RaisePropertyChanged("SelectedItemValkyrie");             
             }
         }
 
@@ -177,15 +190,15 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("SelectedItem");
                 RaisePropertyChanged("IsDetailsEnabled");
 
-                if(_selectedItem == null)
+                if (_selectedItem == null)
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, null);    
+                    _storage.SetValue(KnownKeys.UnknownFile, null);
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, _selectedItem.BadFile);    
+                    _storage.SetValue(KnownKeys.UnknownFile, _selectedItem.BadFile);
                 }
-                
+
             }
         }
 
@@ -199,19 +212,31 @@ namespace APTAT.Application.Models
             get { return MalwareFilesCount > 0; }
         }
 
-        public bool IsUnknownFound 
-        { 
-            get { return UnknownFilesCount > 0; } 
+        public bool IsUnknownFound
+        {
+            get { return UnknownFilesCount > 0; }
         }
 
-        public bool IsProtected 
+        public bool IsProtected
         {
-            get 
+            get
             {
                 if (!IsMalwaresFound && !IsUnknownFound)
                     return true;
                 else
                     return false;
+            }
+        }
+
+         
+        public ObservableCollection<FileResult> ItemsValkyrie
+        {
+            get { return _itemsValkyrie; }
+            set
+            {
+                _itemsValkyrie = value;
+                RaisePropertyChanged("ItemsValkyrie");
+                
             }
         }
 
@@ -232,10 +257,12 @@ namespace APTAT.Application.Models
         public DelegateCommand StopScanCommand { get; private set; }
 
         public APTAT.Core.DevicesSourceDescription DevicesSourceDescription;
+        private FileResult _selectedItemValkyrie;
 
         public MainViewViewModel()
         {
             _aptService = AptService.Instance;
+
             _storage = new StorageService();
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);
@@ -256,7 +283,7 @@ namespace APTAT.Application.Models
             Percentage = 0;
             IsReportEnabled = false;
 
-           
+
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
             {
@@ -289,7 +316,7 @@ namespace APTAT.Application.Models
             //    item.Items = new RadObservableCollection<ThreatInfoItem>();
 
 
-                
+
             //}
 
             //Items = items;
@@ -303,10 +330,10 @@ namespace APTAT.Application.Models
 
         //void T()
         //{
-            
 
 
-           
+
+
         //    Action<Int32> action = (index) =>
         //    {
 
@@ -322,7 +349,7 @@ namespace APTAT.Application.Models
         //                {
         //                    IsOnline = true,
 
-                            
+
         //                    BadFile = new BadFileItem
         //                    {
         //                        Name = "Bad",
@@ -342,10 +369,10 @@ namespace APTAT.Application.Models
         //                Items.Remove(item);
         //                Items.Insert(itemIndex, item);
         //            }
-                    
-                
-               
-                
+
+
+
+
         //    };
 
         //    for (Int32 i = 0; i < 100; i+= 2)
@@ -359,7 +386,7 @@ namespace APTAT.Application.Models
         //        Thread.Sleep(500);
         //        DispatcherHelper.Current.BeginInvoke(action, i);
         //    }
-            
+
 
         //}
 
@@ -367,9 +394,9 @@ namespace APTAT.Application.Models
         {
             foreach (ThreatInfoItem onlineItem in _onlineItems)
             {
-                if(onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed && onlineItem.ScanStage != ScanStage.OperationCanceled)
+                if (onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed && onlineItem.ScanStage != ScanStage.OperationCanceled)
                 {
-                    onlineItem.StatusMessage = "Canceling...";    
+                    onlineItem.StatusMessage = "Canceling...";
                 }
             }
 
@@ -381,16 +408,21 @@ namespace APTAT.Application.Models
             base.InvokeViewLoaded(arg);
 
             IsScanInProgress = false;
-           
+
             _aptService.DirectoryItemsResolved += OnDirectoryItemsResolved;
             _aptService.BeginScanCompleted += OnBeginScanCompleted;
             _aptService.ScanStatusChanged += OnScanStatusChanged;
             _aptService.GetScanResultCompleted += OnGetScanResultCompleted;
             _aptService.ScanCompleted += OnScanCompleted;
             _aptService.ScanProgressChanged += OnScanProgressChanged;
+            _aptService.ValkyrieAnalysisProgressChanged += OnValkyrieAnalysisProgressChanged;
         }
 
-    
+        void OnValkyrieAnalysisProgressChanged(object sender, InProgressEventArgs e)
+        {
+            Percentage = e.Percentage;
+            RaisePropertyChanged("Header");
+        }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
@@ -402,13 +434,14 @@ namespace APTAT.Application.Models
             _aptService.GetScanResultCompleted -= OnGetScanResultCompleted;
             _aptService.ScanCompleted -= OnScanCompleted;
             _aptService.ScanProgressChanged -= OnScanProgressChanged;
+            _aptService.ValkyrieAnalysisProgressChanged -= OnValkyrieAnalysisProgressChanged;
         }
 
-        private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
+        private void OnScanCompleted(Object sender, APTAT.Application.Services.ScanCompletedEventArgs e)
         {
-            if(ScanProcessCompleted != null)
+            if (ScanProcessCompleted != null)
             {
-                ScanProcessCompleted(this, e);    
+                ScanProcessCompleted(this, e);
             }
         }
 
@@ -422,7 +455,7 @@ namespace APTAT.Application.Models
             {
                 if (DomainTargetsResolveFailure != null)
                 {
-                    DomainTargetsResolveFailure(this, new DomainEventArgs {Exception = e.Exception});
+                    DomainTargetsResolveFailure(this, new DomainEventArgs { Exception = e.Exception });
                 }
                 IsScanInProgress = false;
                 return;
@@ -441,8 +474,8 @@ namespace APTAT.Application.Models
             Items =
                 new ObservableCollection<ThreatInfoItem>(
                     _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
-           
-    
+
+
             String domain = _storage.GetValue<String>(KnownKeys.Domain, false);
 
             foreach (ThreatInfoItem item in _cache)
@@ -462,9 +495,9 @@ namespace APTAT.Application.Models
 
                 DevicesSourceDescription = _storage.GetValue<APTAT.Core.DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
 
-                if(DevicesSourceDescription == null)
+                if (DevicesSourceDescription == null)
                     throw new InvalidOperationException("Devices Source Description was not correctly initialised");
-                
+
                 _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this);
                 //_login = null;
                 //_password = null;
@@ -479,9 +512,9 @@ namespace APTAT.Application.Models
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
         {
-            if(e.Exception != null)
+            if (e.Exception != null)
             {
-              //  MessageBox.Show(String.Format("Exception: {0}", e.Exception.Message));    
+                //  MessageBox.Show(String.Format("Exception: {0}", e.Exception.Message));    
             }
             else
             {
@@ -493,18 +526,22 @@ namespace APTAT.Application.Models
         {
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
-            Percentage = 100;                        
-            
+            Percentage = 100;
+
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
-            _aptService.StartValkyrieAnalysis(_login, _password);
-          //  this.CurrentViewControl = new ValkyrieResultUserControl();
-           //     MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
+            var result = _aptService.StartValkyrieAnalysis(_login, _password);
             
-        }        
+            this.CurrentViewControl = new ValkyrieResultUserControl() { DataContext = this };
+            ItemsValkyrie = new ObservableCollection<FileResult>(result);
+            SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
+            RaisePropertyChanged("ItemsValkyrie");
+            //MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
+
+        }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
         {
-            if(_operationGuid == e.OperationGuid)
+            if (_operationGuid == e.OperationGuid)
             {
                 Percentage = e.Percentage;
                 RaisePropertyChanged("Header");
@@ -528,7 +565,7 @@ namespace APTAT.Application.Models
                         infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                         infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                         infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                        infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.")?scanProgress.StatusMessage.Replace("Malwares found: 0.", ""):scanProgress.StatusMessage;
+                        infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.") ? scanProgress.StatusMessage.Replace("Malwares found: 0.", "") : scanProgress.StatusMessage;
                         if (infoItem.ScanStage != ScanStage.OperationCompleted &&
                             scanProgress.ScanStage == ScanStage.OperationCompleted)
                         {
@@ -605,14 +642,14 @@ namespace APTAT.Application.Models
             {
 
                 RadObservableCollection<ThreatInfoItem> items = new RadObservableCollection<ThreatInfoItem>();
-                
-                if(e.ScanResult.BadFiles != null)
+
+                if (e.ScanResult.BadFiles != null)
                 {
                     foreach (BadFileItem badFile in e.ScanResult.BadFiles)
                     {
                         items.Add(new ThreatInfoItem
                         {
-                            IsUnknown =  badFile.IsUnknown,
+                            IsUnknown = badFile.IsUnknown,
                             IsMalware = badFile.IsMalware,
                             Name = badFile.Name,
                             Size = badFile.Size,
@@ -621,7 +658,7 @@ namespace APTAT.Application.Models
                             IsOnline = true,
                             BadFile = badFile,
                         });
-                    }    
+                    }
                 }
 
                 parentItem.TempItems = items;
@@ -636,22 +673,22 @@ namespace APTAT.Application.Models
             {
                 foreach (ThreatInfoItem threatInfoItem in Items)
                 {
-                    if(threatInfoItem.Items != null)
+                    if (threatInfoItem.Items != null)
                     {
                         foreach (ThreatInfoItem item in threatInfoItem.Items)
                         {
                             item.IsCompletedSubItem = false;
-                        }    
-                    }      
+                        }
+                    }
                 }
                 Items =
                    new ObservableCollection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword) || item.StatusMessage.Contains(Keyword)));
 
-                SelectedItem = null;    
+                SelectedItem = null;
             }
         }
 
-      
+
     }
 }

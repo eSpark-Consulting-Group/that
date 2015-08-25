@@ -21,5 +21,7 @@
         /// means verdict not ready and its source is Manual Analysis.
         /// </summary>
         NotReady = 100
+
+
     }
 }

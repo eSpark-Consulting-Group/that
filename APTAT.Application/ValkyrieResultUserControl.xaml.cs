@@ -23,5 +23,30 @@ namespace APTAT.Application
         {
             InitializeComponent();
         }
+
+        private void treeList_LayoutUpdated(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OnTreeDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void treeList_Filtered(object sender, Telerik.Windows.Controls.GridView.GridViewFilteredEventArgs e)
+        {
+
+        }
+
+        private void treeList_RowIsExpandedChanged(object sender, Telerik.Windows.Controls.GridView.RowEventArgs e)
+        {
+
+        }
+
+        private void OnRadGridViewDistinctValuesLoading(object sender, Telerik.Windows.Controls.GridView.GridViewDistinctValuesLoadingEventArgs e)
+        {
+
+        }
     }
 }

@@ -24,7 +24,7 @@
                                  RowIsExpandedChanged="treeList_RowIsExpandedChanged"
                                  DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                  EnableRowVirtualization="True"
-                                 MouseDoubleClick="OnTreeDoubleClick" LayoutUpdated="treeList_LayoutUpdated_1" Filtered="treeList_Filtered"
+                                 MouseDoubleClick="OnTreeDoubleClick" LayoutUpdated="treeList_LayoutUpdated" Filtered="treeList_Filtered"
                                   >
             <telerik:RadTreeListView.Resources>
 

@@ -370,6 +370,7 @@
     <Compile Include="Facade\Descent\MessageContracts\GetTargetsSummary.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FileResult.cs" />
     <Compile Include="FormattedText.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -444,6 +445,7 @@
     <Compile Include="Transport\HostResolverProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ValkyrieManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

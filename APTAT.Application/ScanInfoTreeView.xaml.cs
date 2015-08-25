@@ -30,7 +30,7 @@ namespace APTAT.Application
 
         private MainViewViewModel _viewModel;
 
-        private void treeList_LayoutUpdated_1(object sender, EventArgs e)
+        private void treeList_LayoutUpdated(object sender, EventArgs e)
         {
 
             var rows = this.treeList.ChildrenOfType<GridViewRow>();

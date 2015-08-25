@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using APTAT.Core.Reports;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
+using APTAT.Valkyrie.Client;
 
 namespace APTAT.Application.Services
 {
@@ -63,7 +64,10 @@ namespace APTAT.Application.Services
 
         public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
 
+        public event EventHandler<InProgressEventArgs> ValkyrieAnalysisProgressChanged;
+
         private readonly AptAtManager _manager;
+        private readonly ValkyrieManager _valkyrieManager;
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
 
@@ -89,7 +93,15 @@ namespace APTAT.Application.Services
 
         private AptService()
         {
-           _manager = new AptAtManager(this);
+            _manager = new AptAtManager(this);
+            _valkyrieManager = new ValkyrieManager("MY_CLIENT");
+            _valkyrieManager.ProgressChanged += _valkyrieManager_ProgressChanged;
+        }
+
+        void _valkyrieManager_ProgressChanged(object sender, APTAT.Valkyrie.Client.InProgressEventArgs e)
+        {
+            var tmp = ValkyrieAnalysisProgressChanged;
+            if (tmp != null) tmp(this, e);
         }
 
         public void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState)
@@ -424,9 +436,13 @@ namespace APTAT.Application.Services
             _manager.StopScan();
         }
 
-        public void StartValkyrieAnalysis(string login, string password)
+        
+        public List<FileResult> StartValkyrieAnalysis(string login, string password)
         {
-            _manager.StartValkyrieAnalysis(login, password);
+            var scanResult = _manager.GetFirstScanReslts();                        
+           _valkyrieManager.CallValkyrie(scanResult,login, password);
+           return _valkyrieManager.ValkyrieAnalysisResult;
+
         }
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
@@ -671,7 +687,6 @@ namespace APTAT.Application.Services
                 DispatcherHelper.Current.BeginInvoke(action);
             }
         }
-
         
     }
 }

@@ -408,6 +408,10 @@
       <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
       <Name>APTAT.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj">
+      <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
+      <Name>APTAT.Valkyrie.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="warning.png" />

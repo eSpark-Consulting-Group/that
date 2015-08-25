@@ -37,9 +37,10 @@ namespace APTAT.Core
             //        CalculateTotal();
             //    return _unknownFilesCount;
             //}
-            get; set; 
+            get;
+            set;
         }
-        
+
         public int SafeFilesCount
         {
             //get
@@ -48,9 +49,10 @@ namespace APTAT.Core
             //        CalculateTotal();
             //    return _safeFilesCount;
             //}
-            get; set;
+            get;
+            set;
         }
-        
+
         public int MalwareFilesCount
         {
             //get
@@ -59,7 +61,8 @@ namespace APTAT.Core
             //        CalculateTotal();
             //    return _malwareFilesCount;
             //}
-            get; set;
+            get;
+            set;
         }
 
         public int EmptyFilesCount { get; set; }
@@ -74,7 +77,8 @@ namespace APTAT.Core
             //        return _aptReport.Processes.Length;
             //    return 0;
             //}
-            get; set;
+            get;
+            set;
         }
 
         public int AutorunsCount
@@ -85,7 +89,8 @@ namespace APTAT.Core
             //        return _aptReport.Autoruns.Length;
             //    return 0;
             //}
-            get; set;
+            get;
+            set;
         }
 
         public string ResultErrorText { get; set; }
@@ -108,9 +113,9 @@ namespace APTAT.Core
                     return TargetVerdict.Vulnerable;
                 if (ResultType == ScanResultType.NotPerformed)
                     return TargetVerdict.NotScanned;
-                
+
                 return TargetVerdict.Safe;
-                
+
             }
         }
 
@@ -155,7 +160,7 @@ namespace APTAT.Core
         {
             get
             {
-                var unknownFiles = from file in GetFilesByStatus(CloudVerdict.Unknown) select new UnknownFile() {Name = file.Path, Size = file.Size};
+                var unknownFiles = from file in GetFilesByStatus(CloudVerdict.Unknown) select new UnknownFile() { Name = file.Path, Size = file.Size };
                 return new List<UnknownFile>(unknownFiles);
             }
         }
@@ -242,6 +247,12 @@ namespace APTAT.Core
         }
 
         private AptReport _aptReport;
+
+        public AptReport AptReport
+        {
+            get { return _aptReport; }
+            private set { _aptReport = value; }
+        }
     }
 
     public class UnknownFile
@@ -459,8 +470,10 @@ namespace APTAT.Core
             get { return FileAgeFormatter.GetAge(Created); }
         }
 
-        [XmlIgnore]
-        public Valkyrie.Client.AnalysisResult ValkyrieAnalysisResult { get; set; }
+        //[XmlIgnore]
+        //public Valkyrie.Client.AnalysisResult ValkyrieAnalysisResult { get; set; }
+
+
     }
 
     [XmlType("Process")]
@@ -502,7 +515,7 @@ namespace APTAT.Core
         [XmlArray("Modules")]
         [XmlArrayItem("Module")]
         public ModuleRef[] ModuleReferences { get; set; }
-               
+
     }
 
     [XmlType("ModuleRef")]

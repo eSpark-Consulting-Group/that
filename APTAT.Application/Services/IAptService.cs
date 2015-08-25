@@ -1,6 +1,8 @@
 ﻿using System;
 using APTAT.Application.Models;
 using System.Collections.Generic;
+using APTAT.Valkyrie.Client;
+using APTAT.Core;
 
 namespace APTAT.Application.Services
 {
@@ -157,6 +159,7 @@ namespace APTAT.Application.Services
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
+        event EventHandler<InProgressEventArgs> ValkyrieAnalysisProgressChanged; 
         event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
         event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
 
@@ -178,6 +181,6 @@ namespace APTAT.Application.Services
 
         void StopScan();
                 
-        void StartValkyrieAnalysis(string _login, string _password);
+        List<FileResult> StartValkyrieAnalysis(string login, string password);
     }
 }
