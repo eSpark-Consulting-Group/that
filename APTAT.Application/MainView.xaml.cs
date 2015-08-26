@@ -103,7 +103,10 @@ namespace APTAT.Application
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
             if (e.MalwaresFound > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware(s) found", Environment.NewLine, e.MalwaresFound);
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
-            scanCompletedWindow.ShowDialog();
+            if (scanCompletedWindow.ShowDialog() == true)
+            {
+                _viewModel.RunValkyrieAnalysis();
+            }
         }
         
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)

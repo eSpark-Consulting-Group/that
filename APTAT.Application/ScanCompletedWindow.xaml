@@ -57,7 +57,7 @@
                         </Canvas>
                     </Grid>
 
-                    <TextBlock Text="Scan Completed!" VerticalAlignment="Center" Margin="15,0,0,0" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}"/>
+                    <TextBlock Text="Scan Completed! Do you want to analyse files with Valkyrie?" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,5,0,5" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" Width="300"/>
                 </StackPanel>
 
 
@@ -84,12 +84,13 @@
                             </StackPanel>
                             <Rectangle RadiusX="0" RadiusY="0" Margin="4" Opacity="0.4" StrokeDashArray="4, 2" Stroke="Gray" />
                         </Grid>
-                        
+
                     </Border>
                 </StackPanel>
 
-                <StackPanel HorizontalAlignment="Center" Grid.Row="3" Margin="0,10,0,0">
+                <StackPanel HorizontalAlignment="Center" Grid.Row="3" Margin="0,10,0,0" Orientation="Horizontal">
                     <Button Content="OK"  Margin="5,5,5,15" Click="Button_Click"  Style="{StaticResource ButtonHighlightStyle}" ></Button>
+                    <Button Content="Cancel"  Margin="5,5,5,15" Click="CancelButton_Click"  Style="{StaticResource ButtonHighlightStyle}" ></Button>
                 </StackPanel>
             </Grid>
             <!--<Border Height="60" Width="10" Background="{StaticResource AccentBrush}"

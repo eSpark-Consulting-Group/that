@@ -247,6 +247,7 @@
             </DockPanel >
         </Border>
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
+        
 
         <!--<Application:DesignGrid Grid.ColumnSpan="3" Grid.RowSpan="3" IsHitTestVisible="False" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
 

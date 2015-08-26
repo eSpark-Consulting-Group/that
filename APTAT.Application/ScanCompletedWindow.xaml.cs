@@ -36,7 +36,7 @@ namespace APTAT.Application
         public ScanCompletedWindow(MainViewViewModel currentViewModel)
             :this()
         {
-
+         
             _viewModel = currentViewModel;
             DataContext = _viewModel;
         }
@@ -61,6 +61,12 @@ namespace APTAT.Application
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            Close();
         }
     }
 }

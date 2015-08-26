@@ -172,6 +172,9 @@
     <Compile Include="ReportWindow.xaml.cs">
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ResultTabsControl.xaml.cs">
+      <DependentUpon>ResultTabsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScanCompletedWindow.xaml.cs">
       <DependentUpon>ScanCompletedWindow.xaml</DependentUpon>
     </Compile>
@@ -253,6 +256,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResultTabsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

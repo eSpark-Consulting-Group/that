@@ -22,13 +22,15 @@ namespace APTAT.Application
     /// </summary>
     public partial class ScanInfoTreeView : UserControl
     {
-        public ScanInfoTreeView(MainViewViewModel viewModel)
-        {
+        public ScanInfoTreeView()
+        {            
             InitializeComponent();
-            _viewModel = viewModel;
         }
 
-        private MainViewViewModel _viewModel;
+        public MainViewViewModel ViewModel
+        {
+            get { return this.DataContext as MainViewViewModel; }     
+        }
 
         private void treeList_LayoutUpdated(object sender, EventArgs e)
         {
@@ -136,7 +138,7 @@ namespace APTAT.Application
                 }
 
                 ThreatInfoItem item = GetDataBoundItem(element);
-                if (_viewModel.SelectedItem != null && _viewModel.SelectedItem.IsRootItem == false && _viewModel.SelectedItem == item)
+                if (ViewModel.SelectedItem != null && ViewModel.SelectedItem.IsRootItem == false && ViewModel.SelectedItem == item)
                 {
                     ThreatDetailsWindow details = new ThreatDetailsWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;

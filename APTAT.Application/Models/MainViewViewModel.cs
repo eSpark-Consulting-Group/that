@@ -267,7 +267,7 @@ namespace APTAT.Application.Models
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);
             StopScanCommand = new DelegateCommand(InvokeStopScan);
-            CurrentViewControl = new ScanInfoTreeView(this);
+            CurrentViewControl = new ScanInfoTreeView() { DataContext = this };
 
         }
 
@@ -526,17 +526,19 @@ namespace APTAT.Application.Models
         {
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
-            Percentage = 100;
-
+            Percentage = 100;            
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
+
+        }
+
+        public void RunValkyrieAnalysis()
+        {
             var result = _aptService.StartValkyrieAnalysis(_login, _password);
-            
-            this.CurrentViewControl = new ValkyrieResultUserControl() { DataContext = this };
+
+            this.CurrentViewControl = new ResultTabsControl { DataContext = this };
             ItemsValkyrie = new ObservableCollection<FileResult>(result);
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
-            //MessageBox.Show("Scan Completed. " + UnknownFilesCount + " unknown files found.", "Scan Completed!");
-
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
