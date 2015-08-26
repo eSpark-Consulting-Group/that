@@ -61,7 +61,7 @@
                             <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FFE54C3C" Height="16" Stretch="Fill" Width="16" UseLayoutRounding="False" VerticalAlignment="Top"/>
                             <Path Data="M1.188,7.9370117 C1.8441142,7.9370117 2.3759999,8.4688978 2.3759999,9.1250114 C2.3759999,9.781126 1.8441142,10.313012 1.188,10.313012 C0.53188568,10.313012 -7.4505806E-09,9.781126 0,9.1250114 C-7.4505806E-09,8.4688978 0.53188568,7.9370117 1.188,7.9370117 z M0.10499457,0 L2.2299945,0 L2.2299945,6.5619998 L0.10499457,6.5619998 z" Fill="White" Height="10.313" Stretch="Fill" Width="2.376" UseLayoutRounding="False" Canvas.Left="6.811" Canvas.Top="2.687"/>
                         </Canvas>
-                        <TextBlock Text="{Binding Name}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path}"/>
+                        <TextBlock Text="{Binding FullName}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path}"/>
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="NameColumn">
@@ -73,8 +73,14 @@
                 <DataTemplate x:Key="SizeColumn">
                     <TextBlock Text="{Binding FileSizeFormatted}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Size}"/>
                 </DataTemplate>
+                <DataTemplate x:Key="WhiteListedColumn">
+                    <CheckBox IsChecked="{Binding IsWhiteListed}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" />
+                </DataTemplate>
                 <DataTemplate x:Key="VerdictColumn">
                     <TextBlock Text="{Binding ValkyrieAnalysisResult.Verdict}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.Verdict}"/>
+                </DataTemplate>
+                <DataTemplate x:Key="MalwareProbabilityColumn">
+                    <TextBlock Text="{Binding ValkyrieAnalysisResult.MalwareProbability}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.MalwareProbability}"/>
                 </DataTemplate>
                 <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="ValkyrieNameTemplateSelector" 
                                                                 FileTemplate="{StaticResource FileInfoTemplate}"
@@ -91,7 +97,7 @@
                     ShowFilterButton="False"                    
                     ShowFieldFilters="False"                    
                     Header="NAME"
-                    Width="580" 
+                    Width="460" 
                  SortMemberPath="Name"
                 />
                
@@ -104,10 +110,25 @@
 
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource VerdictColumn}"
-                    SortMemberPath="Verdict"
+                    SortMemberPath="ValkyrieAnalysisResult.Verdict"
                     IsFilterable="False"
                     Header="Verdict"  
                     Width="*"/>
+                <telerik:GridViewColumn 
+                    CellTemplate="{StaticResource MalwareProbabilityColumn}"
+                    SortMemberPath="ValkyrieAnalysisResult.MalwareProbability"
+                    IsFilterable="False"
+                    Header="Malware Prob."  
+                    Width="*"/>
+                <telerik:GridViewCheckBoxColumn                    
+                    CellTemplate="{StaticResource WhiteListedColumn}"
+                    SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
+                    IsFilterable="False"
+                    Header="White Listed"  
+                    Width="*"/>
+                
+
+
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>

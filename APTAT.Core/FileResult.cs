@@ -83,6 +83,18 @@ namespace APTAT.Core
         public string Copyright { get; set; }
         public string Product { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                if(String.IsNullOrWhiteSpace(this.Product))
+                {
+                    return this.Name;
+                }
+
+                return String.Format("{0} ({1})", this.Name, this.Product);
+            }
+        }        
 
         public bool IsMalware
         {
