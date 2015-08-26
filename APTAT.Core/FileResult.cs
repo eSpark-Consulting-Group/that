@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,16 +8,49 @@ using APTAT.Valkyrie.Client;
 
 namespace APTAT.Core
 {
+    public class ComputerInformation
+    {
+        public ComputerInformation(Computer computer)
+        {
+            Os = computer.Os;
+            Name = computer.Name;
+            Sid = computer.Sid;
+            if (computer.Connections.Any())
+            {
+                this.IP = computer.Connections.First().IPv4;
+
+            }
+        }
+
+        public string Name { get; set; }
+        public string Sid { get; set; }
+        public OperatingSystem Os { get; set; }
+        
+
+        public string IP { get; set; }
+        public string FilePath { get; set; }
+        public string FullName
+        {
+            get
+            {
+
+                return String.Format("{0} ({1}) {2} {3} ", this.Name, this.IP,  this.Os, this.Sid);
+
+            }
+        }        
+    }
+
+
     public class FileResult
     {
-        private  FileResult()
+        private FileResult()
         {
-            
+
         }
 
         public FileResult(Module badFile)
         {
-            Computers = new List<Computer>();
+            Computers = new List<ComputerInformation>();
             Id = badFile.Id;
             Path = badFile.Path;
             Cloud = badFile.Cloud;
@@ -31,7 +65,7 @@ namespace APTAT.Core
             Version = badFile.Version;
             Copyright = badFile.Copyright;
             Product = badFile.Product;
-            
+
         }
         public string Id { get; set; }
         public string Path { get; set; }
@@ -49,9 +83,46 @@ namespace APTAT.Core
         public string Copyright { get; set; }
         public string Product { get; set; }
 
-        public string Name 
+
+        public bool IsMalware
         {
-            get {
+            get
+            {
+                if (this.ValkyrieAnalysisResult != null)
+                {
+
+                    return ValkyrieAnalysisResult.Verdict == Valkyrie.Client.Enums.InfoVerdictEnum.Malware;
+                }
+                return false;
+            }
+        }
+
+        public string MalwareProbability
+        {
+            get
+            {
+                if (this.ValkyrieAnalysisResult != null)
+                {
+                    return ValkyrieAnalysisResult.MalwareProbability.ToString("P", CultureInfo.InvariantCulture);
+                }
+                return String.Empty;
+            }
+        }
+
+        public bool IsUnknown
+        {
+            get
+            {
+
+                return true;
+            }
+
+        }
+
+        public string Name
+        {
+            get
+            {
                 return System.IO.Path.GetFileName(this.Path);
             }
         }
@@ -90,9 +161,9 @@ namespace APTAT.Core
         {
             get { return FileAgeFormatter.GetAge(Created); }
         }
-        
+
         public AnalysisResult ValkyrieAnalysisResult { get; set; }
 
-        public List<Computer> Computers { get; set; }
+        public List<ComputerInformation> Computers { get; set; }
     }
 }

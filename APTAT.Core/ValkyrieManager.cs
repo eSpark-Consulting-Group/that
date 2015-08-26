@@ -69,8 +69,6 @@ namespace APTAT.Core
 
             foreach (var scanResult in scanResults)
             {
-                var comp = scanResult.Value.AptReport.Computer;
-
                 foreach (var badFile in scanResult.Value.BadFiles)
                 {
                     var found = fileResults.SingleOrDefault(f => f.Sha1 == badFile.Sha1);
@@ -78,19 +76,23 @@ namespace APTAT.Core
                     if (found == null)
                     {
                         found = new FileResult(badFile);
-                        fileResults.Add(found);
-                        found.Computers.Add(comp);
+                        fileResults.Add(found);                    
+
                         var vResult = valkyrieResult.Where(v => v.SHA1 != null).Where(v => v.SHA1.ToUpper() == badFile.Sha1.ToUpper()).FirstOrDefault();
 
                         if (vResult != null)
                         {
                             found.ValkyrieAnalysisResult = vResult;
                         }
-                    }
-                    else
-                    {
-                        if (!found.Computers.Any(c => c.Sid == comp.Sid))
+                    }                    
+
+                    if (scanResult.Value.AptReport != null && scanResult.Value.AptReport.Computer != null)
+                    {                     
+                        var computer = scanResult.Value.AptReport.Computer;
+                        if (!found.Computers.Any(c => c.Sid == computer.Sid))
                         {
+                            var comp = new ComputerInformation(computer);
+                            comp.FilePath = badFile.Path;
                             found.Computers.Add(comp);
                         }
                     }

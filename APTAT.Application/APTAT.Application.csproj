@@ -216,6 +216,7 @@
       <DependentUpon>StartScanWorkgroupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplateSelectors\MainViewNameTemplateSelector.cs" />
+    <Compile Include="TemplateSelectors\ValkyrieNameTemplateSelector.cs" />
     <Compile Include="TextEntryListView.xaml.cs">
       <DependentUpon>TextEntryListView.xaml</DependentUpon>
     </Compile>

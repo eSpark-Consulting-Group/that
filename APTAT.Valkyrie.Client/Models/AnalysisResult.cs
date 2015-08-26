@@ -14,9 +14,12 @@ namespace APTAT.Valkyrie.Client
         {
             AnalysisResult result = new AnalysisResult();
             result.SHA1 = basicInfo.SHA1;
+            result.FirstAnalysisDate = basicInfo.FirstAnalysisDate;
             result.LastAnalysisDate = basicInfo.LastAnalysisDate;
+            result.MalwareProbability = basicInfo.MalwareProbability;            
             result.Verdict = basicInfo.Verdict;
             result.IsWhiteListed = basicInfo.IsWhiteListed;
+            result.ReturnCode = basicInfo.ReturnCode;
             return result;
         }
 
@@ -24,9 +27,12 @@ namespace APTAT.Valkyrie.Client
         {
             AnalysisResult result = new AnalysisResult();
             result.SHA1 = automaticResponse.SHA1;
+            result.FirstAnalysisDate = automaticResponse.FirstAnalysisDate;
             result.LastAnalysisDate = automaticResponse.LastAnalysisDate;
             result.Verdict = automaticResponse.Verdict;
             result.IsWhiteListed = automaticResponse.IsWhiteListed;
+            result.MalwareProbability = automaticResponse.MalwareProbability;
+            result.ReturnCode = automaticResponse.ReturnCode;
             return result;
         }
 
@@ -42,5 +48,11 @@ namespace APTAT.Valkyrie.Client
         {
             return new AnalysisResult() { IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict=InfoVerdictEnum.NotReady,IsWhiteListed=false, LastAnalysisDate= null };
         }
+
+        public float MalwareProbability { get; set; }
+
+        public DateTime? FirstAnalysisDate { get; set; }
+
+        public ErrorCodesEnum ReturnCode { get; set; }
     }
 }
