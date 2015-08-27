@@ -258,6 +258,8 @@ namespace APTAT.Application.Models
 
         public APTAT.Core.DevicesSourceDescription DevicesSourceDescription;
         private FileResult _selectedItemValkyrie;
+        private UserControl _scanInfoTreeControl;
+        private UserControl _valkyrieResultControl;
 
         public MainViewViewModel()
         {
@@ -267,13 +269,17 @@ namespace APTAT.Application.Models
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);
             StopScanCommand = new DelegateCommand(InvokeStopScan);
-            CurrentViewControl = new ScanInfoTreeView() { DataContext = this };
-
+            _scanInfoTreeControl = new ScanInfoTreeView() { DataContext = this };
+            _valkyrieResultControl = new ResultTabsControl { DataContext = this };
+            
+            CurrentViewControl = _scanInfoTreeControl;
+            
         }
 
         private void InvokeStartScan(Object arg)
         {
             Items = new ObservableCollection<ThreatInfoItem>();
+            ItemsValkyrie = new ObservableCollection<FileResult>();
             _cache = new ObservableCollection<ThreatInfoItem>();
             _onlineItems = new ThreatInfoItem[0];
             SelectedItem = null;
@@ -282,7 +288,7 @@ namespace APTAT.Application.Models
             ScannedItemsCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
-
+            CurrentViewControl = _scanInfoTreeControl;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
@@ -420,8 +426,8 @@ namespace APTAT.Application.Models
         }
 
         void _aptService_ValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
-        {
-            this.CurrentViewControl = new ResultTabsControl { DataContext = this };
+        {            
+            CurrentViewControl = _valkyrieResultControl;
             ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
@@ -524,7 +530,7 @@ namespace APTAT.Application.Models
         }
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
-        {
+        {            
             if (e.Exception != null)
             {
                 //  MessageBox.Show(String.Format("Exception: {0}", e.Exception.Message));    
