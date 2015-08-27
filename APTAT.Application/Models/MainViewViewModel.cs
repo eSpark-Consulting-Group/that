@@ -415,15 +415,27 @@ namespace APTAT.Application.Models
             _aptService.GetScanResultCompleted += OnGetScanResultCompleted;
             _aptService.ScanCompleted += OnScanCompleted;
             _aptService.ScanProgressChanged += OnScanProgressChanged;
-            _aptService.ValkyrieAnalysisProgressChanged += OnValkyrieAnalysisProgressChanged;
+            _aptService.ValkyrieAnalyzeProgressChanged+=OnValkyrieAnalyzeProgressChanged;
+            _aptService.ValkyrieAnalyzeCompleted += _aptService_ValkyrieAnalyzeCompleted;
         }
 
-        void OnValkyrieAnalysisProgressChanged(object sender, InProgressEventArgs e)
+        void _aptService_ValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
-            Percentage = e.Percentage;
+            this.CurrentViewControl = new ResultTabsControl { DataContext = this };
+            ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
+            SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
+            RaisePropertyChanged("ItemsValkyrie");
+            IsScanInProgress = false;
             RaisePropertyChanged("Header");
         }
 
+        private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            Percentage = e.ProgressPercentage;
+            RaisePropertyChanged("Header");
+        }
+
+        
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
@@ -434,7 +446,8 @@ namespace APTAT.Application.Models
             _aptService.GetScanResultCompleted -= OnGetScanResultCompleted;
             _aptService.ScanCompleted -= OnScanCompleted;
             _aptService.ScanProgressChanged -= OnScanProgressChanged;
-            _aptService.ValkyrieAnalysisProgressChanged -= OnValkyrieAnalysisProgressChanged;
+            _aptService.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
+            _aptService.ValkyrieAnalyzeCompleted -= _aptService_ValkyrieAnalyzeCompleted;
         }
 
         private void OnScanCompleted(Object sender, APTAT.Application.Services.ScanCompletedEventArgs e)
@@ -531,14 +544,10 @@ namespace APTAT.Application.Models
 
         }
 
-        public void RunValkyrieAnalysis()
+        public void BeginValkyrieAnalysis()
         {
-            var result = _aptService.StartValkyrieAnalysis(_login, _password);
-
-            this.CurrentViewControl = new ResultTabsControl { DataContext = this };
-            ItemsValkyrie = new ObservableCollection<FileResult>(result);
-            SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
-            RaisePropertyChanged("ItemsValkyrie");
+            IsScanInProgress = true;
+            _aptService.BeginValkyrieAnalysis(_login, _password);
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)

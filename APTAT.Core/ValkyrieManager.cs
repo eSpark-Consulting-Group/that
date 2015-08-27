@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using APTAT.Core.Descent;
@@ -10,60 +11,54 @@ namespace APTAT.Core
     public sealed class ValkyrieManager
     {
         private string _clientId;
-
+        public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
+        public event AnalyzeCompletedEventHandler<AnalysisResult> ValkyrieAnalyzeCompleted;
+        
+        
         private Valkyrie.Client.ValkyrieClient _client;
+        
    
         public ValkyrieManager(string clientId)
         {
-
             _clientId = clientId;
+            
             ValkyrieAnalysisResult = new List<FileResult>();
             _client = new Valkyrie.Client.ValkyrieClient(_clientId);
-            _client.InProgress += ValkyrieOnProgressChanged;
-
+            _client.AnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
+            _client.AnalyzeCompleted += OnValkyrieAnalyzeCompleted;
         }
 
-        public List<FileResult> ValkyrieAnalysisResult { get; set; }
-
-        public void CallValkyrie(ConcurrentDictionary<Guid, ScanResult> scanResults, string login, string password)
-        {
-            var distinctFileList = GetDistinctFileInfo(scanResults);
-            try
-            {
-                _client.AskValkyrie(distinctFileList, login, password);
-            }
-            catch (AggregateException ex)
-            {
-                throw ex;
-            }
-
-            ValkyrieAnalysisResult = GetFullResult(_client.AnalysisResults, scanResults);
-            OnValkyrieAnalysisCompleted();
-
-        }
-
-        public event EventHandler<InProgressEventArgs> ProgressChanged;
-        public event EventHandler Completed;
-
-        private void ValkyrieOnProgressChanged(object sender, InProgressEventArgs e)
-        {
-            var tmp = ProgressChanged;
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
+        {   
+            var tmp = ValkyrieAnalyzeCompleted;
             if (tmp != null)
-            {
+            {                
                 tmp(this, e);
             }
         }
 
-        private void OnValkyrieAnalysisCompleted()
+        void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            var tmp = Completed;
-            if (tmp != null)
-            {
-                tmp(this, EventArgs.Empty);
-            }
-        }        
+            var tmp = ValkyrieAnalyzeProgressChanged;
+            if (tmp != null) tmp(this, e);
+        }
 
-        private static List<FileResult> GetFullResult(IEnumerable<AnalysisResult> valkyrieResult, ConcurrentDictionary<Guid, ScanResult> scanResults)
+        public List<FileResult> ValkyrieAnalysisResult { get; set; }
+
+        public void CallValkyrieAsync(string login, string password, ConcurrentDictionary<Guid, ScanResult> scanResults)
+        {
+            var distinctFileList = GetDistinctFileInfo(scanResults);
+            try
+            {
+                _client.AnalyzeAsync(distinctFileList, login, password);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex;
+            }            
+        }
+
+        public  static List<FileResult> GetFullResult(IEnumerable<AnalysisResult> valkyrieResult, ConcurrentDictionary<Guid, ScanResult> scanResults)
         {
             List<FileResult> fileResults = new List<FileResult>();
 

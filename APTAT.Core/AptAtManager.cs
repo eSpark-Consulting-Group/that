@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
@@ -11,6 +12,7 @@ using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using APTAT.Core.Reports;
+using APTAT.Valkyrie.Client;
 
 namespace APTAT.Core
 {
@@ -608,6 +610,8 @@ namespace APTAT.Core
         private readonly CommandFactory _commandFactory;
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;
+        public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
+        public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         private ValkyrieManager _valkyrieManager;        
         public AptAtManager()
             : this(null)
@@ -623,16 +627,35 @@ namespace APTAT.Core
             _commandFactory = new CommandFactory(_descentSubSystem);
             _changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
             _valkyrieManager = new ValkyrieManager("MY_CLIENT");
-            _valkyrieManager.ProgressChanged += _valkyrieManager_ProgressChanged;
+            _valkyrieManager.ValkyrieAnalyzeProgressChanged += _valkyrieManager_ProgressChanged;
+            _valkyrieManager.ValkyrieAnalyzeCompleted += _valkyrieManager_ValkyrieAnalyzeCompleted;
             if (listener != null)
                 _changeTrackingSubSystem.RegisterListener(listener);
         }
 
-        void _valkyrieManager_ProgressChanged(object sender, Valkyrie.Client.InProgressEventArgs e)
+        void _valkyrieManager_ValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
         {
-            //throw new NotImplementedException();
+            var results = _descentSubSystem.GetFirstScanResults().ScanResults;
+            var valkyrieAnalysisResult = ValkyrieManager.GetFullResult(e.Result, results);
+            var handler = ValkyrieAnalyzeCompleted;
+                        
+            if (handler != null)
+            {
+                var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled, e.UserState);
+                handler(this, arg);
+            }
         }
 
+        void _valkyrieManager_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            var handler = ValkyrieAnalyzeProgressChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+      
         public void RegisterChangeTrackingListener(IChangeTrackingListener listener)
         {
             if (listener != null)
@@ -795,12 +818,11 @@ namespace APTAT.Core
             _descentSubSystem.AbortAllThreads();
         }
                 
-        public List<FileResult> StartValkyrieAnalysis(string login, string password)
+        public void StartValkyrieAnalysisAsync(string login, string password)
         {   
-            _valkyrieManager.CallValkyrie(_descentSubSystem.GetFirstScanResults().ScanResults, login, password);
-            return _valkyrieManager.ValkyrieAnalysisResult;
+            var results = _descentSubSystem.GetFirstScanResults().ScanResults;
+            _valkyrieManager.CallValkyrieAsync(login, password, results);           
         }
     }
-
 
 }

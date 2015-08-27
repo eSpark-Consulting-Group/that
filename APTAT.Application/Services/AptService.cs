@@ -12,6 +12,7 @@ using System.Linq;
 using APTAT.Core.Reports;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Valkyrie.Client;
+using System.ComponentModel;
 
 namespace APTAT.Application.Services
 {
@@ -64,10 +65,12 @@ namespace APTAT.Application.Services
 
         public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
 
-        public event EventHandler<InProgressEventArgs> ValkyrieAnalysisProgressChanged;
+        public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
+        public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+
 
         private readonly AptAtManager _manager;
-        private readonly ValkyrieManager _valkyrieManager;
+        
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
 
@@ -94,14 +97,30 @@ namespace APTAT.Application.Services
         private AptService()
         {
             _manager = new AptAtManager(this);
+            _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
+            _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
      
         }
 
-        void _valkyrieManager_ProgressChanged(object sender, APTAT.Valkyrie.Client.InProgressEventArgs e)
+        void OnValkyrieAnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            var tmp = ValkyrieAnalysisProgressChanged;
-            if (tmp != null) tmp(this, e);
+            var handler = ValkyrieAnalyzeProgressChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
+
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        {
+            var handler = ValkyrieAnalyzeCompleted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        
 
         public void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState)
         {
@@ -433,10 +452,10 @@ namespace APTAT.Application.Services
         {
             _manager.StopScan();
         }
-        
-        public List<FileResult> StartValkyrieAnalysis(string login, string password)
+
+        public void BeginValkyrieAnalysis(string login, string password)
         {
-           return _manager.StartValkyrieAnalysis(login, password);                        
+           _manager.StartValkyrieAnalysisAsync(login, password);                        
         }
 
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
@@ -682,6 +701,9 @@ namespace APTAT.Application.Services
                 DispatcherHelper.Current.BeginInvoke(action);
             }
         }
+
+
+
         
     }
 }

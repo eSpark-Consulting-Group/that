@@ -3,6 +3,7 @@ using APTAT.Application.Models;
 using System.Collections.Generic;
 using APTAT.Valkyrie.Client;
 using APTAT.Core;
+using System.ComponentModel;
 
 namespace APTAT.Application.Services
 {
@@ -158,10 +159,11 @@ namespace APTAT.Application.Services
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-        event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
-        event EventHandler<InProgressEventArgs> ValkyrieAnalysisProgressChanged; 
+        event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;        
         event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
         event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
+        event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
+        event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
 
         void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState);
 
@@ -180,7 +182,7 @@ namespace APTAT.Application.Services
         void GetScanResult(Guid targetUid, Object userState);
 
         void StopScan();
-                
-        List<FileResult> StartValkyrieAnalysis(string login, string password);
+
+        void BeginValkyrieAnalysis(string login, string password);
     }
 }

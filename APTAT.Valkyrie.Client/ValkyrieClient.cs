@@ -9,46 +9,33 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Helpers;
+using System.ComponentModel;
 
 namespace APTAT.Valkyrie.Client
 {
 
     public sealed class ValkyrieClient
     {
+        private const Int32 maxFileLenght = 26214400;        
+        private const string ApiKey = "d552623a-47d5-4dab-81d8-039f596c241f";
+        
+        private string _clientID;
         private int _fileScanned;
-
-        public event EventHandler<EventArgs> ScanCompleted;
-        public event EventHandler<InProgressEventArgs> InProgress;
-       
-        private void OnInProgress()
-        {
-            var tmp = InProgress;
-            if (tmp != null)
-            {
-                double progress = 0;
-                if (FilesCount > 0)
-                {
-                    progress = ((double)_fileScanned / (double)FilesCount) * 100;
-
-                }
-                tmp(this, new InProgressEventArgs() { Percentage = Convert.ToInt32(progress), TotalFileCount = FilesCount, ProcessedFileCount = _fileScanned });
-            }
-        }
-        public int FilesCount { get; private set; }
-
         public int FileScanned
         {
             get
             {
                 return _fileScanned;
             }
-
-            set
+            private set
             {
                 _fileScanned = value;
             }
         }
 
+        public int FilesCount { get; private set; }
+
+        private ConcurrentBag<AnalysisResult> _analysisResults;
         public ConcurrentBag<AnalysisResult> AnalysisResults
         {
             get
@@ -61,27 +48,96 @@ namespace APTAT.Valkyrie.Client
                 _analysisResults = value;
             }
         }
-
-
-        private ConcurrentBag<AnalysisResult> _analysisResults;
-
+        
         public ValkyrieClient(string cientID)
         {
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
             _clientID = cientID;
-        }
-        const Int32 maxFileLenght = 26214400;
-        private string _clientID;
-        private string _apiKey = "d552623a-47d5-4dab-81d8-039f596c241f";
+        }     
 
+        //public void AskValkyrie(List<ValkyrieFileInfo> badFiles, string login, string password)
+        //{
+        //    var folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
+        //    SubmitFolderToAutomaticAnalysis(_clientID, folderPath);
+        //}
 
-        public void AskValkyrie(List<ValkyrieFileInfo> badFiles, string login, string password)
+        
+        private CancellationTokenSource _cancellationTokenSource;
+        private TaskScheduler _taskScheduler;
+        public void AnalyzeAsync(string folderPath)
         {
-            var folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
-            SubmitFolderToAutomatic(_clientID, folderPath);
+            AnalyzeAsync(null, null, null, folderPath);
         }
 
-        public void SubmitFolderToAutomatic(string clientID, string folderPath)
+        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password, string folderPath = null)
+        {
+            Guid taskId = Guid.NewGuid();
+            AnalysisResults = new ConcurrentBag<AnalysisResult>();
+            _fileScanned = 0;
+
+            this._cancellationTokenSource = new CancellationTokenSource();
+
+            var cancellationToken = this._cancellationTokenSource.Token;
+            cancellationToken.Register(() =>
+            {
+                var tmp = AnalyzeCanceled;
+                if (tmp != null) tmp(this, EventArgs.Empty);
+            });
+
+            _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
+            bool useBadFilesCollection = String.IsNullOrWhiteSpace(folderPath) && badFiles != null;
+            var task = Task.Factory.StartNew(() =>
+                {
+                    if (useBadFilesCollection)
+                    {
+                        folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
+                    }
+                    SubmitFolderToAutomaticAnalysis(_clientID, folderPath);
+                }, cancellationToken
+            )
+                .ContinueWith(t =>
+                {
+                    OnAnalyzeCompleted(t);
+                }, CancellationToken.None, TaskContinuationOptions.None, _taskScheduler);
+
+        }
+
+        public void AnalyzeAsyncCancel()
+        {
+            this._cancellationTokenSource.Cancel();
+        }
+              
+        public event AnalyzeCompletedEventHandler<AnalysisResult> AnalyzeCompleted;
+        public event ProgressChangedEventHandler AnalyzeProgressChanged;
+        public event EventHandler AnalyzeCanceled;
+
+        private void OnAnalyzeCompleted(Task task)
+        {
+            var tmp = AnalyzeCompleted;
+            if (tmp != null)
+            {
+                tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(this.AnalysisResults.ToArray(), task.Exception, task.IsCanceled, task.AsyncState));
+            }
+        } 
+        private void OnAnalyzeProgressChanged()
+        {
+            var tmp = AnalyzeProgressChanged;
+            if (tmp != null)
+            {
+                double progress = 0;
+                if (FilesCount > 0)
+                {
+                    progress = ((double)_fileScanned / (double)FilesCount) * 100;
+
+                }
+                var progressInt = Convert.ToInt32(progress);
+                tmp(this, new ProgressChangedEventArgs(progressInt, null));
+            }
+        }
+
+
+        private void SubmitFolderToAutomaticAnalysis(string clientID, string folderPath)
         {
 
             var exceptions = new ConcurrentQueue<Exception>();
@@ -109,9 +165,14 @@ namespace APTAT.Valkyrie.Client
             //foreach (var filePath in files)
             //{
             //    UploadFile(clientID, filePath);
+            //    if (cancellationTokenSource != null)
+            //    {
+            //        if (cancellationTokenSource.Token.IsCancellationRequested)
+            //        {
+            //            break;
+            //        }
+            //    }
             //}
-
-
         }
 
         private void UploadFile(string clientID, string filePath)
@@ -124,7 +185,7 @@ namespace APTAT.Valkyrie.Client
                 return;
             }
 
-            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1 , ApiKey = _apiKey};
+            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1, ApiKey = ApiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
 
             if (basicInfo.Presence)
@@ -136,19 +197,15 @@ namespace APTAT.Valkyrie.Client
             {
                 var request = new SubmitToAutomaticRequest();
                 request.Client_id = clientID;
-                request.ApiKey = _apiKey;
+                request.ApiKey = ApiKey;
                 request.SubmitToken = basicInfo.SubmitToken;
                 request.FilePath = filePath;
-
-
                 var payload = request.ToNameValueCollection();
 
                 var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
                 var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
                 var result = AnalysisResult.Create(response);
                 AddResult(result);
-
-
             }
         }
 
@@ -156,7 +213,7 @@ namespace APTAT.Valkyrie.Client
         {
             AnalysisResults.Add(result);
             Interlocked.Increment(ref _fileScanned);
-            OnInProgress();
+            Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
         }
     }
 }

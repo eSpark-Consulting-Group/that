@@ -8,53 +8,87 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace APTAT.Valkyrie.ClientTest
 {
     class Program
     {
-     
 
+          [STAThread]
         static void Main(string[] args)
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
 
-            string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
-            Console.WriteLine("Starting uploading files to Valkyrie...");
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            var valkyrie = new ValkyrieClient("MY_CLIENT");
-            valkyrie.InProgress += Valkyrie_InProgress;
-            try
-            {
-                valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
-                
-                
-                //List<string> files = GetDuplicatedCollection(folderPath);
+            //string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
+            //Console.WriteLine("Starting uploading files to Valkyrie...");
+            ////Stopwatch sw = new Stopwatch();
+            ////sw.Start();
+            //var valkyrie = new ValkyrieClient("MY_CLIENT");
+            //valkyrie.InProgress += Valkyrie_InProgress;
+            //valkyrie.AnalyzeCanceled += valkyrie_AnalyzeCanceled;
+            //valkyrie.AnalyzeCompleted += valkyrie_AnalyzeCompleted;
+            //try
+            //{
+            //    valkyrie.AnalyzeAsync("MY_CLIENT", folderPath);
 
-                //valkyrie.UploadFilesToValkyrie("MY_CLIENT", files);
+            //    for (int i = 0; i < 1000; i++)
+            //    {
+            //        //if (i == 5) valkyrie.AnalyzeAsyncCancel();
+            //        //Console.WriteLine(i);
+            //        Thread.Sleep(1000);
+            //    }
+
+            //    //valkyrie.SubmitFolderToAutomatic("MY_CLIENT", folderPath);
 
 
-            }
-            catch (AggregateException ex)
-            {
+            //    //List<string> files = GetDuplicatedCollection(folderPath);
 
-                foreach (var item in ex.InnerExceptions)
-                {
-                    Console.WriteLine(item.Message);
-                }
-            }
+            //    //valkyrie.UploadFilesToValkyrie("MY_CLIENT", files);
+
+
+            //}          
+            //catch (AggregateException ex)
+            //{
+
+            //    foreach (var item in ex.InnerExceptions)
+            //    {
+            //        Console.WriteLine(item.Message);
+            //    }
+            //}
+            
+            
+            ////sw.Stop();
+
+            ////var result = valkyrie.AnalysisResults;
+            ////Console.WriteLine(String.Format("Upload to Valkyrie completed. Uploaded files {0}. Skipped files {1}", result.Where(f => f.IsSkipped == false).Count(), result.Where(f => f.IsSkipped).Count()));
+            ////Console.WriteLine("Total Time elapsed: {0}", sw.Elapsed);
+
+            ////ShowResult(result);
+
+            //Console.WriteLine("\n\nPress any key to close");
+            //Console.ReadKey();
+        }
+
+        static void valkyrie_AnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            var result = e.Result;
+            Console.WriteLine(String.Format("Upload to Valkyrie completed. Uploaded files {0}. Skipped files {1}", result.Where(f => f.IsSkipped == false).Count(), result.Where(f => f.IsSkipped).Count()));
             
 
-            sw.Stop();
-
-            var result = valkyrie.AnalysisResults;
-            Console.WriteLine(String.Format("Upload to Valkyrie completed. Uploaded files {0}. Skipped files {1}", result.Where(f => f.IsSkipped == false).Count(), result.Where(f => f.IsSkipped).Count()));
-            Console.WriteLine("Total Time elapsed: {0}", sw.Elapsed);
-
             ShowResult(result);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
 
-            Console.WriteLine("\n\nPress any key to close");
-            Console.ReadKey();
+        static void valkyrie_AnalyzeCanceled(object sender, EventArgs e)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Valkyrie analysis canceled");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private static List<string> GetDuplicatedCollection(string folderPath)
@@ -74,7 +108,7 @@ namespace APTAT.Valkyrie.ClientTest
             return files;
         }
 
-        private static void ShowResult(System.Collections.Concurrent.ConcurrentBag<AnalysisResult> result)
+        private static void ShowResult(IEnumerable<AnalysisResult> result)
         {
             foreach (var item in result)
             {

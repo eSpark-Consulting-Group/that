@@ -105,7 +105,7 @@ namespace APTAT.Application
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             if (scanCompletedWindow.ShowDialog() == true)
             {
-                _viewModel.RunValkyrieAnalysis();
+                _viewModel.BeginValkyrieAnalysis();
             }
         }
         
