@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
@@ -460,9 +461,10 @@ namespace APTAT.Core
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly ReportBuilder _reportBuilder = new ReportBuilder();
 
-        public AptReportBuilder(IDescentSubSystem descentSubSystem)
+        public AptReportBuilder(IDescentSubSystem descentSubSystem, ValkyrieManager valkyrie)
         {
             _descentSubSystem = descentSubSystem;
+            _valkyrieSubSystem = valkyrie;
         }
 
         /* FAKE DATA
@@ -489,16 +491,18 @@ namespace APTAT.Core
         public void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null)
         {
             //data = GetFakeData();
+            
             var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
             if (results.Finished == DateTime.MinValue)
                 throw new DataNotReadyException();
+            
             BeginBuildReport(results, reportType, state);
         }
 
         public void BeginBuildReport(AptScanOperationContext operationContext, ReportType reportType, object state = null)
-        {
+        {         
             if (operationContext != null)
-            {
+            {                
                 AptReportData data = new AptReportData
                 {
                     OperationUid = operationContext.OperationUid,
@@ -510,7 +514,9 @@ namespace APTAT.Core
                     TotalTargetsCount = operationContext.TotalTargetsCount,
                     TargetsSucceeded = operationContext.SucceededTargetsCount,
                     Targets = operationContext.ScanResults.Values.ToArray(),
-                    DevicesSourceDescription = operationContext.DevicesSourceDescription
+                    DevicesSourceDescription = operationContext.DevicesSourceDescription,
+                    ValkyrieAnalysisResult = _valkyrieSubSystem.ValkyrieAnalysisResult
+                  
                 };
 
                 ReportBuilder.BuildReportDelegate action = new ReportBuilder.BuildReportDelegate(_reportBuilder.Build);
@@ -574,6 +580,7 @@ namespace APTAT.Core
         }
 
         public event EventHandler<ReportCompletedEventArgs> ReportCompleted;
+        private ValkyrieManager _valkyrieSubSystem;
 
         protected virtual void OnReportCompleted(ReportCompletedEventArgs args)
         {
@@ -600,7 +607,8 @@ namespace APTAT.Core
     {
         private readonly CommandFactory _commandFactory;
         private readonly IDescentSubSystem _descentSubSystem;
-        private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;        
+        private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;
+        private ValkyrieManager _valkyrieManager;        
         public AptAtManager()
             : this(null)
         {
@@ -614,9 +622,15 @@ namespace APTAT.Core
             _descentSubSystem.Init(catalog);
             _commandFactory = new CommandFactory(_descentSubSystem);
             _changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
-
+            _valkyrieManager = new ValkyrieManager("MY_CLIENT");
+            _valkyrieManager.ProgressChanged += _valkyrieManager_ProgressChanged;
             if (listener != null)
                 _changeTrackingSubSystem.RegisterListener(listener);
+        }
+
+        void _valkyrieManager_ProgressChanged(object sender, Valkyrie.Client.InProgressEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         public void RegisterChangeTrackingListener(IChangeTrackingListener listener)
@@ -739,7 +753,7 @@ namespace APTAT.Core
 
         public IAptReportBuilder GetAptReportBuilder()
         {
-            IAptReportBuilder aptReportBuilder = new AptReportBuilder(_descentSubSystem);
+            IAptReportBuilder aptReportBuilder = new AptReportBuilder(_descentSubSystem, _valkyrieManager);
             return aptReportBuilder;
         }
 
@@ -780,10 +794,11 @@ namespace APTAT.Core
         {
             _descentSubSystem.AbortAllThreads();
         }
-
-        public ConcurrentDictionary<Guid,ScanResult> GetFirstScanReslts()
-        {
-            return _descentSubSystem.GetFirstScanResults().ScanResults;
+                
+        public List<FileResult> StartValkyrieAnalysis(string login, string password)
+        {   
+            _valkyrieManager.CallValkyrie(_descentSubSystem.GetFirstScanResults().ScanResults, login, password);
+            return _valkyrieManager.ValkyrieAnalysisResult;
         }
     }
 

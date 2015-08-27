@@ -94,8 +94,7 @@ namespace APTAT.Application.Services
         private AptService()
         {
             _manager = new AptAtManager(this);
-            _valkyrieManager = new ValkyrieManager("MY_CLIENT");
-            _valkyrieManager.ProgressChanged += _valkyrieManager_ProgressChanged;
+     
         }
 
         void _valkyrieManager_ProgressChanged(object sender, APTAT.Valkyrie.Client.InProgressEventArgs e)
@@ -108,6 +107,7 @@ namespace APTAT.Application.Services
         {
             IAptReportBuilder reportBuilder =  _manager.GetAptReportBuilder();
             reportBuilder.ReportCompleted += OnReportCompleted;
+            
             reportBuilder.BeginBuildReport(operationGuid, ToReportType(reportKind), userState);
         }
 
@@ -425,9 +425,7 @@ namespace APTAT.Application.Services
                 }
             };
 
-            DispatcherHelper.Current.BeginInvoke(action);
-
-
+            DispatcherHelper.Current.BeginInvoke(action);            
 
         }
 
@@ -435,15 +433,12 @@ namespace APTAT.Application.Services
         {
             _manager.StopScan();
         }
-
         
         public List<FileResult> StartValkyrieAnalysis(string login, string password)
         {
-            var scanResult = _manager.GetFirstScanReslts();                        
-           _valkyrieManager.CallValkyrie(scanResult,login, password);
-           return _valkyrieManager.ValkyrieAnalysisResult;
-
+           return _manager.StartValkyrieAnalysis(login, password);                        
         }
+
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
             if (type == DomainEntryType.Root)

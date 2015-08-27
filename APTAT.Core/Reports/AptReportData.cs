@@ -282,7 +282,17 @@ namespace APTAT.Core.Reports
             foreach (var scanResult in Targets)
             {
                 var badFilesFromTarget = scanResult.GetUniqueBadFiles();
+                
                 files.AddRange(badFilesFromTarget);
+            }
+
+            if (ValkyrieAnalysisResult.Any())
+            {
+                foreach (var f in files)
+                {
+                    var fileResult = this.ValkyrieAnalysisResult.Where(v=>v.Sha1.ToUpper() == f.Hash.ToUpper()).FirstOrDefault();
+                    f.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
+                }
             }
 
             return files.ToArray();
@@ -308,6 +318,8 @@ namespace APTAT.Core.Reports
             //return (from file in globallyUniqueFiles.Values orderby file.Targets.Count descending select file).ToArray();
             return (from file in globallyUniqueFiles.Values select file).OrderByDescending(file => file.Targets.Count).ThenBy(file => file.Name).ToArray();
         }
+
+        public List<FileResult> ValkyrieAnalysisResult { get; set; }
     }
 
     public class VulnerableDeviceInfo
@@ -435,6 +447,19 @@ namespace APTAT.Core.Reports
         public CloudVerdict Cloud { get; set; }
         public string FileSizeFormatted { get; set; }
         public BadFileType FileType { get; set; }
+
+        public void SetValkyrieAnalysis(Valkyrie.Client.AnalysisResult analysisResult)
+        {
+            if (analysisResult == null) return;
+            IsWhiteListed = analysisResult.IsWhiteListed;
+            MalwareProbability = analysisResult.MalwareProbability;
+            ReturnCode = analysisResult.ReturnCode;
+            Verdict = analysisResult.Verdict;
+            IsWhiteListed = analysisResult.IsWhiteListed;
+            IsSkipped = analysisResult.IsSkipped;
+            SkipReason = analysisResult.SkipReason;
+        }
+
         public int TargetsCount
         {
             get { return Targets.Count; }
@@ -493,6 +518,18 @@ namespace APTAT.Core.Reports
             public DateTime Modified { get; set; }
             public DateTime Accessed { get; set; }
         }
+
+        public bool IsWhiteListed { get; set; }
+
+        public float MalwareProbability { get; set; }
+
+        public Valkyrie.Client.Enums.ErrorCodesEnum ReturnCode { get; set; }
+
+        public Valkyrie.Client.Enums.InfoVerdictEnum Verdict { get; set; }
+
+        public bool IsSkipped { get; set; }
+
+        public string SkipReason { get; set; }
     }
 
     public abstract class ItemRatingInfo

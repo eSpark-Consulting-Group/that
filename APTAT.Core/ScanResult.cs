@@ -227,7 +227,7 @@ namespace APTAT.Core
                     uniqueFiles.Add(badFile.Sha1, file);
                 }
             }
-
+            
             return uniqueFiles.Values.ToArray();
         }
 
