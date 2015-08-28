@@ -34,7 +34,7 @@ namespace APTAT.Core
             get
             {
 
-                return String.Format("{0} ({1}) {2} {3} ", this.Name, this.IP,  this.Os, this.Sid);
+                return String.Format("{0} ({1}) {2}", this.Name, this.IP,  this.Os);
 
             }
         }        

@@ -677,13 +677,13 @@ namespace APTAT.Core
                             found.ValkyrieAnalysisResult = vResult;
                         }
                     }
-
+                  
                     if (scanResult.Value.AptReport != null && scanResult.Value.AptReport.Computer != null)
                     {
                         var computer = scanResult.Value.AptReport.Computer;
-                        if (!found.Computers.Any(c => c.Sid == computer.Sid))
-                        {
-                            var comp = new ComputerInformation(computer);
+                        var comp = new ComputerInformation(computer);
+                        if (!found.Computers.Any(c => c.IP == comp.IP))
+                        {                        
                             comp.FilePath = badFile.Path;
                             found.Computers.Add(comp);
                         }
