@@ -454,6 +454,7 @@
     </None>
     <None Include="Properties\DataSources\APTAT.Core.Reports.AptReportData.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.DetailedBadFile.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.DetailedBadFile1.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.FileRatingInfo.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.MostWantedBadFileInfo.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.ScannedTarget.datasource" />
@@ -468,12 +469,26 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\ServerSideMessagesResources.resx" />
-    <EmbeddedResource Include="Reports\DetailedDevices.rdlc" />
+    <EmbeddedResource Include="Reports\DetailedDevicesWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\DetailedDevices.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\DetailedProgramsWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\DetailedPrograms.rdlc" />
     <EmbeddedResource Include="Reports\Devices.rdlc" />
+    <EmbeddedResource Include="Reports\ExecutiveWithValkyrie.rdlc" />
     <EmbeddedResource Include="Reports\Executive.rdlc" />
     <EmbeddedResource Include="Reports\MaliciousFiles.rdlc" />
-    <EmbeddedResource Include="Reports\UnknownFiles.rdlc" />
+    <EmbeddedResource Include="Reports\UnknownFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ValkyrieResult.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj">

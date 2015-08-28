@@ -592,6 +592,21 @@ namespace APTAT.Application.Services
                 return ReportType.DetailedPerDevice;
             }
 
+            if (kind == ReportKind.ExecutiveWithValkyrie)
+            {
+                return ReportType.ExecutiveWithValkyrie;
+            }
+
+            if (kind == ReportKind.DetailedPerProgramWithValkyrie)
+            {
+                return ReportType.DetailedPerProgramWithValkyrie;
+            }
+
+            if (kind == ReportKind.DetailedPerDeviceWithValkyrie)
+            {
+                return ReportType.DetailedPerDeviceWithValkyrie;
+            }
+
             throw new ArgumentException("kind");
         }
 

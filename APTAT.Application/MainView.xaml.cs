@@ -200,7 +200,27 @@ namespace APTAT.Application
             _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerProgram);
             ReportButton.IsOpen = false;
             ShowReport();
-            
+        }
+
+        private void OnExecutiveReportValkyrieClick(Object sender, RadRoutedEventArgs e)
+        {
+            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.ExecutiveWithValkyrie);
+            ReportButton.IsOpen = false;
+            ShowReport();
+        }
+
+        private void OnPerDeviceReportValkyrieClick(Object sender, RadRoutedEventArgs e)
+        {
+            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerDeviceWithValkyrie);
+            ReportButton.IsOpen = false;
+            ShowReport();
+        }
+
+        private void OnPerProgramReportValkyrieClick(Object sender, RadRoutedEventArgs e)
+        {
+            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerProgramWithValkyrie);
+            ReportButton.IsOpen = false;
+            ShowReport();
         }
 
         private void OnStopScanClick(Object sender, RoutedEventArgs e)

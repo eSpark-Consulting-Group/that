@@ -4,6 +4,10 @@
     {
         Executive,
         DetailedPerDevice,
-        DetailedPerProgram
+        DetailedPerProgram,
+        ExecutiveWithValkyrie,
+        DetailedPerDeviceWithValkyrie,
+        DetailedPerProgramWithValkyrie,
+
     }
 }

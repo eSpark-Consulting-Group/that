@@ -32,6 +32,7 @@ namespace APTAT.Application.Models
 
         // private Boolean _resolvingTargets;
         private Boolean _isReportEnabled;
+        private Boolean _isValkyrieReportEnabled;
         private Boolean? _isScanInProgress;
         private Int32 _scannedItemsCount;
 
@@ -187,6 +188,16 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Boolean IsValkyrieReportEnabled
+        {
+            get { return _isValkyrieReportEnabled; }
+            set
+            {
+                _isValkyrieReportEnabled = value;
+                RaisePropertyChanged("IsValkyrieReportEnabled");
+            }
+        }
+
         public Int32 ItemsCount
         {
             get
@@ -317,6 +328,7 @@ namespace APTAT.Application.Models
             ScannedItemsCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
+            IsValkyrieReportEnabled = false;
             CurrentViewControl = _scanInfoTreeControl;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
@@ -461,6 +473,7 @@ namespace APTAT.Application.Models
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
             IsValkyrieScanInProgress = false;
+            IsValkyrieReportEnabled = true;
             RaisePropertyChanged("Header");
         }
 

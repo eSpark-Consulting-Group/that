@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APTAT.Valkyrie.Client;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -437,6 +438,8 @@ namespace APTAT.Core.Reports
             _targets.Add(target);
         }
 
+
+
         public string Hash { get; set; }
         public string Name { get; set; }
         public long Size { get; set; }
@@ -521,11 +524,35 @@ namespace APTAT.Core.Reports
 
         public bool IsWhiteListed { get; set; }
 
+        public string WhiteListed
+        {
+            get
+            {
+                return IsWhiteListed ? "Whitelisted" : "Not whitelisted";
+            }
+        }
+
         public float MalwareProbability { get; set; }
+
+        public string MalwareProbabilityFormatted
+        {
+            get
+            {
+                return string.Format("{0:P}", MalwareProbability / 100);
+            }
+        }
 
         public Valkyrie.Client.Enums.ErrorCodesEnum ReturnCode { get; set; }
 
         public Valkyrie.Client.Enums.InfoVerdictEnum Verdict { get; set; }
+
+        public string ValkyrieVerdictString
+        {
+            get
+            {
+                return Verdict.ToString();
+            }
+        }
 
         public bool IsSkipped { get; set; }
 

@@ -146,7 +146,10 @@ namespace APTAT.Application.Services
     {
         Executive,
         DetailedPerDevice,
-        DetailedPerProgram
+        DetailedPerProgram,
+        ExecutiveWithValkyrie,
+        DetailedPerDeviceWithValkyrie,
+        DetailedPerProgramWithValkyrie
     }
 
     public interface IAptService
