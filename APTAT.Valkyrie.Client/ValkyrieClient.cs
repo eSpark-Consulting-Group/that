@@ -87,19 +87,23 @@ namespace APTAT.Valkyrie.Client
             _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
             bool useBadFilesCollection = String.IsNullOrWhiteSpace(folderPath) && badFiles != null;
-            var task = Task.Factory.StartNew(() =>
+            var task = Task.Factory.StartNew((t) =>
                 {
                     if (useBadFilesCollection)
                     {
                         folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
                     }
                     SubmitFolderToAutomaticAnalysis(_clientID, folderPath);
-                }, cancellationToken
+                }, TaskCreationOptions.LongRunning, cancellationToken
             )
                 .ContinueWith(t =>
                 {
                     OnAnalyzeCompleted(t);
-                }, CancellationToken.None, TaskContinuationOptions.None, _taskScheduler);
+                }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
+
+            task.ContinueWith((t) => {
+                var error = t.Exception;
+            }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted,_taskScheduler);
 
         }
 
@@ -114,11 +118,13 @@ namespace APTAT.Valkyrie.Client
 
         private void OnAnalyzeCompleted(Task task)
         {
+            if (task.Exception != null) throw task.Exception;
             var tmp = AnalyzeCompleted;
             if (tmp != null)
             {
                 tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(this.AnalysisResults.ToArray(), task.Exception, task.IsCanceled, task.AsyncState));
             }
+            
         } 
         private void OnAnalyzeProgressChanged()
         {
@@ -139,46 +145,46 @@ namespace APTAT.Valkyrie.Client
 
         private void SubmitFolderToAutomaticAnalysis(string clientID, string folderPath)
         {
-
             var exceptions = new ConcurrentQueue<Exception>();
 
-            var files = Directory.EnumerateFiles(folderPath);
+            var files = Directory.EnumerateFiles(folderPath).ToArray();
             FilesCount = files.Count();
 
-            Parallel.ForEach(files, (filePath) =>
-            {
-                try
-                {
-                    UploadFile(clientID, filePath);
-                }
-                catch (Exception e)
-                {
-
-                    AddResult(AnalysisResult.CreateSkipInfo(filePath, e.Message));
-                    exceptions.Enqueue(e);
-                }
-            });
-
-            if (exceptions.Count > 0) throw new AggregateException(exceptions);
-
-
-            //foreach (var filePath in files)
+            //Parallel.ForEach(files, (filePath) =>
             //{
-            //    UploadFile(clientID, filePath);
-            //    if (cancellationTokenSource != null)
+            //    try
             //    {
-            //        if (cancellationTokenSource.Token.IsCancellationRequested)
-            //        {
-            //            break;
-            //        }
+            //        UploadFile(clientID, filePath);
             //    }
-            //}
+            //    catch (Exception e)
+            //    {
+
+            //        AddResult(AnalysisResult.CreateSkipInfo(filePath, e.Message));
+            //        exceptions.Enqueue(e);
+            //    }
+            //});
+
+            //if (exceptions.Count > 0) throw new AggregateException(exceptions);
+
+
+            foreach (var filePath in files)
+            {
+                UploadFile(clientID, filePath);
+                //if (_cancellationTokenSource != null)
+                //{
+                //    if (_cancellationTokenSource.Token.IsCancellationRequested)
+                //    {
+                //        break;
+                //    }
+                //}
+            }
         }
 
         private void UploadFile(string clientID, string filePath)
         {
             var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
             FileInfo f = new FileInfo(filePath);
+            
             if (f.Length > maxFileLenght)
             {
                 AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB."));

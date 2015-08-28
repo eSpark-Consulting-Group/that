@@ -14,8 +14,8 @@ namespace APTAT.Valkyrie.Client
             Uri uri = new Uri(url);
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
             webrequest.Timeout = 1000 * 300;
-         //   webrequest.ServerCertificateValidationCallback += null;
-                        
+            //   webrequest.ServerCertificateValidationCallback += null;
+
             string boundary = "----WebKitFormBoundary" + DateTime.Now.Ticks.ToString("x");
             webrequest.ContentType = "multipart/form-data; boundary=" + boundary;
             webrequest.Method = "POST";
@@ -37,30 +37,37 @@ namespace APTAT.Valkyrie.Client
 
         private static string SubmitFormData(string uploadfile, HttpWebRequest webrequest, string boundary, string postHeader)
         {
+            string serverResponse = String.Empty;
             byte[] postHeaderBytes = Encoding.UTF8.GetBytes(postHeader);
             byte[] boundaryBytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "--\r\n");
-            FileStream fileStream = new FileStream(uploadfile, FileMode.Open, FileAccess.Read);
-            long length = postHeaderBytes.Length + fileStream.Length + boundaryBytes.Length;
-            webrequest.ContentLength = length;
+            using (FileStream fileStream = new FileStream(uploadfile, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                long length = postHeaderBytes.Length + fileStream.Length + boundaryBytes.Length;
+                webrequest.ContentLength = length;
 
-            Stream requestStream = webrequest.GetRequestStream();
+                Stream requestStream = webrequest.GetRequestStream();
 
-            // Write out our post header
-            requestStream.Write(postHeaderBytes, 0, postHeaderBytes.Length);
+                // Write out our post header
+                requestStream.Write(postHeaderBytes, 0, postHeaderBytes.Length);
 
-            // Write out the file contents
-            byte[] buffer = new Byte[checked((uint)Math.Min(4096, (int)fileStream.Length))];
-            int bytesRead = 0;
-            while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-                requestStream.Write(buffer, 0, bytesRead);
+                // Write out the file contents
+                byte[] buffer = new Byte[checked((uint)Math.Min(4096, (int)fileStream.Length))];
+                int bytesRead = 0;
+                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
+                    requestStream.Write(buffer, 0, bytesRead);
 
-            // Write out the trailing boundary
-            requestStream.Write(boundaryBytes, 0, boundaryBytes.Length);
-            WebResponse responce = webrequest.GetResponse();
-            Stream s = responce.GetResponseStream();
-            StreamReader sr = new StreamReader(s);
+                // Write out the trailing boundary
+                requestStream.Write(boundaryBytes, 0, boundaryBytes.Length);
 
-            return sr.ReadToEnd();
+                WebResponse responce = webrequest.GetResponse();
+                Stream s = responce.GetResponseStream();
+                using (StreamReader sr = new StreamReader(s))
+                {
+                    serverResponse = sr.ReadToEnd();
+                }
+            }
+
+            return serverResponse;
         }
 
         private static void BuildParamHeaderEntry(string name, string value, string boundary, StringBuilder sb)

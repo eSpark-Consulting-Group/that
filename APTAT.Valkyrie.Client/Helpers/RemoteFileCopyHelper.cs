@@ -10,11 +10,21 @@ namespace APTAT.Valkyrie.Client.Helpers
     {
         public static string CopyFiles(List<ValkyrieFileInfo> badFiles, string login, string password)
         {
+            int timeout = 60000 * 5;
+            
             var path = CreateTmpFolder();
             foreach (var file in badFiles)
             {
                 GetRemoteFile(file.Path, file.Sha1, login, password, file.Ip, path);
             }
+                        
+            while (timeout > 0)
+            {                
+                if (Directory.EnumerateFiles(path).Count() == badFiles.Count) break;
+                System.Threading.Thread.Sleep(1000);
+                timeout -= (1000 * 60);
+            }
+            
             return path;
         }
 
@@ -40,14 +50,16 @@ namespace APTAT.Valkyrie.Client.Helpers
                 {
                     dir.Delete(true);
                 }
+                
             }
+           
             return valkyrieFolder;
         }
 
         private static void GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
         {
 
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.Process process = new System.Diagnostics.Process();       
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
@@ -59,6 +71,8 @@ namespace APTAT.Valkyrie.Client.Helpers
 
             process.StartInfo = startInfo;
             process.Start();
+          
+            
         }
 
     }

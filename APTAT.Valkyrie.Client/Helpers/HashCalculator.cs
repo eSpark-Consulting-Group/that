@@ -8,7 +8,7 @@ namespace APTAT.Valkyrie.Client
     {
         public static string ComputeSHA1Hash(string filePath)
         {
-            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read,FileShare.Read))
             {
                 using (var sha1gen = new SHA1CryptoServiceProvider())
                 {

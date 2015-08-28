@@ -447,7 +447,6 @@
     <Compile Include="Transport\HostResolverProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ValkyrieManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

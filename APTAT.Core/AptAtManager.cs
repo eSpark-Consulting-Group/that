@@ -463,7 +463,7 @@ namespace APTAT.Core
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly ReportBuilder _reportBuilder = new ReportBuilder();
 
-        public AptReportBuilder(IDescentSubSystem descentSubSystem, ValkyrieManager valkyrie)
+        public AptReportBuilder(IDescentSubSystem descentSubSystem, AptAtManager valkyrie)
         {
             _descentSubSystem = descentSubSystem;
             _valkyrieSubSystem = valkyrie;
@@ -582,7 +582,7 @@ namespace APTAT.Core
         }
 
         public event EventHandler<ReportCompletedEventArgs> ReportCompleted;
-        private ValkyrieManager _valkyrieSubSystem;
+        private AptAtManager _valkyrieSubSystem;
 
         protected virtual void OnReportCompleted(ReportCompletedEventArgs args)
         {
@@ -612,7 +612,7 @@ namespace APTAT.Core
         private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;
         public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
-        private ValkyrieManager _valkyrieManager;        
+        private ValkyrieClient _valkyrieClient;        
         public AptAtManager()
             : this(null)
         {
@@ -626,19 +626,19 @@ namespace APTAT.Core
             _descentSubSystem.Init(catalog);
             _commandFactory = new CommandFactory(_descentSubSystem);
             _changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
-            _valkyrieManager = new ValkyrieManager("MY_CLIENT");
-            _valkyrieManager.ValkyrieAnalyzeProgressChanged += _valkyrieManager_ProgressChanged;
-            _valkyrieManager.ValkyrieAnalyzeCompleted += _valkyrieManager_ValkyrieAnalyzeCompleted;
+            _valkyrieClient = new ValkyrieClient("MY_CLIENT");
+            _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
+            _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
             if (listener != null)
                 _changeTrackingSubSystem.RegisterListener(listener);
         }
 
-        void _valkyrieManager_ValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
+        void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
         {
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
-            var valkyrieAnalysisResult = ValkyrieManager.GetFullResult(e.Result, results);
+            var valkyrieAnalysisResult = GetFullResult(e.Result, results);
             var handler = ValkyrieAnalyzeCompleted;
-                        
+            this.ValkyrieAnalysisResult = valkyrieAnalysisResult;
             if (handler != null)
             {
                 var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled, e.UserState);
@@ -646,13 +646,69 @@ namespace APTAT.Core
             }
         }
 
-        void _valkyrieManager_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        void OnValkyrieClientProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             var handler = ValkyrieAnalyzeProgressChanged;
             if (handler != null)
             {
                 handler(this, e);
             }
+        }
+
+        private static List<FileResult> GetFullResult(IEnumerable<AnalysisResult> valkyrieResult, ConcurrentDictionary<Guid, ScanResult> scanResults)
+        {
+            List<FileResult> fileResults = new List<FileResult>();
+
+            foreach (var scanResult in scanResults)
+            {
+                foreach (var badFile in scanResult.Value.BadFiles)
+                {
+                    var found = fileResults.SingleOrDefault(f => f.Sha1 == badFile.Sha1);
+
+                    if (found == null)
+                    {
+                        found = new FileResult(badFile);
+                        fileResults.Add(found);
+
+                        var vResult = valkyrieResult.Where(v => v.SHA1 != null).Where(v => v.SHA1.ToUpper() == badFile.Sha1.ToUpper()).FirstOrDefault();
+
+                        if (vResult != null)
+                        {
+                            found.ValkyrieAnalysisResult = vResult;
+                        }
+                    }
+
+                    if (scanResult.Value.AptReport != null && scanResult.Value.AptReport.Computer != null)
+                    {
+                        var computer = scanResult.Value.AptReport.Computer;
+                        if (!found.Computers.Any(c => c.Sid == computer.Sid))
+                        {
+                            var comp = new ComputerInformation(computer);
+                            comp.FilePath = badFile.Path;
+                            found.Computers.Add(comp);
+                        }
+                    }
+                }
+            }
+            return fileResults;
+        }
+
+        private static List<ValkyrieFileInfo> GetDistinctFileInfo(ConcurrentDictionary<Guid, ScanResult> results)
+        {
+            Dictionary<string, ScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.IpAddress);
+
+            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
+            foreach (var scanResult in scanResults)
+            {
+                foreach (var badFile in scanResult.Value.BadFiles)
+                {
+                    if (!files.Any(f => f.Sha1 == badFile.Sha1))
+                    {
+                        files.Add(new ValkyrieFileInfo() { Ip = scanResult.Value.IpAddress, Path = badFile.Path, Sha1 = badFile.Sha1 });
+                    }
+                }
+            }
+            return files;
         }
 
       
@@ -776,7 +832,7 @@ namespace APTAT.Core
 
         public IAptReportBuilder GetAptReportBuilder()
         {
-            IAptReportBuilder aptReportBuilder = new AptReportBuilder(_descentSubSystem, _valkyrieManager);
+            IAptReportBuilder aptReportBuilder = new AptReportBuilder(_descentSubSystem, this);
             return aptReportBuilder;
         }
 
@@ -817,12 +873,15 @@ namespace APTAT.Core
         {
             _descentSubSystem.AbortAllThreads();
         }
-                
+        
         public void StartValkyrieAnalysisAsync(string login, string password)
-        {   
+        {            
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
-            _valkyrieManager.CallValkyrieAsync(login, password, results);           
+            var distinctFileList = GetDistinctFileInfo(results);
+            _valkyrieClient.AnalyzeAsync(distinctFileList, login, password);           
         }
+
+        public List<FileResult> ValkyrieAnalysisResult { get; set; }
     }
 
 }
