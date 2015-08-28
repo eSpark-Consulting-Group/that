@@ -9,7 +9,7 @@
                 xmlns:Controls="clr-namespace:APTAT.Application.Controls"
                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                 xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="400" d:DesignWidth="1000">
     <Grid>
         <telerik:RadTreeListView SelectedItem="{Binding SelectedItemValkyrie}" 
                                  CanUserFreezeColumns="False"                                
@@ -79,9 +79,7 @@
                 <DataTemplate x:Key="VerdictColumn">
                     <TextBlock Text="{Binding ValkyrieAnalysisResult.Verdict}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.Verdict}"/>
                 </DataTemplate>
-                <DataTemplate x:Key="MalwareProbabilityColumn">
-                    <TextBlock Text="{Binding ValkyrieAnalysisResult.MalwareProbability}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.MalwareProbability}"/>
-                </DataTemplate>
+                
                 <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="ValkyrieNameTemplateSelector" 
                                                                 FileTemplate="{StaticResource FileInfoTemplate}"
                                                                 ComputerTemplate="{StaticResource ComputerInfoTemplate}"/>
@@ -97,7 +95,7 @@
                     ShowFilterButton="False"                    
                     ShowFieldFilters="False"                    
                     Header="NAME"
-                    Width="460" 
+                    Width="640" 
                  SortMemberPath="Name"
                 />
                
@@ -114,12 +112,7 @@
                     IsFilterable="False"
                     Header="Verdict"  
                     Width="*"/>
-                <telerik:GridViewColumn 
-                    CellTemplate="{StaticResource MalwareProbabilityColumn}"
-                    SortMemberPath="ValkyrieAnalysisResult.MalwareProbability"
-                    IsFilterable="False"
-                    Header="Malware Prob."  
-                    Width="*"/>
+               
                 <telerik:GridViewCheckBoxColumn                    
                     CellTemplate="{StaticResource WhiteListedColumn}"
                     SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"

@@ -73,6 +73,7 @@
     <Compile Include="Enums\AnalysisStatusEnum.cs" />
     <Compile Include="Enums\VerdictEnum.cs" />
     <Compile Include="Extensions\NameValueCollectionExt.cs" />
+    <Compile Include="Models\ProgressInfo.cs" />
     <Compile Include="Models\ValkyrieFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanInProgressEventArgs.cs" />

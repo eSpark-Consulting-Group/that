@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Controls;
 using APTAT.Valkyrie.Client;
 using APTAT.Core;
+using APTAT.Valkyrie.Client.Models;
 
 
 namespace APTAT.Application.Models
@@ -77,6 +78,27 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Boolean? IsValkyrieScanInProgress
+        {
+            get { return _isValkyrieScanInProgress; }
+            set
+            {
+                _isValkyrieScanInProgress = value;
+                RaisePropertyChanged("IsValkyrieScanInProgress");
+            }
+        }
+        private ProgressInfo _valkyrieProgressInfo;
+
+        public ProgressInfo ValkyrieProgressInfo
+        {
+            get { return _valkyrieProgressInfo; }
+            set { 
+                _valkyrieProgressInfo = value;
+                RaisePropertyChanged("ValkyrieProgressInfo");
+            }
+        } 
+        
+
         public Int32 UnknownFilesCount
         {
             get { return _unknownFilesCount; }
@@ -126,6 +148,13 @@ namespace APTAT.Application.Models
                 {
                     return String.Format("{0} ({1}% scanning...)", commonHeaderName, Percentage);
                 }
+                if (IsValkyrieScanInProgress == true)
+                {
+                    var info = ValkyrieProgressInfo;
+                    var header = String.Format("Analyzed {0} from {1}. Malware found: {2}. Progress {3:P}",  info.ProcessedFileCount, info.TotalFileCount, info.MalwareFileCount, (Percentage/100m));
+                    return String.Format("{0} ({1})", commonHeaderName, header);
+                }
+
                 return commonHeaderName;
             }
         }
@@ -431,14 +460,17 @@ namespace APTAT.Application.Models
             ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
-            IsScanInProgress = false;
+            IsValkyrieScanInProgress = false;
             RaisePropertyChanged("Header");
         }
+
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             Percentage = e.ProgressPercentage;
             RaisePropertyChanged("Header");
+            var info = (ProgressInfo)e.UserState;
+            this.ValkyrieProgressInfo = info;
         }
 
         
@@ -552,7 +584,8 @@ namespace APTAT.Application.Models
 
         public void BeginValkyrieAnalysis()
         {
-            IsScanInProgress = true;
+            //IsScanInProgress = true;
+            IsValkyrieScanInProgress = true;
             _aptService.BeginValkyrieAnalysis(_login, _password);
         }
 
@@ -707,5 +740,7 @@ namespace APTAT.Application.Models
         }
 
 
+
+        private bool? _isValkyrieScanInProgress;
     }
 }

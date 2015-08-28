@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Helpers;
 using System.ComponentModel;
+using APTAT.Valkyrie.Client.Models;
 
 namespace APTAT.Valkyrie.Client
 {
@@ -131,52 +132,61 @@ namespace APTAT.Valkyrie.Client
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
             {
+                var malwareCount = this.AnalysisResults.Where(f => f.Verdict == Enums.InfoVerdictEnum.Malware).Count();
                 double progress = 0;
+
                 if (FilesCount > 0)
                 {
                     progress = ((double)_fileScanned / (double)FilesCount) * 100;
 
                 }
                 var progressInt = Convert.ToInt32(progress);
-                tmp(this, new ProgressChangedEventArgs(progressInt, null));
+
+                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo(FilesCount, _fileScanned, malwareCount)));
             }
         }
 
 
-        private void SubmitFolderToAutomaticAnalysis(string clientID, string folderPath)
+        private void SubmitFolderToAutomaticAnalysis(string clientID, string folderPath, bool useParallel = false)
         {
             var exceptions = new ConcurrentQueue<Exception>();
 
             var files = Directory.EnumerateFiles(folderPath).ToArray();
             FilesCount = files.Count();
 
-            //Parallel.ForEach(files, (filePath) =>
-            //{
-            //    try
-            //    {
-            //        UploadFile(clientID, filePath);
-            //    }
-            //    catch (Exception e)
-            //    {
-
-            //        AddResult(AnalysisResult.CreateSkipInfo(filePath, e.Message));
-            //        exceptions.Enqueue(e);
-            //    }
-            //});
-
-            //if (exceptions.Count > 0) throw new AggregateException(exceptions);
-
-
-            foreach (var filePath in files)
+            if (useParallel)
             {
-                UploadFile(clientID, filePath);
-                //if (_cancellationTokenSource != null)
-                //{
-                //    if (_cancellationTokenSource.Token.IsCancellationRequested)
-                //    {
-                //        break;
-                //    }
-                //}
+                Parallel.ForEach(files, (filePath) =>
+                {
+                    try
+                    {
+                        UploadFile(clientID, filePath);
+                    }
+                    catch (Exception e)
+                    {
+
+                        AddResult(AnalysisResult.CreateSkipInfo(filePath, e.Message));
+                        exceptions.Enqueue(e);
+                    }
+                });
+
+                if (exceptions.Count > 0) throw new AggregateException(exceptions);
+
+            }
+            else
+            {
+                foreach (var filePath in files)
+                {
+                    Thread.Sleep(1000);
+                    UploadFile(clientID, filePath);
+                    //if (_cancellationTokenSource != null)
+                    //{
+                    //    if (_cancellationTokenSource.Token.IsCancellationRequested)
+                    //    {
+                    //        break;
+                    //    }
+                    //}
+                }
             }
         }
 
