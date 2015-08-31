@@ -454,7 +454,6 @@
     </None>
     <None Include="Properties\DataSources\APTAT.Core.Reports.AptReportData.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.DetailedBadFile.datasource" />
-    <None Include="Properties\DataSources\APTAT.Core.Reports.DetailedBadFile1.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.FileRatingInfo.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.MostWantedBadFileInfo.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.ScannedTarget.datasource" />

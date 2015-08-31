@@ -31,6 +31,9 @@ namespace APTAT.Core.Reports
                 case ReportType.Executive:
                     BuildExecutiveReport(_fileName, data);
                     break;
+                case ReportType.ExecutiveWithValkyrie:
+                    BuildExecutiveWithValkyrieReport(_fileName, data);
+                    break;
                 case ReportType.DetailedPerDevice:
                     BuildDetailedPerDeviceReport(_fileName, data);
                     break;
@@ -56,6 +59,15 @@ namespace APTAT.Core.Reports
             ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
 
             GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.Executive.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
+        }
+
+        private static void BuildExecutiveWithValkyrieReport(string fileName, AptReportData data)
+        {
+            ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollection());
+            ReportDataSource valkyrieRatingDataSource = new ReportDataSource("ValkyrieRatingDataSet", data.GetValkyrieRatingCollection());
+            ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
+
+            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.ExecutiveWithValkyrie.rdlc", null, fileRatingDataSource, devicesRatingDataSource, valkyrieRatingDataSource);
         }
 
         private static void BuildDetailedPerDeviceReport(string fileName, AptReportData data)

@@ -1,4 +1,5 @@
 ﻿using APTAT.Valkyrie.Client;
+using APTAT.Valkyrie.Client.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -200,6 +201,17 @@ namespace APTAT.Core.Reports
             //        );
             //}
 
+            return itemRatingInfoList.ToArray();
+        }
+
+        public ItemRatingInfo[] GetValkyrieRatingCollection()
+        {
+            var allBadFiles = GetAllBadFilesSorted();
+            var itemRatingInfoList = new List<ItemRatingInfo>();
+            foreach (var valkyrieStatus in Enum.GetValues(typeof(InfoVerdictEnum)))
+            {
+                itemRatingInfoList.Add(new FileRatingInfo() {Count = allBadFiles.Count(b => (int)b.Verdict == (int)valkyrieStatus), Value = ((InfoVerdictEnum)valkyrieStatus).ToString() });
+            }
             return itemRatingInfoList.ToArray();
         }
 

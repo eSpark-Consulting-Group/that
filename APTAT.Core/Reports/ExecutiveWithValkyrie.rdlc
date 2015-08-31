@@ -1,159 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="APTReportTest">
-      <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
-        <ConnectString>/* Local Connection */</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>01be3dfa-75da-4237-93fb-54f33092e5bd</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="AptReportDataSet">
-      <Fields>
-        <Field Name="DevicesSourceDescription">
-          <DataField>DevicesSourceDescription</DataField>
-          <rd:TypeName>APTAT.Core.DevicesSourceDescription</rd:TypeName>
-        </Field>
-        <Field Name="DevicesSourceDescriptionString">
-          <DataField>DevicesSourceDescriptionString</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="EmptyFilesFound">
-          <DataField>EmptyFilesFound</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="MalwareFilesFound">
-          <DataField>MalwareFilesFound</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NetworkTrustLevel">
-          <DataField>NetworkTrustLevel</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NetworkTrustLevelString">
-          <DataField>NetworkTrustLevelString</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OperationUid">
-          <DataField>OperationUid</DataField>
-          <rd:TypeName>System.Guid</rd:TypeName>
-        </Field>
-        <Field Name="SafeFilesCount">
-          <DataField>SafeFilesCount</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ScanFinished">
-          <DataField>ScanFinished</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ScanStarted">
-          <DataField>ScanStarted</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="TargetsFailed">
-          <DataField>TargetsFailed</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetsNotPerformed">
-          <DataField>TargetsNotPerformed</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSafetyLevel">
-          <DataField>TargetsSafetyLevel</DataField>
-          <rd:TypeName>APTAT.Core.Reports.AptRiskAssessmentLevel</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSafetyLevelString">
-          <DataField>TargetsSafetyLevelString</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TargetsScanned">
-          <DataField>TargetsScanned</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSource">
-          <DataField>TargetsSource</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TargetsSucceeded">
-          <DataField>TargetsSucceeded</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TotalFilesScanned">
-          <DataField>TotalFilesScanned</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TotalTargetsCount">
-          <DataField>TotalTargetsCount</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="UnknownFilesFound">
-          <DataField>UnknownFilesFound</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>APTReportTest</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
-        <rd:TableName>AptReportData</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.1.28293, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="FileRatingDataSet">
-      <Fields>
-        <Field Name="CloudVerdict">
-          <DataField>CloudVerdict</DataField>
-          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
-        </Field>
-        <Field Name="Count">
-          <DataField>Count</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Value">
-          <DataField>Value</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>APTReportTest</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
-        <rd:TableName>FileRatingInfo</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.FileRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="DevicesRatingDataSet">
-      <Fields>
-        <Field Name="Count">
-          <DataField>Count</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetVerdict">
-          <DataField>TargetVerdict</DataField>
-          <rd:TypeName>APTAT.Core.Reports.TargetVerdict</rd:TypeName>
-        </Field>
-        <Field Name="Value">
-          <DataField>Value</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>APTReportTest</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
-        <rd:TableName>TargetRatingInfo</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.TargetRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Textbox Name="Textbox6">
@@ -175,6 +21,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Left>0in</Left>
         <Height>1.23216cm</Height>
         <Width>14.72458cm</Width>
         <Style>
@@ -207,6 +54,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
         <Top>9.35354cm</Top>
+        <Left>0in</Left>
         <Height>1.25542cm</Height>
         <Width>14.72458cm</Width>
         <ZIndex>1</ZIndex>
@@ -1132,6 +980,7 @@
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.23555cm</Top>
+        <Left>0in</Left>
         <Height>8.06294cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
@@ -1278,6 +1127,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1312,6 +1164,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartCategoryAxes>
                 <ChartValueAxes>
@@ -1346,6 +1201,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1379,6 +1237,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartValueAxes>
                 <Style>
@@ -1439,6 +1300,332 @@
               <BackgroundGradientType>None</BackgroundGradientType>
             </Style>
           </Chart>
+          <Rectangle Name="Rectangle5">
+            <ReportItems>
+              <Textbox Name="Textbox36">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Programs Rating Over Scanned Devices</Value>
+                        <Style>
+                          <FontFamily>Segoe UI Light</FontFamily>
+                          <FontSize>14pt</FontSize>
+                          <Color>#2e2c2c</Color>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>Textbox3</rd:DefaultName>
+                <Top>0.04057cm</Top>
+                <Height>0.92722cm</Height>
+                <Width>16.873cm</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Chart Name="Chart5">
+                <ChartCategoryHierarchy>
+                  <ChartMembers>
+                    <ChartMember>
+                      <Group Name="Chart4_CategoryGroup2">
+                        <GroupExpressions>
+                          <GroupExpression>=Fields!CloudVerdict.Value</GroupExpression>
+                        </GroupExpressions>
+                      </Group>
+                      <Label>=Fields!CloudVerdict.Value</Label>
+                    </ChartMember>
+                  </ChartMembers>
+                </ChartCategoryHierarchy>
+                <ChartSeriesHierarchy>
+                  <ChartMembers>
+                    <ChartMember>
+                      <Label>Count</Label>
+                    </ChartMember>
+                  </ChartMembers>
+                </ChartSeriesHierarchy>
+                <ChartData>
+                  <ChartSeriesCollection>
+                    <ChartSeries Name="Count">
+                      <ChartDataPoints>
+                        <ChartDataPoint>
+                          <ChartDataPointValues>
+                            <Y>=Fields!Count.Value</Y>
+                          </ChartDataPointValues>
+                          <ChartDataLabel>
+                            <Style />
+                          </ChartDataLabel>
+                          <Style>
+                            <Color>=Switch(
+                      Fields!CloudVerdict.Value = "2", "#b22222",
+                      Fields!CloudVerdict.Value = "1", "#ffc000",
+                      Fields!CloudVerdict.Value = "0", "#3c963c")</Color>
+                          </Style>
+                          <ChartMarker>
+                            <Style />
+                          </ChartMarker>
+                          <DataElementOutput>Output</DataElementOutput>
+                          <ChartItemInLegend>
+                            <LegendText>=Fields!Value.Value + " (#PERCENT{p2})"</LegendText>
+                          </ChartItemInLegend>
+                        </ChartDataPoint>
+                      </ChartDataPoints>
+                      <Type>Shape</Type>
+                      <Style />
+                      <ChartEmptyPoints>
+                        <Style />
+                        <ChartMarker>
+                          <Style />
+                        </ChartMarker>
+                        <ChartDataLabel>
+                          <Style />
+                        </ChartDataLabel>
+                      </ChartEmptyPoints>
+                      <ValueAxisName>Primary</ValueAxisName>
+                      <CategoryAxisName>Primary</CategoryAxisName>
+                      <ChartSmartLabel>
+                        <CalloutLineColor>Black</CalloutLineColor>
+                        <MinMovingDistance>0pt</MinMovingDistance>
+                      </ChartSmartLabel>
+                    </ChartSeries>
+                  </ChartSeriesCollection>
+                </ChartData>
+                <ChartAreas>
+                  <ChartArea Name="Default">
+                    <ChartCategoryAxes>
+                      <ChartAxis Name="Primary">
+                        <Style>
+                          <FontSize>8pt</FontSize>
+                        </Style>
+                        <ChartAxisTitle>
+                          <Caption>Axis Title</Caption>
+                          <Style>
+                            <FontSize>8pt</FontSize>
+                          </Style>
+                        </ChartAxisTitle>
+                        <ChartMajorGridLines>
+                          <Enabled>False</Enabled>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                            </Border>
+                          </Style>
+                        </ChartMajorGridLines>
+                        <ChartMinorGridLines>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                          </Style>
+                        </ChartMinorGridLines>
+                        <ChartMinorTickMarks>
+                          <Length>0.5</Length>
+                        </ChartMinorTickMarks>
+                        <CrossAt>NaN</CrossAt>
+                        <Minimum>NaN</Minimum>
+                        <Maximum>NaN</Maximum>
+                        <ChartAxisScaleBreak>
+                          <Style />
+                        </ChartAxisScaleBreak>
+                      </ChartAxis>
+                      <ChartAxis Name="Secondary">
+                        <Style>
+                          <FontSize>8pt</FontSize>
+                        </Style>
+                        <ChartAxisTitle>
+                          <Caption>Axis Title</Caption>
+                          <Style>
+                            <FontSize>8pt</FontSize>
+                          </Style>
+                        </ChartAxisTitle>
+                        <ChartMajorGridLines>
+                          <Enabled>False</Enabled>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                            </Border>
+                          </Style>
+                        </ChartMajorGridLines>
+                        <ChartMinorGridLines>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                          </Style>
+                        </ChartMinorGridLines>
+                        <ChartMinorTickMarks>
+                          <Length>0.5</Length>
+                        </ChartMinorTickMarks>
+                        <CrossAt>NaN</CrossAt>
+                        <Location>Opposite</Location>
+                        <Minimum>NaN</Minimum>
+                        <Maximum>NaN</Maximum>
+                        <ChartAxisScaleBreak>
+                          <Style />
+                        </ChartAxisScaleBreak>
+                      </ChartAxis>
+                    </ChartCategoryAxes>
+                    <ChartValueAxes>
+                      <ChartAxis Name="Primary">
+                        <Style>
+                          <FontSize>8pt</FontSize>
+                        </Style>
+                        <ChartAxisTitle>
+                          <Caption>Axis Title</Caption>
+                          <Style>
+                            <FontSize>8pt</FontSize>
+                          </Style>
+                        </ChartAxisTitle>
+                        <ChartMajorGridLines>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                            </Border>
+                          </Style>
+                        </ChartMajorGridLines>
+                        <ChartMinorGridLines>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                          </Style>
+                        </ChartMinorGridLines>
+                        <ChartMinorTickMarks>
+                          <Length>0.5</Length>
+                        </ChartMinorTickMarks>
+                        <CrossAt>NaN</CrossAt>
+                        <Minimum>NaN</Minimum>
+                        <Maximum>NaN</Maximum>
+                        <ChartAxisScaleBreak>
+                          <Style />
+                        </ChartAxisScaleBreak>
+                      </ChartAxis>
+                      <ChartAxis Name="Secondary">
+                        <Style>
+                          <FontSize>8pt</FontSize>
+                        </Style>
+                        <ChartAxisTitle>
+                          <Caption>Axis Title</Caption>
+                          <Style>
+                            <FontSize>8pt</FontSize>
+                          </Style>
+                        </ChartAxisTitle>
+                        <ChartMajorGridLines>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                            </Border>
+                          </Style>
+                        </ChartMajorGridLines>
+                        <ChartMinorGridLines>
+                          <Style>
+                            <Border>
+                              <Color>Gainsboro</Color>
+                              <Style>Dotted</Style>
+                            </Border>
+                          </Style>
+                        </ChartMinorGridLines>
+                        <ChartMinorTickMarks>
+                          <Length>0.5</Length>
+                        </ChartMinorTickMarks>
+                        <CrossAt>NaN</CrossAt>
+                        <Location>Opposite</Location>
+                        <Minimum>NaN</Minimum>
+                        <Maximum>NaN</Maximum>
+                        <ChartAxisScaleBreak>
+                          <Style />
+                        </ChartAxisScaleBreak>
+                      </ChartAxis>
+                    </ChartValueAxes>
+                    <Style>
+                      <BackgroundGradientType>None</BackgroundGradientType>
+                    </Style>
+                  </ChartArea>
+                </ChartAreas>
+                <ChartLegends>
+                  <ChartLegend Name="Default">
+                    <Style>
+                      <BackgroundGradientType>None</BackgroundGradientType>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <Color>#454444</Color>
+                    </Style>
+                    <Position>RightCenter</Position>
+                    <ChartLegendTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                        <TextAlign>Center</TextAlign>
+                      </Style>
+                    </ChartLegendTitle>
+                    <AutoFitTextDisabled>true</AutoFitTextDisabled>
+                    <HeaderSeparatorColor>Black</HeaderSeparatorColor>
+                    <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+                    <TextWrapThreshold>30</TextWrapThreshold>
+                  </ChartLegend>
+                </ChartLegends>
+                <Palette>BrightPastel</Palette>
+                <ChartBorderSkin>
+                  <Style>
+                    <BackgroundColor>Gray</BackgroundColor>
+                    <BackgroundGradientType>None</BackgroundGradientType>
+                    <Color>White</Color>
+                  </Style>
+                </ChartBorderSkin>
+                <ChartNoDataMessage Name="NoDataMessage">
+                  <Caption>No Data Available</Caption>
+                  <Style>
+                    <BackgroundGradientType>None</BackgroundGradientType>
+                    <TextAlign>General</TextAlign>
+                    <VerticalAlign>Top</VerticalAlign>
+                  </Style>
+                </ChartNoDataMessage>
+                <DataSetName>FileRatingDataSet</DataSetName>
+                <Top>1.01013cm</Top>
+                <Left>0.0635cm</Left>
+                <Height>7.75167cm</Height>
+                <Width>16.873cm</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Color>LightGrey</Color>
+                    <Style>None</Style>
+                  </Border>
+                  <BackgroundColor>White</BackgroundColor>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                </Style>
+              </Chart>
+            </ReportItems>
+            <KeepTogether>true</KeepTogether>
+            <Top>0cm</Top>
+            <Left>0cm</Left>
+            <Height>8.85001cm</Height>
+            <Width>16.9365cm</Width>
+            <ZIndex>2</ZIndex>
+            <Visibility>
+              <Hidden>=(First(Fields!TotalFilesScanned.Value, "AptReportDataSet") = 0)</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Rectangle>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>10.61778cm</Top>
@@ -1564,6 +1751,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1598,6 +1788,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartCategoryAxes>
                 <ChartValueAxes>
@@ -1632,6 +1825,9 @@
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                   <ChartAxis Name="Secondary">
                     <Style>
@@ -1665,6 +1861,9 @@
                     <Location>Opposite</Location>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartValueAxes>
                 <Style>
@@ -1771,18 +1970,320 @@
           </Border>
         </Style>
       </Rectangle>
+      <Textbox Name="Textbox37">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Programs Valkyrie Rating Over Scanned Devices</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>14pt</FontSize>
+                  <Color>#2e2c2c</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Top>30.80559cm</Top>
+        <Left>0.025in</Left>
+        <Height>0.92722cm</Height>
+        <Width>16.873cm</Width>
+        <ZIndex>5</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Chart Name="Chart6">
+        <ChartCategoryHierarchy>
+          <ChartMembers>
+            <ChartMember>
+              <Group Name="Chart4_CategoryGroup3">
+                <GroupExpressions>
+                  <GroupExpression>=Fields!CloudVerdict.Value</GroupExpression>
+                </GroupExpressions>
+              </Group>
+              <Label>=Fields!CloudVerdict.Value</Label>
+            </ChartMember>
+          </ChartMembers>
+        </ChartCategoryHierarchy>
+        <ChartSeriesHierarchy>
+          <ChartMembers>
+            <ChartMember>
+              <Label>Count</Label>
+            </ChartMember>
+          </ChartMembers>
+        </ChartSeriesHierarchy>
+        <ChartData>
+          <ChartSeriesCollection>
+            <ChartSeries Name="Count">
+              <ChartDataPoints>
+                <ChartDataPoint>
+                  <ChartDataPointValues>
+                    <Y>=Fields!Count.Value</Y>
+                  </ChartDataPointValues>
+                  <ChartDataLabel>
+                    <Style />
+                  </ChartDataLabel>
+                  <Style>
+                    <Color>=Switch(
+                      Fields!CloudVerdict.Value = "2", "#b22222",
+                      Fields!CloudVerdict.Value = "1", "#ffc000",
+                      Fields!CloudVerdict.Value = "0", "#3c963c")</Color>
+                  </Style>
+                  <ChartMarker>
+                    <Style />
+                  </ChartMarker>
+                  <DataElementOutput>Output</DataElementOutput>
+                  <ChartItemInLegend>
+                    <LegendText>=Fields!Value.Value + " (#PERCENT{p2})"</LegendText>
+                  </ChartItemInLegend>
+                </ChartDataPoint>
+              </ChartDataPoints>
+              <Type>Shape</Type>
+              <Style />
+              <ChartEmptyPoints>
+                <Style />
+                <ChartMarker>
+                  <Style />
+                </ChartMarker>
+                <ChartDataLabel>
+                  <Style />
+                </ChartDataLabel>
+              </ChartEmptyPoints>
+              <ValueAxisName>Primary</ValueAxisName>
+              <CategoryAxisName>Primary</CategoryAxisName>
+              <ChartSmartLabel>
+                <CalloutLineColor>Black</CalloutLineColor>
+                <MinMovingDistance>0pt</MinMovingDistance>
+              </ChartSmartLabel>
+            </ChartSeries>
+          </ChartSeriesCollection>
+        </ChartData>
+        <ChartAreas>
+          <ChartArea Name="Default">
+            <ChartCategoryAxes>
+              <ChartAxis Name="Primary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Enabled>False</Enabled>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+              <ChartAxis Name="Secondary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Enabled>False</Enabled>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Location>Opposite</Location>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+            </ChartCategoryAxes>
+            <ChartValueAxes>
+              <ChartAxis Name="Primary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+              <ChartAxis Name="Secondary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Location>Opposite</Location>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+            </ChartValueAxes>
+            <Style>
+              <BackgroundGradientType>None</BackgroundGradientType>
+            </Style>
+          </ChartArea>
+        </ChartAreas>
+        <ChartLegends>
+          <ChartLegend Name="Default">
+            <Style>
+              <BackgroundGradientType>None</BackgroundGradientType>
+              <FontFamily>Segoe UI</FontFamily>
+              <Color>#454444</Color>
+            </Style>
+            <Position>RightCenter</Position>
+            <ChartLegendTitle>
+              <Caption />
+              <Style>
+                <FontSize>8pt</FontSize>
+                <FontWeight>Bold</FontWeight>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </ChartLegendTitle>
+            <AutoFitTextDisabled>true</AutoFitTextDisabled>
+            <HeaderSeparatorColor>Black</HeaderSeparatorColor>
+            <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+            <TextWrapThreshold>30</TextWrapThreshold>
+          </ChartLegend>
+        </ChartLegends>
+        <Palette>BrightPastel</Palette>
+        <ChartBorderSkin>
+          <Style>
+            <BackgroundColor>Gray</BackgroundColor>
+            <BackgroundGradientType>None</BackgroundGradientType>
+            <Color>White</Color>
+          </Style>
+        </ChartBorderSkin>
+        <ChartNoDataMessage Name="NoDataMessage">
+          <Caption>No Data Available</Caption>
+          <Style>
+            <BackgroundGradientType>None</BackgroundGradientType>
+            <TextAlign>General</TextAlign>
+            <VerticalAlign>Top</VerticalAlign>
+          </Style>
+        </ChartNoDataMessage>
+        <DataSetName>ValkyrieRatingDataSet</DataSetName>
+        <Top>31.83836cm</Top>
+        <Left>0.0635cm</Left>
+        <Height>7.75167cm</Height>
+        <Width>16.873cm</Width>
+        <ZIndex>6</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>None</Style>
+          </Border>
+          <BackgroundColor>White</BackgroundColor>
+          <BackgroundGradientType>None</BackgroundGradientType>
+        </Style>
+      </Chart>
     </ReportItems>
-    <Height>11.7985in</Height>
+    <Height>15.83663in</Height>
     <Style />
   </Body>
-  <ReportParameters>
-    <ReportParameter Name="ReportDate">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
   <Width>17cm</Width>
   <Page>
     <PageHeader>
@@ -1893,6 +2394,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox3</rd:DefaultName>
           <Top>2.08021cm</Top>
+          <Left>0in</Left>
           <Height>0.63618cm</Height>
           <Width>7.02521cm</Width>
           <ZIndex>3</ZIndex>
@@ -1925,6 +2427,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox3</rd:DefaultName>
           <Top>0.91988cm</Top>
+          <Left>0in</Left>
           <Height>1.22383cm</Height>
           <Width>14.72458cm</Width>
           <ZIndex>4</ZIndex>
@@ -1981,7 +2484,7 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>0.73174cm</Height>
+      <Height>1.18153cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -2004,7 +2507,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Left>0.0635cm</Left>
+          <Top>0.06944in</Top>
+          <Left>0cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
           <Style>
@@ -2059,8 +2563,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox3</rd:DefaultName>
-          <Top>0.09556cm</Top>
-          <Left>8.53886cm</Left>
+          <Top>0.42361cm</Top>
+          <Left>8.60235cm</Left>
           <Height>0.63618cm</Height>
           <Width>8.39765cm</Width>
           <ZIndex>1</ZIndex>
@@ -2090,6 +2594,201 @@
     <ColumnSpacing>0.13cm</ColumnSpacing>
     <Style />
   </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="APTReportTest">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>01be3dfa-75da-4237-93fb-54f33092e5bd</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="APTATCoreReports">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>c2b978c5-fa92-4323-a56d-f6f4781dd0f2</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="AptReportDataSet">
+      <Query>
+        <DataSourceName>APTReportTest</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="DevicesSourceDescription">
+          <DataField>DevicesSourceDescription</DataField>
+          <rd:TypeName>APTAT.Core.DevicesSourceDescription</rd:TypeName>
+        </Field>
+        <Field Name="DevicesSourceDescriptionString">
+          <DataField>DevicesSourceDescriptionString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EmptyFilesFound">
+          <DataField>EmptyFilesFound</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="MalwareFilesFound">
+          <DataField>MalwareFilesFound</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NetworkTrustLevel">
+          <DataField>NetworkTrustLevel</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NetworkTrustLevelString">
+          <DataField>NetworkTrustLevelString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OperationUid">
+          <DataField>OperationUid</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
+        <Field Name="SafeFilesCount">
+          <DataField>SafeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ScanFinished">
+          <DataField>ScanFinished</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ScanStarted">
+          <DataField>ScanStarted</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="TargetsFailed">
+          <DataField>TargetsFailed</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetsNotPerformed">
+          <DataField>TargetsNotPerformed</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSafetyLevel">
+          <DataField>TargetsSafetyLevel</DataField>
+          <rd:TypeName>APTAT.Core.Reports.AptRiskAssessmentLevel</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSafetyLevelString">
+          <DataField>TargetsSafetyLevelString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TargetsScanned">
+          <DataField>TargetsScanned</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSource">
+          <DataField>TargetsSource</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TargetsSucceeded">
+          <DataField>TargetsSucceeded</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalFilesScanned">
+          <DataField>TotalFilesScanned</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalTargetsCount">
+          <DataField>TotalTargetsCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="UnknownFilesFound">
+          <DataField>UnknownFilesFound</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>AptReportData</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.AptReportData, APTAT.Core, Version=1.0.1.28293, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="FileRatingDataSet">
+      <Query>
+        <DataSourceName>APTReportTest</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="CloudVerdict">
+          <DataField>CloudVerdict</DataField>
+          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
+        </Field>
+        <Field Name="Count">
+          <DataField>Count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Value">
+          <DataField>Value</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>FileRatingInfo</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.FileRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="DevicesRatingDataSet">
+      <Query>
+        <DataSourceName>APTReportTest</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Count">
+          <DataField>Count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetVerdict">
+          <DataField>TargetVerdict</DataField>
+          <rd:TypeName>APTAT.Core.Reports.TargetVerdict</rd:TypeName>
+        </Field>
+        <Field Name="Value">
+          <DataField>Value</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>TargetRatingInfo</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.TargetRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+    <DataSet Name="ValkyrieRatingDataSet">
+      <Query>
+        <DataSourceName>APTATCoreReports</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="CloudVerdict">
+          <DataField>CloudVerdict</DataField>
+          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
+        </Field>
+        <Field Name="Count">
+          <DataField>Count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Value">
+          <DataField>Value</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>FileRatingInfo</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.FileRatingInfo, APTAT.Core, Version=1.0.1.24098, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="ReportDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="comodo">
       <MIMEType>image/jpeg</MIMEType>
@@ -2140,6 +2839,6 @@ TxOVwtU9DmcZkMTXR6vJR5OiqaCqTRJJC2unqo4pl0zRMhuOGUj6g+/de6b/AH7r3WWCCepmjp6aGWoq
 okm5Nlby2bUmj3ftLc21KwNoNLuTA5XBVIe8g0mDKUtLKGvE3Fr+k/0Pv3Xukz7917r3v3XuhQ2l0j3Lv6SGLZHU/ZG7WnZFjbbuydyZiH1/R5Kihxs8EMIAJaR2VFUEkgAn37r3R9Oof5R/yt7EqKWo3pjdv9O7elZXmrt3ZakyuealI5kodr7aqMlU/dK/HhyE+NNgTqHp1e691eH8Wv5dPQfxhlo9yUlDP2L2dTjUvYG8KeneXFzEIGO0tvxGXGbaAKXWe9TkV1uv3RjbQPde6Pz7917r3v3Xuv/R3+Pfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+690X/vT/mFv/I3/wDIj37r3Rf/AH7r3RsOoP8AjzYP+1hX/wDWxffuvdCh7917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de697917r3v3Xuve/de6C/t//AI82f/tYUH/WxvfuvdFP9+690YDov/mKf/IJ/wDJf37r3RgPfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3Xvfuvde9+691737r3XvfuvdM+4f+LBnP+1Pk/wD3Cn9+690Rf37r3QkdT/8AH743/qHyP/uDP7917o3Hv3Xuve/de697917r3v3Xuve/de6//9k=</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
-  <rd:ReportID>d1b88eed-e1f7-48af-99ce-9356a2c2e98f</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>d1b88eed-e1f7-48af-99ce-9356a2c2e98f</rd:ReportID>
 </Report>
