@@ -18,7 +18,7 @@ namespace APTAT.Valkyrie.Client
     public sealed class ValkyrieClient
     {
         private const Int32 maxFileLenght = 26214400;        
-        private const string ApiKey = Guid.NewGuid().ToString();
+        private string ApiKey = Guid.NewGuid().ToString();
         
         private string _clientID;
         private int _fileScanned;

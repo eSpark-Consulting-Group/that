@@ -1,4 +1,5 @@
-﻿namespace APTAT.Valkyrie.Client.Enums
+﻿using System.ComponentModel;
+namespace APTAT.Valkyrie.Client.Enums
 {
     public enum InfoVerdictEnum
     {
@@ -10,6 +11,7 @@
         /// <summary>
         /// means undetected and its source is either Automatic Analysis or Manual Analysis.
         /// </summary>
+        [Description("Threat Not Found")]
         Undetected = 0,
 
         /// <summary>
