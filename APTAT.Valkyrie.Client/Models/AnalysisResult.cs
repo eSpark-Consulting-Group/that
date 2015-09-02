@@ -41,12 +41,22 @@ namespace APTAT.Valkyrie.Client
         public bool IsWhiteListed { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }
         public InfoVerdictEnum Verdict { get; private set; }
+
+
+        public string VerdictString
+        {
+            get
+            {
+                return Verdict == InfoVerdictEnum.Undetected ? "Threat Not Found" : Verdict.ToString();
+            }
+        }
+
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
 
         internal static AnalysisResult CreateSkipInfo(string sha1, string reason)
         {
-            return new AnalysisResult() { IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict=InfoVerdictEnum.NotReady,IsWhiteListed=false, LastAnalysisDate= null };
+            return new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotReady, IsWhiteListed = false, LastAnalysisDate = null};
         }
 
         public float MalwareProbability { get; set; }

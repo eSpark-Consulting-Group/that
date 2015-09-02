@@ -93,6 +93,11 @@ namespace APTAT.Application.Models
         public bool IsValkyrieAnalysCompleted
         {
             get { return _isValkyrieAnalysCompleted; }
+            set
+            {
+                _isValkyrieAnalysCompleted = value;
+                RaisePropertyChanged("IsValkyrieAnalysCompleted");
+            }
         }
 
         public Boolean? IsValkyrieScanInProgress
@@ -649,7 +654,9 @@ namespace APTAT.Application.Models
         public void BeginValkyrieAnalysis()
         {
             //IsScanInProgress = true;
+            IsValkyrieAnalysCompleted = false;
             IsValkyrieScanInProgress = true;
+            
             UnknownFilesCount = 0;
             this.StatusBarText = " files analysed from";
             _aptService.BeginValkyrieAnalysis(_login, _password);
