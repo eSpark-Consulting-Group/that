@@ -187,5 +187,6 @@ namespace APTAT.Application.Services
         void StopScan();
 
         void BeginValkyrieAnalysis(string login, string password);
+        string GetValkyrieDetailsLink();
     }
 }

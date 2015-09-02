@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace APTAT.Valkyrie.Client.Models
+﻿namespace APTAT.Valkyrie.Client.Models
 {
-    public struct ProgressInfo
+    public class ProgressInfo
     {
-        private int _totalCount;
-        private int _processedCount;
-        private int _malwareFileCount;
+        private readonly int _totalCount;
+        private readonly int _processedCount;
+        private readonly int _malwareFilesCount;
+
+        public static ProgressInfo Empty
+        {
+            get { return  new ProgressInfo(0,0,0);}
+        }
+
         public ProgressInfo(int total, int processed, int malware)
         {
             _totalCount = total;
             _processedCount = processed;
-            _malwareFileCount = malware;
+            _malwareFilesCount = malware;
         }
 
         public int TotalFileCount
@@ -33,11 +34,11 @@ namespace APTAT.Valkyrie.Client.Models
             }
         }
 
-        public int MalwareFileCount
+        public int MalwareFilesCount
         {
             get
             {
-                return _malwareFileCount;
+                return _malwareFilesCount;
             }
         }
     }

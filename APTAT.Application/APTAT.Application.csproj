@@ -163,6 +163,7 @@
     <Compile Include="Models\DelegateCommand.cs" />
     <Compile Include="Models\IpAddressItem.cs" />
     <Compile Include="Models\OperationContext.cs" />
+    <Compile Include="Models\RegisterWithMachineIdResponse.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
     <Compile Include="Models\StartScanByIpViewModel.cs" />
     <Compile Include="Models\StartScanDomainViewModel.cs" />

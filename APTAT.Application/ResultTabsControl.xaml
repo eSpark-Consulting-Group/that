@@ -8,10 +8,10 @@
              d:DesignHeight="600" d:DesignWidth="900">
     <Grid>
         <TabControl Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TabItem Header="Scan Info">
+            <TabItem Header="Unknown files">
                 <local:ScanInfoTreeView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
-            <TabItem Header="Valkyrie">
+            <TabItem Header="FVS analysis results">
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
         </TabControl>

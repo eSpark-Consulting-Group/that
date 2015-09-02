@@ -69,6 +69,17 @@ namespace APTAT.Application.Models
             }
         }
 
+        public string StatusBarText
+        {
+            
+            get { return _statusBarText; }
+            set
+            {
+                _statusBarText = value;
+                RaisePropertyChanged("StatusBarText");
+            }
+        }
+
         public Boolean? IsScanInProgress
         {
             get { return _isScanInProgress; }
@@ -77,6 +88,11 @@ namespace APTAT.Application.Models
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
             }
+        }
+
+        public bool IsValkyrieAnalysCompleted
+        {
+            get { return _isValkyrieAnalysCompleted; }
         }
 
         public Boolean? IsValkyrieScanInProgress
@@ -88,6 +104,18 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsValkyrieScanInProgress");
             }
         }
+
+       
+        public Boolean IsValkyrieAnalysStarted
+        {
+            get { return ValkyrieProgressInfo.ProcessedFileCount > 0; }
+            
+        }
+
+        public int DistinctFilesCount
+        {
+            get { return ValkyrieProgressInfo.TotalFileCount; }
+        }
         private ProgressInfo _valkyrieProgressInfo;
 
         public ProgressInfo ValkyrieProgressInfo
@@ -96,6 +124,9 @@ namespace APTAT.Application.Models
             set { 
                 _valkyrieProgressInfo = value;
                 RaisePropertyChanged("ValkyrieProgressInfo");
+                RaisePropertyChanged("DistinctFilesCount");
+                RaisePropertyChanged("IsValkyrieAnalysStarted");
+                RaisePropertyChanged("MalwareFilesCount");
             }
         } 
         
@@ -149,10 +180,10 @@ namespace APTAT.Application.Models
                 {
                     return String.Format("{0} ({1}% scanning...)", commonHeaderName, Percentage);
                 }
-                if (IsValkyrieScanInProgress == true)
+                if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
                     var info = ValkyrieProgressInfo;
-                    var header = String.Format("Analyzed {0} from {1}. Malware found: {2}. Progress {3:P}",  info.ProcessedFileCount, info.TotalFileCount, info.MalwareFileCount, (Percentage/100m));
+                    var header = String.Format("FVS progress {0}%",  Percentage);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
 
@@ -247,6 +278,11 @@ namespace APTAT.Application.Models
             get { return _cache == null || _cache.Count == 0; }
         }
 
+        public string ValkyrieDetailsLink
+        {
+            get { return _aptService.GetValkyrieDetailsLink(); }
+        }
+
         public Boolean IsMalwaresFound
         {
             get { return MalwareFilesCount > 0; }
@@ -298,11 +334,12 @@ namespace APTAT.Application.Models
 
         public APTAT.Core.DevicesSourceDescription DevicesSourceDescription;
         private FileResult _selectedItemValkyrie;
-        private UserControl _scanInfoTreeControl;
-        private UserControl _valkyrieResultControl;
+        private readonly UserControl _scanInfoTreeControl;
+        private readonly UserControl _valkyrieResultControl;
 
         public MainViewViewModel()
         {
+            _isValkyrieAnalysCompleted = false;
             _aptService = AptService.Instance;
 
             _storage = new StorageService();
@@ -311,7 +348,8 @@ namespace APTAT.Application.Models
             StopScanCommand = new DelegateCommand(InvokeStopScan);
             _scanInfoTreeControl = new ScanInfoTreeView() { DataContext = this };
             _valkyrieResultControl = new ResultTabsControl { DataContext = this };
-            
+            ValkyrieProgressInfo = ProgressInfo.Empty;
+            StatusBarText = " unknown programs detected";
             CurrentViewControl = _scanInfoTreeControl;
             
         }
@@ -474,7 +512,10 @@ namespace APTAT.Application.Models
             RaisePropertyChanged("ItemsValkyrie");
             IsValkyrieScanInProgress = false;
             IsValkyrieReportEnabled = true;
+            _isValkyrieAnalysCompleted = true;
+            RaisePropertyChanged("IsValkyrieAnalysCompleted");
             RaisePropertyChanged("Header");
+            RaisePropertyChanged("ValkyrieDetailsLink");
         }
 
 
@@ -483,7 +524,17 @@ namespace APTAT.Application.Models
             Percentage = e.ProgressPercentage;
             RaisePropertyChanged("Header");
             var info = (ProgressInfo)e.UserState;
+
             this.ValkyrieProgressInfo = info;
+
+            if (info != null)
+            {
+                UnknownFilesCount = info.ProcessedFileCount;
+                if (info.MalwareFilesCount > 0)
+                {
+                    this.MalwareFilesCount = info.MalwareFilesCount;
+                }
+            }
         }
 
         
@@ -599,6 +650,8 @@ namespace APTAT.Application.Models
         {
             //IsScanInProgress = true;
             IsValkyrieScanInProgress = true;
+            UnknownFilesCount = 0;
+            this.StatusBarText = " files analysed from";
             _aptService.BeginValkyrieAnalysis(_login, _password);
         }
 
@@ -607,6 +660,7 @@ namespace APTAT.Application.Models
             if (_operationGuid == e.OperationGuid)
             {
                 Percentage = e.Percentage;
+
                 RaisePropertyChanged("Header");
             }
         }
@@ -755,5 +809,7 @@ namespace APTAT.Application.Models
 
 
         private bool? _isValkyrieScanInProgress;
+        private string _statusBarText;
+        private bool _isValkyrieAnalysCompleted;
     }
 }

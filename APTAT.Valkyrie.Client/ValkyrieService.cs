@@ -25,6 +25,13 @@ namespace APTAT.Valkyrie.Client
             return response;
         }
 
+        // ReSharper disable once InconsistentNaming
+        public static RegisterWithMachineIdResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
+        {
+            var response = CallValkyrie<RegisterWithMachineIdResponse>(ValkyrieApiUrls.RegisterWithMachineId, request);
+            return response;
+        }
+
         public static FullInfoResponse GetFullInfo(InfoRequest request)
         {
             var result = CallValkyrie<FullInfoResponse>(ValkyrieApiUrls.FullInfo, request);

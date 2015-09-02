@@ -5,11 +5,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Helpers;
 using System.ComponentModel;
+using APTAT.Valkyrie.Client.Enums;
 using APTAT.Valkyrie.Client.Models;
 
 namespace APTAT.Valkyrie.Client
@@ -17,10 +17,10 @@ namespace APTAT.Valkyrie.Client
 
     public sealed class ValkyrieClient
     {
-        private const Int32 maxFileLenght = 26214400;        
-        private string ApiKey = Guid.NewGuid().ToString();
+        private const Int32 MaxFileLenght = 26214400;
+        private string _apiKey; 
         
-        private string _clientID;
+        private readonly string _clientId;
         private int _fileScanned;
         public int FileScanned
         {
@@ -28,11 +28,7 @@ namespace APTAT.Valkyrie.Client
             {
                 return _fileScanned;
             }
-            private set
-            {
-                _fileScanned = value;
             }
-        }
 
         public int FilesCount { get; private set; }
 
@@ -53,7 +49,7 @@ namespace APTAT.Valkyrie.Client
         public ValkyrieClient(string cientID)
         {
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
-            _clientID = cientID;
+            _clientId = cientID;
         }     
 
         //public void AskValkyrie(List<ValkyrieFileInfo> badFiles, string login, string password)
@@ -72,7 +68,16 @@ namespace APTAT.Valkyrie.Client
 
         public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password, string folderPath = null)
         {
-            Guid taskId = Guid.NewGuid();
+            var request = new RegisterWithMachineIdRequest
+            {
+                MachineId = Guid.NewGuid().ToString()
+            };
+
+            var regInfo = ValkyrieService.RegisterWithMachineId(request);
+            if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID "+request.MachineId);
+
+            _apiKey = regInfo.ApiKey;
+           
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
             _fileScanned = 0;
 
@@ -94,7 +99,7 @@ namespace APTAT.Valkyrie.Client
                     {
                         folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
                     }
-                    SubmitFolderToAutomaticAnalysis(_clientID, folderPath);
+                    SubmitFolderToAutomaticAnalysis(_clientId, folderPath);
                 }, TaskCreationOptions.LongRunning, cancellationToken
             )
                 .ContinueWith(t =>
@@ -132,7 +137,7 @@ namespace APTAT.Valkyrie.Client
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
             {
-                var malwareCount = this.AnalysisResults.Where(f => f.Verdict == Enums.InfoVerdictEnum.Malware).Count();
+                var malwareCount = AnalysisResults.Count(f => f.Verdict == InfoVerdictEnum.Malware);
                 double progress = 0;
 
                 if (FilesCount > 0)
@@ -190,18 +195,19 @@ namespace APTAT.Valkyrie.Client
             }
         }
 
+
         private void UploadFile(string clientID, string filePath)
         {
             var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
             FileInfo f = new FileInfo(filePath);
             
-            if (f.Length > maxFileLenght)
+            if (f.Length > MaxFileLenght)
             {
                 AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB."));
                 return;
             }
 
-            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1, ApiKey = ApiKey };
+            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
 
             if (basicInfo.Presence)
@@ -213,7 +219,7 @@ namespace APTAT.Valkyrie.Client
             {
                 var request = new SubmitToAutomaticRequest();
                 request.Client_id = clientID;
-                request.ApiKey = ApiKey;
+                request.ApiKey = _apiKey;
                 request.SubmitToken = basicInfo.SubmitToken;
                 request.FilePath = filePath;
                 var payload = request.ToNameValueCollection();
@@ -230,6 +236,11 @@ namespace APTAT.Valkyrie.Client
             AnalysisResults.Add(result);
             Interlocked.Increment(ref _fileScanned);
             Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+        }
+
+        public string GetValkyrieDetailsLink()
+        {
+            return ValkyrieApiUrls.GetBaseUri() + "?api_key=" + this._apiKey;
         }
     }
 }

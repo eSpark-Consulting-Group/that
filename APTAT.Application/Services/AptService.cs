@@ -458,6 +458,11 @@ namespace APTAT.Application.Services
            _manager.StartValkyrieAnalysisAsync(login, password);                        
         }
 
+        public string GetValkyrieDetailsLink()
+        {
+            return  _manager.GetValkyrieDetailsLink();
+        }
+
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
         {
             if (type == DomainEntryType.Root)

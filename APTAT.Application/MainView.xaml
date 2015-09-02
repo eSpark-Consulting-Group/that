@@ -9,7 +9,7 @@
                    xmlns:Application="clr-namespace:APTAT.Application"
                    xmlns:Controls="clr-namespace:APTAT.Application.Controls"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
-      d:DesignHeight="480" d:DesignWidth="1024"
+      d:DesignHeight="760" d:DesignWidth="1200"
 	Title="APT Assesment Tool" Background="White">
 
     <Grid>
@@ -51,6 +51,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Application:TitleUpdater Header="{Binding Header}"/>
@@ -79,6 +80,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="180"/>
                 <ColumnDefinition Width="180"/>
             </Grid.ColumnDefinitions>
 
@@ -208,12 +210,19 @@
             </Controls:RadMaskedTextBoxEx>
         </Grid>
 
-        <Border Grid.Row="2"  Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85">
+        <Border Grid.Row="2" Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85" Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
+        <TextBlock VerticalAlignment="Center"  HorizontalAlignment="Center">
+            <Hyperlink x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#B1F984" FontSize="18">
+                Please click here to see the detailed results
+            </Hyperlink>
+            </TextBlock>
+        </Border>
+        <Border Grid.Row="3"  Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85">
             <DockPanel  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" Height="35" >
 
                 <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="10,5,0,5" FontSize="14"/>
-                <TextBlock Foreground="White" Text=" unknown programs detected" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
-
+                <TextBlock Foreground="White" Text="{Binding StatusBarText}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text="{Binding DistinctFilesCount}" Visibility="{Binding IsValkyrieAnalysStarted, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5,5,0,5" FontSize="14"/>
                 <StackPanel  Orientation="Horizontal" Visibility="{Binding IsMalwaresFound, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                     <TextBlock Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
@@ -242,6 +251,8 @@
                                    RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFB6E0FD" >
                             Get Endpoint Security Manager
                         </Hyperlink>
+                        
+                       
                     </TextBlock>
 
 

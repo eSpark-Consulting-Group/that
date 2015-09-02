@@ -44,6 +44,7 @@ namespace APTAT.Valkyrie.ClientTest
         {
             bindingSource1.DataSource = null;
             button1.Enabled = false;
+            
             _client.AnalyzeAsync(folderPath);
 
         }

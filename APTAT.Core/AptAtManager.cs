@@ -618,6 +618,8 @@ namespace APTAT.Core
         {
         }
 
+        
+
         public AptAtManager(IChangeTrackingListener listener)
         {
             var catalog = new SubSystemCatalog();
@@ -882,6 +884,11 @@ namespace APTAT.Core
         }
 
         public List<FileResult> ValkyrieAnalysisResult { get; set; }
+
+        public string GetValkyrieDetailsLink()
+        {
+            return _valkyrieClient.GetValkyrieDetailsLink();
+        }
     }
 
 }
