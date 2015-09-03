@@ -69,13 +69,15 @@ namespace APTAT.Application.Models
 
         public string StatusBarText
         {
-
-            get { return _statusBarText; }
-            set
+            get
             {
-                _statusBarText = value;
-                RaisePropertyChanged("StatusBarText");
+                if (IsValkyrieScanInProgress == true)
+                {
+                    return String.Format(" of {0} files analysed", DistinctFilesCount);
+                }
+                return " unknown programs detected";
             }
+         
         }
 
         public Boolean? IsScanInProgress
@@ -105,6 +107,7 @@ namespace APTAT.Application.Models
             {
                 _isValkyrieScanInProgress = value;
                 RaisePropertyChanged("IsValkyrieScanInProgress");
+                RaisePropertyChanged("StatusBarText");
             }
         }
 
@@ -128,6 +131,7 @@ namespace APTAT.Application.Models
                 _valkyrieProgressInfo = value;
                 RaisePropertyChanged("ValkyrieProgressInfo");
                 RaisePropertyChanged("DistinctFilesCount");
+                RaisePropertyChanged("StatusBarText");
                 RaisePropertyChanged("IsValkyrieAnalysStarted");
                 RaisePropertyChanged("MalwareFilesCount");
             }
@@ -352,7 +356,6 @@ namespace APTAT.Application.Models
             _scanInfoTreeControl = new ScanInfoTreeView() { DataContext = this };
             _valkyrieResultControl = new ResultTabsControl { DataContext = this };
             ValkyrieProgressInfo = ProgressInfo.Empty;
-            StatusBarText = " unknown programs detected";
             CurrentViewControl = _scanInfoTreeControl;
 
         }
@@ -514,15 +517,12 @@ namespace APTAT.Application.Models
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
             IsValkyrieScanInProgress = false;
+
             IsValkyrieReportEnabled = true;
             _isValkyrieAnalysCompleted = true;
             RaisePropertyChanged("IsValkyrieAnalysCompleted");
             RaisePropertyChanged("Header");
             RaisePropertyChanged("ValkyrieDetailsLink");
-
-           // var tabs = CurrentViewControl as ResultTabsControl;
-            
-            
         }
 
 
@@ -658,12 +658,10 @@ namespace APTAT.Application.Models
 
         public void BeginValkyrieAnalysis()
         {
-            //IsScanInProgress = true;
-   
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;
-            this.StatusBarText = " files analysed from";
+            
             _aptService.BeginValkyrieAnalysis(_login, _password);
         }
 
