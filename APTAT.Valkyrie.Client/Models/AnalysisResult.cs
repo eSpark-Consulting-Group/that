@@ -41,8 +41,6 @@ namespace APTAT.Valkyrie.Client
         public bool IsWhiteListed { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }
         public InfoVerdictEnum Verdict { get; private set; }
-
-
         public string VerdictString
         {
             get
@@ -50,7 +48,6 @@ namespace APTAT.Valkyrie.Client
                 return Verdict == InfoVerdictEnum.Undetected ? "Threat Not Found" : Verdict.ToString();
             }
         }
-
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
 
