@@ -23,5 +23,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
         }
+
+        
     }
 }

@@ -7,11 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="900">
     <Grid>
-        <TabControl Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TabControl Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
             <TabItem Header="Unknown files">
                 <local:ScanInfoTreeView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
-            <TabItem Header="FVS analysis results">
+            <TabItem Name="FVSTab" Header="FVS analysis results" IsSelected="True" >
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
         </TabControl>
