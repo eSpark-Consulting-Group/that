@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
@@ -507,11 +508,20 @@ namespace APTAT.Application.Models
             _aptService.ScanCompleted += OnScanCompleted;
             _aptService.ScanProgressChanged += OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
-            _aptService.ValkyrieAnalyzeCompleted += _aptService_ValkyrieAnalyzeCompleted;
+            _aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
         }
 
-        void _aptService_ValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
+            if (e.Error != null)
+            {
+                ErrorWindow error = new ErrorWindow
+                {
+                    Text = {Text = e.Error.Message},
+                    Owner = System.Windows.Application.Current.MainWindow
+                };
+                error.ShowDialog();   
+            }
             CurrentViewControl = _valkyrieResultControl;
             ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
@@ -531,7 +541,7 @@ namespace APTAT.Application.Models
             Percentage = e.ProgressPercentage;
             RaisePropertyChanged("Header");
             var info = (ProgressInfo)e.UserState;
-
+            
             this.ValkyrieProgressInfo = info;
 
             if (info != null)
@@ -556,7 +566,7 @@ namespace APTAT.Application.Models
             _aptService.ScanCompleted -= OnScanCompleted;
             _aptService.ScanProgressChanged -= OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
-            _aptService.ValkyrieAnalyzeCompleted -= _aptService_ValkyrieAnalyzeCompleted;
+            _aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
         }
 
         private void OnScanCompleted(Object sender, APTAT.Application.Services.ScanCompletedEventArgs e)

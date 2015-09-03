@@ -40,12 +40,29 @@ namespace APTAT.Valkyrie.ClientTest
 
         private Valkyrie.Client.ValkyrieClient _client;
         private const string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
+        private static List<ValkyrieFileInfo> MockData()
+        {
+            var files = new List<ValkyrieFileInfo>();
+            const string ip = "10.100.65.42";
+
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2AE.dll", Sha1 = "" });
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2ERES.dll", Sha1 = "" });
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2EXT.dll", Sha1 = "" });
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2FILT.dll", Sha1 = "" });
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2FXA.dll", Sha1 = "" });
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2FXB.dll", Sha1 = "" });
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2RES.dll", Sha1 = "" });
+            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2RES2.dll", Sha1 = "" });
+            return files;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             bindingSource1.DataSource = null;
             button1.Enabled = false;
-            
-            _client.AnalyzeAsync(folderPath);
+
+
+            var files = MockData();
+            _client.AnalyzeAsync(files,"user", "test");
 
         }
 

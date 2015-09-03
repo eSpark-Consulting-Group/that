@@ -57,47 +57,62 @@ namespace APTAT.Valkyrie.Client
 
         public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password)
         {
-            var request = new RegisterWithMachineIdRequest
+            try
             {
-                MachineId = Guid.NewGuid().ToString()
-            };
-
-            var regInfo = ValkyrieService.RegisterWithMachineId(request);
-            if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + request.MachineId);
-
-            _apiKey = regInfo.ApiKey;
-
-            AnalysisResults = new ConcurrentBag<AnalysisResult>();
-            _fileScanned = 0;
-
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            var cancellationToken = _cancellationTokenSource.Token;
-            cancellationToken.Register(() =>
-            {
-                var tmp = AnalyzeCanceled;
-                if (tmp != null) tmp(this, EventArgs.Empty);
-            });
-
-            _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-
-
-            var task = Task.Factory.StartNew(t =>
-            {
-                SubmitToAutomaticAnalysis(_clientId, badFiles, login, password);
-            }, TaskCreationOptions.LongRunning, cancellationToken
-            )
-                .ContinueWith(t =>
+                
+                var request = new RegisterWithMachineIdRequest
                 {
-                    OnAnalyzeCompleted(t);
-                }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
+                    MachineId = Guid.NewGuid().ToString()
+                };
 
-            task.ContinueWith(t =>
+                var regInfo = ValkyrieService.RegisterWithMachineId(request);
+                if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + request.MachineId);
+           
+                _apiKey = regInfo.ApiKey;
+
+                AnalysisResults = new ConcurrentBag<AnalysisResult>();
+                _fileScanned = 0;
+
+                _cancellationTokenSource = new CancellationTokenSource();
+
+                var cancellationToken = _cancellationTokenSource.Token;
+
+                cancellationToken.Register(() =>
+                {
+                    var tmp = AnalyzeCanceled;
+                    if (tmp != null) tmp(this, EventArgs.Empty);
+                });
+
+                _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
+
+                var task = Task.Factory.StartNew(t =>
+                {
+                    SubmitToAutomaticAnalysis(_clientId, badFiles, login, password);
+                }, TaskCreationOptions.LongRunning, cancellationToken
+                )
+                    .ContinueWith(t =>
+                    {
+                        OnAnalyzeCompleted(t);
+                    }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
+
+                task.ContinueWith(t =>
+                {
+                    var error = t.Exception;
+                    if (error != null) throw error;
+                }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, _taskScheduler);
+
+            }
+            catch (Exception exception)
             {
-                var error = t.Exception;
-                if (error != null) throw error;
-            }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, _taskScheduler);
+                var tmp = AnalyzeCompleted;
+                if (tmp != null)
+                {
+                    tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), exception, false, null));
+                }
 
+                throw;
+            }
         }
 
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
@@ -155,7 +170,7 @@ namespace APTAT.Valkyrie.Client
 
         private void SubmitToAutomaticAnalysis(string clientId, List<ValkyrieFileInfo> badFiles, string login, string password, bool parallel = true)
         {
-            FilesCount = badFiles.Count();
+            FilesCount = badFiles.Count;
 
             var destFolder = CreateTmpFolder();
             var exceptions = new ConcurrentQueue<Exception>();
@@ -231,7 +246,7 @@ namespace APTAT.Valkyrie.Client
             }
         }
 
-        private void UploadFile(string clientID, string filePath)
+        private void UploadFile(string clientId, string filePath)
         {
             var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
             FileInfo f = new FileInfo(filePath);
@@ -242,7 +257,7 @@ namespace APTAT.Valkyrie.Client
                 return;
             }
 
-            var infoRequeast = new InfoRequest { Client_id = clientID, SHA1 = sha1, ApiKey = _apiKey };
+            var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
 
             if (basicInfo.Presence)
@@ -252,11 +267,13 @@ namespace APTAT.Valkyrie.Client
             }
             else
             {
-                var request = new SubmitToAutomaticRequest();
-                request.Client_id = clientID;
-                request.ApiKey = _apiKey;
-                request.SubmitToken = basicInfo.SubmitToken;
-                request.FilePath = filePath;
+                var request = new SubmitToAutomaticRequest
+                {
+                    Client_id = clientId,
+                    ApiKey = _apiKey,
+                    SubmitToken = basicInfo.SubmitToken,
+                    FilePath = filePath
+                };
                 var payload = request.ToNameValueCollection();
 
                 var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
