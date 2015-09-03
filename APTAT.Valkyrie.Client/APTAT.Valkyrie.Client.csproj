@@ -56,7 +56,6 @@
     <Compile Include="Contracts\RegisterWithMachineIdRequest.cs" />
     <Compile Include="Helpers\HashCalculator.cs" />
     <Compile Include="Helpers\ProgressReporter.cs" />
-    <Compile Include="Helpers\RemoteFileCopyHelper.cs" />
     <Compile Include="Models\AnalysisResult.cs" />
     <Compile Include="Helpers\ObjectToArrayConverter.cs" />
     <Compile Include="Helpers\MultipartPostHelper.cs" />

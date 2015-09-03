@@ -1,16 +1,16 @@
-﻿using APTAT.Valkyrie.Client.Contracts;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using APTAT.Valkyrie.Client.Helpers;
-using System.ComponentModel;
+using APTAT.Valkyrie.Client.Contracts;
 using APTAT.Valkyrie.Client.Enums;
 using APTAT.Valkyrie.Client.Models;
+using Newtonsoft.Json;
 
 namespace APTAT.Valkyrie.Client
 {
@@ -18,8 +18,8 @@ namespace APTAT.Valkyrie.Client
     public sealed class ValkyrieClient
     {
         private const Int32 MaxFileLenght = 26214400;
-        private string _apiKey; 
-        
+        private string _apiKey;
+
         private readonly string _clientId;
         private int _fileScanned;
         public int FileScanned
@@ -28,7 +28,7 @@ namespace APTAT.Valkyrie.Client
             {
                 return _fileScanned;
             }
-            }
+        }
 
         public int FilesCount { get; private set; }
 
@@ -45,28 +45,17 @@ namespace APTAT.Valkyrie.Client
                 _analysisResults = value;
             }
         }
-        
-        public ValkyrieClient(string cientID)
+
+        public ValkyrieClient(string cientId)
         {
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
-            _clientId = cientID;
-        }     
-
-        //public void AskValkyrie(List<ValkyrieFileInfo> badFiles, string login, string password)
-        //{
-        //    var folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
-        //    SubmitFolderToAutomaticAnalysis(_clientID, folderPath);
-        //}
-
-        
-        private CancellationTokenSource _cancellationTokenSource;
-        private TaskScheduler _taskScheduler;
-        public void AnalyzeAsync(string folderPath)
-        {
-            AnalyzeAsync(null, null, null, folderPath);
+            _clientId = cientId;
         }
 
-        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password, string folderPath = null)
+        private CancellationTokenSource _cancellationTokenSource;
+        private TaskScheduler _taskScheduler;
+
+        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password)
         {
             var request = new RegisterWithMachineIdRequest
             {
@@ -74,16 +63,16 @@ namespace APTAT.Valkyrie.Client
             };
 
             var regInfo = ValkyrieService.RegisterWithMachineId(request);
-            if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID "+request.MachineId);
+            if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + request.MachineId);
 
             _apiKey = regInfo.ApiKey;
-           
+
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
             _fileScanned = 0;
 
-            this._cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
 
-            var cancellationToken = this._cancellationTokenSource.Token;
+            var cancellationToken = _cancellationTokenSource.Token;
             cancellationToken.Register(() =>
             {
                 var tmp = AnalyzeCanceled;
@@ -92,32 +81,123 @@ namespace APTAT.Valkyrie.Client
 
             _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-            bool useBadFilesCollection = String.IsNullOrWhiteSpace(folderPath) && badFiles != null;
-            var task = Task.Factory.StartNew((t) =>
-                {
-                    if (useBadFilesCollection)
-                    {
-                        folderPath = RemoteFileCopyHelper.CopyFiles(badFiles, login, password);
-                    }
-                    SubmitFolderToAutomaticAnalysis(_clientId, folderPath);
-                }, TaskCreationOptions.LongRunning, cancellationToken
+
+            var task = Task.Factory.StartNew(t =>
+            {
+                SubmitToAutomaticAnalysis(_clientId, badFiles, login, password);
+            }, TaskCreationOptions.LongRunning, cancellationToken
             )
                 .ContinueWith(t =>
                 {
                     OnAnalyzeCompleted(t);
                 }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
 
-            task.ContinueWith((t) => {
+            task.ContinueWith(t =>
+            {
                 var error = t.Exception;
-            }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted,_taskScheduler);
+                if (error != null) throw error;
+            }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, _taskScheduler);
+
+        }
+
+        private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
+        {
+            if (fileName == null) throw new ArgumentNullException("fileName");
+
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe"
+            };
+            var host = "\\\\" + ipAddress; //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
+            var target = host + "\\" + Path.GetPathRoot(fileName).Replace(":\\", "$");
+            string destination = Path.Combine(destPath, sha1);
+            string destinationFile = string.Format("{0}.tmp", destination);
+            string source = target + fileName.Remove(0, 2);
+            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password, login, source, destinationFile);
+
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+            return destinationFile;
+        }
+
+        private static string CreateTmpFolder()
+        {
+            var usrTempFolder = Environment.GetEnvironmentVariable("TEMP");
+            if (string.IsNullOrWhiteSpace(usrTempFolder))
+            {
+                usrTempFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            }
+            var valkyrieFolder = Path.Combine(usrTempFolder, "ValkyrieTmp");
+            bool exists = Directory.Exists(valkyrieFolder);
+            if (!exists)
+            {
+                Directory.CreateDirectory(valkyrieFolder);
+            }
+            else
+            {
+                DirectoryInfo downloadedMessageInfo = new DirectoryInfo(valkyrieFolder);
+
+                foreach (FileInfo file in downloadedMessageInfo.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in downloadedMessageInfo.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+
+            return valkyrieFolder;
+        }
+
+        private void SubmitToAutomaticAnalysis(string clientId, List<ValkyrieFileInfo> badFiles, string login, string password, bool parallel = true)
+        {
+            FilesCount = badFiles.Count();
+
+            var destFolder = CreateTmpFolder();
+            var exceptions = new ConcurrentQueue<Exception>();
+            if (parallel)
+            {
+                Parallel.ForEach(badFiles, f =>
+                {
+
+                    try
+                    {
+                        var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
+                        UploadFile(clientId, filePath);
+                    }
+                    catch (Exception e)
+                    {
+
+                        AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message));
+                        exceptions.Enqueue(e);
+                    }
+                });
+
+                if (exceptions.Count > 0) throw new AggregateException(exceptions);
+            }
+            else
+            {
+                foreach (var f in badFiles)
+                {
+                    var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
+                    UploadFile(clientId, filePath);
+
+                }
+            }
+
 
         }
 
         public void AnalyzeAsyncCancel()
         {
-            this._cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Cancel();
         }
-              
+
+
         public event AnalyzeCompletedEventHandler<AnalysisResult> AnalyzeCompleted;
         public event ProgressChangedEventHandler AnalyzeProgressChanged;
         public event EventHandler AnalyzeCanceled;
@@ -128,10 +208,10 @@ namespace APTAT.Valkyrie.Client
             var tmp = AnalyzeCompleted;
             if (tmp != null)
             {
-                tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(this.AnalysisResults.ToArray(), task.Exception, task.IsCanceled, task.AsyncState));
+                tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), task.Exception, task.IsCanceled, task.AsyncState));
             }
-            
-        } 
+
+        }
         private void OnAnalyzeProgressChanged()
         {
             var tmp = AnalyzeProgressChanged;
@@ -142,7 +222,7 @@ namespace APTAT.Valkyrie.Client
 
                 if (FilesCount > 0)
                 {
-                    progress = ((double)_fileScanned / (double)FilesCount) * 100;
+                    progress = (_fileScanned / (double)FilesCount) * 100;
 
                 }
                 var progressInt = Convert.ToInt32(progress);
@@ -151,63 +231,18 @@ namespace APTAT.Valkyrie.Client
             }
         }
 
-
-        private void SubmitFolderToAutomaticAnalysis(string clientID, string folderPath, bool useParallel = false)
-        {
-            var exceptions = new ConcurrentQueue<Exception>();
-
-            var files = Directory.EnumerateFiles(folderPath).ToArray();
-            FilesCount = files.Count();
-
-            if (useParallel)
-            {
-                Parallel.ForEach(files, (filePath) =>
-                {
-                    try
-                    {
-                        UploadFile(clientID, filePath);
-                    }
-                    catch (Exception e)
-                    {
-
-                        AddResult(AnalysisResult.CreateSkipInfo(filePath, e.Message));
-                        exceptions.Enqueue(e);
-                    }
-                });
-
-                if (exceptions.Count > 0) throw new AggregateException(exceptions);
-
-            }
-            else
-            {
-                foreach (var filePath in files)
-                {
-                    Thread.Sleep(1000);
-                    UploadFile(clientID, filePath);
-                    //if (_cancellationTokenSource != null)
-                    //{
-                    //    if (_cancellationTokenSource.Token.IsCancellationRequested)
-                    //    {
-                    //        break;
-                    //    }
-                    //}
-                }
-            }
-        }
-
-
         private void UploadFile(string clientID, string filePath)
         {
             var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
             FileInfo f = new FileInfo(filePath);
-            
+
             if (f.Length > MaxFileLenght)
             {
                 AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB."));
                 return;
             }
 
-            var infoRequeast = new InfoRequest() { Client_id = clientID, SHA1 = sha1, ApiKey = _apiKey };
+            var infoRequeast = new InfoRequest { Client_id = clientID, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
 
             if (basicInfo.Presence)
@@ -240,7 +275,7 @@ namespace APTAT.Valkyrie.Client
 
         public string GetValkyrieDetailsLink()
         {
-            return ValkyrieApiUrls.GetBaseUri() + "?api_key=" + this._apiKey;
+            return ValkyrieApiUrls.GetBaseUri() + "?api_key=" + _apiKey;
         }
     }
 }
