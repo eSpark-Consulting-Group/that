@@ -116,7 +116,7 @@ namespace APTAT.Valkyrie.ClientTest
                 if (item.IsSkipped)
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(String.Format("{0} {1} {2}  {3}", item.SHA1, "Skipped", item.LastAnalysisDate, item.SkipReason));
+                    Console.WriteLine("{0} {1} {2}  {3}", item.SHA1, "Skipped", item.LastAnalysisDate, item.SkipReason);
                 }
                 else
                 {

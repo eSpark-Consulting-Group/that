@@ -22,8 +22,8 @@ namespace APTAT.Valkyrie.Client.Enums
         /// <summary>
         /// means verdict not ready and its source is Manual Analysis.
         /// </summary>
-        NotReady = 100
+        NotReady = 100,
 
-
+        Skipped = 111
     }
 }

@@ -53,7 +53,7 @@ namespace APTAT.Valkyrie.Client
 
         internal static AnalysisResult CreateSkipInfo(string sha1, string reason)
         {
-            return new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotReady, IsWhiteListed = false, LastAnalysisDate = null};
+            return new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.Skipped, IsWhiteListed = false, LastAnalysisDate = null};
         }
 
         public float MalwareProbability { get; set; }

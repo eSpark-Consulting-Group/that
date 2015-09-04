@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Contracts;
@@ -59,7 +60,7 @@ namespace APTAT.Valkyrie.Client
         {
             try
             {
-                
+
                 var request = new RegisterWithMachineIdRequest
                 {
                     MachineId = Guid.NewGuid().ToString()
@@ -67,7 +68,7 @@ namespace APTAT.Valkyrie.Client
 
                 var regInfo = ValkyrieService.RegisterWithMachineId(request);
                 if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + request.MachineId);
-           
+
                 _apiKey = regInfo.ApiKey;
 
                 AnalysisResults = new ConcurrentBag<AnalysisResult>();
@@ -88,19 +89,28 @@ namespace APTAT.Valkyrie.Client
 
                 var task = Task.Factory.StartNew(t =>
                 {
-                    SubmitToAutomaticAnalysis(_clientId, badFiles, login, password);
-                }, TaskCreationOptions.LongRunning, cancellationToken
-                )
-                    .ContinueWith(t =>
+                    try
                     {
-                        OnAnalyzeCompleted(t);
-                    }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
+                        SubmitToAutomaticAnalysis(_clientId, badFiles, login, password);
+                    }
+                    catch (AggregateException exception)
+                    {
 
-                task.ContinueWith(t =>
+                       OnAnalyzeCompleted(exception);
+                    }
+                    
+                }, TaskCreationOptions.None, cancellationToken
+                ).ContinueWith(t =>
                 {
-                    var error = t.Exception;
-                    if (error != null) throw error;
-                }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, _taskScheduler);
+                    OnAnalyzeCompleted(t);
+                }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler)
+                .ContinueWith((t) =>
+                {
+                    Debug.WriteLine("I have observed a {0}",
+                        t.Exception.InnerException.GetType().Name);
+                },
+    TaskContinuationOptions.OnlyOnFaulted);
+
 
             }
             catch (Exception exception)
@@ -118,7 +128,7 @@ namespace APTAT.Valkyrie.Client
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
         {
             if (fileName == null) throw new ArgumentNullException("fileName");
-
+            
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -192,7 +202,8 @@ namespace APTAT.Valkyrie.Client
                     }
                 });
 
-                if (exceptions.Count > 0) throw new AggregateException(exceptions);
+                var ex = new AggregateException(exceptions.ToArray());
+                if (exceptions.Count > 0) throw ex;
             }
             else
             {
@@ -217,6 +228,23 @@ namespace APTAT.Valkyrie.Client
         public event ProgressChangedEventHandler AnalyzeProgressChanged;
         public event EventHandler AnalyzeCanceled;
 
+        private void OnAnalyzeCompleted(Exception exception)
+        {
+            
+            var tmp = AnalyzeCompleted;
+            if (tmp != null)
+            {
+                Task.Factory.StartNew(
+                
+                    () =>
+                    {
+                        tmp(this,
+                            new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), exception, true,
+                                null));
+                    },CancellationToken.None,TaskCreationOptions.None, _taskScheduler);
+            }
+
+        }
         private void OnAnalyzeCompleted(Task task)
         {
             if (task.Exception != null) throw task.Exception;

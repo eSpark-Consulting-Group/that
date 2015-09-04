@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
@@ -515,13 +516,9 @@ namespace APTAT.Application.Models
         {
             if (e.Error != null)
             {
-                ErrorWindow error = new ErrorWindow
-                {
-                    Text = {Text = e.Error.Message},
-                    Owner = System.Windows.Application.Current.MainWindow
-                };
-                error.ShowDialog();   
+                ShowError(e.Error);
             }
+
             CurrentViewControl = _valkyrieResultControl;
             ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
@@ -533,6 +530,27 @@ namespace APTAT.Application.Models
             RaisePropertyChanged("IsValkyrieAnalysCompleted");
             RaisePropertyChanged("Header");
             RaisePropertyChanged("ValkyrieDetailsLink");
+        }
+
+        private static void ShowError(Exception exception)
+        {
+            if (exception == null) return;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(exception.Message);
+            var ae = exception as AggregateException;
+            if (ae != null)
+            {
+                foreach (var innerException in ae.InnerExceptions)
+                {
+                    sb.AppendLine(innerException.Message);
+                }
+            }
+            ErrorWindow error = new ErrorWindow
+            {
+                Text = {Text = sb.ToString()},
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            error.ShowDialog();
         }
 
 

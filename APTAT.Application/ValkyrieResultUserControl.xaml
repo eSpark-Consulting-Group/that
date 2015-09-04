@@ -77,7 +77,7 @@
                     <CheckBox IsChecked="{Binding IsWhiteListed}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" />
                 </DataTemplate>
                 <DataTemplate x:Key="VerdictColumn">
-                    <TextBlock Text="{Binding ValkyrieAnalysisResult.VerdictString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.VerdictString}"/>
+                    <TextBlock Text="{Binding ValkyrieAnalysisResult.VerdictString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
                 </DataTemplate>
                 
                 <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="ValkyrieNameTemplateSelector" 
