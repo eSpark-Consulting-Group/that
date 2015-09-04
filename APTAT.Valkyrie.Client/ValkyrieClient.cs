@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Contracts;
@@ -95,13 +94,12 @@ namespace APTAT.Valkyrie.Client
                     }
                     catch (AggregateException exception)
                     {
-
                         OnAnalyzeCompleted(exception);
                     }
 
-                }, TaskCreationOptions.None, cancellationToken).ContinueWith(OnAnalyzeCompleted, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
-               
-    
+                }, TaskCreationOptions.None, cancellationToken
+                    ).ContinueWith(OnAnalyzeCompleted, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
+
 
 
             }
@@ -120,6 +118,7 @@ namespace APTAT.Valkyrie.Client
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
         {
             if (fileName == null) throw new ArgumentNullException("fileName");
+            
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -278,7 +277,7 @@ namespace APTAT.Valkyrie.Client
 
             var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
-
+            if(basicInfo.ReturnCode != ErrorCodesEnum.Success) throw  new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
             if (basicInfo.Presence)
             {
                 AnalysisResult result = AnalysisResult.Create(basicInfo);
@@ -297,6 +296,7 @@ namespace APTAT.Valkyrie.Client
 
                 var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
                 var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
+                if (response.ReturnCode != ErrorCodesEnum.Success) throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
                 var result = AnalysisResult.Create(response);
                 AddResult(result);
             }

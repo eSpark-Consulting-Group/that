@@ -538,10 +538,13 @@ namespace APTAT.Application.Models
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(exception.Message);
             var ae = exception as AggregateException;
+            List<string> errorList = new List<string>();
             if (ae != null)
             {
                 foreach (var innerException in ae.InnerExceptions)
                 {
+                    if (errorList.Contains(innerException.Message)) continue;
+                    errorList.Add(innerException.Message);
                     sb.AppendLine(innerException.Message);
                 }
             }
