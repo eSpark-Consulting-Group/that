@@ -87,7 +87,7 @@ namespace APTAT.Valkyrie.Client
                 _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
 
-                var task = Task.Factory.StartNew(t =>
+                Task.Factory.StartNew(t =>
                 {
                     try
                     {
@@ -96,20 +96,12 @@ namespace APTAT.Valkyrie.Client
                     catch (AggregateException exception)
                     {
 
-                       OnAnalyzeCompleted(exception);
+                        OnAnalyzeCompleted(exception);
                     }
-                    
-                }, TaskCreationOptions.None, cancellationToken
-                ).ContinueWith(t =>
-                {
-                    OnAnalyzeCompleted(t);
-                }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler)
-                .ContinueWith((t) =>
-                {
-                    Debug.WriteLine("I have observed a {0}",
-                        t.Exception.InnerException.GetType().Name);
-                },
-    TaskContinuationOptions.OnlyOnFaulted);
+
+                }, TaskCreationOptions.None, cancellationToken).ContinueWith(OnAnalyzeCompleted, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
+               
+    
 
 
             }
@@ -128,7 +120,6 @@ namespace APTAT.Valkyrie.Client
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
         {
             if (fileName == null) throw new ArgumentNullException("fileName");
-            
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
