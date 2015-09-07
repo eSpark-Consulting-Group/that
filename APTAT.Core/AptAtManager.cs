@@ -13,6 +13,7 @@ using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using APTAT.Core.Reports;
 using APTAT.Valkyrie.Client;
+using APTAT.Valkyrie.Client.Models;
 
 namespace APTAT.Core
 {
@@ -640,7 +641,7 @@ namespace APTAT.Core
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var valkyrieAnalysisResult = GetFullResult(e.Result, results);
             var handler = ValkyrieAnalyzeCompleted;
-            this.ValkyrieAnalysisResult = valkyrieAnalysisResult;
+            ValkyrieAnalysisResult = valkyrieAnalysisResult;
             if (handler != null)
             {
                 var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled, e.UserState);
@@ -653,7 +654,13 @@ namespace APTAT.Core
             var handler = ValkyrieAnalyzeProgressChanged;
             if (handler != null)
             {
-                handler(this, e);
+                ProgressInfo<AnalysisResult> info = (ProgressInfo<AnalysisResult>)e.UserState;
+                
+                var results = _descentSubSystem.GetFirstScanResults().ScanResults;
+                var valkyrieAnalysisResult = GetFullResult(info.Results, results);
+
+                ProgressInfo<FileResult> progressInfo = new ProgressInfo<FileResult>(info.TotalFileCount, info.ProcessedFileCount, info.MalwareFilesCount, valkyrieAnalysisResult.ToArray());
+                handler(this, new ProgressChangedEventArgs(e.ProgressPercentage, progressInfo));
             }
         }
 

@@ -32,6 +32,7 @@
             <Converters:NullableConverter x:Key="NullableConverter"/>
             <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <Converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+            <Converters:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
             <Converters:BoolToOpacityConverter Inverse="True" x:Key="InverseBoolToOpacityConverter"/>
             <Converters:BoolToVisibilityConverter Inverse="True" x:Key="InverseBoolToVisibilityConverter"/>
             <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>

@@ -260,7 +260,7 @@ namespace APTAT.Valkyrie.Client
                 }
                 var progressInt = Convert.ToInt32(progress);
 
-                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo(FilesCount, _fileScanned, malwareCount)));
+                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<AnalysisResult>(FilesCount, _fileScanned, malwareCount, AnalysisResults.ToArray())));
             }
         }
 

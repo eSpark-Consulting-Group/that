@@ -1,18 +1,28 @@
 ﻿namespace APTAT.Valkyrie.Client.Models
 {
-    public class ProgressInfo
+    public class ProgressInfo<T>
     {
+       
         private readonly int _totalCount;
         private readonly int _processedCount;
         private readonly int _malwareFilesCount;
 
-        public static ProgressInfo Empty
+        private readonly T[] _results;
+        public T[] Results
         {
-            get { return  new ProgressInfo(0,0,0);}
+            get
+            {
+                return _results;
+            }
+        }
+        public static ProgressInfo<T> Empty
+        {
+            get { return  new ProgressInfo<T>(0,0,0, new T[]{});}
         }
 
-        public ProgressInfo(int total, int processed, int malware)
+        public ProgressInfo(int total, int processed, int malware, T[] results)
         {
+            _results = results;
             _totalCount = total;
             _processedCount = processed;
             _malwareFilesCount = malware;
@@ -42,4 +52,6 @@
             }
         }
     }
+
+   
 }

@@ -7,6 +7,20 @@ using System.Windows.Data;
 
 namespace APTAT.Application.Converters
 {
+    public class BoolToYesNoConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null || (bool)value == false) return "No";
+            return "Yes";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw  new NotSupportedException();
+        }
+    }
+
     public class BoolToOpacityConverter : IValueConverter
     {
         public Boolean Inverse { get; set; }

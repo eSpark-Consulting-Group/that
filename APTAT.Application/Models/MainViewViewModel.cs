@@ -123,9 +123,9 @@ namespace APTAT.Application.Models
         {
             get { return ValkyrieProgressInfo.TotalFileCount; }
         }
-        private ProgressInfo _valkyrieProgressInfo;
+        private ProgressInfo<FileResult> _valkyrieProgressInfo;
 
-        public ProgressInfo ValkyrieProgressInfo
+        public ProgressInfo<FileResult> ValkyrieProgressInfo
         {
             get { return _valkyrieProgressInfo; }
             set
@@ -357,7 +357,7 @@ namespace APTAT.Application.Models
             StopScanCommand = new DelegateCommand(InvokeStopScan);
             _scanInfoTreeControl = new ScanInfoTreeView() { DataContext = this };
             _valkyrieResultControl = new ResultTabsControl { DataContext = this };
-            ValkyrieProgressInfo = ProgressInfo.Empty;
+            ValkyrieProgressInfo = ProgressInfo<FileResult>.Empty;
             CurrentViewControl = _scanInfoTreeControl;
 
         }
@@ -519,7 +519,7 @@ namespace APTAT.Application.Models
                 ShowError(e.Error);
             }
 
-            CurrentViewControl = _valkyrieResultControl;
+            
             ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
@@ -561,7 +561,7 @@ namespace APTAT.Application.Models
         {
             Percentage = e.ProgressPercentage;
             RaisePropertyChanged("Header");
-            var info = (ProgressInfo)e.UserState;
+            var info = (ProgressInfo<FileResult>)e.UserState;
             
             this.ValkyrieProgressInfo = info;
 
@@ -572,6 +572,9 @@ namespace APTAT.Application.Models
                 {
                     this.MalwareFilesCount = info.MalwareFilesCount;
                 }
+
+                var results = info.Results.Where(l=>l.ValkyrieAnalysisResult != null);
+                this.ItemsValkyrie = new ObservableCollection<FileResult>(results);
             }
         }
 
@@ -692,7 +695,7 @@ namespace APTAT.Application.Models
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;
-            
+            CurrentViewControl = _valkyrieResultControl;
             _aptService.BeginValkyrieAnalysis(_login, _password);
         }
 
