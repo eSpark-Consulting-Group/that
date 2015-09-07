@@ -26,6 +26,7 @@
                                  DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                  EnableRowVirtualization="True"
                                  MouseDoubleClick="OnTreeDoubleClick" LayoutUpdated="treeList_LayoutUpdated" Filtered="treeList_Filtered"
+                                 Validation.ErrorTemplate="{x:Null}"
                                   >
             <telerik:RadTreeListView.Resources>
 
@@ -38,8 +39,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Margin="8,8,0,0" Text="{Binding FullName}" Grid.Column="0"/>
-                        <TextBlock Margin="8,8,0,0" Text="{Binding FilePath}" Grid.Column="0" Grid.Row="1"/>
+                        <TextBlock Margin="8,8,0,0" Text="{Binding FullName, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" Grid.Column="0"/>
+                        <TextBlock Margin="8,8,0,0" Text="{Binding FilePath, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" Grid.Column="0" Grid.Row="1"/>
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="FileInfoTemplate">
@@ -63,12 +64,6 @@
                         </Canvas>
                         <TextBlock Text="{Binding FullName, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
                     </Grid>
-                </DataTemplate>
-                <DataTemplate x:Key="NameColumn">
-                    <TextBlock Text="{Binding Name, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
-                </DataTemplate>
-                <DataTemplate x:Key="FileNameColumn">
-                    <TextBlock Text="{Binding Path,ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="SizeColumn">
                     <TextBlock Text="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Size, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
