@@ -45,7 +45,7 @@ namespace APTAT.Valkyrie.Client
         {
             get
             {
-                return Verdict == InfoVerdictEnum.Undetected ? "Threat Not Found" : Verdict.ToString();
+                return Verdict == InfoVerdictEnum.Undetected ? "No Threat Found" : Verdict.ToString();
             }
         }
         public bool IsSkipped { get; private set; }
