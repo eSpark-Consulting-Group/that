@@ -52,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AnalyzeCompletedEventHandler.cs" />
     <Compile Include="Contracts\RegisterWithMachineIdRequest.cs" />
     <Compile Include="Helpers\HashCalculator.cs" />
