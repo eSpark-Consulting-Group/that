@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
@@ -563,18 +562,18 @@ namespace APTAT.Application.Models
             RaisePropertyChanged("Header");
             var info = (ProgressInfo<FileResult>)e.UserState;
             
-            this.ValkyrieProgressInfo = info;
+            ValkyrieProgressInfo = info;
 
             if (info != null)
             {
                 UnknownFilesCount = info.ProcessedFileCount;
                 if (info.MalwareFilesCount > 0)
                 {
-                    this.MalwareFilesCount = info.MalwareFilesCount;
+                    MalwareFilesCount = info.MalwareFilesCount;
                 }
 
                 var results = info.Results.Where(l=>l.ValkyrieAnalysisResult != null);
-                this.ItemsValkyrie = new ObservableCollection<FileResult>(results);
+                ItemsValkyrie = new ObservableCollection<FileResult>(results);
             }
         }
 
@@ -692,6 +691,8 @@ namespace APTAT.Application.Models
 
         public void BeginValkyrieAnalysis()
         {
+            ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
+
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;

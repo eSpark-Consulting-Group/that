@@ -265,7 +265,7 @@ namespace APTAT.Valkyrie.Client
         }
 
         private void UploadFile(string clientId, string filePath)
-        {
+        {            
             var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
             FileInfo f = new FileInfo(filePath);
 

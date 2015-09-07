@@ -51,6 +51,11 @@
                 return _malwareFilesCount;
             }
         }
+
+        public static ProgressInfo<T> CreateFromTotal(int totalFileCount)
+        {
+            return new ProgressInfo<T>(totalFileCount, 0, 0, new T[] {});
+        }
     }
 
    
