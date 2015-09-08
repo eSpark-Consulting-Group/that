@@ -186,8 +186,7 @@ namespace APTAT.Valkyrie.Client
                     }
                     catch (Exception e)
                     {
-
-                        AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message));
+                        AddResult(AnalysisResult.CreateSkipInfo(f.Path, e.Message));
                         exceptions.Enqueue(e);
                     }
                 });
