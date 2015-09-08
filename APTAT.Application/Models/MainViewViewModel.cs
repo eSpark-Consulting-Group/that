@@ -544,12 +544,11 @@ namespace APTAT.Application.Models
                 {
                     if (errorList.Contains(innerException.Message)) continue;
                     errorList.Add(innerException.Message);
-                    sb.AppendLine(innerException.Message);
+                    
                 }
             }
-            ErrorWindow error = new ErrorWindow
+            ErrorLogWindow error = new ErrorLogWindow(errorList)
             {
-                Text = {Text = sb.ToString()},
                 Owner = System.Windows.Application.Current.MainWindow
             };
             error.ShowDialog();
