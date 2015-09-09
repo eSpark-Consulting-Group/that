@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -19,7 +20,8 @@ namespace APTAT.Valkyrie.Client
     {
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
-
+        private DateTime _dateStart;
+        private DateTime _dateEnd;
         private readonly string _clientId;
         private int _fileScanned;
         public int FileScanned
@@ -49,17 +51,20 @@ namespace APTAT.Valkyrie.Client
         public ValkyrieClient(string cientId)
         {
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
+
             _clientId = cientId;
+            
         }
 
         private CancellationTokenSource _cancellationTokenSource;
         private TaskScheduler _taskScheduler;
 
-        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password)
+        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password, int machineCount)
         {
             try
             {
-
+                _machineCount = machineCount;
+                _dateStart = DateTime.UtcNow;
                 var request = new RegisterWithMachineIdRequest
                 {
                     MachineId = Guid.NewGuid().ToString()
@@ -216,6 +221,7 @@ namespace APTAT.Valkyrie.Client
         public event AnalyzeCompletedEventHandler<AnalysisResult> AnalyzeCompleted;
         public event ProgressChangedEventHandler AnalyzeProgressChanged;
         public event EventHandler AnalyzeCanceled;
+        private int _machineCount;
 
         private void OnAnalyzeCompleted(Exception exception)
         {
@@ -236,6 +242,9 @@ namespace APTAT.Valkyrie.Client
         }
         private void OnAnalyzeCompleted(Task task)
         {
+            _dateEnd = DateTime.UtcNow;
+            FinalizeScan();
+
             if (task.Exception != null) throw task.Exception;
             var tmp = AnalyzeCompleted;
             if (tmp != null)
@@ -244,6 +253,20 @@ namespace APTAT.Valkyrie.Client
             }
 
         }
+
+        private void FinalizeScan()
+        {
+            FinalizeScanRequest request = new FinalizeScanRequest
+            {
+                ApiKey = _apiKey,
+                StartTime = _dateStart.ToString(CultureInfo.InvariantCulture),
+                EndTime = _dateEnd.ToString(CultureInfo.InvariantCulture),
+                MachineCount = _machineCount
+            };
+
+            ValkyrieService.FinalizeScan(request);
+        }
+
         private void OnAnalyzeProgressChanged()
         {
             var tmp = AnalyzeProgressChanged;

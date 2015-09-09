@@ -887,7 +887,7 @@ namespace APTAT.Core
         {            
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var distinctFileList = GetDistinctFileInfo(results);
-            _valkyrieClient.AnalyzeAsync(distinctFileList, login, password);           
+            _valkyrieClient.AnalyzeAsync(distinctFileList, login, password,results.Count);           
         }
 
         public List<FileResult> ValkyrieAnalysisResult { get; set; }

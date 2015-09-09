@@ -32,6 +32,12 @@ namespace APTAT.Valkyrie.Client
             return response;
         }
 
+        public static FinalizeScanResponse FinalizeScan(FinalizeScanRequest request)
+        {
+            var response = CallValkyrie<FinalizeScanResponse>(ValkyrieApiUrls.FinalizeScan, request);
+            return response;
+        }
+
         public static FullInfoResponse GetFullInfo(InfoRequest request)
         {
             var result = CallValkyrie<FullInfoResponse>(ValkyrieApiUrls.FullInfo, request);
