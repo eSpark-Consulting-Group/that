@@ -158,14 +158,14 @@
                     ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="NAME"
-                    Width="782" 
+                    Width="*" 
                  SortMemberPath="Name" />
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource SizeColumn}"
                     SortMemberPath="Size"
                     IsFilterable="False"
                     Header="SIZE"  
-                    Width="*"/>
+                    Width="100"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>

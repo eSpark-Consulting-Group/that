@@ -66,10 +66,10 @@
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="SizeColumn">
-                    <TextBlock Text="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Size, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
+                    <TextBlock Text="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Size, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" TextAlignment="Right"/>
                 </DataTemplate>
                 <DataTemplate x:Key="WhiteListedColumn">
-                    <TextBlock Text="{Binding ValkyrieAnalysisResult.IsWhiteListed, ValidatesOnDataErrors=False, ValidatesOnExceptions=False,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" />
+                    <TextBlock Text="{Binding ValkyrieAnalysisResult.IsWhiteListed, ValidatesOnDataErrors=False, ValidatesOnExceptions=False,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1"  TextAlignment="Center"/>
                 </DataTemplate>
                 <DataTemplate x:Key="VerdictColumn">
                     <TextBlock  Text="{Binding ValkyrieAnalysisResult.VerdictString, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
@@ -90,7 +90,8 @@
                     ShowFilterButton="False"                    
                     ShowFieldFilters="False"                    
                     Header="NAME"
-                    Width="640" 
+                    TextAlignment="Left"
+                    Width="*" 
                  SortMemberPath="Name"
                 />
                
@@ -99,13 +100,15 @@
                     SortMemberPath="Size"
                     IsFilterable="False"
                     Header="SIZE"  
-                    Width="*"/>
+                    TextAlignment="Right"
+                    Width="80"/>
 
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource VerdictColumn}"
                     SortMemberPath="ValkyrieAnalysisResult.VerdictString"
                     IsFilterable="False"
                     Header="Verdict"  
+                    TextAlignment="Left"
                     Width="140"/>
 
                 <telerik:GridViewColumn                    
@@ -113,7 +116,8 @@
                     SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
                     IsFilterable="False"
                     Header="White Listed"  
-                    Width="*"/>
+                    TextAlignment="Center"
+                    Width="80"/>
                 
 
 

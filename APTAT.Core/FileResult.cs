@@ -160,15 +160,23 @@ namespace APTAT.Core
             get { return SizeToString(Size); }
         }
 
+        //private static string SizeToString(long size)
+        //{
+        //    if (size < 1024)
+        //        return String.Format("{0} KB ({1} bytes)", 1, size);
+        //    else
+        //        return String.Format("{0} KB ({1} bytes)", (int)(size / (double)1024), size);
+
+        //}
+
         private static string SizeToString(long size)
         {
             if (size < 1024)
-                return String.Format("{0} KB ({1} bytes)", 1, size);
+                return String.Format("{0} KB", 1);
             else
-                return String.Format("{0} KB ({1} bytes)", (int)(size / (double)1024), size);
+                return String.Format("{0} KB", (int)(size / (double)1024));
 
         }
-
         public string FileAge
         {
             get { return FileAgeFormatter.GetAge(Created); }
