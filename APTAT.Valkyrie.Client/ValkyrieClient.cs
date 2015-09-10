@@ -330,7 +330,7 @@ namespace APTAT.Valkyrie.Client
 
         public string GetValkyrieDetailsLink()
         {
-            return ValkyrieApiUrls.GetBaseUri() + "?api_key=" + _apiKey;
+            return ValkyrieApiUrls.GetBaseUri() + @"/apt_scan_results?api_key=" + _apiKey;
         }
     }
 }
