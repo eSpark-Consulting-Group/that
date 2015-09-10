@@ -33,12 +33,12 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2">
                         <Button Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
                         <Button x:Name="ResizeButton" Style="{StaticResource MaximizeButton}" Click="OnResizeClick" VerticalAlignment="Top"/>
-                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
+                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick" Height="35" VerticalAlignment="Bottom"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <Frame Source="/MainView.xaml"  Background="#CEE0F9" NavigationUIVisibility="Hidden"  Grid.Row="1">
+            <Frame x:Name="MainFrame" Source="/MainView.xaml"  Background="#CEE0F9" NavigationUIVisibility="Hidden"  Grid.Row="1" >
             </Frame>
         </Grid>
     </Border>

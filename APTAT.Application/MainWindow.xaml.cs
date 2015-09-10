@@ -24,6 +24,8 @@ namespace APTAT.Application
     /// </summary>
     public partial class MainWindow
     {
+        private MainView _mainView;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -53,6 +55,7 @@ namespace APTAT.Application
                     }
                 });
             }
+            _mainView = (MainView) this.MainFrame.Content;
         }
 
         
@@ -67,7 +70,23 @@ namespace APTAT.Application
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            if (_mainView.IsScanInProgress)
+            {
+                ConfirmationWindow confirmation = new ConfirmationWindow
+                {
+                    Owner = System.Windows.Application.Current.MainWindow
+                };
+
+                if (confirmation.ShowDialog() == true)
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                Close();
+            }
+
         }
 
         private void OnMinimize(object sender, RoutedEventArgs e)

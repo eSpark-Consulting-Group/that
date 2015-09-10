@@ -44,7 +44,22 @@ namespace APTAT.Application
         private IStorageService _storageService;
         private Int32 _selectedReportIndex = -1;
 
-        
+        //public void CancelScan()
+        //{
+        //    if (_viewModel.IsScanInProgress.GetValueOrDefault())
+        //    {
+        //        _viewModel.StopScanCommand.Execute(null);
+                
+        //    }
+        //}
+
+        public bool IsScanInProgress
+        {
+            get
+            {
+                return _viewModel.IsScanInProgress.GetValueOrDefault() || _viewModel.IsValkyrieScanInProgress.GetValueOrDefault();
+            }
+        }
 
         public MainView()
         {
