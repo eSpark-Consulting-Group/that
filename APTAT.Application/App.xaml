@@ -43,7 +43,8 @@
             <Converters:StringToHyperlinkConverter x:Key="StringToHyperlinkConverter" />
 
             <Style TargetType="TextBlock" x:Key="HeaderTextBlock">
-                <Setter Property="FontFamily" Value="Segoe UI Light"/>
+                <Setter Property="FontFamily" Value="Segoe UI Light" />
+                
             </Style>
 
             <Style TargetType="TextBox">
@@ -632,6 +633,65 @@
                                 Margin="10,0,5,12"
                                   Fill="White" HorizontalAlignment="Right" Height="3.167"  
                                   Stretch="Fill" Stroke="Black" StrokeThickness="0" VerticalAlignment="Bottom" Width="12" UseLayoutRounding="False"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="Button" x:Key="RestoreWindowButton">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Background="Transparent">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.7" Storyboard.TargetName="path" Duration="0:0:0.1"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Normal"/>
+                                    </VisualStateGroup>
+
+                                </VisualStateManager.VisualStateGroups>
+                                <Path Name="path" Fill="#FFFFFF"  RenderTransformOrigin="0.5, 0.5">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                                    </Path.RenderTransform>
+                                    <Path.Data>
+                                        <PathGeometry Figures="M32 0H8v8C5.094 8 0 8 0 8v24h24v-8h8V0z M20 28H4V16h4v8h12C20 25.789 20 28 20 28z M28 20H12V8h16   V20z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="Button" x:Key="MaximizeButton">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Background="Transparent">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.7" Storyboard.TargetName="path" Duration="0:0:0.1"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Normal"/>
+                                    </VisualStateGroup>
+
+                                </VisualStateManager.VisualStateGroups>
+                                <Path Name="path" Fill="#FFFFFF"  RenderTransformOrigin="0.5, 0.5">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                                    </Path.RenderTransform>
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 36 4 12 4 C 9.79 4 8 5.79 8 8 l 0 24 c 0 2.21 1.79 4 4 4 l 24 0 c 2.21 0 4 -1.79 4 -4 L 40 8 C 40 5.79 38.21 4 36 4 Z m 0 28 -24 0 0 -24 24 0 0 24 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>

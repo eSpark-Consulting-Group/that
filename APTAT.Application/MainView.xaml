@@ -81,13 +81,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="180"/>
-                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="0"/>
             </Grid.ColumnDefinitions>
 
             <telerik:RadToolBar Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
 
-                <telerik:RadButton Margin="20,-1,30,-1"  
-                               FontSize="18"
+                <telerik:RadButton Margin="15,-1,0,-1"  
+                               FontSize="16"
                                Padding="10,20"
                                IsTabStop="True"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
@@ -108,9 +108,9 @@
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                <telerik:RadButton Margin="5,-1,30,-1"  
+                <telerik:RadButton Margin="0,-1,0,-1"  
                                   Padding="10,20"
-                               FontSize="18"
+                               FontSize="16"
                                Click="OnStopScanClick"
                                IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}">
                     <telerik:RadButton.Content>
@@ -128,8 +128,8 @@
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                <telerik:RadButton Margin="5,-1,30,-1"
-                               FontSize="18"
+                <telerik:RadButton Margin="0,-1,0,-1"
+                               FontSize="16"
                                  Padding="10,20"
                                IsEnabled="{Binding IsDetailsEnabled}" 
                                Click="OnPropertiesClick" >
@@ -158,7 +158,7 @@
                            ContentTemplate="{StaticResource ReportButtonContentTemplate}"            
                        
                            x:Name="ReportButton"
-                           FontSize="18"
+                           FontSize="16"
                            Padding="10,20,10,20">
                     <telerik:RadDropDownButton.DropDownContent>
 
@@ -174,7 +174,7 @@
                     </telerik:RadDropDownButton.DropDownContent>
                 </telerik:RadDropDownButton>
 
-                <telerik:RadButton Margin="5,-1" 
+                <telerik:RadButton Margin="0,-1" 
                           Padding="10,20"
                                Click="AboutClick"
                                IsEnabled="True" FontSize="18">
@@ -191,7 +191,7 @@
                               Margin="0,0,10,0"
                               Width="20.115"/>
 
-                            <TextBlock Text="About" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
+                            <TextBlock Text="About" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16" />
                         </Grid>
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
@@ -212,7 +212,7 @@
 
         <Border Grid.Row="2" Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85" Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
         <TextBlock VerticalAlignment="Center"  HorizontalAlignment="Center">
-            <Hyperlink x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#B1F984" FontSize="18">
+            <Hyperlink x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#B1F984" FontSize="16">
                 Please click here to see the detailed results
             </Hyperlink>
             </TextBlock>

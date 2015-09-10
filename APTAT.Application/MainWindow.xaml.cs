@@ -74,5 +74,22 @@ namespace APTAT.Application
         {
             WindowState = WindowState.Minimized;
         }
+
+        private void OnResizeClick(object sender, RoutedEventArgs e)
+        {
+            var maxStyle = FindResource("MaximizeButton") as Style;
+            var restoreStyle = FindResource("RestoreWindowButton") as Style;
+            
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+                ResizeButton.Style = maxStyle;
+            }
+            else 
+            {
+                WindowState = WindowState.Maximized;
+                ResizeButton.Style = restoreStyle;
+            }
+        }
     }
 }
