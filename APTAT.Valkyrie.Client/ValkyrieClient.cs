@@ -256,13 +256,10 @@ namespace APTAT.Valkyrie.Client
 
         private void FinalizeScan()
         {
-            FinalizeScanRequest request = new FinalizeScanRequest
-            {
-                ApiKey = _apiKey,
-                StartTime = _dateStart.ToString(CultureInfo.InvariantCulture),
-                EndTime = _dateEnd.ToString(CultureInfo.InvariantCulture),
-                MachineCount = _machineCount
-            };
+
+
+            FinalizeScanRequest request = new FinalizeScanRequest(_dateStart, _dateEnd, _apiKey, _machineCount);
+            
 
             ValkyrieService.FinalizeScan(request);
         }

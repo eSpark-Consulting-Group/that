@@ -1,24 +1,9 @@
 ﻿using System.ComponentModel;
-using System.Runtime.InteropServices;
-using APTAT.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace APTAT.Application
 {
-
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -57,7 +42,6 @@ namespace APTAT.Application
             }
             _mainView = (MainView) this.MainFrame.Content;
         }
-
         
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
@@ -65,8 +49,6 @@ namespace APTAT.Application
                 WindowState = WindowState.Normal;
                 DragMove();
         }
-
-   
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
@@ -86,7 +68,6 @@ namespace APTAT.Application
             {
                 Close();
             }
-
         }
 
         private void OnMinimize(object sender, RoutedEventArgs e)

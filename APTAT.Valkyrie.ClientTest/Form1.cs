@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using APTAT.Valkyrie.Client;
+using APTAT.Valkyrie.Client.Contracts;
 
 namespace APTAT.Valkyrie.ClientTest
 {
@@ -57,12 +60,22 @@ namespace APTAT.Valkyrie.ClientTest
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            bindingSource1.DataSource = null;
-            button1.Enabled = false;
+            var registration = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest(){MachineId = Guid.NewGuid().ToString()});
+           
+           
+            
+            var start = DateTime.Now;
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            var endTime = DateTime.Now;
+            var request = new FinalizeScanRequest(start, endTime, registration.ApiKey, 3);
+            var finalizeResult = ValkyrieService.FinalizeScan(request);
+
+            //bindingSource1.DataSource = null;
+            //button1.Enabled = false;
 
 
-            var files = MockData();
-            _client.AnalyzeAsync(files,"user", "test", 1);
+            //var files = MockData();
+            //_client.AnalyzeAsync(files,"user", "test", 1);
 
         }
 
