@@ -56,9 +56,9 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AnalyzeCompletedEventHandler.cs" />
-    <Compile Include="Contracts\FinalizeScanResponse.cs" />
+    <Compile Include="Contracts\StartAndFinalizeScanResponse.cs" />
     <Compile Include="Contracts\RegisterWithMachineIdRequest.cs" />
-    <Compile Include="Contracts\FinalizeScanRequest.cs" />
+    <Compile Include="Contracts\EndScanRequest.cs" />
     <Compile Include="Helpers\HashCalculator.cs" />
     <Compile Include="Helpers\ProgressReporter.cs" />
     <Compile Include="Models\AnalysisResult.cs" />
@@ -83,6 +83,7 @@
     <Compile Include="Models\ValkyrieFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanInProgressEventArgs.cs" />
+    <Compile Include="StartScanRequest.cs" />
     <Compile Include="ValkyrieApiUrls.cs" />
     <Compile Include="ValkyrieClientWithProxy.cs" />
     <Compile Include="ValkyrieClient.cs" />

@@ -75,6 +75,8 @@ namespace APTAT.Valkyrie.Client
 
                 _apiKey = regInfo.ApiKey;
 
+                ValkyrieService.StartScan(new StartScanRequest(_apiKey));
+
                 AnalysisResults = new ConcurrentBag<AnalysisResult>();
                 _fileScanned = 0;
 
@@ -243,7 +245,7 @@ namespace APTAT.Valkyrie.Client
         private void OnAnalyzeCompleted(Task task)
         {
             _dateEnd = DateTime.UtcNow;
-            FinalizeScan();
+            ValkyrieService.EndScan(new EndScanRequest(_apiKey, _machineCount));
 
             if (task.Exception != null) throw task.Exception;
             var tmp = AnalyzeCompleted;
@@ -251,17 +253,6 @@ namespace APTAT.Valkyrie.Client
             {
                 tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), task.Exception, task.IsCanceled, task.AsyncState));
             }
-
-        }
-
-        private void FinalizeScan()
-        {
-
-
-            FinalizeScanRequest request = new FinalizeScanRequest(_dateStart, _dateEnd, _apiKey, _machineCount);
-            
-
-            ValkyrieService.FinalizeScan(request);
         }
 
         private void OnAnalyzeProgressChanged()

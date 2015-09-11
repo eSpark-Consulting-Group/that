@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace APTAT.Valkyrie.Client.Contracts
 {
-    public class FinalizeScanResponse
+    public class StartAndFinalizeScanResponse
     {
         [JsonProperty("scan_id ")]
         public string ScanId { get; set; } //a key uniquely identifying this scan

@@ -12,6 +12,8 @@ namespace APTAT.Valkyrie.Client
         public static Uri ManualStatus { get; private set; }
         public static Uri RegisterWithMachineId { get; private set; }
         public static Uri FinalizeScan { get; private set; }
+        public static Uri StartScan { get; private set; }
+        public static Uri EndScan { get; private set; }
 
         static ValkyrieApiUrls()
         {
@@ -23,6 +25,8 @@ namespace APTAT.Valkyrie.Client
             ManualStatus = new Uri(baseUri, "fvs_manual_status");
             RegisterWithMachineId = new Uri(baseUri, "fvs_register_with_machine_id");
             FinalizeScan = new Uri(baseUri, "apt_finalize_scan");
+            StartScan = new Uri(baseUri, "apt_start_scan");
+            EndScan = new Uri(baseUri, "apt_end_scan");
         }
         
         public static Uri GetBaseUri()

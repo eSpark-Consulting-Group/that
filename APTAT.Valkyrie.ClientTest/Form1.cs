@@ -67,8 +67,8 @@ namespace APTAT.Valkyrie.ClientTest
             var start = DateTime.Now;
             Thread.Sleep(TimeSpan.FromSeconds(2));
             var endTime = DateTime.Now;
-            var request = new FinalizeScanRequest(start, endTime, registration.ApiKey, 3);
-            var finalizeResult = ValkyrieService.FinalizeScan(request);
+            var request = new EndScanRequest(registration.ApiKey, 3);
+            //var finalizeResult = ValkyrieService.FinalizeScan(request);
 
             //bindingSource1.DataSource = null;
             //button1.Enabled = false;
