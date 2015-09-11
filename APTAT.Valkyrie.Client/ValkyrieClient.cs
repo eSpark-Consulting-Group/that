@@ -65,16 +65,20 @@ namespace APTAT.Valkyrie.Client
             {
                 _machineCount = machineCount;
                 _dateStart = DateTime.UtcNow;
-                var request = new RegisterWithMachineIdRequest
+
+                var regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest
                 {
                     MachineId = Guid.NewGuid().ToString()
-                };
+                });
 
-                var regInfo = ValkyrieService.RegisterWithMachineId(request);
-                if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + request.MachineId);
+                if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + new RegisterWithMachineIdRequest
+                {
+                    MachineId = Guid.NewGuid().ToString()
+                }.MachineId);
 
                 _apiKey = regInfo.ApiKey;
 
+                Thread.Sleep(2000);
                 ValkyrieService.StartScan(new StartScanRequest(_apiKey));
 
                 AnalysisResults = new ConcurrentBag<AnalysisResult>();
