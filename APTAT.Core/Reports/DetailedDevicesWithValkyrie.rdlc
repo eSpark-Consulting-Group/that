@@ -2178,11 +2178,11 @@
                               <Value>=Fields!MalwareFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>9.08809cm</Top>
+                          <Top>9.15512cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.86072cm</Height>
                           <Width>16.25175cm</Width>
-                          <ZIndex>2</ZIndex>
+                          <ZIndex>3</ZIndex>
                           <DataElementOutput>NoOutput</DataElementOutput>
                           <Style>
                             <Border>
@@ -2465,7 +2465,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0in</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>

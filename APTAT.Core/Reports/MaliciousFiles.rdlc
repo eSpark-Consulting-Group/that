@@ -287,7 +287,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Copyright:</Value>
+                                  <Value>SHA1:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -389,7 +389,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>SHA1:</Value>
+                                  <Value>Copyright</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -529,7 +529,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(Fields!Copyright.Value &lt;&gt; "", Fields!Copyright.Value, "N/A")</Value>
+                                  <Value>=IIF(Fields!Sha1.Value &lt;&gt; "", Fields!Sha1.Value, "N/A")</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -781,7 +781,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(Fields!Sha1.Value &lt;&gt; "", Fields!Sha1.Value, "N/A")</Value>
+                                  <Value>=IIF(Fields!Copyright.Value &lt;&gt; "", Fields!Copyright.Value, "N/A")</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>

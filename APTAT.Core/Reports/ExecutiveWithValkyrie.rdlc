@@ -21,7 +21,6 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Left>0in</Left>
         <Height>1.23216cm</Height>
         <Width>14.72458cm</Width>
         <Style>
@@ -54,7 +53,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
         <Top>9.35354cm</Top>
-        <Left>0in</Left>
         <Height>1.25542cm</Height>
         <Width>14.72458cm</Width>
         <ZIndex>1</ZIndex>
@@ -980,7 +978,6 @@
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.23555cm</Top>
-        <Left>0in</Left>
         <Height>8.06294cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
@@ -1378,7 +1375,7 @@
                           </ChartMarker>
                           <DataElementOutput>Output</DataElementOutput>
                           <ChartItemInLegend>
-                            <LegendText>=Fields!Value.Value + " (#PERCENT{p2})"</LegendText>
+                            <LegendText>=Fields!Value.Value + IIf((Fields!Count.Value &lt;&gt; 0) AND (Fields!Count.Value/ Sum(Fields!Count.Value, "FileRatingDataSet")*100 &lt; 0.01 ), "&lt; 0.01%","(#PERCENT{p2})")</LegendText>
                           </ChartItemInLegend>
                         </ChartDataPoint>
                       </ChartDataPoints>
@@ -2048,7 +2045,7 @@
                   </ChartMarker>
                   <DataElementOutput>Output</DataElementOutput>
                   <ChartItemInLegend>
-                    <LegendText>=Fields!Value.Value + " (#PERCENT{p2})"</LegendText>
+                    <LegendText>=Fields!Value.Value + IIf((Fields!Count.Value &lt;&gt; 0) AND (Fields!Count.Value/ Sum(Fields!Count.Value, "ValkyrieRatingDataSet")*100 &lt; 0.01 ), "&lt; 0.01%","(#PERCENT{p2})")</LegendText>
                   </ChartItemInLegend>
                 </ChartDataPoint>
               </ChartDataPoints>
@@ -2394,7 +2391,6 @@
           </Paragraphs>
           <rd:DefaultName>Textbox3</rd:DefaultName>
           <Top>2.08021cm</Top>
-          <Left>0in</Left>
           <Height>0.63618cm</Height>
           <Width>7.02521cm</Width>
           <ZIndex>3</ZIndex>
@@ -2427,7 +2423,6 @@
           </Paragraphs>
           <rd:DefaultName>Textbox3</rd:DefaultName>
           <Top>0.91988cm</Top>
-          <Left>0in</Left>
           <Height>1.22383cm</Height>
           <Width>14.72458cm</Width>
           <ZIndex>4</ZIndex>
