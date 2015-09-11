@@ -115,10 +115,11 @@ namespace APTAT.Valkyrie.Client
                 var tmp = AnalyzeCompleted;
                 if (tmp != null)
                 {
-                    tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), exception, false, null));
+                    var agrEx = new AggregateException(new[] {exception});
+                    tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), agrEx, false, null));
                 }
-
-                throw;
+              // OnAnalyzeCompleted(exception);
+                //throw;
             }
         }
 
