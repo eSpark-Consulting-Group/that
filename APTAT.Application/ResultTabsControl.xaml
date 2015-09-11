@@ -11,7 +11,7 @@
             <TabItem Header="Unknown files">
                 <local:ScanInfoTreeView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
-            <TabItem Name="FVSTab" Header="FVS analysis results" IsSelected="True" >
+            <TabItem Name="FVSTab" Header="Valkyrie analysis results" IsSelected="True" >
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
         </TabControl>
