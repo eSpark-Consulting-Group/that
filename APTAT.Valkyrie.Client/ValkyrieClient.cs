@@ -195,7 +195,8 @@ namespace APTAT.Valkyrie.Client
                     try
                     {
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
-                        UploadFile(clientId, filePath);
+                        var orgPath = @"\\" + f.Ip + @"\" + f.Path;
+                        UploadFile(clientId, filePath, orgPath);
                     }
                     catch (Exception e)
                     {
@@ -212,13 +213,16 @@ namespace APTAT.Valkyrie.Client
                 foreach (var f in badFiles)
                 {
                     var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
-                    UploadFile(clientId, filePath);
+                    var orgPath = @"\\" + f.Ip + @"\" + f.Path;
+                    UploadFile(clientId, filePath,orgPath);
 
                 }
             }
 
 
         }
+
+       
 
         public void AnalyzeAsyncCancel()
         {
@@ -280,7 +284,7 @@ namespace APTAT.Valkyrie.Client
             }
         }
 
-        private void UploadFile(string clientId, string filePath)
+        private void UploadFile(string clientId, string filePath, string originalFilePath)
         {            
             var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
             FileInfo f = new FileInfo(filePath);
@@ -294,7 +298,7 @@ namespace APTAT.Valkyrie.Client
             var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
             if(basicInfo.ReturnCode != ErrorCodesEnum.Success) throw  new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
-            if (basicInfo.Presence)
+            if (basicInfo.Presence == false) 
             {
                 AnalysisResult result = AnalysisResult.Create(basicInfo);
                 AddResult(result);
@@ -306,11 +310,11 @@ namespace APTAT.Valkyrie.Client
                     Client_id = clientId,
                     ApiKey = _apiKey,
                     SubmitToken = basicInfo.SubmitToken,
-                    FilePath = filePath
+                    FilePath = originalFilePath
                 };
                 var payload = request.ToNameValueCollection();
 
-                var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
+                var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
                 var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
                 if (response.ReturnCode != ErrorCodesEnum.Success) throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
                 var result = AnalysisResult.Create(response);

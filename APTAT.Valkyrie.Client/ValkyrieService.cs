@@ -59,13 +59,13 @@ namespace APTAT.Valkyrie.Client
         }
 
 
-        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request)
-        {
-            var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
-            var result = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
-            return result;
-        }
+        //public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request)
+        //{
+        //    var payload = request.ToNameValueCollection();
+        //    var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
+        //    var result = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
+        //    return result;
+        //}
 
         public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {
