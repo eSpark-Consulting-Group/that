@@ -327,8 +327,7 @@ namespace APTAT.Valkyrie.Client
 
         public string GetValkyrieDetailsLink()
         {
-
-            return ValkyrieApiUrls.GetBaseUri() + @"signup_apikey/api_key=" + _apiKey;
+            return ValkyrieApiUrls.GetBaseUri() + @"signup_apikey/" + _apiKey;
         }
     }
 }
