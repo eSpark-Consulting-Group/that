@@ -140,15 +140,15 @@ namespace APTAT.Valkyrie.Client
             };
             var host = "\\\\" + ipAddress; //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
             var target = host + "\\" + Path.GetPathRoot(fileName).Replace(":\\", "$");
-            string destination = Path.Combine(destPath, sha1);
-            string destinationFile = string.Format("{0}.tmp", destination);
+            string destination = Path.Combine(destPath, Path.GetFileName(fileName));
+            
             string source = target + fileName.Remove(0, 2);
-            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password, login, source, destinationFile);
+            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password, login, source, destination);
 
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();
-            return destinationFile;
+            return destination;
         }
 
         private static string CreateTmpFolder()
