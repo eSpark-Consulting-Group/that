@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using APTAT.Valkyrie.Client;
 using APTAT.Valkyrie.Client.Contracts;
+using APTAT.Valkyrie.Client.Helpers;
 
 namespace APTAT.Valkyrie.ClientTest
 {
@@ -60,22 +61,26 @@ namespace APTAT.Valkyrie.ClientTest
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            var registration = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest(){MachineId = Guid.NewGuid().ToString()});
-           
-           
+            var mac = NetAddressHelper.GetMacWithIPAddress();
             
-            var start = DateTime.Now;
-            Thread.Sleep(TimeSpan.FromSeconds(2));
-            var endTime = DateTime.Now;
-            var request = new EndScanRequest(registration.ApiKey, 3);
-            //var finalizeResult = ValkyrieService.FinalizeScan(request);
-
-            //bindingSource1.DataSource = null;
-            //button1.Enabled = false;
+            
+        
+            //var registration = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest(){MachineId = Guid.NewGuid().ToString()});
 
 
-            //var files = MockData();
-            //_client.AnalyzeAsync(files,"user", "test", 1);
+
+            //var start = DateTime.Now;
+            //Thread.Sleep(TimeSpan.FromSeconds(2));
+            //var endTime = DateTime.Now;
+            //var request = new EndScanRequest(registration.ApiKey, 3);
+            ////var finalizeResult = ValkyrieService.FinalizeScan(request);
+
+            ////bindingSource1.DataSource = null;
+            ////button1.Enabled = false;
+
+
+            ////var files = MockData();
+            ////_client.AnalyzeAsync(files,"user", "test", 1);
 
         }
 

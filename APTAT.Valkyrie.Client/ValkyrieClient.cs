@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Contracts;
 using APTAT.Valkyrie.Client.Enums;
+using APTAT.Valkyrie.Client.Helpers;
 using APTAT.Valkyrie.Client.Models;
 using Newtonsoft.Json;
 
@@ -68,7 +69,7 @@ namespace APTAT.Valkyrie.Client
 
                 var regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest
                 {
-                    MachineId = Guid.NewGuid().ToString()
+                    MachineId = NetAddressHelper.GetMacWithIPAddress()
                 });
 
                 if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + new RegisterWithMachineIdRequest
@@ -326,7 +327,8 @@ namespace APTAT.Valkyrie.Client
 
         public string GetValkyrieDetailsLink()
         {
-            return ValkyrieApiUrls.GetBaseUri() + @"/apt_scan_results?api_key=" + _apiKey;
+
+            return ValkyrieApiUrls.GetBaseUri() + @"signup_apikey/api_key=" + _apiKey;
         }
     }
 }

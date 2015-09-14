@@ -60,6 +60,7 @@
     <Compile Include="Contracts\RegisterWithMachineIdRequest.cs" />
     <Compile Include="Contracts\EndScanRequest.cs" />
     <Compile Include="Helpers\HashCalculator.cs" />
+    <Compile Include="Helpers\IPHelper.cs" />
     <Compile Include="Helpers\ProgressReporter.cs" />
     <Compile Include="Models\AnalysisResult.cs" />
     <Compile Include="Helpers\ObjectToArrayConverter.cs" />
