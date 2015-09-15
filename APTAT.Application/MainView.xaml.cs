@@ -111,12 +111,45 @@ namespace APTAT.Application
             
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow(_viewModel);
             scanCompletedWindow.Text.Text = String.Empty;
+            scanCompletedWindow.Text.Text += "Computer Statistics:";
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
+            scanCompletedWindow.Text.Text += Environment.NewLine;
+
             if (e.SuccededCount > 0) scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
             if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Canceled Scans", Environment.NewLine, e.CanceledCount);
             if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
             if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
+
+            scanCompletedWindow.Text.Text += Environment.NewLine +"File Statistics:";
+
+            //if (e.FilesStatistics.TotalFilesCound> 0)
+            //{
+            //    scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine,
+            //        e.FilesStatistics.TotalFilesCound);
+            //}
+
+
+            //if (e.FilesStatistics.SkippedFilesCount > 0)
+            //{
+            //    scanCompletedWindow.Text.Text += String.Format("{0}- {1} Skipped(s) found", Environment.NewLine,
+            //        e.FilesStatistics.SkippedFilesCount);
+            //}
+
+            if (e.FilesStatistics.UnknownFilesCount > 0)
+            {
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown(s) found", Environment.NewLine,
+                    e.FilesStatistics.UnknownFilesCount);
+            }
+            
+
+            //if (e.FilesStatistics.SafeFilesCount> 0)
+            //{
+            //    scanCompletedWindow.Text.Text += String.Format("{0}- {1} Safe(s) found", Environment.NewLine,
+            //        e.FilesStatistics.SafeFilesCount);
+            //}
+            
             if (e.MalwaresFound > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware(s) found", Environment.NewLine, e.MalwaresFound);
+
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             if (e.SuccededCount > 0)
             {

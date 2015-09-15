@@ -112,9 +112,10 @@ namespace APTAT.Application.Services
         public Int32 CanceledCount { get; set; }
 
         public Int32 NotPerformedCount { get; set; }
-
         
         public Int32 MalwaresFound { get; set; }
+
+        public FilesStatistics FilesStatistics { get; set; }
     }
 
     public class BuildReportCompletedEventArgs : DomainEventArgs

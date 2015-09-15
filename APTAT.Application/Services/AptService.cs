@@ -196,7 +196,8 @@ namespace APTAT.Application.Services
             args.CanceledCount = e.CalceledCount;
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
-
+            args.FilesStatistics = e.FilesStatistics;
+            
             args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
 
 

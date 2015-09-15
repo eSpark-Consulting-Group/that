@@ -1,18 +1,8 @@
 ﻿using APTAT.Application.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace APTAT.Application
 {
@@ -21,8 +11,6 @@ namespace APTAT.Application
     /// </summary>
     public partial class ScanCompletedWindow
     {
-        private MainViewViewModel _viewModel;
-
         public ScanCompletedWindow()
         {
             InitializeComponent();
@@ -36,9 +24,7 @@ namespace APTAT.Application
         public ScanCompletedWindow(MainViewViewModel currentViewModel)
             :this()
         {
-         
-            _viewModel = currentViewModel;
-            DataContext = _viewModel;
+            DataContext = currentViewModel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -65,7 +51,7 @@ namespace APTAT.Application
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
+            DialogResult = false;
             Close();
         }
     }
