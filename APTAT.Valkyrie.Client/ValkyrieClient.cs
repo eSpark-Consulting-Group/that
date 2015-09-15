@@ -200,8 +200,9 @@ namespace APTAT.Valkyrie.Client
                     }
                     catch (Exception e)
                     {
-                        AddResult(AnalysisResult.CreateSkipInfo(f.Path, e.Message));
-                        exceptions.Enqueue(e);
+                        AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message));
+                        var exp = new InvalidOperationException("Could not upload file "+f.Path,e);
+                        exceptions.Enqueue(exp);
                     }
                 });
 
@@ -295,6 +296,7 @@ namespace APTAT.Valkyrie.Client
                 return;
             }
 
+           // throw new NotSupportedException("Test");
             var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
             if(basicInfo.ReturnCode != ErrorCodesEnum.Success) throw  new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());

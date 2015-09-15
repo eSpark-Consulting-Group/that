@@ -86,9 +86,7 @@
     <Compile Include="ScanInProgressEventArgs.cs" />
     <Compile Include="StartScanRequest.cs" />
     <Compile Include="ValkyrieApiUrls.cs" />
-    <Compile Include="ValkyrieClientWithProxy.cs" />
     <Compile Include="ValkyrieClient.cs" />
-    <Compile Include="ValkyrieProxy.cs" />
     <Compile Include="ValkyrieService.cs" />
   </ItemGroup>
   <ItemGroup>
