@@ -9,7 +9,7 @@ namespace APTAT.Valkyrie.Client
 {
     public static class MultipartPostHelper
     {
-        public static string Post(string uploadfile, string url, NameValueCollection payload, string fileFormFieldName = "file_data")
+        public static string Post(string uploadfile, string url, NameValueCollection payload, string orgFileName)
         {
             Uri uri = new Uri(url);
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
@@ -29,7 +29,11 @@ namespace APTAT.Valkyrie.Client
                 }
             }
 
-            BuildFileUploadHeaderEntry(uploadfile, fileFormFieldName, boundary, sb);
+            if (String.IsNullOrWhiteSpace(orgFileName))
+            {
+                orgFileName = uploadfile;
+            }
+            BuildFileUploadHeaderEntry(orgFileName, boundary, sb);
 
             string postHeader = sb.ToString();
             return SubmitFormData(uploadfile, webrequest, boundary, postHeader);
@@ -79,14 +83,13 @@ namespace APTAT.Valkyrie.Client
             sb.Append(HttpUtility.UrlEncode(value));
             sb.Append("\r\n");
         }
-        private static void BuildFileUploadHeaderEntry(string uploadfile, string fileFormName, string boundary, StringBuilder sb)
+
+        private static void BuildFileUploadHeaderEntry(string fileName, string boundary, StringBuilder sb)
         {
             sb.Append("--"); sb.Append(boundary); sb.Append("\r\n");
-            sb.Append("Content-Disposition: form-data; name=\""); sb.Append(fileFormName); sb.Append("\"");
-
+            sb.Append("Content-Disposition: form-data; name=\""); sb.Append("file_data"); sb.Append("\"");
             sb.Append("; filename=\"");
-            var filePathEncoded = HttpUtility.UrlEncode(Path.GetFileName(uploadfile));
-            sb.Append(filePathEncoded);
+            sb.Append(HttpUtility.UrlEncode(fileName.Trim()));
             sb.Append("\"");
             sb.Append("\r\n");
             sb.Append("Content-Type: application / octet - stream");

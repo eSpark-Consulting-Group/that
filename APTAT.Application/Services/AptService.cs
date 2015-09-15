@@ -191,7 +191,7 @@ namespace APTAT.Application.Services
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
         {
             //Logger.WriteLog("Scan Completed");
-            ScanCompletedEventArgs args = new ScanCompletedEventArgs();
+           ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
             args.CanceledCount = e.CalceledCount;
             args.FailedCount = e.FailedCount;

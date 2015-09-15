@@ -131,7 +131,7 @@ namespace APTAT.Valkyrie.Client
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
         {
             if (fileName == null) throw new ArgumentNullException("fileName");
-            
+
             Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -140,15 +140,15 @@ namespace APTAT.Valkyrie.Client
             };
             var host = "\\\\" + ipAddress; //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
             var target = host + "\\" + Path.GetPathRoot(fileName).Replace(":\\", "$");
-            string destination = Path.Combine(destPath, Path.GetFileName(fileName));
-            
+            string destination = Path.Combine(destPath, sha1);
+            string destinationFile = string.Format("{0}.tmp", destination);
             string source = target + fileName.Remove(0, 2);
-            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password, login, source, destination);
+            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password, login, source, destinationFile);
 
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();
-            return destination;
+            return destinationFile;
         }
 
         private static string CreateTmpFolder()
@@ -300,7 +300,7 @@ namespace APTAT.Valkyrie.Client
             var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
             if(basicInfo.ReturnCode != ErrorCodesEnum.Success) throw  new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
-            if (basicInfo.Presence == false) 
+            if (basicInfo.Presence) 
             {
                 AnalysisResult result = AnalysisResult.Create(basicInfo);
                 AddResult(result);
@@ -316,7 +316,8 @@ namespace APTAT.Valkyrie.Client
                 };
                 var payload = request.ToNameValueCollection();
 
-                var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
+                string originalFileName = Path.GetFileName(originalFilePath);
+                var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName);
                 var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
                 if (response.ReturnCode != ErrorCodesEnum.Success) throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
                 var result = AnalysisResult.Create(response);
