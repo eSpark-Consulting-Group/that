@@ -7,7 +7,18 @@
             SizeToContent="Height"
         MouseLeftButtonDown="Window_MouseLeftButtonDown" d:DesignHeight="360">
 
-
+<Window.Resources>
+        <Style  TargetType="{x:Type ListBoxItem}">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="#19f39611"></Setter>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="#19000000"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
     <Border VerticalAlignment="Top">
         <Border.Effect>
@@ -50,14 +61,25 @@
 
 
                 <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <ListBox HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" x:Name="ErrorList" Height="178" />
-                    </StackPanel>
+                    <!--<ListBox HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" x:Name="ErrorList" Height="178" />-->
+
+
+                    <ListBox HorizontalContentAlignment="Stretch" x:Name="ErrorList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AlternationCount="2">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel >
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="0,10,0,0" Orientation="Horizontal">
                     <Button Content="OK"  Margin="5,5,5,15" Click="YesClick"  Style="{StaticResource ButtonHighlightStyle}" />
                 </StackPanel>
             </Grid>
-            
+
 
         </Grid>
 

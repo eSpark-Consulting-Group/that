@@ -29,11 +29,13 @@ namespace APTAT.Application
 
             var errorMessages = errors as string[] ?? errors.ToArray();
             ErrorHeader.Text = errorMessages.Length > 1 ? "Errors" : "Error";
-            foreach (var errorMessage in errorMessages)
-            {
-                var itm = new ListBoxItem {Content = errorMessage};
-                ErrorList.Items.Add(itm);
-            }
+
+            ErrorList.ItemsSource = errorMessages;
+            //foreach (var errorMessage in errorMessages)
+            //{
+            //    var itm = new ListBoxItem {Content = errorMessage};
+            //    ErrorList.Items.Add(itm);
+            //}
             
         }
 
