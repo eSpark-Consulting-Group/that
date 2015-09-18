@@ -704,7 +704,7 @@ namespace APTAT.Core
 
         private static List<ValkyrieFileInfo> GetDistinctFileInfo(ConcurrentDictionary<Guid, ScanResult> results)
         {
-            Dictionary<string, ScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.IpAddress);
+            Dictionary<string, ScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.TargetUid.ToString());
 
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
             foreach (var scanResult in scanResults)

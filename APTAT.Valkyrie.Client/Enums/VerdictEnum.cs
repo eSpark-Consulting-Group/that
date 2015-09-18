@@ -11,7 +11,7 @@ namespace APTAT.Valkyrie.Client.Enums
         /// <summary>
         /// means undetected and its source is either Automatic Analysis or Manual Analysis.
         /// </summary>
-       [Description("Threat Not Found")]
+       [Description("No Threat Found")]
         Undetected = 0,
 
         /// <summary>

@@ -79,7 +79,14 @@ namespace APTAT.Valkyrie.Client
 
                 _apiKey = regInfo.ApiKey;
 
+                Trace.WriteLine("API_KEY = " + _apiKey);
+                Trace.Flush();
+
                 Thread.Sleep(2000);
+
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Started for API_KEY = {1}", DateTime.UtcNow, _apiKey));
+                Trace.Flush();
+
                 ValkyrieService.StartScan(new StartScanRequest(_apiKey));
 
                 AnalysisResults = new ConcurrentBag<AnalysisResult>();
@@ -201,6 +208,9 @@ namespace APTAT.Valkyrie.Client
                     catch (Exception e)
                     {
                         AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message));
+                        Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
+                        Trace.Flush();
+
                         var exp = new InvalidOperationException("Could not upload file "+f.Path,e);
                         exceptions.Enqueue(exp);
                     }
@@ -257,6 +267,8 @@ namespace APTAT.Valkyrie.Client
         {
             _dateEnd = DateTime.UtcNow;
             ValkyrieService.EndScan(new EndScanRequest(_apiKey, _machineCount));
+            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Completed for API_KEY = {1}", DateTime.UtcNow, _apiKey));
+            Trace.Flush();
 
             if (task.Exception != null) throw task.Exception;
             var tmp = AnalyzeCompleted;
@@ -293,6 +305,8 @@ namespace APTAT.Valkyrie.Client
             if (f.Length > MaxFileLenght)
             {
                 AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB."));
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} greater than 25 Mb", DateTime.UtcNow, originalFilePath));
+                Trace.Flush();
                 return;
             }
 
@@ -300,6 +314,10 @@ namespace APTAT.Valkyrie.Client
             var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
             if(basicInfo.ReturnCode != ErrorCodesEnum.Success) throw  new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
+
+            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}", DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+            Trace.Flush();
+            
             if (basicInfo.Presence) 
             {
                 AnalysisResult result = AnalysisResult.Create(basicInfo);
@@ -307,6 +325,8 @@ namespace APTAT.Valkyrie.Client
             }
             else
             {
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]", DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                Trace.Flush();
                 var request = new SubmitToAutomaticRequest
                 {
                     Client_id = clientId,
