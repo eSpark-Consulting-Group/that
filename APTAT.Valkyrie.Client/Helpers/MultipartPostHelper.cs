@@ -3,16 +3,21 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Web;
 
 namespace APTAT.Valkyrie.Client
 {
     public static class MultipartPostHelper
     {
-        public static string Post(string uploadfile, string url, NameValueCollection payload, string orgFileName)
+        public static string Post(string uploadfile, string url, NameValueCollection payload, string orgFileName, CancellationToken cancellationToken)
         {
             Uri uri = new Uri(url);
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
+            cancellationToken.Register(() =>
+            {
+                webrequest.Abort();
+            });
             webrequest.Timeout = 1000 * 300;
             //   webrequest.ServerCertificateValidationCallback += null;
 
@@ -62,8 +67,8 @@ namespace APTAT.Valkyrie.Client
 
                 // Write out the trailing boundary
                 requestStream.Write(boundaryBytes, 0, boundaryBytes.Length);
-
                 WebResponse responce = webrequest.GetResponse();
+                
                 Stream s = responce.GetResponseStream();
                 using (StreamReader sr = new StreamReader(s))
                 {

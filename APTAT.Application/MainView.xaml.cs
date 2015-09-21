@@ -331,9 +331,9 @@ namespace APTAT.Application
 
         private void AboutClick(Object sender, RoutedEventArgs e)
         {
-            AboutWindow about = new AboutWindow();
-            about.Owner = System.Windows.Application.Current.MainWindow;
+            AboutWindow about = new AboutWindow {Owner = System.Windows.Application.Current.MainWindow};
             about.ShowDialog();
+            
         }
 
         //private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)

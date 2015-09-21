@@ -54,7 +54,7 @@ namespace APTAT.Valkyrie.Client
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
 
             _clientId = cientId;
-            
+
         }
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -67,27 +67,34 @@ namespace APTAT.Valkyrie.Client
                 _machineCount = machineCount;
                 _dateStart = DateTime.UtcNow;
 
+                var machineId = NetAddressHelper.GetMacWithIPAddress();
+
                 var regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest
                 {
-                    MachineId = NetAddressHelper.GetMacWithIPAddress()
+                    MachineId = machineId
                 });
 
-                if (regInfo.ReturnCode != 0) throw new InvalidOperationException("Could not Register with Machine ID " + new RegisterWithMachineIdRequest
+                if (regInfo.ReturnCode != 0)
                 {
-                    MachineId = Guid.NewGuid().ToString()
-                }.MachineId);
+                    throw new InvalidOperationException("Could not Register with Machine ID " + machineId, new InvalidOperationException(regInfo.ResultDescription));
+                }
+
 
                 _apiKey = regInfo.ApiKey;
 
                 Trace.WriteLine("API_KEY = " + _apiKey);
                 Trace.Flush();
-
-                Thread.Sleep(2000);
-
+                OnAnalyzeProgressChanged();
+                Thread.Sleep(2000);//time out asked by Valkyrie team 
+                OnAnalyzeProgressChanged();
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Started for API_KEY = {1}", DateTime.UtcNow, _apiKey));
                 Trace.Flush();
 
-                ValkyrieService.StartScan(new StartScanRequest(_apiKey));
+                var startScanResult = ValkyrieService.StartScan(new StartScanRequest(_apiKey));
+                if (startScanResult.ReturnCode != 0)
+                {
+                    Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
+                }
 
                 AnalysisResults = new ConcurrentBag<AnalysisResult>();
                 _fileScanned = 0;
@@ -96,11 +103,7 @@ namespace APTAT.Valkyrie.Client
 
                 var cancellationToken = _cancellationTokenSource.Token;
 
-                cancellationToken.Register(() =>
-                {
-                    var tmp = AnalyzeCanceled;
-                    if (tmp != null) tmp(this, EventArgs.Empty);
-                });
+                cancellationToken.Register(OnAnalyzeCompleted);
 
                 _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
@@ -109,7 +112,7 @@ namespace APTAT.Valkyrie.Client
                 {
                     try
                     {
-                        SubmitToAutomaticAnalysis(_clientId, badFiles, login, password);
+                        SubmitToAutomaticAnalysis(_clientId, badFiles, login, password, _cancellationTokenSource.Token);
                     }
                     catch (AggregateException exception)
                     {
@@ -127,10 +130,10 @@ namespace APTAT.Valkyrie.Client
                 var tmp = AnalyzeCompleted;
                 if (tmp != null)
                 {
-                    var agrEx = new AggregateException(new[] {exception});
+                    var agrEx = new AggregateException(new[] { exception });
                     tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), agrEx, false, null));
                 }
-              // OnAnalyzeCompleted(exception);
+                // OnAnalyzeCompleted(exception);
                 //throw;
             }
         }
@@ -188,7 +191,7 @@ namespace APTAT.Valkyrie.Client
             return valkyrieFolder;
         }
 
-        private void SubmitToAutomaticAnalysis(string clientId, List<ValkyrieFileInfo> badFiles, string login, string password, bool parallel = true)
+        private void SubmitToAutomaticAnalysis(string clientId, List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
         {
             FilesCount = badFiles.Count;
 
@@ -196,7 +199,13 @@ namespace APTAT.Valkyrie.Client
             var exceptions = new ConcurrentQueue<Exception>();
             if (parallel)
             {
-                Parallel.ForEach(badFiles, f =>
+                ParallelOptions opt = new ParallelOptions
+                {
+                    CancellationToken = cancellationToken,
+                    MaxDegreeOfParallelism = Environment.ProcessorCount
+                };
+
+                Parallel.ForEach(badFiles, opt, f =>
                 {
 
                     try
@@ -204,6 +213,7 @@ namespace APTAT.Valkyrie.Client
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                         var orgPath = @"\\" + f.Ip + @"\" + f.Path;
                         UploadFile(clientId, filePath, orgPath);
+                        File.Delete(filePath);
                     }
                     catch (Exception e)
                     {
@@ -211,10 +221,11 @@ namespace APTAT.Valkyrie.Client
                         Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
                         Trace.Flush();
 
-                        var exp = new InvalidOperationException("Could not upload file "+f.Path,e);
+                        var exp = new InvalidOperationException("Could not upload file " + f.Path, e);
                         exceptions.Enqueue(exp);
                     }
                 });
+
 
                 var ex = new AggregateException(exceptions.ToArray());
                 if (exceptions.Count > 0) throw ex;
@@ -225,41 +236,46 @@ namespace APTAT.Valkyrie.Client
                 {
                     var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                     var orgPath = @"\\" + f.Ip + @"\" + f.Path;
-                    UploadFile(clientId, filePath,orgPath);
-
+                    UploadFile(clientId, filePath, orgPath);
+                    File.Delete(filePath);
                 }
             }
-
-
         }
-
-       
 
         public void AnalyzeAsyncCancel()
         {
             _cancellationTokenSource.Cancel();
         }
 
-
         public event AnalyzeCompletedEventHandler<AnalysisResult> AnalyzeCompleted;
         public event ProgressChangedEventHandler AnalyzeProgressChanged;
-        public event EventHandler AnalyzeCanceled;
+
         private int _machineCount;
+
+        private void OnAnalyzeCompleted()
+        {
+            var tmp = AnalyzeCompleted;
+            if (tmp != null)
+            {
+                Task.Factory.StartNew(() =>
+                    {
+                        tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), null, true, null));
+                    }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+            }
+        }
+
 
         private void OnAnalyzeCompleted(Exception exception)
         {
-            
             var tmp = AnalyzeCompleted;
             if (tmp != null)
             {
                 Task.Factory.StartNew(
-                
+
                     () =>
                     {
-                        tmp(this,
-                            new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), exception, true,
-                                null));
-                    },CancellationToken.None,TaskCreationOptions.None, _taskScheduler);
+                        tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), exception, false, null));
+                    }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
             }
 
         }
@@ -298,9 +314,21 @@ namespace APTAT.Valkyrie.Client
         }
 
         private void UploadFile(string clientId, string filePath, string originalFilePath)
-        {            
+        {
+
             var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
+
+            if (_cancellationTokenSource.IsCancellationRequested)
+            {
+                AddResult(AnalysisResult.CreateSkipInfo(sha1, "Cancelled by user."));
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} cancelled by user", DateTime.UtcNow, originalFilePath));
+                Trace.Flush();
+                return;
+
+            }
+
             FileInfo f = new FileInfo(filePath);
+
 
             if (f.Length > MaxFileLenght)
             {
@@ -310,14 +338,14 @@ namespace APTAT.Valkyrie.Client
                 return;
             }
 
-           // throw new NotSupportedException("Test");
+            // throw new NotSupportedException("Test");
             var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
             BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
-            if(basicInfo.ReturnCode != ErrorCodesEnum.Success) throw  new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
+            if (basicInfo.ReturnCode != ErrorCodesEnum.Success) throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
 
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}", DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
             Trace.Flush();
-            
+
             if (basicInfo.Presence) 
             {
                 AnalysisResult result = AnalysisResult.Create(basicInfo);
@@ -337,7 +365,7 @@ namespace APTAT.Valkyrie.Client
                 var payload = request.ToNameValueCollection();
 
                 string originalFileName = Path.GetFileName(originalFilePath);
-                var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName);
+                var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName,_cancellationTokenSource.Token);
                 var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
                 if (response.ReturnCode != ErrorCodesEnum.Success) throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
                 var result = AnalysisResult.Create(response);

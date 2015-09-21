@@ -881,6 +881,7 @@ namespace APTAT.Core
         public void StopScan()
         {
             _descentSubSystem.AbortAllThreads();
+            _valkyrieClient.AnalyzeAsyncCancel();
         }
         
         public void StartValkyrieAnalysisAsync(string login, string password)

@@ -15,8 +15,7 @@ using APTAT.Valkyrie.Client.Models;
 namespace APTAT.Application.Models
 {
 
-
-    public class MainViewViewModel : ViewModel
+    public sealed class MainViewViewModel : ViewModel
     {
         public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
@@ -81,6 +80,14 @@ namespace APTAT.Application.Models
          
         }
 
+        public bool IsAnyScanInProgress
+        {
+            get
+            {
+                return IsScanInProgress.GetValueOrDefault() || IsValkyrieScanInProgress.GetValueOrDefault();
+            }
+        }
+
         public Boolean? IsScanInProgress
         {
             get { return _isScanInProgress; }
@@ -88,6 +95,7 @@ namespace APTAT.Application.Models
             {
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
+                RaisePropertyChanged("IsAnyScanInProgress");
             }
         }
 
@@ -108,7 +116,9 @@ namespace APTAT.Application.Models
             {
                 _isValkyrieScanInProgress = value;
                 RaisePropertyChanged("IsValkyrieScanInProgress");
+                RaisePropertyChanged("IsAnyScanInProgress");
                 RaisePropertyChanged("StatusBarText");
+                
             }
         }
 

@@ -22,12 +22,7 @@ namespace APTAT.Valkyrie.ClientTest
             _client = new Client.ValkyrieClient("MYCLIENTID");
             _client.AnalyzeCompleted += _client_AnalyzeCompleted;
             _client.AnalyzeProgressChanged += _client_AnalyzeProgressChanged;
-            _client.AnalyzeCanceled += _client_AnalyzeCanceled;
-        }
-
-        void _client_AnalyzeCanceled(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
+            
         }
 
         void _client_AnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -38,6 +33,8 @@ namespace APTAT.Valkyrie.ClientTest
 
         void _client_AnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
         {
+            var isCancelled = e.Cancelled;
+            if(isCancelled) MessageBox.Show("Cancelled");
             bindingSource1.DataSource = e.Result;
             button1.Enabled = true;
         }
@@ -61,27 +58,24 @@ namespace APTAT.Valkyrie.ClientTest
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            var mac = NetAddressHelper.GetMacWithIPAddress();
             
-            
+
+            bindingSource1.DataSource = null;
         
-            //var registration = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest(){MachineId = Guid.NewGuid().ToString()});
+            
 
 
 
-            //var start = DateTime.Now;
-            //Thread.Sleep(TimeSpan.FromSeconds(2));
-            //var endTime = DateTime.Now;
-            //var request = new EndScanRequest(registration.ApiKey, 3);
-            ////var finalizeResult = ValkyrieService.FinalizeScan(request);
+           
 
-            ////bindingSource1.DataSource = null;
-            ////button1.Enabled = false;
+            var files = MockData();
+            _client.AnalyzeAsync(files,"user", "test", 1);
 
+        }
 
-            ////var files = MockData();
-            ////_client.AnalyzeAsync(files,"user", "test", 1);
-
+        private void button2_Click(object sender, EventArgs e)
+        {
+            _client.AnalyzeAsyncCancel();
         }
 
        

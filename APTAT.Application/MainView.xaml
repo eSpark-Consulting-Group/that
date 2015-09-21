@@ -112,7 +112,7 @@
                                   Padding="10,20"
                                FontSize="16"
                                Click="OnStopScanClick"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource NullableConverter}}">
+                               IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource NullableConverter}}">
                     <telerik:RadButton.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>

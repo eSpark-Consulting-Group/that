@@ -15,45 +15,42 @@ namespace APTAT.Valkyrie.Client
     public static class ValkyrieService
     {
 
-    
-
         /// <summary>
         /// This request will be used to get Basic Info of a file that FVS have already analyzed before. 
         /// </summary>             
-        public static BasicInfoResponse GetBasicInfo(InfoRequest request)
+        internal static BasicInfoResponse GetBasicInfo(InfoRequest request)
         {
             var response = CallValkyrie<BasicInfoResponse>(ValkyrieApiUrls.BasicInfo, request);
             return response;
         }
 
         // ReSharper disable once InconsistentNaming
-        public static RegisterWithMachineIdResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
+        internal static RegisterWithMachineIdResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
         {
             var response = CallValkyrie<RegisterWithMachineIdResponse>(ValkyrieApiUrls.RegisterWithMachineId, request);
             return response;
         }
 
-        public static StartAndFinalizeScanResponse StartScan(StartScanRequest request)
+        internal static StartAndFinalizeScanResponse StartScan(StartScanRequest request)
         {
             var response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.StartScan, request);
             return response;
         }
 
-        public static StartAndFinalizeScanResponse EndScan(EndScanRequest request)
+        internal static StartAndFinalizeScanResponse EndScan(EndScanRequest request)
         {
             var response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.EndScan, request);
             return response;
         }
 
-        
 
-        public static FullInfoResponse GetFullInfo(InfoRequest request)
+        internal static FullInfoResponse GetFullInfo(InfoRequest request)
         {
             var result = CallValkyrie<FullInfoResponse>(ValkyrieApiUrls.FullInfo, request);
             return result;
         }
 
-        public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request)
+        internal static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request)
         {
             var result = CallValkyrie<SubmitToManualResponse>(ValkyrieApiUrls.SubmitToManualAnalysis, request);
             return result;
@@ -68,7 +65,7 @@ namespace APTAT.Valkyrie.Client
         //    return result;
         //}
 
-        public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
+        internal static ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {
             var result = CallValkyrie<ManualStatusResponse>(ValkyrieApiUrls.ManualStatus, request);
             return result;
