@@ -2,12 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="APTAT.Application.ErrorLogWindow"
-       Title="Stop Scan"   Width="520"   WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+       Title="Stop Scan"   Width="720"    WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent" BorderThickness="3" WindowStyle="None"
             SizeToContent="Height"
         MouseLeftButtonDown="Window_MouseLeftButtonDown" d:DesignHeight="360">
 
-<Window.Resources>
+    <Window.Resources>
         <Style  TargetType="{x:Type ListBoxItem}">
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
@@ -64,11 +64,11 @@
                     <!--<ListBox HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Stretch" x:Name="ErrorList" Height="178" />-->
 
 
-                    <ListBox HorizontalContentAlignment="Stretch" x:Name="ErrorList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AlternationCount="2">
+                    <ListBox HorizontalContentAlignment="Stretch" Height="180" x:Name="ErrorList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AlternationCount="2" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel >
-                                <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
                                 </DockPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

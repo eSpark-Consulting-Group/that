@@ -116,7 +116,7 @@
                     Width="140"/>
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource OperationStatusColumn}"
-                    SortMemberPath="ValkyrieAnalysisResult.OperationStatusColumn"
+                    SortMemberPath="ValkyrieAnalysisResult.OperationStatus"
                     IsFilterable="False"
                     Header="Status"  
                     TextAlignment="Left"
@@ -128,7 +128,7 @@
                     IsFilterable="False"
                     Header="White Listed"  
                     TextAlignment="Center"
-                    Width="75"/>
+                    Width="85"/>
                 
 
 
