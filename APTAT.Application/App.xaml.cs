@@ -28,6 +28,28 @@ namespace APTAT.Application
             System.Windows.Application.Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            InitTraceListener();
+            Trace.WriteLine("APT TOOL started"+DateTime.UtcNow);
+            Trace.Flush();
+        }
+
+        private static void InitTraceListener()
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Comodo");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = Path.Combine(path, "APTAT");
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = Path.Combine(path, "apttool.log");
+            Trace.Listeners.Add(new TextWriterTraceListener(path, "ValkyrieListener"));
         }
 
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
