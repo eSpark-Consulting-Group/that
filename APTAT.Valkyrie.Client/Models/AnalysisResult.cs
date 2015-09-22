@@ -1,10 +1,7 @@
 ﻿using APTAT.Valkyrie.Client.Contracts;
 using APTAT.Valkyrie.Client.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace APTAT.Valkyrie.Client
 {
@@ -20,8 +17,13 @@ namespace APTAT.Valkyrie.Client
             result.Verdict = basicInfo.Verdict;
             result.IsWhiteListed = basicInfo.IsWhiteListed;
             result.ReturnCode = basicInfo.ReturnCode;
+
+            result.OperationStatus = result.ReturnCode.ToString();
+          
             return result;
         }
+
+        
 
         public static AnalysisResult Create(SubmitToAutomaticResponse automaticResponse)
         {
@@ -33,6 +35,7 @@ namespace APTAT.Valkyrie.Client
             result.IsWhiteListed = automaticResponse.IsWhiteListed;
             result.MalwareProbability = automaticResponse.MalwareProbability;
             result.ReturnCode = automaticResponse.ReturnCode;
+            result.OperationStatus = result.ReturnCode.ToString();
             return result;
         }
 
@@ -41,19 +44,33 @@ namespace APTAT.Valkyrie.Client
         public bool IsWhiteListed { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }
         public InfoVerdictEnum Verdict { get; private set; }
+
         public string VerdictString
         {
-            get
-            {
-                return Verdict == InfoVerdictEnum.Undetected ? "No Threat Found" : Verdict.ToString();
-            }
+            get { return Verdict == InfoVerdictEnum.Undetected ? "No Threat Found" : Verdict.ToString(); }
         }
+
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
 
-        internal static AnalysisResult CreateSkipInfo(string sha1, string reason)
+        internal static AnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
-            return new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.Skipped, IsWhiteListed = false, LastAnalysisDate = null};
+            var result = new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotUploadedToValkyrie , IsWhiteListed = false, LastAnalysisDate = null};
+            switch (skippReasonEnum)
+            {
+                case SkippReasonEnum.Skipped:
+                    result.OperationStatus = "Exceed size limit (25 MB).";
+                    break;
+                case SkippReasonEnum.Cancelled:
+                    result.OperationStatus = "Cancelled by user.";
+                    break;
+                case SkippReasonEnum.Failed:
+                    result.OperationStatus = reason;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("skippReasonEnum", skippReasonEnum, null);
+            }
+            return result;
         }
 
         public float MalwareProbability { get; set; }
@@ -61,5 +78,7 @@ namespace APTAT.Valkyrie.Client
         public DateTime? FirstAnalysisDate { get; set; }
 
         public ErrorCodesEnum ReturnCode { get; set; }
+
+        public string OperationStatus { get; set; }
     }
 }

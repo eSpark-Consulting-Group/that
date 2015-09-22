@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Contracts;
@@ -21,8 +21,6 @@ namespace APTAT.Valkyrie.Client
     {
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
-        private DateTime _dateStart;
-        private DateTime _dateEnd;
         private readonly string _clientId;
         private int _fileScanned;
         public int FileScanned
@@ -35,26 +33,12 @@ namespace APTAT.Valkyrie.Client
 
         public int FilesCount { get; private set; }
 
-        private ConcurrentBag<AnalysisResult> _analysisResults;
-        public ConcurrentBag<AnalysisResult> AnalysisResults
-        {
-            get
-            {
-                return _analysisResults;
-            }
-
-            set
-            {
-                _analysisResults = value;
-            }
-        }
+        public ConcurrentBag<AnalysisResult> AnalysisResults { get; set; }
 
         public ValkyrieClient(string cientId)
         {
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
-
             _clientId = cientId;
-
         }
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -65,7 +49,6 @@ namespace APTAT.Valkyrie.Client
             try
             {
                 _machineCount = machineCount;
-                _dateStart = DateTime.UtcNow;
 
                 var machineId = NetAddressHelper.GetMacWithIPAddress();
 
@@ -119,10 +102,8 @@ namespace APTAT.Valkyrie.Client
                         OnAnalyzeCompleted(exception);
                     }
 
-                }, TaskCreationOptions.None, cancellationToken
-                    ).ContinueWith(OnAnalyzeCompleted, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
-
-
+                }, TaskCreationOptions.None, cancellationToken)
+                .ContinueWith(OnAnalyzeCompleted, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
 
             }
             catch (Exception exception)
@@ -130,11 +111,9 @@ namespace APTAT.Valkyrie.Client
                 var tmp = AnalyzeCompleted;
                 if (tmp != null)
                 {
-                    var agrEx = new AggregateException(new[] { exception });
+                    var agrEx = new AggregateException(exception);
                     tmp(this, new AnalyzeCompletedEventArgs<AnalysisResult>(AnalysisResults.ToArray(), agrEx, false, null));
                 }
-                // OnAnalyzeCompleted(exception);
-                //throw;
             }
         }
 
@@ -217,7 +196,15 @@ namespace APTAT.Valkyrie.Client
                     }
                     catch (Exception e)
                     {
-                        AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message));
+                        if (e is WebException && e.Message == "The request was aborted: The request was canceled.")
+                        {
+                            AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, "The request was canceled by user", SkippReasonEnum.Cancelled));
+                        }
+                        else
+                        {
+                            AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message, SkippReasonEnum.Failed));    
+                        }
+                        
                         Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
                         Trace.Flush();
 
@@ -237,14 +224,16 @@ namespace APTAT.Valkyrie.Client
                     var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                     var orgPath = @"\\" + f.Ip + @"\" + f.Path;
                     UploadFile(clientId, filePath, orgPath);
-                    File.Delete(filePath);
                 }
             }
         }
 
         public void AnalyzeAsyncCancel()
         {
-            _cancellationTokenSource.Cancel();
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+            }
         }
 
         public event AnalyzeCompletedEventHandler<AnalysisResult> AnalyzeCompleted;
@@ -281,7 +270,6 @@ namespace APTAT.Valkyrie.Client
         }
         private void OnAnalyzeCompleted(Task task)
         {
-            _dateEnd = DateTime.UtcNow;
             ValkyrieService.EndScan(new EndScanRequest(_apiKey, _machineCount));
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Completed for API_KEY = {1}", DateTime.UtcNow, _apiKey));
             Trace.Flush();
@@ -315,61 +303,76 @@ namespace APTAT.Valkyrie.Client
 
         private void UploadFile(string clientId, string filePath, string originalFilePath)
         {
-
-            var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
-
-            if (_cancellationTokenSource.IsCancellationRequested)
+            try
             {
-                AddResult(AnalysisResult.CreateSkipInfo(sha1, "Cancelled by user."));
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} cancelled by user", DateTime.UtcNow, originalFilePath));
-                Trace.Flush();
-                return;
+                var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
 
-            }
-
-            FileInfo f = new FileInfo(filePath);
-
-
-            if (f.Length > MaxFileLenght)
-            {
-                AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB."));
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} greater than 25 Mb", DateTime.UtcNow, originalFilePath));
-                Trace.Flush();
-                return;
-            }
-
-            // throw new NotSupportedException("Test");
-            var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
-            BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
-            if (basicInfo.ReturnCode != ErrorCodesEnum.Success) throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
-
-            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}", DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
-            Trace.Flush();
-
-            if (basicInfo.Presence) 
-            {
-                AnalysisResult result = AnalysisResult.Create(basicInfo);
-                AddResult(result);
-            }
-            else
-            {
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]", DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
-                Trace.Flush();
-                var request = new SubmitToAutomaticRequest
+                if (_cancellationTokenSource.IsCancellationRequested)
                 {
-                    Client_id = clientId,
-                    ApiKey = _apiKey,
-                    SubmitToken = basicInfo.SubmitToken,
-                    FilePath = originalFilePath
-                };
-                var payload = request.ToNameValueCollection();
+                    AddResult(AnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled));
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} cancelled by user", DateTime.UtcNow,
+                        originalFilePath));
+                    Trace.Flush();
+                    return;
 
-                string originalFileName = Path.GetFileName(originalFilePath);
-                var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName,_cancellationTokenSource.Token);
-                var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
-                if (response.ReturnCode != ErrorCodesEnum.Success) throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
-                var result = AnalysisResult.Create(response);
-                AddResult(result);
+                }
+
+                FileInfo f = new FileInfo(filePath);
+
+
+                if (f.Length > MaxFileLenght)
+                {
+                    AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.", SkippReasonEnum.Skipped));
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} greater than 25 Mb", DateTime.UtcNow,
+                        originalFilePath));
+                    Trace.Flush();
+                    return;
+                }
+
+                // throw new NotSupportedException("Test");
+                var infoRequeast = new InfoRequest { Client_id = clientId, SHA1 = sha1, ApiKey = _apiKey };
+                BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
+                if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
+                    throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
+
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}",
+                    DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                Trace.Flush();
+
+                if (basicInfo.Presence) 
+                {
+                    AnalysisResult result = AnalysisResult.Create(basicInfo);
+                    AddResult(result);
+                }
+                else
+                {
+                    Trace.WriteLine(
+                        string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]",
+                            DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                    Trace.Flush();
+                    var request = new SubmitToAutomaticRequest
+                    {
+                        Client_id = clientId,
+                        ApiKey = _apiKey,
+                        SubmitToken = basicInfo.SubmitToken,
+                        FilePath = originalFilePath
+                    };
+                    var payload = request.ToNameValueCollection();
+
+                    string originalFileName = Path.GetFileName(originalFilePath);
+                    var uploadResult = MultipartPostHelper.Post(filePath,
+                        ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName,
+                        _cancellationTokenSource.Token);
+                    var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
+                    if (response.ReturnCode != ErrorCodesEnum.Success)
+                        throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+                    var result = AnalysisResult.Create(response);
+                    AddResult(result);
+                }
+            }
+            finally
+            {
+                File.Delete(filePath);
             }
         }
 

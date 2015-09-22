@@ -1,6 +1,13 @@
 ﻿using System.ComponentModel;
 namespace APTAT.Valkyrie.Client.Enums
 {
+    public enum SkippReasonEnum
+    {
+        Skipped, 
+        Cancelled, 
+        Failed
+    }
+
     public enum InfoVerdictEnum
     {
         /// <summary>
@@ -24,6 +31,10 @@ namespace APTAT.Valkyrie.Client.Enums
         /// </summary>
         NotReady = 100,
 
-        Skipped = 111
+        
+        [Description("Not uploaded")]
+        NotUploadedToValkyrie = 101
+
+        
     }
 }

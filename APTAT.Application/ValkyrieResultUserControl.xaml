@@ -74,7 +74,11 @@
                 <DataTemplate x:Key="VerdictColumn">
                     <TextBlock  Text="{Binding ValkyrieAnalysisResult.VerdictString, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
                 </DataTemplate>
-                
+
+                <DataTemplate x:Key="OperationStatusColumn">
+                    <TextBlock  Text="{Binding ValkyrieAnalysisResult.OperationStatus, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
+                </DataTemplate>
+
                 <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="ValkyrieNameTemplateSelector" 
                                                                 FileTemplate="{StaticResource FileInfoTemplate}"
                                                                 ComputerTemplate="{StaticResource ComputerInfoTemplate}"/>
@@ -110,6 +114,13 @@
                     Header="Verdict"  
                     TextAlignment="Left"
                     Width="140"/>
+                <telerik:GridViewColumn 
+                    CellTemplate="{StaticResource OperationStatusColumn}"
+                    SortMemberPath="ValkyrieAnalysisResult.OperationStatusColumn"
+                    IsFilterable="False"
+                    Header="Status"  
+                    TextAlignment="Left"
+                    Width="240"/>
 
                 <telerik:GridViewColumn                    
                     CellTemplate="{StaticResource WhiteListedColumn}"
@@ -117,7 +128,7 @@
                     IsFilterable="False"
                     Header="White Listed"  
                     TextAlignment="Center"
-                    Width="80"/>
+                    Width="75"/>
                 
 
 

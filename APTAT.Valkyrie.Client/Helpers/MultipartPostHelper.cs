@@ -14,6 +14,8 @@ namespace APTAT.Valkyrie.Client
         {
             Uri uri = new Uri(url);
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
+            webrequest.Proxy = WebRequest.GetSystemWebProxy();
+
             cancellationToken.Register(() =>
             {
                 webrequest.Abort();
@@ -46,7 +48,7 @@ namespace APTAT.Valkyrie.Client
 
         private static string SubmitFormData(string uploadfile, HttpWebRequest webrequest, string boundary, string postHeader)
         {
-            string serverResponse = String.Empty;
+            string serverResponse;
             byte[] postHeaderBytes = Encoding.UTF8.GetBytes(postHeader);
             byte[] boundaryBytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "--\r\n");
             using (FileStream fileStream = new FileStream(uploadfile, FileMode.Open, FileAccess.Read, FileShare.Read))

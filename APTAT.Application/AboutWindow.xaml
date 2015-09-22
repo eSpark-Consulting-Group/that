@@ -66,13 +66,13 @@
                 <TextBlock Grid.Row="2" Grid.Column="1"
                            Text="Product Version:" FontFamily="Segoe UI" Margin="15,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
                 <TextBlock Name="txtProductVersion" Grid.Row="2" Grid.Column="2"
-                           Text="1.0.0.0" FontFamily="Segoe UI" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
+                           Text="1.1.0.13892" FontFamily="Segoe UI" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
                 
                 
                
                     <Button Grid.Row="3" Grid.ColumnSpan="1" HorizontalAlignment="Right" Content="Close" Margin="0,0,15,5"  Click="OnBackClick" Style="{StaticResource ButtonHighlightStyle}" Grid.Column="2" Width="120"/>
                 <TextBlock Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Left"
-                           Text="© 2014 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
+                           Text="© 2015 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
                            Margin="24,20,0,0" Foreground="#878787" FontSize="13" ></TextBlock>
                 
             </Grid>
