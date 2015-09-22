@@ -66,7 +66,7 @@
                 <TextBlock Grid.Row="2" Grid.Column="1"
                            Text="Product Version:" FontFamily="Segoe UI" Margin="15,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
                 <TextBlock Name="txtProductVersion" Grid.Row="2" Grid.Column="2"
-                           Text="1.1.0.13892" FontFamily="Segoe UI" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
+                           Text="1.1.0.13895" FontFamily="Segoe UI" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
                 
                 
                

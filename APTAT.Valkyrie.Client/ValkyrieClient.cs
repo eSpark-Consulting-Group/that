@@ -339,7 +339,7 @@ namespace APTAT.Valkyrie.Client
                     DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
                 Trace.Flush();
 
-                if (basicInfo.Presence) 
+                if (basicInfo.Presence)
                 {
                     AnalysisResult result = AnalysisResult.Create(basicInfo);
                     AddResult(result);
@@ -370,6 +370,11 @@ namespace APTAT.Valkyrie.Client
                     AddResult(result);
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+               
             finally
             {
                 File.Delete(filePath);

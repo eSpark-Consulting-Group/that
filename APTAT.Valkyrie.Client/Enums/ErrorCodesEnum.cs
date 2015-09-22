@@ -9,7 +9,7 @@ namespace APTAT.Valkyrie.Client.Enums
         public static string GetEnumDescription(this Enum value)
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());
-
+            if(fi == null) throw new InvalidOperationException("Not supported enum value "+value);
             DescriptionAttribute[] attributes =
                 (DescriptionAttribute[])fi.GetCustomAttributes(
                 typeof(DescriptionAttribute),
@@ -53,6 +53,9 @@ namespace APTAT.Valkyrie.Client.Enums
         [Description("API Key is invalid")]
         InvalidApiKey = 109,
 
+        [Description("Invalid file type")]
+        InvalidFileType = 110,
+        
         [Description("Component Response Timeout")]
         ComponentResponseTimeout = 201,
 
