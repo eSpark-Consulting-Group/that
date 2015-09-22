@@ -29,7 +29,7 @@ namespace APTAT.Application
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             InitTraceListener();
-            Trace.WriteLine("APT TOOL started"+DateTime.UtcNow);
+            Trace.WriteLine("APTAT started: " + DateTime.UtcNow);
             Trace.Flush();
         }
 
