@@ -237,6 +237,11 @@ namespace APTAT.Application.Models
             }
         }
 
+        public bool ShowFlsReportsMenu
+        {
+            get { return !IsValkyrieReportEnabled; }
+        }
+
         public bool IsValkyrieReportEnabled
         {
             get { return _isValkyrieReportEnabled; }
@@ -244,6 +249,7 @@ namespace APTAT.Application.Models
             {
                 _isValkyrieReportEnabled = value;
                 RaisePropertyChanged("IsValkyrieReportEnabled");
+                RaisePropertyChanged("ShowFlsReportsMenu");
             }
         }
 

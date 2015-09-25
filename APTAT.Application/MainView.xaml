@@ -163,12 +163,12 @@
                     <telerik:RadDropDownButton.DropDownContent>
 
                         <telerik:RadContextMenu IconColumnWidth="0" Width="154" BorderThickness="0">
-                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive" Click="OnExecutiveReportClick" />
-                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device" Click="OnPerDeviceReportClick" />
-                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Program" Click="OnPerProgramReportClick" />
-                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive Valkyrie" Click="OnExecutiveReportValkyrieClick" IsEnabled="{Binding IsValkyrieReportEnabled}"/>
-                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device Valkyrie" Click="OnPerDeviceReportValkyrieClick" IsEnabled="{Binding IsValkyrieReportEnabled}"/>
-                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Program Valkyrie" Click="OnPerProgramReportValkyrieClick" IsEnabled="{Binding IsValkyrieReportEnabled}"/>
+                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive" Click="OnExecutiveReportClick"  Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device" Click="OnPerDeviceReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Program" Click="OnPerProgramReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive Valkyrie" Click="OnExecutiveReportValkyrieClick"  Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device Valkyrie" Click="OnPerDeviceReportValkyrieClick" Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Program Valkyrie" Click="OnPerProgramReportValkyrieClick" Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </telerik:RadContextMenu>
 
                     </telerik:RadDropDownButton.DropDownContent>
