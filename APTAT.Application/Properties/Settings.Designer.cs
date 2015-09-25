@@ -22,5 +22,53 @@ namespace APTAT.Application.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProxyUrl {
+            get {
+                return ((string)(this["ProxyUrl"]));
+            }
+            set {
+                this["ProxyUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProxyLogin {
+            get {
+                return ((string)(this["ProxyLogin"]));
+            }
+            set {
+                this["ProxyLogin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProxyPassword {
+            get {
+                return ((string)(this["ProxyPassword"]));
+            }
+            set {
+                this["ProxyPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsCredentialsRequired {
+            get {
+                return ((bool)(this["IsCredentialsRequired"]));
+            }
+            set {
+                this["IsCredentialsRequired"] = value;
+            }
+        }
     }
 }

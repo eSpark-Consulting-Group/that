@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
+using System.Net;
 using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
@@ -629,6 +630,7 @@ namespace APTAT.Core
             _descentSubSystem.Init(catalog);
             _commandFactory = new CommandFactory(_descentSubSystem);
             _changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
+           
             _valkyrieClient = new ValkyrieClient("MY_CLIENT");
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
             _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
@@ -884,11 +886,14 @@ namespace APTAT.Core
             _valkyrieClient.AnalyzeAsyncCancel();
         }
         
-        public void StartValkyrieAnalysisAsync(string login, string password)
-        {            
+        public void StartValkyrieAnalysisAsync(string login, string password, NetworkCredential proxyCredential)
+        {
+            var apiKey = _valkyrieClient.Register(proxyCredential.UserName, proxyCredential.Password);
+
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var distinctFileList = GetDistinctFileInfo(results);
-            _valkyrieClient.AnalyzeAsync(distinctFileList, login, password,results.Count);           
+
+            _valkyrieClient.AnalyzeAsync(distinctFileList, login, password,results.Count, apiKey);           
         }
 
         public List<FileResult> ValkyrieAnalysisResult { get; set; }

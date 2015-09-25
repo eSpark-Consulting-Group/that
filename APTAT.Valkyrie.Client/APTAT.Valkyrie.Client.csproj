@@ -83,6 +83,7 @@
     <Compile Include="Contracts\RegisterWithMachineIdResponse.cs" />
     <Compile Include="Models\ValkyrieFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProxySettings.cs" />
     <Compile Include="ScanInProgressEventArgs.cs" />
     <Compile Include="StartScanRequest.cs" />
     <Compile Include="ValkyrieApiUrls.cs" />

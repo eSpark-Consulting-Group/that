@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Contracts;
@@ -44,26 +45,55 @@ namespace APTAT.Valkyrie.Client
         private CancellationTokenSource _cancellationTokenSource;
         private TaskScheduler _taskScheduler;
 
-        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password, int machineCount)
+        public string Register(string proxyLogin = null, string proxyPassword = null)
+        {
+            ProxySettings.Proxy = TryGetProxy(proxyLogin, proxyPassword);
+            var machineId = NetAddressHelper.GetMacWithIPAddress();
+            RegisterWithMachineIdResponse regInfo = null;
+
+            regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest { MachineId = machineId });
+
+            if (regInfo.ReturnCode != 0)
+            {
+                throw new InvalidOperationException("Could not Register with Machine ID " + machineId, new InvalidOperationException(regInfo.ResultDescription));
+            }
+            
+            return  regInfo.ApiKey;
+        }
+
+        public IWebProxy TryGetProxy(string login, string password)
+        {
+            var proxy = WebRequest.GetSystemWebProxy();
+            if (!String.IsNullOrWhiteSpace(login) && !String.IsNullOrWhiteSpace(password))
+            {
+                proxy.Credentials = new NetworkCredential(login, password);
+            }
+            return proxy;
+        }
+
+        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password, int machineCount, string apiKey)
         {
             try
             {
+         
+
                 _machineCount = machineCount;
 
-                var machineId = NetAddressHelper.GetMacWithIPAddress();
+                //var machineId = NetAddressHelper.GetMacWithIPAddress();
+                // RegisterWithMachineIdResponse regInfo  = null;
+              
+                // regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest { MachineId = machineId });
+              
+                
 
-                var regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest
-                {
-                    MachineId = machineId
-                });
-
-                if (regInfo.ReturnCode != 0)
-                {
-                    throw new InvalidOperationException("Could not Register with Machine ID " + machineId, new InvalidOperationException(regInfo.ResultDescription));
-                }
+                //if (regInfo.ReturnCode != 0)
+                //{
+                //    throw new InvalidOperationException("Could not Register with Machine ID " + machineId, new InvalidOperationException(regInfo.ResultDescription));
+                //}
 
 
-                _apiKey = regInfo.ApiKey;
+                //_apiKey = regInfo.ApiKey;
+                _apiKey = apiKey;
 
                 Trace.WriteLine("API_KEY = " + _apiKey);
                 Trace.Flush();
@@ -72,6 +102,8 @@ namespace APTAT.Valkyrie.Client
                 OnAnalyzeProgressChanged();
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Started for API_KEY = {1}", DateTime.UtcNow, _apiKey));
                 Trace.Flush();
+
+                
 
                 var startScanResult = ValkyrieService.StartScan(new StartScanRequest(_apiKey));
                 if (startScanResult.ReturnCode != 0)
@@ -240,6 +272,8 @@ namespace APTAT.Valkyrie.Client
         public event ProgressChangedEventHandler AnalyzeProgressChanged;
 
         private int _machineCount;
+        private string _proxyLogin;
+        private string _proxyPassword;
 
         private void OnAnalyzeCompleted()
         {

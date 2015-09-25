@@ -1,7 +1,4 @@
 ﻿using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using System.Windows.Threading;
 using APTAT.Application.Models;
 using APTAT.Core;
 using APTAT.Core.Descent;
@@ -13,6 +10,8 @@ using APTAT.Core.Reports;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Valkyrie.Client;
 using System.ComponentModel;
+using System.Net;
+using System.Windows;
 
 namespace APTAT.Application.Services
 {
@@ -456,7 +455,35 @@ namespace APTAT.Application.Services
 
         public void BeginValkyrieAnalysis(string login, string password)
         {
-           _manager.StartValkyrieAnalysisAsync(login, password);                        
+            try
+            {
+                _manager.StartValkyrieAnalysisAsync(login, password, new NetworkCredential(Properties.Settings.Default.ProxyLogin, Properties.Settings.Default.ProxyPassword));
+            }
+            catch (WebException webException)
+            {
+                HttpStatusCode code = ((HttpWebResponse)webException.Response).StatusCode;
+                if (code == HttpStatusCode.ProxyAuthenticationRequired)
+                {
+                    Trace.WriteLine(code.ToString());
+                    
+                    SettingsWindow window = new SettingsWindow();
+                    window.Owner = System.Windows.Application.Current.MainWindow;
+                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    window.ShowDialog();
+                    Properties.Settings.Default.ProxyLogin = window.LoginTextBox.Text;
+                    Properties.Settings.Default.ProxyPassword = window.PasswordBox.Password;
+                    Properties.Settings.Default.Save();
+                    Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+
+                    BeginValkyrieAnalysis(login,password);
+                    //_manager.StartValkyrieAnalysisAsync(login, password, new NetworkCredential(window.LoginTextBox.Text, window.PasswordBox.Password));
+                }
+                else
+                {
+                    throw webException;
+                }
+            }
+              
         }
 
         public string GetValkyrieDetailsLink()

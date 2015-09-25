@@ -80,7 +80,10 @@ namespace APTAT.Valkyrie.Client
 #if DEBUG
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 #endif
-                client.Proxy = WebRequest.GetSystemWebProxy();
+                if (ProxySettings.Proxy != null)
+                {
+                    client.Proxy = ProxySettings.Proxy;
+                }
                 byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);

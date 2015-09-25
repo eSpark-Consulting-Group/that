@@ -6,8 +6,12 @@
              Startup="Application_Startup"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:telerikMaskedTextBox="clr-namespace:Telerik.Windows.Controls.MaskedTextBox;assembly=Telerik.Windows.Controls.Input"
+             xmlns:properties="clr-namespace:APTAT.Application.Properties"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        
+            
+        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/System.Windows.xaml"/>
@@ -17,7 +21,7 @@
                 <!--<ResourceDictionary Source="/Telerik.Windows.Themes.Windows7;component/Themes/Telerik.Windows.Controls.GridView.xaml"/>-->
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
+            <properties:Settings x:Key="Settings" />
 
             <sys:String x:Key="CESMLink">http://www.comodo.com/business-enterprise/cesm3/index_v2.php</sys:String>
             <sys:String x:Key="BuyCesSmallText">Protect your environment from APT’s</sys:String>

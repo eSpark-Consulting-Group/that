@@ -213,6 +213,10 @@
     <Compile Include="Models\ThreatDetailsViewModel.cs" />
     <Compile Include="Models\ThreatInfoItem.cs" />
     <Compile Include="Models\ViewModel.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StartScanByIpView.xaml.cs">
       <DependentUpon>StartScanByIpView.xaml</DependentUpon>
     </Compile>
@@ -301,6 +305,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ScanInfoTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

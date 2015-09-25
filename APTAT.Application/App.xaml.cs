@@ -31,6 +31,10 @@ namespace APTAT.Application
             InitTraceListener();
             Trace.WriteLine("APTAT started: " + DateTime.UtcNow);
             Trace.Flush();
+
+            //Application.Properties.Settings.Default.ProxyLogin = "";
+            //Application.Properties.Settings.Default.ProxyPassword = "";
+            //Application.Properties.Settings.Default.Save();
         }
 
         private static void InitTraceListener()

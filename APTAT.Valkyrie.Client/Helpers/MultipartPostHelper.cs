@@ -14,7 +14,11 @@ namespace APTAT.Valkyrie.Client
         {
             Uri uri = new Uri(url);
             HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
-            webrequest.Proxy = WebRequest.GetSystemWebProxy();
+            if (ProxySettings.Proxy != null)
+            {
+                webrequest.Proxy = ProxySettings.Proxy;
+            }
+
 
             cancellationToken.Register(() =>
             {
