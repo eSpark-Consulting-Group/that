@@ -69,7 +69,7 @@ namespace APTAT.Valkyrie.ClientTest
            
 
             var files = MockData();
-            _client.AnalyzeAsync(files,"user", "test", 1);
+            //_client.AnalyzeAsync(files,"user", "test", 1,);
 
         }
 

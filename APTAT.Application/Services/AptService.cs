@@ -43,7 +43,7 @@ namespace APTAT.Application.Services
     public class AptService : IAptService, IChangeTrackingListener
     {
         public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
-        
+
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
 
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
@@ -69,7 +69,7 @@ namespace APTAT.Application.Services
 
 
         private readonly AptAtManager _manager;
-        
+
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
 
@@ -84,7 +84,7 @@ namespace APTAT.Application.Services
         {
             get
             {
-                if(_instance == null)
+                if (_instance == null)
                 {
                     _instance = new AptService();
                 }
@@ -98,7 +98,7 @@ namespace APTAT.Application.Services
             _manager = new AptAtManager(this);
             _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
-     
+
         }
 
         void OnValkyrieAnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -119,13 +119,13 @@ namespace APTAT.Application.Services
             }
         }
 
-        
+
 
         public void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState)
         {
-            IAptReportBuilder reportBuilder =  _manager.GetAptReportBuilder();
+            IAptReportBuilder reportBuilder = _manager.GetAptReportBuilder();
             reportBuilder.ReportCompleted += OnReportCompleted;
-            
+
             reportBuilder.BeginBuildReport(operationGuid, ToReportType(reportKind), userState);
         }
 
@@ -142,7 +142,7 @@ namespace APTAT.Application.Services
             };
             DispatcherHelper.Current.BeginInvoke(action);
 
-           
+
         }
 
         public void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState)
@@ -170,7 +170,7 @@ namespace APTAT.Application.Services
                     ScanProgressChanged(this, args);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);   
+            DispatcherHelper.Current.BeginInvoke(action);
         }
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
@@ -184,19 +184,19 @@ namespace APTAT.Application.Services
                 BeginScanCompleted(this, args);
 
             }
-     
+
         }
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
         {
             //Logger.WriteLog("Scan Completed");
-           ScanCompletedEventArgs args = new ScanCompletedEventArgs();
+            ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
             args.CanceledCount = e.CalceledCount;
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
             args.FilesStatistics = e.FilesStatistics;
-            
+
             args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
 
 
@@ -215,8 +215,8 @@ namespace APTAT.Application.Services
         {
             DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
             IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets, admin, password);
-            
-            resolver.TargetsResolved += OnTargetsResolved;  
+
+            resolver.TargetsResolved += OnTargetsResolved;
             resolver.BeginResolve(userState);
         }
 
@@ -225,7 +225,7 @@ namespace APTAT.Application.Services
 
             //File.AppendAllText("OnTargetsResolved.txt", String.Format("Error {0}; Targets {1}", e.Error, e.Targets != null ? e.Targets.Length.ToString() : "e.Targets == null"));
 
-            if(e.Error == null)
+            if (e.Error == null)
             {
                 List<ThreatInfoItem> result = new List<ThreatInfoItem>(e.Targets.Length);
                 foreach (DeploymentTarget deploymentTarget in e.Targets)
@@ -236,7 +236,7 @@ namespace APTAT.Application.Services
                         Name = deploymentTarget.Name,
                         IpAddress = deploymentTarget.IPAddress,
                         IsRootItem = true,
-                        IsOnline =  deploymentTarget.Online,
+                        IsOnline = deploymentTarget.Online,
                         ComputerGuid = deploymentTarget.TargetUid
                     };
 
@@ -276,9 +276,9 @@ namespace APTAT.Application.Services
 
         private void OnRootDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
-            if(e.Error == null)
+            if (e.Error == null)
             {
-                DomainTarget domainRoot = (DomainTarget) e.Targets[0];
+                DomainTarget domainRoot = (DomainTarget)e.Targets[0];
                 DirectoryItem root = new DirectoryItem
                 {
                     DnsName = domainRoot.DnsName,
@@ -354,7 +354,7 @@ namespace APTAT.Application.Services
                     }
                 };
                 DispatcherHelper.Current.BeginInvoke(action);
-                
+
             }
             else
             {
@@ -366,7 +366,7 @@ namespace APTAT.Application.Services
                         GetDirectoryItemsCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);   
+                DispatcherHelper.Current.BeginInvoke(action);
             }
         }
 
@@ -374,7 +374,7 @@ namespace APTAT.Application.Services
         public void GetScanResult(Guid targetUid, Object userState)
         {
             ScanResult scanResult = _manager.GetScanResultByTargetUid(targetUid);
-            
+
             ScanResultItem resultItem = new ScanResultItem
             {
                 TargetUid = scanResult.TargetUid,
@@ -404,12 +404,12 @@ namespace APTAT.Application.Services
                     IsUnknown = m.Cloud == CloudVerdict.Unknown || m.Cloud == CloudVerdict.FirstSeen
                 }
                 ).ToArray();
-        
+
 
             resultItem.BadFiles = badFileItems;
-            
 
-            if(GetScanResultCompleted != null)
+
+            if (GetScanResultCompleted != null)
             {
                 GetScanResultCompleted(this, new GetScanResultCompletedEventArgs(resultItem, userState));
             }
@@ -444,7 +444,7 @@ namespace APTAT.Application.Services
                 }
             };
 
-            DispatcherHelper.Current.BeginInvoke(action);            
+            DispatcherHelper.Current.BeginInvoke(action);
 
         }
 
@@ -452,6 +452,42 @@ namespace APTAT.Application.Services
         {
             _manager.StopScan();
         }
+
+
+        //private void SetProxy()
+        //{
+        //    var proxy = IsProxyRequired();
+        //    if (proxy != null)
+        //    {
+        //        SettingsWindow window = new SettingsWindow();
+        //        window.Owner = System.Windows.Application.Current.MainWindow;
+        //        window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        //        if (window.ShowDialog() == true)
+        //        {
+        //            string message = String.Format("The server {0} requires a username and password.", proxy);
+        //            window.MessageText.Text = message;
+        //            Properties.Settings.Default.ProxyLogin = window.LoginTextBox.Text;
+        //            Properties.Settings.Default.ProxyPassword = window.PasswordBox.Password;
+        //            Properties.Settings.Default.Save();
+        //            Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+        //        }
+        //    }
+        //}
+
+
+        //private static Uri IsProxyRequired()
+        //{
+        //    Uri exampleUri = new Uri("https://www.comodo.com");
+        //    IWebProxy defaultProxy = WebRequest.GetSystemWebProxy();
+            
+        //    bool isBypassed = defaultProxy.IsBypassed(exampleUri);
+        //    if (isBypassed == false)
+        //    {
+        //        Uri proxyUri = defaultProxy.GetProxy(exampleUri);
+        //        return proxyUri;
+        //    }
+        //    return null;
+        //}
 
         public void BeginValkyrieAnalysis(string login, string password)
         {
@@ -465,17 +501,35 @@ namespace APTAT.Application.Services
                 if (code == HttpStatusCode.ProxyAuthenticationRequired)
                 {
                     Trace.WriteLine(code.ToString());
-                    
+
                     SettingsWindow window = new SettingsWindow();
                     window.Owner = System.Windows.Application.Current.MainWindow;
                     window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                    window.ShowDialog();
-                    Properties.Settings.Default.ProxyLogin = window.LoginTextBox.Text;
-                    Properties.Settings.Default.ProxyPassword = window.PasswordBox.Password;
-                    Properties.Settings.Default.Save();
-                    Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+                    
+                    string proxy = String.Empty;
+                    var defaultProxy = WebProxy.GetDefaultProxy();
+                    if(defaultProxy != null)
+                    {
+                        proxy = defaultProxy.Address.AbsoluteUri;   
+                    }
+                    
 
-                    BeginValkyrieAnalysis(login,password);
+                    string message = String.Format("The server {0} requires a username and password.", proxy);
+                    window.MessageText.Text = message;
+                    
+                    if (window.ShowDialog() == true)
+                    {                     
+                        Properties.Settings.Default.ProxyLogin = window.LoginTextBox.Text;
+                        Properties.Settings.Default.ProxyPassword = window.PasswordBox.Password;
+                        Properties.Settings.Default.Save();
+                        Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+
+                        BeginValkyrieAnalysis(login, password);
+                    }
+                    else
+                    {
+                        throw webException;
+                    }
                     //_manager.StartValkyrieAnalysisAsync(login, password, new NetworkCredential(window.LoginTextBox.Text, window.PasswordBox.Password));
                 }
                 else
@@ -483,12 +537,12 @@ namespace APTAT.Application.Services
                     throw webException;
                 }
             }
-              
+
         }
 
         public string GetValkyrieDetailsLink()
         {
-            return  _manager.GetValkyrieDetailsLink();
+            return _manager.GetValkyrieDetailsLink();
         }
 
         private DirectoryItemType FromDomainEntryType(DomainEntryType type)
@@ -576,7 +630,7 @@ namespace APTAT.Application.Services
 
                 default:
                     return ScanStage.Unknown;
-                    //  throw new ArgumentOutOfRangeException("stage");
+                //  throw new ArgumentOutOfRangeException("stage");
             }
         }
 
@@ -610,12 +664,12 @@ namespace APTAT.Application.Services
 
         private ReportType ToReportType(ReportKind kind)
         {
-            if(kind == ReportKind.Executive)
+            if (kind == ReportKind.Executive)
             {
                 return ReportType.Executive;
             }
 
-            if(kind == ReportKind.DetailedPerProgram)
+            if (kind == ReportKind.DetailedPerProgram)
             {
                 return ReportType.DetailedPerProgram;
             }
@@ -697,7 +751,7 @@ namespace APTAT.Application.Services
         public void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState)
         {
             EndpointAddressCollection ipAddressCollection = new EndpointAddressCollection();
-            foreach(IpAddressWrapper ipAddress in ipAddresses)
+            foreach (IpAddressWrapper ipAddress in ipAddresses)
             {
                 ipAddressCollection.Add(ipAddress.GetEndpointAddress().BaseEntity);
             }
@@ -752,6 +806,6 @@ namespace APTAT.Application.Services
 
 
 
-        
+
     }
 }

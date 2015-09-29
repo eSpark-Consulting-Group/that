@@ -29,5 +29,11 @@ namespace APTAT.Application
             var pwd = PasswordBox.Password;
             var login = LoginTextBox.Text;
         }
+
+        private void Button_CancelClick(object sender, RoutedEventArgs e)
+        {
+
+            this.DialogResult = false;
+        }
     }
 }
