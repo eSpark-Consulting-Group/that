@@ -50,7 +50,7 @@ namespace APTAT.Valkyrie.Client
 
             get
             {
-                if (Verdict == InfoVerdictEnum.NotUploadedToValkyrie) return "Not Uploaded";
+                if (Verdict == InfoVerdictEnum.NotAnalyzed) return "Not Analyzed";
                 if (Verdict == InfoVerdictEnum.Undetected) return "No Threat Found";
 
                 return Verdict.ToString();
@@ -62,7 +62,7 @@ namespace APTAT.Valkyrie.Client
 
         internal static AnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
-            var result = new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotUploadedToValkyrie , IsWhiteListed = false, LastAnalysisDate = null};
+            var result = new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotAnalyzed , IsWhiteListed = false, LastAnalysisDate = null};
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:

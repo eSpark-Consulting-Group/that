@@ -31,9 +31,9 @@ namespace APTAT.Valkyrie.Client.Enums
         /// </summary>
         NotReady = 100,
 
-        
-        [Description("Not uploaded")]
-        NotUploadedToValkyrie = 101
+
+        [Description("Not Analyzed")]
+        NotAnalyzed = 101
 
         
     }

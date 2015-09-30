@@ -550,6 +550,7 @@ namespace APTAT.Application.Models
         private static void ShowError(Exception exception)
         {
             if (exception == null) return;
+            if (exception is AggregateException) return;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(exception.Message);
             var ae = exception as AggregateException;
