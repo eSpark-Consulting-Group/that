@@ -55,9 +55,9 @@ namespace APTAT.Valkyrie.Client.Enums
 
         [Description("Invalid file type")]
         InvalidFileType = 110,
-        
-        [Description("Corrupted or protected archive")]
-        CorruptedOrProtectedArchive = 111, //CORRUPTED_OR_PROTECTED_ARCHIVE
+
+        [Description("Timeout extracting archive file")]
+        TimeoutExtractingArchiveFile = 111, //CORRUPTED_OR_PROTECTED_ARCHIVE
         
         [Description("No exe in archive file")]
         NoExeInArchiveFile = 112,
