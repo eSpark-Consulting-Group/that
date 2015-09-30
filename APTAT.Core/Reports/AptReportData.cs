@@ -473,6 +473,7 @@ namespace APTAT.Core.Reports
             IsWhiteListed = analysisResult.IsWhiteListed;
             IsSkipped = analysisResult.IsSkipped;
             SkipReason = analysisResult.SkipReason;
+            OperationStatus = analysisResult.OperationStatus;
         }
 
         public int TargetsCount
@@ -562,13 +563,21 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                return Verdict.ToString();
+                string  result = this.Verdict.GetEnumDescription();
+                if (this.IsSkipped)
+                {
+                    result += " (" + this.OperationStatus + ")";
+                }
+
+                return result;
             }
         }
 
         public bool IsSkipped { get; set; }
 
         public string SkipReason { get; set; }
+
+        public string OperationStatus { get; set; }
     }
 
     public abstract class ItemRatingInfo
