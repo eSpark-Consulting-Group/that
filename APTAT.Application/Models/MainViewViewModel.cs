@@ -73,7 +73,7 @@ namespace APTAT.Application.Models
             {
                 if (IsValkyrieScanInProgress == true)
                 {
-                    return String.Format(" of {0} files analysed", DistinctFilesCount);
+                    return String.Format(" of {0} unique files analysed", DistinctFilesCount);
                 }
                 return " unknown programs detected";
             }
@@ -653,7 +653,7 @@ namespace APTAT.Application.Models
             {
                 if (item.IsOnline == false)
                 {
-                    item.StatusMessage = "This computer is currently offline";
+                    item.StatusMessage = "This computer is not accessible";
                 }
             }
 
@@ -739,7 +739,7 @@ namespace APTAT.Application.Models
                 {
                     ThreatInfoItem infoItem = _onlineItems[j];
                     if (infoItem.ComputerGuid == scanProgress.ComputerGuid)
-                    {
+                    {                        
                         infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                         infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                         infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;

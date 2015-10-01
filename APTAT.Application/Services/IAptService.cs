@@ -116,6 +116,8 @@ namespace APTAT.Application.Services
         public Int32 MalwaresFound { get; set; }
 
         public FilesStatistics FilesStatistics { get; set; }
+
+        public int DistinctFileFound { get; set; }
     }
 
     public class BuildReportCompletedEventArgs : DomainEventArgs

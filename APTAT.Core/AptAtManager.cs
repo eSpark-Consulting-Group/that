@@ -704,7 +704,7 @@ namespace APTAT.Core
             return fileResults;
         }
 
-        private static List<ValkyrieFileInfo> GetDistinctFileInfo(ConcurrentDictionary<Guid, ScanResult> results)
+        public static List<ValkyrieFileInfo> GetDistinctFileInfo(ConcurrentDictionary<Guid, ScanResult> results)
         {
             Dictionary<string, ScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.TargetUid.ToString());
 
@@ -901,6 +901,13 @@ namespace APTAT.Core
         public string GetValkyrieDetailsLink()
         {
             return _valkyrieClient.GetValkyrieDetailsLink();
+        }
+
+        public int GetDistinctFileCount()
+        {
+            var results = _descentSubSystem.GetFirstScanResults().ScanResults;
+            var files = GetDistinctFileInfo(results);
+            return files.Count;
         }
     }
 

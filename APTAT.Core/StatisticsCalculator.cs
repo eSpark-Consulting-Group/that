@@ -35,9 +35,12 @@ namespace APTAT.Core
                     malwareFilesCount += scanResult.MalwareFilesCount;
                     emptyFilesCount += scanResult.EmptyFilesCount;
                     skippedFilesCount += scanResult.SkippedFilesCount;
+                    
                 }
             }
 
+            
+           
             return new FilesStatistics {EmptyFilesCount = emptyFilesCount, MalwareFilesCount = malwareFilesCount, SafeFilesCount = safeFilesCount, TotalFilesCound = totalFilesCound, UnknownFilesCount = unknownFilesCount, SkippedFilesCount = skippedFilesCount};
         }
     }

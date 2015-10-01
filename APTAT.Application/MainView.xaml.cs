@@ -135,12 +135,16 @@ namespace APTAT.Application
             //        e.FilesStatistics.SkippedFilesCount);
             //}
 
-            if (e.FilesStatistics.UnknownFilesCount > 0)
-            {
+
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown(s) found", Environment.NewLine,
                     e.FilesStatistics.UnknownFilesCount);
-            }
+
+
+
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Distinct Unknown(s) found", Environment.NewLine, e.DistinctFileFound);
+
             
+
 
             //if (e.FilesStatistics.SafeFilesCount> 0)
             //{
