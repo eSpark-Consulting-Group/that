@@ -54,22 +54,31 @@ namespace APTAT.Valkyrie.ClientTest
             _client.AnalyzeAsync(files, "user", "test", 1, apiKey);
 
 
-           // SubmitToManualFromBytes(files.First(), apiKey);
-            //SubmitToManualTest(files.First(), apiKey);
+            // SubmitToManualFromBytes(files.First(), apiKey);
+          //  SubmitToManualTest(files.First(), apiKey);
 
         }
 
-        private void SubmitToManualFromBytes(ValkyrieFileInfo file, string apiKey)
+        private SubmitToManualResponse SubmitToManualFromBytes(ValkyrieFileInfo file, string apiKey)
         {
             var filePath = "C:\\Temp\\7DDB5C8B108B46D773F4A88954E02401CEE9E624.tmp";
 
-
+            SubmitToManualResponse response = null;
             var bytes = File.ReadAllBytes(filePath);
             var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = file.Sha1 });
 
             if (info.Presence)
             {
-                return;
+                var req1 = new SubmitToManualRequestSHA1()
+                {
+                    ApiKey = apiKey,
+                    FilePath = filePath,
+                    Priority = 3,
+                    SHA1 = file.Sha1,
+                    SubmitToken = info.SubmitToken
+                };
+                
+                return ValkyrieService.SubmitToManualAnalysisWithoutUpload(req1);
             }
             else
             {
@@ -78,19 +87,21 @@ namespace APTAT.Valkyrie.ClientTest
                     ApiKey = apiKey,
                     //    Client_id = "MY_CLIENTID",
                     FilePath = filePath, //where file was found
-                    Priority = 5,
+                    Priority = 3,
                     SubmitToken = info.SubmitToken
                 };
 
-                ValkyrieService.SubmitToManualAnalysis(request, bytes, CancellationToken.None);
+                response = ValkyrieService.SubmitToManualAnalysis(request, bytes, CancellationToken.None);
             }
+            
+            return response;
         }
 
         private void SubmitToManualTest(ValkyrieFileInfo file, string apiKey)
         {
             var filePath = "C:\\Temp\\7DDB5C8B108B46D773F4A88954E02401CEE9E624.tmp";
 
-            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey,  SHA1 = file.Sha1 });
+            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = file.Sha1 });
 
             if (info.Presence)
             {

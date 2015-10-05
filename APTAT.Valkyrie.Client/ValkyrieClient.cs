@@ -6,14 +6,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Contracts;
 using APTAT.Valkyrie.Client.Enums;
 using APTAT.Valkyrie.Client.Helpers;
 using APTAT.Valkyrie.Client.Models;
-using Newtonsoft.Json;
 
 namespace APTAT.Valkyrie.Client
 {
@@ -49,16 +47,14 @@ namespace APTAT.Valkyrie.Client
         {
             ProxySettings.Proxy = TryGetProxy(proxyLogin, proxyPassword);
             var machineId = NetAddressHelper.GetMacWithIPAddress();
-            RegisterWithMachineIdResponse regInfo = null;
-
-            regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest { MachineId = machineId });
+            var regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest { MachineId = machineId });
 
             if (regInfo.ReturnCode != 0)
             {
                 throw new InvalidOperationException("Could not Register with Machine ID " + machineId, new InvalidOperationException(regInfo.ResultDescription));
             }
-            
-            return  regInfo.ApiKey;
+
+            return regInfo.ApiKey;
         }
 
         public IWebProxy TryGetProxy(string login, string password)
@@ -84,7 +80,7 @@ namespace APTAT.Valkyrie.Client
                 Thread.Sleep(2000);//time out asked by Valkyrie team 
                 OnAnalyzeProgressChanged();
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
-                Trace.Flush();                
+                Trace.Flush();
 
                 var startScanResult = ValkyrieService.StartScan(new StartScanRequest(apiKey));
                 if (startScanResult.ReturnCode != 0)
@@ -108,7 +104,7 @@ namespace APTAT.Valkyrie.Client
                 {
                     try
                     {
-                        SubmitToAutomaticAnalysis(_clientId, badFiles, login, password, _cancellationTokenSource.Token);
+                        SubmitToAutomaticAnalysis(badFiles, login, password, _cancellationTokenSource.Token);
                     }
                     catch (AggregateException exception)
                     {
@@ -140,8 +136,8 @@ namespace APTAT.Valkyrie.Client
                 WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe"
             };
-            var host = "\\\\" + ipAddress; //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
-            var target = host + "\\" + Path.GetPathRoot(fileName).Replace(":\\", "$");
+            //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
+            var target = string.Format("\\\\{0}\\{1}", ipAddress, Path.GetPathRoot(fileName).Replace(":\\", "$"));
             string destination = Path.Combine(destPath, sha1);
             string destinationFile = string.Format("{0}.tmp", destination);
             string source = target + fileName.Remove(0, 2);
@@ -183,7 +179,7 @@ namespace APTAT.Valkyrie.Client
             return valkyrieFolder;
         }
 
-        private void SubmitToAutomaticAnalysis(string clientId, List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
+        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
         {
             FilesCount = badFiles.Count;
 
@@ -203,8 +199,8 @@ namespace APTAT.Valkyrie.Client
                     try
                     {
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
-                        var orgPath = @"\\" + f.Ip + @"\" + f.Path;
-                        UploadFile(clientId, filePath, orgPath);
+                        var orgPath = f.GetFullPath();
+                        UploadFile(filePath, orgPath);
                         File.Delete(filePath);
                     }
                     catch (Exception e)
@@ -215,9 +211,9 @@ namespace APTAT.Valkyrie.Client
                         }
                         else
                         {
-                            AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message, SkippReasonEnum.Failed));    
+                            AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message, SkippReasonEnum.Failed));
                         }
-                        
+
                         Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
                         Trace.Flush();
 
@@ -234,8 +230,8 @@ namespace APTAT.Valkyrie.Client
             {
                 foreach (var f in badFiles)
                 {
-                    var tmpfilePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);                    
-                    UploadFile(clientId, tmpfilePath, f.GetFullPath());
+                    var tmpfilePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
+                    UploadFile(tmpfilePath, f.GetFullPath());
                 }
             }
         }
@@ -252,9 +248,6 @@ namespace APTAT.Valkyrie.Client
         public event ProgressChangedEventHandler AnalyzeProgressChanged;
 
         private int _machineCount;
-        private string _proxyLogin;
-        private string _proxyPassword;
-
         private void OnAnalyzeCompleted()
         {
             var tmp = AnalyzeCompleted;
@@ -315,9 +308,7 @@ namespace APTAT.Valkyrie.Client
             }
         }
 
-
-
-        private void UploadFile(string clientId, string filePath, string originalFilePath)
+        private void UploadFile(string filePath, string originalFilePath)
         {
             try
             {
@@ -345,7 +336,6 @@ namespace APTAT.Valkyrie.Client
                     return;
                 }
 
-                // throw new NotSupportedException("Test");
                 var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey };
                 BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
@@ -355,7 +345,7 @@ namespace APTAT.Valkyrie.Client
                     DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
                 Trace.Flush();
 
-                if (basicInfo.Presence) 
+                if (basicInfo.Presence )
                 {
                     AnalysisResult result = AnalysisResult.Create(basicInfo);
                     AddResult(result);
@@ -368,30 +358,16 @@ namespace APTAT.Valkyrie.Client
                     Trace.Flush();
                     var request = new SubmitToAutomaticRequest
                     {
-                        //Client_id = clientId,
                         ApiKey = _apiKey,
                         SubmitToken = basicInfo.SubmitToken,
                         FilePath = originalFilePath
                     };
-                    //var payload = request.ToNameValueCollection();
 
-                    //string originalFileName = Path.GetFileName(originalFilePath);
-                    //var uploadResult = MultipartPostHelper.Post(filePath,
-                    //    ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName,
-                    //    _cancellationTokenSource.Token);
-                    //var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
-                    //if (response.ReturnCode != ErrorCodesEnum.Success)
-                    //    throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
                     var response = ValkyrieService.SubmitToAutomaticAnalysis(request, filePath, _cancellationTokenSource.Token);
                     var result = AnalysisResult.Create(response);
                     AddResult(result);
                 }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-               
             finally
             {
                 File.Delete(filePath);
@@ -407,7 +383,7 @@ namespace APTAT.Valkyrie.Client
 
         public string GetValkyrieDetailsLink()
         {
-            return ValkyrieApiUrls.GetBaseUri() + @"signup_apikey/" + _apiKey;
+            return string.Format(@"{0}signup_apikey/{1}", ValkyrieApiUrls.GetBaseUri(), _apiKey);
         }
     }
 }

@@ -55,13 +55,15 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AnalyzeCompletedEventArgs.cs" />
     <Compile Include="AnalyzeCompletedEventHandler.cs" />
     <Compile Include="Contracts\StartAndFinalizeScanResponse.cs" />
     <Compile Include="Contracts\RegisterWithMachineIdRequest.cs" />
     <Compile Include="Contracts\EndScanRequest.cs" />
+    <Compile Include="Contracts\SubmitToManualRequestSHA1.cs" />
+    <Compile Include="Enums\EnumExt.cs" />
     <Compile Include="Helpers\HashCalculator.cs" />
-    <Compile Include="Helpers\IPHelper.cs" />
-    <Compile Include="Helpers\ProgressReporter.cs" />
+    <Compile Include="Helpers\NetAddressHelper.cs" />
     <Compile Include="Models\AnalysisResult.cs" />
     <Compile Include="Helpers\ObjectToArrayConverter.cs" />
     <Compile Include="Helpers\MultipartPostHelper.cs" />
@@ -84,7 +86,6 @@
     <Compile Include="Models\ValkyrieFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxySettings.cs" />
-    <Compile Include="ScanInProgressEventArgs.cs" />
     <Compile Include="StartScanRequest.cs" />
     <Compile Include="ValkyrieApiUrls.cs" />
     <Compile Include="ValkyrieClient.cs" />

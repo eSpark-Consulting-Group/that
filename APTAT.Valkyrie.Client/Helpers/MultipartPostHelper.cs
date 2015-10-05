@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Web;
 
-namespace APTAT.Valkyrie.Client
+namespace APTAT.Valkyrie.Client.Helpers
 {
     internal static class MultipartPostHelper
     {
@@ -47,7 +47,7 @@ namespace APTAT.Valkyrie.Client
             HttpWebRequest webrequest = CreateWebRequest(url, boundary, cancellationToken);
             string serverResponse;
             byte[] postHeaderBytes = Encoding.UTF8.GetBytes(postHeader);
-            byte[] boundaryBytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "--\r\n");
+            byte[] boundaryBytes = Encoding.ASCII.GetBytes(string.Format("\r\n--{0}--\r\n", boundary));
 
             long length = postHeaderBytes.Length + stream.Length + boundaryBytes.Length;
             webrequest.ContentLength = length;
@@ -96,25 +96,25 @@ namespace APTAT.Valkyrie.Client
 
         private static void BuildParamHeaderEntry(string name, string value, string boundary, StringBuilder sb)
         {
-            sb.Append("--"); sb.Append(boundary); sb.Append("\r\n");
+            sb.Append("--"); sb.Append(boundary); sb.Append(Environment.NewLine);
             sb.Append("Content-Disposition: form-data; name=\""); sb.Append(name); sb.Append("\"");
-            sb.Append("\r\n");
-            sb.Append("\r\n");
+            sb.Append(Environment.NewLine);
+            sb.Append(Environment.NewLine);
             sb.Append(HttpUtility.UrlEncode(value));
-            sb.Append("\r\n");
+            sb.Append(Environment.NewLine);
         }
 
         private static void BuildFileUploadHeaderEntry(string fileName, string boundary, StringBuilder sb)
         {
-            sb.Append("--"); sb.Append(boundary); sb.Append("\r\n");
+            sb.Append("--"); sb.Append(boundary); sb.Append(Environment.NewLine);
             sb.Append("Content-Disposition: form-data; name=\""); sb.Append("file_data"); sb.Append("\"");
             sb.Append("; filename=\"");
             sb.Append(HttpUtility.UrlEncode(fileName.Trim()));
             sb.Append("\"");
-            sb.Append("\r\n");
+            sb.Append(Environment.NewLine);
             sb.Append("Content-Type: application / octet - stream");
-            sb.Append("\r\n");
-            sb.Append("\r\n");
+            sb.Append(Environment.NewLine);
+            sb.Append(Environment.NewLine);
         }
 
         private static HttpWebRequest CreateWebRequest(string url, string boundary, CancellationToken cancellationToken)

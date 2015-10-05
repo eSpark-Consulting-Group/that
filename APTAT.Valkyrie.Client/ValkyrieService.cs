@@ -3,11 +3,8 @@ using APTAT.Valkyrie.Client.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace APTAT.Valkyrie.Client
@@ -66,7 +63,7 @@ namespace APTAT.Valkyrie.Client
 
             string originalFileName = Path.GetFileName(request.FilePath);
             var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var uploadResult = APTAT.Valkyrie.Client.Helpers.MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
             var response = JsonConvert.DeserializeObject<SubmitToManualResponse>(uploadResult);
             if (response.ReturnCode != ErrorCodesEnum.Success)
             {
@@ -89,7 +86,7 @@ namespace APTAT.Valkyrie.Client
 
             string originalFileName = Path.GetFileName(request.FilePath);
             var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(fileData, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var uploadResult = APTAT.Valkyrie.Client.Helpers.MultipartPostHelper.Post(fileData, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
             var response = JsonConvert.DeserializeObject<SubmitToManualResponse>(uploadResult);
             if (response.ReturnCode != ErrorCodesEnum.Success)
             {
@@ -108,7 +105,7 @@ namespace APTAT.Valkyrie.Client
 
             string originalFileName = Path.GetFileName(request.FilePath);
             var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var uploadResult = APTAT.Valkyrie.Client.Helpers.MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName, token);
             var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
             if (response.ReturnCode != ErrorCodesEnum.Success)
             {

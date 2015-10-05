@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System;
 
-namespace APTAT.Valkyrie.Client
+namespace APTAT.Valkyrie.Client.Helpers
 {
     public class ObjectToArrayConverter<T> : CustomCreationConverter<T[]>
     {

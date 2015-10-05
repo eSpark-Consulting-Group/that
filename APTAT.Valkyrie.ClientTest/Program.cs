@@ -133,12 +133,7 @@ namespace APTAT.Valkyrie.ClientTest
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
-
-        private static void Valkyrie_InProgress(object sender, InProgressEventArgs e)
-        {
-            Console.WriteLine(String.Format("Processed {0,3} from {1,3}\t{2:P}", e.ProcessedFileCount, e.TotalFileCount, ((double)e.Percentage / 100)));
-        }
-
+               
 
 
         //private static SubmitToManualResponse TestSubmitToManual(string submitToken)
