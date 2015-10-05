@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using APTAT.Valkyrie.Client;
 using APTAT.Valkyrie.Client.Contracts;
-using APTAT.Valkyrie.Client.Helpers;
 
 namespace APTAT.Valkyrie.ClientTest
 {
@@ -20,7 +15,7 @@ namespace APTAT.Valkyrie.ClientTest
         public Form1()
         {
             InitializeComponent();
-            _client = new Client.ValkyrieClient("MYCLIENTID");
+            _client = new ValkyrieClient("MYCLIENTID");
             _client.AnalyzeCompleted += _client_AnalyzeCompleted;
             _client.AnalyzeProgressChanged += _client_AnalyzeProgressChanged;
 
@@ -40,8 +35,8 @@ namespace APTAT.Valkyrie.ClientTest
             button1.Enabled = true;
         }
 
-        private Valkyrie.Client.ValkyrieClient _client;
-        private const string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
+        private ValkyrieClient _client;
+      //  private const string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -50,12 +45,12 @@ namespace APTAT.Valkyrie.ClientTest
 
 
             var files = MockData.GetBadFiles();
+
             var apiKey = _client.Register();
-            _client.AnalyzeAsync(files, "user", "test", 1, apiKey);
-
-
+            //   _client.AnalyzeAsync(files, "user", "test", 1, apiKey);
             // SubmitToManualFromBytes(files.First(), apiKey);
-          //  SubmitToManualTest(files.First(), apiKey);
+
+            SubmitToManualTest(files.First(), apiKey, "C:\\Temp\\7DDB5C8B108B46D773F4A88954E02401CEE9E624.tmp");
 
         }
 
@@ -77,7 +72,7 @@ namespace APTAT.Valkyrie.ClientTest
                     SHA1 = file.Sha1,
                     SubmitToken = info.SubmitToken
                 };
-                
+
                 return ValkyrieService.SubmitToManualAnalysisWithoutUpload(req1);
             }
             else
@@ -85,7 +80,6 @@ namespace APTAT.Valkyrie.ClientTest
                 var request = new SubmitToManualRequest()
                 {
                     ApiKey = apiKey,
-                    //    Client_id = "MY_CLIENTID",
                     FilePath = filePath, //where file was found
                     Priority = 3,
                     SubmitToken = info.SubmitToken
@@ -93,32 +87,36 @@ namespace APTAT.Valkyrie.ClientTest
 
                 response = ValkyrieService.SubmitToManualAnalysis(request, bytes, CancellationToken.None);
             }
-            
+
             return response;
         }
 
-        private void SubmitToManualTest(ValkyrieFileInfo file, string apiKey)
+        private SubmitToManualResponse SubmitToManualTest(ValkyrieFileInfo file, string apiKey, string filePath)
         {
-            var filePath = "C:\\Temp\\7DDB5C8B108B46D773F4A88954E02401CEE9E624.tmp";
+        
 
             var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = file.Sha1 });
 
             if (info.Presence)
             {
-                return;
+                return ValkyrieService.SubmitToManualAnalysisWithoutUpload(new SubmitToManualRequestSHA1()
+                {
+                    ApiKey = apiKey,
+                    FilePath = filePath,
+                    Priority = 3,
+                    SHA1 = file.Sha1,
+                    SubmitToken = info.SubmitToken
+                });
             }
             else
             {
-                var request = new SubmitToManualRequest()
+                return ValkyrieService.SubmitToManualAnalysis(new SubmitToManualRequest()
                 {
-                    ApiKey = apiKey,
-                    //    Client_id = "MY_CLIENTID",
+                    ApiKey = apiKey,                    
                     FilePath = filePath,
-                    Priority = 5,
+                    Priority = 3,
                     SubmitToken = info.SubmitToken
-                };
-
-                ValkyrieService.SubmitToManualAnalysis(request, filePath, CancellationToken.None);
+                }, filePath, CancellationToken.None);
             }
 
         }

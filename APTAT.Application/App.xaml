@@ -26,8 +26,8 @@
             <sys:String x:Key="CESMLink">http://www.comodo.com/business-enterprise/cesm3/index_v2.php</sys:String>
             <sys:String x:Key="BuyCesSmallText">Protect your environment from APT’s</sys:String>
             <sys:String x:Key="BuyCesBigText">Protect your environment from APT’s</sys:String>
-            
-            <sys:String x:Key="APTApplicationTitle">APT/Unknown Risk Assessment Tool</sys:String>
+
+            <sys:String x:Key="APTApplicationTitle">Valkyrie Hunter (APT/Unknown Risk Assessment Tool)</sys:String>
             
             
             <SolidColorBrush x:Key="FooterDarkBrush" Color="#FF3C404B"/>
