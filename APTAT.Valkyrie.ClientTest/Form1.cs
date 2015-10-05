@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace APTAT.Valkyrie.ClientTest
             _client = new Client.ValkyrieClient("MYCLIENTID");
             _client.AnalyzeCompleted += _client_AnalyzeCompleted;
             _client.AnalyzeProgressChanged += _client_AnalyzeProgressChanged;
-            
+
         }
 
         void _client_AnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -34,50 +35,89 @@ namespace APTAT.Valkyrie.ClientTest
         void _client_AnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
         {
             var isCancelled = e.Cancelled;
-            if(isCancelled) MessageBox.Show("Cancelled");
+            if (isCancelled) MessageBox.Show("Cancelled");
             bindingSource1.DataSource = e.Result;
             button1.Enabled = true;
         }
 
         private Valkyrie.Client.ValkyrieClient _client;
         private const string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
-        private static List<ValkyrieFileInfo> MockData()
-        {
-            var files = new List<ValkyrieFileInfo>();
-            const string ip = "10.100.65.42";
 
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2AE.dll", Sha1 = "" });
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2ERES.dll", Sha1 = "" });
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2EXT.dll", Sha1 = "" });
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2FILT.dll", Sha1 = "" });
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2FXA.dll", Sha1 = "" });
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2FXB.dll", Sha1 = "" });
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2RES.dll", Sha1 = "" });
-            files.Add(new ValkyrieFileInfo() { Ip = ip, Path = "WMM2RES2.dll", Sha1 = "" });
-            return files;
-        }
         private void button1_Click(object sender, EventArgs e)
         {
-            
 
             bindingSource1.DataSource = null;
-        
-            
 
 
+            var files = MockData.GetBadFiles();
+            var apiKey = _client.Register();
+            _client.AnalyzeAsync(files, "user", "test", 1, apiKey);
 
-           
 
-            var files = MockData();
-            //_client.AnalyzeAsync(files,"user", "test", 1,);
+           // SubmitToManualFromBytes(files.First(), apiKey);
+            //SubmitToManualTest(files.First(), apiKey);
+
+        }
+
+        private void SubmitToManualFromBytes(ValkyrieFileInfo file, string apiKey)
+        {
+            var filePath = "C:\\Temp\\7DDB5C8B108B46D773F4A88954E02401CEE9E624.tmp";
+
+
+            var bytes = File.ReadAllBytes(filePath);
+            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = file.Sha1 });
+
+            if (info.Presence)
+            {
+                return;
+            }
+            else
+            {
+                var request = new SubmitToManualRequest()
+                {
+                    ApiKey = apiKey,
+                    //    Client_id = "MY_CLIENTID",
+                    FilePath = filePath, //where file was found
+                    Priority = 5,
+                    SubmitToken = info.SubmitToken
+                };
+
+                ValkyrieService.SubmitToManualAnalysis(request, bytes, CancellationToken.None);
+            }
+        }
+
+        private void SubmitToManualTest(ValkyrieFileInfo file, string apiKey)
+        {
+            var filePath = "C:\\Temp\\7DDB5C8B108B46D773F4A88954E02401CEE9E624.tmp";
+
+            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey,  SHA1 = file.Sha1 });
+
+            if (info.Presence)
+            {
+                return;
+            }
+            else
+            {
+                var request = new SubmitToManualRequest()
+                {
+                    ApiKey = apiKey,
+                    //    Client_id = "MY_CLIENTID",
+                    FilePath = filePath,
+                    Priority = 5,
+                    SubmitToken = info.SubmitToken
+                };
+
+                ValkyrieService.SubmitToManualAnalysis(request, filePath, CancellationToken.None);
+            }
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            _client.AnalyzeAsyncCancel();
+            //_client.AnalyzeAsyncCancel();
+            //   SubmitToManualFromBytes(
         }
 
-       
+
     }
 }

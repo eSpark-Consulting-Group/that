@@ -8,17 +8,18 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace APTAT.Valkyrie.Client
 {
-   
+
     public static class ValkyrieService
     {
 
         /// <summary>
         /// This request will be used to get Basic Info of a file that FVS have already analyzed before. 
         /// </summary>             
-        internal static BasicInfoResponse GetBasicInfo(InfoRequest request)
+        public static BasicInfoResponse GetBasicInfo(InfoRequest request)
         {
             var response = CallValkyrie<BasicInfoResponse>(ValkyrieApiUrls.BasicInfo, request);
             return response;
@@ -50,20 +51,72 @@ namespace APTAT.Valkyrie.Client
             return result;
         }
 
-        internal static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request)
+        /// <summary>
+        /// This request will be used to . This request is  request and following form data must Submit a File to Manual Analysis HTTP POST be provided with corresponding keys: 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="filePath"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+
+        public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, string filePath, CancellationToken token)
         {
-            var result = CallValkyrie<SubmitToManualResponse>(ValkyrieApiUrls.SubmitToManualAnalysis, request);
-            return result;
+            if (token == null)
+                token = CancellationToken.None;
+
+            string originalFileName = Path.GetFileName(request.FilePath);
+            var payload = request.ToNameValueCollection();
+            var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var response = JsonConvert.DeserializeObject<SubmitToManualResponse>(uploadResult);
+            if (response.ReturnCode != ErrorCodesEnum.Success)
+            {
+                throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+            }
+
+            return response;
         }
 
+        public static SubmitToManualResponse SubmitToManualAnalysisWithoutUpload(SubmitToManualRequestSHA1 request)
+        {
+            var result = CallValkyrie<SubmitToManualResponse>(ValkyrieApiUrls.SubmitToManualAnalysisWithoutFileUpload, request);
+            return result;            
+        }
+        
+        public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, byte[] fileData, CancellationToken token)
+        {
+            if (token == null)
+                token = CancellationToken.None;
 
-        //public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request)
-        //{
-        //    var payload = request.ToNameValueCollection();
-        //    var uploadResult = MultipartPostHelper.Post(request.FilePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload);
-        //    var result = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
-        //    return result;
-        //}
+            string originalFileName = Path.GetFileName(request.FilePath);
+            var payload = request.ToNameValueCollection();
+            var uploadResult = MultipartPostHelper.Post(fileData, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var response = JsonConvert.DeserializeObject<SubmitToManualResponse>(uploadResult);
+            if (response.ReturnCode != ErrorCodesEnum.Success)
+            {
+                throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+            }
+
+            return response;
+        }
+
+        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, string filePath, CancellationToken token)
+        {
+            if (token == null)
+            {
+                token = CancellationToken.None;
+            }
+
+            string originalFileName = Path.GetFileName(request.FilePath);
+            var payload = request.ToNameValueCollection();
+            var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
+            if (response.ReturnCode != ErrorCodesEnum.Success)
+            {
+                throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+            }
+
+            return response;
+        }
 
         internal static ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {

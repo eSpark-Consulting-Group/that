@@ -8,29 +8,76 @@ using System.Web;
 
 namespace APTAT.Valkyrie.Client
 {
-    public static class MultipartPostHelper
+    internal static class MultipartPostHelper
     {
-        public static string Post(string uploadfile, string url, NameValueCollection payload, string orgFileName, CancellationToken cancellationToken)
+        internal static string Post(byte[] uploadfileBytes, string url, NameValueCollection payload, string fileName, CancellationToken cancellationToken)
         {
-            Uri uri = new Uri(url);
-            HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(uri);
-            if (ProxySettings.Proxy != null)
+            if (String.IsNullOrWhiteSpace(fileName))
             {
-                webrequest.Proxy = ProxySettings.Proxy;
+                throw new InvalidOperationException("file name is required");
             }
 
-
-            cancellationToken.Register(() =>
+            using (MemoryStream fileStream = new MemoryStream(uploadfileBytes))
             {
-                webrequest.Abort();
-            });
-            webrequest.Timeout = 1000 * 300;
-            //   webrequest.ServerCertificateValidationCallback += null;
+                return SubmitForm(url, fileStream, fileName, payload, cancellationToken);
+            }
+        }
 
+
+        internal static string Post(string uploadfilePath, string url, NameValueCollection payload, string orgFileName, CancellationToken cancellationToken)
+        {
+            if (String.IsNullOrWhiteSpace(orgFileName))
+            {
+                orgFileName = uploadfilePath;
+            }
+
+            using (FileStream fileStream = new FileStream(uploadfilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                return SubmitForm(url, fileStream,  orgFileName, payload,  cancellationToken);
+            }
+        }
+      
+
+        private static string SubmitForm(string url, Stream stream, String fileName, NameValueCollection payload,  CancellationToken cancellationToken)
+        {
             string boundary = "----WebKitFormBoundary" + DateTime.Now.Ticks.ToString("x");
-            webrequest.ContentType = "multipart/form-data; boundary=" + boundary;
-            webrequest.Method = "POST";
 
+            string postHeader = BuildHeaders(payload, fileName, boundary);
+
+            HttpWebRequest webrequest = CreateWebRequest(url, boundary, cancellationToken);
+            string serverResponse;
+            byte[] postHeaderBytes = Encoding.UTF8.GetBytes(postHeader);
+            byte[] boundaryBytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "--\r\n");
+
+            long length = postHeaderBytes.Length + stream.Length + boundaryBytes.Length;
+            webrequest.ContentLength = length;
+
+            Stream requestStream = webrequest.GetRequestStream();
+
+            // Write out our post header
+            requestStream.Write(postHeaderBytes, 0, postHeaderBytes.Length);
+
+            // Write out the file contents
+            byte[] buffer = new Byte[checked((uint)Math.Min(4096, (int)stream.Length))];
+            int bytesRead = 0;
+            while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) != 0)
+                requestStream.Write(buffer, 0, bytesRead);
+
+            // Write out the trailing boundary
+            requestStream.Write(boundaryBytes, 0, boundaryBytes.Length);
+            WebResponse responce = webrequest.GetResponse();
+
+            Stream s = responce.GetResponseStream();
+            using (StreamReader sr = new StreamReader(s))
+            {
+                serverResponse = sr.ReadToEnd();
+            }
+
+            return serverResponse;
+        }
+
+        private static string BuildHeaders(NameValueCollection payload, string fileName, string boundary)
+        {
             StringBuilder sb = new StringBuilder();
             if (payload != null)
             {
@@ -40,49 +87,11 @@ namespace APTAT.Valkyrie.Client
                 }
             }
 
-            if (String.IsNullOrWhiteSpace(orgFileName))
-            {
-                orgFileName = uploadfile;
-            }
-            BuildFileUploadHeaderEntry(orgFileName, boundary, sb);
+            BuildFileUploadHeaderEntry(fileName, boundary, sb);
 
             string postHeader = sb.ToString();
-            return SubmitFormData(uploadfile, webrequest, boundary, postHeader);
-        }
 
-        private static string SubmitFormData(string uploadfile, HttpWebRequest webrequest, string boundary, string postHeader)
-        {
-            string serverResponse;
-            byte[] postHeaderBytes = Encoding.UTF8.GetBytes(postHeader);
-            byte[] boundaryBytes = Encoding.ASCII.GetBytes("\r\n--" + boundary + "--\r\n");
-            using (FileStream fileStream = new FileStream(uploadfile, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                long length = postHeaderBytes.Length + fileStream.Length + boundaryBytes.Length;
-                webrequest.ContentLength = length;
-
-                Stream requestStream = webrequest.GetRequestStream();
-
-                // Write out our post header
-                requestStream.Write(postHeaderBytes, 0, postHeaderBytes.Length);
-
-                // Write out the file contents
-                byte[] buffer = new Byte[checked((uint)Math.Min(4096, (int)fileStream.Length))];
-                int bytesRead = 0;
-                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-                    requestStream.Write(buffer, 0, bytesRead);
-
-                // Write out the trailing boundary
-                requestStream.Write(boundaryBytes, 0, boundaryBytes.Length);
-                WebResponse responce = webrequest.GetResponse();
-                
-                Stream s = responce.GetResponseStream();
-                using (StreamReader sr = new StreamReader(s))
-                {
-                    serverResponse = sr.ReadToEnd();
-                }
-            }
-
-            return serverResponse;
+            return postHeader;
         }
 
         private static void BuildParamHeaderEntry(string name, string value, string boundary, StringBuilder sb)
@@ -106,6 +115,28 @@ namespace APTAT.Valkyrie.Client
             sb.Append("Content-Type: application / octet - stream");
             sb.Append("\r\n");
             sb.Append("\r\n");
+        }
+
+        private static HttpWebRequest CreateWebRequest(string url, string boundary, CancellationToken cancellationToken)
+        {
+            HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(url);
+            if (ProxySettings.Proxy != null)
+            {
+                webrequest.Proxy = ProxySettings.Proxy;
+            }
+
+            if (cancellationToken != null)
+            {
+                cancellationToken.Register(() =>
+                {
+                    webrequest.Abort();
+                });
+            }
+            webrequest.Timeout = 1000 * 300;
+
+            webrequest.ContentType = "multipart/form-data; boundary=" + boundary;
+            webrequest.Method = "POST";
+            return webrequest;
         }
     }
 }

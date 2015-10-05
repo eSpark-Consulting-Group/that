@@ -11,5 +11,9 @@ namespace APTAT.Valkyrie.Client
         public string Sha1 { get; set; }
         public string Ip { get; set; }
 
+        public string GetFullPath()
+        {
+            return String.Format("\\\\{0}\\{1}", Ip, Path);
+        }
     }
 }
