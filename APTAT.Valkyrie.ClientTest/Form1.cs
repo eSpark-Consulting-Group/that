@@ -49,8 +49,8 @@ namespace APTAT.Valkyrie.ClientTest
             var apiKey = _client.Register();
             //   _client.AnalyzeAsync(files, "user", "test", 1, apiKey);
             // SubmitToManualFromBytes(files.First(), apiKey);
-
-            SubmitToManualTest(files.First(), apiKey, "C:\\Temp\\7DDB5C8B108B46D773F4A88954E02401CEE9E624.tmp");
+            ValkyrieFileInfo filesFirst = files.First();
+            SubmitToManualTest(filesFirst, apiKey, filesFirst.Path);
 
         }
 
@@ -123,8 +123,11 @@ namespace APTAT.Valkyrie.ClientTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //_client.AnalyzeAsyncCancel();
-            //   SubmitToManualFromBytes(
+            var apiKey = _client.Register();            
+            var path = "C:\\Temp\\C631FB17389FF624E7B606D1006342E032BE28D7.tmp";
+            var result = _client.SubmitToManual(path, apiKey);
+            var status = ValkyrieService.ManualStatus(new ManualStatusRequest(result.ManualAnalysisId, apiKey));
+            
         }
 
 

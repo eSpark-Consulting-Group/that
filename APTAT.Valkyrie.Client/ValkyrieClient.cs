@@ -179,6 +179,45 @@ namespace APTAT.Valkyrie.Client
             return valkyrieFolder;
         }
 
+        public SubmitToManualResponse SubmitToManual(string filePath, string apiKey, int priority = 3)
+        {
+            FileInfo f = new FileInfo(filePath);
+
+            var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
+
+
+            if (f.Length > MaxFileLenght)
+            {
+                throw new InvalidOperationException(String.Format("{0}{1}", sha1, "Maximum file size per upload to 25 MB."));
+
+            }
+
+            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = sha1 });
+
+            if (info.Presence)
+            {
+                return ValkyrieService.SubmitToManualAnalysisWithoutUpload(new SubmitToManualRequestSHA1()
+                {
+                    ApiKey = apiKey,
+                    FilePath = filePath,
+                    Priority = priority,
+                    SHA1 = sha1,
+                    SubmitToken = info.SubmitToken
+                });
+            }
+            else
+            {
+                return ValkyrieService.SubmitToManualAnalysis(new SubmitToManualRequest()
+                {
+                    ApiKey = apiKey,
+                    FilePath = filePath,
+                    Priority = priority,
+                    SubmitToken = info.SubmitToken
+                }, filePath, CancellationToken.None);
+            }
+
+        }
+
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
         {
             FilesCount = badFiles.Count;

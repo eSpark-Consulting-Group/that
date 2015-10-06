@@ -115,7 +115,7 @@ namespace APTAT.Valkyrie.Client
             return response;
         }
 
-        internal static ManualStatusResponse ManualStatus(ManualStatusRequest request)
+        public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {
             var result = CallValkyrie<ManualStatusResponse>(ValkyrieApiUrls.ManualStatus, request);
             return result;

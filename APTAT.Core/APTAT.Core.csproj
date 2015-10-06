@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="AptAtManager.cs" />
     <Compile Include="AptScanStage.cs" />
+    <Compile Include="ComputerInformation.cs" />
     <Compile Include="DataNotReadyException.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
