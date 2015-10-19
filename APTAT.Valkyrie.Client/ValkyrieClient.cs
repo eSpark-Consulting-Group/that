@@ -18,7 +18,7 @@ namespace APTAT.Valkyrie.Client
 
     public sealed class ValkyrieClient
     {
-        private const Int32 MaxFileLenght = 26214400;
+        private const Int32 MaxFileLenght = 26214400;  
         private string _apiKey;
         private readonly string _clientId;
         private int _fileScanned;
@@ -79,13 +79,14 @@ namespace APTAT.Valkyrie.Client
                 OnAnalyzeProgressChanged();
                 Thread.Sleep(2000);//time out asked by Valkyrie team 
                 OnAnalyzeProgressChanged();
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
                 Trace.Flush();
 
                 var startScanResult = ValkyrieService.StartScan(new StartScanRequest(apiKey));
                 if (startScanResult.ReturnCode != 0)
                 {
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
+                    Trace.Flush();
                 }
 
                 AnalysisResults = new ConcurrentBag<AnalysisResult>();
@@ -108,6 +109,10 @@ namespace APTAT.Valkyrie.Client
                     }
                     catch (AggregateException exception)
                     {
+                        var messages  = exception.InnerExceptions.Select(e => e.Message).ToArray();
+                        var exMessage = String.Join(Environment.NewLine, messages);
+                        Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exMessage));
+                        Trace.Flush();
                         OnAnalyzeCompleted(exception);
                     }
 
@@ -117,6 +122,8 @@ namespace APTAT.Valkyrie.Client
             }
             catch (Exception exception)
             {
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exception.Message));
+                Trace.Flush();
                 var tmp = AnalyzeCompleted;
                 if (tmp != null)
                 {
@@ -134,18 +141,40 @@ namespace APTAT.Valkyrie.Client
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe"
+                FileName = "cmd.exe",                
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+
+
             };
             //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
             var target = string.Format("\\\\{0}\\{1}", ipAddress, Path.GetPathRoot(fileName).Replace(":\\", "$"));
+            
             string destination = Path.Combine(destPath, sha1);
             string destinationFile = string.Format("{0}.tmp", destination);
             string source = target + fileName.Remove(0, 2);
             startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password, login, source, destinationFile);
 
             process.StartInfo = startInfo;
+                  
             process.Start();
+
+            string stdout = process.StandardOutput.ReadToEnd();
+            string stderr = process.StandardError.ReadToEnd();        
+            
+            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, string.Format("Started process. Copy file from {0} to {1}", source, destinationFile)));
+            
             process.WaitForExit();
+            Trace.WriteLine(String.Format("Process exit code : {0}", process.ExitCode));
+            Trace.WriteLine(String.Format("Process standard output : {0}", stdout));
+            if (String.IsNullOrWhiteSpace(stderr) == false)
+            {
+                Trace.WriteLine(String.Format("Process standard error : {0}", stderr));
+            }
+
+            Trace.Flush();
             return destinationFile;
         }
 
@@ -243,7 +272,8 @@ namespace APTAT.Valkyrie.Client
                         File.Delete(filePath);
                     }
                     catch (Exception e)
-                    {
+                    {                       
+
                         if (e is WebException && e.Message == "The request was aborted: The request was canceled.")
                         {
                             AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, "The request was canceled by user", SkippReasonEnum.Cancelled));
@@ -253,7 +283,7 @@ namespace APTAT.Valkyrie.Client
                             AddResult(AnalysisResult.CreateSkipInfo(f.Sha1, e.Message, SkippReasonEnum.Failed));
                         }
 
-                        Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
+                        Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
                         Trace.Flush();
 
                         var exp = new InvalidOperationException("Could not upload file " + f.Path, e);
@@ -317,7 +347,7 @@ namespace APTAT.Valkyrie.Client
         private void OnAnalyzeCompleted(Task task)
         {
             ValkyrieService.EndScan(new EndScanRequest(_apiKey, _machineCount));
-            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : Scan Completed for API_KEY = {1}", DateTime.UtcNow, _apiKey));
+            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {1}", DateTime.UtcNow, _apiKey));
             Trace.Flush();
 
             if (task.Exception != null) throw task.Exception;
@@ -356,7 +386,7 @@ namespace APTAT.Valkyrie.Client
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
                     AddResult(AnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled));
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} cancelled by user", DateTime.UtcNow,
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} cancelled by user", DateTime.UtcNow,
                         originalFilePath));
                     Trace.Flush();
                     return;
@@ -369,7 +399,7 @@ namespace APTAT.Valkyrie.Client
                 if (f.Length > MaxFileLenght)
                 {
                     AddResult(AnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.", SkippReasonEnum.Skipped));
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : File {1} greater than 25 Mb", DateTime.UtcNow,
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} greater than 25 Mb", DateTime.UtcNow,
                         originalFilePath));
                     Trace.Flush();
                     return;
@@ -380,11 +410,11 @@ namespace APTAT.Valkyrie.Client
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
 
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}",
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}",
                     DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
                 Trace.Flush();
 
-                if (basicInfo.Presence )
+                if (basicInfo.Presence)
                 {
                     AnalysisResult result = AnalysisResult.Create(basicInfo);
                     AddResult(result);
@@ -392,7 +422,7 @@ namespace APTAT.Valkyrie.Client
                 else
                 {
                     Trace.WriteLine(
-                        string.Format("{0:MM/dd/yy H:mm:ss}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]",
+                        string.Format("{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]",
                             DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
                     Trace.Flush();
                     var request = new SubmitToAutomaticRequest
@@ -407,9 +437,19 @@ namespace APTAT.Valkyrie.Client
                     AddResult(result);
                 }
             }
+            //catch (Exception e)
+            //{ 
+            //    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : {1}", DateTime.UtcNow, e.Message));
+            //    Trace.Flush();
+            //    throw e;
+            //}
             finally
             {
+                
                 File.Delete(filePath);
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Delete {1}", DateTime.UtcNow, filePath));
+                Trace.Flush();
+                
             }
         }
 

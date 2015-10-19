@@ -7,8 +7,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
-    using System.Windows.Threading;
+using System.Windows.Threading;
 using APTAT.Core;
 
 
@@ -19,8 +20,42 @@ namespace APTAT.Application
     /// </summary>
     /// 
     /// 
-    public partial class App
+    public partial class App : IDisposable
     {
+        private Mutex _mutex;
+        private static string appGuid = "8F24B2C3-13A4-490A-ACD5-0D68C7BAEA81";
+        public void Dispose()
+        {
+            if (_mutex != null)
+            {
+                _mutex.Dispose();
+                _mutex = null;
+            }
+        }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            bool createdNew;
+            // thread should own mutex, so pass true
+            _mutex = new Mutex(true, "Global\\" + appGuid, out createdNew);
+            if (!createdNew)
+            {
+                _mutex = null;
+                MessageBox.Show("Instance already running");
+                Current.Shutdown(); // close application!
+                return;
+            }
+
+            base.OnStartup(e);
+            //run application code
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            if (_mutex != null)
+                _mutex.ReleaseMutex();
+            base.OnExit(e);
+        }
+
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -29,7 +64,12 @@ namespace APTAT.Application
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             InitTraceListener();
-            Trace.WriteLine("APTAT started: " + DateTime.UtcNow);
+
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.FileVersion;
+
+            Trace.WriteLine(String.Format("APTAT Tool {0} started : {1}", version, DateTime.UtcNow));
             Trace.Flush();
 
             //Application.Properties.Settings.Default.ProxyLogin = "";
@@ -63,13 +103,13 @@ namespace APTAT.Application
 
         private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            #if DEBUG // In debug mode do not custom-handle the exception, let Visual Studio handle it
+#if DEBUG // In debug mode do not custom-handle the exception, let Visual Studio handle it
                 e.Handled = false;
 
-            #else
+#else
 
-                ShowUnhandeledException(e);
-            #endif
+            ShowUnhandeledException(e);
+#endif
         }
 
         private void ShowUnhandeledException(DispatcherUnhandledExceptionEventArgs e)
