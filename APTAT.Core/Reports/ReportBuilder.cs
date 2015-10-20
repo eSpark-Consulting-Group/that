@@ -13,6 +13,11 @@ namespace APTAT.Core.Reports
         private const string ExecutiveReportName = "ExecutiveAptReport";
         private const string DetailedPerDeviceReportName = "DetailedPerDeviceAptReport";
         private const string DetailedPerProgramReportName = "DetailedPerProgramAptReport";
+
+        private const string ExecutiveReportNameValkyrie = "ExecutiveAptReportValkyrie";
+        private const string DetailedPerDeviceReportNameValkyrie = "DetailedPerDeviceAptReportValkyrie";
+        private const string DetailedPerProgramReportNameValkyrie = "DetailedPerProgramAptReportValkyrie";
+
         private string _fileName;
 
         public delegate string BuildReportDelegate(AptReportData data, ReportType reportType);
@@ -416,14 +421,20 @@ namespace APTAT.Core.Reports
             switch (reportType)
             {
                 case ReportType.Executive:
-                case ReportType.ExecutiveWithValkyrie:
                     return String.Format(fileFormatString, ExecutiveReportName, operatationUid);
+                case ReportType.ExecutiveWithValkyrie:
+                    return String.Format(fileFormatString, ExecutiveReportNameValkyrie, operatationUid);
+                
                 case ReportType.DetailedPerDevice:
-                case ReportType.DetailedPerDeviceWithValkyrie:
                     return String.Format(fileFormatString, DetailedPerDeviceReportName, operatationUid);
+                case ReportType.DetailedPerDeviceWithValkyrie:
+                    return String.Format(fileFormatString, DetailedPerDeviceReportNameValkyrie, operatationUid);
+                
                 case ReportType.DetailedPerProgram:
-                case ReportType.DetailedPerProgramWithValkyrie:
                     return String.Format(fileFormatString, DetailedPerProgramReportName, operatationUid);
+                case ReportType.DetailedPerProgramWithValkyrie:
+                    return String.Format(fileFormatString, DetailedPerProgramReportNameValkyrie, operatationUid);
+                
                 default:
                     throw new ArgumentOutOfRangeException("reportType");
             }
