@@ -15,7 +15,7 @@ namespace APTAT.Valkyrie.ClientTest
         public Form1()
         {
             InitializeComponent();
-            _client = new ValkyrieClient("MYCLIENTID");
+            _client = new ValkyrieClient();
             _client.AnalyzeCompleted += _client_AnalyzeCompleted;
             _client.AnalyzeProgressChanged += _client_AnalyzeProgressChanged;
 
@@ -46,11 +46,11 @@ namespace APTAT.Valkyrie.ClientTest
 
             var files = MockData.GetBadFiles();
 
-            var apiKey = _client.Register();
+            var reg = _client.Register(new CamRegistration("adsf", "adsf","adsf"));
             //   _client.AnalyzeAsync(files, "user", "test", 1, apiKey);
             // SubmitToManualFromBytes(files.First(), apiKey);
             ValkyrieFileInfo filesFirst = files.First();
-            SubmitToManualTest(filesFirst, apiKey, filesFirst.Path);
+            SubmitToManualTest(filesFirst, reg.ApiKey, filesFirst.Path);
 
         }
 
@@ -123,10 +123,10 @@ namespace APTAT.Valkyrie.ClientTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var apiKey = _client.Register();            
+            var reg = _client.Register(new CamRegistration("adsf", "adsf", "asdf"));            
             var path = "C:\\Temp\\C631FB17389FF624E7B606D1006342E032BE28D7.tmp";
-            var result = _client.SubmitToManual(path, apiKey);
-            var status = ValkyrieService.ManualStatus(new ManualStatusRequest(result.ManualAnalysisId, apiKey));
+            var result = _client.SubmitToManual(path, reg.ApiKey);
+            var status = ValkyrieService.ManualStatus(new ManualStatusRequest(result.ManualAnalysisId, reg.ApiKey));
             
         }
 

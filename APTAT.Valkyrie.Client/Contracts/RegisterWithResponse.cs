@@ -2,7 +2,7 @@
 
 namespace APTAT.Valkyrie.Client.Contracts
 {
-    public class RegisterWithMachineIdResponse
+    public class RegisterWithResponse
     {
 
      

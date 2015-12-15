@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Security.Policy;
 
 namespace APTAT.Valkyrie.Client
 {
@@ -15,8 +16,10 @@ namespace APTAT.Valkyrie.Client
         public static Uri FinalizeScan { get; private set; }
         public static Uri StartScan { get; private set; }
         public static Uri EndScan { get; private set; }
+        public static Uri RegisterWithCamLicense { get; private set; }
+        public static Uri RegisterWithCamCredentials { get; private set; } 
 
-        static ValkyrieApiUrls()
+    static ValkyrieApiUrls()
         {
             var baseUri = GetBaseUri();
             BasicInfo = new Uri(baseUri, "fvs_basic_info");
@@ -29,6 +32,8 @@ namespace APTAT.Valkyrie.Client
             FinalizeScan = new Uri(baseUri, "apt_finalize_scan");
             StartScan = new Uri(baseUri, "apt_start_scan");
             EndScan = new Uri(baseUri, "apt_end_scan");
+            RegisterWithCamLicense = new Uri(baseUri, "fvs_register_with_cam_license");
+            RegisterWithCamCredentials = new Uri(baseUri, "fvs_register_with_cam_credentials");
         }
         
         public static Uri GetBaseUri()
@@ -37,6 +42,8 @@ namespace APTAT.Valkyrie.Client
             var strUrl = String.Format(url);
             return new Uri(strUrl);
         }
-        
+
+
+       
     }
 }

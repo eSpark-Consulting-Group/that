@@ -60,7 +60,7 @@
                            Grid.Row="1" Grid.Column="1"
                            FontFamily="Segoe UI" Margin="15,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
                 <TextBlock Grid.Row="1" Grid.Column="2"
-                           Text="{StaticResource APTApplicationTitle}" 
+                           x:Name="txtProductName" 
                            FontFamily="Segoe UI" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
 
                 <TextBlock Grid.Row="2" Grid.Column="1"

@@ -23,9 +23,21 @@ namespace APTAT.Valkyrie.Client
         }
 
         // ReSharper disable once InconsistentNaming
-        internal static RegisterWithMachineIdResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
+        internal static RegisterWithResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
         {
-            var response = CallValkyrie<RegisterWithMachineIdResponse>(ValkyrieApiUrls.RegisterWithMachineId, request);
+            var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithMachineId, request);
+            return response;
+        }
+
+        internal static RegisterWithResponse RegisterWithCamLicense(RegisterWithCamLicenseRequest request)
+        {
+            var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithCamLicense, request);
+            return response;
+        }
+
+        internal static RegisterWithResponse RegisterWithCamCredentials(RegisterWithCamCredentials request)
+        {
+            var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithCamCredentials, request);
             return response;
         }
 

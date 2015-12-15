@@ -9,5 +9,8 @@ namespace APTAT.Valkyrie.Client.Contracts
     {
         [JsonProperty("sha1")]
         public string SHA1 { get; set;}
+
+        [JsonProperty("endpoint_id")]
+        public Guid EndpointId{ get; set; }
     }
 }

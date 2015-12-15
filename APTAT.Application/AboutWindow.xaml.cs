@@ -27,7 +27,7 @@ namespace APTAT.Application
             {
                 this.HideMinimizeAndMaximizeButtons();
             };
-
+            txtProductName.Text = "Comodo Unknown Files Hunter";
             txtProductVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 

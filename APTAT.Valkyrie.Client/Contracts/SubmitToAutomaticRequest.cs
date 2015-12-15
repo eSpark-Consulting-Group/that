@@ -13,5 +13,9 @@ namespace APTAT.Valkyrie.Client.Contracts
 
         [JsonProperty("file_path")]
         public string FilePath { get; set; }
+
+
+        [JsonProperty("endpoint_id")]
+        public Guid EndpointId { get; set; }
     }
 }

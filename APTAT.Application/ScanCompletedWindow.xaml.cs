@@ -1,4 +1,5 @@
-﻿using APTAT.Application.Models;
+﻿using System.Configuration;
+using APTAT.Application.Models;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -18,6 +19,16 @@ namespace APTAT.Application
             SourceInitialized += (x, y) =>
             {
                 this.HideMinimizeAndMaximizeButtons();
+                var adProduct = ConfigurationManager.AppSettings["advertisingProduct"];
+                if (adProduct == "cesm")
+                {
+                    Banner.SetAdMode(AdMode.Cesm);
+                }
+                else
+                {
+                    Banner.SetAdMode(AdMode.Cdm);    
+                }
+                
             };
         }
 
@@ -45,6 +56,7 @@ namespace APTAT.Application
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
+
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }

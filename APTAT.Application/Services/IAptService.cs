@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using APTAT.Valkyrie.Client;
 using APTAT.Core;
 using System.ComponentModel;
+using APTAT.Valkyrie.Client.Contracts;
 
 namespace APTAT.Application.Services
 {
@@ -189,7 +190,10 @@ namespace APTAT.Application.Services
 
         void StopScan();
 
-        void BeginValkyrieAnalysis(string login, string password);
+        void BeginValkyrieAnalysis(string login, string password, string apiKey);
+        
+        RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserName, string camPassword);
+        
         string GetValkyrieDetailsLink();
     }
 }

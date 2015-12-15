@@ -10,8 +10,10 @@ using APTAT.Core.Reports;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Valkyrie.Client;
 using System.ComponentModel;
+using System.Globalization;
 using System.Net;
 using System.Windows;
+using APTAT.Valkyrie.Client.Contracts;
 
 namespace APTAT.Application.Services
 {
@@ -494,14 +496,33 @@ namespace APTAT.Application.Services
         //    return null;
         //}
 
-        public void BeginValkyrieAnalysis(string login, string password)
+        //public void RegisterOnValkyrie()
+        //{
+
+        //}
+
+        public RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserName, string camPassword)
         {
+            RegisterWithResponse regInfo = new RegisterWithResponse(); 
+
             try
             {
-                _manager.StartValkyrieAnalysisAsync(login, password, new NetworkCredential(Properties.Settings.Default.ProxyLogin, Properties.Settings.Default.ProxyPassword));
+                var networkCredential = new NetworkCredential(Properties.Settings.Default.ProxyLogin, Properties.Settings.Default.ProxyPassword);
+
+                regInfo = _manager.Register(camLicenseId, camUserName, camPassword, networkCredential);
+                if (regInfo.ReturnCode != 0)
+                {
+                    var ex = new InvalidOperationException(regInfo.ResultDescription);
+                    ex.Data.Add("ValkyrieReturnCode", regInfo.ReturnCode);
+                    ex.Data.Add("ValkyrieReturnMessage", regInfo.ResultMessage);
+                    throw ex;
+                }
+
             }
             catch (WebException webException)
             {
+                if (webException.Response == null) throw ;
+
                 HttpStatusCode code = ((HttpWebResponse)webException.Response).StatusCode;
                 if (code == HttpStatusCode.ProxyAuthenticationRequired)
                 {
@@ -510,39 +531,45 @@ namespace APTAT.Application.Services
                     SettingsWindow window = new SettingsWindow();
                     window.Owner = System.Windows.Application.Current.MainWindow;
                     window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                    
+
                     string proxy = String.Empty;
                     var defaultProxy = WebProxy.GetDefaultProxy();
-                    if(defaultProxy != null)
+                    if (defaultProxy != null)
                     {
-                        proxy = defaultProxy.Address.AbsoluteUri;   
+                        proxy = defaultProxy.Address.AbsoluteUri;
                     }
-                    
+
 
                     string message = String.Format("The server {0} requires a username and password.", proxy);
                     window.MessageText.Text = message;
-                    
+
                     if (window.ShowDialog() == true)
-                    {                     
+                    {
                         Properties.Settings.Default.ProxyLogin = window.LoginTextBox.Text;
                         Properties.Settings.Default.ProxyPassword = window.PasswordBox.Password;
                         Properties.Settings.Default.Save();
                         Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
 
-                        BeginValkyrieAnalysis(login, password);
+                        RegisterWithValkyrie(camLicenseId, camUserName, camPassword);
                     }
                     else
                     {
-                        throw webException;
+                        throw;
                     }
-                    //_manager.StartValkyrieAnalysisAsync(login, password, new NetworkCredential(window.LoginTextBox.Text, window.PasswordBox.Password));
                 }
                 else
                 {
-                    throw webException;
+                    throw;
                 }
             }
 
+            return regInfo;
+        }
+
+        public void BeginValkyrieAnalysis(string systemLogin, string systemPassword, string apiKey)
+        {
+            var networkCredential = new NetworkCredential(Properties.Settings.Default.ProxyLogin, Properties.Settings.Default.ProxyPassword);
+            _manager.StartValkyrieAnalysisAsync(systemLogin, systemPassword, networkCredential, apiKey);
         }
 
         public string GetValkyrieDetailsLink()

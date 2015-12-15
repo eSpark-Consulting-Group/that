@@ -147,7 +147,13 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CamCredentialsWindow.xaml.cs">
+      <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CancelItemArgs.cs" />
+    <Compile Include="BannerUserControl.xaml.cs">
+      <DependentUpon>BannerUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
@@ -175,7 +181,9 @@
     <Compile Include="Models\StartScanByIpViewModel.cs" />
     <Compile Include="Models\StartScanDomainViewModel.cs" />
     <Compile Include="Models\StartScanWorkgroupViewModel.cs" />
+    <Compile Include="Models\ValkyrieRegistrationModel.cs" />
     <Compile Include="Models\WizardViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
@@ -256,6 +264,14 @@
     <Page Include="Assets\System.Windows.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CamCredentialsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BannerUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfirmationWindow.xaml">
       <SubType>Designer</SubType>
@@ -368,6 +384,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="Assets\arrows.png" />
+    <Resource Include="Images\banner_1.png" />
+    <Resource Include="Images\banner_2.png" />
     <Content Include="trl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

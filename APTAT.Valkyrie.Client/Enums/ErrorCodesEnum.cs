@@ -48,6 +48,8 @@ namespace APTAT.Valkyrie.Client.Enums
         [Description("Component Response Timeout")]
         ComponentResponseTimeout = 201,
 
+        [Description("ENDPOINT ID MISSING ")]
+        EndpointIdMissing = 303,
         [Description("Bad Request")]
         BadRequest = 400,
 

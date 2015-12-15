@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Valkyrie.Client.Contracts;
@@ -15,12 +16,10 @@ using APTAT.Valkyrie.Client.Models;
 
 namespace APTAT.Valkyrie.Client
 {
-
     public sealed class ValkyrieClient
     {
         private const Int32 MaxFileLenght = 26214400;  
         private string _apiKey;
-        private readonly string _clientId;
         private int _fileScanned;
         public int FileScanned
         {
@@ -34,27 +33,46 @@ namespace APTAT.Valkyrie.Client
 
         public ConcurrentBag<AnalysisResult> AnalysisResults { get; set; }
 
-        public ValkyrieClient(string cientId)
+        public ValkyrieClient()
         {
             AnalysisResults = new ConcurrentBag<AnalysisResult>();
-            _clientId = cientId;
         }
 
         private CancellationTokenSource _cancellationTokenSource;
         private TaskScheduler _taskScheduler;
 
-        public string Register(string proxyLogin = null, string proxyPassword = null)
+        public RegisterWithResponse Register(CamRegistration camRegistration,  string proxyLogin = null, string proxyPassword = null )
         {
-            ProxySettings.Proxy = TryGetProxy(proxyLogin, proxyPassword);
-            var machineId = NetAddressHelper.GetMacWithIPAddress();
-            var regInfo = ValkyrieService.RegisterWithMachineId(new RegisterWithMachineIdRequest { MachineId = machineId });
+            if(camRegistration == null || camRegistration.IsEmpty) throw new InvalidOperationException("CAM license or CAM credentials are required");
 
-            if (regInfo.ReturnCode != 0)
+            ProxySettings.Proxy = TryGetProxy(proxyLogin, proxyPassword);
+            //var machineId = NetAddressHelper.GetMacWithIPAddress();
+            RegisterWithResponse regInfo;
+
+            var asm = Assembly.GetExecutingAssembly().GetName();
+
+            if (string.IsNullOrWhiteSpace(camRegistration.LicenseId) == false)
             {
-                throw new InvalidOperationException("Could not Register with Machine ID " + machineId, new InvalidOperationException(regInfo.ResultDescription));
+                regInfo = ValkyrieService.RegisterWithCamLicense(new RegisterWithCamLicenseRequest()
+                {
+                    LicenseId = camRegistration.LicenseId,
+                    ProductName =  asm.Name,
+                    ProductVersion =  asm.Version.ToString()
+                });
+                
+            }
+            else
+            {
+                regInfo = ValkyrieService.RegisterWithCamCredentials(new RegisterWithCamCredentials
+                {
+                    UserName = camRegistration.UserName,
+                    Password = camRegistration.Password,
+                    ProductName = asm.Name,
+                    ProductVersion = asm.Version.ToString()
+                });
             }
 
-            return regInfo.ApiKey;
+            return regInfo;
         }
 
         public IWebProxy TryGetProxy(string login, string password)
@@ -250,7 +268,7 @@ namespace APTAT.Valkyrie.Client
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
         {
             FilesCount = badFiles.Count;
-
+            Guid endpointId = Guid.NewGuid();
             var destFolder = CreateTmpFolder();
             var exceptions = new ConcurrentQueue<Exception>();
             if (parallel)
@@ -268,7 +286,7 @@ namespace APTAT.Valkyrie.Client
                     {
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                         var orgPath = f.GetFullPath();
-                        UploadFile(filePath, orgPath);
+                        UploadFile(filePath, orgPath, endpointId);
                         File.Delete(filePath);
                     }
                     catch (Exception e)
@@ -300,7 +318,7 @@ namespace APTAT.Valkyrie.Client
                 foreach (var f in badFiles)
                 {
                     var tmpfilePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
-                    UploadFile(tmpfilePath, f.GetFullPath());
+                    UploadFile(tmpfilePath, f.GetFullPath(), endpointId);
                 }
             }
         }
@@ -377,7 +395,7 @@ namespace APTAT.Valkyrie.Client
             }
         }
 
-        private void UploadFile(string filePath, string originalFilePath)
+        private void UploadFile(string filePath, string originalFilePath, Guid endpointId)
         {
             try
             {
@@ -405,7 +423,7 @@ namespace APTAT.Valkyrie.Client
                     return;
                 }
 
-                var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey };
+                var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId};
                 BasicInfoResponse basicInfo = ValkyrieService.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
@@ -429,7 +447,8 @@ namespace APTAT.Valkyrie.Client
                     {
                         ApiKey = _apiKey,
                         SubmitToken = basicInfo.SubmitToken,
-                        FilePath = originalFilePath
+                        FilePath = originalFilePath,
+                        EndpointId = endpointId
                     };
 
                     var response = ValkyrieService.SubmitToAutomaticAnalysis(request, filePath, _cancellationTokenSource.Token);

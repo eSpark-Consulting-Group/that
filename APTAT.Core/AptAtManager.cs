@@ -14,6 +14,7 @@ using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using APTAT.Core.Reports;
 using APTAT.Valkyrie.Client;
+using APTAT.Valkyrie.Client.Contracts;
 using APTAT.Valkyrie.Client.Models;
 
 namespace APTAT.Core
@@ -631,7 +632,7 @@ namespace APTAT.Core
             _commandFactory = new CommandFactory(_descentSubSystem);
             _changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
            
-            _valkyrieClient = new ValkyrieClient("MY_CLIENT");
+            _valkyrieClient = new ValkyrieClient();
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
             _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
             if (listener != null)
@@ -885,11 +886,19 @@ namespace APTAT.Core
             _descentSubSystem.AbortAllThreads();
             _valkyrieClient.AnalyzeAsyncCancel();
         }
-        
-        public void StartValkyrieAnalysisAsync(string login, string password, NetworkCredential proxyCredential)
-        {
-            var apiKey = _valkyrieClient.Register(proxyCredential.UserName, proxyCredential.Password);
 
+
+        public RegisterWithResponse Register(string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential)
+        {
+            var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
+
+            RegisterWithResponse regInfo = _valkyrieClient.Register(camRegistration, proxyCredential.UserName, proxyCredential.Password);
+
+            return regInfo;
+        }
+
+        public void StartValkyrieAnalysisAsync(string login, string password, NetworkCredential proxyCredential, string apiKey )
+        {
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var distinctFileList = GetDistinctFileInfo(results);
 

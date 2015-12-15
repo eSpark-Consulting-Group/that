@@ -159,11 +159,52 @@ namespace APTAT.Application
             {
                 if (scanCompletedWindow.ShowDialog() == true)
                 {
-                    _viewModel.BeginValkyrieAnalysis();
+
+             //       _viewModel.BeginValkyrieAnalysis();
+                    ShowRegisterToValkyrieWindow();
                 }
             }
         }
-        
+
+        private void ShowRegisterToValkyrieWindow()
+        {
+
+            var model = new ValkyrieRegistrationModel();
+
+            var win = new CamCredentialsWindow(model);
+            win.Owner = System.Windows.Application.Current.MainWindow;
+            
+            win.OkClick += (sender, args) =>
+            {
+                win.MarkPasswordValidation(model.ValidatePassword());
+
+                if (model.ValidateModel())
+                {
+                    try
+                    {
+                        var info = _viewModel.RegisterWithValkyrie(win.LicenseId, win.UserName, win.PasswordText.Password.Trim());
+                        if (info.ReturnCode == 0)
+                        {
+                            _viewModel.BeginValkyrieAnalysis(info.ApiKey);
+                            win.Close();
+                        }
+                    }
+                    catch (InvalidOperationException exception)
+                    {
+                        if (exception.Data.Contains("ValkyrieReturnCode"))
+                        {
+                            var obj = exception.Data["ValkyrieReturnCode"].ToString();
+                            int code = 0;
+                            Int32.TryParse(obj, out code);
+                            model.ErrorMessage = exception.Message;
+                        }
+                    }
+                }
+            };
+            win.ShowDialog();
+            
+        }
+
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {
            

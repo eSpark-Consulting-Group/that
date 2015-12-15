@@ -9,6 +9,7 @@ using Telerik.Windows.Data;
 using System.Windows.Controls;
 using APTAT.Valkyrie.Client;
 using APTAT.Core;
+using APTAT.Valkyrie.Client.Contracts;
 using APTAT.Valkyrie.Client.Models;
 
 
@@ -705,15 +706,24 @@ namespace APTAT.Application.Models
 
         }
 
-        public void BeginValkyrieAnalysis()
+
+        public RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserLogin, string camUserPassword)
+        {
+            RegisterWithResponse regInfo = _aptService.RegisterWithValkyrie(camLicenseId, camUserLogin, camUserPassword);
+            return regInfo;
+        }
+
+        public void BeginValkyrieAnalysis(string apiKey)
         {
             ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
 
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;
+            
             CurrentViewControl = _valkyrieResultControl;
-            _aptService.BeginValkyrieAnalysis(_login, _password);
+            _aptService.BeginValkyrieAnalysis(_login, _password, apiKey);
+            
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)

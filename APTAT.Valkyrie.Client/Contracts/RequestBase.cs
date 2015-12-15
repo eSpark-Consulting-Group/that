@@ -10,5 +10,7 @@ namespace APTAT.Valkyrie.Client.Contracts
 
         [JsonProperty("api_key")]
         public string ApiKey { get; set; }
+
+        
     }
 }
