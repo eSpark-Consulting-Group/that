@@ -86,6 +86,7 @@ namespace APTAT.Application
 
         protected virtual void OnOkClick()
         {
+            _model.ErrorMessage = String.Empty;
             var handler = OkClick;
             if (handler != null) handler(this, EventArgs.Empty);
         }

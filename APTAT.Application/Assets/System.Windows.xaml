@@ -25,6 +25,7 @@
 <SolidColorBrush x:Key="MainBrush" Color="{Binding Path=Palette.MainColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
 <SolidColorBrush x:Key="MarkerBrush" Color="{Binding Path=Palette.MarkerColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
 <SolidColorBrush x:Key="StrongBrush" Color="{Binding Path=Palette.StrongColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
+    
 <External:Windows8ThemeExternal x:Key="Theme" />
 <SolidColorBrush x:Key="AccentBrush" Color="{Binding Path=Palette.AccentColor, Source={StaticResource Windows8Colors}}" telerik:Windows8Colors.Color="BoundColor" />
 
