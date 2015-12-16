@@ -90,5 +90,11 @@ namespace APTAT.Application
             var handler = OkClick;
             if (handler != null) handler(this, EventArgs.Empty);
         }
+
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
     }
 }
