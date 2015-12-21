@@ -299,7 +299,7 @@ namespace APTAT.Core.Reports
                 files.AddRange(badFilesFromTarget);
             }
 
-            if (ValkyrieAnalysisResult.Any())
+            if (ValkyrieAnalysisResult != null && ValkyrieAnalysisResult.Any())
             {
                 foreach (var f in files)
                 {
