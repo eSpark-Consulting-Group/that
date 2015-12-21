@@ -139,9 +139,11 @@ namespace APTAT.Valkyrie.Client
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
             {
-#if DEBUG
-                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-#endif
+
+                if (!ValkyrieApiUrls.IsProduction)
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                }
                 if (ProxySettings.Proxy != null)
                 {
                     client.Proxy = ProxySettings.Proxy;

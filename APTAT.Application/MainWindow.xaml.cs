@@ -29,6 +29,7 @@ namespace APTAT.Application
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            this.Visibility = Visibility.Hidden;
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(TitleProperty, typeof(Window));
             if (dpd != null)
             {
@@ -41,6 +42,15 @@ namespace APTAT.Application
                 });
             }
             _mainView = (MainView) this.MainFrame.Content;
+            
+            EulaWindow win = new EulaWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Height = this.Height,
+                Width =  this.Width
+            };
+            if(win.ShowDialog() == true) this.Visibility = Visibility.Visible;
         }
         
 
@@ -52,6 +62,8 @@ namespace APTAT.Application
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
+            if(_mainView == null) return;
+            
             if (_mainView.IsScanInProgress)
             {
                 ConfirmationWindow confirmation = new ConfirmationWindow

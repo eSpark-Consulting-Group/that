@@ -198,6 +198,11 @@ namespace APTAT.Application
                             Int32.TryParse(obj, out code);
                             model.ErrorMessage = exception.Message;
                         }
+                        else
+                        {
+                            model.ErrorMessage = "Could not connect to Valkyrie Server";
+                            throw;
+                        }
                     }
                 }
             };

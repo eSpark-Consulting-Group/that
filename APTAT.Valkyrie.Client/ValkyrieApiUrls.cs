@@ -43,7 +43,14 @@ namespace APTAT.Valkyrie.Client
             return new Uri(strUrl);
         }
 
+        public static bool IsProduction
+        {
+            get
+            {
+                var url = GetBaseUri();
+                return url.ToString().Contains(("valkyrie.comodo.com"));
+            }
+        }
 
-       
     }
 }

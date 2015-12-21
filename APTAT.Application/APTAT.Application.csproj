@@ -161,6 +161,9 @@
     <Compile Include="ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EulaWindow.xaml.cs">
+      <DependentUpon>EulaWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GridSelectionColumn.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Models\DelegateCommand.cs" />
@@ -275,6 +278,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EulaWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -376,6 +383,7 @@
     <Resource Include="Assets\arrows.png" />
     <Resource Include="Images\banner_1.png" />
     <Resource Include="Images\banner_2.png" />
+    <Resource Include="Images\Image.png" />
     <Content Include="trl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -392,6 +400,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SfxPackage\7za.exe" />
+    <None Include="Images\Unknown File Hunter EULA %2811-18-2015%29.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="SfxPackage\CreateSfx.bat" />
     <Resource Include="Assets\comodo_white.png" />
     <Resource Include="SfxPackage\config.txt" />
