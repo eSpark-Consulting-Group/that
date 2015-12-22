@@ -400,7 +400,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SfxPackage\7za.exe" />
-    <None Include="Images\Unknown File Hunter EULA %2811-18-2015%29.rtf">
+    <None Include="Unknown File Hunter EULA %2811-18-2015%29.rtf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="SfxPackage\CreateSfx.bat" />
@@ -476,7 +476,7 @@ xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.DataVisualization.dll" "$
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.ProcessingObjectModel.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.WinForms.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)$(ConfigurationName)\APTAT.Bootstrapper.exe" "$(TargetDir)" /Y
-"$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt"  "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)APTAT.Application.exe" "$(TargetDir)APTAT.Application.exe.config" "$(TargetDir)APTAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
+"$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.rtf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)APTAT.Application.exe" "$(TargetDir)APTAT.Application.exe.config" "$(TargetDir)APTAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
 copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)APTAT.exe" || goto :error
 del  "$(TargetDir)archive.7z"</PostBuildEvent>
   </PropertyGroup>

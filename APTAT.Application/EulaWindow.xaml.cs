@@ -32,7 +32,7 @@ namespace APTAT.Application
 
         void EulaWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            string fileName = @"Images\Unknown File Hunter EULA (11-18-2015).rtf";
+            string fileName = @"Unknown File Hunter EULA (11-18-2015).rtf";
 
             if (System.IO.File.Exists(fileName))
             {
