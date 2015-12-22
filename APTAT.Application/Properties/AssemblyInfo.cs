@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("APTAT.Application")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Comodo Uknown Files Hunter")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Comodo")]
 [assembly: AssemblyProduct("Comodo Uknown Files Hunter")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

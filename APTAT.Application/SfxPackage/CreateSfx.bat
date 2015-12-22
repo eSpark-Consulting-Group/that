@@ -9,7 +9,7 @@ set SOURCEDIR=%~dp0..\..\..\
 set OUTDIR=%~dp1
 set VERSION=%~2
 
-if "%VERSION%"=="" set VERSION=1.0.0.0
+if "%VERSION%"=="" set VERSION=1.2.2212.0
 
 set SFX_FILENAME=APTAT%VERSION%.exe
 
