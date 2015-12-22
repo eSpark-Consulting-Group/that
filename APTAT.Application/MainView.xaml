@@ -237,25 +237,7 @@
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Margin="0,0,5,0"
-                            Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                    <TextBlock VerticalAlignment="Center" Margin="0,5" 
-                               FontSize="14"
-                               Text="{Binding Source={StaticResource BuyCesSmallText}}" 
-                               Foreground="White" />
-                    <Image Source="Assets/arrows.png" Margin="5,0" Stretch="None" />
-                
-                    <TextBlock VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0"  >
-                        <Hyperlink x:Name="cesmHyperLink"
-                                   NavigateUri="{Binding Mode=OneWay, Source={StaticResource CESMLink}, Converter={StaticResource StringToHyperlinkConverter}}"
-                                   RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFB6E0FD" >
-                            Get Endpoint Security Manager
-                        </Hyperlink>
-                        
-                       
-                    </TextBlock>
-
-
-                </StackPanel>
+                            Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
             </DockPanel >
         </Border>
