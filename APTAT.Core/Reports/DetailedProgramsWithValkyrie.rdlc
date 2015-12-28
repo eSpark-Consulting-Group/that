@@ -1157,6 +1157,8 @@
                         <FontSize>8pt</FontSize>
                       </Style>
                     </ChartAxisTitle>
+                    <Interval>=Ceiling(Max(Fields!Count.Value / 10))</Interval>
+                    <IntervalType>Number</IntervalType>
                     <ChartMajorGridLines>
                       <Style>
                         <Border>
@@ -1183,7 +1185,7 @@
                       <Length>0.5</Length>
                     </ChartMinorTickMarks>
                     <CrossAt>NaN</CrossAt>
-                    <Minimum>NaN</Minimum>
+                    <Minimum>1</Minimum>
                     <Maximum>NaN</Maximum>
                     <ChartAxisScaleBreak>
                       <Style />
@@ -2403,6 +2405,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
