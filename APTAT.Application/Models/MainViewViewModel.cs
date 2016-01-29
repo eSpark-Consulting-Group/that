@@ -34,7 +34,7 @@ namespace APTAT.Application.Models
         private Boolean _isValkyrieReportEnabled;
         private Boolean? _isScanInProgress;
         private Int32 _scannedItemsCount;
-
+        
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
 
@@ -392,7 +392,7 @@ namespace APTAT.Application.Models
             IsReportEnabled = false;
             IsValkyrieReportEnabled = false;
             CurrentViewControl = _scanInfoTreeControl;
-
+            
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
             {
@@ -670,7 +670,13 @@ namespace APTAT.Application.Models
                 if (DevicesSourceDescription == null)
                     throw new InvalidOperationException("Devices Source Description was not correctly initialised");
 
-                _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this);
+                string scanScope = @"?:";
+                if (IsQuickScan)
+                {
+                    scanScope = @"processes|drivers|autoruns";
+                }
+
+                _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this, scanScope); 
                 //_login = null;
                 //_password = null;
                 DevicesSourceDescription = null;
@@ -882,5 +888,7 @@ namespace APTAT.Application.Models
         private bool? _isValkyrieScanInProgress;
         private string _statusBarText;
         private bool _isValkyrieAnalysCompleted;
+
+        public bool IsQuickScan { get; set; }
     }
 }

@@ -43,6 +43,7 @@ namespace APTAT.Application
         private MainViewViewModel _viewModel;
         private IStorageService _storageService;
         private Int32 _selectedReportIndex = -1;
+        
 
         //public void CancelScan()
         //{
@@ -224,6 +225,7 @@ namespace APTAT.Application
             details.Owner = System.Windows.Application.Current.MainWindow;
             if(details.ShowDialog() == true)
             {
+                _viewModel.IsQuickScan = details.IsQuickScan;
                 _viewModel.StartScanCommand.Execute(null);
             }
         }

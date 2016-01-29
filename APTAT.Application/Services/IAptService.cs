@@ -184,7 +184,7 @@ namespace APTAT.Application.Services
 
         void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState);
 
-        void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState);
+        void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState, String scanScope);
 
         void GetScanResult(Guid targetUid, Object userState);
 

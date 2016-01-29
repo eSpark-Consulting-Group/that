@@ -36,7 +36,7 @@
       <Value Profile="(Default)">260</Value>
     </Setting>
     <Setting Name="ScanScope" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">processes|drivers|autoruns</Value>
+      <Value Profile="(Default)">?:</Value>
     </Setting>
     <Setting Name="SkipGac" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>

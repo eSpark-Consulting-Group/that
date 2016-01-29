@@ -180,7 +180,7 @@
 
                 </Canvas>
 
-                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="50" Margin="0,0,25,0">
+                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="50" Margin="0,0,25,0">                    
                     <Button x:Name="btnCancel" Content="Cancel" 
                         Visibility="{Binding IsCancelEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}"
                         Click="OnCancelClick" Margin="5"  Style="{StaticResource ButtonNormalStyle}"/>
@@ -195,11 +195,17 @@
                         Margin="5" 
                         Click="OnNextClick"  
                         Style="{StaticResource ButtonHighlightStyle}" />
+                    <Button x:Name="btnQuickScan"
+                        Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                        IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
+                        Content="Quick Scan" 
+                        Click="OnQuickScanClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
                     <Button x:Name="btnFinish"
                         Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
                         IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
                         IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
-                        Content="Scan" 
+                        Content="Full Scan" 
                         Click="OnFinishClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
                 </StackPanel>
             </Grid>

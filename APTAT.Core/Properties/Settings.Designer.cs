@@ -124,7 +124,7 @@ namespace APTAT.Core.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("processes|drivers|autoruns")]
+        [global::System.Configuration.DefaultSettingValueAttribute("?:")]
         public string ScanScope {
             get {
                 return ((string)(this["ScanScope"]));

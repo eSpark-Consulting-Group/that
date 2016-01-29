@@ -28,8 +28,11 @@ namespace APTAT.Application
             };
         }
 
-        private void OnFinishClick(Object sender, EventArgs e)
+        public bool IsQuickScan { get; private set; }
+        
+        private void OnFinishClick(Object sender, StartScanEventArgs e)
         {
+            IsQuickScan = e.IsQuickScan;
             DialogResult = true;
         }
 

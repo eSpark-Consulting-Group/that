@@ -147,7 +147,7 @@ namespace APTAT.Application.Services
 
         }
 
-        public void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState)
+        public void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState, string scanScope)
         {
             //Logger.Clear();
             //Logger.WriteLog("================= Begin Scan");
@@ -155,7 +155,7 @@ namespace APTAT.Application.Services
             var devicesSourceDescr = ((MainViewViewModel)userState).DevicesSourceDescription;
 
             DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
-            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain, devicesSourceDescr);
+            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain, devicesSourceDescr, scanScope);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;

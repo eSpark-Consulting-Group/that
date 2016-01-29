@@ -25,14 +25,17 @@ namespace APTAT.Application
         public const Int32 FinishStep = 2;
     }
 
-
+    public class StartScanEventArgs : EventArgs
+    {
+        public bool IsQuickScan { get; set; }
+    }
     /// <summary>
     /// Interaction logic for StartScanView.xaml
     /// </summary>
     public partial class StartScanView
     {
         public event EventHandler CancelClick;
-        public event EventHandler FinishClick;
+        public event EventHandler<StartScanEventArgs> FinishClick;
 
         //private readonly StartScanViewModel _viewModel;
         private readonly WizardViewModel _scanDomainViewModel;
@@ -42,6 +45,7 @@ namespace APTAT.Application
         private WizardViewModel _currentViewModel;
         
         ToolTip tooltip;
+        private bool _isQuickScan;
         public bool IsTooltipOpen 
         {
             get
@@ -83,8 +87,10 @@ namespace APTAT.Application
 
         private void OnFinishClick(Object sender, RoutedEventArgs e)
         {
+        
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
+                
                 Step = _currentViewModel.CurrentStepIndex + 1,
                 Completed = ctx =>
                 {
@@ -204,7 +210,8 @@ namespace APTAT.Application
         {
             if (FinishClick != null)
             {
-                FinishClick(this, EventArgs.Empty);
+                var arg = new StartScanEventArgs() { IsQuickScan = _isQuickScan };
+                FinishClick(this, arg);
             }
         }
 
@@ -265,6 +272,19 @@ Computer Name: HomeComputer";
             if (tooltip != null)
                 tooltip.IsOpen = false;
 
+        }
+
+        private void OnQuickScanClick(object sender, RoutedEventArgs e)
+        {
+            _isQuickScan = true;            
+            _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
+            {
+
+                Step = _currentViewModel.CurrentStepIndex + 1,
+                Completed = ctx =>
+                {
+                }
+            });
         }
     }
 }
