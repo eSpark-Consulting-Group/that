@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("APTAT.Application")]
+[assembly: AssemblyTitle("Comodo Uknown Files Hunter")]
 [assembly: AssemblyDescription("Comodo Uknown Files Hunter")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Comodo")]
 [assembly: AssemblyProduct("Comodo Uknown Files Hunter")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
