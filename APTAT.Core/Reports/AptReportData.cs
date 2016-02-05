@@ -463,7 +463,7 @@ namespace APTAT.Core.Reports
         public string FileSizeFormatted { get; set; }
         public BadFileType FileType { get; set; }
 
-        public void SetValkyrieAnalysis(Valkyrie.Client.AnalysisResult analysisResult)
+        public void SetValkyrieAnalysis(Valkyrie.Client.ValkyrieAnalysisResult analysisResult)
         {
             if (analysisResult == null) return;
             IsWhiteListed = analysisResult.IsWhiteListed;

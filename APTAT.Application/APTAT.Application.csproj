@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>APTAT.Application</RootNamespace>
-    <AssemblyName>Hunter</AssemblyName>
+    <AssemblyName>APTAT.Application</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -458,9 +458,9 @@
       <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
       <Name>APTAT.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj">
+    <ProjectReference Include="..\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
       <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
-      <Name>APTAT.Valkyrie.Client</Name>
+      <Name>Valkyrie.WebApiProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

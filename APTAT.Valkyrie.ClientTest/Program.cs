@@ -73,16 +73,16 @@ namespace APTAT.Valkyrie.ClientTest
             //Console.ReadKey();
         }
 
-        static void valkyrie_AnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            var result = e.Result;
-            Console.WriteLine(String.Format("Upload to Valkyrie completed. Uploaded files {0}. Skipped files {1}", result.Where(f => f.IsSkipped == false).Count(), result.Where(f => f.IsSkipped).Count()));
+        //static void valkyrie_AnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
+        //{
+        //    Console.ForegroundColor = ConsoleColor.Green;
+        //    var result = e.Result;
+        //    Console.WriteLine(String.Format("Upload to Valkyrie completed. Uploaded files {0}. Skipped files {1}", result.Where(f => f.IsSkipped == false).Count(), result.Where(f => f.IsSkipped).Count()));
             
 
-            ShowResult(result);
-            Console.ForegroundColor = ConsoleColor.White;
-        }
+        //    ShowResult(result);
+        //    Console.ForegroundColor = ConsoleColor.White;
+        //}
 
         static void valkyrie_AnalyzeCanceled(object sender, EventArgs e)
         {
@@ -108,31 +108,31 @@ namespace APTAT.Valkyrie.ClientTest
             return files;
         }
 
-        private static void ShowResult(IEnumerable<AnalysisResult> result)
-        {
-            foreach (var item in result)
-            {
-                Console.WriteLine("-----------------------------------------------------------------------------------------");
-                if (item.IsSkipped)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("{0} {1} {2}  {3}", item.SHA1, "Skipped", item.LastAnalysisDate, item.SkipReason);
-                }
-                else
-                {
-                    if (item.Verdict == Client.Enums.InfoVerdictEnum.Malware)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.White;
-                    }
-                    Console.WriteLine(String.Format("{0} {1} {2}  Whitelisted: {3}", item.SHA1, item.Verdict, item.LastAnalysisDate, item.IsWhiteListed));
-                }
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
+        //private static void ShowResult(IEnumerable<ValkyrieAnalysisResult> result)
+        //{
+        //    foreach (var item in result)
+        //    {
+        //        Console.WriteLine("-----------------------------------------------------------------------------------------");
+        //        if (item.IsSkipped)
+        //        {
+        //            Console.ForegroundColor = ConsoleColor.Yellow;
+        //            Console.WriteLine("{0} {1} {2}  {3}", item.SHA1, "Skipped", item.LastAnalysisDate, item.SkipReason);
+        //        }
+        //        else
+        //        {
+        //            if (item.Verdict == Client.Enums.InfoVerdictEnum.Malware)
+        //            {
+        //                Console.ForegroundColor = ConsoleColor.Red;
+        //            }
+        //            else
+        //            {
+        //                Console.ForegroundColor = ConsoleColor.White;
+        //            }
+        //            Console.WriteLine(String.Format("{0} {1} {2}  Whitelisted: {3}", item.SHA1, item.Verdict, item.LastAnalysisDate, item.IsWhiteListed));
+        //        }
+        //        Console.ForegroundColor = ConsoleColor.White;
+        //    }
+        //}
                
 
 

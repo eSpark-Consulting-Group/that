@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Application", "APTAT.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "APTAT.Bootstrapper", "APTAT.Bootstrapper\APTAT.Bootstrapper.vcxproj", "{9F567299-6CB8-4F71-BA7E-D23FF1ACE430}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie.Client", "APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj", "{851E6095-DD19-4C19-8F9C-20E134FB6F5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Valkyrie.WebApiProvider", "APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj", "{851E6095-DD19-4C19-8F9C-20E134FB6F5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie.ClientTest", "APTAT.Valkyrie.ClientTest\APTAT.Valkyrie.ClientTest.csproj", "{D653354D-6289-45A2-B37F-A032BF3AE377}"
 EndProject
@@ -34,12 +34,12 @@ Global
 		SccProjectUniqueName3 = APTAT.Bootstrapper\\APTAT.Bootstrapper.vcxproj
 		SccProjectName3 = APTAT.Bootstrapper
 		SccLocalPath3 = APTAT.Bootstrapper
-		SccProjectUniqueName4 = APTAT.Valkyrie.Client\\APTAT.Valkyrie.Client.csproj
-		SccProjectName4 = APTAT.Valkyrie.Client
-		SccLocalPath4 = APTAT.Valkyrie.Client
-		SccProjectUniqueName5 = APTAT.Valkyrie.ClientTest\\APTAT.Valkyrie.ClientTest.csproj
-		SccProjectName5 = APTAT.Valkyrie.ClientTest
-		SccLocalPath5 = APTAT.Valkyrie.ClientTest
+		SccProjectUniqueName4 = APTAT.Valkyrie.ClientTest\\APTAT.Valkyrie.ClientTest.csproj
+		SccProjectName4 = APTAT.Valkyrie.ClientTest
+		SccLocalPath4 = APTAT.Valkyrie.ClientTest
+		SccProjectUniqueName5 = APTAT.Valkyrie.Client\\Valkyrie.WebApiProvider.csproj
+		SccProjectName5 = APTAT.Valkyrie.Client
+		SccLocalPath5 = APTAT.Valkyrie.Client
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

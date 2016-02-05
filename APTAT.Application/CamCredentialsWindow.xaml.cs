@@ -96,5 +96,10 @@ namespace APTAT.Application
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
+
+        private void CamCredentialsWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+           DragMove();
+        }
     }
 }

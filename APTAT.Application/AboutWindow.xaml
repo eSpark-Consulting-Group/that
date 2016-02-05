@@ -72,7 +72,7 @@
                
                     <Button Grid.Row="3" Grid.ColumnSpan="1" HorizontalAlignment="Right" Content="Close" Margin="0,0,15,5"  Click="OnBackClick" Style="{StaticResource ButtonHighlightStyle}" Grid.Column="2" Width="120"/>
                 <TextBlock Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Left"
-                           Text="© 2015 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
+                           Text="© 2016 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
                            Margin="24,20,0,0" Foreground="#878787" FontSize="13" ></TextBlock>
                 
             </Grid>

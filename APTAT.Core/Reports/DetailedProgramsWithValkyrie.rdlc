@@ -1758,7 +1758,7 @@
                                       <Value>=Fields!Name.Value</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
-                                        <FontSize>20pt</FontSize>
+                                        <FontSize>18pt</FontSize>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>

@@ -10,7 +10,7 @@ using System.Threading;
 namespace APTAT.Valkyrie.Client
 {
 
-    public static class ValkyrieService
+    public static class ValkyrieWebApiProvider
     {
 
         /// <summary>
@@ -23,38 +23,38 @@ namespace APTAT.Valkyrie.Client
         }
 
         // ReSharper disable once InconsistentNaming
-        internal static RegisterWithResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
+        public static RegisterWithResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
         {
             var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithMachineId, request);
             return response;
         }
 
-        internal static RegisterWithResponse RegisterWithCamLicense(RegisterWithCamLicenseRequest request)
+        public static RegisterWithResponse RegisterWithCamLicense(RegisterWithCamLicenseRequest request)
         {
             var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithCamLicense, request);
             return response;
         }
 
-        internal static RegisterWithResponse RegisterWithCamCredentials(RegisterWithCamCredentials request)
+        public static RegisterWithResponse RegisterWithCamCredentials(RegisterWithCamCredentials request)
         {
             var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithCamCredentials, request);
             return response;
         }
 
-        internal static StartAndFinalizeScanResponse StartScan(StartScanRequest request)
+        public static StartAndFinalizeScanResponse StartScan(StartScanRequest request)
         {
             var response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.StartScan, request);
             return response;
         }
 
-        internal static StartAndFinalizeScanResponse EndScan(EndScanRequest request)
+        public static StartAndFinalizeScanResponse EndScan(EndScanRequest request)
         {
             var response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.EndScan, request);
             return response;
         }
 
 
-        internal static FullInfoResponse GetFullInfo(InfoRequest request)
+        public static FullInfoResponse GetFullInfo(InfoRequest request)
         {
             var result = CallValkyrie<FullInfoResponse>(ValkyrieApiUrls.FullInfo, request);
             return result;

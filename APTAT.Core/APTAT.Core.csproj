@@ -408,6 +408,10 @@
     <Compile Include="ProductSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Valkyrie\AnalyzeCompletedEventArgs.cs" />
+    <Compile Include="Valkyrie\AnalyzeCompletedEventHandler.cs" />
+    <Compile Include="Valkyrie\CamRegistration.cs" />
+    <Compile Include="Valkyrie\ProgressInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ServerSideMessagesResources.cs">
       <SubType>Code</SubType>
@@ -451,6 +455,9 @@
     <Compile Include="Transport\HostResolverProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Valkyrie\ValkyrieAnalysisResult.cs" />
+    <Compile Include="Valkyrie\ValkyrieClient.cs" />
+    <Compile Include="Valkyrie\ValkyrieFileInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -494,9 +501,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj">
+    <ProjectReference Include="..\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
       <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
-      <Name>APTAT.Valkyrie.Client</Name>
+      <Name>Valkyrie.WebApiProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

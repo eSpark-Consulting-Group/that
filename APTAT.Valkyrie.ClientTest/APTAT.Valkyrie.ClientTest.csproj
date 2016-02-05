@@ -69,9 +69,9 @@
     <None Include="Properties\DataSources\APTAT.Valkyrie.Client.AnalysisResult.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\APTAT.Valkyrie.Client\APTAT.Valkyrie.Client.csproj">
+    <ProjectReference Include="..\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
       <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
-      <Name>APTAT.Valkyrie.Client</Name>
+      <Name>Valkyrie.WebApiProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

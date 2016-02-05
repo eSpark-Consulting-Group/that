@@ -148,7 +148,7 @@ namespace APTAT.Core
             get { return FileAgeFormatter.GetAge(Created); }
         }
 
-        public AnalysisResult ValkyrieAnalysisResult { get; set; }
+        public ValkyrieAnalysisResult ValkyrieAnalysisResult { get; set; }
 
         public List<ComputerInformation> Computers { get; set; }
     }

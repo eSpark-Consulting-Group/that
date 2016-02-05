@@ -639,7 +639,7 @@ namespace APTAT.Core
                 _changeTrackingSubSystem.RegisterListener(listener);
         }
 
-        void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<AnalysisResult> e)
+        void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
         {
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var valkyrieAnalysisResult = GetFullResult(e.Result, results);
@@ -657,7 +657,7 @@ namespace APTAT.Core
             var handler = ValkyrieAnalyzeProgressChanged;
             if (handler != null)
             {
-                ProgressInfo<AnalysisResult> info = (ProgressInfo<AnalysisResult>)e.UserState;
+                ProgressInfo<ValkyrieAnalysisResult> info = (ProgressInfo<ValkyrieAnalysisResult>)e.UserState;
                 
                 var results = _descentSubSystem.GetFirstScanResults().ScanResults;
                 var valkyrieAnalysisResult = GetFullResult(info.Results, results);
@@ -667,7 +667,7 @@ namespace APTAT.Core
             }
         }
 
-        private static List<FileResult> GetFullResult(IEnumerable<AnalysisResult> valkyrieResult, ConcurrentDictionary<Guid, ScanResult> scanResults)
+        private static List<FileResult> GetFullResult(IEnumerable<ValkyrieAnalysisResult> valkyrieResult, ConcurrentDictionary<Guid, ScanResult> scanResults)
         {
             List<FileResult> fileResults = new List<FileResult>();
 

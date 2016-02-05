@@ -5,11 +5,11 @@ using System.Linq.Expressions;
 
 namespace APTAT.Valkyrie.Client
 {
-    public class AnalysisResult
+    public class ValkyrieAnalysisResult
     {
-        public static AnalysisResult Create(BasicInfoResponse basicInfo)
+        public static ValkyrieAnalysisResult Create(BasicInfoResponse basicInfo)
         {
-            AnalysisResult result = new AnalysisResult();
+            ValkyrieAnalysisResult result = new ValkyrieAnalysisResult();
             result.SHA1 = basicInfo.SHA1;
             result.FirstAnalysisDate = basicInfo.FirstAnalysisDate;
             result.LastAnalysisDate = basicInfo.LastAnalysisDate;
@@ -25,9 +25,9 @@ namespace APTAT.Valkyrie.Client
 
         
 
-        public static AnalysisResult Create(SubmitToAutomaticResponse automaticResponse)
+        public static ValkyrieAnalysisResult Create(SubmitToAutomaticResponse automaticResponse)
         {
-            AnalysisResult result = new AnalysisResult();
+            ValkyrieAnalysisResult result = new ValkyrieAnalysisResult();
             result.SHA1 = automaticResponse.SHA1;
             result.FirstAnalysisDate = automaticResponse.FirstAnalysisDate;
             result.LastAnalysisDate = automaticResponse.LastAnalysisDate;
@@ -60,9 +60,9 @@ namespace APTAT.Valkyrie.Client
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
 
-        internal static AnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
+        public static ValkyrieAnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
-            var result = new AnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotAnalyzed , IsWhiteListed = false, LastAnalysisDate = null};
+            var result = new ValkyrieAnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotAnalyzed , IsWhiteListed = false, LastAnalysisDate = null};
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:

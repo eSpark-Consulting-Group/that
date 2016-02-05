@@ -7,8 +7,8 @@
     <ProjectGuid>{851E6095-DD19-4C19-8F9C-20E134FB6F5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>APTAT.Valkyrie.Client</RootNamespace>
-    <AssemblyName>APTAT.Valkyrie.Client</AssemblyName>
+    <RootNamespace>Valkyrie.WebApiProvider</RootNamespace>
+    <AssemblyName>Valkyrie.WebApiProvider</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -55,9 +55,6 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AnalyzeCompletedEventArgs.cs" />
-    <Compile Include="AnalyzeCompletedEventHandler.cs" />
-    <Compile Include="CamRegistration.cs" />
     <Compile Include="Contracts\RegisterWithCamCredentials.cs" />
     <Compile Include="Contracts\RegisterWithCamLicenseRequest.cs" />
     <Compile Include="Contracts\StartAndFinalizeScanResponse.cs" />
@@ -66,8 +63,6 @@
     <Compile Include="Contracts\SubmitToManualRequestSHA1.cs" />
     <Compile Include="Enums\EnumExt.cs" />
     <Compile Include="Helpers\HashCalculator.cs" />
-    <Compile Include="Helpers\NetAddressHelper.cs" />
-    <Compile Include="Models\AnalysisResult.cs" />
     <Compile Include="Helpers\ObjectToArrayConverter.cs" />
     <Compile Include="Helpers\MultipartPostHelper.cs" />
     <Compile Include="Contracts\InfoRequest.cs" />
@@ -84,18 +79,18 @@
     <Compile Include="Enums\AnalysisStatusEnum.cs" />
     <Compile Include="Enums\VerdictEnum.cs" />
     <Compile Include="Extensions\NameValueCollectionExt.cs" />
-    <Compile Include="Models\ProgressInfo.cs" />
     <Compile Include="Contracts\RegisterWithResponse.cs" />
-    <Compile Include="Models\ValkyrieFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxySettings.cs" />
-    <Compile Include="StartScanRequest.cs" />
+    <Compile Include="Contracts\StartScanRequest.cs" />
     <Compile Include="ValkyrieApiUrls.cs" />
-    <Compile Include="ValkyrieClient.cs" />
-    <Compile Include="ValkyrieService.cs" />
+    <Compile Include="ValkyrieWebApiProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
