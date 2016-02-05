@@ -1,6 +1,6 @@
 using System;
 
-namespace APTAT.Valkyrie.Client
+namespace APTAT.Core.Valkyrie
 {
     public class CamRegistration
     {

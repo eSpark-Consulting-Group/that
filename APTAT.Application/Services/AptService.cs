@@ -13,7 +13,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Net;
 using System.Windows;
-using APTAT.Valkyrie.Client.Contracts;
+using APTAT.Core.Valkyrie;
+using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Application.Services
 {

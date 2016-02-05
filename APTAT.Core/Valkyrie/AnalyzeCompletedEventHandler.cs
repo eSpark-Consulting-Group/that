@@ -1,6 +1,4 @@
-using System;
-
-namespace APTAT.Valkyrie.Client
+namespace APTAT.Core.Valkyrie
 {
     public delegate void AnalyzeCompletedEventHandler<T>(object sender, AnalyzeCompletedEventArgs<T> e);
 }

@@ -9,8 +9,8 @@ using Telerik.Windows.Data;
 using System.Windows.Controls;
 using APTAT.Valkyrie.Client;
 using APTAT.Core;
-using APTAT.Valkyrie.Client.Contracts;
-using APTAT.Valkyrie.Client.Models;
+using APTAT.Core.Valkyrie;
+using Valkyrie.WebApiProvider.Contracts;
 
 
 namespace APTAT.Application.Models

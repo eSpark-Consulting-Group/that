@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using Newtonsoft.Json;
 
-namespace APTAT.Valkyrie.Client.Contracts
+namespace Valkyrie.WebApiProvider.Contracts
 {
     public class InfoRequest : RequestBase
     {

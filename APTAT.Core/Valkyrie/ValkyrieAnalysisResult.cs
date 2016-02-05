@@ -1,9 +1,8 @@
-﻿using APTAT.Valkyrie.Client.Contracts;
-using APTAT.Valkyrie.Client.Enums;
-using System;
-using System.Linq.Expressions;
+﻿using System;
+using Valkyrie.WebApiProvider.Contracts;
+using Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie.Client
+namespace APTAT.Core.Valkyrie
 {
     public class ValkyrieAnalysisResult
     {

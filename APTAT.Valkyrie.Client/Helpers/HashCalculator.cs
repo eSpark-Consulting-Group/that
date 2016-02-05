@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace APTAT.Valkyrie.Client.Helpers
+namespace Valkyrie.WebApiProvider.Helpers
 {
     public static class HashCalculator
     {

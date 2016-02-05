@@ -1,8 +1,8 @@
-﻿using APTAT.Valkyrie.Client.Enums;
+﻿using System;
 using Newtonsoft.Json;
-using System;
+using Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie.Client.Contracts
+namespace Valkyrie.WebApiProvider.Contracts
 {
     public class BasicInfoResponse
     {

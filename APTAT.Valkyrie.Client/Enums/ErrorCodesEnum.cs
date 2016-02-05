@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Reflection;
+﻿using System.ComponentModel;
 
-namespace APTAT.Valkyrie.Client.Enums
+namespace Valkyrie.WebApiProvider.Enums
 {
     public enum ErrorCodesEnum
     {

@@ -1,7 +1,7 @@
-using APTAT.Valkyrie.Client.Enums;
 using Newtonsoft.Json;
+using Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie.Client.Contracts
+namespace Valkyrie.WebApiProvider.Contracts
 {
     public class StartAndFinalizeScanResponse
     {

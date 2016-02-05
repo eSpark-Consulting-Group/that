@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using APTAT.Core.Valkyrie;
 using APTAT.Valkyrie.Client;
+using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Core
 {
@@ -69,7 +71,7 @@ namespace APTAT.Core
                 if (this.ValkyrieAnalysisResult != null)
                 {
 
-                    return ValkyrieAnalysisResult.Verdict == Valkyrie.Client.Enums.InfoVerdictEnum.Malware;
+                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware;
                 }
                 return false;
             }

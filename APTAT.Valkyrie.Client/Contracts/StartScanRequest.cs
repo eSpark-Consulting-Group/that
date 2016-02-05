@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace APTAT.Valkyrie.Client
+namespace Valkyrie.WebApiProvider.Contracts
 {
     public class StartScanRequest
     {

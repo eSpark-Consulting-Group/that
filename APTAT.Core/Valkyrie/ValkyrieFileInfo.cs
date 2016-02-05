@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace APTAT.Valkyrie.Client
+namespace APTAT.Core.Valkyrie
 {
     public class ValkyrieFileInfo
     {

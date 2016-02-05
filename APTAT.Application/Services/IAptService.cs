@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using APTAT.Valkyrie.Client;
 using APTAT.Core;
 using System.ComponentModel;
-using APTAT.Valkyrie.Client.Contracts;
+using APTAT.Core.Valkyrie;
+using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Application.Services
 {

@@ -1,12 +1,9 @@
-﻿using APTAT.Valkyrie.Client.Enums;
+﻿using System;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Valkyrie.WebApiProvider.Enums;
+using Valkyrie.WebApiProvider.Helpers;
 
-namespace APTAT.Valkyrie.Client.Contracts
+namespace Valkyrie.WebApiProvider.Contracts
 {
 
     public class FullInfoResponse
@@ -121,7 +118,7 @@ namespace APTAT.Valkyrie.Client.Contracts
 
     public class ComponentAnalysisResults
     {
-        [JsonConverter(typeof(APTAT.Valkyrie.Client.Helpers.ObjectToArrayConverter<Anomalies>))]
+        [JsonConverter(typeof(ObjectToArrayConverter<Anomalies>))]
         public Anomalies[] anomalies { get; set; }
         public Camas camas { get; set; }
         public DateTime? end_date { get; set; }

@@ -1,11 +1,12 @@
 ﻿using APTAT.Valkyrie.Client;
-using APTAT.Valkyrie.Client.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using APTAT.Core.Valkyrie;
+using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Core.Reports
 {
@@ -463,7 +464,7 @@ namespace APTAT.Core.Reports
         public string FileSizeFormatted { get; set; }
         public BadFileType FileType { get; set; }
 
-        public void SetValkyrieAnalysis(Valkyrie.Client.ValkyrieAnalysisResult analysisResult)
+        public void SetValkyrieAnalysis(ValkyrieAnalysisResult analysisResult)
         {
             if (analysisResult == null) return;
             IsWhiteListed = analysisResult.IsWhiteListed;
@@ -555,9 +556,9 @@ namespace APTAT.Core.Reports
             }
         }
 
-        public Valkyrie.Client.Enums.ErrorCodesEnum ReturnCode { get; set; }
+        public ErrorCodesEnum ReturnCode { get; set; }
 
-        public Valkyrie.Client.Enums.InfoVerdictEnum Verdict { get; set; }
+        public InfoVerdictEnum Verdict { get; set; }
 
         public string ValkyrieVerdictString
         {

@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System;
 
-namespace APTAT.Valkyrie.Client.Helpers
+namespace Valkyrie.WebApiProvider.Helpers
 {
     public class ObjectToArrayConverter<T> : CustomCreationConverter<T[]>
     {

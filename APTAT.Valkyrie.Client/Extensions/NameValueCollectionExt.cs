@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Newtonsoft.Json;
 
-namespace APTAT.Valkyrie.Client
+namespace Valkyrie.WebApiProvider.Extensions
 {
     public static class NameValueCollectionExt
     {

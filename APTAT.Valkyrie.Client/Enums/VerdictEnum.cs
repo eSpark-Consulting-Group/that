@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
-namespace APTAT.Valkyrie.Client.Enums
+
+namespace Valkyrie.WebApiProvider.Enums
 {
     public enum SkippReasonEnum
     {

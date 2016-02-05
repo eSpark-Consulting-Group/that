@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-namespace APTAT.Valkyrie.Client.Contracts
+﻿using Newtonsoft.Json;
+
+namespace Valkyrie.WebApiProvider.Contracts
 {
     public class ManualStatusRequest:RequestBase
     {

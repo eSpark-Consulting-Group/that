@@ -1,5 +1,4 @@
 ﻿using APTAT.Valkyrie.Client;
-using APTAT.Valkyrie.Client.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

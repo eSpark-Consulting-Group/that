@@ -1,10 +1,8 @@
-﻿using APTAT.Valkyrie.Client.Enums;
+﻿using System;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Valkyrie.WebApiProvider.Enums;
 
-namespace APTAT.Valkyrie.Client.Contracts
+namespace Valkyrie.WebApiProvider.Contracts
 {
 
     public class SubmitToAutomaticResponse

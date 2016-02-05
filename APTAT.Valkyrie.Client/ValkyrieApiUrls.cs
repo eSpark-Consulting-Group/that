@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Configuration;
-using System.Security.Policy;
 
-namespace APTAT.Valkyrie.Client
+namespace Valkyrie.WebApiProvider
 {
     public static class ValkyrieApiUrls
     {

@@ -9,12 +9,13 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using APTAT.Valkyrie.Client.Contracts;
-using APTAT.Valkyrie.Client.Enums;
-using APTAT.Valkyrie.Client.Helpers;
-using APTAT.Valkyrie.Client.Models;
+using APTAT.Valkyrie.Client;
+using Valkyrie.WebApiProvider;
+using Valkyrie.WebApiProvider.Contracts;
+using Valkyrie.WebApiProvider.Enums;
+using Valkyrie.WebApiProvider.Helpers;
 
-namespace APTAT.Valkyrie.Client
+namespace APTAT.Core.Valkyrie
 {
     public sealed class ValkyrieClient
     {
@@ -155,7 +156,7 @@ namespace APTAT.Valkyrie.Client
         {
             if (fileName == null) throw new ArgumentNullException("fileName");
 
-            Process process = new Process();
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Hidden,
@@ -204,10 +205,10 @@ namespace APTAT.Valkyrie.Client
                 usrTempFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             }
             var valkyrieFolder = Path.Combine(usrTempFolder, "ValkyrieTmp");
-            bool exists = Directory.Exists(valkyrieFolder);
+            bool exists = System.IO.Directory.Exists(valkyrieFolder);
             if (!exists)
             {
-                Directory.CreateDirectory(valkyrieFolder);
+                System.IO.Directory.CreateDirectory(valkyrieFolder);
             }
             else
             {

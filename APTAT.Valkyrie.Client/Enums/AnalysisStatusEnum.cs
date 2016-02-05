@@ -1,4 +1,4 @@
-﻿namespace APTAT.Valkyrie.Client.Enums
+﻿namespace Valkyrie.WebApiProvider.Enums
 {
     public enum AnalysisStatusEnum
     {

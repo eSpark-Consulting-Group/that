@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace APTAT.Valkyrie.Client.Contracts
+namespace Valkyrie.WebApiProvider.Contracts
 {
     public class EndScanRequest
     {

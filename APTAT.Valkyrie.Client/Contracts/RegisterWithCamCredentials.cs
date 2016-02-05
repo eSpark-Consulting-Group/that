@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace APTAT.Valkyrie.Client.Contracts
+namespace Valkyrie.WebApiProvider.Contracts
 {
     /// <summary>
     /// 1.1.3 Register with CAM Credentials (/fvs_register_with_cam_credentials)

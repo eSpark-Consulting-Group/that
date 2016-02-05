@@ -13,9 +13,9 @@ using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.Core.Facade.Descent.MessageContracts;
 using APTAT.Core.Reports;
+using APTAT.Core.Valkyrie;
 using APTAT.Valkyrie.Client;
-using APTAT.Valkyrie.Client.Contracts;
-using APTAT.Valkyrie.Client.Models;
+using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Core
 {

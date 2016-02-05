@@ -1,4 +1,4 @@
-﻿namespace APTAT.Valkyrie.Client.Models
+﻿namespace APTAT.Core.Valkyrie
 {
     public class ProgressInfo<T>
     {
