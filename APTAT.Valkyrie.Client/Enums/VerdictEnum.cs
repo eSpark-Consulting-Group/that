@@ -27,12 +27,8 @@ namespace Valkyrie.WebApiProvider.Enums
         /// </summary>        
         Malware = 1,
 
-        /// <summary>
-        /// means verdict not ready and its source is Manual Analysis.
-        /// </summary>
-        NotReady = 100,
-
-
+        PotentiallyUnwantedApplication = 3,
+        
         [Description("Not Analyzed")]
         NotAnalyzed = 101
 
