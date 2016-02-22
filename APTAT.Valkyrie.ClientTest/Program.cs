@@ -20,7 +20,7 @@ namespace APTAT.Valkyrie.ClientTest
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new CsvReaderForm());
 
             //string folderPath = @"C:\Users\Yevhen.Bal\AppData\Local\Temp\ValkyrieTmp";
             //Console.WriteLine("Starting uploading files to Valkyrie...");

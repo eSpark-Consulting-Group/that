@@ -5,6 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using APTAT.Valkyrie.Client;
+using Microsoft.VisualBasic.FileIO;
+using Valkyrie.WebApiProvider.Contracts;
+
 //using APTAT.Valkyrie.Client;
 //using APTAT.Valkyrie.Client.Contracts;
 
@@ -19,6 +23,15 @@ namespace APTAT.Valkyrie.ClientTest
             //_client.AnalyzeCompleted += _client_AnalyzeCompleted;
             //_client.AnalyzeProgressChanged += _client_AnalyzeProgressChanged;
 
+        }
+
+
+       
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest(){});
+            
         }
 
 //        void _client_AnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
