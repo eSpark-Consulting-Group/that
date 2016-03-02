@@ -186,7 +186,7 @@ namespace APTAT.Application
                         var info = _viewModel.RegisterWithValkyrie(win.LicenseId, win.UserName, win.PasswordText.Password.Trim());
                         if (info.ReturnCode == 0)
                         {
-                            _viewModel.BeginValkyrieAnalysis(info.ApiKey);
+                            _viewModel.BeginValkyrieAnalysis(info.Key);
                             win.Close();
                         }
                     }

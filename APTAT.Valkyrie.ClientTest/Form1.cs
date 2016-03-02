@@ -63,7 +63,7 @@ namespace APTAT.Valkyrie.ClientTest
 //            //   _client.AnalyzeAsync(files, "user", "test", 1, apiKey);
 //            // SubmitToManualFromBytes(files.First(), apiKey);
 //            ValkyrieFileInfo filesFirst = files.First();
-//            SubmitToManualTest(filesFirst, reg.ApiKey, filesFirst.Path);
+//            SubmitToManualTest(filesFirst, reg.ApiKeys, filesFirst.Path);
 
 //        }
 
@@ -73,13 +73,13 @@ namespace APTAT.Valkyrie.ClientTest
 
 //            SubmitToManualResponse response = null;
 //            var bytes = File.ReadAllBytes(filePath);
-//            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = file.Sha1 });
+//            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKeys = apiKey, SHA1 = file.Sha1 });
 
 //            if (info.Presence)
 //            {
 //                var req1 = new SubmitToManualRequestSHA1()
 //                {
-//                    ApiKey = apiKey,
+//                    ApiKeys = apiKey,
 //                    FilePath = filePath,
 //                    Priority = 3,
 //                    SHA1 = file.Sha1,
@@ -92,7 +92,7 @@ namespace APTAT.Valkyrie.ClientTest
 //            {
 //                var request = new SubmitToManualRequest()
 //                {
-//                    ApiKey = apiKey,
+//                    ApiKeys = apiKey,
 //                    FilePath = filePath, //where file was found
 //                    Priority = 3,
 //                    SubmitToken = info.SubmitToken
@@ -108,13 +108,13 @@ namespace APTAT.Valkyrie.ClientTest
 //        {
         
 
-//            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = file.Sha1 });
+//            var info = ValkyrieService.GetBasicInfo(new InfoRequest() { ApiKeys = apiKey, SHA1 = file.Sha1 });
 
 //            if (info.Presence)
 //            {
 //                return ValkyrieService.SubmitToManualAnalysisWithoutUpload(new SubmitToManualRequestSHA1()
 //                {
-//                    ApiKey = apiKey,
+//                    ApiKeys = apiKey,
 //                    FilePath = filePath,
 //                    Priority = 3,
 //                    SHA1 = file.Sha1,
@@ -125,7 +125,7 @@ namespace APTAT.Valkyrie.ClientTest
 //            {
 //                return ValkyrieService.SubmitToManualAnalysis(new SubmitToManualRequest()
 //                {
-//                    ApiKey = apiKey,                    
+//                    ApiKeys = apiKey,                    
 //                    FilePath = filePath,
 //                    Priority = 3,
 //                    SubmitToken = info.SubmitToken
@@ -138,8 +138,8 @@ namespace APTAT.Valkyrie.ClientTest
 //        {
 //            var reg = _client.Register(new CamRegistration("adsf", "adsf", "asdf"));            
 //            var path = "C:\\Temp\\C631FB17389FF624E7B606D1006342E032BE28D7.tmp";
-//            var result = _client.SubmitToManual(path, reg.ApiKey);
-//            var status = ValkyrieService.ManualStatus(new ManualStatusRequest(result.ManualAnalysisId, reg.ApiKey));
+//            var result = _client.SubmitToManual(path, reg.ApiKeys);
+//            var status = ValkyrieService.ManualStatus(new ManualStatusRequest(result.ManualAnalysisId, reg.ApiKeys));
             
 //        }
 

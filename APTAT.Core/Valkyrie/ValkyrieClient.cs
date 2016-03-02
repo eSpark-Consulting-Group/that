@@ -240,13 +240,13 @@ namespace APTAT.Core.Valkyrie
 
         //    }
 
-        //    var info = ValkyrieWebApiProvider.GetBasicInfo(new InfoRequest() { ApiKey = apiKey, SHA1 = sha1 });
+        //    var info = ValkyrieWebApiProvider.GetBasicInfo(new InfoRequest() { ApiKeys = apiKey, SHA1 = sha1 });
 
         //    if (info.Presence)
         //    {
         //        return ValkyrieWebApiProvider.SubmitToManualAnalysisWithoutUpload(new SubmitToManualRequestSHA1()
         //        {
-        //            ApiKey = apiKey,
+        //            ApiKeys = apiKey,
         //            FilePath = filePath,
         //            Priority = priority,
         //            SHA1 = sha1,
@@ -257,7 +257,7 @@ namespace APTAT.Core.Valkyrie
         //    {
         //        return ValkyrieWebApiProvider.SubmitToManualAnalysis(new SubmitToManualRequest()
         //        {
-        //            ApiKey = apiKey,
+        //            ApiKeys = apiKey,
         //            FilePath = filePath,
         //            Priority = priority,
         //            SubmitToken = info.SubmitToken
