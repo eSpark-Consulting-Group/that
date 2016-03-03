@@ -22,7 +22,7 @@ namespace APTAT.Valkyrie.ClientTest
         private void button1_Click(object sender, EventArgs e)
         {
             List<BasicInfoResponse> results = new List<BasicInfoResponse>();
-            var s = new StreamWriter("c:\\file.txt", true);
+            var s = new StreamWriter("c:\\valkyrie.txt", true);
 
             OpenFileDialog dlg = new OpenFileDialog();
             if (dlg.ShowDialog() == DialogResult.OK)
