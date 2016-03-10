@@ -14,12 +14,13 @@ using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using Valkyrie.WebApiProvider.Helpers;
+using Microsoft.Win32;
 
 namespace APTAT.Core.Valkyrie
 {
     public sealed class ValkyrieClient
     {
-        private const Int32 MaxFileLenght = 26214400;  
+        private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
         public int FileScanned
@@ -42,9 +43,9 @@ namespace APTAT.Core.Valkyrie
         private CancellationTokenSource _cancellationTokenSource;
         private TaskScheduler _taskScheduler;
 
-        public RegisterWithResponse Register(CamRegistration camRegistration,  string proxyLogin = null, string proxyPassword = null )
+        public RegisterWithResponse Register(CamRegistration camRegistration, string proxyLogin = null, string proxyPassword = null)
         {
-            if(camRegistration == null || camRegistration.IsEmpty) throw new InvalidOperationException("CAM license or CAM credentials are required");
+            if (camRegistration == null || camRegistration.IsEmpty) throw new InvalidOperationException("CAM license or CAM credentials are required");
 
             ProxySettings.Proxy = TryGetProxy(proxyLogin, proxyPassword);
             //var machineId = NetAddressHelper.GetMacWithIPAddress();
@@ -57,10 +58,10 @@ namespace APTAT.Core.Valkyrie
                 regInfo = ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest()
                 {
                     LicenseId = camRegistration.LicenseId,
-                    ProductName =  asm.Name,
-                    ProductVersion =  asm.Version.ToString()
+                    ProductName = asm.Name,
+                    ProductVersion = asm.Version.ToString()
                 });
-                
+
             }
             else
             {
@@ -128,7 +129,7 @@ namespace APTAT.Core.Valkyrie
                     }
                     catch (AggregateException exception)
                     {
-                        var messages  = exception.InnerExceptions.Select(e => e.Message).ToArray();
+                        var messages = exception.InnerExceptions.Select(e => e.Message).ToArray();
                         var exMessage = String.Join(Environment.NewLine, messages);
                         Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exMessage));
                         Trace.Flush();
@@ -160,7 +161,7 @@ namespace APTAT.Core.Valkyrie
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",                
+                FileName = "cmd.exe",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -170,21 +171,21 @@ namespace APTAT.Core.Valkyrie
             };
             //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
             var target = string.Format("\\\\{0}\\{1}", ipAddress, Path.GetPathRoot(fileName).Replace(":\\", "$"));
-            
+
             string destination = Path.Combine(destPath, sha1);
             string destinationFile = string.Format("{0}.tmp", destination);
             string source = target + fileName.Remove(0, 2);
             startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password, login, source, destinationFile);
 
             process.StartInfo = startInfo;
-                  
+
             process.Start();
 
             string stdout = process.StandardOutput.ReadToEnd();
-            string stderr = process.StandardError.ReadToEnd();        
-            
+            string stderr = process.StandardError.ReadToEnd();
+
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, string.Format("Started process. Copy file from {0} to {1}", source, destinationFile)));
-            
+
             process.WaitForExit();
             Trace.WriteLine(String.Format("Process exit code : {0}", process.ExitCode));
             Trace.WriteLine(String.Format("Process standard output : {0}", stdout));
@@ -266,10 +267,46 @@ namespace APTAT.Core.Valkyrie
 
         //}
 
+
+        private Guid GetEndpointId()
+        {
+            string subKeyName = @"SOFTWARE\COMODO\APTAT";
+            const string keyValueName = "EndpointID";
+
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(subKeyName, true);
+
+            if (key == null)
+            {
+                key = Registry.CurrentUser.CreateSubKey(subKeyName);
+                var guid = Guid.NewGuid();
+                key.SetValue(keyValueName, guid, RegistryValueKind.String);
+                key.Dispose();
+                return guid;
+            }
+            else
+            {
+                var id = key.GetValue(keyValueName);
+                if (id == null)
+                {
+                    var guid = Guid.NewGuid();
+                    key.SetValue(keyValueName, guid, RegistryValueKind.String);
+                    key.Dispose();
+                    return guid;
+                }
+                else
+                {
+                    key.Dispose();
+                    Guid result;
+                    Guid.TryParse(id.ToString(), out result);
+                    return result;
+                }
+            }
+        }
+
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
         {
             FilesCount = badFiles.Count;
-            Guid endpointId = Guid.NewGuid();
+            Guid endpointId = GetEndpointId();
             var destFolder = CreateTmpFolder();
             var exceptions = new ConcurrentQueue<Exception>();
             if (parallel)
@@ -291,7 +328,7 @@ namespace APTAT.Core.Valkyrie
                         File.Delete(filePath);
                     }
                     catch (Exception e)
-                    {                       
+                    {
 
                         if (e is WebException && e.Message == "The request was aborted: The request was canceled.")
                         {
@@ -424,7 +461,7 @@ namespace APTAT.Core.Valkyrie
                     return;
                 }
 
-                var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId};
+                var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId };
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
@@ -448,7 +485,7 @@ namespace APTAT.Core.Valkyrie
                     {
                         ApiKey = _apiKey,
                         SubmitToken = basicInfo.SubmitToken,
-                        FilePath = originalFilePath,
+                        FilePath = WebUtility.HtmlDecode(originalFilePath),
                         EndpointId = endpointId
                     };
 
@@ -465,11 +502,11 @@ namespace APTAT.Core.Valkyrie
             //}
             finally
             {
-                
+
                 File.Delete(filePath);
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Delete {1}", DateTime.UtcNow, filePath));
                 Trace.Flush();
-                
+
             }
         }
 
