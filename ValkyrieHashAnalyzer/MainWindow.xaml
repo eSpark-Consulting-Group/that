@@ -1,0 +1,40 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ValkyrieHashAnalyzer"
+        xmlns:Contracts="clr-namespace:Valkyrie.WebApiProvider.Contracts;assembly=Valkyrie.WebApiProvider" x:Class="ValkyrieHashAnalyzer.MainWindow"
+        mc:Ignorable="d"
+        Title="{Binding Path=Information}" Height="720" Width="1080" Loaded="Window_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="200"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+            <Button x:Name="button" Content="Open CSV File" HorizontalAlignment="Center"  VerticalAlignment="Center" Width="95" Click="button_Click" Margin="0 0 10 0"/>
+            <Button Content="Export to File" HorizontalAlignment="Center"  VerticalAlignment="Center" Width="95" Click="button_Click_1"/>
+            </StackPanel>
+            <ProgressBar HorizontalAlignment="Stretch" Height="20" Grid.Column="0" VerticalAlignment="Center" Margin="20 0 20 0" Value="{Binding Path=Progress}" />
+        </Grid>
+        <DataGrid x:Name="valkyrieAnalysisResultDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Path=ValkyrieResults}"  RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="sHA1Column" Binding="{Binding SHA1, Mode=OneWay}" Header="SHA 1" IsReadOnly="True" Width="300"/>
+                <DataGridCheckBoxColumn x:Name="isSkippedColumn" Binding="{Binding IsSkipped, Mode=OneWay}" Header="Is Skipped" IsReadOnly="True" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="isWhiteListedColumn" Binding="{Binding IsWhiteListed,  Mode=OneWay}" Header="Is White Listed" IsReadOnly="True" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="malwareProbabilityColumn" Binding="{Binding MalwareProbability, Mode=OneWay}" Header="Malware Probability" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="operationStatusColumn" Binding="{Binding OperationStatus, Mode=OneWay}" Header="Operation Status" Width="SizeToHeader"/>                
+                <DataGridTextColumn x:Name="skipReasonColumn" Binding="{Binding SkipReason, Mode=OneWay}" Header="Skip Reason" IsReadOnly="True" Width="200"/>                
+                <DataGridTextColumn x:Name="verdictStringColumn" Binding="{Binding VerdictString, Mode=OneWay}" Header="Verdict" IsReadOnly="True" Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>
