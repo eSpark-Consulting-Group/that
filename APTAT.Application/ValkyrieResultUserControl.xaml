@@ -95,7 +95,7 @@
                     ShowFieldFilters="False"                    
                     Header="NAME"
                     TextAlignment="Left"
-                    Width="*" 
+                    Width="Auto" 
                  SortMemberPath="Name"
                 />
                
