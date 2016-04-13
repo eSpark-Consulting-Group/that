@@ -529,6 +529,21 @@ namespace APTAT.Core.Descent
             m_serviceHandle = IntPtr.Zero;
         }
 
+        public bool IsServiceRunning()
+        {
+            SERVICE_STATUS ss = new SERVICE_STATUS();
+
+            if (QueryServiceStatus(m_serviceHandle, ref ss))
+            {
+                SERVICE_STATE state = (SERVICE_STATE) ss.currentState;
+                if ((state & SERVICE_STATE.SERVICE_RUNNING) != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void StopService()
         {
             if (m_databaseHandle == IntPtr.Zero || m_serviceHandle == IntPtr.Zero)

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using APTAT.Core.Descent.Transport;
+using APTAT.Core.Properties;
 using CRM.SrvCore.Descent;
 using APTAT.Core.Tasks;
 
@@ -14,9 +16,13 @@ namespace APTAT.Core.Descent
 	//	private readonly ConcurrentDictionary<string, ComputerDescentResult> _resultsByName = new ConcurrentDictionary<string, ComputerDescentResult>();
 		private readonly ConcurrentDictionary<Guid, ComputerDescentResult> _resultsByUid = new ConcurrentDictionary<Guid, ComputerDescentResult>();
         private readonly ConcurrentDictionary<Guid, Guid> _descendByIpMappings = new ConcurrentDictionary<Guid, Guid>();
-		// Task key => computers by UID. 
-		// A task may concern to many target computers (e.g. agent control task - agent upgrade may be managed by a single task).
-		private readonly Dictionary<long, Dictionary<Guid, ComputerDescentResult>> _resultsByTask = new Dictionary<long, Dictionary<Guid, ComputerDescentResult>>();
+        private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks = new ConcurrentDictionary<Guid, Action<TimeSpan>>();
+        private IDescentWatcher _descentWatcher;
+
+
+        // Task key => computers by UID. 
+        // A task may concern to many target computers (e.g. agent control task - agent upgrade may be managed by a single task).
+        private readonly Dictionary<long, Dictionary<Guid, ComputerDescentResult>> _resultsByTask = new Dictionary<long, Dictionary<Guid, ComputerDescentResult>>();
 		private readonly Dictionary<Guid, bool> _reportedByUid = new Dictionary<Guid, bool>();
 		private readonly bool _withPackages;
 		private readonly bool _withUninstall;
@@ -30,7 +36,8 @@ namespace APTAT.Core.Descent
 
 		public DescentResult( IEnumerable<TargetUidComputerPair> computers, bool withDelayedComputers, InstallPackageInfo package )
 		{
-			bool withPackages = package != null && package.PackageUids != null && package.PackageUids.Length > 0;
+            _descentWatcher = new DescentWatcher(Settings.Default.AgentDescentingTimeout, OnDescentTimeout);
+            bool withPackages = package != null && package.PackageUids != null && package.PackageUids.Length > 0;
 			bool withUninstall = package != null && package.UninstallIncompatible;
 			bool update = package != null && package.Update;
 			bool foundCis = false;
@@ -69,7 +76,8 @@ namespace APTAT.Core.Descent
 				}
 			//	_resultsByName.AddOrUpdate( computer.Computer.Name, result, ( key, value ) => value );
 				_resultsByUid.AddOrUpdate(computer.Computer.Uid, result, (key, value) => value);
-			}
+                _descentWatcher.AddIdentity(computer.Computer.Uid);
+            }
 
 			OperationUid = Guid.NewGuid();
 			CompletedTime = null;
@@ -78,7 +86,8 @@ namespace APTAT.Core.Descent
 			_withPackages = withPackages && foundCis;
 			_withUninstall = withUninstall;
 			StartTime = DateTime.UtcNow;
-		}
+            _descentWatcher.Start();
+        }
 
         public ComputerDescentResult GetComputerDescentResult(Guid computerUid)
         {
@@ -287,8 +296,9 @@ namespace APTAT.Core.Descent
 
 					_inprogressCount--;
 					_reportedByUid[uid] = true;
+                    _descentWatcher.ExcludeIdentity(uid);
 
-					CheckCompletion();
+                    CheckCompletion();
 				}
 				count = _inprogressCount;
 			}
@@ -306,59 +316,123 @@ namespace APTAT.Core.Descent
 				OnDescentCompleted();
 			}
 		}
-	/*
-		internal void AddComputers( IEnumerable<IComputer> computers, out IComputer[] newComputers )
-		{
-			List<string> dublicatedComputersNames = new List<string>();
-			List<IComputer> newComputersList = new List<IComputer>();
 
-#if DEBUG
-			int oldCount = _resultsByUid.Count;
-#endif
+        public void RegisterTimeoutCallback(Guid agentIdentity, Action<TimeSpan> callback)
+        {
+            _timeoutCallbacks[agentIdentity] = callback;
+        }
 
-			foreach( var computer in computers )
-			{
-				var fixedComp = computer;
-				_resultsByName.AddOrUpdate( 
-					computer.Name,
- 					( computerName ) =>
- 					{
-						var result = new ComputerDescentResult( fixedComp, _withPackages, _withUninstall );
-						_resultsByUid.AddOrUpdate( fixedComp.Uid, result, ( uid, res ) => res );
-						newComputersList.Add( fixedComp );
-						return result;
- 					},
-					( computerName, existingResult ) => 
-					{
-						dublicatedComputersNames.Add( existingResult.Computer.Name );
-						return existingResult; 
-					} );
-			}
+        public void UnregisterTimeoutCallback(Guid agentIdentity)
+        {
+            Action<TimeSpan> item;
+            _timeoutCallbacks.TryRemove(agentIdentity, out item);
+        }
+        public ComputerDescentResult UpdateComputerDescentResult(Guid uid, Func<ComputerDescentResult, ComputerDescentResult> updateFactory)
+        {
+            return _resultsByUid.AddOrUpdate(uid,
+                key => { throw new InvalidOperationException(String.Format("The key {0} was expected to exist.", uid)); },
+                (key, oldValue) => updateFactory(oldValue));
+        }
 
-			newComputers = newComputersList.ToArray();
+        protected virtual void OnDescentTimeout(Guid agentIdentity)
+        {
+            Action<TimeSpan> onTimeout;
+            if (_timeoutCallbacks.TryGetValue(agentIdentity, out onTimeout))
+            {
+                onTimeout(_descentWatcher.Timeout);
+            }
+            else
+            {
+                ComputerDescentResult computerResult;
+                if (_resultsByUid.TryGetValue(agentIdentity, out computerResult))
+                {
+                    LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
+                        "Computer connection for package installation timed out{0} computer name: {1}{0} computer UID: {2}{0} operation UID: {3}{0} timeout: {4}{0}",
+                        Environment.NewLine, computerResult.Computer.Name, computerResult.Computer.Uid, OperationUid, _descentWatcher.Timeout);
 
-			lock( _sync )
-			{
-				_inprogressCount += newComputers.Count();
-			}
+                    FormattedText statusMessage;
+                    switch (computerResult.CurrentStage)
+                    {
+                        case DescentStage.OutdatedCisUninstall:
+                        case DescentStage.IncompatibleUninstall:
+                            statusMessage = new FormattedText(ServerSideMessagesResources.AgentDescentTimeoutMessage);
+                            break;
+                        default:
+                            statusMessage = new FormattedText(ServerSideMessagesResources.PackageDescentTimeoutMessage);
+                            break;
+                    }
+                    var systemMessage = new FormattedText(ServerSideMessagesResources.DescentTimeoutSystemMessage, _descentWatcher.Timeout.ToString());
+                    OnPackageInstallationEvent(
+                        false,
+                        computerResult.Computer,
+                        statusMessage,
+                        statusMessage,
+                        DescentStatus.status_package_timeout.ToString(),
+                        systemMessage.ToString(),
+                        0);
+                }
+                else
+                {
+                    LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent,
+                        "Computer descent result not found{0} computer name: {1}{0} computer UID: {2}{0} operation UID: {3}{0}",
+                        Environment.NewLine, computerResult.Computer.Name, computerResult.Computer.Uid, OperationUid);
+                }
+            }
+            _descentWatcher.ExcludeIdentity(agentIdentity);
+        }
+        /*
+            internal void AddComputers( IEnumerable<IComputer> computers, out IComputer[] newComputers )
+            {
+                List<string> dublicatedComputersNames = new List<string>();
+                List<IComputer> newComputersList = new List<IComputer>();
 
-#if DEBUG
-			Debug.WriteLine( String.Format( "Deployment targets added{0} UID: {1}{0} passed computers count: {2}{0} dublicated computers count: {3}{0} old task computers count: {4}{0} new task computers count: {5}{0}",
-				Environment.NewLine, OperationUid, computers.Count(), dublicatedComputersNames.Count, oldCount, oldCount + newComputers.Length ), "DSC" );
-#endif
-		}
-	 */
-	/*
-		internal void FinishAddingDelayedComputers()
-		{
-			lock( _sync )
-			{
-				_withDelayedComputers = false;
-				CheckCompletion();
-			}
-		}
-	 */
-		public void AddPackageTask( ComputerDescentResult result, ITask task )
+    #if DEBUG
+                int oldCount = _resultsByUid.Count;
+    #endif
+
+                foreach( var computer in computers )
+                {
+                    var fixedComp = computer;
+                    _resultsByName.AddOrUpdate( 
+                        computer.Name,
+                        ( computerName ) =>
+                        {
+                            var result = new ComputerDescentResult( fixedComp, _withPackages, _withUninstall );
+                            _resultsByUid.AddOrUpdate( fixedComp.Uid, result, ( uid, res ) => res );
+                            newComputersList.Add( fixedComp );
+                            return result;
+                        },
+                        ( computerName, existingResult ) => 
+                        {
+                            dublicatedComputersNames.Add( existingResult.Computer.Name );
+                            return existingResult; 
+                        } );
+                }
+
+                newComputers = newComputersList.ToArray();
+
+                lock( _sync )
+                {
+                    _inprogressCount += newComputers.Count();
+                }
+
+    #if DEBUG
+                Debug.WriteLine( String.Format( "Deployment targets added{0} UID: {1}{0} passed computers count: {2}{0} dublicated computers count: {3}{0} old task computers count: {4}{0} new task computers count: {5}{0}",
+                    Environment.NewLine, OperationUid, computers.Count(), dublicatedComputersNames.Count, oldCount, oldCount + newComputers.Length ), "DSC" );
+    #endif
+            }
+         */
+        /*
+            internal void FinishAddingDelayedComputers()
+            {
+                lock( _sync )
+                {
+                    _withDelayedComputers = false;
+                    CheckCompletion();
+                }
+            }
+         */
+        public void AddPackageTask( ComputerDescentResult result, ITask task )
 		{
 			lock( _actionResultSync )
 			{
@@ -453,7 +527,8 @@ namespace APTAT.Core.Descent
                         //    Environment.NewLine, originalResult.Computer.Name, uid, progressItem.StatusMessage, progressItem.ProgressPercentage );
 
 						_resultsByUid[progressItem.ComputerUid] = newResult;
-					}
+                        _descentWatcher.NotifyProgress(progressItem.ComputerUid, newResult.TotalProgressPercentage);
+                    }
 				}
 			}
 		}

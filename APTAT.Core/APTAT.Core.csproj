@@ -73,20 +73,8 @@
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\AgentDescentWatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Descent\AnotherScanIsInProgressException.cs" />
-    <Compile Include="Descent\BaseDescentWatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Descent\ComputerDescentResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\ComputerDescentWatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\ComputerWatchersContainer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\DescentException.cs">
@@ -110,16 +98,7 @@
     <Compile Include="Descent\DescentSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\DescentWatcherFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\DescentWatcherParams.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Descent\IActiveDirectorySearcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\IComputerWatchersContainer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\IDescentProgressItem.cs">
@@ -132,9 +111,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\IDescentWatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\IDescentWatcherFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\ImpersonationHelper.cs">
@@ -478,7 +454,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\ServerSideMessagesResources.resx" />
+    <EmbeddedResource Include="Properties\ServerSideMessagesResources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\DetailedDevicesWithValkyrie.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

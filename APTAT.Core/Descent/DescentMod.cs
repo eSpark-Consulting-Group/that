@@ -26,7 +26,8 @@ namespace APTAT.Core.Descent
     public interface IDescentCallback
     {
         void OnDescentCallback(DescentStatus status, int win32Error, string response);
-		bool IsCompleted { get; }
+        void SetDescentThread();
+        bool IsCompleted { get; }
     }
 
     public struct AgentInformation
@@ -49,7 +50,7 @@ namespace APTAT.Core.Descent
 	    private const int E_FAIL = unchecked((int) 0x80004005);
 
         private readonly ConcurrentDictionary<Guid, Thread> _threads = new ConcurrentDictionary<Guid, Thread>();
-		public DescentMod( IDescentWatcherFactory watcherFactory, ISubSystemCatalog catalog, ConcurrentDictionary<Guid, ScanResult> scanResults )
+		public DescentMod(ISubSystemCatalog catalog, ConcurrentDictionary<Guid, ScanResult> scanResults )
 		{
 			_taskFactory = new TaskFactory( 
 				CancellationToken.None, 
@@ -59,15 +60,7 @@ namespace APTAT.Core.Descent
             
 			_tracker = catalog.Find<IChangeTrackingSubSystem>();
 
-			DescentWatcherFactory = watcherFactory;
-
 		    _scanResults = scanResults;
-		}
-
-		public IDescentWatcherFactory DescentWatcherFactory
-		{
-			get;
-			set;
 		}
 
         // TODO: Commented
@@ -185,23 +178,8 @@ namespace APTAT.Core.Descent
             public IDescentCallback DescentCallback;
             public Guid AgentIdentity;
             public uint HostPort;
-			public IDescentWatcherFactory DescentWatcherFactory;
 			public Guid OperationUid;
             public string ScanScope;
-
-			public IDisposable InformOperationStart( Thread thread )
-			{
-				string computer = RemoteHostInfo.HostName;
-				LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
-					"Queued thread informed descent operation start{0} computer name: {1}{0} computer UID: {2}{0} thread ID: {3}{0} timeout: {4}{0}",
-					Environment.NewLine, computer, AgentIdentity, thread.ManagedThreadId, Settings.Default.AgentDescentingTimeout);
-
-				IDescentWatcher<AgentDescentWatcherParams> watcher =
-                    DescentWatcherFactory.CreateWatcher(new AgentDescentWatcherParams { Computer = RemoteHostInfo.HostName, DescentCallback = DescentCallback, DescentThread = thread });
-				watcher.Watch();
-
-				return watcher;
-			}
 		}
 
         public void InstallAgent(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity, uint hostPort, Guid operationUid, string scanScope)
@@ -211,7 +189,6 @@ namespace APTAT.Core.Descent
             tp.DescentCallback = cb;
             tp.AgentIdentity = agentIdentity;
             tp.HostPort = hostPort;
-            tp.DescentWatcherFactory = DescentWatcherFactory;
 			tp.OperationUid = operationUid;
             tp.ScanScope = scanScope;
 
@@ -281,12 +258,17 @@ namespace APTAT.Core.Descent
 
 		private void InstallAgentThread( object obj )
 		{
-			InstallAgentThreadParams tp = ( InstallAgentThreadParams )obj;
             //RemoteInstallerJob remoteInstallerJob = tp._cb as RemoteInstallerJob;
+            var tp = (InstallAgentThreadParams)obj;
+            tp.DescentCallback.SetDescentThread();
 
+            string computer = tp.RemoteHostInfo.HostName;
+            LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
+                "Descent operation started{0} computer name: {1}{0} computer UID: {2}{0} thread ID: {3}{0}",
+                Environment.NewLine, computer, tp.AgentIdentity, Thread.CurrentThread.ManagedThreadId);
             _threads.TryAdd(tp.AgentIdentity, Thread.CurrentThread);
 
-            using (tp.InformOperationStart(Thread.CurrentThread))
+            //using (tp.InformOperationStart(Thread.CurrentThread))
 			{
 				DescentHelper dh = new DescentHelper( tp.RemoteHostInfo, tp.ScanScope );
                 ScanResultsProcessor resultsProcessor = new ScanResultsProcessor();

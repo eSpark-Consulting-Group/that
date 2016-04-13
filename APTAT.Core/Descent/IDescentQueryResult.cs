@@ -16,7 +16,11 @@ namespace APTAT.Core.Descent
         // Check OriginalAgentIdentityOnConnect: it matters when descend subsystem was used
         Guid GetComputerOriginalUid(IComputer computer);
         bool ContainsComputer( Guid uid, out ComputerDescentResult result );
-		void AddPackageTask( ComputerDescentResult result, ITask task );
+        ComputerDescentResult UpdateComputerDescentResult(Guid uid, Func<ComputerDescentResult, ComputerDescentResult> updateFactory);
+		void AddPackageTask(ComputerDescentResult result, ITask task);
+
+		void RegisterTimeoutCallback(Guid agentIdentity, Action<TimeSpan> callback);
+		void UnregisterTimeoutCallback(Guid agentIdentity);
 
 		event Action<IComputer, bool> AgentDescentCompleted;
 		event Action DescentCompleted;

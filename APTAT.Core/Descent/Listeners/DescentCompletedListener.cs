@@ -7,13 +7,12 @@ namespace APTAT.Core.Descent.Listeners
 {
 	public class DescentCompletedListener
 	{
-		public DescentCompletedListener( ComputerWatchersContainer watchersContainer, ITasksSubSystem tasks, IMessagingSubSystem messaging,
+		public DescentCompletedListener( ITasksSubSystem tasks, IMessagingSubSystem messaging,
 			IDescentQueryResult result, Action<IComputer, bool> agentDescentCompletedDelegate, EventHandler<ActionDeferredEventArgs> actionDeferredDelegate,
 			EventHandler<ProductRegisteredEventArgs> computerConnectedDelegate,
 			IEnumerable<EventHandler<ActionCompletedEventArgs>> actionCompletedDelegates,
 			EventHandler<ActionStartedEventArgs> actionStartedDelegate )
 		{
-			_watchersContainer = watchersContainer;
 			_tasks = tasks;
 			_messaging = messaging;
 			_result = result;
@@ -23,8 +22,6 @@ namespace APTAT.Core.Descent.Listeners
 			_actionStartedDelegate = actionStartedDelegate;
 			_actionCompletedDelegates = actionCompletedDelegates;
 		}
-
-		private readonly ComputerWatchersContainer _watchersContainer;
 		private readonly ITasksSubSystem _tasks;
 		private readonly IDescentQueryResult _result;
 		private readonly IMessagingSubSystem _messaging;
@@ -43,11 +40,6 @@ namespace APTAT.Core.Descent.Listeners
 
 		public void DecsentCompleted()
 		{
-			foreach( var watcher in _watchersContainer.Watchers )
-			{
-				watcher.Dispose();
-			}
-
 			foreach (var actionCompletedDelegate in _actionCompletedDelegates)
 			{
 				_tasks.ActionCompleted -= actionCompletedDelegate;

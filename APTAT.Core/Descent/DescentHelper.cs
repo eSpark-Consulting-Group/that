@@ -716,9 +716,13 @@ namespace APTAT.Core.Descent
                             Int32.TryParse(temp[11], out skipped);
 
                             string error = temp[12];
+                            EnAptStage status = (EnAptStage)statusInt;
+
+                            if (!_serviceHelper.IsServiceRunning() && status != EnAptStage.EnApt_Complete &&
+                                status != EnAptStage.EnApt_Failed)
+                                throw new DescentException(DescentStatus.status_error, "scanner was crashed.", 0);
 
                             int unknownFilesTotal = unknownFiles + newFiles;
-                            EnAptStage status = (EnAptStage)statusInt;
 
                             int filesToSkip = errorFiles + emptyFiles + skipped;
                             

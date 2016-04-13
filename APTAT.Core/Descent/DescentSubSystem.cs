@@ -175,12 +175,7 @@ namespace APTAT.Core.Descent
 			public RemoteAgentInformation RemoteAgentInfo { get { return _remoteAgentInfo; } }
 			public FormattedText Error { get { return _error; } }
 		}
-
-		public IDescentWatcherFactory DescentWatcherFactory
-		{
-			get;
-			set;
-		}
+        
 
 		private void Dispose( bool disposing )
 		{
@@ -214,31 +209,38 @@ namespace APTAT.Core.Descent
 		private class RemoteInstallerJob: IDescentCallback//, IDisposable
 		{
 			private readonly IDescentQueryResult _queryResult;
-			private readonly IProductManagementSubSystem _productManagement;
 		    private readonly IChangeTrackingSubSystem _changeTrackingSubSystem;
 			private readonly IComputer _computer;
-			private readonly bool _isUndescent;
+            private Thread _descentThread;
+            private readonly bool _isUndescent;
 			//private bool _disposed;
 
 			#region RemoteInstallerJob class
 
 			public RemoteInstallerJob(
 				IDescentQueryResult queryResult,
-				IProductManagementSubSystem productManagement,
                 IChangeTrackingSubSystem changeTrackingSubSystem,
 				IComputer computer,
 				bool isUndescent )
 			{
 				_queryResult = queryResult;
-				_productManagement = productManagement;
 			    _changeTrackingSubSystem = changeTrackingSubSystem;
 				_computer = computer;
 				_isUndescent = isUndescent;
 				IsCompleted = false;
-				//_owner._installerJobs.Add( this );
+			    _queryResult.RegisterTimeoutCallback(_computer.Uid, OnTimeout);
+			    //_owner._installerJobs.Add( this );
 			}
-
-			public bool IsCompleted
+            public void SetDescentThread()
+            {
+                if (_descentThread != null)
+                {
+                    LogHelper.TraceInColor(ConsoleColor.DarkRed, TraceEventType.Warning, TraceCategory.Descent, "Descent thread re-assignment ignored.");
+                    return;
+                }
+                _descentThread = Thread.CurrentThread;
+            }
+            public bool IsCompleted
 			{
 				get;
 				private set;
@@ -249,12 +251,29 @@ namespace APTAT.Core.Descent
 		        get { return _queryResult; }
 		    }
 
-		    public IChangeTrackingSubSystem ChangeTrackingSubSystem
-		    {
-		        get { return _changeTrackingSubSystem; }
-		    }
+            private void OnTimeout(TimeSpan timeout)
+            {
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Agent descent to computer {0} has exceeded timeout of: {1}", _computer.Name, timeout);
 
-		    public static FormattedText GetDescentStatusInformation( ResourceText errorFormat, DescentStatus status, int win32Error, string errorString, out FormattedText shortMessage )
+                if (!IsCompleted)
+                {
+                    try
+                    {
+                        if (_descentThread != null)
+                            _descentThread.Abort(DescentMod.TimeoutAbortString);
+                        var responseText = new FormattedText(ServerSideMessagesResources.DescentTimeoutSystemMessage, timeout.ToString());
+                        OnDescentCallback(DescentStatus.status_agent_timeout, 0, responseText.ToString());
+                    }
+                    catch (ThreadStateException ex)
+                    {
+                        LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, "{0}: {1}", ex.GetType().Name, ex.Message);
+                    }
+                }
+
+                _queryResult.UnregisterTimeoutCallback(_computer.Uid);
+            }
+
+            public static FormattedText GetDescentStatusInformation( ResourceText errorFormat, DescentStatus status, int win32Error, string errorString, out FormattedText shortMessage )
 			{
 				try
 				{
@@ -605,7 +624,7 @@ namespace APTAT.Core.Descent
 			ri.Password = password;
 		    ri.TargetUid = computer.Uid;
 
-			var job = new RemoteInstallerJob( queryResult, _productManagement, _tracker, computer, !descend );
+			var job = new RemoteInstallerJob( queryResult, _tracker, computer, !descend );
 
 			if( descend )
 				_descentMod.InstallAgent( ri, job, computer.Uid, GetSocketPortForAgent(), queryResult.OperationUid, scanScope );
@@ -1043,14 +1062,11 @@ namespace APTAT.Core.Descent
             };
 
             _scanResultsPerOperation.TryAdd(result.OperationUid, operationContext);
-            _descentMod = new DescentMod(DescentWatcherFactory, _catalog, operationContext.ScanResults);
+            _descentMod = new DescentMod( _catalog, operationContext.ScanResults);
 
 			LogHelper.Trace( TraceEventType.Verbose, TraceCategory.Descent,
 				"Deployment operation started{0} UID: {1}{0} computers count: {2}{0} with delayed targets: {3}{0}",
                 Environment.NewLine, operationUid, onlineTargetUidComputerPairs.Count(), withDelayedComputers);
-
-			var watchers = new ConcurrentDictionary<Guid, IDescentWatcher<ComputerDescentWatcherParams>>();
-			var watchersContainer = new ComputerWatchersContainer( watchers );
 
             #region CIS installation related stuff
             //if( package != null && package.PackageUids != null && package.PackageUids.Length > 0 )
@@ -1302,8 +1318,7 @@ namespace APTAT.Core.Descent
 			_windowsPackageHelper = new WindowsAgentPackageHelper(Settings.Default.WebRootFolder, socketPortNumber, publicKey);
 			_debianPackageHelper = new DebianAgentPackageHelper(Settings.Default.WebRootFolder, socketPortNumber, publicKey);
 			_macosPackageHelper = new MacOSAgentPackageHelper(Settings.Default.WebRootFolder, socketPortNumber, publicKey);
-
-			DescentWatcherFactory = new DescentWatcherFactory();
+            
 			//_descentMod = new DescentMod( DescentWatcherFactory, _catalog, _scanResults );
 			_descentResultsCleanupTimer = new Timer( DescentResultsCleanupTimerCallback, null, Settings.Default.DescentResultLifetime, TimeSpan.FromMilliseconds( Timeout.Infinite ) );
 		}
