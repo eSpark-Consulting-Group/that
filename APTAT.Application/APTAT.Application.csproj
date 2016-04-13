@@ -385,6 +385,8 @@
     <Resource Include="Images\banner_1.png" />
     <Resource Include="Images\banner_2.png" />
     <Resource Include="Images\Image.png" />
+    <Resource Include="Images\C1_banner.png" />
+    <Resource Include="Images\C1banner.png" />
     <Content Include="trl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -25,24 +25,25 @@ namespace APTAT.Application
         public BannerUserControl()
         {
             InitializeComponent();
+            _currentLink = "CDMLink";
         }
 
-        public void SetAdMode(AdMode mode)
-        {
-            switch (mode)
-            {
-                case AdMode.Cesm:
-                    _currentLink = "CESMLink";
-                    SetBackground("Images/banner_1.png");     
-                    break;
-                case AdMode.Cdm:
-                    _currentLink = "CDMLink";
-                    SetBackground("Images/banner_2.png");     
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("mode", mode, null);
-            }
-        }
+        //public void SetAdMode(AdMode mode)
+        //{
+        //    switch (mode)
+        //    {
+        //        case AdMode.Cesm:
+        //            _currentLink = "CESMLink";
+        //            SetBackground("Images/banner_1.png");     
+        //            break;
+        //        case AdMode.Cdm:
+        //            _currentLink = "CDMLink";
+        //            SetBackground("Images/banner_2.png");     
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException("mode", mode, null);
+        //    }
+        //}
 
         private void SetBackground(string imagePath)
         {

@@ -24,7 +24,7 @@
             <properties:Settings x:Key="Settings" />
 
             <sys:String x:Key="CESMLink">https://www.comodo.com/endpoint-protection/endpoint-security.php</sys:String>
-            <sys:String x:Key="CDMLink">https://dm.comodo.com/</sys:String>
+            <sys:String x:Key="CDMLink">https://one.comodo.com/signup/enterprise</sys:String>
             <sys:String x:Key="BuyCesSmallText">Protect your environment from APT’s</sys:String>
             <sys:String x:Key="BuyCesBigText">Protect your environment from APT’s</sys:String>
             <sys:String x:Key="GETValkyrieLink">https://accounts.comodo.com/valkyrie/management/signup</sys:String>

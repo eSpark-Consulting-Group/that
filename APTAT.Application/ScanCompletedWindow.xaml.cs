@@ -19,16 +19,6 @@ namespace APTAT.Application
             SourceInitialized += (x, y) =>
             {
                 this.HideMinimizeAndMaximizeButtons();
-                var adProduct = ConfigurationManager.AppSettings["advertisingProduct"];
-                if (adProduct == "cesm")
-                {
-                    Banner.SetAdMode(AdMode.Cesm);
-                }
-                else
-                {
-                    Banner.SetAdMode(AdMode.Cdm);    
-                }
-                
             };
         }
 

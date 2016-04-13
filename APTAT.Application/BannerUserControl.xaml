@@ -11,14 +11,14 @@
                 <Setter Property="Margin" Value="2,4"/>
                 <Setter Property="Background">
                     <Setter.Value>
-                        <ImageBrush x:Name="BannerImage" ImageSource="Images/banner_1.png"/>
+                        <ImageBrush x:Name="BannerImage" ImageSource="Images/C1banner.png"/>
                     </Setter.Value>
                 </Setter>
             </Style>
         </Grid.Resources>
 
-        <TextBlock Height="24" Width="100" TextAlignment="Center" Margin="180 58 10 10" >           
-            <Hyperlink NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate" FontWeight="Bold" FontSize="13" Foreground="LimeGreen">TRY FOR FREE</Hyperlink>
+        <TextBlock Height="24" Width="120" TextAlignment="Center" Margin="10 58 10 10" >           
+            <Hyperlink NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate" FontWeight="Medium" FontSize="14" Foreground="White">TRY IT FOR FREE</Hyperlink>
         </TextBlock>
 
 
