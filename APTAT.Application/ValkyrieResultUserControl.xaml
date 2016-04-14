@@ -95,7 +95,7 @@
                     ShowFieldFilters="False"                    
                     Header="NAME"
                     TextAlignment="Left"
-                    Width="Auto" 
+                    Width="440*" 
                  SortMemberPath="Name"
                 />
                
@@ -105,7 +105,7 @@
                     IsFilterable="False"
                     Header="SIZE"  
                     TextAlignment="Right"
-                    Width="80"/>
+                    Width="80*"/>
 
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource VerdictColumn}"
@@ -113,14 +113,14 @@
                     IsFilterable="False"
                     Header="Verdict"  
                     TextAlignment="Left"
-                    Width="140"/>
+                    Width="140*"/>
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource OperationStatusColumn}"
                     SortMemberPath="ValkyrieAnalysisResult.OperationStatus"
                     IsFilterable="False"
                     Header="Status"  
                     TextAlignment="Left"
-                    Width="240"/>
+                    Width="240*"/>
 
                 <telerik:GridViewColumn                    
                     CellTemplate="{StaticResource WhiteListedColumn}"
@@ -128,7 +128,7 @@
                     IsFilterable="False"
                     Header="White Listed"  
                     TextAlignment="Center"
-                    Width="85"/>
+                    Width="85*"/>
                 
 
 
