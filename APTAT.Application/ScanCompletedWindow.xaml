@@ -1,4 +1,4 @@
-﻿<Window
+﻿<Window AutomationProperties.AutomationId="ScanCompletedWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:APTAT.Application" x:Class="APTAT.Application.ScanCompletedWindow"
@@ -6,8 +6,6 @@
         AllowsTransparency="True" Background="Transparent" BorderThickness="3" WindowStyle="None"
             SizeToContent="Height"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-
-
 
     <Border VerticalAlignment="Top">
         <Border.Effect>
@@ -58,23 +56,20 @@
                         </Canvas>
                     </Grid>
 
-                    <TextBlock Text="Scan Completed! Do you want to analyse files with Valkyrie?" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,5,0,5" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" Width="300"/>
+                <TextBlock AutomationProperties.AutomationId="ScanCompletedTextBlock" Text="Scan Completed! Do you want to analyse files with Valkyrie?" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,5,0,5" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" Width="300"/>
                 </StackPanel>
 
-
-                <TextBlock x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10" Grid.Row="1" LineHeight="28" Foreground="#555"/>
+                <TextBlock AutomationProperties.AutomationId="StatisticsTextBlock" x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10" Grid.Row="1" LineHeight="28" Foreground="#555"/>
 
                 <StackPanel Grid.Row="2" 
 					Height="Auto" HorizontalAlignment="Center"
-					Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}" >
-
-
+					Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                     <local:BannerUserControl  x:Name="Banner"  Width="357" Height="92"/>
                 </StackPanel>
 
-                <StackPanel HorizontalAlignment="Center" Grid.Row="3" Margin="0,10,0,0" Orientation="Horizontal">
-                    <Button Content="OK"  Margin="5,5,5,15" Click="Button_Click"  Style="{StaticResource ButtonHighlightStyle}" />
-                    <Button Content="Cancel"  Margin="5,5,5,15" Click="CancelButton_Click"  Style="{StaticResource ButtonHighlightStyle}" />
+                <StackPanel AutomationProperties.AutomationId="ToolBarPanel" HorizontalAlignment="Center" Grid.Row="3" Margin="0,10,0,0" Orientation="Horizontal">
+                    <Button AutomationProperties.AutomationId="OkButton" Content="OK"  Margin="5,5,5,15" Click="Button_Click"  Style="{StaticResource ButtonHighlightStyle}" />
+                    <Button AutomationProperties.AutomationId="CancelButton" Content="Cancel"  Margin="5,5,5,15" Click="CancelButton_Click"  Style="{StaticResource ButtonHighlightStyle}" />
                 </StackPanel>
             </Grid>
             

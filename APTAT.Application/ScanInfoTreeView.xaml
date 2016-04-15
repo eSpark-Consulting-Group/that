@@ -11,7 +11,8 @@
                 xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
              d:DesignHeight="400" d:DesignWidth="600">
     <Grid>
-        <telerik:RadTreeListView SelectedItem="{Binding SelectedItem}" 
+        <telerik:RadTreeListView AutomationProperties.AutomationId="ScanResultTree"
+                                 SelectedItem="{Binding SelectedItem}" 
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList" 
                                  AutoGenerateColumns="False" 
@@ -24,10 +25,8 @@
                                  RowIsExpandedChanged="treeList_RowIsExpandedChanged"
                                  DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                  EnableRowVirtualization="True"
-                                 MouseDoubleClick="OnTreeDoubleClick" LayoutUpdated="treeList_LayoutUpdated" Filtered="treeList_Filtered"
-                                  >
+                                 MouseDoubleClick="OnTreeDoubleClick" LayoutUpdated="treeList_LayoutUpdated" Filtered="treeList_Filtered">
             <telerik:RadTreeListView.Resources>
-
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch" Height="50">
                         <Grid.ColumnDefinitions>

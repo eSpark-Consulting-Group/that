@@ -1,17 +1,18 @@
-﻿<Models:BasePage    x:Class="APTAT.Application.MainView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:Models="clr-namespace:APTAT.Application.Models"
-                 xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
-                   xmlns:Application="clr-namespace:APTAT.Application"
-                   xmlns:Controls="clr-namespace:APTAT.Application.Controls"
-                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
-      d:DesignHeight="760" d:DesignWidth="1200"
-	Title="APT Assesment Tool" Background="White">
-
+﻿<Models:BasePage AutomationProperties.AutomationId="MainWindow"
+                  x:Class="APTAT.Application.MainView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:Models="clr-namespace:APTAT.Application.Models"
+                  xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
+                  xmlns:Application="clr-namespace:APTAT.Application"
+                  xmlns:Controls="clr-namespace:APTAT.Application.Controls"
+                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
+                  d:DesignHeight="760" d:DesignWidth="1200"
+	                Title="APT Assesment Tool" Background="White">
+    
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="ReportButtonContentTemplate">
@@ -56,37 +57,43 @@
 
         <Application:TitleUpdater Header="{Binding Header}"/>
 
+        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." Background="Transparent" BorderBrush="Transparent">
+            <Grid>
 
-
-        <ContentControl  Grid.Row="1" Content="{Binding CurrentViewControl}"></ContentControl>
+        <ContentControl Content="{Binding CurrentViewControl}"></ContentControl>
+        
         <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
-                   HorizontalAlignment="Center" Grid.Row="1">
+                   HorizontalAlignment="Center">
 
             <TextBlock Text="There are no scans have been performed yet."
                    Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                    FontSize="21"
                    FontFamily="Segoe UI Light"/>
 
-            <Button Margin="0,10,0,0"  HorizontalAlignment="Center"
+            <Button AutomationProperties.AutomationId="StartScanningNowButton"
+                    Margin="0,10,0,0"  HorizontalAlignment="Center"
                     Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                     Style="{StaticResource LinkButton}" 
                     Content="Start Scanning Now!" FontSize="21" FontFamily="Segoe UI Light"
                     Click="OnStartScanningClick"/>
-
-
-
+            
         </StackPanel>
 
-        <Grid>
+            </Grid>
+        </telerik:RadBusyIndicator>
+
+       <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="180"/>
                 <ColumnDefinition Width="0"/>
             </Grid.ColumnDefinitions>
 
-            <telerik:RadToolBar Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
+            <telerik:RadToolBar AutomationProperties.AutomationId="MainToolBar"
+                                Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
 
-                <telerik:RadButton Margin="15,-1,0,-1"  
+                <telerik:RadButton AutomationProperties.AutomationId="StartScanningButton"
+                               Margin="15,-1,0,-1"  
                                FontSize="16"
                                Padding="10,20"
                                IsTabStop="True"
@@ -108,11 +115,12 @@
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                <telerik:RadButton Margin="0,-1,0,-1"  
+                <telerik:RadButton AutomationProperties.AutomationId="StopScanningButton"
+                                  Margin="0,-1,0,-1"  
                                   Padding="10,20"
-                               FontSize="16"
-                               Click="OnStopScanClick"
-                               IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource NullableConverter}}">
+                                  FontSize="16"
+                                  Click="OnStopScanClick"
+                                  IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource NullableConverter}}">
                     <telerik:RadButton.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -128,11 +136,12 @@
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                <telerik:RadButton Margin="0,-1,0,-1"
-                               FontSize="16"
-                                 Padding="10,20"
-                               IsEnabled="{Binding IsDetailsEnabled}" 
-                               Click="OnPropertiesClick" >
+                <telerik:RadButton AutomationProperties.AutomationId="PropertiesButton"
+                                   Margin="0,-1,0,-1"
+                                   FontSize="16"
+                                   Padding="10,20"
+                                   IsEnabled="{Binding IsDetailsEnabled}" 
+                                   Click="OnPropertiesClick" >
                     <telerik:RadButton.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -150,18 +159,17 @@
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                <telerik:RadDropDownButton AutoOpenDelay="0:0:0.0"
-                           Content="Reports"
-                                       IsEnabled="{Binding IsReportEnabled}"
-                                      Style="{StaticResource RadDropDownButtonStyle2}"
-                                       Margin="5,-1,30,-1"
-                           ContentTemplate="{StaticResource ReportButtonContentTemplate}"            
-                       
-                           x:Name="ReportButton"
-                           FontSize="16"
-                           Padding="10,20,10,20">
+                <telerik:RadDropDownButton AutomationProperties.AutomationId="ReportsDropDownButton"
+                                           AutoOpenDelay="0:0:0.0"
+                                           Content="Reports"
+                                           IsEnabled="{Binding IsReportEnabled}"
+                                           Style="{StaticResource RadDropDownButtonStyle2}"
+                                           Margin="5,-1,30,-1"
+                                           ContentTemplate="{StaticResource ReportButtonContentTemplate}"
+                                           x:Name="ReportButton"
+                                           FontSize="16"
+                                           Padding="10,20,10,20">
                     <telerik:RadDropDownButton.DropDownContent>
-
                         <telerik:RadContextMenu IconColumnWidth="0" Width="154" BorderThickness="0">
                             <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive" Click="OnExecutiveReportClick"  Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}"/>
                             <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device" Click="OnPerDeviceReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -170,14 +178,14 @@
                             <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device Valkyrie" Click="OnPerDeviceReportValkyrieClick" Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}"/>
                             <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Program Valkyrie" Click="OnPerProgramReportValkyrieClick" Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </telerik:RadContextMenu>
-
                     </telerik:RadDropDownButton.DropDownContent>
                 </telerik:RadDropDownButton>
 
-                <telerik:RadButton Margin="0,-1" 
-                          Padding="10,20"
-                               Click="AboutClick"
-                               IsEnabled="True" FontSize="18">
+                <telerik:RadButton AutomationProperties.AutomationId="AboutButton"
+                                   Margin="0,-1" 
+                                   Padding="10,20"
+                                   Click="AboutClick"
+                                   IsEnabled="True" FontSize="18">
                     <telerik:RadButton.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -190,11 +198,11 @@
                               Stretch="Fill" 
                               Margin="0,0,10,0"
                               Width="20.115"/>
-
                             <TextBlock Text="About" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16" />
                         </Grid>
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
+              
             </telerik:RadToolBar>
             <Controls:RadMaskedTextBoxEx 
                 Style="{StaticResource SearchBoxStyle}"
@@ -240,10 +248,8 @@
                             Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
             </DockPanel >
-        </Border>
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}"  BusyContent="Resolving Computers..." Background="Transparent"    BorderBrush="Transparent"/>
+        </Border>        
         
-
         <!--<Application:DesignGrid Grid.ColumnSpan="3" Grid.RowSpan="3" IsHitTestVisible="False" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
 
     </Grid>

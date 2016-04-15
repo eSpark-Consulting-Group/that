@@ -294,5 +294,10 @@ namespace APTAT.Application.Models
         {
             StatusMessage = "Initializing...";
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

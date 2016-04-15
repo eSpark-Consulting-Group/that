@@ -14,10 +14,8 @@
             <Grid.Resources>
                 <converters:EmptyStringToBoolConverter x:Key="EmptyStringToBoolConverter"/>
                 <converters:SelectedIndexToBoolConverter x:Key="SelectedIndexToBoolConverter"/>
-                <CollectionViewSource x:Key="CollectionViewSource">
-                
+                <CollectionViewSource x:Key="CollectionViewSource">                
                 </CollectionViewSource>
-
         </Grid.Resources>
 
             <Grid.RowDefinitions>
@@ -30,13 +28,14 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Row="0" Margin="0 5" HorizontalAlignment="Stretch" x:Name="InputTextBox" BorderThickness="0">
-           
+            <TextBox AutomationProperties.AutomationId="NetworkAddressTextBox"
+                     Grid.Row="0" Margin="0 5" HorizontalAlignment="Stretch" x:Name="InputTextBox" BorderThickness="0">           
             </TextBox>
 
-            <Button x:Name="AddButton" Grid.Row="0" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Center"
-                    Content="Add"
-                    IsEnabled="{Binding Text, ElementName=InputTextBox, Converter={StaticResource EmptyStringToBoolConverter}}" />
+        <Button AutomationProperties.AutomationId="AddButton"
+                x:Name="AddButton" Grid.Row="0" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Center"
+                Content="Add"
+                IsEnabled="{Binding Text, ElementName=InputTextBox, Converter={StaticResource EmptyStringToBoolConverter}}" />
 
             <!--<sdk:DataGrid x:Name="ItemsList" Grid.Row="1" Margin="0 5 0 5" BorderBrush="#CCCCCC" BorderThickness="1"
                           ItemsSource="{Binding Source={StaticResource CollectionViewSource}}"
@@ -47,29 +46,21 @@
             </sdk:DataGrid>-->
 
         <telerik:RadListBox x:Name="ItemsList" Grid.Row="1" Margin="0 5 0 5" BorderBrush="#CCCCCC" BorderThickness="1" 
-                                ItemsSource="{Binding Source={StaticResource CollectionViewSource}}"
-                            >
-            
+                                ItemsSource="{Binding Source={StaticResource CollectionViewSource}}">
         </telerik:RadListBox>
 
-            <Button x:Name="RemoveButton" Grid.Row="1" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Top"
-                    Content="Remove"
-                    IsEnabled="{Binding SelectedIndex, ElementName=ItemsList, Converter={StaticResource SelectedIndexToBoolConverter}}" />
-
+        <Button AutomationProperties.AutomationId="RemoveButton"
+                x:Name="RemoveButton" Grid.Row="1" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Top"
+                Content="Remove"
+                IsEnabled="{Binding SelectedIndex, ElementName=ItemsList, Converter={StaticResource SelectedIndexToBoolConverter}}" />
 
         <Canvas x:Name="ToolTipIcon" Visibility="Collapsed" ToolTipService.Placement="Left" ToolTipService.HorizontalOffset="-5"  Background="Transparent"  Margin="10, 35,5,5" Width="24" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="1"  Grid.Column="1"  >
 
-
             <Ellipse  Fill="White" HorizontalAlignment="Left" Height="24" Stroke="#2A81BA" VerticalAlignment="Top" Width="24" StrokeThickness="2"/>
             <Path Data="M0,5 L4,5 L4,14 L0,14 z M2,0 C3.10457,0 4,0.895431 4,2 C4,3.10457 3.10457,4 2,4 C0.895431,4 0,3.10457 0,2 C0,0.895431 0.895431,0 2,0 z" Fill="#2A81BA" HorizontalAlignment="Left" Height="14" Stretch="Fill" Stroke="#FF767676" StrokeThickness="0" UseLayoutRounding="False" VerticalAlignment="Top" Width="4" Canvas.Left="10" Canvas.Top="5" />
-
-
-
         </Canvas>
         
             <!--<HyperlinkButton x:Name="TipText" Grid.Row="2" Margin="15,15,10,10" IsHitTestVisible="False" IsTabStop="False"
                              Style="{StaticResource InfoLink}" VerticalContentAlignment="Top" />-->
-
-        </Grid>
-   
+        </Grid>   
 </UserControl>

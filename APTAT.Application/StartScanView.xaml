@@ -1,14 +1,14 @@
-﻿<Models:BaseView x:Class="APTAT.Application.StartScanView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-      xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
-      xmlns:App="clr-namespace:APTAT.Application"
-      d:DesignHeight="480" d:DesignWidth="640"
-                 SnapsToDevicePixels="True"
-	>
+﻿<Models:BaseView  AutomationProperties.AutomationId="ScanningWizardWindow"
+                  x:Class="APTAT.Application.StartScanView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+                  xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
+                  xmlns:App="clr-namespace:APTAT.Application"
+                  d:DesignHeight="480" d:DesignWidth="640"
+                  SnapsToDevicePixels="True">
 
     <Grid Background="White" MouseEnter="Grid_MouseEnter">
         <Grid.RowDefinitions>
@@ -17,140 +17,153 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        
         <!--<telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Grid.Row="1" >
         </telerik:RadToolBar>-->
-
-        <Border Grid.Row="1" x:Name="pathSelector">
-            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Grid.Resources>
-              
-                    <Style TargetType="App:SelectorButton">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="App:SelectorButton">
-                                    <Grid Background="Transparent">
-                                 
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="CommonStates">
-                                                <VisualState x:Name="Normal" />
-                                                <VisualState x:Name="MouseOver" >
-                                                    <Storyboard  >
-                                                        <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Icon" Storyboard.TargetProperty="Background" >
-                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource AccentBrush}" />
-                                                        </ObjectAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </VisualState>
-                                                <VisualState x:Name="Pressed">
-                                                    <Storyboard >
-                                                        <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Icon" Storyboard.TargetProperty="Background" >
-                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource AccentBrush}" />
-                                                        </ObjectAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </VisualState>
-                                                <VisualState x:Name="Disabled">
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                            <VisualStateGroup x:Name="FocusStatesGroup">
-                                                <VisualState x:Name="Unfocused">
-                                                </VisualState>
-                                                <VisualState x:Name="Focused">
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Border Background="#2A81BA" Grid.RowSpan="2" Width="90" Height="90" Margin="10,10,20,10" x:Name="Icon">
-                                            <Ellipse Width="50" Height="50" Fill="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        </Border>
-                                        <StackPanel VerticalAlignment="Center" Grid.Column="1" Margin="0,0,0,5">
-                                            <TextBlock Text="{TemplateBinding Header}" Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center" FontSize="24" />
-                                            <TextBlock Text="{TemplateBinding Content}"  Grid.Row="2" VerticalAlignment="Top" Margin="0,10,0,0" Foreground="#FF555555"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                
-                </Grid.Resources>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <App:SelectorButton Header="Active Directory" Content="Scan computers by selecting them from active directory" Click="OnActiveDirectoryClick">
-                    <App:SelectorButton.RenderTransform>
-                        <TranslateTransform x:Name="translate1" X="800" />
-                    </App:SelectorButton.RenderTransform>
-                    <App:SelectorButton.Triggers>
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0" >
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <CubicEase/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </App:SelectorButton.Triggers>
-                </App:SelectorButton>
-                <App:SelectorButton x:Name="WgButton" Grid.Row="1" Header="Workgroup" Content="Scan computers by selecting them from workground" Click="OnWorkgroupClick">
-                    <App:SelectorButton.RenderTransform>
-                        <TranslateTransform x:Name="translate2" X="900" />
-                    </App:SelectorButton.RenderTransform>
-                    <App:SelectorButton.Triggers>
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate2" Storyboard.TargetProperty="X" BeginTime="0:0:0.1">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <CubicEase/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </App:SelectorButton.Triggers>
-                </App:SelectorButton>
-                <App:SelectorButton x:Name="IpButton"  Grid.Row="2" Header="Network Addresses"  Content="Scan computers by specifying IP addresses or hostnames manually" Click="OnIpClick">
-                    <App:SelectorButton.RenderTransform>
-                        <TranslateTransform x:Name="translate3" X="1000" />
-                    </App:SelectorButton.RenderTransform>
-                    <App:SelectorButton.Triggers>
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate3" Storyboard.TargetProperty="X" BeginTime="0:0:0.2">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <CubicEase/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </App:SelectorButton.Triggers>
-                </App:SelectorButton>
-            </Grid>
-        </Border>
-        <Border x:Name="wizardBorder" Visibility="Collapsed" Grid.Row="1" >
+        <telerik:RadBusyIndicator Grid.Row="1" Margin="0,60,0,0" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
             <Grid>
-                <App:StartScanDomainView x:Name="viewScanDomain" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
-                <App:StartScanWorkgroupView x:Name="viewScanWorkgroup"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
-                <App:StartScanByIpView x:Name="viewScanByIp"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
+                
+            <Border x:Name="pathSelector">
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.Resources>
+
+                        <Style TargetType="App:SelectorButton">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="App:SelectorButton">
+                                        <Grid Background="Transparent">
+
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="MouseOver" >
+                                                        <Storyboard  >
+                                                            <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Icon" Storyboard.TargetProperty="Background" >
+                                                                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource AccentBrush}" />
+                                                            </ObjectAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Pressed">
+                                                        <Storyboard >
+                                                            <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Icon" Storyboard.TargetProperty="Background" >
+                                                                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource AccentBrush}" />
+                                                            </ObjectAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Disabled">
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                                <VisualStateGroup x:Name="FocusStatesGroup">
+                                                    <VisualState x:Name="Unfocused">
+                                                    </VisualState>
+                                                    <VisualState x:Name="Focused">
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Background="#2A81BA" Grid.RowSpan="2" Width="90" Height="90" Margin="10,10,20,10" x:Name="Icon">
+                                                <Ellipse Width="50" Height="50" Fill="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center" Grid.Column="1" Margin="0,0,0,5">
+                                                <TextBlock Text="{TemplateBinding Header}" Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center" FontSize="24" />
+                                                <TextBlock Text="{TemplateBinding Content}"  Grid.Row="2" VerticalAlignment="Top" Margin="0,10,0,0" Foreground="#FF555555"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <App:SelectorButton AutomationProperties.AutomationId="ActiveDirectoryButton"
+                                    Header="Active Directory" Content="Scan computers by selecting them from active directory" Click="OnActiveDirectoryClick">
+                        <App:SelectorButton.RenderTransform>
+                            <TranslateTransform x:Name="translate1" X="800" />
+                        </App:SelectorButton.RenderTransform>
+                        <App:SelectorButton.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0" >
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <CubicEase/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </App:SelectorButton.Triggers>
+                    </App:SelectorButton>
+
+                    <App:SelectorButton AutomationProperties.AutomationId="WorkgroupButton"
+                                    x:Name="WgButton" Grid.Row="1" Header="Workgroup" Content="Scan computers by selecting them from workground" Click="OnWorkgroupClick">
+                        <App:SelectorButton.RenderTransform>
+                            <TranslateTransform x:Name="translate2" X="900" />
+                        </App:SelectorButton.RenderTransform>
+                        <App:SelectorButton.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate2" Storyboard.TargetProperty="X" BeginTime="0:0:0.1">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <CubicEase/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </App:SelectorButton.Triggers>
+                    </App:SelectorButton>
+
+                    <App:SelectorButton AutomationProperties.AutomationId="NetworkAddressesButton"
+                                    x:Name="IpButton"  Grid.Row="2" Header="Network Addresses"  Content="Scan computers by specifying IP addresses or hostnames manually" Click="OnIpClick">
+                        <App:SelectorButton.RenderTransform>
+                            <TranslateTransform x:Name="translate3" X="1000" />
+                        </App:SelectorButton.RenderTransform>
+                        <App:SelectorButton.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate3" Storyboard.TargetProperty="X" BeginTime="0:0:0.2">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0">
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <CubicEase/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </App:SelectorButton.Triggers>
+                    </App:SelectorButton>                    
+                </Grid>
+            </Border>
+
+            <Border x:Name="wizardBorder" Visibility="Collapsed" >
+                    <Grid>
+                        <App:StartScanDomainView AutomationProperties.AutomationId="ActiveDirectoryView" x:Name="viewScanDomain" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
+                        <App:StartScanWorkgroupView AutomationProperties.AutomationId="WorkgroupView" x:Name="viewScanWorkgroup"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
+                        <App:StartScanByIpView AutomationProperties.AutomationId="NetworkAddressesView" x:Name="viewScanByIp" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
+                    </Grid>
+                </Border>
+
             </Grid>
-        </Border>
-        <Border Grid.Row="0" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}">    
+        </telerik:RadBusyIndicator>
+        
+        <Border Grid.Row="0" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" 
+                Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}">    
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFA11D1D" Offset="0"/>
@@ -160,11 +173,8 @@
             <TextBlock Foreground="White" Text="{Binding Error}" Margin="20,5"/>
         </Border>
 
-
-        <Border  BorderBrush="#CCC" Grid.Row="2"  Height="60" BorderThickness="0,0,0,0" >
+        <Border BorderBrush="#CCC" Grid.Row="2"  Height="60" BorderThickness="0,0,0,0" >
             <Grid>
-
-
                 <Canvas x:Name="ToolTipIcon" Visibility="Collapsed"  
                         ToolTipService.HorizontalOffset="-5" ToolTipService.VerticalOffset="2"
                         ToolTipService.InitialShowDelay="0"
@@ -174,44 +184,48 @@
                         VerticalAlignment="Center" HorizontalAlignment="Left" 
                         Grid.Row="1"  Grid.Column="1"  >
                     
-                    <Ellipse  Fill="White" HorizontalAlignment="Left" Height="24" Stroke="#878787" VerticalAlignment="Top" Width="24" StrokeThickness="2"/>
+                    <Ellipse Fill="White" HorizontalAlignment="Left" Height="24" Stroke="#878787" VerticalAlignment="Top" Width="24" StrokeThickness="2"/>
                     <Path Data="M0,5 L4,5 L4,14 L0,14 z M2,0 C3.10457,0 4,0.895431 4,2 C4,3.10457 3.10457,4 2,4 C0.895431,4 0,3.10457 0,2 C0,0.895431 0.895431,0 2,0 z" Fill="#878787" HorizontalAlignment="Left" Height="14" Stretch="Fill" Stroke="#FF767676" StrokeThickness="0" UseLayoutRounding="False" VerticalAlignment="Top" Width="4" Canvas.Left="10" Canvas.Top="5" />
-
-
                 </Canvas>
 
-                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Height="50" Margin="0,0,25,0">                    
-                    <Button x:Name="btnCancel" Content="Cancel" 
-                        Visibility="{Binding IsCancelEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}"
-                        Click="OnCancelClick" Margin="5"  Style="{StaticResource ButtonNormalStyle}"/>
-                    <Button x:Name="btnBack" Content="Back" Margin="5" 
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
-                        Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
-                        Click="OnBackClick" Style="{StaticResource ButtonNormalStyle}"/>
-                    <Button x:Name="btnNext"  
-                        Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                        IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
-                        Content="Next" 
-                        Margin="5" 
-                        Click="OnNextClick"  
-                        Style="{StaticResource ButtonHighlightStyle}" />
-                    <Button x:Name="btnQuickScan"
-                        Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                        IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
-                        Content="Quick Scan" 
-                        Click="OnQuickScanClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
-                    <Button x:Name="btnFinish"
-                        Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                        IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
-                        Content="Full Scan" 
-                        Click="OnFinishClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
+                <StackPanel AutomationProperties.AutomationId="ToolBarPanel"
+                            Orientation="Horizontal"  HorizontalAlignment="Right" Height="50" Margin="0,0,25,0">
+                    <Button AutomationProperties.AutomationId="CancelButton"
+                            x:Name="btnCancel" Content="Cancel" 
+                            Visibility="{Binding IsCancelEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Visible}"
+                            Click="OnCancelClick" Margin="5"  Style="{StaticResource ButtonNormalStyle}"/>
+                    <Button AutomationProperties.AutomationId="BackButton"
+                            x:Name="btnBack" Content="Back" Margin="5" 
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
+                            Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
+                            Click="OnBackClick" Style="{StaticResource ButtonNormalStyle}"/>
+                    <Button AutomationProperties.AutomationId="NextButton"
+                            x:Name="btnNext"  
+                            Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
+                            Content="Next" 
+                            Margin="5" 
+                            Click="OnNextClick"  
+                            Style="{StaticResource ButtonHighlightStyle}" />                    
+                    <Button AutomationProperties.AutomationId="QuickScanButton"
+                            x:Name="btnQuickScan"
+                            Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
+                            Content="Quick Scan" 
+                            Click="OnQuickScanClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
+                    <Button AutomationProperties.AutomationId="FullScanButton"
+                            x:Name="btnFinish"
+                            Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
+                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
+                            Content="Full Scan" 
+                            Click="OnFinishClick" Margin="5"   Style="{StaticResource ButtonHighlightStyle}" />
                 </StackPanel>
             </Grid>
             
         </Border>
         
-        <telerik:RadBusyIndicator Grid.Row="1" Margin="0,60,0,0" IsBusy="{Binding IsBusy}"  Background="Transparent"   BorderBrush="Transparent" />
     </Grid>
+    
 </Models:BaseView>
