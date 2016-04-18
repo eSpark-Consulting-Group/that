@@ -658,8 +658,18 @@ namespace APTAT.Core.Descent
                     {
                         using(FileStream fs = new FileStream(_responseFilePathForCurrentComputer, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            byte[] buf = new byte[fs.Length];
-                            fs.Read(buf, 0, (int)fs.Length);
+                            byte[] buf;
+                            try
+                            {
+                                buf = new byte[fs.Length];
+                                fs.Read(buf, 0, (int)fs.Length);
+                                break;
+                            }
+                            catch (ArgumentException)
+                            {
+                                buf = new byte[0];
+                            }
+
                             string data = Encoding.Unicode.GetString(buf);
                             if (String.IsNullOrEmpty(data))
                             {
