@@ -151,4 +151,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <Exec Condition="'$(Cnat)' != ''" Command="xcopy /Y &quot;$(Cnat)&quot;  &quot;$(OutDir)&quot;" />
+  </Target>
 </Project>
