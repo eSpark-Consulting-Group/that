@@ -16,7 +16,7 @@ set ServerRoot=C
 
 set EndpointRoot=%ServerRoot%
 
-set TargetDir=%ServerRoot%:\CESM
+set TargetDir=%ServerRoot%:\CNAT
 
 set ProductExeName=APTAT.exe
 
@@ -40,7 +40,7 @@ setx _ServerRoot %ServerRoot% /m
 
 setx _EndpointRoot %EndpointRoot% /m
 
-set _ProductExeName=%ProductExeName%
+setx _ProductExeName %ProductExeName% /m
 
 
 
