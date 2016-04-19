@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="QuickScanWaitTime" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">180000</Value>
+      <Value Profile="(Default)">360000</Value>
     </Setting>
   </Settings>
 </SettingsFile>
