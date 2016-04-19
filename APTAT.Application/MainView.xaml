@@ -140,7 +140,7 @@
                                    Margin="0,-1,0,-1"
                                    FontSize="16"
                                    Padding="10,20"
-                                   IsEnabled="{Binding IsDetailsEnabled}" 
+                                   IsEnabled="{Binding IsAnalyseWithValkyrieEnabled}" 
                                    Click="OnPropertiesClick" >
                     <telerik:RadButton.Content>
                         <Grid>
@@ -154,7 +154,7 @@
                               Stretch="Fill" 
                               Margin="0,0,10,0"
                               Width="20.385"/>
-                            <TextBlock Text="Properties" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" HorizontalAlignment="Right" Width="76"/>
+                            <TextBlock Text="Analyse with Valkyrie" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" HorizontalAlignment="Right" Width="140"/>
                         </Grid>
                     </telerik:RadButton.Content>
                 </telerik:RadButton>

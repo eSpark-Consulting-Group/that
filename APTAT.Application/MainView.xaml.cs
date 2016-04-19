@@ -214,11 +214,8 @@ namespace APTAT.Application
         }
 
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
-        {
-           
-            ThreatDetailsWindow details = new ThreatDetailsWindow();
-            details.Owner = System.Windows.Application.Current.MainWindow;
-            details.ShowDialog();
+        {            
+            ShowRegisterToValkyrieWindow();
         }
 
         private void OnStartScanningClick(object sender, RoutedEventArgs e)

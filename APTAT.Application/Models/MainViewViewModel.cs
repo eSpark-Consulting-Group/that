@@ -243,6 +243,16 @@ namespace APTAT.Application.Models
             }
         }
 
+        private bool _IsAnalyseWithValkyrieEnabled;
+        public Boolean IsAnalyseWithValkyrieEnabled
+        {
+            get { return _IsAnalyseWithValkyrieEnabled; }
+            set
+            {
+                _IsAnalyseWithValkyrieEnabled = value;
+                RaisePropertyChanged("IsAnalyseWithValkyrieEnabled");
+            }
+        }
         public bool ShowFlsReportsMenu
         {
             get { return !IsValkyrieReportEnabled; }
@@ -395,6 +405,7 @@ namespace APTAT.Application.Models
             ScannedItemsCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
+            IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = false;
             CurrentViewControl = _scanInfoTreeControl;
             
@@ -549,7 +560,7 @@ namespace APTAT.Application.Models
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
             IsValkyrieScanInProgress = false;
-
+            IsAnalyseWithValkyrieEnabled = true;
             IsValkyrieReportEnabled = true;
             _isValkyrieAnalysCompleted = true;
             RaisePropertyChanged("IsValkyrieAnalysCompleted");
@@ -702,6 +713,7 @@ namespace APTAT.Application.Models
 
             IsValkyrieScanInProgress = false;
             IsValkyrieAnalysCompleted = false;
+//            IsAnalyseWithValkyrieEnabled = !IsAnyScanInProgress;
             if (e.Exception != null)
             {
                 //  MessageBox.Show(String.Format("Exception: {0}", e.Exception.Message));    
@@ -716,6 +728,7 @@ namespace APTAT.Application.Models
         {
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
+            IsAnalyseWithValkyrieEnabled = enableReports;
             Percentage = 100;
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
 
@@ -732,6 +745,7 @@ namespace APTAT.Application.Models
         {
             ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
 
+            IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;
