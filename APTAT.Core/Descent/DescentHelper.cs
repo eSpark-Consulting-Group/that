@@ -663,7 +663,6 @@ namespace APTAT.Core.Descent
                             {
                                 buf = new byte[fs.Length];
                                 fs.Read(buf, 0, (int)fs.Length);
-                                break;
                             }
                             catch (ArgumentException)
                             {
