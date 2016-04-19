@@ -68,6 +68,7 @@ namespace APTAT.Application.Models
             }
         }
 
+        
         public string StatusBarText
         {
             get
@@ -76,7 +77,11 @@ namespace APTAT.Application.Models
                 {
                     return String.Format(" of {0} unique files analysed", DistinctFilesCount);
                 }
-                return " unknown programs detected";
+                if (IsScanInProgress == true)
+                {
+                    return " unknown programs detected";
+                }
+                return  " programs analysed";
             }
          
         }
@@ -537,6 +542,10 @@ namespace APTAT.Application.Models
 
             
             ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
+            MalwareFilesCount = ItemsValkyrie.Where(i => i.IsMalware).Count();
+            UnknownFilesCount = ItemsValkyrie.Where(i => i.IsUnknown).Count();
+            
+
             SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
             IsValkyrieScanInProgress = false;

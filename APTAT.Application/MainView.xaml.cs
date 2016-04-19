@@ -122,12 +122,12 @@ namespace APTAT.Application
             if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
 
             scanCompletedWindow.Text.Text += Environment.NewLine +"File Statistics:";
-
-            //if (e.FilesStatistics.TotalFilesCound> 0)
-            //{
-            //    scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine,
-            //        e.FilesStatistics.TotalFilesCound);
-            //}
+            int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount;
+            if (e.FilesStatistics.TotalFilesCound > 0)
+            {
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine,
+                    total);
+            }
 
 
             //if (e.FilesStatistics.SkippedFilesCount > 0)
@@ -142,7 +142,7 @@ namespace APTAT.Application
 
 
 
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Distinct Unknown(s) found", Environment.NewLine, e.DistinctFileFound);
+                
 
             
 
@@ -154,6 +154,8 @@ namespace APTAT.Application
             //}
             
             if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware(s) found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
+
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} from {2} distinct by hash found", Environment.NewLine, e.DistinctFileFound, total);
 
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             if (e.SuccededCount > 0)
