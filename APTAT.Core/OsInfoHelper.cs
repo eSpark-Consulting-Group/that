@@ -70,7 +70,16 @@
                                      ? "Windows 8"
                                      : "Windows Server 2012";
                         break;
+                    case 3:
+                        osName = productType == ProductType.Workstation
+                                     ? "Windows 8.1"
+                                     : "Windows Server 2012 R2";
+                        break;
                 }
+            }
+            else if (osMajorVersion == 10)
+            {
+                osName = "Windows 10";
             }
 
 
