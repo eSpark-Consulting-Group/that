@@ -215,6 +215,38 @@ namespace CodedUITestAT
 
         #endregion
 
+        #region Local helper methods
+
+        /// <summary> Gets the number of files of a given type from Scan Completed window. Starts at Scan Completed window. </summary>
+        /// <param name="fileType">Set a file type.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private int GetFilesNumber(FileType fileType, TestContext testContext)
+        {
+            string searchWord = null;
+
+            switch (fileType)
+            {
+                case FileType.Unknown:
+                    searchWord = Settings.ScanCompleted.Default.UnknownFiles;
+                    break;
+                case FileType.Malware:
+                    searchWord = Settings.ScanCompleted.Default.Malwares;
+                    break;
+                default: throw new Exception(String.Format("Unexpected file type '{0}'!", fileType));
+            }
+            
+            string searchPattern = @"\d{1,}\s{1,}" + searchWord;
+            string match = Regex.Match(ScanStatisticsTextBlock().DisplayText, searchPattern).ToString().Replace(searchWord, String.Empty);
+            int filesNumber;
+            if (Int32.TryParse(match, out filesNumber))
+                testContext.WriteLine(String.Format("'{0}' files number {1} successfully found at Scan Completed window.\n", searchWord, filesNumber));
+            else Assert.Fail(String.Format("'{0}' files number is not found at Scan Completed window!", searchWord));
+
+            return filesNumber;
+        }
+
+        #endregion
+
         #region Test methods
 
         [TestMethod]
@@ -250,17 +282,16 @@ namespace CodedUITestAT
                 TestContext.WriteLine(String.Format("Scan Completed window appeared with text containing: '{0}'.\n", Settings.ScanCompleted.Default.ScanCompletedText));
             else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!\n", Settings.ScanCompleted.Default.ScanCompletedText));
 
-            // Gets the number of Unknown files found at Scan Completed window
-            string unknownFilesSearchWord = Settings.ScanCompleted.Default.UnknownFiles;
-            string unknownFilesPattern = @"\d{1,}\s{1,}" + unknownFilesSearchWord;
-            string match = Regex.Match(ScanStatisticsTextBlock().DisplayText, unknownFilesPattern).ToString().Replace(unknownFilesSearchWord, String.Empty);
-            int expectedUnknownFilesNumber;
-            if (Int32.TryParse(match, out expectedUnknownFilesNumber))
-                    TestContext.WriteLine("Unknown files number successfully found at Scan Completed window.");
-            else Assert.Fail("Unknown files number is not found at Scan Completed window!");
+            // Gets the number of Unknown files and Malwares found at Scan Completed window
+            int expectedUnknownFilesNumber = GetFilesNumber(FileType.Unknown, TestContext);
+            int expectedMalwaresNumber = 0;
+            if (ScanStatisticsTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.Malwares))
+                                                expectedMalwaresNumber = GetFilesNumber(FileType.Malware, TestContext);
+            int expectedFilesNumber = expectedUnknownFilesNumber + expectedMalwaresNumber;
+
             UIMapScanCompletedWindow.ClickOkButton();
             
-            if (expectedUnknownFilesNumber == 0) UIMapMain.ClickAnalyseWithValkyrieButton();
+            if (expectedFilesNumber == 0) UIMapMain.ClickAnalyseWithValkyrieButton();
 
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
             TestContext.WriteLine("CAM Credentials window appeared...\n");
@@ -275,9 +306,9 @@ namespace CodedUITestAT
             TestContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
             var valkyrieResultsRows = ValkyrieResultsTree().GetTreeRows();
             int valkyrieResultsRowsNumber = valkyrieResultsRows.Count;
-            if (valkyrieResultsRowsNumber == expectedUnknownFilesNumber)
-                TestContext.WriteLine(String.Format("The number of Unknown files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedUnknownFilesNumber, valkyrieResultsRowsNumber));
-            else Assert.Fail(String.Format("The number of Unknown files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedUnknownFilesNumber, valkyrieResultsRowsNumber));
+            if (valkyrieResultsRowsNumber == expectedFilesNumber)
+                TestContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
+            else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
 
             // Clicks Valkyrie link and checks the respective browser window URI
             string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;

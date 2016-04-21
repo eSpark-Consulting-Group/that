@@ -8,5 +8,8 @@
     <Setting Name="UnknownFiles" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Unknown</Value>
     </Setting>
+    <Setting Name="Malwares" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Malware</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
