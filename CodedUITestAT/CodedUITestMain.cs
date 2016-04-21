@@ -271,7 +271,7 @@ namespace CodedUITestAT
             UIMapCamCredentialsWindow.ClickOkButton();
 
             // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of Unknown files found
-            UIHelper.WaitForControl(ValkyrieResultsTree());
+            UIHelper.WaitForControl(ValkyrieResultsTree(), Settings.WaitingTime.Default.ValkyrieUploadWaitTime);
             TestContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
             var valkyrieResultsRows = ValkyrieResultsTree().GetTreeRows();
             int valkyrieResultsRowsNumber = valkyrieResultsRows.Count;
