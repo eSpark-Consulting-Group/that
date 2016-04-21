@@ -21,6 +21,20 @@ namespace APTAT.Application.Converters
         }
     }
 
+    public class InverseBoolToTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null || (bool)value == false) return (String)parameter;
+            return String.Empty;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
     public class BoolToOpacityConverter : IValueConverter
     {
         public Boolean Inverse { get; set; }

@@ -30,7 +30,10 @@ namespace APTAT.Application
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            if ((bool) ((FrameworkElement) e.Source).Tag)
+                DialogResult = false;
+            else
+                DialogResult = true;
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
