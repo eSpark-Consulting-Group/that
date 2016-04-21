@@ -81,6 +81,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Mouse.Click(uIPleaseclickheretoseeHyperlink, new Point(50, 13));
         }
         
+        /// <summary>
+        /// ClickAnalyseWithValkyrieButton
+        /// </summary>
+        public void ClickAnalyseWithValkyrieButton()
+        {
+            #region Variable Declarations
+            WpfButton uIAnalyseWithValkyrieBButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIAnalyseWithValkyrieBButton;
+            #endregion
+
+            // Click 'AnalyseWithValkyrieButton' button
+            Mouse.Click(uIAnalyseWithValkyrieBButton, new Point(74, 29));
+        }
+        
         #region Properties
         public virtual CheckIAcceptTermsOfThisAgreementCheckBoxParams CheckIAcceptTermsOfThisAgreementCheckBoxParams
         {
@@ -305,10 +318,28 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIStartScanningButtonButton;
             }
         }
+        
+        public WpfButton UIAnalyseWithValkyrieBButton
+        {
+            get
+            {
+                if ((this.mUIAnalyseWithValkyrieBButton == null))
+                {
+                    this.mUIAnalyseWithValkyrieBButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIAnalyseWithValkyrieBButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "AnalyseWithValkyrieButton";
+                    this.mUIAnalyseWithValkyrieBButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIAnalyseWithValkyrieBButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUIStartScanningButtonButton;
+        
+        private WpfButton mUIAnalyseWithValkyrieBButton;
         #endregion
     }
     

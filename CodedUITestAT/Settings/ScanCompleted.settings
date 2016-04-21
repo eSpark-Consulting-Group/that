@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ScanCompletedText" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Scan Completed! Do you want to analyse files with Valkyrie?</Value>
+      <Value Profile="(Default)">Scan Completed!</Value>
     </Setting>
     <Setting Name="UnknownFiles" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Unknown</Value>

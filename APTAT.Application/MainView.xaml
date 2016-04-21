@@ -136,7 +136,7 @@
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                <telerik:RadButton AutomationProperties.AutomationId="PropertiesButton"
+                <telerik:RadButton AutomationProperties.AutomationId="AnalyseWithValkyrieButton"
                                    Margin="0,-1,0,-1"
                                    FontSize="16"
                                    Padding="10,20"
@@ -204,7 +204,8 @@
                 </telerik:RadButton>
               
             </telerik:RadToolBar>
-            <Controls:RadMaskedTextBoxEx 
+            
+           <Controls:RadMaskedTextBoxEx 
                 Style="{StaticResource SearchBoxStyle}"
                 AcceptReturn="False"
                 x:Name="SearchTextBox" 
@@ -216,6 +217,7 @@
                     <Controls:RadMaskedTextBoxUpdateSourceBehavior Delay="True" Value="{Binding Keyword, Mode=TwoWay}"/>
                 </i:Interaction.Behaviors>
             </Controls:RadMaskedTextBoxEx>
+           
         </Grid>
 
         <Border Grid.Row="2" Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85" Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">

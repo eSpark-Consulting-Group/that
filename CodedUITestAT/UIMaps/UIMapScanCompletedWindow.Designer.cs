@@ -30,19 +30,6 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
     {
         
         /// <summary>
-        /// AssertScanCompletedTextBlockText - Use 'AssertScanCompletedTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertScanCompletedTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIScanCompletedDoyouwaText = this.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! Do you want to analyse files with Valkyrie?'
-            Assert.AreEqual(this.AssertScanCompletedTextBlockTextExpectedValues.UIScanCompletedDoyouwaTextDisplayText, uIScanCompletedDoyouwaText.DisplayText);
-        }
-        
-        /// <summary>
         /// ClickOkButton
         /// </summary>
         public void ClickOkButton()
@@ -68,19 +55,20 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
             Assert.AreEqual(this.AssertStatisticsTextBlockExpectedValues.UIComputerStatistics1TTextExists, uIComputerStatistics1TText.Exists);
         }
         
-        #region Properties
-        public virtual AssertScanCompletedTextBlockTextExpectedValues AssertScanCompletedTextBlockTextExpectedValues
+        /// <summary>
+        /// AssertScanCompletedTextBlockText - Use 'AssertScanCompletedTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertScanCompletedTextBlockText()
         {
-            get
-            {
-                if ((this.mAssertScanCompletedTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertScanCompletedTextBlockTextExpectedValues = new AssertScanCompletedTextBlockTextExpectedValues();
-                }
-                return this.mAssertScanCompletedTextBlockTextExpectedValues;
-            }
+            #region Variable Declarations
+            WpfText uIScanCompletedDoyouwaText = this.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! '
+            Assert.AreEqual(this.AssertScanCompletedTextBlockTextExpectedValues.UIScanCompletedDoyouwaTextDisplayText, uIScanCompletedDoyouwaText.DisplayText);
         }
         
+        #region Properties
         public virtual AssertStatisticsTextBlockExpectedValues AssertStatisticsTextBlockExpectedValues
         {
             get
@@ -90,6 +78,18 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                     this.mAssertStatisticsTextBlockExpectedValues = new AssertStatisticsTextBlockExpectedValues();
                 }
                 return this.mAssertStatisticsTextBlockExpectedValues;
+            }
+        }
+        
+        public virtual AssertScanCompletedTextBlockTextExpectedValues AssertScanCompletedTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertScanCompletedTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertScanCompletedTextBlockTextExpectedValues = new AssertScanCompletedTextBlockTextExpectedValues();
+                }
+                return this.mAssertScanCompletedTextBlockTextExpectedValues;
             }
         }
         
@@ -107,26 +107,11 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         #endregion
         
         #region Fields
-        private AssertScanCompletedTextBlockTextExpectedValues mAssertScanCompletedTextBlockTextExpectedValues;
-        
         private AssertStatisticsTextBlockExpectedValues mAssertStatisticsTextBlockExpectedValues;
         
-        private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertScanCompletedTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
-    public class AssertScanCompletedTextBlockTextExpectedValues
-    {
+        private AssertScanCompletedTextBlockTextExpectedValues mAssertScanCompletedTextBlockTextExpectedValues;
         
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! Do you want to analyse files with Valkyrie?'
-        /// </summary>
-        public string UIScanCompletedDoyouwaTextDisplayText = "Scan Completed! Do you want to analyse files with Valkyrie?";
+        private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
     }
     
@@ -142,6 +127,21 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         /// Verify that the 'Exists' property of 'Computer Statistics: - 1 Total - 1 Successful Scan...' label equals 'True'
         /// </summary>
         public bool UIComputerStatistics1TTextExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertScanCompletedTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    public class AssertScanCompletedTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! '
+        /// </summary>
+        public string UIScanCompletedDoyouwaTextDisplayText = "Scan Completed! ";
         #endregion
     }
     

@@ -25,7 +25,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Scan Completed! Do you want to analyse files with Valkyrie?")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Scan Completed!")]
         public string ScanCompletedText {
             get {
                 return ((string)(this["ScanCompletedText"]));
