@@ -336,7 +336,12 @@ namespace APTAT.Core.Valkyrie
                         }
                         else
                         {
-                            AddResult(ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, e.Message, SkippReasonEnum.Failed));
+                            string m = e.Message;
+                            if (e.Message.StartsWith("Could not find file"))
+                            {
+                                m = "Could not find file";
+                            }
+                            AddResult(ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, m, SkippReasonEnum.Failed));
                         }
 
                         Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));

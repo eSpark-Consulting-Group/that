@@ -24,9 +24,9 @@ namespace APTAT.Core.Reports
         public string TargetsSource { get; set; }
 
         public DevicesSourceDescription DevicesSourceDescription { get; set; }
-        public string DevicesSourceDescriptionString 
-        { 
-            get 
+        public string DevicesSourceDescriptionString
+        {
+            get
             {
                 switch (DevicesSourceDescription.Type)
                 {
@@ -39,7 +39,7 @@ namespace APTAT.Core.Reports
                     default:
                         return string.Empty;
                 }
-            } 
+            }
         }
         public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == ETargetsDiscovererType.ActiveDirectory; } }
 
@@ -55,8 +55,8 @@ namespace APTAT.Core.Reports
         public int TargetsSucceeded { get; set; }
         public int TargetsFailed { get; set; }
 
-        public int TotalFilesScanned 
-        { 
+        public int TotalFilesScanned
+        {
             get
             {
                 if (_totalFilesCound == -1)
@@ -64,12 +64,12 @@ namespace APTAT.Core.Reports
                 return _totalFilesCound;
             }
         }
-        
+
         public int SafeFilesCount
         {
             get
             {
-                if(_safeFilesCount == -1)
+                if (_safeFilesCount == -1)
                     CalculateTotal();
                 return _safeFilesCount;
             }
@@ -79,7 +79,7 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                if(_unknownFilesCount == -1)
+                if (_unknownFilesCount == -1)
                     CalculateTotal();
                 return _unknownFilesCount;
             }
@@ -89,7 +89,7 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                if(_malwareFilesCount == -1)
+                if (_malwareFilesCount == -1)
                     CalculateTotal();
                 return _malwareFilesCount;
             }
@@ -114,7 +114,7 @@ namespace APTAT.Core.Reports
                 return _skippedFilesCount;
             }
         }
-        
+
         public AptRiskAssessmentLevel TargetsSafetyLevel
         {
             get
@@ -134,8 +134,8 @@ namespace APTAT.Core.Reports
             get { return TargetsSafetyLevel.ToString(); }
         }
 
-        public int NetworkTrustLevel 
-        { 
+        public int NetworkTrustLevel
+        {
             get
             {
                 if (TotalFilesScanned == 0)
@@ -211,14 +211,14 @@ namespace APTAT.Core.Reports
             var itemRatingInfoList = new List<ItemRatingInfo>();
             foreach (var valkyrieStatus in Enum.GetValues(typeof(InfoVerdictEnum)))
             {
-                itemRatingInfoList.Add(new FileRatingInfo() {Count = allBadFiles.Count(b => (int)b.Verdict == (int)valkyrieStatus), Value = ((InfoVerdictEnum)valkyrieStatus).ToString() });
+                itemRatingInfoList.Add(new FileRatingInfo() { Count = allBadFiles.Count(b => (int)b.Verdict == (int)valkyrieStatus), Value = ((InfoVerdictEnum)valkyrieStatus).ToString() });
             }
             return itemRatingInfoList.ToArray();
         }
 
         public ItemRatingInfo[] GetDevicesRatingCollection()
         {
-            int safe = 0; 
+            int safe = 0;
             int vulnerable = 0;
             int infected = 0;
             int unknown = 0;
@@ -248,17 +248,17 @@ namespace APTAT.Core.Reports
         public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()
         {
             var top10 = (from target in SucceededTargets
-                        where target.BadFilesCount > 0
-                        orderby target.BadFilesCount descending 
-                        select target).Take(10);
+                         where target.BadFilesCount > 0
+                         orderby target.BadFilesCount descending
+                         select target).Take(10);
 
             List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
             foreach (var scanResult in top10)
             {
-                if(scanResult.UnknownFilesCount > 0)
-                    devices.Add(new VulnerableDeviceInfoEx(){BadFilesCount = scanResult.UnknownFilesCount, BadFileType = BadFileType.Unknown, Name = scanResult.HostName, Uid = scanResult.TargetUid});
-                if(scanResult.MalwareFilesCount > 0)
-                    devices.Add(new VulnerableDeviceInfoEx(){BadFilesCount = scanResult.MalwareFilesCount, BadFileType = BadFileType.Infected, Name = scanResult.HostName, Uid = scanResult.TargetUid});
+                if (scanResult.UnknownFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = BadFileType.Unknown, Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                if (scanResult.MalwareFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = BadFileType.Infected, Name = scanResult.HostName, Uid = scanResult.TargetUid });
             }
 
             return devices.ToArray();
@@ -296,7 +296,7 @@ namespace APTAT.Core.Reports
             foreach (var scanResult in Targets)
             {
                 var badFilesFromTarget = scanResult.GetUniqueBadFiles();
-                
+
                 files.AddRange(badFilesFromTarget);
             }
 
@@ -304,7 +304,7 @@ namespace APTAT.Core.Reports
             {
                 foreach (var f in files)
                 {
-                    var fileResult = this.ValkyrieAnalysisResult.Where(v=>v.Sha1.ToUpper() == f.Hash.ToUpper()).FirstOrDefault();
+                    var fileResult = this.ValkyrieAnalysisResult.Where(v => v.Sha1.ToUpper() == f.Hash.ToUpper()).FirstOrDefault();
                     f.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
                 }
             }
@@ -314,12 +314,12 @@ namespace APTAT.Core.Reports
 
         public DetailedBadFile[] GetAllBadFilesSorted()
         {
-            Dictionary<string, DetailedBadFile> globallyUniqueFiles = new Dictionary<string, DetailedBadFile>(); 
-            
+            Dictionary<string, DetailedBadFile> globallyUniqueFiles = new Dictionary<string, DetailedBadFile>();
+
             DetailedBadFile[] allBadFiles = GetAllBadFiles();
             foreach (var badFile in allBadFiles)
             {
-                if(globallyUniqueFiles.ContainsKey(badFile.Hash))
+                if (globallyUniqueFiles.ContainsKey(badFile.Hash))
                 {
                     globallyUniqueFiles[badFile.Hash].Targets.AddRange(badFile.Targets);
                 }
@@ -374,7 +374,7 @@ namespace APTAT.Core.Reports
 
         public ScannedTarget(ScanResult scanResult)
         {
-            if(scanResult != null)
+            if (scanResult != null)
             {
                 TargetUid = scanResult.TargetUid;
                 HostName = scanResult.HostName;
@@ -397,12 +397,12 @@ namespace APTAT.Core.Reports
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
         public int MalwareFilesCount { get; set; }
-        
+
         public int InstancesCount
         {
             get { return BadFileInstances.Count; }
         }
-        
+
         public string Instances
         {
             get
@@ -481,7 +481,7 @@ namespace APTAT.Core.Reports
         {
             get { return Targets.Count; }
         }
-        
+
 
         public string CloudString
         {
@@ -519,7 +519,7 @@ namespace APTAT.Core.Reports
 
             public BadFileInstanceInfo(Module module)
             {
-                if(module != null)
+                if (module != null)
                 {
                     Id = module.Id;
                     Path = module.Path;
@@ -564,10 +564,19 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                string  result = this.Verdict.GetEnumDescription();
+                string result = this.Verdict.GetEnumDescription();
                 if (this.IsSkipped)
                 {
-                    result += " (" + this.OperationStatus + ")";
+                    if (!String.IsNullOrWhiteSpace(this.OperationStatus))
+                    {
+                        if (OperationStatus.Length > 80)
+                        {
+                            var s = OperationStatus.Substring(0, 80);
+                            s = s.Substring(0, s.LastIndexOf(" "));
+                            return result += " (" + s + ")";
+                        }
+                        result += " (" + this.OperationStatus + ")";
+                    }
                 }
 
                 return result;
