@@ -917,9 +917,9 @@ namespace APTAT.Application.Models
             if (newValue == oldValue)
                 return;
 
-            if (_cache.Any() != null)
+            if (_cache.Any())
             {
-                foreach (ThreatInfoItem threatInfoItem in Items)
+                /*foreach (ThreatInfoItem threatInfoItem in Items)
                 {
                     if (threatInfoItem.Items != null)
                     {
@@ -928,9 +928,8 @@ namespace APTAT.Application.Models
                             item.IsCompletedSubItem = false;
                         }
                     }
-                }
-                Items =
-                   new ObservableCollection<ThreatInfoItem>(
+                }*/
+                Items = new ObservableCollection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword) || item.StatusMessage.Contains(Keyword)));
 
                 SelectedItem = null;
@@ -940,13 +939,15 @@ namespace APTAT.Application.Models
             {
                 ItemsValkyrie = new ObservableCollection<FileResult>(
                        _cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
+
+                SelectedValkyrieItem = null;
             }
         }
 
 
 
         private bool? _isValkyrieScanInProgress;
-        private string _statusBarText;
+        //private string _statusBarText;
         private bool _isValkyrieAnalysCompleted;
 
         public bool IsQuickScan { get; set; }

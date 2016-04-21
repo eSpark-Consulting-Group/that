@@ -1,25 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using APTAT.Application.Models;
 using APTAT.Application.Services;
 using Telerik.Windows;
-using Telerik.Windows.Controls;
-using Telerik.Windows.Controls.GridView;
 using System.Diagnostics;
 using APTAT.Application.Helpers;
 using Valkyrie.WebApiProvider.Contracts;
@@ -37,14 +24,14 @@ namespace APTAT.Application
     public partial class MainView 
     {
         //private Boolean _filteringDone = false;
-        bool IsSearchPerformed = false;
+        //bool IsSearchPerformed = false;
 
         private List<ThreatInfoItem> _collapseItems = new List<ThreatInfoItem>();
         private List<ThreatInfoItem> _collapseFilteringItems = new List<ThreatInfoItem>();
 
         private MainViewViewModel _viewModel;
         private IStorageService _storageService;
-        private Int32 _selectedReportIndex = -1;
+        //private Int32 _selectedReportIndex = -1;
         
 
         //public void CancelScan()
@@ -73,7 +60,7 @@ namespace APTAT.Application
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
             //treeList.Filtered += treeList_Filtered;
             //treeList.LayoutUpdated += treeList_LayoutUpdated;
-            SearchTextBox.ValueChanged += SearchTextBox_ValueChanged;
+            //SearchTextBox.ValueChanged += SearchTextBox_ValueChanged;
            
         }
 
@@ -81,7 +68,7 @@ namespace APTAT.Application
         {
             //var searchTextBox = (APTAT.Application.Controls.RadMaskedTextBoxEx)sender;
             //IsSearchPerformed = !searchTextBox.IsEmpty;
-            IsSearchPerformed = true;
+            //IsSearchPerformed = true;
         }
 
         //private void treeList_LayoutUpdated(object sender, EventArgs e)
@@ -197,8 +184,7 @@ namespace APTAT.Application
                     progressWrapper = LoadingHelper.CreateElementOnWorkerThread<Loading>();
                     if (progressWrapper.ElementCreated)
                         dialog.loading.Child = progressWrapper.Host;
-
-                    LoadingHelper.StartProgress(progressWrapper);                  
+              
                     asynchOperation = LoadingHelper.RunOnWorkingThreadDelayed(() =>
                         {
                             var result = _viewModel.RegisterWithValkyrie(licid, name, pass);
@@ -206,14 +192,13 @@ namespace APTAT.Application
                         });
                     asynchOperation.Completed += AsynchOperationCompleted;
                     asynchOperation.Aborted += AsynchOperationAborted;
-
                     asynchOperation.Priority = DispatcherPriority.Normal;
+
                     LoadingHelper.StartProgress(progressWrapper); 
                 }
             };
             dialog.ShowDialog();
         }
-        
 
         private void AsynchOperationAborted(object sender, EventArgs e)
         {
