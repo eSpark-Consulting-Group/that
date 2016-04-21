@@ -68,6 +68,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Mouse.Click(uIStartScanningButtonButton, new Point(45, 35));
         }
         
+        /// <summary>
+        /// ClickValkyrieLink
+        /// </summary>
+        public void ClickValkyrieLink()
+        {
+            #region Variable Declarations
+            WpfHyperlink uIPleaseclickheretoseeHyperlink = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
+            #endregion
+
+            // Click 'Please click here to see the detailed results' link
+            Mouse.Click(uIPleaseclickheretoseeHyperlink, new Point(50, 13));
+        }
+        
         #region Properties
         public virtual CheckIAcceptTermsOfThisAgreementCheckBoxParams CheckIAcceptTermsOfThisAgreementCheckBoxParams
         {
@@ -242,10 +255,24 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIRadToolBarToolBar;
             }
         }
+        
+        public UIPleaseclickheretoseeText UIPleaseclickheretoseeText
+        {
+            get
+            {
+                if ((this.mUIPleaseclickheretoseeText == null))
+                {
+                    this.mUIPleaseclickheretoseeText = new UIPleaseclickheretoseeText(this);
+                }
+                return this.mUIPleaseclickheretoseeText;
+            }
+        }
         #endregion
         
         #region Fields
         private UIRadToolBarToolBar mUIRadToolBarToolBar;
+        
+        private UIPleaseclickheretoseeText mUIPleaseclickheretoseeText;
         #endregion
     }
     
@@ -282,6 +309,42 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         #region Fields
         private WpfButton mUIStartScanningButtonButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    public class UIPleaseclickheretoseeText : WpfText
+    {
+        
+        public UIPleaseclickheretoseeText(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfText.PropertyNames.AutomationId] = "ValkyrieTextBlock";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfHyperlink UIPleaseclickheretoseeHyperlink
+        {
+            get
+            {
+                if ((this.mUIPleaseclickheretoseeHyperlink == null))
+                {
+                    this.mUIPleaseclickheretoseeHyperlink = new WpfHyperlink(this);
+                    #region Search Criteria
+                    this.mUIPleaseclickheretoseeHyperlink.SearchProperties[WpfHyperlink.PropertyNames.AutomationId] = "ValkyrieLink";
+                    this.mUIPleaseclickheretoseeHyperlink.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPleaseclickheretoseeHyperlink;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfHyperlink mUIPleaseclickheretoseeHyperlink;
         #endregion
     }
 }

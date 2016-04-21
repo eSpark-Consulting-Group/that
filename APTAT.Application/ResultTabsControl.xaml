@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<UserControl AutomationProperties.AutomationId="ResultsScreen"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,13 +7,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="900">
     <Grid>
-        <TabControl Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-            <TabItem Header="Unknown files">
+        
+        <TabControl AutomationProperties.AutomationId="ResultsTabControl"
+            Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+            <TabItem AutomationProperties.AutomationId="UnknownFilesTab"
+                     Header="Unknown files">
                 <local:ScanInfoTreeView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
-            <TabItem Name="FVSTab" Header="Valkyrie analysis results" IsSelected="True" >
+            
+            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab"
+                     Name="FVSTab" Header="Valkyrie analysis results" IsSelected="True" >
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
+            
         </TabControl>
+        
     </Grid>
 </UserControl>

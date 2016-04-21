@@ -27,8 +27,8 @@ namespace CodedUITestAT
         /// <summary> Gets an internal name of endpoint obtained from a local environment variable. </summary>
         internal static string GetEndpointName()
         {
-           return Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine).ToUpper();
-           //return "as06w8x64".ToUpper();
+           return Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine);
+           //return "as06w8x64";
         }
 
         /// <summary> Gets working folder from a local environment variable </summary>

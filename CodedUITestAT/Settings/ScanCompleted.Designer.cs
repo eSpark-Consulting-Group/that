@@ -31,5 +31,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["ScanCompletedText"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Unknown")]
+        public string UnknownFiles {
+            get {
+                return ((string)(this["UnknownFiles"]));
+            }
+        }
     }
 }

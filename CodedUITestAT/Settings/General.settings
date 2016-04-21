@@ -5,5 +5,17 @@
     <Setting Name="ATApplicationProcessName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">APTAT.Application</Value>
     </Setting>
+    <Setting Name="CamLogin" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">alexey.smirnov@comodo.com</Value>
+    </Setting>
+    <Setting Name="CamPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Test1234</Value>
+    </Setting>
+    <Setting Name="CamKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">a4cfd6d7-3c6c-449b-a55d-13e5c3d30a02</Value>
+    </Setting>
+    <Setting Name="ValkyrieUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://valkyrie.comodo.com/signup_apikey</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

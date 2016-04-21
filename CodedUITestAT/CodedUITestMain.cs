@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
@@ -7,6 +8,8 @@ using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClasses;
 using CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
+using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
+using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 
 namespace CodedUITestAT
 {
@@ -80,6 +83,36 @@ namespace CodedUITestAT
         }
         private UIMapScanCompletedWindow mapScanCompletedWindow;
 
+        /// <summary> UIMap for CAM Credentials window, UIMapCamCredentialsWindow.uitest. </summary>
+        public UIMapCamCredentialsWindow UIMapCamCredentialsWindow
+        {
+            get
+            {
+                if ((this.mapCamCredentialsWindow == null))
+                {
+                    this.mapCamCredentialsWindow = new UIMapCamCredentialsWindow();
+                }
+
+                return this.mapCamCredentialsWindow;
+            }
+        }
+        private UIMapCamCredentialsWindow mapCamCredentialsWindow;
+
+        /// <summary> UIMap for Results window, UIMapResultsWindow.uitest. </summary>
+        public UIMapResultsWindow UIMapResultsWindow
+        {
+            get
+            {
+                if ((this.mapResultsWindow == null))
+                {
+                    this.mapResultsWindow = new UIMapResultsWindow();
+                }
+
+                return this.mapResultsWindow;
+            }
+        }
+        private UIMapResultsWindow mapResultsWindow;
+
         #endregion
         
         #region Initialize and cleanup
@@ -115,7 +148,7 @@ namespace CodedUITestAT
 
         #endregion
 
-        #region Start Scanning Wizard screen
+        #region Start Scanning wizard
 
         private WpfButton NetworkAddressButton()
         {
@@ -136,6 +169,48 @@ namespace CodedUITestAT
             return UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText;
         }
 
+        private WpfText ScanStatisticsTextBlock()
+        {
+            return UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIComputerStatistics1TText;
+        }
+
+        #endregion
+
+        #region CAM Credentials window
+
+        private WpfEdit CamLoginTextBox()
+        {
+            return UIMapCamCredentialsWindow.UIUnknownFileHunterWindow.UILoginWatermarkTextBoEdit;
+        }
+
+        #endregion
+
+        #region Results window
+
+        private WpfTabPage UnknownFilesTab()
+        {     
+            return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage;
+        }
+
+        private WpfTabPage ValkyrieAnalysisResultsTab()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
+        }
+
+        private WpfTree UnknownFilesTree()
+        {
+            WpfTree uft = UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree;
+            uft.Container = UnknownFilesTab();
+            return uft;
+        }
+
+        private WpfTree ValkyrieResultsTree()
+        {
+            WpfTree vrt = UIMapResultsWindow.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree;
+            vrt.Container = ValkyrieAnalysisResultsTab();
+            return vrt;
+        }
+
         #endregion
 
         #endregion
@@ -154,7 +229,7 @@ namespace CodedUITestAT
             UIMapMain.ClickStartScanningButton();
             
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            TestContext.WriteLine("Start Scanning Wizard appeared...");
+            TestContext.WriteLine("Start Scanning wizard appeared...\n");
             UIMapStartScanningWizard.ClickNetworkAddressButton();
             
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -168,14 +243,53 @@ namespace CodedUITestAT
 
             UIHelper.WaitForControlIsClickable(QuickScanButton());
             UIMapStartScanningWizard.ClickQuickScanButton();
-            TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}'...", endpointName));
+            TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}'...\n", endpointName));
             
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
 
             UIMapScanCompletedWindow.AssertScanCompletedTextBlockTextExpectedValues.UIScanCompletedDoyouwaTextDisplayText = Settings.ScanCompleted.Default.ScanCompletedText;
             UIMapScanCompletedWindow.AssertScanCompletedTextBlockText();
-            TestContext.WriteLine(String.Format("Scan Completed window appered with expected text: '{0}'", Settings.ScanCompleted.Default.ScanCompletedText));
+            TestContext.WriteLine(String.Format("Scan Completed window appered with expected text: '{0}'.\n", Settings.ScanCompleted.Default.ScanCompletedText));
+
+            // Gets the number of Unknown files found at Scan Completed window
+            string unknownFilesSearchWord = Settings.ScanCompleted.Default.UnknownFiles;
+            string unknownFilesPattern = @"\d{1,}\s{1,}" + unknownFilesSearchWord;
+            string match = Regex.Match(ScanStatisticsTextBlock().DisplayText, unknownFilesPattern).ToString().Replace(unknownFilesSearchWord, String.Empty);
+            int exepectedUnknownFilesNumber = Int32.Parse(match);            
+            
             UIMapScanCompletedWindow.ClickOkButton();
+            
+            UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
+            TestContext.WriteLine("CAM Credentials window appeared...\n");
+            UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
+            UIMapCamCredentialsWindow.InputLogin();
+            UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
+            UIMapCamCredentialsWindow.InputPassword();
+            UIMapCamCredentialsWindow.ClickOkButton();
+
+            // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of Unknown files found
+            UIHelper.WaitForControl(ValkyrieResultsTree());
+            TestContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
+            var valkyrieResultsRows = ValkyrieResultsTree().GetTreeRows();
+            int valkyrieResultsRowsNumber = valkyrieResultsRows.Count;
+            if (valkyrieResultsRowsNumber == exepectedUnknownFilesNumber)
+                TestContext.WriteLine(String.Format("The number of Unknown files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", exepectedUnknownFilesNumber, valkyrieResultsRowsNumber));
+            else Assert.Fail(String.Format("The number of Unknown files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", exepectedUnknownFilesNumber, valkyrieResultsRowsNumber));
+
+            // Clicks Valkyrie link and checks the respective browser window URI
+            string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
+            UIMapMain.ClickValkyrieLink();
+            TestContext.WriteLine("Valkyrie link clicked...\n");
+            BrowserWindow valkyrieWebPage = new BrowserWindow();
+            valkyrieWebPage.SearchProperties.Add(new PropertyExpression(BrowserWindow.PropertyNames.Name, Settings.General.Default.ValkyrieUri, PropertyExpressionOperator.Contains));
+            UIHelper.WaitForControl(valkyrieWebPage);
+            string actualValkyrieUri = valkyrieWebPage.Uri.ToString();
+            string error = null;
+            if (actualValkyrieUri.Contains(expectedValkyrieUri))
+                TestContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.\n", actualValkyrieUri));
+            else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualValkyrieUri);            
+            valkyrieWebPage.Close();
+            if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
         }
 
         #endregion

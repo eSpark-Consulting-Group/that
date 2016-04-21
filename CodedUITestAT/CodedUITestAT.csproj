@@ -83,6 +83,12 @@
     <Compile Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.Designer.cs">
       <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
     </Compile>
+    <Compile Include="UIMaps\UIMapCamCredentialsWindow.cs">
+      <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapCamCredentialsWindow.Designer.cs">
+      <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
+    </Compile>
     <Compile Include="UIMaps\UIMapMain.cs">
       <DependentUpon>UIMapMain.uitest</DependentUpon>
     </Compile>
@@ -94,6 +100,12 @@
     </Compile>
     <Compile Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.Designer.cs">
       <DependentUpon>UIMapStartScanningWizard.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapResultsWindow.cs">
+      <DependentUpon>UIMapResultsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapResultsWindow.Designer.cs">
+      <DependentUpon>UIMapResultsWindow.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapScanCompletedWindow.cs">
       <DependentUpon>UIMapScanCompletedWindow.uitest</DependentUpon>
@@ -120,8 +132,10 @@
       <LastGenOutput>WaitingTime.Designer.cs</LastGenOutput>
     </None>
     <None Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.uitest" />
+    <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
     <None Include="UIMaps\UIMapMain.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.uitest" />
+    <None Include="UIMaps\UIMapResultsWindow.uitest" />
     <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
   </ItemGroup>
   <Choose>

@@ -31,5 +31,41 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["ATApplicationProcessName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("alexey.smirnov@comodo.com")]
+        public string CamLogin {
+            get {
+                return ((string)(this["CamLogin"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Test1234")]
+        public string CamPassword {
+            get {
+                return ((string)(this["CamPassword"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("a4cfd6d7-3c6c-449b-a55d-13e5c3d30a02")]
+        public string CamKey {
+            get {
+                return ((string)(this["CamKey"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://valkyrie.comodo.com/signup_apikey")]
+        public string ValkyrieUri {
+            get {
+                return ((string)(this["ValkyrieUri"]));
+            }
+        }
     }
 }

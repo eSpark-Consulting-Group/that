@@ -55,6 +55,19 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
             Mouse.Click(uIOKButton, new Point(38, 14));
         }
         
+        /// <summary>
+        /// AssertStatisticsTextBlock - Use 'AssertStatisticsTextBlockExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertStatisticsTextBlock()
+        {
+            #region Variable Declarations
+            WpfText uIComputerStatistics1TText = this.UIUnknownFileHunterWindow.UIComputerStatistics1TText;
+            #endregion
+
+            // Verify that the 'Exists' property of 'Computer Statistics: - 1 Total - 1 Successful Scan...' label equals 'True'
+            Assert.AreEqual(this.AssertStatisticsTextBlockExpectedValues.UIComputerStatistics1TTextExists, uIComputerStatistics1TText.Exists);
+        }
+        
         #region Properties
         public virtual AssertScanCompletedTextBlockTextExpectedValues AssertScanCompletedTextBlockTextExpectedValues
         {
@@ -65,6 +78,18 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                     this.mAssertScanCompletedTextBlockTextExpectedValues = new AssertScanCompletedTextBlockTextExpectedValues();
                 }
                 return this.mAssertScanCompletedTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertStatisticsTextBlockExpectedValues AssertStatisticsTextBlockExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertStatisticsTextBlockExpectedValues == null))
+                {
+                    this.mAssertStatisticsTextBlockExpectedValues = new AssertStatisticsTextBlockExpectedValues();
+                }
+                return this.mAssertStatisticsTextBlockExpectedValues;
             }
         }
         
@@ -84,6 +109,8 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         #region Fields
         private AssertScanCompletedTextBlockTextExpectedValues mAssertScanCompletedTextBlockTextExpectedValues;
         
+        private AssertStatisticsTextBlockExpectedValues mAssertStatisticsTextBlockExpectedValues;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
     }
@@ -100,6 +127,21 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         /// Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! Do you want to analyse files with Valkyrie?'
         /// </summary>
         public string UIScanCompletedDoyouwaTextDisplayText = "Scan Completed! Do you want to analyse files with Valkyrie?";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertStatisticsTextBlock'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    public class AssertStatisticsTextBlockExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'Computer Statistics: - 1 Total - 1 Successful Scan...' label equals 'True'
+        /// </summary>
+        public bool UIComputerStatistics1TTextExists = true;
         #endregion
     }
     
@@ -148,12 +190,30 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                 return this.mUIOKButton;
             }
         }
+        
+        public WpfText UIComputerStatistics1TText
+        {
+            get
+            {
+                if ((this.mUIComputerStatistics1TText == null))
+                {
+                    this.mUIComputerStatistics1TText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIComputerStatistics1TText.SearchProperties[WpfText.PropertyNames.AutomationId] = "StatisticsTextBlock";
+                    this.mUIComputerStatistics1TText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIComputerStatistics1TText;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfText mUIScanCompletedDoyouwaText;
         
         private WpfButton mUIOKButton;
+        
+        private WpfText mUIComputerStatistics1TText;
         #endregion
     }
 }

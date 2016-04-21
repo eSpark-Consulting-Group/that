@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
+using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 
 namespace CodedUITestAT
 {
@@ -47,6 +48,13 @@ namespace CodedUITestAT
         {
             Point point;
             return control.TryGetClickablePoint(out point);
+        }
+
+        /// <summary> Gets rows collection from a given tree control. </summary>
+        /// <param name="tree">Set a tree control.</param>
+        internal static UITestControlCollection GetTreeRows(this WpfTree tree)
+        {
+            return tree.GetChildren()[2].GetChildren();
         }
     }
 }
