@@ -25,7 +25,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("360000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("600000")]
         public int QuickScanWaitTime {
             get {
                 return ((int)(this["QuickScanWaitTime"]));
