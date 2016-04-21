@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using APTAT.Application.Services;
+using APTAT.Core;
 
 namespace APTAT.Application.Models
 {
@@ -23,6 +24,8 @@ namespace APTAT.Application.Models
         private String _product;
         private Boolean _isMalware;
         private Boolean _isUnknown;
+        private string _isWhitelisted;
+        private string _malwareProbability;
 
         public String FileName
         {
@@ -164,7 +167,25 @@ namespace APTAT.Application.Models
             }
         }
 
+        public string IsWhitelisted
+        {
+            get { return _isWhitelisted; }
+            set
+            {
+                _isWhitelisted = value;
+                RaisePropertyChanged("IsWhitelisted");
+            }
+        }
 
+        public string MalwareProbability
+        {
+            get { return _malwareProbability; }
+            set
+            {
+                _malwareProbability = value;
+                RaisePropertyChanged("MalwareProbability");
+            }
+        }
 
         public ThreatDetailsViewModel()
         {
@@ -175,23 +196,28 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            BadFileItem badFile = _storage.GetValue<BadFileItem>(KnownKeys.UnknownFile, false);
+            var file = _storage.GetValue<Tuple<BadFileItem, FileResult>>(KnownKeys.UnknownFile, false);
+            var badFile = file.Item1;
+            var valkyrieFile = file.Item2;
 
 
-            FileName = Path.GetFileName(badFile.Name);
-            Verdict = "unknown";
-            Size = badFile.Size / 1024 + "KB";
-            Created = badFile.Created;
-            Modified = badFile.Modified;
-            Accessed = badFile.Accessed;
-            Hash = NAIfEmpty(badFile.Sha1);
-            Signer = NAIfEmpty(badFile.Signer);
-            Description = NAIfEmpty(badFile.Description);
-            Version = NAIfEmpty(badFile.Version);
-            Copyright = NAIfEmpty(badFile.Copyright);
-            Product = NAIfEmpty(badFile.Product);
-            IsMalware = badFile.IsMalware;
-            IsUnknown = badFile.IsUnknown;
+            FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
+            Verdict = badFile != null ? "unknown" : valkyrieFile.ValkyrieAnalysisResult.VerdictString;
+            Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
+            Created = badFile != null ? badFile.Created : valkyrieFile.Created;
+            Modified = badFile != null ? badFile.Modified : valkyrieFile.Modified;
+            Accessed = badFile != null ? badFile.Accessed : valkyrieFile.Accessed;
+            Hash = NAIfEmpty(badFile != null ? badFile.Sha1 : valkyrieFile.Sha1);
+            Signer = NAIfEmpty(badFile != null ? badFile.Signer : valkyrieFile.Signer);
+            Description = NAIfEmpty(badFile != null ? badFile.Description : valkyrieFile.Description);
+            Version = NAIfEmpty(badFile != null ? badFile.Version : valkyrieFile.Version);
+            Copyright = NAIfEmpty(badFile != null ? badFile.Copyright : valkyrieFile.Copyright);
+            Product = NAIfEmpty(badFile != null ? badFile.Product : valkyrieFile.Product);
+            IsMalware = badFile != null ? badFile.IsMalware : valkyrieFile.IsMalware;
+            IsUnknown = badFile != null ? badFile.IsUnknown : valkyrieFile.IsUnknown;
+
+            IsWhitelisted = valkyrieFile != null && valkyrieFile.ValkyrieAnalysisResult.IsWhiteListed ? "yes" : "no";
+            MalwareProbability = valkyrieFile != null ? valkyrieFile.ValkyrieAnalysisResult.MalwareProbability + "%" : "";
         }
 
         private String NAIfEmpty(String str)

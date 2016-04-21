@@ -1,52 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using APTAT.Application.Models;
+using APTAT.Core;
+using Telerik.Windows.Controls;
 
 namespace APTAT.Application
 {
-    /// <summary>
-    /// Interaction logic for ValkyrieResultUserControl.xaml
-    /// </summary>
     public partial class ValkyrieResultUserControl : UserControl
     {
         public ValkyrieResultUserControl()
         {
             InitializeComponent();
+
+            Loaded += (s, e) =>
+                {
+                    var menu = new RadContextMenu();
+                    var item = new MenuItem();
+                    item.Header = "Details";
+                    menu.IconColumnWidth = 0;
+                    item.Click += item_Click;
+                    menu.Items.Add(item);
+                    RadContextMenu.SetContextMenu(treeList2, menu);
+                };
         }
 
-        private void treeList_LayoutUpdated(object sender, EventArgs e)
+        void item_Click(object sender, RoutedEventArgs e)
         {
+            if (treeList2.SelectedItem != null)
+            {
+                var item = treeList2.SelectedItem as FileResult;
+                if (item != null && ViewModel.SelectedValkyrieItem == item)
+                {
+                    ValkyrieDetailsWindow details = new ValkyrieDetailsWindow();
+                    details.Owner = System.Windows.Application.Current.MainWindow;
+                    details.ShowDialog();
+                }
+            }
+        }
 
+        public MainViewViewModel ViewModel
+        {
+            get { return this.DataContext as MainViewViewModel; }
         }
 
         private void OnTreeDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (e.OriginalSource != null)
+            {
+                FrameworkElement element = e.OriginalSource as FrameworkElement;
+                if (element == null)
+                {
+                    return;
+                }
 
+                var item = element.DataContext as FileResult;
+                if (item != null && ViewModel.SelectedValkyrieItem == item)
+                {
+                    ValkyrieDetailsWindow details = new ValkyrieDetailsWindow();
+                    details.Owner = System.Windows.Application.Current.MainWindow;
+                    details.ShowDialog();
+                }
+            }
         }
 
-        private void treeList_Filtered(object sender, Telerik.Windows.Controls.GridView.GridViewFilteredEventArgs e)
-        {
-
-        }
-
-        private void treeList_RowIsExpandedChanged(object sender, Telerik.Windows.Controls.GridView.RowEventArgs e)
-        {
-
-        }
-
-        private void OnRadGridViewDistinctValuesLoading(object sender, Telerik.Windows.Controls.GridView.GridViewDistinctValuesLoadingEventArgs e)
-        {
-
-        }
     }
 }

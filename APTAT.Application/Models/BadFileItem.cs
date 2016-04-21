@@ -31,5 +31,27 @@ namespace APTAT.Application.Models
         public String Copyright { get; set; }
 
         public String Product { get; set; }
+
+        public string FileSizeFormatted
+        {
+            get { return SizeToString(Size); }
+        }
+
+
+        private static string SizeToString(long len)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB" };
+
+            int order = 0;
+            while (len >= 1024 && order + 1 < sizes.Length)
+            {
+                order++;
+                len = len / 1024;
+            }
+
+            string result = String.Format("{0:0.##} {1}", len, sizes[order]);
+
+            return result;
+        }
     }
 }

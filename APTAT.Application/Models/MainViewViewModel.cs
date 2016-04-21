@@ -40,9 +40,11 @@ namespace APTAT.Application.Models
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
+        private FileResult _selectedValkyrieItem;
         private ObservableCollection<ThreatInfoItem> _items;
         private ObservableCollection<FileResult> _itemsValkyrie;
-        private ObservableCollection<ThreatInfoItem> _cache;
+        private Collection<ThreatInfoItem> _cache;
+        private Collection<FileResult> _cacheValkyrie;
 
         //public Boolean ResolvingTargets
         //{
@@ -282,16 +284,6 @@ namespace APTAT.Application.Models
             }
         }
 
-        public FileResult SelectedItemValkyrie
-        {
-            get { return _selectedItemValkyrie; }
-            set
-            {
-                _selectedItemValkyrie = value;
-                RaisePropertyChanged("SelectedItemValkyrie");
-            }
-        }
-
         public ThreatInfoItem SelectedItem
         {
             get { return _selectedItem; }
@@ -307,7 +299,28 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, _selectedItem.BadFile);
+                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(_selectedItem.BadFile, null));
+                }
+
+            }
+        }
+
+        public FileResult SelectedValkyrieItem
+        {
+            get { return _selectedValkyrieItem; }
+            set
+            {
+                _selectedValkyrieItem = value;
+                RaisePropertyChanged("SelectedValkyrieItem");
+                RaisePropertyChanged("IsDetailsEnabled");
+
+                if (_selectedValkyrieItem == null)
+                {
+                    _storage.SetValue(KnownKeys.UnknownFile, null);
+                }
+                else
+                {
+                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, _selectedValkyrieItem));
                 }
 
             }
@@ -373,7 +386,7 @@ namespace APTAT.Application.Models
         public DelegateCommand StopScanCommand { get; private set; }
 
         public DevicesSourceDescription DevicesSourceDescription;
-        private FileResult _selectedItemValkyrie;
+
         private readonly UserControl _scanInfoTreeControl;
         private readonly UserControl _valkyrieResultControl;
 
@@ -397,7 +410,8 @@ namespace APTAT.Application.Models
         {
             Items = new ObservableCollection<ThreatInfoItem>();
             ItemsValkyrie = new ObservableCollection<FileResult>();
-            _cache = new ObservableCollection<ThreatInfoItem>();
+            _cache = new Collection<ThreatInfoItem>();
+            _cacheValkyrie = new Collection<FileResult>();
             _onlineItems = new ThreatInfoItem[0];
             SelectedItem = null;
             UnknownFilesCount = 0;
@@ -552,12 +566,14 @@ namespace APTAT.Application.Models
             }
 
             
-            ItemsValkyrie = new ObservableCollection<FileResult>(e.Result);
-            MalwareFilesCount = ItemsValkyrie.Where(i => i.IsMalware).Count();
-            UnknownFilesCount = ItemsValkyrie.Where(i => i.IsUnknown).Count();
+            _cacheValkyrie = new Collection<FileResult>(e.Result);
+            ItemsValkyrie = new ObservableCollection<FileResult>(
+                       _cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
+
+            MalwareFilesCount = _cacheValkyrie.Count(i => i.IsMalware);
+            UnknownFilesCount = _cacheValkyrie.Count(i => i.IsUnknown);
             
 
-            SelectedItemValkyrie = ItemsValkyrie.FirstOrDefault();
             RaisePropertyChanged("ItemsValkyrie");
             IsValkyrieScanInProgress = false;
             IsAnalyseWithValkyrieEnabled = true;
@@ -592,7 +608,7 @@ namespace APTAT.Application.Models
             error.ShowDialog();
         }
 
-
+        private int _packer = 0;
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             Percentage = e.ProgressPercentage;
@@ -609,11 +625,18 @@ namespace APTAT.Application.Models
                     MalwareFilesCount = info.MalwareFilesCount;
                 }
 
-                var results = info.Results.Where(l=>l.ValkyrieAnalysisResult != null);
-                ItemsValkyrie = new ObservableCollection<FileResult>(results);
-            }
-        }
+                if (info.ProcessedFileCount > 100)
+                    return;
 
+                int percentage = Percentage / 20;
+                if (_packer < percentage)
+                {
+                    _packer = percentage;
+                    var results = info.Results.Where(l => l.ValkyrieAnalysisResult != null).ToArray();
+                    ItemsValkyrie = new ObservableCollection<FileResult>(results);
+                }
+            } 
+        }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
@@ -662,7 +685,7 @@ namespace APTAT.Application.Models
             _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
 
-            _cache = new ObservableCollection<ThreatInfoItem>(e.Items);
+            _cache = new Collection<ThreatInfoItem>(e.Items);
             Items =
                 new ObservableCollection<ThreatInfoItem>(
                     _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
@@ -749,7 +772,12 @@ namespace APTAT.Application.Models
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;
+
+            ItemsValkyrie = new ObservableCollection<FileResult>();
+            _cacheValkyrie = new Collection<FileResult>();
+            Keyword = string.Empty;
             
+
             CurrentViewControl = _valkyrieResultControl;
             _aptService.BeginValkyrieAnalysis(_login, _password, apiKey);
             
@@ -870,7 +898,7 @@ namespace APTAT.Application.Models
                             IsMalware = badFile.IsMalware,
                             Name = badFile.Name,
                             Size = badFile.Size,
-                            SizeString = badFile.Size / 1024 + " KB",
+                            SizeString = badFile.FileSizeFormatted,
                             IsRootItem = false,
                             IsOnline = true,
                             BadFile = badFile,
@@ -886,7 +914,10 @@ namespace APTAT.Application.Models
         {
             base.OnKeywordChanged(oldValue, newValue);
 
-            if (Items != null)
+            if (newValue == oldValue)
+                return;
+
+            if (_cache.Any() != null)
             {
                 foreach (ThreatInfoItem threatInfoItem in Items)
                 {
@@ -903,6 +934,12 @@ namespace APTAT.Application.Models
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword) || item.StatusMessage.Contains(Keyword)));
 
                 SelectedItem = null;
+            }
+
+            if (_cacheValkyrie.Any())
+            {
+                ItemsValkyrie = new ObservableCollection<FileResult>(
+                       _cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
             }
         }
 

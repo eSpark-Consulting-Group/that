@@ -13,8 +13,33 @@ namespace APTAT.Application
     public partial class ScanInfoTreeView : UserControl
     {
         public ScanInfoTreeView()
-        {            
-            InitializeComponent();
+        {
+            InitializeComponent(); 
+            
+            Loaded += (s, e) =>
+            {
+                var menu = new RadContextMenu();
+                var item = new MenuItem();
+                item.Header = "Details";
+                menu.IconColumnWidth = 0;
+                item.Click += item_Click;
+                menu.Items.Add(item);
+                RadContextMenu.SetContextMenu(treeList, menu);
+            };
+        }
+
+        void item_Click(object sender, RoutedEventArgs e)
+        {
+            if (treeList.SelectedItem != null)
+            {
+                var item = treeList.SelectedItem as ThreatInfoItem;
+                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsRootItem && ViewModel.SelectedItem == item)
+                {
+                    ThreatDetailsWindow details = new ThreatDetailsWindow();
+                    details.Owner = System.Windows.Application.Current.MainWindow;
+                    details.ShowDialog();
+                }
+            }
         }
 
         public MainViewViewModel ViewModel
@@ -128,7 +153,7 @@ namespace APTAT.Application
                 }
 
                 ThreatInfoItem item = GetDataBoundItem(element);
-                if (ViewModel.SelectedItem != null && ViewModel.SelectedItem.IsRootItem == false && ViewModel.SelectedItem == item)
+                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsRootItem && ViewModel.SelectedItem == item)
                 {
                     ThreatDetailsWindow details = new ThreatDetailsWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;

@@ -156,6 +156,17 @@
     <Compile Include="Converters\SelectedIndexToBoolConverter.cs" />
     <Compile Include="Converters\StringToHyperlinkConverter.cs" />
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
+    <Compile Include="Helpers\LoadingHelper.cs" />
+    <Compile Include="Helpers\VisualWrapper.cs" />
+    <Compile Include="Loading.xaml.cs">
+      <DependentUpon>Loading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValkyrieDetailsView.xaml.cs">
+      <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValkyrieDetailsWindow.xaml.cs">
+      <DependentUpon>ValkyrieDetailsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ErrorLogWindow.xaml.cs">
       <DependentUpon>ErrorLogWindow.xaml</DependentUpon>
     </Compile>
@@ -270,6 +281,18 @@
     <Page Include="ConfirmationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ValkyrieDetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ValkyrieDetailsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ErrorLogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

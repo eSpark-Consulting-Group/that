@@ -21,6 +21,8 @@ using Telerik.Windows;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 using System.Diagnostics;
+using APTAT.Application.Helpers;
+using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Application
 {
@@ -169,49 +171,86 @@ namespace APTAT.Application
             }
         }
 
+        private DispatcherOperation asynchOperation;
+        private LoadProgressWrapper progressWrapper;
+        private CamCredentialsWindow dialog;
         private void ShowRegisterToValkyrieWindow()
         {
 
             var model = new ValkyrieRegistrationModel();
 
-            var win = new CamCredentialsWindow(model);
-            win.Owner = System.Windows.Application.Current.MainWindow;
-            
-            win.OkClick += (sender, args) =>
+            dialog = new CamCredentialsWindow(model);
+            dialog.Owner = System.Windows.Application.Current.MainWindow;
+
+            dialog.OkClick += (sender, args) =>
             {
-                win.MarkPasswordValidation(model.ValidatePassword());
+                if (asynchOperation != null && asynchOperation.Status != DispatcherOperationStatus.Completed) return;
+
+                dialog.MarkPasswordValidation(model.ValidatePassword());
 
                 if (model.ValidateModel())
                 {
-                    try
-                    {
-                        var info = _viewModel.RegisterWithValkyrie(win.LicenseId, win.UserName, win.PasswordText.Password.Trim());
-                        if (info.ReturnCode == 0)
+                    var licid = dialog.LicenseId;
+                    var name = dialog.UserName.TrimEnd();
+                    var pass = dialog.PasswordText.Password.TrimEnd();
+
+                    progressWrapper = LoadingHelper.CreateElementOnWorkerThread<Loading>();
+                    if (progressWrapper.ElementCreated)
+                        dialog.loading.Child = progressWrapper.Host;
+
+                    LoadingHelper.StartProgress(progressWrapper);                  
+                    asynchOperation = LoadingHelper.RunOnWorkingThreadDelayed(() =>
                         {
-                            _viewModel.BeginValkyrieAnalysis(info.Key);
-                            win.Close();
-                        }
-                    }
-                    catch (InvalidOperationException exception)
-                    {
-                        if (exception.Data.Contains("ValkyrieReturnCode"))
-                        {
-                            var obj = exception.Data["ValkyrieReturnCode"].ToString();
-                            int code = 0;
-                            Int32.TryParse(obj, out code);
-                            model.ErrorMessage = exception.Message;
-                        }
-                        else
-                        {
-                            model.ErrorMessage = "Could not connect to Valkyrie Server";
-                            throw;
-                        }
-                    }
+                            var result = _viewModel.RegisterWithValkyrie(licid, name, pass);
+                            return result;
+                        });
+                    asynchOperation.Completed += AsynchOperationCompleted;
+                    asynchOperation.Aborted += AsynchOperationAborted;
+
+                    asynchOperation.Priority = DispatcherPriority.Normal;
+                    LoadingHelper.StartProgress(progressWrapper); 
                 }
             };
-            win.ShowDialog();
-            
+            dialog.ShowDialog();
         }
+        
+
+        private void AsynchOperationAborted(object sender, EventArgs e)
+        {
+            LoadingHelper.StopProgress(progressWrapper);
+            asynchOperation.Aborted -= AsynchOperationAborted;
+        }
+
+        private void AsynchOperationCompleted(object sender, EventArgs e)
+        {
+            Dispatcher.Invoke((Action)delegate
+            {
+                var response = ((DispatcherOperation)sender).Result as RegisterWithResponse;
+                if (response != null && response.ReturnCode == 0)
+                {
+                    _viewModel.BeginValkyrieAnalysis(response.Key);
+                    dialog.Close();
+                }
+                /*catch (InvalidOperationException exception)
+                {
+                    if (exception.Data.Contains("ValkyrieReturnCode"))
+                    {
+                        var obj = exception.Data["ValkyrieReturnCode"].ToString();
+                        int code = 0;
+                        Int32.TryParse(obj, out code);
+                        model.ErrorMessage = exception.Message;
+                    }
+                    else
+                    {
+                        model.ErrorMessage = "Could not connect to Valkyrie Server";
+                        throw;
+                    }
+                }*/
+            }, DispatcherPriority.Background, null);
+
+            LoadingHelper.StopProgress(progressWrapper);
+            asynchOperation.Completed -= AsynchOperationCompleted;
+        } 
 
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {            

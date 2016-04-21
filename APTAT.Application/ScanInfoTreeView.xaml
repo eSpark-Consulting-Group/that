@@ -18,7 +18,7 @@
                                  x:Name="treeList" 
                                  AutoGenerateColumns="False" 
                                  IsReadOnly="True" ItemsSource="{Binding Items}"   
-                                 Margin="20,0,20,20"
+                                 
                                  TabIndex="1"
                                  AutoExpandItems="False"
                                  RowHeight="50"

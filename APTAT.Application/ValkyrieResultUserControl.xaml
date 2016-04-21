@@ -15,21 +15,20 @@
     <Grid>
         
         <telerik:RadTreeListView AutomationProperties.AutomationId="ValkyrieResultsTree"
-                                 SelectedItem="{Binding SelectedItemValkyrie}" 
+                                 SelectedItem="{Binding SelectedValkyrieItem}" 
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList2" 
                                  AutoGenerateColumns="False" 
                                  IsReadOnly="True" 
                                  ItemsSource="{Binding ItemsValkyrie}"   
-                                 Margin="20,0,20,20"
+                                 
                                  TabIndex="1"
                                  AutoExpandItems="False"
                                  RowHeight="50"
                                  HierarchyIndent="14"
-                                 RowIsExpandedChanged="treeList_RowIsExpandedChanged"
-                                 DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
+                                
                                  EnableRowVirtualization="True"
-                                 MouseDoubleClick="OnTreeDoubleClick" LayoutUpdated="treeList_LayoutUpdated" Filtered="treeList_Filtered"
+                                 MouseDoubleClick="OnTreeDoubleClick" 
                                  Validation.ErrorTemplate="{x:Null}">
             
        <telerik:RadTreeListView.Resources>
