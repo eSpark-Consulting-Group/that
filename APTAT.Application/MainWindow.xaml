@@ -7,7 +7,7 @@
                 ResizeMode="CanResizeWithGrip" 
         >
 
-    <Border>
+    <Border x:Name="Border">
         <Border.Effect>
             <DropShadowEffect BlurRadius="5" Color="Black" Opacity="0.8" ShadowDepth="0.5" />
         </Border.Effect>
@@ -18,7 +18,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Border Background="#2A81BA" Height="35">
+            <Border Background="#2A81BA" Height="35" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown" 
+                    MouseMove="UIElement_OnMouseMove" MouseLeftButtonUp="UIElement_OnMouseLeftButtonUp">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
