@@ -16,7 +16,8 @@ namespace Valkyrie.WebApiProvider
         public static Uri StartScan { get; private set; }
         public static Uri EndScan { get; private set; }
         public static Uri RegisterWithCamLicense { get; private set; }
-        public static Uri RegisterWithCamCredentials { get; private set; } 
+        public static Uri RegisterWithCamCredentials { get; private set; }
+        public static Uri CheckAnalysisResult { get; private set; } 
 
     static ValkyrieApiUrls()
         {
@@ -33,6 +34,7 @@ namespace Valkyrie.WebApiProvider
             EndScan = new Uri(baseUri, "apt_end_scan");
             RegisterWithCamLicense = new Uri(baseUri, "fvs_register_with_cam_license");
             RegisterWithCamCredentials = new Uri(baseUri, "fvs_register_with_cam_credentials");
+            CheckAnalysisResult = new Uri(baseUri, "fvs_check_analysis_result");
         }
         
         public static Uri GetBaseUri()

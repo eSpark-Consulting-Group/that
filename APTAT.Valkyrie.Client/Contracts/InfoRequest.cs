@@ -11,4 +11,11 @@ namespace Valkyrie.WebApiProvider.Contracts
         [JsonProperty("endpoint_id")]
         public Guid EndpointId{ get; set; }
     }
+
+
+    public class CheckAnalysisResultRequest :RequestBase
+    {
+        [JsonProperty("analysis_id")]
+        public string AnalysisId { get; set; }      
+    }
 }

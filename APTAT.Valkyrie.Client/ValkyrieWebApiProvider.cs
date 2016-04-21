@@ -136,6 +136,11 @@ namespace APTAT.Valkyrie.Client
             return result;
         }
 
+        public static CheckAnalysisResultResponse CheckAnalysisResult(CheckAnalysisResultRequest request)
+        {
+            var result = CallValkyrie<CheckAnalysisResultResponse>(ValkyrieApiUrls.CheckAnalysisResult, request);
+            return result;
+        }
 
         private static T CallValkyrie<T>(Uri apiUri, object request)
         {
@@ -156,6 +161,6 @@ namespace APTAT.Valkyrie.Client
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;
             }
-        }
+        }       
     }
 }

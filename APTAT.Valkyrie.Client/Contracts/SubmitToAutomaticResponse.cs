@@ -4,8 +4,22 @@ using Valkyrie.WebApiProvider.Enums;
 
 namespace Valkyrie.WebApiProvider.Contracts
 {
-
     public class SubmitToAutomaticResponse
+    {
+        [JsonProperty("analysis_id")]
+        public string AnalysisId { get; set; }
+
+        [JsonProperty("result_description")]
+        public string ResultDescription { get; set; }
+
+        [JsonProperty("result_message")]
+        public string ResultMessage { get; set; }
+
+        [JsonProperty("return_code")]
+        public ErrorCodesEnum ReturnCode { get; set; }
+    }
+
+    public class CheckAnalysisResultResponse
     {
 
         [JsonProperty("additional_file_info")]
@@ -47,6 +61,10 @@ namespace Valkyrie.WebApiProvider.Contracts
         [JsonProperty("white_listed")]
         public bool IsWhiteListed { get; set; }
 
+
+        [JsonProperty("category_ids")]
+        public FileCategories[] CategoryIds { get; set; }
+        
         public override string ToString()
         {
             return String.Format("SHA1: {0} Verdict: {1}", BasicFileInfo.SHA1, Verdict);

@@ -490,7 +490,21 @@ namespace APTAT.Core.Valkyrie
                     };
 
                     var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, filePath, _cancellationTokenSource.Token);
-                    var result = ValkyrieAnalysisResult.Create(response);
+
+                    CheckAnalysisResultResponse automaticAnalysisResponse = new CheckAnalysisResultResponse() { ReturnCode = ErrorCodesEnum.None};
+
+                    var timeOut = TimeSpan.FromMinutes(5);
+                    bool success = false;
+                    int elapsed = 0;
+                    while ((!success) && (elapsed < timeOut.TotalMilliseconds))
+                    {
+                        Thread.Sleep(1000);
+                        elapsed += 1000;
+                        automaticAnalysisResponse = ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest() { ApiKey = _apiKey, AnalysisId = response.AnalysisId });
+                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.ANALYSIS_NOT_FINISHED);                      
+                    }
+
+                    var result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);
                     AddResult(result);
                 }
             }
@@ -521,5 +535,10 @@ namespace APTAT.Core.Valkyrie
         {
             return string.Format(@"{0}signup_apikey/{1}", ValkyrieApiUrls.GetBaseUri(), _apiKey);
         }
+
+
+
     }
+
+
 }
