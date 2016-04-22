@@ -14,18 +14,35 @@ namespace APTAT.Application
     {
         public ScanInfoTreeView()
         {
-            InitializeComponent(); 
-            
+            InitializeComponent();
+
             Loaded += (s, e) =>
             {
                 var menu = new RadContextMenu();
+                menu.IconColumnWidth = 0;
+                menu.Opened += menu_Opened;
+
                 var item = new MenuItem();
                 item.Header = "Details";
-                menu.IconColumnWidth = 0;
+                item.Command = ViewModel.SelectCommand;
                 item.Click += item_Click;
                 menu.Items.Add(item);
+
                 RadContextMenu.SetContextMenu(treeList, menu);
             };
+        }
+
+        void menu_Opened(object sender, RoutedEventArgs e)
+        {
+            RadContextMenu menu = (RadContextMenu)sender;
+            var cell = menu.GetClickedElement<GridViewCell>();
+            if (cell != null)
+            {
+                cell.IsSelected = true;
+                cell.IsCurrent = true;
+
+                treeList.SelectedItem = cell.DataContext;
+            }
         }
 
         void item_Click(object sender, RoutedEventArgs e)

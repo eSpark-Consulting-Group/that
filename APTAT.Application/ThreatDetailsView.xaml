@@ -71,8 +71,8 @@
                     <TextBlock Text="Modified:" Grid.Column="0" Grid.Row="4"/>
                     <TextBlock Text="Accessed:" Grid.Column="0" Grid.Row="5"/>
 
-                    <TextBlock Text="{Binding FileName}" Grid.Column="1" Grid.Row="0" MaxWidth="350" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
-                    <TextBlock Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1"/>
+                    <TextBlock Text="{Binding FileName}" Grid.Column="1" Grid.Row="0" MaxWidth="250" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                    <TextBlock Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" MaxWidth="250" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
                     <TextBlock Text="{Binding Size}" Grid.Column="1" Grid.Row="2"/>
                     <TextBlock Text="{Binding Created}" Grid.Column="1" Grid.Row="3"/>
                     <TextBlock Text="{Binding Modified}" Grid.Column="1" Grid.Row="4"/>
@@ -99,12 +99,12 @@
                     <TextBlock Text="Product:" Grid.Column="0" Grid.Row="5"/>
 
 
-                    <TextBlock Text="{Binding Hash}" Grid.Column="1" Grid.Row="0"/>
-                    <TextBlock Text="{Binding Signer}" Grid.Column="1" Grid.Row="1"/>
-                    <TextBlock Text="{Binding Description}" Grid.Column="1" Grid.Row="2"/>
-                    <TextBlock Text="{Binding Version}" Grid.Column="1" Grid.Row="3"/>
-                    <TextBlock Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4"/>
-                    <TextBlock Text="{Binding Product}" Grid.Column="1" Grid.Row="5"/>
+                      <TextBlock Text="{Binding Hash}" Grid.Column="1" Grid.Row="0"/>
+                      <TextBlock Text="{Binding Signer}" Grid.Column="1" Grid.Row="1" MaxWidth="200" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="200" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Version}" Grid.Column="1" Grid.Row="3" />
+                      <TextBlock Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="200" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="200" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
 
 
 

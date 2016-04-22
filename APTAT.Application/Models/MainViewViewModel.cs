@@ -232,7 +232,12 @@ namespace APTAT.Application.Models
 
         public Boolean IsDetailsEnabled
         {
-            get { return SelectedItem != null && SelectedItem.IsRootItem == false; }
+            get { return SelectedItem != null && !SelectedItem.IsRootItem; }
+        }
+
+        public Boolean IsValkyrieDetailsEnabled
+        {
+            get { return SelectedValkyrieItem != null; }
         }
 
         public Boolean IsReportEnabled
@@ -293,6 +298,8 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("SelectedItem");
                 RaisePropertyChanged("IsDetailsEnabled");
 
+                SelectCommand.InvalidateCanExecute();
+
                 if (_selectedItem == null)
                 {
                     _storage.SetValue(KnownKeys.UnknownFile, null);
@@ -312,7 +319,7 @@ namespace APTAT.Application.Models
             {
                 _selectedValkyrieItem = value;
                 RaisePropertyChanged("SelectedValkyrieItem");
-                RaisePropertyChanged("IsDetailsEnabled");
+                SelectValkyrieCommand.InvalidateCanExecute();
 
                 if (_selectedValkyrieItem == null)
                 {
@@ -382,8 +389,10 @@ namespace APTAT.Application.Models
         }
 
         public DelegateCommand StartScanCommand { get; private set; }
-
         public DelegateCommand StopScanCommand { get; private set; }
+
+        public DelegateCommand SelectCommand { get; private set; }
+        public DelegateCommand SelectValkyrieCommand { get; private set; }
 
         public DevicesSourceDescription DevicesSourceDescription;
 
@@ -399,6 +408,9 @@ namespace APTAT.Application.Models
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);
             StopScanCommand = new DelegateCommand(InvokeStopScan);
+            SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
+            SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
+
             _scanInfoTreeControl = new ScanInfoTreeView() { DataContext = this };
             _valkyrieResultControl = new ResultTabsControl { DataContext = this };
             ValkyrieProgressInfo = ProgressInfo<FileResult>.Empty;

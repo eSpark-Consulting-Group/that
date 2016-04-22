@@ -163,7 +163,6 @@ namespace APTAT.Application
         private CamCredentialsWindow dialog;
         private void ShowRegisterToValkyrieWindow()
         {
-
             var model = new ValkyrieRegistrationModel();
 
             dialog = new CamCredentialsWindow(model);
@@ -183,7 +182,10 @@ namespace APTAT.Application
 
                     progressWrapper = LoadingHelper.CreateElementOnWorkerThread<Loading>();
                     if (progressWrapper.ElementCreated)
+                    {
                         dialog.loading.Child = progressWrapper.Host;
+                        dialog.ok.Visibility = Visibility.Collapsed;
+                    }
               
                     asynchOperation = LoadingHelper.RunOnWorkingThreadDelayed(() =>
                         {
@@ -220,6 +222,8 @@ namespace APTAT.Application
                     _viewModel.BeginValkyrieAnalysis(response.Key);
                     dialog.Close();
                 }
+                else
+                    dialog.ok.Visibility = Visibility.Visible;
                 
             }, DispatcherPriority.Background, null);
 

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using APTAT.Application.Models;
 using APTAT.Core;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 
 namespace APTAT.Application
 {
@@ -14,15 +15,32 @@ namespace APTAT.Application
             InitializeComponent();
 
             Loaded += (s, e) =>
-                {
-                    var menu = new RadContextMenu();
-                    var item = new MenuItem();
-                    item.Header = "Details";
-                    menu.IconColumnWidth = 0;
-                    item.Click += item_Click;
-                    menu.Items.Add(item);
-                    RadContextMenu.SetContextMenu(treeList2, menu);
-                };
+            {
+                var menu = new RadContextMenu();
+                menu.IconColumnWidth = 0;
+                menu.Opened += menu_Opened;
+
+                var item = new MenuItem();
+                item.Header = "Details";
+                item.Command = ViewModel.SelectValkyrieCommand;
+                item.Click += item_Click;
+                menu.Items.Add(item);
+
+                RadContextMenu.SetContextMenu(treeList2, menu);
+            };
+        }
+
+        void menu_Opened(object sender, RoutedEventArgs e)
+        {
+            RadContextMenu menu = (RadContextMenu)sender;
+            var cell = menu.GetClickedElement<GridViewCell>();
+            if (cell != null)
+            {
+                cell.IsSelected = true;
+                cell.IsCurrent = true;
+
+                treeList2.SelectedItem = cell.DataContext;
+            }
         }
 
         void item_Click(object sender, RoutedEventArgs e)
