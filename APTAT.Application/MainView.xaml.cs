@@ -170,8 +170,9 @@ namespace APTAT.Application
 
             dialog.OkClick += (sender, args) =>
             {
-                if (asyncOperation != null && asyncOperation.Status != DispatcherOperationStatus.Completed && 
-                    asyncOperation.Status != DispatcherOperationStatus.Aborted) return;
+                if (asyncOperation != null && 
+                    (asyncOperation.Status == DispatcherOperationStatus.Executing || 
+                    asyncOperation.Status == DispatcherOperationStatus.Pending)) return;
 
                 dialog.MarkPasswordValidation(model.ValidatePassword());
 
