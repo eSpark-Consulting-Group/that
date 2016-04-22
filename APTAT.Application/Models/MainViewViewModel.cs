@@ -608,7 +608,7 @@ namespace APTAT.Application.Models
             error.ShowDialog();
         }
 
-        private int _packer = 0;
+
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             Percentage = e.ProgressPercentage;
@@ -625,16 +625,11 @@ namespace APTAT.Application.Models
                     MalwareFilesCount = info.MalwareFilesCount;
                 }
 
-                if (info.ProcessedFileCount > 100)
+                if (info.ProcessedFileCount > 50)
                     return;
 
-                int percentage = Percentage / 20;
-                if (_packer < percentage)
-                {
-                    _packer = percentage;
-                    var results = info.Results.Where(l => l.ValkyrieAnalysisResult != null).ToArray();
-                    ItemsValkyrie = new ObservableCollection<FileResult>(results);
-                }
+                var results = info.Results.Where(l => l.ValkyrieAnalysisResult != null).ToArray();
+                ItemsValkyrie = new ObservableCollection<FileResult>(results);
             } 
         }
 
@@ -930,7 +925,7 @@ namespace APTAT.Application.Models
                     }
                 }*/
                 Items = new ObservableCollection<ThreatInfoItem>(
-                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword) || item.StatusMessage.Contains(Keyword)));
+                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
 
                 SelectedItem = null;
             }

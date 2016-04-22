@@ -187,23 +187,27 @@ namespace APTAT.Application
               
                     asynchOperation = LoadingHelper.RunOnWorkingThreadDelayed(() =>
                         {
-                            var result = _viewModel.RegisterWithValkyrie(licid, name, pass);
+                            RegisterWithResponse result = null;
+                            try
+                            {
+                                result = _viewModel.RegisterWithValkyrie(licid, name, pass);
+                            }
+                            catch (InvalidOperationException exception)
+                            {
+                                if (exception.Data.Contains("ValkyrieReturnCode"))
+                                    model.ErrorMessage = exception.Message;
+                                else
+                                    model.ErrorMessage = "Could not connect to Valkyrie Server.";
+                            }
                             return result;
                         });
                     asynchOperation.Completed += AsynchOperationCompleted;
-                    asynchOperation.Aborted += AsynchOperationAborted;
                     asynchOperation.Priority = DispatcherPriority.Normal;
 
                     LoadingHelper.StartProgress(progressWrapper); 
                 }
             };
             dialog.ShowDialog();
-        }
-
-        private void AsynchOperationAborted(object sender, EventArgs e)
-        {
-            LoadingHelper.StopProgress(progressWrapper);
-            asynchOperation.Aborted -= AsynchOperationAborted;
         }
 
         private void AsynchOperationCompleted(object sender, EventArgs e)
@@ -216,21 +220,7 @@ namespace APTAT.Application
                     _viewModel.BeginValkyrieAnalysis(response.Key);
                     dialog.Close();
                 }
-                /*catch (InvalidOperationException exception)
-                {
-                    if (exception.Data.Contains("ValkyrieReturnCode"))
-                    {
-                        var obj = exception.Data["ValkyrieReturnCode"].ToString();
-                        int code = 0;
-                        Int32.TryParse(obj, out code);
-                        model.ErrorMessage = exception.Message;
-                    }
-                    else
-                    {
-                        model.ErrorMessage = "Could not connect to Valkyrie Server";
-                        throw;
-                    }
-                }*/
+                
             }, DispatcherPriority.Background, null);
 
             LoadingHelper.StopProgress(progressWrapper);

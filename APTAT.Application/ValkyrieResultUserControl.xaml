@@ -70,7 +70,7 @@
                 </DataTemplate>
            
                 <DataTemplate x:Key="SizeColumn">
-                    <TextBlock Text="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Size, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" TextAlignment="Right"/>
+                    <TextBlock Text="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" TextAlignment="Right" Margin="0 0 5 0"/>
                 </DataTemplate>
                 <DataTemplate x:Key="WhiteListedColumn">
                     <TextBlock Text="{Binding ValkyrieAnalysisResult.IsWhiteListed, ValidatesOnDataErrors=False, ValidatesOnExceptions=False,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1"  TextAlignment="Center"/>
@@ -115,23 +115,23 @@
                     CellTemplate="{StaticResource VerdictColumn}"
                     SortMemberPath="ValkyrieAnalysisResult.VerdictString"
                     IsFilterable="False"
-                    Header="Verdict"  
+                    Header="VERDICT"  
                     TextAlignment="Left"
-                    Width="140*"/>
+                    Width="240*"/>
                 
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource OperationStatusColumn}"
                     SortMemberPath="ValkyrieAnalysisResult.OperationStatus"
                     IsFilterable="False"
-                    Header="Status"  
+                    Header="STATUS"  
                     TextAlignment="Left"
-                    Width="240*"/>
+                    Width="140*"/>
 
                 <telerik:GridViewColumn                    
                     CellTemplate="{StaticResource WhiteListedColumn}"
                     SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
                     IsFilterable="False"
-                    Header="White Listed"  
+                    Header="WHITELISTED"  
                     TextAlignment="Center"
                     Width="85*"/>
 
