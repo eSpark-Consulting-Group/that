@@ -95,19 +95,12 @@ namespace APTAT.Core.Valkyrie
                 _apiKey = apiKey;
 
                 Trace.WriteLine("API_KEY = " + apiKey);
-                Trace.Flush();
-                OnAnalyzeProgressChanged();
-                Thread.Sleep(2000);//time out asked by Valkyrie team 
+                //Trace.Flush();
                 OnAnalyzeProgressChanged();
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
-                Trace.Flush();
+                //Trace.Flush();
 
-                var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(apiKey));
-                if (startScanResult.ReturnCode != 0)
-                {
-                    Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
-                    Trace.Flush();
-                }
+                
 
                 AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 _fileScanned = 0;
@@ -125,6 +118,13 @@ namespace APTAT.Core.Valkyrie
                 {
                     try
                     {
+                        Thread.Sleep(2000);//time out asked by Valkyrie team 
+                        var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(apiKey));
+                        if (startScanResult.ReturnCode != 0)
+                        {
+                            Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
+                            //Trace.Flush();
+                        }
                         SubmitToAutomaticAnalysis(badFiles, login, password, _cancellationTokenSource.Token);
                     }
                     catch (AggregateException exception)
