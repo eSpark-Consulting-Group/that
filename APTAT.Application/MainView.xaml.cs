@@ -158,7 +158,7 @@ namespace APTAT.Application
             }
         }
 
-        private DispatcherOperation asynchOperation;
+        private DispatcherOperation asyncOperation;
         private LoadProgressWrapper progressWrapper;
         private CamCredentialsWindow dialog;
         private void ShowRegisterToValkyrieWindow()
@@ -170,7 +170,8 @@ namespace APTAT.Application
 
             dialog.OkClick += (sender, args) =>
             {
-                if (asynchOperation != null && asynchOperation.Status != DispatcherOperationStatus.Completed) return;
+                if (asyncOperation != null && asyncOperation.Status != DispatcherOperationStatus.Completed && 
+                    asyncOperation.Status != DispatcherOperationStatus.Aborted) return;
 
                 dialog.MarkPasswordValidation(model.ValidatePassword());
 
@@ -187,7 +188,7 @@ namespace APTAT.Application
                         dialog.ok.Visibility = Visibility.Collapsed;
                     }
               
-                    asynchOperation = LoadingHelper.RunOnWorkingThreadDelayed(() =>
+                    asyncOperation = LoadingHelper.RunOnWorkingThreadDelayed(() =>
                         {
                             RegisterWithResponse result = null;
                             try
@@ -203,8 +204,9 @@ namespace APTAT.Application
                             }
                             return result;
                         });
-                    asynchOperation.Completed += AsynchOperationCompleted;
-                    asynchOperation.Priority = DispatcherPriority.Normal;
+                    asyncOperation.Completed += AsyncOperationCompleted;
+                    asyncOperation.Aborted += AsyncOperationAborted;
+                    asyncOperation.Priority = DispatcherPriority.Normal;
 
                     LoadingHelper.StartProgress(progressWrapper); 
                 }
@@ -212,7 +214,12 @@ namespace APTAT.Application
             dialog.ShowDialog();
         }
 
-        private void AsynchOperationCompleted(object sender, EventArgs e)
+        private void AsyncOperationAborted(object sender, EventArgs e)
+        {
+            LoadingHelper.StopProgress(progressWrapper);
+        }
+
+        private void AsyncOperationCompleted(object sender, EventArgs e)
         {
             Dispatcher.Invoke((Action)delegate
             {
@@ -228,7 +235,6 @@ namespace APTAT.Application
             }, DispatcherPriority.Background, null);
 
             LoadingHelper.StopProgress(progressWrapper);
-            asynchOperation.Completed -= AsynchOperationCompleted;
         } 
 
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
