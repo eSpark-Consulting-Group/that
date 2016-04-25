@@ -6,21 +6,28 @@ namespace APTAT.Application.Helpers
 {
     public class LoadingHelper
     {
-        private readonly Thread _bThread;
-        private readonly AutoResetEvent _bEvent = new AutoResetEvent(false);
+        private Thread _thread;
+        private object _sync = new object();
 
-        private Dispatcher _dispatcher;
         private Dispatcher Dispatcher
         {
             get
             {
-                if (_dispatcher == null)
+                if (_thread == null)
                 {
-                    _bEvent.WaitOne();
-
-                    _dispatcher = Dispatcher.FromThread(_bThread);
+                    _thread = new Thread(OnStart);
+                    _thread.Name = "NewThread";
+                    _thread.SetApartmentState(ApartmentState.STA);
+                    _thread.IsBackground = true;
+                    
+                    lock (_sync)
+                    {
+                        _thread.Start();
+                        Monitor.Wait(_sync);
+                    }
                 }
-                return _dispatcher;
+
+                return Dispatcher.FromThread(_thread);
             }
         }
 
@@ -49,21 +56,18 @@ namespace APTAT.Application.Helpers
             return Dispatcher.BeginInvoke(act, DispatcherPriority.Inactive, list);
         }
 
-        public LoadingHelper()
-        {
-            _bThread = new Thread(OnStart);
-            _bThread.Name = "NewThread";
-            _bThread.SetApartmentState(ApartmentState.STA);
-            _bThread.IsBackground = true;
-            _bThread.Priority = ThreadPriority.Normal;
-            _bThread.Start(null);
-        }
-
         private void OnStart(object arg)
         {
-            _bEvent.Set();
+            Dispatcher.CurrentDispatcher.BeginInvoke((Action)DispatcherStarted);
             Dispatcher.Run();
-            _bEvent.Close();
+        }
+
+        private void DispatcherStarted()
+        {
+            lock (_sync)
+            {
+                Monitor.Pulse(_sync);
+            }
         }
     }
 }

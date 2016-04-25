@@ -150,11 +150,11 @@ namespace APTAT.Application
             if (e.SuccededCount > 0)
             {
                 if (scanCompletedWindow.ShowDialog() == true)
-                {
-                    
                     ShowRegisterToValkyrieWindow();
-                }
+                else if (total == 0)
+                    _viewModel.IsAnalyseWithValkyrieEnabled = false;
             }
+                
         }
 
         private DispatcherOperation _asyncOperation;
