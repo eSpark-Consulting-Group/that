@@ -93,7 +93,7 @@
                                 Margin="0,0,0,0" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" BorderThickness="0" >
 
                 <telerik:RadButton AutomationProperties.AutomationId="StartScanningButton"
-                               Margin="15,-1,0,-1"  
+                               Margin="10,-1,0,-1"  
                                FontSize="16"
                                Padding="10,20"
                                IsTabStop="True"
@@ -164,13 +164,13 @@
                                            Content="Reports"
                                            IsEnabled="{Binding IsReportEnabled}"
                                            Style="{StaticResource RadDropDownButtonStyle2}"
-                                           Margin="5,-1,30,-1"
+                                           Margin="0,-1,15,-1"
                                            ContentTemplate="{StaticResource ReportButtonContentTemplate}"
                                            x:Name="ReportButton"
                                            FontSize="16"
                                            Padding="10,20,10,20">
                     <telerik:RadDropDownButton.DropDownContent>
-                        <telerik:RadContextMenu IconColumnWidth="0" Width="154" BorderThickness="0">
+                        <telerik:RadContextMenu IconColumnWidth="0" Width="160" BorderThickness="0">
                             <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive" Click="OnExecutiveReportClick"  Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}"/>
                             <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Device" Click="OnPerDeviceReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
                             <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Per Program" Click="OnPerProgramReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -182,7 +182,7 @@
                 </telerik:RadDropDownButton>
 
                 <telerik:RadButton AutomationProperties.AutomationId="AboutButton"
-                                   Margin="0,-1" 
+                                   Margin="0,-1,0,-1" 
                                    Padding="10,20"
                                    Click="AboutClick"
                                    IsEnabled="True" FontSize="18">

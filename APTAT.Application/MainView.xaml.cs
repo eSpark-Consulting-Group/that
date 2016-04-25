@@ -194,8 +194,8 @@ namespace APTAT.Application
                     _asyncOperation = _loadingHelper.RunOnThreadDelayed(() =>
                         {
                             RegisterWithResponse result = null;
-                            try
-                            {
+                            try   
+                            {                                               
                                 result = _viewModel.RegisterWithValkyrie(licid, name, pass);
                             }
                             catch (InvalidOperationException exception)
@@ -231,7 +231,11 @@ namespace APTAT.Application
             var response = ((DispatcherOperation)sender).Result as RegisterWithResponse;
             if (response != null && response.ReturnCode == 0)
             {
-                Dispatcher.Invoke((Action)_dialog.Close);
+                Dispatcher.Invoke((Action)delegate
+                {
+                    _dialog.Close();
+                    _viewModel.OnBeforeBeginValkyrieAnalysis();
+                });
 
                 if (_loadingHelper == null)
                     _loadingHelper = new LoadingHelper();

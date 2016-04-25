@@ -770,25 +770,23 @@ namespace APTAT.Application.Models
 
         public RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserLogin, string camUserPassword)
         {
-            RegisterWithResponse regInfo = _aptService.RegisterWithValkyrie(camLicenseId, camUserLogin, camUserPassword);
+            return _aptService.RegisterWithValkyrie(camLicenseId, camUserLogin, camUserPassword);
+        }
 
-            if (regInfo != null && regInfo.ReturnCode == 0)
-            {
-                ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
+        public void OnBeforeBeginValkyrieAnalysis()
+        {
+            ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
 
-                IsAnalyseWithValkyrieEnabled = false;
-                IsValkyrieScanInProgress = true;
-                IsValkyrieAnalysCompleted = false;
-                UnknownFilesCount = 0;
-                
-                ItemsValkyrie = new ObservableCollection<FileResult>();
-                _cacheValkyrie = new Collection<FileResult>();
-                Keyword = string.Empty;
+            IsAnalyseWithValkyrieEnabled = false;
+            IsValkyrieScanInProgress = true;
+            IsValkyrieAnalysCompleted = false;
+            UnknownFilesCount = 0;
 
-                CurrentViewControl = _valkyrieResultControl;
-            }
+            ItemsValkyrie = new ObservableCollection<FileResult>();
+            _cacheValkyrie = new Collection<FileResult>();
+            Keyword = string.Empty;
 
-            return regInfo;
+            CurrentViewControl = _valkyrieResultControl;
         }
 
         public void BeginValkyrieAnalysis(string apiKey)
