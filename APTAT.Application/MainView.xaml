@@ -58,6 +58,7 @@
         <Application:TitleUpdater Header="{Binding Header}"/>
 
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." Background="Transparent" BorderBrush="Transparent">
+          <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent">
             <Grid>
 
         <ContentControl Content="{Binding CurrentViewControl}"></ContentControl>
@@ -80,6 +81,7 @@
         </StackPanel>
 
             </Grid>
+          </telerik:RadBusyIndicator>
         </telerik:RadBusyIndicator>
 
        <Grid>

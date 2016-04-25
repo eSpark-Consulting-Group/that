@@ -620,12 +620,28 @@ namespace APTAT.Application.Models
             error.ShowDialog();
         }
 
+        private bool _valkyrieSendingFiles;
+        public bool ValkyrieSendingFiles
+        {
+            get { return _valkyrieSendingFiles; }
+            set 
+            {
+                if (_valkyrieSendingFiles == value)
+                    return;
+
+                _valkyrieSendingFiles = value;
+                RaisePropertyChanged("ValkyrieSendingFiles");
+            }
+        }
+
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             if (Percentage == e.ProgressPercentage)
                 return;
-            
+
+            ValkyrieSendingFiles = false;
+
             Percentage = e.ProgressPercentage;
             RaisePropertyChanged("Header");
             var info = (ProgressInfo<FileResult>)e.UserState;
@@ -640,7 +656,7 @@ namespace APTAT.Application.Models
                     MalwareFilesCount = info.MalwareFilesCount;
                 }
 
-                if (info.ProcessedFileCount > 50)
+                if (info.ProcessedFileCount > 50 || info.ProcessedFileCount % 2 == 1)
                     return;
 
                 var results = info.Results.Where(l => l.ValkyrieAnalysisResult != null).ToArray();
@@ -768,6 +784,7 @@ namespace APTAT.Application.Models
         }
 
 
+
         public RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserLogin, string camUserPassword)
         {
             return _aptService.RegisterWithValkyrie(camLicenseId, camUserLogin, camUserPassword);
@@ -787,6 +804,8 @@ namespace APTAT.Application.Models
             Keyword = string.Empty;
 
             CurrentViewControl = _valkyrieResultControl;
+
+            ValkyrieSendingFiles = true;
         }
 
         public void BeginValkyrieAnalysis(string apiKey)
