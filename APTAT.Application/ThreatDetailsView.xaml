@@ -99,12 +99,12 @@
                     <TextBlock Text="Product:" Grid.Column="0" Grid.Row="5"/>
 
 
-                      <TextBlock Text="{Binding Hash}" Grid.Column="1" Grid.Row="0"/>
-                      <TextBlock Text="{Binding Signer}" Grid.Column="1" Grid.Row="1" MaxWidth="250" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
-                      <TextBlock Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="250" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Hash}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Signer}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="220" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
                       <TextBlock Text="{Binding Version}" Grid.Column="1" Grid.Row="3" />
-                      <TextBlock Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="250" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
-                      <TextBlock Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="250" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="220" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+                      <TextBlock Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="220" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
 
 
 
