@@ -39,7 +39,7 @@ namespace APTAT.Application
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
 
-                treeList2.SelectedItem = cell.DataContext;
+                treeList2.SelectedItem = cell.DataContext is FileResult ? cell.DataContext : null;
             }
         }
 
