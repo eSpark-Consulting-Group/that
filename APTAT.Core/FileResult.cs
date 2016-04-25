@@ -71,7 +71,7 @@ namespace APTAT.Core
                 if (this.ValkyrieAnalysisResult != null)
                 {
 
-                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware;
+                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware || ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication;
                 }
                 return false;
             }
