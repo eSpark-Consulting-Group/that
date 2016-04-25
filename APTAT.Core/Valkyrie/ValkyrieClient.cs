@@ -325,7 +325,7 @@ namespace APTAT.Core.Valkyrie
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                         var orgPath = f.GetFullPath();
                         UploadFile(filePath, orgPath, endpointId);
-                        File.Delete(filePath);
+                       // File.Delete(filePath);
                     }
                     catch (Exception e)
                     {
