@@ -623,6 +623,9 @@ namespace APTAT.Application.Models
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
+            if (Percentage == e.ProgressPercentage)
+                return;
+            
             Percentage = e.ProgressPercentage;
             RaisePropertyChanged("Header");
             var info = (ProgressInfo<FileResult>)e.UserState;
@@ -768,26 +771,29 @@ namespace APTAT.Application.Models
         public RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserLogin, string camUserPassword)
         {
             RegisterWithResponse regInfo = _aptService.RegisterWithValkyrie(camLicenseId, camUserLogin, camUserPassword);
+
+            if (regInfo != null && regInfo.ReturnCode == 0)
+            {
+                ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
+
+                IsAnalyseWithValkyrieEnabled = false;
+                IsValkyrieScanInProgress = true;
+                IsValkyrieAnalysCompleted = false;
+                UnknownFilesCount = 0;
+                
+                ItemsValkyrie = new ObservableCollection<FileResult>();
+                _cacheValkyrie = new Collection<FileResult>();
+                Keyword = string.Empty;
+
+                CurrentViewControl = _valkyrieResultControl;
+            }
+
             return regInfo;
         }
 
         public void BeginValkyrieAnalysis(string apiKey)
         {
-            ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
-
-            IsAnalyseWithValkyrieEnabled = false;
-            IsValkyrieScanInProgress = true;
-            IsValkyrieAnalysCompleted = false;
-            UnknownFilesCount = 0;
-
-            ItemsValkyrie = new ObservableCollection<FileResult>();
-            _cacheValkyrie = new Collection<FileResult>();
-            Keyword = string.Empty;
-            
-
-            CurrentViewControl = _valkyrieResultControl;
             _aptService.BeginValkyrieAnalysis(_login, _password, apiKey);
-            
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)

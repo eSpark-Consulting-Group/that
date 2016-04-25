@@ -151,45 +151,47 @@ namespace APTAT.Application
             {
                 if (scanCompletedWindow.ShowDialog() == true)
                 {
-
-             //       _viewModel.BeginValkyrieAnalysis();
+                    
                     ShowRegisterToValkyrieWindow();
                 }
             }
         }
 
-        private DispatcherOperation asyncOperation;
-        private LoadProgressWrapper progressWrapper;
-        private CamCredentialsWindow dialog;
+        private DispatcherOperation _asyncOperation;
+        private CamCredentialsWindow _dialog;
+        private LoadingHelper _loadingHelper;
+
         private void ShowRegisterToValkyrieWindow()
         {
             var model = new ValkyrieRegistrationModel();
 
-            dialog = new CamCredentialsWindow(model);
-            dialog.Owner = System.Windows.Application.Current.MainWindow;
+            _dialog = new CamCredentialsWindow(model);
+            _dialog.Owner = System.Windows.Application.Current.MainWindow;
 
-            dialog.OkClick += (sender, args) =>
+            _dialog.OkClick += (sender, args) =>
             {
-                if (asyncOperation != null && 
-                    (asyncOperation.Status == DispatcherOperationStatus.Executing || 
-                    asyncOperation.Status == DispatcherOperationStatus.Pending)) return;
+                if (_asyncOperation != null && 
+                    (_asyncOperation.Status == DispatcherOperationStatus.Executing || 
+                    _asyncOperation.Status == DispatcherOperationStatus.Pending)) return;
 
-                dialog.MarkPasswordValidation(model.ValidatePassword());
+                _dialog.MarkPasswordValidation(model.ValidatePassword());
 
                 if (model.ValidateModel())
                 {
-                    var licid = dialog.LicenseId;
-                    var name = dialog.UserName.TrimEnd();
-                    var pass = dialog.PasswordText.Password.TrimEnd();
+                    var licid = _dialog.LicenseId;
+                    var name = _dialog.UserName.TrimEnd();
+                    var pass = _dialog.PasswordText.Password.TrimEnd();
 
-                    progressWrapper = LoadingHelper.CreateElementOnWorkerThread<Loading>();
-                    if (progressWrapper.ElementCreated)
+                    if (_loadingHelper == null)
+                        _loadingHelper = new LoadingHelper();
+
+                    Dispatcher.Invoke((Action)delegate
                     {
-                        dialog.loading.Child = progressWrapper.Host;
-                        dialog.ok.Visibility = Visibility.Collapsed;
-                    }
-              
-                    asyncOperation = LoadingHelper.RunOnWorkingThreadDelayed(() =>
+                        _dialog.ok.Visibility = Visibility.Collapsed;
+                        _dialog.loading.IsBusy = true;
+                    });
+
+                    _asyncOperation = _loadingHelper.RunOnThreadDelayed(() =>
                         {
                             RegisterWithResponse result = null;
                             try
@@ -205,38 +207,45 @@ namespace APTAT.Application
                             }
                             return result;
                         });
-                    asyncOperation.Completed += AsyncOperationCompleted;
-                    asyncOperation.Aborted += AsyncOperationAborted;
-                    asyncOperation.Priority = DispatcherPriority.Normal;
 
-                    LoadingHelper.StartProgress(progressWrapper); 
+                    _asyncOperation.Completed += AsyncOperationCompleted;
+                    _asyncOperation.Aborted += AsyncOperationAborted;
+                    _asyncOperation.Priority = DispatcherPriority.Normal;
                 }
             };
-            dialog.ShowDialog();
+
+            _dialog.ShowDialog();
         }
 
         private void AsyncOperationAborted(object sender, EventArgs e)
         {
-            LoadingHelper.StopProgress(progressWrapper);
+            Dispatcher.Invoke((Action)delegate
+            {
+                _dialog.ok.Visibility = Visibility.Visible;
+                _dialog.loading.IsBusy = false;
+            });
         }
 
         private void AsyncOperationCompleted(object sender, EventArgs e)
         {
-            Dispatcher.Invoke((Action)delegate
+            var response = ((DispatcherOperation)sender).Result as RegisterWithResponse;
+            if (response != null && response.ReturnCode == 0)
             {
-                var response = ((DispatcherOperation)sender).Result as RegisterWithResponse;
-                if (response != null && response.ReturnCode == 0)
+                Dispatcher.Invoke((Action)_dialog.Close);
+
+                if (_loadingHelper == null)
+                    _loadingHelper = new LoadingHelper();
+
+                _loadingHelper.DoEvents(Dispatcher);
+
+                _loadingHelper.RunOnThread(() =>
                 {
                     _viewModel.BeginValkyrieAnalysis(response.Key);
-                    dialog.Close();
-                }
-                else
-                    dialog.ok.Visibility = Visibility.Visible;
-                
-            }, DispatcherPriority.Background, null);
-
-            LoadingHelper.StopProgress(progressWrapper);
-        } 
+                });
+            }
+            else
+                AsyncOperationAborted(sender, e);
+        }
 
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {            

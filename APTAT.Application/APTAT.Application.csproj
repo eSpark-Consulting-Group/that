@@ -157,10 +157,6 @@
     <Compile Include="Converters\StringToHyperlinkConverter.cs" />
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
     <Compile Include="Helpers\LoadingHelper.cs" />
-    <Compile Include="Helpers\VisualWrapper.cs" />
-    <Compile Include="Loading.xaml.cs">
-      <DependentUpon>Loading.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ValkyrieDetailsView.xaml.cs">
       <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
     </Compile>
@@ -279,10 +275,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfirmationWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Loading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
