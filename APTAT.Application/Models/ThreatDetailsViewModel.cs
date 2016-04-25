@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using APTAT.Application.Services;
 using APTAT.Core;
+using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Application.Models
 {
@@ -202,7 +203,9 @@ namespace APTAT.Application.Models
 
 
             FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
-            Verdict = badFile != null ? "unknown" : valkyrieFile.ValkyrieAnalysisResult.VerdictString;
+            IsMalware = badFile != null ? badFile.IsMalware : valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware;
+            IsUnknown = badFile != null ? badFile.IsUnknown : valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication;
+            Verdict = badFile != null ? (IsMalware ? "Malware" : "Unknown") : valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
             Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();
             Modified = badFile != null ? badFile.Modified.ToLocalTime() : valkyrieFile.Modified.ToLocalTime();
@@ -213,9 +216,6 @@ namespace APTAT.Application.Models
             Version = NAIfEmpty(badFile != null ? badFile.Version : valkyrieFile.Version);
             Copyright = NAIfEmpty(badFile != null ? badFile.Copyright : valkyrieFile.Copyright);
             Product = NAIfEmpty(badFile != null ? badFile.Product : valkyrieFile.Product);
-            IsMalware = badFile != null ? badFile.IsMalware : valkyrieFile.IsMalware;
-            IsUnknown = badFile != null ? badFile.IsUnknown : valkyrieFile.IsUnknown;
-
             IsWhitelisted = valkyrieFile != null && valkyrieFile.ValkyrieAnalysisResult.IsWhiteListed ? "yes" : "no";
             MalwareProbability = valkyrieFile != null ? valkyrieFile.ValkyrieAnalysisResult.MalwareProbability + "%" : "";
         }

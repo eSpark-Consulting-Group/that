@@ -93,8 +93,12 @@ namespace APTAT.Core
         {
             get
             {
+                if (this.ValkyrieAnalysisResult != null)
+                {
 
-                return true;
+                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication;
+                }
+                return false;
             }
 
         }

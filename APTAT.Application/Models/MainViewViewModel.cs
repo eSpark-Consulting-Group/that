@@ -656,7 +656,7 @@ namespace APTAT.Application.Models
                     MalwareFilesCount = info.MalwareFilesCount;
                 }
 
-                if (info.ProcessedFileCount > 50 || info.ProcessedFileCount % 2 == 1)
+                if (info.ProcessedFileCount > 50)
                     return;
 
                 var results = info.Results.Where(l => l.ValkyrieAnalysisResult != null).ToArray();

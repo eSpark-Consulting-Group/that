@@ -51,7 +51,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                    <Grid x:Name="GeneralCol1" Margin="20, 0,20,20 " MinWidth="250">
+                    <Grid x:Name="GeneralCol1" Margin="20, 0,20,20 " MinWidth="370">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
