@@ -204,9 +204,9 @@ namespace APTAT.Application.Models
             FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
             Verdict = badFile != null ? "unknown" : valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
-            Created = badFile != null ? badFile.Created : valkyrieFile.Created;
-            Modified = badFile != null ? badFile.Modified : valkyrieFile.Modified;
-            Accessed = badFile != null ? badFile.Accessed : valkyrieFile.Accessed;
+            Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();
+            Modified = badFile != null ? badFile.Modified.ToLocalTime() : valkyrieFile.Modified.ToLocalTime();
+            Accessed = badFile != null ? badFile.Accessed.ToLocalTime() : valkyrieFile.Accessed.ToLocalTime();
             Hash = NAIfEmpty(badFile != null ? badFile.Sha1 : valkyrieFile.Sha1);
             Signer = NAIfEmpty(badFile != null ? badFile.Signer : valkyrieFile.Signer);
             Description = NAIfEmpty(badFile != null ? badFile.Description : valkyrieFile.Description);
