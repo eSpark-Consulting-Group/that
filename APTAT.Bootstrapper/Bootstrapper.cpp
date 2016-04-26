@@ -5,7 +5,7 @@
 const wchar_t PATH[] = L"Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Client";
 const wchar_t KEY[]  = L"Install";
 const wchar_t FRAMEWORK_DOWNLOAD_LINK[] = L"http://go.microsoft.com/fwlink/?linkid=182804";
-const wchar_t APP[]  = L"APTAT.Application.exe";
+const wchar_t APP[]  = L"UnknownFileHunter.exe";
 
 const wchar_t FONT_REGISTRY_KEY[] = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
 const wchar_t FONT1[] = L"segoeui.ttf";

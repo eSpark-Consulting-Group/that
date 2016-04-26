@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>APTAT.Application</RootNamespace>
-    <AssemblyName>APTAT.Application</AssemblyName>
+    <AssemblyName>UnknownFileHunter</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -488,14 +488,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del "$(TargetDir)APTAT.exe"
+    <PostBuildEvent>del "$(TargetDir)ValkyrieHunter.exe"
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.Common.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.DataVisualization.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.ProcessingObjectModel.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.WinForms.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)$(ConfigurationName)\APTAT.Bootstrapper.exe" "$(TargetDir)" /Y
-"$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.rtf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)APTAT.Application.exe" "$(TargetDir)APTAT.Application.exe.config" "$(TargetDir)APTAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
-copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)APTAT.exe" || goto :error
+"$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.rtf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)UnknownFileHunter.exe" "$(TargetDir)UnknownFileHunter.exe.config" "$(TargetDir)APTAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
+copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)ValkyrieHunter.exe" || goto :error
 del  "$(TargetDir)archive.7z"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
