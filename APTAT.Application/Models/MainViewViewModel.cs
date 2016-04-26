@@ -83,7 +83,7 @@ namespace APTAT.Application.Models
                 {
                     return " unknown programs detected";
                 }
-                return  " programs analysed";
+                return " unknown programs";
             }
          
         }
