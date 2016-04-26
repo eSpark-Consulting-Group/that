@@ -11,11 +11,6 @@ namespace APTAT.Core
 {
     public class FileResult
     {
-        private FileResult()
-        {
-
-        }
-
         public FileResult(Module badFile)
         {
             Computers = new List<ComputerInformation>();

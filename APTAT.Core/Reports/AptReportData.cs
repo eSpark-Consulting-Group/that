@@ -12,6 +12,8 @@ namespace APTAT.Core.Reports
 {
     public class AptReportData
     {
+        private MergedScanResults _mergedScanResultsCache = null;
+
         private int _totalFilesCound = -1;
         private int _safeFilesCount = -1;
         private int _unknownFilesCount = -1;
@@ -160,29 +162,56 @@ namespace APTAT.Core.Reports
         {
             get { return (from t in Targets where t.ResultType == Core.ScanResultType.Completed select t).ToArray(); }
         }
+        public ScanResult[] SucceededTargetsWithValkyrie
+        {
+            get 
+            {
+                IEnumerable<ScannedTarget> targets;
+                IEnumerable<DetailedBadFile> files;
+                MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+                List<ScanResult> scanResults = new List<ScanResult>();
+                foreach (var t in targets)
+                {
+                    var scanResult = new ScanResult()
+                    {
+                        MalwareFilesCount = t.MalwareFilesCount,
+                        UnknownFilesCount = t.UnknownFilesCount,
+                        SafeFilesCount = t.SafeFilesCount,
+                        AutorunsCount = t.AutorunsCount,
+                        RunningProgramsCount = t.RunningProgramsCount,
+                        HostName = t.HostName,
+                        IpAddress = t.IpAddress,
+                        OrganizationUnit = t.OrganizationUnit,
+                        ResultType = t.ResultType,
+                        ResultErrorText = t.ResultErrorText,
+                        TargetUid = t.TargetUid,
+                        TotalFilesCount = t.TotalFilesCount,
+                    };
+
+                    scanResult.SetAptReportInstance(t.AptReport);
+                    scanResults.Add(scanResult);
+                }
+
+                return scanResults.ToArray();
+            }
+        }
 
         private void CalculateTotal()
         {
             var statistics = StatisticsCalculator.Calculate(Targets);
 
+            ReplaceStatistics(statistics);
+        }
+
+        private void ReplaceStatistics(FilesStatistics statistics)
+        {
             _totalFilesCound = statistics.TotalFilesCound;
             _safeFilesCount = statistics.SafeFilesCount;
             _unknownFilesCount = statistics.UnknownFilesCount;
             _malwareFilesCount = statistics.MalwareFilesCount;
             _emptyFilesCount = statistics.EmptyFilesCount;
             _skippedFilesCount = statistics.SkippedFilesCount;
-
-            //foreach (var scanResult in Targets)
-            //{
-            //    if (scanResult.ResultType == Core.ScanResultType.Completed)
-            //    {
-            //        _totalFilesCound += scanResult.TotalFilesCount;
-            //        _safeFilesCount += scanResult.SafeFilesCount;
-            //        _unknownFilesCount += scanResult.UnknownFilesCount;
-            //        _malwareFilesCount += scanResult.MalwareFilesCount;
-            //        _emptyFilesCount += scanResult.EmptyFilesCount;
-            //    }
-            //}
         }
 
         public ItemRatingInfo[] GetFileRatingCollection()
@@ -202,17 +231,6 @@ namespace APTAT.Core.Reports
             //        );
             //}
 
-            return itemRatingInfoList.ToArray();
-        }
-
-        public ItemRatingInfo[] GetValkyrieRatingCollection()
-        {
-            var allBadFiles = GetAllBadFilesSorted();
-            var itemRatingInfoList = new List<ItemRatingInfo>();
-            foreach (var valkyrieStatus in Enum.GetValues(typeof(InfoVerdictEnum)))
-            {
-                itemRatingInfoList.Add(new FileRatingInfo() { Count = allBadFiles.Count(b => (int)b.Verdict == (int)valkyrieStatus), Value = ((InfoVerdictEnum)valkyrieStatus).ToString() });
-            }
             return itemRatingInfoList.ToArray();
         }
 
@@ -247,7 +265,11 @@ namespace APTAT.Core.Reports
 
         public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()
         {
-            var top10 = (from target in SucceededTargets
+            IEnumerable<ScannedTarget> targets = new ScannedTarget[] {};
+            IEnumerable<DetailedBadFile> files;
+            MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+            var top10 = (from target in targets
                          where target.BadFilesCount > 0
                          orderby target.BadFilesCount descending
                          select target).Take(10);
@@ -262,6 +284,25 @@ namespace APTAT.Core.Reports
             }
 
             return devices.ToArray();
+
+
+
+
+            //var top10 = (from target in SucceededTargets
+            //             where target.BadFilesCount > 0
+            //             orderby target.BadFilesCount descending
+            //             select target).Take(10);
+
+            //List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
+            //foreach (var scanResult in top10)
+            //{
+            //    if (scanResult.UnknownFilesCount > 0)
+            //        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = BadFileType.Unknown, Name = scanResult.HostName, Uid = scanResult.TargetUid });
+            //    if (scanResult.MalwareFilesCount > 0)
+            //        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = BadFileType.Infected, Name = scanResult.HostName, Uid = scanResult.TargetUid });
+            //}
+
+            //return devices.ToArray();
 
             //return (from target in Targets
             //             where target.BadFilesCount > 0 orderby target.BadFilesCount
@@ -283,10 +324,203 @@ namespace APTAT.Core.Reports
                               {
                                   BadFileType = file.FileType,
                                   Count = file.Targets.Count,
-                                  Hash = file.Hash,
+                                  Hash = file.Sha1,
                                   Name = file.Name
                               }).Take(10);
             return result.Reverse().ToArray();
+        }
+
+
+        public class MergedScanResults
+        {
+            public IEnumerable<ScannedTarget> MergedTargets { get; set; }
+            public IEnumerable<DetailedBadFile> MergeUniqueResults { get; set; }
+            public IEnumerable<DetailedBadFile> MergeNonUniqueResults { get; set; }
+        }
+
+        private void MergeResults(IEnumerable<ScanResult> flsResults, IEnumerable<FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+            out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
+        {
+            if (_mergedScanResultsCache != null)
+            {
+                mergedTargets = _mergedScanResultsCache.MergedTargets;
+                uniqueBadFiles = _mergedScanResultsCache.MergeUniqueResults;
+                nonUniqueBadFiles = _mergedScanResultsCache.MergeNonUniqueResults;
+                return;
+            }
+
+            int totalFilesCound = 0;
+            int safeFilesCount = 0;
+            int unknownFilesCount = 0;
+            int malwareFilesCount = 0;
+            int emptyFilesCount = 0;
+            int skippedFilesCount = 0;
+
+            var targets = new List<ScannedTarget>();
+
+            List<DetailedBadFile> nonUniqueBadFilesInternal = new List<DetailedBadFile>();
+            var fileResults = (valkyrieResults??new FileResult[0]) as FileResult[] ?? valkyrieResults.ToArray();
+            Dictionary<string, DetailedBadFile> globalUniqueFiles = new Dictionary<string, DetailedBadFile>();
+            foreach (var flsResult in flsResults)
+            {
+                if (flsResult.ResultType != Core.ScanResultType.Completed)
+                    continue;
+                Dictionary<string, DetailedBadFile> uniqueFiles = new Dictionary<string, DetailedBadFile>();
+
+                int mergedSafeCount = 0;
+                int mergedUnknownCount = 0;
+                int mergedMalwareCount = 0;
+
+                #region Working with a single scan result
+
+                foreach (var module in flsResult.Files)
+                {
+                    var fileResult = fileResults.FirstOrDefault(v => v.ValkyrieAnalysisResult.SHA1 != null && v.ValkyrieAnalysisResult.SHA1.ToUpper() == module.Sha1.ToUpper());
+                    if (fileResult != null)
+                    {
+                        DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+
+                        badFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
+                        if (badFile.Verdict != InfoVerdictEnum.Clean)
+                        {
+                            AddBadFile(uniqueFiles, badFile, module);
+                        }
+                        nonUniqueBadFilesInternal.Add(badFile);
+                        #region Calculate Statistics
+
+                        switch (fileResult.ValkyrieAnalysisResult.Verdict)
+                        {
+                            case InfoVerdictEnum.Clean:
+                                mergedSafeCount++;
+                                break;
+                            case InfoVerdictEnum.Undetected:
+                                mergedUnknownCount++;
+                                break;
+                            case InfoVerdictEnum.Malware:
+                            case InfoVerdictEnum.PotentiallyUnwantedApplication:
+                                mergedMalwareCount++;
+                                break;
+                            case InfoVerdictEnum.NotAnalyzed:
+                                {
+                                    switch (module.Cloud)
+                                    {
+                                        case CloudVerdict.Safe:
+                                            mergedSafeCount++;
+                                            break;
+                                        case CloudVerdict.Unknown:
+                                        case CloudVerdict.FirstSeen:
+                                            mergedUnknownCount++;
+                                            break;
+                                        case CloudVerdict.Malware:
+                                            mergedMalwareCount++;
+                                            break;
+                                        case CloudVerdict.NetworkError:
+                                            break;
+                                        default:
+                                            throw new ArgumentOutOfRangeException();
+                                    }
+                                }
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                        #endregion
+                    }
+                    else
+                    {
+                        if (module.IsBad)
+                        {
+                            DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+                            AddBadFile(uniqueFiles, badFile, module);
+                            nonUniqueBadFilesInternal.Add(badFile);
+                        }
+                        #region Calculate Statistics
+                        switch (module.Cloud)
+                        {
+                            case CloudVerdict.Safe:
+                                mergedSafeCount++;
+                                break;
+                            case CloudVerdict.Unknown:
+                            case CloudVerdict.FirstSeen:
+                                mergedUnknownCount++;
+                                break;
+                            case CloudVerdict.Malware:
+                                mergedMalwareCount++;
+                                break;
+                            case CloudVerdict.NetworkError:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                        #endregion
+                    }
+                }
+
+                #endregion
+
+                #region Filling in targets info
+
+                ScannedTarget target = new ScannedTarget(flsResult)
+                {
+                    MalwareFilesCount = mergedMalwareCount,
+                    SafeFilesCount = mergedSafeCount,
+                    UnknownFilesCount = mergedUnknownCount
+                };
+                targets.Add(target);
+
+                #endregion
+
+                foreach (var badFile in uniqueFiles)
+                {
+                    if (globalUniqueFiles.ContainsKey(badFile.Key))
+                    {
+                        globalUniqueFiles[badFile.Key].Targets.AddRange(badFile.Value.Targets);
+                    }
+                    else
+                    {
+                        globalUniqueFiles.Add(badFile.Key, badFile.Value);
+                    }
+
+                    badFile.Value.Targets[0].SafeFilesCount = mergedSafeCount;
+                    badFile.Value.Targets[0].UnknownFilesCount = mergedUnknownCount;
+                    badFile.Value.Targets[0].MalwareFilesCount = mergedMalwareCount;
+                }
+
+                safeFilesCount += mergedSafeCount;
+                unknownFilesCount += mergedUnknownCount;
+                malwareFilesCount += mergedMalwareCount;
+
+                totalFilesCound += flsResult.TotalFilesCount;
+                emptyFilesCount += flsResult.EmptyFilesCount;
+                skippedFilesCount += flsResult.SkippedFilesCount;
+            }
+
+            mergedTargets = targets;
+
+            var statistics = new FilesStatistics() { EmptyFilesCount = emptyFilesCount, MalwareFilesCount = malwareFilesCount, SafeFilesCount = safeFilesCount, TotalFilesCound = totalFilesCound, UnknownFilesCount = unknownFilesCount, SkippedFilesCount = skippedFilesCount };
+            ReplaceStatistics(statistics);
+
+            _mergedScanResultsCache = new MergedScanResults
+            {
+                MergeUniqueResults = globalUniqueFiles.Values.ToArray(),
+                MergeNonUniqueResults = nonUniqueBadFilesInternal,
+                MergedTargets = mergedTargets
+            };
+            nonUniqueBadFiles = _mergedScanResultsCache.MergeNonUniqueResults;
+            uniqueBadFiles = _mergedScanResultsCache.MergeNonUniqueResults;
+        }
+
+        private static void AddBadFile(Dictionary<string, DetailedBadFile> uniqueFiles, DetailedBadFile badFile, Module module)
+        {
+            if (uniqueFiles.ContainsKey(badFile.Sha1))
+            {
+                uniqueFiles[badFile.Sha1].Targets[0].BadFileInstances.Add(new DetailedBadFile.BadFileInstanceInfo(module));
+            }
+            else
+            {
+                uniqueFiles.Add(badFile.Sha1, badFile);
+            }
         }
 
         private DetailedBadFile[] GetAllBadFiles()
@@ -304,7 +538,7 @@ namespace APTAT.Core.Reports
             {
                 foreach (var f in files)
                 {
-                    var fileResult = this.ValkyrieAnalysisResult.Where(v => v.Sha1.ToUpper() == f.Hash.ToUpper()).FirstOrDefault();
+                    var fileResult = this.ValkyrieAnalysisResult.Where(v => v.Sha1.ToUpper() == f.Sha1.ToUpper()).FirstOrDefault();
                     f.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
                 }
             }
@@ -312,25 +546,15 @@ namespace APTAT.Core.Reports
             return files.ToArray();
         }
 
-        public DetailedBadFile[] GetAllBadFilesSorted()
+        public DetailedBadFile[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
         {
-            Dictionary<string, DetailedBadFile> globallyUniqueFiles = new Dictionary<string, DetailedBadFile>();
-
-            DetailedBadFile[] allBadFiles = GetAllBadFiles();
-            foreach (var badFile in allBadFiles)
-            {
-                if (globallyUniqueFiles.ContainsKey(badFile.Hash))
-                {
-                    globallyUniqueFiles[badFile.Hash].Targets.AddRange(badFile.Targets);
-                }
-                else
-                {
-                    globallyUniqueFiles.Add(badFile.Hash, badFile);
-                }
-            }
+            IEnumerable<ScannedTarget> targets;
+            IEnumerable<DetailedBadFile> allUniqueBadFiles;
+            IEnumerable<DetailedBadFile> allNonUniqueBadFiles;
+            MergeResults(Targets, ValkyrieAnalysisResult, out targets, out allUniqueBadFiles, out allNonUniqueBadFiles);
 
             //return (from file in globallyUniqueFiles.Values orderby file.Targets.Count descending select file).ToArray();
-            return (from file in globallyUniqueFiles.Values select file).OrderByDescending(file => file.Targets.Count).ThenBy(file => file.Name).ToArray();
+            return (isUniqueSetOfFiles? allUniqueBadFiles: allNonUniqueBadFiles).OrderByDescending(file => file.Targets.Count).ThenBy(file => file.Name).ToArray();
         }
 
         public List<FileResult> ValkyrieAnalysisResult { get; set; }
@@ -385,9 +609,19 @@ namespace APTAT.Core.Reports
                 UnknownFilesCount = scanResult.UnknownFilesCount;
                 SafeFilesCount = scanResult.SafeFilesCount;
                 MalwareFilesCount = scanResult.MalwareFilesCount;
+                RunningProgramsCount = scanResult.RunningProgramsCount;
+                AutorunsCount = scanResult.AutorunsCount;
+                TargetVerdictString = scanResult.TargetVerdictString;
+                AptReport = scanResult.AptReport;
+                ResultErrorText = scanResult.ResultErrorText;
+                ResultType = scanResult.ResultType;
             }
         }
 
+        public AptReport AptReport { get; set; }
+
+        public string ResultErrorText { get; set; }
+        public Core.ScanResultType ResultType { get; set; }
         public Guid TargetUid { get; set; }
         public string HostName { get; set; }
         public string IpAddress { get; set; }
@@ -398,9 +632,20 @@ namespace APTAT.Core.Reports
         public int SafeFilesCount { get; set; }
         public int MalwareFilesCount { get; set; }
 
+        public int RunningProgramsCount { get; set; }
+
+        public string TargetVerdictString { get; set; }
+
+        public int AutorunsCount { get; set; }
+
         public int InstancesCount
         {
             get { return BadFileInstances.Count; }
+        }
+
+        public int BadFilesCount
+        {
+            get { return UnknownFilesCount + MalwareFilesCount; }
         }
 
         public string Instances
@@ -433,10 +678,12 @@ namespace APTAT.Core.Reports
 
         public DetailedBadFile(Module module, ScannedTarget target)
         {
+            Verdict = InfoVerdictEnum.NotAnalyzed;
             if (module != null)
             {
-                Hash = module.Sha1;
-                Name = Path.GetFileName(module.Path);
+                Sha1 = module.Sha1;
+                Name = System.IO.Path.GetFileName(module.Path);
+                Path = module.Path;
                 Size = module.Size;
                 Signer = module.Signer;
                 Version = module.Version;
@@ -444,17 +691,23 @@ namespace APTAT.Core.Reports
                 Product = module.Product;
                 Cloud = module.Cloud;
                 FileSizeFormatted = module.FileSizeFormatted;
-                FileType = module.Cloud == CloudVerdict.Unknown || module.Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
+                Created = module.Created;
+                Accessed = module.Accessed;
+                Modified = module.Modified;
+                FileAge = module.FileAge;
             }
 
             target.BadFileInstances.Add(new BadFileInstanceInfo(module));
             _targets.Add(target);
         }
+        public string Path { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
+        public DateTime Accessed { get; set; }
 
-
-
-        public string Hash { get; set; }
+        public string Sha1 { get; set; }
         public string Name { get; set; }
+
         public long Size { get; set; }
         public string Signer { get; set; }
         public string Version { get; set; }
@@ -462,11 +715,21 @@ namespace APTAT.Core.Reports
         public string Product { get; set; }
         public CloudVerdict Cloud { get; set; }
         public string FileSizeFormatted { get; set; }
-        public BadFileType FileType { get; set; }
+        
+        public BadFileType FileType
+        {
+            get
+            {
+                if (Verdict == InfoVerdictEnum.NotAnalyzed)
+                    return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
+                return Verdict == InfoVerdictEnum.Undetected ? BadFileType.Unknown : BadFileType.Infected;
+            }
+        }
 
         public void SetValkyrieAnalysis(ValkyrieAnalysisResult analysisResult)
         {
-            if (analysisResult == null) return;
+            if (analysisResult == null)
+                return;
             IsWhiteListed = analysisResult.IsWhiteListed;
             MalwareProbability = analysisResult.MalwareProbability;
             ReturnCode = analysisResult.ReturnCode;
@@ -476,6 +739,8 @@ namespace APTAT.Core.Reports
             SkipReason = analysisResult.SkipReason;
             OperationStatus = analysisResult.OperationStatus;
         }
+        
+
 
         public int TargetsCount
         {
@@ -540,20 +805,14 @@ namespace APTAT.Core.Reports
 
         public string WhiteListed
         {
-            get
-            {
-                return IsWhiteListed ? "Whitelisted" : "Not whitelisted";
-            }
+            get { return IsWhiteListed ? "Whitelisted" : "Not whitelisted"; }
         }
 
         public float MalwareProbability { get; set; }
 
         public string MalwareProbabilityFormatted
         {
-            get
-            {
-                return string.Format("{0:P}", MalwareProbability / 100);
-            }
+            get { return string.Format("{0:P}", MalwareProbability/100); }
         }
 
         public ErrorCodesEnum ReturnCode { get; set; }
@@ -588,6 +847,8 @@ namespace APTAT.Core.Reports
         public string SkipReason { get; set; }
 
         public string OperationStatus { get; set; }
+
+        public string FileAge { get; set; }
     }
 
     public abstract class ItemRatingInfo

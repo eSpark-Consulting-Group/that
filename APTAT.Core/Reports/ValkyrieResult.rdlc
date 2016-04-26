@@ -1,125 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="APTATCoreReports">
-      <ConnectionProperties>
-        <DataProvider>System.Data.DataSet</DataProvider>
-        <ConnectString>/* Local Connection */</ConnectString>
-      </ConnectionProperties>
-      <rd:DataSourceID>bb3ba229-8548-456a-bb6e-23692d151066</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="ValkyrieDataSet">
-      <Fields>
-        <Field Name="Cloud">
-          <DataField>Cloud</DataField>
-          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
-        </Field>
-        <Field Name="CloudString">
-          <DataField>CloudString</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Copyright">
-          <DataField>Copyright</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FileSizeFormatted">
-          <DataField>FileSizeFormatted</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FileType">
-          <DataField>FileType</DataField>
-          <rd:TypeName>APTAT.Core.Reports.BadFileType</rd:TypeName>
-        </Field>
-        <Field Name="Hash">
-          <DataField>Hash</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="IsSkipped">
-          <DataField>IsSkipped</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
-        </Field>
-        <Field Name="IsWhiteListed">
-          <DataField>IsWhiteListed</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
-        </Field>
-        <Field Name="MalwareProbability">
-          <DataField>MalwareProbability</DataField>
-          <rd:TypeName>System.Single</rd:TypeName>
-        </Field>
-        <Field Name="MalwareProbabilityFormatted">
-          <DataField>MalwareProbabilityFormatted</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Product">
-          <DataField>Product</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ReturnCode">
-          <DataField>ReturnCode</DataField>
-          <rd:TypeName>APTAT.Valkyrie.Client.Enums.ErrorCodesEnum</rd:TypeName>
-        </Field>
-        <Field Name="Signer">
-          <DataField>Signer</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Size">
-          <DataField>Size</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="SkipReason">
-          <DataField>SkipReason</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TargetsCount">
-          <DataField>TargetsCount</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ValkyrieVerdictString">
-          <DataField>ValkyrieVerdictString</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Verdict">
-          <DataField>Verdict</DataField>
-          <rd:TypeName>APTAT.Valkyrie.Client.Enums.InfoVerdictEnum</rd:TypeName>
-        </Field>
-        <Field Name="Version">
-          <DataField>Version</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="WhiteListed">
-          <DataField>WhiteListed</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>APTATCoreReports</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
-        <rd:TableName>DetailedBadFile</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.DetailedBadFile, APTAT.Core, Version=1.0.1.16377, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Tablix Name="Tablix1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.34833in</Width>
+              <Width>16.12476cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.11967in</Height>
+              <Height>2.84396cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -494,18 +386,6 @@
     <Height>1.48925in</Height>
     <Style />
   </Body>
-  <ReportParameters>
-    <ReportParameter Name="TargetUid">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="Count">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
   <Width>16.12476cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
@@ -518,6 +398,154 @@
     <BottomMargin>2cm</BottomMargin>
     <Style />
   </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="APTATCoreReports">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>bb3ba229-8548-456a-bb6e-23692d151066</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="APTATCoreReports1">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>f864adb3-148a-4608-82b3-6c85c87eaede</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="ValkyrieDataSet">
+      <Query>
+        <DataSourceName>APTATCoreReports1</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Accessed">
+          <DataField>Accessed</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Cloud">
+          <DataField>Cloud</DataField>
+          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
+        </Field>
+        <Field Name="CloudString">
+          <DataField>CloudString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Copyright">
+          <DataField>Copyright</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Created">
+          <DataField>Created</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="FileAge">
+          <DataField>FileAge</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FileSizeFormatted">
+          <DataField>FileSizeFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FileType">
+          <DataField>FileType</DataField>
+          <rd:TypeName>APTAT.Core.Reports.BadFileType</rd:TypeName>
+        </Field>
+        <Field Name="IsSkipped">
+          <DataField>IsSkipped</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="IsWhiteListed">
+          <DataField>IsWhiteListed</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="MalwareProbability">
+          <DataField>MalwareProbability</DataField>
+          <rd:TypeName>System.Single</rd:TypeName>
+        </Field>
+        <Field Name="MalwareProbabilityFormatted">
+          <DataField>MalwareProbabilityFormatted</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Modified">
+          <DataField>Modified</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OperationStatus">
+          <DataField>OperationStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Product">
+          <DataField>Product</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ReturnCode">
+          <DataField>ReturnCode</DataField>
+          <rd:TypeName>Valkyrie.WebApiProvider.Enums.ErrorCodesEnum</rd:TypeName>
+        </Field>
+        <Field Name="Sha1">
+          <DataField>Sha1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Signer">
+          <DataField>Signer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Size">
+          <DataField>Size</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="SkipReason">
+          <DataField>SkipReason</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TargetsCount">
+          <DataField>TargetsCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ValkyrieVerdictString">
+          <DataField>ValkyrieVerdictString</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Verdict">
+          <DataField>Verdict</DataField>
+          <rd:TypeName>Valkyrie.WebApiProvider.Enums.InfoVerdictEnum</rd:TypeName>
+        </Field>
+        <Field Name="Version">
+          <DataField>Version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="WhiteListed">
+          <DataField>WhiteListed</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
+        <rd:TableName>DetailedBadFile</rd:TableName>
+        <rd:ObjectDataSourceType>APTAT.Core.Reports.DetailedBadFile, APTAT.Core, Version=1.3.20422.1, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="TargetUid">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Count">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="logodefaultbad">
       <MIMEType>image/jpeg</MIMEType>
@@ -543,6 +571,6 @@ XGpaTLFH/wB9ldo/E1839XrcvNyu3ex+3LNsr9uqHt4c7+zzK/3Xuc9RR9KKxPQCu8/Za17RvDH7SfgX
 AKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//Z</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
-  <rd:ReportID>bc945fc0-c0ba-4a11-b65f-8b9daa9928f7</rd:ReportID>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>bc945fc0-c0ba-4a11-b65f-8b9daa9928f7</rd:ReportID>
 </Report>

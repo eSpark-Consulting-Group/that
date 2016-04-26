@@ -10,10 +10,6 @@ namespace APTAT.Core
 {
     public class ScanResult
     {
-        private int _unknownFilesCount = -1;
-        private int _malwareFilesCount = -1;
-        private int _safeFilesCount = -1;
-
         public Guid TargetUid { get; set; }
         public string HostName { get; set; }
         public string IpAddress { get; set; }
@@ -26,6 +22,8 @@ namespace APTAT.Core
                 return null;
             }
         }
+        
+
         public string OrganizationUnit { get; set; }
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
@@ -188,26 +186,7 @@ namespace APTAT.Core
             var files = Files;
             if (files == null)
                 return new Module[0];
-            return (from file in files where (file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.Malware || file.Cloud == CloudVerdict.FirstSeen) select file).ToArray();
-        }
-
-        private void CalculateTotal()
-        {
-            _unknownFilesCount = 0;
-            _malwareFilesCount = 0;
-
-            var groupped = from file in Files group file by file.Cloud into temp select temp;
-
-            foreach (var item in groupped)
-            {
-                if (item.Key == CloudVerdict.Unknown)
-                    _unknownFilesCount = item.Count();
-
-                if (item.Key == CloudVerdict.Malware)
-                    _malwareFilesCount = item.Count();
-            }
-
-            _safeFilesCount = TotalFilesCount - _unknownFilesCount - _malwareFilesCount;
+            return (from file in files where file.IsBad select file).ToArray();
         }
 
         public DetailedBadFile[] GetUniqueBadFiles()
@@ -239,10 +218,6 @@ namespace APTAT.Core
             {
                 RunningProgramsCount = _aptReport.Processes != null ? _aptReport.Processes.Length : 0;
                 AutorunsCount = _aptReport.Autoruns != null ? _aptReport.Autoruns.Length : 0;
-
-                // TODO: Remove this if Processes and Autoruns data is needed.
-                _aptReport.Processes = null;
-                _aptReport.Autoruns = null;
             }
         }
 
@@ -251,7 +226,6 @@ namespace APTAT.Core
         public AptReport AptReport
         {
             get { return _aptReport; }
-            private set { _aptReport = value; }
         }
     }
 
@@ -468,6 +442,14 @@ namespace APTAT.Core
         public string FileAge
         {
             get { return FileAgeFormatter.GetAge(Created); }
+        }
+
+        public bool IsBad
+        {
+            get
+            {
+                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Malware || Cloud == CloudVerdict.Unknown;
+            }
         }
 
         //[XmlIgnore]

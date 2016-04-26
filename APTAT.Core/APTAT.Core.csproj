@@ -16,7 +16,7 @@
     </TargetFrameworkProfile>
     <SccProjectName>%24/ComodoESM SME/Sources/APTAT/APTAT.Core</SccProjectName>
     <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>http://pss05v:8080/tfs/defaultcollection</SccAuxPath>
+    <SccAuxPath>http://192.168.71.245:8080/tfs/defaultcollection</SccAuxPath>
     <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -466,11 +466,23 @@
     <EmbeddedResource Include="Reports\DetailedProgramsWithValkyrie.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\DetailedPrograms.rdlc" />
+    <EmbeddedResource Include="Reports\DetailedPrograms.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Devices.rdlc" />
-    <EmbeddedResource Include="Reports\ExecutiveWithValkyrie.rdlc" />
+    <EmbeddedResource Include="Reports\ExecutiveWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Executive.rdlc" />
-    <EmbeddedResource Include="Reports\MaliciousFiles.rdlc" />
+    <EmbeddedResource Include="Reports\MaliciousFilesWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\MaliciousFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\UnknownFilesWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\UnknownFiles.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

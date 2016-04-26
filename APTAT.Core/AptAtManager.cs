@@ -839,7 +839,25 @@ namespace APTAT.Core
                 DevicesSourceDescription = devicesSourceDescr
             };
             var command = _commandFactory.CreateCommand<DeployAgentResponse>(request);
-            return new AptScanner(command, _descentSubSystem);
+            var scanner = new AptScanner(command, _descentSubSystem);
+            scanner.ScanStarted += OnScanStarted;
+            scanner.ScanCompleted += OnScanCompleted;
+            return scanner;
+        }
+
+        private void OnScanStarted(object sender, ScanStartedEventArgs e)
+        {
+            ValkyrieAnalysisResult = null; 
+        }
+
+        private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
+        {
+            AptScanner scanner = sender as AptScanner;
+            if (scanner != null)
+            {
+                scanner.ScanStarted -= OnScanStarted;
+                scanner.ScanCompleted -= OnScanCompleted;
+            }
         }
 
         public IAptReportBuilder GetAptReportBuilder()

@@ -68,11 +68,11 @@ namespace APTAT.Core.Reports
 
         private static void BuildExecutiveWithValkyrieReport(string fileName, AptReportData data)
         {
+            data.GetAllBadFilesSorted(false);
             ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollection());
-            ReportDataSource valkyrieRatingDataSource = new ReportDataSource("ValkyrieRatingDataSet", data.GetValkyrieRatingCollection());
             ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
 
-            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.ExecutiveWithValkyrie.rdlc", null, fileRatingDataSource, devicesRatingDataSource, valkyrieRatingDataSource);
+            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.ExecutiveWithValkyrie.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
         }
 
         private static void BuildDetailedPerDeviceReport(string fileName, AptReportData data)
@@ -87,15 +87,15 @@ namespace APTAT.Core.Reports
 
         private static void BuildDetailedPerDeviceWithValkyrieReport(string fileName, AptReportData data)
         {
-            var allBadFilesData = data.GetAllBadFilesSorted();
-            ReportDataSource allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargets);
+            var allBadFilesData = data.GetAllBadFilesSorted(false);
+            ReportDataSource allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargetsWithValkyrie);
             ReportDataSource vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevices());
-            ReportDataSource valkyrieVerdictDataSource = new ReportDataSource("ValkyrieDataSet", allBadFilesData);
-            SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.UnknownFiles.rdlc", ReportName = "UnknownFiles" };
-            SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.MaliciousFiles.rdlc", ReportName = "MaliciousFiles" };
-            SubReportContext valkyrieVerdictSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.ValkyrieResult.rdlc", ReportName = "ValkyrieVerdict" };
+            //ReportDataSource valkyrieVerdictDataSource = new ReportDataSource("ValkyrieDataSet", allBadFilesData);
+            SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.UnknownFilesWithValkyrie.rdlc", ReportName = "UnknownFiles" };
+            SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.MaliciousFilesWithValkyrie.rdlc", ReportName = "MaliciousFiles" };
+            //SubReportContext valkyrieVerdictSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.ValkyrieResult.rdlc", ReportName = "ValkyrieVerdict" };
 
-            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource, valkyrieVerdictDataSource }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, valkyrieVerdictSubReportContext });
+            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext/*, valkyrieVerdictSubReportContext*/ });
         }
 
         private static void BuildDetailedPerProgramReport(string fileName, AptReportData data, string reportName)
@@ -239,12 +239,12 @@ namespace APTAT.Core.Reports
                         var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
                         if (context != null)
                         {
-                            IEnumerable<ScanResult> targets = context.Data as IEnumerable<ScanResult>;
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
                             if (targets != null)
                             {
-                                ScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
-                                if (item != null)
-                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.GetUnknownFiles()));
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.Unknown)));
                             }
                         }
                     }
@@ -253,12 +253,12 @@ namespace APTAT.Core.Reports
                         var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
                         if (context != null)
                         {
-                            IEnumerable<ScanResult> targets = context.Data as IEnumerable<ScanResult>;
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
                             if (targets != null)
                             {
-                                ScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
-                                if (item != null)
-                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.GetFilesByStatus(CloudVerdict.Malware)));
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.Infected)));
                             }
                         }
                     }
@@ -342,7 +342,7 @@ namespace APTAT.Core.Reports
                             IEnumerable<DetailedBadFile> files = context.Data as IEnumerable<DetailedBadFile>;
                             if (files != null)
                             {
-                                DetailedBadFile item = (from entry in files where entry.Hash == fileId select entry).FirstOrDefault(); //data[computerKey];
+                                DetailedBadFile item = (from entry in files where entry.Sha1 == fileId select entry).FirstOrDefault(); //data[computerKey];
                                 if (item != null)
                                     e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.Targets));
                             }

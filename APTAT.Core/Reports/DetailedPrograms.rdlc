@@ -1370,7 +1370,7 @@
                           <ReportName>Devices</ReportName>
                           <Parameters>
                             <Parameter Name="ProgramId">
-                              <Value>=Fields!Hash.Value</Value>
+                              <Value>=Fields!Sha1.Value</Value>
                             </Parameter>
                             <Parameter Name="Count">
                               <Value>=Fields!TargetsCount.Value</Value>
@@ -1499,7 +1499,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=IIF(Fields!Hash.Value &lt;&gt; "", Fields!Hash.Value, "N/A")</Value>
+                                      <Value>=IIF(Fields!Sha1.Value &lt;&gt; "", Fields!Sha1.Value, "N/A")</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -2451,8 +2451,8 @@
           <DataField>FileType</DataField>
           <rd:TypeName>APTAT.Core.Reports.BadFileType</rd:TypeName>
         </Field>
-        <Field Name="Hash">
-          <DataField>Hash</DataField>
+        <Field Name="Sha1">
+          <DataField>Sha1</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Name">
