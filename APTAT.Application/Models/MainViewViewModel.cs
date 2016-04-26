@@ -101,6 +101,9 @@ namespace APTAT.Application.Models
             get { return _isScanInProgress; }
             set
             {
+                if (_isScanInProgress == value || (Percentage > 0 && Percentage < 100))
+                    return;
+                
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
@@ -698,7 +701,9 @@ namespace APTAT.Application.Models
                 {
                     DomainTargetsResolveFailure(this, new DomainEventArgs { Exception = e.Exception });
                 }
+
                 IsScanInProgress = false;
+
                 return;
             }
 
@@ -775,10 +780,11 @@ namespace APTAT.Application.Models
 
         private void ScanCompleted(Boolean enableReports)
         {
+            Percentage = 100;
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
             IsAnalyseWithValkyrieEnabled = enableReports;
-            Percentage = 100;
+            
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
 
         }

@@ -49,7 +49,7 @@ namespace APTAT.Core.Valkyrie
 
             get
             {
-                if (Verdict == InfoVerdictEnum.NotAnalyzed) return "Not Analyzed";
+                if (Verdict == InfoVerdictEnum.NotAnalyzed) return "Not Analysed";
                 if (Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication) return "Potentially Unwanted";
 
                 if (Verdict == InfoVerdictEnum.Undetected) return "No Threat Found";
