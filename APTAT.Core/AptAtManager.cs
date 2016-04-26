@@ -575,6 +575,7 @@ namespace APTAT.Core
             }
             catch (Exception ex)
             {
+                LogHelper.Trace(TraceEventType.Error, TraceCategory.Reports, "Report failed: {0}", ex);
                 args.Error = ex;
             }
             finally

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.IO;
+using System.Windows;
 using APTAT.Application.Services;
 
 namespace APTAT.Application.Models
@@ -70,7 +71,7 @@ namespace APTAT.Application.Models
             IsBusy = false;
             if(e.Exception != null)
             {
-               // MessageBox.Show(e.Exception.ToString());
+                MessageBox.Show(e.Exception.ToString());
                 return;
             }
 
@@ -84,7 +85,7 @@ namespace APTAT.Application.Models
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.ToString());    
+                MessageBox.Show(ex.ToString());    
                 throw;
             }
             
