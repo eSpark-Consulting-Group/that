@@ -71,7 +71,7 @@ namespace APTAT.Application.Models
             IsBusy = false;
             if(e.Exception != null)
             {
-                MessageBox.Show(e.Exception.ToString());
+                //MessageBox.Show(e.Exception.ToString());
                 return;
             }
 
