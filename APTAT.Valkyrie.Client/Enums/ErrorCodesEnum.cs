@@ -137,7 +137,9 @@ namespace Valkyrie.WebApiProvider.Enums
         [Description("NO VALID LICENSE FOUND")]
         NO_VALID_LICENSE_FOUND = 312,
 
-        
+        [Description("NON ENTERPRISE")]
+        NON_ENTERPRISE = 313,
+
         [Description("Bad Request")]
         BadRequest = 400,
 
