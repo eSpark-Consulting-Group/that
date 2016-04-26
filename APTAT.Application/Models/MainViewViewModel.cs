@@ -101,7 +101,7 @@ namespace APTAT.Application.Models
             get { return _isScanInProgress; }
             set
             {
-                if (_isScanInProgress == value || (Percentage > 0 && Percentage < 100))
+                if (_isScanInProgress == value || (_isScanInProgress.GetValueOrDefault() && Percentage < 100))
                     return;
                 
                 _isScanInProgress = value;
