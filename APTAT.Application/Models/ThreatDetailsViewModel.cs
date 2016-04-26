@@ -205,7 +205,8 @@ namespace APTAT.Application.Models
             FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
             IsMalware = badFile != null ? badFile.IsMalware : (valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware || 
                 valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
-            IsUnknown = badFile != null ? badFile.IsUnknown : valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Undetected;
+            IsUnknown = badFile != null ? badFile.IsUnknown : (valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Undetected ||
+                valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.NotAnalyzed);
             Verdict = badFile != null ? (IsMalware ? "Malware" : "Unknown") : valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
             Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();

@@ -91,7 +91,7 @@ namespace APTAT.Core
                 if (this.ValkyrieAnalysisResult != null)
                 {
 
-                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Undetected;
+                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Undetected || ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.NotAnalyzed;
                 }
                 return false;
             }
