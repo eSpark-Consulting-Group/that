@@ -508,7 +508,7 @@ namespace APTAT.Core.Reports
                 MergedTargets = mergedTargets
             };
             nonUniqueBadFiles = _mergedScanResultsCache.MergeNonUniqueResults;
-            uniqueBadFiles = _mergedScanResultsCache.MergeNonUniqueResults;
+            uniqueBadFiles = _mergedScanResultsCache.MergeUniqueResults;
         }
 
         private static void AddBadFile(Dictionary<string, DetailedBadFile> uniqueFiles, DetailedBadFile badFile, Module module)
