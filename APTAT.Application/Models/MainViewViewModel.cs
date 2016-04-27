@@ -32,7 +32,7 @@ namespace APTAT.Application.Models
         // private Boolean _resolvingTargets;
         private Boolean _isReportEnabled;
         private Boolean _isValkyrieReportEnabled;
-        private Boolean? _isScanInProgress;
+        private Boolean? _isScanInProgress = false;
         private Int32 _scannedItemsCount;
         
         private Int32 _unknownFilesCount;
@@ -101,9 +101,6 @@ namespace APTAT.Application.Models
             get { return _isScanInProgress; }
             set
             {
-                if (_isScanInProgress == value || (_isScanInProgress.GetValueOrDefault() && Percentage < 100))
-                    return;
-                
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
@@ -561,7 +558,7 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            IsScanInProgress = false;
+      
 
             _aptService.DirectoryItemsResolved += OnDirectoryItemsResolved;
             _aptService.BeginScanCompleted += OnBeginScanCompleted;
