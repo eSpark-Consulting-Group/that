@@ -214,7 +214,7 @@
                 Grid.Column="1" VerticalAlignment="Center"   TabIndex="0"
                 UpdateValueEvent="PropertyChanged"
                 EmptyContent="Search"   Margin="20" HorizontalAlignment="Stretch"  
-                IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll">
+                IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
                 <i:Interaction.Behaviors>
                     <Controls:RadMaskedTextBoxUpdateSourceBehavior Delay="True" Value="{Binding Keyword, Mode=TwoWay}"/>
                 </i:Interaction.Behaviors>

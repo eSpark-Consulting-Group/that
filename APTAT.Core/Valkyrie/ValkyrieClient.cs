@@ -97,13 +97,11 @@ namespace APTAT.Core.Valkyrie
 
                 Trace.WriteLine("API_KEY = " + apiKey);
                 //Trace.Flush();
+                AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 OnAnalyzeProgressChanged();
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
                 //Trace.Flush();
 
-
-
-                AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 _fileScanned = 0;
 
                 _cancellationTokenSource = new CancellationTokenSource();
@@ -115,7 +113,7 @@ namespace APTAT.Core.Valkyrie
                 _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
                 _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, 1000);
-                
+
                 Task.Factory.StartNew(t =>
                 {
                     try
@@ -332,7 +330,7 @@ namespace APTAT.Core.Valkyrie
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                         var orgPath = f.GetFullPath();
                         UploadFile(filePath, orgPath, endpointId);
-                        // File.Delete(filePath);
+                       // File.Delete(filePath);
                     }
                     catch (Exception e)
                     {
@@ -451,11 +449,11 @@ namespace APTAT.Core.Valkyrie
                 {
                     ValkyrieAnalysisResult result;
                     _analysedItems.TryRemove(item.SHA1, out result);
-                }
+            }
 
                 tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<ValkyrieAnalysisResult>(FilesCount, _fileScanned, malwareCount, newResults)));
              
-            }
+        }
         }
 
         private void UploadFile(string filePath, string originalFilePath, Guid endpointId)
@@ -526,7 +524,7 @@ namespace APTAT.Core.Valkyrie
                         Thread.Sleep(1000);
                         elapsed += 1000;
                         automaticAnalysisResponse = ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest() { ApiKey = _apiKey, AnalysisId = response.AnalysisId });
-                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.ANALYSIS_NOT_FINISHED);
+                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.ANALYSIS_NOT_FINISHED);                      
                     }
 
                     var result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);

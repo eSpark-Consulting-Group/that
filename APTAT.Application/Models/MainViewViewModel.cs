@@ -579,13 +579,8 @@ namespace APTAT.Application.Models
 
             
             _cacheValkyrie = new Collection<FileResult>(e.Result);
-            //ItemsValkyrie = new ObservableCollection<FileResult>(_cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
-
-            MalwareFilesCount = _cacheValkyrie.Count(i => i.IsMalware);
-            UnknownFilesCount = _cacheValkyrie.Count(i => i.IsUnknown);
             
 
-            RaisePropertyChanged("ItemsValkyrie");
             IsValkyrieScanInProgress = false;
             IsAnalyseWithValkyrieEnabled = true;
             IsValkyrieReportEnabled = true;
@@ -633,33 +628,22 @@ namespace APTAT.Application.Models
             }
         }
 
-
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            //if (Percentage == e.ProgressPercentage)
-            //    return;
-
             ValkyrieSendingFiles = false;
 
-            //Percentage = e.ProgressPercentage;
-            RaisePropertyChanged("Header");
             var info = (ProgressInfo<FileResult>)e.UserState;
-            Percentage = ((double)info.MalwareFilesCount / (double)info.TotalFileCount) * 100d;
-            ValkyrieProgressInfo = info;
-
             if (info != null)
             {
+                ValkyrieProgressInfo = info;
+
+                Percentage = e.ProgressPercentage;
+                RaisePropertyChanged("Header");
                 UnknownFilesCount = info.ProcessedFileCount;
-                if (info.MalwareFilesCount > 0)
-                {
-                    MalwareFilesCount = info.MalwareFilesCount;
-                }
+                MalwareFilesCount = info.MalwareFilesCount;
 
-                if (info.ProcessedFileCount > 50)
-                    return;
-
-                var results = info.Results.Where(l => l.ValkyrieAnalysisResult != null).ToArray();
-                ItemsValkyrie = new ObservableCollection<FileResult>(results);
+                foreach (var result in info.Results)
+                    CurrentViewControl.Dispatcher.BeginInvoke((Action)delegate { ItemsValkyrie.Add(result); });   
             } 
         }
 
