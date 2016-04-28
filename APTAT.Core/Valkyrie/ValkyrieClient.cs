@@ -157,7 +157,7 @@ namespace APTAT.Core.Valkyrie
 
         private void ProgressNotifyTimerCallback(object state)
         {
-            Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+            OnAnalyzeProgressChanged();
         }
 
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)

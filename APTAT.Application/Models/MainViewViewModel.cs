@@ -192,7 +192,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public Int32 Percentage { get; set; }
+        public Double Percentage { get; set; }
 
         public String Header
         {
@@ -209,7 +209,7 @@ namespace APTAT.Application.Models
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
                     var info = ValkyrieProgressInfo;
-                    var header = String.Format("Valkyrie progress {0}%", Percentage);
+                    var header = String.Format("Valkyrie progress {0:##.00}%", Percentage);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
 
@@ -579,8 +579,7 @@ namespace APTAT.Application.Models
 
             
             _cacheValkyrie = new Collection<FileResult>(e.Result);
-            ItemsValkyrie = new ObservableCollection<FileResult>(
-                       _cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
+            //ItemsValkyrie = new ObservableCollection<FileResult>(_cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
 
             MalwareFilesCount = _cacheValkyrie.Count(i => i.IsMalware);
             UnknownFilesCount = _cacheValkyrie.Count(i => i.IsUnknown);
@@ -637,15 +636,15 @@ namespace APTAT.Application.Models
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            if (Percentage == e.ProgressPercentage)
-                return;
+            //if (Percentage == e.ProgressPercentage)
+            //    return;
 
             ValkyrieSendingFiles = false;
 
-            Percentage = e.ProgressPercentage;
+            //Percentage = e.ProgressPercentage;
             RaisePropertyChanged("Header");
             var info = (ProgressInfo<FileResult>)e.UserState;
-            
+            Percentage = ((double)info.MalwareFilesCount / (double)info.TotalFileCount) * 100d;
             ValkyrieProgressInfo = info;
 
             if (info != null)
