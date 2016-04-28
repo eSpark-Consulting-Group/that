@@ -96,11 +96,11 @@ namespace APTAT.Core.Valkyrie
                 _apiKey = apiKey;
 
                 Trace.WriteLine("API_KEY = " + apiKey);
-                //Trace.Flush();
+    
                 AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
-                OnAnalyzeProgressChanged();
+    
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
-                //Trace.Flush();
+    
 
                 _fileScanned = 0;
 
@@ -112,7 +112,7 @@ namespace APTAT.Core.Valkyrie
 
                 _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, 1000);
+                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, 200);
 
                 Task.Factory.StartNew(t =>
                 {
@@ -123,7 +123,7 @@ namespace APTAT.Core.Valkyrie
                         if (startScanResult.ReturnCode != 0)
                         {
                             Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
-                            //Trace.Flush();
+                      
                         }
                         SubmitToAutomaticAnalysis(badFiles, login, password, _cancellationTokenSource.Token);
                     }
@@ -394,6 +394,7 @@ namespace APTAT.Core.Valkyrie
                         tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), null, true, null));
                     }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
             }
+            _progressNotifyTimer.Dispose();
         }
 
 
@@ -409,7 +410,7 @@ namespace APTAT.Core.Valkyrie
                         tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), exception, false, null));
                     }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
             }
-
+              _progressNotifyTimer.Dispose();
         }
         private void OnAnalyzeCompleted(Task task)
         {
