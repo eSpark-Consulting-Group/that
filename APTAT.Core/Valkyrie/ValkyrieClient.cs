@@ -34,7 +34,7 @@ namespace APTAT.Core.Valkyrie
         public int FilesCount { get; private set; }
 
         public ConcurrentBag<ValkyrieAnalysisResult> AnalysisResults { get; set; }
-
+        private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
         public ValkyrieClient()
         {
             AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
@@ -91,6 +91,7 @@ namespace APTAT.Core.Valkyrie
         {
             try
             {
+                _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
                 _machineCount = machineCount;
                 _apiKey = apiKey;
 
@@ -100,7 +101,7 @@ namespace APTAT.Core.Valkyrie
                 Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
                 //Trace.Flush();
 
-                
+
 
                 AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 _fileScanned = 0;
@@ -113,7 +114,8 @@ namespace APTAT.Core.Valkyrie
 
                 _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-
+                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, 1000);
+                
                 Task.Factory.StartNew(t =>
                 {
                     try
@@ -151,6 +153,11 @@ namespace APTAT.Core.Valkyrie
                     tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), agrEx, false, null));
                 }
             }
+        }
+
+        private void ProgressNotifyTimerCallback(object state)
+        {
+            Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
         }
 
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
@@ -325,7 +332,7 @@ namespace APTAT.Core.Valkyrie
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                         var orgPath = f.GetFullPath();
                         UploadFile(filePath, orgPath, endpointId);
-                       // File.Delete(filePath);
+                        // File.Delete(filePath);
                     }
                     catch (Exception e)
                     {
@@ -380,6 +387,7 @@ namespace APTAT.Core.Valkyrie
         private int _machineCount;
         private void OnAnalyzeCompleted()
         {
+        
             var tmp = AnalyzeCompleted;
             if (tmp != null)
             {
@@ -417,10 +425,13 @@ namespace APTAT.Core.Valkyrie
             {
                 tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), task.Exception, task.IsCanceled, task.AsyncState));
             }
+            _progressNotifyTimer.Dispose();
         }
 
         private void OnAnalyzeProgressChanged()
         {
+            if (_analysedItems.Count == 0) return;
+
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
             {
@@ -434,7 +445,16 @@ namespace APTAT.Core.Valkyrie
                 }
                 var progressInt = Convert.ToInt32(progress);
 
-                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<ValkyrieAnalysisResult>(FilesCount, _fileScanned, malwareCount, AnalysisResults.ToArray())));
+                var newResults = _analysedItems.Values.ToArray();
+
+                foreach (var item in newResults)
+                {
+                    ValkyrieAnalysisResult result;
+                    _analysedItems.TryRemove(item.SHA1, out result);
+                }
+
+                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<ValkyrieAnalysisResult>(FilesCount, _fileScanned, malwareCount, newResults)));
+             
             }
         }
 
@@ -496,7 +516,7 @@ namespace APTAT.Core.Valkyrie
 
                     var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, filePath, _cancellationTokenSource.Token);
 
-                    CheckAnalysisResultResponse automaticAnalysisResponse = new CheckAnalysisResultResponse() { ReturnCode = ErrorCodesEnum.None};
+                    CheckAnalysisResultResponse automaticAnalysisResponse = new CheckAnalysisResultResponse() { ReturnCode = ErrorCodesEnum.None };
 
                     var timeOut = TimeSpan.FromMinutes(5);
                     bool success = false;
@@ -506,7 +526,7 @@ namespace APTAT.Core.Valkyrie
                         Thread.Sleep(1000);
                         elapsed += 1000;
                         automaticAnalysisResponse = ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest() { ApiKey = _apiKey, AnalysisId = response.AnalysisId });
-                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.ANALYSIS_NOT_FINISHED);                      
+                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.ANALYSIS_NOT_FINISHED);
                     }
 
                     var result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);
@@ -529,11 +549,16 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
+        private System.Threading.Timer _progressNotifyTimer;
+
         private void AddResult(ValkyrieAnalysisResult result)
         {
             AnalysisResults.Add(result);
+
             Interlocked.Increment(ref _fileScanned);
-            Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+            _analysedItems.TryAdd(result.SHA1, result);
+
+            //Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
         }
 
         public string GetValkyrieDetailsLink()
