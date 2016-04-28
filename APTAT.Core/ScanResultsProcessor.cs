@@ -27,7 +27,7 @@ namespace APTAT.Core
 
                 try
                 {
-                    File.Delete(result.FileName);
+                   // File.Delete(result.FileName);
                 }
                 catch
                 {

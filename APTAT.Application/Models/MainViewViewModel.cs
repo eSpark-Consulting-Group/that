@@ -637,7 +637,7 @@ namespace APTAT.Application.Models
             {
                 ValkyrieProgressInfo = info;
 
-                Percentage = e.ProgressPercentage;
+                Percentage = ((double)info.MalwareFilesCount / (double)info.TotalFileCount) * 100d;
                 RaisePropertyChanged("Header");
                 UnknownFilesCount = info.ProcessedFileCount;
                 MalwareFilesCount = info.MalwareFilesCount;
