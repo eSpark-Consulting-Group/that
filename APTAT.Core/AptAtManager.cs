@@ -681,13 +681,12 @@ namespace APTAT.Core
                     if (found == null)
                     {
                         found = new FileResult(badFile);
-                        fileResults.Add(found);
-
                         var vResult = valkyrieResult.Where(v => v.SHA1 != null).Where(v => v.SHA1.ToUpper() == badFile.Sha1.ToUpper()).FirstOrDefault();
 
                         if (vResult != null)
                         {
                             found.ValkyrieAnalysisResult = vResult;
+                            fileResults.Add(found);
                         }
                     }
                   
