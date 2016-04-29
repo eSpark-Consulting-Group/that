@@ -11,6 +11,7 @@ using APTAT.Valkyrie.Client;
 using APTAT.Core;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Contracts;
+using Valkyrie.WebApiProvider.Enums;
 
 
 namespace APTAT.Application.Models
@@ -75,16 +76,41 @@ namespace APTAT.Application.Models
         {
             get
             {
-                if (IsValkyrieScanInProgress == true)
-                {
-                    return String.Format(" of {0} unique files analysed", DistinctFilesCount);
+
+                return " unknown programs detected";
+                //if (IsScanInProgress == true)
+                //{
+                //    return " unknown programs detected";
+                //}
+                //else if(IsValkyrieAnalysStarted)
+                //{
+
+                //    MalwareFilesCount =
+                //        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
+                //            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
+                //                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
+
+
+                //    UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
+                //    return " unknown programs detected";
+                    
                 }
-                if (IsScanInProgress == true)
-                {
-                    return " unknown programs detected";
-                }
-                return " unknown programs";
-            }
+                //else if (IsValkyrieAnalysCompleted)
+                //{
+                //    MalwareFilesCount =
+                //        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
+                //            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
+                //                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
+
+                    
+                //    UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
+                    
+                //    //return String.Format(" of {0} files analysed", ItemsValkyrie.Count);
+                //    return " unknown programs detected";
+                //}
+
+               // return " unknown programs detected";
+            
          
         }
 
@@ -208,7 +234,6 @@ namespace APTAT.Application.Models
                 }
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
-                    var info = ValkyrieProgressInfo;
                     var header = String.Format("Valkyrie progress {0:##.00}%", Percentage);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
@@ -579,12 +604,12 @@ namespace APTAT.Application.Models
 
             
             _cacheValkyrie = new Collection<FileResult>(e.Result);
-            
 
+            
             IsValkyrieScanInProgress = false;
             IsAnalyseWithValkyrieEnabled = true;
             IsValkyrieReportEnabled = true;
-            _isValkyrieAnalysCompleted = true;
+            IsValkyrieAnalysCompleted = true;
             RaisePropertyChanged("IsValkyrieAnalysCompleted");
             RaisePropertyChanged("Header");
             RaisePropertyChanged("ValkyrieDetailsLink");
@@ -637,13 +662,23 @@ namespace APTAT.Application.Models
             {
                 ValkyrieProgressInfo = info;
 
-                Percentage = ((double)info.MalwareFilesCount / (double)info.TotalFileCount) * 100d;
+                Percentage = ((double)info.ProcessedFileCount / (double)info.TotalFileCount) * 100d;
                 RaisePropertyChanged("Header");
-                UnknownFilesCount = info.ProcessedFileCount;
-                MalwareFilesCount = info.MalwareFilesCount;
+                //UnknownFilesCount = info.ProcessedFileCount;
+                //MalwareFilesCount = info.MalwareFilesCount;
 
                 foreach (var result in info.Results)
-                    CurrentViewControl.Dispatcher.BeginInvoke((Action)delegate { ItemsValkyrie.Add(result); });   
+                    CurrentViewControl.Dispatcher.BeginInvoke((Action) delegate
+                    {
+                        ItemsValkyrie.Add(result);
+                        MalwareFilesCount =
+                        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
+                            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
+                                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
+
+
+                        UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
+                    });   
             } 
         }
 
@@ -796,6 +831,10 @@ namespace APTAT.Application.Models
 
         public void BeginValkyrieAnalysis(string apiKey)
         {
+            
+            UnknownFilesCount = 0;
+            MalwareFilesCount = 0;
+           
             _aptService.BeginValkyrieAnalysis(_login, _password, apiKey);
         }
 

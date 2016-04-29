@@ -103,7 +103,7 @@ namespace APTAT.Core.Valkyrie
     
 
                 _fileScanned = 0;
-
+                
                 _cancellationTokenSource = new CancellationTokenSource();
 
                 var cancellationToken = _cancellationTokenSource.Token;
