@@ -131,14 +131,19 @@ namespace CodedUITestAT
         }
 
         #endregion
-
+        
         #region Control methods
-
+        
         #region Main screen
 
         private WpfButton StartScanningButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
+        }
+
+        private WpfButton AnalyseWithValkyrieButton()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIAnalyseWithValkyrieBButton;
         }
 
         private WpfCheckBox IAcceptTermsOfThisAgreementCheckBox()
@@ -290,40 +295,47 @@ namespace CodedUITestAT
             int expectedFilesNumber = expectedUnknownFilesNumber + expectedMalwaresNumber;
 
             UIMapScanCompletedWindow.ClickOkButton();
-            
-            if (expectedFilesNumber == 0) UIMapMain.ClickAnalyseWithValkyrieButton();
 
-            UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-            TestContext.WriteLine("CAM Credentials window appeared...\n");
-            UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
-            UIMapCamCredentialsWindow.InputLogin();
-            UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
-            UIMapCamCredentialsWindow.InputPassword();
-            UIMapCamCredentialsWindow.ClickOkButton();
+            // In the case no unknown or malicious files found - the analysis is not available
+            if (expectedFilesNumber == 0) 
+            {
+                if (!AnalyseWithValkyrieButton().Enabled) TestContext.WriteLine("No unknown or malicious files found and Valkyrie analysis is not available.");
+                else Assert.Fail("No unknown or malicious files found but Valkyrie analysis is available!");
+            }
+            else
+            {
+                UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
+                TestContext.WriteLine("CAM Credentials window appeared...\n");
+                UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
+                UIMapCamCredentialsWindow.InputLogin();
+                UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
+                UIMapCamCredentialsWindow.InputPassword();
+                UIMapCamCredentialsWindow.ClickOkButton();
 
-            // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of Unknown files found
-            UIHelper.WaitForControl(ValkyrieResultsTree(), Settings.WaitingTime.Default.ValkyrieUploadWaitTime);
-            TestContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
-            var valkyrieResultsRows = ValkyrieResultsTree().GetTreeRows();
-            int valkyrieResultsRowsNumber = valkyrieResultsRows.Count;
-            if (valkyrieResultsRowsNumber == expectedFilesNumber)
-                TestContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
-            else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
+                // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of Unknown files found
+                UIHelper.WaitForControl(ValkyrieResultsTree(), Settings.WaitingTime.Default.ValkyrieUploadWaitTime);
+                TestContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
+                var valkyrieResultsRows = ValkyrieResultsTree().GetTreeRows();
+                int valkyrieResultsRowsNumber = valkyrieResultsRows.Count;
+                if (valkyrieResultsRowsNumber == expectedFilesNumber)
+                    TestContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
+                else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
 
-            // Clicks Valkyrie link and checks the respective browser window URI
-            string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
-            UIMapMain.ClickValkyrieLink();
-            TestContext.WriteLine("Valkyrie link clicked...\n");
-            BrowserWindow valkyrieWebPage = new BrowserWindow();
-            valkyrieWebPage.SearchProperties.Add(new PropertyExpression(BrowserWindow.PropertyNames.Name, Settings.General.Default.ValkyrieUri, PropertyExpressionOperator.Contains));
-            UIHelper.WaitForControl(valkyrieWebPage);
-            string actualValkyrieUri = valkyrieWebPage.Uri.ToString();
-            string error = null;
-            if (actualValkyrieUri.Contains(expectedValkyrieUri))
-                TestContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.\n", actualValkyrieUri));
-            else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualValkyrieUri);            
-            valkyrieWebPage.Close();
-            if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
+                // Clicks Valkyrie link and checks the respective browser window URI
+                string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
+                UIMapMain.ClickValkyrieLink();
+                TestContext.WriteLine("Valkyrie link clicked...\n");
+                BrowserWindow valkyrieWebPage = new BrowserWindow();
+                valkyrieWebPage.SearchProperties.Add(new PropertyExpression(BrowserWindow.PropertyNames.Name, Settings.General.Default.ValkyrieUri, PropertyExpressionOperator.Contains));
+                UIHelper.WaitForControl(valkyrieWebPage);
+                string actualValkyrieUri = valkyrieWebPage.Uri.ToString();
+                string error = null;
+                if (actualValkyrieUri.Contains(expectedValkyrieUri))
+                    TestContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.\n", actualValkyrieUri));
+                else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualValkyrieUri);
+                valkyrieWebPage.Close();
+                if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
+            }
         }
 
         #endregion

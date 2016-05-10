@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ATApplicationProcessName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">APTAT.Application</Value>
+      <Value Profile="(Default)">UnknownFileHunter</Value>
     </Setting>
     <Setting Name="CamLogin" Type="System.String" Scope="Application">
       <Value Profile="(Default)">alexey.smirnov@comodo.com</Value>

@@ -18,7 +18,7 @@ set EndpointRoot=%ServerRoot%
 
 set TargetDir=%ServerRoot%:\CNAT
 
-set ProductExeName=APTAT.exe
+set ProductExeName=ValkyrieHunter.exe
 
 
 

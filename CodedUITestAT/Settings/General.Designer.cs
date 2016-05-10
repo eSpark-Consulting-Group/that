@@ -25,7 +25,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("APTAT.Application")]
+        [global::System.Configuration.DefaultSettingValueAttribute("UnknownFileHunter")]
         public string ATApplicationProcessName {
             get {
                 return ((string)(this["ATApplicationProcessName"]));
