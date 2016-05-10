@@ -1,4 +1,4 @@
-REM Gets build deployment arguments (Deploy step) and sets the respective local machine variables
+REM Gets build deployment arguments (Deploy step) and sets the necessary local machine variables
 
 set BuildLocation=%~1
 
@@ -19,6 +19,10 @@ set EndpointRoot=%ServerRoot%
 set TargetDir=%ServerRoot%:\CNAT
 
 set ProductExeName=ValkyrieHunter.exe
+
+set DataSource=AutotestsData\AT
+
+set MalwaresFolder=Malfolder
 
 
 
@@ -47,3 +51,19 @@ setx _ProductExeName %ProductExeName% /m
 REM Copies files necessary for testing to the server VM
 
 xcopy "%BuildLocation%\%ProductExeName%" "%TargetDir%\" /y
+
+
+
+REM Copies files necessary for testing to the endpoint VM
+
+net use x: "\\%EndpointName%\%EndpointRoot%$" /user:%EndpointLogin% %EndpointPassword%
+
+net use s: "\\esmbuildstorage\%DataSource%"
+
+xcopy "s:\%MalwaresFolder%" "x:\%MalwaresFolder%" /e /y
+
+xcopy "s:\%MalwaresFolder%\91exestealth.exe" "x:\Users\%EndpointLogin%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup" /e /y
+
+net use x: /delete
+
+net use s: /delete
