@@ -7,11 +7,9 @@ using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
 using System.Windows.Controls;
-using APTAT.Valkyrie.Client;
 using APTAT.Core;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Contracts;
-using Valkyrie.WebApiProvider.Enums;
 
 
 namespace APTAT.Application.Models
@@ -35,7 +33,7 @@ namespace APTAT.Application.Models
         private Boolean _isValkyrieReportEnabled;
         private Boolean? _isScanInProgress = false;
         private Int32 _scannedItemsCount;
-        
+
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
 
@@ -71,7 +69,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        
+
         public string StatusBarText
         {
             get
@@ -93,25 +91,25 @@ namespace APTAT.Application.Models
 
                 //    UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
                 //    return " unknown programs detected";
-                    
-                }
-                //else if (IsValkyrieAnalysCompleted)
-                //{
-                //    MalwareFilesCount =
-                //        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
-                //            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
-                //                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
 
-                    
-                //    UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
-                    
-                //    //return String.Format(" of {0} files analysed", ItemsValkyrie.Count);
-                //    return " unknown programs detected";
-                //}
+            }
+            //else if (IsValkyrieAnalysCompleted)
+            //{
+            //    MalwareFilesCount =
+            //        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
+            //            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
+            //                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
 
-               // return " unknown programs detected";
-            
-         
+
+            //    UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
+
+            //    //return String.Format(" of {0} files analysed", ItemsValkyrie.Count);
+            //    return " unknown programs detected";
+            //}
+
+            // return " unknown programs detected";
+
+
         }
 
         public bool IsAnyScanInProgress
@@ -152,7 +150,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsValkyrieScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
                 RaisePropertyChanged("StatusBarText");
-                
+
             }
         }
 
@@ -459,7 +457,7 @@ namespace APTAT.Application.Models
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = false;
             CurrentViewControl = _scanInfoTreeControl;
-            
+
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
             {
@@ -583,8 +581,6 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-      
-
             _aptService.DirectoryItemsResolved += OnDirectoryItemsResolved;
             _aptService.BeginScanCompleted += OnBeginScanCompleted;
             _aptService.ScanStatusChanged += OnScanStatusChanged;
@@ -602,10 +598,10 @@ namespace APTAT.Application.Models
                 ShowError(e.Error);
             }
 
-            
+
             _cacheValkyrie = new Collection<FileResult>(e.Result);
 
-            
+
             IsValkyrieScanInProgress = false;
             IsAnalyseWithValkyrieEnabled = true;
             IsValkyrieReportEnabled = true;
@@ -629,7 +625,7 @@ namespace APTAT.Application.Models
                 {
                     if (errorList.Contains(innerException.Message)) continue;
                     errorList.Add(innerException.Message);
-                    
+
                 }
             }
             ErrorLogWindow error = new ErrorLogWindow(errorList)
@@ -643,7 +639,7 @@ namespace APTAT.Application.Models
         public bool ValkyrieSendingFiles
         {
             get { return _valkyrieSendingFiles; }
-            set 
+            set
             {
                 if (_valkyrieSendingFiles == value)
                     return;
@@ -662,24 +658,16 @@ namespace APTAT.Application.Models
             {
                 ValkyrieProgressInfo = info;
 
-                Percentage = ((double)info.ProcessedFileCount / (double)info.TotalFileCount) * 100d;
+                Percentage = info.Percentage;
+                UnknownFilesCount = UnknownFilesCount + info.UnknownFileCount;
+                MalwareFilesCount = MalwareFilesCount + info.MalwareFilesCount;
                 RaisePropertyChanged("Header");
-                //UnknownFilesCount = info.ProcessedFileCount;
-                //MalwareFilesCount = info.MalwareFilesCount;
 
                 foreach (var result in info.Results)
-                    CurrentViewControl.Dispatcher.BeginInvoke((Action) delegate
-                    {
-                        ItemsValkyrie.Add(result);
-                        MalwareFilesCount =
-                        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
-                            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
-                                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
-
-
-                        UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
-                    });   
-            } 
+                {
+                    CurrentViewControl.Dispatcher.BeginInvoke((Action)delegate { ItemsValkyrie.Add(result); });
+                }
+            }
         }
 
         protected override void InvokeViewUnloaded(Object arg)
@@ -765,7 +753,7 @@ namespace APTAT.Application.Models
                     scanScope = @"processes|drivers|autoruns";
                 }
 
-                _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this, scanScope); 
+                _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this, scanScope);
                 //_login = null;
                 //_password = null;
                 DevicesSourceDescription = null;
@@ -782,7 +770,7 @@ namespace APTAT.Application.Models
 
             IsValkyrieScanInProgress = false;
             IsValkyrieAnalysCompleted = false;
-//            IsAnalyseWithValkyrieEnabled = !IsAnyScanInProgress;
+            //            IsAnalyseWithValkyrieEnabled = !IsAnyScanInProgress;
             if (e.Exception != null)
             {
                 //  MessageBox.Show(String.Format("Exception: {0}", e.Exception.Message));    
@@ -799,7 +787,7 @@ namespace APTAT.Application.Models
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
             IsAnalyseWithValkyrieEnabled = enableReports;
-            
+
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
 
         }
@@ -831,10 +819,10 @@ namespace APTAT.Application.Models
 
         public void BeginValkyrieAnalysis(string apiKey)
         {
-            
+
             UnknownFilesCount = 0;
             MalwareFilesCount = 0;
-           
+
             _aptService.BeginValkyrieAnalysis(_login, _password, apiKey);
         }
 
@@ -861,7 +849,7 @@ namespace APTAT.Application.Models
                 {
                     ThreatInfoItem infoItem = _onlineItems[j];
                     if (infoItem.ComputerGuid == scanProgress.ComputerGuid)
-                    {                        
+                    {
                         infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                         infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                         infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;

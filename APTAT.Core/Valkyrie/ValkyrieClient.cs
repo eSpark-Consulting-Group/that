@@ -284,8 +284,11 @@ namespace APTAT.Core.Valkyrie
             {
                 key = Registry.CurrentUser.CreateSubKey(subKeyName);
                 var guid = Guid.NewGuid();
-                key.SetValue(keyValueName, guid, RegistryValueKind.String);
-                key.Dispose();
+                if (key != null)
+                {
+                    key.SetValue(keyValueName, guid, RegistryValueKind.String);
+                    key.Dispose();
+                }
                 return guid;
             }
             else
@@ -452,7 +455,7 @@ namespace APTAT.Core.Valkyrie
                     _analysedItems.TryRemove(item.SHA1, out result);
             }
 
-                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<ValkyrieAnalysisResult>(FilesCount, _fileScanned, malwareCount, newResults)));
+                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<ValkyrieAnalysisResult>(FilesCount, _fileScanned, malwareCount, 0, newResults)));
              
         }
         }

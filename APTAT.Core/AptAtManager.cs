@@ -16,6 +16,7 @@ using APTAT.Core.Reports;
 using APTAT.Core.Valkyrie;
 using APTAT.Valkyrie.Client;
 using Valkyrie.WebApiProvider.Contracts;
+using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Core
 {
@@ -662,8 +663,15 @@ namespace APTAT.Core
                 
                 var results = _descentSubSystem.GetFirstScanResults().ScanResults;
                 var valkyrieAnalysisResult = GetFullResult(info.Results, results);
+                var malwareFilesCount =
+                        valkyrieAnalysisResult.Where(i => i.ValkyrieAnalysisResult != null)
+                            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
+                                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
 
-                ProgressInfo<FileResult> progressInfo = new ProgressInfo<FileResult>(info.TotalFileCount, info.ProcessedFileCount, info.MalwareFilesCount, valkyrieAnalysisResult.ToArray());
+
+                var unknownFilesCount = valkyrieAnalysisResult.Count - malwareFilesCount;
+
+                ProgressInfo<FileResult> progressInfo = new ProgressInfo<FileResult>(info.TotalFileCount, info.ProcessedFileCount, malwareFilesCount, unknownFilesCount, valkyrieAnalysisResult.ToArray());
                 handler(this, new ProgressChangedEventArgs(e.ProgressPercentage, progressInfo));
             }
         }

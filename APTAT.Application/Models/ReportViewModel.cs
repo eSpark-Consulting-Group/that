@@ -71,7 +71,11 @@ namespace APTAT.Application.Models
             IsBusy = false;
             if(e.Exception != null)
             {
-                //MessageBox.Show(e.Exception.ToString());
+                if (e.Exception is OutOfMemoryException)
+                {
+                    MessageBox.Show(e.Exception.ToString());
+                }
+                
                 return;
             }
 
