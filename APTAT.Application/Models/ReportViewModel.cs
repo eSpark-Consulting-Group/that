@@ -68,12 +68,14 @@ namespace APTAT.Application.Models
 
         private void OnBuildReportCompleted(Object sender, BuildReportCompletedEventArgs e)
         {
+            
             IsBusy = false;
             if(e.Exception != null)
             {
                 if (e.Exception is OutOfMemoryException)
                 {
-                    MessageBox.Show(e.Exception.ToString());
+                    Error = e.Exception.Message;
+                    HasErrors = true;
                 }
                 
                 return;

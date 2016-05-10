@@ -16,6 +16,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Application:TitleUpdater Header="{Binding Header}"/>
+        <Border Grid.Row="0" BorderThickness="0"  BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Height="40" Margin="0 32 0 0"
+              Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFA11D1D" Offset="0"/>
+                    <GradientStop Color="#FF931919" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <TextBlock Foreground="White"  Text="{Binding Error}" Margin="20,0" FontSize="16" Height="26" VerticalAlignment="Stretch"/>
+        </Border>
+
         <telerik:RadToolBar DataContext="{Binding ElementName=pdfViewer, Path=Commands}" VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Margin="0">
             <telerik:RadToolBar.Resources>
                 <converters:DoubleToStringPercentConverter x:Key="doubleToStringPercentConverter" />
