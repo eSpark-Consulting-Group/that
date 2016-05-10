@@ -60,7 +60,7 @@ net use x: "\\%EndpointName%\%EndpointRoot%$" /user:%EndpointLogin% %EndpointPas
 
 net use s: "\\esmbuildstorage\%DataSource%"
 
-xcopy "s:\%MalwaresFolder%" "x:\%MalwaresFolder%" /e /y
+xcopy "s:\%MalwaresFolder%" "x:\%MalwaresFolder%\" /e /y
 
 xcopy "s:\%MalwaresFolder%\91exestealth.exe" "x:\Users\%EndpointLogin%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup" /e /y
 
