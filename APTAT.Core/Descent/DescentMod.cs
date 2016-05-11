@@ -9,8 +9,6 @@ using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using APTAT.Core.Properties;
-using CRM.SrvCore;
-using CRM.SrvCore.Descent;
 using APTAT.Core.Descent.Transport;
 
 namespace APTAT.Core.Descent
@@ -28,16 +26,6 @@ namespace APTAT.Core.Descent
         void OnDescentCallback(DescentStatus status, int win32Error, string response);
         void SetDescentThread();
         bool IsCompleted { get; }
-    }
-
-    public struct AgentInformation
-    {
-        public bool Installed { get; set; }
-		public uint VersionMajor { get; set; }
-		public uint VersionMinor { get; set; }
-		public string ServerHostName { get; set; }
-		public uint ServerPort { get; set; }
-		public bool CurrentServerAccessible { get; set; } // current server is accessible
     }
 
     public class DescentMod
@@ -62,57 +50,6 @@ namespace APTAT.Core.Descent
 
 		    _scanResults = scanResults;
 		}
-
-        // TODO: Commented
-        //private struct MsiInfo
-        //{
-        //    public string Path { get; set; }
-        //    public string Platform { get; set; }
-        //    public int Bits { get; set; }
-        //    public Version Version { get; set; }
-        //}
-
-        // TODO: Commented
-        //private MsiInfo[] QueryMsiPackages(string msiFolder)
-        //{
-        //    List<MsiInfo> result = new List<MsiInfo>();
-
-        //    string[] agents = System.IO.Directory.GetFiles(msiFolder, "*.msi", SearchOption.TopDirectoryOnly);
-        //    foreach (string agentPath in agents)
-        //    {
-        //        string fullPath = Path.GetFullPath(agentPath);
-
-        //        try
-        //        {
-        //            string[] values;
-        //            Guid productCode, upgradeCode;
-        //            string productVersion;
-
-        //            MsiTools.ExtractMsiProperties(fullPath,
-        //                new string[] { "PLATFORM" },
-        //                out values,
-        //                out productCode,
-        //                out upgradeCode,
-        //                out productVersion);
-
-        //            MsiInfo info = new MsiInfo();
-        //            info.Path = fullPath;
-        //            info.Platform = values[0];
-        //            info.Bits = (info.Platform == "x86" ? 32 : 64);
-        //            info.Version = new Version(productVersion);
-        //            result.Add(info);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            var text = String.Format("Querying Agent '{0}' properties failed.", fullPath);
-        //            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, text);
-        //            Debug.Fail(text, ex.ToString());
-        //        }
-        //    }
-
-        //    return result.ToArray();
-        //}
-
 
         private struct UninstallAgentThreadParams
         {
@@ -202,11 +139,6 @@ namespace APTAT.Core.Descent
 		{
             NotifyProgressChanged(operationUid, hostName, computerUid, resourceMessage, scanStage, 0, 0, 0, 0, percentage);
 		}
-
-        //private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int percentage)
-        //{
-        //    NotifyProgressChanged(operationUid, hostName, computerUid, resourceMessage, scanStage, totalFilesCount, unknownFilesCount, 0, 0, percentage);
-        //}
 
         private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, int percentage)
         {
@@ -465,69 +397,6 @@ namespace APTAT.Core.Descent
 						throw new DescentException( dh.Response );
 					}
 
-					// 50% Copying agent installation package
-					//NotifyProgressChanged( tp._operationUid, tp._agentIdentity, ServerSideMessagesResources.DescentProgressAgentInstallCopyingAgentPackage, 50 );
-
-                    // TODO: Commented
-                    ////TODO: Make DescentHelper report full SystemKind instead of just platform
-                    //string[] split = dh.Response.Response.Split( ',' );
-                    //if( split.Length != 5 )
-                    //{
-                    //    throw new DescentException( DescentStatus.status_remote_invalid_response, "Query agent information failed: invalid response", 0 );
-                    //}
-
-                    //AgentInformation info = new AgentInformation();
-                    //string platform = split[0];
-                    //info.VersionMajor = ( uint )Int32.Parse( split[1] );
-                    //info.VersionMinor = ( uint )Int32.Parse( split[2] );
-                    //info.ServerPort = ( uint )Int32.Parse( split[3] );
-                    //info.ServerHostName = split[4];
-
-                    //var agentKind = SystemKind.Windows;
-                    //if (platform == "64")
-                    //    agentKind |= SystemKind.IsIntelX64Edition;
-                    //var productManagement = SubSystemFactory.Current.GetSubSystem<IProductManagementSubSystem>();
-                    //var agentPackage = productManagement.GetAgentPackage(agentKind);
-                    //if (agentPackage == null)
-                    //    throw new DescentException(DescentStatus.status_no_compatible_msi_found, String.Format("No Agent package found for the target system (SystemKind = {0})", agentKind), 0);
-                    //if (!ProductSubSystem.VerifyHash(agentPackage.Hash, agentPackage.StoredPath))
-                    //    throw new DescentException(DescentStatus.status_package_file_hash_is_invalid, "Package file hash is invalid.", 0);
-
-                    //// We need to reestablish connection to the remote computer now.
-                    //dh.Release();
-                    //dh.Init( impersonationLogonType );
-                    //dh.CopyFile( agentPackage.StoredPath, true );
-
-                    //// 60% Installing agent package
-                    //NotifyProgressChanged( tp._operationUid, tp._agentIdentity, ServerSideMessagesResources.DescentProgressAgentInstallInstallingAgentPackage, 60 );
-
-                    //string remotePath = Path.Combine( dh.RemoteInstallerTempFolderName, Path.GetFileName( agentPackage.StoredPath ) );
-
-                    //string[] serverHosts = NetHelp.GetSupportedExternalAddresses(false);
-                    //string parameters = string.Format( "ALTSERVERHOSTS=\"{0}\" SERVERPORT={1} AGENTIDENTITY={2} EXECUTEACTION=INSTALL ",
-                    //    String.Join(" ", serverHosts.Skip(1)),
-                    //    tp._hostPort,
-                    //    tp._agentIdentity.ToString()
-                    //    );
-
-                    //string agentInstallParameters = remotePath + "*" + parameters;
-
-                    //// Install msi package
-                    //dh.ExecuteAction(
-                    //    "action_install_agent",
-                    //    new string[] { agentInstallParameters },
-                    //    0 );
-
-                    //// 90% Finalizing agent istallation
-                    //NotifyProgressChanged( tp._operationUid, tp._agentIdentity, ServerSideMessagesResources.DescentProgressAgentInstallFinalizingAgentInstallation, 90 );
-
-                    //// DescentStatus.status_success_agent_updated means success too
-                    //if( dh.Response.Status != DescentStatus.status_success &&
-                    //    dh.Response.Status != DescentStatus.status_success_agent_updated )
-                    //{
-                    //    throw new DescentException( dh.Response );
-                    //}
-
                     tp.DescentCallback.OnDescentCallback(DescentStatus.status_success, 0, String.Empty);
 				}
 				catch( DescentException ex )
@@ -606,63 +475,6 @@ namespace APTAT.Core.Descent
 				return null;
 			return (int) value;
 		}
-
-        // TODO: Commented
-        //// Sync operations
-        //public AgentInformation QueryAgentInformation(RemoteHostInfo remoteHostInfo, int LocalPort)
-        //{
-        //    DescentHelper dh = new DescentHelper(remoteHostInfo);
-        //    AgentInformation info = new AgentInformation();
-
-        //    try
-        //    {
-        //    //	try
-        //    //	{
-        //            // NewCredentials will use the impersonated user for network connections only.
-        //            dh.Init( ImpersonationHelper.Logon32LogonType.NewCredentials );
-        //    //	}
-        //    //	catch( Exception )
-        //    //	{
-        //    //		dh.Init( ImpersonationHelper.Logon32LogonType.Service );
-        //    //	}
-
-        //        info = new AgentInformation();
-        //        dh.ExecuteAction(
-        //            "action_query_agent_information",
-        //            new string[] { LocalPort.ToString() },
-        //            0);
-
-        //        dh.Release();
-        //        if ( dh.Response.Status != DescentStatus.status_success )
-        //        {
-        //            throw new DescentException(dh.Response);
-        //        }
-
-        //        string[] split = dh.Response.Response.Split(',');
-        //        if (split.Length != 6)
-        //        {
-        //            throw new DescentException(DescentStatus.status_remote_invalid_response,
-        //                "Query agent information failed: invalid response", 0);
-        //        }
-
-        //        info.Installed = (Int32.Parse(split[0]) == 1);
-        //        info.VersionMajor = (uint)Int32.Parse(split[1]);
-        //        info.VersionMinor = (uint)Int32.Parse(split[2]);
-        //        info.ServerPort = (uint)Int32.Parse(split[3]);
-        //        info.ServerHostName = split[4];
-        //        info.CurrentServerAccessible = (Int32.Parse(split[5]) == 1);
-
-        //        return info;
-        //    }
-        ////  catch (DescentException ex)
-        ////  {
-        ////      throw ex;
-        ////  }
-        //    finally
-        //    {
-        //        dh.Release();
-        //    }
-        //}
 
         public void Release()
         {

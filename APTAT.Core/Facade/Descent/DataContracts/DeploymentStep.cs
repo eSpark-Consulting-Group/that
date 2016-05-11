@@ -2,12 +2,6 @@
 {
 	public enum DeploymentStep
 	{
-		AgentInstall,
-
-		IncompatibleSoftwareUninstall,
-
-		CisInstall,
-
-		OutdatedCisUninstall,
+		AgentInstall
 	}
 }

@@ -22,9 +22,6 @@ namespace APTAT.Core
 
     public interface ISubSystemCatalog
     {
-        void Register(ISubSystem subSystem);
-        ISubSystem Find(string name);
-        ISubSystem Find(Guid identifier);
         T Find<T>();
 
         void RemoveSessionId(Guid guid);
@@ -41,21 +38,7 @@ namespace APTAT.Core
 
             _changeTrackingSubSystem.Init(this);
         }
-
-        public void Register(ISubSystem subSystem)
-        {
-            throw new NotImplementedException("SubSystemCatalog.Register");
-        }
-
-        public ISubSystem Find(string name)
-        {
-            throw new NotImplementedException("SubSystemCatalog.Find");
-        }
-
-        public ISubSystem Find(Guid identifier)
-        {
-            throw new NotImplementedException("SubSystemCatalog.Find");
-        }
+        
 
         public T Find<T>()
         {
@@ -80,7 +63,6 @@ namespace APTAT.Core
         void RegisterListener(IChangeTrackingListener listener);
         void UnregisterListener(IChangeTrackingListener listener);
         void NotifyChanged(ChangesTrackingItem item, bool exceptSelfSession);
-        void NotifyChanged(ChangesTrackingItem[] items, bool exceptSelfSession);
 
     }
 
@@ -219,7 +201,7 @@ namespace APTAT.Core
             NotifyChanged(new ChangesTrackingItem[] { item }, exceptSelfSession);
         }
 
-        public void NotifyChanged(ChangesTrackingItem[] items, bool exceptSelfSession)
+        private void NotifyChanged(ChangesTrackingItem[] items, bool exceptSelfSession)
         {
             List<Guid> failed = new List<Guid>();
             //GenericContextData<Guid> clientUID = CallContext.GetData(@"ClientUID") as GenericContextData<Guid>;
@@ -250,35 +232,8 @@ namespace APTAT.Core
         }
 
         #endregion
-
-        private static void UpdateSessionInfo(ChangesTrackingItem[] changesTrackingItems, GenericContextData<Guid> sessionId)
-        {
-            if (sessionId != null)
-            {
-                Array.ForEach(
-                    changesTrackingItems, delegate(ChangesTrackingItem item) { item.ClientSessionId = sessionId.Data; });
-            }
-        }
     }
-
-    [Serializable]
-    public class GenericContextData<T> : MarshalByRefNullLifetime, ILogicalThreadAffinative
-    {
-        private readonly T objData;
-
-        public GenericContextData(T data)
-        {
-            objData = data;
-        }
-
-        public T Data
-        {
-            get
-            {
-                return objData;
-            }
-        }
-    }
+    
 
     public interface IChangeTrackingListener
     {
@@ -296,32 +251,8 @@ namespace APTAT.Core
     [Serializable]
     public class ChangesTrackingItem
     {
-        private Guid _clientSessionId = Guid.Empty;
-
         public readonly ChangeType ChangeType;
         public readonly IBusinessObject ChangedItem;
-
-        public Guid ClientSessionId
-        {
-            get
-            {
-                return _clientSessionId;
-            }
-            set
-            {
-                _clientSessionId = value;
-            }
-        }
-
-        public static ChangesTrackingItem[] CreateItems<T>(ChangeType type, T[] items) where T : IBusinessObject
-        {
-            ChangesTrackingItem[] res = new ChangesTrackingItem[items.Length];
-            for (int i = 0; i < items.Length; i++)
-            {
-                res[i] = new ChangesTrackingItem(type, items[i]);
-            }
-            return res;
-        }
 
         public ChangesTrackingItem(ChangeType type, IBusinessObject changed)
         {

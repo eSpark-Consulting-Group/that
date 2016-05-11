@@ -63,11 +63,9 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AgentPackageHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AptAtManager.cs" />
     <Compile Include="AptScanStage.cs" />
+    <Compile Include="Apt\AptScanner.cs" />
     <Compile Include="ComputerInformation.cs" />
     <Compile Include="DataNotReadyException.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
@@ -92,9 +90,6 @@
     <Compile Include="Descent\DescentResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\DescentStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Descent\DescentSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -116,37 +111,7 @@
     <Compile Include="Descent\ImpersonationHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\InstallPackageInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Descent\LimitedConcurrencyLevelTaskScheduler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\ActionDeferredListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\AgentControlActionStartedListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\AgentDescentCompletedListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\CisUninstallCompletedListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\ComputerConnectedListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\DescentCompletedListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\IncompatibleUninstallCompletedListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\Listeners\PackageInstallCompletedListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\MsiTools.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\NetworkHelper.cs">
@@ -154,9 +119,6 @@
     </Compile>
     <Compile Include="Descent\NoAvailableTargetsException.cs" />
     <Compile Include="Descent\OperationDescentResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\RemoteAgentInformation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\ServiceHelper.cs">
@@ -169,22 +131,10 @@
     <Compile Include="Descent\WatcherType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DirectoryResolver.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DirectorySubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Directory\ActiveDirectoryObserver.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Discovery\DiscoverySubSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DsaKeyLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EntityModel.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExtendedResourceManager.cs">
@@ -196,9 +146,6 @@
     <Compile Include="Facade\Descent\Commands\DeployAgentCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Facade\Descent\Commands\EnumerateWorkgroupsCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Facade\Descent\Commands\FindDomainTargetsCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -206,12 +153,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Facade\Descent\Commands\FindWorkgroupTargetsCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facade\Descent\Commands\GetDeploymentResultsCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facade\Descent\Commands\GetDescentErrorMessageCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Facade\Descent\Commands\GetTargetsSummaryCommand.cs">
@@ -337,18 +278,6 @@
     <Compile Include="Facade\Descent\MessageContracts\FindTargetsResponse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Facade\Descent\MessageContracts\GetDeploymentResultsRequest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facade\Descent\MessageContracts\GetDeploymentResultsResponse.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facade\Descent\MessageContracts\GetDescentErrorMessageRequest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facade\Descent\MessageContracts\GetDescentErrorMessageResponse.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Facade\Descent\MessageContracts\GetTargetsSummary.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -362,12 +291,7 @@
     <Compile Include="LogHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Messages\MessagingSubSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MsiNative.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Messages\MessagingSubSystem.cs" />
     <Compile Include="NetHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -375,15 +299,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OsInfoHelper.cs" />
-    <Compile Include="ProductManagementSubSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ProductManagementTools.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ProductSubSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Reports\AptReportBuilder.cs" />
+    <Compile Include="Reports\IAptReportBuilder.cs" />
+    <Compile Include="Reports\ReportCompletedEventArgs.cs" />
     <Compile Include="Valkyrie\AnalyzeCompletedEventArgs.cs" />
     <Compile Include="Valkyrie\AnalyzeCompletedEventHandler.cs" />
     <Compile Include="Valkyrie\CamRegistration.cs" />
@@ -420,12 +338,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SystemKind.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tasks\Actions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tasks\TaskSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Transport\HostResolverProvider.cs">

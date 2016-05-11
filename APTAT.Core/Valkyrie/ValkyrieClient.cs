@@ -23,17 +23,9 @@ namespace APTAT.Core.Valkyrie
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
-        public int FileScanned
-        {
-            get
-            {
-                return _fileScanned;
-            }
-        }
+        private int FilesCount { get;  set; }
 
-        public int FilesCount { get; private set; }
-
-        public ConcurrentBag<ValkyrieAnalysisResult> AnalysisResults { get; set; }
+        private ConcurrentBag<ValkyrieAnalysisResult> AnalysisResults { get; set; }
         private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
         public ValkyrieClient()
         {
@@ -232,45 +224,6 @@ namespace APTAT.Core.Valkyrie
 
             return valkyrieFolder;
         }
-
-        //public SubmitToManualResponse SubmitToManual(string filePath, string apiKey, int priority = 3)
-        //{
-        //    FileInfo f = new FileInfo(filePath);
-
-        //    var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
-
-
-        //    if (f.Length > MaxFileLenght)
-        //    {
-        //        throw new InvalidOperationException(String.Format("{0}{1}", sha1, "Maximum file size per upload to 25 MB."));
-
-        //    }
-
-        //    var info = ValkyrieWebApiProvider.GetBasicInfo(new InfoRequest() { ApiKeys = apiKey, SHA1 = sha1 });
-
-        //    if (info.Presence)
-        //    {
-        //        return ValkyrieWebApiProvider.SubmitToManualAnalysisWithoutUpload(new SubmitToManualRequestSHA1()
-        //        {
-        //            ApiKeys = apiKey,
-        //            FilePath = filePath,
-        //            Priority = priority,
-        //            SHA1 = sha1,
-        //            SubmitToken = info.SubmitToken
-        //        });
-        //    }
-        //    else
-        //    {
-        //        return ValkyrieWebApiProvider.SubmitToManualAnalysis(new SubmitToManualRequest()
-        //        {
-        //            ApiKeys = apiKey,
-        //            FilePath = filePath,
-        //            Priority = priority,
-        //            SubmitToken = info.SubmitToken
-        //        }, filePath, CancellationToken.None);
-        //    }
-
-        //}
 
 
         private Guid GetEndpointId()

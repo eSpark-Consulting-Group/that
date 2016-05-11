@@ -8,14 +8,17 @@ namespace APTAT.Core.Valkyrie
     {
         public static ValkyrieAnalysisResult Create(BasicInfoResponse basicInfo)
         {
-            ValkyrieAnalysisResult result = new ValkyrieAnalysisResult();
-            result.SHA1 = basicInfo.SHA1;
-            result.FirstAnalysisDate = basicInfo.FirstAnalysisDate;
-            result.LastAnalysisDate = basicInfo.LastAnalysisDate;
-            result.MalwareProbability = basicInfo.MalwareProbability;            
-            result.Verdict = basicInfo.Verdict;
-            result.IsWhiteListed = basicInfo.IsWhiteListed;
-            result.ReturnCode = basicInfo.ReturnCode;
+            ValkyrieAnalysisResult result = new ValkyrieAnalysisResult
+            {
+                SHA1 = basicInfo.SHA1,
+                FirstAnalysisDate = basicInfo.FirstAnalysisDate,
+                LastAnalysisDate = basicInfo.LastAnalysisDate,
+                MalwareProbability = basicInfo.MalwareProbability,
+                Verdict = basicInfo.Verdict,
+                IsWhiteListed = basicInfo.IsWhiteListed,
+                ReturnCode = basicInfo.ReturnCode
+            };
+
 
             result.OperationStatus = result.ReturnCode.ToString();
           
@@ -26,14 +29,16 @@ namespace APTAT.Core.Valkyrie
 
         public static ValkyrieAnalysisResult Create(CheckAnalysisResultResponse automaticResponse)
         {
-            ValkyrieAnalysisResult result = new ValkyrieAnalysisResult();
-            result.SHA1 = automaticResponse.SHA1;
-            result.FirstAnalysisDate = automaticResponse.FirstAnalysisDate;
-            result.LastAnalysisDate = automaticResponse.LastAnalysisDate;
-            result.Verdict = automaticResponse.Verdict;
-            result.IsWhiteListed = automaticResponse.IsWhiteListed;
-            result.MalwareProbability = automaticResponse.MalwareProbability;
-            result.ReturnCode = automaticResponse.ReturnCode;
+            ValkyrieAnalysisResult result = new ValkyrieAnalysisResult
+            {
+                SHA1 = automaticResponse.SHA1,
+                FirstAnalysisDate = automaticResponse.FirstAnalysisDate,
+                LastAnalysisDate = automaticResponse.LastAnalysisDate,
+                Verdict = automaticResponse.Verdict,
+                IsWhiteListed = automaticResponse.IsWhiteListed,
+                MalwareProbability = automaticResponse.MalwareProbability,
+                ReturnCode = automaticResponse.ReturnCode
+            };
             result.OperationStatus = result.ReturnCode.ToString();
             return result;
         }

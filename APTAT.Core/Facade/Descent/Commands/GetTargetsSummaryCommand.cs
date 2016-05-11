@@ -22,20 +22,18 @@ namespace APTAT.Core.Facade.Descent.Commands
 	{
         // TODO: Probably should be moved to some Initialization part
         private readonly IActiveDirectoryObserver _activeDirectoryObserver = new ActiveDirectoryObserver();
-        private readonly IDirectorySubSystem _directorySubSystem = new DirectorySubSystem();
 
 		private static readonly int MaxConcurrentTasks = Settings.Default.MaxEndpointsAvailabilityResolverConcurrentTasks;
 
 		// Must be in sync with the Esm.Shared.Modules.Computers.Wrappers.IpAddressValidator.MaxTargetsCount and MaxTargetsNetworkBits constants!
 		private const int MaxDeploymentTargets = 1024;
 
-		private INetworkObserver _networkObserver;
-		private TaskFactory _taskFactory;
+		private readonly INetworkObserver _networkObserver = new DirectorySubSystem();
+	    private readonly TaskFactory _taskFactory;
 
-		public GetTargetsSummaryCommand(GetTargetsSummaryRequest request): base(request)
+        public GetTargetsSummaryCommand(GetTargetsSummaryRequest request): base(request)
 		{
-            _networkObserver = _directorySubSystem as INetworkObserver;//SubSystemFactory.Current.GetSubSystem<IDirectorySubSystem>() as INetworkObserver;
-			_taskFactory = new TaskFactory(new LimitedConcurrencyLevelTaskScheduler(MaxConcurrentTasks));
+           _taskFactory = new TaskFactory(new LimitedConcurrencyLevelTaskScheduler(MaxConcurrentTasks));
 		}
 
 		public override void Execute()
@@ -281,6 +279,10 @@ namespace APTAT.Core.Facade.Descent.Commands
         {
             sideEffect(@object);
             return @object;
+        }
+        public static string ToStringOrEmpty<T>(this T source) where T : class
+        {
+            return source != null ? source.ToString() : String.Empty;
         }
     }
 }

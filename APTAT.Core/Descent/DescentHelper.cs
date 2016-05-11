@@ -601,7 +601,7 @@ namespace APTAT.Core.Descent
                     {
                         _serviceHelper.StopService();
                     }
-                    catch (Win32Exception exception)
+                    catch (Win32Exception)
                     {
                     }
 

@@ -2,20 +2,8 @@
 
 namespace APTAT.Core
 {
-    public class StatisticsCalculator
+    public static class StatisticsCalculator
     {
-        private readonly IEnumerable<ScanResult> _results;
-
-        public StatisticsCalculator(IEnumerable<ScanResult> results)
-        {
-            _results = results;
-        }
-
-        public FilesStatistics Calculate()
-        {
-            return Calculate(_results);
-        }
-
         public static FilesStatistics Calculate(IEnumerable<ScanResult> results)
         {
             int totalFilesCound = 0;
@@ -38,9 +26,6 @@ namespace APTAT.Core
                     
                 }
             }
-
-            
-           
             return new FilesStatistics {EmptyFilesCount = emptyFilesCount, MalwareFilesCount = malwareFilesCount, SafeFilesCount = safeFilesCount, TotalFilesCound = totalFilesCound, UnknownFilesCount = unknownFilesCount, SkippedFilesCount = skippedFilesCount};
         }
     }

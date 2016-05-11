@@ -569,8 +569,7 @@ namespace APTAT.Application.Services
 
         public void BeginValkyrieAnalysis(string systemLogin, string systemPassword, string apiKey)
         {
-            var networkCredential = new NetworkCredential(Properties.Settings.Default.ProxyLogin, Properties.Settings.Default.ProxyPassword);
-            _manager.StartValkyrieAnalysisAsync(systemLogin, systemPassword, networkCredential, apiKey);
+            _manager.StartValkyrieAnalysisAsync(systemLogin, systemPassword, apiKey);
         }
 
         public string GetValkyrieDetailsLink()

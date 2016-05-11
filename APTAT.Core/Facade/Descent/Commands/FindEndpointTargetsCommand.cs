@@ -39,16 +39,9 @@ namespace APTAT.Core.Facade.Descent.Commands
 			: base( request )
 		{
 			IPSatretegySelectionProvider = new IPSatretegySelectionProvider();
-			HostResolverProvider = new HostResolverProvider();
 		}
 
 		public IIPSatretegySelectionProvider IPSatretegySelectionProvider
-		{
-			get;
-			set;
-		}
-
-		public IHostResolverProvider HostResolverProvider
 		{
 			get;
 			set;

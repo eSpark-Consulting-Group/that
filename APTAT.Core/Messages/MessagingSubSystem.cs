@@ -3,42 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using APTAT.Core;
 using APTAT.Core.Properties;
-using APTAT.Core.Tasks;
 
 namespace APTAT.Core.Messages
 {
-    public interface IMessagingSubSystem
-    {
-        event EventHandler<ProductRegisteredEventArgs> ProductRegistered;
-    }
-
-    public interface IMessagesListener : IService
-    {
-        //void ProcessNotification(IProductNotification notification);
-        //void ProcessConnectionNotification(IConnectionNotification notification);
-        //void ProcessRequest(IProductRequest request);
-        //void ProcessRequestAnswerResult(Guid requestUid, int resultCode, string resultMessage);
-        //void ProcessRequestAnswerResult(Guid requestUid, RequestAnswerResult result);
-
-        void InjectServerSideNotification(IComputer computer, NotificationLevel level, FormattedText text);
-        void InjectServerSideNotification(IComputer computer, NotificationLevel level, FormattedText text, bool bExceptThisSession);
-
-        //// TODO: InjectServerSideRequest should return UID of created request (System.Guid) for delayed agent approve.
-        //void InjectServerSideRequest(IComputer computer, RequestLevel level, FormattedText text, IMessageServerInsideRequestCallback callback, MessageParam[] messageParameters, MessageType messageType);
-        //void InjectServerSideRequest(IComputer computer, RequestLevel level, FormattedText text, RequestAnswer[] answers, int defaultAnswerIndex, IMessageServerInsideRequestCallback callback, MessageParam[] messageParameters, MessageType messageType);
-
-        //void ProcessPolicyRequest(IComputer computer, IPolicyRequest request);
-        ////void ProcessPolicyComplianceRequest( IComputer computer, IPolicyRequest request );
-    }
-
-    public enum NotificationLevel
-    {
-        Information = 10,
-        Warning = 20,
-        Error = 30,
-        Critical = 40
-    }
-
     /// <summary>
     /// Contains translators of messages from different message sources. 
     /// </summary>

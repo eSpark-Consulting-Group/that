@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text;
-using APTAT.Core;
 
 namespace APTAT.Core
 {
@@ -14,10 +11,7 @@ namespace APTAT.Core
         string Name { get; set; }
         string DnsName { get; set; }
         Guid OriginalAgentIdentityOnConnect { get; set; }
-        Version GetManagedProductVersion(Guid productGuid);
         IPAddress IPAddress { get; set; }
-        bool IsLicensed { get; set; }
-        Version AgentVersion { get; set; }
         bool IsOnline { get; set; }
         string OrganizationUnit { get; set; }
         string LdapPath { get; set; }
@@ -29,19 +23,13 @@ namespace APTAT.Core
         public string Name { get; set; }
         public string DnsName { get; set; }
         public Guid OriginalAgentIdentityOnConnect { get; set; }
-        public Version GetManagedProductVersion(Guid productGuid)
-        {
-            throw new NotImplementedException("DirectoryComputer.GetManagedProductVersion");
-        }
         public IPAddress IPAddress { get; set; }
-        public bool IsLicensed { get; set; }
-        public Version AgentVersion { get; set; }
         public bool IsOnline { get; set; }
         public string OrganizationUnit { get; set; }
         public string LdapPath { get; set; }
     }
 
-    public interface IDirectorySubSystem : ISubSystem
+    public interface IDirectorySubSystem
     {
         IActiveDirectoryObserver ActiveDirectoryObserver { get; }
     }
@@ -49,21 +37,6 @@ namespace APTAT.Core
     public class DirectorySubSystem : IDirectorySubSystem, INetworkObserver
     {
         public IActiveDirectoryObserver ActiveDirectoryObserver { get; set; }
-
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Guid Identifier
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public void Init(ISubSystemCatalog catalog)
-        {
-            throw new NotImplementedException();
-        }
 
         #region INetworkObserver Members
 
@@ -118,47 +91,9 @@ namespace APTAT.Core
     public interface IService //marker
     {
     }
+    
 
-    public interface IPersistentGroup : IBusinessObject
-    {
-        string Name { get; set; }
-        string Description { get; set; }
-        List<IComputer> Computers { get; }
-        bool IsMarkedAsDeleted { get; }
-        bool IsDefault { get; }
-    }
-
-    public interface IDirectoryItem : IBusinessObject, IComparable
-    {
-        string Name { get; set; }
-        Guid Uid { get; }
-        string Sid { get; }
-        bool IsContainer { get; }
-        DateTime Created { get; }
-        DateTime Modified { get; }
-
-        bool HasChanges
-        {
-            get;
-        }
-        Guid? ParentUid
-        {
-            get;
-        }
-        long? ParentKey
-        {
-            get;
-        }
-        IDirectoryItem Parent
-        {
-            get;
-        }
-        bool Visible
-        {
-            get;
-        }
-    }
-
+    
     public interface INetworkObserver : IService
     {
         /// <summary>

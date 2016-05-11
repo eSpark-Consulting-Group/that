@@ -2,7 +2,6 @@
 using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.MessageContracts;
-using Esm.Server.Facade.Descent.Commands;
 
 namespace APTAT.Core.Facade.Descent.Commands
 {
@@ -15,11 +14,6 @@ namespace APTAT.Core.Facade.Descent.Commands
 	        _descentSubSystem = descentSubSystem;
 	    }
 
-		public IServiceCommand CreateCommand( object request )
-		{
-			throw new NotImplementedException( "Not implemented yet." );
-		}
-
 		public IServiceCommand<TResponse> CreateCommand<TResponse>( object request ) where TResponse : new()
 		{
 			if( request == null )
@@ -27,7 +21,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 				throw new ArgumentNullException( "request" );
 			}
 
-			IServiceCommand<TResponse> command = null;
+			IServiceCommand<TResponse> command;
 
 			if( request is FindTargetsRequest )
 			{
@@ -57,43 +51,12 @@ namespace APTAT.Core.Facade.Descent.Commands
             {
                 command = (IServiceCommand<TResponse>)new DeployAgentCommand((DeployAgentRequest)request, _descentSubSystem);
             }
-			else if( request is GetDeploymentResultsRequest )
-			{
-				command = ( IServiceCommand<TResponse> )new GetDeploymentResultsCommand( ( GetDeploymentResultsRequest )request );
-			}
-			else if( request is GetDescentErrorMessageRequest )
-			{
-				command = ( IServiceCommand<TResponse> )new GetDescentErrorMessageCommand( ( GetDescentErrorMessageRequest )request );
-			}
 			else
 				throw new ArgumentException( String.Format( "Unknown request instance type: {0}.", request.GetType() ), "request" );
 
 			return command;
 		}
 
-		public IServiceCommand<TResponse> CreateCommand<TResponse>() where TResponse : new()
-		{
-			IServiceCommand<TResponse> command = null;
-
-			#region BeginEnumerateWorkgroups
-
-			if( typeof( TResponse ) == typeof( EnumerateWorkgroupsResponse ) )
-			{
-				command = ( IServiceCommand<TResponse> )new EnumerateWorkgroupsCommand();
-			}
-
-			#endregion
-
-			#region Unknown Operation
-
-			else
-			{
-				throw new ArgumentException( String.Format( "Unknown response type: {0}.", typeof( TResponse ) ), "TResponse" );
-			}
-
-			#endregion
-
-			return command;
-		}
+		
 	}
 }

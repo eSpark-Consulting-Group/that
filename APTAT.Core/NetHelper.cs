@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 using APTAT.Core.Properties;
-using APTAT.Core;
 
 namespace APTAT.Core
 {
