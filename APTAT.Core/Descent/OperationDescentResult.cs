@@ -7,6 +7,7 @@ namespace APTAT.Core.Descent
 		public OperationDescentResult(  bool completed, bool succeeded,
 			FormattedText statusMessage, FormattedText shortStatusMessage,
 			string errorCode, string systemMessage, int systemCode, int progressPercentage )
+            : this()
         {
             Succeeded = succeeded;
             StatusMessage = statusMessage;
