@@ -436,6 +436,7 @@ namespace CodedUITestAT
         {
             string endpointName = DataHelper.GetEndpointName();
             string workgroupName = SysHelper.GetWorkgroupName();
+            string malwarePath = SysHelper.InfectForQuickScan(endpointName);
             
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -469,8 +470,7 @@ namespace CodedUITestAT
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
             
             // Verifies the scanning result at the Results screen
-            string malwareName = DataHelper.GetMalwareName();
-            string malwarePath = Path.Combine(DataHelper.GetInfectedFolder(), malwareName);
+            string malwareName = Settings.General.Default.ThreatName;
             ClickRow(ResultsScreen.Files, endpointName);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpointName));
             ClickRow(ResultsScreen.Files, malwarePath, MouseClick.DoubleLeft);

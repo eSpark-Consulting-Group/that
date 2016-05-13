@@ -50,18 +50,25 @@ namespace CodedUITestAT
             else return @"C:\";*/
         }
 
-        /// <summary> Gets the path to endpoint folder infected during the deployment process. </summary>
-        internal static string GetInfectedFolder()
+        /// <summary> Gets a root directory of server machine in the environment from a local environment variable. </summary>
+        /// <param name="IsAdminShare">Determines whether the root should be returned in a form of admin share.</param>        
+        internal static string GetServerRoot(bool isAdminShare = false)
         {
-            return Environment.GetEnvironmentVariable("_InfectedFolder", EnvironmentVariableTarget.Machine);
-            //return @"Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup";
+            string rootDirectory = Environment.GetEnvironmentVariable("_ServerRoot", EnvironmentVariableTarget.Machine);
+            if (isAdminShare) return rootDirectory + @"$";
+            else return rootDirectory + @":\";
+            //return @"C:\";
         }
 
-        /// <summary> Gets a malware name copied to an endpoint during the deployment process. </summary>
-        internal static string GetMalwareName()
+        /// <summary> Gets a path to a folder with malwares on server or endpoint from a local environment variable. </summary>
+        /// <param name="isServer">Indicate whether the path to a folder with malwares should be formed for the product server.</param>
+        internal static string GetMalwaresFolder(bool isServer = false)
         {
-            return Environment.GetEnvironmentVariable("_MalwareName", EnvironmentVariableTarget.Machine);
-            //return "91exestealth.exe";
+            string malFolder = Environment.GetEnvironmentVariable("_MalwaresFolder", EnvironmentVariableTarget.Machine);
+            if (isServer) return String.Format(@"{0}{1}", GetServerRoot(), malFolder);
+            else return String.Format(@"{0}{1}", GetEndpointRoot(), malFolder);
+
+            //return @"C:\Malfolder";
         }
 
         #endregion

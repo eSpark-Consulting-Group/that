@@ -53,5 +53,23 @@ namespace CodedUITestAT
         }
 
         #endregion
+
+        #region File- and directory-related methods
+
+        /// <summary> Infects a given endpoint for a Quick Scan. </summary>
+        /// <param name="endpointName">Set an endpoint name.</param>
+        /// <returns>Returns a local path to the added threat.</returns>
+        internal static string InfectForQuickScan(string endpointName)
+        {
+            string threatName = Settings.General.Default.ThreatName;
+            string fileToBeScanned = String.Format(@"Users\{0}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{1}", DataHelper.Username, threatName);
+            string source = String.Format(@"{0}\{1}", DataHelper.GetMalwaresFolder(true), threatName);
+            string destination = String.Format(@"\\{0}\{1}\{2}", endpointName, DataHelper.GetEndpointRoot(true), fileToBeScanned);
+            File.Copy(source, destination);
+
+            return String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned);
+        }
+
+        #endregion
     }
 }

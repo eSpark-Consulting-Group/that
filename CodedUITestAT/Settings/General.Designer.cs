@@ -67,5 +67,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["ValkyrieUri"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("91exestealth.exe")]
+        public string ThreatName {
+            get {
+                return ((string)(this["ThreatName"]));
+            }
+        }
     }
 }

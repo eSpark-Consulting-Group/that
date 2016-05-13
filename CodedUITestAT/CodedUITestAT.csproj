@@ -58,7 +58,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessObjects\FileType.cs" />
+    <Compile Include="BusinessObjects\Files\FileType.cs" />
+    <Compile Include="BusinessObjects\Files\IThreat.cs" />
     <Compile Include="BusinessObjects\MouseClick.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="CodedUITestMain.cs" />
