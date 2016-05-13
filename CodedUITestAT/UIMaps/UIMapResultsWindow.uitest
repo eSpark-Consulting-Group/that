@@ -74,23 +74,6 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree">
-      <ParameterName />
-      <PropertyName>Exists</PropertyName>
-      <ExpectedValue>True</ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>Boolean</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertValkyrieAnalysisResultsTree">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
-    </TestStepMarkerAction>
     <AssertAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage">
       <ParameterName />
       <PropertyName>Exists</PropertyName>
@@ -100,6 +83,23 @@
       <PropertyCondition>AreEqual</PropertyCondition>
     </AssertAction>
     <TestStepMarkerAction Comment="" MarkerInformation="AssertValkyrieAnalysisResultsTab">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree">
+      <ParameterName />
+      <PropertyName>Exists</PropertyName>
+      <ExpectedValue>True</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>Boolean</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertValkyrieAnalysisResultsTree">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -179,6 +179,9 @@
                   <WindowTitles>
                     <WindowTitle>Unknown File Hunter</WindowTitle>
                   </WindowTitles>
+                  <SearchConfigurations>
+                    <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+                  </SearchConfigurations>
                   <AndCondition>
                     <PropertyCondition Name="ControlType">Tree</PropertyCondition>
                     <PropertyCondition Name="AutomationId">ValkyrieResultsTree</PropertyCondition>
@@ -205,6 +208,9 @@
                   <WindowTitles>
                     <WindowTitle>Unknown File Hunter</WindowTitle>
                   </WindowTitles>
+                  <SearchConfigurations>
+                    <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+                  </SearchConfigurations>
                   <AndCondition>
                     <PropertyCondition Name="ControlType">Tree</PropertyCondition>
                     <PropertyCondition Name="AutomationId">UnknownFilesTree</PropertyCondition>
@@ -242,6 +248,9 @@
                       <WindowTitles>
                         <WindowTitle>Unknown File Hunter</WindowTitle>
                       </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+                      </SearchConfigurations>
                       <AndCondition>
                         <PropertyCondition Name="ControlType">TabPage</PropertyCondition>
                         <PropertyCondition Name="AutomationId">UnknownFilesTab</PropertyCondition>
@@ -254,6 +263,9 @@
                       <WindowTitles>
                         <WindowTitle>Unknown File Hunter</WindowTitle>
                       </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+                      </SearchConfigurations>
                       <AndCondition>
                         <PropertyCondition Name="ControlType">TabPage</PropertyCondition>
                         <PropertyCondition Name="AutomationId">ValkyrieAnalysisResultsTab</PropertyCondition>

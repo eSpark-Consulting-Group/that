@@ -56,19 +56,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         }
         
         /// <summary>
-        /// AssertValkyrieAnalysisResultsTree - Use 'AssertValkyrieAnalysisResultsTreeExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertValkyrieAnalysisResultsTree()
-        {
-            #region Variable Declarations
-            WpfTree uIRadTreeListViewTree = this.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree;
-            #endregion
-
-            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-            Assert.AreEqual(this.AssertValkyrieAnalysisResultsTreeExpectedValues.UIRadTreeListViewTreeExists, uIRadTreeListViewTree.Exists);
-        }
-        
-        /// <summary>
         /// AssertValkyrieAnalysisResultsTab - Use 'AssertValkyrieAnalysisResultsTabExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertValkyrieAnalysisResultsTab()
@@ -79,6 +66,19 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
 
             // Verify that the 'Exists' property of 'Valkyrie analysis results' tab equals 'True'
             Assert.AreEqual(this.AssertValkyrieAnalysisResultsTabExpectedValues.UIValkyrieanalysisresuTabPageExists, uIValkyrieanalysisresuTabPage.Exists);
+        }
+        
+        /// <summary>
+        /// AssertValkyrieAnalysisResultsTree - Use 'AssertValkyrieAnalysisResultsTreeExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertValkyrieAnalysisResultsTree()
+        {
+            #region Variable Declarations
+            WpfTree uIRadTreeListViewTree = this.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree;
+            #endregion
+
+            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+            Assert.AreEqual(this.AssertValkyrieAnalysisResultsTreeExpectedValues.UIRadTreeListViewTreeExists, uIRadTreeListViewTree.Exists);
         }
         
         /// <summary>
@@ -132,18 +132,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             }
         }
         
-        public virtual AssertValkyrieAnalysisResultsTreeExpectedValues AssertValkyrieAnalysisResultsTreeExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertValkyrieAnalysisResultsTreeExpectedValues == null))
-                {
-                    this.mAssertValkyrieAnalysisResultsTreeExpectedValues = new AssertValkyrieAnalysisResultsTreeExpectedValues();
-                }
-                return this.mAssertValkyrieAnalysisResultsTreeExpectedValues;
-            }
-        }
-        
         public virtual AssertValkyrieAnalysisResultsTabExpectedValues AssertValkyrieAnalysisResultsTabExpectedValues
         {
             get
@@ -153,6 +141,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                     this.mAssertValkyrieAnalysisResultsTabExpectedValues = new AssertValkyrieAnalysisResultsTabExpectedValues();
                 }
                 return this.mAssertValkyrieAnalysisResultsTabExpectedValues;
+            }
+        }
+        
+        public virtual AssertValkyrieAnalysisResultsTreeExpectedValues AssertValkyrieAnalysisResultsTreeExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertValkyrieAnalysisResultsTreeExpectedValues == null))
+                {
+                    this.mAssertValkyrieAnalysisResultsTreeExpectedValues = new AssertValkyrieAnalysisResultsTreeExpectedValues();
+                }
+                return this.mAssertValkyrieAnalysisResultsTreeExpectedValues;
             }
         }
         
@@ -174,9 +174,9 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         private AssertUnknownFilesTreeExpectedValues mAssertUnknownFilesTreeExpectedValues;
         
-        private AssertValkyrieAnalysisResultsTreeExpectedValues mAssertValkyrieAnalysisResultsTreeExpectedValues;
-        
         private AssertValkyrieAnalysisResultsTabExpectedValues mAssertValkyrieAnalysisResultsTabExpectedValues;
+        
+        private AssertValkyrieAnalysisResultsTreeExpectedValues mAssertValkyrieAnalysisResultsTreeExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
@@ -213,21 +213,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertValkyrieAnalysisResultsTree'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertValkyrieAnalysisResultsTreeExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-        /// </summary>
-        public bool UIRadTreeListViewTreeExists = true;
-        #endregion
-    }
-    
-    /// <summary>
     /// Parameters to be passed into 'AssertValkyrieAnalysisResultsTab'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
@@ -239,6 +224,21 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         /// Verify that the 'Exists' property of 'Valkyrie analysis results' tab equals 'True'
         /// </summary>
         public bool UIValkyrieanalysisresuTabPageExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertValkyrieAnalysisResultsTree'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertValkyrieAnalysisResultsTreeExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+        /// </summary>
+        public bool UIRadTreeListViewTreeExists = true;
         #endregion
     }
     
@@ -326,6 +326,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                     this.mUIRadTreeListViewTree = new WpfTree(this);
                     #region Search Criteria
                     this.mUIRadTreeListViewTree.SearchProperties[WpfTree.PropertyNames.AutomationId] = "ValkyrieResultsTree";
+                    this.mUIRadTreeListViewTree.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
                     this.mUIRadTreeListViewTree.WindowTitles.Add("Unknown File Hunter");
                     #endregion
                 }
@@ -363,6 +364,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                     this.mUIRadTreeListViewTree = new WpfTree(this);
                     #region Search Criteria
                     this.mUIRadTreeListViewTree.SearchProperties[WpfTree.PropertyNames.AutomationId] = "UnknownFilesTree";
+                    this.mUIRadTreeListViewTree.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
                     this.mUIRadTreeListViewTree.WindowTitles.Add("Unknown File Hunter");
                     #endregion
                 }
@@ -432,6 +434,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                     this.mUIUnknownfilesTabPage = new WpfTabPage(this);
                     #region Search Criteria
                     this.mUIUnknownfilesTabPage.SearchProperties[WpfTabPage.PropertyNames.AutomationId] = "UnknownFilesTab";
+                    this.mUIUnknownfilesTabPage.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
                     this.mUIUnknownfilesTabPage.WindowTitles.Add("Unknown File Hunter");
                     #endregion
                 }
@@ -448,6 +451,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                     this.mUIValkyrieanalysisresuTabPage = new WpfTabPage(this);
                     #region Search Criteria
                     this.mUIValkyrieanalysisresuTabPage.SearchProperties[WpfTabPage.PropertyNames.AutomationId] = "ValkyrieAnalysisResultsTab";
+                    this.mUIValkyrieanalysisresuTabPage.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
                     this.mUIValkyrieanalysisresuTabPage.WindowTitles.Add("Unknown File Hunter");
                     #endregion
                 }
