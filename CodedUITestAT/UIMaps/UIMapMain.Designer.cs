@@ -25,7 +25,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     using MouseButtons = System.Windows.Forms.MouseButtons;
     
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public partial class UIMapMain
     {
         
@@ -94,6 +94,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Mouse.Click(uIAnalyseWithValkyrieBButton, new Point(74, 29));
         }
         
+        /// <summary>
+        /// ClickStartScanningNowButton
+        /// </summary>
+        public void ClickStartScanningNowButton()
+        {
+            #region Variable Declarations
+            WpfButton uIStartScanningNowButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
+            #endregion
+
+            // Click 'Start Scanning Now!' button
+            Mouse.Click(uIStartScanningNowButton, new Point(76, 12));
+        }
+        
         #region Properties
         public virtual CheckIAcceptTermsOfThisAgreementCheckBoxParams CheckIAcceptTermsOfThisAgreementCheckBoxParams
         {
@@ -144,7 +157,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     /// <summary>
     /// Parameters to be passed into 'CheckIAcceptTermsOfThisAgreementCheckBox'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class CheckIAcceptTermsOfThisAgreementCheckBoxParams
     {
         
@@ -156,7 +169,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UICOMODOUnknownFileHunWindow : WpfWindow
     {
         
@@ -210,7 +223,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
         
@@ -242,7 +255,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIMainViewxamlPane : WpfPane
     {
         
@@ -280,16 +293,30 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIPleaseclickheretoseeText;
             }
         }
+        
+        public UISendingFilesforAnalyProgressBar UISendingFilesforAnalyProgressBar
+        {
+            get
+            {
+                if ((this.mUISendingFilesforAnalyProgressBar == null))
+                {
+                    this.mUISendingFilesforAnalyProgressBar = new UISendingFilesforAnalyProgressBar(this);
+                }
+                return this.mUISendingFilesforAnalyProgressBar;
+            }
+        }
         #endregion
         
         #region Fields
         private UIRadToolBarToolBar mUIRadToolBarToolBar;
         
         private UIPleaseclickheretoseeText mUIPleaseclickheretoseeText;
+        
+        private UISendingFilesforAnalyProgressBar mUISendingFilesforAnalyProgressBar;
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIRadToolBarToolBar : WpfToolBar
     {
         
@@ -343,7 +370,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIPleaseclickheretoseeText : WpfText
     {
         
@@ -376,6 +403,42 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         #region Fields
         private WpfHyperlink mUIPleaseclickheretoseeHyperlink;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UISendingFilesforAnalyProgressBar : WpfProgressBar
+    {
+        
+        public UISendingFilesforAnalyProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Sending Files for Analysis...";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIStartScanningNowButton
+        {
+            get
+            {
+                if ((this.mUIStartScanningNowButton == null))
+                {
+                    this.mUIStartScanningNowButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIStartScanningNowButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "StartScanningNowButton";
+                    this.mUIStartScanningNowButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIStartScanningNowButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIStartScanningNowButton;
         #endregion
     }
 }

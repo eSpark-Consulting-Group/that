@@ -25,7 +25,7 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
     using MouseButtons = System.Windows.Forms.MouseButtons;
     
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public partial class UIMapStartScanningWizard
     {
         
@@ -55,6 +55,19 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
             Mouse.Click(uIQuickScanButton, new Point(56, 15));
         }
         
+        /// <summary>
+        /// ClickWorkgroupButton
+        /// </summary>
+        public void ClickWorkgroupButton()
+        {
+            #region Variable Declarations
+            WpfButton uIScancomputersbyselecButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyselecButton;
+            #endregion
+
+            // Click 'Scan computers by selecting them from workground' button
+            Mouse.Click(uIScancomputersbyselecButton, new Point(78, 64));
+        }
+        
         #region Properties
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
@@ -74,7 +87,7 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
         
@@ -106,7 +119,7 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIScanningWizardWindowCustom : WpfCustom
     {
         
@@ -137,17 +150,13 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
             }
         }
         
-        public WpfProgressBar UILoadingProgressBar
+        public UILoadingProgressBar UILoadingProgressBar
         {
             get
             {
                 if ((this.mUILoadingProgressBar == null))
                 {
-                    this.mUILoadingProgressBar = new WpfProgressBar(this);
-                    #region Search Criteria
-                    this.mUILoadingProgressBar.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Loading...";
-                    this.mUILoadingProgressBar.WindowTitles.Add("Unknown File Hunter");
-                    #endregion
+                    this.mUILoadingProgressBar = new UILoadingProgressBar(this);
                 }
                 return this.mUILoadingProgressBar;
             }
@@ -173,9 +182,45 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         #region Fields
         private WpfButton mUIScancomputersbyspeciButton;
         
-        private WpfProgressBar mUILoadingProgressBar;
+        private UILoadingProgressBar mUILoadingProgressBar;
         
         private WpfButton mUIQuickScanButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UILoadingProgressBar : WpfProgressBar
+    {
+        
+        public UILoadingProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Loading...";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIScancomputersbyselecButton
+        {
+            get
+            {
+                if ((this.mUIScancomputersbyselecButton == null))
+                {
+                    this.mUIScancomputersbyselecButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScancomputersbyselecButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "WorkgroupButton";
+                    this.mUIScancomputersbyselecButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIScancomputersbyselecButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIScancomputersbyselecButton;
         #endregion
     }
 }

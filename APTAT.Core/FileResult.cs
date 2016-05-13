@@ -125,8 +125,7 @@ namespace APTAT.Core
         public string FileSizeFormatted
         {
             get { return SizeToString(Size); }
-        }
-      
+        }      
 
         private static string SizeToString(long len)
         {
@@ -152,5 +151,10 @@ namespace APTAT.Core
         public ValkyrieAnalysisResult ValkyrieAnalysisResult { get; set; }
 
         public List<ComputerInformation> Computers { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     using MouseButtons = System.Windows.Forms.MouseButtons;
     
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public partial class UIMapResultsWindow
     {
         
@@ -79,6 +79,32 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
 
             // Verify that the 'Exists' property of 'Valkyrie analysis results' tab equals 'True'
             Assert.AreEqual(this.AssertValkyrieAnalysisResultsTabExpectedValues.UIValkyrieanalysisresuTabPageExists, uIValkyrieanalysisresuTabPage.Exists);
+        }
+        
+        /// <summary>
+        /// GoToUnknownFilesTab
+        /// </summary>
+        public void GoToUnknownFilesTab()
+        {
+            #region Variable Declarations
+            WpfTabPage uIUnknownfilesTabPage = this.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage;
+            #endregion
+
+            // Click 'Unknown files' tab
+            Mouse.Click(uIUnknownfilesTabPage, new Point(56, 6));
+        }
+        
+        /// <summary>
+        /// GoToValkyrieAnalysisResultsTab
+        /// </summary>
+        public void GoToValkyrieAnalysisResultsTab()
+        {
+            #region Variable Declarations
+            WpfTabPage uIValkyrieanalysisresuTabPage = this.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
+            #endregion
+
+            // Click 'Valkyrie analysis results' tab
+            Mouse.Click(uIValkyrieanalysisresuTabPage, new Point(13, 4));
         }
         
         #region Properties
@@ -159,7 +185,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     /// <summary>
     /// Parameters to be passed into 'AssertUnknownFilesTab'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class AssertUnknownFilesTabExpectedValues
     {
         
@@ -174,7 +200,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     /// <summary>
     /// Parameters to be passed into 'AssertUnknownFilesTree'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class AssertUnknownFilesTreeExpectedValues
     {
         
@@ -189,7 +215,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     /// <summary>
     /// Parameters to be passed into 'AssertValkyrieAnalysisResultsTree'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class AssertValkyrieAnalysisResultsTreeExpectedValues
     {
         
@@ -204,7 +230,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     /// <summary>
     /// Parameters to be passed into 'AssertValkyrieAnalysisResultsTab'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class AssertValkyrieAnalysisResultsTabExpectedValues
     {
         
@@ -216,7 +242,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
         
@@ -276,7 +302,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIValkyrieResultsScreeCustom : WpfCustom
     {
         
@@ -313,7 +339,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIScanResultsScreenCustom : WpfCustom
     {
         
@@ -350,7 +376,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIResultsScreenCustom : WpfCustom
     {
         
@@ -383,7 +409,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIResultsTabControlTabList : WpfTabList
     {
         

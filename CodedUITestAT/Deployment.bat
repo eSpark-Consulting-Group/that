@@ -24,6 +24,10 @@ set DataSource=AutotestsData\AT
 
 set MalwaresFolder=Malfolder
 
+set InfectedFolder="Users\%EndpointLogin%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
+
+set MalwareName=91exestealth.exe
+
 
 
 REM Stores the local machine variables to be used in autotests
@@ -46,6 +50,10 @@ setx _EndpointRoot %EndpointRoot% /m
 
 setx _ProductExeName %ProductExeName% /m
 
+setx _InfectedFolder %InfectedFolder% /m
+
+setx _MalwareName %MalwareName% /m
+
 
 
 REM Copies files necessary for testing to the server VM
@@ -62,7 +70,7 @@ net use s: "\\esmbuildstorage\%DataSource%"
 
 xcopy "s:\%MalwaresFolder%" "x:\%MalwaresFolder%\" /e /y
 
-xcopy "s:\%MalwaresFolder%\91exestealth.exe" "x:\Users\%EndpointLogin%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup" /e /y
+xcopy "s:\%MalwaresFolder%\%MalwareName%" "x:\%InfectedFolder%" /e /y
 
 net use x: /delete
 

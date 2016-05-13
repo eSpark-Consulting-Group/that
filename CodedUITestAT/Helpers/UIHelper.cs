@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Drawing;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
@@ -50,11 +51,20 @@ namespace CodedUITestAT
             return control.TryGetClickablePoint(out point);
         }
 
-        /// <summary> Gets rows collection from a given tree control. </summary>
+        /// <summary> Gets rows from a given tree control. </summary>
         /// <param name="tree">Set a tree control.</param>
-        internal static UITestControlCollection GetTreeRows(this WpfTree tree)
+        internal static WpfRow[] GetTreeRows(this WpfTree tree)
         {
-            return tree.GetChildren()[2].GetChildren();
+           var rowsCollection = tree.GetChildren()[2].GetChildren();
+           WpfRow[] rows = rowsCollection.OfType<WpfRow>().ToArray();
+           return rows;
+        }
+
+        /// <summary> Gets a given row name. In accordance with Application.Models.ThreatInfoItem or Core.FileResults. </summary>
+        /// <param name="row">Set a row control.</param>
+        internal static string GetRowName(this WpfRow row)
+        {
+            return row.GetChildren()[1].Name;
         }
     }
 }

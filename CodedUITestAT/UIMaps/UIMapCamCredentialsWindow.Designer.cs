@@ -25,7 +25,7 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
     using MouseButtons = System.Windows.Forms.MouseButtons;
     
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public partial class UIMapCamCredentialsWindow
     {
         
@@ -68,6 +68,19 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
             Mouse.Click(uIOKButton, new Point(53, 22));
         }
         
+        /// <summary>
+        /// InputCamKey - Use 'InputCamKeyParams' to pass parameters into this method.
+        /// </summary>
+        public void InputCamKey()
+        {
+            #region Variable Declarations
+            WpfEdit uICamLicenseKeyWatermaEdit = this.UIUnknownFileHunterWindow.UICamLicenseKeyWatermaEdit;
+            #endregion
+
+            // Type 'key' in 'CamLicenseKeyWatermarkTextBox' text box
+            Keyboard.SendKeys(uICamLicenseKeyWatermaEdit, this.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys, ModifierKeys.None);
+        }
+        
         #region Properties
         public virtual InputLoginParams InputLoginParams
         {
@@ -93,6 +106,18 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
             }
         }
         
+        public virtual InputCamKeyParams InputCamKeyParams
+        {
+            get
+            {
+                if ((this.mInputCamKeyParams == null))
+                {
+                    this.mInputCamKeyParams = new InputCamKeyParams();
+                }
+                return this.mInputCamKeyParams;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -111,6 +136,8 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
         
         private InputPasswordParams mInputPasswordParams;
         
+        private InputCamKeyParams mInputCamKeyParams;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
     }
@@ -118,7 +145,7 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
     /// <summary>
     /// Parameters to be passed into 'InputLogin'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class InputLoginParams
     {
         
@@ -133,7 +160,7 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
     /// <summary>
     /// Parameters to be passed into 'InputPassword'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class InputPasswordParams
     {
         
@@ -145,7 +172,22 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    /// <summary>
+    /// Parameters to be passed into 'InputCamKey'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class InputCamKeyParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Type 'key' in 'CamLicenseKeyWatermarkTextBox' text box
+        /// </summary>
+        public string UICamLicenseKeyWatermaEditSendKeys = "key";
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
         
@@ -206,6 +248,22 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
                 return this.mUIOKButton;
             }
         }
+        
+        public WpfEdit UICamLicenseKeyWatermaEdit
+        {
+            get
+            {
+                if ((this.mUICamLicenseKeyWatermaEdit == null))
+                {
+                    this.mUICamLicenseKeyWatermaEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUICamLicenseKeyWatermaEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "CamLicenseKeyWatermarkTextBox";
+                    this.mUICamLicenseKeyWatermaEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICamLicenseKeyWatermaEdit;
+            }
+        }
         #endregion
         
         #region Fields
@@ -214,6 +272,8 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
         private WpfEdit mUIPasswordBoxEdit;
         
         private WpfButton mUIOKButton;
+        
+        private WpfEdit mUICamLicenseKeyWatermaEdit;
         #endregion
     }
 }

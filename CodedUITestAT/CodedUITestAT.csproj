@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
@@ -58,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessObjects\FileType.cs" />
+    <Compile Include="BusinessObjects\MouseClick.cs" />
+    <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="CodedUITestMain.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\SysHelper.cs" />
@@ -84,11 +87,23 @@
     <Compile Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.Designer.cs">
       <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
     </Compile>
+    <Compile Include="UIMaps\StartScanningWizard\UIMapWorkgroup.cs">
+      <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanningWizard\UIMapWorkgroup.Designer.cs">
+      <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
+    </Compile>
     <Compile Include="UIMaps\UIMapCamCredentialsWindow.cs">
       <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapCamCredentialsWindow.Designer.cs">
       <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapDetailsWindow.cs">
+      <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapDetailsWindow.Designer.cs">
+      <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapMain.cs">
       <DependentUpon>UIMapMain.uitest</DependentUpon>
@@ -133,7 +148,9 @@
       <LastGenOutput>WaitingTime.Designer.cs</LastGenOutput>
     </None>
     <None Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.uitest" />
+    <None Include="UIMaps\StartScanningWizard\UIMapWorkgroup.uitest" />
     <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
+    <None Include="UIMaps\UIMapDetailsWindow.uitest" />
     <None Include="UIMaps\UIMapMain.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.uitest" />
     <None Include="UIMaps\UIMapResultsWindow.uitest" />
