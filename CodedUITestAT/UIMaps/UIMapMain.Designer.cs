@@ -107,6 +107,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Mouse.Click(uIStartScanningNowButton, new Point(76, 12));
         }
         
+        /// <summary>
+        /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMainWindowTitleTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIUnknownFileHunterText = this.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
+            Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
+        }
+        
         #region Properties
         public virtual CheckIAcceptTermsOfThisAgreementCheckBoxParams CheckIAcceptTermsOfThisAgreementCheckBoxParams
         {
@@ -117,6 +130,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                     this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams = new CheckIAcceptTermsOfThisAgreementCheckBoxParams();
                 }
                 return this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams;
+            }
+        }
+        
+        public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMainWindowTitleTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertMainWindowTitleTextBlockTextExpectedValues = new AssertMainWindowTitleTextBlockTextExpectedValues();
+                }
+                return this.mAssertMainWindowTitleTextBlockTextExpectedValues;
             }
         }
         
@@ -148,6 +173,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #region Fields
         private CheckIAcceptTermsOfThisAgreementCheckBoxParams mCheckIAcceptTermsOfThisAgreementCheckBoxParams;
         
+        private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
+        
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
@@ -166,6 +193,21 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Select 'I accept the terms of this agreement' check box
         /// </summary>
         public bool UIIacceptthetermsofthiCheckBoxChecked = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMainWindowTitleTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertMainWindowTitleTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
+        /// </summary>
+        public string UIUnknownFileHunterTextDisplayText = "Unknown File Hunter";
         #endregion
     }
     
@@ -248,10 +290,28 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIMainViewxamlPane;
             }
         }
+        
+        public WpfText UIUnknownFileHunterText
+        {
+            get
+            {
+                if ((this.mUIUnknownFileHunterText == null))
+                {
+                    this.mUIUnknownFileHunterText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIUnknownFileHunterText.SearchProperties[WpfText.PropertyNames.AutomationId] = "MainWindowTitleTextBlock";
+                    this.mUIUnknownFileHunterText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUnknownFileHunterText;
+            }
+        }
         #endregion
         
         #region Fields
         private UIMainViewxamlPane mUIMainViewxamlPane;
+        
+        private WpfText mUIUnknownFileHunterText;
         #endregion
     }
     

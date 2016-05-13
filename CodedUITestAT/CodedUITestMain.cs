@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
@@ -190,6 +191,11 @@ namespace CodedUITestAT
             return UIMapMain.UICOMODOUnknownFileHunWindow.UIIacceptthetermsofthiCheckBox;
         }
 
+        private WpfText MainWindowTitleTextBlock()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
+        }
+
         #endregion
 
         #region Start Scanning wizard
@@ -356,6 +362,26 @@ namespace CodedUITestAT
             }
         }
 
+        /// <summary> Waits until the Valkyrie results are received. </summary>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void WaitForValkyrieResults(TestContext testContext)
+        {
+            int waitTime = Settings.WaitingTime.Default.ValkyrieUploadWaitTime;
+            UIHelper.WaitForControl(ValkyrieResultsTree(), waitTime);
+
+            var timer = Stopwatch.StartNew();
+            for (; ; )
+            {
+                Playback.Wait(2000);
+                if (!MainWindowTitleTextBlock().DisplayText.Contains("%")) break;
+                if ((int)timer.ElapsedMilliseconds > waitTime)
+                    throw new Exception(String.Format("All Valkyrie results are not received after {0} seconds!", waitTime / 1000));
+            }
+            timer.Stop();
+
+            testContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
+        }
+
         #endregion
 
         #region Test methods
@@ -410,8 +436,7 @@ namespace CodedUITestAT
                 UIMapCamCredentialsWindow.ClickOkButton();
 
                 // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
-                UIHelper.WaitForControl(ValkyrieResultsTree(), Settings.WaitingTime.Default.ValkyrieUploadWaitTime);
-                TestContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
+                WaitForValkyrieResults(TestContext);
                 AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
 
                 // Clicks Valkyrie link and checks the respective browser window URI
@@ -436,8 +461,8 @@ namespace CodedUITestAT
         {
             string endpointName = DataHelper.GetEndpointName();
             string workgroupName = SysHelper.GetWorkgroupName();
-            string malwarePath = SysHelper.InfectForQuickScan(endpointName);
-            
+            string malwarePath = SysHelper.InfectForQuickScan(endpointName);            
+                        
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
 
@@ -465,18 +490,16 @@ namespace CodedUITestAT
             UIMapCamCredentialsWindow.ClickOkButton();
             
             // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
-            UIHelper.WaitForControl(ValkyrieResultsTree(), Settings.WaitingTime.Default.ValkyrieUploadWaitTime);
-            TestContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
+            WaitForValkyrieResults(TestContext);
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
             
             // Verifies the scanning result at the Results screen
-            string malwareName = Settings.General.Default.ThreatName;
             ClickRow(ResultsScreen.Files, endpointName);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpointName));
             ClickRow(ResultsScreen.Files, malwarePath, MouseClick.DoubleLeft);
-            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malwareName));
+            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malwarePath));
             UIHelper.WaitForControl(CloseDetailsButton());
-            UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malwareName;
+            UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
         }
