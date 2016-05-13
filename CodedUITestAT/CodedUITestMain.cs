@@ -361,7 +361,7 @@ namespace CodedUITestAT
         #region Test methods
 
         [TestMethod]
-        public void QuickScanTest()
+        public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
             string endpointName = DataHelper.GetEndpointName();
 
@@ -432,7 +432,7 @@ namespace CodedUITestAT
         }
 
         [TestMethod]
-        public void WorkgroupQuickScanTest()
+        public void WorkgroupQuickScanAndThreatDetailsCheckTest()
         {
             string endpointName = DataHelper.GetEndpointName();
             string workgroupName = SysHelper.GetWorkgroupName();
