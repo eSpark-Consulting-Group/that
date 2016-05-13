@@ -65,7 +65,7 @@ namespace CodedUITestAT
             string fileToBeScanned = String.Format(@"Users\{0}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{1}", DataHelper.Username, threatName);
             string source = String.Format(@"{0}\{1}", DataHelper.GetMalwaresFolder(true), threatName);
             string destination = String.Format(@"\\{0}\{1}\{2}", endpointName, DataHelper.GetEndpointRoot(true), fileToBeScanned);
-            File.Copy(source, destination);
+            File.Copy(source, destination, true);
 
             return String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned);
         }
