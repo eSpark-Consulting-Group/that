@@ -3,9 +3,8 @@ using APTAT.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
+using APTAT.Core.Descent;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
@@ -16,7 +15,7 @@ namespace APTAT.Application.Models
         public const String SelectWorkgroup = "SelectWorkgroup";
         public const String SelectTargets = "SelectTargets";
 
-        private readonly IAptService _service = AptService.Instance;
+        private readonly ITargetsDiscoveryService _service = TargetsDiscoveryService.Instance;
         private readonly IStorageService _storage = new StorageService();
 
         private String _workgroup;

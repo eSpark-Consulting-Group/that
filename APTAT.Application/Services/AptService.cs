@@ -1,56 +1,20 @@
-﻿using System.Diagnostics;
-using APTAT.Application.Models;
+﻿using APTAT.Application.Models;
 using APTAT.Core;
 using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using APTAT.Core.Reports;
-using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
-using APTAT.Valkyrie.Client;
 using System.ComponentModel;
-using System.Globalization;
 using System.Net;
-using System.Windows;
+using APTAT.Core.Apt;
 using APTAT.Core.Valkyrie;
-using Valkyrie.WebApiProvider.Contracts;
+using APTAT.Core.Reports;
 
 namespace APTAT.Application.Services
 {
-    public class GetDirectoryItemsContext
-    {
-        public DirectoryItem Parent { get; set; }
-
-        public Object UserState { get; set; }
-    }
-
-    public class GetDirectoryRootRequest
-    {
-        public String Name { get; set; }
-
-        public Object UserState { get; set; }
-    }
-
-    public class GetDomainTargetsContext
-    {
-        public Action Action { get; set; }
-
-        public Object UserState { get; set; }
-
-        public Boolean FromRoot { get; set; }
-
-        public DirectoryItem Parent { get; set; }
-    }
-
+    
     public class AptService : IAptService, IChangeTrackingListener
     {
-        public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
-
-        public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
-
-        public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
-
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
 
         public event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
@@ -63,12 +27,10 @@ namespace APTAT.Application.Services
 
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
 
-        public event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
-
-        public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
-
         public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+        public event EventHandler ValkyrieAnalyzeStarted;
+
 
 
         private readonly AptAtManager _manager;
@@ -99,27 +61,48 @@ namespace APTAT.Application.Services
         private AptService()
         {
             _manager = new AptAtManager(this);
-            _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
-            _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
 
+        }
+        void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
+        {
+            Action action = () =>
+            {
+                var handler = ValkyrieAnalyzeStarted;
+                if (handler != null)
+                {
+                    handler(this, e);
+                }
+            };
+            DispatcherHelper.Current.BeginInvoke(action);
         }
 
         void OnValkyrieAnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            var handler = ValkyrieAnalyzeProgressChanged;
-            if (handler != null)
+            Action action = () =>
             {
-                handler(this, e);
-            }
+                var handler = ValkyrieAnalyzeProgressChanged;
+                if (handler != null)
+                {
+                    handler(this, e);
+                }
+            };
+            DispatcherHelper.Current.BeginInvoke(action);
         }
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
-            var handler = ValkyrieAnalyzeCompleted;
-            if (handler != null)
+            _manager.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
+            _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
+            _manager.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
+            Action action = () =>
             {
-                handler(this, e);
-            }
+                var handler = ValkyrieAnalyzeCompleted;
+                if (handler != null)
+                {
+                    handler(this, e);
+                }
+            };
+            DispatcherHelper.Current.BeginInvoke(action);
         }
 
 
@@ -192,6 +175,13 @@ namespace APTAT.Application.Services
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
         {
+            var scanner = sender as IAptScanner;
+            if (scanner != null)
+            {
+                scanner.ScanStarted -= OnScanStarted;
+                scanner.ScanCompleted -= OnScanCompleted;
+                scanner.ScanInProgress -= OnScanInProgress;
+            }
             //Logger.WriteLog("Scan Completed");
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
@@ -213,171 +203,9 @@ namespace APTAT.Application.Services
                     ScanCompleted(this, args);
                 }
             };
-
-
             DispatcherHelper.Current.BeginInvoke(action);
 
         }
-
-        public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState)
-        {
-            DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
-            IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets, admin, password);
-
-            resolver.TargetsResolved += OnTargetsResolved;
-            resolver.BeginResolve(userState);
-        }
-
-        private void OnTargetsResolved(Object sender, TargetsResolverEventArgs e)
-        {
-
-            //File.AppendAllText("OnTargetsResolved.txt", String.Format("Error {0}; Targets {1}", e.Error, e.Targets != null ? e.Targets.Length.ToString() : "e.Targets == null"));
-
-            if (e.Error == null)
-            {
-                List<ThreatInfoItem> result = new List<ThreatInfoItem>(e.Targets.Length);
-                foreach (DeploymentTarget deploymentTarget in e.Targets)
-                {
-                    ThreatInfoItem infoItem = new ThreatInfoItem
-                    {
-                        Target = deploymentTarget,
-                        Name = deploymentTarget.Name,
-                        IpAddress = deploymentTarget.IPAddress,
-                        IsRootItem = true,
-                        IsOnline = deploymentTarget.Online,
-                        ComputerGuid = deploymentTarget.TargetUid
-                    };
-
-                    result.Add(infoItem);
-                }
-
-                DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(result.ToArray(), e.State);
-                Action action = () =>
-                {
-                    if (DirectoryItemsResolved != null)
-                    {
-                        DirectoryItemsResolved(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-            else
-            {
-                DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(null, e.State, e.Error);
-                Action action = () =>
-                {
-                    if (DirectoryItemsResolved != null)
-                    {
-                        DirectoryItemsResolved(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-        }
-
-        public void GetDirectoryRoot(String domainController, String admin, String password, Object userState)
-        {
-            IDomainDiscoverer d = _manager.GetDomainDiscoverer(null, true, domainController, admin, password);
-            d.Discovered += OnRootDiscovered;
-            d.BeginDiscover(userState);
-        }
-
-        private void OnRootDiscovered(Object sender, TargetsDiscovererEventArgs e)
-        {
-            if (e.Error == null)
-            {
-                DomainTarget domainRoot = (DomainTarget)e.Targets[0];
-                DirectoryItem root = new DirectoryItem
-                {
-                    DnsName = domainRoot.DnsName,
-                    Name = domainRoot.Name,
-                    LdapPath = domainRoot.LdapPath,
-                    TargetUid = domainRoot.TargetUid,
-                    Type = FromDomainEntryType(domainRoot.EntryType)
-                };
-                DirectoryItem[] result = new[] { root };
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, result, e.State);
-                Action action = () =>
-                {
-                    if (GetDirectoryRootCompleted != null)
-                    {
-                        GetDirectoryRootCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-            else
-            {
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null, e.State, e.Error);
-                Action action = () =>
-                {
-                    if (GetDirectoryRootCompleted != null)
-                    {
-                        GetDirectoryRootCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-        }
-
-        public void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState)
-        {
-            GetDirectoryItemsContext context = new GetDirectoryItemsContext
-            {
-                Parent = parent,
-                UserState = userState
-            };
-            IDomainDiscoverer d = _manager.GetDomainDiscoverer(parent.LdapPath, false, domainController, admin, password);
-            d.Discovered += OnDiscovered;
-            d.BeginDiscover(context);
-        }
-
-        private void OnDiscovered(Object sender, TargetsDiscovererEventArgs e)
-        {
-            GetDirectoryItemsContext context = (GetDirectoryItemsContext)e.State;
-            if (e.Error == null)
-            {
-                DeploymentTarget[] targets = e.Targets;
-                DirectoryItem[] result = new DirectoryItem[targets.Length];
-                for (Int32 i = 0; i < targets.Length; ++i)
-                {
-                    DomainTarget target = (DomainTarget)targets[i];
-
-                    result[i] = new DirectoryItem
-                    {
-                        DnsName = target.DnsName,
-                        Name = target.Name,
-                        LdapPath = target.LdapPath,
-                        TargetUid = target.TargetUid,
-                        Type = FromDomainEntryType(target.EntryType)
-                    };
-                }
-
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, result, context.UserState);
-                Action action = () =>
-                {
-                    if (GetDirectoryItemsCompleted != null)
-                    {
-                        GetDirectoryItemsCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-
-            }
-            else
-            {
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, null, context.UserState, e.Error);
-                Action action = () =>
-                {
-                    if (GetDirectoryItemsCompleted != null)
-                    {
-                        GetDirectoryItemsCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-        }
-
 
         public void GetScanResult(Guid targetUid, Object userState)
         {
@@ -428,7 +256,7 @@ namespace APTAT.Application.Services
             Action action = () =>
             {
                 ScanProgressItem[] scanProgressItems = new ScanProgressItem[arg.Length];
-                for (Int32 i = 0; i < arg.Length; ++i)
+                for (var i = 0; i < arg.Length; ++i)
                 {
                     ChangesTrackingItem changesTrackingItem = arg[i];
                     DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
@@ -461,115 +289,17 @@ namespace APTAT.Application.Services
             _manager.StopScan();
         }
 
+        
 
-        //private void SetProxy()
-        //{
-        //    var proxy = IsProxyRequired();
-        //    if (proxy != null)
-        //    {
-        //        SettingsWindow window = new SettingsWindow();
-        //        window.Owner = System.Windows.Application.Current.MainWindow;
-        //        window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        //        if (window.ShowDialog() == true)
-        //        {
-        //            string message = String.Format("The server {0} requires a username and password.", proxy);
-        //            window.MessageText.Text = message;
-        //            Properties.Settings.Default.ProxyLogin = window.LoginTextBox.Text;
-        //            Properties.Settings.Default.ProxyPassword = window.PasswordBox.Password;
-        //            Properties.Settings.Default.Save();
-        //            Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
-        //        }
-        //    }
-        //}
-
-
-        //private static Uri IsProxyRequired()
-        //{
-        //    Uri exampleUri = new Uri("https://www.comodo.com");
-        //    IWebProxy defaultProxy = WebRequest.GetSystemWebProxy();
-            
-        //    bool isBypassed = defaultProxy.IsBypassed(exampleUri);
-        //    if (isBypassed == false)
-        //    {
-        //        Uri proxyUri = defaultProxy.GetProxy(exampleUri);
-        //        return proxyUri;
-        //    }
-        //    return null;
-        //}
-
-        //public void RegisterOnValkyrie()
-        //{
-
-        //}
-
-        public RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserName, string camPassword)
+        public void BeginValkyrieAnalysis(string systemLogin, string systemPassword
+            , string camLicenseId, string camUserName, string camPassword,
+            NetworkCredential networkCredential = null)
         {
-            RegisterWithResponse regInfo = new RegisterWithResponse(); 
-
-            try
-            {
-                var networkCredential = new NetworkCredential(Properties.Settings.Default.ProxyLogin, Properties.Settings.Default.ProxyPassword);
-
-                regInfo = _manager.Register(camLicenseId, camUserName, camPassword, networkCredential);
-                if (regInfo.ReturnCode != 0)
-                {
-                    var ex = new InvalidOperationException(regInfo.ResultDescription);
-                    ex.Data.Add("ValkyrieReturnCode", regInfo.ReturnCode);
-                    ex.Data.Add("ValkyrieReturnMessage", regInfo.ResultMessage);
-                    throw ex;
-                }
-
-            }
-            catch (WebException webException)
-            {
-                if (webException.Response == null) throw ;
-
-                HttpStatusCode code = ((HttpWebResponse)webException.Response).StatusCode;
-                if (code == HttpStatusCode.ProxyAuthenticationRequired)
-                {
-                    Trace.WriteLine(code.ToString());
-
-                    SettingsWindow window = new SettingsWindow();
-                    window.Owner = System.Windows.Application.Current.MainWindow;
-                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-                    string proxy = String.Empty;
-                    var defaultProxy = WebProxy.GetDefaultProxy();
-                    if (defaultProxy != null)
-                    {
-                        proxy = defaultProxy.Address.AbsoluteUri;
-                    }
-
-
-                    string message = String.Format("The server {0} requires a username and password.", proxy);
-                    window.MessageText.Text = message;
-
-                    if (window.ShowDialog() == true)
-                    {
-                        Properties.Settings.Default.ProxyLogin = window.LoginTextBox.Text;
-                        Properties.Settings.Default.ProxyPassword = window.PasswordBox.Password;
-                        Properties.Settings.Default.Save();
-                        Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
-
-                        RegisterWithValkyrie(camLicenseId, camUserName, camPassword);
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return regInfo;
-        }
-
-        public void BeginValkyrieAnalysis(string systemLogin, string systemPassword, string apiKey)
-        {
-            _manager.StartValkyrieAnalysisAsync(systemLogin, systemPassword, apiKey);
+            _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
+            _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
+            _manager.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
+            _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
+                camPassword, networkCredential);
         }
 
         public string GetValkyrieDetailsLink()
@@ -577,45 +307,7 @@ namespace APTAT.Application.Services
             return _manager.GetValkyrieDetailsLink();
         }
 
-        private DirectoryItemType FromDomainEntryType(DomainEntryType type)
-        {
-            if (type == DomainEntryType.Root)
-            {
-                return DirectoryItemType.Root;
-            }
-
-            if (type == DomainEntryType.OrganizationUnit)
-            {
-                return DirectoryItemType.OrgUnit;
-            }
-
-            if (type == DomainEntryType.Computer)
-            {
-                return DirectoryItemType.Computer;
-            }
-
-            throw new ArgumentException("type");
-        }
-
-        private DomainEntryType FromDirectoryItemType(DirectoryItemType type)
-        {
-            if (type == DirectoryItemType.Root)
-            {
-                return DomainEntryType.Root;
-            }
-
-            if (type == DirectoryItemType.OrgUnit)
-            {
-                return DomainEntryType.OrganizationUnit;
-            }
-
-            if (type == DirectoryItemType.Computer)
-            {
-                return DomainEntryType.Computer;
-            }
-
-            throw new ArgumentException("type");
-        }
+        
 
         private ScanStage FromAptScanStage(AptScanStage stage)
         {
@@ -666,33 +358,7 @@ namespace APTAT.Application.Services
             }
         }
 
-        private DeploymentTargetsCollection ToDeploymentTargetsCollection(DeploymentItem[] deploymentItems)
-        {
-            DeploymentTargetsCollection collection = new DeploymentTargetsCollection(deploymentItems.Length);
-            foreach (DeploymentItem item in deploymentItems)
-            {
-                if (item is DirectoryItem)
-                {
-                    DirectoryItem directoryItem = (DirectoryItem)item;
-                    DomainTarget deploymentTarget = new DomainTarget();
-                    deploymentTarget.LdapPath = directoryItem.LdapPath;
-                    deploymentTarget.EntryType = FromDirectoryItemType(directoryItem.Type);
-                    deploymentTarget.DnsName = directoryItem.DnsName;
-                    deploymentTarget.Name = item.Name;
-                    deploymentTarget.TargetUid = item.TargetUid;
-                    collection.Add(deploymentTarget);
-                }
-                else
-                {
-                    DeploymentTarget deploymentTarget = new DeploymentTarget();
-                    deploymentTarget.Name = item.Name;
-                    deploymentTarget.TargetUid = item.TargetUid;
-                    collection.Add(deploymentTarget);
-                }
-            }
-
-            return collection;
-        }
+        
 
         private ReportType ToReportType(ReportKind kind)
         {
@@ -728,116 +394,5 @@ namespace APTAT.Application.Services
 
             throw new ArgumentException("kind");
         }
-
-        public void GetWorkgroup(String workgroupName, Object userState)
-        {
-            IWorkgroupDiscoverer discoverer = _manager.GetWorkgroupDiscoverer(workgroupName);
-            discoverer.Discovered += OnWorkgroupDiscovered;
-            discoverer.BeginDiscover(userState);
-        }
-
-        private void OnWorkgroupDiscovered(Object sender, TargetsDiscovererEventArgs e)
-        {
-            if (e.Error == null)
-            {
-                DeploymentTarget[] targets = e.Targets;
-                DeploymentItem[] result = new DeploymentItem[targets.Length];
-                for (Int32 i = 0; i < targets.Length; ++i)
-                {
-                    DeploymentTarget target = targets[i];
-                    result[i] = new DeploymentItem
-                    {
-                        Name = target.Name,
-                        TargetUid = target.TargetUid,
-                        IPAddress = target.IPAddress == null ? "Unknown" : target.IPAddress,
-                        Status = target.Online ? "Ready" : "Offline",
-                        IsOnline = target.Online
-                    };
-                }
-
-                GetWorkgroupEventArgs args = new GetWorkgroupEventArgs(result, e.State);
-                Action action = () =>
-                {
-                    if (GetWorkgroupCompleted != null)
-                    {
-                        GetWorkgroupCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-
-            }
-            else
-            {
-                GetWorkgroupEventArgs args = new GetWorkgroupEventArgs(null, e.State, e.Error);
-                Action action = () =>
-                {
-                    if (GetWorkgroupCompleted != null)
-                    {
-                        GetWorkgroupCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-        }
-
-        public void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState)
-        {
-            EndpointAddressCollection ipAddressCollection = new EndpointAddressCollection();
-            foreach (IpAddressWrapper ipAddress in ipAddresses)
-            {
-                ipAddressCollection.Add(ipAddress.GetEndpointAddress().BaseEntity);
-            }
-
-            IIpAddressDiscoverer discoverer = _manager.GetIpAddressDiscoverer(ipAddressCollection);
-            discoverer.Discovered += OnComputersByIpAddressesDiscovered;
-            discoverer.BeginDiscover(userState);
-        }
-
-        private void OnComputersByIpAddressesDiscovered(Object sender, TargetsDiscovererEventArgs e)
-        {
-            if (e.Error == null)
-            {
-                DeploymentTarget[] targets = e.Targets;
-                DeploymentItem[] result = new DeploymentItem[targets.Length];
-                for (Int32 i = 0; i < targets.Length; ++i)
-                {
-                    DeploymentTarget target = targets[i];
-                    result[i] = new DeploymentItem
-                    {
-                        Name = target.Name,
-                        TargetUid = target.TargetUid,
-                        IPAddress = target.IPAddress == null ? "Unknown" : target.IPAddress,
-                        Status = target.Online ? "Ready" : "Offline",
-                        IsOnline = target.Online
-                    };
-                }
-
-                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(result, e.State);
-                Action action = () =>
-                {
-                    if (GetByIpAddressesCompleted != null)
-                    {
-                        GetByIpAddressesCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-            else
-            {
-                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(null, e.State, e.Error);
-                Action action = () =>
-                {
-                    if (GetByIpAddressesCompleted != null)
-                    {
-                        GetByIpAddressesCompleted(this, args);
-                    }
-                };
-                DispatcherHelper.Current.BeginInvoke(action);
-            }
-        }
-
-
-
-
     }
 }

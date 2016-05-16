@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -157,6 +157,8 @@
     <Compile Include="Converters\StringToHyperlinkConverter.cs" />
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
     <Compile Include="Helpers\LoadingHelper.cs" />
+    <Compile Include="Services\ITargetsDiscoveryService.cs" />
+    <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="ValkyrieDetailsView.xaml.cs">
       <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
     </Compile>
@@ -475,10 +477,6 @@
     <ProjectReference Include="..\APTAT.Core\APTAT.Core.csproj">
       <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
       <Name>APTAT.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
-      <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
-      <Name>Valkyrie.WebApiProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

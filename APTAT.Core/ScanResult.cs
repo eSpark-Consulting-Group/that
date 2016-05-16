@@ -53,12 +53,6 @@ namespace APTAT.Core
 
         public int MalwareFilesCount
         {
-            //get
-            //{
-            //    if (_malwareFilesCount == -1)
-            //        CalculateTotal();
-            //    return _malwareFilesCount;
-            //}
             get;
             set;
         }
@@ -69,24 +63,12 @@ namespace APTAT.Core
 
         public int RunningProgramsCount
         {
-            //get
-            //{
-            //    if (_aptReport != null && _aptReport.Processes != null)
-            //        return _aptReport.Processes.Length;
-            //    return 0;
-            //}
             get;
             set;
         }
 
         public int AutorunsCount
         {
-            //get
-            //{
-            //    if (_aptReport != null && _aptReport.Autoruns != null)
-            //        return _aptReport.Autoruns.Length;
-            //    return 0;
-            //}
             get;
             set;
         }
@@ -152,16 +134,7 @@ namespace APTAT.Core
                 return null;
             }
         }
-
-        [Obsolete]
-        public List<UnknownFile> UnknownFiles
-        {
-            get
-            {
-                var unknownFiles = from file in GetFilesByStatus(CloudVerdict.Unknown) select new UnknownFile() { Name = file.Path, Size = file.Size };
-                return new List<UnknownFile>(unknownFiles);
-            }
-        }
+        
 
         public Module[] BadFiles
         {

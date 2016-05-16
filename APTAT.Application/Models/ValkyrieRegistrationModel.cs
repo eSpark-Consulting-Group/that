@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using APTAT.Application.Annotations;
-using APTAT.Application.Services;
-using Telerik.Windows.Data;
-using ValidationContext = FluentValidation.ValidationContext;
 
 namespace APTAT.Application.Models
 {
@@ -130,6 +122,8 @@ namespace APTAT.Application.Models
             }
         }
 
+        public string Error { get {return String.Empty;} }
+
         #region ValidateDate
         public bool ValidatePassword()
         {
@@ -165,10 +159,6 @@ namespace APTAT.Application.Models
         }
         
         #endregion
-        public string Error
-        {
-            get { return String.Empty; }
-        }
 
 
 

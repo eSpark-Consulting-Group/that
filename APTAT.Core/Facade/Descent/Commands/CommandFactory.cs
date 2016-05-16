@@ -1,5 +1,4 @@
 ﻿using System;
-using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.Core.Facade.Descent.MessageContracts;
 
@@ -7,11 +6,13 @@ namespace APTAT.Core.Facade.Descent.Commands
 {
 	public class CommandFactory : ICommandFactory
 	{
-	    private readonly IDescentSubSystem _descentSubSystem;
+	    private static CommandFactory _instance;
+        private CommandFactory ()
+        { }
 
-	    public CommandFactory(IDescentSubSystem descentSubSystem)
+	    public static CommandFactory Instance
 	    {
-	        _descentSubSystem = descentSubSystem;
+	        get { return _instance ?? (_instance = new CommandFactory()); }
 	    }
 
 		public IServiceCommand<TResponse> CreateCommand<TResponse>( object request ) where TResponse : new()
@@ -47,10 +48,6 @@ namespace APTAT.Core.Facade.Descent.Commands
 			{
 				command = ( IServiceCommand<TResponse> ) new GetTargetsSummaryCommand( ( GetTargetsSummaryRequest )request );
 			}
-            else if( request is DeployAgentRequest )
-            {
-                command = (IServiceCommand<TResponse>)new DeployAgentCommand((DeployAgentRequest)request, _descentSubSystem);
-            }
 			else
 				throw new ArgumentException( String.Format( "Unknown request instance type: {0}.", request.GetType() ), "request" );
 

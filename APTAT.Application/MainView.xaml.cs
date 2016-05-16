@@ -8,8 +8,11 @@ using APTAT.Application.Models;
 using APTAT.Application.Services;
 using Telerik.Windows;
 using System.Diagnostics;
-using APTAT.Application.Helpers;
-using Valkyrie.WebApiProvider.Contracts;
+using System.Linq;
+using APTAT.Core;
+using APTAT.Core.Valkyrie;
+using Process = System.Diagnostics.Process;
+using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
 
 namespace APTAT.Application
 {
@@ -58,10 +61,12 @@ namespace APTAT.Application
             DataContext = _viewModel = new MainViewViewModel();
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
+            _viewModel.ValkyrieAnalyzeStarted += ViewModelOnValkyrieAnalyzeStarted;
+            _viewModel.ValkyrieAnalyzeCompleted += ViewModelOnValkyrieAnalyzeCompleted;
             //treeList.Filtered += treeList_Filtered;
             //treeList.LayoutUpdated += treeList_LayoutUpdated;
             //SearchTextBox.ValueChanged += SearchTextBox_ValueChanged;
-           
+
         }
 
         void SearchTextBox_ValueChanged(object sender, RadRoutedEventArgs e)
@@ -156,10 +161,8 @@ namespace APTAT.Application
             }
                 
         }
-
-        private DispatcherOperation _asyncOperation;
+        
         private CamCredentialsWindow _dialog;
-        private LoadingHelper _loadingHelper;
 
         private void ShowRegisterToValkyrieWindow()
         {
@@ -170,10 +173,11 @@ namespace APTAT.Application
 
             _dialog.OkClick += (sender, args) =>
             {
-                if (_asyncOperation != null && 
-                    (_asyncOperation.Status == DispatcherOperationStatus.Executing || 
-                    _asyncOperation.Status == DispatcherOperationStatus.Pending)) return;
-
+                Dispatcher.Invoke((Action)delegate
+                {
+                    _dialog.loading.IsBusy = true;
+                    _dialog.ok.Visibility = Visibility.Collapsed;
+                });
                 _dialog.MarkPasswordValidation(model.ValidatePassword());
 
                 if (model.ValidateModel())
@@ -182,73 +186,43 @@ namespace APTAT.Application
                     var name = _dialog.UserName.TrimEnd();
                     var pass = _dialog.PasswordText.Password.TrimEnd();
 
-                    if (_loadingHelper == null)
-                        _loadingHelper = new LoadingHelper();
-
+                    
+                    _viewModel.BeginValkyrieAnalysis(licid, name, pass);
+                }
+                else
+                {
                     Dispatcher.Invoke((Action)delegate
                     {
-                        _dialog.ok.Visibility = Visibility.Collapsed;
-                        _dialog.loading.IsBusy = true;
+                        _dialog.ok.Visibility = Visibility.Visible;
+                        _dialog.loading.IsBusy = false;
                     });
-
-                    _asyncOperation = _loadingHelper.RunOnThreadDelayed(() =>
-                        {
-                            RegisterWithResponse result = null;
-                            try   
-                            {                                               
-                                result = _viewModel.RegisterWithValkyrie(licid, name, pass);
-                            }
-                            catch (InvalidOperationException exception)
-                            {
-                                if (exception.Data.Contains("ValkyrieReturnCode"))
-                                    model.ErrorMessage = exception.Message;
-                                else
-                                    model.ErrorMessage = "Could not connect to Valkyrie Server.";
-                            }
-                            return result;
-                        });
-
-                    _asyncOperation.Completed += AsyncOperationCompleted;
-                    _asyncOperation.Aborted += AsyncOperationAborted;
-                    _asyncOperation.Priority = DispatcherPriority.Normal;
                 }
             };
 
             _dialog.ShowDialog();
         }
-
-        private void AsyncOperationAborted(object sender, EventArgs e)
+        private void ViewModelOnValkyrieAnalyzeStarted(object sender, EventArgs eventArgs)
         {
+            if (_dialog == null) return;
+            Dispatcher.Invoke((Action)delegate
+            {
+                _dialog.Close();
+                _dialog = null;
+            });
+        }
+        private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        {
+            if (_dialog == null) return;
+            if (e.Error == null) return;
+            var error = e.Error as AggregateException;
+            var exception = error != null ? error.InnerExceptions.First() : e.Error;
+            if (exception is InvalidOperationException || exception is ValkyrieRegistrationFailedException)
+                _dialog.SetErrorMessage(e.Error.Message);
             Dispatcher.Invoke((Action)delegate
             {
                 _dialog.ok.Visibility = Visibility.Visible;
                 _dialog.loading.IsBusy = false;
             });
-        }
-
-        private void AsyncOperationCompleted(object sender, EventArgs e)
-        {
-            var response = ((DispatcherOperation)sender).Result as RegisterWithResponse;
-            if (response != null && response.ReturnCode == 0)
-            {
-                Dispatcher.Invoke((Action)delegate
-                {
-                    _dialog.Close();
-                    _viewModel.OnBeforeBeginValkyrieAnalysis();
-                });
-
-                if (_loadingHelper == null)
-                    _loadingHelper = new LoadingHelper();
-
-                _loadingHelper.DoEvents(Dispatcher);
-
-                _loadingHelper.RunOnThread(() =>
-                {
-                    _viewModel.BeginValkyrieAnalysis(response.Key);
-                });
-            }
-            else
-                AsyncOperationAborted(sender, e);
         }
 
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)

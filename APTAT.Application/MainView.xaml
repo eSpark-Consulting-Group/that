@@ -11,8 +11,9 @@
                   xmlns:Controls="clr-namespace:APTAT.Application.Controls"
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                   d:DesignHeight="760" d:DesignWidth="1200"
+                 
 	                Title="APT Assesment Tool" Background="White">
-    
+
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="ReportButtonContentTemplate">
@@ -58,33 +59,34 @@
         <Application:TitleUpdater Header="{Binding Header}"/>
 
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." Background="Transparent" BorderBrush="Transparent">
-          <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent">
-            <Grid>
+            <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent">
+                <Grid>
 
-        <ContentControl Content="{Binding CurrentViewControl}"></ContentControl>
-        
-        <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
+                    <ContentControl Content="{Binding CurrentViewControl, Mode=TwoWay,
+                        PresentationTraceSources.TraceLevel=High}"  ></ContentControl>
+
+                    <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
                    HorizontalAlignment="Center">
 
-            <TextBlock Text="There are no scans have been performed yet."
+                        <TextBlock Text="There are no scans have been performed yet."
                    Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                    FontSize="21"
                    FontFamily="Segoe UI Light"/>
 
-            <Button AutomationProperties.AutomationId="StartScanningNowButton"
+                        <Button AutomationProperties.AutomationId="StartScanningNowButton"
                     Margin="0,10,0,0"  HorizontalAlignment="Center"
                     Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                     Style="{StaticResource LinkButton}" 
                     Content="Start Scanning Now!" FontSize="21" FontFamily="Segoe UI Light"
                     Click="OnStartScanningClick"/>
-            
-        </StackPanel>
 
-            </Grid>
-          </telerik:RadBusyIndicator>
+                    </StackPanel>
+
+                </Grid>
+            </telerik:RadBusyIndicator>
         </telerik:RadBusyIndicator>
 
-       <Grid>
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="180"/>
@@ -204,10 +206,10 @@
                         </Grid>
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
-              
+
             </telerik:RadToolBar>
-            
-           <Controls:RadMaskedTextBoxEx 
+
+            <Controls:RadMaskedTextBoxEx 
                 Style="{StaticResource SearchBoxStyle}"
                 AcceptReturn="False"
                 x:Name="SearchTextBox" 
@@ -219,7 +221,7 @@
                     <Controls:RadMaskedTextBoxUpdateSourceBehavior Delay="True" Value="{Binding Keyword, Mode=TwoWay}"/>
                 </i:Interaction.Behaviors>
             </Controls:RadMaskedTextBoxEx>
-           
+
         </Grid>
 
         <Border Grid.Row="2" Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85" Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -230,7 +232,7 @@
             </Hyperlink>
             </TextBlock>
         </Border>
-        
+
         <Border Grid.Row="3"  Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85">
             <DockPanel  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" Height="35" >
 
@@ -254,8 +256,8 @@
                             Visibility="{Binding IsProtected, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
             </DockPanel >
-        </Border>        
-        
+        </Border>
+
         <!--<Application:DesignGrid Grid.ColumnSpan="3" Grid.RowSpan="3" IsHitTestVisible="False" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
 
     </Grid>

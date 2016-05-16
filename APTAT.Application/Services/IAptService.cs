@@ -1,11 +1,9 @@
 ﻿using System;
 using APTAT.Application.Models;
-using System.Collections.Generic;
-using APTAT.Valkyrie.Client;
 using APTAT.Core;
 using System.ComponentModel;
+using System.Net;
 using APTAT.Core.Valkyrie;
-using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Application.Services
 {
@@ -159,31 +157,15 @@ namespace APTAT.Application.Services
 
     public interface IAptService
     {
-        event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
-        event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
-        event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
         event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-        event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;        
-        event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
-        event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
+        event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;   
         event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
-
-        void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState);
-
-        void GetWorkgroup(String workgroupName, Object userState);
-
-        void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
-
-        void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
-
-        void GetDirectoryRoot(String domainController, String admin, String password, Object userState);
-
-        void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState);
+        event EventHandler ValkyrieAnalyzeStarted;
 
         void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState, String scanScope);
 
@@ -191,9 +173,11 @@ namespace APTAT.Application.Services
 
         void StopScan();
 
-        void BeginValkyrieAnalysis(string login, string password, string apiKey);
+        void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
+
+        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, string camPassword,
+            NetworkCredential networkCredential = null);
         
-        RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserName, string camPassword);
         
         string GetValkyrieDetailsLink();
     }

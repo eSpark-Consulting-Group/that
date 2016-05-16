@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using APTAT.Application.Services;
 using APTAT.Core;
-using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Application.Models
 {
@@ -203,10 +202,8 @@ namespace APTAT.Application.Models
 
 
             FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
-            IsMalware = badFile != null ? badFile.IsMalware : (valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware || 
-                valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
-            IsUnknown = badFile != null ? badFile.IsUnknown : (valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Undetected ||
-                valkyrieFile.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.NotAnalyzed);
+            IsMalware = badFile != null ? badFile.IsMalware : valkyrieFile.IsMalware;
+            IsUnknown = badFile != null ? badFile.IsUnknown : valkyrieFile.IsUnknown;
             Verdict = badFile != null ? (IsMalware ? "Malware" : "Unknown") : valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
             Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();

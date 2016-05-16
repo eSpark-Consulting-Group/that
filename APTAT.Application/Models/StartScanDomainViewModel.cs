@@ -3,17 +3,15 @@ using APTAT.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+using APTAT.Core.Descent;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
 {
     public class StartScanDomainViewModel : WizardViewModel
     {
-        private readonly IAptService _service = AptService.Instance;
+        private readonly ITargetsDiscoveryService _service = TargetsDiscoveryService.Instance;
         private readonly IStorageService _storage = new StorageService();
         private Int32 _step;
         private DirectoryItem[] _items;

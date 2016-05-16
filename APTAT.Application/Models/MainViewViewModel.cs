@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
 using System.Windows.Controls;
 using APTAT.Core;
+using APTAT.Core.Descent;
 using APTAT.Core.Valkyrie;
-using Valkyrie.WebApiProvider.Contracts;
 
 
 namespace APTAT.Application.Models
@@ -19,11 +22,14 @@ namespace APTAT.Application.Models
     {
         public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
+        public event EventHandler ValkyrieAnalyzeStarted;
+        public event EventHandler<AnalyzeCompletedEventArgs<FileResult>> ValkyrieAnalyzeCompleted;
 
         private String _login;
         private String _password;
 
         private readonly IAptService _aptService;
+        private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
         private Guid _operationGuid;
         private DeploymentItem[] _selectedTargets;
@@ -426,6 +432,7 @@ namespace APTAT.Application.Models
         {
             _isValkyrieAnalysCompleted = false;
             _aptService = AptService.Instance;
+            _targetsDiscoveryService = TargetsDiscoveryService.Instance;
 
             _storage = new StorageService();
 
@@ -473,96 +480,13 @@ namespace APTAT.Application.Models
                         throw new InvalidOperationException("specify login and password");
                     }
 
-                    _aptService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
+                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
 
                 }
             }
-
-            //var items = new ObservableCollection<ThreatInfoItem>();
-            //for (int i = 0; i < 100; ++i)
-            //{
-            //    ThreatInfoItem item = new ThreatInfoItem();
-            //    item.Name = "Test " + i;
-            //    items.Add(item);
-            //    item.IsRootItem = true;
-            //    item.IsOnline = true;
-            //    item.ScanStage = ScanStage.ScanInProgress;
-            //    item.Items = new RadObservableCollection<ThreatInfoItem>();
-
-
-
-            //}
-
-            //Items = items;
-            //_cache = items;
-
-
-
-            //Thread t = new Thread(T);
-            //t.Start();
         }
 
-        //void T()
-        //{
-
-
-
-
-        //    Action<Int32> action = (index) =>
-        //    {
-
-
-
-        //        ThreatInfoItem item = _cache[index];
-        //        item.TempItems = new ObservableCollection<ThreatInfoItem>();
-
-
-        //            for (Int32 j = 0; j < 5; ++j)
-        //            {
-        //                item.TempItems.Add(new ThreatInfoItem
-        //                {
-        //                    IsOnline = true,
-
-
-        //                    BadFile = new BadFileItem
-        //                    {
-        //                        Name = "Bad",
-        //                    },
-        //                    IsCompletedSubItem = false,
-        //                    Name = "Bad File",
-        //                    IsUnknown = true,
-        //                });
-        //            }
-
-        //            item.ScanStage = ScanStage.OperationCompleted;
-        //            item.UnknownFilesCount = 5;
-
-        //            Int32 itemIndex = Items.IndexOf(item);
-        //            if (itemIndex != -1)
-        //            {
-        //                Items.Remove(item);
-        //                Items.Insert(itemIndex, item);
-        //            }
-
-
-
-
-        //    };
-
-        //    for (Int32 i = 0; i < 100; i+= 2)
-        //    {
-        //        Thread.Sleep(500);
-        //        DispatcherHelper.Current.BeginInvoke(action, i);
-        //    }
-
-        //    for (Int32 i = 1; i < 100; i += 2)
-        //    {
-        //        Thread.Sleep(500);
-        //        DispatcherHelper.Current.BeginInvoke(action, i);
-        //    }
-
-
-        //}
+        
 
         private void InvokeStopScan(Object arg)
         {
@@ -581,7 +505,7 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            _aptService.DirectoryItemsResolved += OnDirectoryItemsResolved;
+            _targetsDiscoveryService.DirectoryItemsResolved += OnDirectoryItemsResolved;
             _aptService.BeginScanCompleted += OnBeginScanCompleted;
             _aptService.ScanStatusChanged += OnScanStatusChanged;
             _aptService.GetScanResultCompleted += OnGetScanResultCompleted;
@@ -589,30 +513,82 @@ namespace APTAT.Application.Models
             _aptService.ScanProgressChanged += OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
             _aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
+            _aptService.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
+        }
+
+        void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
+        {
+            OnBeforeBeginValkyrieAnalysis();
+            var tmp = ValkyrieAnalyzeStarted;
+            if (tmp != null)
+            {
+                tmp(this, e);
+            }
         }
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
-            if (e.Error != null)
-            {
-                ShowError(e.Error);
-            }
+            
+                if (e.Error != null)
+                {
+                    ShowError(e.Error);
+                    var webException = e.Error as WebException;
+                    if (webException != null)
+                    {
+                        var httpWebResponse = webException.Response as HttpWebResponse;
+                        if (httpWebResponse != null)
+                        {
+                            HttpStatusCode code = httpWebResponse.StatusCode;
+                            if (code == HttpStatusCode.ProxyAuthenticationRequired)
+                            {
+                                Trace.WriteLine(code.ToString());
+
+                                SettingsWindow window = new SettingsWindow();
+                                window.Owner = System.Windows.Application.Current.MainWindow;
+                                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                                string proxy = String.Empty;
+                                var defaultProxy = WebProxy.GetDefaultProxy();
+                                if (defaultProxy != null)
+                                {
+                                    proxy = defaultProxy.Address.AbsoluteUri;
+                                }
 
 
-            _cacheValkyrie = new Collection<FileResult>(e.Result);
+                                string message = String.Format("The server {0} requires a username and password.", proxy);
+                                window.MessageText.Text = message;
 
+                                if (window.ShowDialog() == true)
+                                {
+                                    NetworkCredential cred = new NetworkCredential(window.LoginTextBox.Text,
+                                        window.PasswordBox.Password);
+                                    Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+                                    BeginValkyrieAnalysis(cred);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+                var tmp = ValkyrieAnalyzeCompleted;
+                if (tmp != null)
+                {
+                    tmp(this, e);
+                }
 
-            IsValkyrieScanInProgress = false;
-            IsAnalyseWithValkyrieEnabled = true;
-            IsValkyrieReportEnabled = true;
-            IsValkyrieAnalysCompleted = true;
-            RaisePropertyChanged("IsValkyrieAnalysCompleted");
-            RaisePropertyChanged("Header");
-            RaisePropertyChanged("ValkyrieDetailsLink");
+                _cacheValkyrie = new Collection<FileResult>(e.Result);
+                IsValkyrieScanInProgress = false;
+                IsAnalyseWithValkyrieEnabled = true;
+                IsValkyrieReportEnabled = true;
+                IsValkyrieAnalysCompleted = true;
+                RaisePropertyChanged("IsValkyrieAnalysCompleted");
+                RaisePropertyChanged("Header");
+                RaisePropertyChanged("ValkyrieDetailsLink");
         }
 
         private static void ShowError(Exception exception)
         {
+            return;
             if (exception == null) return;
             if (exception is AggregateException) return;
             StringBuilder sb = new StringBuilder();
@@ -665,7 +641,7 @@ namespace APTAT.Application.Models
 
                 foreach (var result in info.Results)
                 {
-                    CurrentViewControl.Dispatcher.BeginInvoke((Action)delegate { ItemsValkyrie.Add(result); });
+                    ItemsValkyrie.Add(result);
                 }
             }
         }
@@ -674,7 +650,7 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewUnloaded(arg);
 
-            _aptService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
+            _targetsDiscoveryService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
             _aptService.BeginScanCompleted -= OnBeginScanCompleted;
             _aptService.ScanStatusChanged -= OnScanStatusChanged;
             _aptService.GetScanResultCompleted -= OnGetScanResultCompleted;
@@ -682,6 +658,7 @@ namespace APTAT.Application.Models
             _aptService.ScanProgressChanged -= OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             _aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
+            _aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
         }
 
         private void OnScanCompleted(Object sender, APTAT.Application.Services.ScanCompletedEventArgs e)
@@ -742,7 +719,7 @@ namespace APTAT.Application.Models
                     throw new InvalidOperationException("specify login and password");
                 }
 
-                DevicesSourceDescription = _storage.GetValue<APTAT.Core.DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
+                DevicesSourceDescription = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
 
                 if (DevicesSourceDescription == null)
                     throw new InvalidOperationException("Devices Source Description was not correctly initialised");
@@ -792,13 +769,6 @@ namespace APTAT.Application.Models
 
         }
 
-
-
-        public RegisterWithResponse RegisterWithValkyrie(string camLicenseId, string camUserLogin, string camUserPassword)
-        {
-            return _aptService.RegisterWithValkyrie(camLicenseId, camUserLogin, camUserPassword);
-        }
-
         public void OnBeforeBeginValkyrieAnalysis()
         {
             ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
@@ -817,13 +787,19 @@ namespace APTAT.Application.Models
             ValkyrieSendingFiles = true;
         }
 
-        public void BeginValkyrieAnalysis(string apiKey)
+        public void BeginValkyrieAnalysis(string camLicenseId, string camUserLogin, string camUserPassword)
         {
-
+            _camLicenseId = camLicenseId;
+            _camUserLogin = camUserLogin;
+            _camUserPassword = camUserPassword;
+            BeginValkyrieAnalysis();
+        }
+        public void BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
+        {
             UnknownFilesCount = 0;
             MalwareFilesCount = 0;
-
-            _aptService.BeginValkyrieAnalysis(_login, _password, apiKey);
+            _aptService.BeginValkyrieAnalysis(_login, _password, _camLicenseId, _camUserLogin, _camUserPassword,
+                networkCredential);
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
@@ -992,6 +968,9 @@ namespace APTAT.Application.Models
         private bool? _isValkyrieScanInProgress;
         //private string _statusBarText;
         private bool _isValkyrieAnalysCompleted;
+        private string _camLicenseId;
+        private string _camUserLogin;
+        private string _camUserPassword;
 
         public bool IsQuickScan { get; set; }
     }

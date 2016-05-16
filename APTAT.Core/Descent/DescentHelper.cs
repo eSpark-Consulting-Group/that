@@ -251,8 +251,6 @@ namespace APTAT.Core.Descent
 
 			public event EventHandler DescentHelperParametersCopied;
 
-			public event EventHandler DescentHelperStarted;
-
 			private void InvokeRemotelyConnected( EventArgs e )
 			{
 				EventHandler handler = RemotelyConnected;
@@ -272,12 +270,6 @@ namespace APTAT.Core.Descent
 				EventHandler handler = DescentHelperParametersCopied;
 				if( handler != null )
 					handler( this, e );
-			}
-            
-			private void InvokeDescentHelperStarted( EventArgs e )
-			{
-				EventHandler handler = DescentHelperStarted;
-				if (handler != null) handler(this, e);
 			}
 
             //======================================================================
@@ -306,15 +298,6 @@ namespace APTAT.Core.Descent
                         return (int)((double)TotalFilesScanned / EnumeratedFilesCount * 100);
                     }
                 }
-            }
-
-            // New events
-		    public EventHandler<EventArgs> ScanStarted;
-            private void InvokeScanStarted(EventArgs e)
-            {
-                EventHandler<EventArgs> temp = ScanStarted;
-                if (temp != null)
-                    temp(this, e);
             }
 
             public EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
@@ -418,33 +401,6 @@ namespace APTAT.Core.Descent
 
 			public void Init( ImpersonationHelper.Logon32LogonType logonType )
 			{
-                //_networkHelper.LogonType = logonType;
-                //DescentException originalException;
-                //// First, try traditional impersonation as network service
-                //try
-                //{
-                //    Init(true);
-                //    return;
-                //}
-                //catch (DescentException exception)
-                //{
-                //    originalException = exception;
-                //}
-
-                //// We failed. Trying to impersonate as actual user
-                //try
-                //{
-                //    Init(false);
-                //}
-                //catch (DescentException exception)
-                //{
-                //    throw;
-                //    // TODO: Commented
-                //    //// Failed. Throw original exception to not to confuse user
-                //    //throw originalException;
-                //}
-
-
                 // Impersonation logic has been inverted as opposed to the code below.
                 _networkHelper.LogonType = logonType;
                 DescentException originalException;
@@ -504,38 +460,7 @@ namespace APTAT.Core.Descent
                 {
                 }
 			}
-			// ===============================================================
-            // TODO: Commented
-            //private void PutServerCredentialsOnTheAgentComputer()
-            //{
-            //    const bool deleteFilesAfterSessionEnded = false; // do not delete for debug purposes
 
-            //    // Get public key
-            //    byte[] publicKey, privateKey;
-            //    DsaKeysLoader.GetDsaKeys( out privateKey, out publicKey );
-
-            //    // Store server connection settings
-            //    FileStream fs = CreateRemoteFile( "server.ini", deleteFilesAfterSessionEnded );
-            //    StreamWriter writer = new StreamWriter( fs );
-
-            //    writer.WriteLine( "[General]" );
-
-            //    // Server public key in Base64
-            //    writer.WriteLine( "PublicKey={0}", Convert.ToBase64String( publicKey ) );
-
-            //    string[] addresses = NetHelp.GetSupportedExternalAddresses(false);
-
-            //    // Host name
-            //    writer.WriteLine( "SERVERHOST={0}", addresses[0] );
-
-            //    // Alternative ip addresses
-            //    for (int index = 1; index < addresses.Length; index++)
-            //    {
-            //        string address = addresses[index];
-            //        writer.WriteLine( "Address{0}={1}", index, address );
-            //    }
-            //    writer.Close();
-            //}
 
 			private void InitializeDescentAgentService( string descentAgentPath, string tvlFilePath, string trlFilePath )
 			{
@@ -995,38 +920,11 @@ namespace APTAT.Core.Descent
                 //    }
                 //}
 			}
-
-			// Create remote path on remote host (to c:\windows\ComodoESMAgent\)
-			public FileStream CreateRemoteFile( string fileName, bool deleteOnQuit )
-			{
-				try
-				{
-					// Create directory ESMAgent
-					if ( System.IO.Directory.Exists( _remoteWorkingDirectory ) == false )
-						System.IO.Directory.CreateDirectory( _remoteWorkingDirectory );
-
-					// Copy file to the target directory
-					string targetPath = _remoteWorkingDirectory + @"\" + fileName;
-					FileStream fs = new FileStream( targetPath, FileMode.Create );
-
-					if ( deleteOnQuit )
-					{
-                        AddFileToRemoveList(targetPath);
-					}
-
-					return fs;
-				}
-				catch ( Exception ex )
-				{
-					throw new DescentException( DescentStatus.status_remote_cannot_copy_file,
-						ex.Message, 0 );
-				}
-			}
-
-            public void StopService()
-            {
-                _serviceHelper.StopService();
-            }
+            
+            //public void StopService()
+            //{
+            //    _serviceHelper.StopService();
+            //}
 
 			// Copy file to remote host (to c:\windows\ComodoESMAgent\)
 			public string CopyFile( string filePath, bool deleteOnQuit )

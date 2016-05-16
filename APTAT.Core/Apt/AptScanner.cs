@@ -1,7 +1,5 @@
 ﻿using System;
 using APTAT.Core.Descent;
-using APTAT.Core.Facade.Descent.Commands;
-using APTAT.Core.Facade.Descent.MessageContracts;
 
 
 namespace APTAT.Core.Apt
@@ -9,18 +7,30 @@ namespace APTAT.Core.Apt
     internal class AptScanner : IAptScanner
     {
         private AptScanOperationContext _scanOperationContext;
-        private IServiceCommand<DeployAgentResponse> _command;
         private readonly IDescentSubSystem _descentSubSystem;
+        private readonly string _password;
+        private readonly string _login;
+        private readonly string _scanScope;
+        private readonly DevicesSourceDescription _devicesSourceDescr;
+        private readonly string _domain;
+        private Guid _operationUid;
+        private readonly TargetUidComputerPair[] _targets;
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<ScanInProgressEventArgs> ScanInProgress;
 
-        internal AptScanner(IServiceCommand<DeployAgentResponse> command, IDescentSubSystem descentSubSystem)
+        internal AptScanner(IDescentSubSystem descentSubSystem, TargetUidComputerPair[] targets, string login,
+            string password, string domain, DevicesSourceDescription devicesSourceDescr, string scanScope)
         {
-            _command = command;
             _descentSubSystem = descentSubSystem;
             if (_descentSubSystem != null)
                 _descentSubSystem.DescentCompleted += OnDescentCompleted;
+            _targets = targets;
+            _login = login;
+            _password = password;
+            _scanScope = scanScope;
+            _domain = domain;
+            _devicesSourceDescr = devicesSourceDescr;
         }
 
         private void OnDescentCompleted(object sender, DescentCompletedEventArgs e)
@@ -45,12 +55,17 @@ namespace APTAT.Core.Apt
 
         public void BeginScan(object state = null)
         {
-            if (_command != null)
-            {
-                Action action = _command.Execute;
-                Context context = new Context() { Action = action, State = state };
-                action.BeginInvoke(BeginScanCallback, context);
-            }
+            Action action = StartScan;
+            Context context = new Context() { Action = action, State = state };
+            action.BeginInvoke(BeginScanCallback, context);
+        }
+
+        private void StartScan()
+        {
+            Guid operationUid;
+            _descentSubSystem.DoDescentOperationOnNotExistingComputers(_targets, _login, _password, out operationUid, 
+                _scanScope, _domain, _devicesSourceDescr);
+            _operationUid = operationUid;
         }
 
         private void BeginScanCallback(IAsyncResult ar)
@@ -63,7 +78,7 @@ namespace APTAT.Core.Apt
             try
             {
                 context.Action.EndInvoke(ar);
-                args.OperationUid = _command.Response.OperationUid;
+                args.OperationUid = _operationUid;
                 args.State = context.State;
 
                 _scanOperationContext = _descentSubSystem.GetScanResultsByOperationUid(args.OperationUid);
@@ -109,12 +124,6 @@ namespace APTAT.Core.Apt
             EventHandler<ScanInProgressEventArgs> temp = ScanInProgress;
             if (temp != null)
                 temp(this, args);
-        }
-
-        public IServiceCommand<DeployAgentResponse> Command
-        {
-            get { return _command; }
-            set { _command = value; }
         }
 
         internal class Context

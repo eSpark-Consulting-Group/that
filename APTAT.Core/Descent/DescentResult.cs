@@ -12,7 +12,7 @@ namespace APTAT.Core.Descent
 		private readonly ConcurrentDictionary<Guid, ComputerDescentResult> _resultsByUid = new ConcurrentDictionary<Guid, ComputerDescentResult>();
         private readonly ConcurrentDictionary<Guid, Guid> _descendByIpMappings = new ConcurrentDictionary<Guid, Guid>();
         private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks = new ConcurrentDictionary<Guid, Action<TimeSpan>>();
-        private IDescentWatcher _descentWatcher;
+        private readonly IDescentWatcher _descentWatcher;
 
 
         private readonly Dictionary<Guid, bool> _reportedByUid = new Dictionary<Guid, bool>();
@@ -88,7 +88,7 @@ namespace APTAT.Core.Descent
 
 		public void OnDescendOperationEvent( bool ok, IComputer computer, FormattedText errorMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage )
 		{
-            Guid uid = GetComputerOriginalUid(computer);
+            Guid uid = computer.Uid;
 
 			OperationDescentResult operationResult;
 			ComputerDescentResult computerDescentResult;
@@ -99,11 +99,11 @@ namespace APTAT.Core.Descent
             
 			if( !ok)
 			{
-				operationResult = new OperationDescentResult(true, ok, errorMessage, shortStatusMessage, errorCode, systemMessage, systemCode, 100 );
+				operationResult = new OperationDescentResult(true, false, errorMessage, shortStatusMessage, errorCode, systemMessage, systemCode, 100 );
 			}
 			else
 			{
-				operationResult = new OperationDescentResult(true, ok, FormattedText.Empty, FormattedText.Empty, String.Empty, String.Empty, 0, 0 );
+				operationResult = new OperationDescentResult(true,true, FormattedText.Empty, FormattedText.Empty, String.Empty, String.Empty, 0, 0 );
 			}
 
 			var inprogressCount = ProcessResult(uid, operationResult);
@@ -117,35 +117,6 @@ namespace APTAT.Core.Descent
 				OnAgentDescentCompleted( computer, ok );
 			}
 		}
-
-        public Guid GetComputerOriginalUid(IComputer computer)
-        {
-            Guid uid = computer.Uid;
-            Guid originalUid = computer.OriginalAgentIdentityOnConnect;
-
-            if (_descendByIpMappings.ContainsKey(uid))
-            {
-                return _descendByIpMappings[uid];
-            }
-
-            // If descending was done using IP, we may have a situation when pc.OriginalAgentIdentityOnConnect
-            // differs from pc.UID. It is normal and DescentResult should handle such computers in a special way.
-            if (originalUid == uid || originalUid == Guid.Empty)
-                return uid; // not our case
-
-            // If we know about OriginalAgentIdentityOnConnect but not about Uid, exchange them.
-            if (_resultsByUid.ContainsKey(originalUid) && !_resultsByUid.ContainsKey(uid))
-            {
-				LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, "Detected descended by IP computer: {0}. Replacing {1} by {2}", computer.Name, uid, originalUid);
-
-                // Remember this mapping
-                _descendByIpMappings.AddOrUpdate(uid, originalUid, (key, value) => value);
-
-                return originalUid;
-            }
-
-            return uid;
-        }
 
 		
 		private int ProcessResult(Guid uid, OperationDescentResult operationResult)

@@ -18,28 +18,36 @@ using Microsoft.Win32;
 
 namespace APTAT.Core.Valkyrie
 {
-    public sealed class ValkyrieClient
+    internal sealed class ValkyrieClient : IValkyrieClient
     {
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
-        private int FilesCount { get;  set; }
+        private int _filesCount;
+        private CancellationTokenSource _cancellationTokenSource;
+        private readonly ConcurrentBag<ValkyrieAnalysisResult> _analysisResults;
+        private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems 
+            = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
+        private Timer _progressNotifyTimer;
+        private int _machineCount;
 
-        private ConcurrentBag<ValkyrieAnalysisResult> AnalysisResults { get; set; }
-        private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
+        public event EventHandler<ProgressChangedEventArgs> AnalyzeProgressChanged;
+        public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
+        public event EventHandler AnalyzeStarted;
+
         public ValkyrieClient()
         {
-            AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
+            _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
         }
 
-        private CancellationTokenSource _cancellationTokenSource;
-        private TaskScheduler _taskScheduler;
+       
 
-        public RegisterWithResponse Register(CamRegistration camRegistration, string proxyLogin = null, string proxyPassword = null)
+        private RegisterWithResponse Register(CamRegistration camRegistration, NetworkCredential networkCredential = null)
         {
             if (camRegistration == null || camRegistration.IsEmpty) throw new InvalidOperationException("CAM license or CAM credentials are required");
 
-            ProxySettings.Proxy = TryGetProxy(proxyLogin, proxyPassword);
+            if (networkCredential != null)
+                ProxySettings.Proxy = TryGetProxy(networkCredential);
             //var machineId = NetAddressHelper.GetMacWithIPAddress();
             RegisterWithResponse regInfo;
 
@@ -65,84 +73,18 @@ namespace APTAT.Core.Valkyrie
                     ProductVersion = asm.Version.ToString()
                 });
             }
-
+            _apiKey = regInfo.ApiKey;
             return regInfo;
         }
 
-        private IWebProxy TryGetProxy(string login, string password)
+        private IWebProxy TryGetProxy(NetworkCredential networkCredential)
         {
             var proxy = WebRequest.GetSystemWebProxy();
-            if (!String.IsNullOrWhiteSpace(login) && !String.IsNullOrWhiteSpace(password))
+            if (networkCredential != null)
             {
-                proxy.Credentials = new NetworkCredential(login, password);
+                proxy.Credentials = networkCredential;
             }
             return proxy;
-        }
-
-        public void AnalyzeAsync(List<ValkyrieFileInfo> badFiles, string login, string password, int machineCount, string apiKey)
-        {
-            try
-            {
-                _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
-                _machineCount = machineCount;
-                _apiKey = apiKey;
-
-                Trace.WriteLine("API_KEY = " + apiKey);
-    
-                AnalysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
-    
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiKey));
-    
-
-                _fileScanned = 0;
-                
-                _cancellationTokenSource = new CancellationTokenSource();
-
-                var cancellationToken = _cancellationTokenSource.Token;
-
-                cancellationToken.Register(OnAnalyzeCompleted);
-
-                _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-
-                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, 200);
-
-                Task.Factory.StartNew(t =>
-                {
-                    try
-                    {
-                        Thread.Sleep(2000);//time out asked by Valkyrie team 
-                        var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(apiKey));
-                        if (startScanResult.ReturnCode != 0)
-                        {
-                            Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
-                      
-                        }
-                        SubmitToAutomaticAnalysis(badFiles, login, password, _cancellationTokenSource.Token);
-                    }
-                    catch (AggregateException exception)
-                    {
-                        var messages = exception.InnerExceptions.Select(e => e.Message).ToArray();
-                        var exMessage = String.Join(Environment.NewLine, messages);
-                        Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exMessage));
-                        Trace.Flush();
-                        OnAnalyzeCompleted(exception);
-                    }
-
-                }, TaskCreationOptions.None, cancellationToken)
-                .ContinueWith(OnAnalyzeCompleted, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, _taskScheduler);
-
-            }
-            catch (Exception exception)
-            {
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exception.Message));
-                Trace.Flush();
-                var tmp = AnalyzeCompleted;
-                if (tmp != null)
-                {
-                    var agrEx = new AggregateException(exception);
-                    tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), agrEx, false, null));
-                }
-            }
         }
 
         private void ProgressNotifyTimerCallback(object state)
@@ -225,7 +167,6 @@ namespace APTAT.Core.Valkyrie
             return valkyrieFolder;
         }
 
-
         private Guid GetEndpointId()
         {
             string subKeyName = @"SOFTWARE\COMODO\APTAT";
@@ -266,10 +207,9 @@ namespace APTAT.Core.Valkyrie
 
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
         {
-            FilesCount = badFiles.Count;
+            _filesCount = badFiles.Count;
             Guid endpointId = GetEndpointId();
             var destFolder = CreateTmpFolder();
-            var exceptions = new ConcurrentQueue<Exception>();
             if (parallel)
             {
                 ParallelOptions opt = new ParallelOptions
@@ -286,7 +226,7 @@ namespace APTAT.Core.Valkyrie
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                         var orgPath = f.GetFullPath();
                         UploadFile(filePath, orgPath, endpointId);
-                       // File.Delete(filePath);
+                        File.Delete(filePath);
                     }
                     catch (Exception e)
                     {
@@ -306,16 +246,10 @@ namespace APTAT.Core.Valkyrie
                         }
 
                         Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
-                        Trace.Flush();
 
-                        var exp = new InvalidOperationException("Could not upload file " + f.Path, e);
-                        exceptions.Enqueue(exp);
+                        
                     }
                 });
-
-
-                var ex = new AggregateException(exceptions.ToArray());
-                if (exceptions.Count > 0) throw ex;
             }
             else
             {
@@ -335,52 +269,56 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        public event AnalyzeCompletedEventHandler<ValkyrieAnalysisResult> AnalyzeCompleted;
-        public event ProgressChangedEventHandler AnalyzeProgressChanged;
-
-        private int _machineCount;
+        
         private void OnAnalyzeCompleted()
         {
-        
+            if (_progressNotifyTimer != null)
+            {
+                _progressNotifyTimer.Dispose();
+                _progressNotifyTimer = null;
+            }
             var tmp = AnalyzeCompleted;
             if (tmp != null)
             {
                 Task.Factory.StartNew(() =>
                     {
-                        tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), null, true, null));
-                    }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+                        tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), null, true, null));
+                    }, CancellationToken.None);
             }
-            _progressNotifyTimer.Dispose();
+
         }
 
-
-        private void OnAnalyzeCompleted(Exception exception)
-        {
-            var tmp = AnalyzeCompleted;
-            if (tmp != null)
-            {
-                Task.Factory.StartNew(
-
-                    () =>
-                    {
-                        tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), exception, false, null));
-                    }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
-            }
-              _progressNotifyTimer.Dispose();
-        }
         private void OnAnalyzeCompleted(Task task)
         {
-            ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount));
+            if (_progressNotifyTimer != null)
+            {
+                _progressNotifyTimer.Dispose();
+                _progressNotifyTimer = null;
+            }
+            Exception exception = null;
+            if (task.Exception != null)
+            {
+                var aggregateException = task.Exception;
+                if (aggregateException.InnerExceptions.Count == 1)
+                {
+                    exception = aggregateException.InnerExceptions.First();
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exception.Message));
+                }
+                else
+                {
+                    var messages = aggregateException.InnerExceptions.Select(e => e.Message).ToArray();
+                    var exMessage = String.Join(Environment.NewLine, messages);
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exMessage));
+                    exception = aggregateException;
+                }
+            }
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {1}", DateTime.UtcNow, _apiKey));
-            Trace.Flush();
-
-            if (task.Exception != null) throw task.Exception;
+            
             var tmp = AnalyzeCompleted;
             if (tmp != null)
             {
-                tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(AnalysisResults.ToArray(), task.Exception, task.IsCanceled, task.AsyncState));
+                tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), exception, task.IsCanceled, task.AsyncState));
             }
-            _progressNotifyTimer.Dispose();
         }
 
         private void OnAnalyzeProgressChanged()
@@ -390,12 +328,12 @@ namespace APTAT.Core.Valkyrie
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
             {
-                var malwareCount = AnalysisResults.Count(f => f.Verdict == InfoVerdictEnum.Malware || f.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
+                var malwareCount = _analysisResults.Count(f => f.Verdict == InfoVerdictEnum.Malware || f.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
                 double progress = 0;
 
-                if (FilesCount > 0)
+                if (_filesCount > 0)
                 {
-                    progress = (_fileScanned / (double)FilesCount) * 100;
+                    progress = (_fileScanned / (double)_filesCount) * 100;
 
                 }
                 var progressInt = Convert.ToInt32(progress);
@@ -406,11 +344,20 @@ namespace APTAT.Core.Valkyrie
                 {
                     ValkyrieAnalysisResult result;
                     _analysedItems.TryRemove(item.SHA1, out result);
-            }
+                }
 
-                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<ValkyrieAnalysisResult>(FilesCount, _fileScanned, malwareCount, 0, newResults)));
-             
+                tmp(this, new ProgressChangedEventArgs(progressInt, new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, malwareCount, 0, newResults)));
+
+            }
         }
+
+        private void OnAnalyzeStarted()
+        {
+            var tmp = AnalyzeStarted;
+            if (tmp != null)
+            {
+                tmp(this, EventArgs.Empty);
+            }
         }
 
         private void UploadFile(string filePath, string originalFilePath, Guid endpointId)
@@ -504,11 +451,9 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        private System.Threading.Timer _progressNotifyTimer;
-
         private void AddResult(ValkyrieAnalysisResult result)
         {
-            AnalysisResults.Add(result);
+            _analysisResults.Add(result);
 
             Interlocked.Increment(ref _fileScanned);
             _analysedItems.TryAdd(result.SHA1, result);
@@ -518,12 +463,42 @@ namespace APTAT.Core.Valkyrie
 
         public string GetValkyrieDetailsLink()
         {
-            return string.Format(@"{0}signup_apikey/{1}", ValkyrieApiUrls.GetBaseUri(), _apiKey);
+            return String.Format(@"{0}signup_apikey/{1}", ValkyrieApiUrls.GetBaseUri(), _apiKey);
         }
 
 
+        public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnaluyze,
+            string login, string password, int machineCount, NetworkCredential proxyCredential = null)
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+            _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
+            _machineCount = machineCount;
+            _fileScanned = 0;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
+            cancellationToken.Register(OnAnalyzeCompleted);
 
+            Task.Factory.StartNew(t =>
+            {
+                var regInfo = Register(camRegistration, proxyCredential);
+                if (regInfo.ReturnCode != 0)
+                {
+                    var ex = new ValkyrieRegistrationFailedException(regInfo);
+                    throw ex;
+                }
+                OnAnalyzeStarted();
+                Thread.Sleep(2000); //time out asked by Valkyrie team 
+                var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(regInfo.Key));
+                if (startScanResult.ReturnCode != 0)
+                {
+                    Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
+                    throw new InvalidOperationException();
+                }
+                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, 200);
+                SubmitToAutomaticAnalysis(filesToAnaluyze, login, password, _cancellationTokenSource.Token);
+                ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount));
+            }, TaskCreationOptions.None, cancellationToken)
+                .ContinueWith(OnAnalyzeCompleted,TaskContinuationOptions.NotOnCanceled);
+        }
     }
-
-
 }

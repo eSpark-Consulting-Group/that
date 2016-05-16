@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
@@ -51,6 +54,47 @@ namespace APTAT.Core.Facade.Descent.Commands
 				countdownEvent.Wait();
 			}
 		}
+        public static string GetOrganizationUnit(string ldapPath /*, out string firstParent*/ )
+        {
+            string firstParent;
+            if (String.IsNullOrEmpty(ldapPath))
+                return null;
 
-	}
+            string[] parts = ldapPath.Split(',');
+            List<string> units = new List<string>();
+            List<string> containers = new List<string>();
+            foreach (var part in parts)
+            {
+                if (part.StartsWith("CN=", true, CultureInfo.InvariantCulture) && part.Length > 3)
+                    containers.Add(part.Substring(3));
+
+                if (part.StartsWith("OU=", true, CultureInfo.InvariantCulture) && part.Length > 3)
+                    units.Add(part.Substring(3));
+            }
+
+            if (units.Count > 0)
+            {
+                firstParent = units[0];
+            }
+            else
+            {
+                if (containers.Count > 0)
+                {
+                    firstParent = containers[0];
+                    return firstParent;
+                }
+            }
+
+            units.Reverse();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var unit in units)
+            {
+                sb.Append(String.Concat(unit, "\\"));
+            }
+
+            return sb.ToString().TrimEnd('\\');
+        }
+
+    }
 }
