@@ -374,10 +374,11 @@ namespace CodedUITestAT
             {
                 Playback.Wait(2000);
                 if (!MainWindowTitleTextBlock().DisplayText.Contains("%")) break;
-                if ((int)timer.ElapsedMilliseconds > waitTime)
-                    throw new Exception(String.Format("All Valkyrie results are not received after {0} seconds!", waitTime / 1000));
+                if ( (int) timer.ElapsedMilliseconds > waitTime )
+                    throw new Exception(String.Format("Complete Valkyrie results are not received after {0} seconds!", waitTime / 1000));
             }
             timer.Stop();
+            Playback.Wait(5000);
 
             testContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
         }
@@ -461,7 +462,7 @@ namespace CodedUITestAT
         {
             string endpointName = DataHelper.GetEndpointName();
             string workgroupName = SysHelper.GetWorkgroupName();
-            string malwarePath = SysHelper.InfectForQuickScan(endpointName);            
+            string malwarePath = SysHelper.InfectForQuickScan(endpointName);
                         
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
