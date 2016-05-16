@@ -387,7 +387,7 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
                 if (!MainWindowTitleTextBlock().DisplayText.Contains("%")) break;
                 if ( (int) timer.ElapsedMilliseconds > waitTime )
-                    throw new Exception(String.Format("Complete Valkyrie results are not received after {0} seconds!", waitTime / 1000));
+                    throw new Exception(String.Format("Complete Valkyrie results are not received after {0} minutes!", waitTime / 60000));
             }
             timer.Stop();
 
