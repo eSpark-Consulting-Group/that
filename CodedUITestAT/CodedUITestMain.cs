@@ -320,7 +320,16 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current test context.</param>
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
-            int valkyrieResultsRowsNumber = ValkyrieResultsTree().GetTreeRows().Length;
+            int valkyrieResultsRowsNumber = 0;
+
+            // Waits while the screen is refreshed
+            for (int i = 0; i < 3; i++)
+            {
+                Playback.Wait(5000);
+                valkyrieResultsRowsNumber = ValkyrieResultsTree().GetTreeRows().Length;
+                if (valkyrieResultsRowsNumber != 0) break;
+            }
+            
             if (valkyrieResultsRowsNumber == expectedFilesNumber)
                 testContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
             else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
@@ -368,7 +377,7 @@ namespace CodedUITestAT
         {
             int waitTime = Settings.WaitingTime.Default.ValkyrieUploadWaitTime;
             UIHelper.WaitForControl(ValkyrieResultsTree(), waitTime);
-
+            
             var timer = Stopwatch.StartNew();
             for (; ; )
             {
@@ -378,7 +387,6 @@ namespace CodedUITestAT
                     throw new Exception(String.Format("Complete Valkyrie results are not received after {0} seconds!", waitTime / 1000));
             }
             timer.Stop();
-            Playback.Wait(5000);
 
             testContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
         }
@@ -463,6 +471,7 @@ namespace CodedUITestAT
             string endpointName = DataHelper.GetEndpointName();
             string workgroupName = SysHelper.GetWorkgroupName();
             string malwarePath = SysHelper.InfectForQuickScan(endpointName);
+            //string malwarePath = String.Format(@"Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{0}", Settings.General.Default.ThreatName);
                         
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
