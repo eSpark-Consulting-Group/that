@@ -321,6 +321,9 @@ namespace CodedUITestAT
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
             int valkyrieResultsRowsNumber = 0;
+            UIHelper.WaitForControl(ValkyrieResultsTree());
+            UIMapResultsWindow.GoToUnknownFilesTab();
+            UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
             // Waits while the screen is refreshed
             for (int i = 0; i < 3; i++)
@@ -388,7 +391,7 @@ namespace CodedUITestAT
             }
             timer.Stop();
 
-            testContext.WriteLine("'Valkyrie analysis results' screen appeared...\n");
+            testContext.WriteLine("Valkyrie upload finished...\n");
         }
 
         #endregion
@@ -472,7 +475,7 @@ namespace CodedUITestAT
             string workgroupName = SysHelper.GetWorkgroupName();
             string malwarePath = SysHelper.InfectForQuickScan(endpointName);
             //string malwarePath = String.Format(@"Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{0}", Settings.General.Default.ThreatName);
-                        
+            
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
 
