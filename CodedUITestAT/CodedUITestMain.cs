@@ -321,7 +321,6 @@ namespace CodedUITestAT
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
             int valkyrieResultsRowsNumber = 0;
-            UIHelper.WaitForControl(ValkyrieResultsTree());
             UIMapResultsWindow.GoToUnknownFilesTab();
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
