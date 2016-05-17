@@ -328,7 +328,7 @@ namespace CodedUITestAT
             for (int i = 0; i < 3; i++)
             {
                 Playback.Wait(5000);
-                valkyrieResultsRowsNumber = ValkyrieResultsTree().GetTreeRows().Length;
+                valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetTabRows().Length;
                 if (valkyrieResultsRowsNumber != 0) break;
             }
             
@@ -343,22 +343,22 @@ namespace CodedUITestAT
         private void ClickRow(ResultsScreen screen, string rowName, MouseClick click = MouseClick.Left)
         {
             WpfButton expandRowButton;
-            WpfTree tree;
+            WpfTabPage tab;
 
             switch (screen)
             {
                 case ResultsScreen.Files:
                     UIMapResultsWindow.GoToUnknownFilesTab();
-                    tree = UnknownFilesTree();
+                    tab = UnknownFilesTab();
                     break;
                 case ResultsScreen.Analysis:
                     UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
-                    tree = ValkyrieResultsTree();
+                    tab = ValkyrieAnalysisResultsTab();
                     break;
                 default: throw new Exception("Unexpected Results screen!");
             }
             
-            var rows = tree.GetTreeRows();
+            var rows = tab.GetTabRows();
 
             foreach (var row in rows)
             {
@@ -378,7 +378,8 @@ namespace CodedUITestAT
         private void WaitForValkyrieResults(TestContext testContext)
         {
             int waitTime = Settings.WaitingTime.Default.ValkyrieUploadWaitTime;
-            UIHelper.WaitForControl(ValkyrieResultsTree(), waitTime);
+            UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
+            UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
             
             var timer = Stopwatch.StartNew();
             for (; ; )
@@ -390,7 +391,7 @@ namespace CodedUITestAT
             }
             timer.Stop();
 
-            testContext.WriteLine("Valkyrie upload finished...\n");
+            testContext.WriteLine("Complete Valkyrie results received...\n");
         }
 
         #endregion
@@ -401,6 +402,7 @@ namespace CodedUITestAT
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
             string endpointName = DataHelper.GetEndpointName();
+            SysHelper.InfectForQuickScan(endpointName);
 
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
