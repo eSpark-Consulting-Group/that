@@ -8,7 +8,7 @@ namespace Valkyrie.WebApiProvider.Enums
         None = -1,
 
         [Description("Success")]
-        Success =0,
+        Success = 0,
 
         [Description("Analysis Token Expired")]
         AnalysisTokenExpired = 101,
@@ -42,103 +42,103 @@ namespace Valkyrie.WebApiProvider.Enums
 
         [Description("Timeout extracting archive file")]
         TimeoutExtractingArchiveFile = 111, //CORRUPTED_OR_PROTECTED_ARCHIVE
-        
+
         [Description("No exe in archive file")]
         NoExeInArchiveFile = 112,
 
         [Description("FILE NOT UPLOADED BEFORE")]
-        FILE_NOT_UPLOADED_BEFORE = 113, 
+        FileNotUploadedBefore = 113,
 
         [Description("INVALID SHA1")]
-        INVALID_SHA1 = 114,
+        InvalidSha1 = 114,
 
-        INVALID_NUMERIC_VALUE = 115, 
+        InvalidNumericValue = 115,
 
-        APT_NO_STARTED_SCAN_FOUND = 116,
-
-        [Description("MANUAL ANALYSIS LIMIT REACHED")]
-        MANUAL_ANALYSIS_LIMIT_REACHED = 117,
+        AptNoStartedScanFound = 116,
 
         [Description("MANUAL ANALYSIS LIMIT REACHED")]
-        METADATA_TOKEN_MISSING = 131, 
+        ManualAnalysisLimitReached = 117,
+
+        [Description("MANUAL ANALYSIS LIMIT REACHED")]
+        MetadataTokenMissing = 131,
 
         [Description("METADATA TOKEN ALREADY USED")]
-        METADATA_TOKEN_ALREADY_USED = 132,
+        MetadataTokenAlreadyUsed = 132,
 
         [Description("INVALID METADATA TYPE")]
-        INVALID_METADATA_TYPE = 133, 
+        InvalidMetadataType = 133,
 
         [Description("INVALID METADATA TOKEN PARAMETER")]
-        INVALID_METADATA_TOKEN_PARAMETER = 134,
+        InvalidMetadataTokenParameter = 134,
 
         [Description("METADATA TOKEN EXPIRED")]
-        METADATA_TOKEN_EXPIRED = 135,
+        MetadataTokenExpired = 135,
 
         [Description("METADATA FILE MISSING")]
-        METADATA_FILE_MISSING = 136,
+        MetadataFileMissing = 136,
 
         [Description("METADATA FILE IS INVALID")]
-        METADATA_FILE_IS_INVALID = 137,
+        MetadataFileIsInvalid = 137,
 
         [Description("Component Response Timeout")]
         ComponentResponseTimeout = 201,
 
         [Description("MANUAL VERDICT NOT GIVEN")]
-        MANUAL_VERDICT_NOT_GIVEN = 202,
+        ManualVerdictNotGiven = 202,
 
         [Description("ALREADY_OBJECTED")]
-        ALREADY_OBJECTED = 203,
+        AlreadyObjected = 203,
 
         [Description("ANALYSIS NOT FINISHED")]
-        ANALYSIS_NOT_FINISHED = 204,
+        AnalysisNotFinished = 204,
 
         [Description("ANALYSIS NOT FOUND")]
-        ANALYSIS_NOT_FOUND = 205,
+        AnalysisNotFound = 205,
 
         [Description("ANALYSIS FAILED")]
-        ANALYSIS_FAILED = 206,
+        AnalysisFailed = 206,
 
         [Description("COMPONENT ERROR OCCURRED")]
-        COMPONENT_ERROR_OCCURRED = 207,
+        ComponentErrorOccurred = 207,
 
         [Description("LICENSE ALREADY ASSOCIATED TO ANOTHER API KEY")]
-        LICENSE_ALREADY_ASSOCIATED_TO_ANOTHER_API_KEY = 301,
+        LicenseAlreadyAssociatedToAnotherApiKey = 301,
 
         [Description("INVALID LICENSE ID")]
-        INVALID_LICENSE_ID = 302,
+        InvalidLicenseId = 302,
 
         [Description("ENDPOINT ID MISSING")]
         EndpointIdMissing = 303,
 
         [Description("LICENSE EXPIRED")]
-        LICENSE_EXPIRED = 304,
+        LicenseExpired = 304,
 
         [Description("NO ACTIVE LICENSE FOUND")]
-        NO_ACTIVE_LICENSE_FOUND = 305,
+        NoActiveLicenseFound = 305,
 
-        [Description("CANNOT CONNECT TO CAM LICENSE SERVER")]            
-        CANNOT_CONNECT_TO_CAM_LICENSE_SERVER = 306, 
+        [Description("CANNOT CONNECT TO CAM LICENSE SERVER")]
+        CannotConnectToCamLicenseServer = 306,
 
         [Description("INVALID CAM CREDENTIALS")]
-        INVALID_CAM_CREDENTIALS = 307,
+        InvalidCamCredentials = 307,
 
         [Description("ALL LICENSES ARE ALREADY CONNECTED TO ANOTHER API KEY")]
-        ALL_LICENSES_ARE_ALREADY_CONNECTED_TO_ANOTHER_API_KEY = 308,
+        AllLicensesAreAlreadyConnectedToAnotherApiKey = 308,
 
         [Description("API KEY ALREADY HAS VALID LICENSE")]
-        API_KEY_ALREADY_HAS_VALID_LICENSE = 309,
+        ApiKeyAlreadyHasValidLicense = 309,
 
         [Description("CAM LICENSE REQUIRED")]
-        CAM_LICENSE_REQUIRED = 310,
+        CamLicenseRequired = 310,
 
         [Description("ENDPOINT LIMIT REACHED")]
-        ENDPOINT_LIMIT_REACHED = 311,
+        EndpointLimitReached = 311,
 
         [Description("NO VALID LICENSE FOUND")]
-        NO_VALID_LICENSE_FOUND = 312,
+        NoValidLicenseFound = 312,
 
         [Description("NON ENTERPRISE")]
-        NON_ENTERPRISE = 313,
+        NonEnterprise = 313,
 
         [Description("Bad Request")]
         BadRequest = 400,
@@ -147,7 +147,7 @@ namespace Valkyrie.WebApiProvider.Enums
         PageNotFound = 404,
 
         [Description("Internal Server Error")]
-        InternalServerError = 500       
+        InternalServerError = 500
 
     }
 }

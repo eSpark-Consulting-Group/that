@@ -426,7 +426,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SfxPackage\7za.exe" />
-    <None Include="build.bat" />
+    <None Include="buildScript.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Unknown File Hunter EULA %2811-18-2015%29.rtf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

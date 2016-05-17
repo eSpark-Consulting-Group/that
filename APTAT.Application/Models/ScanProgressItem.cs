@@ -40,5 +40,7 @@ namespace APTAT.Application.Models
         public Guid OperationUid { get; set; }
 
         public Int32 Percentage { get; set; }
+
+        public Int32 ErrorFilesCount { get; set; }
     }
 }

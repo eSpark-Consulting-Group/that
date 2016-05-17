@@ -45,7 +45,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         public string SubmitToken { get; set; }
 
         [JsonProperty("verdict")]
-        public InfoVerdictEnum Verdict { get; set; }
+        public ValkyrieVerdict Verdict { get; set; }
 
         [JsonProperty("verdict_source")]
         public string VerdictSource { get; set; }

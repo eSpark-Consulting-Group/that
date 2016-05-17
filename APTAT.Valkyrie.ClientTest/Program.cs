@@ -119,7 +119,7 @@ namespace APTAT.Valkyrie.ClientTest
         //        }
         //        else
         //        {
-        //            if (item.Verdict == Client.Enums.InfoVerdictEnum.Malware)
+        //            if (item.Verdict == Client.Enums.ValkyrieVerdict.Malware)
         //            {
         //                Console.ForegroundColor = ConsoleColor.Red;
         //            }

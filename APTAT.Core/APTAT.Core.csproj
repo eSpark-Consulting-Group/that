@@ -282,6 +282,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileResult.cs" />
+    <Compile Include="FilesStatistics.cs" />
     <Compile Include="FormattedText.cs">
       <SubType>Code</SubType>
     </Compile>

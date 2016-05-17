@@ -22,7 +22,7 @@ namespace ValkyrieHashAnalyzer
             return result;
         }
 
-        public static ValkyrieAnalysisResult Create(SubmitToAutomaticResponse automaticResponse)
+        public static ValkyrieAnalysisResult Create(CheckAnalysisResultResponse automaticResponse)
         {
             ValkyrieAnalysisResult result = new ValkyrieAnalysisResult();
             result.SHA1 = automaticResponse.SHA1;

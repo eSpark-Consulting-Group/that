@@ -47,17 +47,17 @@ namespace APTAT.Core.Valkyrie
         public string FilePath { get; private set; }
         public bool IsWhiteListed { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }
-        public InfoVerdictEnum Verdict { get; private set; }
+        public ValkyrieVerdict Verdict { get; private set; }
 
         public string VerdictString
         {
 
             get
             {
-                if (Verdict == InfoVerdictEnum.NotAnalyzed) return "Not Analysed";
-                if (Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication) return "Potentially Unwanted";
+                if (Verdict == ValkyrieVerdict.NotAnalyzed) return "Not Analysed";
+                if (Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication) return "Potentially Unwanted";
 
-                if (Verdict == InfoVerdictEnum.Undetected) return "No Threat Found";
+                if (Verdict == ValkyrieVerdict.Undetected) return "No Threat Found";
 
                 return Verdict.ToString();
             }
@@ -68,7 +68,7 @@ namespace APTAT.Core.Valkyrie
 
         public static ValkyrieAnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
-            var result = new ValkyrieAnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = InfoVerdictEnum.NotAnalyzed , IsWhiteListed = false, LastAnalysisDate = null};
+            var result = new ValkyrieAnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = ValkyrieVerdict.NotAnalyzed , IsWhiteListed = false, LastAnalysisDate = null};
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:

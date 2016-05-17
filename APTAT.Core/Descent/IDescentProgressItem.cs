@@ -13,5 +13,6 @@ namespace APTAT.Core.Descent
 	    int UnknownFilesCount { get; }
 	    int MalwaresCount { get; }
 	    int SafeFilesCount { get; }
+        int ErrorFilesCount { get; }
 	}
 }

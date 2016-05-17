@@ -59,6 +59,10 @@ namespace APTAT.Core
 
         public int EmptyFilesCount { get; set; }
 
+        public int ErrorFilesCount { get; set; }
+       
+        public int ServerErrorFilesCount { get; set; }
+
         public int SkippedFilesCount { get; set; }
 
         public int RunningProgramsCount
@@ -127,6 +131,7 @@ namespace APTAT.Core
             {
                 if (_aptReport != null)
                 {
+
                     // Sort out empty files (size = 0 and hash = 000000000...)
                     var notEmptyFiles = from file in _aptReport.Modules where /*file.Size > 0*/ !file.Sha1.StartsWith("0000000000000000000000000000000000000000") select file;
                     return notEmptyFiles.ToArray();
@@ -315,7 +320,10 @@ namespace APTAT.Core
         FirstSeen,
 
         [XmlEnum("error")]
-        NetworkError,
+        FailedToAnalyze,
+
+        [XmlEnum("servererror")]
+        ServerError
     }
 
     public enum OsPlatform
@@ -417,11 +425,12 @@ namespace APTAT.Core
             get { return FileAgeFormatter.GetAge(Created); }
         }
 
+        [XmlIgnore]
         public bool IsBad
         {
             get
             {
-                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Malware || Cloud == CloudVerdict.Unknown;
+                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Malware || Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FailedToAnalyze || Cloud == CloudVerdict.ServerError;
             }
         }
 

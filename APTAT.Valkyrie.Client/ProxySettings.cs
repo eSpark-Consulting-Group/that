@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 
-namespace APTAT.Valkyrie.Client
+namespace Valkyrie.WebApiProvider
 {
     public static class ProxySettings
     {

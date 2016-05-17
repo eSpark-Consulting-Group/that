@@ -139,6 +139,16 @@ namespace APTAT.Application.Models
             }
         }
 
+        private Int32 _errorFilesCount;
+        public Int32 ErrorFilesCount
+        {
+            get { return _errorFilesCount; }
+            set
+            {
+                _errorFilesCount = value;
+            }
+        }
+
         public Int32 MalwareFilesCount
         {
             get { return _malwareFilesCount; }
@@ -322,14 +332,16 @@ namespace APTAT.Application.Models
             get { return UnknownFilesCount > 0; }
         }
 
+        public bool IsErrorsFound
+        {
+            get { return ErrorFilesCount > 0; }
+        }
+
         public bool IsProtected
         {
             get
             {
-                if (!IsMalwaresFound && !IsUnknownFound)
-                    return true;
-                else
-                    return false;
+                return !IsMalwaresFound && !IsUnknownFound && !IsErrorsFound;
             }
         }
 
@@ -395,6 +407,7 @@ namespace APTAT.Application.Models
             UnknownFilesCount = 0;
             MalwareFilesCount = 0;
             ScannedItemsCount = 0;
+            ErrorFilesCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
             IsAnalyseWithValkyrieEnabled = false;
@@ -421,9 +434,7 @@ namespace APTAT.Application.Models
 
                 }
             }
-        }
-
-        
+        }        
 
         private void InvokeStopScan(Object arg)
         {
@@ -575,6 +586,7 @@ namespace APTAT.Application.Models
                 Percentage = info.Percentage;
                 UnknownFilesCount = UnknownFilesCount + info.UnknownFileCount;
                 MalwareFilesCount = MalwareFilesCount + info.MalwareFilesCount;
+                
                 RaisePropertyChanged("Header");
 
                 foreach (var result in info.Results)
@@ -766,6 +778,7 @@ namespace APTAT.Application.Models
                         infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                         infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                         infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                        infoItem.ErrorFilesCount = scanProgress.ErrorFilesCount;
                         infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.") ? scanProgress.StatusMessage.Replace("Malwares found: 0.", "") : scanProgress.StatusMessage;
                         if (infoItem.ScanStage != ScanStage.OperationCompleted &&
                             scanProgress.ScanStage == ScanStage.OperationCompleted)
@@ -796,6 +809,8 @@ namespace APTAT.Application.Models
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
             Int32 malwareFiles = 0;
+            Int32 errorFiles = 0;
+
             for (Int32 j = 0; j < _onlineItems.Length; ++j)
             {
                 ThreatInfoItem infoItem = _onlineItems[j];
@@ -811,9 +826,10 @@ namespace APTAT.Application.Models
                 {
                     scanned++;
                 }
-
+                
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
+                errorFiles += infoItem.ErrorFilesCount;
             }
 
             if (unknownFiles > UnknownFilesCount)
@@ -824,6 +840,11 @@ namespace APTAT.Application.Models
             if (malwareFiles > MalwareFilesCount)
             {
                 MalwareFilesCount = malwareFiles;
+            }
+
+            if (errorFiles > ErrorFilesCount)
+            {
+                ErrorFilesCount = errorFiles;
             }
 
             ScannedItemsCount = completed;

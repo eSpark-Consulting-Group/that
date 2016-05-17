@@ -16,7 +16,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         public AnalysisStatusEnum AnalysisStatus { get; set; }
 
         [JsonProperty("analysis_verdict")]
-        public InfoVerdictEnum AnalysisVerdict { get; set; }
+        public ValkyrieVerdict AnalysisVerdict { get; set; }
 
         [JsonProperty("manual_analysis_id")]
         public string ManualAnalysisId { get; set; }

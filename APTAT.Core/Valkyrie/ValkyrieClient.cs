@@ -328,7 +328,7 @@ namespace APTAT.Core.Valkyrie
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
             {
-                var malwareCount = _analysisResults.Count(f => f.Verdict == InfoVerdictEnum.Malware || f.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
+                var malwareCount = _analysisResults.Count(f => f.Verdict == ValkyrieVerdict.Malware || f.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
                 double progress = 0;
 
                 if (_filesCount > 0)
@@ -428,7 +428,7 @@ namespace APTAT.Core.Valkyrie
                         Thread.Sleep(1000);
                         elapsed += 1000;
                         automaticAnalysisResponse = ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest() { ApiKey = _apiKey, AnalysisId = response.AnalysisId });
-                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.ANALYSIS_NOT_FINISHED);                      
+                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.AnalysisNotFinished);                      
                     }
 
                     var result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);

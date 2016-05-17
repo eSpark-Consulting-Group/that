@@ -57,6 +57,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Contracts\CheckAnalysisResultResponse.cs" />
     <Compile Include="Contracts\RegisterWithCamCredentials.cs" />
     <Compile Include="Contracts\RegisterWithCamLicenseRequest.cs" />
     <Compile Include="Contracts\StartAndFinalizeScanResponse.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="Contracts\EndScanRequest.cs" />
     <Compile Include="Contracts\SubmitToManualRequestSHA1.cs" />
     <Compile Include="Enums\EnumExt.cs" />
+    <Compile Include="Enums\FileCategories.cs" />
+    <Compile Include="Enums\SkippReasonEnum.cs" />
     <Compile Include="Helpers\HashCalculator.cs" />
     <Compile Include="Helpers\ObjectToArrayConverter.cs" />
     <Compile Include="Helpers\MultipartPostHelper.cs" />

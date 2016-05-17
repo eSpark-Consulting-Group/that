@@ -118,8 +118,8 @@ namespace APTAT.Core
                 var valkyrieAnalysisResult = GetFullResult(info.Results, results);
                 var malwareFilesCount =
                         valkyrieAnalysisResult.Where(i => i.ValkyrieAnalysisResult != null)
-                            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
-                                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
+                            .Count(i => i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware ||
+                                i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
 
 
                 var unknownFilesCount = valkyrieAnalysisResult.Count - malwareFilesCount;

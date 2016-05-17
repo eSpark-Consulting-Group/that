@@ -12,6 +12,8 @@ namespace APTAT.Core
             int malwareFilesCount = 0;
             int emptyFilesCount = 0;
             int skippedFilesCount = 0;
+            int errorFilesCount = 0;
+            int serverErrorFilesCount = 0;
 
             foreach (var scanResult in results)
             {
@@ -23,20 +25,22 @@ namespace APTAT.Core
                     malwareFilesCount += scanResult.MalwareFilesCount;
                     emptyFilesCount += scanResult.EmptyFilesCount;
                     skippedFilesCount += scanResult.SkippedFilesCount;
-                    
+                    errorFilesCount += scanResult.ErrorFilesCount;
+                    serverErrorFilesCount += scanResult.ServerErrorFilesCount;
                 }
             }
-            return new FilesStatistics {EmptyFilesCount = emptyFilesCount, MalwareFilesCount = malwareFilesCount, SafeFilesCount = safeFilesCount, TotalFilesCound = totalFilesCound, UnknownFilesCount = unknownFilesCount, SkippedFilesCount = skippedFilesCount};
-        }
-    }
+            return new FilesStatistics
+            {
+                EmptyFilesCount = emptyFilesCount,
+                MalwareFilesCount = malwareFilesCount,
+                SafeFilesCount = safeFilesCount,
+                TotalFilesCound = totalFilesCound,
+                UnknownFilesCount = unknownFilesCount,
+                SkippedFilesCount = skippedFilesCount,
+                ErrorFilesCount = errorFilesCount,
+                ServerErrorFilesCount = serverErrorFilesCount
 
-    public class FilesStatistics
-    {
-        public int TotalFilesCound { get; set; }
-        public int SafeFilesCount { get; set; }
-        public int UnknownFilesCount { get; set; }
-        public int MalwareFilesCount { get; set; }
-        public int EmptyFilesCount { get; set; }
-        public int SkippedFilesCount { get; set; }
+            };
+        }
     }
 }

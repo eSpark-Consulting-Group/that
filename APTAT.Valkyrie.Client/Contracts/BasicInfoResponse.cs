@@ -24,7 +24,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         [JsonProperty("submit_token")]
         public string SubmitToken { get; set; }
         [JsonProperty("verdict")]
-        public InfoVerdictEnum Verdict { get; set; }
+        public ValkyrieVerdict Verdict { get; set; }
         [JsonProperty("white_listed")]
         public bool IsWhiteListed { get; set; }
        

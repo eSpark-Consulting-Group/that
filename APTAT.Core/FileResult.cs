@@ -64,7 +64,7 @@ namespace APTAT.Core
                 if (this.ValkyrieAnalysisResult != null)
                 {
 
-                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware || ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication;
+                    return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware || ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
                 }
                 return false;
             }
@@ -89,7 +89,7 @@ namespace APTAT.Core
                 if (this.ValkyrieAnalysisResult != null)
                 {
 
-                    return ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Undetected || ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.NotAnalyzed;
+                    return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Undetected || ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.NotAnalyzed;
                 }
                 return false;
             }

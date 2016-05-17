@@ -18,7 +18,8 @@ namespace APTAT.Core.Reports
         private int _malwareFilesCount = -1;
         private int _emptyFilesCount = -1;
         private int _skippedFilesCount = -1;
-
+        private int _errorFileCount = -1;
+        private int _serverErrorFileCount = -1;
         public Guid OperationUid { get; set; }
 
         public string TargetsSource { get; set; }
@@ -105,6 +106,26 @@ namespace APTAT.Core.Reports
             }
         }
 
+        public int ErrorFilesCount
+        {
+            get
+            {
+                if (_errorFileCount == -1)
+                    CalculateTotal();
+                return _errorFileCount;
+            }
+        }
+
+
+        public int ServerErrorFilesCount
+        {
+            get
+            {
+                if (_serverErrorFileCount == -1)
+                    CalculateTotal();
+                return _serverErrorFileCount;
+            }
+        }
         public int SkippedFilesCount
         {
             get
@@ -185,6 +206,8 @@ namespace APTAT.Core.Reports
                         ResultErrorText = t.ResultErrorText,
                         TargetUid = t.TargetUid,
                         TotalFilesCount = t.TotalFilesCount,
+                        ErrorFilesCount =  t.ErrorFilesCount,
+                        ServerErrorFilesCount = t.ServerErrorFilesCount,
                     };
 
                     scanResult.SetAptReportInstance(t.AptReport);
@@ -210,6 +233,8 @@ namespace APTAT.Core.Reports
             _malwareFilesCount = statistics.MalwareFilesCount;
             _emptyFilesCount = statistics.EmptyFilesCount;
             _skippedFilesCount = statistics.SkippedFilesCount;
+            _errorFileCount = statistics.ErrorFilesCount;
+            _serverErrorFileCount = statistics.ServerErrorFilesCount;
         }
 
         public ItemRatingInfo[] GetFileRatingCollection()
@@ -353,7 +378,8 @@ namespace APTAT.Core.Reports
             int malwareFilesCount = 0;
             int emptyFilesCount = 0;
             int skippedFilesCount = 0;
-
+            int errorFilesCount = 0;
+            int serverErrorFilesCount = 0;
             var targets = new List<ScannedTarget>();
 
             List<DetailedBadFile> nonUniqueBadFilesInternal = new List<DetailedBadFile>();
@@ -379,7 +405,7 @@ namespace APTAT.Core.Reports
                         DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
 
                         badFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
-                        if (badFile.Verdict != InfoVerdictEnum.Clean)
+                        if (badFile.Verdict != ValkyrieVerdict.Clean)
                         {
                             AddBadFile(uniqueFiles, badFile, module);
                         }
@@ -388,17 +414,17 @@ namespace APTAT.Core.Reports
 
                         switch (fileResult.ValkyrieAnalysisResult.Verdict)
                         {
-                            case InfoVerdictEnum.Clean:
+                            case ValkyrieVerdict.Clean:
                                 mergedSafeCount++;
                                 break;
-                            case InfoVerdictEnum.Undetected:
+                            case ValkyrieVerdict.Undetected:
                                 mergedUnknownCount++;
                                 break;
-                            case InfoVerdictEnum.Malware:
-                            case InfoVerdictEnum.PotentiallyUnwantedApplication:
+                            case ValkyrieVerdict.Malware:
+                            case ValkyrieVerdict.PotentiallyUnwantedApplication:
                                 mergedMalwareCount++;
                                 break;
-                            case InfoVerdictEnum.NotAnalyzed:
+                            case ValkyrieVerdict.NotAnalyzed:
                                 {
                                     switch (module.Cloud)
                                     {
@@ -412,7 +438,7 @@ namespace APTAT.Core.Reports
                                         case CloudVerdict.Malware:
                                             mergedMalwareCount++;
                                             break;
-                                        case CloudVerdict.NetworkError:
+                                        case CloudVerdict.FailedToAnalyze:
                                             break;
                                         default:
                                             throw new ArgumentOutOfRangeException();
@@ -446,7 +472,7 @@ namespace APTAT.Core.Reports
                             case CloudVerdict.Malware:
                                 mergedMalwareCount++;
                                 break;
-                            case CloudVerdict.NetworkError:
+                            case CloudVerdict.FailedToAnalyze:
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -488,7 +514,8 @@ namespace APTAT.Core.Reports
                 safeFilesCount += mergedSafeCount;
                 unknownFilesCount += mergedUnknownCount;
                 malwareFilesCount += mergedMalwareCount;
-
+                errorFilesCount += flsResult.ErrorFilesCount;
+                serverErrorFilesCount += flsResult.ServerErrorFilesCount;
                 totalFilesCound += flsResult.TotalFilesCount;
                 emptyFilesCount += flsResult.EmptyFilesCount;
                 skippedFilesCount += flsResult.SkippedFilesCount;
@@ -496,7 +523,17 @@ namespace APTAT.Core.Reports
 
             mergedTargets = targets;
 
-            var statistics = new FilesStatistics() { EmptyFilesCount = emptyFilesCount, MalwareFilesCount = malwareFilesCount, SafeFilesCount = safeFilesCount, TotalFilesCound = totalFilesCound, UnknownFilesCount = unknownFilesCount, SkippedFilesCount = skippedFilesCount };
+            var statistics = new FilesStatistics()
+            {
+                EmptyFilesCount = emptyFilesCount,
+                MalwareFilesCount = malwareFilesCount,
+                SafeFilesCount = safeFilesCount,
+                TotalFilesCound = totalFilesCound,
+                UnknownFilesCount = unknownFilesCount,
+                SkippedFilesCount = skippedFilesCount,
+                ErrorFilesCount =  errorFilesCount,
+                ServerErrorFilesCount = serverErrorFilesCount
+            };
             ReplaceStatistics(statistics);
 
             _mergedScanResultsCache = new MergedScanResults
@@ -605,6 +642,8 @@ namespace APTAT.Core.Reports
                 OrganizationUnit = scanResult.OrganizationUnit;
                 TotalFilesCount = scanResult.TotalFilesCount;
                 UnknownFilesCount = scanResult.UnknownFilesCount;
+                ErrorFilesCount = scanResult.ErrorFilesCount;
+                ServerErrorFilesCount = scanResult.ServerErrorFilesCount;
                 SafeFilesCount = scanResult.SafeFilesCount;
                 MalwareFilesCount = scanResult.MalwareFilesCount;
                 RunningProgramsCount = scanResult.RunningProgramsCount;
@@ -629,7 +668,8 @@ namespace APTAT.Core.Reports
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
         public int MalwareFilesCount { get; set; }
-
+        public int ErrorFilesCount { get; set; }
+        public int ServerErrorFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }
 
         public string TargetVerdictString { get; set; }
@@ -676,7 +716,7 @@ namespace APTAT.Core.Reports
 
         public DetailedBadFile(Module module, ScannedTarget target)
         {
-            Verdict = InfoVerdictEnum.NotAnalyzed;
+            Verdict = ValkyrieVerdict.NotAnalyzed;
             if (module != null)
             {
                 Sha1 = module.Sha1;
@@ -718,9 +758,9 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                if (Verdict == InfoVerdictEnum.NotAnalyzed)
+                if (Verdict == ValkyrieVerdict.NotAnalyzed)
                     return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
-                return Verdict == InfoVerdictEnum.Undetected ? BadFileType.Unknown : BadFileType.Infected;
+                return Verdict == ValkyrieVerdict.Undetected ? BadFileType.Unknown : BadFileType.Infected;
             }
         }
 
@@ -760,7 +800,7 @@ namespace APTAT.Core.Reports
                         return "Malware";
                     case CloudVerdict.FirstSeen:
                         return "Unknown (FirstSeen)";
-                    case CloudVerdict.NetworkError:
+                    case CloudVerdict.FailedToAnalyze:
                         return "Error";
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -815,7 +855,7 @@ namespace APTAT.Core.Reports
 
         public ErrorCodesEnum ReturnCode { get; set; }
 
-        public InfoVerdictEnum Verdict { get; set; }
+        public ValkyrieVerdict Verdict { get; set; }
 
         public string ValkyrieVerdictString
         {

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Net;
-using APTAT.Core;
-using APTAT.Core.Descent;
 
 namespace APTAT.Core.Descent
 {
@@ -289,8 +286,9 @@ namespace APTAT.Core.Descent
                 public int MalwaresFound { get; set; }
                 public int EmptyFilesFound { get; set; }
                 public int SkippedFilesCount { get; set; }
+                public int NetworkErrorFilesCount { get; set; }
                 public long TotalFilesSize { get; set; }
-
+                public int FailedAtNodeCount { get; set; }
                 public int Percentage
                 {
                     get
@@ -309,6 +307,7 @@ namespace APTAT.Core.Descent
             }
             public class ScanProgressChangedEventArgs : AptScanningEventArgs
             {
+                
             }
 
             public EventHandler<ScanFailedEventArgs> ScanFailed;
@@ -623,22 +622,22 @@ namespace APTAT.Core.Descent
                             Int64.TryParse(temp[2], out enumeratedSize);
 
                             int totalFiles;
-                            Int32.TryParse(temp[3], out totalFiles);
+                            Int32.TryParse(temp[3], out totalFiles); //scanned count
 
                             long totalFilesSize;
-                            Int64.TryParse(temp[4], out totalFilesSize);
+                            Int64.TryParse(temp[4], out totalFilesSize);//scanned size
 
                             int unknownFiles;
                             Int32.TryParse(temp[5], out unknownFiles);
 
                             int newFiles;
-                            Int32.TryParse(temp[6], out newFiles);
+                            Int32.TryParse(temp[6], out newFiles);//nonExistentCount
 
                             int errorFiles;
-                            Int32.TryParse(temp[7], out errorFiles);
+                            Int32.TryParse(temp[7], out errorFiles); //failed to analyze count
 
                             int emptyFiles;
-                            Int32.TryParse(temp[8], out emptyFiles);
+                            Int32.TryParse(temp[8], out emptyFiles);//inaccessibleCount
 
                             int safeFiles;
                             Int32.TryParse(temp[9], out safeFiles);
@@ -649,7 +648,10 @@ namespace APTAT.Core.Descent
                             int skipped;
                             Int32.TryParse(temp[11], out skipped);
 
-                            string error = temp[12];
+                            int failedAtNodeCount;
+                            Int32.TryParse(temp[12], out failedAtNodeCount);    
+
+                            string error = temp[13];
                             EnAptStage status = (EnAptStage)statusInt;
 
                             if (!_serviceHelper.IsServiceRunning() && status != EnAptStage.EnApt_Complete &&
@@ -682,7 +684,7 @@ namespace APTAT.Core.Descent
                             }
                             else if( status == EnAptStage.EnApt_ScaningModules )
                             {
-                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, SkippedFilesCount = skipped });
+                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, SkippedFilesCount = skipped, NetworkErrorFilesCount = errorFiles, FailedAtNodeCount = failedAtNodeCount});
                             }
                             else if( status == EnAptStage.EnApt_WritingReport )
                             {
@@ -700,7 +702,7 @@ namespace APTAT.Core.Descent
 
                                 File.Copy(_resultsFile, resultsFileLocal, true);
                                 //File.Delete(resultsFile);
-                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, EmptyFilesFound = emptyFiles, SkippedFilesCount = skipped });
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, EmptyFilesFound = emptyFiles, SkippedFilesCount = skipped ,NetworkErrorFilesCount = errorFiles});
                                 break;
                             }
                             else if( status == EnAptStage.EnApt_Failed )

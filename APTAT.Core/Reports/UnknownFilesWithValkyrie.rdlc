@@ -1122,7 +1122,7 @@
         </Field>
         <Field Name="Verdict">
           <DataField>Verdict</DataField>
-          <rd:TypeName>Valkyrie.WebApiProvider.Enums.InfoVerdictEnum</rd:TypeName>
+          <rd:TypeName>Valkyrie.WebApiProvider.Enums.ValkyrieVerdict</rd:TypeName>
         </Field>
         <Field Name="Version">
           <DataField>Version</DataField>

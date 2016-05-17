@@ -83,6 +83,7 @@ namespace APTAT.Application.Models
         private Boolean _isCompletedSubItem;
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
+        private int _errorFilesCount;
 
         public Boolean AutoExpandHandled
         {
@@ -146,8 +147,6 @@ namespace APTAT.Application.Models
         {
             get
             {
-                
-
                 if(IsRootItem == false)
                 {
                     if (IsCompletedSubItem)
@@ -243,6 +242,22 @@ namespace APTAT.Application.Models
 
                 _malwareFilesCount = value;
                 RaisePropertyChanged("MalwareFilesCount");
+                RaisePropertyChanged("HasBadFiles");
+            }
+        }
+
+        public Int32 ErrorFilesCount
+        {
+            get { return _errorFilesCount; }
+            set
+            {
+                if (_errorFilesCount == value)
+                {
+                    return;
+                }
+
+                _errorFilesCount = value;
+                RaisePropertyChanged("ErrorFilesCount");
                 RaisePropertyChanged("HasBadFiles");
             }
         }
