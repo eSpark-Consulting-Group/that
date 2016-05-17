@@ -50,37 +50,20 @@ namespace CodedUITestAT
             Point point;
             return control.TryGetClickablePoint(out point);
         }
-          /*      
-        /// <summary> Gets rows from a given tree control. </summary>
-        /// <param name="tree">Set a tree control.</param>
-        internal static WpfRow[] GetTreeRows(this WpfTree tree)
-        {
-           var rowsCollection = tree.GetChildren()[2].GetChildren();
-           WpfRow[] rows = rowsCollection.OfType<WpfRow>().ToArray();
-           return rows;
-        }
-        
-        /// <summary> Gets a given row name. In accordance with Application.Models.ThreatInfoItem or Core.FileResults. </summary>
-        /// <param name="row">Set a row control.</param>
-        internal static string GetRowName(this WpfRow row)
-        {
-            return row.GetChildren()[1].Name;
-        }
-        */
 
         /// <summary> Gets rows from a given tab page control.  </summary>
         /// <param name="tab">Set a tab page control.</param>
-        internal static UITestControl[] GetTabRows(this WpfTabPage tab)
+        internal static WpfRow[] GetTabRows(this WpfTabPage tab)
         {
             var tree = tab.GetChildren()[1].GetChildren()[0];
             var rowsCollection = tree.GetChildren()[2].GetChildren();
 
-            return rowsCollection.ToArray();
+            return rowsCollection.OfType<WpfRow>().ToArray();
         }
 
         /// <summary> Gets a given row name. In accordance with Application.Models.ThreatInfoItem or Core.FileResults. </summary>
         /// <param name="row">Set a row control.</param>
-        internal static string GetRowName(this UITestControl row)
+        internal static string GetRowName(this WpfRow row)
         {
             return row.GetChildren()[1].Name;
         }

@@ -321,8 +321,6 @@ namespace CodedUITestAT
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
             int valkyrieResultsRowsNumber = 0;
-            UIMapResultsWindow.GoToUnknownFilesTab();
-            UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
             // Waits while the screen is refreshed
             for (int i = 0; i < 3; i++)
