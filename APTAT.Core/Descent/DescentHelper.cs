@@ -603,7 +603,7 @@ namespace APTAT.Core.Descent
                             readFileAttemptsCount = 20;
 
                             string[] temp = data.Split(';');
-                            if (temp.Length != 13)
+                            if (temp.Length != 14)
                             {
                                 if (checkFileHeaderAttemptsCount > 0)
                                     --checkFileHeaderAttemptsCount;
