@@ -11,8 +11,8 @@ namespace APTAT.Application.Models
 {
     public class StartScanDomainViewModel : WizardViewModel
     {
-        private readonly ITargetsDiscoveryService _service = TargetsDiscoveryService.Instance;
-        private readonly IStorageService _storage = new StorageService();
+        ITargetsDiscoveryService _targetsDiscoveryService; 
+        IStorageService _storage;
         private Int32 _step;
         private DirectoryItem[] _items;
         private readonly ICollection<Object> _checkedItems;
@@ -86,8 +86,11 @@ namespace APTAT.Application.Models
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
-        public StartScanDomainViewModel()
+        public StartScanDomainViewModel(ITargetsDiscoveryService targetsDiscoveryService,IStorageService storage)
         {
+            _targetsDiscoveryService = targetsDiscoveryService;
+            _storage = storage;
+
             SetSteps(new[] { null, SelectDomain, SelectTargets });
 
             ExpandCommand = new DelegateCommand(InvokeExpand);
@@ -102,7 +105,7 @@ namespace APTAT.Application.Models
         private void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
-            _service.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, new OperationContext { UserState = this, Arg = commandContext });
+            _targetsDiscoveryService.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, new OperationContext { UserState = this, Arg = commandContext });
         }
 
         private void InvokeCheckItem(Object arg)
@@ -141,7 +144,7 @@ namespace APTAT.Application.Models
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.Domain, DomainController);
-                _service.GetDirectoryRoot(DomainController, Administrator, Password, new OperationContext { UserState = this, Success = success });
+                _targetsDiscoveryService.GetDirectoryRoot(DomainController, Administrator, Password, new OperationContext { UserState = this, Success = success });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -193,17 +196,17 @@ namespace APTAT.Application.Models
             {
                 RaisePropertyChanged("DomainController");
             }
-            
-            _service.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
-            _service.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
+
+            _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
+            _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
         }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
 
-            _service.GetDirectoryItemsCompleted -= OnGetDirectoryItemsCompleted;
-            _service.GetDirectoryRootCompleted -= OnGetDirectoryRootCompleted;
+            _targetsDiscoveryService.GetDirectoryItemsCompleted -= OnGetDirectoryItemsCompleted;
+            _targetsDiscoveryService.GetDirectoryRootCompleted -= OnGetDirectoryRootCompleted;
         }
 
 
@@ -222,7 +225,7 @@ namespace APTAT.Application.Models
             {
                 if (Items != null && Items.Length > 0)
                 {
-                    _service.GetDirectoryItems(DomainController, Administrator, Password, Items[0], new OperationContext { UserState = this, Arg = this });
+                    _targetsDiscoveryService.GetDirectoryItems(DomainController, Administrator, Password, Items[0], new OperationContext { UserState = this, Arg = this });
                 }
 
                 Error = null;

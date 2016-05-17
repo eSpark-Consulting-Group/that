@@ -19,7 +19,6 @@ namespace APTAT.Application.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Int64 Id { get; set; }
         private Boolean _hasErrors;
         private List<Error> _errors;
 

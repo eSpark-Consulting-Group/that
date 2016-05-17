@@ -13,38 +13,19 @@ using APTAT.Core;
 using APTAT.Core.Valkyrie;
 using Process = System.Diagnostics.Process;
 using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
+using System.ComponentModel;
+using APTAT.Application.Messages;
+using APTAT.Application.Helpers;
 
 namespace APTAT.Application
 {
-    public static class DispatcherHelper
-    {
-        public static Dispatcher Current { get; set; }
-    }
-
-    /// <summary>
-    /// Interaction logic for MainView.xaml
-    /// </summary>
     public partial class MainView 
     {
-        //private Boolean _filteringDone = false;
-        //bool IsSearchPerformed = false;
 
-        private List<ThreatInfoItem> _collapseItems = new List<ThreatInfoItem>();
-        private List<ThreatInfoItem> _collapseFilteringItems = new List<ThreatInfoItem>();
 
         private MainViewViewModel _viewModel;
         private IStorageService _storageService;
-        //private Int32 _selectedReportIndex = -1;
-        
 
-        //public void CancelScan()
-        //{
-        //    if (_viewModel.IsScanInProgress.GetValueOrDefault())
-        //    {
-        //        _viewModel.StopScanCommand.Execute(null);
-                
-        //    }
-        //}
 
         public bool IsScanInProgress
         {
@@ -57,40 +38,35 @@ namespace APTAT.Application
         public MainView()
         {
             InitializeComponent();
-            _storageService = new StorageService();
-            DataContext = _viewModel = new MainViewViewModel();
+
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                MessageManager.Instance.RegisterListener(this);
+            }
+
+            _storageService = CompositionHelper.Instance.GetService<IStorageService>();
+            DataContext = _viewModel = CompositionHelper.Instance.GetService<MainViewViewModel>();
+
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
             _viewModel.ValkyrieAnalyzeStarted += ViewModelOnValkyrieAnalyzeStarted;
             _viewModel.ValkyrieAnalyzeCompleted += ViewModelOnValkyrieAnalyzeCompleted;
-            //treeList.Filtered += treeList_Filtered;
-            //treeList.LayoutUpdated += treeList_LayoutUpdated;
-            //SearchTextBox.ValueChanged += SearchTextBox_ValueChanged;
 
         }
 
-        void SearchTextBox_ValueChanged(object sender, RadRoutedEventArgs e)
+        [MessageReceiver]
+        public void AcceptMessage(ChangeScreenMessageType message)
         {
-            //var searchTextBox = (APTAT.Application.Controls.RadMaskedTextBoxEx)sender;
-            //IsSearchPerformed = !searchTextBox.IsEmpty;
-            //IsSearchPerformed = true;
+            switch (message.Message)
+            {
+                case ViewFormTypes.ValkyrieScan:
+                    mainContent.Content = new ResultTabsControl();
+                    break;
+                case ViewFormTypes.Scan:
+                    mainContent.Content = new ScanInfoTreeView();
+                    break;
+            }
         }
-
-        //private void treeList_LayoutUpdated(object sender, EventArgs e)
-        //{
-        //    var rows = this.treeList.ChildrenOfType<GridViewRow>();
-        //    foreach (GridViewRow row in rows)
-        //    {
-        //        if (row != null)
-        //        {
-        //            ThreatInfoItem threatInfo = row.DataContext as ThreatInfoItem;
-        //            if (threatInfo != null)
-        //            {
-        //                row.IsExpandable = threatInfo.TempItems != null && threatInfo.TempItems.Count > 0 && threatInfo.ScanStage == ScanStage.OperationCompleted;
-        //            }
-        //        }
-        //    }
-        //}
 
 
         private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)

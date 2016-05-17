@@ -9,7 +9,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using APTAT.Application.Helpers;
+using APTAT.Application.Services;
 using APTAT.Core;
+using APTAT.Core.Directory;
 
 
 namespace APTAT.Application
@@ -70,6 +73,12 @@ namespace APTAT.Application
 
             Trace.WriteLine(String.Format("APTAT Tool {0} started : {1}", version, DateTime.UtcNow));
             Trace.Flush();
+
+            CompositionHelper.Instance.Register<ITargetsDiscoveryService, TargetsDiscoveryService>();
+            CompositionHelper.Instance.Register<IAptService, AptService>();
+            CompositionHelper.Instance.Register<IStorageService, StorageService>();
+
+            CompositionHelper.Instance.Verify();
 
             //Application.Properties.Settings.Default.ProxyLogin = "";
             //Application.Properties.Settings.Default.ProxyPassword = "";

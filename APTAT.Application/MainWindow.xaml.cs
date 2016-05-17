@@ -17,14 +17,8 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            DispatcherHelper.Current = Dispatcher;
-
             MouseLeftButtonDown += MainWindow_MouseDown;
-
-            SourceInitialized += (x, y) =>
-            {
-                //this.HideMinimizeAndMaximizeButtons();
-            };            
+        
 
             Loaded += MainWindow_Loaded;
         }

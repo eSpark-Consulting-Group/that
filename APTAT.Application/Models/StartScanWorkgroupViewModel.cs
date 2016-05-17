@@ -14,9 +14,9 @@ namespace APTAT.Application.Models
     {
         public const String SelectWorkgroup = "SelectWorkgroup";
         public const String SelectTargets = "SelectTargets";
+        ITargetsDiscoveryService _targetsDiscoveryService;
+        IStorageService _storage;
 
-        private readonly ITargetsDiscoveryService _service = TargetsDiscoveryService.Instance;
-        private readonly IStorageService _storage = new StorageService();
 
         private String _workgroup;
         private String _administrator;
@@ -89,8 +89,11 @@ namespace APTAT.Application.Models
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
-        public StartScanWorkgroupViewModel()
+        public StartScanWorkgroupViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
+            _targetsDiscoveryService = targetsDiscoveryService;
+            _storage = storage;
+            
             SetSteps(new[] { null, SelectWorkgroup });
 
             _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, true);
@@ -110,7 +113,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("Workgroup");
             }
 
-            _service.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
+            _targetsDiscoveryService.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
            
         }
 
@@ -118,7 +121,7 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewUnloaded(arg);
 
-            _service.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
+            _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
         }
 
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
@@ -145,7 +148,7 @@ namespace APTAT.Application.Models
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.Workgroup, Workgroup);
-                _service.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
+                _targetsDiscoveryService.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {

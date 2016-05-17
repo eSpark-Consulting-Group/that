@@ -7,20 +7,20 @@ using APTAT.Core.Directory.Resolvers;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 
+using Composition = APTAT.Application.Helpers.CompositionHelper;
+
 namespace APTAT.Application.Services
 {
+    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class TargetsDiscoveryService : ITargetsDiscoveryService
     {
         private readonly ITargetsManager _manager;
-        private static ITargetsDiscoveryService _instance;
-        private TargetsDiscoveryService()
+
+        public TargetsDiscoveryService()
         {
             _manager = new TargetsManager();
         }
-        public static ITargetsDiscoveryService Instance
-        {
-            get { return _instance ?? (_instance = new TargetsDiscoveryService()); }
-        }
+
         public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
@@ -66,7 +66,7 @@ namespace APTAT.Application.Services
                         DirectoryItemsResolved(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
             else
             {
@@ -78,7 +78,7 @@ namespace APTAT.Application.Services
                         DirectoryItemsResolved(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
         }
 
@@ -111,7 +111,7 @@ namespace APTAT.Application.Services
                         GetDirectoryRootCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
             else
             {
@@ -123,7 +123,7 @@ namespace APTAT.Application.Services
                         GetDirectoryRootCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
         }
 
@@ -168,7 +168,7 @@ namespace APTAT.Application.Services
                         GetDirectoryItemsCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
 
             }
             else
@@ -181,7 +181,7 @@ namespace APTAT.Application.Services
                         GetDirectoryItemsCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
         }
         public void GetWorkgroup(String workgroupName, Object userState)
@@ -218,7 +218,7 @@ namespace APTAT.Application.Services
                         GetWorkgroupCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
 
             }
             else
@@ -231,7 +231,7 @@ namespace APTAT.Application.Services
                         GetWorkgroupCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
         }
 
@@ -275,7 +275,7 @@ namespace APTAT.Application.Services
                         GetByIpAddressesCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
             else
             {
@@ -287,7 +287,7 @@ namespace APTAT.Application.Services
                         GetByIpAddressesCompleted(this, args);
                     }
                 };
-                DispatcherHelper.Current.BeginInvoke(action);
+                App.Current.Dispatcher.BeginInvoke(action);
             }
         }
         private DeploymentTargetsCollection ToDeploymentTargetsCollection(DeploymentItem[] deploymentItems)

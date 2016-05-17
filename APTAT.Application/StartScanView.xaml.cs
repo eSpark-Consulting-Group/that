@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using APTAT.Application.Helpers;
 using APTAT.Application.Models;
 using Telerik.Windows;
 using Telerik.Windows.Controls;
@@ -66,9 +67,9 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            _scanDomainViewModel = new StartScanDomainViewModel();
-            _scanWorkgroupViewModel = new StartScanWorkgroupViewModel();
-            _scanByIpViewModel = new StartScanByIpViewModel();
+            _scanDomainViewModel = CompositionHelper.Instance.GetService<StartScanDomainViewModel>();
+            _scanWorkgroupViewModel = CompositionHelper.Instance.GetService<StartScanWorkgroupViewModel>();
+            _scanByIpViewModel = CompositionHelper.Instance.GetService<StartScanByIpViewModel>();
 
             viewScanByIp.DataContext = _scanByIpViewModel;
             viewScanDomain.DataContext = _scanDomainViewModel;

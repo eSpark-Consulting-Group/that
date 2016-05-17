@@ -62,8 +62,7 @@
             <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent">
                 <Grid>
 
-                    <ContentControl Content="{Binding CurrentViewControl, Mode=TwoWay,
-                        PresentationTraceSources.TraceLevel=High}"  ></ContentControl>
+                    <ContentControl x:Name="mainContent" />
 
                     <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
                    HorizontalAlignment="Center">

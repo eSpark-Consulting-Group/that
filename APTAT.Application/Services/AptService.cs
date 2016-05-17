@@ -10,9 +10,11 @@ using APTAT.Core.Apt;
 using APTAT.Core.Valkyrie;
 using APTAT.Core.Reports;
 
+using Composition = APTAT.Application.Helpers.CompositionHelper;
+
 namespace APTAT.Application.Services
 {
-    
+    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class AptService : IAptService, IChangeTrackingListener
     {
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
@@ -43,22 +45,8 @@ namespace APTAT.Application.Services
             get { return _sessionGuid; }
         }
 
-        private static IAptService _instance;
 
-        public static IAptService Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new AptService();
-                }
-
-                return _instance;
-            }
-        }
-
-        private AptService()
+        public AptService()
         {
             _manager = new AptAtManager(this);
 
@@ -73,7 +61,7 @@ namespace APTAT.Application.Services
                     handler(this, e);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);
+            App.Current.Dispatcher.BeginInvoke(action);
         }
 
         void OnValkyrieAnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -86,7 +74,7 @@ namespace APTAT.Application.Services
                     handler(this, e);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);
+            App.Current.Dispatcher.BeginInvoke(action);
         }
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
@@ -102,7 +90,7 @@ namespace APTAT.Application.Services
                     handler(this, e);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);
+            App.Current.Dispatcher.BeginInvoke(action);
         }
 
 
@@ -126,7 +114,7 @@ namespace APTAT.Application.Services
                     BuildReportCompleted(this, args);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);
+            App.Current.Dispatcher.BeginInvoke(action);
 
 
         }
@@ -156,7 +144,7 @@ namespace APTAT.Application.Services
                     ScanProgressChanged(this, args);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);
+            App.Current.Dispatcher.BeginInvoke(action);
         }
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
@@ -203,7 +191,7 @@ namespace APTAT.Application.Services
                     ScanCompleted(this, args);
                 }
             };
-            DispatcherHelper.Current.BeginInvoke(action);
+            App.Current.Dispatcher.BeginInvoke(action);
 
         }
 
@@ -280,7 +268,7 @@ namespace APTAT.Application.Services
                 }
             };
 
-            DispatcherHelper.Current.BeginInvoke(action);
+            App.Current.Dispatcher.BeginInvoke(action);
 
         }
 

@@ -4,16 +4,15 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
-using System.Windows.Controls;
 using APTAT.Core;
 using APTAT.Core.Descent;
 using APTAT.Core.Valkyrie;
-
+using APTAT.Application.Helpers;
+using APTAT.Application.Messages;
 
 namespace APTAT.Application.Models
 {
@@ -31,10 +30,10 @@ namespace APTAT.Application.Models
         private readonly IAptService _aptService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
+
         private Guid _operationGuid;
         private DeploymentItem[] _selectedTargets;
 
-        // private Boolean _resolvingTargets;
         private Boolean _isReportEnabled;
         private Boolean _isValkyrieReportEnabled;
         private Boolean? _isScanInProgress = false;
@@ -51,71 +50,12 @@ namespace APTAT.Application.Models
         private Collection<ThreatInfoItem> _cache;
         private Collection<FileResult> _cacheValkyrie;
 
-        //public Boolean ResolvingTargets
-        //{
-        //    get { return _resolvingTargets; }
-        //    set
-        //    {
-        //        _resolvingTargets = value;
-        //        RaisePropertyChanged("ResolvingTargets");
-        //    }
-        //}
-
-        private UserControl _currentViewControl;
-        public UserControl CurrentViewControl
-        {
-            get
-            {
-                return _currentViewControl;
-            }
-            set
-            {
-                _currentViewControl = value;
-                RaisePropertyChanged("CurrentViewControl");
-            }
-        }
-
-
         public string StatusBarText
         {
             get
             {
-
                 return " unknown programs detected";
-                //if (IsScanInProgress == true)
-                //{
-                //    return " unknown programs detected";
-                //}
-                //else if(IsValkyrieAnalysStarted)
-                //{
-
-                //    MalwareFilesCount =
-                //        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
-                //            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
-                //                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
-
-
-                //    UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
-                //    return " unknown programs detected";
-
             }
-            //else if (IsValkyrieAnalysCompleted)
-            //{
-            //    MalwareFilesCount =
-            //        ItemsValkyrie.Where(i => i.ValkyrieAnalysisResult != null)
-            //            .Count(i => i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.Malware ||
-            //                i.ValkyrieAnalysisResult.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
-
-
-            //    UnknownFilesCount = ItemsValkyrie.Count() - MalwareFilesCount;
-
-            //    //return String.Format(" of {0} files analysed", ItemsValkyrie.Count);
-            //    return " unknown programs detected";
-            //}
-
-            // return " unknown programs detected";
-
-
         }
 
         public bool IsAnyScanInProgress
@@ -425,27 +365,23 @@ namespace APTAT.Application.Models
 
         public DevicesSourceDescription DevicesSourceDescription;
 
-        private readonly UserControl _scanInfoTreeControl;
-        private readonly UserControl _valkyrieResultControl;
 
-        public MainViewViewModel()
+        public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService, IAptService aptService, IStorageService storage)
         {
-            _isValkyrieAnalysCompleted = false;
-            _aptService = AptService.Instance;
-            _targetsDiscoveryService = TargetsDiscoveryService.Instance;
+            
+            _aptService = aptService;
+            _targetsDiscoveryService = targetsDiscoveryService;
+            _storage = storage;
 
-            _storage = new StorageService();
+
+            _isValkyrieAnalysCompleted = false;
 
             StartScanCommand = new DelegateCommand(InvokeStartScan);
             StopScanCommand = new DelegateCommand(InvokeStopScan);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
 
-            _scanInfoTreeControl = new ScanInfoTreeView() { DataContext = this };
-            _valkyrieResultControl = new ResultTabsControl { DataContext = this };
             ValkyrieProgressInfo = ProgressInfo<FileResult>.Empty;
-            CurrentViewControl = _scanInfoTreeControl;
-
         }
 
         private void InvokeStartScan(Object arg)
@@ -463,7 +399,8 @@ namespace APTAT.Application.Models
             IsReportEnabled = false;
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = false;
-            CurrentViewControl = _scanInfoTreeControl;
+
+            AppMessages.ChangeScreenMessage.Send(ViewFormTypes.Scan);
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
@@ -506,6 +443,7 @@ namespace APTAT.Application.Models
             base.InvokeViewLoaded(arg);
 
             _targetsDiscoveryService.DirectoryItemsResolved += OnDirectoryItemsResolved;
+
             _aptService.BeginScanCompleted += OnBeginScanCompleted;
             _aptService.ScanStatusChanged += OnScanStatusChanged;
             _aptService.GetScanResultCompleted += OnGetScanResultCompleted;
@@ -589,7 +527,7 @@ namespace APTAT.Application.Models
         private static void ShowError(Exception exception)
         {
             return;
-            if (exception == null) return;
+            /*if (exception == null) return;
             if (exception is AggregateException) return;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(exception.Message);
@@ -608,7 +546,7 @@ namespace APTAT.Application.Models
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
-            error.ShowDialog();
+            error.ShowDialog();*/
         }
 
         private bool _valkyrieSendingFiles;
@@ -774,6 +712,7 @@ namespace APTAT.Application.Models
             ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
 
             IsAnalyseWithValkyrieEnabled = false;
+            ValkyrieSendingFiles = true;
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;
@@ -782,9 +721,7 @@ namespace APTAT.Application.Models
             _cacheValkyrie = new Collection<FileResult>();
             Keyword = string.Empty;
 
-            CurrentViewControl = _valkyrieResultControl;
-
-            ValkyrieSendingFiles = true;
+            AppMessages.ChangeScreenMessage.Send(ViewFormTypes.ValkyrieScan);
         }
 
         public void BeginValkyrieAnalysis(string camLicenseId, string camUserLogin, string camUserPassword)

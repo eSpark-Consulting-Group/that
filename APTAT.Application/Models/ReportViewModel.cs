@@ -11,8 +11,8 @@ namespace APTAT.Application.Models
         public event EventHandler ReportOpened;
         
 
-        private IStorageService storageService = new StorageService();
-        private IAptService _aptService = AptService.Instance;
+        private IStorageService _storage;
+        private IAptService _aptService;
         private String _header = String.Empty;
 
         public Stream ReportStream { get; set; }
@@ -29,12 +29,18 @@ namespace APTAT.Application.Models
             }
         }
 
+        public ReportViewModel(IAptService aptService, IStorageService storage)
+        {
+            _aptService = aptService;
+            _storage = storage;
+        }
+
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
 
-            Guid operationGuid = storageService.GetValue<Guid>(KnownKeys.OperationGuid, false);
-            ReportKind kind = storageService.GetValue<ReportKind>(KnownKeys.ReportKind, false);
+            Guid operationGuid = _storage.GetValue<Guid>(KnownKeys.OperationGuid, false);
+            ReportKind kind = _storage.GetValue<ReportKind>(KnownKeys.ReportKind, false);
 
             if(kind == ReportKind.DetailedPerProgram)
             {

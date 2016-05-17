@@ -17,8 +17,8 @@ namespace APTAT.Application.Models
         public const String SelectIp = "SelectIp";
         public const String SelectTargets = "SelectTargets";
 
-        private readonly ITargetsDiscoveryService _service = TargetsDiscoveryService.Instance;
-        private readonly IStorageService _storage = new StorageService();
+        private readonly ITargetsDiscoveryService _targetsDiscoveryService;
+        private readonly IStorageService _storage;
 
         private String _administrator;
         private String _password;
@@ -107,8 +107,11 @@ namespace APTAT.Application.Models
             }
         }
 
-        public StartScanByIpViewModel()
+        public StartScanByIpViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
+            _targetsDiscoveryService = targetsDiscoveryService;
+            _storage = storage;
+
             SetSteps(new[] { null, SelectIp });
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
@@ -149,7 +152,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IpAddresses");                
             }
 
-            _service.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
+            _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
         }
 
 
@@ -157,7 +160,7 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewUnloaded(arg);
 
-            _service.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
+            _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
         }
 
 
@@ -238,7 +241,7 @@ namespace APTAT.Application.Models
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
-                _service.GetByIpAddresses(IpAddresses, new OperationContext { Success = success, UserState = this });
+                _targetsDiscoveryService.GetByIpAddresses(IpAddresses, new OperationContext { Success = success, UserState = this });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {

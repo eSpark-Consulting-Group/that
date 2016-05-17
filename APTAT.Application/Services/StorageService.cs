@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Composition = APTAT.Application.Helpers.CompositionHelper;
+
 namespace APTAT.Application.Services
 {
+    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StorageService : IStorageService
     {
-        private static readonly Dictionary<String, Object> _dictionary = new Dictionary<String, Object>();
+        public StorageService()
+        { 
+            _dictionary = new Dictionary<String, Object>(); 
+        }
+        
+        private readonly Dictionary<String, Object> _dictionary;
 
         public void SetValue(String key, Object value)
         {

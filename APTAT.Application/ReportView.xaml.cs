@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
+using APTAT.Application.Helpers;
 using APTAT.Application.Models;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Documents.Fixed;
@@ -31,7 +32,7 @@ namespace APTAT.Application
         public ReportView()
         {
             InitializeComponent();
-            DataContext = _viewModel = new ReportViewModel();
+            DataContext = _viewModel = CompositionHelper.Instance.GetService<ReportViewModel>();
             _viewModel.ReportOpened += OnReportOpened;
 
             Unloaded += OnUnloaded;

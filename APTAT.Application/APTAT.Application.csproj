@@ -67,6 +67,9 @@
     <Reference Include="FluentValidation">
       <HintPath>..\APTAT.Libraries\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleInjector">
+      <HintPath>..\packages\SimpleInjector.3.1.4\lib\net40-client\SimpleInjector.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -156,7 +159,10 @@
     <Compile Include="Converters\SelectedIndexToBoolConverter.cs" />
     <Compile Include="Converters\StringToHyperlinkConverter.cs" />
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
-    <Compile Include="Helpers\LoadingHelper.cs" />
+    <Compile Include="Helpers\CompositionHelper.cs" />
+    <Compile Include="Helpers\ThreadHelper.cs" />
+    <Compile Include="Messages\MessageManager.cs" />
+    <Compile Include="Messages\MessageTokens.cs" />
     <Compile Include="Services\ITargetsDiscoveryService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="ValkyrieDetailsView.xaml.cs">
@@ -211,7 +217,7 @@
     <Compile Include="ScanInfoTreeView.xaml.cs">
       <DependentUpon>ScanInfoTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SearchHelper.cs" />
+    <Compile Include="Helpers\SearchHelper.cs" />
     <Compile Include="SelectorButton.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\BasePage.cs" />
@@ -421,6 +427,7 @@
     </Content>
     <Content Include="SfxPackage\7za.exe" />
     <None Include="build.bat" />
+    <None Include="packages.config" />
     <None Include="Unknown File Hunter EULA %2811-18-2015%29.rtf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -481,9 +488,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="warning.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

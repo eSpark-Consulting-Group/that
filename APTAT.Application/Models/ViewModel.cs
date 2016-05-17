@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Reflection;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
@@ -55,7 +57,28 @@ namespace APTAT.Application.Models
             
         }
 
-    
+        protected bool Set<T>(Expression<Func<T>> propertyExpression, T newValue)
+        {
+            var inputBody = (MemberExpression)propertyExpression.Body;
+            var parameterExpression = Expression.Parameter(typeof(T));
 
+            MemberExpression memberExpression = null;
+            if (inputBody.Member is PropertyInfo)
+                memberExpression = Expression.Property(inputBody.Expression, (PropertyInfo)inputBody.Member);
+            else if (inputBody.Member is FieldInfo)
+                memberExpression = Expression.Field(inputBody.Expression, (FieldInfo)inputBody.Member);
+
+            if (memberExpression == null)
+                return false;
+
+            var setExpr = Expression.Assign(memberExpression, parameterExpression);
+            var result = Expression.Lambda<Action<T>>(setExpr, parameterExpression);
+            result.Compile()(newValue);
+
+            var propertyName = ((MemberExpression)propertyExpression.Body).Member.Name;
+            RaisePropertyChanged(propertyName);
+
+            return true;
+        }
     }
 }

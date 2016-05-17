@@ -4,10 +4,22 @@ using System.Windows.Threading;
 
 namespace APTAT.Application.Helpers
 {
-    public class LoadingHelper
+    public class ThreadHelper
     {
-        private Thread _thread;
         private object _sync = new object();
+
+        private Thread _thread;
+
+        public static ThreadHelper Instance { get; private set; }
+
+        ThreadHelper()
+        {
+        }
+
+        static ThreadHelper() 
+        {
+            Instance = new ThreadHelper();
+        }
 
         private Dispatcher Dispatcher
         {
