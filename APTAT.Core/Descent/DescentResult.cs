@@ -10,18 +10,17 @@ namespace APTAT.Core.Descent
 	public class DescentResult : IDescentQueryResult, IChangeTrackingListener
 	{
 		private readonly ConcurrentDictionary<Guid, ComputerDescentResult> _resultsByUid = new ConcurrentDictionary<Guid, ComputerDescentResult>();
-        private readonly ConcurrentDictionary<Guid, Guid> _descendByIpMappings = new ConcurrentDictionary<Guid, Guid>();
         private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks = new ConcurrentDictionary<Guid, Action<TimeSpan>>();
         private readonly IDescentWatcher _descentWatcher;
-
+	    protected readonly DateTime StartTime;
 
         private readonly Dictionary<Guid, bool> _reportedByUid = new Dictionary<Guid, bool>();
 
 		private readonly object _sync = new object();
 
 		private int _inprogressCount;
-		private int _succeeded;
-		private int _failed;
+		protected int SucceededCount;
+        protected int FailedCount;
 
 		public DescentResult( IEnumerable<TargetUidComputerPair> computers)
 		{
@@ -40,7 +39,6 @@ namespace APTAT.Core.Descent
 				{
 					_reportedByUid[computer.Computer.Uid] = false;
 				}
-			//	_resultsByName.AddOrUpdate( computer.Computer.Name, result, ( key, value ) => value );
 				_resultsByUid.AddOrUpdate(computer.Computer.Uid, result, (key, value) => value);
                 _descentWatcher.AddIdentity(computer.Computer.Uid);
             }
@@ -51,14 +49,6 @@ namespace APTAT.Core.Descent
 			StartTime = DateTime.UtcNow;
             _descentWatcher.Start();
         }
-
-		public ComputerDescentResult[] ComputerResults
-		{
-			get
-			{
-				return _resultsByUid.Values.ToArray();
-			}
-		}
 
 		public Guid OperationUid
 		{
@@ -74,11 +64,7 @@ namespace APTAT.Core.Descent
 			}
 		}
 
-		public DateTime StartTime
-		{
-			get;
-			private set;
-		}
+		
 
 		public DateTime? CompletedTime
 		{
@@ -86,7 +72,7 @@ namespace APTAT.Core.Descent
 			private set;
 		}
 
-		public void OnDescendOperationEvent( bool ok, IComputer computer, FormattedText errorMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage )
+		public virtual void OnDescendOperationEvent( bool ok, IComputer computer, FormattedText errorMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage )
 		{
             Guid uid = computer.Uid;
 
@@ -99,11 +85,11 @@ namespace APTAT.Core.Descent
             
 			if( !ok)
 			{
-				operationResult = new OperationDescentResult(true, false, errorMessage, shortStatusMessage, errorCode, systemMessage, systemCode, 100 );
+				operationResult = new OperationDescentResult(false, errorMessage, shortStatusMessage, errorCode, systemMessage, systemCode );
 			}
 			else
 			{
-				operationResult = new OperationDescentResult(true,true, FormattedText.Empty, FormattedText.Empty, String.Empty, String.Empty, 0, 0 );
+				operationResult = new OperationDescentResult(true, FormattedText.Empty, FormattedText.Empty, String.Empty, String.Empty, 0 );
 			}
 
 			var inprogressCount = ProcessResult(uid, operationResult);
@@ -112,10 +98,6 @@ namespace APTAT.Core.Descent
 				"Computer agent descent {1}{0} operation uid: {2}{0} computer: {3}{0} elapsed: {4}{0} error code: {5} ({6}){0} system message: {7}{0} remaining: {8}{0}",
 				Environment.NewLine, ok ? "SUCCEEDED" : "FAILED", OperationUid, computer.Name, DateTime.UtcNow - StartTime, errorCode, systemCode, systemMessage, inprogressCount);
 
-			if( _resultsByUid[uid].AgentCompleted )
-			{
-				OnAgentDescentCompleted( computer, ok );
-			}
 		}
 
 		
@@ -130,9 +112,9 @@ namespace APTAT.Core.Descent
 				if (result.Completed && !_reportedByUid[uid])
 				{
 					if (result.Succeeded)
-						_succeeded++;
+						SucceededCount++;
 					else
-						_failed++;
+						FailedCount++;
 
 					_inprogressCount--;
 					_reportedByUid[uid] = true;
@@ -152,7 +134,7 @@ namespace APTAT.Core.Descent
 				CompletedTime = DateTime.UtcNow;
 				LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
 					"Deployment operation completed{0} uid: {1}{0} elapsed: {2}{0} total: {3}{0} succeeded: {4}{0} failed: {5}{0}",
-					Environment.NewLine, OperationUid, CompletedTime.Value - StartTime, _resultsByUid.Count, _succeeded, _failed);
+					Environment.NewLine, OperationUid, CompletedTime.Value - StartTime, _resultsByUid.Count, SucceededCount, FailedCount);
 				OnDescentCompleted();
 			}
 		}
@@ -174,7 +156,7 @@ namespace APTAT.Core.Descent
             Action<TimeSpan> onTimeout;
             if (_timeoutCallbacks.TryGetValue(agentIdentity, out onTimeout))
             {
-                onTimeout(_descentWatcher.Timeout);
+                onTimeout(_descentWatcher.DescentTimeout);
             }
             else
             {
@@ -184,15 +166,6 @@ namespace APTAT.Core.Descent
             }
             _descentWatcher.ExcludeIdentity(agentIdentity);
         }
-        
-		protected virtual void OnAgentDescentCompleted( IComputer computer, bool success )
-		{
-			Action<IComputer, bool> tmp = AgentDescentCompleted;
-			if( tmp != null )
-			{
-				tmp( computer, success );
-			}
-		}
 
 		protected virtual void OnDescentCompleted()
 		{
@@ -203,13 +176,11 @@ namespace APTAT.Core.Descent
 			}
 		}
 
-		public event Action<IComputer, bool> AgentDescentCompleted;
-
 		public event Action DescentCompleted;
 
 		#region IChangeTrackingListener Members
 
-		public void Changed( params ChangesTrackingItem[] items )
+		public virtual void Changed( params ChangesTrackingItem[] items )
 		{
 			foreach( var item in items )
 			{
@@ -219,16 +190,16 @@ namespace APTAT.Core.Descent
                     if (progressItem.OperationUid == OperationUid && _resultsByUid.ContainsKey(progressItem.ComputerUid))
 					{
 						ComputerDescentResult originalResult = _resultsByUid[progressItem.ComputerUid];
-						ComputerDescentResult newResult = new ComputerDescentResult( originalResult, progressItem.StatusMessage, progressItem.StatusMessage, progressItem.ProgressPercentage );
+						ComputerDescentResult newResult = new ComputerDescentResult( originalResult, progressItem.StatusMessage, progressItem.StatusMessage);
                         
 						_resultsByUid[progressItem.ComputerUid] = newResult;
-                        _descentWatcher.NotifyProgress(progressItem.ComputerUid, newResult.TotalProgressPercentage);
+                        _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                     }
 				}
 			}
 		}
 
-		public Guid SessionId
+		public virtual Guid SessionId
 		{
 			get
 			{

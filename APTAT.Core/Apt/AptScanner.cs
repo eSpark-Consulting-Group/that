@@ -11,8 +11,6 @@ namespace APTAT.Core.Apt
         private readonly string _password;
         private readonly string _login;
         private readonly string _scanScope;
-        private readonly DevicesSourceDescription _devicesSourceDescr;
-        private readonly string _domain;
         private Guid _operationUid;
         private readonly TargetUidComputerPair[] _targets;
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
@@ -20,7 +18,7 @@ namespace APTAT.Core.Apt
         public event EventHandler<ScanInProgressEventArgs> ScanInProgress;
 
         internal AptScanner(IDescentSubSystem descentSubSystem, TargetUidComputerPair[] targets, string login,
-            string password, string domain, DevicesSourceDescription devicesSourceDescr, string scanScope)
+            string password, string scanScope)
         {
             _descentSubSystem = descentSubSystem;
             if (_descentSubSystem != null)
@@ -29,8 +27,6 @@ namespace APTAT.Core.Apt
             _login = login;
             _password = password;
             _scanScope = scanScope;
-            _domain = domain;
-            _devicesSourceDescr = devicesSourceDescr;
         }
 
         private void OnDescentCompleted(object sender, DescentCompletedEventArgs e)
@@ -63,8 +59,8 @@ namespace APTAT.Core.Apt
         private void StartScan()
         {
             Guid operationUid;
-            _descentSubSystem.DoDescentOperationOnNotExistingComputers(_targets, _login, _password, out operationUid, 
-                _scanScope, _domain, _devicesSourceDescr);
+            _descentSubSystem.StartAptScan(_targets, _login, _password, out operationUid, 
+                _scanScope);
             _operationUid = operationUid;
         }
 

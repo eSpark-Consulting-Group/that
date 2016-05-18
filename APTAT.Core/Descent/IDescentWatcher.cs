@@ -7,26 +7,20 @@ namespace APTAT.Core.Descent
 {
     public interface IDescentWatcher : IDisposable
     {
-        TimeSpan Timeout { get; }
         void AddIdentity(Guid agentIdentity);
         void ExcludeIdentity(Guid agentIdentity);
-        void NotifyProgress(Guid agentIdentity, int value);
+        TimeSpan DescentTimeout { get; }
+        void NotifyProgress(Guid agentIdentity);
         void Start();
     }
 
     public class DescentWatcher : IDescentWatcher
     {
-        private object _access;
-        private Dictionary<Guid, int> _computersProgress;
-        private Dictionary<Guid, DateTime> _computersActivity;
-        private Timer _timer;
-        private TimeSpan _timeout;
-        private Action<Guid> _timeoutCallback;
-
-        public TimeSpan Timeout
-        {
-            get { return _timeout; }
-        }
+        private readonly object _access;
+        private readonly Dictionary<Guid, DateTime> _computersActivity;
+        private readonly Timer _timer;
+        private readonly TimeSpan _timeout;
+        private readonly Action<Guid> _timeoutCallback;
 
         public DescentWatcher(TimeSpan timeout, Action<Guid> timeoutCallback)
         {
@@ -34,16 +28,19 @@ namespace APTAT.Core.Descent
             _timeoutCallback = timeoutCallback;
 
             _access = new object();
-            _computersProgress = new Dictionary<Guid, int>();
             _computersActivity = new Dictionary<Guid, DateTime>();
             _timer = new Timer(TimerCallback);
+        }
+
+        public TimeSpan DescentTimeout
+        {
+            get { return _timeout; }
         }
 
         public void AddIdentity(Guid agentIdentity)
         {
             lock (_access)
             {
-                _computersProgress[agentIdentity] = 0;
                 _computersActivity[agentIdentity] = DateTime.UtcNow;
             }
         }
@@ -52,17 +49,15 @@ namespace APTAT.Core.Descent
         {
             lock (_access)
             {
-                _computersProgress[agentIdentity] = Int32.MaxValue;
-                _computersActivity[agentIdentity] = DateTime.MaxValue;
+                _computersActivity.Remove(agentIdentity);
             }
         }
 
-        public void NotifyProgress(Guid agentIdentity, int value)
+        public void NotifyProgress(Guid agentIdentity)
         {
             lock (_access)
             {
                 _computersActivity[agentIdentity] = DateTime.UtcNow;
-                _computersProgress[agentIdentity] = value;
             }
         }
 
@@ -70,6 +65,8 @@ namespace APTAT.Core.Descent
         {
             _timer.Change(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
         }
+
+        
 
         public void Dispose()
         {
@@ -82,6 +79,8 @@ namespace APTAT.Core.Descent
             KeyValuePair<Guid, DateTime>[] activities;
             lock (_access)
                 activities = _computersActivity.ToArray();
+            if (activities.Length == 0)
+                Stop();
             foreach (var computerActivity in activities)
             {
                 if (computerActivity.Value < deadline)
@@ -90,6 +89,11 @@ namespace APTAT.Core.Descent
                     _timeoutCallback(computerActivity.Key);
                 }
             }
+        }
+
+        void Stop()
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
     }

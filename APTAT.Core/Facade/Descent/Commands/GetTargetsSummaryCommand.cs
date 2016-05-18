@@ -22,12 +22,10 @@ namespace APTAT.Core.Facade.Descent.Commands
 	{
         // TODO: Probably should be moved to some Initialization part
         private readonly IActiveDirectoryObserver _activeDirectoryObserver = new ActiveDirectoryObserver();
-
-		private static readonly int MaxConcurrentTasks = Settings.Default.MaxEndpointsAvailabilityResolverConcurrentTasks;
+        private static readonly int MaxConcurrentTasks = Settings.Default.MaxEndpointsAvailabilityResolverConcurrentTasks;
 
 		// Must be in sync with the Esm.Shared.Modules.Computers.Wrappers.IpAddressValidator.MaxTargetsCount and MaxTargetsNetworkBits constants!
 		private const int MaxDeploymentTargets = 1024;
-
 		private readonly INetworkObserver _networkObserver = new DirectorySubSystem();
 	    private readonly TaskFactory _taskFactory;
 
@@ -48,18 +46,10 @@ namespace APTAT.Core.Facade.Descent.Commands
                 return source != null && IPAddress.TryParse(source, out result) ? result : null;
             };
 
-            var targetComputers = from target in Request.Targets
-                                    let domainTarget = target as DomainTarget
-                                    where domainTarget == null || domainTarget.EntryType == DomainEntryType.Computer
-                                    select new DirectoryComputer
-                                    {
-                                        Uid = target.TargetUid, // Use DirectoryComputer.Uid as a temp storage for TargetUid
-                                        Name = target.Name,
-                                        DnsName = target.DnsName,
-                                        IPAddress = domainTarget == null ? ParseIP(target.Name) : null,
-                                        IsOnline = target.Online,
-                                        LdapPath = domainTarget != null ? domainTarget.LdapPath : null,
-                                    };
+		    var targetComputers = from target in Request.Targets
+		        let domainTarget = target as DomainTarget
+		        where domainTarget == null || domainTarget.EntryType == DomainEntryType.Computer
+		        select target;
 
             var computers = new List<IComputer>(targetComputers);
             //var directory = SubSystemFactory.Current.GetSubSystem<IDirectorySubSystem>();
@@ -72,7 +62,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                                     lock (computers)
                                     {
                                         computers.AddRange(from fc in foundComputers
-                                                            select new DirectoryComputer
+                                                            select new DomainTarget
                                                             {
                                                                 Uid = Guid.NewGuid(), // Comp was not found on console, give it a new GUID as a temp storage for TargetUid
                                                                 Name = fc.Name,
@@ -85,7 +75,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 
             searchTasks = searchTasks.ToArray(); 
 
-            if (searchTasks.Count() > 0)
+            if (searchTasks.Any())
             {
                 using (var completeTask = _taskFactory.ContinueWhenAll((Task[])searchTasks, completedTasks => ResolveAndTest(computers)))
                 {
@@ -132,8 +122,6 @@ namespace APTAT.Core.Facade.Descent.Commands
 
         private void ResolveAndTest(IEnumerable<IComputer> sourceComputers)
         {
-            //sourceComputers = sourceComputers.Distinct(this);
-
             IComputer[] uniqueComputers = sourceComputers.Distinct(this).ToArray();
 
             if (uniqueComputers.Count() > MaxDeploymentTargets)
@@ -150,16 +138,16 @@ namespace APTAT.Core.Facade.Descent.Commands
                               if (IPs != null)
                               {
                                   var extv4 = IPs.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip)).ToArray();
-                                  if (extv4.Count() == 0)
+                                  if (!extv4.Any())
                                       extv4 = IPs.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToArray();
-                                  if (extv4.Count() == 0)
+                                  if (!extv4.Any())
                                       extv4 = IPs;
-                                  target.IPAddress = extv4.First();
+                                  target.IPAddress = extv4.First().ToString();
                               }
                           });
 
             ipTasks = ipTasks.ToArray();
-            if (ipTasks.Count() > 0)
+            if (ipTasks.Any())
             {
                 using (var completeTask = _taskFactory.ContinueWhenAll((ThreadingTask[])ipTasks, completedTasks => Array.ForEach(completedTasks, t => t.Dispose())))
                 {
@@ -170,18 +158,18 @@ namespace APTAT.Core.Facade.Descent.Commands
             // Tasks to resolve unknown DNS names
             var dnsTasks = from target in uniqueComputers
                            where String.IsNullOrEmpty(target.DnsName) && target.IPAddress != null
-                           select _taskFactory.StartNew(() => target.DnsName = _networkObserver.ResolveDnsByIp(target.IPAddress));
+                           select _taskFactory.StartNew(() => target.DnsName = _networkObserver.ResolveDnsByIp(IPAddress.Parse(target.IPAddress)));
 
             dnsTasks = dnsTasks.ToArray();
-            if (dnsTasks.Count() > 0)
+            if (dnsTasks.Any())
             {
                 using (var completeTask = _taskFactory.ContinueWhenAll((ThreadingTask[])dnsTasks, completedTasks =>
-                                                                                                      {
-                                                                                                          foreach (var completedTask in completedTasks)
-                                                                                                          {
-                                                                                                              completedTask.Dispose();
-                                                                                                          }
-                                                                                                      }))
+                {
+                    foreach (var completedTask in completedTasks)
+                    {
+                        completedTask.Dispose();
+                    }
+                }))
                 {
                     completeTask.Wait();
                 }
@@ -195,7 +183,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                             select _taskFactory.StartNew(() => Tuple.Create(target, _networkObserver.TestMsDs(target.IPAddress.ToString())));
 
             testTasks = testTasks.ToArray();
-            if (testTasks.Count() > 0)
+            if (testTasks.Any())
             {
                 var completeTask = _taskFactory.ContinueWhenAll(testTasks.ToArray(), completedTasks =>
                 {
@@ -206,11 +194,11 @@ namespace APTAT.Core.Facade.Descent.Commands
                                          let name = target.Name != ipAddress ? target.Name : target.DnsName.ToStringOrEmpty()
                                          select new DeploymentTarget
                                          {
-                                             TargetUid = target.Uid, // IComputer.Uid was used as a temp storage for TargetUid
+                                             Uid = target.Uid, // IComputer.Uid was used as a temp storage for TargetUid
                                              Name = name,
                                              DnsName = target.DnsName,
                                              IPAddress = ipAddress,
-                                             Online = testTask != null ? testTask.Result.Item2 : false,
+                                             IsOnline = testTask != null ? testTask.Result.Item2 : false,
                                              LdapPath = target.LdapPath
                                          };
 
@@ -225,10 +213,10 @@ namespace APTAT.Core.Facade.Descent.Commands
             }
 
             var results = from c in uniqueComputers
-                          join t in deploymentTargets on c.Uid equals t.TargetUid into relatedTargets
+                          join t in deploymentTargets on c.Uid equals t.Uid into relatedTargets
                           from rt in relatedTargets.DefaultIfEmpty(new DeploymentTarget
                           {
-                              TargetUid = c.Uid,
+                              Uid = c.Uid,
                               Name = c.Name,
                               DnsName = c.DnsName ?? c.Name,
                               LdapPath = c.LdapPath
@@ -249,8 +237,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 		{
 			return x.Name == y.Name && x.DnsName == y.DnsName &&
 				(x.IPAddress != null ? x.IPAddress.Equals(y.IPAddress) : 
-				 y.IPAddress != null ? y.IPAddress.Equals(x.IPAddress) :
-				 true);
+				 y.IPAddress?.Equals(x.IPAddress) ?? true);
 		}
 
 		public int GetHashCode(IComputer obj)

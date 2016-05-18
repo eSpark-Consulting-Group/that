@@ -6,7 +6,6 @@ using System;
 using System.Linq;
 using System.ComponentModel;
 using System.Net;
-using APTAT.Core.Apt;
 using APTAT.Core.Valkyrie;
 using APTAT.Core.Reports;
 
@@ -119,15 +118,9 @@ namespace APTAT.Application.Services
 
         }
 
-        public void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState, string scanScope)
+        public void BeginScan(DeploymentTarget[] items , String login, String password, Object userState, string scanScope)
         {
-            //Logger.Clear();
-            //Logger.WriteLog("================= Begin Scan");
-
-            var devicesSourceDescr = ((MainViewViewModel)userState).DevicesSourceDescription;
-
-            DeploymentTarget[] targets = items.Select(item => item.Target).OfType<DeploymentTarget>().ToArray();
-            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, domain, devicesSourceDescr, scanScope);
+            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(items), login, password, scanScope);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;

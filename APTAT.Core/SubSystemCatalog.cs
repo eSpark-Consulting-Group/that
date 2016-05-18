@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.Remoting.Messaging;
 using System.Security.Authentication;
 using APTAT.Core.Descent;
 
 namespace APTAT.Core
 {
-    public interface IBusinessObject : ICloneable
+    public interface IBusinessObject 
     {
-        long Key { get; }
-        bool IsNew { get; }
     }
 
     public interface ISubSystem : IService
@@ -35,8 +32,12 @@ namespace APTAT.Core
         public SubSystemCatalog()
         {
             _subSystems.Add(_changeTrackingSubSystem);
+            _subSystems.Add(new DescentSubSystem());
 
-            _changeTrackingSubSystem.Init(this);
+            foreach (ISubSystem system in _subSystems)
+            {
+                system.Init(this);
+            }
         }
         
 
@@ -97,7 +98,7 @@ namespace APTAT.Core
         #endregion
     }
 
-    public class ChangeTrackingSubSystem : MarshalByRefNullLifetime, IChangeTrackingSubSystem
+    public class ChangeTrackingSubSystem : IChangeTrackingSubSystem
     {
         private static readonly Guid SubSystemId = new Guid(@"{8E8C8B2B-1E58-4fa0-A7D4-90132CCAEB8B}");
         private const string SubSystemName = @"ChangesTracking";

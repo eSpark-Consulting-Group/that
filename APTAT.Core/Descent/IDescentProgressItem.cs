@@ -2,7 +2,7 @@
 
 namespace APTAT.Core.Descent
 {
-	public interface IDescentProgressItem
+	public interface IDescentProgressItem : IBusinessObject
 	{
 		Guid ComputerUid { get; }
 		Guid OperationUid { get; }
@@ -11,7 +11,8 @@ namespace APTAT.Core.Descent
 	    AptScanStage ScanStage { get; }
 	    int TotalFilesCount { get; }
 	    int UnknownFilesCount { get; }
-	    int MalwaresCount { get; }
+        int FailedAtNodeCount { get; set; }
+        int MalwaresCount { get; }
 	    int SafeFilesCount { get; }
         int ErrorFilesCount { get; }
 	}

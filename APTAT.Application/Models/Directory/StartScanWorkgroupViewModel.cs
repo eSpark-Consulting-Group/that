@@ -1,10 +1,8 @@
 ﻿using APTAT.Application.Services;
-using APTAT.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using APTAT.Core.Descent;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
@@ -95,8 +93,6 @@ namespace APTAT.Application.Models
             _storage = storage;
             
             SetSteps(new[] { null, SelectWorkgroup });
-
-            _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, true);
         }
 
         protected override void InvokeViewLoaded(object arg)
@@ -200,10 +196,7 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.Login, _administrator);
                 _storage.SetValue(KnownKeys.Password, _password);
                 _storage.SetValue(KnownKeys.Workgroup, _workgroup);
-
-                _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });
-
+                
                context.Success();
             }
             else

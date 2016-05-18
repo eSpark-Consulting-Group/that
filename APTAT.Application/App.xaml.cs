@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using APTAT.Application.Helpers;
 using APTAT.Application.Services;
 using APTAT.Core;
-using APTAT.Core.Directory;
 
 
 namespace APTAT.Application
@@ -77,6 +71,7 @@ namespace APTAT.Application
             CompositionHelper.Instance.Register<ITargetsDiscoveryService, TargetsDiscoveryService>();
             CompositionHelper.Instance.Register<IAptService, AptService>();
             CompositionHelper.Instance.Register<IStorageService, StorageService>();
+            CompositionHelper.Instance.Register<IWmiService, WmiService>();
 
             CompositionHelper.Instance.Verify();
 

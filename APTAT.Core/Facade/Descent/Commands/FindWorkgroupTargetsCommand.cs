@@ -47,7 +47,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                 throw new InvalidOperationException("Unknown error occured.");
             }
 
-			Response.Targets.AddRange( from name in computers select new WorkgroupTarget { TargetUid = Guid.NewGuid(), Name = name, SmbName = name } );
+			Response.Targets.AddRange( from name in computers select new WorkgroupTarget { Uid = Guid.NewGuid(), Name = name, SmbName = name } );
 			Response.IsCompleted = true;
 		}
 	}

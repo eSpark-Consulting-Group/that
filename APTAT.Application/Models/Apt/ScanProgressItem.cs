@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace APTAT.Application.Models
 {
@@ -17,6 +14,7 @@ namespace APTAT.Application.Models
         ScanCompleted,
         ScanFailed,
         ScanResultsObtaning,
+        ScanResultsObtaned,
         ScanResultsProcessing,
         OperationCompleted,
         OperationFailed,

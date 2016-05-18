@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using APTAT.Application.Helpers;
 using APTAT.Application.Models;
 
 namespace APTAT.Application
@@ -27,7 +28,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            DataContext = _viewModel = new ThreatDetailsViewModel();
+            DataContext = _viewModel = CompositionHelper.Instance.GetService<ThreatDetailsViewModel>();
         }
 
         private void OnBackClick(Object sender, RoutedEventArgs e)

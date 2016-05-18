@@ -98,8 +98,6 @@ namespace APTAT.Application.Models
             UncheckItemCommand = new DelegateCommand(InvokeUncheckItem);
 
             _checkedItems = new Collection<Object>();
-            
-            _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, true);
         }
 
         private void InvokeExpand(Object arg)
@@ -158,8 +156,6 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
                     _storage.SetValue(KnownKeys.Domain, _domainController);
-                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
                     success();
                 }
             }

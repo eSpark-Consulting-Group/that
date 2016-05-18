@@ -47,14 +47,14 @@ namespace APTAT.Core.Facade.Descent.Commands
 					computer => networkObserver.SendPingAsync(computer.Name,
 						(pingRes, ipAddress) =>
 						{
-							computersDict[computer.Name].Online = pingRes == IPStatus.Success;
+							computersDict[computer.Name].IsOnline = pingRes == IPStatus.Success;
 							countdownEvent.Signal();
 						} ) );
 
 				countdownEvent.Wait();
 			}
 		}
-        public static string GetOrganizationUnit(string ldapPath /*, out string firstParent*/ )
+        public static string GetOrganizationUnit(string ldapPath)
         {
             string firstParent;
             if (String.IsNullOrEmpty(ldapPath))

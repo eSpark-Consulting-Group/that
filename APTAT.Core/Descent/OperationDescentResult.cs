@@ -4,9 +4,9 @@ namespace APTAT.Core.Descent
 {
 	public struct OperationDescentResult
 	{
-		public OperationDescentResult(  bool completed, bool succeeded,
+		public OperationDescentResult( bool succeeded,
 			FormattedText statusMessage, FormattedText shortStatusMessage,
-			string errorCode, string systemMessage, int systemCode, int progressPercentage )
+			string errorCode, string systemMessage, int systemCode )
             : this()
         {
             Succeeded = succeeded;
@@ -15,7 +15,6 @@ namespace APTAT.Core.Descent
             ErrorCode = errorCode;
             SystemMessage = systemMessage;
             SystemCode = systemCode;
-            ProgressPercentage = progressPercentage;
         }
         
         
@@ -25,6 +24,5 @@ namespace APTAT.Core.Descent
 		public string ErrorCode { get; set; }
 		public string SystemMessage { get; set; }
 		public int SystemCode { get; set; }
-		public int ProgressPercentage { get; set; }
 	}
 }

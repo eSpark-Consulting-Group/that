@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Telerik.Windows.Data;
+using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Application.Models
 {
@@ -16,7 +16,7 @@ namespace APTAT.Application.Models
 
     public struct ScanStatus : IComparable
     {
-        private ScanStatusEnum _value;
+        private readonly ScanStatusEnum _value;
 
 
         public ScanStatus(ScanStatusEnum value)
@@ -45,14 +45,6 @@ namespace APTAT.Application.Models
             if(obj is ScanStatus)
             {
                 ScanStatus status = (ScanStatus) obj;
-                //if(status._value == ScanStatusEnum.SubItem && _value == ScanStatusEnum.Completed)
-                //{
-                //    return true;
-                //}
-                //if (_value == ScanStatusEnum.SubItem && status._value == ScanStatusEnum.Completed)
-                //{
-                //    return true;
-                //}
 
                 if(status._value == _value)
                 {
@@ -95,7 +87,7 @@ namespace APTAT.Application.Models
         {
             get { return UnknownFilesCount > 0 || MalwareFilesCount > 0; }
         }
-
+        
         public Boolean IsUnknown { get; set; }
 
         public Boolean IsMalware { get; set; }
@@ -125,11 +117,9 @@ namespace APTAT.Application.Models
 
         public Int64 Size { get; set; }
 
-        public String Type { get; set; }
-
         public Guid ComputerGuid { get; set; }
 
-        public Object Target { get; set; }
+        public string LdapPath { get; set; }
 
 
 
@@ -309,6 +299,16 @@ namespace APTAT.Application.Models
         {
             StatusMessage = "Initializing...";
         }
+
+        public ThreatInfoItem(DeploymentTarget deploymentTarget) : this()
+        {
+            Name = deploymentTarget.Name;
+            IpAddress = deploymentTarget.IPAddress;
+            IsRootItem = true;
+            IsOnline = deploymentTarget.IsOnline;
+            ComputerGuid = deploymentTarget.Uid;
+            LdapPath = deploymentTarget.LdapPath;
+    }
 
         public override string ToString()
         {

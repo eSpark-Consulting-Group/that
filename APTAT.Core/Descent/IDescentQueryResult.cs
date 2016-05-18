@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 
 namespace APTAT.Core.Descent
 {
+    public interface IAptScanOperationContext : IDescentQueryResult
+    {
+        ConcurrentDictionary<Guid, ScanResult> ScanResults { get; }
+    }
+
 	public interface IDescentQueryResult
 	{
 		Guid OperationUid { get; }
@@ -9,8 +15,7 @@ namespace APTAT.Core.Descent
 		
 		void RegisterTimeoutCallback(Guid agentIdentity, Action<TimeSpan> callback);
 		void UnregisterTimeoutCallback(Guid agentIdentity);
-
-		event Action<IComputer, bool> AgentDescentCompleted;
+    
 		event Action DescentCompleted;
 	}
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using System.Windows.Threading;
 using APTAT.Application.Models;
 using APTAT.Application.Services;
 using Telerik.Windows;
@@ -85,7 +83,7 @@ namespace APTAT.Application
             scanCompletedWindow.Text.Text += "Computer Statistics:";
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
             scanCompletedWindow.Text.Text += Environment.NewLine;
-
+            ;
             if (e.SuccededCount > 0) scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
             if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Canceled Scans", Environment.NewLine, e.CanceledCount);
             if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);

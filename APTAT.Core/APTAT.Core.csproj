@@ -71,14 +71,15 @@
     <Compile Include="Descent\ActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\AnotherScanIsInProgressException.cs" />
+    <Compile Include="Descent\Exceptions\AnotherScanIsInProgressException.cs" />
+    <Compile Include="Descent\AptScanOperationContext.cs" />
     <Compile Include="Descent\ComputerDescentResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\DescentException.cs">
+    <Compile Include="Descent\Exceptions\DescentException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\DescentHelper.cs">
+    <Compile Include="Descent\Helpers\DescentHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\DescentMod.cs">
@@ -93,7 +94,6 @@
     <Compile Include="Descent\DescentSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\DevicesSourceDescription.cs" />
     <Compile Include="Descent\IActiveDirectorySearcher.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -109,27 +109,24 @@
     <Compile Include="Descent\IDescentWatcher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\ImpersonationHelper.cs">
+    <Compile Include="Descent\Helpers\ImpersonationHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Descent\LimitedConcurrencyLevelTaskScheduler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\NetworkHelper.cs">
+    <Compile Include="Descent\Helpers\NetworkHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\NoAvailableTargetsException.cs" />
+    <Compile Include="Descent\Exceptions\NoAvailableTargetsException.cs" />
     <Compile Include="Descent\OperationDescentResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\ServiceHelper.cs">
+    <Compile Include="Descent\Helpers\ServiceHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Descent\StatusFileEmptyException.cs" />
+    <Compile Include="Descent\Exceptions\StatusFileEmptyException.cs" />
     <Compile Include="Descent\TargetUidComputerPair.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Descent\WatcherType.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DirectorySubSystem.cs">

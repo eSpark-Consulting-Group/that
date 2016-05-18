@@ -42,23 +42,7 @@ namespace APTAT.Application.Services
 
             if (e.Error == null)
             {
-                List<ThreatInfoItem> result = new List<ThreatInfoItem>(e.Targets.Length);
-                foreach (DeploymentTarget deploymentTarget in e.Targets)
-                {
-                    ThreatInfoItem infoItem = new ThreatInfoItem
-                    {
-                        Target = deploymentTarget,
-                        Name = deploymentTarget.Name,
-                        IpAddress = deploymentTarget.IPAddress,
-                        IsRootItem = true,
-                        IsOnline = deploymentTarget.Online,
-                        ComputerGuid = deploymentTarget.TargetUid
-                    };
-
-                    result.Add(infoItem);
-                }
-
-                DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(result.ToArray(), e.State);
+                DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(e.Targets, e.State);
                 Action action = () =>
                 {
                     if (DirectoryItemsResolved != null)
@@ -99,7 +83,7 @@ namespace APTAT.Application.Services
                     DnsName = domainRoot.DnsName,
                     Name = domainRoot.Name,
                     LdapPath = domainRoot.LdapPath,
-                    TargetUid = domainRoot.TargetUid,
+                    TargetUid = domainRoot.Uid,
                     Type = FromDomainEntryType(domainRoot.EntryType)
                 };
                 DirectoryItem[] result = new[] { root };
@@ -155,7 +139,7 @@ namespace APTAT.Application.Services
                         DnsName = target.DnsName,
                         Name = target.Name,
                         LdapPath = target.LdapPath,
-                        TargetUid = target.TargetUid,
+                        TargetUid = target.Uid,
                         Type = FromDomainEntryType(target.EntryType)
                     };
                 }
@@ -203,10 +187,10 @@ namespace APTAT.Application.Services
                     result[i] = new DeploymentItem
                     {
                         Name = target.Name,
-                        TargetUid = target.TargetUid,
+                        TargetUid = target.Uid,
                         IPAddress = target.IPAddress ?? "Unknown",
-                        Status = target.Online ? "Ready" : "Offline",
-                        IsOnline = target.Online
+                        Status = target.IsOnline ? "Ready" : "Offline",
+                        IsOnline = target.IsOnline
                     };
                 }
 
@@ -260,10 +244,10 @@ namespace APTAT.Application.Services
                     result[i] = new DeploymentItem
                     {
                         Name = target.Name,
-                        TargetUid = target.TargetUid,
+                        TargetUid = target.Uid,
                         IPAddress = target.IPAddress == null ? "Unknown" : target.IPAddress,
-                        Status = target.Online ? "Ready" : "Offline",
-                        IsOnline = target.Online
+                        Status = target.IsOnline ? "Ready" : "Offline",
+                        IsOnline = target.IsOnline
                     };
                 }
 
@@ -303,14 +287,14 @@ namespace APTAT.Application.Services
                     deploymentTarget.EntryType = FromDirectoryItemType(directoryItem.Type);
                     deploymentTarget.DnsName = directoryItem.DnsName;
                     deploymentTarget.Name = item.Name;
-                    deploymentTarget.TargetUid = item.TargetUid;
+                    deploymentTarget.Uid = item.TargetUid;
                     collection.Add(deploymentTarget);
                 }
                 else
                 {
                     DeploymentTarget deploymentTarget = new DeploymentTarget();
                     deploymentTarget.Name = item.Name;
-                    deploymentTarget.TargetUid = item.TargetUid;
+                    deploymentTarget.Uid = item.TargetUid;
                     collection.Add(deploymentTarget);
                 }
             }

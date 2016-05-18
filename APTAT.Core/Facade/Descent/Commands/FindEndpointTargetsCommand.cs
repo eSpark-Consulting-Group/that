@@ -59,7 +59,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 					try
 					{
 						var ip = IPAddress.Parse( address.ToString() );
-						endpointTargets.Add( new EndpointTarget { TargetUid = Guid.NewGuid(), Name = ip.ToString(), IPAddress = ip.ToString() } );
+						endpointTargets.Add( new EndpointTarget { Uid = Guid.NewGuid(), Name = ip.ToString(), IPAddress = ip.ToString() } );
 					}
 					catch( FormatException )
 					{
@@ -68,7 +68,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 				}
 				else if( address is DnsNameAddress )
 				{
-					endpointTargets.Add( new EndpointTarget { TargetUid = Guid.NewGuid(), Name = address.ToString(), DnsName = address.ToString() } );
+					endpointTargets.Add( new EndpointTarget { Uid = Guid.NewGuid(), Name = address.ToString(), DnsName = address.ToString() } );
 				}
 				else
 				{
@@ -97,12 +97,12 @@ namespace APTAT.Core.Facade.Descent.Commands
 					catch( InvalidOperationException )
 					{
 						ips = new IPAddress[0];
-						Response.Targets.Add( new EndpointTarget { TargetUid = Guid.NewGuid(), Name = address.ToString() } );
+						Response.Targets.Add( new EndpointTarget { Uid = Guid.NewGuid(), Name = address.ToString() } );
 					}
 
 					foreach( var ip in ips )
 					{
-						endpointTargets.Add( new EndpointTarget { TargetUid = Guid.NewGuid(), Name = ip.ToString(), IPAddress = ip.ToString() } );
+						endpointTargets.Add( new EndpointTarget { Uid = Guid.NewGuid(), Name = ip.ToString(), IPAddress = ip.ToString() } );
 					}
 				}
 			}

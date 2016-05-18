@@ -2,8 +2,6 @@
 {
 	public class DomainTarget : DeploymentTarget
 	{
-		public string LdapPath { get; set; }
-
 		public DomainEntryType EntryType { get; set; }
 	}
 }

@@ -22,41 +22,12 @@ namespace APTAT.Core
                 return null;
             }
         }
-        
-
         public string OrganizationUnit { get; set; }
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
-        public int UnknownFilesCount
-        {
-            //get
-            //{
-            //    if (_unknownFilesCount == -1)
-            //        CalculateTotal();
-            //    return _unknownFilesCount;
-            //}
-            get;
-            set;
-        }
-
-        public int SafeFilesCount
-        {
-            //get
-            //{
-            //    if (_safeFilesCount == -1)
-            //        CalculateTotal();
-            //    return _safeFilesCount;
-            //}
-            get;
-            set;
-        }
-
-        public int MalwareFilesCount
-        {
-            get;
-            set;
-        }
-
+        public int UnknownFilesCount { get; set; }
+        public int SafeFilesCount { get; set; }
+        public int MalwareFilesCount { get; set; }
         public int EmptyFilesCount { get; set; }
 
         public int ErrorFilesCount { get; set; }
@@ -64,21 +35,11 @@ namespace APTAT.Core
         public int ServerErrorFilesCount { get; set; }
 
         public int SkippedFilesCount { get; set; }
-
-        public int RunningProgramsCount
-        {
-            get;
-            set;
-        }
-
-        public int AutorunsCount
-        {
-            get;
-            set;
-        }
-
+        public int RunningProgramsCount { get; set; }
+        public int AutorunsCount { get; set; }
         public string ResultErrorText { get; set; }
         public ScanResultType ResultType { get; set; }
+
 
         public int BadFilesCount
         {

@@ -3,6 +3,7 @@ using APTAT.Application.Models;
 using APTAT.Core;
 using System.ComponentModel;
 using System.Net;
+using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Valkyrie;
 
 namespace APTAT.Application.Services
@@ -55,9 +56,9 @@ namespace APTAT.Application.Services
 
     public class DirectoryItemsResolvedEventArgs : DomainEventArgs
     {
-        public ThreatInfoItem[] Items { get; private set; }
+        public DeploymentTarget[] Items { get; private set; }
 
-        public DirectoryItemsResolvedEventArgs(ThreatInfoItem[] items, Object userState, Exception error = null)
+        public DirectoryItemsResolvedEventArgs(DeploymentTarget[] items, Object userState, Exception error = null)
         {
             Items = items;
             UserState = userState;
@@ -167,7 +168,7 @@ namespace APTAT.Application.Services
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
 
-        void BeginScan(ThreatInfoItem[] items, String domain, String login, String password, Object userState, String scanScope);
+        void BeginScan(DeploymentTarget[] items, String login, String password, Object userState, String scanScope);
 
         void GetScanResult(Guid targetUid, Object userState);
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using APTAT.Core.Descent;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
 
@@ -10,43 +9,21 @@ namespace APTAT.Core.Reports
 {
     public class AptReportData
     {
-        private MergedScanResults _mergedScanResultsCache = null;
-
-        private int _totalFilesCound = -1;
+        private MergedScanResults _mergedScanResultsCache;
         private int _safeFilesCount = -1;
         private int _unknownFilesCount = -1;
         private int _malwareFilesCount = -1;
+
+        public Guid OperationUid { get; set; } 
+        public bool IsActiveDirectoryDevicesSource { get { return Targets.Any(t => !String.IsNullOrEmpty(t.OrganizationUnit)); } }
         private int _emptyFilesCount = -1;
         private int _skippedFilesCount = -1;
         private int _errorFileCount = -1;
         private int _serverErrorFileCount = -1;
-        public Guid OperationUid { get; set; }
-
-        public string TargetsSource { get; set; }
-
-        public DevicesSourceDescription DevicesSourceDescription { get; set; }
-        public string DevicesSourceDescriptionString
-        {
-            get
-            {
-                switch (DevicesSourceDescription.Type)
-                {
-                    case ETargetsDiscovererType.ActiveDirectory:
-                        return string.Format("Active Directory ({0})", (string)(DevicesSourceDescription.Description));
-                    case ETargetsDiscovererType.NetworkAddresses:
-                        return string.Format("Network Addresses ({0}) ", (string)(DevicesSourceDescription.Description));
-                    case ETargetsDiscovererType.Workgroup:
-                        return string.Format("Workgroup ({0})", (string)(DevicesSourceDescription.Description));
-                    default:
-                        return string.Empty;
-                }
-            }
-        }
-        public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == ETargetsDiscovererType.ActiveDirectory; } }
+        private int _totalFilesCound = -1;
 
         public DateTime ScanStarted { get; set; }
         public DateTime ScanFinished { get; set; }
-
         public int TotalTargetsCount { get; set; }
         public int TargetsNotPerformed { get; set; }
         public int TargetsScanned
@@ -227,7 +204,6 @@ namespace APTAT.Core.Reports
 
         private void ReplaceStatistics(FilesStatistics statistics)
         {
-            _totalFilesCound = statistics.TotalFilesCound;
             _safeFilesCount = statistics.SafeFilesCount;
             _unknownFilesCount = statistics.UnknownFilesCount;
             _malwareFilesCount = statistics.MalwareFilesCount;
@@ -246,13 +222,6 @@ namespace APTAT.Core.Reports
                 //**
                 new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" }
             };
-
-            //if (MalwareFilesFound > 0)
-            //{
-            //    itemRatingInfoList.Add(
-            //        new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" }
-            //        );
-            //}
 
             return itemRatingInfoList.ToArray();
         }
@@ -307,31 +276,7 @@ namespace APTAT.Core.Reports
             }
 
             return devices.ToArray();
-
-
-
-
-            //var top10 = (from target in SucceededTargets
-            //             where target.BadFilesCount > 0
-            //             orderby target.BadFilesCount descending
-            //             select target).Take(10);
-
-            //List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
-            //foreach (var scanResult in top10)
-            //{
-            //    if (scanResult.UnknownFilesCount > 0)
-            //        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = BadFileType.Unknown, Name = scanResult.HostName, Uid = scanResult.TargetUid });
-            //    if (scanResult.MalwareFilesCount > 0)
-            //        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = BadFileType.Infected, Name = scanResult.HostName, Uid = scanResult.TargetUid });
-            //}
-
-            //return devices.ToArray();
-
-            //return (from target in Targets
-            //             where target.BadFilesCount > 0 orderby target.BadFilesCount
-            //             select
-            //                 new VulnerableDeviceInfoEx() { BadFilesCount = target, Name = target.HostName, BadFileType =  }).Take(10).ToArray();
-        }
+       }
 
         public MostWantedBadFileInfo[] GetTop10PopularBadFiles()
         {
@@ -556,29 +501,6 @@ namespace APTAT.Core.Reports
             {
                 uniqueFiles.Add(badFile.Sha1, badFile);
             }
-        }
-
-        private DetailedBadFile[] GetAllBadFiles()
-        {
-            List<DetailedBadFile> files = new List<DetailedBadFile>();
-
-            foreach (var scanResult in Targets)
-            {
-                var badFilesFromTarget = scanResult.GetUniqueBadFiles();
-
-                files.AddRange(badFilesFromTarget);
-            }
-
-            if (ValkyrieAnalysisResult != null && ValkyrieAnalysisResult.Any())
-            {
-                foreach (var f in files)
-                {
-                    var fileResult = this.ValkyrieAnalysisResult.Where(v => v.Sha1.ToUpper() == f.Sha1.ToUpper()).FirstOrDefault();
-                    f.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
-                }
-            }
-
-            return files.ToArray();
         }
 
         public DetailedBadFile[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)

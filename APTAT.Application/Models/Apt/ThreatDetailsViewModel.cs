@@ -187,9 +187,9 @@ namespace APTAT.Application.Models
             }
         }
 
-        public ThreatDetailsViewModel()
+        public ThreatDetailsViewModel(IStorageService storage)
         {
-            _storage = new StorageService();
+            _storage = storage;
         }
 
         protected override void InvokeViewLoaded(Object arg)

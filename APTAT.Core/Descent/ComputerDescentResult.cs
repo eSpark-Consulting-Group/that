@@ -5,24 +5,17 @@ namespace APTAT.Core.Descent
 {
 	public struct ComputerDescentResult
 	{
-		private void Initialize(IComputer computer )
-		{
-
-
-			Computer = computer;
-			StatusMessage = FormattedText.Empty;
-			ShortStatusMessage = FormattedText.Empty;
-			ErrorCode = String.Empty;
-			SystemMessage = String.Empty;
-			SystemCode = 0;
-			ExtensionTexts = null;
-		}
-
 		public ComputerDescentResult( Guid targetUid, IComputer computer)
 			: this()
 		{
-			Initialize( computer );
-			TargetUid = targetUid;
+            Computer = computer;
+            StatusMessage = FormattedText.Empty;
+            ShortStatusMessage = FormattedText.Empty;
+            ErrorCode = String.Empty;
+            SystemMessage = String.Empty;
+            SystemCode = 0;
+            ExtensionTexts = null;
+            TargetUid = targetUid;
 		}
 
 		public ComputerDescentResult( ComputerDescentResult originalResult, OperationDescentResult result )
@@ -33,15 +26,15 @@ namespace APTAT.Core.Descent
 
 			StatusMessage = result.StatusMessage;
 			ShortStatusMessage = result.ShortStatusMessage;
-			ProgressPercentage = result.ProgressPercentage;
 			ErrorCode = result.ErrorCode;
 			SystemMessage = result.SystemMessage;
 			SystemCode = result.SystemCode;
             Succeeded = result.Succeeded;
-            AgentCompleted = true;
+            Completed = true;
         }
 
-        public ComputerDescentResult(ComputerDescentResult originalResult, FormattedText statusMessage, FormattedText shortStatusMessage, int progressPercentage)
+        public ComputerDescentResult(ComputerDescentResult originalResult, FormattedText statusMessage, 
+            FormattedText shortStatusMessage)
 			: this()
 		{
 			TargetUid = originalResult.TargetUid;
@@ -49,7 +42,7 @@ namespace APTAT.Core.Descent
 			ErrorCode = originalResult.ErrorCode;
 			SystemMessage = originalResult.SystemMessage;
 			SystemCode = originalResult.SystemCode;
-			AgentCompleted = originalResult.AgentCompleted;
+			Completed = originalResult.Completed;
             Succeeded = originalResult.Succeeded;
 
 			if( statusMessage == null || String.IsNullOrEmpty( statusMessage.ToString() ) )
@@ -69,8 +62,7 @@ namespace APTAT.Core.Descent
 			{
 				ShortStatusMessage = shortStatusMessage;
 			}
-
-			ProgressPercentage = progressPercentage;
+            
 			ExtensionTexts = originalResult.ExtensionTexts;
 		}
 
@@ -79,7 +71,7 @@ namespace APTAT.Core.Descent
 			if (invalidateAgent)
 			{
                 Succeeded = false;
-				AgentCompleted = true;
+				Completed = true;
 			}
 			ErrorCode = errorCode.ToString();
 			ShortStatusMessage = new FormattedText(new ResourceText(shortMessage, shortMessage));
@@ -87,102 +79,15 @@ namespace APTAT.Core.Descent
 			SystemMessage = detailedMessage;
 		}
 
-		public Guid TargetUid
-		{
-			get;
-			private set;
-		}
-
-		public IComputer Computer
-		{
-			get;
-			private set;
-		}
-
-		public bool Completed
-		{
-			get
-			{
-				return  AgentCompleted || (AgentCompleted && !Succeeded);
-			}
-		}
-
-		public bool Succeeded
-		{
-
-            get;
-            private set;
-        }
-
-		public bool AgentCompleted
-		{
-			get;
-			private set;
-		}
-
-		public FormattedText StatusMessage
-		{
-			get;
-			private set;
-		}
-
-		public FormattedText ShortStatusMessage
-		{
-			get;
-			private set;
-		}
-
-		public string ErrorCode
-		{
-			get;
-			private set;
-		}
-
-		public string SystemMessage
-		{
-			get;
-			private set;
-		}
-
-		public int SystemCode
-		{
-			get;
-			private set;
-		}
-
-		public int ProgressPercentage
-		{
-			get; 
-			private set; 
-		}
-
-		public string[] ExtensionTexts
-		{
-			get;
-			private set;
-		}
-
-		public int TotalProgressPercentage
-		{
-			get
-			{
-				if (Completed)
-					return 100;
-
-				// As we can't know beforehand whether we need to uninstall outdated CIS,
-				// we assume we always have to, and just momentarily increase the total
-				// percentage in case no outdated CIS exists (hence WithPackage counts for
-				// two stages).
-
-				var totalStages = 1;
-				var completedStages = AgentCompleted ? 1 : 0;
-
-
-				var completedPercentage = (double) completedStages / totalStages * 100;
-				var totalPercentage = completedPercentage + 1.0 / totalStages * ProgressPercentage;
-
-				return (int) totalPercentage;
-			}
-		}
+		public Guid TargetUid { get; private set; }
+		public IComputer Computer { get; private set; }
+		public bool Completed { get; private set; }
+		public bool Succeeded { get; private set; }
+		public FormattedText StatusMessage { get; private set; }
+		public FormattedText ShortStatusMessage { get; private set; }
+	    public string ErrorCode { get; private set; }
+	    public string SystemMessage { get; private set; }
+		public int SystemCode { get; private set; }
+		public string[] ExtensionTexts { get; private set; }
 	}
 }

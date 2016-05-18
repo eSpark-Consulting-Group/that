@@ -163,7 +163,11 @@
     <Compile Include="Helpers\ThreadHelper.cs" />
     <Compile Include="Messages\MessageManager.cs" />
     <Compile Include="Messages\MessageTokens.cs" />
+    <Compile Include="Models\DomainObject.cs" />
+    <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Services\ITargetsDiscoveryService.cs" />
+    <Compile Include="Services\WmiService.cs" />
+    <Compile Include="Services\IWmiService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="ValkyrieDetailsView.xaml.cs">
       <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
@@ -182,16 +186,16 @@
     </Compile>
     <Compile Include="GridSelectionColumn.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Models\DelegateCommand.cs" />
-    <Compile Include="Models\IpAddressItem.cs" />
-    <Compile Include="Models\OperationContext.cs" />
+    <Compile Include="Models\ModelBase\DelegateCommand.cs" />
+    <Compile Include="Models\Directory\IpAddressItem.cs" />
+    <Compile Include="Models\Directory\OperationContext.cs" />
     <Compile Include="Models\RegisterWithMachineIdResponse.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
-    <Compile Include="Models\StartScanByIpViewModel.cs" />
-    <Compile Include="Models\StartScanDomainViewModel.cs" />
-    <Compile Include="Models\StartScanWorkgroupViewModel.cs" />
+    <Compile Include="Models\Directory\StartScanByIpViewModel.cs" />
+    <Compile Include="Models\Directory\StartScanDomainViewModel.cs" />
+    <Compile Include="Models\Directory\StartScanWorkgroupViewModel.cs" />
     <Compile Include="Models\ValkyrieRegistrationModel.cs" />
-    <Compile Include="Models\WizardViewModel.cs" />
+    <Compile Include="Models\ModelBase\WizardViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
@@ -210,9 +214,9 @@
     <Compile Include="Converters\DirectoryItemTypeToOpacityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\ScanStageToBrushConverter.cs" />
-    <Compile Include="Models\ScanProgressItem.cs" />
-    <Compile Include="Models\ScanResultItem.cs" />
-    <Compile Include="Models\BadFileItem.cs" />
+    <Compile Include="Models\Apt\ScanProgressItem.cs" />
+    <Compile Include="Models\Apt\ScanResultItem.cs" />
+    <Compile Include="Models\Apt\BadFileItem.cs" />
     <Compile Include="Converters\NullableConverter.cs" />
     <Compile Include="ScanInfoTreeView.xaml.cs">
       <DependentUpon>ScanInfoTreeView.xaml</DependentUpon>
@@ -220,16 +224,14 @@
     <Compile Include="Helpers\SearchHelper.cs" />
     <Compile Include="SelectorButton.cs" />
     <Compile Include="Services\AptService.cs" />
-    <Compile Include="Models\BasePage.cs" />
-    <Compile Include="Models\DirectoryItem.cs" />
-    <Compile Include="Models\DomainObject.cs" />
+    <Compile Include="Models\ModelBase\BasePage.cs" />
+    <Compile Include="Models\Directory\DirectoryItem.cs" />
     <Compile Include="Services\IAptService.cs" />
     <Compile Include="Services\IStorageService.cs" />
     <Compile Include="Models\MainViewViewModel.cs" />
     <Compile Include="Services\StorageService.cs" />
-    <Compile Include="Models\ThreatDetailsViewModel.cs" />
-    <Compile Include="Models\ThreatInfoItem.cs" />
-    <Compile Include="Models\ViewModel.cs" />
+    <Compile Include="Models\Apt\ThreatDetailsViewModel.cs" />
+    <Compile Include="Models\Apt\ThreatInfoItem.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>

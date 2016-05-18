@@ -2,7 +2,7 @@
 
 namespace APTAT.Core.Descent
 {
-	public class DescentProgressItem : IDescentProgressItem, IBusinessObject
+	public class DescentProgressItem : IDescentProgressItem
 	{
         public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int percentage)
             : this(computerUid, hostName, operationUid, statusMessage, scanStage, 0, 0, 0, 0, percentage, 0, 0)
@@ -29,60 +29,17 @@ namespace APTAT.Core.Descent
             ErrorFilesCount = errorFileCount;
             FailedAtNodeCount = failedAtNodeCount;
         }
+		
 
-	    
+        #region IDescentProgressItem Members
 
-	    #region IBusinessObject Members
-
-		public long Key
-		{
-			get { return 0; }
-		}
-
-		public bool IsNew
-		{
-			get { return false; }
-		}
-
-		#endregion
-
-		#region ICloneable Members
-
-		public object Clone()
-		{
-			return this;
-		}
-
-		#endregion
-
-		#region IDescentProgressItem Members
-
-		public Guid ComputerUid
-		{
-			get;
-			private set;
-		}
-
-		public Guid OperationUid
-		{
-			get;
-			private set;
-		}
-
-		public int ProgressPercentage
-		{
-			get;
-			private set;
-		}
-
-		public FormattedText StatusMessage
-		{
-			get;
-			private set;
-		}
-        public int FailedAtNodeCount { get; set; }
+        public Guid ComputerUid { get; private set; }
+		public Guid OperationUid { get; private set; }
+		public int ProgressPercentage { get; private set; }
+		public FormattedText StatusMessage { get; private set; }
         public string HostName { get; private set; }
-	    public AptScanStage ScanStage { get; private set; }
+        public int FailedAtNodeCount { get; set; }
+        public AptScanStage ScanStage { get; private set; }
 	    public int TotalFilesCount { get; private set; }
 	    public int UnknownFilesCount { get; private set; }
 	    public int MalwaresCount { get; private set; }

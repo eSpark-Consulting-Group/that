@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
-using APTAT.Core.Facade.Descent.Commands;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Reports;
 using APTAT.Core.Valkyrie;
@@ -14,13 +13,6 @@ using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Core
 {
-    public enum ETargetsDiscovererType
-    {
-        ActiveDirectory,
-        NetworkAddresses,
-        Workgroup
-    }
-
     public interface IAptScanner
     {
         void BeginScan(object state = null);
@@ -63,6 +55,9 @@ namespace APTAT.Core
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         private readonly IValkyrieClient _valkyrieClient;
+        
+        public List<FileResult> ValkyrieAnalysisResult { get; set; }
+
         public AptAtManager()
             : this(null)
         {
@@ -74,8 +69,7 @@ namespace APTAT.Core
         {
             var catalog = new SubSystemCatalog();
 
-            _descentSubSystem = new DescentSubSystem();
-            _descentSubSystem.Init(catalog);
+            _descentSubSystem = catalog.Find<IDescentSubSystem>();
             var changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
              _valkyrieClient = new ValkyrieClient();
             if (listener != null)
@@ -107,7 +101,7 @@ namespace APTAT.Core
             }
         }
 
-        void OnValkyrieClientProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        void OnValkyrieClientProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             var handler = ValkyrieAnalyzeProgressChanged;
             if (handler != null)
@@ -133,6 +127,7 @@ namespace APTAT.Core
         {
             List<FileResult> fileResults = new List<FileResult>();
 
+            var valkyrieAnalysisResults = valkyrieResult as ValkyrieAnalysisResult[] ?? valkyrieResult.ToArray();
             foreach (var scanResult in scanResults)
             {
                 foreach (var badFile in scanResult.Value.BadFiles)
@@ -142,7 +137,7 @@ namespace APTAT.Core
                     if (found == null)
                     {
                         found = new FileResult(badFile);
-                        var vResult = valkyrieResult.FirstOrDefault(v => v.SHA1 != null && v.SHA1.ToUpper() == badFile.Sha1.ToUpper());
+                        var vResult = valkyrieAnalysisResults.FirstOrDefault(v => v.SHA1 != null && v.SHA1.ToUpper() == badFile.Sha1.ToUpper());
 
                         if (vResult != null)
                         {
@@ -175,7 +170,7 @@ namespace APTAT.Core
             {
                 foreach (var badFile in scanResult.Value.BadFiles)
                 {
-                    if (!files.Any(f => f.Sha1 == badFile.Sha1))
+                    if (files.All(f => f.Sha1 != badFile.Sha1))
                     {
                         files.Add(new ValkyrieFileInfo() { Ip = scanResult.Value.IpAddress, Path = badFile.Path, Sha1 = badFile.Sha1 });
                     }
@@ -183,7 +178,7 @@ namespace APTAT.Core
             }
             return files;
         }
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string domain, DevicesSourceDescription devicesSourceDescr, string scanScope = null)
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string scanScope = null)
         {
             if (scanScope == null)
                 scanScope = Properties.Settings.Default.ScanScope;
@@ -194,19 +189,9 @@ namespace APTAT.Core
                 var target = targets[index];
                 IPAddress targetAddress;
                 IPAddress.TryParse(target.IPAddress, out targetAddress);
-                var computer = new DirectoryComputer
-                {
-                    Name = target.Name,
-                    DnsName = !String.IsNullOrEmpty(target.DnsName) ? target.DnsName : target.Name,
-                    IPAddress = targetAddress,
-                    Uid = target.TargetUid,
-                    IsOnline = target.Online,
-                    LdapPath = target.LdapPath,
-                    OrganizationUnit = TargetsHelper.GetOrganizationUnit(target.LdapPath),
-                };
-                computers[index] = new TargetUidComputerPair(target.TargetUid, computer);
+                computers[index] = new TargetUidComputerPair(target.Uid, target);
             }
-            var scanner = new AptScanner(_descentSubSystem, computers, login, password, domain, devicesSourceDescr, scanScope);
+            var scanner = new AptScanner(_descentSubSystem, computers, login, password, scanScope);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             return scanner;
@@ -268,8 +253,6 @@ namespace APTAT.Core
             _valkyrieClient.AnalyzeStarted += OnValkyrieAnalyzeStarted;
             _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password,results.Count, proxyCredential);           
         }
-
-        public List<FileResult> ValkyrieAnalysisResult { get; set; }
 
         public string GetValkyrieDetailsLink()
         {

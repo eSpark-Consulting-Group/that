@@ -9,7 +9,7 @@ using APTAT.Core.Descent;
 
 namespace APTAT.Core.Directory
 {
-    public class ActiveDirectoryObserver : MarshalByRefNullLifetime, IActiveDirectoryObserver
+    public class ActiveDirectoryObserver : IActiveDirectoryObserver
     {
         public IAdEntry GetDomainRootEntry(string domainName, string login, string password)
         {

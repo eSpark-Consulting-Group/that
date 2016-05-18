@@ -55,7 +55,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 
 				Response.Targets.Add( new DomainTarget
 				{
-					TargetUid = Guid.NewGuid(),
+					Uid = Guid.NewGuid(),
 					EntryType = DomainEntryType.Root,
 					LdapPath = root.FullPath,
 					Name = root.Name,
@@ -91,7 +91,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 				{
 					Response.Targets.Add( new DomainTarget
 					{
-						TargetUid = Guid.NewGuid(),
+						Uid = Guid.NewGuid(),
 						LdapPath = computersContainer.FullPath,
 						Name = computersContainer.Name,
 						DnsName = computersContainer.DnsName,
@@ -123,7 +123,7 @@ namespace APTAT.Core.Facade.Descent.Commands
 			{
 				Response.Targets.Add( new DomainTarget
 				{
-					TargetUid = Guid.NewGuid(),
+                    Uid = Guid.NewGuid(),
 					LdapPath = child.FullPath,
 					Name = child.Name,
 					DnsName = child.DnsName,

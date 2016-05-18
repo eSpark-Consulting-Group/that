@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Core.Descent
 {
@@ -8,11 +9,6 @@ namespace APTAT.Core.Descent
         private readonly IActiveDirectoryObserver _activeDirectoryObserver;
 		private readonly string _login;
 		private readonly string _password;
-
-		public ActiveDirectorySearcher( IDirectorySubSystem directory )
-			: this( directory, null, null )
-		{
-		}
 
 		public ActiveDirectorySearcher( IDirectorySubSystem directory, string login, string password )
 		{
@@ -54,11 +50,12 @@ namespace APTAT.Core.Descent
 								  group entry by entry.Type into entryGrp
 								  select entryGrp;
 
-			var computersGroup = grouppedEntries.FirstOrDefault( grp => grp.Key == AdEntryType.Computer );
+		    var enumerable = grouppedEntries as IGrouping<AdEntryType, IAdEntry>[] ?? grouppedEntries.ToArray();
+		    var computersGroup = enumerable.FirstOrDefault( grp => grp.Key == AdEntryType.Computer );
 			if( computersGroup != null )
 			{
 				computers = ( from entry in computersGroup
-							  select new DirectoryComputer
+							  select new DomainTarget()
 							  {
 								  Name = entry.Name,
 								  DnsName = entry.DnsName,
@@ -71,7 +68,7 @@ namespace APTAT.Core.Descent
 				foundComputersAction( computers );
 			}
 
-			var unitsGroup = grouppedEntries.FirstOrDefault( grp => grp.Key == AdEntryType.OrganizationUnit );
+			var unitsGroup = enumerable.FirstOrDefault( grp => grp.Key == AdEntryType.OrganizationUnit );
 			if( unitsGroup != null )
 			{
 				foreach( var unit in unitsGroup )

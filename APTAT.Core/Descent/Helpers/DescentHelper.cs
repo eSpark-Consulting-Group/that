@@ -34,7 +34,7 @@ namespace APTAT.Core.Descent
 		    private const string SkipGacParam = "--skipGAC";
 
 			private RemoteHostInfo _remoteHostInfo;
-			private string _oldRemoteHostName; // old name without changing it to IP address
+			private readonly string _oldRemoteHostName; // old name without changing it to IP address
 			private string _remoteAdminPath;
 			private string _remoteWorkingDirectory;
 			private string _remoteHost;
@@ -58,7 +58,7 @@ namespace APTAT.Core.Descent
 			};
 
 
-			RemoteResponse _response = new RemoteResponse();
+		    readonly RemoteResponse _response = new RemoteResponse();
 
 			public RemoteResponse Response
 			{
@@ -713,89 +713,8 @@ namespace APTAT.Core.Descent
                             {
                                 throw new ArgumentException(String.Format("Unknown EnAptStage value: {0}", (int)status));
                             }
-
-                            //string[] temp = data.Split(';');
-                            //if(temp.Length != 3)
-                            //    throw new Exception("Response file header is not valid");
-
-                            //int status;
-                            //Int32.TryParse(temp[0], out status);
-
-                            //int totalFiles;
-                            //Int32.TryParse(temp[1], out totalFiles);
-
-                            //int unknownFiles;
-                            //Int32.TryParse(temp[2], out unknownFiles);
-
-                            //_response.Status = (DescentStatus)status;
-
-                            //if(status == 0) // In progress
-                            //{
-                            //    InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
-                            //}
-                            //else if(status == 1) // Completed
-                            //{
-                            //    InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
-                                
-                            //    string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(_remoteHostInfo.TargetUid.ToString(), ".xml"));
-
-                            //    InvokeReceivingResults(EventArgs.Empty);
-                                
-                            //    File.Copy(resultsFile, resultsFileLocal, true);
-                            //    //File.Delete(resultsFile);
-                            //    InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, TotalFilesScanned = totalFiles, UnknownFilesFound = unknownFiles });
-                            //    break;
-                            //}
-                            //else if(status == 2) // Error (>=2)
-                            //{
-                            //    //InvokeScanFailed(new ScanFailedEventArgs() { Status = (DescentStatus)status });
-                            //    throw new DescentException((DescentStatus)status, "Error returned from a remote computer. See the status for details.", 0);
-                            //    //break;
-                            //}
-
                             Thread.Sleep(3000);
                         }
-                        
-
-                        //using (TextReader sr = new StreamReader(responseFilePathForCurrentComputer,
-                        //    System.Text.Encoding.ASCII))
-                        //{
-                        //    string line = sr.ReadLine();
-                        //    if (line == null)
-                        //    {
-                        //        throw new Exception("Response file is empty");
-                        //    }
-
-                        //    int status;
-                        //    Int32.TryParse(line, out status);
-
-                        //    if(status == 100)
-                        //    {
-                        //        sr.Close();
-                        //        break;
-                        //    }
-                        //    else
-                        //    {
-                        //        sr.Close();
-                        //        Thread.Sleep(1000);
-                        //    }
-
-                        //    //string[] splitted = line.Split(';', '#');
-                        //    //if (splitted.Length != 3)
-                        //    //{
-                        //    //    throw new Exception("Response file header is not valid");
-                        //    //}
-
-                        //    //_response.Status = (DescentStatus)Int32.Parse(splitted[0]);
-                        //    //_response.Win32Error = Int32.Parse(splitted[1]);
-                        //    //_response.ErrorString = splitted[2];
-                        //    //_response.Response = "";
-
-                        //    //while ((line = sr.ReadLine()) != null)
-                        //    //{
-                        //    //    _response.Response += line;
-                        //    //}
-                        //}
                     }
                     catch (FileNotFoundException ex)
                     {

@@ -9,7 +9,6 @@ using APTAT.Application.Services;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
 using APTAT.Core;
-using APTAT.Core.Descent;
 using APTAT.Core.Valkyrie;
 using APTAT.Application.Helpers;
 using APTAT.Application.Messages;
@@ -28,6 +27,7 @@ namespace APTAT.Application.Models
         private String _password;
 
         private readonly IAptService _aptService;
+        private readonly IWmiService _wmiService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
@@ -375,10 +375,9 @@ namespace APTAT.Application.Models
         public DelegateCommand SelectCommand { get; private set; }
         public DelegateCommand SelectValkyrieCommand { get; private set; }
 
-        public DevicesSourceDescription DevicesSourceDescription;
-
-
-        public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService, IAptService aptService, IStorageService storage)
+        
+        public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService, 
+            IAptService aptService, IStorageService storage, IWmiService wmiService)
         {
             
             _aptService = aptService;
@@ -643,16 +642,19 @@ namespace APTAT.Application.Models
             }
 
 
-            _onlineItems = e.Items.Where(item => item.IsOnline).ToArray();
+            var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
+            List<ThreatInfoItem> result = new List<ThreatInfoItem>(items.Length);
+
+
+
+            _onlineItems = items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
 
-            _cache = new Collection<ThreatInfoItem>(e.Items);
-            Items =
-                new ObservableCollection<ThreatInfoItem>(
+            _cache = new Collection<ThreatInfoItem>(items);
+            Items = new ObservableCollection<ThreatInfoItem>(
                     _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
 
-
-            String domain = _storage.GetValue<String>(KnownKeys.Domain, false);
+            
 
             foreach (ThreatInfoItem item in _cache)
             {
@@ -668,22 +670,20 @@ namespace APTAT.Application.Models
                 {
                     throw new InvalidOperationException("specify login and password");
                 }
-
-                DevicesSourceDescription = _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false);
-
-                if (DevicesSourceDescription == null)
-                    throw new InvalidOperationException("Devices Source Description was not correctly initialised");
-
+               
                 string scanScope = @"?:";
                 if (IsQuickScan)
                 {
                     scanScope = @"processes|drivers|autoruns";
-                }
+                    _aptService.BeginScan(e.Items, _login, _password, this, scanScope);
 
-                _aptService.BeginScan(_cache.ToArray(), domain, _login, _password, this, scanScope);
+                }
+                else
+                {
+                    _wmiService.StartAnalyze(e.Items,_login, _password, this);
+                }
                 //_login = null;
                 //_password = null;
-                DevicesSourceDescription = null;
             }
             else
             {
@@ -779,8 +779,9 @@ namespace APTAT.Application.Models
                         infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                         infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
                         infoItem.ErrorFilesCount = scanProgress.ErrorFilesCount;
-                        infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.") ? scanProgress.StatusMessage.Replace("Malwares found: 0.", "") : scanProgress.StatusMessage;
-                        if (infoItem.ScanStage != ScanStage.OperationCompleted &&
+                        infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.") ?
+                                                    scanProgress.StatusMessage.Replace("Malwares found: 0.", "") :
+                                                    scanProgress.StatusMessage; if (infoItem.ScanStage != ScanStage.OperationCompleted &&
                             scanProgress.ScanStage == ScanStage.OperationCompleted)
                         {
                             _aptService.GetScanResult(infoItem.ComputerGuid, this);
