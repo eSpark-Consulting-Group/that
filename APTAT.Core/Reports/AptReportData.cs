@@ -211,6 +211,7 @@ namespace APTAT.Core.Reports
             _skippedFilesCount = statistics.SkippedFilesCount;
             _errorFileCount = statistics.ErrorFilesCount;
             _serverErrorFileCount = statistics.ServerErrorFilesCount;
+            _totalFilesCound = statistics.TotalFilesCound;
         }
 
         public ItemRatingInfo[] GetFileRatingCollection()
