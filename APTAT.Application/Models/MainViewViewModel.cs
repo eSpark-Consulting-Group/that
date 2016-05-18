@@ -675,13 +675,10 @@ namespace APTAT.Application.Models
                 if (IsQuickScan)
                 {
                     scanScope = @"processes|drivers|autoruns";
-                    _aptService.BeginScan(e.Items, _login, _password, this, scanScope);
+                }
 
-                }
-                else
-                {
-                    _wmiService.StartAnalyze(e.Items,_login, _password, this);
-                }
+                _aptService.BeginScan(e.Items, _login, _password, this, scanScope);
+                
                 //_login = null;
                 //_password = null;
             }
