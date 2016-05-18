@@ -382,6 +382,7 @@ namespace APTAT.Application.Models
             
             _aptService = aptService;
             _targetsDiscoveryService = targetsDiscoveryService;
+            _wmiService = wmiService;
             _storage = storage;
 
 

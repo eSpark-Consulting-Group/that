@@ -233,12 +233,13 @@ namespace APTAT.Core.Facade.Descent.Commands
             Response.Targets.AddRange(results);
         }
 
-		public bool Equals(IComputer x, IComputer y)
-		{
-			return x.Name == y.Name && x.DnsName == y.DnsName &&
-				(x.IPAddress != null ? x.IPAddress.Equals(y.IPAddress) : 
-				 y.IPAddress?.Equals(x.IPAddress) ?? true);
-		}
+        public bool Equals(IComputer x, IComputer y)
+        {
+            return x.Name == y.Name && x.DnsName == y.DnsName &&
+                (x.IPAddress != null ? x.IPAddress.Equals(y.IPAddress) :
+                 y.IPAddress != null ? y.IPAddress.Equals(x.IPAddress) :
+                 true);
+        }
 
 		public int GetHashCode(IComputer obj)
 		{
