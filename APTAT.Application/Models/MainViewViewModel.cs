@@ -384,6 +384,7 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService = targetsDiscoveryService;
             _wmiService = wmiService;
             _storage = storage;
+            _wmiService = wmiService;
 
 
             _isValkyrieAnalysCompleted = false;
@@ -679,7 +680,7 @@ namespace APTAT.Application.Models
                 }
 
                 _aptService.BeginScan(e.Items, _login, _password, this, scanScope);
-                
+
                 //_login = null;
                 //_password = null;
             }

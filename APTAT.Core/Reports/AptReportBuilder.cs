@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using APTAT.Core.Descent;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core.Reports
 {

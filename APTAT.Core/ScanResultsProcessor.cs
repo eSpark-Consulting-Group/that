@@ -2,12 +2,13 @@
 using System.IO;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
 {
     public class ScanResultsProcessor
     {
-        public bool TryParse(ref ScanResult result)
+        public bool TryParse(ref AptScanResult result)
         {
             if (result == null)
                 return false;

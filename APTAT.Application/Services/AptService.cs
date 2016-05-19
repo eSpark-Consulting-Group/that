@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.ComponentModel;
 using System.Net;
+using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
 using APTAT.Core.Reports;
 
@@ -47,7 +48,7 @@ namespace APTAT.Application.Services
 
         public AptService()
         {
-            _manager = new AptAtManager(this);
+            _manager = new AptAtManager();
 
         }
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
@@ -120,6 +121,9 @@ namespace APTAT.Application.Services
 
         public void BeginScan(DeploymentTarget[] items , String login, String password, Object userState, string scanScope)
         {
+
+            var changeTrackingSubSystem = SubSystemFactory.Current.GetSubSystem<IChangeTrackingSubSystem>();
+            changeTrackingSubSystem.RegisterListener(this);
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(items), login, password, scanScope);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
@@ -156,6 +160,8 @@ namespace APTAT.Application.Services
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
         {
+            var changeTrackingSubSystem = SubSystemFactory.Current.GetSubSystem<IChangeTrackingSubSystem>();
+            changeTrackingSubSystem.UnregisterListener(this);
             var scanner = sender as IAptScanner;
             if (scanner != null)
             {
@@ -190,19 +196,19 @@ namespace APTAT.Application.Services
 
         public void GetScanResult(Guid targetUid, Object userState)
         {
-            ScanResult scanResult = _manager.GetScanResultByTargetUid(targetUid);
+            AptScanResult aptScanResult = _manager.GetScanResultByTargetUid(targetUid);
 
             ScanResultItem resultItem = new ScanResultItem
             {
-                TargetUid = scanResult.TargetUid,
-                TotalFilesCount = scanResult.TotalFilesCount,
-                UnknownFilesCount = scanResult.UnknownFilesCount
+                TargetUid = aptScanResult.TargetUid,
+                TotalFilesCount = aptScanResult.TotalFilesCount,
+                UnknownFilesCount = aptScanResult.UnknownFilesCount
             };
 
 
             BadFileItem[] badFileItems;
 
-            badFileItems = scanResult.BadFiles
+            badFileItems = aptScanResult.BadFiles
                 .Select(m => new BadFileItem
                 {
                     Name = m.Path,

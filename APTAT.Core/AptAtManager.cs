@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
+using APTAT.Core.Descent.Apt;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Reports;
 using APTAT.Core.Valkyrie;
@@ -57,23 +58,13 @@ namespace APTAT.Core
         private readonly IValkyrieClient _valkyrieClient;
         
         public List<FileResult> ValkyrieAnalysisResult { get; set; }
+   
 
         public AptAtManager()
-            : this(null)
         {
-        }
-
-        
-
-        public AptAtManager(IChangeTrackingListener listener)
-        {
-            var catalog = new SubSystemCatalog();
-
+            var catalog = SubSystemFactory.Current.Catalog;
             _descentSubSystem = catalog.Find<IDescentSubSystem>();
-            var changeTrackingSubSystem = catalog.Find<IChangeTrackingSubSystem>();
-             _valkyrieClient = new ValkyrieClient();
-            if (listener != null)
-                changeTrackingSubSystem.RegisterListener(listener);
+            _valkyrieClient = new ValkyrieClient();
         }
 
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
@@ -123,7 +114,7 @@ namespace APTAT.Core
             }
         }
 
-        private static List<FileResult> GetFullResult(IEnumerable<ValkyrieAnalysisResult> valkyrieResult, ConcurrentDictionary<Guid, ScanResult> scanResults)
+        private static List<FileResult> GetFullResult(IEnumerable<ValkyrieAnalysisResult> valkyrieResult, ConcurrentDictionary<Guid, AptScanResult> scanResults)
         {
             List<FileResult> fileResults = new List<FileResult>();
 
@@ -161,9 +152,9 @@ namespace APTAT.Core
             return fileResults;
         }
 
-        public static List<ValkyrieFileInfo> GetDistinctFileInfo(ConcurrentDictionary<Guid, ScanResult> results)
+        public static List<ValkyrieFileInfo> GetDistinctFileInfo(ConcurrentDictionary<Guid, AptScanResult> results)
         {
-            Dictionary<string, ScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.TargetUid.ToString());
+            Dictionary<string, AptScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.TargetUid.ToString());
 
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
             foreach (var scanResult in scanResults)
@@ -183,15 +174,8 @@ namespace APTAT.Core
             if (scanScope == null)
                 scanScope = Properties.Settings.Default.ScanScope;
 
-            TargetUidComputerPair[] computers = new TargetUidComputerPair[targets.Count];
-            for (int index = 0; index < targets.Count; index++)
-            {
-                var target = targets[index];
-                IPAddress targetAddress;
-                IPAddress.TryParse(target.IPAddress, out targetAddress);
-                computers[index] = new TargetUidComputerPair(target.Uid, target);
-            }
-            var scanner = new AptScanner(_descentSubSystem, computers, login, password, scanScope);
+            
+            var scanner = new AptScanner(_descentSubSystem, targets, login, password, scanScope);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             return scanner;
@@ -199,7 +183,7 @@ namespace APTAT.Core
 
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
-            ValkyrieAnalysisResult = null; 
+            ValkyrieAnalysisResult = null;
         }
 
         private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
@@ -218,16 +202,16 @@ namespace APTAT.Core
             return aptReportBuilder;
         }
 
-        public ScanResult GetScanResultByTargetUid(Guid targetUid)
+        public AptScanResult GetScanResultByTargetUid(Guid targetUid)
         {
-            ScanResult scanResult = null;
+            AptScanResult aptScanResult = null;
             var results = _descentSubSystem.GetFirstScanResults();
             if (results != null)
             {
-                results.ScanResults.TryGetValue(targetUid, out scanResult);
+                results.ScanResults.TryGetValue(targetUid, out aptScanResult);
             }
 
-            return scanResult;
+            return aptScanResult;
         }
 
         public void StopScan(Guid targetUid)

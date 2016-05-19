@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
 

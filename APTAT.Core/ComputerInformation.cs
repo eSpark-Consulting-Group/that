@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using APTAT.Core.Descent.Apt;
+using OperatingSystem = APTAT.Core.Descent.Apt.OperatingSystem;
 
 namespace APTAT.Core
 {

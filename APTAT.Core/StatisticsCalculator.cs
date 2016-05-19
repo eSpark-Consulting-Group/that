@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
 {
     public static class StatisticsCalculator
     {
-        public static FilesStatistics Calculate(IEnumerable<ScanResult> results)
+        public static FilesStatistics Calculate(IEnumerable<AptScanResult> results)
         {
             int totalFilesCound = 0;
             int safeFilesCount = 0;

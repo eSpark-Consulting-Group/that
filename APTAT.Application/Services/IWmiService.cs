@@ -7,7 +7,10 @@ namespace APTAT.Application.Services
     {
         void StartAnalyze(DeploymentTarget[] items , String login, String password, Object userState);
         event EventHandler<WmiAnalyzeCompletedEventArgs> AnalyzeCompleted;
+        event EventHandler<WmiAnalyzeProgressChangedEventArgs> ProgressChanged;
     }
     public class WmiAnalyzeCompletedEventArgs : EventArgs
+    { }
+    public class WmiAnalyzeProgressChangedEventArgs : EventArgs
     { }
 }

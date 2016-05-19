@@ -3,24 +3,24 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace APTAT.Core.Descent
+namespace APTAT.Core.Descent.Apt
 {
     public class AptScanOperationContext : DescentResult, IAptScanOperationContext
     {
         private readonly Guid _sessionId = Guid.NewGuid();
-        private readonly ConcurrentDictionary<Guid, ScanResult> _scanResults;
+        private readonly ConcurrentDictionary<Guid, AptScanResult> _scanResults;
 
         public AptScanOperationContext(IEnumerable<TargetUidComputerPair> computers)
             : base(computers)
         {
-            _scanResults = new ConcurrentDictionary<Guid, ScanResult>();
+            _scanResults = new ConcurrentDictionary<Guid, AptScanResult>();
             var scanResultType = ScanResultType.InProgress;
             foreach (var target in computers)
             {
                 var computer = target.Computer;
                 _scanResults.TryAdd(
                        computer.Uid,
-                       new ScanResult()
+                       new AptScanResult()
                        {
                            HostName = computer.Name,
                            IpAddress = computer.IPAddress != null ? computer.IPAddress.ToString() : String.Empty,
@@ -41,7 +41,7 @@ namespace APTAT.Core.Descent
 
         private readonly object _sync = new object();
 
-        public ConcurrentDictionary<Guid, ScanResult> ScanResults
+        public ConcurrentDictionary<Guid, AptScanResult> ScanResults
         {
             get { return _scanResults; }
         }
@@ -54,7 +54,7 @@ namespace APTAT.Core.Descent
                 if (item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
                 {
                     DescentProgressItem descentProgressItem = (DescentProgressItem)item.ChangedItem;
-                    ScanResult result;
+                    AptScanResult result;
                     if (_scanResults.TryGetValue(descentProgressItem.ComputerUid, out result))
                     {
                         if (result != null)
@@ -69,31 +69,6 @@ namespace APTAT.Core.Descent
             }
 
             OnOperationProgressChanged(new OperationProgressChangedEventArgs() { Percentage = CalculateTotalPercentage() });
-        }
-
-        public override void OnDescendOperationEvent(bool ok, IComputer computer, FormattedText errorMessage, FormattedText shortStatusMessage,
-            string errorCode, int systemCode, string systemMessage)
-        {
-            if (!ok)
-            {
-                ScanResult result;
-                if (_scanResults.TryGetValue(computer.Uid, out result))
-                {
-                    if (result != null)
-                    {
-                        lock (_sync)
-                        {
-                            ScanResultType scanResultType = ScanResultType.Failed;
-                            if (errorCode == "status_operation_canceled")
-                                scanResultType = ScanResultType.Canceled;
-                            result.ResultErrorText = systemMessage;
-                            result.ResultType = scanResultType;
-                        }
-                    }
-                }
-            }
-            
-            base.OnDescendOperationEvent(ok, computer, errorMessage, shortStatusMessage, errorCode, systemCode, systemMessage);
         }
 
         public override Guid SessionId

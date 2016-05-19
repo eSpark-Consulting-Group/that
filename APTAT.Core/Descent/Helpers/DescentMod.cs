@@ -4,6 +4,7 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using APTAT.Core.Descent.Apt;
 using APTAT.Core.Properties;
 using APTAT.Core.Descent.Transport;
 
@@ -48,26 +49,26 @@ namespace APTAT.Core.Descent
         {
             public RemoteHostInfo RemoteHostInfo;
             public IDescentCallback DescentCallback;
-            public ScanResult Result;
+            public AptScanResult Result;
             public Guid AgentIdentity;
 			public Guid OperationUid;
-            public string ScanScope;
-		}
+            public string args;
+        }
 
         public void StartAptScan(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity,
-            ScanResult result, Guid operationUid, string scanScope)
+            AptScanResult result, Guid operationUid, string args = null)
         {
             InstallAgentThreadParams tp = new InstallAgentThreadParams();
             tp.RemoteHostInfo = remoteHostInfo;
             tp.DescentCallback = cb;
             tp.AgentIdentity = agentIdentity;
 			tp.OperationUid = operationUid;
-            tp.ScanScope = scanScope;
             tp.Result = result;
+            tp.args = args;
 
             //Thread thread = new Thread(InstallAgentThread);
             //thread.Start(tp);
-			_taskFactory.StartNew( InstallAgentThread, tp, TaskCreationOptions.LongRunning ).ContinueWith( task => task.Dispose() );
+			_taskFactory.StartNew( StartAptScanThread, tp, TaskCreationOptions.LongRunning ).ContinueWith( task => task.Dispose() );
             //ThreadPool.QueueUserWorkItem(InstallAgentThread_, tp);
         }
 
@@ -124,7 +125,7 @@ namespace APTAT.Core.Descent
             }
         }
 
-		private void InstallAgentThread( object obj )
+		private void StartAptScanThread( object obj )
 		{
             //RemoteInstallerJob remoteInstallerJob = tp._cb as RemoteInstallerJob;
             var tp = (InstallAgentThreadParams)obj;
@@ -138,7 +139,7 @@ namespace APTAT.Core.Descent
 
             //using (tp.InformOperationStart(Thread.CurrentThread))
 			{
-				DescentHelper dh = new DescentHelper( tp.RemoteHostInfo, tp.ScanScope );
+				DescentHelper dh = new DescentHelper( tp.RemoteHostInfo, tp.args );
                 ScanResultsProcessor resultsProcessor = new ScanResultsProcessor();
 
 				EventHandler onRemotelyConnected = null;
@@ -246,7 +247,7 @@ namespace APTAT.Core.Descent
                     dh.ScanResultsFileReceived -= onScanResultsFileReceived;
                     // ReSharper restore AccessToModifiedClosure
 
-                    ScanResult result = tp.Result;
+                    AptScanResult result = tp.Result;
 
                     if (result != null)
                     {
@@ -304,12 +305,14 @@ namespace APTAT.Core.Descent
 					ImpersonationHelper.Logon32LogonType impersonationLogonType = ImpersonationHelper.Logon32LogonType.NewCredentials;
 
 					dh.Init( impersonationLogonType );
-					dh.ExecuteAction(tp.ScanScope, 0 );
+					dh.ExecuteAction(0 );
 
-                    ScanResult result = tp.Result;
+                    AptScanResult result = tp.Result;
                     if (result != null)
                     {
-                        var text = new ResourceText("null", String.Format("Scan results received. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.", result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount));
+                        var text = new ResourceText("null", String.Format("Scan results received. Total programs scanned: {0}. " +
+                               "Unknown programs found: {1}. Malwares found: {2}.", result.TotalFilesCount, result.UnknownFilesCount, 
+                               result.MalwareFilesCount));
                         NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount, result.SafeFilesCount, 100, result.ErrorFilesCount, result.ServerErrorFilesCount);
 
                         if(!resultsProcessor.TryParse(ref result))
@@ -323,9 +326,7 @@ namespace APTAT.Core.Descent
                     }
 
                     if( dh.Response.Status != DescentStatus.status_success &&
-						dh.Response.Status != DescentStatus.status_agent_is_already_installed &&
-						dh.Response.Status != DescentStatus.status_agent_is_already_installed_and_server_differs
-						)
+						dh.Response.Status != DescentStatus.status_agent_is_already_installed)
 					{
 						throw new DescentException( dh.Response );
 					}
@@ -382,7 +383,7 @@ namespace APTAT.Core.Descent
         private void ProcessErrorOrCancel(DescentStatus descentStatus, int win32ErrorCode, string errorMessage, 
             InstallAgentThreadParams tp)
         {
-            ScanResult result = tp.Result;
+            AptScanResult result = tp.Result;
             if (result != null)
             {
                 string errorText = errorMessage;

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using APTAT.Core.Descent;
+using APTAT.Core.Descent.Apt;
+using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 
 namespace APTAT.Core.Apt
@@ -12,40 +15,41 @@ namespace APTAT.Core.Apt
         private readonly string _login;
         private readonly string _scanScope;
         private Guid _operationUid;
-        private readonly TargetUidComputerPair[] _targets;
+        private readonly IEnumerable<DeploymentTarget> _targets;
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<ScanInProgressEventArgs> ScanInProgress;
 
-        internal AptScanner(IDescentSubSystem descentSubSystem, TargetUidComputerPair[] targets, string login,
+        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<DeploymentTarget> targets, string login,
             string password, string scanScope)
         {
             _descentSubSystem = descentSubSystem;
-            if (_descentSubSystem != null)
-                _descentSubSystem.DescentCompleted += OnDescentCompleted;
             _targets = targets;
             _login = login;
             _password = password;
             _scanScope = scanScope;
         }
 
-        private void OnDescentCompleted(object sender, DescentCompletedEventArgs e)
+        private void OnDescentCompleted(object sender, DescentEventArgs e)
         {
+            if (_operationUid != e.OperationUid) return;
             _descentSubSystem.DescentCompleted -= OnDescentCompleted;
             if (_scanOperationContext != null)
             {
                 _scanOperationContext.OperationProgressChanged -= scanOperationContext_OperationProgressChanged;
             }
+            var aptScanCompletedEventArgs = e as AptScanCompletedEventArgs;
+            if (aptScanCompletedEventArgs == null) return;
 
             OnScanCompleted(new ScanCompletedEventArgs()
             {
                 OperationUid = e.OperationUid,
-                CalceledCount = e.Context.CanceledTargetsCount,
-                FailedCount = e.Context.FailedTargetsCount,
-                NotPerformedCount = e.Context.NotPerformedTargetsCount,
-                SucceededCount = e.Context.SucceededTargetsCount,
-                TotalCount = e.Context.TotalTargetsCount,
-                FilesStatistics = e.Context.CalculateFilesStatistics()
+                CalceledCount = aptScanCompletedEventArgs.Context.CanceledTargetsCount,
+                FailedCount = aptScanCompletedEventArgs.Context.FailedTargetsCount,
+                NotPerformedCount = aptScanCompletedEventArgs.Context.NotPerformedTargetsCount,
+                SucceededCount = aptScanCompletedEventArgs.Context.SucceededTargetsCount,
+                TotalCount = aptScanCompletedEventArgs.Context.TotalTargetsCount,
+                FilesStatistics = aptScanCompletedEventArgs.Context.CalculateFilesStatistics()
             });
         }
 
@@ -53,6 +57,7 @@ namespace APTAT.Core.Apt
         {
             Action action = StartScan;
             Context context = new Context() { Action = action, State = state };
+            _descentSubSystem.DescentCompleted += OnDescentCompleted;
             action.BeginInvoke(BeginScanCallback, context);
         }
 

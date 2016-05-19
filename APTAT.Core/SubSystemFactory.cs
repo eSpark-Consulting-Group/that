@@ -10,7 +10,7 @@ namespace APTAT.Core
     {
         private static readonly SubSystemFactory Instance = new SubSystemFactory();
         private volatile ISubSystemCatalog _catalog;
-        private ISubSystemCatalogProvider _provider;
+        private readonly ISubSystemCatalogProvider _provider = new LocalSubSystemCatalogProvider();
 
         private SubSystemFactory()
         {
@@ -30,21 +30,10 @@ namespace APTAT.Core
                     lock (Instance)
                     {
                         if (_catalog == null)
-                            _catalog = CatalogProvider.GetSubSystemCatalog();
+                            _catalog = _provider.GetSubSystemCatalog();
                     }
                 }
                 return _catalog;
-            }
-        }
-
-        public ISubSystemCatalogProvider CatalogProvider
-        {
-            get
-            {
-                if (_provider == null)
-                    _provider = new LocalSubSystemCatalogProvider();
-
-                return _provider;
             }
         }
 
@@ -58,8 +47,7 @@ namespace APTAT.Core
     {
         public ISubSystemCatalog GetSubSystemCatalog()
         {
-            //var serverPlugins = SubSystemCatalog.GetServerPluginsFromConfig();
-            return new SubSystemCatalog(/*serverPlugins*/);
+            return new SubSystemCatalog();
         }
     }
 }

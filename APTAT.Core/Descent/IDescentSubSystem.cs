@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using APTAT.Core.Descent.Apt;
+using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Core.Descent
 {
@@ -8,10 +10,10 @@ namespace APTAT.Core.Descent
 
 	    void AbortThreadByTargetUid(Guid uid);
         
-        void StartAptScan(IEnumerable<TargetUidComputerPair> computers, string login, string password, 
+        void StartAptScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
             out Guid operationUid, string scanScope);
 
-        void StartWmiScan(IEnumerable<TargetUidComputerPair> computers, string login, string password, 
+        void StartWmiScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
             out Guid operationUid);
 
         AptScanOperationContext GetScanResultsByOperationUid(Guid operationUid);
@@ -19,6 +21,6 @@ namespace APTAT.Core.Descent
 
         void AbortAllThreads();
 
-	    event EventHandler<DescentCompletedEventArgs> DescentCompleted;
+	    event EventHandler<DescentEventArgs> DescentCompleted;
 	}
 }

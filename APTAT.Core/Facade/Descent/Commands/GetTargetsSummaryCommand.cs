@@ -46,32 +46,34 @@ namespace APTAT.Core.Facade.Descent.Commands
                 return source != null && IPAddress.TryParse(source, out result) ? result : null;
             };
 
-		    var targetComputers = from target in Request.Targets
-		        let domainTarget = target as DomainTarget
-		        where domainTarget == null || domainTarget.EntryType == DomainEntryType.Computer
-		        select target;
+		    var targetComputers = Request.Targets.Where(target => !(target is DomainTarget) ||
+                ((DomainTarget) target).EntryType ==DomainEntryType.Computer)
+		        .Select(t =>
+                {
+		            t.IPAddress = String.IsNullOrEmpty(t.LdapPath) ? ParseIP(t.Name).ToString() : null;
+		            return t;
+		        });
 
             var computers = new List<IComputer>(targetComputers);
-            //var directory = SubSystemFactory.Current.GetSubSystem<IDirectorySubSystem>();
             var searcher = new ActiveDirectorySearcher(_activeDirectoryObserver, Request.DomainAccessLogin, Request.DomainAccessPassword);
 
             var searchTasks = from dt in Request.Targets.OfType<DomainTarget>()
-                                where dt.EntryType != DomainEntryType.Computer
-                                let asyncResult = searcher.BeginSearch(dt.LdapPath, foundComputers =>
-                                {
-                                    lock (computers)
-                                    {
-                                        computers.AddRange(from fc in foundComputers
-                                                            select new DomainTarget
-                                                            {
-                                                                Uid = Guid.NewGuid(), // Comp was not found on console, give it a new GUID as a temp storage for TargetUid
-                                                                Name = fc.Name,
-                                                                DnsName = fc.DnsName,
-                                                                LdapPath = fc.LdapPath
-                                                            });
-                                    }
-                                })
-                                select _taskFactory.FromAsync(asyncResult, searcher.EndSearch);
+                where dt.EntryType != DomainEntryType.Computer
+                let asyncResult = searcher.BeginSearch(dt.LdapPath, foundComputers =>
+                {
+                    lock (computers)
+                    {
+                        computers.AddRange(from fc in foundComputers
+                                            select new DomainTarget
+                                            {
+                                                Uid = Guid.NewGuid(), // Comp was not found on console, give it a new GUID as a temp storage for TargetUid
+                                                Name = fc.Name,
+                                                DnsName = fc.DnsName,
+                                                LdapPath = fc.LdapPath
+                                            });
+                    }
+                })
+                select _taskFactory.FromAsync(asyncResult, searcher.EndSearch);
 
             searchTasks = searchTasks.ToArray(); 
 
@@ -142,7 +144,9 @@ namespace APTAT.Core.Facade.Descent.Commands
                                       extv4 = IPs.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToArray();
                                   if (!extv4.Any())
                                       extv4 = IPs;
-                                  target.IPAddress = extv4.First().ToString();
+                                  var firstOrDefault = extv4.FirstOrDefault();
+                                  if (firstOrDefault != null)
+                                      target.IPAddress = firstOrDefault.ToString();
                               }
                           });
 

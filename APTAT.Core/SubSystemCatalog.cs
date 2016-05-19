@@ -39,7 +39,7 @@ namespace APTAT.Core
                 system.Init(this);
             }
         }
-        
+
 
         public T Find<T>()
         {

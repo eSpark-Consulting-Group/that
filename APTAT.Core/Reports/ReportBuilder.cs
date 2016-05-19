@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using APTAT.Core.Descent.Apt;
 using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core.Reports
@@ -159,10 +160,10 @@ namespace APTAT.Core.Reports
                         var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
                         if (context != null)
                         {
-                            IEnumerable<ScanResult> targets = context.Data as IEnumerable<ScanResult>;
+                            IEnumerable<AptScanResult> targets = context.Data as IEnumerable<AptScanResult>;
                             if (targets != null)
                             {
-                                ScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
+                                AptScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
                                 if (item != null)
                                     e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.GetUnknownFiles()));
                             }
@@ -173,10 +174,10 @@ namespace APTAT.Core.Reports
                         var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
                         if (context != null)
                         {
-                            IEnumerable<ScanResult> targets = context.Data as IEnumerable<ScanResult>;
+                            IEnumerable<AptScanResult> targets = context.Data as IEnumerable<AptScanResult>;
                             if (targets != null)
                             {
-                                ScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
+                                AptScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
                                 if (item != null)
                                     e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.GetFilesByStatus(CloudVerdict.Malware)));
                             }

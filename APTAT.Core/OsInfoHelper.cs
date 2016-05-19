@@ -1,4 +1,6 @@
-﻿namespace APTAT.Core
+﻿using APTAT.Core.Descent.Apt;
+
+namespace APTAT.Core
 {
     public static class OsInfoHelper
     {

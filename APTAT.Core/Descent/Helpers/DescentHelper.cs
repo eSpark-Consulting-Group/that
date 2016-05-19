@@ -538,7 +538,7 @@ namespace APTAT.Core.Descent
 				}
 			}
 
-			public void ExecuteAction( string scanScope, int timeoutInMs )
+			public void ExecuteAction( int timeoutInMs )
 			{
 				List<string> args = new List<string>();
 

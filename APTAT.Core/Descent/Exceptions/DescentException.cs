@@ -30,29 +30,17 @@ namespace APTAT.Core.Descent
 			status_remote_invalid_response = 11,
 
 			status_agent_is_already_installed = 12,
-			status_agent_is_already_installed_and_server_differs = 13,
 			status_agent_is_not_installed = 14,
 
 			status_installer_unknown_product = 15,
 			status_installer_fatal_error = 16,
 			status_installer_product_already_installed = 17,
 			status_installer_install_already_running = 18,
-
-			status_uninstall_incompatible_products_failure = 19,
-			status_uninstall_incompatible_products_not_supported = 20,
-			status_uninstall_incompatible_products_partially_not_supported = 21,
-
-			status_host_is_not_accessible_from_remote_pc = 22,
-			status_no_compatible_msi_found = 23,
-			status_package_file_hash_is_invalid = 26,
+            
 
 			status_bad_admin_netpath = 24,
-			status_success_agent_updated = 25,
-
-			status_uninstall_outdated_cis_failure = 1000,
-			status_package_timeout = 1001,
+            
 			status_agent_timeout = 1002,
-			status_managed_target_not_found = 1003,
 
             status_operation_canceled = 1004,
 		}

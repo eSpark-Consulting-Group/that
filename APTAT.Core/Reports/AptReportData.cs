@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
 
@@ -152,13 +153,13 @@ namespace APTAT.Core.Reports
             get { return NetworkTrustLevel >= 0 ? String.Format("{0} %", NetworkTrustLevel) : "Unknown"; }
         }
 
-        public ScanResult[] Targets { get; set; }
+        public AptScanResult[] Targets { get; set; }
 
-        public ScanResult[] SucceededTargets
+        public AptScanResult[] SucceededTargets
         {
             get { return (from t in Targets where t.ResultType == Core.ScanResultType.Completed select t).ToArray(); }
         }
-        public ScanResult[] SucceededTargetsWithValkyrie
+        public AptScanResult[] SucceededTargetsWithValkyrie
         {
             get 
             {
@@ -166,10 +167,10 @@ namespace APTAT.Core.Reports
                 IEnumerable<DetailedBadFile> files;
                 MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
 
-                List<ScanResult> scanResults = new List<ScanResult>();
+                List<AptScanResult> scanResults = new List<AptScanResult>();
                 foreach (var t in targets)
                 {
-                    var scanResult = new ScanResult()
+                    var scanResult = new AptScanResult()
                     {
                         MalwareFilesCount = t.MalwareFilesCount,
                         UnknownFilesCount = t.UnknownFilesCount,
@@ -307,7 +308,7 @@ namespace APTAT.Core.Reports
             public IEnumerable<DetailedBadFile> MergeNonUniqueResults { get; set; }
         }
 
-        private void MergeResults(IEnumerable<ScanResult> flsResults, IEnumerable<FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+        private void MergeResults(IEnumerable<AptScanResult> flsResults, IEnumerable<FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
             out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
             if (_mergedScanResultsCache != null)
@@ -554,27 +555,27 @@ namespace APTAT.Core.Reports
         {
         }
 
-        public ScannedTarget(ScanResult scanResult)
+        public ScannedTarget(AptScanResult aptScanResult)
         {
-            if (scanResult != null)
+            if (aptScanResult != null)
             {
-                TargetUid = scanResult.TargetUid;
-                HostName = scanResult.HostName;
-                IpAddress = scanResult.IpAddress;
-                OsName = scanResult.OsName;
-                OrganizationUnit = scanResult.OrganizationUnit;
-                TotalFilesCount = scanResult.TotalFilesCount;
-                UnknownFilesCount = scanResult.UnknownFilesCount;
-                ErrorFilesCount = scanResult.ErrorFilesCount;
-                ServerErrorFilesCount = scanResult.ServerErrorFilesCount;
-                SafeFilesCount = scanResult.SafeFilesCount;
-                MalwareFilesCount = scanResult.MalwareFilesCount;
-                RunningProgramsCount = scanResult.RunningProgramsCount;
-                AutorunsCount = scanResult.AutorunsCount;
-                TargetVerdictString = scanResult.TargetVerdictString;
-                AptReport = scanResult.AptReport;
-                ResultErrorText = scanResult.ResultErrorText;
-                ResultType = scanResult.ResultType;
+                TargetUid = aptScanResult.TargetUid;
+                HostName = aptScanResult.HostName;
+                IpAddress = aptScanResult.IpAddress;
+                OsName = aptScanResult.OsName;
+                OrganizationUnit = aptScanResult.OrganizationUnit;
+                TotalFilesCount = aptScanResult.TotalFilesCount;
+                UnknownFilesCount = aptScanResult.UnknownFilesCount;
+                ErrorFilesCount = aptScanResult.ErrorFilesCount;
+                ServerErrorFilesCount = aptScanResult.ServerErrorFilesCount;
+                SafeFilesCount = aptScanResult.SafeFilesCount;
+                MalwareFilesCount = aptScanResult.MalwareFilesCount;
+                RunningProgramsCount = aptScanResult.RunningProgramsCount;
+                AutorunsCount = aptScanResult.AutorunsCount;
+                TargetVerdictString = aptScanResult.TargetVerdictString;
+                AptReport = aptScanResult.AptReport;
+                ResultErrorText = aptScanResult.ResultErrorText;
+                ResultType = aptScanResult.ResultType;
             }
         }
 
