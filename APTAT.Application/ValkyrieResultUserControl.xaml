@@ -20,8 +20,8 @@
                                  x:Name="treeList2" 
                                  AutoGenerateColumns="False" 
                                  IsReadOnly="True" 
-                                 ItemsSource="{Binding ItemsValkyrie}"   
-                                 
+                                 ItemsSource="{Binding ItemsValkyrie}"
+                                 RowStyle="{StaticResource rowStyleCompleted}"
                                  TabIndex="1"
                                  AutoExpandItems="False"
                                  RowHeight="50"
@@ -42,7 +42,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Margin="8,8,0,0" Text="{Binding FullName, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" Grid.Column="0"/>
-                        <TextBlock Margin="8,8,0,0" Text="{Binding FilePath, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" Grid.Column="0" Grid.Row="1"/>
+                        <TextBlock Margin="8,4,0,0" Text="{Binding FilePath, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"  FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding FilePath}" Grid.Row="1"/>
                     </Grid>
                 </DataTemplate>
            

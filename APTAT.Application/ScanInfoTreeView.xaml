@@ -18,7 +18,7 @@
                                  x:Name="treeList" 
                                  AutoGenerateColumns="False" 
                                  IsReadOnly="True" ItemsSource="{Binding Items}"   
-                                 
+                                 RowStyle="{StaticResource rowStyleCompleted}"
                                  TabIndex="1"
                                  AutoExpandItems="False"
                                  RowHeight="50"
@@ -26,8 +26,11 @@
                                  RowIsExpandedChanged="treeList_RowIsExpandedChanged"
                                  DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                  EnableRowVirtualization="True"
-                                 MouseDoubleClick="OnTreeDoubleClick" LayoutUpdated="treeList_LayoutUpdated" Filtered="treeList_Filtered">
+                                 MouseDoubleClick="OnTreeDoubleClick" Filtered="treeList_Filtered">
+
             <telerik:RadTreeListView.Resources>
+
+              
                 <DataTemplate x:Key="NameTemplate">
                     <Grid HorizontalAlignment="Stretch" Height="50">
                         <Grid.ColumnDefinitions>

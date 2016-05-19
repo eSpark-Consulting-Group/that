@@ -169,6 +169,7 @@
     <Compile Include="Services\WmiService.cs" />
     <Compile Include="Services\IWmiService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
+    <Compile Include="TitleUpdater.cs" />
     <Compile Include="ValkyrieDetailsView.xaml.cs">
       <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
     </Compile>
@@ -184,7 +185,6 @@
     <Compile Include="EulaWindow.xaml.cs">
       <DependentUpon>EulaWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GridSelectionColumn.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Models\ModelBase\DelegateCommand.cs" />
     <Compile Include="Models\Directory\IpAddressItem.cs" />
@@ -262,12 +262,10 @@
     <Compile Include="ThreatDetailsWindow.xaml.cs">
       <DependentUpon>ThreatDetailsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TitleUpdater.cs" />
     <Compile Include="ValkyrieResultUserControl.xaml.cs">
       <DependentUpon>ValkyrieResultUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowExtensions.cs" />
-    <Compile Include="WindowResizer.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

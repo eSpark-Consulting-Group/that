@@ -384,7 +384,6 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService = targetsDiscoveryService;
             _wmiService = wmiService;
             _storage = storage;
-            _wmiService = wmiService;
 
 
             _isValkyrieAnalysCompleted = false;
@@ -884,6 +883,7 @@ namespace APTAT.Application.Models
                 }
 
                 parentItem.TempItems = items;
+                parentItem.ScanStage = parentItem.ScanStage;
             }
         }
 

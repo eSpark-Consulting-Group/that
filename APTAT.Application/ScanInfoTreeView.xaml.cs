@@ -5,6 +5,7 @@ using System.Windows.Input;
 using APTAT.Application.Models;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
+
 namespace APTAT.Application
 {
     /// <summary>
@@ -64,23 +65,6 @@ namespace APTAT.Application
             get { return this.DataContext as MainViewViewModel; }     
         }
 
-        private void treeList_LayoutUpdated(object sender, EventArgs e)
-        {
-
-            var rows = this.treeList.ChildrenOfType<GridViewRow>();
-            foreach (GridViewRow row in rows)
-            {
-                if (row != null)
-                {
-                    ThreatInfoItem threatInfo = row.DataContext as ThreatInfoItem;
-                    if (threatInfo != null)
-                    {
-                        row.IsExpandable = threatInfo.TempItems != null && threatInfo.TempItems.Count > 0 && threatInfo.ScanStage == ScanStage.OperationCompleted;
-                    }
-                }
-            }
-
-        }
 
         private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
         {

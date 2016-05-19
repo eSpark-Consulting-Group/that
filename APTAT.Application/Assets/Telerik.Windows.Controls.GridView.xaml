@@ -1651,6 +1651,12 @@
 		
 	</Style>
 
+  <Style x:Key="rowStyleCompleted" TargetType="{x:Type telerik:GridViewRow}" >
+    <Style.Setters>
+      <Setter Property="IsExpandable" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=DataContext.ScanCompleted}" />
+    </Style.Setters>
+  </Style>
+
 	<Style TargetType="grid:GridViewRow" BasedOn="{StaticResource GridViewRowStyle}"/>
 	
 	<Style TargetType="grid:GridViewRow" x:Key="{telerik:ThemeResourceKey 
@@ -1870,7 +1876,7 @@
 					grid:SelectiveScrollingGrid.SelectiveScrollingClip="True"
 					Opacity="{Binding IsExpandable, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToOpacityConverter}}"
 					IsHitTestVisible="{Binding IsExpandable, RelativeSource={RelativeSource TemplatedParent}}"
-					Visibility="{Binding HasHierarchy, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					 />
 <grid:IndentPresenter x:Name="PART_IndentPresenter"
 								  telerik:StyleManager.Theme="{StaticResource Theme}"
 								  BorderThickness="0,0,0,1"

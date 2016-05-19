@@ -13,7 +13,7 @@ namespace APTAT.Application.Models
     {
         ITargetsDiscoveryService _targetsDiscoveryService; 
         IStorageService _storage;
-        private Int32 _step;
+  
         private DirectoryItem[] _items;
         private readonly ICollection<Object> _checkedItems;
         private String _domainController;

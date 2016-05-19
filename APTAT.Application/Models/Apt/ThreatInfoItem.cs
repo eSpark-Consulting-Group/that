@@ -187,7 +187,13 @@ namespace APTAT.Application.Models
                 _scanStage = value;
                 RaisePropertyChanged("ScanStage");
                 RaisePropertyChanged("ScanStatus");
+                RaisePropertyChanged("ScanInProgress");
             }
+        }
+
+        public bool ScanCompleted
+        {
+            get { return ScanStage == ScanStage.OperationCompleted && TempItems != null && TempItems.Count > 0; }
         }
 
         public String StatusMessage
