@@ -71,6 +71,9 @@
   <ItemGroup>
     <Compile Include="BusinessObjects\Files\FileType.cs" />
     <Compile Include="BusinessObjects\Files\IThreat.cs" />
+    <Compile Include="BusinessObjects\Files\Malware.cs" />
+    <Compile Include="BusinessObjects\Files\Threat.cs" />
+    <Compile Include="BusinessObjects\Files\UnknownFile.cs" />
     <Compile Include="BusinessObjects\MouseClick.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="CodedUITestMain.cs" />

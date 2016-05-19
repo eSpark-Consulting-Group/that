@@ -196,6 +196,11 @@ namespace CodedUITestAT
             return UIMapMain.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
         }
 
+        private WpfHyperlink ValkyrieLink()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
+        }
+
         #endregion
 
         #region Start Scanning wizard
@@ -245,20 +250,6 @@ namespace CodedUITestAT
         private WpfTabPage ValkyrieAnalysisResultsTab()
         {
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
-        }
-
-        private WpfTree UnknownFilesTree()
-        {
-            WpfTree uft = UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree;
-            uft.Container = UnknownFilesTab();
-            return uft;
-        }
-
-        private WpfTree ValkyrieResultsTree()
-        {
-            WpfTree vrt = UIMapResultsWindow.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree;
-            vrt.Container = ValkyrieAnalysisResultsTab();
-            return vrt;
         }
 
         #endregion
@@ -452,6 +443,7 @@ namespace CodedUITestAT
 
                 // Clicks Valkyrie link and checks the respective browser window URI
                 string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
+                UIHelper.WaitForControl(ValkyrieLink());
                 UIMapMain.ClickValkyrieLink();
                 TestContext.WriteLine("Valkyrie link clicked...\n");
                 BrowserWindow valkyrieWebPage = new BrowserWindow();

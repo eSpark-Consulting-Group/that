@@ -1,9 +1,10 @@
 ﻿namespace CodedUITestAT
 {
+    /// <summary> Interface for a threat. </summary>
     internal interface IThreat
     {
         string Name { get; }
-        FileType Type { get; }
-        string Path { get; }
+        string Location { get; }
+        string SearchWord { get; }
     }
 }

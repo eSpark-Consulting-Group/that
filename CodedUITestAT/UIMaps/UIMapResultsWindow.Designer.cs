@@ -30,32 +30,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     {
         
         /// <summary>
-        /// AssertUnknownFilesTree - Use 'AssertUnknownFilesTreeExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertUnknownFilesTree()
-        {
-            #region Variable Declarations
-            WpfTree uIRadTreeListViewTree1 = this.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree1;
-            #endregion
-
-            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-            Assert.AreEqual(this.AssertUnknownFilesTreeExpectedValues.UIRadTreeListViewTree1Exists, uIRadTreeListViewTree1.Exists);
-        }
-        
-        /// <summary>
-        /// AssertValkyrieAnalysisResultsTree - Use 'AssertValkyrieAnalysisResultsTreeExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertValkyrieAnalysisResultsTree()
-        {
-            #region Variable Declarations
-            WpfTree uIRadTreeListViewTree1 = this.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree1;
-            #endregion
-
-            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-            Assert.AreEqual(this.AssertValkyrieAnalysisResultsTreeExpectedValues.UIRadTreeListViewTree1Exists, uIRadTreeListViewTree1.Exists);
-        }
-        
-        /// <summary>
         /// GoToUnknownFilesTab
         /// </summary>
         public void GoToUnknownFilesTab()
@@ -82,30 +56,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         }
         
         #region Properties
-        public virtual AssertUnknownFilesTreeExpectedValues AssertUnknownFilesTreeExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertUnknownFilesTreeExpectedValues == null))
-                {
-                    this.mAssertUnknownFilesTreeExpectedValues = new AssertUnknownFilesTreeExpectedValues();
-                }
-                return this.mAssertUnknownFilesTreeExpectedValues;
-            }
-        }
-        
-        public virtual AssertValkyrieAnalysisResultsTreeExpectedValues AssertValkyrieAnalysisResultsTreeExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertValkyrieAnalysisResultsTreeExpectedValues == null))
-                {
-                    this.mAssertValkyrieAnalysisResultsTreeExpectedValues = new AssertValkyrieAnalysisResultsTreeExpectedValues();
-                }
-                return this.mAssertValkyrieAnalysisResultsTreeExpectedValues;
-            }
-        }
-        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -120,41 +70,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
         
         #region Fields
-        private AssertUnknownFilesTreeExpectedValues mAssertUnknownFilesTreeExpectedValues;
-        
-        private AssertValkyrieAnalysisResultsTreeExpectedValues mAssertValkyrieAnalysisResultsTreeExpectedValues;
-        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertUnknownFilesTree'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertUnknownFilesTreeExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-        /// </summary>
-        public bool UIRadTreeListViewTree1Exists = true;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertValkyrieAnalysisResultsTree'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertValkyrieAnalysisResultsTreeExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-        /// </summary>
-        public bool UIRadTreeListViewTree1Exists = true;
         #endregion
     }
     
