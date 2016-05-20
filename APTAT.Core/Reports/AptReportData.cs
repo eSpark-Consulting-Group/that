@@ -421,7 +421,11 @@ namespace APTAT.Core.Reports
                                 break;
                             case CloudVerdict.FailedToAnalyze:
                                 break;
+                            case CloudVerdict.ServerError:
+                                break;
+
                             default:
+
                                 throw new ArgumentOutOfRangeException();
                         }
                         #endregion

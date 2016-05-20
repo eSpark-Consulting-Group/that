@@ -300,7 +300,7 @@ namespace ValkyrieHashAnalyzer
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
             {
-                var malwareCount = AnalysisResults.Count(f => f.Verdict == InfoVerdictEnum.Malware || f.Verdict == InfoVerdictEnum.PotentiallyUnwantedApplication);
+                var malwareCount = AnalysisResults.Count(f => f.Verdict == ValkyrieVerdict.Malware || f.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
                 double progress = 0;
 
                 if (FilesCount > 0)

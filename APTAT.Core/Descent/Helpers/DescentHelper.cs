@@ -494,11 +494,11 @@ namespace APTAT.Core.Descent
             {
                 List<string> serviceParams = new List<string>();
                 serviceParams.Add(String.Format(ScopeParamFormat, _scanScope));
-                serviceParams.Add(String.Format(StatusFileParamFormat, _responseFilePathForCurrentComputer));
+                serviceParams.Add(String.Format(StatusFileParamFormat, @"%SYSTEMROOT%\ComodoAptAtScanner\scan_status.txt"));
                 serviceParams.Add(String.Format(OutputFileParamFormat, _resultsFile));
                 serviceParams.Add(String.Format(TvlParamFormat, _tvlFile));
                 serviceParams.Add(String.Format(TrlParamFormat, _trlFile));
-
+           //     serviceParams.Add("--impersonate  off");
                 if(Properties.Settings.Default.SkipGac)
                     serviceParams.Add(SkipGacParam);
 
@@ -603,7 +603,7 @@ namespace APTAT.Core.Descent
                             readFileAttemptsCount = 20;
 
                             string[] temp = data.Split(';');
-                            if (temp.Length != 14)
+                            if (temp.Length != 14 && temp.Length != 13)
                             {
                                 if (checkFileHeaderAttemptsCount > 0)
                                     --checkFileHeaderAttemptsCount;
@@ -648,10 +648,19 @@ namespace APTAT.Core.Descent
                             int skipped;
                             Int32.TryParse(temp[11], out skipped);
 
-                            int failedAtNodeCount;
-                            Int32.TryParse(temp[12], out failedAtNodeCount);    
+                            string error = String.Empty;
 
-                            string error = temp[13];
+                            int failedAtNodeCount = 0;
+                            if (temp.Length == 14) //next FLS version
+                            {
+                                Int32.TryParse(temp[12], out failedAtNodeCount);
+                                error = temp[13];
+                            }
+                            else if (temp.Length == 13)
+                            {
+                                error = temp[12];
+                            }
+                            
                             EnAptStage status = (EnAptStage)statusInt;
 
                             if (!_serviceHelper.IsServiceRunning() && status != EnAptStage.EnApt_Complete &&
@@ -694,7 +703,7 @@ namespace APTAT.Core.Descent
                             {
                                 _response.Status = DescentStatus.status_success;//(DescentStatus)status;
 
-                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal });
+                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal,FailedAtNodeCount = failedAtNodeCount, NetworkErrorFilesCount = errorFiles, SkippedFilesCount = skipped});
 
                                 string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("{0}_{1:yyyyMMddHHmmss}.xml", _remoteHostInfo.HostName, DateTime.Now));
 
@@ -702,7 +711,7 @@ namespace APTAT.Core.Descent
 
                                 File.Copy(_resultsFile, resultsFileLocal, true);
                                 //File.Delete(resultsFile);
-                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, EmptyFilesFound = emptyFiles, SkippedFilesCount = skipped ,NetworkErrorFilesCount = errorFiles});
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, EmptyFilesFound = emptyFiles, SkippedFilesCount = skipped ,NetworkErrorFilesCount = errorFiles, FailedAtNodeCount = failedAtNodeCount});
                                 break;
                             }
                             else if( status == EnAptStage.EnApt_Failed )

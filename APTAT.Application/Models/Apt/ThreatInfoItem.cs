@@ -76,6 +76,7 @@ namespace APTAT.Application.Models
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
         private int _errorFilesCount;
+        private int _serverErrorFilesCount;
 
         public Boolean AutoExpandHandled
         {
@@ -85,7 +86,7 @@ namespace APTAT.Application.Models
 
         public Boolean HasBadFiles
         {
-            get { return UnknownFilesCount > 0 || MalwareFilesCount > 0; }
+            get { return UnknownFilesCount > 0 || MalwareFilesCount > 0 || ServerErrorFilesCount > 0 || ErrorFilesCount > 0; }
         }
         
         public Boolean IsUnknown { get; set; }
@@ -258,6 +259,21 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Int32 ServerErrorFilesCount
+        {
+            get { return _serverErrorFilesCount; }
+            set
+            {
+                if (_serverErrorFilesCount == value)
+                {
+                    return;
+                }
+
+                _serverErrorFilesCount = value;
+                RaisePropertyChanged("ServerErrorFilesCount");
+                RaisePropertyChanged("HasBadFiles");
+            }
+        }
         public Int32 TotalFilesCount
         {
             get { return _totalFilesCount; }

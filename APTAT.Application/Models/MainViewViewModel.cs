@@ -149,6 +149,16 @@ namespace APTAT.Application.Models
             }
         }
 
+        private Int32 _serverErrorFilesCount;
+        public Int32 ServerErrorFilesCount
+        {
+            get { return _serverErrorFilesCount; }
+            set
+            {
+                _serverErrorFilesCount = value;
+            }
+        }
+
         public Int32 MalwareFilesCount
         {
             get { return _malwareFilesCount; }
@@ -334,7 +344,7 @@ namespace APTAT.Application.Models
 
         public bool IsErrorsFound
         {
-            get { return ErrorFilesCount > 0; }
+            get { return ErrorFilesCount > 0 || ServerErrorFilesCount > 0; }
         }
 
         public bool IsProtected
@@ -809,6 +819,7 @@ namespace APTAT.Application.Models
             Int32 unknownFiles = 0;
             Int32 malwareFiles = 0;
             Int32 errorFiles = 0;
+            Int32 serverErrorFiles = 0;
 
             for (Int32 j = 0; j < _onlineItems.Length; ++j)
             {
@@ -829,6 +840,7 @@ namespace APTAT.Application.Models
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
                 errorFiles += infoItem.ErrorFilesCount;
+                serverErrorFiles += infoItem.ServerErrorFilesCount;
             }
 
             if (unknownFiles > UnknownFilesCount)
@@ -844,6 +856,11 @@ namespace APTAT.Application.Models
             if (errorFiles > ErrorFilesCount)
             {
                 ErrorFilesCount = errorFiles;
+            }
+
+            if (serverErrorFiles > ServerErrorFilesCount)
+            {
+                ServerErrorFilesCount = serverErrorFiles;
             }
 
             ScannedItemsCount = completed;
