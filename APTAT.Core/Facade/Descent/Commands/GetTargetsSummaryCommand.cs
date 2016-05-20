@@ -49,9 +49,14 @@ namespace APTAT.Core.Facade.Descent.Commands
 		    var targetComputers = Request.Targets.Where(target => !(target is DomainTarget) ||
                 ((DomainTarget) target).EntryType ==DomainEntryType.Computer)
 		        .Select(t =>
-                {
-		            t.IPAddress = String.IsNullOrEmpty(t.LdapPath) ? ParseIP(t.Name).ToString() : null;
-		            return t;
+		        {
+                    if (String.IsNullOrEmpty(t.LdapPath))
+                    {
+                        var ipAddress = ParseIP(t.Name);
+                        if (ipAddress != null)
+                            t.IPAddress = ipAddress.ToString();
+                    }
+                    return t;
 		        });
 
             var computers = new List<IComputer>(targetComputers);
