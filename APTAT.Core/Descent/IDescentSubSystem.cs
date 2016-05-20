@@ -7,8 +7,6 @@ namespace APTAT.Core.Descent
 {
 	public interface IDescentSubSystem : ISubSystem
 	{
-
-	    void AbortThreadByTargetUid(Guid uid);
         
         void StartAptScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
             out Guid operationUid, string scanScope);

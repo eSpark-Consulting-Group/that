@@ -10,7 +10,7 @@ namespace APTAT.Core.Descent.Apt
         private readonly Guid _sessionId = Guid.NewGuid();
         private readonly ConcurrentDictionary<Guid, AptScanResult> _scanResults;
 
-        public AptScanOperationContext(IEnumerable<TargetUidComputerPair> computers)
+        public AptScanOperationContext(IEnumerable<TargetUidComputerPair> computers, int totalTargetCount)
             : base(computers)
         {
             _scanResults = new ConcurrentDictionary<Guid, AptScanResult>();
@@ -30,14 +30,10 @@ namespace APTAT.Core.Descent.Apt
                        });
 
             }
-            
+            TotalTargetsCount = totalTargetCount;
+
         }
         public DateTime Started { get { return StartTime; } }
-        public int TotalTargetsCount { get; set; }
-        public int NotPerformedTargetsCount { get; set; }
-        public int SucceededTargetsCount { get; set; }
-        public int FailedTargetsCount { get; set; }
-        public int CanceledTargetsCount { get; set; }
 
         private readonly object _sync = new object();
 

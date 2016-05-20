@@ -7,7 +7,7 @@ using APTAT.Core.Properties;
 
 namespace APTAT.Core.Descent
 {
-	public class DescentResult : IDescentQueryResult, IChangeTrackingListener
+	public class DescentResult : IDescentQueryResult
 	{
 		private readonly ConcurrentDictionary<Guid, ComputerDescentResult> _resultsByUid = new ConcurrentDictionary<Guid, ComputerDescentResult>();
         private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks = new ConcurrentDictionary<Guid, Action<TimeSpan>>();
@@ -46,11 +46,19 @@ namespace APTAT.Core.Descent
 			OperationUid = Guid.NewGuid();
 			CompletedTime = null;
 			_inprogressCount = _resultsByUid.Count(r => !r.Value.Completed);
+		    TotalTargetsCount = _resultsByUid.Count;
 			StartTime = DateTime.UtcNow;
             _descentWatcher.Start();
         }
 
-		public Guid OperationUid
+
+        public int TotalTargetsCount { get; set; }
+
+        public int NotPerformedTargetsCount { get; set; }
+        public int SucceededTargetsCount { get; set; }
+        public int FailedTargetsCount { get; set; }
+        public int CanceledTargetsCount { get; set; }
+        public Guid OperationUid
 		{
 			get;
 			private set;

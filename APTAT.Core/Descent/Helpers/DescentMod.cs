@@ -34,15 +34,10 @@ namespace APTAT.Core.Descent
 	    private const int E_FAIL = unchecked((int) 0x80004005);
 
         private readonly ConcurrentDictionary<Guid, Thread> _threads = new ConcurrentDictionary<Guid, Thread>();
-		public DescentMod(ISubSystemCatalog catalog)
+		public DescentMod(TaskFactory taskFactory, IChangeTrackingSubSystem changeTrackingSubSystem)
 		{
-			_taskFactory = new TaskFactory( 
-				CancellationToken.None, 
-				TaskCreationOptions.LongRunning, 
-				TaskContinuationOptions.None, 
-				new LimitedConcurrencyLevelTaskScheduler( Settings.Default.DescentMaximumConcurrencyLevel ) );
-            
-			_tracker = catalog.Find<IChangeTrackingSubSystem>();
+            _tracker = changeTrackingSubSystem;
+            _taskFactory = taskFactory;
 		}
 
         private struct InstallAgentThreadParams

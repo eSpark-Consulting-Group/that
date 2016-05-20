@@ -1,32 +1,23 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management;
 using System.Threading;
 using System.Threading.Tasks;
+using APTAT.Core.Descent.Helpers;
 using APTAT.Core.Descent.Transport;
-using APTAT.Core.Descent.Wmi;
-using APTAT.Core.Properties;
+using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
-namespace APTAT.Core.Descent.Helpers
+namespace APTAT.Core.Descent.Wmi
 {
-    class WmiScanner
+    class WmiScanner : Scanner
     {
-        private static TaskFactory _taskFactory;
-        private readonly IChangeTrackingSubSystem _tracker;
-
-        public const string TimeoutAbortString = "OH SHI--";
-
-        private readonly ConcurrentDictionary<Guid, Thread> _threads = new ConcurrentDictionary<Guid, Thread>();
-        public WmiScanner(ISubSystemCatalog catalog)
+        protected readonly ConcurrentDictionary<Guid, Thread> Threads = new ConcurrentDictionary<Guid, Thread>();
+        public WmiScanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password)
+            : base(catalog, targets, login, password)
         {
-            _taskFactory = new TaskFactory(
-                CancellationToken.None,
-                TaskCreationOptions.LongRunning,
-                TaskContinuationOptions.None,
-                new LimitedConcurrencyLevelTaskScheduler(Settings.Default.DescentMaximumConcurrencyLevel));
 
-            _tracker = catalog.Find<IChangeTrackingSubSystem>();
         }
         public void StartWmiScan(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity,
             WmiScanResult result, Guid operationUid, string args = null)
@@ -41,7 +32,7 @@ namespace APTAT.Core.Descent.Helpers
 
             //Thread thread = new Thread(InstallAgentThread);
             //thread.Start(tp);
-            _taskFactory.StartNew(StartWmiScanThread, tp, TaskCreationOptions.LongRunning).ContinueWith(task => task.Dispose());
+            TaskFactory.StartNew(StartWmiScanThread, tp, TaskCreationOptions.LongRunning).ContinueWith(task => task.Dispose());
             //ThreadPool.QueueUserWorkItem(InstallAgentThread_, tp);
         }
 
@@ -55,7 +46,7 @@ namespace APTAT.Core.Descent.Helpers
                 ManagementScope ms = null;
                 ObjectQuery objectQuery = new SelectQuery("Win32_Bios");
                 bool tryWithoutCred = false;
-                var path = "\\\\" + tp.RemoteHostInfo.HostName + "\\root\\CIMV2";
+                var path = String.Format("\\\\{0}\\root\\CIMV2", tp.RemoteHostInfo.HostName);
                 try
                 {
                     
@@ -73,16 +64,10 @@ namespace APTAT.Core.Descent.Helpers
                 }
                 if (tryWithoutCred)
                 {
-                    try
-                    {
-                        co = GetConnectionOptionsForWmi(tp.RemoteHostInfo.Login, tp.RemoteHostInfo.Login);
-                        ms = new ManagementScope(path, co);
-                        ms.Connect();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw;
-                    }
+                    co = GetConnectionOptionsForWmi(null, null);
+                    ms = new ManagementScope(path, co);
+                    ms.Connect();
+                    
                 }
                 ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(ms, objectQuery);
                 managementObjectSearcher.Options.Timeout = TimeSpan.FromMinutes(2);
@@ -137,7 +122,7 @@ namespace APTAT.Core.Descent.Helpers
             if (tp.DescentCallback != null)
                 tp.DescentCallback.OnDescentCallback(descentStatus, 1, errorMessage);
         }
-        public static ConnectionOptions GetConnectionOptionsForWmi(string login, string password)
+        private static ConnectionOptions GetConnectionOptionsForWmi(string login, string password)
         {
             ConnectionOptions connectionOptions = new ConnectionOptions();
             connectionOptions.Impersonation = ImpersonationLevel.Impersonate;
@@ -150,7 +135,7 @@ namespace APTAT.Core.Descent.Helpers
             }
             return connectionOptions;
         }
-        public static string GetProperty(ManagementBaseObject mo, string propertyName, string defaultVal)
+        private static string GetProperty(ManagementBaseObject mo, string propertyName, string defaultVal)
         {
             string str = "";
             try
@@ -183,6 +168,36 @@ namespace APTAT.Core.Descent.Helpers
             public Guid AgentIdentity;
             public Guid OperationUid;
             public string args;
+        }
+
+        public override IDescentQueryResult ValidateAndGetResult()
+        {
+            var result = new WmiScanOperationContext(Targets);
+            return result;
+        }
+
+        public override void StartScan(IDescentQueryResult result)
+        {
+            var scanResults = (WmiScanOperationContext) result;
+            foreach (TargetUidComputerPair computer in Targets)
+            {
+                RemoteHostInfo ri = new RemoteHostInfo
+                {
+                    HostName = (computer.Computer.IPAddress != null) ? computer.Computer.IPAddress.ToString() : computer.Computer.DnsName,
+                    Login = Login,
+                    Password = Password,
+                    TargetUid = computer.TargetUid
+                };
+                WmiScanResult scanResult;
+                scanResults.ScanResults.TryGetValue(computer.TargetUid, out scanResult);
+                var job = new RemoteInstallerJob(result, Tracker, computer.Computer);
+                StartWmiScan(ri, job, computer.TargetUid, scanResult, result.OperationUid);
+            }
+        }
+
+        public override void AbortAllThread()
+        {
+
         }
     }
 }

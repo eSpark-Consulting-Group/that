@@ -14,10 +14,13 @@ namespace APTAT.Core.Descent
         ConcurrentDictionary<Guid, WmiScanResult> ScanResults { get; }
     }
 
-    public interface IDescentQueryResult
-	{
+    public interface IDescentQueryResult: IChangeTrackingListener
+    {
 		Guid OperationUid { get; }
-		void OnDescendOperationEvent( bool ok, IComputer computer, FormattedText statusMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage );
+        int TotalTargetsCount { get; }
+        bool Completed { get; }
+        DateTime? CompletedTime { get; }
+        void OnDescendOperationEvent( bool ok, IComputer computer, FormattedText statusMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage );
 		
 		void RegisterTimeoutCallback(Guid agentIdentity, Action<TimeSpan> callback);
 		void UnregisterTimeoutCallback(Guid agentIdentity);

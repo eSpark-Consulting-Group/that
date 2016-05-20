@@ -214,11 +214,6 @@ namespace APTAT.Core
             return aptScanResult;
         }
 
-        public void StopScan(Guid targetUid)
-        {
-            _descentSubSystem.AbortThreadByTargetUid(targetUid);
-        }
-
         public void StopScan()
         {
             _descentSubSystem.AbortAllThreads();
