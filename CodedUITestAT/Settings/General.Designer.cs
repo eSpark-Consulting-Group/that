@@ -34,7 +34,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("alexey.smirnov@comodo.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("evgeniy.bal@comodo.od.ua")]
         public string CamLogin {
             get {
                 return ((string)(this["CamLogin"]));
@@ -43,7 +43,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Test1234")]
+        [global::System.Configuration.DefaultSettingValueAttribute("test4test")]
         public string CamPassword {
             get {
                 return ((string)(this["CamPassword"]));

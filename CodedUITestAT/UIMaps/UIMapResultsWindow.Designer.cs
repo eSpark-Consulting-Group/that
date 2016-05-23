@@ -55,7 +55,57 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uIValkyrieanalysisresuTabPage1, new Point(67, 7));
         }
         
+        /// <summary>
+        /// AssertValkyrieResultsTree - Use 'AssertValkyrieResultsTreeExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertValkyrieResultsTree()
+        {
+            #region Variable Declarations
+            WpfTree uIRadTreeListViewTree2 = this.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree2;
+            #endregion
+
+            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+            Assert.AreEqual(this.AssertValkyrieResultsTreeExpectedValues.UIRadTreeListViewTree2Exists, uIRadTreeListViewTree2.Exists);
+        }
+        
+        /// <summary>
+        /// AssertUnknownFilesTree - Use 'AssertUnknownFilesTreeExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertUnknownFilesTree()
+        {
+            #region Variable Declarations
+            WpfTree uIRadTreeListViewTree2 = this.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree2;
+            #endregion
+
+            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+            Assert.AreEqual(this.AssertUnknownFilesTreeExpectedValues.UIRadTreeListViewTree2Exists, uIRadTreeListViewTree2.Exists);
+        }
+        
         #region Properties
+        public virtual AssertValkyrieResultsTreeExpectedValues AssertValkyrieResultsTreeExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertValkyrieResultsTreeExpectedValues == null))
+                {
+                    this.mAssertValkyrieResultsTreeExpectedValues = new AssertValkyrieResultsTreeExpectedValues();
+                }
+                return this.mAssertValkyrieResultsTreeExpectedValues;
+            }
+        }
+        
+        public virtual AssertUnknownFilesTreeExpectedValues AssertUnknownFilesTreeExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertUnknownFilesTreeExpectedValues == null))
+                {
+                    this.mAssertUnknownFilesTreeExpectedValues = new AssertUnknownFilesTreeExpectedValues();
+                }
+                return this.mAssertUnknownFilesTreeExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -70,7 +120,41 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
         
         #region Fields
+        private AssertValkyrieResultsTreeExpectedValues mAssertValkyrieResultsTreeExpectedValues;
+        
+        private AssertUnknownFilesTreeExpectedValues mAssertUnknownFilesTreeExpectedValues;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertValkyrieResultsTree'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertValkyrieResultsTreeExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+        /// </summary>
+        public bool UIRadTreeListViewTree2Exists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertUnknownFilesTree'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertUnknownFilesTreeExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+        /// </summary>
+        public bool UIRadTreeListViewTree2Exists = true;
         #endregion
     }
     
@@ -182,12 +266,30 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIRadTreeListViewTree1;
             }
         }
+        
+        public WpfTree UIRadTreeListViewTree2
+        {
+            get
+            {
+                if ((this.mUIRadTreeListViewTree2 == null))
+                {
+                    this.mUIRadTreeListViewTree2 = new WpfTree(this);
+                    #region Search Criteria
+                    this.mUIRadTreeListViewTree2.SearchProperties[WpfTree.PropertyNames.AutomationId] = "ValkyrieResultsTree";
+                    this.mUIRadTreeListViewTree2.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIRadTreeListViewTree2;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfTree mUIRadTreeListViewTree;
         
         private WpfTree mUIRadTreeListViewTree1;
+        
+        private WpfTree mUIRadTreeListViewTree2;
         #endregion
     }
     
@@ -239,12 +341,30 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIRadTreeListViewTree1;
             }
         }
+        
+        public WpfTree UIRadTreeListViewTree2
+        {
+            get
+            {
+                if ((this.mUIRadTreeListViewTree2 == null))
+                {
+                    this.mUIRadTreeListViewTree2 = new WpfTree(this);
+                    #region Search Criteria
+                    this.mUIRadTreeListViewTree2.SearchProperties[WpfTree.PropertyNames.AutomationId] = "UnknownFilesTree";
+                    this.mUIRadTreeListViewTree2.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIRadTreeListViewTree2;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfTree mUIRadTreeListViewTree;
         
         private WpfTree mUIRadTreeListViewTree1;
+        
+        private WpfTree mUIRadTreeListViewTree2;
         #endregion
     }
     

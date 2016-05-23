@@ -311,15 +311,7 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current test context.</param>
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
-            int valkyrieResultsRowsNumber = 0;
-
-            // Waits while the screen is refreshed
-            for (int i = 0; i < 3; i++)
-            {
-                Playback.Wait(5000);
-                valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetTabRows().Length;
-                if (valkyrieResultsRowsNumber != 0) break;
-            }
+            int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetTabRows().Length;
             
             if (valkyrieResultsRowsNumber == expectedFilesNumber)
                 testContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
@@ -389,17 +381,32 @@ namespace CodedUITestAT
             UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
             UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
             
+            // Waits until the Valkyrie upload progress is completed
             var timer = Stopwatch.StartNew();
             for (; ; )
             {
                 Playback.Wait(2000);
                 if (!MainWindowTitleTextBlock().DisplayText.Contains("%")) break;
-                if ( (int) timer.ElapsedMilliseconds > waitTime )
-                    throw new Exception(String.Format("Complete Valkyrie results are not received after {0} minutes!", waitTime / 60000));
+                if ((int) timer.ElapsedMilliseconds > waitTime) throw new Exception(String.Format("Valkyrie upload progress is not completed after {0} minutes!", waitTime / 60000));
             }
             timer.Stop();
 
-            testContext.WriteLine("Complete Valkyrie results received...\n");
+            // Waits until the results are actually available at UI
+            int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
+            timer.Restart();
+            for (; ; )
+            {
+                Playback.Wait(2000);
+                try
+                {
+                    ValkyrieAnalysisResultsTab().GetTabRows();
+                    testContext.WriteLine("Valkyrie results now can be obtained from UI.\n");
+                    break;
+                }
+                catch (Exception) { }
+                if ((int)timer.ElapsedMilliseconds > treeWaitTime) throw new Exception(String.Format("Valkyrie results cannot be obtained from UI after {0} seconds!", treeWaitTime / 1000));
+            }
+            timer.Stop();
         }
 
         #endregion
@@ -411,7 +418,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.InfectForQuickScan(endpoint);
-
+            
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             TestContext.WriteLine("Start Scanning wizard appeared...\n");
