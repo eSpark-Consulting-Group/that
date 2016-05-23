@@ -10,7 +10,7 @@ namespace APTAT.Core
     {
     }
 
-    public interface ISubSystem : IService
+    public interface ISubSystem 
     {
         string Name { get; }
         Guid Identifier { get; }

@@ -45,6 +45,7 @@ namespace APTAT.Core.Descent.Apt
         public override void Changed(params ChangesTrackingItem[] items)
         {
             base.Changed(items);
+            if (items == null) return;
             foreach (var item in items)
             {
                 if (item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
@@ -64,7 +65,12 @@ namespace APTAT.Core.Descent.Apt
                 }
             }
 
-            OnOperationProgressChanged(new OperationProgressChangedEventArgs() { Percentage = CalculateTotalPercentage() });
+            OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
+            {
+                Percentage = CalculateTotalPercentage(),
+                ProgressItems = items.Select(c => c.ChangedItem).OfType<DescentProgressItem>().ToArray(),
+                OperationUid = OperationUid
+            });
         }
 
         public override Guid SessionId
@@ -84,17 +90,17 @@ namespace APTAT.Core.Descent.Apt
             return (int)((double)current / total * 100);
         }
 
-        public event EventHandler<OperationProgressChangedEventArgs> OperationProgressChanged;
-        private void OnOperationProgressChanged(OperationProgressChangedEventArgs args)
+        public event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;
+        private void OnOperationProgressChanged(AptOperationProgressChangedEventArgs args)
         {
-            EventHandler<OperationProgressChangedEventArgs> temp = OperationProgressChanged;
+            EventHandler<AptOperationProgressChangedEventArgs> temp = OperationProgressChanged;
             if (temp != null)
                 temp(this, args);
         }
 
-        public class OperationProgressChangedEventArgs : EventArgs
+        public class AptOperationProgressChangedEventArgs : OperationProgressChangedEventArgs
         {
-            public int Percentage { get; set; }
+            public DescentProgressItem[] ProgressItems { get; set; }
         }
 
         public FilesStatistics CalculateFilesStatistics()

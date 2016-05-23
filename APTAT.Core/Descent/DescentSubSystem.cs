@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Properties;
@@ -176,12 +175,12 @@ namespace APTAT.Core.Descent
             }
             var scanner = new WmiScanner(_catalog, targets, login, password);
             StartScan(scanner, out operationUid);
+            _wmiScanResultsPerOperation.Clear();
             lock (_descentResults)
             {
                 _wmiScanResultsPerOperation[operationUid] = (WmiScanOperationContext)_descentResults[operationUid];
             }
 
-            _wmiScanResultsPerOperation.Clear();
             //var computers = GetTargetUidComputerPairs(targets);
             //var result = new WmiScanOperationContext(computers);
             //operationUid = result.OperationUid;
@@ -289,10 +288,17 @@ namespace APTAT.Core.Descent
         }
 
 
-        public AptScanOperationContext GetScanResultsByOperationUid(Guid operationUid)
+        public AptScanOperationContext GetAptScanResultsByOperationUid(Guid operationUid)
         {
             AptScanOperationContext results;
             _aptScanResultsPerOperation.TryGetValue(operationUid, out results);
+            return results;
+        }
+
+	    public WmiScanOperationContext GetWmiScanResultsByOperationUid(Guid operationUid)
+	    {
+            WmiScanOperationContext results;
+            _wmiScanResultsPerOperation.TryGetValue(operationUid, out results);
             return results;
         }
         public AptScanOperationContext GetFirstScanResults()

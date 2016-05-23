@@ -61,7 +61,7 @@ namespace APTAT.Core.Descent.Wmi
                 }
             }
 
-            OnOperationProgressChanged(new OperationProgressChangedEventArgs() { Percentage = CalculateTotalPercentage() });
+            OnOperationProgressChanged(new OperationProgressChangedEventArgs() { Percentage = CalculateTotalPercentage(), OperationUid = OperationUid });
         }
 
         public override void OnDescendOperationEvent(bool ok, IComputer computer, FormattedText errorMessage, FormattedText shortStatusMessage,
@@ -112,11 +112,6 @@ namespace APTAT.Core.Descent.Wmi
             EventHandler<OperationProgressChangedEventArgs> temp = OperationProgressChanged;
             if (temp != null)
                 temp(this, args);
-        }
-
-        public class OperationProgressChangedEventArgs : EventArgs
-        {
-            public int Percentage { get; set; }
         }
     }
 }

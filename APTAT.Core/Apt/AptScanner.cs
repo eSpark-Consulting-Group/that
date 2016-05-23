@@ -18,7 +18,7 @@ namespace APTAT.Core.Apt
         private readonly IEnumerable<DeploymentTarget> _targets;
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
-        public event EventHandler<ScanInProgressEventArgs> ScanInProgress;
+        public event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
 
         internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<DeploymentTarget> targets, string login,
             string password, string scanScope)
@@ -82,7 +82,7 @@ namespace APTAT.Core.Apt
                 args.OperationUid = _operationUid;
                 args.State = context.State;
 
-                _scanOperationContext = _descentSubSystem.GetScanResultsByOperationUid(args.OperationUid);
+                _scanOperationContext = _descentSubSystem.GetAptScanResultsByOperationUid(args.OperationUid);
                 if (_scanOperationContext != null)
                 {
                     _scanOperationContext.OperationProgressChanged += scanOperationContext_OperationProgressChanged;
@@ -101,9 +101,13 @@ namespace APTAT.Core.Apt
             }
         }
 
-        void scanOperationContext_OperationProgressChanged(object sender, AptScanOperationContext.OperationProgressChangedEventArgs e)
+        void scanOperationContext_OperationProgressChanged(object sender, AptScanOperationContext.AptOperationProgressChangedEventArgs e)
         {
-            OnScanInProgress(new ScanInProgressEventArgs() { OperationUid = _scanOperationContext.OperationUid, Percentage = e.Percentage });
+            OnScanInProgress(new AptScanInProgressEventArgs()
+            {
+                OperationUid = _scanOperationContext.OperationUid, Percentage = e.Percentage,
+                ProgressItems = e.ProgressItems
+            });
         }
 
         protected virtual void OnScanStarted(ScanStartedEventArgs args)
@@ -120,9 +124,9 @@ namespace APTAT.Core.Apt
                 temp(this, args);
         }
 
-        protected virtual void OnScanInProgress(ScanInProgressEventArgs args)
+        protected virtual void OnScanInProgress(AptScanInProgressEventArgs args)
         {
-            EventHandler<ScanInProgressEventArgs> temp = ScanInProgress;
+            EventHandler<AptScanInProgressEventArgs> temp = ScanInProgress;
             if (temp != null)
                 temp(this, args);
         }

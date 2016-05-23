@@ -1,4 +1,5 @@
 ﻿using System;
+using APTAT.Core;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Application.Services
@@ -9,8 +10,11 @@ namespace APTAT.Application.Services
         event EventHandler<WmiAnalyzeCompletedEventArgs> AnalyzeCompleted;
         event EventHandler<WmiAnalyzeProgressChangedEventArgs> ProgressChanged;
     }
+
     public class WmiAnalyzeCompletedEventArgs : EventArgs
-    { }
-    public class WmiAnalyzeProgressChangedEventArgs : EventArgs
+    {
+        public Guid OperationUid { get; set; }
+    }
+    public class WmiAnalyzeProgressChangedEventArgs : ScanInProgressEventArgs
     { }
 }

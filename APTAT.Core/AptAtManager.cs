@@ -19,7 +19,7 @@ namespace APTAT.Core
         void BeginScan(object state = null);
         event EventHandler<ScanStartedEventArgs> ScanStarted;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
-        event EventHandler<ScanInProgressEventArgs> ScanInProgress;
+        event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
     }
 
     public class ScanStartedEventArgs : EventArgs
@@ -46,7 +46,10 @@ namespace APTAT.Core
         public Guid OperationUid { get; set; }
         public int Percentage { get; set; }
     }
-
+    public class AptScanInProgressEventArgs : ScanInProgressEventArgs
+    {
+        public DescentProgressItem[] ProgressItems { get; set; }
+    }
 
 
     public class AptAtManager

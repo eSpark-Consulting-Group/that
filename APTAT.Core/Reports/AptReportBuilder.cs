@@ -22,7 +22,7 @@ namespace APTAT.Core.Reports
         public void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null)
         {
 
-            var results = _descentSubSystem.GetScanResultsByOperationUid(operationUid);
+            var results = _descentSubSystem.GetAptScanResultsByOperationUid(operationUid);
             if (!results.CompletedTime.HasValue || results.CompletedTime.Value == DateTime.MinValue)
                 throw new DataNotReadyException();
 

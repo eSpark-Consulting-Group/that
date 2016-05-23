@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using APTAT.Core.Descent.Apt;
+using APTAT.Core.Descent.Wmi;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Core.Descent
@@ -14,8 +15,9 @@ namespace APTAT.Core.Descent
         void StartWmiScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
             out Guid operationUid);
 
-        AptScanOperationContext GetScanResultsByOperationUid(Guid operationUid);
-	    AptScanOperationContext GetFirstScanResults();
+        AptScanOperationContext GetAptScanResultsByOperationUid(Guid operationUid);
+        WmiScanOperationContext GetWmiScanResultsByOperationUid(Guid operationUid);
+        AptScanOperationContext GetFirstScanResults();
 
         void AbortAllThreads();
 

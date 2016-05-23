@@ -15,7 +15,7 @@ using Composition = APTAT.Application.Helpers.CompositionHelper;
 namespace APTAT.Application.Services
 {
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
-    public class AptService : IAptService, IChangeTrackingListener
+    public class AptService : IAptService
     {
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
 
@@ -121,9 +121,6 @@ namespace APTAT.Application.Services
 
         public void BeginScan(DeploymentTarget[] items , String login, String password, Object userState, string scanScope)
         {
-
-            var changeTrackingSubSystem = SubSystemFactory.Current.GetSubSystem<IChangeTrackingSubSystem>();
-            changeTrackingSubSystem.RegisterListener(this);
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(items), login, password, scanScope);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
@@ -131,11 +128,36 @@ namespace APTAT.Application.Services
             scanner.BeginScan(userState);
         }
 
-        private void OnScanInProgress(Object sender, ScanInProgressEventArgs e)
+        private void OnScanInProgress(Object sender, AptScanInProgressEventArgs e)
         {
             ScanProgressChangedEventArgs args = new ScanProgressChangedEventArgs(e.Percentage, e.OperationUid);
+            ScanProgressItem[] scanProgressItems = new ScanProgressItem[e.ProgressItems.Length];
+            for (var i = 0; i < e.ProgressItems.Length; ++i)
+            {
+                DescentProgressItem descentProgressItem = e.ProgressItems[i];
+                if (descentProgressItem != null)
+                {
+                    ScanProgressItem progressItem = new ScanProgressItem();
+                    progressItem.ComputerGuid = descentProgressItem.ComputerUid;
+                    progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
+                    progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
+                    progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
+                    progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
+                    progressItem.ErrorFilesCount = descentProgressItem.ErrorFilesCount;
+                    progressItem.ServerErrorFilesCount = descentProgressItem.FailedAtNodeCount;
+                    progressItem.OperationUid = descentProgressItem.OperationUid;
+                    progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
+                    scanProgressItems[i] = progressItem;
+                }
+            }
+
             Action action = () =>
             {
+
+                if (ScanStatusChanged != null)
+                {
+                    ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
+                }
                 if (ScanProgressChanged != null)
                 {
                     ScanProgressChanged(this, args);
@@ -160,8 +182,6 @@ namespace APTAT.Application.Services
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
         {
-            var changeTrackingSubSystem = SubSystemFactory.Current.GetSubSystem<IChangeTrackingSubSystem>();
-            changeTrackingSubSystem.UnregisterListener(this);
             var scanner = sender as IAptScanner;
             if (scanner != null)
             {
@@ -206,9 +226,7 @@ namespace APTAT.Application.Services
             };
 
 
-            BadFileItem[] badFileItems;
-
-            badFileItems = aptScanResult.BadFiles
+            var badFileItems = aptScanResult.BadFiles
                 .Select(m => new BadFileItem
                 {
                     Name = m.Path,
@@ -236,41 +254,6 @@ namespace APTAT.Application.Services
             {
                 GetScanResultCompleted(this, new GetScanResultCompletedEventArgs(resultItem, userState));
             }
-        }
-
-        public void Changed(params ChangesTrackingItem[] arg)
-        {
-            Action action = () =>
-            {
-                ScanProgressItem[] scanProgressItems = new ScanProgressItem[arg.Length];
-                for (var i = 0; i < arg.Length; ++i)
-                {
-                    ChangesTrackingItem changesTrackingItem = arg[i];
-                    DescentProgressItem descentProgressItem = changesTrackingItem.ChangedItem as DescentProgressItem;
-                    if (descentProgressItem != null)
-                    {
-                        ScanProgressItem progressItem = new ScanProgressItem();
-                        progressItem.ComputerGuid = descentProgressItem.ComputerUid;
-                        progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
-                        progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
-                        progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
-                        progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
-                        progressItem.ErrorFilesCount = descentProgressItem.ErrorFilesCount;
-                        progressItem.ServerErrorFilesCount = descentProgressItem.FailedAtNodeCount;
-                        progressItem.OperationUid = descentProgressItem.OperationUid;
-                        progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
-                        scanProgressItems[i] = progressItem;
-                    }
-                }
-
-                if (ScanStatusChanged != null)
-                {
-                    ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
-                }
-            };
-
-            App.Current.Dispatcher.BeginInvoke(action);
-
         }
 
         public void StopScan()
