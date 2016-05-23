@@ -270,17 +270,17 @@ namespace CodedUITestAT
         /// <summary> Gets the number of files of a given type from Scan Completed window. Starts at Scan Completed window. </summary>
         /// <param name="fileType">Set a file type.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private int GetFoundFilesNumber(FileType fileType, TestContext testContext)
+        private int GetFoundFilesNumber(ThreatType fileType, TestContext testContext)
         {
             string searchWord = null;
 
             switch (fileType)
             {
-                case FileType.Unknown:
-                    searchWord = Settings.ScanCompleted.Default.UnknownFiles;
+                case ThreatType.Unknown:
+                    searchWord = Settings.ScanCompleted.Default.UnknownFile;
                     break;
-                case FileType.Malware:
-                    searchWord = Settings.ScanCompleted.Default.Malwares;
+                case ThreatType.Malware:
+                    searchWord = Settings.ScanCompleted.Default.Malware;
                     break;
                 default: throw new Exception(String.Format("Unexpected file type '{0}'!", fileType));
             }
@@ -299,10 +299,10 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private int GetFoundFilesNumber(TestContext testContext)
         {
-            int unknownFilesNumber = GetFoundFilesNumber(FileType.Unknown, testContext);
+            int unknownFilesNumber = GetFoundFilesNumber(ThreatType.Unknown, testContext);
             int malwaresNumber = 0;
-            if (ScanStatisticsTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.Malwares))
-                                                            malwaresNumber = GetFoundFilesNumber(FileType.Malware, testContext);
+            if (ScanStatisticsTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.Malware))
+                malwaresNumber = GetFoundFilesNumber(ThreatType.Malware, testContext);
             return unknownFilesNumber + malwaresNumber;
         }
 
@@ -326,21 +326,22 @@ namespace CodedUITestAT
             else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
         }
 
-        /// <summary> Clicks a given row at a given results screen. Starts at Results screen. </summary>
+        /// <summary> Clicks a given row at a specified results screen. Starts at Results screen. </summary>
         ///<param name="screen">Set a results screen.</param>
         /// <param name="rowName">Set a row name.</param>
-        private void ClickRow(ResultsScreen screen, string rowName, MouseClick click = MouseClick.Left)
+        /// <param name="click">Set a mouse click type.</param>
+        private void ClickRow(ResultsScreen screen, string rowName, MouseClick click)
         {
             WpfButton expandRowButton;
             WpfTabPage tab;
 
             switch (screen)
             {
-                case ResultsScreen.Files:
+                case ResultsScreen.FoundFiles:
                     UIMapResultsWindow.GoToUnknownFilesTab();
                     tab = UnknownFilesTab();
                     break;
-                case ResultsScreen.Analysis:
+                case ResultsScreen.ValkyrieAnalysis:
                     UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
                     tab = ValkyrieAnalysisResultsTab();
                     break;
@@ -360,6 +361,24 @@ namespace CodedUITestAT
                     break;
                 }
             }
+        }
+
+        /// <summary> Clicks a given computer at a specified results screen. Starts at Results screen. </summary>
+        ///<param name="screen">Set a results screen.</param>
+        /// <param name="computer">Set a computer.</param>
+        /// <param name="click">Set a mouse click type.</param>
+        internal void ClickRow(ResultsScreen screen, Computer computer, MouseClick click = MouseClick.Left)
+        {
+            ClickRow(screen, computer.RowName, click);
+        }
+
+        /// <summary> Clicks a given threat at a specified results screen. Starts at Results screen. </summary>
+        ///<param name="screen">Set a results screen.</param>
+        /// <param name="threat">Set a threat.</param>
+        /// <param name="click">Set a mouse click type.</param>
+        internal void ClickRow(ResultsScreen screen, Threat threat, MouseClick click = MouseClick.Left)
+        {
+            ClickRow(screen, threat.RowName, click);
         }
 
         /// <summary> Waits until the Valkyrie results are received. </summary>
@@ -390,8 +409,8 @@ namespace CodedUITestAT
         [TestMethod]
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
-            string endpointName = DataHelper.GetEndpointName();
-            SysHelper.InfectForQuickScan(endpointName);
+            Computer endpoint = DataHelper.GetEndpoint();
+            SysHelper.InfectForQuickScan(endpoint);
 
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -399,7 +418,7 @@ namespace CodedUITestAT
             UIMapStartScanningWizard.ClickNetworkAddressButton();
             
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
-            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpointName;
+            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapNetworkAddresses.ClickAddButton();
             UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
@@ -409,7 +428,7 @@ namespace CodedUITestAT
 
             UIHelper.WaitForControlIsClickable(QuickScanButton());
             UIMapStartScanningWizard.ClickQuickScanButton();
-            TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}'...\n", endpointName));
+            TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}'...\n", endpoint.Name));
             
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
             if (ScanCompletedTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.ScanCompletedText))
@@ -462,9 +481,9 @@ namespace CodedUITestAT
         [TestMethod]
         public void WorkgroupQuickScanAndThreatDetailsCheckTest()
         {
-            string endpointName = DataHelper.GetEndpointName();
+            Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
-            string malwarePath = SysHelper.InfectForQuickScan(endpointName);
+            Malware malware = SysHelper.InfectForQuickScan(endpoint);
             //string malwarePath = String.Format(@"Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{0}", Settings.General.Default.ThreatName);
             
             UIMapMain.ClickStartScanningNowButton();
@@ -498,10 +517,10 @@ namespace CodedUITestAT
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
             
             // Verifies the scanning result at the Results screen
-            ClickRow(ResultsScreen.Files, endpointName);
-            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpointName));
-            ClickRow(ResultsScreen.Files, malwarePath, MouseClick.DoubleLeft);
-            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malwarePath));
+            ClickRow(ResultsScreen.FoundFiles, endpoint);
+            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpoint.Name));
+            ClickRow(ResultsScreen.FoundFiles, malware, MouseClick.DoubleLeft);
+            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
             UIHelper.WaitForControl(CloseDetailsButton());
             UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();

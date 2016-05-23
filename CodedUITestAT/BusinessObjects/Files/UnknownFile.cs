@@ -2,21 +2,18 @@
 
 namespace CodedUITestAT
 {
-    internal sealed class UnknownFile : IThreat
+    /// <summary> Represents an unknown file. </summary>
+    internal sealed class UnknownFile : Threat
     {
-        public string Name { get { return _name; } }
-        public string Location { get { return _location; } }
-        public string SearchWord {  get {return _searchWord;} }
+        internal override string SearchWord { get { return _searchWord;} }
 
-        internal UnknownFile(string fileLocation)
+        /// <summary> Represents an unknown file. </summary>
+        /// <param name="fileLocation">Set a local file location.</param>
+        internal UnknownFile(string fileLocation) : base(fileLocation)
         {
-            _location = fileLocation;
-            _name = Path.GetFileName(fileLocation);
-            _searchWord = Settings.ScanCompleted.Default.UnknownFiles;        
+            _searchWord = Settings.ScanCompleted.Default.UnknownFile;
         }
 
-        private string _name;
-        private string _location;
         private string _searchWord;
     }
 }

@@ -5,10 +5,10 @@
     <Setting Name="ScanCompletedText" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Scan Completed!</Value>
     </Setting>
-    <Setting Name="UnknownFiles" Type="System.String" Scope="Application">
+    <Setting Name="UnknownFile" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Unknown</Value>
     </Setting>
-    <Setting Name="Malwares" Type="System.String" Scope="Application">
+    <Setting Name="Malware" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Malware</Value>
     </Setting>
   </Settings>

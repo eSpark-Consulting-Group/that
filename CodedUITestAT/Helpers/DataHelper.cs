@@ -18,16 +18,16 @@ namespace CodedUITestAT
         internal static readonly string Username = Environment.GetEnvironmentVariable("_ServerLogin", EnvironmentVariableTarget.Machine);
         internal static readonly string Password = Environment.GetEnvironmentVariable("_ServerPassword", EnvironmentVariableTarget.Machine);
         //internal static readonly string Username = "administrator";
-        //internal static readonly string Password = "test";
         
         internal static readonly string EncriptedPassword = Playback.EncryptText(Password);
 
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
 
-        /// <summary> Gets an internal name of endpoint obtained from a local environment variable. </summary>
-        internal static string GetEndpointName()
+        /// <summary> Gets data on an internal endpoint obtained from a local environment variable. </summary>
+        internal static Computer GetEndpoint()
         {
-           return Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine).ToUpper();
+           string computerName = Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine).ToUpper();
+           return new Computer(computerName);
            //return "as06w8x64".ToUpper();
         }
 
