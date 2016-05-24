@@ -6,13 +6,13 @@
       <Value Profile="(Default)">UnknownFileHunter</Value>
     </Setting>
     <Setting Name="CamLogin" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">evgeniy.bal@comodo.od.ua</Value>
+      <Value Profile="(Default)">esm.reseller@gmail.com</Value>
     </Setting>
     <Setting Name="CamPassword" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">test4test</Value>
+      <Value Profile="(Default)">sellthemall</Value>
     </Setting>
     <Setting Name="CamKey" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">a4cfd6d7-3c6c-449b-a55d-13e5c3d30a02</Value>
+      <Value Profile="(Default)">c593bd1c-ca67-4013-914d-0fe852d72108</Value>
     </Setting>
     <Setting Name="ValkyrieUri" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://valkyrie.comodo.com/signup_apikey</Value>

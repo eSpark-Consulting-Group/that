@@ -34,7 +34,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("evgeniy.bal@comodo.od.ua")]
+        [global::System.Configuration.DefaultSettingValueAttribute("esm.reseller@gmail.com")]
         public string CamLogin {
             get {
                 return ((string)(this["CamLogin"]));
@@ -43,7 +43,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("test4test")]
+        [global::System.Configuration.DefaultSettingValueAttribute("sellthemall")]
         public string CamPassword {
             get {
                 return ((string)(this["CamPassword"]));
@@ -52,7 +52,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("a4cfd6d7-3c6c-449b-a55d-13e5c3d30a02")]
+        [global::System.Configuration.DefaultSettingValueAttribute("c593bd1c-ca67-4013-914d-0fe852d72108")]
         public string CamKey {
             get {
                 return ((string)(this["CamKey"]));
