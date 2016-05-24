@@ -440,10 +440,7 @@ namespace APTAT.Core.Descent
 			{
 				DeleteDescentAgentService();
 				_serviceHelper.Release();
-				_networkHelper.Release();
-
-			    _objectDestroyed = true;
-
+				
                 // Remove file system content
                 try
                 {
@@ -458,7 +455,11 @@ namespace APTAT.Core.Descent
                 catch (Exception)
                 {
                 }
-			}
+
+                _networkHelper.Release();
+
+                _objectDestroyed = true;
+            }
 
 
 			private void InitializeDescentAgentService( string descentAgentPath, string tvlFilePath, string trlFilePath )
