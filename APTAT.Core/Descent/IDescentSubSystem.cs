@@ -10,7 +10,7 @@ namespace APTAT.Core.Descent
 	{
         
         void StartAptScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
-            out Guid operationUid, string scanScope);
+            out Guid operationUid, string scanScope, string tcpPort, string udpPort);
 
         void StartWmiScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
             out Guid operationUid);

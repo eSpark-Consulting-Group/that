@@ -56,16 +56,24 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <TextBlock VerticalAlignment="Center" Grid.Row="0" FontSize="14" Margin="5" Text="Domain Controller:"/>
                 <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="5" Text="Administrator:"/>
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="2" Text="Password:"/>
+                <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="3" Text="FLS TCP Port:"/>
+                <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="4" Text="FLS UDP Port:"/>
 
                 <TextBox x:Name="txtDomainController" BorderThickness="0" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding DomainController, Mode=TwoWay, ValidatesOnExceptions=True}" >
                 </TextBox>
                 <TextBox x:Name="txtAdministrator" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
                 <PasswordBox x:Name="password"  BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
+                <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.AutomationId="TcpPortTextBox" x:Name="TextTcpPort" BorderThickness="0" Margin="5"                             
+                             Text="{Binding TcpPort, Mode=TwoWay, ValidatesOnExceptions=True}" PreviewTextInput="NumberValidationTextBox" ></TextBox>
+
+                <TextBox Grid.Row="4" Grid.Column="1"  AutomationProperties.AutomationId="UdpPortTextBox" x:Name="TextUdpPort" BorderThickness="0" Margin="5"                             
+                             Text="{Binding UdpPort, Mode=TwoWay, ValidatesOnExceptions=True}" PreviewTextInput="NumberValidationTextBox" ></TextBox>
 
             </Grid>
 

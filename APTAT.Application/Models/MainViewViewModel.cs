@@ -435,6 +435,9 @@ namespace APTAT.Application.Models
                     IsBusy = true;
                     _login = _storage.GetValue<String>(KnownKeys.Login, false);
                     _password = _storage.GetValue<String>(KnownKeys.Password, true);
+                    _tcpPort= _storage.GetValue<String>(KnownKeys.TcpPort, false);
+                    _udpPort = _storage.GetValue<String>(KnownKeys.UdpPort, false);
+
                     if (_login == null || _password == null)
                     {
                         throw new InvalidOperationException("specify login and password");
@@ -681,15 +684,19 @@ namespace APTAT.Application.Models
                 {
                     throw new InvalidOperationException("specify login and password");
                 }
-               
+
+                if (String.IsNullOrWhiteSpace(_udpPort) || String.IsNullOrWhiteSpace(_tcpPort))
+                {
+                    throw new InvalidOperationException("specify FLS tcp and udp ports");
+                }
+
                 string scanScope = @"?:";
                 if (IsQuickScan)
                 {
                     scanScope = @"processes|drivers|autoruns";
                 }
 
-                _aptService.BeginScan(e.Items, _login, _password, this, scanScope);
-
+                _aptService.BeginScan(e.Items, _login, _password, this, scanScope, _tcpPort, _udpPort);
                 //_login = null;
                 //_password = null;
             }
@@ -946,6 +953,8 @@ namespace APTAT.Application.Models
         private string _camLicenseId;
         private string _camUserLogin;
         private string _camUserPassword;
+        private string _tcpPort;
+        private string _udpPort;
 
         public bool IsQuickScan { get; set; }
     }

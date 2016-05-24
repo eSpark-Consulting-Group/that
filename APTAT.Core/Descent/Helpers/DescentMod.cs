@@ -46,12 +46,13 @@ namespace APTAT.Core.Descent
             public IDescentCallback DescentCallback;
             public AptScanResult Result;
             public Guid AgentIdentity;
-			public Guid OperationUid;
-            public string args;
+            public Guid OperationUid;
+            public string ScanScope;
+            public string TcpPort;
+            public string UdpPort;
         }
-
-        public void StartAptScan(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity,
-            AptScanResult result, Guid operationUid, string args = null)
+            public void StartAptScan(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity,
+            AptScanResult result, Guid operationUid, string scanScope, string tcpPort, string udpPort)
         {
             InstallAgentThreadParams tp = new InstallAgentThreadParams();
             tp.RemoteHostInfo = remoteHostInfo;
@@ -59,8 +60,9 @@ namespace APTAT.Core.Descent
             tp.AgentIdentity = agentIdentity;
 			tp.OperationUid = operationUid;
             tp.Result = result;
-            tp.args = args;
-
+            tp.ScanScope = scanScope;
+            tp.TcpPort = tcpPort;
+            tp.UdpPort = udpPort;
             //Thread thread = new Thread(InstallAgentThread);
             //thread.Start(tp);
 			_taskFactory.StartNew( StartAptScanThread, tp, TaskCreationOptions.LongRunning ).ContinueWith( task => task.Dispose() );
@@ -134,7 +136,7 @@ namespace APTAT.Core.Descent
 
             //using (tp.InformOperationStart(Thread.CurrentThread))
 			{
-				DescentHelper dh = new DescentHelper( tp.RemoteHostInfo, tp.args );
+				DescentHelper dh = new DescentHelper( tp.RemoteHostInfo, tp.ScanScope, tp.TcpPort, tp.UdpPort );
                 ScanResultsProcessor resultsProcessor = new ScanResultsProcessor();
 
 				EventHandler onRemotelyConnected = null;

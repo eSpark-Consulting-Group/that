@@ -170,6 +170,7 @@
     <Compile Include="Services\IWmiService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="TitleUpdater.cs" />
+    <Compile Include="Helpers\PortValidators.cs" />
     <Compile Include="ValkyrieDetailsView.xaml.cs">
       <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
     </Compile>

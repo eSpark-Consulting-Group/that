@@ -59,6 +59,15 @@ namespace Valkyrie.WebApiProvider.Enums
         [Description("MANUAL ANALYSIS LIMIT REACHED")]
         ManualAnalysisLimitReached = 117,
 
+        [Description("UNDEFINED MANUAL ANALYSIS LIMIT")]
+        UNDEFINED_MANUAL_ANALYSIS_LIMIT = 118,
+
+        [Description("MASTER USER NOT FOUND")]
+        MASTER_USER_NOT_FOUND = 119,
+
+        [Description("INVALID_USER_FOR_MANUAL_ANALYSIS")]
+        INVALID_USER_FOR_MANUAL_ANALYSIS = 120,
+
         [Description("MANUAL ANALYSIS LIMIT REACHED")]
         MetadataTokenMissing = 131,
 
@@ -139,6 +148,9 @@ namespace Valkyrie.WebApiProvider.Enums
 
         [Description("NON ENTERPRISE")]
         NonEnterprise = 313,
+
+        [Description("UNEXPECTED RESPONSE RETURNED FROM CAM")]
+        UNEXPECTED_RESPONSE_RETURNED_FROM_CAM = 314,
 
         [Description("Bad Request")]
         BadRequest = 400,

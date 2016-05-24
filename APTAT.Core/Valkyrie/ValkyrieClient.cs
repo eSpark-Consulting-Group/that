@@ -205,13 +205,13 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken, bool parallel = true)
+        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password, CancellationToken cancellationToken)
         {
             _filesCount = badFiles.Count;
             Guid endpointId = GetEndpointId();
             var destFolder = CreateTmpFolder();
-            if (parallel)
-            {
+            var exceptions = new ConcurrentQueue<Exception>();
+            
                 ParallelOptions opt = new ParallelOptions
                 {
                     CancellationToken = cancellationToken,
@@ -225,15 +225,16 @@ namespace APTAT.Core.Valkyrie
                     {
                         var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
                         var orgPath = f.GetFullPath();
-                        UploadFile(filePath, orgPath, endpointId);
-                        File.Delete(filePath);
+                        var result = UploadFile(filePath, orgPath, endpointId);
+                        if (result == null) throw new ArgumentException("ValkyrieAnalysisResult can not be null");
+                        AddResult(result);                        
                     }
                     catch (Exception e)
                     {
-
+                        ValkyrieAnalysisResult result = null;
                         if (e is WebException && e.Message == "The request was aborted: The request was canceled.")
                         {
-                            AddResult(ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, "The request was canceled by user", SkippReasonEnum.Cancelled));
+                            result = ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, "The request was canceled by user", SkippReasonEnum.Cancelled);                            
                         }
                         else
                         {
@@ -242,23 +243,17 @@ namespace APTAT.Core.Valkyrie
                             {
                                 m = "Could not find file";
                             }
-                            AddResult(ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, m, SkippReasonEnum.Failed));
+                            result = ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, m, SkippReasonEnum.Failed);
                         }
-
+                        AddResult(result);
+                        
                         Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {1} Reason : {2} {3}", DateTime.UtcNow, f.Sha1, e.Message, e.InnerException != null ? e.InnerException.Message : string.Empty));
 
                         
                     }
                 });
-            }
-            else
-            {
-                foreach (var f in badFiles)
-                {
-                    var tmpfilePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
-                    UploadFile(tmpfilePath, f.GetFullPath(), endpointId);
-                }
-            }
+        
+            
         }
 
         public void AnalyzeAsyncCancel()
@@ -360,20 +355,20 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        private void UploadFile(string filePath, string originalFilePath, Guid endpointId)
+        private ValkyrieAnalysisResult UploadFile(string filePath, string originalFilePath, Guid endpointId)
         {
+            ValkyrieAnalysisResult result = null;
             try
             {
                 var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
-
+                                
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
-                    AddResult(ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled));
+                    result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled);
                     Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} cancelled by user", DateTime.UtcNow,
                         originalFilePath));
                     Trace.Flush();
-                    return;
-
+                    return result;
                 }
 
                 FileInfo f = new FileInfo(filePath);
@@ -381,11 +376,11 @@ namespace APTAT.Core.Valkyrie
 
                 if (f.Length > MaxFileLenght)
                 {
-                    AddResult(ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.", SkippReasonEnum.Skipped));
+                    result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.", SkippReasonEnum.Skipped);
                     Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} greater than 25 Mb", DateTime.UtcNow,
                         originalFilePath));
                     Trace.Flush();
-                    return;
+                    return result;
                 }
 
                 var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId };
@@ -399,8 +394,7 @@ namespace APTAT.Core.Valkyrie
 
                 if (basicInfo.Presence)
                 {
-                    ValkyrieAnalysisResult result = ValkyrieAnalysisResult.Create(basicInfo);
-                    AddResult(result);
+                    result = ValkyrieAnalysisResult.Create(basicInfo);                    
                 }
                 else
                 {
@@ -430,25 +424,28 @@ namespace APTAT.Core.Valkyrie
                         automaticAnalysisResponse = ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest() { ApiKey = _apiKey, AnalysisId = response.AnalysisId });
                         success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.AnalysisNotFinished);                      
                     }
-
-                    var result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);
-                    AddResult(result);
+                    if (!success)
+                    {
+                        throw new TimeoutException("Automatic analysis has not been completed after " + timeOut.TotalMinutes + " minutes");
+                    }
+                    result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);
+             
                 }
-            }
-            //catch (Exception e)
-            //{ 
-            //    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss} : {1}", DateTime.UtcNow, e.Message));
-            //    Trace.Flush();
-            //    throw e;
-            //}
+            }            
             finally
             {
-
-                File.Delete(filePath);
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Delete {1}", DateTime.UtcNow, filePath));
+                try
+                {
+                    File.Delete(filePath);
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Delete {1}", DateTime.UtcNow, filePath));
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Delete Failed {1} with error: {2}", DateTime.UtcNow, filePath, ex.Message));
+                }                
                 Trace.Flush();
-
             }
+            return result;
         }
 
         private void AddResult(ValkyrieAnalysisResult result)

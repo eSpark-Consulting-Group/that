@@ -14,6 +14,8 @@ namespace APTAT.Application.Services
         public const String ReportKind = "ReportKind";
         public const String DevicesSourceDescription = "DevicesSourceDescription";
         public const String IpAddresses = "IpAddresses";
+        public const String TcpPort = "TcpPort";
+        public const String UdpPort = "UdpPort";
     }
 
     public interface IStorageService

@@ -82,7 +82,7 @@ namespace APTAT.Application.Models
                 _password = value;
             }
         }
-      
+
         public DelegateCommand CheckItemCommand { get; private set; }
 
         public DelegateCommand UncheckItemCommand { get; private set; }
@@ -93,8 +93,50 @@ namespace APTAT.Application.Models
             _storage = storage;
             
             SetSteps(new[] { null, SelectWorkgroup });
+            
+            TcpPort = "80";
+            UdpPort = "53";
         }
 
+        private string _tcpPort = String.Empty;
+        public String TcpPort
+        {
+            get { return _tcpPort; }
+            set
+            {
+                _tcpPort = value;
+                bool hasError = false;
+                var errorMessage = PortValidators.ValidateTCP(value, out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("TcpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("TcpPort");
+                }
+            }
+        }
+
+        private string _udpPort = String.Empty;
+        public String UdpPort
+        {
+            get { return _udpPort; }
+            set
+            {
+                _udpPort = value;
+                bool hasError = false;
+                var errorMessage = PortValidators.ValidateUDP(value, out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("UdpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("UdpPort");
+                }
+            }
+        }
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
@@ -142,6 +184,22 @@ namespace APTAT.Application.Models
                     return;
                 }
 
+                bool isTcpPortHasError = false;
+                var msgTcp = PortValidators.ValidateTCP(TcpPort, out isTcpPortHasError);
+                if (isTcpPortHasError)
+                {
+                    Error = msgTcp;
+                    return;
+                }
+
+                bool isUdpPortHasError = false;
+                var msgUdp = PortValidators.ValidateUDP(UdpPort, out isUdpPortHasError);
+                if (isUdpPortHasError)
+                {
+                    Error = msgUdp;
+                    return;
+                }
+
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.Workgroup, Workgroup);
                 _targetsDiscoveryService.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
@@ -158,6 +216,8 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
                     _storage.SetValue(KnownKeys.Workgroup, _workgroup);
+                    _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                    _storage.SetValue(KnownKeys.UdpPort, _udpPort);
                     success();
                 }
             }
@@ -198,14 +258,18 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.Workgroup, _workgroup);
                 
                context.Success();
+                _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                _storage.SetValue(KnownKeys.UdpPort, _udpPort);
+
+                context.Success();
             }
             else
             {
-              //  Items = new ObservableCollection<DeploymentItem>();
+                //  Items = new ObservableCollection<DeploymentItem>();
                 Error = e.Exception.Message;
             }
 
-           
+
         }
     }
 }

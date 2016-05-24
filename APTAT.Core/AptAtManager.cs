@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
@@ -172,13 +173,13 @@ namespace APTAT.Core
             }
             return files;
         }
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string scanScope = null)
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string scanScope, string tcp, string udp)
         {
             if (scanScope == null)
                 scanScope = Properties.Settings.Default.ScanScope;
 
             
-            var scanner = new AptScanner(_descentSubSystem, targets, login, password, scanScope);
+            var scanner = new AptScanner(_descentSubSystem, targets, login, password, scanScope, tcp, udp);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             return scanner;

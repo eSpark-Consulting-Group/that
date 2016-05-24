@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -159,6 +160,7 @@ namespace APTAT.Valkyrie.Client
                 }
                 byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiUri.ToString() + " " + responseEncoded));
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;
             }

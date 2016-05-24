@@ -22,7 +22,7 @@ namespace APTAT.Application.Models
 
         private String _administrator;
         private String _password;
-
+        
         private ObservableCollection<DeploymentItem> _items;
 
         public ICollection<Object> CheckedItems
@@ -41,7 +41,45 @@ namespace APTAT.Application.Models
             }
         }
 
+        private string _tcpPort = String.Empty;
+        public String TcpPort
+        {
+            get { return _tcpPort; }
+            set
+            {
+                _tcpPort = value;
+                bool hasError;
+                var errorMessage = PortValidators.ValidateTCP(value,  out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("TcpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("TcpPort");
+                }
+            }
+        }
 
+        private string _udpPort = String.Empty;
+        public String UdpPort
+        {
+            get { return _udpPort; }
+            set
+            {
+                _udpPort = value;
+                bool hasError = false;
+                var errorMessage = PortValidators.ValidateUDP(value, out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("UdpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("UdpPort");
+                }
+            }
+        }
         public String Administrator
         {
             get { return _administrator; }
@@ -116,6 +154,8 @@ namespace APTAT.Application.Models
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
             DeleteIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
+            TcpPort = "80";
+            UdpPort = "53";
         }
 
         protected override void InvokeViewLoaded(object arg)
@@ -236,6 +276,21 @@ namespace APTAT.Application.Models
                     return;
                 }
 
+                bool isTcpPortHasError = false;
+                var msgTcp = PortValidators.ValidateTCP(TcpPort, out isTcpPortHasError);
+                if (isTcpPortHasError)
+                {
+                    Error = msgTcp;
+                    return;
+                }
+
+                bool isUdpPortHasError = false;
+                var msgUdp = PortValidators.ValidateUDP(UdpPort, out isUdpPortHasError);
+                if (isUdpPortHasError)
+                {
+                    Error = msgUdp;
+                    return;
+                }
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
@@ -253,6 +308,8 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
+                    _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                    _storage.SetValue(KnownKeys.UdpPort, _udpPort);
                     _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
 
                     success();
@@ -288,7 +345,8 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                 _storage.SetValue(KnownKeys.Login, _administrator);
                 _storage.SetValue(KnownKeys.Password, _password);
-                
+                _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                _storage.SetValue(KnownKeys.UdpPort, _udpPort);
 
                 context.Success();
             }

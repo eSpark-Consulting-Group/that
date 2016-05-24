@@ -57,17 +57,20 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock VerticalAlignment="Center" Grid.Row="0" FontSize="14" Margin="5" Text="Workgroup:"/>
                 <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="5" Text="Login:"/>
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="2" Text="Password:"/>
-                <TextBox AutomationProperties.AutomationId="WorkgroupTextBox"
-                         x:Name="txtWorkgroup" BorderThickness="0" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Workgroup, Mode=TwoWay, ValidatesOnExceptions=True}" >
+                <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="3" Text="FLS TCP Port:"/>
+                <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="4" Text="FLS UDP Port:"/>
+                <TextBox x:Name="txtWorkgroup" AutomationProperties.AutomationId="WorkgroupTextBox" BorderThickness="0" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Workgroup, Mode=TwoWay, ValidatesOnExceptions=True}" >
                 </TextBox>
-                <TextBox AutomationProperties.AutomationId="LoginTextBox"
-                         x:Name="txtAdministrator" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
-                <PasswordBox AutomationProperties.AutomationId="PasswordBox"
-                             x:Name="password"  BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
+                <TextBox x:Name="txtAdministrator" AutomationProperties.AutomationId="LoginTextBox" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
+                <PasswordBox x:Name="password" AutomationProperties.AutomationId="PasswordBox" BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
+                <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.AutomationId="TcpPortTextBox" x:Name="TextTcpPort" BorderThickness="0" Margin="5"                             
+                             Text="{Binding TcpPort, Mode=TwoWay, ValidatesOnExceptions=True}" PreviewTextInput="NumberValidationTextBox"></TextBox>
+
             </Grid>
 
         </Grid>

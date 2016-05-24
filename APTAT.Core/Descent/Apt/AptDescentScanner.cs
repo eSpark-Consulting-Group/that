@@ -10,12 +10,17 @@ namespace APTAT.Core.Descent.Apt
     {
         private readonly string _scanScope;
         private readonly DescentMod _descentMod;
+        private readonly string _tcpPort;
+        private readonly string _udpPort;
+
         public AptDescentScanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password,
-            string scanScope) 
+            string scanScope, string tcpPort, string udpPort) 
             : base(catalog, targets, login, password)
         {
             _descentMod = new DescentMod(TaskFactory, Tracker);
             _scanScope = scanScope;
+            _tcpPort = tcpPort;
+            _udpPort = udpPort;
         }
 
         public override IDescentQueryResult ValidateAndGetResult()
@@ -62,7 +67,7 @@ namespace APTAT.Core.Descent.Apt
                 scanResults.ScanResults.TryGetValue(computer.Uid, out scanResult);
 
                 var job = new RemoteInstallerJob(result, Tracker, computer);
-                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, result.OperationUid, _scanScope);
+                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, result.OperationUid, _scanScope, _tcpPort, _udpPort);
             }
         }
         private static void CalculateOperationStatistics(IEnumerable<AptScanResult> results, out int failed, out int notPerformed, out int succeeded, out int total, out int canceled)

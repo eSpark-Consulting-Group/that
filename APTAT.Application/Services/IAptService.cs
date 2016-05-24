@@ -168,7 +168,7 @@ namespace APTAT.Application.Services
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
 
-        void BeginScan(DeploymentTarget[] items, String login, String password, Object userState, String scanScope);
+        void BeginScan(DeploymentTarget[] items, String login, String password, Object userState, String scanScope, String tcpPort, String udpPort);
 
         void GetScanResult(Guid targetUid, Object userState);
 

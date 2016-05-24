@@ -79,6 +79,50 @@ namespace APTAT.Application.Models
               
             }
         }
+        private string _tcpPort = String.Empty;
+        public String TcpPort
+        {            
+            get
+            {
+                return _tcpPort;
+            }
+            set
+            {
+                _tcpPort = value;
+                bool hasError;
+                var errorMessage = PortValidators.ValidateTCP(value,  out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("TcpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("TcpPort");
+                }            
+            }
+        }
+
+        private string _udpPort = String.Empty;
+        public String UdpPort
+        {
+            get { return _udpPort; }
+            set
+            {
+                _udpPort = value;
+                bool hasError = false;
+                var errorMessage = PortValidators.ValidateUDP(value, out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("UdpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("UdpPort");
+                }
+            }
+        }
+
+
 
         public DelegateCommand ExpandCommand { get; private set; }
 
@@ -98,6 +142,8 @@ namespace APTAT.Application.Models
             UncheckItemCommand = new DelegateCommand(InvokeUncheckItem);
 
             _checkedItems = new Collection<Object>();
+            TcpPort = "80";
+            UdpPort = "53";
         }
 
         private void InvokeExpand(Object arg)
@@ -138,7 +184,22 @@ namespace APTAT.Application.Models
                     Error = "Please Specify Password";
                     return;
                 }
-               
+
+                bool isTcpPortHasError = false;
+                var msgTcp = PortValidators.ValidateTCP(TcpPort, out isTcpPortHasError);
+                if (isTcpPortHasError)
+                {
+                    Error = msgTcp;
+                    return;
+                }
+
+                bool isUdpPortHasError = false;
+                var msgUdp = PortValidators.ValidateUDP(UdpPort, out isUdpPortHasError);
+                if (isUdpPortHasError)
+                {
+                    Error = msgUdp;
+                    return;
+                }
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.Domain, DomainController);
@@ -156,6 +217,8 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.Login, _administrator);
                     _storage.SetValue(KnownKeys.Password, _password);
                     _storage.SetValue(KnownKeys.Domain, _domainController);
+                    _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                    _storage.SetValue(KnownKeys.UdpPort, _udpPort);
                     success();
                 }
             }

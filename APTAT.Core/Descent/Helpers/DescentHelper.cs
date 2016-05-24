@@ -31,7 +31,9 @@ namespace APTAT.Core.Descent
             private const string StatusFileParamFormat = "--status \"{0}\"";
             private const string TvlParamFormat = "--tvl \"{0}\"";
             private const string TrlParamFormat = "--trl \"{0}\"";
-		    private const string SkipGacParam = "--skipGAC";
+            private const string TcpPortParamFormat = "--flsTcpPort {0}";
+            private const string UdpPortParamFormat = "--flsUdpPort {0}";
+            private const string SkipGacParam = "--skipGAC";
 
 			private RemoteHostInfo _remoteHostInfo;
 			private readonly string _oldRemoteHostName; // old name without changing it to IP address
@@ -47,6 +49,7 @@ namespace APTAT.Core.Descent
             private const string RemoteWorkingDirectoryAsLocal = @"%SYSTEMROOT%\ComodoAptAtScanner";
 
 			private readonly NetworkHelper _networkHelper = new NetworkHelper();
+
             private readonly string _scanScope;
 
 			public class RemoteResponse
@@ -69,9 +72,11 @@ namespace APTAT.Core.Descent
 			}
 
 
-			public DescentHelper( RemoteHostInfo info, string scanScope )
+			public DescentHelper( RemoteHostInfo info, string scanScope, string tcpPort, string udpPort )
 			{
 			    _scanScope = scanScope;
+			    _tcpPort = tcpPort;
+			    _udpPort = udpPort;
 				_remoteHostInfo = info;
 				_oldRemoteHostName = info.HostName;
 				InitPaths();
@@ -436,7 +441,10 @@ namespace APTAT.Core.Descent
 			}
 
 		    private bool _objectDestroyed = false;
-			public void Release()
+		    private readonly string _udpPort;
+		    private readonly string _tcpPort;
+
+		    public void Release()
 			{
 				DeleteDescentAgentService();
 				_serviceHelper.Release();
@@ -495,12 +503,16 @@ namespace APTAT.Core.Descent
             {
                 List<string> serviceParams = new List<string>();
                 serviceParams.Add(String.Format(ScopeParamFormat, _scanScope));
-                serviceParams.Add(String.Format(StatusFileParamFormat, @"%SYSTEMROOT%\ComodoAptAtScanner\scan_status.txt"));
+                serviceParams.Add(String.Format(StatusFileParamFormat, _responseFilePathForCurrentComputer));
                 serviceParams.Add(String.Format(OutputFileParamFormat, _resultsFile));
                 serviceParams.Add(String.Format(TvlParamFormat, _tvlFile));
                 serviceParams.Add(String.Format(TrlParamFormat, _trlFile));
-           //     serviceParams.Add("--impersonate  off");
-                if(Properties.Settings.Default.SkipGac)
+                serviceParams.Add("--filter \"*\"");
+                serviceParams.Add("--scanPeOnly on");
+                serviceParams.Add(String.Format(UdpPortParamFormat, _udpPort));
+                serviceParams.Add(String.Format(TcpPortParamFormat, _tcpPort));
+                
+                if (Properties.Settings.Default.SkipGac)
                     serviceParams.Add(SkipGacParam);
 
                 return serviceParams.ToArray();
