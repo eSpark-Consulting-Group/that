@@ -19,8 +19,8 @@
             <TextBlock FontSize="14">To continue you must accept the terms of this agreement. </TextBlock>
         </StackPanel>
         
-        <ScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">        
-        <RichTextBox x:Name="EulaRichTextBox"></RichTextBox>      
+        <ScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <RichTextBox AutomationProperties.AutomationId="EulaRichTextBox" x:Name="EulaRichTextBox"></RichTextBox>      
         </ScrollViewer>
 
         <Grid AutomationProperties.AutomationId="EulaAcceptGrid"

@@ -76,6 +76,7 @@
     <Compile Include="BusinessObjects\Files\UnknownFile.cs" />
     <Compile Include="BusinessObjects\MouseClick.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
+    <Compile Include="CodedUITestEula.cs" />
     <Compile Include="CodedUITestMain.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\SysHelper.cs" />
@@ -119,6 +120,12 @@
     </Compile>
     <Compile Include="UIMaps\UIMapDetailsWindow.Designer.cs">
       <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapEula.cs">
+      <DependentUpon>UIMapEula.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapEula.Designer.cs">
+      <DependentUpon>UIMapEula.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapMain.cs">
       <DependentUpon>UIMapMain.uitest</DependentUpon>
@@ -166,6 +173,7 @@
     <None Include="UIMaps\StartScanningWizard\UIMapWorkgroup.uitest" />
     <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
     <None Include="UIMaps\UIMapDetailsWindow.uitest" />
+    <None Include="UIMaps\UIMapEula.uitest" />
     <None Include="UIMaps\UIMapMain.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.uitest" />
     <None Include="UIMaps\UIMapResultsWindow.uitest" />

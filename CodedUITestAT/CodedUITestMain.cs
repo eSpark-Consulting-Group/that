@@ -20,7 +20,7 @@ namespace CodedUITestAT
 {
     /// <summary> Tests for the Main screen. </summary>
     [CodedUITest]
-    public class CodedUITestMain
+    public sealed class CodedUITestMain
     {
         public CodedUITestMain()
         {
@@ -156,10 +156,11 @@ namespace CodedUITestAT
         public void ATTestInitialize()
         {
             SysHelper.StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
-            UIHelper.WaitForControlIsEnabled(IAcceptTermsOfThisAgreementCheckBox());
-
-            UIMapMain.CheckIAcceptTermsOfThisAgreementCheckBox();
-            UIMapMain.ClickContinueButton();
+            
+            CodedUITestEula useEula = new CodedUITestEula();
+            UIHelper.WaitForControlIsEnabled(useEula.IAcceptTermsOfThisAgreementCheckBox());
+            useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
+            useEula.UIMapEula.ClickContinueButton();
 
             UIHelper.WaitForControlIsEnabled(StartScanningButton());
         }
@@ -176,7 +177,7 @@ namespace CodedUITestAT
         
         #region Main screen
 
-        private WpfButton StartScanningButton()
+        internal WpfButton StartScanningButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
         }
@@ -184,11 +185,6 @@ namespace CodedUITestAT
         private WpfButton AnalyseWithValkyrieButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIAnalyseWithValkyrieBButton;
-        }
-
-        private WpfCheckBox IAcceptTermsOfThisAgreementCheckBox()
-        {
-            return UIMapMain.UICOMODOUnknownFileHunWindow.UIIacceptthetermsofthiCheckBox;
         }
 
         private WpfText MainWindowTitleTextBlock()

@@ -30,55 +30,16 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     {
         
         /// <summary>
-        /// CheckIAcceptTermsOfThisAgreementCheckBox - Use 'CheckIAcceptTermsOfThisAgreementCheckBoxParams' to pass parameters into this method.
+        /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
         /// </summary>
-        public void CheckIAcceptTermsOfThisAgreementCheckBox()
+        public void AssertMainWindowTitleTextBlockText()
         {
             #region Variable Declarations
-            WpfCheckBox uIIacceptthetermsofthiCheckBox = this.UICOMODOUnknownFileHunWindow.UIIacceptthetermsofthiCheckBox;
+            WpfText uIUnknownFileHunterText = this.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
             #endregion
 
-            // Select 'I accept the terms of this agreement' check box
-            uIIacceptthetermsofthiCheckBox.Checked = this.CheckIAcceptTermsOfThisAgreementCheckBoxParams.UIIacceptthetermsofthiCheckBoxChecked;
-        }
-        
-        /// <summary>
-        /// ClickContinueButton
-        /// </summary>
-        public void ClickContinueButton()
-        {
-            #region Variable Declarations
-            WpfButton uIContinueButton = this.UICOMODOUnknownFileHunWindow.UIContinueButton;
-            #endregion
-
-            // Click 'Continue' button
-            Mouse.Click(uIContinueButton, new Point(47, 11));
-        }
-        
-        /// <summary>
-        /// ClickStartScanningButton
-        /// </summary>
-        public void ClickStartScanningButton()
-        {
-            #region Variable Declarations
-            WpfButton uIStartScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
-            #endregion
-
-            // Click 'StartScanningButton' button
-            Mouse.Click(uIStartScanningButtonButton, new Point(45, 35));
-        }
-        
-        /// <summary>
-        /// ClickValkyrieLink
-        /// </summary>
-        public void ClickValkyrieLink()
-        {
-            #region Variable Declarations
-            WpfHyperlink uIPleaseclickheretoseeHyperlink = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
-            #endregion
-
-            // Click 'Please click here to see the detailed results' link
-            Mouse.Click(uIPleaseclickheretoseeHyperlink, new Point(50, 13));
+            // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
+            Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
         }
         
         /// <summary>
@@ -95,6 +56,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
+        /// ClickStartScanningButton
+        /// </summary>
+        public void ClickStartScanningButton()
+        {
+            #region Variable Declarations
+            WpfButton uIStartScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
+            #endregion
+
+            // Click 'StartScanningButton' button
+            Mouse.Click(uIStartScanningButtonButton, new Point(45, 35));
+        }
+        
+        /// <summary>
         /// ClickStartScanningNowButton
         /// </summary>
         public void ClickStartScanningNowButton()
@@ -108,31 +82,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
+        /// ClickValkyrieLink
         /// </summary>
-        public void AssertMainWindowTitleTextBlockText()
+        public void ClickValkyrieLink()
         {
             #region Variable Declarations
-            WpfText uIUnknownFileHunterText = this.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
+            WpfHyperlink uIPleaseclickheretoseeHyperlink = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
             #endregion
 
-            // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
-            Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
+            // Click 'Please click here to see the detailed results' link
+            Mouse.Click(uIPleaseclickheretoseeHyperlink, new Point(50, 13));
         }
         
         #region Properties
-        public virtual CheckIAcceptTermsOfThisAgreementCheckBoxParams CheckIAcceptTermsOfThisAgreementCheckBoxParams
-        {
-            get
-            {
-                if ((this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams == null))
-                {
-                    this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams = new CheckIAcceptTermsOfThisAgreementCheckBoxParams();
-                }
-                return this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams;
-            }
-        }
-        
         public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
         {
             get
@@ -171,28 +133,11 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #endregion
         
         #region Fields
-        private CheckIAcceptTermsOfThisAgreementCheckBoxParams mCheckIAcceptTermsOfThisAgreementCheckBoxParams;
-        
         private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
         
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'CheckIAcceptTermsOfThisAgreementCheckBox'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class CheckIAcceptTermsOfThisAgreementCheckBoxParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Select 'I accept the terms of this agreement' check box
-        /// </summary>
-        public bool UIIacceptthetermsofthiCheckBoxChecked = true;
         #endregion
     }
     
