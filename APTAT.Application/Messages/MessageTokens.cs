@@ -2,44 +2,27 @@
 
 namespace APTAT.Application.Messages
 {
-    public interface IMessage<out T>
-    {
-        T Message { get; }
-    }
-
     public enum ViewFormTypes
     {
+        StartScan,
+        StartValkyrieScan,
         Scan,
         ValkyrieScan
     }
 
-    public sealed class ChangeScreenMessageType : IMessage<ViewFormTypes>
+    public sealed class ChangeScreenMessageType
     {
         public ViewFormTypes Message { get; internal set; }
-        public bool ToClose { get; internal set; }
-    }
-
-    public sealed class ExceptionMessage
-    {
-        public ExceptionMessage(Exception ex)
-        {
-            Exception = ex;
-        }
-
-        public Exception Exception { get;  set; }
-
-        public void ShowError()
-        {
-        }
+        public Action<object> Action { get; internal set; }
     }
 
     public static class AppMessages
     {
         public static class ChangeScreenMessage
         {
-            public static void Send(ViewFormTypes messageType, bool toClose = false)
+            public static void Send(ViewFormTypes messageType, Action<object> action = null)
             {
-                MessageManager.Instance.PublishMessage(new ChangeScreenMessageType { Message = messageType, ToClose = toClose });
+                MessageManager.Instance.PublishMessage(new ChangeScreenMessageType { Message = messageType, Action = action });
             }
         }
     }

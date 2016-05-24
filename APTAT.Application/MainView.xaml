@@ -77,7 +77,7 @@
                     Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                     Style="{StaticResource LinkButton}" 
                     Content="Start Scanning Now!" FontSize="21" FontFamily="Segoe UI Light"
-                    Click="OnStartScanningClick"/>
+                    Command="{Binding StartScanCommand}"/>
 
                     </StackPanel>
 
@@ -100,8 +100,7 @@
                                FontSize="16"
                                Padding="10,20"
                                IsTabStop="True"
-                               IsEnabled="{Binding IsScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
-                               Click="OnStartScanningClick">
+                               Command="{Binding StartScanCommand}">
                     <telerik:RadButton.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -123,7 +122,7 @@
                                   Padding="10,20"
                                   FontSize="16"
                                   Click="OnStopScanClick"
-                                  IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource NullableConverter}}">
+                                  IsEnabled="{Binding IsAnyScanInProgress}">
                     <telerik:RadButton.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>

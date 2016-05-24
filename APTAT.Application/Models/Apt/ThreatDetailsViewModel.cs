@@ -200,6 +200,8 @@ namespace APTAT.Application.Models
             var badFile = file.Item1;
             var valkyrieFile = file.Item2;
 
+            if (badFile == null && valkyrieFile == null)
+                return;
 
             FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
             IsMalware = badFile != null ? badFile.IsMalware : valkyrieFile.IsMalware;

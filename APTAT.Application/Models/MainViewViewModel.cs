@@ -62,7 +62,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                return IsScanInProgress.GetValueOrDefault() || IsValkyrieScanInProgress.GetValueOrDefault();
+                return IsScanInProgress.GetValueOrDefault() || !IsScanInProgress.HasValue || IsValkyrieScanInProgress.GetValueOrDefault();
             }
         }
 
@@ -74,6 +74,11 @@ namespace APTAT.Application.Models
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
+
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    StartScanCommand.InvalidateCanExecute();
+                });
             }
         }
 
@@ -96,6 +101,11 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsValkyrieScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
                 RaisePropertyChanged("StatusBarText");
+
+                App.Current.Dispatcher.BeginInvoke((Action) delegate 
+                { 
+                    StartScanCommand.InvalidateCanExecute(); 
+                });
 
             }
         }
@@ -398,7 +408,9 @@ namespace APTAT.Application.Models
 
             _isValkyrieAnalysCompleted = false;
 
-            StartScanCommand = new DelegateCommand(InvokeStartScan);
+            StartScanCommand = new DelegateCommand(o => 
+                AppMessages.ChangeScreenMessage.Send(ViewFormTypes.StartScan, InvokeStartScan), 
+                o => !IsAnyScanInProgress);
             StopScanCommand = new DelegateCommand(InvokeStopScan);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
@@ -408,6 +420,7 @@ namespace APTAT.Application.Models
 
         private void InvokeStartScan(Object arg)
         {
+            IsQuickScan = (bool)arg;
             Items = new ObservableCollection<ThreatInfoItem>();
             ItemsValkyrie = new ObservableCollection<FileResult>();
             _cache = new Collection<ThreatInfoItem>();
@@ -431,8 +444,9 @@ namespace APTAT.Application.Models
                 _selectedTargets = value.OfType<DeploymentItem>().ToArray();
                 if (_selectedTargets.Length > 0)
                 {
-                    IsScanInProgress = null;
                     IsBusy = true;
+                    IsScanInProgress = null;
+                    
                     _login = _storage.GetValue<String>(KnownKeys.Login, false);
                     _password = _storage.GetValue<String>(KnownKeys.Password, true);
                     _tcpPort= _storage.GetValue<String>(KnownKeys.TcpPort, false);

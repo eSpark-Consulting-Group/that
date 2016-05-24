@@ -29,7 +29,7 @@ namespace APTAT.Application
         {
             get
             {
-                return _viewModel.IsScanInProgress.GetValueOrDefault() || _viewModel.IsValkyrieScanInProgress.GetValueOrDefault();
+                return _viewModel.IsAnyScanInProgress;
             }
         }
 
@@ -62,6 +62,12 @@ namespace APTAT.Application
                     break;
                 case ViewFormTypes.Scan:
                     mainContent.Content = new ScanInfoTreeView();
+                    break;
+                case ViewFormTypes.StartScan:
+                    StartScanWindow details = new StartScanWindow();
+                    details.Owner = System.Windows.Application.Current.MainWindow;
+                    if (details.ShowDialog() == true)
+                        message.Action(details.IsQuickScan);
                     break;
             }
         }
@@ -204,16 +210,7 @@ namespace APTAT.Application
             ShowRegisterToValkyrieWindow();
         }
 
-        private void OnStartScanningClick(object sender, RoutedEventArgs e)
-        {            
-            StartScanWindow details = new StartScanWindow();
-            details.Owner = System.Windows.Application.Current.MainWindow;
-            if(details.ShowDialog() == true)
-            {
-                _viewModel.IsQuickScan = details.IsQuickScan;
-                _viewModel.StartScanCommand.Execute(null);
-            }
-        }
+
 
         private ThreatInfoItem GetDataBoundItem(FrameworkElement element)
         {
