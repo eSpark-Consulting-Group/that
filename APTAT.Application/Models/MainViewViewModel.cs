@@ -78,6 +78,7 @@ namespace APTAT.Application.Models
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StartScanCommand.InvalidateCanExecute();
+                    StopScanCommand.InvalidateCanExecute();
                 });
             }
         }
@@ -104,7 +105,8 @@ namespace APTAT.Application.Models
 
                 App.Current.Dispatcher.BeginInvoke((Action) delegate 
                 { 
-                    StartScanCommand.InvalidateCanExecute(); 
+                    StartScanCommand.InvalidateCanExecute();
+                    StopScanCommand.InvalidateCanExecute();
                 });
 
             }
@@ -408,10 +410,12 @@ namespace APTAT.Application.Models
 
             _isValkyrieAnalysCompleted = false;
 
-            StartScanCommand = new DelegateCommand(o => 
-                AppMessages.ChangeScreenMessage.Send(ViewFormTypes.StartScan, InvokeStartScan), 
+            StartScanCommand = new DelegateCommand(o =>
+                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan), 
                 o => !IsAnyScanInProgress);
-            StopScanCommand = new DelegateCommand(InvokeStopScan);
+            StopScanCommand = new DelegateCommand(o =>
+                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan), 
+                o => IsAnyScanInProgress && IsScanInProgress.HasValue);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
 
@@ -436,7 +440,7 @@ namespace APTAT.Application.Models
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = false;
 
-            AppMessages.ChangeScreenMessage.Send(ViewFormTypes.Scan);
+            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Scan);
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
@@ -762,7 +766,7 @@ namespace APTAT.Application.Models
             _cacheValkyrie = new Collection<FileResult>();
             Keyword = string.Empty;
 
-            AppMessages.ChangeScreenMessage.Send(ViewFormTypes.ValkyrieScan);
+            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ValkyrieScan);
         }
 
         public void BeginValkyrieAnalysis(string camLicenseId, string camUserLogin, string camUserPassword)

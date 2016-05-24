@@ -53,21 +53,27 @@ namespace APTAT.Application
         }
 
         [MessageReceiver]
-        public void AcceptMessage(ChangeScreenMessageType message)
+        public void AcceptMessage(ChangeScreen message)
         {
             switch (message.Message)
             {
-                case ViewFormTypes.ValkyrieScan:
+                case ChangeScreenTypes.ValkyrieScan:
                     mainContent.Content = new ResultTabsControl();
                     break;
-                case ViewFormTypes.Scan:
+                case ChangeScreenTypes.Scan:
                     mainContent.Content = new ScanInfoTreeView();
                     break;
-                case ViewFormTypes.StartScan:
+                case ChangeScreenTypes.StartScan:
                     StartScanWindow details = new StartScanWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
-                    if (details.ShowDialog() == true)
+                    if (details.ShowDialog() == true && message.Action != null)
                         message.Action(details.IsQuickScan);
+                    break;
+                case ChangeScreenTypes.StopScan:
+                    ConfirmationWindow confirmation = new ConfirmationWindow();
+                    confirmation.Owner = System.Windows.Application.Current.MainWindow;
+                    if (confirmation.ShowDialog() == true && message.Action != null)
+                        message.Action(null);
                     break;
             }
         }
@@ -102,30 +108,10 @@ namespace APTAT.Application
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine,
                     total);
             }
-
-
-            //if (e.FilesStatistics.SkippedFilesCount > 0)
-            //{
-            //    scanCompletedWindow.Text.Text += String.Format("{0}- {1} Skipped(s) found", Environment.NewLine,
-            //        e.FilesStatistics.SkippedFilesCount);
-            //}
-
-
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown(s) found", Environment.NewLine,
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown(s) found", Environment.NewLine,
                     e.FilesStatistics.UnknownFilesCount);
 
 
-
-                
-
-            
-
-
-            //if (e.FilesStatistics.SafeFilesCount> 0)
-            //{
-            //    scanCompletedWindow.Text.Text += String.Format("{0}- {1} Safe(s) found", Environment.NewLine,
-            //        e.FilesStatistics.SafeFilesCount);
-            //}
             
             if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware(s) found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
 
@@ -308,60 +294,7 @@ namespace APTAT.Application
             ShowReport();
         }
 
-        private void OnStopScanClick(Object sender, RoutedEventArgs e)
-        {
-            ConfirmationWindow confirmation = new ConfirmationWindow();
-            confirmation.Owner = System.Windows.Application.Current.MainWindow;
-            
-            if(confirmation.ShowDialog() == true)
-            {
-                _viewModel.StopScanCommand.Execute(null);
-            }
-        }
-
-
-        //private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
-        //{
-        //    var row = e.Row as GridViewRow;
-        //        if (row.IsExpanded)
-        //        {
-        //            if (row != null)
-        //            {
-        //                ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
-
-        //                if (item.ScanStage == ScanStage.OperationCompleted)
-        //                {
-        //                    if (item.TempItems.Count > 0)
-        //                    {
-        //                        item.Items = item.TempItems;
-
-        //                        //if (!IsSearchPerformed)
-        //                        //{
-        //                            foreach (ThreatInfoItem subItem in item.Items)
-        //                            {
-        //                                subItem.IsCompletedSubItem = true;
-        //                            }
-        //                        //}
-        //                        //else
-        //                        //    IsSearchPerformed = false;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
-        //            if (item.Items != null)
-        //            {
-        //                foreach (ThreatInfoItem subItem in item.Items)
-        //                {
-        //                    subItem.IsCompletedSubItem = false;
-        //                }
-        //            }
-
-        //            //item.Items = null;
-        //        }            
-        //}
+        
 
         private void AboutClick(Object sender, RoutedEventArgs e)
         {

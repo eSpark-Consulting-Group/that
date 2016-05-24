@@ -121,8 +121,7 @@
                                   Margin="0,-1,0,-1"  
                                   Padding="10,20"
                                   FontSize="16"
-                                  Click="OnStopScanClick"
-                                  IsEnabled="{Binding IsAnyScanInProgress}">
+                                  Command="{Binding StopScanCommand}">
                     <telerik:RadButton.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
