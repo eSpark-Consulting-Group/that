@@ -74,6 +74,7 @@ namespace APTAT.Application
                     confirmation.Owner = System.Windows.Application.Current.MainWindow;
                     if (confirmation.ShowDialog() == true && message.Action != null)
                         message.Action(null);
+
                     break;
             }
         }

@@ -32,8 +32,12 @@ namespace APTAT.Application
 
         void EulaWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            EulaRichTextBox.BorderThickness = new Thickness(0);
+            BorderThickness = new Thickness(1);
+            BorderBrush = new SolidColorBrush(Color.FromRgb(214,212,212));
+            
             string fileName = @"Unknown File Hunter EULA (11-18-2015).rtf";
-
+            
             if (System.IO.File.Exists(fileName))
             {
                 var textRange = new TextRange(EulaRichTextBox.Document.ContentStart, EulaRichTextBox.Document.ContentEnd);
@@ -47,10 +51,16 @@ namespace APTAT.Application
 
         private void OnOkButtonClick(object sender, RoutedEventArgs e)
         {
-
             this.DialogResult = this.AgreeCheckbox.IsChecked;
             this.Close();
 
         }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            DragMove();
+        }
+
     }
 }

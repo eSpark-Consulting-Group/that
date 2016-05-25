@@ -19,7 +19,7 @@
         
         <!--<telerik:RadToolBar Margin="0,0,0,0"  IsOverflowOpen="False" GripVisibility="Collapsed"   IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed" Grid.Row="1" >
         </telerik:RadToolBar>-->
-        <telerik:RadBusyIndicator Grid.Row="1" Margin="0,60,0,0" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
+        <telerik:RadBusyIndicator Grid.Row="1" Margin="0,30,0,0" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
             <Grid>
                 
             <Border x:Name="pathSelector">

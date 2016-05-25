@@ -62,7 +62,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                return IsScanInProgress.GetValueOrDefault() || !IsScanInProgress.HasValue || IsValkyrieScanInProgress.GetValueOrDefault();
+                return IsScanInProgress.GetValueOrDefault() || IsValkyrieScanInProgress.GetValueOrDefault();
             }
         }
 
@@ -413,8 +413,8 @@ namespace APTAT.Application.Models
             _isValkyrieAnalysCompleted = false;
 
             StartScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan), 
-                o => !IsAnyScanInProgress);
+                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
+                o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan), 
                 o => IsAnyScanInProgress && IsScanInProgress.HasValue);
@@ -759,8 +759,9 @@ namespace APTAT.Application.Models
             ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
 
             IsAnalyseWithValkyrieEnabled = false;
-            ValkyrieSendingFiles = true;
             IsValkyrieScanInProgress = true;
+            ValkyrieSendingFiles = true;
+            
             IsValkyrieAnalysCompleted = false;
             UnknownFilesCount = 0;
 
