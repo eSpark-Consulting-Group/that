@@ -397,7 +397,7 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private void WaitForValkyrieResults(TestContext testContext)
         {
-            int waitTime = Settings.WaitingTime.Default.ValkyrieUploadWaitTime;
+            int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
             UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
             UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
             

@@ -25,7 +25,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("600000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1200000")]
         public int QuickScanWaitTime {
             get {
                 return ((int)(this["QuickScanWaitTime"]));
@@ -34,10 +34,10 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("600000")]
-        public int ValkyrieUploadWaitTime {
+        [global::System.Configuration.DefaultSettingValueAttribute("1200000")]
+        public int ValkyrieAnalysisWaitTime {
             get {
-                return ((int)(this["ValkyrieUploadWaitTime"]));
+                return ((int)(this["ValkyrieAnalysisWaitTime"]));
             }
         }
         
@@ -52,7 +52,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60000")]
         public int LaunchAppWaitTime {
             get {
                 return ((int)(this["LaunchAppWaitTime"]));
