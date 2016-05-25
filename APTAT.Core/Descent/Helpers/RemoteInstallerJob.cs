@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Threading;
 using APTAT.Core.Descent.Transport;
-using APTAT.Core.Messages;
 using APTAT.Core.Properties;
 
 namespace APTAT.Core.Descent.Helpers

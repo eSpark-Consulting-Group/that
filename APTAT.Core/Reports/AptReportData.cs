@@ -386,6 +386,7 @@ namespace APTAT.Core.Reports
                                             mergedMalwareCount++;
                                             break;
                                         case CloudVerdict.FailedToAnalyze:
+                                        case CloudVerdict.ServerError:
                                             break;
                                         default:
                                             throw new ArgumentOutOfRangeException();
@@ -420,7 +421,6 @@ namespace APTAT.Core.Reports
                                 mergedMalwareCount++;
                                 break;
                             case CloudVerdict.FailedToAnalyze:
-                                break;
                             case CloudVerdict.ServerError:
                                 break;
 
@@ -729,6 +729,7 @@ namespace APTAT.Core.Reports
                     case CloudVerdict.FirstSeen:
                         return "Unknown (FirstSeen)";
                     case CloudVerdict.FailedToAnalyze:
+                    case CloudVerdict.ServerError:
                         return "Error";
                     default:
                         throw new ArgumentOutOfRangeException();

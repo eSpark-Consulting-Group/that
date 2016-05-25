@@ -75,6 +75,8 @@
     <Compile Include="Descent\Apt\AptReportData.cs" />
     <Compile Include="Descent\Apt\AptScanCompletedEventArgs.cs" />
     <Compile Include="Descent\Apt\AptDescentScanner.cs" />
+    <Compile Include="Descent\Helpers\IDescentCallback.cs" />
+    <Compile Include="Descent\Helpers\RemoteHostInfo.cs" />
     <Compile Include="Descent\Helpers\RemoteInstallerJob.cs" />
     <Compile Include="Descent\OperationProgressChangedEventArgs.cs" />
     <Compile Include="Descent\Scanner.cs" />

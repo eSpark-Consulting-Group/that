@@ -1,30 +1,15 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Security.Permissions;
 using System.Threading;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
-using APTAT.Core.Properties;
 using APTAT.Core.Descent.Transport;
+using APTAT.Core.Properties;
 
-namespace APTAT.Core.Descent
+namespace APTAT.Core.Descent.Helpers
 {
-    public struct RemoteHostInfo
-    {
-        public string HostName;
-        public string Login;
-        public string Password;
-        public Guid TargetUid;
-    };
-
-    public interface IDescentCallback
-    {
-        void OnDescentCallback(DescentStatus status, int win32Error, string response);
-        void SetDescentThread();
-        bool IsCompleted { get; }
-    }
-
     public class DescentMod
     {
         private static TaskFactory _taskFactory;
@@ -78,28 +63,6 @@ namespace APTAT.Core.Descent
         {
             FormattedText formattedText = new FormattedText(resourceMessage);
             _tracker.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(computerUid, hostName, operationUid, formattedText, scanStage, totalFilesCount, unknownFilesCount, malwaresCount, safeFilesCount, percentage, errorFilesCount, failedAtNodeCount)), false);
-        }
-
-        [SecurityPermissionAttribute(SecurityAction.Demand, ControlThread = true)]
-        public void AbortThreadByTargetUid(Guid uid)
-        {
-            Thread thread;
-            if(_threads.TryGetValue(uid, out thread))
-            {
-                if (thread != null)
-                {
-                    try
-                    {
-                        thread.Abort(true);
-                    }
-                    catch (ThreadStateException ex)
-                    {
-                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Thread abort exception occurred: {0}", ex);
-                        throw new InvalidOperationException("Cannot stop operation.");
-                    }
-                    
-                }
-            }
         }
 
         public void AbortAllThreads()
@@ -227,7 +190,7 @@ namespace APTAT.Core.Descent
                     dh.ScanProgressChanged -= onScanProgressChanged;
                     dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
-//                    var text = new ResourceText("null", String.Format("Scan completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}. Errors count {3}. Server error {4}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.NetworkErrorFilesCount, args.FailedAtNodeCount));
+                    //var text = new ResourceText("null", String.Format("Scan completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}. Errors count {3}. Server error {4}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.NetworkErrorFilesCount, args.FailedAtNodeCount));
                     string errorCounterText = args.NetworkErrorFilesCount > 0 ? String.Format("Failed to analyze count: {0}", args.NetworkErrorFilesCount) : String.Empty;
 
                     string serverErrorCounterText = args.FailedAtNodeCount > 0 ? String.Format("Server error count: {0}", args.FailedAtNodeCount) : String.Empty;
