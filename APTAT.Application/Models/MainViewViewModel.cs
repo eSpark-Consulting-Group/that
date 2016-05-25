@@ -231,6 +231,8 @@ namespace APTAT.Application.Models
             }
         }
 
+        public int TotalItemsCount { get; set; }
+
         public Boolean IsDetailsEnabled
         {
             get { return SelectedItem != null && !SelectedItem.IsRootItem; }
@@ -675,12 +677,12 @@ namespace APTAT.Application.Models
 
 
             var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
-            List<ThreatInfoItem> result = new List<ThreatInfoItem>(items.Length);
 
-
+            Set(() => TotalItemsCount, items.Count());
 
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
+
 
             _cache = new Collection<ThreatInfoItem>(items);
             Items = new ObservableCollection<ThreatInfoItem>(
@@ -690,7 +692,7 @@ namespace APTAT.Application.Models
 
             foreach (ThreatInfoItem item in _cache)
             {
-                if (item.IsOnline == false)
+                if (!item.IsOnline)
                 {
                     item.StatusMessage = "This computer is not accessible";
                 }
