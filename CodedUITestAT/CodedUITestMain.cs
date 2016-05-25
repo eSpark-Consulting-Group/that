@@ -176,7 +176,7 @@ namespace CodedUITestAT
         
         #region Main screen
 
-        private WpfWindow MainWindow()
+        internal WpfWindow MainWindow()
         {
             return UIMapMain.UIUnknownFileHunterWindow;
         }
@@ -573,7 +573,7 @@ namespace CodedUITestAT
             if (StartScanningButton().Enabled) TestContext.WriteLine("Start Scanning button is enabled by default.\n");
             else Assert.Fail("Start Scanning button is disabled by default!\n");
 
-            if (!StopScanningButton().Enabled) TestContext.WriteLine("Start Scanning button is disabled by default.\n");
+            if (!StopScanningButton().Enabled) TestContext.WriteLine("Stop Scanning button is disabled by default.\n");
             else Assert.Fail("Stop Scanning button is enabled by default!\n");
 
             if (!AnalyseWithValkyrieButton().Enabled) TestContext.WriteLine("'Analyse with Valkyrie' button is disabled by default.\n");

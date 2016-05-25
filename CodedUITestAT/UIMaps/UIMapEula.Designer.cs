@@ -178,6 +178,19 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
             Assert.AreEqual(this.AssertEulaTextExpectedValues.UIEulaRichTextBoxEditText, uIEulaRichTextBoxEdit.Text);
         }
         
+        /// <summary>
+        /// ClickCancelButton
+        /// </summary>
+        public void ClickCancelButton()
+        {
+            #region Variable Declarations
+            WpfButton uICancelButton = this.UICOMODOUnknownFileHunWindow.UICancelButton;
+            #endregion
+
+            // Click 'Cancel' button
+            Mouse.Click(uICancelButton, new Point(38, 10));
+        }
+        
         #region Properties
         public virtual CheckIAcceptTermsOfThisAgreementCheckBoxParams CheckIAcceptTermsOfThisAgreementCheckBoxParams
         {
@@ -755,6 +768,22 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
                 return this.mUIItemPane;
             }
         }
+        
+        public WpfButton UICancelButton
+        {
+            get
+            {
+                if ((this.mUICancelButton == null))
+                {
+                    this.mUICancelButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICancelButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CancelButton";
+                    this.mUICancelButton.WindowTitles.Add("COMODO Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICancelButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -763,6 +792,8 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
         private WpfButton mUIContinueButton;
         
         private UIItemPane mUIItemPane;
+        
+        private WpfButton mUICancelButton;
         #endregion
     }
     

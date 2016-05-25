@@ -77,12 +77,10 @@ namespace CodedUITestAT
             UIMapEula.AssertEulaText();
             TestContext.WriteLine("EULA text is correct.\n");
 
-            UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
-            UIMapEula.ClickContinueButton();
-
+            UIMapEula.ClickCancelButton();
             CodedUITestMain useMain = new CodedUITestMain();
-            UIHelper.WaitForControlIsEnabled(useMain.StartScanningButton());
-            TestContext.WriteLine("Main screen appeared.\n");
+            if (!useMain.MainWindow().Exists) TestContext.WriteLine("Application EULA window was successfully closed using Cancel button.\n");
+            else Assert.Fail("Application EULA window was not closed after clicking Cancel button!");
         }
 
         #endregion
