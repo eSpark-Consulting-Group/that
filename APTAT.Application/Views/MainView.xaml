@@ -12,7 +12,7 @@
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                   d:DesignHeight="760" d:DesignWidth="1200"
                  
-	                Title="APT Assesment Tool" Background="White">
+	                Background="White">
 
     <Grid>
         <Grid.Resources>

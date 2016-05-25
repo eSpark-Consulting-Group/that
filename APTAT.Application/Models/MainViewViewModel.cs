@@ -10,8 +10,8 @@ using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
 using APTAT.Core;
 using APTAT.Core.Valkyrie;
-using APTAT.Application.Helpers;
 using APTAT.Application.Messages;
+using APTAT.Application.Extensions;
 
 namespace APTAT.Application.Models
 {

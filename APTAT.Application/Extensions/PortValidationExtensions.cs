@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace APTAT.Application
+namespace APTAT.Application.Extensions
 {
-    public static class PortValidators
+    public static class PortValidationExtensions
     {
-        public static string ValidateTCP(string value, out bool hasError)
+        public static string ValidateTCP(this string value, out bool hasError)
         {            
             hasError = false;
             Int32 i = 0;
@@ -29,7 +26,7 @@ namespace APTAT.Application
         }
 
 
-        public static string ValidateUDP(string value, out bool hasError)
+        public static string ValidateUDP(this string value, out bool hasError)
         {
             hasError = false;
             Int32 i = 0;

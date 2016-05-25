@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace APTAT.Application.Helpers
+namespace APTAT.Application.Extensions
 {
-    public static class SearchHelper
+    public static class SearchExtensions
     {
         public static bool ContainsString(this string target, string value)
         {

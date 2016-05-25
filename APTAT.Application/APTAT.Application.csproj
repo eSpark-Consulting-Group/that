@@ -128,17 +128,16 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CamCredentialsWindow.xaml.cs">
+    <Compile Include="Services\ServicesComposition.cs" />
+    <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CancelItemArgs.cs" />
     <Compile Include="BannerUserControl.xaml.cs">
       <DependentUpon>BannerUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfirmationWindow.xaml.cs">
+    <Compile Include="Views\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CollapseTreeViewAction.cs" />
     <Compile Include="Controls\RadMaskedTextBoxEx.cs" />
     <Compile Include="Controls\RadMaskedTextBoxUpdateSourceBehavior.cs" />
     <Compile Include="Converters\EmptyStringToBoolConverter.cs" />
@@ -156,45 +155,38 @@
     <Compile Include="Services\WmiService.cs" />
     <Compile Include="Services\IWmiService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
-    <Compile Include="TitleUpdater.cs" />
-    <Compile Include="Helpers\PortValidators.cs" />
-    <Compile Include="ValkyrieDetailsView.xaml.cs">
+    <Compile Include="Extensions\PortValidationExtensions.cs" />
+    <Compile Include="Controls\TitleUpdater.cs" />
+    <Compile Include="Views\ValkyrieDetailsView.xaml.cs">
       <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ValkyrieDetailsWindow.xaml.cs">
+    <Compile Include="Views\ValkyrieDetailsWindow.xaml.cs">
       <DependentUpon>ValkyrieDetailsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ErrorLogWindow.xaml.cs">
-      <DependentUpon>ErrorLogWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ErrorWindow.xaml.cs">
+    <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EulaWindow.xaml.cs">
+    <Compile Include="Views\EulaWindow.xaml.cs">
       <DependentUpon>EulaWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logger.cs" />
-    <Compile Include="Models\ModelBase\DelegateCommand.cs" />
     <Compile Include="Models\Directory\IpAddressItem.cs" />
     <Compile Include="Models\Directory\OperationContext.cs" />
-    <Compile Include="Models\RegisterWithMachineIdResponse.cs" />
     <Compile Include="Models\ReportViewModel.cs" />
     <Compile Include="Models\Directory\StartScanByIpViewModel.cs" />
     <Compile Include="Models\Directory\StartScanDomainViewModel.cs" />
     <Compile Include="Models\Directory\StartScanWorkgroupViewModel.cs" />
     <Compile Include="Models\ValkyrieRegistrationModel.cs" />
     <Compile Include="Models\ModelBase\WizardViewModel.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ReportView.xaml.cs">
+    <Compile Include="Views\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReportWindow.xaml.cs">
+    <Compile Include="Views\ReportWindow.xaml.cs">
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ResultTabsControl.xaml.cs">
+    <Compile Include="Views\ResultTabsControl.xaml.cs">
       <DependentUpon>ResultTabsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScanCompletedWindow.xaml.cs">
+    <Compile Include="Views\ScanCompletedWindow.xaml.cs">
       <DependentUpon>ScanCompletedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToOpacityConverter.cs" />
@@ -206,11 +198,11 @@
     <Compile Include="Models\Apt\ScanResultItem.cs" />
     <Compile Include="Models\Apt\BadFileItem.cs" />
     <Compile Include="Converters\NullableConverter.cs" />
-    <Compile Include="ScanInfoTreeView.xaml.cs">
+    <Compile Include="Views\ScanInfoTreeView.xaml.cs">
       <DependentUpon>ScanInfoTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\SearchHelper.cs" />
-    <Compile Include="SelectorButton.cs" />
+    <Compile Include="Extensions\SearchExtensions.cs" />
+    <Compile Include="Controls\SelectorButton.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\ModelBase\BasePage.cs" />
     <Compile Include="Models\Directory\DirectoryItem.cs" />
@@ -220,40 +212,39 @@
     <Compile Include="Services\StorageService.cs" />
     <Compile Include="Models\Apt\ThreatDetailsViewModel.cs" />
     <Compile Include="Models\Apt\ThreatInfoItem.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StartScanByIpView.xaml.cs">
+    <Compile Include="Views\StartScanByIpView.xaml.cs">
       <DependentUpon>StartScanByIpView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StartScanDomainView.xaml.cs">
+    <Compile Include="Views\StartScanDomainView.xaml.cs">
       <DependentUpon>StartScanDomainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StartScanView.xaml.cs">
+    <Compile Include="Views\StartScanView.xaml.cs">
       <DependentUpon>StartScanView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StartScanWindow.xaml.cs">
+    <Compile Include="Views\StartScanWindow.xaml.cs">
       <DependentUpon>StartScanWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StartScanWorkgroupView.xaml.cs">
+    <Compile Include="Views\StartScanWorkgroupView.xaml.cs">
       <DependentUpon>StartScanWorkgroupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplateSelectors\MainViewNameTemplateSelector.cs" />
     <Compile Include="TemplateSelectors\ValkyrieNameTemplateSelector.cs" />
-    <Compile Include="TextEntryListView.xaml.cs">
+    <Compile Include="Views\TextEntryListView.xaml.cs">
       <DependentUpon>TextEntryListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ThreatDetailsView.xaml.cs">
+    <Compile Include="Views\ThreatDetailsView.xaml.cs">
       <DependentUpon>ThreatDetailsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ThreatDetailsWindow.xaml.cs">
+    <Compile Include="Views\ThreatDetailsWindow.xaml.cs">
       <DependentUpon>ThreatDetailsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ValkyrieResultUserControl.xaml.cs">
+    <Compile Include="Views\ValkyrieResultUserControl.xaml.cs">
       <DependentUpon>ValkyrieResultUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WindowExtensions.cs" />
+    <Compile Include="Extensions\WindowExtensions.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -262,7 +253,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="CamCredentialsWindow.xaml">
+    <Page Include="Views\CamCredentialsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -270,47 +261,43 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfirmationWindow.xaml">
+    <Page Include="Views\ConfirmationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ValkyrieDetailsView.xaml">
+    <Page Include="Views\ValkyrieDetailsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ValkyrieDetailsWindow.xaml">
+    <Page Include="Views\ValkyrieDetailsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ErrorLogWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ErrorWindow.xaml">
+    <Page Include="Views\ErrorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EulaWindow.xaml">
+    <Page Include="Views\EulaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReportView.xaml">
+    <Page Include="Views\ReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReportWindow.xaml">
+    <Page Include="Views\ReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResultTabsControl.xaml">
+    <Page Include="Views\ResultTabsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ScanCompletedWindow.xaml">
+    <Page Include="Views\ScanCompletedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainView.xaml">
+    <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -322,34 +309,34 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainView.xaml.cs">
+    <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ScanInfoTreeView.xaml">
+    <Page Include="Views\ScanInfoTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Views\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StartScanByIpView.xaml">
+    <Page Include="Views\StartScanByIpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StartScanDomainView.xaml">
+    <Page Include="Views\StartScanDomainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StartScanView.xaml">
+    <Page Include="Views\StartScanView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StartScanWindow.xaml">
+    <Page Include="Views\StartScanWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -357,23 +344,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="StartScanWorkgroupView.xaml">
+    <Page Include="Views\StartScanWorkgroupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TextEntryListView.xaml">
+    <Page Include="Views\TextEntryListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ThreatDetailsView.xaml">
+    <Page Include="Views\ThreatDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ThreatDetailsWindow.xaml">
+    <Page Include="Views\ThreatDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ValkyrieResultUserControl.xaml">
+    <Page Include="Views\ValkyrieResultUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

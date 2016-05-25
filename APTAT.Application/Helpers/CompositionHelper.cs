@@ -131,13 +131,6 @@ namespace APTAT.Application.Helpers
             _container.Register<TIService, TService>();
         }
 
-        public void RegisterSingleton<TIService, TService>()
-            where TIService : class
-            where TService : class, TIService
-        {
-            _container.Register<TIService, TService>(Lifestyle.Singleton);
-        }
-
         public void Verify()
         {
             _container.Verify();

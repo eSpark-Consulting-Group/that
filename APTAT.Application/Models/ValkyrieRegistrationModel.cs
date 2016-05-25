@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using APTAT.Application.Annotations;
 
 namespace APTAT.Application.Models
 {
-    public class ValkyrieRegistrationModel : IDataErrorInfo, INotifyPropertyChanged
+    public class ValkyrieRegistrationModel : ViewModel, IDataErrorInfo
     {
         private string _licenseId;
         private string _userName;
@@ -18,7 +17,7 @@ namespace APTAT.Application.Models
             set
             {
                 _licenseId = value;
-                OnPropertyChanged("LicenseId");
+                RaisePropertyChanged("LicenseId");
             }
         }
 
@@ -28,7 +27,7 @@ namespace APTAT.Application.Models
             set
             {
                 _userName = value;
-                OnPropertyChanged("UserName");
+                RaisePropertyChanged("UserName");
             }
         }
 
@@ -38,7 +37,7 @@ namespace APTAT.Application.Models
             set
             {
                 _password = value;
-                OnPropertyChanged("Password");
+                RaisePropertyChanged("Password");
             }
         }
 
@@ -48,7 +47,7 @@ namespace APTAT.Application.Models
             set
             {
                 _errorMessage = value;
-                OnPropertyChanged("ErrorMessage");
+                RaisePropertyChanged("ErrorMessage");
             }
         }
 
@@ -151,25 +150,14 @@ namespace APTAT.Application.Models
         public bool ValidateModel()
         {
             IsValidationMode = true;
-            OnPropertyChanged("UserName");
-            OnPropertyChanged("Password");
-            OnPropertyChanged("LicenseId");
+            RaisePropertyChanged("UserName");
+            RaisePropertyChanged("Password");
+            RaisePropertyChanged("LicenseId");
             IsValidationMode = false;
             return FormValidation();
         }
         
         #endregion
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
 
     }
 }

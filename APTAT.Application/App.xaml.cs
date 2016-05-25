@@ -68,16 +68,7 @@ namespace APTAT.Application
             Trace.WriteLine(String.Format("APTAT Tool {0} started : {1}", version, DateTime.UtcNow));
             Trace.Flush();
 
-            CompositionHelper.Instance.Register<ITargetsDiscoveryService, TargetsDiscoveryService>();
-            CompositionHelper.Instance.Register<IAptService, AptService>();
-            CompositionHelper.Instance.Register<IStorageService, StorageService>();
-            CompositionHelper.Instance.Register<IWmiService, WmiService>();
-
-            CompositionHelper.Instance.Verify();
-
-            //Application.Properties.Settings.Default.ProxyLogin = "";
-            //Application.Properties.Settings.Default.ProxyPassword = "";
-            //Application.Properties.Settings.Default.Save();
+            ServicesComposition.Init();
         }
 
         private static void InitTraceListener()

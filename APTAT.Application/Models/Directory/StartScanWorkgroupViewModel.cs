@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Telerik.Windows.Controls;
+using APTAT.Application.Extensions;
+
 
 namespace APTAT.Application.Models
 {
@@ -106,7 +108,7 @@ namespace APTAT.Application.Models
             {
                 _tcpPort = value;
                 bool hasError = false;
-                var errorMessage = PortValidators.ValidateTCP(value, out hasError);
+                var errorMessage = value.ValidateTCP(out hasError);
                 if (hasError)
                 {
                     RaiseValidationError("TcpPort", errorMessage);
@@ -126,7 +128,7 @@ namespace APTAT.Application.Models
             {
                 _udpPort = value;
                 bool hasError = false;
-                var errorMessage = PortValidators.ValidateUDP(value, out hasError);
+                var errorMessage = value.ValidateUDP(out hasError);
                 if (hasError)
                 {
                     RaiseValidationError("UdpPort", errorMessage);
@@ -185,7 +187,7 @@ namespace APTAT.Application.Models
                 }
 
                 bool isTcpPortHasError = false;
-                var msgTcp = PortValidators.ValidateTCP(TcpPort, out isTcpPortHasError);
+                var msgTcp = TcpPort.ValidateTCP(out isTcpPortHasError);
                 if (isTcpPortHasError)
                 {
                     Error = msgTcp;
@@ -193,7 +195,7 @@ namespace APTAT.Application.Models
                 }
 
                 bool isUdpPortHasError = false;
-                var msgUdp = PortValidators.ValidateUDP(UdpPort, out isUdpPortHasError);
+                var msgUdp = UdpPort.ValidateUDP(out isUdpPortHasError);
                 if (isUdpPortHasError)
                 {
                     Error = msgUdp;

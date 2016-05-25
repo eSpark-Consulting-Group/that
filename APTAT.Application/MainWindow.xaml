@@ -40,7 +40,7 @@
                 </Grid>
             </Border>
 
-            <Frame x:Name="MainFrame" Source="/MainView.xaml"  Background="#CEE0F9" NavigationUIVisibility="Hidden"  Grid.Row="1" >
+            <Frame x:Name="MainFrame" Source="/Views/MainView.xaml"  Background="#CEE0F9" NavigationUIVisibility="Hidden"  Grid.Row="1" >
             </Frame>
         </Grid>
     </Border>
