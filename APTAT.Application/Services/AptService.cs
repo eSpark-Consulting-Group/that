@@ -74,7 +74,7 @@ namespace APTAT.Application.Services
                     handler(this, e);
                 }
             };
-            App.Current.Dispatcher.BeginInvoke(action);
+            App.Current.Dispatcher.Invoke(action);
         }
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)

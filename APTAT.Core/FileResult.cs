@@ -8,7 +8,7 @@ using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Core
 {
-    public class FileResult
+    public class FileResult : IEquatable<FileResult>
     {
         public FileResult(Module badFile)
         {
@@ -159,6 +159,11 @@ namespace APTAT.Core
         public override string ToString()
         {
             return Name;
+        }
+
+        public bool Equals(FileResult other)
+        {
+            return Sha1 == other.Sha1 && ValkyrieAnalysisResult != null && other.ValkyrieAnalysisResult != null;
         }
     }
 }

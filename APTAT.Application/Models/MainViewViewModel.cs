@@ -624,7 +624,8 @@ namespace APTAT.Application.Models
 
                 foreach (var result in info.Results)
                 {
-                    ItemsValkyrie.Add(result);
+                    if (result.ValkyrieAnalysisResult != null)
+                        ItemsValkyrie.Add(result);
                 }
             }
         }
@@ -941,16 +942,6 @@ namespace APTAT.Application.Models
 
             if (_cache.Any())
             {
-                /*foreach (ThreatInfoItem threatInfoItem in Items)
-                {
-                    if (threatInfoItem.Items != null)
-                    {
-                        foreach (ThreatInfoItem item in threatInfoItem.Items)
-                        {
-                            item.IsCompletedSubItem = false;
-                        }
-                    }
-                }*/
                 Items = new ObservableCollection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
 
