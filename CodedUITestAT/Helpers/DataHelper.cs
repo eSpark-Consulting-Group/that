@@ -11,6 +11,9 @@ namespace CodedUITestAT
         /// <summary> Default waiting time for tests. </summary>
         internal const int DefaultWaitTime = 15000; // Milliseconds
 
+        /// <summary> Timeout for long-lasting tests. </summary>
+        internal const int LongTestTimeout = 3600000; // Milliseconds
+
         #endregion
 
         #region Environment variables

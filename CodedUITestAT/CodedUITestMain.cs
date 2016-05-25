@@ -433,7 +433,7 @@ namespace CodedUITestAT
 
         #region Test methods
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -505,7 +505,7 @@ namespace CodedUITestAT
             }
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void WorkgroupQuickScanAndThreatDetailsCheckTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
