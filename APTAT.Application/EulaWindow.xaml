@@ -9,7 +9,7 @@
 
 
       <Grid.RowDefinitions>
-        <RowDefinition Height="10"></RowDefinition>
+        <RowDefinition Height="0"></RowDefinition>
         <RowDefinition Height="58"></RowDefinition>
         <RowDefinition Height="*"></RowDefinition>
         <RowDefinition Height="Auto"></RowDefinition>
@@ -36,8 +36,12 @@
                   x:Name="AgreeCheckbox"  Grid.Column="0"
                   Content="I accept the terms of this agreement" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
 
+        <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
         <Button AutomationProperties.AutomationId="ContinueButton"
-                Grid.Column="1" HorizontalAlignment="Right" IsEnabled="{Binding ElementName=AgreeCheckbox, Path=IsChecked}"  Content="Continue" Click="OnOkButtonClick" Height="23" Width="75"></Button>
+                 IsEnabled="{Binding ElementName=AgreeCheckbox, Path=IsChecked}"  Content="Continue" Click="OnOkButtonClick" Height="23" Width="75" />
+          <Button AutomationProperties.AutomationId="CancelButton" Margin="15,0,0,0"
+                 Content="Cancel" Click="OnOkButtonClick" Height="23" Width="75" />
+        </StackPanel>
       </Grid>
 
 
