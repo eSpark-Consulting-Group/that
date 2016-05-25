@@ -38,14 +38,13 @@ namespace CodedUITestAT
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
-            UIHelper.WaitForControlIsEnabled(IAcceptTermsOfThisAgreementCheckBox());
+            SysHelper.StartApplication();
         }
 
         [TestCleanup]
         public void ATTestCleanup()
         {
-            SysHelper.KillProcesses(Settings.General.Default.ATApplicationProcessName);
+            SysHelper.StopApplication();
         }
 
         #endregion

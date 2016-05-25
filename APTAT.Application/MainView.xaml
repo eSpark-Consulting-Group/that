@@ -67,7 +67,7 @@
                     <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
                    HorizontalAlignment="Center">
 
-                        <TextBlock Text="There are no scans have been performed yet."
+                        <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="There are no scans have been performed yet."
                    Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}"
                    FontSize="21"
                    FontFamily="Segoe UI Light"/>
@@ -207,6 +207,7 @@
             </telerik:RadToolBar>
 
             <Controls:RadMaskedTextBoxEx 
+                AutomationProperties.AutomationId="SearchBox"
                 Style="{StaticResource SearchBoxStyle}"
                 AcceptReturn="False"
                 x:Name="SearchTextBox" 

@@ -94,6 +94,110 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Mouse.Click(uIPleaseclickheretoseeHyperlink, new Point(50, 13));
         }
         
+        /// <summary>
+        /// AssertMainWindow - Use 'AssertMainWindowExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMainWindow()
+        {
+            #region Variable Declarations
+            WpfWindow uIUnknownFileHunterWindow = this.UIUnknownFileHunterWindow;
+            #endregion
+
+            // Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
+            Assert.AreEqual(this.AssertMainWindowExpectedValues.UIUnknownFileHunterWindowExists, uIUnknownFileHunterWindow.Exists);
+        }
+        
+        /// <summary>
+        /// ClickResizeButton
+        /// </summary>
+        public void ClickResizeButton()
+        {
+            #region Variable Declarations
+            WpfButton uIResizeButtonButton = this.UIUnknownFileHunterWindow.UIResizeButtonButton;
+            #endregion
+
+            // Click 'ResizeButton' button
+            Mouse.Click(uIResizeButtonButton, new Point(21, 19));
+        }
+        
+        /// <summary>
+        /// ClickCloseButton
+        /// </summary>
+        public void ClickCloseButton()
+        {
+            #region Variable Declarations
+            WpfButton uICloseButtonButton = this.UIUnknownFileHunterWindow.UICloseButtonButton;
+            #endregion
+
+            // Click 'CloseButton' button
+            Mouse.Click(uICloseButtonButton, new Point(13, 10));
+        }
+        
+        /// <summary>
+        /// ClickMinimizeButton
+        /// </summary>
+        public void ClickMinimizeButton()
+        {
+            #region Variable Declarations
+            WpfButton uIMinimizeButtonButton = this.UIUnknownFileHunterWindow.UIMinimizeButtonButton;
+            #endregion
+
+            // Click 'MinimizeButton' button
+            Mouse.Click(uIMinimizeButtonButton, new Point(21, 21));
+        }
+        
+        /// <summary>
+        /// ClickStopScanningButton
+        /// </summary>
+        public void ClickStopScanningButton()
+        {
+            #region Variable Declarations
+            WpfButton uIStopScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
+            #endregion
+
+            // Click 'StopScanningButton' button
+            Mouse.Click(uIStopScanningButtonButton, new Point(58, 36));
+        }
+        
+        /// <summary>
+        /// ClickReportsDropDownButton
+        /// </summary>
+        public void ClickReportsDropDownButton()
+        {
+            #region Variable Declarations
+            WpfButton uIReportButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIReportButtonButton;
+            #endregion
+
+            // Click 'ReportButton' button
+            Mouse.Click(uIReportButtonButton, new Point(52, 34));
+        }
+        
+        /// <summary>
+        /// ClickAboutButton
+        /// </summary>
+        public void ClickAboutButton()
+        {
+            #region Variable Declarations
+            WpfButton uISystemWindowsControlButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
+            #endregion
+
+            // Click 'System.Windows.Controls.Grid' button
+            Mouse.Click(uISystemWindowsControlButton, new Point(39, 17));
+        }
+        
+        /// <summary>
+        /// AssertNoScansTextBlockText - Use 'AssertNoScansTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertNoScansTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uITherearenoscanshavebText = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UITherearenoscanshavebText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'There are no scans have been performed yet.' label equals 'There are no scans have been performed yet.'
+            Assert.AreEqual(this.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText, uITherearenoscanshavebText.DisplayText);
+        }
+        
         #region Properties
         public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
         {
@@ -104,6 +208,30 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                     this.mAssertMainWindowTitleTextBlockTextExpectedValues = new AssertMainWindowTitleTextBlockTextExpectedValues();
                 }
                 return this.mAssertMainWindowTitleTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertMainWindowExpectedValues AssertMainWindowExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMainWindowExpectedValues == null))
+                {
+                    this.mAssertMainWindowExpectedValues = new AssertMainWindowExpectedValues();
+                }
+                return this.mAssertMainWindowExpectedValues;
+            }
+        }
+        
+        public virtual AssertNoScansTextBlockTextExpectedValues AssertNoScansTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertNoScansTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertNoScansTextBlockTextExpectedValues = new AssertNoScansTextBlockTextExpectedValues();
+                }
+                return this.mAssertNoScansTextBlockTextExpectedValues;
             }
         }
         
@@ -135,6 +263,10 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #region Fields
         private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
         
+        private AssertMainWindowExpectedValues mAssertMainWindowExpectedValues;
+        
+        private AssertNoScansTextBlockTextExpectedValues mAssertNoScansTextBlockTextExpectedValues;
+        
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
@@ -153,6 +285,36 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
         /// </summary>
         public string UIUnknownFileHunterTextDisplayText = "Unknown File Hunter";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMainWindow'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertMainWindowExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
+        /// </summary>
+        public bool UIUnknownFileHunterWindowExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertNoScansTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertNoScansTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'There are no scans have been performed yet.' label equals 'There are no scans have been performed yet.'
+        /// </summary>
+        public string UITherearenoscanshavebTextDisplayText = "There are no scans have been performed yet.";
         #endregion
     }
     
@@ -251,12 +413,66 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIUnknownFileHunterText;
             }
         }
+        
+        public WpfButton UIResizeButtonButton
+        {
+            get
+            {
+                if ((this.mUIResizeButtonButton == null))
+                {
+                    this.mUIResizeButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIResizeButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ResizeButton";
+                    this.mUIResizeButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIResizeButtonButton;
+            }
+        }
+        
+        public WpfButton UICloseButtonButton
+        {
+            get
+            {
+                if ((this.mUICloseButtonButton == null))
+                {
+                    this.mUICloseButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICloseButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CloseButton";
+                    this.mUICloseButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICloseButtonButton;
+            }
+        }
+        
+        public WpfButton UIMinimizeButtonButton
+        {
+            get
+            {
+                if ((this.mUIMinimizeButtonButton == null))
+                {
+                    this.mUIMinimizeButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIMinimizeButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "MinimizeButton";
+                    this.mUIMinimizeButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIMinimizeButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
         private UIMainViewxamlPane mUIMainViewxamlPane;
         
         private WpfText mUIUnknownFileHunterText;
+        
+        private WpfButton mUIResizeButtonButton;
+        
+        private WpfButton mUICloseButtonButton;
+        
+        private WpfButton mUIMinimizeButtonButton;
         #endregion
     }
     
@@ -366,12 +582,66 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIAnalyseWithValkyrieBButton;
             }
         }
+        
+        public WpfButton UIStopScanningButtonButton
+        {
+            get
+            {
+                if ((this.mUIStopScanningButtonButton == null))
+                {
+                    this.mUIStopScanningButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIStopScanningButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "StopScanningButton";
+                    this.mUIStopScanningButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIStopScanningButtonButton;
+            }
+        }
+        
+        public WpfButton UIReportButtonButton
+        {
+            get
+            {
+                if ((this.mUIReportButtonButton == null))
+                {
+                    this.mUIReportButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIReportButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ReportsDropDownButton";
+                    this.mUIReportButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIReportButtonButton;
+            }
+        }
+        
+        public WpfButton UISystemWindowsControlButton
+        {
+            get
+            {
+                if ((this.mUISystemWindowsControlButton == null))
+                {
+                    this.mUISystemWindowsControlButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUISystemWindowsControlButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "AboutButton";
+                    this.mUISystemWindowsControlButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUISystemWindowsControlButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUIStartScanningButtonButton;
         
         private WpfButton mUIAnalyseWithValkyrieBButton;
+        
+        private WpfButton mUIStopScanningButtonButton;
+        
+        private WpfButton mUIReportButtonButton;
+        
+        private WpfButton mUISystemWindowsControlButton;
         #endregion
     }
     
@@ -440,10 +710,28 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIStartScanningNowButton;
             }
         }
+        
+        public WpfText UITherearenoscanshavebText
+        {
+            get
+            {
+                if ((this.mUITherearenoscanshavebText == null))
+                {
+                    this.mUITherearenoscanshavebText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUITherearenoscanshavebText.SearchProperties[WpfText.PropertyNames.AutomationId] = "NoScansTextBlock";
+                    this.mUITherearenoscanshavebText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUITherearenoscanshavebText;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUIStartScanningNowButton;
+        
+        private WpfText mUITherearenoscanshavebText;
         #endregion
     }
 }

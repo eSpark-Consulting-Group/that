@@ -10,6 +10,21 @@ namespace CodedUITestAT
     /// <summary> Contains methods for work with OS, processes, services, etc. </summary>
     internal static class SysHelper
     {
+        /// <summary> Starts the application under test. </summary>
+        internal static void StartApplication()
+        {
+            StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
+
+            CodedUITestEula useEula = new CodedUITestEula();
+            UIHelper.WaitForControlIsEnabled(useEula.IAcceptTermsOfThisAgreementCheckBox(), Settings.WaitingTime.Default.LaunchAppWaitTime);        
+        }
+
+        /// <summary> Stops the application under test. </summary>
+        internal static void StopApplication()
+        {
+            if (IsThereProcess(Settings.General.Default.ATApplicationProcessName)) KillProcesses(Settings.General.Default.ATApplicationProcessName);
+        }
+
         #region Process-related methods
 
         /// <summary> Starts a local process. </summary>
@@ -37,6 +52,17 @@ namespace CodedUITestAT
                 proc.CloseMainWindow();
                 if (!proc.WaitForExit(2000)) proc.Kill();
             }
+        }
+
+        /// <summary> Checks whether a given process is present at a given endpoint. </summary>
+        /// <param name="procName">Set a process name.</param>
+        /// <param name="machineName">Set an endpoint name.</param>
+        internal static bool IsThereProcess(string procName, string machineName = "localhost")
+        {
+            if (machineName == "localhost") machineName = Environment.MachineName;
+            Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(procName), machineName);
+            if (processes.Length == 0) return false;
+            else return true;
         }
 
         #endregion

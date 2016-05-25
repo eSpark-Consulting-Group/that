@@ -1,4 +1,5 @@
-﻿<Window         x:Class="APTAT.Application.MainWindow"
+﻿<Window
+                x:Class="APTAT.Application.MainWindow"
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 Title="Unknown File Hunter" MinHeight="300" MinWidth="920"  Height="768" Width="1024" 
@@ -32,9 +33,9 @@
                                Grid.Column="1"
                                Text="{StaticResource APTApplicationTitle}"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2">
-                        <Button Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
-                        <Button x:Name="ResizeButton" Style="{StaticResource MaximizeButton}" Click="OnResizeClick" VerticalAlignment="Top"/>
-                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick" Height="35" VerticalAlignment="Bottom"/>
+                        <Button AutomationProperties.AutomationId="MinimizeButton" Style="{StaticResource MinimizeButton}" Click="OnMinimize"/>
+                        <Button AutomationProperties.AutomationId="ResizeButton" x:Name="ResizeButton" Style="{StaticResource MaximizeButton}" Click="OnResizeClick" VerticalAlignment="Top"/>
+                        <Button AutomationProperties.AutomationId="CloseButton" Style="{StaticResource CloseButton}" Click="OnCloseClick" Height="35" VerticalAlignment="Bottom"/>
                     </StackPanel>
                 </Grid>
             </Border>

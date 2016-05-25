@@ -20,5 +20,8 @@
     <Setting Name="ThreatName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">91exestealth.exe</Value>
     </Setting>
+    <Setting Name="NoScansTextBlockText" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">There are no scans have been performed yet.</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

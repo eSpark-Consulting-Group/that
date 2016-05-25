@@ -155,10 +155,9 @@ namespace CodedUITestAT
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
+            SysHelper.StartApplication();
             
             CodedUITestEula useEula = new CodedUITestEula();
-            UIHelper.WaitForControlIsEnabled(useEula.IAcceptTermsOfThisAgreementCheckBox());
             useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
             useEula.UIMapEula.ClickContinueButton();
 
@@ -168,7 +167,7 @@ namespace CodedUITestAT
         [TestCleanup]
         public void ATTestCleanup()
         {
-            SysHelper.KillProcesses(Settings.General.Default.ATApplicationProcessName);
+            SysHelper.StopApplication();
         }
 
         #endregion
@@ -177,14 +176,39 @@ namespace CodedUITestAT
         
         #region Main screen
 
+        private WpfWindow MainWindow()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow;
+        }
+        
         internal WpfButton StartScanningButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
         }
 
+        private WpfButton StartScanningNowButton()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
+        }
+
+        private WpfButton StopScanningButton()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
+        }
+
         private WpfButton AnalyseWithValkyrieButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIAnalyseWithValkyrieBButton;
+        }
+
+        private WpfButton ReportsDropDownButton()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIReportButtonButton;
+        }
+
+        private WpfButton AboutButton()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
         }
 
         private WpfText MainWindowTitleTextBlock()
@@ -528,6 +552,52 @@ namespace CodedUITestAT
             UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
+        }
+
+        [TestMethod]
+        public void VerifyMainScreenDefaultsTest()
+        {
+            UIMapMain.ClickResizeButton();
+            if (MainWindow().Maximized) TestContext.WriteLine("Main window was successfully maximized using Resize button.\n");
+            else Assert.Fail("Main window was not maximized after clicking Resize button!");
+
+            UIMapMain.ClickResizeButton();
+            if (!MainWindow().Maximized) TestContext.WriteLine("Main window is not maximized after clicking Resize button again.\n");
+            else Assert.Fail("Main window is maximized after clicking Resize button again!");
+
+            UIMapMain.ClickMinimizeButton();
+            if (MainWindow().Minimized) TestContext.WriteLine("Main window is successfully minimized after clicking Minimize button.\n");
+            else Assert.Fail("Main window is not minimized after clicking Minimize button!");
+            MainWindow().Minimized = false;
+
+            if (StartScanningButton().Enabled) TestContext.WriteLine("Start Scanning button is enabled by default.\n");
+            else Assert.Fail("Start Scanning button is disabled by default!\n");
+
+            if (!StopScanningButton().Enabled) TestContext.WriteLine("Start Scanning button is disabled by default.\n");
+            else Assert.Fail("Stop Scanning button is enabled by default!\n");
+
+            if (!AnalyseWithValkyrieButton().Enabled) TestContext.WriteLine("'Analyse with Valkyrie' button is disabled by default.\n");
+            else Assert.Fail("'Analyse with Valkyrie' button is enabled by default!\n");
+            
+            if (!ReportsDropDownButton().Enabled) TestContext.WriteLine("Reports button is disabled by default.\n");
+            else Assert.Fail("Reports button is enabled by default!\n");
+
+            if (AboutButton().Enabled) TestContext.WriteLine("About button is enabled by default.\n");
+            else Assert.Fail("About button is disabled by default!\n");
+
+            if (!UnknownFilesTab().Exists) TestContext.WriteLine("'Unknown files' list is not shown by default.\n");
+            else Assert.Fail("'Unknown files' list is shown by default!\n");
+
+            UIMapMain.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText = Settings.General.Default.NoScansTextBlockText;
+            UIMapMain.AssertNoScansTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' message is shown.\n", Settings.General.Default.NoScansTextBlockText));
+
+            if (StartScanningNowButton().Enabled) TestContext.WriteLine("'Start Scanning Now' button is enabled by default.\n");
+            else Assert.Fail("'Start Scanning Now' button is disabled by default!\n");
+
+            UIMapMain.ClickCloseButton();
+            if (!MainWindow().Exists) TestContext.WriteLine("Main window was successfully closed using Close button.\n");
+            else Assert.Fail("Main window was not closed after clicking Close button!");
         }
 
         #endregion
