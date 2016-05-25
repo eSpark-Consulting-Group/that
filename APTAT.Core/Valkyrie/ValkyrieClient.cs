@@ -89,7 +89,11 @@ namespace APTAT.Core.Valkyrie
 
         private void ProgressNotifyTimerCallback(object state)
         {
+            if (_progressNotifyTimer != null)
+                _progressNotifyTimer.Change(Timeout.Infinite, Timeout.Infinite);
             OnAnalyzeProgressChanged();
+            if (_progressNotifyTimer != null)
+                _progressNotifyTimer.Change(1000, Timeout.Infinite);
         }
 
         private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress, string destPath)
