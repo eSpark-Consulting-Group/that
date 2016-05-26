@@ -26,7 +26,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         public DateTime? LastAnalysisDate { get; set; }
 
         [JsonProperty("malware_probability")]
-        public float MalwareProbability { get; set; }
+        public float? MalwareProbability { get; set; }
 
         [JsonProperty("number_of_seen_before")]
         public int? NumberOfSeenBefore { get; set; }

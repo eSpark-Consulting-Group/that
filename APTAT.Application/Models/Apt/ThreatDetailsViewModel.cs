@@ -218,7 +218,7 @@ namespace APTAT.Application.Models
             Copyright = NAIfEmpty(badFile != null ? badFile.Copyright : valkyrieFile.Copyright);
             Product = NAIfEmpty(badFile != null ? badFile.Product : valkyrieFile.Product);
             IsWhitelisted = valkyrieFile != null && valkyrieFile.ValkyrieAnalysisResult.IsWhiteListed ? "yes" : "no";
-            MalwareProbability = valkyrieFile != null ? valkyrieFile.ValkyrieAnalysisResult.MalwareProbability + "%" : "";
+            MalwareProbability = (valkyrieFile != null && valkyrieFile.ValkyrieAnalysisResult.MalwareProbability.HasValue) ? (valkyrieFile.ValkyrieAnalysisResult.MalwareProbability.Value / 100).ToString("P") : "";
         }
 
         private String NAIfEmpty(String str)

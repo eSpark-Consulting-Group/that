@@ -86,7 +86,7 @@ namespace APTAT.Core.Valkyrie
             return result;
         }
 
-        public float MalwareProbability { get; set; }
+        public float? MalwareProbability { get; set; }
 
         public DateTime? FirstAnalysisDate { get; set; }
 

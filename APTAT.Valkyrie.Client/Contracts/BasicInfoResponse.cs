@@ -11,7 +11,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         [JsonProperty("last_analysis_date")]
         public DateTime? LastAnalysisDate { get; set; }
         [JsonProperty("malware_probability")]
-        public float MalwareProbability { get; set; }
+        public float? MalwareProbability { get; set; }
         /// <summary>
         /// meaning file is analyzed/not analyzed by FVS before
         /// </summary>

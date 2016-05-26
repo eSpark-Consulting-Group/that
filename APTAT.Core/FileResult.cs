@@ -75,9 +75,9 @@ namespace APTAT.Core
         {
             get
             {
-                if (this.ValkyrieAnalysisResult != null)
-                {
-                    return ValkyrieAnalysisResult.MalwareProbability.ToString("P", CultureInfo.InvariantCulture);
+                if (this.ValkyrieAnalysisResult != null && ValkyrieAnalysisResult.MalwareProbability.HasValue)
+                {                    
+                    return ValkyrieAnalysisResult.MalwareProbability.Value.ToString("P", CultureInfo.InvariantCulture);
                 }
                 return String.Empty;
             }

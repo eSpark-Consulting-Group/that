@@ -775,7 +775,7 @@ namespace APTAT.Core.Reports
             get { return IsWhiteListed ? "Whitelisted" : "Not whitelisted"; }
         }
 
-        public float MalwareProbability { get; set; }
+        public float? MalwareProbability { get; set; }
 
         public string MalwareProbabilityFormatted
         {
