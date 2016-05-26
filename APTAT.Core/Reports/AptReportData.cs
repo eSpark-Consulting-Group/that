@@ -355,8 +355,8 @@ namespace APTAT.Core.Reports
                         if (badFile.Verdict != ValkyrieVerdict.Clean)
                         {
                             AddBadFile(uniqueFiles, badFile, module);
+                            nonUniqueBadFilesInternal.Add(badFile);
                         }
-                        nonUniqueBadFilesInternal.Add(badFile);
                         #region Calculate Statistics
 
                         switch (fileResult.ValkyrieAnalysisResult.Verdict)
