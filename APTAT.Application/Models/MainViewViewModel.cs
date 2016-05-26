@@ -210,7 +210,7 @@ namespace APTAT.Application.Models
                 }
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
-                    var header = String.Format("Valkyrie progress {0:##.00}%", Percentage);
+                    var header = String.Format("Valkyrie progress {0:0.00}%", Percentage);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
 
