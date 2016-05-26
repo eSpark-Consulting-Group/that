@@ -449,8 +449,9 @@ namespace APTAT.Core.Valkyrie
 
                     var timeOut = TimeSpan.FromMinutes(5);
                     bool success = false;
+                    bool analyzeNotFinished = true;
                     int elapsed = 0;
-                    while ((!success) && (elapsed < timeOut.TotalMilliseconds))
+                    while (analyzeNotFinished && (elapsed < timeOut.TotalMilliseconds))
                     {
                         Thread.Sleep(1000);
                         elapsed += 1000;
@@ -460,10 +461,16 @@ namespace APTAT.Core.Valkyrie
                                 ApiKey = _apiKey,
                                 AnalysisId = response.AnalysisId
                             });
-                        success = (automaticAnalysisResponse.ReturnCode != ErrorCodesEnum.AnalysisNotFinished);
+                        analyzeNotFinished = (automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFinished);
+
                     }
+                    success = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.Success;
                     if (!success)
                     {
+                        throw new InvalidOperationException(automaticAnalysisResponse.ReturnCode.GetEnumDescription());
+                    }
+                    if (analyzeNotFinished)
+                    { 
                         throw new TimeoutException("Automatic analysis has not been completed after " +
                                                    timeOut.TotalMinutes + " minutes");
                     }
