@@ -21,6 +21,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Left>0.06152cm</Left>
         <Height>1.07021cm</Height>
         <Width>15.75306cm</Width>
         <Style>
@@ -982,7 +983,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ValkyrieDataSet</DataSetName>
-        <Top>0.93874cm</Top>
+        <Top>1.11826cm</Top>
         <Height>3.74355cm</Height>
         <Width>16.18627cm</Width>
         <ZIndex>1</ZIndex>
@@ -993,10 +994,10 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>1.875in</Height>
+    <Height>1.9141in</Height>
     <Style />
   </Body>
-  <Width>16.18627cm</Width>
+  <Width>16.24779cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>

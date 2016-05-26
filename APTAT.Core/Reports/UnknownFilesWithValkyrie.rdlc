@@ -982,7 +982,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ValkyrieDataSet</DataSetName>
-        <Top>0.93874cm</Top>
+        <Top>1.07021cm</Top>
+        <Left>0.02116cm</Left>
         <Height>3.74354cm</Height>
         <Width>16.18627cm</Width>
         <ZIndex>1</ZIndex>
@@ -993,10 +994,10 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>1.875in</Height>
+    <Height>1.89518in</Height>
     <Style />
   </Body>
-  <Width>16.18627cm</Width>
+  <Width>16.20743cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
