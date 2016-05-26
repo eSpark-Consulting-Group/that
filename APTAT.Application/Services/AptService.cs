@@ -35,7 +35,7 @@ namespace APTAT.Application.Services
 
 
 
-        private readonly AptAtManager _manager;
+        private AptAtManager _manager;
 
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
@@ -368,6 +368,15 @@ namespace APTAT.Application.Services
             }
 
             throw new ArgumentException("kind");
+        }
+
+        public void Dispose()
+        {
+            if (_manager != null)
+            {
+                _manager.Dispose();
+                _manager = null;
+            }
         }
     }
 }

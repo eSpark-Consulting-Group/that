@@ -242,7 +242,7 @@ namespace APTAT.Core.Descent
             var result = scanner.ValidateAndGetResult();
             if (result.TotalTargetsCount == 0)
                 throw new NoAvailableTargetsException();
-            operationUid = result.OperationUid;
+            var operationUidInternal = operationUid = result.OperationUid;
             lock (_descentResults)
             {
                 _descentResults[result.OperationUid] = result;
@@ -255,6 +255,9 @@ namespace APTAT.Core.Descent
                 _tracker.UnregisterListener(result);
                 result.DescentCompleted -= wholeDescentCompletedDelegate;
                 OnDescentCompleted(scanner.GetDescentCompletedEventArgs(result));
+                IScanner sc;
+                _scanners.TryRemove(operationUidInternal, out sc);
+                sc.Dispose();
 
             };
             _tracker.RegisterListener(result);

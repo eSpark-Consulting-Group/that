@@ -5,7 +5,7 @@ using System.Text;
 
 namespace APTAT.Core.Descent
 {
-    public interface IScanner
+    public interface IScanner : IDisposable
     {
         IDescentQueryResult ValidateAndGetResult();
         DescentEventArgs GetDescentCompletedEventArgs(IDescentQueryResult result);

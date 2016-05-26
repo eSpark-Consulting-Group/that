@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Security.Permissions;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
@@ -19,7 +18,8 @@ namespace APTAT.Core.Descent.Helpers
 	    private const int E_FAIL = unchecked((int) 0x80004005);
 
         private readonly ConcurrentDictionary<Guid, Thread> _threads = new ConcurrentDictionary<Guid, Thread>();
-		public DescentMod(TaskFactory taskFactory, IChangeTrackingSubSystem changeTrackingSubSystem)
+        private readonly ConcurrentDictionary<Guid, Task> _tasks = new ConcurrentDictionary<Guid, Task>();
+        public DescentMod(TaskFactory taskFactory, IChangeTrackingSubSystem changeTrackingSubSystem)
 		{
             _tracker = changeTrackingSubSystem;
             _taskFactory = taskFactory;
@@ -48,10 +48,10 @@ namespace APTAT.Core.Descent.Helpers
             tp.ScanScope = scanScope;
             tp.TcpPort = tcpPort;
             tp.UdpPort = udpPort;
-            //Thread thread = new Thread(InstallAgentThread);
-            //thread.Start(tp);
-			_taskFactory.StartNew( StartAptScanThread, tp, TaskCreationOptions.LongRunning ).ContinueWith( task => task.Dispose() );
-            //ThreadPool.QueueUserWorkItem(InstallAgentThread_, tp);
+			var task = _taskFactory.StartNew( StartAptScanThread, tp, TaskCreationOptions.LongRunning )
+                .ContinueWith( t => ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp),
+                TaskContinuationOptions.OnlyOnCanceled);
+            _tasks[tp.AgentIdentity] = task;
         }
 
         private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int percentage)
@@ -61,36 +61,17 @@ namespace APTAT.Core.Descent.Helpers
 
         private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, int percentage, int errorFilesCount, int failedAtNodeCount)
         {
+            if (_taskFactory.CancellationToken.IsCancellationRequested) 
+                throw new OperationCanceledException();
             FormattedText formattedText = new FormattedText(resourceMessage);
             _tracker.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(computerUid, hostName, operationUid, formattedText, scanStage, totalFilesCount, unknownFilesCount, malwaresCount, safeFilesCount, percentage, errorFilesCount, failedAtNodeCount)), false);
         }
-
-        public void AbortAllThreads()
-        {
-            foreach (var item in _threads)
-            {
-                if (item.Value != null)
-                {
-                    try
-                    {
-                        item.Value.Abort(true);
-                    }
-                    catch (ThreadStateException ex)
-                    {
-                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Thread abort exception occurred: {0}", ex);
-                        throw new InvalidOperationException("Cannot stop operation.");
-                    }
-
-                }
-            }
-        }
-
-		private void StartAptScanThread( object obj )
+        private void StartAptScanThread( object obj )
 		{
             //RemoteInstallerJob remoteInstallerJob = tp._cb as RemoteInstallerJob;
             var tp = (InstallAgentThreadParams)obj;
             tp.DescentCallback.SetDescentThread();
-
+ 
             string computer = tp.RemoteHostInfo.HostName;
             LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
                 "Descent operation started{0} computer name: {1}{0} computer UID: {2}{0} thread ID: {3}{0}",
@@ -267,56 +248,75 @@ namespace APTAT.Core.Descent.Helpers
 			    dh.ReceivingResults += onResultsReceiving;
 			    dh.EnumerationProgressChanged += onEnumerationProgressChanged;
 
-				try
-				{
-					// 5% Connecting to the target computer
-                    NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, ServerSideMessagesResources.DescentProgressAgentInstallConnectingToTarget, AptScanStage.Connecting, 0);
-                    //_scanResults.TryAdd(tp.AgentIdentity, new ScanResult() { TargetUid = tp.AgentIdentity, HostName = tp.RemoteHostInfo.HostName, ResultType = ScanResultType.NotPerformed});
+			    try
+			    {
+			        // 5% Connecting to the target computer
+			        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity,
+			            ServerSideMessagesResources.DescentProgressAgentInstallConnectingToTarget, AptScanStage.Connecting, 0);
+			        //_scanResults.TryAdd(tp.AgentIdentity, new ScanResult() { TargetUid = tp.AgentIdentity, HostName = tp.RemoteHostInfo.HostName, ResultType = ScanResultType.NotPerformed});
 
-					// NewCredentials will use the impersonated user for network connections only.
-					ImpersonationHelper.Logon32LogonType impersonationLogonType = ImpersonationHelper.Logon32LogonType.NewCredentials;
+			        // NewCredentials will use the impersonated user for network connections only.
+			        ImpersonationHelper.Logon32LogonType impersonationLogonType =
+			            ImpersonationHelper.Logon32LogonType.NewCredentials;
 
-					dh.Init( impersonationLogonType );
-					dh.ExecuteAction(0 );
+			        dh.Init(impersonationLogonType);
+			        dh.ExecuteAction(0);
 
-                    AptScanResult result = tp.Result;
-                    if (result != null)
-                    {
-                        var text = new ResourceText("null", String.Format("Scan results received. Total programs scanned: {0}. " +
-                               "Unknown programs found: {1}. Malwares found: {2}.", result.TotalFilesCount, result.UnknownFilesCount, 
-                               result.MalwareFilesCount));
-                        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount, result.SafeFilesCount, 100, result.ErrorFilesCount, result.ServerErrorFilesCount);
+			        AptScanResult result = tp.Result;
+			        if (result != null)
+			        {
+			            var text = new ResourceText("null",
+			                String.Format("Scan results received. Total programs scanned: {0}. " +
+			                              "Unknown programs found: {1}. Malwares found: {2}.", result.TotalFilesCount,
+			                    result.UnknownFilesCount,
+			                    result.MalwareFilesCount));
+			            NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text,
+			                AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount,
+			                result.MalwareFilesCount, result.SafeFilesCount, 100, result.ErrorFilesCount,
+			                result.ServerErrorFilesCount);
 
-                        if(!resultsProcessor.TryParse(ref result))
-                            throw new DescentException(DescentStatus.status_error, "Cannot process scan results.", 0);
+			            if (!resultsProcessor.TryParse(ref result))
+			                throw new DescentException(DescentStatus.status_error, "Cannot process scan results.", 0);
 
-                        result.ResultType = ScanResultType.Completed;
-                        NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity,
-                            new ResourceText("null",
-                                String.Format("Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}. Failed to analise: {3}, Server errors: {4}", result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount, result.ErrorFilesCount, result.ServerErrorFilesCount)),
-                                AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount, result.SafeFilesCount, 100, result.ErrorFilesCount, result.ServerErrorFilesCount);
-                    }
+			            result.ResultType = ScanResultType.Completed;
+			            NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity,
+			                new ResourceText("null",
+			                    String.Format(
+			                        "Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}. Failed to analise: {3}, Server errors: {4}",
+			                        result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount,
+			                        result.ErrorFilesCount, result.ServerErrorFilesCount)),
+			                AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount,
+			                result.MalwareFilesCount, result.SafeFilesCount, 100, result.ErrorFilesCount,
+			                result.ServerErrorFilesCount);
+			        }
 
-                    if( dh.Response.Status != DescentStatus.status_success &&
-						dh.Response.Status != DescentStatus.status_agent_is_already_installed)
-					{
-						throw new DescentException( dh.Response );
-					}
+			        if (dh.Response.Status != DescentStatus.status_success &&
+			            dh.Response.Status != DescentStatus.status_agent_is_already_installed)
+			        {
+			            throw new DescentException(dh.Response);
+			        }
 
-                    tp.DescentCallback.OnDescentCallback(DescentStatus.status_success, 0, String.Empty);
-				}
-				catch( DescentException ex )
-				{
-					//if( tp.DescentCallback != null )
-					//	tp.DescentCallback.OnDescentCallback( ex._status, ex._win32error, ex._errorString );
-                    LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, "{0} occurred in descent thread: {1}", ex.GetType().Name, ex.Message);
+			        tp.DescentCallback.OnDescentCallback(DescentStatus.status_success, 0, String.Empty);
+			    }
+			    catch (DescentException ex)
+			    {
+			        //if( tp.DescentCallback != null )
+			        //	tp.DescentCallback.OnDescentCallback( ex._status, ex._win32error, ex._errorString );
+			        LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, "{0} occurred in descent thread: {1}",
+			            ex.GetType().Name, ex.Message);
 
-                    ProcessErrorOrCancel(ex._status, ex._win32error, ex._errorString, tp);
-				}
-                catch( ScanCanceledException )
-                {
-                    dh.ScanProgressChanged -= onScanProgressChanged;
-                    //ProcessScanCancelation(tp);
+			        ProcessErrorOrCancel(ex._status, ex._win32error, ex._errorString, tp);
+			    }
+			    catch (ScanCanceledException)
+			    {
+			        dh.ScanProgressChanged -= onScanProgressChanged;
+			        //ProcessScanCancelation(tp);
+			        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.",
+			            tp.RemoteHostInfo.HostName);
+			        ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
+			    }
+			    catch (OperationCanceledException ex)
+			    {
                     LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
                     ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
                 }
@@ -328,9 +328,8 @@ namespace APTAT.Core.Descent.Helpers
 						Thread.ResetAbort();
 					}
 
-                    if ((ex.ExceptionState is bool) == true)
+                    if (ex.ExceptionState is bool)
                     {
-                        //ProcessScanCancelation(tp);
                         LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
                         ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
                     }
@@ -344,7 +343,16 @@ namespace APTAT.Core.Descent.Helpers
 				}
 				finally
 				{
-					dh.Release();
+                    dh.RemotelyConnected -= onRemotelyConnected;
+                    dh.DescentHelperCopied -= onDescentHelperCopied;
+                    dh.DescentHelperParametersCopied -= onDescentHelperParametersCopied;
+                    dh.ScanProgressChanged -= onScanProgressChanged;
+                    dh.ScanCompleted -= onScanCompleted;
+                    dh.ScanFailed -= onScanFailed;
+                    dh.ScanResultsFileReceived -= onScanResultsFileReceived;
+                    dh.ReceivingResults -= onResultsReceiving;
+                    dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
+                    dh.Release();
 
 				    Thread thread;
                     _threads.TryRemove(tp.AgentIdentity, out thread);

@@ -16,11 +16,15 @@ namespace APTAT.Core.Descent
         protected readonly string Password;
         protected readonly TargetUidComputerPair[] Targets;
         protected readonly TargetUidComputerPair[] OnlineTargets;
+        protected readonly CancellationToken CancellationToken;
+        protected CancellationTokenSource CancellationTokenSource { get; private set; }
 
         protected Scanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password)
         {
+            CancellationTokenSource = new CancellationTokenSource();
+            CancellationToken = CancellationTokenSource.Token;
             TaskFactory = new TaskFactory(
-                CancellationToken.None,
+                CancellationToken,
                 TaskCreationOptions.LongRunning,
                 TaskContinuationOptions.None,
                 new LimitedConcurrencyLevelTaskScheduler(Settings.Default.DescentMaximumConcurrencyLevel));
@@ -30,7 +34,6 @@ namespace APTAT.Core.Descent
             OnlineTargets = onlineTargets;
             Login = login;
             Password = password;
-
         }
 
         protected static TargetUidComputerPair[] GetTargetUidComputerPairs(IEnumerable<DeploymentTarget> targets,
@@ -61,6 +64,18 @@ namespace APTAT.Core.Descent
 
         public abstract IDescentQueryResult ValidateAndGetResult();
         public abstract void StartScan(IDescentQueryResult result);
-        public abstract void AbortAllThread();
+
+        public virtual void AbortAllThread()
+        {
+            CancellationTokenSource.Cancel();
+        }
+        public virtual void Dispose()
+        {
+            if (CancellationTokenSource != null)
+            {
+                CancellationTokenSource.Dispose();
+                CancellationTokenSource = null;
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptDescentScanner : Scanner, IDisposable
+    public class AptDescentScanner : Scanner
     {
         private readonly string _scanScope;
         private readonly DescentMod _descentMod;
@@ -93,13 +93,9 @@ namespace APTAT.Core.Descent.Apt
             }
         }
 
-        public override void AbortAllThread()
+        public override void Dispose()
         {
-            _descentMod.AbortAllThreads();
-        }
-
-        public void Dispose()
-        {
+            base.Dispose();
             if (_descentMod != null)
             {
                 _descentMod.Release();

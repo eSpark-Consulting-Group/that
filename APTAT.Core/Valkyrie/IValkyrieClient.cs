@@ -7,7 +7,7 @@ using System.Text;
 
 namespace APTAT.Core.Valkyrie
 {
-    public interface IValkyrieClient
+    public interface IValkyrieClient : IDisposable
     {
         event EventHandler<ProgressChangedEventArgs> AnalyzeProgressChanged;
         event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;

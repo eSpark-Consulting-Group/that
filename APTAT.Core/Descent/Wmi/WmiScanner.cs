@@ -194,10 +194,5 @@ namespace APTAT.Core.Descent.Wmi
                 StartWmiScan(ri, job, computer.TargetUid, scanResult, result.OperationUid);
             }
         }
-
-        public override void AbortAllThread()
-        {
-
-        }
     }
 }

@@ -156,7 +156,7 @@ namespace APTAT.Application.Services
         DetailedPerProgramWithValkyrie
     }
 
-    public interface IAptService
+    public interface IAptService : IDisposable
     {
         event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
         event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;

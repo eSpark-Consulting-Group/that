@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
@@ -53,13 +52,13 @@ namespace APTAT.Core
     }
 
 
-    public class AptAtManager
+    public class AptAtManager : IDisposable
     {
         private readonly IDescentSubSystem _descentSubSystem;
         public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
-        private readonly IValkyrieClient _valkyrieClient;
+        private IValkyrieClient _valkyrieClient;
         
         public List<FileResult> ValkyrieAnalysisResult { get; set; }
    
@@ -82,9 +81,12 @@ namespace APTAT.Core
 
         void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
         {
-            _valkyrieClient.AnalyzeProgressChanged -= OnValkyrieClientProgressChanged;
-            _valkyrieClient.AnalyzeCompleted -= OnValkyrieManagerAnalyzeCompleted;
-            _valkyrieClient.AnalyzeStarted -= OnValkyrieAnalyzeStarted;
+            if (_valkyrieClient != null)
+            {
+                _valkyrieClient.AnalyzeProgressChanged -= OnValkyrieClientProgressChanged;
+                _valkyrieClient.AnalyzeCompleted -= OnValkyrieManagerAnalyzeCompleted;
+                _valkyrieClient.AnalyzeStarted -= OnValkyrieAnalyzeStarted;
+            }
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var valkyrieAnalysisResult = GetFullResult(e.Result, results);
             var handler = ValkyrieAnalyzeCompleted;
@@ -247,6 +249,15 @@ namespace APTAT.Core
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var files = GetDistinctFileInfo(results);
             return files.Count;
+        }
+
+        public void Dispose()
+        {
+            if (_valkyrieClient != null)
+            {
+                _valkyrieClient.Dispose();
+                _valkyrieClient = null;
+            }
         }
     }
 
