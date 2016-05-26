@@ -495,11 +495,15 @@ namespace APTAT.Core.Valkyrie
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
                     throw new InvalidOperationException();
                 }
-                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, 200);
+                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, Timeout.Infinite);
                 SubmitToAutomaticAnalysis(filesToAnaluyze, login, password, _cancellationTokenSource.Token);
-                ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount));
+                
             }, TaskCreationOptions.None, cancellationToken)
-                .ContinueWith(OnAnalyzeCompleted,TaskContinuationOptions.NotOnCanceled);
+                .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled)
+                .ContinueWith(t =>
+                {
+                    ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount));
+                },  TaskContinuationOptions.OnlyOnRanToCompletion);
         }
     }
 }

@@ -552,20 +552,24 @@ namespace APTAT.Application.Models
                         }
                     }
                 }
+                
+
+                _cacheValkyrie = new Collection<FileResult>(e.Result);
+                ItemsValkyrie = new ObservableCollection<FileResult>(_cacheValkyrie);
+
+                IsValkyrieScanInProgress = false;
+                IsAnalyseWithValkyrieEnabled = true;
+                IsValkyrieReportEnabled = true;
+                IsValkyrieAnalysCompleted = true;
+
+                RaisePropertyChanged("Header");
+                RaisePropertyChanged("ValkyrieDetailsLink");
+
                 var tmp = ValkyrieAnalyzeCompleted;
                 if (tmp != null)
                 {
                     tmp(this, e);
                 }
-
-                _cacheValkyrie = new Collection<FileResult>(e.Result);
-                IsValkyrieScanInProgress = false;
-                IsAnalyseWithValkyrieEnabled = true;
-                IsValkyrieReportEnabled = true;
-                IsValkyrieAnalysCompleted = true;
-                RaisePropertyChanged("IsValkyrieAnalysCompleted");
-                RaisePropertyChanged("Header");
-                RaisePropertyChanged("ValkyrieDetailsLink");
         }
 
         private static void ShowError(Exception exception)
