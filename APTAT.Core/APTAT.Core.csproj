@@ -399,7 +399,9 @@
     <EmbeddedResource Include="Reports\ExecutiveWithValkyrie.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Executive.rdlc" />
+    <EmbeddedResource Include="Reports\Executive.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\MaliciousFilesWithValkyrie.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

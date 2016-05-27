@@ -975,10 +975,78 @@
                       First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "0", "#3c963c")</BackgroundColor>
             </Style>
           </Rectangle>
+          <Textbox Name="Textbox36">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Server Error Count:</Value>
+                    <Style>
+                      <FontFamily>Segoe UI Light</FontFamily>
+                      <Color>Gray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>7.69006cm</Top>
+            <Left>1.14659cm</Left>
+            <Height>0.55681cm</Height>
+            <Width>4.74979cm</Width>
+            <ZIndex>27</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox60">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <Color>DimGray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>7.69006cm</Top>
+            <Left>7.06936cm</Left>
+            <Height>0.55681cm</Height>
+            <Width>9.48254cm</Width>
+            <ZIndex>28</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.23555cm</Top>
-        <Height>8.06294cm</Height>
+        <Height>8.24687cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
         <Style>
@@ -1867,6 +1935,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
@@ -2044,6 +2113,10 @@
         </Field>
         <Field Name="TotalTargetsCount">
           <DataField>TotalTargetsCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalErrorFilesCount">
+          <DataField>TotalErrorFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="UnknownFilesFound">

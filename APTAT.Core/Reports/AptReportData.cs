@@ -104,6 +104,19 @@ namespace APTAT.Core.Reports
                 return _serverErrorFileCount;
             }
         }
+
+        public int TotalErrorFilesCount
+        {
+            get
+            {
+                if (_serverErrorFileCount == -1 || _errorFileCount == -1)
+                {
+                    CalculateTotal();
+                }
+                return _serverErrorFileCount + _errorFileCount;
+            }
+            
+        }
         public int SkippedFilesCount
         {
             get
