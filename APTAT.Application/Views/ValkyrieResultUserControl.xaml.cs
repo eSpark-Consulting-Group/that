@@ -18,9 +18,10 @@ namespace APTAT.Application
             {
                 var menu = new RadContextMenu();
                 menu.IconColumnWidth = 0;
+                menu.Width = 160;
                 menu.Opened += menu_Opened;
 
-                var item = new MenuItem();
+                var item = new RadMenuItem();
                 item.Header = "Details";
                 item.Command = ViewModel.SelectValkyrieCommand;
                 item.Click += item_Click;

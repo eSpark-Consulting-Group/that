@@ -162,9 +162,14 @@ namespace APTAT.Core
 
         public void MergeComputers(List<ComputerInformation> computers)
         {
-            var existing = Computers.Intersect(computers, EqualityComparer<ComputerInformation>.Default);
-            Computers.AddRange(computers.Except(existing));
-            RaisePropertyChanged("Computers");
+            foreach (var computer in computers)
+            {
+                if (!Computers.Any(_ => _.Equals(computer)))
+                {
+                    Computers.Add(computer);
+                    RaisePropertyChanged("Computers");
+                }
+            }
         }
 
         public override string ToString()
