@@ -212,7 +212,7 @@
                 AcceptReturn="False"
                 x:Name="SearchTextBox" 
                 Grid.Column="1" VerticalAlignment="Center"   TabIndex="0"
-                UpdateValueEvent="PropertyChanged"
+                UpdateValueEvent="PropertyChanged" FontSize="13"
                 EmptyContent="Search"   Margin="20" HorizontalAlignment="Stretch"  
                 IsSpinEnabled="True"  MaskType="None" SelectionOnFocus="SelectAll" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
                 <i:Interaction.Behaviors>

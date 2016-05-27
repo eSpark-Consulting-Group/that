@@ -180,7 +180,7 @@
             <Style TargetType="telerik:RadMaskedTextBox" x:Key="SearchBoxStyle">
                 <Setter Property="Mask" Value="aaaa"></Setter>
                 <Setter Property="MaskType" Value="Standard" />
-                <Setter Property="Foreground" Value="{StaticResource MarkerBrush}"/>
+                <Setter Property="Foreground" Value="#FF767676"/>
                 <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                 <Setter Property="Background" Value="{StaticResource MainBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
