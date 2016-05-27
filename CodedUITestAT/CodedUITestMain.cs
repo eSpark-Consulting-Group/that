@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,6 +14,7 @@ using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDetailsWindowClasses;
+using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 
 namespace CodedUITestAT
 {
@@ -148,6 +148,21 @@ namespace CodedUITestAT
         }
         private UIMapDetailsWindow mapDetailsWindow;
 
+        /// <summary> UIMap for Stop Scan window, UIMapStopScanWindow.uitest. </summary>
+        public UIMapStopScanWindow UIMapStopScanWindow
+        {
+            get
+            {
+                if ((this.mapStopScanWindow == null))
+                {
+                    this.mapStopScanWindow = new UIMapStopScanWindow();
+                }
+
+                return this.mapStopScanWindow;
+            }
+        }
+        private UIMapStopScanWindow mapStopScanWindow;
+
         #endregion
         
         #region Initialize and cleanup
@@ -262,14 +277,19 @@ namespace CodedUITestAT
 
         #region Results window
 
-        private WpfTabPage UnknownFilesTab()
+        internal WpfTabPage UnknownFilesTab()
         {     
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage;
         }
 
-        private WpfTabPage ValkyrieAnalysisResultsTab()
+        internal WpfTabPage ValkyrieAnalysisResultsTab()
         {
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
+        }
+
+        internal WpfTree UnknownFilesTree()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree2;
         }
 
         #endregion
@@ -279,6 +299,15 @@ namespace CodedUITestAT
         private WpfButton CloseDetailsButton()
         {
             return UIMapDetailsWindow.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UICloseButton;
+        }
+
+        #endregion
+
+        #region Stop Scan window
+
+        private WpfButton YesDialogButton()
+        {
+            return UIMapStopScanWindow.UIUnknownFileHunter0scWindow.UIYesButton;
         }
 
         #endregion
@@ -331,66 +360,11 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current test context.</param>
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
-            int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetTabRows().Length;
+            int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetRows().Length;
             
             if (valkyrieResultsRowsNumber == expectedFilesNumber)
                 testContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
             else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
-        }
-
-        /// <summary> Clicks a given row at a specified results screen. Starts at Results screen. </summary>
-        ///<param name="screen">Set a results screen.</param>
-        /// <param name="rowName">Set a row name.</param>
-        /// <param name="click">Set a mouse click type.</param>
-        private void ClickRow(ResultsScreen screen, string rowName, MouseClick click)
-        {
-            WpfButton expandRowButton;
-            WpfTabPage tab;
-
-            switch (screen)
-            {
-                case ResultsScreen.FoundFiles:
-                    UIMapResultsWindow.GoToUnknownFilesTab();
-                    tab = UnknownFilesTab();
-                    break;
-                case ResultsScreen.ValkyrieAnalysis:
-                    UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
-                    tab = ValkyrieAnalysisResultsTab();
-                    break;
-                default: throw new Exception("Unexpected Results screen!");
-            }
-            
-            var rows = tab.GetTabRows();
-
-            foreach (var row in rows)
-            {
-                if (row.GetRowName().Contains(rowName))
-                {
-                    expandRowButton = row.GetChildren()[0] as WpfButton;
-                    if (click == MouseClick.DoubleLeft) Mouse.DoubleClick(expandRowButton);
-                    else if (click == MouseClick.Right) Mouse.Click(expandRowButton, MouseButtons.Right);
-                    else Mouse.Click(expandRowButton);
-                    break;
-                }
-            }
-        }
-
-        /// <summary> Clicks a given computer at a specified results screen. Starts at Results screen. </summary>
-        ///<param name="screen">Set a results screen.</param>
-        /// <param name="computer">Set a computer.</param>
-        /// <param name="click">Set a mouse click type.</param>
-        internal void ClickRow(ResultsScreen screen, Computer computer, MouseClick click = MouseClick.Left)
-        {
-            ClickRow(screen, computer.RowName, click);
-        }
-
-        /// <summary> Clicks a given threat at a specified results screen. Starts at Results screen. </summary>
-        ///<param name="screen">Set a results screen.</param>
-        /// <param name="threat">Set a threat.</param>
-        /// <param name="click">Set a mouse click type.</param>
-        internal void ClickRow(ResultsScreen screen, Threat threat, MouseClick click = MouseClick.Left)
-        {
-            ClickRow(screen, threat.RowName, click);
         }
 
         /// <summary> Waits until the Valkyrie results are received. </summary>
@@ -419,7 +393,7 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
                 try
                 {
-                    ValkyrieAnalysisResultsTab().GetTabRows();
+                    ValkyrieAnalysisResultsTab().GetRows();
                     testContext.WriteLine("Valkyrie results now can be obtained from UI.\n");
                     break;
                 }
@@ -427,6 +401,39 @@ namespace CodedUITestAT
                 if ((int)timer.ElapsedMilliseconds > treeWaitTime) throw new Exception(String.Format("Valkyrie results cannot be obtained from UI after {0} seconds!", treeWaitTime / 1000));
             }
             timer.Stop();
+        }
+
+        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at main screen. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        /// <param name="scanType">Set a scan type.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void StartEndpointScan(Computer endpoint, ScanType scanType, TestContext testContext)
+        {
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            testContext.WriteLine("Start Scanning wizard appeared...\n");
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
+            UIMapNetworkAddresses.InputNetworkAddress();
+            UIMapNetworkAddresses.ClickAddButton();
+            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLogin();
+            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncriptedPassword;
+            UIMapNetworkAddresses.InputPassword();
+
+            switch (scanType)
+            {
+                case ScanType.Quick:
+                    UIMapStartScanningWizard.ClickQuickScanButton();
+                    break;
+                case ScanType.Full:
+                    UIMapStartScanningWizard.ClickFullScanButton();
+                    break;
+                default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType.ToString()));
+            }
+            testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...\n", scanType.ToString(), endpoint.Name));
         }
 
         #endregion
@@ -438,24 +445,8 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.InfectForQuickScan(endpoint);
-            
-            UIMapMain.ClickStartScanningButton();
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            TestContext.WriteLine("Start Scanning wizard appeared...\n");
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
-            
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
-            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
-            UIMapNetworkAddresses.InputNetworkAddress();
-            UIMapNetworkAddresses.ClickAddButton();
-            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
-            UIMapNetworkAddresses.InputLogin();
-            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncriptedPassword;
-            UIMapNetworkAddresses.InputPassword();
 
-            UIHelper.WaitForControlIsClickable(QuickScanButton());
-            UIMapStartScanningWizard.ClickQuickScanButton();
-            TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}'...\n", endpoint.Name));
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
             if (ScanCompletedTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.ScanCompletedText))
@@ -544,9 +535,9 @@ namespace CodedUITestAT
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
             
             // Verifies the scanning result at the Results screen
-            ClickRow(ResultsScreen.FoundFiles, endpoint);
+            UIHelper.ClickRow(ResultsScreen.FoundFiles, endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpoint.Name));
-            ClickRow(ResultsScreen.FoundFiles, malware, MouseClick.DoubleLeft);
+            UIHelper.ClickRow(ResultsScreen.FoundFiles, malware, MouseClick.DoubleLeft);
             TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
             UIHelper.WaitForControl(CloseDetailsButton());
             UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
@@ -598,6 +589,61 @@ namespace CodedUITestAT
             UIMapMain.ClickCloseButton();
             if (!MainWindow().Exists) TestContext.WriteLine("Main window was successfully closed using Close button.\n");
             else Assert.Fail("Main window was not closed after clicking Close button!");
+        }
+
+        [TestMethod]
+        public void StopFullScanTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            string scannerServiceName = Settings.Scanner.Default.ServiceName;
+            string scannerPath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Scanner.Default.Directory);
+
+            StartEndpointScan(endpoint, ScanType.Full, TestContext);
+
+            UIHelper.WaitForControlIsEnabled(StopScanningButton());
+            UIHelper.WaitForControlIsClickable(StopScanningButton());
+            UIMapMain.ClickStopScanningButton();
+
+            // Does not confirm the stop and checks the result
+            UIHelper.WaitForControl(YesDialogButton());
+            UIMapStopScanWindow.ClickNoButton();
+
+            ScanStatus endpointStatus = endpoint.GetScanStatus();
+            if (endpointStatus != ScanStatus.Running) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed!", endpoint.Name, endpointStatus));
+            else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed.\n", endpoint.Name, endpointStatus));
+
+            if (SysHelper.IsThereService(scannerServiceName, endpoint))
+                TestContext.WriteLine(String.Format("Service '{0}' is still present at endpoint '{1}' after a scan stop is not confirmed.\n", scannerServiceName, endpoint.Name));
+            else Assert.Fail(String.Format("Service '{0}' is no longer present at endpoint '{1}' after a scan stop is not confirmed!\n", scannerServiceName, endpoint.Name));
+            
+            // Confirms the stop and checks the result
+            UIHelper.WaitForControlIsClickable(StopScanningButton());
+            UIMapMain.ClickStopScanningButton();
+            UIHelper.WaitForControl(YesDialogButton());
+            UIMapStopScanWindow.ClickYesButton();
+
+            endpointStatus = endpoint.GetScanStatus();
+            if (endpointStatus != ScanStatus.Stopped) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed!", endpoint.Name, endpointStatus));
+            else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed.\n", endpoint.Name, endpointStatus));
+
+            if (!SysHelper.IsThereService(scannerServiceName, endpoint))
+                TestContext.WriteLine(String.Format("Service '{0}' is no longer present at endpoint '{1}' after a scan stop is confirmed.\n", scannerServiceName, endpoint.Name));
+            else Assert.Fail(String.Format("Service '{0}' is still present at endpoint '{1}' after a scan stop is confirmed!\n", scannerServiceName, endpoint.Name));
+
+            if (!Directory.Exists(scannerPath))
+                TestContext.WriteLine(String.Format("Directory '{0}' is no longer present at endpoint '{1}' after a scan stop is confirmed.\n", scannerPath, endpoint.Name));
+            else Assert.Fail(String.Format("Directory '{0}' is still present at endpoint '{1}' after a scan stop is confirmed!\n", scannerPath, endpoint.Name));
+
+            // Checks whether a scan can be started after the stop
+            StartEndpointScan(endpoint, ScanType.Full, TestContext);
+
+            endpointStatus = endpoint.GetScanStatus();
+            if (endpointStatus != ScanStatus.Running) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after another scan start!", endpoint.Name, endpointStatus));
+            else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after another scan start.\n", endpoint.Name, endpointStatus));
+
+            if (SysHelper.IsThereService(scannerServiceName, endpoint))
+                TestContext.WriteLine(String.Format("Service '{0}' is present at endpoint '{1}' after another scan start.\n", scannerServiceName, endpoint.Name));
+            else Assert.Fail(String.Format("Service '{0}' is not present at endpoint '{1}' after another scan start!\n", scannerServiceName, endpoint.Name));
         }
 
         #endregion

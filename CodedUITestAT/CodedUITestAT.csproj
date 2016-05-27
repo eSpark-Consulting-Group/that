@@ -60,6 +60,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -70,12 +71,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessObjects\Computers\Computer.cs" />
+    <Compile Include="BusinessObjects\Computers\ScanStatus.cs" />
     <Compile Include="BusinessObjects\Files\ThreatType.cs" />
     <Compile Include="BusinessObjects\Files\Malware.cs" />
     <Compile Include="BusinessObjects\Files\Threat.cs" />
     <Compile Include="BusinessObjects\Files\UnknownFile.cs" />
     <Compile Include="BusinessObjects\MouseClick.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
+    <Compile Include="BusinessObjects\Computers\ScanType.cs" />
     <Compile Include="CodedUITestEula.cs" />
     <Compile Include="CodedUITestMain.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
@@ -87,10 +90,20 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>General.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Results.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Results.settings</DependentUpon>
+    </Compile>
     <Compile Include="Settings\ScanCompleted.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>ScanCompleted.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Scanner.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Scanner.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings\WaitingTime.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -151,6 +164,12 @@
     <Compile Include="UIMaps\UIMapScanCompletedWindow.Designer.cs">
       <DependentUpon>UIMapScanCompletedWindow.uitest</DependentUpon>
     </Compile>
+    <Compile Include="UIMaps\UIMapStopScanWindow.cs">
+      <DependentUpon>UIMapStopScanWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapStopScanWindow.Designer.cs">
+      <DependentUpon>UIMapStopScanWindow.uitest</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -161,9 +180,17 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>General.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Settings\Results.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Results.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Settings\ScanCompleted.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>ScanCompleted.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\Scanner.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Scanner.Designer.cs</LastGenOutput>
     </None>
     <None Include="Settings\WaitingTime.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -178,6 +205,7 @@
     <None Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.uitest" />
     <None Include="UIMaps\UIMapResultsWindow.uitest" />
     <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
+    <None Include="UIMaps\UIMapStopScanWindow.uitest" />
   </ItemGroup>
   <ItemGroup />
   <Choose>

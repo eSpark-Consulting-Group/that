@@ -1,0 +1,26 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CodedUITestAT.Settings" GeneratedClassName="Results">
+  <Profiles />
+  <Settings>
+    <Setting Name="ScanStatusIndicatorCompleted" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Completed:</Value>
+    </Setting>
+    <Setting Name="ScanStatusIndicatorFailed" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Failed:</Value>
+    </Setting>
+    <Setting Name="ScanStatusIndicatorNotAccessible" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">This computer is not accessible</Value>
+    </Setting>
+    <Setting Name="ScanStatusIndicatorStopped" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Scan operation was canceled.</Value>
+    </Setting>
+    <Setting Name="ScanStatusIndicatorRunning" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;%).&lt;/string&gt;
+  &lt;string&gt;Starting&lt;/string&gt;
+  &lt;string&gt;Enumerating&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Diagnostics;
+using System.ServiceProcess;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -63,6 +65,78 @@ namespace CodedUITestAT
             Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(procName), machineName);
             if (processes.Length == 0) return false;
             else return true;
+        }
+
+        #endregion
+
+        #region Service-related methods
+
+        /// <summary> Compares an actual service status on a given machine with an expected one. </summary>
+        /// <param name="machine">Set a machine.</param>
+        /// <param name="serviceName">Set a service name.</param>
+        /// <param name="expectedServiceStatus">Set an expected service status.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        internal static void AssertServiceStatus(Computer machine, string serviceName, ServiceControllerStatus expectedServiceStatus, TestContext testContext)
+        {
+            if (GetServiceStatus(serviceName, machine) == expectedServiceStatus)
+                testContext.WriteLine(String.Format("Service '{0}' status is now '{1}' on machine '{2}'.", serviceName, expectedServiceStatus.ToString(), machine.Name));
+            else Assert.Fail(String.Format("Service '{0}' status is still not '{1}' on machine '{2}'!", serviceName, expectedServiceStatus.ToString(), machine.Name));
+        }
+
+        /// <summary> Waits for a service given status, fails if the status did not appear after all. </summary>
+        /// <param name="serviceName">Set a service name.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        /// <param name="status">Set a desired service status.</param>
+        /// <param name="machine">Set a machine, on which the service status should be checked.</param>
+        /// <param name="waitTime">Set waiting time or keep default.</param>
+        internal static void WaitForServiceStatus(string serviceName, TestContext testContext, ServiceControllerStatus serviceStatus = ServiceControllerStatus.Running, 
+                                                                                                                        Computer machine = null, int waitTime = DataHelper.DefaultWaitTime)
+        {
+            if (machine == null) machine = new Computer();
+            
+            string successMessage = String.Format("Status '{0}' appeared for service '{1}' on machine '{2}'.", serviceStatus.ToString(), serviceName, machine.Name);
+            string failureMessage = String.Format("Status '{0}' did not appear for service '{1}' on machine '{2}' after {3} second(s)!", serviceStatus.ToString(), serviceName, 
+                                                                                                                                                                        machine.Name, waitTime / 1000);
+
+            var timer = Stopwatch.StartNew();
+            for (; ; )
+            {
+                Playback.Wait(1000);
+                if (GetServiceStatus(serviceName, machine) == serviceStatus)
+                {
+                    testContext.WriteLine(successMessage);
+                    break;
+                }
+                if ((int)timer.ElapsedMilliseconds > waitTime)
+                {
+                    Assert.Fail(failureMessage);
+                    break;
+                }
+            }
+            timer.Stop();
+        }
+
+        /// <summary> Gets a given service status on an indicated machine. </summary>
+        /// <param name="serviceName">Set a service name.</param>
+        /// <param name="machine">Set a machine or keep default.</param>
+        internal static ServiceControllerStatus GetServiceStatus(string serviceName, Computer machine = null)
+        {
+            if (machine == null) machine = new Computer();
+            ServiceController serviceController = new ServiceController(serviceName, machine.Name);
+            serviceController.Refresh();
+            return serviceController.Status;
+        }
+
+        /// <summary> Determines whether a given service exists at the indicated machine. </summary>
+        /// <param name="serviceName">Set a service name.</param>
+        /// <param name="machine">Set a machine.</param>
+        internal static bool IsThereService(string serviceName, Computer machine = null)
+        {
+            if (machine == null) machine = new Computer();
+            var services = ServiceController.GetServices(machine.Name);
+            var service = services.FirstOrDefault(s => s.ServiceName == serviceName);
+
+            return service != null;
         }
 
         #endregion

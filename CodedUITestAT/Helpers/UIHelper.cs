@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Drawing;
+using System.Windows.Forms;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
@@ -53,9 +54,18 @@ namespace CodedUITestAT
 
         /// <summary> Gets rows from a given tab page control.  </summary>
         /// <param name="tab">Set a tab page control.</param>
-        internal static UITestControl[] GetTabRows(this WpfTabPage tab)
+        internal static UITestControl[] GetRows(this WpfTabPage tab)
         {
-            var tree = tab.GetChildren()[1].GetChildren()[0];
+            var tree = tab.GetChildren()[1].GetChildren()[0] as WpfTree;
+            var rows = tree.GetRows();
+
+            return rows;
+        }
+
+        /// <summary> Gets rows from a given tree control. </summary>
+        /// <param name="tab">Set a tree control.</param>
+        internal static UITestControl[] GetRows(this WpfTree tree)
+        {            
             var rowsCollection = tree.GetChildren()[2].GetChildren();
 
             return rowsCollection.ToArray();
@@ -66,6 +76,123 @@ namespace CodedUITestAT
         internal static string GetRowName(this UITestControl row)
         {
             return row.GetChildren()[1].Name;
+        }
+
+        /// <summary> Gets a given row status. </summary>
+        /// <param name="row">Set a row.</param>
+        internal static string GetRowStatus(this UITestControl row)
+        {
+            var cell = row.GetChildren()[1];
+            var cellElement = cell.GetChildren()[0];
+            var text = cellElement.GetChildren()[2];
+
+            return text.Name;
+        }
+
+        /// <summary> Gets a current scan status for a given row. </summary>
+        /// <param name="row">Set a row.</param>
+        private static ScanStatus GetScanStatus(this UITestControl row)
+        {
+            string rowStatus = row.GetRowStatus();
+
+            foreach (var str in Settings.Results.Default.ScanStatusIndicatorRunning) if (rowStatus.Contains(str)) return ScanStatus.Running;
+            if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorCompleted)) return ScanStatus.Completed;
+            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorStopped)) return ScanStatus.Stopped;
+            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorFailed)) return ScanStatus.Failed;
+            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorNotAccessible)) return ScanStatus.NotAccessible;
+            else throw new Exception(String.Format("No known scan status indicators found in the given row status '{0}'!", rowStatus));
+        }
+
+        /// <summary> Gets a current scan status at UI for a given computer. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        internal static ScanStatus GetScanStatus(this Computer endpoint)
+        {
+            UITestControl row;
+            CodedUITestMain useMain = new CodedUITestMain();
+            if (useMain.UnknownFilesTab().Exists) row = useMain.UnknownFilesTab().GetRow(endpoint.RowName);
+            else row = useMain.UnknownFilesTree().GetRow(endpoint.RowName);
+
+            return row.GetScanStatus();
+        }
+
+        /// <summary> Gets a row with a given name from the indicated tab page. Returns null, if a row with the given name was not found on the tab page. </summary>
+        /// <param name="tab">Set a tab page.</param>
+        /// <param name="rowName">Set a unique row name.</param>
+        internal static UITestControl GetRow(this WpfTabPage tab, string rowName)
+        {
+           var rows = tab.GetRows();
+
+           foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
+           
+           return null;
+        }
+
+        /// <summary> Gets a row with a given name from the indicated tree. Returns null, if a row with the given name was not found in the tree. </summary>
+        /// <param name="tab">Set a tree.</param>
+        /// <param name="rowName">Set a unique row name.</param>
+        internal static UITestControl GetRow(this WpfTree tree, string rowName)
+        {
+            var rows = tree.GetRows();
+
+            foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
+
+            return null;
+        }
+
+        /// <summary> Clicks a given row at a specified results screen. Starts at Results screen. </summary>
+        ///<param name="screen">Set a results screen.</param>
+        /// <param name="rowName">Set a unique row name.</param>
+        /// <param name="click">Set a mouse click type.</param>
+        private static void ClickRow(ResultsScreen screen, string rowName, MouseClick click)
+        {
+            WpfButton expandRowButton;
+            WpfTabPage tab;
+            CodedUITestMain useMain = new CodedUITestMain();
+
+            switch (screen)
+            {
+                case ResultsScreen.FoundFiles:
+                    useMain.UIMapResultsWindow.GoToUnknownFilesTab();
+                    tab = useMain.UnknownFilesTab();
+                    break;
+                case ResultsScreen.ValkyrieAnalysis:
+                    useMain.UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
+                    tab = useMain.ValkyrieAnalysisResultsTab();
+                    break;
+                default: throw new Exception("Unexpected Results screen!");
+            }
+
+            var rows = tab.GetRows();
+
+            foreach (var row in rows)
+            {
+                if (row.GetRowName().Contains(rowName))
+                {
+                    expandRowButton = row.GetChildren()[0] as WpfButton;
+                    if (click == MouseClick.DoubleLeft) Mouse.DoubleClick(expandRowButton);
+                    else if (click == MouseClick.Right) Mouse.Click(expandRowButton, MouseButtons.Right);
+                    else Mouse.Click(expandRowButton);
+                    break;
+                }
+            }
+        }
+
+        /// <summary> Clicks a given computer at a specified results screen. Starts at Results screen. </summary>
+        ///<param name="screen">Set a results screen.</param>
+        /// <param name="computer">Set a computer.</param>
+        /// <param name="click">Set a mouse click type.</param>
+        internal static void ClickRow(ResultsScreen screen, Computer computer, MouseClick click = MouseClick.Left)
+        {
+            ClickRow(screen, computer.RowName, click);
+        }
+
+        /// <summary> Clicks a given threat at a specified results screen. Starts at Results screen. </summary>
+        ///<param name="screen">Set a results screen.</param>
+        /// <param name="threat">Set a threat.</param>
+        /// <param name="click">Set a mouse click type.</param>
+        internal static void ClickRow(ResultsScreen screen, Threat threat, MouseClick click = MouseClick.Left)
+        {
+            ClickRow(screen, threat.RowName, click);
         }
     }
 }

@@ -9,7 +9,7 @@
       <Value Profile="(Default)">1200000</Value>
     </Setting>
     <Setting Name="WpfTreeWaitTime" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">20000</Value>
+      <Value Profile="(Default)">60000</Value>
     </Setting>
     <Setting Name="LaunchAppWaitTime" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">60000</Value>

@@ -68,6 +68,19 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
             Mouse.Click(uIScancomputersbyselecButton, new Point(78, 64));
         }
         
+        /// <summary>
+        /// ClickFullScanButton
+        /// </summary>
+        public void ClickFullScanButton()
+        {
+            #region Variable Declarations
+            WpfButton uIFullScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIFullScanButton;
+            #endregion
+
+            // Click 'Full Scan' button
+            Mouse.Click(uIFullScanButton, new Point(51, 13));
+        }
+        
         #region Properties
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
@@ -177,6 +190,22 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
                 return this.mUIQuickScanButton;
             }
         }
+        
+        public WpfButton UIFullScanButton
+        {
+            get
+            {
+                if ((this.mUIFullScanButton == null))
+                {
+                    this.mUIFullScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIFullScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "FullScanButton";
+                    this.mUIFullScanButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIFullScanButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -185,6 +214,8 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         private UILoadingProgressBar mUILoadingProgressBar;
         
         private WpfButton mUIQuickScanButton;
+        
+        private WpfButton mUIFullScanButton;
         #endregion
     }
     
