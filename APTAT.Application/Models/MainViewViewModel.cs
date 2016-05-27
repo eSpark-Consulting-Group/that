@@ -210,7 +210,7 @@ namespace APTAT.Application.Models
                 }
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
-                    var header = String.Format("Valkyrie progress {0:0.00}%", Percentage);
+                    var header = String.Format("{0:0.00}% Valkyrie scanning...", Percentage).Replace(".00", string.Empty);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
 
@@ -508,93 +508,68 @@ namespace APTAT.Application.Models
             }
         }
 
-        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        void HandleWebException(WebException ex)
         {
-            
-                if (e.Error != null)
+            var httpWebResponse = ex.Response as HttpWebResponse;
+            if (httpWebResponse != null)
+            {
+                HttpStatusCode code = httpWebResponse.StatusCode;
+                if (code == HttpStatusCode.ProxyAuthenticationRequired)
                 {
-                    ShowError(e.Error);
-                    var webException = e.Error as WebException;
-                    if (webException != null)
+                    Trace.WriteLine(code.ToString());
+
+                    SettingsWindow window = new SettingsWindow();
+                    window.Owner = System.Windows.Application.Current.MainWindow;
+                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                    string proxy = String.Empty;
+                    var defaultProxy = WebProxy.GetDefaultProxy();
+                    if (defaultProxy != null)
                     {
-                        var httpWebResponse = webException.Response as HttpWebResponse;
-                        if (httpWebResponse != null)
-                        {
-                            HttpStatusCode code = httpWebResponse.StatusCode;
-                            if (code == HttpStatusCode.ProxyAuthenticationRequired)
-                            {
-                                Trace.WriteLine(code.ToString());
+                        proxy = defaultProxy.Address.AbsoluteUri;
+                    }
 
-                                SettingsWindow window = new SettingsWindow();
-                                window.Owner = System.Windows.Application.Current.MainWindow;
-                                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    string message = String.Format("The server {0} requires a username and password.", proxy);
+                    window.MessageText.Text = message;
 
-                                string proxy = String.Empty;
-                                var defaultProxy = WebProxy.GetDefaultProxy();
-                                if (defaultProxy != null)
-                                {
-                                    proxy = defaultProxy.Address.AbsoluteUri;
-                                }
-
-
-                                string message = String.Format("The server {0} requires a username and password.", proxy);
-                                window.MessageText.Text = message;
-
-                                if (window.ShowDialog() == true)
-                                {
-                                    NetworkCredential cred = new NetworkCredential(window.LoginTextBox.Text,
-                                        window.PasswordBox.Password);
-                                    Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
-                                    BeginValkyrieAnalysis(cred);
-                                    return;
-                                }
-                            }
-                        }
+                    if (window.ShowDialog() == true)
+                    {
+                        NetworkCredential cred = new NetworkCredential(window.LoginTextBox.Text,
+                            window.PasswordBox.Password);
+                        Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+                        BeginValkyrieAnalysis(cred);
+                        return;
                     }
                 }
-                
-
-                _cacheValkyrie = new Collection<FileResult>(e.Result);
-                ItemsValkyrie = new ObservableCollection<FileResult>(_cacheValkyrie);
-
-                IsValkyrieScanInProgress = false;
-                IsAnalyseWithValkyrieEnabled = true;
-                IsValkyrieReportEnabled = true;
-                IsValkyrieAnalysCompleted = true;
-
-                RaisePropertyChanged("Header");
-                RaisePropertyChanged("ValkyrieDetailsLink");
-
-                var tmp = ValkyrieAnalyzeCompleted;
-                if (tmp != null)
-                {
-                    tmp(this, e);
-                }
+            }
         }
 
-        private static void ShowError(Exception exception)
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
-            return;
-            /*if (exception == null) return;
-            if (exception is AggregateException) return;
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(exception.Message);
-            var ae = exception as AggregateException;
-            List<string> errorList = new List<string>();
-            if (ae != null)
+            if (e.Error != null)
             {
-                foreach (var innerException in ae.InnerExceptions)
-                {
-                    if (errorList.Contains(innerException.Message)) continue;
-                    errorList.Add(innerException.Message);
-
-                }
+                var webException = e.Error as WebException;
+                if (webException != null)
+                    HandleWebException(webException);
             }
-            ErrorLogWindow error = new ErrorLogWindow(errorList)
+
+            _cacheValkyrie = new Collection<FileResult>(e.Result);
+            ItemsValkyrie = new ObservableCollection<FileResult>(_cacheValkyrie);
+
+            ValkyrieSendingFiles = false;
+            IsValkyrieScanInProgress = false;
+            IsAnalyseWithValkyrieEnabled = true;
+            IsValkyrieReportEnabled = true;
+            IsValkyrieAnalysCompleted = true;
+
+            RaisePropertyChanged("Header");
+            RaisePropertyChanged("ValkyrieDetailsLink");
+
+            var tmp = ValkyrieAnalyzeCompleted;
+            if (tmp != null)
             {
-                Owner = System.Windows.Application.Current.MainWindow
-            };
-            error.ShowDialog();*/
+                tmp(this, e);
+            }
         }
 
         private bool _valkyrieSendingFiles;
@@ -896,7 +871,7 @@ namespace APTAT.Application.Models
                 ServerErrorFilesCount = serverErrorFiles;
             }
 
-            ScannedItemsCount = completed;
+            ScannedItemsCount = scanned;
 
             if (completed == OnlineItemsCount)
             {

@@ -56,6 +56,12 @@ namespace APTAT.Application
 
         }
 
+        private void OnCancelButtonClick(object sender, RoutedEventArgs e)
+        {
+            App.Current.Shutdown();
+
+        }
+
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);

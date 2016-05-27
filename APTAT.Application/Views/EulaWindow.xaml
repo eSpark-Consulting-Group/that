@@ -40,7 +40,7 @@
         <Button AutomationProperties.AutomationId="ContinueButton"
                  IsEnabled="{Binding ElementName=AgreeCheckbox, Path=IsChecked}"  Content="Continue" Click="OnOkButtonClick" Height="23" Width="75" />
           <Button AutomationProperties.AutomationId="CancelButton" Margin="15,0,0,0"
-                 Content="Cancel" Click="OnOkButtonClick" Height="23" Width="75" />
+                 Content="Cancel" Click="OnCancelButtonClick" Height="23" Width="75" />
         </StackPanel>
       </Grid>
 

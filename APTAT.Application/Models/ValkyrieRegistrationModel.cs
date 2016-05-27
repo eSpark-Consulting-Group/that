@@ -121,7 +121,6 @@ namespace APTAT.Application.Models
             }
         }
 
-        public string Error { get {return String.Empty;} }
 
         #region ValidateDate
         public bool ValidatePassword()
