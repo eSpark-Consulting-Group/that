@@ -5,11 +5,15 @@ using System.IO;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
+using System.Linq;
+using System.ComponentModel;
 
 namespace APTAT.Core
 {
-    public class FileResult : IEquatable<FileResult>
+    public class FileResult : IEquatable<FileResult>, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        
         public FileResult(Module badFile)
         {
             Computers = new List<ComputerInformation>();
@@ -156,6 +160,13 @@ namespace APTAT.Core
 
         public List<ComputerInformation> Computers { get; set; }
 
+        public void MergeComputers(List<ComputerInformation> computers)
+        {
+            var existing = Computers.Intersect(computers, EqualityComparer<ComputerInformation>.Default);
+            Computers.AddRange(computers.Except(existing));
+            RaisePropertyChanged("Computers");
+        }
+
         public override string ToString()
         {
             return Name;
@@ -164,6 +175,14 @@ namespace APTAT.Core
         public bool Equals(FileResult other)
         {
             return Sha1 == other.Sha1 && ValkyrieAnalysisResult != null && other.ValkyrieAnalysisResult != null;
+        }
+
+        protected virtual void RaisePropertyChanged(String name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

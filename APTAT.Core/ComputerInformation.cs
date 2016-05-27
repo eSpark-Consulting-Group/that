@@ -6,7 +6,7 @@ using OperatingSystem = APTAT.Core.Descent.Apt.OperatingSystem;
 
 namespace APTAT.Core
 {
-    public class ComputerInformation
+    public class ComputerInformation : IEquatable<ComputerInformation>
     {
         public ComputerInformation(Computer computer)
         {
@@ -35,6 +35,16 @@ namespace APTAT.Core
                 return String.Format("{0} ({1}) {2}", this.Name, this.IP, this.Os);
 
             }
+        }
+
+        public bool Equals(ComputerInformation other)
+        {
+            return FullName == other.FullName && FilePath == other.FilePath;
+        }
+
+        public override string ToString()
+        {
+            return FullName;
         }
     }
 }

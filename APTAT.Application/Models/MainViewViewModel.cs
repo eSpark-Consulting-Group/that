@@ -12,6 +12,7 @@ using APTAT.Core;
 using APTAT.Core.Valkyrie;
 using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
+using System.Collections;
 
 namespace APTAT.Application.Models
 {
@@ -553,8 +554,8 @@ namespace APTAT.Application.Models
                     HandleWebException(webException);
             }
 
-            _cacheValkyrie = new Collection<FileResult>(e.Result);
-            ItemsValkyrie = new ObservableCollection<FileResult>(_cacheValkyrie);
+            MergeResults(e.Result);
+            _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
 
             ValkyrieSendingFiles = false;
             IsValkyrieScanInProgress = false;
@@ -601,11 +602,19 @@ namespace APTAT.Application.Models
                 
                 RaisePropertyChanged("Header");
 
-                foreach (var result in info.Results)
-                {
-                    if (result.ValkyrieAnalysisResult != null)
-                        ItemsValkyrie.Add(result);
-                }
+                MergeResults(info.Results);
+            }
+        }
+
+        private void MergeResults(FileResult[] results)
+        {
+            foreach (var result in results)
+            {
+                var existing = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
+                if (existing != null)
+                    existing.MergeComputers(result.Computers);
+                else
+                    ItemsValkyrie.Add(result);
             }
         }
 
