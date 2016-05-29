@@ -143,7 +143,6 @@ namespace APTAT.Valkyrie.Client
             return result;
         }
 
-        static int i = 0;
         private static T CallValkyrie<T>(Uri apiUri, object request)
         {
             var payload = request.ToNameValueCollection();

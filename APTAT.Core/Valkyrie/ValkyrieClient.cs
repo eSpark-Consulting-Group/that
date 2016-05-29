@@ -323,6 +323,12 @@ namespace APTAT.Core.Valkyrie
                     exception = aggregateException;
                 }
             }
+            else
+                Task.Factory.StartNew(t =>
+                    { 
+                        ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount)); 
+                    }, TaskCreationOptions.None);
+
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {1}",
                 DateTime.UtcNow, _apiKey));
 
@@ -548,12 +554,7 @@ namespace APTAT.Core.Valkyrie
                 SubmitToAutomaticAnalysis(filesToAnaluyze, login, password, _cancellationTokenSource.Token);
                 
             }, TaskCreationOptions.None, cancellationToken)
-                .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled)
-                .ContinueWith(t =>
-                {
-                    if (t.Exception == null)
-                        ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount));
-                },  TaskContinuationOptions.OnlyOnRanToCompletion);
+                .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
         }
 
         public void Dispose()
