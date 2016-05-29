@@ -35,17 +35,14 @@
                 <DataTemplate x:Key="ComputerInfoTemplate">
                     <Grid HorizontalAlignment="Stretch" Height="50">
                       <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                       </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                      <TextBlock Margin="8,8,0,0" Text="{Binding FullName}" Grid.Column="1"/>
-                      <TextBlock  Grid.Column="2" Margin="0,8,0,0" Text="" />
-                      <TextBlock Margin="8,0,0,6" Text="{Binding FilePath}" TextTrimming="CharacterEllipsis" ToolTip="{Binding FilePath}"  VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                      </Grid.RowDefinitions>
+                      <TextBlock Margin="8,8,0,0" Text="{Binding FullName}" Grid.Column="0"/>
+                      <TextBlock Margin="8,4,0,0" Text="{Binding FilePath}"  FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding FilePath}" Grid.Row="1"/>
 
                     </Grid>
                 </DataTemplate>

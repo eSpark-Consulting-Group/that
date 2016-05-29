@@ -543,7 +543,8 @@ namespace APTAT.Core.Valkyrie
                 }
 
                 OnAnalyzeStarted();
-                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 2000, Timeout.Infinite);
+                Thread.Sleep(2000);
+                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, Timeout.Infinite);
                 SubmitToAutomaticAnalysis(filesToAnaluyze, login, password, _cancellationTokenSource.Token);
                 
             }, TaskCreationOptions.None, cancellationToken)
