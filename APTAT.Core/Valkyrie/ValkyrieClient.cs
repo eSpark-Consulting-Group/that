@@ -534,15 +534,16 @@ namespace APTAT.Core.Valkyrie
                     var ex = new ValkyrieRegistrationFailedException(regInfo);
                     throw ex;
                 }
-                OnAnalyzeStarted();
-                Thread.Sleep(2000); //time out asked by Valkyrie team 
+
                 var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(regInfo.Key));
                 if (startScanResult.ReturnCode != 0)
                 {
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException(startScanResult.ResultDescription);
                 }
-                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, Timeout.Infinite);
+
+                OnAnalyzeStarted();
+                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 2000, Timeout.Infinite);
                 SubmitToAutomaticAnalysis(filesToAnaluyze, login, password, _cancellationTokenSource.Token);
                 
             }, TaskCreationOptions.None, cancellationToken)

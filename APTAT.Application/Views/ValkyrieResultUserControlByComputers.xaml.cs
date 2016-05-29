@@ -16,6 +16,9 @@ namespace APTAT.Application
 
             Loaded += (s, e) =>
             {
+                if (RadContextMenu.GetContextMenu(treeList2) != null)
+                    return;
+
                 var menu = new RadContextMenu();
                 menu.IconColumnWidth = 0;
                 menu.Width = 160;
