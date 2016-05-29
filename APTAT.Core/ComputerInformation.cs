@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using APTAT.Core.Descent.Apt;
 using OperatingSystem = APTAT.Core.Descent.Apt.OperatingSystem;
@@ -10,30 +11,65 @@ namespace APTAT.Core
     {
         public ComputerInformation(Computer computer)
         {
+            Files = new ObservableCollection<FileResult>();
+            Status = new ObservableCollection<string>();
             Os = computer.Os;
             Name = computer.Name;
             Sid = computer.Sid;
             if (computer.Connections.Any())
             {
-                this.IP = computer.Connections.First().IPv4;
-
+                IP = computer.Connections.First().IPv4;
             }
+        }
+
+        public ComputerInformation(ComputerInformation computer)
+        {
+            Files = new ObservableCollection<FileResult>();
+            Status = new ObservableCollection<string>();
+            Os = computer.Os;
+            Name = computer.Name;
+            Sid = computer.Sid;
+            IP = computer.IP;
+            FilePath = computer.FilePath;
+            ScanCompleted = true;
         }
 
         public string Name { get; set; }
         public string Sid { get; set; }
         public OperatingSystem Os { get; set; }
-
-
         public string IP { get; set; }
         public string FilePath { get; set; }
+
         public string FullName
         {
             get
             {
+                return String.Format("{0} ({1})", Name, IP);
+            }
+        }
 
-                return String.Format("{0} ({1}) {2}", this.Name, this.IP, this.Os);
+        private bool _scanCompleted = false;
+        public bool ScanCompleted
+        {
+            get { return _scanCompleted; }
+            private set { _scanCompleted = value; }
+        }
 
+        public ObservableCollection<FileResult> Files { get; set; }
+
+        public ObservableCollection<string> Status { get; set; }
+
+        public void MergeFiles(FileResult file)
+        {
+            if (!Files.Any(_ => _.Equals(file)))
+            {
+                Files.Add(new FileResult(file));
+                Status.Clear();
+                var malwareCount = Files.Count(_ => _.IsMalware);
+                var unknownCount = Files.Count(_ => _.IsUnknown);
+                Status.Add(string.Format("Total programs scanned: {0}. Unknown programs found: {1}.",
+                    Files.Count, unknownCount) + 
+                    (malwareCount > 0 ? string.Format(" Malwares found: {0}.", malwareCount) : string.Empty));
             }
         }
 

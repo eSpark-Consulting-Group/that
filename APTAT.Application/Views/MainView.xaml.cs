@@ -58,9 +58,13 @@ namespace APTAT.Application
             switch (message.Message)
             {
                 case ChangeScreenTypes.ValkyrieScan:
+                    if (mainContent.Content != null && mainContent.Content is ResultTabsControl)
+                        return;
                     mainContent.Content = new ResultTabsControl();
                     break;
                 case ChangeScreenTypes.Scan:
+                    if (mainContent.Content != null && mainContent.Content is ScanInfoTreeView)
+                        return;
                     mainContent.Content = new ScanInfoTreeView();
                     break;
                 case ChangeScreenTypes.StartScan:
@@ -74,7 +78,6 @@ namespace APTAT.Application
                     confirmation.Owner = System.Windows.Application.Current.MainWindow;
                     if (confirmation.ShowDialog() == true && message.Action != null)
                         message.Action(null);
-
                     break;
             }
         }

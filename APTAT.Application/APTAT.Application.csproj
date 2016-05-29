@@ -157,6 +157,9 @@
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="Extensions\PortValidationExtensions.cs" />
     <Compile Include="Controls\TitleUpdater.cs" />
+    <Compile Include="Views\ValkyrieResultUserControlByComputers.xaml.cs">
+      <DependentUpon>ValkyrieResultUserControlByComputers.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ValkyrieDetailsView.xaml.cs">
       <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
     </Compile>
@@ -264,6 +267,10 @@
     <Page Include="Views\ConfirmationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ValkyrieResultUserControlByComputers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ValkyrieDetailsView.xaml">
       <Generator>MSBuild:Compile</Generator>

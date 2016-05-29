@@ -10,8 +10,7 @@ namespace APTAT.Application.Models
         InProgress,
         Cancelled,
         Completed,
-        Failed,
-        SubItem,
+        Failed
     }
 
     public struct ScanStatus : IComparable
@@ -64,25 +63,16 @@ namespace APTAT.Application.Models
 
     public class ThreatInfoItem : DomainObject
     {
-        private Boolean _autoExpandHandled;
-
         private Int32 _progress;
         private Int32 _totalFilesCount;
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
         private String _statusMessage;
 
-        private Boolean _isCompletedSubItem;
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _serverErrorFilesCount;
-
-        public Boolean AutoExpandHandled
-        {
-            get { return _autoExpandHandled; }
-            set { _autoExpandHandled = value; }
-        }
 
         public Boolean HasBadFiles
         {
@@ -105,7 +95,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                if(String.IsNullOrWhiteSpace(IpAddress) == false)
+                if (!string.IsNullOrEmpty(IpAddress))
                 {
                     return String.Format("{0} ({1})", Name, IpAddress);    
                 }
@@ -122,36 +112,11 @@ namespace APTAT.Application.Models
 
         public string LdapPath { get; set; }
 
-
-
-        public Boolean IsCompletedSubItem
-        {
-            get { return _isCompletedSubItem; }
-            set
-            {
-                _isCompletedSubItem = value;
-                RaisePropertyChanged("ScanStatus");
-            }
-        }
-
         public ScanStatus ScanStatus
         {
             get
             {
-                if(IsRootItem == false)
-                {
-                    if (IsCompletedSubItem)
-                    {
-                        return new ScanStatus(ScanStatusEnum.Completed);
-                    }
-                    else
-                    {
-                        return new ScanStatus(ScanStatusEnum.SubItem);    
-                    }
-                }
-               
-
-                if(IsOnline == false)
+                if(!IsOnline)
                 {
                     return new ScanStatus(ScanStatusEnum.Offline);
                 }
@@ -194,7 +159,7 @@ namespace APTAT.Application.Models
 
         public bool ScanCompleted
         {
-            get { return ScanStage == ScanStage.OperationCompleted && TempItems != null && TempItems.Count > 0; }
+            get { return ScanStage == ScanStage.OperationCompleted && Items != null && Items.Count > 0; }
         }
 
         public String StatusMessage
@@ -296,13 +261,6 @@ namespace APTAT.Application.Models
                 _progress = value;
                 RaisePropertyChanged("Progress");
             }
-        }
-
-        
-        public ObservableCollection<ThreatInfoItem> TempItems
-        {
-            get;
-            set;
         }
 
         public ObservableCollection<ThreatInfoItem> Items

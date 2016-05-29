@@ -7,16 +7,15 @@ using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
 using System.Linq;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace APTAT.Core
 {
-    public class FileResult : IEquatable<FileResult>, INotifyPropertyChanged
+    public class FileResult : IEquatable<FileResult>
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        
         public FileResult(Module badFile)
         {
-            Computers = new List<ComputerInformation>();
+            Computers = new ObservableCollection<ComputerInformation>();
             Id = badFile.Id;
             Path = badFile.Path;
             Cloud = badFile.Cloud;
@@ -31,8 +30,29 @@ namespace APTAT.Core
             Version = badFile.Version;
             Copyright = badFile.Copyright;
             Product = badFile.Product;
-
         }
+
+        public FileResult(FileResult result)
+        {
+            Computers = new ObservableCollection<ComputerInformation>();
+            Id = result.Id;
+            Path = result.Path;
+            Cloud = result.Cloud;
+            Size = result.Size;
+            Attributes = result.Attributes;
+            Created = result.Created;
+            Modified = result.Modified;
+            Accessed = result.Accessed;
+            Sha1 = result.Sha1.Trim().ToLower();
+            Signer = result.Signer;
+            Description = result.Description;
+            Version = result.Version;
+            Copyright = result.Copyright;
+            Product = result.Product;
+            ValkyrieAnalysisResult = result.ValkyrieAnalysisResult;
+            ScanCompleted = false;
+        }
+
         public string Id { get; set; }
         public string Path { get; set; }
         public CloudVerdict Cloud { get; set; }
@@ -151,24 +171,23 @@ namespace APTAT.Core
             get { return FileAgeFormatter.GetAge(Created); }
         }
 
+        private bool _scanCompleted = true;
         public bool ScanCompleted
         {
-            get { return true; }
+            get { return _scanCompleted; }
+            private set { _scanCompleted = value; }
         }
 
         public ValkyrieAnalysisResult ValkyrieAnalysisResult { get; set; }
 
-        public List<ComputerInformation> Computers { get; set; }
+        public ObservableCollection<ComputerInformation> Computers { get; set; }
 
-        public void MergeComputers(List<ComputerInformation> computers)
+        public void MergeComputers(IEnumerable<ComputerInformation> computers)
         {
             foreach (var computer in computers)
             {
                 if (!Computers.Any(_ => _.Equals(computer)))
-                {
                     Computers.Add(computer);
-                    RaisePropertyChanged("Computers");
-                }
             }
         }
 
@@ -180,14 +199,6 @@ namespace APTAT.Core
         public bool Equals(FileResult other)
         {
             return Sha1 == other.Sha1 && ValkyrieAnalysisResult != null && other.ValkyrieAnalysisResult != null;
-        }
-
-        protected virtual void RaisePropertyChanged(String name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
         }
     }
 }

@@ -24,8 +24,13 @@ namespace APTAT.Application.Models
         public event EventHandler ValkyrieAnalyzeStarted;
         public event EventHandler<AnalyzeCompletedEventArgs<FileResult>> ValkyrieAnalyzeCompleted;
 
-        private String _login;
-        private String _password;
+        private string _login;
+        private string _password;
+        private string _camLicenseId;
+        private string _camUserLogin;
+        private string _camUserPassword;
+        private string _tcpPort;
+        private string _udpPort;
 
         private readonly IAptService _aptService;
         private readonly IWmiService _wmiService;
@@ -37,27 +42,25 @@ namespace APTAT.Application.Models
 
         private Boolean _isReportEnabled;
         private Boolean _isValkyrieReportEnabled;
+        private Boolean? _isValkyrieScanInProgress;
+        private Boolean _isValkyrieAnalysCompleted;
         private Boolean? _isScanInProgress = false;
-        private Int32 _scannedItemsCount;
 
+        private Int32 _scannedItemsCount;
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
         private FileResult _selectedValkyrieItem;
+
         private ObservableCollection<ThreatInfoItem> _items;
         private ObservableCollection<FileResult> _itemsValkyrie;
+        private ObservableCollection<ComputerInformation> _computersValkyrie;
+
         private Collection<ThreatInfoItem> _cache;
         private Collection<FileResult> _cacheValkyrie;
-
-        public string StatusBarText
-        {
-            get
-            {
-                return " unknown programs detected";
-            }
-        }
+        private Collection<ComputerInformation> _cacheValkyrieComputers;
 
         public bool IsAnyScanInProgress
         {
@@ -102,7 +105,6 @@ namespace APTAT.Application.Models
                 _isValkyrieScanInProgress = value;
                 RaisePropertyChanged("IsValkyrieScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
-                RaisePropertyChanged("StatusBarText");
 
                 App.Current.Dispatcher.BeginInvoke((Action) delegate 
                 { 
@@ -113,31 +115,12 @@ namespace APTAT.Application.Models
             }
         }
 
-
-        public bool IsValkyrieAnalysStarted
-        {
-            get { return ValkyrieProgressInfo.ProcessedFileCount > 0; }
-        }
-
         public int DistinctFilesCount
         {
             get { return ValkyrieProgressInfo.TotalFileCount; }
         }
-        private ProgressInfo<FileResult> _valkyrieProgressInfo;
 
-        public ProgressInfo<FileResult> ValkyrieProgressInfo
-        {
-            get { return _valkyrieProgressInfo; }
-            set
-            {
-                _valkyrieProgressInfo = value;
-                RaisePropertyChanged("ValkyrieProgressInfo");
-                RaisePropertyChanged("DistinctFilesCount");
-                RaisePropertyChanged("StatusBarText");
-                RaisePropertyChanged("IsValkyrieAnalysStarted");
-                RaisePropertyChanged("MalwareFilesCount");
-            }
-        }
+        public ProgressInfo<FileResult> ValkyrieProgressInfo { get; set; }
 
 
         public Int32 UnknownFilesCount
@@ -378,7 +361,16 @@ namespace APTAT.Application.Models
             {
                 _itemsValkyrie = value;
                 RaisePropertyChanged("ItemsValkyrie");
+            }
+        }
 
+        public ObservableCollection<ComputerInformation> ComputersValkyrie
+        {
+            get { return _computersValkyrie; }
+            set
+            {
+                _computersValkyrie = value;
+                RaisePropertyChanged("ComputersValkyrie");
             }
         }
 
@@ -430,8 +422,10 @@ namespace APTAT.Application.Models
             IsQuickScan = (bool)arg;
             Items = new ObservableCollection<ThreatInfoItem>();
             ItemsValkyrie = new ObservableCollection<FileResult>();
+            ComputersValkyrie = new ObservableCollection<ComputerInformation>();
             _cache = new Collection<ThreatInfoItem>();
             _cacheValkyrie = new Collection<FileResult>();
+            _cacheValkyrieComputers = new Collection<ComputerInformation>();
             _onlineItems = new ThreatInfoItem[0];
             SelectedItem = null;
             UnknownFilesCount = 0;
@@ -556,8 +550,9 @@ namespace APTAT.Application.Models
 
             MergeResults(e.Result);
             _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
+            _cacheValkyrieComputers = new Collection<ComputerInformation>(ComputersValkyrie);
 
-            ValkyrieSendingFiles = false;
+            Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
             IsAnalyseWithValkyrieEnabled = true;
             IsValkyrieReportEnabled = true;
@@ -573,35 +568,18 @@ namespace APTAT.Application.Models
             }
         }
 
-        private bool _valkyrieSendingFiles;
-        public bool ValkyrieSendingFiles
-        {
-            get { return _valkyrieSendingFiles; }
-            set
-            {
-                if (_valkyrieSendingFiles == value)
-                    return;
-
-                _valkyrieSendingFiles = value;
-                RaisePropertyChanged("ValkyrieSendingFiles");
-            }
-        }
+        public bool ValkyrieSendingFiles { get; set; }
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            ValkyrieSendingFiles = false;
+            Set(() => ValkyrieSendingFiles, false);
 
             var info = (ProgressInfo<FileResult>)e.UserState;
             if (info != null)
             {
                 ValkyrieProgressInfo = info;
-
                 Percentage = info.Percentage;
-                UnknownFilesCount = UnknownFilesCount + info.UnknownFileCount;
-                MalwareFilesCount = MalwareFilesCount + info.MalwareFilesCount;
-                
                 RaisePropertyChanged("Header");
-
                 MergeResults(info.Results);
             }
         }
@@ -610,11 +588,27 @@ namespace APTAT.Application.Models
         {
             foreach (var result in results)
             {
-                var existing = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
-                if (existing != null)
-                    existing.MergeComputers(result.Computers);
-                else
+                var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
+                if (file != null)
+                    file.MergeComputers(result.Computers);
+                else if (result.ValkyrieAnalysisResult != null)
+                {
                     ItemsValkyrie.Add(result);
+                    UnknownFilesCount += result.IsUnknown ? 1 : 0;
+                    MalwareFilesCount += result.IsMalware ? 1 : 0;
+                }
+
+                foreach (var computer in result.Computers)
+                {
+                    var comp = ComputersValkyrie.FirstOrDefault(_ => _.FullName == computer.FullName);
+                    if (comp != null)
+                        comp.MergeFiles(result);
+                    else
+                    {
+                        computer.MergeFiles(result);
+                        ComputersValkyrie.Add(new ComputerInformation(computer));
+                    }
+                }
             }
         }
 
@@ -749,16 +743,18 @@ namespace APTAT.Application.Models
 
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieScanInProgress = true;
-            ValkyrieSendingFiles = true;
-            
             IsValkyrieAnalysCompleted = false;
-            UnknownFilesCount = 0;
 
             ItemsValkyrie = new ObservableCollection<FileResult>();
+            ComputersValkyrie = new ObservableCollection<ComputerInformation>();
             _cacheValkyrie = new Collection<FileResult>();
+            _cacheValkyrieComputers = new Collection<ComputerInformation>();
+
             Keyword = string.Empty;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ValkyrieScan);
+
+            Set(() => ValkyrieSendingFiles, true);
         }
 
         public void BeginValkyrieAnalysis(string camLicenseId, string camUserLogin, string camUserPassword)
@@ -916,7 +912,7 @@ namespace APTAT.Application.Models
                     }
                 }
 
-                parentItem.TempItems = items;
+                parentItem.Items = items;
                 parentItem.ScanStage = parentItem.ScanStage;
             }
         }
@@ -940,21 +936,16 @@ namespace APTAT.Application.Models
             {
                 ItemsValkyrie = new ObservableCollection<FileResult>(
                        _cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
-
                 SelectedValkyrieItem = null;
+            }
+
+            if (_cacheValkyrieComputers.Any())
+            {
+                ComputersValkyrie = new ObservableCollection<ComputerInformation>(
+                       _cacheValkyrieComputers.Where(item => item.FullName.ContainsString(Keyword)));
             }
         }
 
-
-
-        private bool? _isValkyrieScanInProgress;
-        //private string _statusBarText;
-        private bool _isValkyrieAnalysCompleted;
-        private string _camLicenseId;
-        private string _camUserLogin;
-        private string _camUserPassword;
-        private string _tcpPort;
-        private string _udpPort;
 
         public bool IsQuickScan { get; set; }
     }

@@ -66,57 +66,6 @@ namespace APTAT.Application
             get { return this.DataContext as MainViewViewModel; }     
         }
 
-
-        private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
-        {
-            treeList.CollapseAllHierarchyItems();
-
-        }
-
-        private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
-        {
-            var row = e.Row as GridViewRow;
-            if (row.IsExpanded)
-            {
-                if (row != null)
-                {
-                    ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
-
-                    if (item.ScanStage == ScanStage.OperationCompleted)
-                    {
-                        if (item.TempItems.Count > 0)
-                        {
-                            item.Items = item.TempItems;
-
-                            //if (!IsSearchPerformed)
-                            //{
-                            foreach (ThreatInfoItem subItem in item.Items)
-                            {
-                                subItem.IsCompletedSubItem = true;
-                            }
-                            //}
-                            //else
-                            //    IsSearchPerformed = false;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                ThreatInfoItem item = ((ThreatInfoItem)row.DataContext);
-                if (item.Items != null)
-                {
-                    foreach (ThreatInfoItem subItem in item.Items)
-                    {
-                        subItem.IsCompletedSubItem = false;
-                    }
-                }
-
-                //item.Items = null;
-            }
-
-        }
-
         private ThreatInfoItem GetDataBoundItem(FrameworkElement element)
         {
             if (element == null)

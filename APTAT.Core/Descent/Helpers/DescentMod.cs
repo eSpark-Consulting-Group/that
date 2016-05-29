@@ -282,9 +282,10 @@ namespace APTAT.Core.Descent.Helpers
 			            NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity,
 			                new ResourceText("null",
 			                    String.Format(
-			                        "Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}. Failed to analise: {3}, Server errors: {4}",
-			                        result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount,
-			                        result.ErrorFilesCount, result.ServerErrorFilesCount)),
+			                        "Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
+			                        result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount) + 
+                                    (result.ErrorFilesCount > 0 ? String.Format(" Failed to analyse: {0}.", result.ErrorFilesCount) : String.Empty) +
+                                    (result.ServerErrorFilesCount > 0 ? String.Format(" Server errors: {0}.", result.ServerErrorFilesCount) : String.Empty)),
 			                AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount,
 			                result.MalwareFilesCount, result.SafeFilesCount, 100, result.ErrorFilesCount,
 			                result.ServerErrorFilesCount);

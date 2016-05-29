@@ -68,9 +68,9 @@
                   </Style>
                 </TabControl.Resources>
                 <TabItem Header="Group by Computers">
-                  
+                  <local:ValkyrieResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </TabItem>
-
+                  
                 <TabItem Header="Group by Files" IsSelected="True" >
                   <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </TabItem>

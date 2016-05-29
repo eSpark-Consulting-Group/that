@@ -233,20 +233,20 @@
 
         <Border Grid.Row="3"  Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85">
             <DockPanel  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" Height="35" >
-
-                <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="10,5,0,5" FontSize="14"/>
-                <TextBlock Foreground="White" Text="{Binding StatusBarText}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                <TextBlock Margin="10,0,0,0" />
+                <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text=" Unknown programs found" VerticalAlignment="Center" Margin="0,5" FontSize="14" />
                 <StackPanel  Orientation="Horizontal" Visibility="{Binding IsMalwaresFound, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                    <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
                     <TextBlock Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
-                    <TextBlock Foreground="White" Text=" malwares detected" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                    <TextBlock Foreground="White" Text=" Malwares found" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 </StackPanel>
 
                 <TextBlock Foreground="White" Text=" (" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text=" of " VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding TotalItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
-                <TextBlock  Foreground="White" Text=" computers scanned)." VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                <TextBlock  Foreground="White" Text=" Computers scanned)" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
