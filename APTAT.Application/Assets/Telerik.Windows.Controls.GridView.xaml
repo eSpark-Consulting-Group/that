@@ -1022,7 +1022,7 @@
 		<Setter Property="Foreground" Value="{StaticResource StrongBrush}" />
 		<!--<Setter Property="Background" Value="{StaticResource MainBrush}" />-->
         <Setter Property="Background" Value="#FFE3E3E3"/>
-        <Setter Property="BorderBrush" Value="#DDD"/>
+        <Setter Property="BorderBrush" Value="#FFF9F9F9"/>
 		<Setter Property="BorderThickness" Value="0,0,1,1"/>
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
