@@ -551,7 +551,8 @@ namespace APTAT.Core.Valkyrie
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled)
                 .ContinueWith(t =>
                 {
-                    ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount));
+                    if (t.Exception == null)
+                        ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount));
                 },  TaskContinuationOptions.OnlyOnRanToCompletion);
         }
 

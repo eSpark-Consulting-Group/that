@@ -52,7 +52,7 @@ namespace APTAT.Application.Models
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
-        private FileResult _selectedValkyrieItem;
+        private object _selectedValkyrieItem;
 
         private ObservableCollection<ThreatInfoItem> _items;
         private ObservableCollection<FileResult> _itemsValkyrie;
@@ -224,7 +224,7 @@ namespace APTAT.Application.Models
 
         public Boolean IsValkyrieDetailsEnabled
         {
-            get { return SelectedValkyrieItem != null; }
+            get { return SelectedValkyrieItem != null && SelectedValkyrieItem is FileResult; }
         }
 
         public Boolean IsReportEnabled
@@ -299,12 +299,12 @@ namespace APTAT.Application.Models
             }
         }
 
-        public FileResult SelectedValkyrieItem
+        public object SelectedValkyrieItem
         {
             get { return _selectedValkyrieItem; }
             set
             {
-                _selectedValkyrieItem = value;
+                _selectedValkyrieItem = value == null ? null : (value is FileResult ? value : null);
                 RaisePropertyChanged("SelectedValkyrieItem");
                 SelectValkyrieCommand.InvalidateCanExecute();
 
@@ -314,7 +314,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, _selectedValkyrieItem));
+                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, (FileResult)_selectedValkyrieItem));
                 }
 
             }

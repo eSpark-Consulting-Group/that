@@ -96,58 +96,70 @@
                     <TextBlock  Text="{Binding ValkyrieAnalysisResult.OperationStatus}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
                 </DataTemplate>
 
-                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="ValkyrieNameTemplateSelector" 
-                                                                FileTemplate="{StaticResource FileInfoTemplate}"
-                                                                ComputerTemplate="{StaticResource ComputerInfoTemplate}"/>
-            </telerik:RadTreeListView.Resources>
+         <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="NameTemplateSelector"
+                                         FileTemplate="{StaticResource FileInfoTemplate}"
+                                         ComputerTemplate="{StaticResource ComputerInfoTemplate}"/>
+         <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="SizeTemplateSelector"
+                                                         FileTemplate="{StaticResource SizeColumn}"
+                                                         ComputerTemplate="{x:Null}"/>
+         <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="WhiteListedTemplateSelector"
+                                                         FileTemplate="{StaticResource WhiteListedColumn}"
+                                                         ComputerTemplate="{x:Null}"/>
+         <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="VerdictTemplateSelector"
+                                                         FileTemplate="{StaticResource VerdictColumn}"
+                                                         ComputerTemplate="{x:Null}"/>
+         <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="OperationStatusTemplateSelector"
+                                                         FileTemplate="{StaticResource OperationStatusColumn}"
+                                                         ComputerTemplate="{x:Null}"/>
+       </telerik:RadTreeListView.Resources>
 
-            <telerik:RadTreeListView.ChildTableDefinitions>
-                <telerik:TreeListViewTableDefinition ItemsSource="{Binding Files}" />
-            </telerik:RadTreeListView.ChildTableDefinitions>
-            
-            <telerik:RadTreeListView.Columns>
-                
-                <telerik:GridViewColumn                 
-                    CellTemplateSelector="{StaticResource ValkyrieNameTemplateSelector}"
-                    IsFilterable="False"
-                    ShowFilterButton="False"                    
-                    ShowFieldFilters="False"                    
-                    Header="NAME"
-                    TextAlignment="Left"
-                    Width="460*" 
-                 SortMemberPath="Name"/>
-               
-                <telerik:GridViewColumn 
-                    CellTemplate="{StaticResource SizeColumn}"
-                    SortMemberPath="Size"
-                    IsFilterable="False"
-                    Header="SIZE"  
-                    TextAlignment="Right"
-                    Width="80*"/>
+       <telerik:RadTreeListView.ChildTableDefinitions>
+         <telerik:TreeListViewTableDefinition ItemsSource="{Binding Files}" />
+       </telerik:RadTreeListView.ChildTableDefinitions>
 
-                <telerik:GridViewColumn 
-                    CellTemplate="{StaticResource VerdictColumn}"
-                    SortMemberPath="ValkyrieAnalysisResult.VerdictString"
-                    IsFilterable="False"
-                    Header="VERDICT"  
-                    TextAlignment="Left"
-                    Width="220*"/>
-                
-                <telerik:GridViewColumn 
-                    CellTemplate="{StaticResource OperationStatusColumn}"
-                    SortMemberPath="ValkyrieAnalysisResult.OperationStatus"
-                    IsFilterable="False"
-                    Header="STATUS"  
-                    TextAlignment="Left"
-                    Width="140*"/>
+       <telerik:RadTreeListView.Columns>
 
-                <telerik:GridViewColumn                    
-                    CellTemplate="{StaticResource WhiteListedColumn}"
-                    SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
-                    IsFilterable="False"
-                    Header="WHITELISTED"  
-                    TextAlignment="Center"
-                    Width="85*"/>
+         <telerik:GridViewColumn
+             CellTemplateSelector="{StaticResource NameTemplateSelector}"
+             IsFilterable="False"
+             ShowFilterButton="False"
+             ShowFieldFilters="False"
+             Header="NAME"
+             TextAlignment="Left"
+             Width="460*"
+          SortMemberPath="Name"/>
+
+         <telerik:GridViewColumn
+             CellTemplateSelector="{StaticResource SizeTemplateSelector}"
+             SortMemberPath="Size"
+             IsFilterable="False"
+             Header="SIZE"
+             TextAlignment="Right"
+             Width="80*"/>
+
+         <telerik:GridViewColumn
+             CellTemplateSelector="{StaticResource VerdictTemplateSelector}"
+             SortMemberPath="ValkyrieAnalysisResult.VerdictString"
+             IsFilterable="False"
+             Header="VERDICT"
+             TextAlignment="Left"
+             Width="220*"/>
+
+         <telerik:GridViewColumn
+             CellTemplateSelector="{StaticResource OperationStatusTemplateSelector}"
+             SortMemberPath="ValkyrieAnalysisResult.OperationStatus"
+             IsFilterable="False"
+             Header="STATUS"
+             TextAlignment="Left"
+             Width="140*"/>
+
+         <telerik:GridViewColumn
+             CellTemplateSelector="{StaticResource WhiteListedTemplateSelector}"
+             SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
+             IsFilterable="False"
+             Header="WHITELISTED"
+             TextAlignment="Center"
+             Width="85*"/>
 
             </telerik:RadTreeListView.Columns>
             

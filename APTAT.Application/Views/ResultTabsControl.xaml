@@ -26,7 +26,8 @@
                 </Grid>
                 <ControlTemplate.Triggers>
                   <Trigger Property="TabItem.IsMouseOver" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="#FFE3E3E3" />
+                    <Setter TargetName="Border" Property="Background" Value="#FFD6D4D4" />
+                    <Setter TargetName="Border" Property="Opacity" Value="1" />
                   </Trigger>
                   <Trigger Property="TabItem.IsSelected" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="#FFE3E3E3" />

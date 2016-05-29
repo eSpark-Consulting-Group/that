@@ -70,7 +70,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <local:TextEntryListView Margin="5,0,0,10" 
+                    <local:TextEntryListView Margin="5,0,0,0" 
                                              x:Name="TextEntryListView"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"

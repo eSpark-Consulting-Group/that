@@ -42,7 +42,7 @@
                         <RowDefinition Height="Auto"/>
                       </Grid.RowDefinitions>
                       <TextBlock Margin="8,8,0,0" Text="{Binding FullName}" Grid.Column="0"/>
-                      <TextBlock Margin="8,4,0,0" Text="{Binding FilePath}"  FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding FilePath}" Grid.Row="1"/>
+                      <TextBlock Margin="8,2,0,0" Text="{Binding FilePath}"  FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding FilePath}" Grid.Row="1"/>
 
                     </Grid>
                 </DataTemplate>
@@ -84,9 +84,21 @@
                     <TextBlock  Text="{Binding ValkyrieAnalysisResult.OperationStatus}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}"/>
                 </DataTemplate>
 
-                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="ValkyrieNameTemplateSelector" 
+                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="NameTemplateSelector" 
                                                                 FileTemplate="{StaticResource FileInfoTemplate}"
                                                                 ComputerTemplate="{StaticResource ComputerInfoTemplate}"/>
+                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="SizeTemplateSelector"
+                                                                FileTemplate="{StaticResource SizeColumn}"
+                                                                ComputerTemplate="{x:Null}"/>
+                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="WhiteListedTemplateSelector"
+                                                                FileTemplate="{StaticResource WhiteListedColumn}"
+                                                                ComputerTemplate="{x:Null}"/>
+                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="VerdictTemplateSelector"
+                                                                FileTemplate="{StaticResource VerdictColumn}"
+                                                                ComputerTemplate="{x:Null}"/>
+                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="OperationStatusTemplateSelector"
+                                                                FileTemplate="{StaticResource OperationStatusColumn}"
+                                                                ComputerTemplate="{x:Null}"/>
             </telerik:RadTreeListView.Resources>
 
             <telerik:RadTreeListView.ChildTableDefinitions>
@@ -96,7 +108,7 @@
             <telerik:RadTreeListView.Columns>
                 
                 <telerik:GridViewColumn                 
-                    CellTemplateSelector="{StaticResource ValkyrieNameTemplateSelector}"
+                    CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     IsFilterable="False"
                     ShowFilterButton="False"                    
                     ShowFieldFilters="False"                    
@@ -105,32 +117,32 @@
                     Width="460*" 
                  SortMemberPath="Name"/>
                
-                <telerik:GridViewColumn 
-                    CellTemplate="{StaticResource SizeColumn}"
+                <telerik:GridViewColumn
+                    CellTemplateSelector="{StaticResource SizeTemplateSelector}"
                     SortMemberPath="Size"
                     IsFilterable="False"
                     Header="SIZE"  
                     TextAlignment="Right"
                     Width="80*"/>
 
-                <telerik:GridViewColumn 
-                    CellTemplate="{StaticResource VerdictColumn}"
+                <telerik:GridViewColumn
+                    CellTemplateSelector="{StaticResource VerdictTemplateSelector}"
                     SortMemberPath="ValkyrieAnalysisResult.VerdictString"
                     IsFilterable="False"
                     Header="VERDICT"  
                     TextAlignment="Left"
                     Width="220*"/>
                 
-                <telerik:GridViewColumn 
-                    CellTemplate="{StaticResource OperationStatusColumn}"
+                <telerik:GridViewColumn
+                    CellTemplateSelector="{StaticResource OperationStatusTemplateSelector}"
                     SortMemberPath="ValkyrieAnalysisResult.OperationStatus"
                     IsFilterable="False"
                     Header="STATUS"  
                     TextAlignment="Left"
                     Width="140*"/>
 
-                <telerik:GridViewColumn                    
-                    CellTemplate="{StaticResource WhiteListedColumn}"
+                <telerik:GridViewColumn
+                    CellTemplateSelector="{StaticResource WhiteListedTemplateSelector}"
                     SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
                     IsFilterable="False"
                     Header="WHITELISTED"  
