@@ -14,7 +14,7 @@
     
     <Grid>
         
-        <telerik:RadTreeListView AutomationProperties.AutomationId="ValkyrieResultsTree"
+        <telerik:RadTreeListView AutomationProperties.AutomationId="ValkyrieResultsTreeByComputers"
                                  SelectedItem="{Binding SelectedValkyrieItem}" 
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList2" 

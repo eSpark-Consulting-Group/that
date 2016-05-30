@@ -17,13 +17,11 @@
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="{x:Type TabItem}">
-                <Grid >
-                  <Border  BorderThickness="1 1 1 0"  BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true">
-                    <Border Name="Border" Opacity="0.4">
+                  <Border  BorderThickness="1 1 1 0"  BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true" Background="White">
+                    <Border Name="Border" Opacity="0.4" Background="White">
                       <ContentPresenter x:Name="ContentSite" HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" Margin="10, 5" />
                     </Border>
                   </Border>
-                </Grid>
                 <ControlTemplate.Triggers>
                   <Trigger Property="TabItem.IsMouseOver" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="#FFD6D4D4" />
@@ -32,6 +30,7 @@
                   <Trigger Property="TabItem.IsSelected" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="#FFE3E3E3" />
                     <Setter TargetName="Border" Property="Opacity" Value="1" />
+                    <Setter Property="Panel.ZIndex" Value="100" />
                   </Trigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate>
@@ -40,16 +39,14 @@
         </Style>
       </Grid.Resources>
         
-        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
-            <TabItem AutomationProperties.AutomationId="UnknownFilesTab"
-                     Header="Scanning results">
-                <local:ScanInfoTreeView HorizontalAlignment="Stretch" Margin="-2 -3 -1 -3" VerticalAlignment="Stretch"/>
+            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results">
+                <local:ScanInfoTreeView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </TabItem>
             
-            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab"
-                     Header="Valkyrie analysis results" IsSelected="True" >
-              <TabControl BorderThickness="0" Margin="-2 -36" Padding="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
+            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="True" >
+              <TabControl BorderThickness="0" Margin="0 -32" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right" AutomationProperties.AutomationId="ResultsTabControlInner">
                 <TabControl.Resources>
                   <Style TargetType="TabControl">
                     <Setter Property="Template">
@@ -60,8 +57,8 @@
                               <RowDefinition Height="Auto" />
                               <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TabPanel Margin="2 2 2 1" IsItemsHost="True" Background="Transparent" HorizontalAlignment="Right"/>
-                            <ContentPresenter Grid.Row="1" ContentSource="SelectedContent" />
+                            <TabPanel Panel.ZIndex="100" Margin="2 0" IsItemsHost="True" Background="Transparent" HorizontalAlignment="Right"/>
+                            <ContentPresenter Grid.Row="1" ContentSource="SelectedContent" Margin="0 2"/>
                           </Grid>
                         </ControlTemplate>
                       </Setter.Value>

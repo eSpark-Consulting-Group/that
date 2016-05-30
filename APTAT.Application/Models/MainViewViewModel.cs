@@ -533,6 +533,7 @@ namespace APTAT.Application.Models
                         NetworkCredential cred = new NetworkCredential(window.LoginTextBox.Text,
                             window.PasswordBox.Password);
                         Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+ 
                         BeginValkyrieAnalysis(cred);
                         return;
                     }
@@ -594,6 +595,11 @@ namespace APTAT.Application.Models
                     file.MergeComputers(result.Computers);
                 else if (result.ValkyrieAnalysisResult != null)
                 {
+                    if (!ItemsValkyrie.Any())
+                    {
+                        UnknownFilesCount = 0;
+                        MalwareFilesCount = 0;
+                    }
                     ItemsValkyrie.Add(result);
                     UnknownFilesCount += result.IsUnknown ? 1 : 0;
                     MalwareFilesCount += result.IsMalware ? 1 : 0;
@@ -766,10 +772,10 @@ namespace APTAT.Application.Models
             _camUserPassword = camUserPassword;
             BeginValkyrieAnalysis();
         }
-        public void BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
+
+        private void BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
-            UnknownFilesCount = 0;
-            MalwareFilesCount = 0;
+            
             _aptService.BeginValkyrieAnalysis(_login, _password, _camLicenseId, _camUserLogin, _camUserPassword,
                 networkCredential);
         }
