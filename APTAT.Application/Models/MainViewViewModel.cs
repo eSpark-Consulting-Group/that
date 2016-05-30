@@ -612,8 +612,9 @@ namespace APTAT.Application.Models
                         comp.MergeFiles(result);
                     else
                     {
-                        computer.MergeFiles(result);
-                        ComputersValkyrie.Add(new ComputerInformation(computer));
+                        comp = new ComputerInformation(computer);
+                        comp.MergeFiles(result);
+                        ComputersValkyrie.Add(comp);
                     }
                 }
             }
