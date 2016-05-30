@@ -384,6 +384,9 @@
     <EmbeddedResource Include="Properties\ServerSideMessagesResources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\FailedToAnalyzeFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\DetailedDevicesWithValkyrie.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

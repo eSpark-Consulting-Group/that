@@ -2238,10 +2238,31 @@
                             </Border>
                           </Style>
                         </Subreport>
+						<Subreport Name="subFailedToAnalyze">
+                          <ReportName>FailedToAnalyzeFiles</ReportName>
+                          <Parameters>
+                            <Parameter Name="TargetUid">
+                              <Value>=Fields!TargetUid.Value</Value>
+                            </Parameter>
+                            <Parameter Name="Count">
+                              <Value>=Fields!TotalErrorFilesCount.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                           <Top>8.05506cm</Top>
+                          <Left>0.62125cm</Left>
+                          <Height>0.85312cm</Height>
+                          <Width>16.31526cm</Width>
+                          <DataElementOutput>NoOutput</DataElementOutput>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Subreport>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Visibility>
-                        <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+                        <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
                       </Visibility>
                       <Style>
                         <Border>
@@ -2793,6 +2814,10 @@
         </Field>
         <Field Name="SafeFilesCount">
           <DataField>SafeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+		<Field Name="TotalErrorFilesCount">
+          <DataField>TotalErrorFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="TargetUid">

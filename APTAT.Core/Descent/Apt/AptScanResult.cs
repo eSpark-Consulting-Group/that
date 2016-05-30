@@ -27,10 +27,17 @@ namespace APTAT.Core.Descent.Apt
         public int MalwareFilesCount { get; set; }
         public int EmptyFilesCount { get; set; }
 
-        public int ErrorFilesCount { get; set; }
-       
+        public int ErrorFilesCount { get; set; }       
         public int ServerErrorFilesCount { get; set; }
 
+        public int TotalErrorFilesCount
+        {
+            get
+            {
+                return this.ErrorFilesCount + this.ServerErrorFilesCount;
+            }
+        }
+        
         public int SkippedFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }
         public int AutorunsCount { get; set; }
@@ -107,6 +114,7 @@ namespace APTAT.Core.Descent.Apt
             }
         }
 
+
         public Module[] GetFilesByStatus(CloudVerdict cloudVerdict)
         {
             return (from file in Files where file.Cloud == cloudVerdict select file).ToArray();
@@ -115,6 +123,16 @@ namespace APTAT.Core.Descent.Apt
         public Module[] GetUnknownFiles()
         {
             return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
+        }
+
+        /// <summary>
+        /// Server Error 4 and others Errors 
+        /// </summary>
+        /// <returns></returns>
+        public Module[] GetFailedToAnalyzeFiles()
+        {
+            //return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();//TODO: REMOVE AFTER TEST!
+            return (from file in Files where file.Cloud == CloudVerdict.ServerError|| file.Cloud == CloudVerdict.FailedToAnalyze select file).ToArray();
         }
 
         public Module[] GetBadFiles()
