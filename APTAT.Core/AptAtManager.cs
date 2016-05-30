@@ -175,13 +175,14 @@ namespace APTAT.Core
             }
             return files;
         }
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, string scanScope, string tcp, string udp)
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
+            DevicesSourceDescription devicesSourceDescription, string scanScope, string tcp, string udp)
         {
             if (scanScope == null)
                 scanScope = Properties.Settings.Default.ScanScope;
 
             
-            var scanner = new AptScanner(_descentSubSystem, targets, login, password, scanScope, tcp, udp);
+            var scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, scanScope, tcp, udp);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             return scanner;

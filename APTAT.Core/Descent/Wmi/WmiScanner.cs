@@ -14,8 +14,9 @@ namespace APTAT.Core.Descent.Wmi
     class WmiScanner : Scanner
     {
         protected readonly ConcurrentDictionary<Guid, Thread> Threads = new ConcurrentDictionary<Guid, Thread>();
-        public WmiScanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password)
-            : base(catalog, targets, login, password)
+        public WmiScanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password,
+            DevicesSourceDescription devicesSourceDescription)
+            : base(catalog, targets, login, password, devicesSourceDescription)
         {
 
         }
@@ -49,8 +50,6 @@ namespace APTAT.Core.Descent.Wmi
                 var path = String.Format("\\\\{0}\\root\\CIMV2", tp.RemoteHostInfo.HostName);
                 try
                 {
-                    
-                    ManagementObjectCollection objectCollection;
                     co = GetConnectionOptionsForWmi(tp.RemoteHostInfo.Login, tp.RemoteHostInfo.Password);
                     ms = new ManagementScope(path, co);
                     ms.Connect();
@@ -172,7 +171,7 @@ namespace APTAT.Core.Descent.Wmi
 
         public override IDescentQueryResult ValidateAndGetResult()
         {
-            var result = new WmiScanOperationContext(Targets);
+            var result = new WmiScanOperationContext(Targets, DevicesSourceDescription);
             return result;
         }
 

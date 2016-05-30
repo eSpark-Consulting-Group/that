@@ -12,6 +12,7 @@ using APTAT.Core;
 using APTAT.Core.Valkyrie;
 using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
+using APTAT.Core.Descent;
 using System.Collections;
 
 namespace APTAT.Application.Models
@@ -699,7 +700,8 @@ namespace APTAT.Application.Models
                     scanScope = @"processes|drivers|autoruns";
                 }
 
-                _aptService.BeginScan(e.Items, _login, _password, this, scanScope, _tcpPort, _udpPort);
+                _aptService.BeginScan(e.Items, _login, _password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false)
+                    , scanScope, _tcpPort, _udpPort);
                 //_login = null;
                 //_password = null;
             }

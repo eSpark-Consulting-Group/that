@@ -17,10 +17,13 @@ namespace APTAT.Core.Descent
         protected readonly TargetUidComputerPair[] Targets;
         protected readonly TargetUidComputerPair[] OnlineTargets;
         protected readonly CancellationToken CancellationToken;
+        protected readonly DevicesSourceDescription DevicesSourceDescription;
         protected CancellationTokenSource CancellationTokenSource { get; private set; }
 
-        protected Scanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password)
+        protected Scanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password
+            , DevicesSourceDescription devicesSourceDescription)
         {
+            DevicesSourceDescription = devicesSourceDescription;
             CancellationTokenSource = new CancellationTokenSource();
             CancellationToken = CancellationTokenSource.Token;
             TaskFactory = new TaskFactory(

@@ -148,6 +148,7 @@
     <Compile Include="Directory\ActiveDirectoryObserver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Directory\DevicesSourceDescription.cs" />
     <Compile Include="Directory\Discoverers\Discoverers.cs" />
     <Compile Include="Directory\Discoverers\ITargetsDiscoverer.cs" />
     <Compile Include="Directory\Discoverers\TargetsDiscoverer.cs" />

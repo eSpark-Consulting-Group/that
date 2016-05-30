@@ -9,8 +9,8 @@ namespace APTAT.Core.Descent.Wmi
         private readonly Guid _sessionId = Guid.NewGuid();
         private readonly ConcurrentDictionary<Guid,WmiScanResult> _scanResults = new ConcurrentDictionary<Guid, WmiScanResult>(); 
 
-        public WmiScanOperationContext(IEnumerable<TargetUidComputerPair> computers)
-            : base(computers)
+        public WmiScanOperationContext(IEnumerable<TargetUidComputerPair> computers, DevicesSourceDescription devicesSourceDescription)
+            : base(computers, devicesSourceDescription)
         {
             var scanResultType = ScanResultType.InProgress;
             foreach (var target in computers)

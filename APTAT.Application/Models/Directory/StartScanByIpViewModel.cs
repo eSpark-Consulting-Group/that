@@ -1,15 +1,14 @@
-﻿using APTAT.Application.Services;
-using APTAT.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using APTAT.Application.Extensions;
+using APTAT.Application.Services;
 using APTAT.Core.Descent;
 using Telerik.Windows.Controls;
-using APTAT.Application.Extensions;
 
-namespace APTAT.Application.Models
+namespace APTAT.Application.Models.Directory
 {
  
 
@@ -312,7 +311,13 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
                     _storage.SetValue(KnownKeys.UdpPort, _udpPort);
                     _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
-
+                    var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                        new DevicesSourceDescription()
+                        {
+                            Type = ETargetsDiscovererType.NetworkAddresses,
+                            Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
+                        });
                     success();
                 }
             }
@@ -348,7 +353,13 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.Password, _password);
                 _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
                 _storage.SetValue(KnownKeys.UdpPort, _udpPort);
-
+                var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
+                _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription()
+                    {
+                        Type = ETargetsDiscovererType.NetworkAddresses,
+                        Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
+                    });
                 context.Success();
             }
             else

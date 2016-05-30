@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Telerik.Windows.Controls;
 using APTAT.Application.Extensions;
+using APTAT.Core.Descent;
 
 
 namespace APTAT.Application.Models
@@ -220,6 +221,8 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.Workgroup, _workgroup);
                     _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
                     _storage.SetValue(KnownKeys.UdpPort, _udpPort);
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });
                     success();
                 }
             }
@@ -258,8 +261,8 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.Login, _administrator);
                 _storage.SetValue(KnownKeys.Password, _password);
                 _storage.SetValue(KnownKeys.Workgroup, _workgroup);
-                
-               context.Success();
+                _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });              
                 _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
                 _storage.SetValue(KnownKeys.UdpPort, _udpPort);
 

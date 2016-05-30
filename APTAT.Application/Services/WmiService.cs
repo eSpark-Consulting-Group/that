@@ -9,14 +9,15 @@ namespace APTAT.Application.Services
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class WmiService : IWmiService
     {
-        public void StartAnalyze(DeploymentTarget[] items, String login, String password, Object userState)
+        public void StartAnalyze(DeploymentTarget[] items, String login, String password, 
+            DevicesSourceDescription devicesSourceDescription, Object userState)
         {
             Guid operationUid;
             var descentSubSystem = SubSystemFactory.Current.GetSubSystem<IDescentSubSystem>();
             descentSubSystem.DescentCompleted += DescentSubSystemOnDescentCompleted;
             try
             {
-                descentSubSystem.StartWmiScan(items, login, password, out operationUid);
+                descentSubSystem.StartWmiScan(items, login, password, devicesSourceDescription, out operationUid);
             }
             catch (Exception)
             {

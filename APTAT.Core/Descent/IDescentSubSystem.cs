@@ -9,11 +9,12 @@ namespace APTAT.Core.Descent
 	public interface IDescentSubSystem : ISubSystem
 	{
         
-        void StartAptScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
-            out Guid operationUid, string scanScope, string tcpPort, string udpPort);
+        void StartAptScan(IEnumerable<DeploymentTarget> computers, string login, string password,
+            DevicesSourceDescription devicesSourceDescription,out Guid operationUid, string scanScope,
+            string tcpPort, string udpPort);
 
-        void StartWmiScan(IEnumerable<DeploymentTarget> computers, string login, string password, 
-            out Guid operationUid);
+        void StartWmiScan(IEnumerable<DeploymentTarget> computers, string login, string password,
+            DevicesSourceDescription devicesSourceDescription, out Guid operationUid);
 
         AptScanOperationContext GetAptScanResultsByOperationUid(Guid operationUid);
         WmiScanOperationContext GetWmiScanResultsByOperationUid(Guid operationUid);

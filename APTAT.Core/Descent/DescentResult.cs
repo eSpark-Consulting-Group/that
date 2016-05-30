@@ -22,11 +22,12 @@ namespace APTAT.Core.Descent
 		protected int SucceededCount;
         protected int FailedCount;
 
-		public DescentResult( IEnumerable<TargetUidComputerPair> computers)
+		public DescentResult( IEnumerable<TargetUidComputerPair> computers, DevicesSourceDescription devicesSourceDescription)
 		{
             _descentWatcher = new DescentWatcher(Settings.Default.AgentDescentingTimeout, OnDescentTimeout);
-            
-			foreach( var computer in computers )
+		    DevicesSourceDescription = devicesSourceDescription;
+
+            foreach ( var computer in computers )
 			{
 				var result = new ComputerDescentResult( computer.TargetUid, computer.Computer );
 				var error = computer.State as Exception;
@@ -51,6 +52,7 @@ namespace APTAT.Core.Descent
             _descentWatcher.Start();
         }
 
+        public DevicesSourceDescription DevicesSourceDescription { get; private set; }
 
         public int TotalTargetsCount { get; set; }
 

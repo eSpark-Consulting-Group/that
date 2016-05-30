@@ -11,6 +11,7 @@ namespace APTAT.Core.Apt
     {
         private AptScanOperationContext _scanOperationContext;
         private readonly IDescentSubSystem _descentSubSystem;
+        private readonly DevicesSourceDescription _devicesSourceDescription;
         private readonly string _password;
         private readonly string _login;
         private readonly string _scanScope;
@@ -24,8 +25,9 @@ namespace APTAT.Core.Apt
         public event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
 
         internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<DeploymentTarget> targets, string login,
-            string password, string scanScope, string tcpPort, string udpPort)
+            string password, DevicesSourceDescription devicesSourceDescription,  string scanScope, string tcpPort, string udpPort)
         {
+            _devicesSourceDescription = devicesSourceDescription;
             _descentSubSystem = descentSubSystem;
             _targets = targets;
             _login = login;
@@ -69,7 +71,7 @@ namespace APTAT.Core.Apt
         private void StartScan()
         {
             Guid operationUid;
-            _descentSubSystem.StartAptScan(_targets, _login, _password, out operationUid, 
+            _descentSubSystem.StartAptScan(_targets, _login, _password, _devicesSourceDescription, out operationUid, 
                 _scanScope, _tcpPort, _udpPort);
             _operationUid = operationUid;
         }

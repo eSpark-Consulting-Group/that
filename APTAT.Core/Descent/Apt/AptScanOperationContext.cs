@@ -10,8 +10,9 @@ namespace APTAT.Core.Descent.Apt
         private readonly Guid _sessionId = Guid.NewGuid();
         private readonly ConcurrentDictionary<Guid, AptScanResult> _scanResults;
 
-        public AptScanOperationContext(IEnumerable<TargetUidComputerPair> computers, int totalTargetCount)
-            : base(computers)
+        public AptScanOperationContext(IEnumerable<TargetUidComputerPair> computers, int totalTargetCount,
+            DevicesSourceDescription devicesSourceDescription)
+            : base(computers, devicesSourceDescription)
         {
             _scanResults = new ConcurrentDictionary<Guid, AptScanResult>();
             var scanResultType = ScanResultType.InProgress;

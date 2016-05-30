@@ -63,8 +63,9 @@ namespace APTAT.Core.Descent
         #region IDescentSubSystem Members
 
         public event EventHandler<DescentEventArgs> DescentCompleted;
-		public void StartAptScan( IEnumerable<DeploymentTarget> targets, string login, string password, 
-            out Guid operationUid, string scanScope, string tcpPort, string udpPort)
+		public void StartAptScan( IEnumerable<DeploymentTarget> targets, string login, string password,
+            DevicesSourceDescription devicesSourceDescription, out Guid operationUid, string scanScope, 
+            string tcpPort, string udpPort)
         {
             if (_aptScanResultsPerOperation.Count > 0)
             {
@@ -72,7 +73,7 @@ namespace APTAT.Core.Descent
                 if (!item.Value.Completed)
                     throw new AnotherScanIsInProgressException();
             }
-            var scanner = new AptDescentScanner(_catalog, targets, login, password, scanScope, tcpPort, udpPort);
+            var scanner = new AptDescentScanner(_catalog, targets, login, password, devicesSourceDescription, scanScope, tcpPort, udpPort);
             StartScan(scanner, out operationUid);
             _aptScanResultsPerOperation.Clear();
             lock (_descentResults)
@@ -165,7 +166,7 @@ namespace APTAT.Core.Descent
 	    
 
 	    public void StartWmiScan(IEnumerable<DeploymentTarget> targets, string login, string password,
-	        out Guid operationUid)
+            DevicesSourceDescription devicesSourceDescription, out Guid operationUid)
 	    {
             if (_wmiScanResultsPerOperation.Count > 0)
             {
@@ -173,7 +174,7 @@ namespace APTAT.Core.Descent
                 if (!item.Value.Completed)
                     throw new AnotherScanIsInProgressException();
             }
-            var scanner = new WmiScanner(_catalog, targets, login, password);
+            var scanner = new WmiScanner(_catalog, targets, login, password, devicesSourceDescription);
             StartScan(scanner, out operationUid);
             _wmiScanResultsPerOperation.Clear();
             lock (_descentResults)

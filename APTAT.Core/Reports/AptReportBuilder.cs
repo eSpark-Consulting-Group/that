@@ -44,8 +44,8 @@ namespace APTAT.Core.Reports
                     TotalTargetsCount = operationContext.TotalTargetsCount,
                     TargetsSucceeded = operationContext.SucceededTargetsCount,
                     Targets = operationContext.ScanResults.Values.ToArray(),
-                    ValkyrieAnalysisResult = _valkyrieSubSystem.ValkyrieAnalysisResult
-
+                    ValkyrieAnalysisResult = _valkyrieSubSystem.ValkyrieAnalysisResult,
+                    DevicesSourceDescription = operationContext.DevicesSourceDescription
                 };
 
                 ReportBuilder.BuildReportDelegate action = new ReportBuilder.BuildReportDelegate(_reportBuilder.Build);

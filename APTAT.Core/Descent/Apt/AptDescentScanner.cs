@@ -14,8 +14,8 @@ namespace APTAT.Core.Descent.Apt
         private readonly string _udpPort;
 
         public AptDescentScanner(ISubSystemCatalog catalog, IEnumerable<DeploymentTarget> targets, string login, string password,
-            string scanScope, string tcpPort, string udpPort) 
-            : base(catalog, targets, login, password)
+            DevicesSourceDescription devicesSourceDescription,string scanScope, string tcpPort, string udpPort) 
+            : base(catalog, targets, login, password,devicesSourceDescription)
         {
             _descentMod = new DescentMod(TaskFactory, Tracker);
             _scanScope = scanScope;
@@ -30,7 +30,7 @@ namespace APTAT.Core.Descent.Apt
             if (Password == null)
                 throw new ArgumentException("Password not specified.", "password");
             
-            var result = new AptScanOperationContext(OnlineTargets, Targets.Length);
+            var result = new AptScanOperationContext(OnlineTargets, Targets.Length, DevicesSourceDescription);
             return result;
             //         //DescentResult result = new DescentResult(onlineTargetUidComputerPairs);
             //         var result = new AptScanOperationContext(onlineTargetUidComputerPairs, computers.Length);

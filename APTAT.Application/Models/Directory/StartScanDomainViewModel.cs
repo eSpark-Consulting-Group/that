@@ -1,12 +1,11 @@
-﻿using APTAT.Application.Services;
-using APTAT.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using APTAT.Core.Descent;
 using Telerik.Windows.Controls;
 using APTAT.Application.Extensions;
+using APTAT.Application.Services;
+using APTAT.Core.Descent;
 
 namespace APTAT.Application.Models
 {
@@ -220,6 +219,8 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.Domain, _domainController);
                     _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
                     _storage.SetValue(KnownKeys.UdpPort, _udpPort);
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
                     success();
                 }
             }

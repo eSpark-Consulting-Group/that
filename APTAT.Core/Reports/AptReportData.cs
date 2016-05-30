@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
@@ -16,7 +17,6 @@ namespace APTAT.Core.Reports
         private int _malwareFilesCount = -1;
 
         public Guid OperationUid { get; set; } 
-        public bool IsActiveDirectoryDevicesSource { get { return Targets.Any(t => !String.IsNullOrEmpty(t.OrganizationUnit)); } }
         private int _emptyFilesCount = -1;
         private int _skippedFilesCount = -1;
         private int _errorFileCount = -1;
@@ -26,6 +26,26 @@ namespace APTAT.Core.Reports
         public DateTime ScanStarted { get; set; }
         public DateTime ScanFinished { get; set; }
         public int TotalTargetsCount { get; set; }
+        public DevicesSourceDescription DevicesSourceDescription { get; set; }
+        public string DevicesSourceDescriptionString
+        {
+            get
+            {
+                switch (DevicesSourceDescription.Type)
+                {
+                    case ETargetsDiscovererType.ActiveDirectory:
+                        return string.Format("Active Directory ({0})", (string)(DevicesSourceDescription.Description));
+                    case ETargetsDiscovererType.NetworkAddresses:
+                        return string.Format("Network Addresses ({0}) ", (string)(DevicesSourceDescription.Description));
+                    case ETargetsDiscovererType.Workgroup:
+                        return string.Format("Workgroup ({0})", (string)(DevicesSourceDescription.Description));
+                    default:
+                        return string.Empty;
+                }
+            }
+        }
+        public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == ETargetsDiscovererType.ActiveDirectory; } }
+
         public int TargetsNotPerformed { get; set; }
         public int TargetsScanned
         {

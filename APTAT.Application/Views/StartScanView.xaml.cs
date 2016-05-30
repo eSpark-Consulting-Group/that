@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using APTAT.Application.Helpers;
 using APTAT.Application.Models;
+using APTAT.Application.Models.Directory;
 using Telerik.Windows;
 using Telerik.Windows.Controls;
 
