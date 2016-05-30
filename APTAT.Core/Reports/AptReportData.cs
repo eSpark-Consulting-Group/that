@@ -581,7 +581,7 @@ namespace APTAT.Core.Reports
     public enum BadFileType
     {
         Unknown = 0,
-        Infected = 1
+        Infected = 1        
     }
 
     public class ScannedTarget

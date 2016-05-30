@@ -106,7 +106,7 @@ namespace APTAT.Application
             if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
 
             scanCompletedWindow.Text.Text += Environment.NewLine +"File Statistics:";
-            int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount+ e.FilesStatistics.ErrorFilesCount;
+            int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount+ e.FilesStatistics.ErrorFilesCount + e.FilesStatistics.ServerErrorFilesCount;
             if (e.FilesStatistics.TotalFilesCound > 0)
             {
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine,

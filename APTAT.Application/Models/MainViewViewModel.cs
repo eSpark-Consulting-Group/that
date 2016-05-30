@@ -809,6 +809,7 @@ namespace APTAT.Application.Models
                         infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                         infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
                         infoItem.ErrorFilesCount = scanProgress.ErrorFilesCount;
+                        infoItem.ServerErrorFilesCount = scanProgress.ServerErrorFilesCount;
                         infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.") ?
                                                     scanProgress.StatusMessage.Replace("Malwares found: 0.", "") :
                                                     scanProgress.StatusMessage; if (infoItem.ScanStage != ScanStage.OperationCompleted &&

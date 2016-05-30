@@ -272,7 +272,7 @@
             <Top>5.33422cm</Top>
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
-            <Width>5.14666cm</Width>
+            <Width>4.74979cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
@@ -338,7 +338,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.64206cm</Top>
+            <Top>7.02306cm</Top>
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -655,7 +655,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.64206cm</Top>
+            <Top>7.02306cm</Top>
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
@@ -688,7 +688,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.17065cm</Top>
+            <Top>7.55165cm</Top>
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -723,7 +723,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.17065cm</Top>
+            <Top>7.55165cm</Top>
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
@@ -960,11 +960,14 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.61081cm</Top>
+            <Top>6.39373cm</Top>
             <Left>1.18345cm</Left>
-            <Height>0.55681cm</Height>
+            <Height>0.58327cm</Height>
             <Width>4.74979cm</Width>
             <ZIndex>27</ZIndex>
+            <Visibility>
+              <Hidden>=iif(First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -995,11 +998,14 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.61081cm</Top>
+            <Top>6.39373cm</Top>
             <Left>7.10622cm</Left>
-            <Height>0.55681cm</Height>
+            <Height>0.58327cm</Height>
             <Width>9.48254cm</Width>
             <ZIndex>28</ZIndex>
+            <Visibility>
+              <Hidden>=iif(First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1462,6 +1468,28 @@
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
+                          <DataElementOutput>NoOutput</DataElementOutput>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Subreport>
+                        <Subreport Name="subFailedToAnalyze">
+                          <ReportName>FailedToAnalyzeFiles</ReportName>
+                          <Parameters>
+                            <Parameter Name="TargetUid">
+                              <Value>=Fields!TargetUid.Value</Value>
+                            </Parameter>
+                            <Parameter Name="Count">
+                              <Value>=Fields!TotalErrorFilesCount.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                          <Top>8.05506cm</Top>
+                          <Left>0.62125cm</Left>
+                          <Height>0.85312cm</Height>
+                          <Width>16.31526cm</Width>
+                          <ZIndex>1</ZIndex>
                           <DataElementOutput>NoOutput</DataElementOutput>
                           <Style>
                             <Border>
@@ -2209,7 +2237,7 @@
                           <Top>0.06576cm</Top>
                           <Height>7.07201cm</Height>
                           <Width>16.93651cm</Width>
-                          <ZIndex>1</ZIndex>
+                          <ZIndex>2</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2230,28 +2258,7 @@
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
-                          <ZIndex>2</ZIndex>
-                          <DataElementOutput>NoOutput</DataElementOutput>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                          </Style>
-                        </Subreport>
-						<Subreport Name="subFailedToAnalyze">
-                          <ReportName>FailedToAnalyzeFiles</ReportName>
-                          <Parameters>
-                            <Parameter Name="TargetUid">
-                              <Value>=Fields!TargetUid.Value</Value>
-                            </Parameter>
-                            <Parameter Name="Count">
-                              <Value>=Fields!TotalErrorFilesCount.Value</Value>
-                            </Parameter>
-                          </Parameters>
-                           <Top>8.05506cm</Top>
-                          <Left>0.62125cm</Left>
-                          <Height>0.85312cm</Height>
-                          <Width>16.31526cm</Width>
+                          <ZIndex>3</ZIndex>
                           <DataElementOutput>NoOutput</DataElementOutput>
                           <Style>
                             <Border>
@@ -2816,7 +2823,7 @@
           <DataField>SafeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-		<Field Name="TotalErrorFilesCount">
+        <Field Name="TotalErrorFilesCount">
           <DataField>TotalErrorFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
