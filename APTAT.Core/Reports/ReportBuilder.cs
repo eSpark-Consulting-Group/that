@@ -93,9 +93,10 @@ namespace APTAT.Core.Reports
             //ReportDataSource valkyrieVerdictDataSource = new ReportDataSource("ValkyrieDataSet", allBadFilesData);
             SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.UnknownFilesWithValkyrie.rdlc", ReportName = "UnknownFiles" };
             SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.MaliciousFilesWithValkyrie.rdlc", ReportName = "MaliciousFiles" };
+            SubReportContext failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeWithValkyrie.rdlc", ReportName = "FailedToAnalyzeFiles" };                        
             //SubReportContext valkyrieVerdictSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.ValkyrieResult.rdlc", ReportName = "ValkyrieVerdict" };
 
-            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext/*, valkyrieVerdictSubReportContext*/ });
+            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext/*, valkyrieVerdictSubReportContext*/ });
         }
 
         private static void BuildDetailedPerProgramReport(string fileName, AptReportData data, string reportName)
@@ -263,6 +264,20 @@ namespace APTAT.Core.Reports
                             }
                         }
                     }
+                    else if (e.ReportPath == "FailedToAnalyzeFiles")
+                    {
+                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                        if (context != null)
+                        {
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
+                            if (targets != null)
+                            {
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.IsNotAnalyzed)));
+                            }
+                        }
+                    }     
                     else if (e.ReportPath == "ValkyrieVerdict")
                     {
                         string fileId = e.Parameters[0].Values[0];

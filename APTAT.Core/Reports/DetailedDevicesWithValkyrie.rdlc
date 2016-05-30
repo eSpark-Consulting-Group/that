@@ -1320,8 +1320,8 @@
         <Height>12.29441cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
-        <Visibility>
-          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+        <Visibility>        
+		  <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -1394,6 +1394,28 @@
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
+                          <DataElementOutput>NoOutput</DataElementOutput>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Subreport>
+						<Subreport Name="subFailedToAnalyze">
+                          <ReportName>FailedToAnalyzeFiles</ReportName>
+                          <Parameters>
+                            <Parameter Name="TargetUid">
+                              <Value>=Fields!TargetUid.Value</Value>
+                            </Parameter>
+                            <Parameter Name="Count">
+                              <Value>=Fields!TotalErrorFilesCount.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                          <Top>8.05506cm</Top>
+                          <Left>0.62125cm</Left>
+                          <Height>0.85312cm</Height>
+                          <Width>16.31526cm</Width>
+                          <ZIndex>1</ZIndex>
                           <DataElementOutput>NoOutput</DataElementOutput>
                           <Style>
                             <Border>
@@ -2579,6 +2601,10 @@
           <DataField>MalwareFilesFound</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+		<Field Name="TotalErrorFilesCount">
+          <DataField>TotalErrorFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="NetworkTrustLevel">
           <DataField>NetworkTrustLevel</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -2655,7 +2681,7 @@
         <DataSourceName>APTReportTest</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
-      <Fields>
+      <Fields>		
         <Field Name="BadFilesCount">
           <DataField>BadFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -2695,6 +2721,10 @@
         </Field>
         <Field Name="BadFilesCount">
           <DataField>BadFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+		<Field Name="TotalErrorFilesCount">
+          <DataField>TotalErrorFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="FileName">

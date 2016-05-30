@@ -374,7 +374,7 @@ namespace APTAT.Core.Reports
                 int mergedSafeCount = 0;
                 int mergedUnknownCount = 0;
                 int mergedMalwareCount = 0;
-
+                int mergedErrorFilesCount = 0;
                 #region Working with a single scan result
 
                 foreach (var module in flsResult.Files)
@@ -420,6 +420,7 @@ namespace APTAT.Core.Reports
                                             break;
                                         case CloudVerdict.FailedToAnalyze:
                                         case CloudVerdict.ServerError:
+                                            mergedErrorFilesCount++;
                                             break;
                                         default:
                                             throw new ArgumentOutOfRangeException();
@@ -455,6 +456,7 @@ namespace APTAT.Core.Reports
                                 break;
                             case CloudVerdict.FailedToAnalyze:
                             case CloudVerdict.ServerError:
+                                mergedErrorFilesCount++;
                                 break;
 
                             default:
@@ -473,7 +475,9 @@ namespace APTAT.Core.Reports
                 {
                     MalwareFilesCount = mergedMalwareCount,
                     SafeFilesCount = mergedSafeCount,
-                    UnknownFilesCount = mergedUnknownCount
+                    UnknownFilesCount = mergedUnknownCount,
+                    ErrorFilesCount = mergedErrorFilesCount,
+                    ServerErrorFilesCount = 0
                 };
                 targets.Add(target);
 
@@ -493,6 +497,8 @@ namespace APTAT.Core.Reports
                     badFile.Value.Targets[0].SafeFilesCount = mergedSafeCount;
                     badFile.Value.Targets[0].UnknownFilesCount = mergedUnknownCount;
                     badFile.Value.Targets[0].MalwareFilesCount = mergedMalwareCount;
+                    badFile.Value.Targets[0].ErrorFilesCount = mergedErrorFilesCount;
+                    badFile.Value.Targets[0].ServerErrorFilesCount = 0;
                 }
 
                 safeFilesCount += mergedSafeCount;
@@ -503,6 +509,7 @@ namespace APTAT.Core.Reports
                 totalFilesCound += flsResult.TotalFilesCount;
                 emptyFilesCount += flsResult.EmptyFilesCount;
                 skippedFilesCount += flsResult.SkippedFilesCount;
+                
             }
 
             mergedTargets = targets;
@@ -722,6 +729,14 @@ namespace APTAT.Core.Reports
                 if (Verdict == ValkyrieVerdict.NotAnalyzed)
                     return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
                 return Verdict == ValkyrieVerdict.Undetected ? BadFileType.Unknown : BadFileType.Infected;
+            }
+        }
+
+        public bool IsNotAnalyzed
+        {
+            get 
+            {
+                return (Verdict == ValkyrieVerdict.NotAnalyzed && (Cloud == CloudVerdict.ServerError || Cloud == CloudVerdict.FailedToAnalyze));
             }
         }
 

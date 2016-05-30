@@ -30,6 +30,7 @@ namespace APTAT.Core.Descent.Apt
         public int ErrorFilesCount { get; set; }       
         public int ServerErrorFilesCount { get; set; }
 
+        
         public int TotalErrorFilesCount
         {
             get
