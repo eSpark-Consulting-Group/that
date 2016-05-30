@@ -32,6 +32,8 @@
     <PlatformToolset>v100</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfAtl>Dynamic</UseOfAtl>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -89,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bootstrapper.h" />
+    <ClInclude Include="AutoHandle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Fonts\segoeui.ttf">

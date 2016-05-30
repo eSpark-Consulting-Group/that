@@ -1,11 +1,16 @@
 #include "Bootstrapper.h"
 #include <tchar.h>
 #include <Shlobj.h>
+#include <cstdint>
+#include <regex>
+#include "AutoHandle.h"
 
 const wchar_t PATH[] = L"Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Client";
-const wchar_t KEY[]  = L"Install";
-const wchar_t FRAMEWORK_DOWNLOAD_LINK[] = L"http://go.microsoft.com/fwlink/?linkid=182804";
+const wchar_t KEY_INSTALL[]  = L"Install";
+const wchar_t KEY_VERSION[] = L"Version";
+const wchar_t FRAMEWORK_DOWNLOAD_LINK[] = L"https://go.microsoft.com/fwlink/?LinkId=225702";
 const wchar_t APP[]  = L"UnknownFileHunter.exe";
+const wchar_t ExpectedVersion[] = L"4.5";
 
 const wchar_t FONT_REGISTRY_KEY[] = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
 const wchar_t FONT1[] = L"segoeui.ttf";
@@ -35,15 +40,70 @@ bool Bootstrapper::IsMinimumFrameworkVersionInstalled()
 	}
 
 	DWORD installed = 0;
-	if(GetDWORDRegKey(hKey, KEY, installed, 0) != ERROR_SUCCESS)
+	if(GetDWORDRegKey(hKey, KEY_INSTALL, installed, 0) != ERROR_SUCCESS)
 	{
 		RegCloseKey(hKey);
 		return false;
 	}
 
+
+	std::wstring value;
+	if (GetRegSZRegKey(hKey, KEY_VERSION, value) != ERROR_SUCCESS)
+	{
+		RegCloseKey(hKey);
+		return false;
+	}
+	if (StandardVersionCheck(ExpectedVersion, value.c_str()))
+	{
+		RegCloseKey(hKey);
+		return true;
+	}
 	RegCloseKey(hKey);
-	return installed == 1;
+	return false;
 }
+
+bool Bootstrapper::StandardVersionCheck(LPCWSTR expectedVersion, LPCWSTR actualVersion)
+{
+	// expectedVersion is policy version
+	// actualVersion is installed version
+
+	uint32_t expectedMajor = 0;
+	uint32_t expectedMinor = 0;
+	if (expectedVersion != NULL && wcslen(expectedVersion) > 0 && !TryParseVersion(expectedVersion, expectedMajor, expectedMinor))
+	{
+		return false;
+	}
+
+	uint32_t actualMajor = 0;
+	uint32_t actualMinor = 0;
+
+	if (!TryParseVersion(actualVersion, actualMajor, actualMinor))
+	{
+		return false;
+	}
+	bool result =
+		(actualMajor > expectedMajor) ||
+		(actualMajor == expectedMajor && actualMinor >= expectedMinor);
+
+	return result;
+}
+
+bool Bootstrapper::TryParseVersion(LPCWSTR versionText, uint32_t& major, uint32_t& minor)
+{
+	if (versionText == NULL || versionText[0] == L'\0')
+		return false;
+
+	static std::wregex versionPattern(L"^(\\d+)\\.(\\d+)", std::regex_constants::syntax_option_type::optimize);
+	std::wcmatch versionMatch;
+	bool parsed = regex_search(versionText, versionMatch, versionPattern);
+	if (!parsed)
+		return false;
+
+	major = _ttoi(versionMatch[1].str().c_str());
+	minor = _ttoi(versionMatch[2].str().c_str());
+	return true;
+}
+
 
 LONG Bootstrapper::GetDWORDRegKey(HKEY hKey, const std::wstring &strValueName, DWORD &nValue, DWORD nDefaultValue)
 {
@@ -61,6 +121,26 @@ LONG Bootstrapper::GetDWORDRegKey(HKEY hKey, const std::wstring &strValueName, D
         nValue = nResult;
     }
     return nError;
+}
+
+LONG Bootstrapper::GetRegSZRegKey(HKEY hKey, const std::wstring &strValueName, std::wstring &buf)
+{
+	DWORD BufferSize = 8192;
+
+	CAutoHandle<PWCHAR> value(BufferSize * sizeof(WCHAR));
+
+	DWORD dwRet;
+	DWORD dwType = REG_SZ;
+	
+	dwRet = RegQueryValueEx(hKey,
+		strValueName.c_str(),
+		NULL,
+		&dwType,
+		(LPBYTE)(PWCHAR)value,
+		&BufferSize);
+	if (dwRet == ERROR_SUCCESS)
+		buf = std::wstring(value);
+	return dwRet;
 }
 
 void Bootstrapper::DownloadPackage()
