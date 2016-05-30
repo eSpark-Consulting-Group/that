@@ -98,8 +98,13 @@ namespace APTAT.Core.Descent.Apt
                 {
 
                     // Sort out empty files (size = 0 and hash = 000000000...)
-                    var notEmptyFiles = from file in _aptReport.Modules where /*file.Size > 0*/ !file.Sha1.StartsWith("0000000000000000000000000000000000000000") select file;
-                    return notEmptyFiles.ToArray();
+                    if (_aptReport.Modules != null)
+                    {
+                        var notEmptyFiles = from file in _aptReport.Modules
+                                            where !file.Sha1.StartsWith("0000000000000000000000000000000000000000")
+                                            select file;
+                        return notEmptyFiles.ToArray();
+                    }
                 }
                 return null;
             }

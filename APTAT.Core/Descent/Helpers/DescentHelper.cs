@@ -594,13 +594,14 @@ namespace APTAT.Core.Descent
 
                     try
                     {
-                        using(FileStream fs = new FileStream(_responseFilePathForCurrentComputer, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using (FileStream fs = new FileStream(_responseFilePathForCurrentComputer, FileMode.Open,
+                                FileAccess.Read, FileShare.ReadWrite))
                         {
                             byte[] buf;
                             try
                             {
                                 buf = new byte[fs.Length];
-                                fs.Read(buf, 0, (int)fs.Length);
+                                fs.Read(buf, 0, (int) fs.Length);
                             }
                             catch (ArgumentException)
                             {
@@ -639,19 +640,19 @@ namespace APTAT.Core.Descent
                             Int32.TryParse(temp[3], out totalFiles); //scanned count
 
                             long totalFilesSize;
-                            Int64.TryParse(temp[4], out totalFilesSize);//scanned size
+                            Int64.TryParse(temp[4], out totalFilesSize); //scanned size
 
                             int unknownFiles;
                             Int32.TryParse(temp[5], out unknownFiles);
 
                             int newFiles;
-                            Int32.TryParse(temp[6], out newFiles);//nonExistentCount
+                            Int32.TryParse(temp[6], out newFiles); //nonExistentCount
 
                             int errorFiles;
                             Int32.TryParse(temp[7], out errorFiles); //failed to analyze count
 
                             int emptyFiles;
-                            Int32.TryParse(temp[8], out emptyFiles);//inaccessibleCount
+                            Int32.TryParse(temp[8], out emptyFiles); //inaccessibleCount
 
                             int safeFiles;
                             Int32.TryParse(temp[9], out safeFiles);
@@ -674,8 +675,8 @@ namespace APTAT.Core.Descent
                             {
                                 error = temp[12];
                             }
-                            
-                            EnAptStage status = (EnAptStage)statusInt;
+
+                            EnAptStage status = (EnAptStage) statusInt;
 
                             if (!_serviceHelper.IsServiceRunning() && status != EnAptStage.EnApt_Complete &&
                                 status != EnAptStage.EnApt_Failed)
@@ -684,57 +685,122 @@ namespace APTAT.Core.Descent
                             int unknownFilesTotal = unknownFiles + newFiles;
 
                             int filesToSkip = errorFiles + emptyFiles + skipped;
-                            
-                            if( status == EnAptStage.EnApt_Pending)
-                            {
-                                
-                            }
-                            else if( status == EnAptStage.EnApt_EnumeratingProcesses )
-                            {
-                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs() { EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status });
-                            }
-                            else if( status == EnAptStage.EnApt_EnumeratingDrivers )
-                            {
-                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs() { EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status });
-                            }
-                            else if( status == EnAptStage.EnApt_EnumeratingAutoruns )
-                            {
-                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs() { EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status });
-                            }
-                            else if( status == EnAptStage.EnApt_EnumeratingFolder )
-                            {
-                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs(){EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid, Stage = status});
-                            }
-                            else if( status == EnAptStage.EnApt_ScaningModules )
-                            {
-                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, SkippedFilesCount = skipped, NetworkErrorFilesCount = errorFiles, FailedAtNodeCount = failedAtNodeCount});
-                            }
-                            else if( status == EnAptStage.EnApt_WritingReport )
-                            {
-                                
-                            }
-                            else if( status == EnAptStage.EnApt_Complete )
-                            {
-                                _response.Status = DescentStatus.status_success;//(DescentStatus)status;
 
-                                InvokeScanCompleted(new ScanCompletedEventArgs() { TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal,FailedAtNodeCount = failedAtNodeCount, NetworkErrorFilesCount = errorFiles, SkippedFilesCount = skipped});
+                            if (status == EnAptStage.EnApt_Pending)
+                            {
 
-                                string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("{0}_{1:yyyyMMddHHmmss}.xml", _remoteHostInfo.HostName, DateTime.Now));
+                            }
+                            else if (status == EnAptStage.EnApt_EnumeratingProcesses)
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs()
+                                {
+                                    EnumeratedFilesCount = enumeratedCount,
+                                    EnumeratedFilesSize = enumeratedSize,
+                                    HostName = _remoteHostInfo.HostName,
+                                    TargetUid = _remoteHostInfo.TargetUid,
+                                    Stage = status
+                                });
+                            }
+                            else if (status == EnAptStage.EnApt_EnumeratingDrivers)
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs()
+                                {
+                                    EnumeratedFilesCount = enumeratedCount,
+                                    EnumeratedFilesSize = enumeratedSize,
+                                    HostName = _remoteHostInfo.HostName,
+                                    TargetUid = _remoteHostInfo.TargetUid,
+                                    Stage = status
+                                });
+                            }
+                            else if (status == EnAptStage.EnApt_EnumeratingAutoruns)
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs()
+                                {
+                                    EnumeratedFilesCount = enumeratedCount,
+                                    EnumeratedFilesSize = enumeratedSize,
+                                    HostName = _remoteHostInfo.HostName,
+                                    TargetUid = _remoteHostInfo.TargetUid,
+                                    Stage = status
+                                });
+                            }
+                            else if (status == EnAptStage.EnApt_EnumeratingFolder)
+                            {
+                                InvokeEnumerationProgressChanged(new AptEnumeratingEventArgs()
+                                {
+                                    EnumeratedFilesCount = enumeratedCount,
+                                    EnumeratedFilesSize = enumeratedSize,
+                                    HostName = _remoteHostInfo.HostName,
+                                    TargetUid = _remoteHostInfo.TargetUid,
+                                    Stage = status
+                                });
+                            }
+                            else if (status == EnAptStage.EnApt_ScaningModules)
+                            {
+                                InvokeScanProgressChanged(new ScanProgressChangedEventArgs()
+                                {
+                                    TargetUid = _remoteHostInfo.TargetUid,
+                                    HostName = _remoteHostInfo.HostName,
+                                    EnumeratedFilesCount = enumeratedCount,
+                                    EnumeratedFilesSize = enumeratedSize,
+                                    TotalFilesScanned = totalFiles - filesToSkip,
+                                    UnknownFilesFound = unknownFilesTotal,
+                                    SafeFilesFound = safeFiles,
+                                    MalwaresFound = malwares,
+                                    SkippedFilesCount = skipped,
+                                    NetworkErrorFilesCount = errorFiles,
+                                    FailedAtNodeCount = failedAtNodeCount
+                                });
+                            }
+                            else if (status == EnAptStage.EnApt_WritingReport)
+                            {
+
+                            }
+                            else if (status == EnAptStage.EnApt_Complete)
+                            {
+                                _response.Status = DescentStatus.status_success; //(DescentStatus)status;
+
+                                InvokeScanCompleted(new ScanCompletedEventArgs()
+                                {
+                                    TotalFilesScanned = totalFiles - filesToSkip,
+                                    UnknownFilesFound = unknownFilesTotal,
+                                    FailedAtNodeCount = failedAtNodeCount,
+                                    NetworkErrorFilesCount = errorFiles,
+                                    SkippedFilesCount = skipped
+                                });
+
+                                string resultsFileLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                    String.Format("{0}_{1:yyyyMMddHHmmss}.xml", _remoteHostInfo.HostName, DateTime.Now));
 
                                 InvokeReceivingResults(EventArgs.Empty);
 
                                 File.Copy(_resultsFile, resultsFileLocal, true);
                                 //File.Delete(resultsFile);
-                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs() { TargetUid = _remoteHostInfo.TargetUid, HostName = _remoteHostInfo.HostName, FileName = resultsFileLocal, EnumeratedFilesCount = enumeratedCount, EnumeratedFilesSize = enumeratedSize, TotalFilesScanned = totalFiles - filesToSkip, UnknownFilesFound = unknownFilesTotal, SafeFilesFound = safeFiles, MalwaresFound = malwares, EmptyFilesFound = emptyFiles, SkippedFilesCount = skipped ,NetworkErrorFilesCount = errorFiles, FailedAtNodeCount = failedAtNodeCount});
+                                InvokeScanResultsFileReceived(new ScanResultsFileReceivedEventArgs()
+                                {
+                                    TargetUid = _remoteHostInfo.TargetUid,
+                                    HostName = _remoteHostInfo.HostName,
+                                    FileName = resultsFileLocal,
+                                    EnumeratedFilesCount = enumeratedCount,
+                                    EnumeratedFilesSize = enumeratedSize,
+                                    TotalFilesScanned = totalFiles - filesToSkip,
+                                    UnknownFilesFound = unknownFilesTotal,
+                                    SafeFilesFound = safeFiles,
+                                    MalwaresFound = malwares,
+                                    EmptyFilesFound = emptyFiles,
+                                    SkippedFilesCount = skipped,
+                                    NetworkErrorFilesCount = errorFiles,
+                                    FailedAtNodeCount = failedAtNodeCount
+                                });
                                 break;
                             }
-                            else if( status == EnAptStage.EnApt_Failed )
+                            else if (status == EnAptStage.EnApt_Failed)
                             {
-                                throw new DescentException(DescentStatus.status_error, String.Format("Error returned from a remote computer: {0}", error), 0);
+                                throw new DescentException(DescentStatus.status_error,
+                                    String.Format("Error returned from a remote computer: {0}", error), 0);
                             }
                             else
                             {
-                                throw new ArgumentException(String.Format("Unknown EnAptStage value: {0}", (int)status));
+                                throw new ArgumentException(String.Format("Unknown EnAptStage value: {0}", (int) status));
                             }
                             Thread.Sleep(3000);
                         }
@@ -746,7 +812,12 @@ namespace APTAT.Core.Descent
                         {
                             // unless attempts count is zero...
                             const DescentStatus status = DescentStatus.status_remote_invalid_response;
-                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid});
+                            InvokeScanFailed(new ScanFailedEventArgs()
+                            {
+                                Status = status,
+                                HostName = _remoteHostInfo.HostName,
+                                TargetUid = _remoteHostInfo.TargetUid
+                            });
                             throw new DescentException(status, ex.Message, 0);
                         }
                         else
@@ -755,14 +826,19 @@ namespace APTAT.Core.Descent
                             Thread.Sleep(1000);
                         }
                     }
-                    catch(ResponseFileHeaderInvalidException ex)
+                    catch (ResponseFileHeaderInvalidException ex)
                     {
                         // If file is not found, we can sleep and try again
                         if (checkFileHeaderAttemptsCount == 0)
                         {
                             // unless attempts count is zero...
                             const DescentStatus status = DescentStatus.status_remote_invalid_response;
-                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid });
+                            InvokeScanFailed(new ScanFailedEventArgs()
+                            {
+                                Status = status,
+                                HostName = _remoteHostInfo.HostName,
+                                TargetUid = _remoteHostInfo.TargetUid
+                            });
                             throw new DescentException(status, ex.Message, 0);
                         }
                         else
@@ -771,14 +847,19 @@ namespace APTAT.Core.Descent
                             Thread.Sleep(1000);
                         }
                     }
-                    catch(StatusFileEmptyException ex)
+                    catch (StatusFileEmptyException ex)
                     {
                         // If file is not found, we can sleep and try again
                         if (readFileAttemptsCount == 0)
                         {
                             // unless attempts count is zero...
                             const DescentStatus status = DescentStatus.status_remote_invalid_response;
-                            InvokeScanFailed(new ScanFailedEventArgs() { Status = status, HostName = _remoteHostInfo.HostName, TargetUid = _remoteHostInfo.TargetUid });
+                            InvokeScanFailed(new ScanFailedEventArgs()
+                            {
+                                Status = status,
+                                HostName = _remoteHostInfo.HostName,
+                                TargetUid = _remoteHostInfo.TargetUid
+                            });
                             throw new DescentException(status, ex.Message, 0);
                         }
                         else
@@ -786,6 +867,10 @@ namespace APTAT.Core.Descent
                             // sleep and try again
                             Thread.Sleep(1000);
                         }
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        throw new ScanCanceledException();
                     }
                     catch (ThreadAbortException ex)
                     {

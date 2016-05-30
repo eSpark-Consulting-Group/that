@@ -46,6 +46,7 @@ namespace APTAT.Application.Models
         private Boolean? _isValkyrieScanInProgress;
         private Boolean _isValkyrieAnalysCompleted;
         private Boolean? _isScanInProgress = false;
+        private Boolean _cancelInProgress = false;
 
         private Int32 _scannedItemsCount;
         private Int32 _unknownFilesCount;
@@ -68,6 +69,20 @@ namespace APTAT.Application.Models
             get
             {
                 return IsScanInProgress.GetValueOrDefault() || IsValkyrieScanInProgress.GetValueOrDefault();
+            }
+        }
+
+        public Boolean CancelInProgress
+        {
+            get { return _cancelInProgress; }
+            set
+            {
+                if (_cancelInProgress == value) return;
+                _cancelInProgress = value;
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    StopScanCommand.InvalidateCanExecute();
+                });
             }
         }
 
@@ -410,8 +425,8 @@ namespace APTAT.Application.Models
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan), 
-                o => IsAnyScanInProgress && IsScanInProgress.HasValue);
+                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
+                o => IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
 
@@ -467,6 +482,7 @@ namespace APTAT.Application.Models
 
         private void InvokeStopScan(Object arg)
         {
+            CancelInProgress = true;
             foreach (ThreatInfoItem onlineItem in _onlineItems)
             {
                 if (onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed && onlineItem.ScanStage != ScanStage.OperationCanceled)
@@ -738,6 +754,7 @@ namespace APTAT.Application.Models
         private void ScanCompleted(Boolean enableReports)
         {
             Percentage = 100;
+            CancelInProgress = false;
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
             IsAnalyseWithValkyrieEnabled = enableReports;
@@ -812,7 +829,8 @@ namespace APTAT.Application.Models
                         infoItem.ServerErrorFilesCount = scanProgress.ServerErrorFilesCount;
                         infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.") ?
                                                     scanProgress.StatusMessage.Replace("Malwares found: 0.", "") :
-                                                    scanProgress.StatusMessage; if (infoItem.ScanStage != ScanStage.OperationCompleted &&
+                                                    scanProgress.StatusMessage;
+                        if (infoItem.ScanStage != ScanStage.OperationCompleted &&
                             scanProgress.ScanStage == ScanStage.OperationCompleted)
                         {
                             _aptService.GetScanResult(infoItem.ComputerGuid, this);
