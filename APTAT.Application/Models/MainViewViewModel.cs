@@ -14,6 +14,7 @@ using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
 using APTAT.Core.Descent;
 using System.Collections;
+using System.Windows.Threading;
 
 namespace APTAT.Application.Models
 {
@@ -425,7 +426,7 @@ namespace APTAT.Application.Models
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
+                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan), 
                 o => IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
@@ -725,8 +726,6 @@ namespace APTAT.Application.Models
 
                 _aptService.BeginScan(e.Items, _login, _password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false)
                     , scanScope, _tcpPort, _udpPort);
-                //_login = null;
-                //_password = null;
             }
             else
             {
@@ -737,22 +736,22 @@ namespace APTAT.Application.Models
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
         {
-
             IsValkyrieScanInProgress = false;
             IsValkyrieAnalysCompleted = false;
-            //            IsAnalyseWithValkyrieEnabled = !IsAnyScanInProgress;
-            if (e.Exception != null)
-            {
-                //  MessageBox.Show(String.Format("Exception: {0}", e.Exception.Message));    
-            }
-            else
-            {
                 _operationGuid = e.OperationGuid;
+
+            _scanIterator = new Dictionary<Guid, ScanProgressItem>();
+            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
+            _scanIteratorTimer.Interval = TimeSpan.FromSeconds(1d);
+            _scanIteratorTimer.Tick += IterateThroughScan;
+            _scanIteratorTimer.Start();
             }
-        }
 
         private void ScanCompleted(Boolean enableReports)
         {
+            if (_scanIteratorTimer.IsEnabled)
+                _scanIteratorTimer.Stop();
+            
             Percentage = 100;
             CancelInProgress = false;
             IsScanInProgress = false;
@@ -808,52 +807,25 @@ namespace APTAT.Application.Models
             }
         }
 
+        private DispatcherTimer _scanIteratorTimer;
+        private Dictionary<Guid, ScanProgressItem> _scanIterator;
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
-            for (Int32 i = 0; i < e.ScanProgress.Length; ++i)
+            foreach (var scan in e.ScanProgress)
             {
-                ScanProgressItem scanProgress = e.ScanProgress[i];
-                if (scanProgress.OperationUid != _operationGuid)
-                {
+                if (scan.OperationUid != _operationGuid)
                     continue;
-                }
-                for (Int32 j = 0; j < _onlineItems.Length; ++j)
-                {
-                    ThreatInfoItem infoItem = _onlineItems[j];
-                    if (infoItem.ComputerGuid == scanProgress.ComputerGuid)
-                    {
-                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
-                        infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                        infoItem.ErrorFilesCount = scanProgress.ErrorFilesCount;
-                        infoItem.ServerErrorFilesCount = scanProgress.ServerErrorFilesCount;
-                        infoItem.StatusMessage = scanProgress.StatusMessage.Contains("Malwares found: 0.") ?
-                                                    scanProgress.StatusMessage.Replace("Malwares found: 0.", "") :
-                                                    scanProgress.StatusMessage;
-                        if (infoItem.ScanStage != ScanStage.OperationCompleted &&
-                            scanProgress.ScanStage == ScanStage.OperationCompleted)
-                        {
-                            _aptService.GetScanResult(infoItem.ComputerGuid, this);
-                        }
 
-                        if (infoItem.ScanStage != scanProgress.ScanStage)
-                        {
-                            infoItem.ScanStage = scanProgress.ScanStage;
-                            Int32 itemIndex = Items.IndexOf(infoItem);
-                            if (itemIndex != -1)
-                            {
-                                Items.Remove(infoItem);
-                                Items.Insert(itemIndex, infoItem);
-                            }
-                        }
-                        else
-                        {
-                            infoItem.ScanStage = scanProgress.ScanStage;
-                        }
-                        break;
-                    }
-                }
+                _scanIterator[scan.ComputerGuid] = scan;
             }
+        }
+
+        private void IterateThroughScan(object sender, EventArgs e)
+        {
+            if (_scanIteratorTimer.IsEnabled)
+                _scanIteratorTimer.Stop();
+                        else
+                return;
 
             Int32 completed = 0;
             Int32 scanned = 0;
@@ -862,21 +834,36 @@ namespace APTAT.Application.Models
             Int32 errorFiles = 0;
             Int32 serverErrorFiles = 0;
 
-            for (Int32 j = 0; j < _onlineItems.Length; ++j)
+            foreach (var infoItem in _onlineItems)
             {
-                ThreatInfoItem infoItem = _onlineItems[j];
+                ScanProgressItem scanProgress = null;
                 if (infoItem.ScanStage == ScanStage.OperationFailed ||
                     infoItem.ScanStage == ScanStage.OperationCompleted ||
                     infoItem.ScanStage == ScanStage.OperationCanceled)
-                {
                     completed++;
+                else
+                    _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
 
+                if (scanProgress != null)
+                {
+                    infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                    infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                    infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                    infoItem.ErrorFilesCount = scanProgress.ErrorFilesCount;
+                    infoItem.ServerErrorFilesCount = scanProgress.ServerErrorFilesCount;
+                    infoItem.StatusMessage = scanProgress.StatusMessage;
+
+                    if (infoItem.ScanStage != ScanStage.OperationCompleted &&
+                        scanProgress.ScanStage == ScanStage.OperationCompleted)
+                    {
+                        _aptService.GetScanResult(infoItem.ComputerGuid, this);
+                    }
+
+                    infoItem.ScanStage = scanProgress.ScanStage;
                 }
 
                 if (infoItem.ScanStage == ScanStage.OperationCompleted)
-                {
                     scanned++;
-                }
                 
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
@@ -910,6 +897,8 @@ namespace APTAT.Application.Models
             {
                 ScanCompleted(scanned > 0);
             }
+            else
+                _scanIteratorTimer.Start();
 
             RaisePropertyChanged("Header");
         }
