@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace APTAT.Application
 {
@@ -11,6 +12,11 @@ namespace APTAT.Application
         public ResultTabsControl()
         {
             InitializeComponent();
+        }
+
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            (e.Source as TabItem).IsSelected = true;
         }
     }
 }

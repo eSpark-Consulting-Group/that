@@ -236,11 +236,11 @@
                 <TextBlock Margin="10,0,0,0" />
                 <TextBlock Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text=" Unknown programs found" VerticalAlignment="Center" Margin="0,5" FontSize="14" />
-                <StackPanel  Orientation="Horizontal" Visibility="{Binding IsMalwaresFound, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
-                    <TextBlock Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
-                    <TextBlock Foreground="White" Text=" Malwares found" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
-                </StackPanel>
+              <StackPanel  Orientation="Horizontal" >
+                <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
+                <TextBlock Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
+                <TextBlock Foreground="White" Text=" Malwares found" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+              </StackPanel>
 
                 <TextBlock Foreground="White" Text=" (" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text="{Binding ScannedItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>

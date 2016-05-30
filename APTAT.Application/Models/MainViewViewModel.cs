@@ -745,7 +745,7 @@ namespace APTAT.Application.Models
             _scanIteratorTimer.Interval = TimeSpan.FromSeconds(1d);
             _scanIteratorTimer.Tick += IterateThroughScan;
             _scanIteratorTimer.Start();
-            }
+        }
 
         private void ScanCompleted(Boolean enableReports)
         {
@@ -824,7 +824,7 @@ namespace APTAT.Application.Models
         {
             if (_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Stop();
-                        else
+            else
                 return;
 
             Int32 completed = 0;
@@ -837,11 +837,9 @@ namespace APTAT.Application.Models
             foreach (var infoItem in _onlineItems)
             {
                 ScanProgressItem scanProgress = null;
-                if (infoItem.ScanStage == ScanStage.OperationFailed ||
-                    infoItem.ScanStage == ScanStage.OperationCompleted ||
-                    infoItem.ScanStage == ScanStage.OperationCanceled)
-                    completed++;
-                else
+                if (infoItem.ScanStage != ScanStage.OperationFailed &&
+                    infoItem.ScanStage != ScanStage.OperationCompleted &&
+                    infoItem.ScanStage != ScanStage.OperationCanceled)
                     _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
 
                 if (scanProgress != null)
@@ -861,6 +859,11 @@ namespace APTAT.Application.Models
 
                     infoItem.ScanStage = scanProgress.ScanStage;
                 }
+
+                if (infoItem.ScanStage == ScanStage.OperationFailed ||
+                    infoItem.ScanStage == ScanStage.OperationCompleted ||
+                    infoItem.ScanStage == ScanStage.OperationCanceled)
+                    completed++;
 
                 if (infoItem.ScanStage == ScanStage.OperationCompleted)
                     scanned++;
@@ -965,5 +968,31 @@ namespace APTAT.Application.Models
 
 
         public bool IsQuickScan { get; set; }
+
+        private bool _groupByFiles = true;
+        public bool GroupByFiles
+        {
+            get { return _groupByFiles; }
+            set 
+            {
+                _groupByFiles = value;
+                _groupByComputers = !value;
+                RaisePropertyChanged("GroupByFiles");
+                RaisePropertyChanged("GroupByComputers");
+            }
+        }
+
+        private bool _groupByComputers;
+        public bool GroupByComputers
+        {
+            get { return _groupByComputers; }
+            set
+            {
+                _groupByFiles = !value;
+                _groupByComputers = value;
+                RaisePropertyChanged("GroupByFiles");
+                RaisePropertyChanged("GroupByComputers");
+            }
+        }
     }
 }

@@ -67,9 +67,8 @@ namespace APTAT.Core
                 Status.Clear();
                 var malwareCount = Files.Count(_ => _.IsMalware);
                 var unknownCount = Files.Count(_ => _.IsUnknown);
-                Status.Add(string.Format("Total programs scanned: {0}. Unknown programs found: {1}.",
-                    Files.Count, unknownCount) + 
-                    (malwareCount > 0 ? string.Format(" Malwares found: {0}.", malwareCount) : string.Empty));
+                Status.Add(string.Format("Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
+                    Files.Count, unknownCount, malwareCount));
             }
         }
 
