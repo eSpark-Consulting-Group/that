@@ -467,18 +467,18 @@ namespace APTAT.Core.Valkyrie
                                 ApiKey = _apiKey,
                                 AnalysisId = response.AnalysisId
                             });
-                        analyzeNotFinished = (automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFinished);
+                        analyzeNotFinished = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFinished;
 
                     }
                     success = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.Success;
+                    if (analyzeNotFinished)
+                    {
+                        throw new TimeoutException("Automatic analysis has not been completed after " +
+                                                   timeOut.TotalMinutes + " minutes");
+                    }
                     if (!success)
                     {
                         throw new InvalidOperationException(automaticAnalysisResponse.ReturnCode.GetEnumDescription());
-                    }
-                    if (analyzeNotFinished)
-                    { 
-                        throw new TimeoutException("Automatic analysis has not been completed after " +
-                                                   timeOut.TotalMinutes + " minutes");
                     }
                     result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);
 
