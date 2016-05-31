@@ -255,7 +255,10 @@ namespace APTAT.Core.Reports
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = "Trusted Programs"},
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = "Unknown Programs"},
                 //**
-                new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" }
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" },
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = FailedToAnalyzeFilesCount, Value = "Failed To Analyze" },
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.NoVerdict, Count = NoVerdictFilesCount, Value = "No Verdict" }
+
             };
 
             return itemRatingInfoList.ToArray();
