@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Telerik.Windows;
 using Telerik.Windows.Controls;
+using APTAT.Application.Extensions;
 
 namespace APTAT.Application
 {
@@ -105,9 +106,8 @@ namespace APTAT.Application
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
+        {         
+            PortValidationExtensions.ValidateInput(sender, e);       
         }
     }
 }
