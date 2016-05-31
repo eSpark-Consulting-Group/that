@@ -1987,7 +1987,7 @@
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>5.09076cm</Top>
-                              <Left>5.98041cm</Left>
+                              <Left>5.94866cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>10.95608cm</Width>
                               <ZIndex>12</ZIndex>
@@ -2352,6 +2352,74 @@
                               <Height>0.55681cm</Height>
                               <Width>10.95608cm</Width>
                               <ZIndex>23</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="TextboxErrorFilesCountLabel2">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>Failed To Analyze:</Value>
+                                      <Style>
+                                        <FontFamily>Segoe UI Light</FontFamily>
+                                        <Color>Gray</Color>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox3</rd:DefaultName>
+                              <Top>5.60567cm</Top>
+                              <Left>1.03512cm</Left>
+                              <Height>0.55681cm</Height>
+                              <Width>4.7145cm</Width>
+                              <ZIndex>24</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="TextboxErrorFilesCount2">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!FailedToAnalyzeFilesCount.Value</Value>
+                                      <Style>
+                                        <FontFamily>Segoe UI</FontFamily>
+                                        <Color>DimGray</Color>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style>
+                                    <TextAlign>Left</TextAlign>
+                                  </Style>
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox3</rd:DefaultName>
+                              <Top>5.60567cm</Top>
+                              <Left>5.9613cm</Left>
+                              <Height>0.55681cm</Height>
+                              <Width>10.95608cm</Width>
+                              <ZIndex>25</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
