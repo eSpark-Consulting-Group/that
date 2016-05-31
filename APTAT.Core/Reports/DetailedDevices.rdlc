@@ -949,7 +949,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Server Error Count:</Value>
+                    <Value>No Verdict:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -985,7 +985,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")</Value>
+                    <Value>=First(Fields!NoVerdictFilesCount.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -1448,7 +1448,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>10.71025cm</Height>
+              <Height>11.62395cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1485,7 +1485,7 @@
                               <Value>=Fields!TotalErrorFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>9.81101cm</Top>
+                          <Top>10.77083cm</Top>
                           <Left>0.62124cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2334,6 +2334,28 @@
                             </Border>
                           </Style>
                         </Subreport>
+                        <Subreport Name="subNoVerdict">
+                          <ReportName>NoVerdictFiles</ReportName>
+                          <Parameters>
+                            <Parameter Name="TargetUid">
+                              <Value>=Fields!TargetUid.Value</Value>
+                            </Parameter>
+                            <Parameter Name="Count">
+                              <Value>=Fields!NoVerdictFilesCount.Value</Value>
+                            </Parameter>
+                          </Parameters>
+                          <Top>9.84657cm</Top>
+                          <Left>0.58949cm</Left>
+                          <Height>0.85312cm</Height>
+                          <Width>16.31526cm</Width>
+                          <ZIndex>4</ZIndex>
+                          <DataElementOutput>NoOutput</DataElementOutput>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Subreport>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Visibility>
@@ -2375,7 +2397,7 @@
         <DataSetName>ScanResultDataSet</DataSetName>
         <Top>23.34258cm</Top>
         <Left>0.0635cm</Left>
-        <Height>10.71025cm</Height>
+        <Height>11.62395cm</Height>
         <Width>16.93649cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2385,7 +2407,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>13.40663in</Height>
+    <Height>13.80385in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
@@ -2609,7 +2631,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.02646cm</Height>
           <Width>16.9365cm</Width>
@@ -2747,6 +2768,14 @@
         </Field>
         <Field Name="TotalErrorFilesCount">
           <DataField>TotalErrorFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NoVerdictFilesCount">
+          <DataField>NoVerdictFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FailedToAnalyzeFilesCount">
+          <DataField>FailedToAnalyzeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="ScanFinished">
@@ -2893,6 +2922,14 @@
         </Field>
         <Field Name="TotalErrorFilesCount">
           <DataField>TotalErrorFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NoVerdictFilesCount">
+          <DataField>NoVerdictFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FailedToAnalyzeFilesCount">
+          <DataField>FailedToAnalyzeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="TargetUid">
