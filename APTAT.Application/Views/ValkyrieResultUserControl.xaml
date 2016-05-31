@@ -114,7 +114,7 @@
                     ShowFieldFilters="False"                    
                     Header="NAME"
                     TextAlignment="Left"
-                    Width="460*" 
+                    Width="450*" 
                  SortMemberPath="Name"/>
                
                 <telerik:GridViewColumn
@@ -131,7 +131,7 @@
                     IsFilterable="False"
                     Header="VERDICT"  
                     TextAlignment="Left"
-                    Width="220*"/>
+                    Width="205*"/>
                 
                 <telerik:GridViewColumn
                     CellTemplateSelector="{StaticResource OperationStatusTemplateSelector}"
@@ -145,9 +145,9 @@
                     CellTemplateSelector="{StaticResource WhiteListedTemplateSelector}"
                     SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
                     IsFilterable="False"
-                    Header="WHITELISTED"  
+                    Header="TRUSTED VENDOR"  
                     TextAlignment="Center"
-                    Width="85*"/>
+                    Width="110*"/>
 
             </telerik:RadTreeListView.Columns>
             

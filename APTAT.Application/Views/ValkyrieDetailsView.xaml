@@ -71,7 +71,7 @@
                     <TextBlock Text="Created:" Grid.Column="0" Grid.Row="3"/>
                     <TextBlock Text="Modified:" Grid.Column="0" Grid.Row="4"/>
                     <TextBlock Text="Accessed:" Grid.Column="0" Grid.Row="5"/>
-                    <TextBlock Text="Whitelisted:" Grid.Column="0" Grid.Row="6"/>
+                    <TextBlock Text="Trusted Vendor:" Grid.Column="0" Grid.Row="6"/>
                       
                     <TextBlock Text="{Binding FileName}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
                     <TextBlock Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" FontWeight="Bold" MaxWidth="220" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
