@@ -57,7 +57,7 @@ namespace APTAT.Core.Descent.Apt
                     return TargetVerdict.Unknown;
                 if (MalwareFilesCount > 0)
                     return TargetVerdict.Infected;
-                if (UnknownFilesCount > 0)
+                if (UnknownFilesCount > 0 || FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0)
                     return TargetVerdict.Vulnerable;
                 if (ResultType == ScanResultType.NotPerformed)
                     return TargetVerdict.NotScanned;
