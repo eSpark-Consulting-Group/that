@@ -115,7 +115,7 @@ namespace APTAT.Core.Descent.Helpers
 
 			        string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze count: {0}", args.FailedToAnalyzeFilesCount): String.Empty;
 
-                    string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("Server error count: {0}", args.NoVerdictFilesCount): String.Empty;
+                    string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict count: {0}", args.NoVerdictFilesCount): String.Empty;
 
                     ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage, errorCounterText, serverErrorCounterText));
                     
@@ -167,7 +167,7 @@ namespace APTAT.Core.Descent.Helpers
                     dh.ScanProgressChanged -= onScanProgressChanged;
                     dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
-                    //var text = new ResourceText("null", String.Format("Scan completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}. Errors count {3}. Server error {4}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.NetworkErrorFilesCount, args.FailedAtNodeCount));
+                    
                     string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze count: {0}", args.FailedToAnalyzeFilesCount) : String.Empty;
 
                     string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict count: {0}", args.NoVerdictFilesCount) : String.Empty;
@@ -281,7 +281,7 @@ namespace APTAT.Core.Descent.Helpers
 			                        "Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
 			                        result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount) + 
                                     (result.FailedToAnalyzeFilesCount > 0 ? String.Format(" Failed to analyse: {0}.", result.FailedToAnalyzeFilesCount) : String.Empty) +
-                                    (result.NoVerdictFilesCount > 0 ? String.Format(" Server errors: {0}.", result.NoVerdictFilesCount) : String.Empty)),
+                                    (result.NoVerdictFilesCount > 0 ? String.Format(" No Verdict: {0}.", result.NoVerdictFilesCount) : String.Empty)),
 			                AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount,
 			                result.MalwareFilesCount, result.SafeFilesCount, 100, result.FailedToAnalyzeFilesCount,
 			                result.NoVerdictFilesCount);
