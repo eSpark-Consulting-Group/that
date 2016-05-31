@@ -388,7 +388,9 @@ namespace APTAT.Core.Reports
                         if (badFile.Verdict != ValkyrieVerdict.Clean)
                         {
                             AddBadFile(uniqueFiles, badFile, module);
-                            nonUniqueBadFilesInternal.Add(badFile);
+                            var copiedBadFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+                            copiedBadFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
+                            nonUniqueBadFilesInternal.Add(copiedBadFile);
                         }
                         #region Calculate Statistics
 
@@ -439,7 +441,8 @@ namespace APTAT.Core.Reports
                         {
                             DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
                             AddBadFile(uniqueFiles, badFile, module);
-                            nonUniqueBadFilesInternal.Add(badFile);
+                            DetailedBadFile copiedBadFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+                            nonUniqueBadFilesInternal.Add(copiedBadFile);
                         }
                         #region Calculate Statistics
                         switch (module.Cloud)
