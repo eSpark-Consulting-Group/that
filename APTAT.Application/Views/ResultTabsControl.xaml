@@ -76,12 +76,6 @@
             
             <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="True">
               <Grid>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 -32 2 0">
-                  <ToggleButton Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" />
-
-                  <ToggleButton Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" />
-                </StackPanel>
-
                 <local:ValkyrieResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
               </Grid>
@@ -89,6 +83,11 @@
             </TabItem>
             
         </TabControl>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 2 0">
+        <ToggleButton Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" />
+
+        <ToggleButton Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" />
+      </StackPanel>
         
     </Grid>
 </UserControl>

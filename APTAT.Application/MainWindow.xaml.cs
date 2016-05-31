@@ -66,7 +66,7 @@ namespace APTAT.Application
             }
             else
             {
-                _mainView.OnAppClose(App.Current.Shutdown);
+                App.Current.Shutdown();
             }
         }
 
