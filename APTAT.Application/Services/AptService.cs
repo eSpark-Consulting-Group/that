@@ -148,8 +148,8 @@ namespace APTAT.Application.Services
                     progressItem.TotalFilesCount = descentProgressItem.TotalFilesCount;
                     progressItem.UnknownFilesCount = descentProgressItem.UnknownFilesCount;
                     progressItem.MalwareFilesCount = descentProgressItem.MalwaresCount;
-                    progressItem.ErrorFilesCount = descentProgressItem.ErrorFilesCount;
-                    progressItem.ServerErrorFilesCount = descentProgressItem.FailedAtNodeCount;
+                    progressItem.FailedToAnalyzeFilesCount = descentProgressItem.ErrorFilesCount;
+                    progressItem.NoVerdictFilesCount = descentProgressItem.FailedAtNodeCount;
                     progressItem.OperationUid = descentProgressItem.OperationUid;
                     progressItem.ScanStage = FromAptScanStage(descentProgressItem.ScanStage);
                     scanProgressItems[i] = progressItem;

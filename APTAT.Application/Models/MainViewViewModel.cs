@@ -152,23 +152,23 @@ namespace APTAT.Application.Models
             }
         }
 
-        private Int32 _errorFilesCount;
-        public Int32 ErrorFilesCount
+        private Int32 _failedToAnalyzeFilesCount;
+        public Int32 FailedToAnalyzeFilesCount
         {
-            get { return _errorFilesCount; }
+            get { return _failedToAnalyzeFilesCount; }
             set
             {
-                _errorFilesCount = value;
+                _failedToAnalyzeFilesCount = value;
             }
         }
 
-        private Int32 _serverErrorFilesCount;
-        public Int32 ServerErrorFilesCount
+        private Int32 _noVerdictFilesCount;
+        public Int32 NoVerdictFilesCount
         {
-            get { return _serverErrorFilesCount; }
+            get { return _noVerdictFilesCount; }
             set
             {
-                _serverErrorFilesCount = value;
+                _noVerdictFilesCount = value;
             }
         }
 
@@ -359,7 +359,7 @@ namespace APTAT.Application.Models
 
         public bool IsErrorsFound
         {
-            get { return ErrorFilesCount > 0 || ServerErrorFilesCount > 0; }
+            get { return FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0; }
         }
 
         public bool IsProtected
@@ -448,7 +448,8 @@ namespace APTAT.Application.Models
             UnknownFilesCount = 0;
             MalwareFilesCount = 0;
             ScannedItemsCount = 0;
-            ErrorFilesCount = 0;
+            FailedToAnalyzeFilesCount = 0;
+            NoVerdictFilesCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
             IsAnalyseWithValkyrieEnabled = false;
@@ -831,8 +832,8 @@ namespace APTAT.Application.Models
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
             Int32 malwareFiles = 0;
-            Int32 errorFiles = 0;
-            Int32 serverErrorFiles = 0;
+            Int32 failedToAnalyzeFiles = 0;
+            Int32 noVerdictFiles = 0;
 
             foreach (var infoItem in _onlineItems)
             {
@@ -847,8 +848,8 @@ namespace APTAT.Application.Models
                     infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
                     infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
                     infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                    infoItem.ErrorFilesCount = scanProgress.ErrorFilesCount;
-                    infoItem.ServerErrorFilesCount = scanProgress.ServerErrorFilesCount;
+                    infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
+                    infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
                     infoItem.StatusMessage = scanProgress.StatusMessage;
 
                     if (infoItem.ScanStage != ScanStage.OperationCompleted &&
@@ -870,8 +871,8 @@ namespace APTAT.Application.Models
                 
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
-                errorFiles += infoItem.ErrorFilesCount;
-                serverErrorFiles += infoItem.ServerErrorFilesCount;
+                failedToAnalyzeFiles += infoItem.FailedToAnalyzeCount;
+                noVerdictFiles += infoItem.NoVerdictFilesCount;
             }
 
             if (unknownFiles > UnknownFilesCount)
@@ -884,14 +885,14 @@ namespace APTAT.Application.Models
                 MalwareFilesCount = malwareFiles;
             }
 
-            if (errorFiles > ErrorFilesCount)
+            if (failedToAnalyzeFiles > FailedToAnalyzeFilesCount)
             {
-                ErrorFilesCount = errorFiles;
+                FailedToAnalyzeFilesCount = failedToAnalyzeFiles;
             }
 
-            if (serverErrorFiles > ServerErrorFilesCount)
+            if (noVerdictFiles > NoVerdictFilesCount)
             {
-                ServerErrorFilesCount = serverErrorFiles;
+                NoVerdictFilesCount = noVerdictFiles;
             }
 
             ScannedItemsCount = scanned;

@@ -82,7 +82,9 @@ namespace APTAT.Core.Reports
             SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.UnknownFiles.rdlc", ReportName = "UnknownFiles" };
             SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.MaliciousFiles.rdlc", ReportName = "MaliciousFiles" };
             SubReportContext failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeFiles.rdlc", ReportName = "FailedToAnalyzeFiles" };
-            GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext });
+            SubReportContext noVerdictFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.NoVerdictFiles.rdlc", ReportName = "NoVerdictFiles" };
+
+            GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext, noVerdictFilesSubReportContext });
         }
 
         private static void BuildDetailedPerDeviceWithValkyrieReport(string fileName, AptReportData data)
@@ -178,6 +180,10 @@ namespace APTAT.Core.Reports
                                 else if (e.ReportPath == "FailedToAnalyzeFiles")
                                 {
                                     items = item.GetFailedToAnalyzeFiles();
+                                }
+                                else if (e.ReportPath == "NoVerdictFiles")
+                                {
+                                    items = item.GetNoVerdictFiles();
                                 }
                                 
                                 e.DataSources.Add(new ReportDataSource(context.DataSourceName, items));

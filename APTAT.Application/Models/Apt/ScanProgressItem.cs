@@ -39,9 +39,9 @@ namespace APTAT.Application.Models
 
         public Int32 Percentage { get; set; }
 
-        public Int32 ErrorFilesCount { get; set; }
+        public Int32 FailedToAnalyzeFilesCount { get; set; }
 
-        public Int32 ServerErrorFilesCount { get; set; }
+        public Int32 NoVerdictFilesCount { get; set; }
 
     }
 }

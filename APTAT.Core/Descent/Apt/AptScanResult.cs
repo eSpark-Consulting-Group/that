@@ -27,17 +27,15 @@ namespace APTAT.Core.Descent.Apt
         public int MalwareFilesCount { get; set; }
         public int EmptyFilesCount { get; set; }
 
-        public int ErrorFilesCount { get; set; }       
-        public int ServerErrorFilesCount { get; set; }
-
-        
-        public int TotalErrorFilesCount
-        {
-            get
-            {
-                return this.ErrorFilesCount + this.ServerErrorFilesCount;
-            }
-        }
+        public int FailedToAnalyzeFilesCount { get; set; }       
+        public int NoVerdictFilesCount { get; set; }        
+        //public int TotalErrorFilesCount
+        //{
+        //    get
+        //    {
+        //        return this.FailedToAnalyzeFilesCount + this.ServerErrorFilesCount;
+        //    }
+        //}
         
         public int SkippedFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }
@@ -131,14 +129,15 @@ namespace APTAT.Core.Descent.Apt
             return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
         }
 
-        /// <summary>
-        /// Server Error 4 and others Errors 
-        /// </summary>
-        /// <returns></returns>
+       
         public Module[] GetFailedToAnalyzeFiles()
-        {
-            //return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();//TODO: REMOVE AFTER TEST!
-            return (from file in Files where file.Cloud == CloudVerdict.ServerError|| file.Cloud == CloudVerdict.FailedToAnalyze select file).ToArray();
+        {            
+            return (from file in Files where  file.Cloud == CloudVerdict.FailedToAnalyze select file).ToArray();
+        }
+
+        public Module[] GetNoVerdictFiles()
+        {            
+            return (from file in Files where file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
         }
 
         public Module[] GetBadFiles()

@@ -114,7 +114,7 @@ namespace APTAT.Core.Descent.Apt
         FailedToAnalyze,
 
         [XmlEnum("servererror")]
-        ServerError
+        NoVerdict
     }
 
     public enum OsPlatform
@@ -221,7 +221,7 @@ namespace APTAT.Core.Descent.Apt
         {
             get
             {
-                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Malware || Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FailedToAnalyze || Cloud == CloudVerdict.ServerError;
+                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Malware || Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FailedToAnalyze || Cloud == CloudVerdict.NoVerdict;
             }
         }
 

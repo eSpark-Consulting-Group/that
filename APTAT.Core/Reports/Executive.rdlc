@@ -52,7 +52,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>9.35354cm</Top>
+        <Top>10.59708cm</Top>
         <Height>1.25542cm</Height>
         <Width>14.72458cm</Width>
         <ZIndex>1</ZIndex>
@@ -286,7 +286,7 @@
             <Top>5.34881cm</Top>
             <Left>1.16247cm</Left>
             <Height>0.55681cm</Height>
-            <Width>5.14666cm</Width>
+            <Width>4.74979cm</Width>
             <ZIndex>6</ZIndex>
             <Style>
               <Border>
@@ -352,7 +352,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.65665cm</Top>
+            <Top>8.1489cm</Top>
             <Left>1.16247cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -669,7 +669,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.65665cm</Top>
+            <Top>8.1489cm</Top>
             <Left>7.08524cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
@@ -702,7 +702,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.18524cm</Top>
+            <Top>8.67749cm</Top>
             <Left>1.16247cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -737,7 +737,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.18524cm</Top>
+            <Top>8.67749cm</Top>
             <Left>7.08524cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
@@ -960,7 +960,7 @@
             <KeepTogether>true</KeepTogether>
             <Top>0.24294cm</Top>
             <Left>0.81174cm</Left>
-            <Height>7.82cm</Height>
+            <Height>8.46277cm</Height>
             <Width>0.09784cm</Width>
             <ZIndex>26</ZIndex>
             <Style>
@@ -982,7 +982,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Server Error Count:</Value>
+                    <Value>No Verdict:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -993,8 +993,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.69006cm</Top>
-            <Left>1.14659cm</Left>
+            <Top>6.51531cm</Top>
+            <Left>1.17835cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
             <ZIndex>27</ZIndex>
@@ -1015,7 +1015,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")</Value>
+                    <Value>=First(Fields!NoVerdictFilesCount.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -1028,8 +1028,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.69006cm</Top>
-            <Left>7.06936cm</Left>
+            <Top>6.51531cm</Top>
+            <Left>7.08524cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
             <ZIndex>28</ZIndex>
@@ -1043,10 +1043,78 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox37">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Failed To Analyze:</Value>
+                    <Style>
+                      <FontFamily>Segoe UI Light</FontFamily>
+                      <Color>Gray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>7.14268cm</Top>
+            <Left>1.17835cm</Left>
+            <Height>0.55681cm</Height>
+            <Width>4.74979cm</Width>
+            <ZIndex>29</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox61">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!FailedToAnalyzeFilesCount.Value, "AptReportDataSet")</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <Color>DimGray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>7.17795cm</Top>
+            <Left>7.08524cm</Left>
+            <Height>0.55681cm</Height>
+            <Width>9.48254cm</Width>
+            <ZIndex>30</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.23555cm</Top>
-        <Height>8.24687cm</Height>
+        <Height>9.64705cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
         <Style>
@@ -1078,7 +1146,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>0.04057cm</Top>
+            <Top>1.31057cm</Top>
             <Height>0.92722cm</Height>
             <Width>16.873cm</Width>
             <Style>
@@ -1352,7 +1420,7 @@
               </Style>
             </ChartNoDataMessage>
             <DataSetName>FileRatingDataSet</DataSetName>
-            <Top>1.01013cm</Top>
+            <Top>2.59763cm</Top>
             <Left>0.0635cm</Left>
             <Height>7.75167cm</Height>
             <Width>16.873cm</Width>
@@ -1370,7 +1438,7 @@
         <KeepTogether>true</KeepTogether>
         <Top>10.61778cm</Top>
         <Left>0.0635cm</Left>
-        <Height>8.85001cm</Height>
+        <Height>10.3493cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>3</ZIndex>
         <Visibility>
@@ -1650,7 +1718,7 @@
               </Style>
             </ChartNoDataMessage>
             <DataSetName>DevicesRatingDataSet</DataSetName>
-            <Top>1.79153cm</Top>
+            <Top>3.02625cm</Top>
             <Height>7.75167cm</Height>
             <Width>16.873cm</Width>
             <Style>
@@ -1683,7 +1751,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>0.60854cm</Top>
+            <Top>1.87854cm</Top>
+            <Left>0.00001cm</Left>
             <Height>1.11243cm</Height>
             <Width>16.873cm</Width>
             <ZIndex>1</ZIndex>
@@ -1701,8 +1770,8 @@
         <KeepTogether>true</KeepTogether>
         <Top>20.0675cm</Top>
         <Left>0.0635cm</Left>
-        <Height>9.83487cm</Height>
-        <Width>16.873cm</Width>
+        <Height>10.77792cm</Height>
+        <Width>16.87301cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -1711,7 +1780,7 @@
         </Style>
       </Rectangle>
     </ReportItems>
-    <Height>11.7985in</Height>
+    <Height>12.14387in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
@@ -2115,8 +2184,12 @@
           <DataField>TotalTargetsCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="TotalErrorFilesCount">
-          <DataField>TotalErrorFilesCount</DataField>
+        <Field Name="FailedToAnalyzeFilesCount">
+          <DataField>FailedToAnalyzeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NoVerdictFilesCount">
+          <DataField>NoVerdictFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="UnknownFilesFound">

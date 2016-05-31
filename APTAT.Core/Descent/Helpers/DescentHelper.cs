@@ -292,9 +292,9 @@ namespace APTAT.Core.Descent
                 public int MalwaresFound { get; set; }
                 public int EmptyFilesFound { get; set; }
                 public int SkippedFilesCount { get; set; }
-                public int NetworkErrorFilesCount { get; set; }
+                public int FailedToAnalyzeFilesCount { get; set; }
                 public long TotalFilesSize { get; set; }
-                public int FailedAtNodeCount { get; set; }
+                public int NoVerdictFilesCount { get; set; }
                 public int Percentage
                 {
                     get
@@ -747,8 +747,8 @@ namespace APTAT.Core.Descent
                                     SafeFilesFound = safeFiles,
                                     MalwaresFound = malwares,
                                     SkippedFilesCount = skipped,
-                                    NetworkErrorFilesCount = errorFiles,
-                                    FailedAtNodeCount = failedAtNodeCount
+                                    FailedToAnalyzeFilesCount = errorFiles,
+                                    NoVerdictFilesCount = failedAtNodeCount
                                 });
                             }
                             else if (status == EnAptStage.EnApt_WritingReport)
@@ -763,8 +763,8 @@ namespace APTAT.Core.Descent
                                 {
                                     TotalFilesScanned = totalFiles - filesToSkip,
                                     UnknownFilesFound = unknownFilesTotal,
-                                    FailedAtNodeCount = failedAtNodeCount,
-                                    NetworkErrorFilesCount = errorFiles,
+                                    NoVerdictFilesCount = failedAtNodeCount,
+                                    FailedToAnalyzeFilesCount = errorFiles,
                                     SkippedFilesCount = skipped
                                 });
 
@@ -788,8 +788,8 @@ namespace APTAT.Core.Descent
                                     MalwaresFound = malwares,
                                     EmptyFilesFound = emptyFiles,
                                     SkippedFilesCount = skipped,
-                                    NetworkErrorFilesCount = errorFiles,
-                                    FailedAtNodeCount = failedAtNodeCount
+                                    FailedToAnalyzeFilesCount = errorFiles,
+                                    NoVerdictFilesCount = failedAtNodeCount
                                 });
                                 break;
                             }

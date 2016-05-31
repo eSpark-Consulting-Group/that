@@ -72,11 +72,11 @@ namespace APTAT.Application.Models
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
         private int _errorFilesCount;
-        private int _serverErrorFilesCount;
+        private int _noVerdictFilesCount;
 
         public Boolean HasBadFiles
         {
-            get { return UnknownFilesCount > 0 || MalwareFilesCount > 0 || ServerErrorFilesCount > 0 || ErrorFilesCount > 0; }
+            get { return UnknownFilesCount > 0 || MalwareFilesCount > 0 || NoVerdictFilesCount > 0 || FailedToAnalyzeCount > 0; }
         }
         
         public Boolean IsUnknown { get; set; }
@@ -208,7 +208,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public Int32 ErrorFilesCount
+        public Int32 FailedToAnalyzeCount
         {
             get { return _errorFilesCount; }
             set
@@ -219,23 +219,23 @@ namespace APTAT.Application.Models
                 }
 
                 _errorFilesCount = value;
-                RaisePropertyChanged("ErrorFilesCount");
+                RaisePropertyChanged("FailedToAnalyzeCount");
                 RaisePropertyChanged("HasBadFiles");
             }
         }
 
-        public Int32 ServerErrorFilesCount
+        public Int32 NoVerdictFilesCount
         {
-            get { return _serverErrorFilesCount; }
+            get { return _noVerdictFilesCount; }
             set
             {
-                if (_serverErrorFilesCount == value)
+                if (_noVerdictFilesCount == value)
                 {
                     return;
                 }
 
-                _serverErrorFilesCount = value;
-                RaisePropertyChanged("ServerErrorFilesCount");
+                _noVerdictFilesCount = value;
+                RaisePropertyChanged("NoVerdictFilesCount");
                 RaisePropertyChanged("HasBadFiles");
             }
         }

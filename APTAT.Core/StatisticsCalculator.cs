@@ -26,8 +26,8 @@ namespace APTAT.Core
                     malwareFilesCount += scanResult.MalwareFilesCount;
                     emptyFilesCount += scanResult.EmptyFilesCount;
                     skippedFilesCount += scanResult.SkippedFilesCount;
-                    errorFilesCount += scanResult.ErrorFilesCount;
-                    serverErrorFilesCount += scanResult.ServerErrorFilesCount;
+                    errorFilesCount += scanResult.FailedToAnalyzeFilesCount;
+                    serverErrorFilesCount += scanResult.NoVerdictFilesCount;
                 }
             }
             return new FilesStatistics
@@ -38,8 +38,8 @@ namespace APTAT.Core
                 TotalFilesCound = totalFilesCound,
                 UnknownFilesCount = unknownFilesCount,
                 SkippedFilesCount = skippedFilesCount,
-                ErrorFilesCount = errorFilesCount,
-                ServerErrorFilesCount = serverErrorFilesCount
+                FailedToAnalyzeFilesCount = errorFilesCount,
+                NoVerdictFilesCount = serverErrorFilesCount
 
             };
         }
