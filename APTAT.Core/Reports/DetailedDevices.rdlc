@@ -1878,7 +1878,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Server Error Count:</Value>
+                                      <Value>No Verdict:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -1911,7 +1911,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!TotalErrorFilesCount.Value</Value>
+                                      <Value>=Fields!NoVerdictFilesCount.Value</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -1959,7 +1959,7 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>4.61451cm</Top>
+                              <Top>4.58276cm</Top>
                               <Left>5.98042cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>10.95608cm</Width>
