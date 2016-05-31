@@ -124,7 +124,7 @@ namespace APTAT.Application.Messages
 			            Action action = () => tuple.Item2.Invoke(viewModel, messageParameters);
 
 			            if (viewModel is UIElement)
-			                ThreadPool.QueueUserWorkItem(e => ((UIElement) viewModel).Dispatcher.BeginInvoke(action));
+			                ((UIElement) viewModel).Dispatcher.BeginInvoke(action);
 			            else ThreadPool.QueueUserWorkItem(e => action());
 			        }
 			    }
