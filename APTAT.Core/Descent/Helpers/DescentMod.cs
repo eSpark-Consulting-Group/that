@@ -17,8 +17,6 @@ namespace APTAT.Core.Descent.Helpers
 		public const string TimeoutAbortString = "OH SHI--";
 	    private const int E_FAIL = unchecked((int) 0x80004005);
 
-        private readonly ConcurrentDictionary<Guid, Thread> _threads = new ConcurrentDictionary<Guid, Thread>();
-        private readonly ConcurrentDictionary<Guid, Task> _tasks = new ConcurrentDictionary<Guid, Task>();
         public DescentMod(TaskFactory taskFactory, IChangeTrackingSubSystem changeTrackingSubSystem)
 		{
             _tracker = changeTrackingSubSystem;
@@ -51,7 +49,6 @@ namespace APTAT.Core.Descent.Helpers
 			var task = _taskFactory.StartNew( StartAptScanThread, tp, TaskCreationOptions.LongRunning )
                 .ContinueWith( t => ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp),
                 TaskContinuationOptions.OnlyOnCanceled);
-            _tasks[tp.AgentIdentity] = task;
         }
 
         private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int percentage)
@@ -76,7 +73,6 @@ namespace APTAT.Core.Descent.Helpers
             LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
                 "Descent operation started{0} computer name: {1}{0} computer UID: {2}{0} thread ID: {3}{0}",
                 Environment.NewLine, computer, tp.AgentIdentity, Thread.CurrentThread.ManagedThreadId);
-            _threads.TryAdd(tp.AgentIdentity, Thread.CurrentThread);
 
             //using (tp.InformOperationStart(Thread.CurrentThread))
 			{
@@ -310,8 +306,8 @@ namespace APTAT.Core.Descent.Helpers
 			    }
 			    catch (ScanCanceledException)
 			    {
-			        dh.ScanProgressChanged -= onScanProgressChanged;
-			        //ProcessScanCancelation(tp);
+			        dh.Release();
+                    //ProcessScanCancelation(tp);
 			        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.",
 			            tp.RemoteHostInfo.HostName);
 			        ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
@@ -319,6 +315,7 @@ namespace APTAT.Core.Descent.Helpers
 			    catch (OperationCanceledException ex)
 			    {
                     LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
+                    dh.Release();
                     ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
                 }
 				catch( ThreadAbortException ex )
@@ -354,9 +351,6 @@ namespace APTAT.Core.Descent.Helpers
                     dh.ReceivingResults -= onResultsReceiving;
                     dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     dh.Release();
-
-				    Thread thread;
-                    _threads.TryRemove(tp.AgentIdentity, out thread);
 				}
 			}
 		}
