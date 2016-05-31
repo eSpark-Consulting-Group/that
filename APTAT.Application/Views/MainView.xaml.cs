@@ -79,13 +79,18 @@ namespace APTAT.Application
 
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
         {
-            
+            if (_onCompletedAction != null)
+            {
+                _onCompletedAction();
+                return;
+            }
+
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow(_viewModel);
             scanCompletedWindow.Text.Text = String.Empty;
             scanCompletedWindow.Text.Text += "Computer Statistics:";
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
             scanCompletedWindow.Text.Text += Environment.NewLine;
-            ;
+
             if (e.SuccededCount > 0) scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
             if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Canceled Scans", Environment.NewLine, e.CanceledCount);
             if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
@@ -95,13 +100,9 @@ namespace APTAT.Application
             int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount+ e.FilesStatistics.ErrorFilesCount + e.FilesStatistics.ServerErrorFilesCount;
             if (e.FilesStatistics.TotalFilesCound > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine,
-                    total);
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine, total);
             }
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown(s) found", Environment.NewLine,
-                    e.FilesStatistics.UnknownFilesCount);
-
-
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown(s) found", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
             
             if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware(s) found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
 
@@ -167,6 +168,11 @@ namespace APTAT.Application
         }
         private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
+            if (_onCompletedAction != null)
+            {
+                _onCompletedAction();
+                return;
+            }
             if (_dialog == null) return;
             if (e.Error == null) return;
             var error = e.Error as AggregateException;
@@ -291,8 +297,11 @@ namespace APTAT.Application
             }
         }
 
-        public void OnAppClose()
+        private Action _onCompletedAction;
+        public void OnAppClose(Action action)
         {
+            _onCompletedAction = action;
+            loading.BusyContent = "Closing...";
             _viewModel.OnAppClose();
         }
 

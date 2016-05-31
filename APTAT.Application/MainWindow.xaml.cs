@@ -18,8 +18,6 @@ namespace APTAT.Application
             InitializeComponent();
 
             MouseLeftButtonDown += MainWindow_MouseDown;
-        
-
             Loaded += MainWindow_Loaded;
         }
 
@@ -63,14 +61,12 @@ namespace APTAT.Application
 
                 if (confirmation.ShowDialog() == true)
                 {
-                    _mainView.OnAppClose();
-                    Close();
+                    _mainView.OnAppClose(App.Current.Shutdown);
                 }
             }
             else
             {
-                _mainView.OnAppClose();
-                Close();
+                _mainView.OnAppClose(App.Current.Shutdown);
             }
         }
 

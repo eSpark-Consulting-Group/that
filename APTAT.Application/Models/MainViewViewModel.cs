@@ -1002,7 +1002,8 @@ namespace APTAT.Application.Models
 
         public void OnAppClose()
         {
- 
+            IsBusy = true;
+            InvokeStopScan(null);
         }
     }
 

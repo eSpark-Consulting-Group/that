@@ -13,10 +13,5 @@ namespace APTAT.Application
         {
             InitializeComponent();
         }
-
-        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            (e.Source as TabItem).IsSelected = true;
-        }
     }
 }
