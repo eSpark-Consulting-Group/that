@@ -54,9 +54,14 @@ namespace CodedUITestAT
 
         /// <summary> Gets rows from a given tab page control.  </summary>
         /// <param name="tab">Set a tab page control.</param>
-        internal static UITestControl[] GetRows(this WpfTabPage tab)
+        /// <param name="resultsScreen">Set a results screen type.</param>
+        internal static UITestControl[] GetRows(this WpfTabPage tab, ResultsScreen resultsScreen)
         {
-            var tree = tab.GetChildren()[1].GetChildren()[0] as WpfTree;
+            int shift = 1;
+
+            if (resultsScreen == ResultsScreen.ValkyrieAnalysis) shift += 3;
+
+            var tree = tab.GetChildren()[shift].GetChildren()[0] as WpfTree;
             var rows = tree.GetRows();
 
             return rows;
@@ -109,7 +114,7 @@ namespace CodedUITestAT
         {
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
-            if (useMain.UnknownFilesTab().Exists) row = useMain.UnknownFilesTab().GetRow(endpoint.RowName);
+            if (useMain.UnknownFilesTab().Exists) row = useMain.UnknownFilesTab().GetRow(ResultsScreen.FoundFiles, endpoint.RowName);
             else row = useMain.UnknownFilesTree().GetRow(endpoint.RowName);
 
             return row.GetScanStatus();
@@ -117,10 +122,11 @@ namespace CodedUITestAT
 
         /// <summary> Gets a row with a given name from the indicated tab page. Returns null, if a row with the given name was not found on the tab page. </summary>
         /// <param name="tab">Set a tab page.</param>
+        /// <param name="resultsScreen">Set a results screen type.</param>
         /// <param name="rowName">Set a unique row name.</param>
-        internal static UITestControl GetRow(this WpfTabPage tab, string rowName)
+        internal static UITestControl GetRow(this WpfTabPage tab, ResultsScreen resultsScreen, string rowName)
         {
-           var rows = tab.GetRows();
+            var rows = tab.GetRows(resultsScreen);
 
            foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
            
@@ -162,7 +168,7 @@ namespace CodedUITestAT
                 default: throw new Exception("Unexpected Results screen!");
             }
 
-            var rows = tab.GetRows();
+            var rows = tab.GetRows(screen);
 
             foreach (var row in rows)
             {

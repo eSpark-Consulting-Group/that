@@ -360,7 +360,7 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current test context.</param>
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
-            int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetRows().Length;
+            int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetRows(ResultsScreen.ValkyrieAnalysis).Length;
             
             if (valkyrieResultsRowsNumber == expectedFilesNumber)
                 testContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
@@ -385,6 +385,9 @@ namespace CodedUITestAT
             }
             timer.Stop();
 
+            UIMapResultsWindow.GoToUnknownFilesTab();
+            UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
+
             // Waits until the results are actually available at UI
             int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
             timer.Restart();
@@ -393,7 +396,7 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
                 try
                 {
-                    ValkyrieAnalysisResultsTab().GetRows();
+                    ValkyrieAnalysisResultsTab().GetRows(ResultsScreen.ValkyrieAnalysis);
                     testContext.WriteLine("Valkyrie results now can be obtained from UI.\n");
                     break;
                 }
@@ -473,7 +476,7 @@ namespace CodedUITestAT
                 UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
                 UIMapCamCredentialsWindow.InputPassword();
                 UIMapCamCredentialsWindow.ClickOkButton();
-
+                
                 // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
                 WaitForValkyrieResults(TestContext);
                 AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
