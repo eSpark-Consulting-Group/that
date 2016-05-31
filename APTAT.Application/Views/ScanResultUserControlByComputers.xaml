@@ -1,5 +1,5 @@
-﻿<UserControl    AutomationProperties.AutomationId="ScanResultsScreen"
-                x:Class="APTAT.Application.ScanInfoTreeView"
+﻿<UserControl    AutomationProperties.AutomationId="ScanResultsScreenByComputers"
+                x:Class="APTAT.Application.ScanResultUserControlByComputers"
                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

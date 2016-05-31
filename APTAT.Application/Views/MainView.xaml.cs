@@ -43,15 +43,11 @@ namespace APTAT.Application
         {
             switch (message.Message)
             {
+                case ChangeScreenTypes.Scan:
                 case ChangeScreenTypes.ValkyrieScan:
                     if (mainContent.Content != null && mainContent.Content is ResultTabsControl)
                         return;
                     mainContent.Content = new ResultTabsControl();
-                    break;
-                case ChangeScreenTypes.Scan:
-                    if (mainContent.Content != null && mainContent.Content is ScanInfoTreeView)
-                        return;
-                    mainContent.Content = new ScanInfoTreeView();
                     break;
                 case ChangeScreenTypes.StartScan:
                     StartScanWindow details = new StartScanWindow();

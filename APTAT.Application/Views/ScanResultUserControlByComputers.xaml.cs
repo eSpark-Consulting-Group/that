@@ -9,11 +9,11 @@ using Telerik.Windows.Controls.GridView;
 namespace APTAT.Application
 {
     /// <summary>
-    /// Interaction logic for ScanInfoTreeView.xaml
+    /// Interaction logic for ScanResultUserControlByComputers.xaml
     /// </summary>
-    public partial class ScanInfoTreeView : UserControl
+    public partial class ScanResultUserControlByComputers : UserControl
     {
-        public ScanInfoTreeView()
+        public ScanResultUserControlByComputers()
         {
             InitializeComponent();
 

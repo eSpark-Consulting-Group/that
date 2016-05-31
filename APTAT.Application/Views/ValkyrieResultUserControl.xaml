@@ -131,7 +131,7 @@
                     IsFilterable="False"
                     Header="VERDICT"  
                     TextAlignment="Left"
-                    Width="205*"/>
+                    Width="206*"/>
                 
                 <telerik:GridViewColumn
                     CellTemplateSelector="{StaticResource OperationStatusTemplateSelector}"

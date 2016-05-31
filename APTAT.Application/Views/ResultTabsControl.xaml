@@ -17,19 +17,15 @@
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="{x:Type TabItem}">
-                  <Border  BorderThickness="1 1 1 0"  BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true" Background="White">
-                    <Border Name="Border" Opacity="0.4" Background="White">
+                  <Border  BorderThickness="1 1 1 0" Name="Border" BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true" Background="White">
                       <ContentPresenter x:Name="ContentSite" HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" Margin="10, 5" />
-                    </Border>
                   </Border>
                 <ControlTemplate.Triggers>
                   <Trigger Property="TabItem.IsMouseOver" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="#FFD6D4D4" />
-                    <Setter TargetName="Border" Property="Opacity" Value="1" />
                   </Trigger>
                   <Trigger Property="TabItem.IsSelected" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="#FFE3E3E3" />
-                    <Setter TargetName="Border" Property="Opacity" Value="1" />
                     <Setter Property="Panel.ZIndex" Value="100" />
                   </Trigger>
                 </ControlTemplate.Triggers>
@@ -46,19 +42,15 @@
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="{x:Type ToggleButton}">
-                <Border  BorderThickness="1 1 1 0"  BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true" Background="White">
-                  <Border Name="Border" Opacity="0.4" Background="White">
+                <Border  BorderThickness="1 1 1 0" Name="Border" BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true" Background="White">
                     <ContentPresenter x:Name="ContentSite" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 5" />
-                  </Border>
                 </Border>
                 <ControlTemplate.Triggers>
                   <Trigger Property="ToggleButton.IsMouseOver" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="#FFD6D4D4" />
-                    <Setter TargetName="Border" Property="Opacity" Value="1" />
                   </Trigger>
                   <Trigger Property="ToggleButton.IsChecked" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="#FFE3E3E3" />
-                    <Setter TargetName="Border" Property="Opacity" Value="1" />
                     <Setter Property="Panel.ZIndex" Value="100" />
                   </Trigger>
                 </ControlTemplate.Triggers>
@@ -68,24 +60,22 @@
         </Style>
       </Grid.Resources>
         
-        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="2 2 0 2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-
-            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results">
-                <local:ScanInfoTreeView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            </TabItem>
-            
-            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="True">
+        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="2 1 1 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results" IsSelected="{Binding SelectScan, Mode=TwoWay}">
+              <Grid>
+                <local:ScanResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <local:ScanResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
+              </TabItem>
+            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" >
               <Grid>
                 <local:ValkyrieResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
               </Grid>
-              
             </TabItem>
-            
         </TabControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 2 0">
         <ToggleButton Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" />
-
         <ToggleButton Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" />
       </StackPanel>
         

@@ -157,6 +157,9 @@
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="Extensions\PortValidationExtensions.cs" />
     <Compile Include="Controls\TitleUpdater.cs" />
+    <Compile Include="Views\ScanResultUserControl.xaml.cs">
+      <DependentUpon>ScanResultUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ValkyrieResultUserControlByComputers.xaml.cs">
       <DependentUpon>ValkyrieResultUserControlByComputers.xaml</DependentUpon>
     </Compile>
@@ -201,8 +204,8 @@
     <Compile Include="Models\Apt\ScanResultItem.cs" />
     <Compile Include="Models\Apt\BadFileItem.cs" />
     <Compile Include="Converters\NullableConverter.cs" />
-    <Compile Include="Views\ScanInfoTreeView.xaml.cs">
-      <DependentUpon>ScanInfoTreeView.xaml</DependentUpon>
+    <Compile Include="Views\ScanResultUserControlByComputers.xaml.cs">
+      <DependentUpon>ScanResultUserControlByComputers.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\SearchExtensions.cs" />
     <Compile Include="Controls\SelectorButton.cs" />
@@ -268,6 +271,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ScanResultUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ValkyrieResultUserControlByComputers.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -323,7 +330,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\ScanInfoTreeView.xaml">
+    <Page Include="Views\ScanResultUserControlByComputers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -456,6 +456,7 @@ namespace APTAT.Application.Models
             IsValkyrieReportEnabled = false;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Scan);
+            Set(() => SelectScan, true);
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
@@ -589,6 +590,8 @@ namespace APTAT.Application.Models
         }
 
         public bool ValkyrieSendingFiles { get; set; }
+        public bool SelectScan { get; set; }
+        public bool SelectValkyrieScan { get; set; }
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
@@ -684,7 +687,6 @@ namespace APTAT.Application.Models
                 return;
             }
 
-
             var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
 
             Set(() => TotalItemsCount, items.Count());
@@ -779,7 +781,7 @@ namespace APTAT.Application.Models
             Keyword = string.Empty;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ValkyrieScan);
-
+            Set(() => SelectValkyrieScan, true);
             Set(() => ValkyrieSendingFiles, true);
         }
 
@@ -970,7 +972,7 @@ namespace APTAT.Application.Models
 
         public bool IsQuickScan { get; set; }
 
-        private bool _groupByFiles = true;
+        private bool _groupByFiles;
         public bool GroupByFiles
         {
             get { return _groupByFiles; }
@@ -983,7 +985,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        private bool _groupByComputers;
+        private bool _groupByComputers = true;
         public bool GroupByComputers
         {
             get { return _groupByComputers; }
