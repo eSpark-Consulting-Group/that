@@ -41,10 +41,9 @@ namespace APTAT.Core.Descent.Apt
             var aptResult = (AptScanOperationContext)result;
             int failed, notPerformed, succeeded, total, canceled;
             CalculateOperationStatistics(aptResult.ScanResults.Values, out failed, out notPerformed, out succeeded, out total, out canceled);
-            aptResult.TotalTargetsCount = total;
             aptResult.SucceededTargetsCount = succeeded;
             aptResult.FailedTargetsCount = failed;
-            aptResult.NotPerformedTargetsCount = notPerformed;
+            aptResult.NotPerformedTargetsCount = aptResult.TotalTargetsCount - total;
             aptResult.CanceledTargetsCount = canceled;
             return new AptScanCompletedEventArgs() { OperationUid = result.OperationUid, Context = aptResult };
         }
