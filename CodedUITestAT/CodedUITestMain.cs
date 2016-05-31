@@ -439,6 +439,15 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...\n", scanType.ToString(), endpoint.Name));
         }
 
+        /// <summary> Stops a scan. </summary>
+        private void StopScanning()
+        {
+            UIHelper.WaitForControlIsClickable(StopScanningButton());
+            UIMapMain.ClickStopScanningButton();
+            UIHelper.WaitForControl(YesDialogButton());
+            UIMapStopScanWindow.ClickYesButton();
+        }
+
         #endregion
 
         #region Test methods
@@ -621,10 +630,7 @@ namespace CodedUITestAT
             else Assert.Fail(String.Format("Service '{0}' is no longer present at endpoint '{1}' after a scan stop is not confirmed!\n", scannerServiceName, endpoint.Name));
             
             // Confirms the stop and checks the result
-            UIHelper.WaitForControlIsClickable(StopScanningButton());
-            UIMapMain.ClickStopScanningButton();
-            UIHelper.WaitForControl(YesDialogButton());
-            UIMapStopScanWindow.ClickYesButton();
+            StopScanning();
 
             endpointStatus = endpoint.GetScanStatus();
             if (endpointStatus != ScanStatus.Stopped) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed!", endpoint.Name, endpointStatus));
@@ -648,6 +654,8 @@ namespace CodedUITestAT
             if (SysHelper.IsThereService(scannerServiceName, endpoint))
                 TestContext.WriteLine(String.Format("Service '{0}' is present at endpoint '{1}' after another scan start.\n", scannerServiceName, endpoint.Name));
             else Assert.Fail(String.Format("Service '{0}' is not present at endpoint '{1}' after another scan start!\n", scannerServiceName, endpoint.Name));
+
+            StopScanning(); // A cleanup
         }
 
         #endregion
