@@ -19,19 +19,7 @@ namespace APTAT.Application
 {
     public partial class MainView 
     {
-
-
         private MainViewViewModel _viewModel;
-        private IStorageService _storageService;
-
-
-        public bool IsScanInProgress
-        {
-            get
-            {
-                return _viewModel.IsAnyScanInProgress;
-            }
-        }
 
         public MainView()
         {
@@ -42,14 +30,12 @@ namespace APTAT.Application
                 MessageManager.Instance.RegisterListener(this);
             }
 
-            _storageService = CompositionHelper.Instance.GetService<IStorageService>();
             DataContext = _viewModel = CompositionHelper.Instance.GetService<MainViewViewModel>();
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
             _viewModel.ValkyrieAnalyzeStarted += ViewModelOnValkyrieAnalyzeStarted;
             _viewModel.ValkyrieAnalyzeCompleted += ViewModelOnValkyrieAnalyzeCompleted;
-
         }
 
         [MessageReceiver]
@@ -133,7 +119,6 @@ namespace APTAT.Application
         }
         
         private CamCredentialsWindow _dialog;
-
         private void ShowRegisterToValkyrieWindow()
         {
             var model = new ValkyrieRegistrationModel();
@@ -258,72 +243,64 @@ namespace APTAT.Application
 
         private void OnExecutiveReportClick(Object sender, RadRoutedEventArgs e)
         {
-            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.Executive);
+            _viewModel.SetReportKind(ReportKind.Executive);
             ReportButton.IsOpen = false;
             ShowReport();
         }
 
         private void OnPerDeviceReportClick(Object sender, RadRoutedEventArgs e)
         {
-            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerDevice);
+            _viewModel.SetReportKind(ReportKind.DetailedPerDevice);
             ReportButton.IsOpen = false;
             ShowReport();
         }
 
         private void OnPerProgramReportClick(Object sender, RadRoutedEventArgs e)
         {
-            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerProgram);
+            _viewModel.SetReportKind(ReportKind.DetailedPerProgram);
             ReportButton.IsOpen = false;
             ShowReport();
         }
 
         private void OnExecutiveReportValkyrieClick(Object sender, RadRoutedEventArgs e)
         {
-            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.ExecutiveWithValkyrie);
+            _viewModel.SetReportKind(ReportKind.ExecutiveWithValkyrie);
             ReportButton.IsOpen = false;
             ShowReport();
         }
 
         private void OnPerDeviceReportValkyrieClick(Object sender, RadRoutedEventArgs e)
         {
-            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerDeviceWithValkyrie);
+           _viewModel.SetReportKind(ReportKind.DetailedPerDeviceWithValkyrie);
             ReportButton.IsOpen = false;
             ShowReport();
         }
 
         private void OnPerProgramReportValkyrieClick(Object sender, RadRoutedEventArgs e)
         {
-            _storageService.SetValue(KnownKeys.ReportKind, ReportKind.DetailedPerProgramWithValkyrie);
+            _viewModel.SetReportKind(ReportKind.DetailedPerProgramWithValkyrie);
             ReportButton.IsOpen = false;
             ShowReport();
         }
 
-        
+        public bool IsScanInProgress
+        {
+            get
+            {
+                return _viewModel.IsAnyScanInProgress;
+            }
+        }
+
+        public void OnAppClose()
+        {
+            _viewModel.OnAppClose();
+        }
 
         private void AboutClick(Object sender, RoutedEventArgs e)
         {
             AboutWindow about = new AboutWindow {Owner = System.Windows.Application.Current.MainWindow};
             about.ShowDialog();
-            
         }
-
-        //private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
-        //{
-        //    e.ItemsSource = new[]
-        //    {
-        //        new ScanStatus(ScanStatusEnum.Cancelled),
-        //        new ScanStatus(ScanStatusEnum.Completed),
-        //        new ScanStatus(ScanStatusEnum.InProgress),
-        //        new ScanStatus(ScanStatusEnum.Failed),
-        //        new ScanStatus(ScanStatusEnum.Offline)
-        //    };
-
-        //}
-
-        //private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
-        //{
-        //    treeList.CollapseAllHierarchyItems();
-        //}
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {

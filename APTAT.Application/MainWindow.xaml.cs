@@ -63,11 +63,13 @@ namespace APTAT.Application
 
                 if (confirmation.ShowDialog() == true)
                 {
+                    _mainView.OnAppClose();
                     Close();
                 }
             }
             else
             {
+                _mainView.OnAppClose();
                 Close();
             }
         }

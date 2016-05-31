@@ -994,5 +994,16 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("GroupByComputers");
             }
         }
+
+        public void SetReportKind(ReportKind kind)
+        {
+            _storage.SetValue(KnownKeys.ReportKind, kind);
+        }
+
+        public void OnAppClose()
+        {
+ 
+        }
     }
+
 }
