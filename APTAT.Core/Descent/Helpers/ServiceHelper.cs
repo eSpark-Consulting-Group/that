@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Text;
+using System.Threading;
 
 namespace APTAT.Core.Descent
 {
@@ -524,7 +525,7 @@ namespace APTAT.Core.Descent
                 return;
             }
 
-            DeleteService(m_serviceHandle);
+            bool res = DeleteService(m_serviceHandle);
             CloseServiceHandle(m_serviceHandle);
             m_serviceHandle = IntPtr.Zero;
         }
@@ -556,6 +557,15 @@ namespace APTAT.Core.Descent
                 if (ss.currentState != (int)SERVICE_STATE.SERVICE_STOPPED)
                     if (!ControlService(m_serviceHandle, SERVICE_CONTROL.STOP, ref ss))
                         throw new Win32Exception(Marshal.GetLastWin32Error());
+                var timeOut = TimeSpan.FromMinutes(1).TotalMilliseconds;
+                int elapsed = 0;
+                while (ss.currentState == (int)SERVICE_STATE.SERVICE_STOP_PENDING &&
+                    elapsed < timeOut)
+                {
+                    elapsed += 1000;
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
+                    QueryServiceStatus(m_serviceHandle, ref ss);
+                }
             }
         }
 
