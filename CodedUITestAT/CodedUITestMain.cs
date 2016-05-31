@@ -277,7 +277,7 @@ namespace CodedUITestAT
 
         #region Results window
 
-        internal WpfTabPage UnknownFilesTab()
+        internal WpfTabPage ScanningResultsTab()
         {     
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage;
         }
@@ -287,7 +287,7 @@ namespace CodedUITestAT
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
         }
 
-        internal WpfTree UnknownFilesTree()
+        internal WpfTree ScanningResultsTree()
         {
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree2;
         }
@@ -385,7 +385,7 @@ namespace CodedUITestAT
             }
             timer.Stop();
 
-            UIMapResultsWindow.GoToUnknownFilesTab();
+            UIMapResultsWindow.GoToScanningResultsTab();
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
             // Waits until the results are actually available at UI
@@ -505,7 +505,7 @@ namespace CodedUITestAT
             Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            //string malwarePath = String.Format(@"Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{0}", Settings.General.Default.ThreatName);
+            //Malware malware = new Malware(String.Format(@"C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{0}", Settings.General.Default.ThreatName));
             
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -519,7 +519,7 @@ namespace CodedUITestAT
             UIMapWorkgroup.InputLogin();
             UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncriptedPassword;
             UIMapWorkgroup.InputPassword();
-
+            
             UIMapStartScanningWizard.ClickQuickScanButton();
             TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...\n", workgroupName));
             
@@ -528,7 +528,7 @@ namespace CodedUITestAT
             UIMapScanCompletedWindow.ClickOkButton();
             
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-            TestContext.WriteLine("CAM Credentials window appeared...\n");
+            TestContext.WriteLine("CAM Credentials window appeared...\n");                        
             UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = Settings.General.Default.CamKey;
             UIMapCamCredentialsWindow.InputCamKey();
             UIMapCamCredentialsWindow.ClickOkButton();
@@ -536,18 +536,19 @@ namespace CodedUITestAT
             // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
             WaitForValkyrieResults(TestContext);
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
-            
+
             // Verifies the scanning result at the Results screen
-            UIHelper.ClickRow(ResultsScreen.FoundFiles, endpoint);
+            UIMapResultsWindow.GoToScanningResultsTab();
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpoint.Name));
-            UIHelper.ClickRow(ResultsScreen.FoundFiles, malware, MouseClick.DoubleLeft);
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, malware, MouseClick.DoubleLeft);
             TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
             UIHelper.WaitForControl(CloseDetailsButton());
             UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
         }
-
+       
         [TestMethod]
         public void VerifyMainScreenDefaultsTest()
         {
@@ -579,7 +580,7 @@ namespace CodedUITestAT
             if (AboutButton().Enabled) TestContext.WriteLine("About button is enabled by default.\n");
             else Assert.Fail("About button is disabled by default!\n");
 
-            if (!UnknownFilesTab().Exists) TestContext.WriteLine("'Unknown files' list is not shown by default.\n");
+            if (!ScanningResultsTab().Exists) TestContext.WriteLine("'Unknown files' list is not shown by default.\n");
             else Assert.Fail("'Unknown files' list is shown by default!\n");
 
             UIMapMain.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText = Settings.General.Default.NoScansTextBlockText;

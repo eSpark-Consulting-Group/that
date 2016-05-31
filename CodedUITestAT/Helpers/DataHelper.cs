@@ -29,9 +29,9 @@ namespace CodedUITestAT
         /// <summary> Gets data on an internal endpoint obtained from a local environment variable. </summary>
         internal static Computer GetEndpoint()
         {
-           string computerName = Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine).ToUpper();
+           string computerName = Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine);
            return new Computer(computerName);
-           //return "as06w8x64".ToUpper();
+           //return "as06w8x64";
         }
 
         /// <summary> Gets working folder from a local environment variable </summary>

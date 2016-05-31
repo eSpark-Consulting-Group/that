@@ -80,7 +80,7 @@ namespace CodedUITestAT
         /// <param name="row">Set a row control.</param>
         internal static string GetRowName(this UITestControl row)
         {
-            return row.GetChildren()[1].Name;
+            return row.GetChildren()[1].Name.ToLower();
         }
 
         /// <summary> Gets a given row status. </summary>
@@ -114,8 +114,8 @@ namespace CodedUITestAT
         {
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
-            if (useMain.UnknownFilesTab().Exists) row = useMain.UnknownFilesTab().GetRow(ResultsScreen.FoundFiles, endpoint.RowName);
-            else row = useMain.UnknownFilesTree().GetRow(endpoint.RowName);
+            if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(ResultsScreen.ScanningResults, endpoint.RowName);
+            else row = useMain.ScanningResultsTree().GetRow(endpoint.RowName);
 
             return row.GetScanStatus();
         }
@@ -153,22 +153,27 @@ namespace CodedUITestAT
         {
             WpfButton expandRowButton;
             WpfTabPage tab;
+            UITestControl[] rows;
             CodedUITestMain useMain = new CodedUITestMain();
 
             switch (screen)
             {
-                case ResultsScreen.FoundFiles:
-                    useMain.UIMapResultsWindow.GoToUnknownFilesTab();
-                    tab = useMain.UnknownFilesTab();
+                case ResultsScreen.ScanningResults:
+                    if (useMain.ScanningResultsTab().Exists)
+                    {
+                        useMain.UIMapResultsWindow.GoToScanningResultsTab();
+                        tab = useMain.ScanningResultsTab();
+                        rows = tab.GetRows(screen);
+                    }
+                    else rows = useMain.ScanningResultsTree().GetRows();                    
                     break;
                 case ResultsScreen.ValkyrieAnalysis:
                     useMain.UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
                     tab = useMain.ValkyrieAnalysisResultsTab();
+                    rows = tab.GetRows(screen);
                     break;
                 default: throw new Exception("Unexpected Results screen!");
             }
-
-            var rows = tab.GetRows(screen);
 
             foreach (var row in rows)
             {
@@ -178,9 +183,10 @@ namespace CodedUITestAT
                     if (click == MouseClick.DoubleLeft) Mouse.DoubleClick(expandRowButton);
                     else if (click == MouseClick.Right) Mouse.Click(expandRowButton, MouseButtons.Right);
                     else Mouse.Click(expandRowButton);
-                    break;
+                    return;
                 }
             }
+            throw new Exception(String.Format("Row '{0}' not found at screen '{1}'!", rowName, screen));
         }
 
         /// <summary> Clicks a given computer at a specified results screen. Starts at Results screen. </summary>

@@ -18,9 +18,9 @@ namespace CodedUITestAT
         {
             if (String.IsNullOrEmpty(fileLocation)) throw new Exception("The provided file location is either null or empty!");
             else if (!Path.IsPathRooted(fileLocation)) throw new Exception("The provided file location is not rooted!");
-            else _location = fileLocation;
+            else _location = fileLocation.ToLower();
             
-            _name = Path.GetFileName(fileLocation);
+            _name = Path.GetFileName(fileLocation).ToLower();
 
             _rowName = _location;
         }

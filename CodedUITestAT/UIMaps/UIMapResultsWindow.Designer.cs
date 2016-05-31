@@ -30,9 +30,35 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     {
         
         /// <summary>
-        /// GoToUnknownFilesTab
+        /// AssertUnknownFilesTree - Use 'AssertUnknownFilesTreeExpectedValues' to pass parameters into this method.
         /// </summary>
-        public void GoToUnknownFilesTab()
+        public void AssertUnknownFilesTree()
+        {
+            #region Variable Declarations
+            WpfTree uIRadTreeListViewTree2 = this.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree2;
+            #endregion
+
+            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+            Assert.AreEqual(this.AssertUnknownFilesTreeExpectedValues.UIRadTreeListViewTree2Exists, uIRadTreeListViewTree2.Exists);
+        }
+        
+        /// <summary>
+        /// AssertValkyrieResultsTree - Use 'AssertValkyrieResultsTreeExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertValkyrieResultsTree()
+        {
+            #region Variable Declarations
+            WpfTree uIRadTreeListViewTree2 = this.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree2;
+            #endregion
+
+            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
+            Assert.AreEqual(this.AssertValkyrieResultsTreeExpectedValues.UIRadTreeListViewTree2Exists, uIRadTreeListViewTree2.Exists);
+        }
+        
+        /// <summary>
+        /// GoToScanningResultsTab
+        /// </summary>
+        public void GoToScanningResultsTab()
         {
             #region Variable Declarations
             WpfTabPage uIUnknownfilesTabPage1 = this.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage1;
@@ -55,45 +81,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uIValkyrieanalysisresuTabPage1, new Point(67, 7));
         }
         
-        /// <summary>
-        /// AssertValkyrieResultsTree - Use 'AssertValkyrieResultsTreeExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertValkyrieResultsTree()
-        {
-            #region Variable Declarations
-            WpfTree uIRadTreeListViewTree2 = this.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree2;
-            #endregion
-
-            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-            Assert.AreEqual(this.AssertValkyrieResultsTreeExpectedValues.UIRadTreeListViewTree2Exists, uIRadTreeListViewTree2.Exists);
-        }
-        
-        /// <summary>
-        /// AssertUnknownFilesTree - Use 'AssertUnknownFilesTreeExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertUnknownFilesTree()
-        {
-            #region Variable Declarations
-            WpfTree uIRadTreeListViewTree2 = this.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree2;
-            #endregion
-
-            // Verify that the 'Exists' property of 'RadTreeListView' tree equals 'True'
-            Assert.AreEqual(this.AssertUnknownFilesTreeExpectedValues.UIRadTreeListViewTree2Exists, uIRadTreeListViewTree2.Exists);
-        }
-        
         #region Properties
-        public virtual AssertValkyrieResultsTreeExpectedValues AssertValkyrieResultsTreeExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertValkyrieResultsTreeExpectedValues == null))
-                {
-                    this.mAssertValkyrieResultsTreeExpectedValues = new AssertValkyrieResultsTreeExpectedValues();
-                }
-                return this.mAssertValkyrieResultsTreeExpectedValues;
-            }
-        }
-        
         public virtual AssertUnknownFilesTreeExpectedValues AssertUnknownFilesTreeExpectedValues
         {
             get
@@ -103,6 +91,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                     this.mAssertUnknownFilesTreeExpectedValues = new AssertUnknownFilesTreeExpectedValues();
                 }
                 return this.mAssertUnknownFilesTreeExpectedValues;
+            }
+        }
+        
+        public virtual AssertValkyrieResultsTreeExpectedValues AssertValkyrieResultsTreeExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertValkyrieResultsTreeExpectedValues == null))
+                {
+                    this.mAssertValkyrieResultsTreeExpectedValues = new AssertValkyrieResultsTreeExpectedValues();
+                }
+                return this.mAssertValkyrieResultsTreeExpectedValues;
             }
         }
         
@@ -120,19 +120,19 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
         
         #region Fields
-        private AssertValkyrieResultsTreeExpectedValues mAssertValkyrieResultsTreeExpectedValues;
-        
         private AssertUnknownFilesTreeExpectedValues mAssertUnknownFilesTreeExpectedValues;
+        
+        private AssertValkyrieResultsTreeExpectedValues mAssertValkyrieResultsTreeExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertValkyrieResultsTree'
+    /// Parameters to be passed into 'AssertUnknownFilesTree'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertValkyrieResultsTreeExpectedValues
+    public class AssertUnknownFilesTreeExpectedValues
     {
         
         #region Fields
@@ -144,10 +144,10 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertUnknownFilesTree'
+    /// Parameters to be passed into 'AssertValkyrieResultsTree'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertUnknownFilesTreeExpectedValues
+    public class AssertValkyrieResultsTreeExpectedValues
     {
         
         #region Fields

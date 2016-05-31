@@ -12,14 +12,14 @@ namespace CodedUITestAT
         /// <param name="computerName">Set a computer isolated network name.</param>
         internal Computer(string computerName)
         {
-            _name = computerName;
-            _rowName = computerName;
+            _name = computerName.ToLower();
+            _rowName = _name;
         }
 
         /// <summary> Represents a current computer. </summary>
         internal Computer()
         {
-            _name = Environment.MachineName;
+            _name = Environment.MachineName.ToLower();
             _rowName = _name;
         }
 
