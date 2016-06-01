@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using APTAT.Application.Services;
 using APTAT.Core;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Application.Models
 {
@@ -206,7 +207,25 @@ namespace APTAT.Application.Models
             FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
             IsMalware = badFile != null ? badFile.IsMalware : valkyrieFile.IsMalware;
             IsUnknown = badFile != null ? badFile.IsUnknown : valkyrieFile.IsUnknown;
-            Verdict = badFile != null ? (IsMalware ? "Malware" : "Unknown") : valkyrieFile.ValkyrieAnalysisResult.VerdictString;
+            if (badFile != null)
+                switch (badFile.Cloud)
+                {
+                    case CloudVerdict.FailedToAnalyze:
+                        Verdict = "Failed to analyze";
+                        break;
+                        case CloudVerdict.FirstSeen:
+                        case CloudVerdict.Unknown:
+                        Verdict = "Unknown";
+                        break;
+                        case CloudVerdict.Malware:
+                        Verdict = "Malware";
+                        break;
+                        case CloudVerdict.NoVerdict:
+                        Verdict = "No verdict";
+                        break;
+                }
+            else
+                Verdict = valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
             Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();
             Modified = badFile != null ? badFile.Modified.ToLocalTime() : valkyrieFile.Modified.ToLocalTime();

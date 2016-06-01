@@ -1,4 +1,5 @@
 ﻿using System;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Application.Models
 {
@@ -36,6 +37,8 @@ namespace APTAT.Application.Models
         {
             get { return SizeToString(Size); }
         }
+
+        public CloudVerdict Cloud { get; set; }
 
 
         private static string SizeToString(long len)
