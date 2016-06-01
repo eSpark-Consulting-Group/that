@@ -462,6 +462,7 @@ namespace APTAT.Application.Models
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Scan);
             Set(() => SelectScan, true);
             Set(() => GroupingEnabled, false);
+            Set(() => ValkyrieEnabled, false);
             GroupByComputers = true;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
@@ -786,6 +787,7 @@ namespace APTAT.Application.Models
             Keyword = string.Empty;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ValkyrieScan);
+            Set(() => ValkyrieEnabled, true);
             Set(() => SelectValkyrieScan, true);
             Set(() => ValkyrieSendingFiles, true);
         }
@@ -1013,6 +1015,8 @@ namespace APTAT.Application.Models
         }
 
         public bool GroupingEnabled { get; set; }
+
+        public bool ValkyrieEnabled { get; set; }
 
         public void SetReportKind(ReportKind kind)
         {

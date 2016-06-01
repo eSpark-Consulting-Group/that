@@ -300,7 +300,10 @@ namespace APTAT.Application.Models
             IsRootItem = false;
             IsOnline = true;
             BadFile = badFile;
-            ShortName = Path.GetFileName(badFile.Name);
+            if (!string.IsNullOrEmpty(badFile.Product))
+                ShortName = string.Format("{0} ({1})", Path.GetFileName(badFile.Name), badFile.Product);
+            else
+                ShortName = Path.GetFileName(badFile.Name);
         }
 
         public override string ToString()

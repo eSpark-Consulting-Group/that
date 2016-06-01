@@ -6,7 +6,6 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
 using System.Linq;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
 
 namespace APTAT.Core
@@ -73,7 +72,7 @@ namespace APTAT.Core
         {
             get
             {
-                if(String.IsNullOrWhiteSpace(this.Product))
+                if(string.IsNullOrEmpty(this.Product))
                 {
                     return this.Name;
                 }

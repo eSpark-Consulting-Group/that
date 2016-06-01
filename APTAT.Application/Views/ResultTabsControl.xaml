@@ -96,7 +96,7 @@
                 <local:ScanResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
               </Grid>
               </TabItem>
-            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" >
+            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" IsEnabled="{Binding ValkyrieEnabled}">
               <Grid>
                 <local:ValkyrieResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -104,8 +104,8 @@
             </TabItem>
         </TabControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 24 0" Visibility="{Binding GroupingEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
-        <ToggleButton Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" />
-        <ToggleButton Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" />
+        <ToggleButton Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}"/>
+        <ToggleButton Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}"/>
       </StackPanel>
         
     </Grid>
