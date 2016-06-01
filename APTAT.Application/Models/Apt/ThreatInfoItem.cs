@@ -71,7 +71,7 @@ namespace APTAT.Application.Models
         private String _statusMessage;
 
         private ScanStage _scanStage;
-        private ObservableCollection<ThreatInfoItem> _items;
+        private Collection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _noVerdictFilesCount;
 
@@ -148,15 +148,10 @@ namespace APTAT.Application.Models
             get { return _scanStage; }
             set
             {
-                if(_scanStage == value)
-                {
-                    return;
-                }
-
                 _scanStage = value;
                 RaisePropertyChanged("ScanStage");
                 RaisePropertyChanged("ScanStatus");
-                RaisePropertyChanged("ScanInProgress");
+                RaisePropertyChanged("ScanCompleted");
             }
         }
 
@@ -266,7 +261,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Items
+        public Collection<ThreatInfoItem> Items
         {
             get { return _items; }
             set

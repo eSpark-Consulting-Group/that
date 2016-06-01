@@ -919,7 +919,7 @@ namespace APTAT.Application.Models
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-                var items = new RadObservableCollection<ThreatInfoItem>();
+                var items = new Collection<ThreatInfoItem>();
 
                 if (e.ScanResult.BadFiles != null)
                 {
@@ -929,7 +929,7 @@ namespace APTAT.Application.Models
                         items.Add(item);
                         item = new ThreatInfoItem(badFile);
 
-                        var exist = _cache.FirstOrDefault(_ =>_.ShortName == item.ShortName && _.BadFile.Sha1 == item.BadFile.Sha1);
+                        var exist = _cache.FirstOrDefault(_ => _.BadFile.Sha1 == item.BadFile.Sha1);
                         var comp = new ThreatInfoItem { IpAddress = parentItem.IpAddress, Name = parentItem.Name, ShortName = item.Name, IsRootItem = true };
                         if (exist != null)
                             exist.Computers.Add(comp);
