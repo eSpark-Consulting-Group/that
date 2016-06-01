@@ -683,8 +683,7 @@ namespace APTAT.Core.Descent
                                 throw new DescentException(DescentStatus.status_error, "scanner was crashed.", 0);
 
                             int unknownFilesTotal = unknownFiles + newFiles;
-
-                            int filesToSkip = errorFiles + emptyFiles + skipped;
+                            
 
                             if (status == EnAptStage.EnApt_Pending)
                             {
@@ -742,7 +741,7 @@ namespace APTAT.Core.Descent
                                     HostName = _remoteHostInfo.HostName,
                                     EnumeratedFilesCount = enumeratedCount,
                                     EnumeratedFilesSize = enumeratedSize,
-                                    TotalFilesScanned = totalFiles - filesToSkip,
+                                    TotalFilesScanned = totalFiles - skipped,
                                     UnknownFilesFound = unknownFilesTotal,
                                     SafeFilesFound = safeFiles,
                                     MalwaresFound = malwares,
@@ -761,7 +760,7 @@ namespace APTAT.Core.Descent
 
                                 InvokeScanCompleted(new ScanCompletedEventArgs()
                                 {
-                                    TotalFilesScanned = totalFiles - filesToSkip,
+                                    TotalFilesScanned = totalFiles - skipped,
                                     UnknownFilesFound = unknownFilesTotal,
                                     NoVerdictFilesCount = failedAtNodeCount,
                                     FailedToAnalyzeFilesCount = errorFiles,
@@ -782,7 +781,7 @@ namespace APTAT.Core.Descent
                                     FileName = resultsFileLocal,
                                     EnumeratedFilesCount = enumeratedCount,
                                     EnumeratedFilesSize = enumeratedSize,
-                                    TotalFilesScanned = totalFiles - filesToSkip,
+                                    TotalFilesScanned = totalFiles - skipped,
                                     UnknownFilesFound = unknownFilesTotal,
                                     SafeFilesFound = safeFiles,
                                     MalwaresFound = malwares,
