@@ -148,13 +148,22 @@ namespace APTAT.Core.Descent.Apt
         public string Attributes { get; set; }
 
         [XmlAttribute("Created")]
-        public DateTime Created { get; set; }
+        public DateTime CreatedInternal { get; set; }
 
         [XmlAttribute("Modified")]
-        public DateTime Modified { get; set; }
+        public DateTime ModifiedInternal { get; set; }
 
         [XmlAttribute("Accessed")]
-        public DateTime Accessed { get; set; }
+        public DateTime AccessedInternal { get; set; }
+
+        [XmlIgnore]
+        public DateTime Created { get { return CreatedInternal.ToLocalTime(); } }
+
+        [XmlIgnore]
+        public DateTime Modified { get { return ModifiedInternal.ToLocalTime(); } }
+
+        [XmlIgnore]
+        public DateTime Accessed { get { return AccessedInternal.ToLocalTime(); } }
 
         [XmlAttribute("Sha1")]
         public string Sha1 { get; set; }
@@ -213,7 +222,7 @@ namespace APTAT.Core.Descent.Apt
         [XmlIgnore]
         public string FileAge
         {
-            get { return FileAgeFormatter.GetAge(Created); }
+            get { return FileAgeFormatter.GetAge(CreatedInternal); }
         }
 
         [XmlIgnore]
@@ -320,8 +329,10 @@ namespace APTAT.Core.Descent.Apt
         public static string GetAge(DateTime fileCreation, bool shortDate = true)
         {
             var formatted = String.Empty;
-            var difference = DateTime.Now - fileCreation;
+            var difference = DateTime.UtcNow - fileCreation;
             int days = difference.Days;
+            if (difference.TotalMilliseconds < 0)
+                return String.Empty;
             if (days == 0)
                 return Formatter((int)difference.TotalHours, OneHour, MoreThenOneHour);
             for (var i = 0; i < intervalsInDays.Length; i++)
