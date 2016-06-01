@@ -116,6 +116,18 @@ namespace CodedUITestAT
             return row.GetScanStatus();
         }
 
+        /// <summary>Gets a current full scan status message for a given computer</summary>
+        /// <param name="endpoint">Set an endpoint</param>        
+        internal static string GetFullScanStatusMessage(this Computer endpoint)
+        {
+            UITestControl row;
+            CodedUITestMain useMain = new CodedUITestMain();
+            if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(endpoint.RowName);
+            else row = useMain.ScanningResultsTree().GetRow(endpoint.RowName);
+
+            return row.GetRowStatus();
+        }
+
         /// <summary> Waits for an expected scan status of an indicated computer. </summary>
         /// <param name="endpoint">Set a computer.</param>
         /// <param name="expectedScanStatus">Set an expected scan status.</param>

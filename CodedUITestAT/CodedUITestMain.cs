@@ -250,6 +250,11 @@ namespace CodedUITestAT
             return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
         }
 
+        private WpfList NetworkAddressesList()
+        {
+            return UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
+        }
+
         #endregion
 
         #region Scan Completed window
@@ -439,6 +444,43 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...\n", scanType.ToString(), endpoint.Name));
         }
 
+        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch using set credentials. Starts at main screen. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        /// <param name="scanType">Set a scan type.</param>
+        /// <param name="username">Set a username</param>
+        /// <param name="password">Set a password</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void StartEndpointScan(Computer endpoint, ScanType scanType, string username, string password, TestContext testContext)
+        {
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            testContext.WriteLine("Start Scanning wizard appeared...");
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+
+            
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            CleanNetworkAddressesList();
+            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
+            UIMapNetworkAddresses.InputNetworkAddress();
+            UIMapNetworkAddresses.ClickAddButton();
+            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = username;
+            UIMapNetworkAddresses.InputLogin();
+            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(password);
+            UIMapNetworkAddresses.InputPassword();
+
+            switch (scanType)
+            {
+                case ScanType.Quick:
+                    UIMapStartScanningWizard.ClickQuickScanButton();
+                    break;
+                case ScanType.Full:
+                    UIMapStartScanningWizard.ClickFullScanButton();
+                    break;
+                default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType.ToString()));
+            }
+            testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...", scanType.ToString(), endpoint.Name));
+        }
+
         /// <summary> Stops a scan. </summary>
         private void StopScanning(TestContext testContext)
         {
@@ -447,6 +489,18 @@ namespace CodedUITestAT
             UIHelper.WaitForControl(YesDialogButton());
             UIMapStopScanWindow.ClickYesButton();
             testContext.WriteLine("The scanning has been stopped.");
+        }
+
+        /// <summary>Cleans Network Addresses list</summary>
+        private void CleanNetworkAddressesList()
+        {
+
+            while (NetworkAddressesList().Items.Count > 0)
+            {
+                Mouse.Click(NetworkAddressesList().Items[0]);
+                UIMapNetworkAddresses useNetworkAddresses = new UIMapNetworkAddresses();
+                useNetworkAddresses.ClickRemoveButton();                
+            }
         }
 
         #endregion
@@ -704,6 +758,55 @@ namespace CodedUITestAT
            if (!Directory.Exists(scannerDir)) 
                TestContext.WriteLine(String.Format("Directory '{0}' does not exist at endpoint '{1}' after the scan has been completed.\n", scannerDir, endpoint.Name));
            else Assert.Fail(String.Format("Directory '{0}' still exists at endpoint '{1}' after the scan has been completed!", scannerDir, endpoint.Name));
+        }
+
+        [TestMethod]
+        public void ScanWithInvalidCredentials()
+        {
+
+            Computer endpoint = DataHelper.GetEndpoint();
+            string correctLogin = DataHelper.Username;
+            string correctPassword = DataHelper.Password;
+            string invalidLogin = DataHelper.Username + "error";
+            string invalidPassword = DataHelper.Password + "error";
+            string failedStatusFullMessage = Settings.Results.Default.ScanStatusIndicatorFailedFullMessage;
+
+            // Scan with correct login and invalid password
+            StartEndpointScan(endpoint, ScanType.Quick, correctLogin, invalidPassword, TestContext);
+            StartScanningButton().WaitForControlEnabled(60000);
+            if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
+            {
+                Assert.Fail(String.Format("Scan is not '{0}' with correct Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
+            }
+            TestContext.WriteLine(String.Format("Scan with invalid Username and correct Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));
+            if (UIHelper.GetFullScanStatusMessage(endpoint) != failedStatusFullMessage)
+                Assert.Fail(String.Format("Scan has incorrect full status message! Expected:'{0}' ; Actual: '{1}'", failedStatusFullMessage, UIHelper.GetFullScanStatusMessage(endpoint)));
+            else TestContext.WriteLine("Scan has correct full status message.\n");
+
+
+            // Scan with invalid login and correct password
+            StartEndpointScan(endpoint, ScanType.Full, invalidLogin, correctPassword, TestContext);
+            StartScanningButton().WaitForControlEnabled(60000);
+            if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
+            {
+                Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and correct Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
+            }
+            TestContext.WriteLine(String.Format("Scan with invalid Username and correct Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));
+            if (UIHelper.GetFullScanStatusMessage(endpoint) != failedStatusFullMessage)
+                Assert.Fail(String.Format("Scan has incorrect full status message! Expected:'{0}' ; Actual: '{1}'", failedStatusFullMessage, UIHelper.GetFullScanStatusMessage(endpoint)));
+            else TestContext.WriteLine("Scan has correct full status message.\n");
+
+            // Scan with invalid login and invalid password
+            StartEndpointScan(endpoint, ScanType.Quick, invalidLogin, invalidPassword, TestContext);
+            StartScanningButton().WaitForControlEnabled(60000);
+            if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
+            {
+                Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
+            }
+            TestContext.WriteLine(String.Format("Scan with invalid Username and correct Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));
+            if (UIHelper.GetFullScanStatusMessage(endpoint) != failedStatusFullMessage)
+                Assert.Fail(String.Format("Scan has incorrect full status message! Expected:'{0}' ; Actual: '{1}'", failedStatusFullMessage, UIHelper.GetFullScanStatusMessage(endpoint)));
+            else TestContext.WriteLine("Scan has correct full status message.\n");
         }
 
         #endregion

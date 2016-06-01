@@ -25,21 +25,21 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
     using MouseButtons = System.Windows.Forms.MouseButtons;
     
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public partial class UIMapNetworkAddresses
     {
         
         /// <summary>
-        /// InputNetworkAddress - Use 'InputNetworkAddressParams' to pass parameters into this method.
+        /// AssertNetworkAddressesListEnabled - Use 'AssertNetworkAddressesListEnabledExpectedValues' to pass parameters into this method.
         /// </summary>
-        public void InputNetworkAddress()
+        public void AssertNetworkAddressesListEnabled()
         {
             #region Variable Declarations
-            WpfEdit uINetworkAddressTextBoEdit = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressTextBoEdit;
+            WpfList uINetworkAddressItemsLList = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
             #endregion
 
-            // Type 'address' in 'NetworkAddressTextBox' text box
-            uINetworkAddressTextBoEdit.Text = this.InputNetworkAddressParams.UINetworkAddressTextBoEditText;
+            // Verify that the 'Enabled' property of 'NetworkAddressItemsList' list box equals 'True'
+            Assert.AreEqual(this.AssertNetworkAddressesListEnabledExpectedValues.UINetworkAddressItemsLListEnabled, uINetworkAddressItemsLList.Enabled);
         }
         
         /// <summary>
@@ -56,6 +56,19 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         }
         
         /// <summary>
+        /// ClickRemoveButton
+        /// </summary>
+        public void ClickRemoveButton()
+        {
+            #region Variable Declarations
+            WpfButton uIRemoveButton = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIRemoveButton;
+            #endregion
+
+            // Click 'Remove' button
+            Mouse.Click(uIRemoveButton, new Point(58, 9));
+        }
+        
+        /// <summary>
         /// InputLogin - Use 'InputLoginParams' to pass parameters into this method.
         /// </summary>
         public void InputLogin()
@@ -66,6 +79,19 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
 
             // Type 'login' in 'LoginTextBox' text box
             uILoginTextBoxEdit.Text = this.InputLoginParams.UILoginTextBoxEditText;
+        }
+        
+        /// <summary>
+        /// InputNetworkAddress - Use 'InputNetworkAddressParams' to pass parameters into this method.
+        /// </summary>
+        public void InputNetworkAddress()
+        {
+            #region Variable Declarations
+            WpfEdit uINetworkAddressTextBoEdit = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressTextBoEdit;
+            #endregion
+
+            // Type 'address' in 'NetworkAddressTextBox' text box
+            uINetworkAddressTextBoEdit.Text = this.InputNetworkAddressParams.UINetworkAddressTextBoEditText;
         }
         
         /// <summary>
@@ -82,15 +108,15 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         }
         
         #region Properties
-        public virtual InputNetworkAddressParams InputNetworkAddressParams
+        public virtual AssertNetworkAddressesListEnabledExpectedValues AssertNetworkAddressesListEnabledExpectedValues
         {
             get
             {
-                if ((this.mInputNetworkAddressParams == null))
+                if ((this.mAssertNetworkAddressesListEnabledExpectedValues == null))
                 {
-                    this.mInputNetworkAddressParams = new InputNetworkAddressParams();
+                    this.mAssertNetworkAddressesListEnabledExpectedValues = new AssertNetworkAddressesListEnabledExpectedValues();
                 }
-                return this.mInputNetworkAddressParams;
+                return this.mAssertNetworkAddressesListEnabledExpectedValues;
             }
         }
         
@@ -103,6 +129,18 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
                     this.mInputLoginParams = new InputLoginParams();
                 }
                 return this.mInputLoginParams;
+            }
+        }
+        
+        public virtual InputNetworkAddressParams InputNetworkAddressParams
+        {
+            get
+            {
+                if ((this.mInputNetworkAddressParams == null))
+                {
+                    this.mInputNetworkAddressParams = new InputNetworkAddressParams();
+                }
+                return this.mInputNetworkAddressParams;
             }
         }
         
@@ -132,9 +170,11 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         #endregion
         
         #region Fields
-        private InputNetworkAddressParams mInputNetworkAddressParams;
+        private AssertNetworkAddressesListEnabledExpectedValues mAssertNetworkAddressesListEnabledExpectedValues;
         
         private InputLoginParams mInputLoginParams;
+        
+        private InputNetworkAddressParams mInputNetworkAddressParams;
         
         private InputPasswordParams mInputPasswordParams;
         
@@ -143,24 +183,24 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'InputNetworkAddress'
+    /// Parameters to be passed into 'AssertNetworkAddressesListEnabled'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
-    public class InputNetworkAddressParams
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertNetworkAddressesListEnabledExpectedValues
     {
         
         #region Fields
         /// <summary>
-        /// Type 'address' in 'NetworkAddressTextBox' text box
+        /// Verify that the 'Enabled' property of 'NetworkAddressItemsList' list box equals 'True'
         /// </summary>
-        public string UINetworkAddressTextBoEditText = "address";
+        public bool UINetworkAddressItemsLListEnabled = true;
         #endregion
     }
     
     /// <summary>
     /// Parameters to be passed into 'InputLogin'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class InputLoginParams
     {
         
@@ -173,9 +213,24 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
     }
     
     /// <summary>
+    /// Parameters to be passed into 'InputNetworkAddress'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class InputNetworkAddressParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Type 'address' in 'NetworkAddressTextBox' text box
+        /// </summary>
+        public string UINetworkAddressTextBoEditText = "address";
+        #endregion
+    }
+    
+    /// <summary>
     /// Parameters to be passed into 'InputPassword'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class InputPasswordParams
     {
         
@@ -187,7 +242,7 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
         
@@ -233,7 +288,7 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UINetworkAddressesViewCustom : WpfCustom
     {
         
@@ -266,7 +321,7 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UITextEntryListViewCustom : WpfCustom
     {
         
@@ -312,16 +367,52 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
                 return this.mUIAddButton;
             }
         }
+        
+        public WpfList UINetworkAddressItemsLList
+        {
+            get
+            {
+                if ((this.mUINetworkAddressItemsLList == null))
+                {
+                    this.mUINetworkAddressItemsLList = new WpfList(this);
+                    #region Search Criteria
+                    this.mUINetworkAddressItemsLList.SearchProperties[WpfList.PropertyNames.AutomationId] = "NetworkAddressItemsList";
+                    this.mUINetworkAddressItemsLList.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUINetworkAddressItemsLList;
+            }
+        }
+        
+        public WpfButton UIRemoveButton
+        {
+            get
+            {
+                if ((this.mUIRemoveButton == null))
+                {
+                    this.mUIRemoveButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIRemoveButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "RemoveButton";
+                    this.mUIRemoveButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIRemoveButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfEdit mUINetworkAddressTextBoEdit;
         
         private WpfButton mUIAddButton;
+        
+        private WpfList mUINetworkAddressItemsLList;
+        
+        private WpfButton mUIRemoveButton;
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIScanningWizardWindowCustom : WpfCustom
     {
         
@@ -354,7 +445,7 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UINetworkAddressesViewCustom1 : WpfCustom
     {
         

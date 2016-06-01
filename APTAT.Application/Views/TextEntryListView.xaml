@@ -45,7 +45,8 @@
                 </sdk:DataGrid.Columns>
             </sdk:DataGrid>-->
 
-        <telerik:RadListBox x:Name="ItemsList" Grid.Row="1" Margin="0 5 0 5" BorderBrush="#CCCCCC" BorderThickness="1" 
+        <telerik:RadListBox AutomationProperties.AutomationId="NetworkAddressItemsList"
+                            x:Name="ItemsList" Grid.Row="1" Margin="0 5 0 5" BorderBrush="#CCCCCC" BorderThickness="1" 
                                 ItemsSource="{Binding Source={StaticResource CollectionViewSource}}">
         </telerik:RadListBox>
 
