@@ -59,6 +59,16 @@ namespace APTAT.Core
 
         public ObservableCollection<string> Status { get; set; }
 
+        public string StatusText
+        {
+            get 
+            {
+                if (Status != null && Status.Any())
+                    return Status[0];
+                return string.Empty;
+            }
+        }
+
         public void MergeFiles(FileResult file)
         {
             if (!Files.Any(_ => _.Equals(file)))

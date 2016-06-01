@@ -113,11 +113,11 @@ namespace APTAT.Core.Descent.Helpers
 			    onScanProgressChanged = (sender, args) =>
 			    {
 
-			        string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}", args.FailedToAnalyzeFilesCount): String.Empty;
+			        string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}.", args.FailedToAnalyzeFilesCount): String.Empty;
 
-                    string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}", args.NoVerdictFilesCount): String.Empty;
+                    string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount): String.Empty;
 
-                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4}. {5}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage, errorCounterText, serverErrorCounterText));
+                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage, errorCounterText, serverErrorCounterText));
                     
                     
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanInProgress, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, args.Percentage, args.FailedToAnalyzeFilesCount, args.NoVerdictFilesCount);
@@ -168,11 +168,11 @@ namespace APTAT.Core.Descent.Helpers
                     dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
                     
-                    string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}", args.FailedToAnalyzeFilesCount) : String.Empty;
+                    string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
 
-                    string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}", args.NoVerdictFilesCount) : String.Empty;
+                    string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount) : String.Empty;
 
-                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4}. {5}.", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage, errorCounterText, serverErrorCounterText));
+                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage, errorCounterText, serverErrorCounterText));
 
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanCompleted, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, 100, args.FailedToAnalyzeFilesCount, args.NoVerdictFilesCount);
                 };
