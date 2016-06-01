@@ -773,7 +773,7 @@ namespace CodedUITestAT
 
             // Scan with correct login and invalid password
             StartEndpointScan(endpoint, ScanType.Quick, correctLogin, invalidPassword, TestContext);
-            StartScanningButton().WaitForControlEnabled(60000);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with correct Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
@@ -786,7 +786,7 @@ namespace CodedUITestAT
 
             // Scan with invalid login and correct password
             StartEndpointScan(endpoint, ScanType.Full, invalidLogin, correctPassword, TestContext);
-            StartScanningButton().WaitForControlEnabled(60000);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and correct Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
@@ -798,7 +798,7 @@ namespace CodedUITestAT
 
             // Scan with invalid login and invalid password
             StartEndpointScan(endpoint, ScanType.Quick, invalidLogin, invalidPassword, TestContext);
-            StartScanningButton().WaitForControlEnabled(60000);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
