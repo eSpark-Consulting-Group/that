@@ -788,6 +788,7 @@ namespace APTAT.Application.Models
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ValkyrieScan);
             Set(() => ValkyrieEnabled, true);
+            Set(() => SelectValkyrieScan, false);
             Set(() => SelectValkyrieScan, true);
             Set(() => ValkyrieSendingFiles, true);
         }
