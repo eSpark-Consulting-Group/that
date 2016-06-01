@@ -4,6 +4,7 @@ using System.Linq;
 using System.Management;
 using System.Diagnostics;
 using System.ServiceProcess;
+using Microsoft.Win32;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -56,15 +57,25 @@ namespace CodedUITestAT
             }
         }
 
-        /// <summary> Checks whether a given process is present at a given endpoint. </summary>
+        /// <summary> Checks whether a given process is present at an indicated endpoint. </summary>
         /// <param name="procName">Set a process name.</param>
-        /// <param name="machineName">Set an endpoint name.</param>
-        internal static bool IsThereProcess(string procName, string machineName = "localhost")
+        /// <param name="machine">Set an endpoint or keep default.</param>
+        internal static bool IsThereProcess(string procName, Computer machine = null)
         {
-            if (machineName == "localhost") machineName = Environment.MachineName;
-            Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(procName), machineName);
+            if (machine == null) machine = new Computer();
+            Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(procName), machine.Name);
             if (processes.Length == 0) return false;
             else return true;
+        }
+
+        /// <summary> Gets a given process from an indicated endpoint. </summary>
+        /// <param name="procName">Set a process name.</param>
+        /// <param name="machine">Set an endpoint or keep default.</param>
+        internal static Process[] GetProcess(string procName, Computer machine = null)
+        {
+            if (machine == null) machine = new Computer();
+            Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(procName), machine.Name);
+            return processes;
         }
 
         #endregion
@@ -150,6 +161,24 @@ namespace CodedUITestAT
             var mos = new ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem");
             foreach (ManagementObject mo in mos.Get()) if (mo["Workgroup"] != null) return mo["Workgroup"].ToString().ToUpper();
             return "WORKGROUP";
+        }
+
+        /// <summary> Indicates whether a given remote machine is 64-bit using its registry. </summary>
+        /// <param name="machine">Set a machine.</param>
+        internal static bool IsOs64Bit(Computer machine)
+        {
+            string keyName = @"SOFTWARE\Wow6432Node"; // By default is present only for 64-bit OS
+
+            using (RegistryKey regHive = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, machine.Name))
+            {
+                try
+                {
+                    RegistryKey regKey = regHive.OpenSubKey(keyName, false);
+                    regKey.Close();
+                    return true;
+                }
+                catch (Exception) { return false; }
+            }
         }
 
         #endregion

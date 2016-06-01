@@ -52,16 +52,12 @@ namespace CodedUITestAT
             return control.TryGetClickablePoint(out point);
         }
 
-        /// <summary> Gets rows from a given tab page control.  </summary>
+        /// <summary> Gets rows from a given tab page control. </summary>
         /// <param name="tab">Set a tab page control.</param>
         /// <param name="resultsScreen">Set a results screen type.</param>
-        internal static UITestControl[] GetRows(this WpfTabPage tab, ResultsScreen resultsScreen)
+        internal static UITestControl[] GetRows(this WpfTabPage tab)
         {
-            int shift = 1;
-
-            if (resultsScreen == ResultsScreen.ValkyrieAnalysis) shift += 3;
-
-            var tree = tab.GetChildren()[shift].GetChildren()[0] as WpfTree;
+            var tree = tab.GetChildren()[2].GetChildren()[0] as WpfTree;
             var rows = tree.GetRows();
 
             return rows;
@@ -114,19 +110,35 @@ namespace CodedUITestAT
         {
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
-            if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(ResultsScreen.ScanningResults, endpoint.RowName);
+            if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(endpoint.RowName);
             else row = useMain.ScanningResultsTree().GetRow(endpoint.RowName);
 
             return row.GetScanStatus();
         }
 
+        /// <summary> Waits for an expected scan status of an indicated computer. </summary>
+        /// <param name="endpoint">Set a computer.</param>
+        /// <param name="expectedScanStatus">Set an expected scan status.</param>
+        /// <param name="waitTime">Set waiting time in milliseconds.</param>
+        internal static void WaitForScanStatus(Computer endpoint, ScanStatus expectedScanStatus, int waitTime = DataHelper.DefaultWaitTime)
+        {
+            var timer = Stopwatch.StartNew();
+            for (; ; )
+            {
+                Playback.Wait(2000);
+                if (endpoint.GetScanStatus() == expectedScanStatus) break;
+                if ((int) timer.ElapsedMilliseconds > waitTime)
+                    throw new Exception(String.Format("The expected status '{0}' did not appear for computer '{1}' after {2} seconds!", expectedScanStatus, endpoint.Name, waitTime / 1000));
+            }
+            timer.Stop();
+        }
+
         /// <summary> Gets a row with a given name from the indicated tab page. Returns null, if a row with the given name was not found on the tab page. </summary>
         /// <param name="tab">Set a tab page.</param>
-        /// <param name="resultsScreen">Set a results screen type.</param>
         /// <param name="rowName">Set a unique row name.</param>
-        internal static UITestControl GetRow(this WpfTabPage tab, ResultsScreen resultsScreen, string rowName)
+        internal static UITestControl GetRow(this WpfTabPage tab, string rowName)
         {
-            var rows = tab.GetRows(resultsScreen);
+           var rows = tab.GetRows();
 
            foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
            
@@ -163,14 +175,14 @@ namespace CodedUITestAT
                     {
                         useMain.UIMapResultsWindow.GoToScanningResultsTab();
                         tab = useMain.ScanningResultsTab();
-                        rows = tab.GetRows(screen);
+                        rows = tab.GetRows();
                     }
                     else rows = useMain.ScanningResultsTree().GetRows();                    
                     break;
                 case ResultsScreen.ValkyrieAnalysis:
                     useMain.UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
                     tab = useMain.ValkyrieAnalysisResultsTab();
-                    rows = tab.GetRows(screen);
+                    rows = tab.GetRows();
                     break;
                 default: throw new Exception("Unexpected Results screen!");
             }

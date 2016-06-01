@@ -40,5 +40,37 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["Directory"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("cmdapt64.exe")]
+        public string ExeName64 {
+            get {
+                return ((string)(this["ExeName64"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("cmdapt86.exe")]
+        public string ExeName86 {
+            get {
+                return ((string)(this["ExeName86"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>scan_status.txt</string>
+  <string>tvl.txt</string>
+  <string>trl.txt</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection TxtFiles {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["TxtFiles"]));
+            }
+        }
     }
 }

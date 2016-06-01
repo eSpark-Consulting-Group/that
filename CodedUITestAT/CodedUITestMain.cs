@@ -360,7 +360,7 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current test context.</param>
         private void AssertValkyrieAnalysisResults(int expectedFilesNumber, TestContext testContext)
         {
-            int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetRows(ResultsScreen.ValkyrieAnalysis).Length;
+            int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetRows().Length;
             
             if (valkyrieResultsRowsNumber == expectedFilesNumber)
                 testContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
@@ -396,7 +396,7 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
                 try
                 {
-                    ValkyrieAnalysisResultsTab().GetRows(ResultsScreen.ValkyrieAnalysis);
+                    ValkyrieAnalysisResultsTab().GetRows();
                     testContext.WriteLine("Valkyrie results now can be obtained from UI.\n");
                     break;
                 }
@@ -440,12 +440,13 @@ namespace CodedUITestAT
         }
 
         /// <summary> Stops a scan. </summary>
-        private void StopScanning()
+        private void StopScanning(TestContext testContext)
         {
             UIHelper.WaitForControlIsClickable(StopScanningButton());
             UIMapMain.ClickStopScanningButton();
             UIHelper.WaitForControl(YesDialogButton());
             UIMapStopScanWindow.ClickYesButton();
+            testContext.WriteLine("The scanning has been stopped.");
         }
 
         #endregion
@@ -630,7 +631,7 @@ namespace CodedUITestAT
             else Assert.Fail(String.Format("Service '{0}' is no longer present at endpoint '{1}' after a scan stop is not confirmed!\n", scannerServiceName, endpoint.Name));
             
             // Confirms the stop and checks the result
-            StopScanning();
+            StopScanning(TestContext);
 
             endpointStatus = endpoint.GetScanStatus();
             if (endpointStatus != ScanStatus.Stopped) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed!", endpoint.Name, endpointStatus));
@@ -655,7 +656,54 @@ namespace CodedUITestAT
                 TestContext.WriteLine(String.Format("Service '{0}' is present at endpoint '{1}' after another scan start.\n", scannerServiceName, endpoint.Name));
             else Assert.Fail(String.Format("Service '{0}' is not present at endpoint '{1}' after another scan start!\n", scannerServiceName, endpoint.Name));
 
-            StopScanning(); // A cleanup
+            StopScanning(TestContext); // A cleanup
+        }
+
+        [TestMethod]
+        public void CheckScannerAgentTest()
+        { 
+            Computer endpoint = DataHelper.GetEndpoint();
+            string procName;
+
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            Playback.Wait(5000);            
+            //UIHelper.WaitForScanStatus(endpoint, ScanStatus.Running);
+
+            if (SysHelper.IsOs64Bit(endpoint)) procName = Settings.Scanner.Default.ExeName64;
+            else procName = Settings.Scanner.Default.ExeName86;
+
+            // Checks whether the scanner process is running
+            if (SysHelper.IsThereProcess(procName, endpoint))
+                TestContext.WriteLine(String.Format("Process '{0}' is running at endpoint '{1}'.\n", procName, endpoint.Name));
+            else Assert.Fail(String.Format("Process '{0}' is not running at endpoint '{1}'!", procName, endpoint.Name));
+
+           // Checks whether there is only one scanner process
+           Process[] processes = SysHelper.GetProcesses(procName, endpoint);
+           if (processes.Length == 1) TestContext.WriteLine(String.Format("There is only one process '{0}' at endpoint '{1}'.\n", procName, endpoint.Name));
+           else if (processes.Length == 0) Assert.Fail(String.Format("There are no processes '{0}' at endpoint '{1}'.\n", procName, endpoint.Name));
+           else Assert.Fail(String.Format("There is more than one process '{0}' at endpoint '{1}'!", procName, endpoint.Name));
+
+           // Checks scanner files at the endpoint
+           string scannerDir = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Scanner.Default.Directory);
+           var files = Settings.Scanner.Default.TxtFiles;
+           files.Add(procName);
+           foreach (string file in files)
+           {
+               string filePath = String.Format(@"{0}\{1}", scannerDir, file);
+               if (File.Exists(filePath)) TestContext.WriteLine(String.Format("File '{0}' exists.\n", filePath));
+               else Assert.Fail(String.Format("File '{0}' does not exist!", filePath));
+           }
+
+           UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+
+           // Checks whether the scanner process is not running any longer
+           if (!SysHelper.IsThereProcess(procName, endpoint))
+               TestContext.WriteLine(String.Format("Process '{0}' is not running at endpoint '{1}' after the scan has been completed.\n", procName, endpoint.Name));
+           else Assert.Fail(String.Format("Process '{0}' is still running at endpoint '{1}' after the scan has been completed!", procName, endpoint.Name));
+
+           if (!Directory.Exists(scannerDir)) 
+               TestContext.WriteLine(String.Format("Directory '{0}' does not exist at endpoint '{1}' after the scan has been completed.\n", scannerDir, endpoint.Name));
+           else Assert.Fail(String.Format("Directory '{0}' still exists at endpoint '{1}' after the scan has been completed!", scannerDir, endpoint.Name));
         }
 
         #endregion
