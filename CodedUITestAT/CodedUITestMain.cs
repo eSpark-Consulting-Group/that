@@ -678,7 +678,7 @@ namespace CodedUITestAT
             else Assert.Fail(String.Format("Process '{0}' is not running at endpoint '{1}'!", procName, endpoint.Name));
 
            // Checks whether there is only one scanner process
-           Process[] processes = SysHelper.GetProcesses(procName, endpoint);
+           Process[] processes = SysHelper.GetProcess(procName, endpoint);
            if (processes.Length == 1) TestContext.WriteLine(String.Format("There is only one process '{0}' at endpoint '{1}'.\n", procName, endpoint.Name));
            else if (processes.Length == 0) Assert.Fail(String.Format("There are no processes '{0}' at endpoint '{1}'.\n", procName, endpoint.Name));
            else Assert.Fail(String.Format("There is more than one process '{0}' at endpoint '{1}'!", procName, endpoint.Name));
