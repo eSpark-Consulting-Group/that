@@ -1,18 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using APTAT.Core.Descent.Apt;
 using OperatingSystem = APTAT.Core.Descent.Apt.OperatingSystem;
 
 namespace APTAT.Core
 {
-    public class ComputerInformation : IEquatable<ComputerInformation>
+    public class ComputerInformation : IEquatable<ComputerInformation>, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void RaisePropertyChanged(String name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        
         public ComputerInformation(Computer computer)
         {
             Files = new ObservableCollection<FileResult>();
-            Status = new ObservableCollection<string>();
             Os = computer.Os;
             Name = computer.Name;
             Sid = computer.Sid;
@@ -25,7 +35,6 @@ namespace APTAT.Core
         public ComputerInformation(ComputerInformation computer)
         {
             Files = new ObservableCollection<FileResult>();
-            Status = new ObservableCollection<string>();
             Os = computer.Os;
             Name = computer.Name;
             Sid = computer.Sid;
@@ -57,16 +66,10 @@ namespace APTAT.Core
 
         public ObservableCollection<FileResult> Files { get; set; }
 
-        public ObservableCollection<string> Status { get; set; }
-
         public string StatusText
         {
-            get 
-            {
-                if (Status != null && Status.Any())
-                    return Status[0];
-                return string.Empty;
-            }
+            get;
+            set;
         }
 
         public void MergeFiles(FileResult file)
@@ -74,11 +77,11 @@ namespace APTAT.Core
             if (!Files.Any(_ => _.Equals(file)))
             {
                 Files.Add(new FileResult(file));
-                Status.Clear();
                 var malwareCount = Files.Count(_ => _.IsMalware);
                 var unknownCount = Files.Count(_ => _.IsUnknown);
-                Status.Add(string.Format("Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
-                    Files.Count, unknownCount, malwareCount));
+                StatusText = string.Format("Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
+                    Files.Count, unknownCount, malwareCount);
+                RaisePropertyChanged("StatusText");
             }
         }
 
