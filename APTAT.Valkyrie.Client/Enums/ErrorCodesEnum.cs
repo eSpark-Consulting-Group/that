@@ -146,7 +146,7 @@ namespace Valkyrie.WebApiProvider.Enums
         [Description("NO VALID LICENSE FOUND")]
         NoValidLicenseFound = 312,
 
-        [Description("NON ENTERPRISE")]
+        [Description("License limitation: upgrade to Enterprise to obtain file verdict")]
         NonEnterprise = 313,
 
         [Description("UNEXPECTED RESPONSE RETURNED FROM CAM")]
