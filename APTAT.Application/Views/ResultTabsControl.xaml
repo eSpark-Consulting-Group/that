@@ -2,56 +2,85 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:APTAT.Application.Converters"
              xmlns:local="clr-namespace:APTAT.Application" x:Class="APTAT.Application.ResultTabsControl" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="900">
     <Grid>
       <Grid.Resources>
+
+        <converters:ContentToPathConverter x:Key="content2PathConverter" />
+        
         <Style TargetType="{x:Type TabItem}">
           <Setter Property="MinWidth" Value="100" />
-          <Setter Property="MinHeight" Value="30" />
-          <Setter Property="FontSize" Value="13" />
-          <Setter Property="Foreground" Value="#FF767676"/>
-          <Setter Property="FontFamily" Value="Segoe UI Semibold" />
           <Setter Property="Template">
             <Setter.Value>
-              <ControlTemplate TargetType="{x:Type TabItem}">
-                  <Border  BorderThickness="1 1 1 0" Name="Border" BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true" Background="White">
-                      <ContentPresenter x:Name="ContentSite" HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" Margin="10, 5" />
-                  </Border>
+              <ControlTemplate TargetType="TabItem">
+                <Grid>
+                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" Margin="0 0 -23 0" Fill="White">
+                    <Path.Data>
+                      <PathGeometry>
+                        <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={StaticResource content2PathConverter}}">
+                        </PathFigure>
+                      </PathGeometry>
+                    </Path.Data>
+                    <Path.LayoutTransform>
+                      <ScaleTransform ScaleY="-1"/>
+                    </Path.LayoutTransform>
+                  </Path>
+                  <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"  Margin="15,5,0,2" ContentSource="Header"
+                                          TextBlock.Foreground="#FF767676" TextBlock.FontSize="13"/>
+                  <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,5,0,2" ContentSource="Header"
+                                          TextBlock.Foreground="#FF767676" TextBlock.FontSize="13" TextBlock.FontFamily="Segoe UI Semibold"/>
+                </Grid>
                 <ControlTemplate.Triggers>
-                  <Trigger Property="TabItem.IsMouseOver" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="#FFD6D4D4" />
+                  <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Fill" TargetName="TabPath" Value="#FFD6D4D4" />
                   </Trigger>
-                  <Trigger Property="TabItem.IsSelected" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="#FFE3E3E3" />
-                    <Setter Property="Panel.ZIndex" Value="100" />
+                  <Trigger Property="Selector.IsSelected" Value="True">
+                    <Setter Property="Fill" TargetName="TabPath" Value="#FFE3E3E3"/>
+                    <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
+                    <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
+                    <Setter Property="Panel.ZIndex" Value="2"/>
                   </Trigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate>
             </Setter.Value>
           </Setter>
         </Style>
+        
         <Style TargetType="{x:Type ToggleButton}">
           <Setter Property="MinWidth" Value="100" />
-          <Setter Property="MinHeight" Value="30" />
-          <Setter Property="FontSize" Value="13" />
-          <Setter Property="Foreground" Value="#FF767676"/>
-          <Setter Property="FontFamily" Value="Segoe UI Semibold" />
           <Setter Property="Template">
             <Setter.Value>
-              <ControlTemplate TargetType="{x:Type ToggleButton}">
-                <Border  BorderThickness="1 1 1 0" Name="Border" BorderBrush="#FFE3E3E3" SnapsToDevicePixels="true" Background="White">
-                    <ContentPresenter x:Name="ContentSite" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10, 5" />
-                </Border>
+              <ControlTemplate TargetType="ToggleButton">
+                <Grid>
+                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" Margin="0 0 -23 0" Fill="White">
+                    <Path.Data>
+                      <PathGeometry>
+                        <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={StaticResource content2PathConverter}}">
+                        </PathFigure>
+                      </PathGeometry>
+                    </Path.Data>
+                    <Path.LayoutTransform>
+                      <ScaleTransform ScaleY="-1"/>
+                    </Path.LayoutTransform>
+                  </Path>
+                  <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"  Margin="15,5,0,2" ContentSource="Content"
+                                          TextBlock.Foreground="#FF767676" TextBlock.FontSize="13"/>
+                  <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,5,0,2" ContentSource="Content"
+                                          TextBlock.Foreground="#FF767676" TextBlock.FontSize="13" TextBlock.FontFamily="Segoe UI Semibold"/>
+                </Grid>
                 <ControlTemplate.Triggers>
-                  <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="#FFD6D4D4" />
+                  <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Fill" TargetName="TabPath" Value="#FFD6D4D4" />
                   </Trigger>
-                  <Trigger Property="ToggleButton.IsChecked" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="#FFE3E3E3" />
-                    <Setter Property="Panel.ZIndex" Value="100" />
+                  <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter Property="Fill" TargetName="TabPath" Value="#FFE3E3E3"/>
+                    <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
+                    <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
+                    <Setter Property="Panel.ZIndex" Value="2"/>
                   </Trigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate>
@@ -60,7 +89,7 @@
         </Style>
       </Grid.Resources>
         
-        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="2 1 1 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results" IsSelected="{Binding SelectScan, Mode=TwoWay}">
               <Grid>
                 <local:ScanResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -74,7 +103,7 @@
               </Grid>
             </TabItem>
         </TabControl>
-      <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 2 0">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 24 0" Visibility="{Binding GroupingEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
         <ToggleButton Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" />
         <ToggleButton Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" />
       </StackPanel>

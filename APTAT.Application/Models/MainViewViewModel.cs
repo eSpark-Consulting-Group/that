@@ -57,11 +57,13 @@ namespace APTAT.Application.Models
         private ThreatInfoItem _selectedItem;
         private object _selectedValkyrieItem;
 
-        private ObservableCollection<ThreatInfoItem> _items;
+        private Collection<ThreatInfoItem> _items;
+        private ObservableCollection<ThreatInfoItem> _computers;
         private ObservableCollection<FileResult> _itemsValkyrie;
         private ObservableCollection<ComputerInformation> _computersValkyrie;
 
         private Collection<ThreatInfoItem> _cache;
+        private Collection<ThreatInfoItem> _cacheComputers;
         private Collection<FileResult> _cacheValkyrie;
         private Collection<ComputerInformation> _cacheValkyrieComputers;
 
@@ -280,19 +282,6 @@ namespace APTAT.Application.Models
             }
         }
 
-        public Int32 ItemsCount
-        {
-            get
-            {
-                if (Items == null)
-                {
-                    return 0;
-                }
-
-                return Items.Count;
-            }
-        }
-
         public ThreatInfoItem SelectedItem
         {
             get { return _selectedItem; }
@@ -339,7 +328,7 @@ namespace APTAT.Application.Models
 
         public Boolean IsItemsEmpty
         {
-            get { return _cache == null || _cache.Count == 0; }
+            get { return _cacheComputers == null || _cacheComputers.Count == 0; }
         }
 
         public string ValkyrieDetailsLink
@@ -391,14 +380,23 @@ namespace APTAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Items
+        public Collection<ThreatInfoItem> Items
         {
             get { return _items; }
             set
             {
                 _items = value;
                 RaisePropertyChanged("Items");
-                RaisePropertyChanged("ItemsCount");
+            }
+        }
+
+        public ObservableCollection<ThreatInfoItem> Computers
+        {
+            get { return _computers; }
+            set
+            {
+                _computers = value;
+                RaisePropertyChanged("Computers");
                 RaisePropertyChanged("IsItemsEmpty");
             }
         }
@@ -437,13 +435,19 @@ namespace APTAT.Application.Models
         private void InvokeStartScan(Object arg)
         {
             IsQuickScan = (bool)arg;
+
             Items = new ObservableCollection<ThreatInfoItem>();
+            Computers = new ObservableCollection<ThreatInfoItem>();
             ItemsValkyrie = new ObservableCollection<FileResult>();
             ComputersValkyrie = new ObservableCollection<ComputerInformation>();
+
             _cache = new Collection<ThreatInfoItem>();
+            _cacheComputers = new Collection<ThreatInfoItem>();
             _cacheValkyrie = new Collection<FileResult>();
             _cacheValkyrieComputers = new Collection<ComputerInformation>();
+
             _onlineItems = new ThreatInfoItem[0];
+
             SelectedItem = null;
             UnknownFilesCount = 0;
             MalwareFilesCount = 0;
@@ -457,6 +461,8 @@ namespace APTAT.Application.Models
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Scan);
             Set(() => SelectScan, true);
+            Set(() => GroupingEnabled, false);
+            GroupByComputers = true;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
@@ -695,13 +701,11 @@ namespace APTAT.Application.Models
             RaisePropertyChanged("OnlineItemsCount");
 
 
-            _cache = new Collection<ThreatInfoItem>(items);
-            Items = new ObservableCollection<ThreatInfoItem>(
-                    _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
-
+            _cacheComputers = new Collection<ThreatInfoItem>(items);
+            Computers = new ObservableCollection<ThreatInfoItem>(_cacheComputers);
             
 
-            foreach (ThreatInfoItem item in _cache)
+            foreach (var item in _cacheComputers)
             {
                 if (!item.IsOnline)
                 {
@@ -741,7 +745,7 @@ namespace APTAT.Application.Models
         {
             IsValkyrieScanInProgress = false;
             IsValkyrieAnalysCompleted = false;
-                _operationGuid = e.OperationGuid;
+            _operationGuid = e.OperationGuid;
 
             _scanIterator = new Dictionary<Guid, ScanProgressItem>();
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
@@ -760,6 +764,7 @@ namespace APTAT.Application.Models
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
             IsAnalyseWithValkyrieEnabled = enableReports;
+            Set(() => GroupingEnabled, true);
 
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
 
@@ -911,27 +916,30 @@ namespace APTAT.Application.Models
 
         private void OnGetScanResultCompleted(Object sender, GetScanResultCompletedEventArgs e)
         {
-            ThreatInfoItem parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
+            var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-
-                RadObservableCollection<ThreatInfoItem> items = new RadObservableCollection<ThreatInfoItem>();
+                var items = new RadObservableCollection<ThreatInfoItem>();
 
                 if (e.ScanResult.BadFiles != null)
                 {
                     foreach (BadFileItem badFile in e.ScanResult.BadFiles)
                     {
-                        items.Add(new ThreatInfoItem
+                        var item = new ThreatInfoItem(badFile);
+                        items.Add(item);
+                        item = new ThreatInfoItem(badFile);
+
+                        var exist = _cache.FirstOrDefault(_ =>_.ShortName == item.ShortName && _.BadFile.Sha1 == item.BadFile.Sha1);
+                        var comp = new ThreatInfoItem { IpAddress = parentItem.IpAddress, Name = parentItem.Name, ShortName = item.Name, IsRootItem = true };
+                        if (exist != null)
+                            exist.Computers.Add(comp);
+                        else
                         {
-                            IsUnknown = badFile.IsUnknown,
-                            IsMalware = badFile.IsMalware,
-                            Name = badFile.Name,
-                            Size = badFile.Size,
-                            SizeString = badFile.FileSizeFormatted,
-                            IsRootItem = false,
-                            IsOnline = true,
-                            BadFile = badFile,
-                        });
+                            item.Computers = new Collection<ThreatInfoItem>();
+                            item.Computers.Add(comp);
+                            _cache.Add(item);
+                            Items.Add(item);
+                        }
                     }
                 }
 
@@ -947,12 +955,18 @@ namespace APTAT.Application.Models
             if (newValue == oldValue)
                 return;
 
+            if (_cacheComputers.Any())
+            {
+                Computers = new ObservableCollection<ThreatInfoItem>(
+                       _cacheComputers.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
+
+                SelectedItem = null;
+            }
+
             if (_cache.Any())
             {
                 Items = new ObservableCollection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
-
-                SelectedItem = null;
             }
 
             if (_cacheValkyrie.Any())
@@ -997,6 +1011,8 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("GroupByComputers");
             }
         }
+
+        public bool GroupingEnabled { get; set; }
 
         public void SetReportKind(ReportKind kind)
         {

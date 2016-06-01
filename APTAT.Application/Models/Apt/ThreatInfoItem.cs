@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Application.Models
@@ -89,6 +90,8 @@ namespace APTAT.Application.Models
 
         public String Name { get; set; }
 
+        public string ShortName { get; set; }
+
         public String IpAddress { get; set; }
 
         public String NameAndIpAddress
@@ -159,7 +162,7 @@ namespace APTAT.Application.Models
 
         public bool ScanCompleted
         {
-            get { return ScanStage == ScanStage.OperationCompleted && Items != null && Items.Count > 0; }
+            get { return (ScanStage == ScanStage.OperationCompleted && Items != null && Items.Count > 0) || Computers != null; }
         }
 
         public String StatusMessage
@@ -273,6 +276,8 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Collection<ThreatInfoItem> Computers { get; set; }
+
         public BadFileItem BadFile { get; set; }
 
         public ThreatInfoItem()
@@ -288,11 +293,24 @@ namespace APTAT.Application.Models
             IsOnline = deploymentTarget.IsOnline;
             ComputerGuid = deploymentTarget.Uid;
             LdapPath = deploymentTarget.LdapPath;
-    }
+        }
+
+        public ThreatInfoItem(BadFileItem badFile)
+        {
+            IsUnknown = badFile.IsUnknown;
+            IsMalware = badFile.IsMalware;
+            Name = badFile.Name;
+            Size = badFile.Size;
+            SizeString = badFile.FileSizeFormatted;
+            IsRootItem = false;
+            IsOnline = true;
+            BadFile = badFile;
+            ShortName = Path.GetFileName(badFile.Name);
+        }
 
         public override string ToString()
         {
-            return Name;
+            return NameAndIpAddress;
         }
     }
 }

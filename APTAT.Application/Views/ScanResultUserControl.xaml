@@ -23,8 +23,7 @@
                                  AutoExpandItems="False"
                                  RowHeight="50"
                                  HierarchyIndent="14"
-                                 
-                                 DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
+                                 Validation.ErrorTemplate="{x:Null}"
                                  EnableRowVirtualization="True"
                                  MouseDoubleClick="OnTreeDoubleClick" >
 
@@ -32,93 +31,18 @@
 
               
                 <DataTemplate x:Key="NameTemplate">
-                    <Grid HorizontalAlignment="Stretch" Height="50" Margin="-10,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                  <Grid HorizontalAlignment="Stretch" Height="50">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="8,8,0,0" Text="{Binding NameAndIpAddress}" Grid.Column="0"/>
+                    <TextBlock Margin="8,2,0,0" Text="{Binding ShortName}"  FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}" Grid.Row="1"/>
 
-
-                        <Path Data="M11.866837,7.4813232 L17.844717,13.459205 L11.742386,19.561535 z M14,2.1129997 C10.716,2.1129997 7.743,3.4419997 5.5960002,5.5899997 L5.5910001,5.5949998 C3.4430001,7.7409997 2.1140001,10.714 2.1139998,13.999 C2.1140001,17.282 3.4430001,20.256998 5.5910001,22.402998 L5.5960002,22.402998 C7.7460003,24.552999 10.719,25.884998 14,25.884998 C17.282001,25.884998 20.255001,24.552999 22.405001,22.402998 C24.555,20.252998 25.887001,17.279999 25.887001,13.999 C25.887001,10.717999 24.555,7.7449994 22.405001,5.5949998 L22.405001,5.5899997 C20.258001,3.4419997 17.284,2.1129997 14,2.1129997 z M14,0 C17.861,-1.1918089E-07 21.363001,1.5679998 23.898001,4.1019998 L23.9,4.0999994 C26.432001,6.6319995 28,10.132 28,13.999 C28,17.862999 26.432001,21.365999 23.9,23.897999 C21.368,26.429998 17.865,27.997999 14,27.997999 C10.134,27.997999 6.6329999,26.429998 4.1009998,23.897999 L4.1030002,23.895998 C1.569,21.360998 0,17.859999 0,13.999 C0,10.138 1.5669999,6.6389995 4.1009998,4.1049995 L4.1030002,4.1019998 L4.1059999,4.0999994 C6.6399999,1.5659999 10.139999,-1.1918089E-07 14,0 z" 
-                                  Grid.RowSpan="2" Margin="5,0,0,0"
-                                  Fill="{StaticResource AccentBrush}" 
-                                  Opacity="{Binding ScanStatus, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='InProgress'}"
-                                  Height="27.998"
-                                  Canvas.Left="0" 
-                                  Stretch="Fill" 
-                                  Canvas.Top="0" 
-                                  UseLayoutRounding="False" 
-                                  Width="28"/>
-
-
-                        <Border Grid.RowSpan="2" Opacity="{Binding HasBadFiles, Converter={StaticResource InverseBoolToOpacityConverter}}" Margin="5,0,0,0">
-                            <Path Data="F1M22.4046,5.5958C20.2546,3.4458,17.2816,2.1138,13.9996,2.1138C10.7186,2.1138,7.7456,3.4458,5.5956,5.5958L5.5906,5.5958C3.4426,7.7428,2.1136,10.7168,2.1136,13.9998C2.1136,17.2848,3.4426,20.2578,5.5906,22.4038L5.5956,22.4088C7.7426,24.5568,10.7156,25.8868,13.9996,25.8868C17.2836,25.8868,20.2576,24.5568,22.4046,22.4088L22.4046,22.4038C24.5546,20.2538,25.8866,17.2808,25.8866,13.9998C25.8866,10.7188,24.5546,7.7458,22.4046,5.5958 M13.2636,15.2288L18.1726,7.8278L21.1966,9.8718L13.7046,20.9708L12.9746,20.2188C11.4676,18.6628,9.9956,17.0758,8.5096,15.5008L7.9246,14.8808L10.5826,12.3908z M13.9996,0.0008000000000008C17.8646,0.0008000000000008,21.3676,1.5688,23.8996,4.1008C26.4316,6.6328,27.9996,10.1358,27.9996,13.9998C27.9996,17.8668,26.4316,21.3668,23.8996,23.8988L23.8976,23.8968C21.3626,26.4318,17.8606,27.9998,13.9996,27.9998C10.1396,27.9998,6.6396,26.4328,4.1056,23.8988L4.1026,23.8968L4.1006,23.8948C1.5666,21.3598,-0.00040000000000262,17.8608,-0.00040000000000262,13.9998C-0.00040000000000262,10.1388,1.5686,6.6378,4.1026,4.1028L4.1006,4.1008C6.6326,1.5688,10.1336,0.0008000000000008,13.9996,0.0008000000000008" 
-                                Fill="#FF2D8700" SnapsToDevicePixels="True"
-                                Height="27.999" 
-                                Opacity="{Binding ScanStatus, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationCompleted'}"
-                                Canvas.Left="0" 
-                                Stretch="Fill" 
-                                HorizontalAlignment="Left" 
-                                Canvas.Top="0" 
-                                Width="28"/>
-                        </Border>
-                        <Border Grid.RowSpan="2" Opacity="{Binding HasBadFiles, Converter={StaticResource BoolToOpacityConverter}}" Margin="5,0,0,0">
-                            <Path Data="F1M22.4046,5.5954C20.2546,3.4454,17.2816,2.1134,13.9996,2.1134C10.7186,2.1134,7.7456,3.4454,5.5956,5.5954L5.5906,5.5954C3.4426,7.7424,2.1136,10.7164,2.1136,14.0004C2.1136,17.2844,3.4426,20.2574,5.5906,22.4044L5.5956,22.4094C7.7426,24.5574,10.7156,25.8864,13.9996,25.8864C17.2836,25.8864,20.2576,24.5574,22.4046,22.4094L22.4046,22.4044C24.5546,20.2544,25.8866,17.2814,25.8866,14.0004C25.8866,10.7184,24.5546,7.7454,22.4046,5.5954 M11.9386,5.6394L16.0616,5.6394L16.0616,15.3964L11.9386,15.3964z M13.9996,17.4544C15.2546,17.4544,16.2716,18.4714,16.2716,19.7264C16.2716,20.9804,15.2546,21.9974,13.9996,21.9974C12.7456,21.9974,11.7286,20.9804,11.7286,19.7264C11.7286,18.4714,12.7456,17.4544,13.9996,17.4544 M13.9996,0.000400000000001732C17.8646,0.000400000000001732,21.3676,1.5684,23.8996,4.1004C26.4316,6.6324,27.9996,10.1354,27.9996,14.0004C27.9996,17.8664,26.4316,21.3674,23.8996,23.8994L23.8976,23.8974C21.3626,26.4314,17.8606,28.0004,13.9996,28.0004C10.1396,28.0004,6.6396,26.4334,4.1056,23.8994L4.1026,23.8974L4.1006,23.8944C1.5666,21.3604,-0.00040000000000262,17.8604,-0.00040000000000262,14.0004C-0.00040000000000262,10.1394,1.5686,6.6374,4.1026,4.1024L4.1006,4.1004C6.6326,1.5684,10.1336,0.000400000000001732,13.9996,0.000400000000001732" 
-                                  Fill="Red"  SnapsToDevicePixels="True"
-                                  Opacity="{Binding ScanStatus, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationCompleted'}"
-                                  Height="28" 
-                                  Grid.RowSpan="2" 
-                                  Canvas.Left="0"
-                                  Stretch="Fill" Canvas.Top="0" 
-                                  Width="28"/>
-                        </Border>
-                        <Path Data="F1M22.4046,5.5958C20.2546,3.4458,17.2816,2.1138,13.9996,2.1138C10.7186,2.1138,7.7456,3.4458,5.5956,5.5958L5.5906,5.5958C3.4426,7.7428,2.1136,10.7168,2.1136,13.9998C2.1136,17.2848,3.4426,20.2578,5.5906,22.4038L5.5956,22.4088C7.7426,24.5568,10.7156,25.8868,13.9996,25.8868C17.2836,25.8868,20.2576,24.5568,22.4046,22.4088L22.4046,22.4038C24.5546,20.2538,25.8866,17.2808,25.8866,13.9998C25.8866,10.7188,24.5546,7.7458,22.4046,5.5958 M16.9646,8.9148L19.0836,11.0338L16.1196,13.9988L19.0856,16.9648L16.9656,19.0838L13.9996,16.1178L11.0336,19.0838L8.9146,16.9648L11.8806,13.9988L8.9166,11.0338L11.0356,8.9148L13.9996,11.8808z M13.9996,0.0008000000000008C17.8646,0.0008000000000008,21.3676,1.5688,23.8996,4.1008C26.4316,6.6328,27.9996,10.1358,27.9996,13.9998C27.9996,17.8668,26.4316,21.3668,23.8996,23.8988L23.8976,23.8968C21.3626,26.4318,17.8606,27.9998,13.9996,27.9998C10.1396,27.9998,6.6396,26.4328,4.1056,23.8988L4.1026,23.8968L4.1006,23.8948C1.5666,21.3598,-0.00040000000000262,17.8608,-0.00040000000000262,13.9998C-0.00040000000000262,10.1388,1.5686,6.6378,4.1026,4.1028L4.1006,4.1008C6.6326,1.5688,10.1336,0.0008000000000008,13.9996,0.0008000000000008" 
-                              Fill="#FFD64333"  SnapsToDevicePixels="True" Margin="5,0,0,0"
-                              Opacity="{Binding ScanStatus, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationFailed'}"
-                              Height="27.999" 
-                              Stretch="Fill" 
-                              HorizontalAlignment="Left" 
-                              Grid.RowSpan="2"
-                              Width="28"/>
-
-                        <Path Data="M8.5839996,8.4160156 L19.584,8.4160156 L19.584,19.416016 L8.5839996,19.416016 z M14,2.1130004 C10.719,2.1130002 7.7460003,3.4450002 5.5960002,5.5949998 L5.5910001,5.5949998 C3.4430001,7.7420001 2.1140001,10.716 2.1139998,13.999 C2.1140001,17.284 3.4430001,20.257 5.5910001,22.403 L5.5960002,22.408001 C7.743,24.556002 10.716,25.886002 14,25.886002 C17.284,25.886002 20.258001,24.556002 22.405001,22.408001 L22.405001,22.403 C24.555,20.253 25.887001,17.280001 25.887001,13.999 C25.887001,10.717999 24.555,7.7449999 22.405001,5.5949998 C20.255001,3.4450002 17.282001,2.1130002 14,2.1130004 z M14,7.1054274E-15 C17.865,-1.1920928E-07 21.368,1.5679998 23.9,4.0999999 C26.432001,6.632 28,10.135 28,13.999 C28,17.866001 26.432001,21.366001 23.9,23.898001 L23.898001,23.896 C21.363001,26.431002 17.861,27.999001 14,27.999001 C10.139999,27.999001 6.6399999,26.432001 4.1059999,23.898001 L4.1030002,23.896 L4.1009998,23.894001 C1.5669999,21.359001 0,17.860001 0,13.999 C0,10.138 1.569,6.6370001 4.1030002,4.1019998 L4.1009998,4.0999999 C6.6329999,1.5679998 10.134,-1.1920928E-07 14,7.1054274E-15 z" 
-                              Fill="#FFD64333" SnapsToDevicePixels="True" Margin="5,0,0,0"
-                              HorizontalAlignment="Left" 
-                              Height="27.999" 
-                              Opacity="{Binding ScanStatus, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='OperationCanceled'}"
-                              Stretch="Fill" 
-                                Grid.RowSpan="2"
-                              UseLayoutRounding="False" 
-                              VerticalAlignment="Center" 
-                              Width="28"/>
-
-
-                        <Path Data="F1M22.4046,5.5958C20.2546,3.4458,17.2816,2.1138,13.9996,2.1138C10.7186,2.1138,7.7456,3.4458,5.5956,5.5958L5.5906,5.5958C3.4426,7.7428,2.1136,10.7168,2.1136,13.9998C2.1136,17.2848,3.4426,20.2578,5.5906,22.4038L5.5956,22.4088C7.7426,24.5568,10.7156,25.8868,13.9996,25.8868C17.2836,25.8868,20.2576,24.5568,22.4046,22.4088L22.4046,22.4038C24.5546,20.2538,25.8866,17.2808,25.8866,13.9998C25.8866,10.7188,24.5546,7.7458,22.4046,5.5958 M17.2396,8.4448L19.5546,10.7598L16.3146,13.9988L19.5556,17.2388L17.2406,19.5548L13.9996,16.3128L10.7596,19.5548L8.4446,17.2388L11.6856,13.9988L8.4456,10.7598L10.7606,8.4448L13.9996,11.6848z M13.9996,0.0008000000000008C17.8646,0.0008000000000008,21.3676,1.5688,23.8996,4.1008C26.4316,6.6328,27.9996,10.1358,27.9996,13.9998C27.9996,17.8668,26.4316,21.3668,23.8996,23.8988L23.8976,23.8968C21.3626,26.4318,17.8606,27.9998,13.9996,27.9998C10.1396,27.9998,6.6396,26.4328,4.1056,23.8988L4.1026,23.8968L4.1006,23.8948C1.5666,21.3598,-0.00040000000000262,17.8608,-0.00040000000000262,13.9998C-0.00040000000000262,10.1388,1.5686,6.6378,4.1026,4.1028L4.1006,4.1008C6.6326,1.5688,10.1336,0.0008000000000008,13.9996,0.0008000000000008" 
-                                  Fill="#FF7F838A" SnapsToDevicePixels="True" Margin="5,0,0,0"
-                                  Grid.RowSpan="2"
-                                  Height="27.999"                  
-                                  Opacity="{Binding ScanStatus, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='Offline'}"
-                                  Stretch="Fill"  
-                                  Width="28"/>
-
-
-
-                        <TextBlock Margin="8,8,0,0" Text="{Binding NameAndIpAddress}" Grid.Column="1"/>
-                        <TextBlock  Grid.Column="2" Margin="0,8,0,0" Text="" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
-                        <TextBlock Margin="8,0,0,8"
-                                   ToolTip="{Binding StatusMessage}"
-                                   TextTrimming="CharacterEllipsis"
-                                   IsHitTestVisible="{Binding IsRootItem}"
-                                   Opacity="{Binding IsRootItem, Converter={StaticResource BoolToOpacityConverter}}"
-                                   Grid.Column="1"
-                                   Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding StatusMessage}" FontSize="12" />
-
-                    </Grid>
+                  </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="UnknownFileTemplate">
                     <Grid Height="50">
@@ -126,7 +50,7 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Canvas x:Name="MalwareFound" HorizontalAlignment="Left" Height="16" UseLayoutRounding="False" Width="16" Margin="0,0,8,0" 
+                        <Canvas x:Name="MalwareFound" HorizontalAlignment="Left" Height="16" UseLayoutRounding="False" Width="16" Margin="0,0,7,0" 
                                 Opacity="{Binding IsMalware, Converter={StaticResource BoolToOpacityConverter}}" VerticalAlignment="Center">
                             <Canvas x:Name="Layer_2" Height="16" Canvas.Left="0" Canvas.Top="0" Width="16">
                                 <Path SnapsToDevicePixels="True" Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FFE54C3C" Height="16" Canvas.Left="0" Stretch="Fill" Canvas.Top="0" Width="16"/>
@@ -135,12 +59,12 @@
 
                         </Canvas>
 
-                        <Canvas HorizontalAlignment="Left" Height="16" VerticalAlignment="Center" Width="16" Margin="0,0,8,0" 
+                        <Canvas HorizontalAlignment="Left" Height="16" VerticalAlignment="Center" Width="16" Margin="0,0,7,0" 
                                 Opacity="{Binding IsUnknown, Converter={StaticResource BoolToOpacityConverter}}">
                             <Path SnapsToDevicePixels="True" Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FFE54C3C" Height="16" Stretch="Fill" Width="16" UseLayoutRounding="False" VerticalAlignment="Top"/>
                             <Path SnapsToDevicePixels="True" Data="M1.188,7.9370117 C1.8441142,7.9370117 2.3759999,8.4688978 2.3759999,9.1250114 C2.3759999,9.781126 1.8441142,10.313012 1.188,10.313012 C0.53188568,10.313012 -7.4505806E-09,9.781126 0,9.1250114 C-7.4505806E-09,8.4688978 0.53188568,7.9370117 1.188,7.9370117 z M0.10499457,0 L2.2299945,0 L2.2299945,6.5619998 L0.10499457,6.5619998 z" Fill="White" Height="10.313" Stretch="Fill" Width="2.376" UseLayoutRounding="False" Canvas.Left="6.811" Canvas.Top="2.687"/>
                         </Canvas>
-                        <TextBlock Text="{Binding Name}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                        <TextBlock Text="{Binding ShortName}" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}"/>
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="SizeColumn">
@@ -151,13 +75,12 @@
                                                                 ComputerTemplate="{StaticResource NameTemplate}"/>
             </telerik:RadTreeListView.Resources>
             <telerik:RadTreeListView.ChildTableDefinitions>
-                <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
+                <telerik:TreeListViewTableDefinition ItemsSource="{Binding Computers}" />
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
                     IsFilterable="True"
                     ShowFilterButton="False"
-                    FilterMemberPath="ScanStatus"
                     ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="NAME"
