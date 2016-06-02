@@ -42,15 +42,15 @@ namespace APTAT.Application.Models
             Guid operationGuid = _storage.GetValue<Guid>(KnownKeys.OperationGuid, false);
             ReportKind kind = _storage.GetValue<ReportKind>(KnownKeys.ReportKind, false);
 
-            if(kind == ReportKind.DetailedPerProgram)
+            if(kind == ReportKind.DetailedPerProgram || kind == ReportKind.DetailedPerProgramWithValkyrie)
             {
                 Header = "Detailed Report Per Program";
             }
-            else if(kind == ReportKind.DetailedPerDevice)
+            else if(kind == ReportKind.DetailedPerDevice || kind == ReportKind.DetailedPerDeviceWithValkyrie)
             {
                 Header = "Detailed Report Per Device";
             }
-            else if(kind == ReportKind.Executive)
+            else if(kind == ReportKind.Executive || kind == ReportKind.ExecutiveWithValkyrie)
             {
                 Header = "Executive Report";
             }
