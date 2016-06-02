@@ -1443,7 +1443,7 @@
                       Fields!CloudVerdict.Value = "2", "#b22222",
                       Fields!CloudVerdict.Value = "1", "#ffc000",
                       Fields!CloudVerdict.Value = "0", "#3c963c",
-					  Fields!CloudVerdict.Value = "3", "#CCCCCC")</Color>
+					  Fields!CloudVerdict.Value = "4", "#CCCCCC")</Color>
                           </Style>
                           <ChartMarker>
                             <Style />
