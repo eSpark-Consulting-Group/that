@@ -93,7 +93,7 @@ namespace APTAT.Core.Reports
         {
             var allBadFilesData = data.GetAllBadFilesSorted(false);
             ReportDataSource allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargetsWithValkyrie);
-            ReportDataSource vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevices());
+            ReportDataSource vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevicesValkyrie());
             //ReportDataSource valkyrieVerdictDataSource = new ReportDataSource("ValkyrieDataSet", allBadFilesData);
             SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.UnknownFilesWithValkyrie.rdlc", ReportName = "UnknownFiles" };
             SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.MaliciousFilesWithValkyrie.rdlc", ReportName = "MaliciousFiles" };
