@@ -75,7 +75,7 @@ namespace APTAT.Core.Valkyrie
                     ProductVersion = asm.Version.ToString()
                 });
             }
-            _apiKey = regInfo.ApiKey;
+            _apiKey = regInfo.Key;
             return regInfo;
         }
 
