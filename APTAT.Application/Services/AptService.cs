@@ -227,7 +227,7 @@ namespace APTAT.Application.Services
             {
                 TargetUid = aptScanResult.TargetUid,
                 TotalFilesCount = aptScanResult.TotalFilesCount,
-                UnknownFilesCount = aptScanResult.UnknownFilesCount
+                UnknownFilesCount = aptScanResult.UnknownFilesCount               
             };
 
 

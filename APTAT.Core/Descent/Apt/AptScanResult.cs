@@ -24,7 +24,17 @@ namespace APTAT.Core.Descent.Apt
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
-        public int MalwareFilesCount { get; set; }
+        private int _malwareCount;
+        public int MalwareFilesCount {
+            get            
+            {
+                return _malwareCount;
+            }
+            set
+            {
+                _malwareCount = value;
+            }
+        }
         public int EmptyFilesCount { get; set; }
 
         public int FailedToAnalyzeFilesCount { get; set; }       

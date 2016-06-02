@@ -264,6 +264,18 @@ namespace APTAT.Core.Reports
             return itemRatingInfoList.ToArray();
         }
 
+        public ItemRatingInfo[] GetFileRatingCollectionValkyrie()
+        {
+            var itemRatingInfoList = new List<ItemRatingInfo>()
+            {                
+                new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = "Trusted Programs"},
+                new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = "Unknown Programs"},                
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" },
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = FailedToAnalyzeFilesCount, Value = "Not Analyzed" }                
+            };
+
+            return itemRatingInfoList.ToArray();
+        }
         public ItemRatingInfo[] GetDevicesRatingCollection()
         {
             int safe = 0;
@@ -293,6 +305,40 @@ namespace APTAT.Core.Reports
             };
         }
 
+
+        public ItemRatingInfo[] GetDevicesRatingCollectionValkyrie()
+        {
+            IEnumerable<ScannedTarget> targets;
+            IEnumerable<DetailedBadFile> files;
+            MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+
+            int safe = 0;
+            int vulnerable = 0;
+            int infected = 0;
+            int unknown = 0;
+            //int notscanned = 0;
+            var groupped = from target in targets group target by target.TargetVerdict into temp select temp;
+            foreach (var item in groupped)
+            {
+                if (item.Key == TargetVerdict.Safe)
+                    safe = item.Count();
+                if (item.Key == TargetVerdict.Infected)
+                    infected = item.Count();
+                if (item.Key == TargetVerdict.Vulnerable)
+                    vulnerable = item.Count();
+                if (item.Key == TargetVerdict.Unknown)
+                    unknown = item.Count();
+            }
+
+            return new ItemRatingInfo[]
+            {
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe Devices"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "Devices At Risk"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected Devices"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Failed/Canceled Devices"},
+            };
+        }
         public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()
         {
             IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
@@ -378,6 +424,7 @@ namespace APTAT.Core.Reports
                 int mergedUnknownCount = 0;
                 int mergedMalwareCount = 0;
                 int mergedErrorFilesCount = 0;
+                int mergedNoVerdictCount = 0;
                 #region Working with a single scan result
 
                 foreach (var module in flsResult.Files)
@@ -461,8 +508,10 @@ namespace APTAT.Core.Reports
                                 mergedMalwareCount++;
                                 break;
                             case CloudVerdict.FailedToAnalyze:
-                            case CloudVerdict.NoVerdict:
                                 mergedErrorFilesCount++;
+                                break;
+                            case CloudVerdict.NoVerdict:
+                                mergedNoVerdictCount++;
                                 break;
 
                             default:
@@ -477,14 +526,18 @@ namespace APTAT.Core.Reports
 
                 #region Filling in targets info
 
+                
                 ScannedTarget target = new ScannedTarget(flsResult)
                 {
                     MalwareFilesCount = mergedMalwareCount,
                     SafeFilesCount = mergedSafeCount,
                     UnknownFilesCount = mergedUnknownCount,
                     FailedToAnalyzeFilesCount = mergedErrorFilesCount,
-                    NoVerdictFilesCount = 0
+                    NoVerdictFilesCount = mergedNoVerdictCount
+                        
                 };
+                target.TargetVerdictString = CalculateTargetVerdictString(target);
+
                 targets.Add(target);
 
                 #endregion
@@ -504,14 +557,14 @@ namespace APTAT.Core.Reports
                     badFile.Value.Targets[0].UnknownFilesCount = mergedUnknownCount;
                     badFile.Value.Targets[0].MalwareFilesCount = mergedMalwareCount;
                     badFile.Value.Targets[0].FailedToAnalyzeFilesCount = mergedErrorFilesCount;
-                    badFile.Value.Targets[0].NoVerdictFilesCount = 0;
+                    badFile.Value.Targets[0].NoVerdictFilesCount = mergedNoVerdictCount;
                 }
 
                 safeFilesCount += mergedSafeCount;
                 unknownFilesCount += mergedUnknownCount;
                 malwareFilesCount += mergedMalwareCount;
-                errorFilesCount += flsResult.FailedToAnalyzeFilesCount;
-                noVerdictFilesCount += flsResult.NoVerdictFilesCount;
+                errorFilesCount += mergedErrorFilesCount;
+                noVerdictFilesCount +=mergedNoVerdictCount;
                 totalFilesCound += flsResult.TotalFilesCount;
                 emptyFilesCount += flsResult.EmptyFilesCount;
                 skippedFilesCount += flsResult.SkippedFilesCount;
@@ -541,6 +594,26 @@ namespace APTAT.Core.Reports
             };
             nonUniqueBadFiles = _mergedScanResultsCache.MergeNonUniqueResults;
             uniqueBadFiles = _mergedScanResultsCache.MergeUniqueResults;
+        }
+
+        private static string CalculateTargetVerdictString(ScannedTarget target)
+        {
+            if (target.MalwareFilesCount > 0)
+            {                
+                return "Infected";
+            }
+
+            if (target.UnknownFilesCount > 0 || target.FailedToAnalyzeFilesCount > 0 || target.NoVerdictFilesCount > 0)
+            {
+                return "At Risk";                
+            }
+            
+            if (target.TotalFilesCount == 0)
+            {
+                return "Unknown";
+            }
+            
+            return "Safe";
         }
 
         private static void AddBadFile(Dictionary<string, DetailedBadFile> uniqueFiles, DetailedBadFile badFile, Module module)
@@ -641,13 +714,35 @@ namespace APTAT.Core.Reports
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
-        public int MalwareFilesCount { get; set; }
+        private int _malwareFilesCount;
+        public int MalwareFilesCount
+        {
+            get {
+                return _malwareFilesCount;
+            }
+            set
+            {
+                _malwareFilesCount = value;
+            }
+        }
         public int FailedToAnalyzeFilesCount { get; set; }
         public int NoVerdictFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }
 
         public string TargetVerdictString { get; set; }
 
+        public TargetVerdict TargetVerdict
+        {
+            get
+            {                
+                if (MalwareFilesCount > 0)
+                    return TargetVerdict.Infected;
+                if (UnknownFilesCount > 0 || FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0)
+                    return TargetVerdict.Vulnerable;
+                return TargetVerdict.Safe;
+
+            }
+        }
         public int AutorunsCount { get; set; }
 
         public int InstancesCount

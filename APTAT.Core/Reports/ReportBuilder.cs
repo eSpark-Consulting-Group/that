@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using APTAT.Core.Descent.Apt;
 using Microsoft.Reporting.WinForms;
+using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Core.Reports
 {
@@ -69,8 +70,9 @@ namespace APTAT.Core.Reports
         private static void BuildExecutiveWithValkyrieReport(string fileName, AptReportData data)
         {
             data.GetAllBadFilesSorted(false);
-            ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollection());
-            ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
+            
+            ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollectionValkyrie());
+            ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollectionValkyrie());
 
             GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.ExecutiveWithValkyrie.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
         }
