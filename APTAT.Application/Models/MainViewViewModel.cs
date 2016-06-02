@@ -573,13 +573,8 @@ namespace APTAT.Application.Models
             }
 
             if (e.Cancelled)
-            {
                 foreach (var comp in ComputersValkyrie)
-                {
-                    if (!comp.Completed)
-                        comp.Canceled = true;
-                }
-            }
+                    comp.Canceling = true;
 
             CancelInProgress = false;
 

@@ -9,6 +9,7 @@ namespace APTAT.Application.Models
     {
         Offline,
         InProgress,
+        Child,
         Cancelled,
         Completed,
         Failed
@@ -139,7 +140,7 @@ namespace APTAT.Application.Models
                     return new ScanStatus(ScanStatusEnum.Cancelled);
                 }
 
-                return new ScanStatus(ScanStatusEnum.InProgress);
+                return new ScanStatus(IsRootItem ? ScanStatusEnum.InProgress : ScanStatusEnum.Child);
             }
         }
 

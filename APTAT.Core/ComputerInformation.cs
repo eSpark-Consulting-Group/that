@@ -70,13 +70,13 @@ namespace APTAT.Core
 
         public string StatusText { get; set; }
 
-        public bool Canceled { get; set; }
+        public bool Canceling { get; set; }
 
         public bool InProgress
         {
             get
             {
-                return Canceled ? false : Files.Count < Count;
+                return Canceling ? false : Files.Count < Count;
             }
         }
 
@@ -94,6 +94,9 @@ namespace APTAT.Core
             {
                 Files.Add(new FileResult(file));
 
+                if (Count == 0)
+                    return;
+
                 var malwareCount = Files.Count(_ => _.IsMalware);
                 var unknownCount = Files.Count(_ => _.IsUnknown);
 
@@ -105,13 +108,13 @@ namespace APTAT.Core
                         Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%", ((Files.Count / Count) * 100d)).Replace(".00", string.Empty));
 
                 if (Completed)
-                    Canceled = false;
+                    Canceling = false;
 
-                if (Canceled)
+                if (Canceling)
                     StatusText = "Scan operation was canceled.";
 
                 RaisePropertyChanged("StatusText");
-                RaisePropertyChanged("Canceled");
+                RaisePropertyChanged("Canceling");
                 RaisePropertyChanged("InProgress");
                 RaisePropertyChanged("Completed");
             }

@@ -73,7 +73,7 @@
                             Fill="#FFD64333" SnapsToDevicePixels="True" Margin="5,0,0,0"
                             HorizontalAlignment="Left"
                             Height="27.999"
-                            Visibility="{Binding Canceled, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Visibility="{Binding Canceling, Converter={StaticResource BoolToVisibilityConverter}}"
                             Stretch="Fill"
                               Grid.RowSpan="2"
                             UseLayoutRounding="False"
