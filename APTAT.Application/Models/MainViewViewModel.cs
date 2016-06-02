@@ -610,7 +610,7 @@ namespace APTAT.Application.Models
             Set(() => ValkyrieSendingFiles, false);
 
             var info = (ProgressInfo<FileResult>)e.UserState;
-            if (info != null)
+            if (info != null && !CancelInProgress)
             {
                 ValkyrieProgressInfo = info;
                 Percentage = info.Percentage;
@@ -756,7 +756,7 @@ namespace APTAT.Application.Models
 
             _scanIterator = new Dictionary<Guid, ScanProgressItem>();
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
-            _scanIteratorTimer.Interval = TimeSpan.FromSeconds(1d);
+            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
             _scanIteratorTimer.Tick += IterateThroughScan;
             _scanIteratorTimer.Start();
         }
