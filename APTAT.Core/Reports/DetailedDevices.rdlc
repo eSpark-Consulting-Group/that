@@ -1511,7 +1511,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>11.7827cm</Height>
+              <Height>12.0367cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1527,7 +1527,7 @@
                               <Value>=Fields!UnknownFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>9.11339cm</Top>
+                          <Top>9.27214cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -1548,7 +1548,7 @@
                               <Value>=Fields!TotalErrorFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>10.92958cm</Top>
+                          <Top>11.18358cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -1952,7 +1952,7 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>5.05901cm</Top>
+                              <Top>5.02726cm</Top>
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>4.7145cm</Width>
@@ -1987,8 +1987,8 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>5.05901cm</Top>
-                              <Left>5.94866cm</Left>
+                              <Top>5.02726cm</Top>
+                              <Left>5.98042cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>10.95608cm</Width>
                               <ZIndex>12</ZIndex>
@@ -2243,9 +2243,9 @@
                             </Textbox>
                             <Rectangle Name="Rectangle5">
                               <KeepTogether>true</KeepTogether>
-                              <Top>1.31562cm</Top>
+                              <Top>1.34737cm</Top>
                               <Left>0.78cm</Left>
-                              <Height>6.66119cm</Height>
+                              <Height>6.88344cm</Height>
                               <Width>0.09784cm</Width>
                               <ZIndex>20</ZIndex>
                               <Style>
@@ -2381,7 +2381,7 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>5.60567cm</Top>
+                              <Top>5.57392cm</Top>
                               <Left>1.03512cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>4.7145cm</Width>
@@ -2416,8 +2416,8 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>5.60567cm</Top>
-                              <Left>5.9613cm</Left>
+                              <Top>5.57392cm</Top>
+                              <Left>5.98042cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>10.95608cm</Width>
                               <ZIndex>25</ZIndex>
@@ -2434,7 +2434,7 @@
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Top>0.06576cm</Top>
-                          <Height>8.02165cm</Height>
+                          <Height>8.23081cm</Height>
                           <Width>16.93651cm</Width>
                           <ZIndex>2</ZIndex>
                           <Style>
@@ -2453,7 +2453,7 @@
                               <Value>=Fields!MalwareFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>8.19324cm</Top>
+                          <Top>8.32024cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2475,7 +2475,7 @@
                               <Value>=Fields!NoVerdictFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>10.03707cm</Top>
+                          <Top>10.22757cm</Top>
                           <Left>0.62123cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2528,7 +2528,7 @@
         <DataSetName>ScanResultDataSet</DataSetName>
         <Top>24.23158cm</Top>
         <Left>0.0635cm</Left>
-        <Height>11.7827cm</Height>
+        <Height>12.0367cm</Height>
         <Width>16.93649cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2538,7 +2538,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>14.17885in</Height>
+    <Height>14.27885in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
@@ -2762,7 +2762,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.02646cm</Height>
           <Width>16.9365cm</Width>
