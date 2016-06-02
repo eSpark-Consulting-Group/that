@@ -578,15 +578,15 @@ namespace APTAT.Application.Models
                     HandleWebException(webException);
             }
 
+            MergeResults(e.Result);
+            _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
+            _cacheValkyrieComputers = new Collection<ComputerInformation>(ComputersValkyrie);
+
             if (e.Cancelled)
                 foreach (var comp in ComputersValkyrie)
                     comp.Canceling = true;
 
             CancelInProgress = false;
-
-            MergeResults(e.Result);
-            _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
-            _cacheValkyrieComputers = new Collection<ComputerInformation>(ComputersValkyrie);
 
             Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
