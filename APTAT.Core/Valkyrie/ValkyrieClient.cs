@@ -60,7 +60,7 @@ namespace APTAT.Core.Valkyrie
                 regInfo = ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest()
                 {
                     LicenseId = camRegistration.LicenseId,
-                    ProductName = asm.Name,
+                    ProductName = "CDM",
                     ProductVersion = asm.Version.ToString()
                 });
 
