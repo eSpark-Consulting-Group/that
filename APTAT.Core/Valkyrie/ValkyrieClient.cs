@@ -71,7 +71,7 @@ namespace APTAT.Core.Valkyrie
                 {
                     UserName = camRegistration.UserName,
                     Password = camRegistration.Password,
-                    ProductName = asm.Name,
+                    ProductName = "CDM",
                     ProductVersion = asm.Version.ToString()
                 });
             }
