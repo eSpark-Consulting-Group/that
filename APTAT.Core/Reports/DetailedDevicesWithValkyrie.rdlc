@@ -1099,7 +1099,7 @@
                         <Style />
                       </ChartDataLabel>
                       <Style>
-                        <Color>=Switch(Fields!BadFileType.Value = "Infected", "Maroon", Fields!BadFileType.Value = "Unknown", "#ffc000", Fields!BadFileType.Value = "Not Analyzed", "#c0c0c0" )</Color>
+                        <Color>=Switch(Fields!BadFileType.Value = "Infected", "Maroon", Fields!BadFileType.Value = "Unknown", "#ffc000", Fields!BadFileType.Value = "Not Analyzed", "#c0c0c0")</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
                         <BackgroundGradientEndColor>=Switch(Fields!BadFileType.Value = "Infected", "#993232", Fields!BadFileType.Value = "Unknown", "#ffecb2", Fields!BadFileType.Value = "Not Analyzed", "#f2f2f2")</BackgroundGradientEndColor>
                       </Style>
