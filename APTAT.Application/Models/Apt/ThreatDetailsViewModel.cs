@@ -211,7 +211,7 @@ namespace APTAT.Application.Models
                 switch (badFile.Cloud)
                 {
                     case CloudVerdict.FailedToAnalyze:
-                        Verdict = "Failed to analyze";
+                        Verdict = "Failed to analyse";
                         break;
                         case CloudVerdict.FirstSeen:
                         case CloudVerdict.Unknown:

@@ -1050,7 +1050,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Failed To Analyze:</Value>
+                    <Value>Failed To Analyse:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>

@@ -113,7 +113,7 @@ namespace APTAT.Core.Descent.Helpers
 			    onScanProgressChanged = (sender, args) =>
 			    {
 
-			        string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}.", args.FailedToAnalyzeFilesCount): String.Empty;
+			        string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyse: {0}.", args.FailedToAnalyzeFilesCount): String.Empty;
 
                     string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount): String.Empty;
 
@@ -168,7 +168,7 @@ namespace APTAT.Core.Descent.Helpers
                     dh.EnumerationProgressChanged -= onEnumerationProgressChanged;
                     // ReSharper restore AccessToModifiedClosure
                     
-                    string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
+                    string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyse: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
 
                     string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount) : String.Empty;
 

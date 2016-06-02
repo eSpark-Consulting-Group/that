@@ -256,7 +256,7 @@ namespace APTAT.Core.Reports
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = "Unknown Programs"},
                 //**
                 new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" },
-                new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = FailedToAnalyzeFilesCount, Value = "Failed To Analyze" },
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = FailedToAnalyzeFilesCount, Value = "Failed To Analyse" },
                 new FileRatingInfo() { CloudVerdict = CloudVerdict.NoVerdict, Count = NoVerdictFilesCount, Value = "No Verdict" }
 
             };
@@ -358,7 +358,7 @@ namespace APTAT.Core.Reports
                 if (scanResult.MalwareFilesCount > 0)
                     devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 if (scanResult.FailedToAnalyzeFilesCount > 0)
-                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.FailedToAnalyzeFilesCount, BadFileType = "Failed To Analyze", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.FailedToAnalyzeFilesCount, BadFileType = "Failed To Analyse", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 if (scanResult.NoVerdictFilesCount > 0)
                     devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NoVerdictFilesCount, BadFileType = "No Verdict", Name = scanResult.HostName, Uid = scanResult.TargetUid });
             }
@@ -911,7 +911,7 @@ namespace APTAT.Core.Reports
                     case CloudVerdict.FirstSeen:
                         return "Unknown (FirstSeen)";
                     case CloudVerdict.FailedToAnalyze:
-                        return "Failed To Analyze";
+                        return "Failed To Analyse";
                     case CloudVerdict.NoVerdict:
                         return "No Verdict";
                     default:
