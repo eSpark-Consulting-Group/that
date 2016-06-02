@@ -1457,7 +1457,9 @@
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
-          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + 
+ First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+
+ First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
