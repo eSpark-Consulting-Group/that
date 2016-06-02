@@ -143,7 +143,7 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
                 if (endpoint.GetScanStatus() == expectedScanStatus)
                 {
-                    testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'./n", expectedScanStatus, endpoint.Name));
+                    testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'.\n", expectedScanStatus, endpoint.Name));
                     break;
                 }
                 if ((int) timer.ElapsedMilliseconds > waitTime)

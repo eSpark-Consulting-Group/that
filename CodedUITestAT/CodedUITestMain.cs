@@ -760,14 +760,13 @@ namespace CodedUITestAT
         }
 
         [TestMethod]
-        public void ScanWithInvalidCredentials()
+        public void ScanWithInvalidCredentialsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
             string correctLogin = DataHelper.Username;
             string correctPassword = DataHelper.Password;
             string invalidLogin = DataHelper.Username + "error";
             string invalidPassword = DataHelper.Password + "error";
-            string failedStatusFullMessage = Settings.Results.Default.ScanStatusIndicatorFailedFullMessage;
             int failedStatusWaitTime = Settings.WaitingTime.Default.ScanStatusFailedWaitTime;
 
             // Scan with correct login and invalid password
@@ -777,10 +776,7 @@ namespace CodedUITestAT
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with correct Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
             }
-            TestContext.WriteLine(String.Format("Scan with invalid Username and correct Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));
-            if (UIHelper.GetFullScanStatusMessage(endpoint) != failedStatusFullMessage)
-                Assert.Fail(String.Format("Scan has incorrect full status message! Expected:'{0}' ; Actual: '{1}'", failedStatusFullMessage, UIHelper.GetFullScanStatusMessage(endpoint)));
-            else TestContext.WriteLine("Scan has correct full status message.\n");
+            TestContext.WriteLine(String.Format("Scan with correct Username and invalid Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));
 
 
             // Scan with invalid login and correct password
@@ -791,9 +787,6 @@ namespace CodedUITestAT
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and correct Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
             }
             TestContext.WriteLine(String.Format("Scan with invalid Username and correct Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));
-            if (UIHelper.GetFullScanStatusMessage(endpoint) != failedStatusFullMessage)
-                Assert.Fail(String.Format("Scan has incorrect full status message! Expected:'{0}' ; Actual: '{1}'", failedStatusFullMessage, UIHelper.GetFullScanStatusMessage(endpoint)));
-            else TestContext.WriteLine("Scan has correct full status message.\n");
 
             // Scan with invalid login and invalid password
             StartEndpointScan(endpoint, ScanType.Quick, invalidLogin, invalidPassword, TestContext);
@@ -802,10 +795,7 @@ namespace CodedUITestAT
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
             }
-            TestContext.WriteLine(String.Format("Scan with invalid Username and correct Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));
-            if (UIHelper.GetFullScanStatusMessage(endpoint) != failedStatusFullMessage)
-                Assert.Fail(String.Format("Scan has incorrect full status message! Expected:'{0}' ; Actual: '{1}'", failedStatusFullMessage, UIHelper.GetFullScanStatusMessage(endpoint)));
-            else TestContext.WriteLine("Scan has correct full status message.\n");
+            TestContext.WriteLine(String.Format("Scan with invalid Username and invalid Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));            
         }        
 
         #endregion
