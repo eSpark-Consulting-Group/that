@@ -282,7 +282,7 @@ namespace APTAT.Core.Reports
                             {
                                 DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
                                 if (targets != null)
-                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.IsNotAnalyzed)));
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.NotAnalyzed)));
                             }
                         }
                     }     
