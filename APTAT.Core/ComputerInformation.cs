@@ -79,6 +79,7 @@ namespace APTAT.Core
                 _canceling = value;
                 RaisePropertyChanged("Canceling");
                 RaisePropertyChanged("InProgress");
+                RaisePropertyChanged("Completed");
             }
         }
 
@@ -94,7 +95,7 @@ namespace APTAT.Core
         {
             get
             {
-                return Files.Count == Count;
+                return Canceling ? false : Files.Count == Count;
             }
         }
 

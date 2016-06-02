@@ -214,7 +214,10 @@ namespace APTAT.Application.Models
                 
                 if (IsScanInProgress == true)
                 {
-                    header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
+                    if (Percentage == 0)
+                        header = "Starting scan...";
+                    else
+                        header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
