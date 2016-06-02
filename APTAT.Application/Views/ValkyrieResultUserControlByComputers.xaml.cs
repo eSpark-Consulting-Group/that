@@ -79,6 +79,7 @@ namespace APTAT.Application
                 var item = element.DataContext as FileResult;
                 if (item != null && ViewModel.SelectedValkyrieItem == item)
                 {
+                    ViewModel.SelectedValkyrieItem = item;
                     ValkyrieDetailsWindow details = new ValkyrieDetailsWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
                     details.ShowDialog();

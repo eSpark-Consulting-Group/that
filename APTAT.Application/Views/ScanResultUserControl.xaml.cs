@@ -109,6 +109,7 @@ namespace APTAT.Application
                 ThreatInfoItem item = GetDataBoundItem(element);
                 if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsRootItem && ViewModel.SelectedItem == item)
                 {
+                    ViewModel.SelectedItem = item;
                     ThreatDetailsWindow details = new ThreatDetailsWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
                     details.ShowDialog();

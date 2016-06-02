@@ -66,10 +66,26 @@ namespace APTAT.Core
 
         public ObservableCollection<FileResult> Files { get; set; }
 
-        public string StatusText
+        public double Count { get; set; }
+
+        public string StatusText { get; set; }
+
+        public bool Canceled { get; set; }
+
+        public bool InProgress
         {
-            get;
-            set;
+            get
+            {
+                return Canceled ? false : Files.Count < Count;
+            }
+        }
+
+        public bool Completed
+        {
+            get
+            {
+                return Files.Count == Count;
+            }
         }
 
         public void MergeFiles(FileResult file)
@@ -77,11 +93,27 @@ namespace APTAT.Core
             if (!Files.Any(_ => _.Equals(file)))
             {
                 Files.Add(new FileResult(file));
+
                 var malwareCount = Files.Count(_ => _.IsMalware);
                 var unknownCount = Files.Count(_ => _.IsUnknown);
-                StatusText = string.Format("Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
-                    Files.Count, unknownCount, malwareCount);
+
+                if (Files.Count == Count)
+                    StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
+                        Files.Count, unknownCount, malwareCount);
+                else
+                    StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
+                        Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%", ((Files.Count / Count) * 100d)).Replace(".00", string.Empty));
+
+                if (Completed)
+                    Canceled = false;
+
+                if (Canceled)
+                    StatusText = "Scan operation was canceled.";
+
                 RaisePropertyChanged("StatusText");
+                RaisePropertyChanged("Canceled");
+                RaisePropertyChanged("InProgress");
+                RaisePropertyChanged("Completed");
             }
         }
 

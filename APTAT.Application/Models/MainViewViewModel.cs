@@ -207,6 +207,9 @@ namespace APTAT.Application.Models
                 if (commonHeaderName == null)
                     throw new ArgumentNullException("Failed to obtain window header value from application resources");
 
+                if (CancelInProgress)
+                    return "Canceling...";
+
                 if (IsScanInProgress == true)
                 {
                     return String.Format("{0} ({1}% scanning...)", commonHeaderName, Percentage);
@@ -493,13 +496,6 @@ namespace APTAT.Application.Models
         private void InvokeStopScan(Object arg)
         {
             CancelInProgress = true;
-            foreach (ThreatInfoItem onlineItem in _onlineItems)
-            {
-                if (onlineItem.ScanStage != ScanStage.OperationCompleted && onlineItem.ScanStage != ScanStage.OperationFailed && onlineItem.ScanStage != ScanStage.OperationCanceled)
-                {
-                    onlineItem.StatusMessage = "Canceling...";
-                }
-            }
 
             _aptService.StopScan();
         }
@@ -576,6 +572,17 @@ namespace APTAT.Application.Models
                     HandleWebException(webException);
             }
 
+            if (e.Cancelled)
+            {
+                foreach (var comp in ComputersValkyrie)
+                {
+                    if (!comp.Completed)
+                        comp.Canceled = true;
+                }
+            }
+
+            CancelInProgress = false;
+
             MergeResults(e.Result);
             _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
             _cacheValkyrieComputers = new Collection<ComputerInformation>(ComputersValkyrie);
@@ -641,6 +648,7 @@ namespace APTAT.Application.Models
                     else
                     {
                         comp = new ComputerInformation(computer);
+                        comp.Count = Computers.FirstOrDefault(_ => _.NameAndIpAddress == computer.FullName).Items.Count;
                         comp.MergeFiles(result);
                         ComputersValkyrie.Add(comp);
                     }
@@ -759,9 +767,9 @@ namespace APTAT.Application.Models
         {
             if (_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Stop();
-            
-            Percentage = 100;
+
             CancelInProgress = false;
+            
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
             IsAnalyseWithValkyrieEnabled = enableReports;
@@ -812,9 +820,12 @@ namespace APTAT.Application.Models
         {
             if (_operationGuid == e.OperationGuid)
             {
-                Percentage = e.Percentage;
+                if (!CancelInProgress)
+                {
+                    Percentage = e.Percentage;
 
-                RaisePropertyChanged("Header");
+                    RaisePropertyChanged("Header");
+                }
             }
         }
 
