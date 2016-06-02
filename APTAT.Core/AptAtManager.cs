@@ -44,7 +44,7 @@ namespace APTAT.Core
     public class ScanInProgressEventArgs : EventArgs
     {
         public Guid OperationUid { get; set; }
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
     }
     public class AptScanInProgressEventArgs : ScanInProgressEventArgs
     {

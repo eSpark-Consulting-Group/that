@@ -79,7 +79,7 @@ namespace APTAT.Core.Descent.Apt
             get { return _sessionId; }
         }
 
-        private int CalculateTotalPercentage()
+        private double CalculateTotalPercentage()
         {
             var onlineScanResults = (from result in _scanResults.Values
                                      where result.ResultType != ScanResultType.NotPerformed
@@ -88,7 +88,7 @@ namespace APTAT.Core.Descent.Apt
             var total = onlineScanResults.Count() * 100;
             var current = onlineScanResults.Sum(scanResult => scanResult.ProgressPercenage);
 
-            return (int)((double)current / total * 100);
+            return (double)current / total * 100d;
         }
 
         public event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;

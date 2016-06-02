@@ -70,7 +70,17 @@ namespace APTAT.Core
 
         public string StatusText { get; set; }
 
-        public bool Canceling { get; set; }
+        private bool _canceling;
+        public bool Canceling
+        {
+            get { return _canceling; }
+            set 
+            {
+                _canceling = value;
+                RaisePropertyChanged("Canceling");
+                RaisePropertyChanged("InProgress");
+            }
+        }
 
         public bool InProgress
         {

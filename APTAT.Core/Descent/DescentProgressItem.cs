@@ -4,17 +4,17 @@ namespace APTAT.Core.Descent
 {
 	public class DescentProgressItem : IDescentProgressItem
 	{
-        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int percentage)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, double percentage)
             : this(computerUid, hostName, operationUid, statusMessage, scanStage, 0, 0, 0, 0, percentage, 0, 0)
 		{
 		}
 
-        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int percentage, int errorFilesCount, int failedAtNodeCount)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, double percentage, int errorFilesCount, int failedAtNodeCount)
             : this(computerUid, hostName, operationUid, statusMessage, scanStage, totalFilesCount, unknownFilesCount, 0, 0, percentage, errorFilesCount, failedAtNodeCount)
         {
         }
 
-        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, int percentage, int errorFileCount, int failedAtNodeCount)
+        public DescentProgressItem(Guid computerUid, string hostName, Guid operationUid, FormattedText statusMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, double percentage, int errorFileCount, int failedAtNodeCount)
         {
             ComputerUid = computerUid;
             HostName = hostName;
@@ -35,7 +35,7 @@ namespace APTAT.Core.Descent
 
         public Guid ComputerUid { get; private set; }
 		public Guid OperationUid { get; private set; }
-		public int ProgressPercentage { get; private set; }
+		public double ProgressPercentage { get; private set; }
 		public FormattedText StatusMessage { get; private set; }
         public string HostName { get; private set; }
         public int FailedAtNodeCount { get; set; }

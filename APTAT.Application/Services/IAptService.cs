@@ -136,13 +136,13 @@ namespace APTAT.Application.Services
 
     public class ScanProgressChangedEventArgs : DomainEventArgs
     {
-        public Int32 Percentage { get; private set; }
+        public double Percentage { get; private set; }
 
         public Guid OperationGuid { get; private set; }
 
-        public ScanProgressChangedEventArgs(Int32 percent, Guid operationGuid)
+        public ScanProgressChangedEventArgs(double percentage, Guid operationGuid)
         {
-            Percentage = percent;
+            Percentage = percentage;
             OperationGuid = operationGuid;
         }
     }

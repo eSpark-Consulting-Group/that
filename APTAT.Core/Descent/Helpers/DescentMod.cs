@@ -51,12 +51,12 @@ namespace APTAT.Core.Descent.Helpers
                 TaskContinuationOptions.OnlyOnCanceled);
         }
 
-        private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int percentage)
+        private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, double percentage)
         {
             NotifyProgressChanged(operationUid, hostName, computerUid, resourceMessage, scanStage, 0, 0, 0, 0, percentage, 0, 0);
         }
 
-        private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, int percentage, int errorFilesCount, int failedAtNodeCount)
+        private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, double percentage, int errorFilesCount, int failedAtNodeCount)
         {
             if (_taskFactory.CancellationToken.IsCancellationRequested) 
                 throw new OperationCanceledException();
@@ -117,7 +117,7 @@ namespace APTAT.Core.Descent.Helpers
 
                     string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount): String.Empty;
 
-                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage, errorCounterText, serverErrorCounterText));
+                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, string.Format("{0:0.00}", args.Percentage).Replace(".00", string.Empty), errorCounterText, serverErrorCounterText));
                     
                     
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanInProgress, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, args.Percentage, args.FailedToAnalyzeFilesCount, args.NoVerdictFilesCount);
@@ -172,7 +172,7 @@ namespace APTAT.Core.Descent.Helpers
 
                     string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount) : String.Empty;
 
-                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.Percentage, errorCounterText, serverErrorCounterText));
+                    ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malwares found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, string.Format("{0:0.00}", args.Percentage).Replace(".00", string.Empty), errorCounterText, serverErrorCounterText));
 
                     NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanCompleted, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, 100, args.FailedToAnalyzeFilesCount, args.NoVerdictFilesCount);
                 };

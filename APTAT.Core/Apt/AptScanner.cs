@@ -112,7 +112,8 @@ namespace APTAT.Core.Apt
         {
             OnScanInProgress(new AptScanInProgressEventArgs()
             {
-                OperationUid = _scanOperationContext.OperationUid, Percentage = e.Percentage,
+                OperationUid = _scanOperationContext.OperationUid, 
+                Percentage = e.Percentage,
                 ProgressItems = e.ProgressItems
             });
         }

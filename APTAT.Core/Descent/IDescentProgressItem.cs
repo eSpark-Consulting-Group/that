@@ -6,7 +6,7 @@ namespace APTAT.Core.Descent
 	{
 		Guid ComputerUid { get; }
 		Guid OperationUid { get; }
-		int ProgressPercentage { get; }
+		double ProgressPercentage { get; }
 		FormattedText StatusMessage { get; }
 	    AptScanStage ScanStage { get; }
 	    int TotalFilesCount { get; }

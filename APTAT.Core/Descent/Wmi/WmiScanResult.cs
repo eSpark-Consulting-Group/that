@@ -11,7 +11,7 @@ namespace APTAT.Core.Descent.Wmi
         public string OrganizationUnit { get; set; }
         public ScanResultType ResultType { get; set; }
         public string ResultErrorText { get; set; }
-        public int ProgressPercenage { get; set; }
+        public double ProgressPercenage { get; set; }
 
 
     }

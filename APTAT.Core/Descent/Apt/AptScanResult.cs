@@ -97,7 +97,7 @@ namespace APTAT.Core.Descent.Apt
             }
         }
 
-        public int ProgressPercenage { get; set; }
+        public double ProgressPercenage { get; set; }
 
         public Module[] Files
         {

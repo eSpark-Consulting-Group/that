@@ -7,7 +7,7 @@ namespace APTAT.Core.Descent
 {
     public class OperationProgressChangedEventArgs : EventArgs
     {
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
         public Guid OperationUid { get; set; }
     }
 }

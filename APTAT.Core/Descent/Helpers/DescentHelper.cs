@@ -295,11 +295,11 @@ namespace APTAT.Core.Descent
                 public int FailedToAnalyzeFilesCount { get; set; }
                 public long TotalFilesSize { get; set; }
                 public int NoVerdictFilesCount { get; set; }
-                public int Percentage
+                public double Percentage
                 {
                     get
                     {
-                        return (int)((double)TotalFilesScanned / EnumeratedFilesCount * 100);
+                        return (double)TotalFilesScanned / EnumeratedFilesCount * 100d;
                     }
                 }
             }

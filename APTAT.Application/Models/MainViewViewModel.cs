@@ -86,6 +86,7 @@ namespace APTAT.Application.Models
                 {
                     StopScanCommand.InvalidateCanExecute();
                 });
+                RaisePropertyChanged("Header");
             }
         }
 
@@ -207,16 +208,18 @@ namespace APTAT.Application.Models
                 if (commonHeaderName == null)
                     throw new ArgumentNullException("Failed to obtain window header value from application resources");
 
+                string header = "Canceling...";
                 if (CancelInProgress)
-                    return "Canceling...";
-
+                    return String.Format("{0} ({1})", commonHeaderName, header);
+                
                 if (IsScanInProgress == true)
                 {
-                    return String.Format("{0} ({1}% scanning...)", commonHeaderName, Percentage);
+                    header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
+                    return String.Format("{0} ({1})", commonHeaderName, header);
                 }
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
-                    var header = String.Format("{0:0.00}% Valkyrie scanning...", Percentage).Replace(".00", string.Empty);
+                    header = String.Format("{0:0.00}% Valkyrie scanning...", Percentage).Replace(".00", string.Empty);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
 
@@ -713,7 +716,7 @@ namespace APTAT.Application.Models
             {
                 if (!item.IsOnline)
                 {
-                    item.StatusMessage = "This computer is not accessible";
+                    item.StatusMessage = "This computer is not accessible.";
                 }
             }
 
