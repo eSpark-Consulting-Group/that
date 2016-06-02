@@ -20,6 +20,7 @@ namespace Valkyrie.WebApiProvider.Enums
         /// </summary>        
         Malware = 1,
 
+        [Description("Potentially Unwanted Application")]
         PotentiallyUnwantedApplication = 3,
 
         [Description("Not Analyzed")]
