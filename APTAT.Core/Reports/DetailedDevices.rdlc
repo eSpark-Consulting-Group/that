@@ -1173,9 +1173,9 @@
                         <Style />
                       </ChartDataLabel>
                       <Style>
-                        <Color>=IIF(Fields!BadFileType.Value = "Malware", "#ff9900", "Maroon")</Color>
+                        <Color>=Switch(Fields!BadFileType.Value = "Infected", "Maroon", Fields!BadFileType.Value = "Unknown", "#ffc000", Fields!BadFileType.Value = "Failed To Analyze", "#ff4d00", Fields!BadFileType.Value = "No Verdict", "#c0c0c0"")</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
-                        <BackgroundGradientEndColor>=IIF(Fields!BadFileType.Value = "Malware", "#ffc64c", "#c03a3a")</BackgroundGradientEndColor>
+                        <BackgroundGradientEndColor>=Switch(Fields!BadFileType.Value = "Infected", "#993232", Fields!BadFileType.Value = "Unknown", "#ffe599", Fields!BadFileType.Value = "Failed To Analyze", "#ffc9b2", Fields!BadFileType.Value = "No Verdict", "#f2f2f2")</BackgroundGradientEndColor>
                       </Style>
                       <ChartMarker>
                         <Style />
