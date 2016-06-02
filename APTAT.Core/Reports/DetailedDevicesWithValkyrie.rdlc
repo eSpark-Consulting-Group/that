@@ -272,7 +272,7 @@
             <Top>5.33422cm</Top>
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
-            <Width>5.14666cm</Width>
+            <Width>4.77643cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
@@ -307,9 +307,6 @@
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
             <ZIndex>8</ZIndex>
-            <Visibility>
-              <Hidden>=iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -338,7 +335,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.6772cm</Top>
+            <Top>7.08995cm</Top>
             <Left>1.18344cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -622,9 +619,6 @@
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
             <ZIndex>17</ZIndex>
-            <Visibility>
-              <Hidden>=iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -655,7 +649,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.64206cm</Top>
+            <Top>7.08656cm</Top>
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
@@ -688,7 +682,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.17065cm</Top>
+            <Top>7.5834cm</Top>
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -723,7 +717,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.17065cm</Top>
+            <Top>7.61515cm</Top>
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
@@ -942,10 +936,78 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox60">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Not Analyzed:</Value>
+                    <Style>
+                      <FontFamily>Segoe UI Light</FontFamily>
+                      <Color>Gray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>6.41107cm</Top>
+            <Left>1.17834cm</Left>
+            <Height>0.52506cm</Height>
+            <Width>4.74979cm</Width>
+            <ZIndex>27</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox61">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!FailedToAnalyzeFilesCount.Value, "AptReportDataSet")</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <Color>DimGray</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>6.38511cm</Top>
+            <Left>7.10111cm</Left>
+            <Height>0.52506cm</Height>
+            <Width>9.48254cm</Width>
+            <ZIndex>28</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.23555cm</Top>
-        <Height>8.09494cm</Height>
+        <Height>8.26721cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
@@ -1320,8 +1382,8 @@
         <Height>12.29441cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
-        <Visibility>        
-		  <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+        <Visibility>
+          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -1353,7 +1415,7 @@
         <Width>14.72458cm</Width>
         <ZIndex>3</ZIndex>
         <Visibility>
-          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!FailedToAnalyzeFilesCount.Value, "AptReportDataSet")+ First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -1374,7 +1436,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>9.07217cm</Height>
+              <Height>9.92418cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1401,7 +1463,7 @@
                             </Border>
                           </Style>
                         </Subreport>
-						<Subreport Name="subFailedToAnalyze">
+                        <Subreport Name="subFailedToAnalyze">
                           <ReportName>FailedToAnalyzeFiles</ReportName>
                           <Parameters>
                             <Parameter Name="TargetUid">
@@ -1411,7 +1473,7 @@
                               <Value>=Fields!TotalErrorFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>8.05506cm</Top>
+                          <Top>9.03931cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2163,7 +2225,7 @@
                           <Top>0.06576cm</Top>
                           <Height>7.07201cm</Height>
                           <Width>16.93651cm</Width>
-                          <ZIndex>1</ZIndex>
+                          <ZIndex>2</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2184,7 +2246,7 @@
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
-                          <ZIndex>2</ZIndex>
+                          <ZIndex>3</ZIndex>
                           <DataElementOutput>NoOutput</DataElementOutput>
                           <Style>
                             <Border>
@@ -2233,7 +2295,7 @@
         <DataSetName>ScanResultDataSet</DataSetName>
         <Top>23.34258cm</Top>
         <Left>0.0635cm</Left>
-        <Height>9.07217cm</Height>
+        <Height>9.92418cm</Height>
         <Width>16.93649cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2243,7 +2305,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>12.78254in</Height>
+    <Height>13.09715in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
@@ -2482,6 +2544,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
@@ -2601,7 +2664,11 @@
           <DataField>MalwareFilesFound</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-		<Field Name="TotalErrorFilesCount">
+        <Field Name="FailedToAnalyzeFilesCount">
+          <DataField>FailedToAnalyzeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalErrorFilesCount">
           <DataField>TotalErrorFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
@@ -2681,7 +2748,7 @@
         <DataSourceName>APTReportTest</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
-      <Fields>		
+      <Fields>
         <Field Name="BadFilesCount">
           <DataField>BadFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -2723,7 +2790,7 @@
           <DataField>BadFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-		<Field Name="TotalErrorFilesCount">
+        <Field Name="TotalErrorFilesCount">
           <DataField>TotalErrorFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
@@ -2741,6 +2808,10 @@
         </Field>
         <Field Name="MalwareFilesCount">
           <DataField>MalwareFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+		<Field Name="FailedToAnalyzeFilesCount">
+          <DataField>FailedToAnalyzeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="OrganizationUnit">

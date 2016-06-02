@@ -38,14 +38,14 @@ namespace APTAT.Core.Descent.Apt
         public int EmptyFilesCount { get; set; }
 
         public int FailedToAnalyzeFilesCount { get; set; }       
-        public int NoVerdictFilesCount { get; set; }        
-        //public int TotalErrorFilesCount
-        //{
-        //    get
-        //    {
-        //        return this.FailedToAnalyzeFilesCount + this.ServerErrorFilesCount;
-        //    }
-        //}
+        public int NoVerdictFilesCount { get; set; }
+        public int TotalErrorFilesCount
+        {
+            get
+            {
+                return this.FailedToAnalyzeFilesCount + this.NoVerdictFilesCount;
+            }
+        }
         
         public int SkippedFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }

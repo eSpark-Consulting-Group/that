@@ -286,29 +286,7 @@ namespace APTAT.Core.Reports
                             }
                         }
                     }     
-                    else if (e.ReportPath == "ValkyrieVerdict")
-                    {
-                        string fileId = e.Parameters[0].Values[0];
-                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
-                        if (context != null)
-                        {
-                            IEnumerable<DetailedBadFile> files = context.Data as IEnumerable<DetailedBadFile>;
-                            //if (targets != null)
-                            //{
-                            //    ScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
-                            //    if (item != null)
-                            //        e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.GetFilesByStatus(CloudVerdict.Malware)));
-                            //}
-
-                            if (files != null)
-                            {
-                                DetailedBadFile[] items = (from entry in files where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
-                                if (items != null)
-                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items));
-                            }
-                        }
-
-                    }
+                    
                 };
                 localReport.SubreportProcessing += subReportProcessingDelegate;
                 //===========================================================================
