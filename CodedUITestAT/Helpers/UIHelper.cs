@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 
 namespace CodedUITestAT
@@ -132,14 +133,19 @@ namespace CodedUITestAT
         /// <summary> Waits for an expected scan status of an indicated computer. </summary>
         /// <param name="endpoint">Set a computer.</param>
         /// <param name="expectedScanStatus">Set an expected scan status.</param>
+        /// <param name="testContext">Set a current Test Context.</param>
         /// <param name="waitTime">Set waiting time in milliseconds.</param>
-        internal static void WaitForScanStatus(Computer endpoint, ScanStatus expectedScanStatus, int waitTime = DataHelper.DefaultWaitTime)
+        internal static void WaitForScanStatus(Computer endpoint, ScanStatus expectedScanStatus, TestContext testContext, int waitTime = DataHelper.DefaultWaitTime)
         {
             var timer = Stopwatch.StartNew();
             for (; ; )
             {
                 Playback.Wait(2000);
-                if (endpoint.GetScanStatus() == expectedScanStatus) break;
+                if (endpoint.GetScanStatus() == expectedScanStatus)
+                {
+                    testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'./n", expectedScanStatus, endpoint.Name));
+                    break;
+                }
                 if ((int) timer.ElapsedMilliseconds > waitTime)
                     throw new Exception(String.Format("The expected status '{0}' did not appear for computer '{1}' after {2} seconds!", expectedScanStatus, endpoint.Name, waitTime / 1000));
             }

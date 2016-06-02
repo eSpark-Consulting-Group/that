@@ -390,6 +390,7 @@ namespace CodedUITestAT
             }
             timer.Stop();
 
+            // CodedUI for some reasons does not detect a tab content without switching the tabs
             UIMapResultsWindow.GoToScanningResultsTab();
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
@@ -456,7 +457,6 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             testContext.WriteLine("Start Scanning wizard appeared...");
             UIMapStartScanningWizard.ClickNetworkAddressButton();
-
             
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
             CleanNetworkAddressesList();
@@ -592,7 +592,7 @@ namespace CodedUITestAT
             UIMapScanCompletedWindow.ClickOkButton();
             
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-            TestContext.WriteLine("CAM Credentials window appeared...\n");                        
+            TestContext.WriteLine("CAM Credentials window appeared...\n");
             UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = Settings.General.Default.CamKey;
             UIMapCamCredentialsWindow.InputCamKey();
             UIMapCamCredentialsWindow.ClickOkButton();
@@ -720,8 +720,7 @@ namespace CodedUITestAT
             string procName;
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            Playback.Wait(5000);            
-            //UIHelper.WaitForScanStatus(endpoint, ScanStatus.Running);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Running, TestContext);
 
             if (SysHelper.IsOs64Bit(endpoint)) procName = Settings.Scanner.Default.ExeName64;
             else procName = Settings.Scanner.Default.ExeName86;
@@ -763,7 +762,6 @@ namespace CodedUITestAT
         [TestMethod]
         public void ScanWithInvalidCredentials()
         {
-
             Computer endpoint = DataHelper.GetEndpoint();
             string correctLogin = DataHelper.Username;
             string correctPassword = DataHelper.Password;
@@ -773,7 +771,7 @@ namespace CodedUITestAT
 
             // Scan with correct login and invalid password
             StartEndpointScan(endpoint, ScanType.Quick, correctLogin, invalidPassword, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with correct Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
@@ -786,7 +784,7 @@ namespace CodedUITestAT
 
             // Scan with invalid login and correct password
             StartEndpointScan(endpoint, ScanType.Full, invalidLogin, correctPassword, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and correct Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
@@ -798,7 +796,7 @@ namespace CodedUITestAT
 
             // Scan with invalid login and invalid password
             StartEndpointScan(endpoint, ScanType.Quick, invalidLogin, invalidPassword, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
@@ -807,7 +805,7 @@ namespace CodedUITestAT
             if (UIHelper.GetFullScanStatusMessage(endpoint) != failedStatusFullMessage)
                 Assert.Fail(String.Format("Scan has incorrect full status message! Expected:'{0}' ; Actual: '{1}'", failedStatusFullMessage, UIHelper.GetFullScanStatusMessage(endpoint)));
             else TestContext.WriteLine("Scan has correct full status message.\n");
-        }
+        }        
 
         #endregion
 
