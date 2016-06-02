@@ -14,5 +14,8 @@
     <Setting Name="LaunchAppWaitTime" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">60000</Value>
     </Setting>
+    <Setting Name="ScanStatusFailedWaitTime" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">60000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

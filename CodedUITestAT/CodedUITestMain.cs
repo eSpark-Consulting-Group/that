@@ -768,10 +768,11 @@ namespace CodedUITestAT
             string invalidLogin = DataHelper.Username + "error";
             string invalidPassword = DataHelper.Password + "error";
             string failedStatusFullMessage = Settings.Results.Default.ScanStatusIndicatorFailedFullMessage;
+            int failedStatusWaitTime = Settings.WaitingTime.Default.ScanStatusFailedWaitTime;
 
             // Scan with correct login and invalid password
             StartEndpointScan(endpoint, ScanType.Quick, correctLogin, invalidPassword, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with correct Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
@@ -784,7 +785,7 @@ namespace CodedUITestAT
 
             // Scan with invalid login and correct password
             StartEndpointScan(endpoint, ScanType.Full, invalidLogin, correctPassword, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and correct Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
@@ -796,7 +797,7 @@ namespace CodedUITestAT
 
             // Scan with invalid login and invalid password
             StartEndpointScan(endpoint, ScanType.Quick, invalidLogin, invalidPassword, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             if (UIHelper.GetScanStatus(endpoint) != ScanStatus.Failed)
             {
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
