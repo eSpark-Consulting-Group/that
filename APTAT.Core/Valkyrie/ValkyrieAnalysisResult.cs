@@ -72,10 +72,10 @@ namespace APTAT.Core.Valkyrie
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:
-                    result.OperationStatus = "Exceed size limit (25 MB).";
+                    result.OperationStatus = "Exceed size limit (25 MB)";
                     break;
                 case SkippReasonEnum.Cancelled:
-                    result.OperationStatus = "Cancelled by user.";
+                    result.OperationStatus = "Cancelled by user";
                     break;
                 case SkippReasonEnum.Failed:
                     result.OperationStatus = reason;
