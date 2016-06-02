@@ -23,7 +23,7 @@ namespace Valkyrie.WebApiProvider.Enums
         [Description("Potentially Unwanted Application")]
         PotentiallyUnwantedApplication = 3,
 
-        [Description("Not Analyzed")]
+        [Description("Not Analysed")]
         NotAnalyzed = 101
 
 
