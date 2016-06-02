@@ -17,6 +17,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MouseLeftButtonDown += MainWindow_MouseDown;
             Loaded += MainWindow_Loaded;
         }
