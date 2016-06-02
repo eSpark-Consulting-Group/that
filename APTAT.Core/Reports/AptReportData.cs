@@ -667,7 +667,8 @@ namespace APTAT.Core.Reports
     public enum BadFileType
     {
         Unknown = 0,
-        Infected = 1
+        Infected = 1,
+        NotAnalyzed = 2
     }
 
     public class ScannedTarget
@@ -828,7 +829,11 @@ namespace APTAT.Core.Reports
             get
             {
                 if (Verdict == ValkyrieVerdict.NotAnalyzed)
+                {
+                    if (Cloud == CloudVerdict.NoVerdict || Cloud == CloudVerdict.FailedToAnalyze)
+                        return BadFileType.NotAnalyzed;
                     return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
+                }
                 return Verdict == ValkyrieVerdict.Undetected ? BadFileType.Unknown : BadFileType.Infected;
             }
         }
