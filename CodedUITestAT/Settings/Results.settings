@@ -26,5 +26,8 @@
     <Setting Name="ScanStatusIndicatorFailedFullMessage" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Failed: Login problem: invalid username or bad password. The user name or password is incorrect</Value>
     </Setting>
+    <Setting Name="ScanStatusIndicatorConnecting" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Connecting</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
