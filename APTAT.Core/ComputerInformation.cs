@@ -76,10 +76,11 @@ namespace APTAT.Core
             get { return _canceling; }
             set 
             {
-                _canceling = value;
-
-                if (value)
+                if (value && !Completed)
+                {
+                    _canceling = value;
                     StatusText = "Scan operation was canceled.";
+                }
 
                 RaisePropertyChanged("StatusText");
                 RaisePropertyChanged("Canceling");

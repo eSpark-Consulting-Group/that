@@ -58,7 +58,7 @@ namespace APTAT.Core.Descent.Helpers
 
         private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, double percentage, int errorFilesCount, int failedAtNodeCount)
         {
-            if (percentage == 0 && scanStage == AptScanStage.ScanInProgress)
+            if ((percentage == 0 || double.IsInfinity(percentage)) && scanStage == AptScanStage.ScanInProgress)
                 return;
             
             if (_taskFactory.CancellationToken.IsCancellationRequested) 
