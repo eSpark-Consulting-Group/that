@@ -27,7 +27,8 @@ namespace CodedUITestAT
             StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
-            UIHelper.WaitForControlIsEnabled(useEula.IAcceptTermsOfThisAgreementCheckBox(), Settings.WaitingTime.Default.LaunchAppWaitTime);        
+            UIHelper.WaitForControl(useEula.IAcceptTermsOfThisAgreementCheckBox(), Settings.WaitingTime.Default.LaunchAppWaitTime);        
+            UIHelper.WaitForControlIsEnabled(useEula.IAcceptTermsOfThisAgreementCheckBox());
         }
 
         /// <summary> Stops the application under test. </summary>

@@ -8,7 +8,7 @@ namespace CodedUITestAT
 {
     /// <summary> Tests for About screen. </summary>
     [CodedUITest]
-    public class CodedUITestAbout
+    public sealed class CodedUITestAbout
     {
         public CodedUITestAbout()
         {
@@ -44,6 +44,7 @@ namespace CodedUITestAT
             useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
             useEula.UIMapEula.ClickContinueButton();
 
+            UIHelper.WaitForControl(AboutButton());
             UIHelper.WaitForControlIsEnabled(AboutButton());
         }
 
