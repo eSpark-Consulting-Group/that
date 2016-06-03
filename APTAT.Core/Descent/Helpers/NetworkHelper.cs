@@ -9,6 +9,7 @@ namespace APTAT.Core.Descent
     public class NetworkHelper
     {
         ImpersonationHelper _impersonation = null;
+        private string _remotePath = null;
 
         ~NetworkHelper()
         {
@@ -17,6 +18,8 @@ namespace APTAT.Core.Descent
 
         public void Release()
         {
+            if (!String.IsNullOrEmpty(_remotePath))
+                CancelConnection(_remotePath);
             if (_impersonation != null)
             {
                 _impersonation.Dispose();
@@ -108,6 +111,7 @@ namespace APTAT.Core.Descent
 
         public void GrantNetworkAccessToRemoteComputer( string userName, string password, string remotePath, bool impersonateAsNetworkService )
         {
+            _remotePath = remotePath;
             if (_impersonation != null)
             {
                 _impersonation = null;
@@ -205,6 +209,16 @@ namespace APTAT.Core.Descent
 
                 // General error occurred
                 throw new Win32Exception(error);
+            }
+        }
+        private void CancelConnection(string remotePath)
+        {
+            try
+            {
+                var error = WNetCancelConnection2(remotePath, CONNECT_UPDATE_PROFILE, true);
+            }
+            catch (Exception)
+            {
             }
         }
     }
