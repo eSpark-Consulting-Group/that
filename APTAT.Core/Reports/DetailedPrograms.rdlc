@@ -55,7 +55,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.37497cm</Top>
+            <Top>6.34322cm</Top>
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
@@ -318,7 +318,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>5.81701cm</Top>
+            <Top>5.75351cm</Top>
             <Left>1.18344cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -954,9 +954,9 @@
           </Textbox>
           <Rectangle Name="Rectangle2">
             <KeepTogether>true</KeepTogether>
-            <Top>0.17944cm</Top>
+            <Top>0.08419cm</Top>
             <Left>0.81174cm</Left>
-            <Height>8.50391cm</Height>
+            <Height>8.63091cm</Height>
             <Width>0.09784cm</Width>
             <ZIndex>27</ZIndex>
             <Style>
@@ -1057,7 +1057,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.37497cm</Top>
+            <Top>6.34322cm</Top>
             <Left>1.18344cm</Left>
             <Height>0.52506cm</Height>
             <Width>4.74979cm</Width>
@@ -1075,7 +1075,7 @@
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.23555cm</Top>
-        <Height>8.74685cm</Height>
+        <Height>8.7786cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
@@ -1107,7 +1107,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>1.51648cm</Top>
+            <Top>1.12575cm</Top>
             <Left>0.00001cm</Left>
             <Height>0.92722cm</Height>
             <Width>16.87299cm</Width>
@@ -1381,7 +1381,7 @@
               </Style>
             </ChartNoDataMessage>
             <DataSetName>MostWantedBadFileDataSet</DataSetName>
-            <Top>2.54953cm</Top>
+            <Top>2.1588cm</Top>
             <Left>0.00001cm</Left>
             <Height>10.00945cm</Height>
             <Width>15.8765cm</Width>
@@ -1414,7 +1414,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>0.53233cm</Top>
+            <Top>0.1416cm</Top>
             <Left>0.00001cm</Left>
             <Height>1.20287cm</Height>
             <Width>14.72458cm</Width>
@@ -1431,13 +1431,13 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>9.26006cm</Top>
+        <Top>10.19054cm</Top>
         <Left>0.0635cm</Left>
-        <Height>12.55898cm</Height>
+        <Height>12.16825cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
-          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet") + First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -1464,7 +1464,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>22.00601cm</Top>
+        <Top>22.51401cm</Top>
         <Height>1.25542cm</Height>
         <Width>14.72458cm</Width>
         <ZIndex>3</ZIndex>
@@ -1931,9 +1931,9 @@
                             </Textbox>
                             <Rectangle Name="Rectangle5">
                               <KeepTogether>true</KeepTogether>
-                              <Top>1.41087cm</Top>
+                              <Top>1.31562cm</Top>
                               <Left>0.78cm</Left>
-                              <Height>3.58618cm</Height>
+                              <Height>3.64968cm</Height>
                               <Width>0.09784cm</Width>
                               <ZIndex>12</ZIndex>
                               <Style>
@@ -2096,7 +2096,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DetailedBadFileDataSet</DataSetName>
-        <Top>23.37432cm</Top>
+        <Top>23.85057cm</Top>
         <Left>0.0635cm</Left>
         <Height>6.24052cm</Height>
         <Width>16.93649cm</Width>
@@ -2108,7 +2108,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>11.65939in</Height>
+    <Height>11.84689in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
