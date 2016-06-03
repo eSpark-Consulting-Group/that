@@ -20,12 +20,13 @@ namespace APTAT.Core
             }
         }
         
-        public ComputerInformation(Computer computer)
+        public ComputerInformation(Computer computer, Guid targetUid)
         {
             Files = new ObservableCollection<FileResult>();
             Os = computer.Os;
             Name = computer.Name;
             Sid = computer.Sid;
+            TargetUid = targetUid;
             if (computer.Connections.Any())
             {
                 IP = computer.Connections.First().IPv4;
@@ -41,6 +42,7 @@ namespace APTAT.Core
             IP = computer.IP;
             FilePath = computer.FilePath;
             ScanCompleted = true;
+            TargetUid = computer.TargetUid;
         }
 
         public string Name { get; set; }
@@ -48,6 +50,7 @@ namespace APTAT.Core
         public OperatingSystem Os { get; set; }
         public string IP { get; set; }
         public string FilePath { get; set; }
+        public Guid TargetUid { get; set; }
 
         public string FullName
         {
