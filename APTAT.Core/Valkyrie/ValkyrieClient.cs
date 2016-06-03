@@ -395,12 +395,7 @@ namespace APTAT.Core.Valkyrie
 
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
-                    result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled);
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} cancelled by user",
-                        DateTime.UtcNow,
-                        originalFilePath));
-                    Trace.Flush();
-                    return result;
+                    return CancelOperation(originalFilePath, sha1);
                 }
 
                 FileInfo f = new FileInfo(filePath);
@@ -459,6 +454,11 @@ namespace APTAT.Core.Valkyrie
                     int elapsed = 0;
                     while (analyzeNotFinished && (elapsed < timeOut.TotalMilliseconds))
                     {
+                        if (_cancellationTokenSource.IsCancellationRequested)
+                        {
+                            return CancelOperation(originalFilePath, sha1);
+                        }
+
                         Thread.Sleep(1000);
                         elapsed += 1000;
                         automaticAnalysisResponse =
@@ -498,6 +498,14 @@ namespace APTAT.Core.Valkyrie
                 }
                 Trace.Flush();
             }
+            return result;
+        }
+
+        private static ValkyrieAnalysisResult CancelOperation(string originalFilePath,  string sha1)
+        {
+            var result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled);
+            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} cancelled by user", DateTime.UtcNow, originalFilePath));            
+            Trace.Flush();
             return result;
         }
 
