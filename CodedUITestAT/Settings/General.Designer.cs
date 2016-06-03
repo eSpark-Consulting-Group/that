@@ -85,5 +85,32 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["NoScansTextBlockText"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Unknown File Hunter")]
+        public string ATApplicationName {
+            get {
+                return ((string)(this["ATApplicationName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("{0} Comodo Security Solutions, Inc. All Rights Reserved.")]
+        public string CopyrightText {
+            get {
+                return ((string)(this["CopyrightText"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ValkyrieHunter.exe")]
+        public string ProductExeName {
+            get {
+                return ((string)(this["ProductExeName"]));
+            }
+        }
     }
 }

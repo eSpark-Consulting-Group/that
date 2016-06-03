@@ -28,6 +28,19 @@ namespace CodedUITestAT
             if (IsThereProcess(Settings.General.Default.ATApplicationProcessName)) KillProcesses(Settings.General.Default.ATApplicationProcessName);
         }
 
+        /// <summary> Gets the product version using its executable. </summary>
+        /// <returns> Returns the product version or null in the case the product file is not found. </returns>
+        internal static string GetProductVersion()
+        {
+            string filePath = Path.Combine(DataHelper.GetWorkingFolder(), Settings.General.Default.ProductExeName);
+            try
+            {
+                var versionInfo = FileVersionInfo.GetVersionInfo(filePath);
+                return versionInfo.ProductVersion;
+            }
+            catch (FileNotFoundException) { return null; }
+        }
+
         #region Process-related methods
 
         /// <summary> Starts a local process. </summary>

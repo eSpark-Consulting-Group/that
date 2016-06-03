@@ -34,11 +34,11 @@ namespace CodedUITestAT
            //return "as06w8x64";
         }
 
-        /// <summary> Gets working folder from a local environment variable </summary>
+        /// <summary> Gets working folder from a local environment variable. </summary>
         internal static string GetWorkingFolder()
         {
             return Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
-            //return @"C:\AT";
+            //return @"C:\CNAT";
         }
 
         /// <summary> Gets a root directory of endpoint machine in the environment from a local environment variable. </summary>
