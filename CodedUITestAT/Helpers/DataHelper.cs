@@ -9,7 +9,7 @@ namespace CodedUITestAT
         #region Constants
 
         /// <summary> Determines whether the autotests will run using staging FLS and Valkyrie servers. </summary>
-        internal const bool IsStaging = true;
+        internal const bool IsStaging = false;
 
         /// <summary> Default waiting time for tests. </summary>
         internal const int DefaultWaitTime = 15000; // Milliseconds
