@@ -18,7 +18,7 @@ namespace CodedUITestAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static void StartApplication(Computer endpoint)
         {
-            if (DataHelper.IsStaging)
+            if (DataHelper.IsStaging())
             {
                 RedirectToValkyrieStaging();
                 RedirectToFlsDedicated(endpoint);

@@ -1,8 +1,10 @@
 REM Gets build deployment arguments (Deploy step) and sets the necessary local machine variables
 
-set BuildLocation=%~1
+set IsStaging=%~1
 
-set EndpointName=%~2
+set BuildLocation=%~2
+
+set EndpointName=%~3
 
 set ServerLogin=tester
 
@@ -27,6 +29,8 @@ set MalwaresFolder=Malfolder
 
 
 REM Stores the local machine variables to be used in autotests
+
+setx _IsStaging %IsStaging% /m
 
 setx _ServerLogin %ServerLogin% /m
 
