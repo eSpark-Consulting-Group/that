@@ -105,6 +105,8 @@ namespace APTAT.Core
             }
         }
 
+        public bool HasAnyUnknownOrMalware { get; set; }
+
         public void MergeFiles(FileResult file)
         {
             if (!Files.Any(_ => _.Equals(file)))
@@ -124,6 +126,9 @@ namespace APTAT.Core
                     StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
                         Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%", ((Files.Count / Count) * 100d)).Replace(".00", string.Empty));
 
+                HasAnyUnknownOrMalware = malwareCount > 0 || unknownCount > 0;
+
+                RaisePropertyChanged("HasAnyUnknownOrMalware");
                 RaisePropertyChanged("StatusText");
                 RaisePropertyChanged("InProgress");
                 RaisePropertyChanged("Completed");

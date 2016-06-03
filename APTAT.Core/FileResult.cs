@@ -120,6 +120,14 @@ namespace APTAT.Core
 
         }
 
+        public Boolean Clean
+        {
+            get
+            {
+                return !IsUnknown && !IsMalware;
+            }
+        }
+
         public string Name
         {
             get

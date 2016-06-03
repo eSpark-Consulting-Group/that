@@ -624,6 +624,9 @@ namespace APTAT.Application.Models
 
         private void MergeResults(FileResult[] results)
         {
+            if (results == null)
+                return;
+            
             foreach (var result in results)
             {
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));

@@ -85,6 +85,14 @@ namespace APTAT.Application.Models
 
         public Boolean IsMalware { get; set; }
 
+        public Boolean Clean
+        {
+            get 
+            {
+                return !IsUnknown && !IsMalware;
+            }
+        }
+
         public Boolean IsRootItem { get; set; }
 
         public Boolean IsOnline { get; set; }
