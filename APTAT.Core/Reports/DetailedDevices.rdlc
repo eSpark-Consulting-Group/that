@@ -1302,7 +1302,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Unknown/Malicious Programs Count</Caption>
+                      <Caption>Unknown/Malicious Programs/Failed to Anaylse/No Verdict  Count</Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
