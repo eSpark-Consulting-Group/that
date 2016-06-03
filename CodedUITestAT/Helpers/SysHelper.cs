@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Management;
 using System.Diagnostics;
 using System.ServiceProcess;
@@ -14,8 +15,12 @@ namespace CodedUITestAT
     internal static class SysHelper
     {
         /// <summary> Starts the application under test. </summary>
-        internal static void StartApplication()
+        /// <param name="endpoint">Set an endpoint.</param>
+        internal static void StartApplication(Computer endpoint)
         {
+            RedirectToValkyrieStaging();
+            RedirectToFlsDedicated(endpoint);
+
             StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
@@ -191,6 +196,31 @@ namespace CodedUITestAT
                     return true;
                 }
                 catch (Exception) { return false; }
+            }
+        }
+
+        /// <summary> Edit hosts file on the server VM and adds Valkyrie staging server address. </summary>
+        private static void RedirectToValkyrieStaging()
+        {
+            string hostsFilePath = DataHelper.GetServerRoot() +  Settings.Staging.Default.HostsFile;
+
+            using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
+            {
+               stream.WriteLine();
+               stream.WriteLine(String.Format(@"{0} {1}", Settings.Staging.Default.ValkyrieStagingIpAddress, Settings.Staging.Default.ValkyrieProductionServerAddress));
+            }
+        }
+
+        /// <summary> Edit hosts file on the endpoint VM and adds FLS staging server address. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        private static void RedirectToFlsDedicated(Computer endpoint)
+        {
+            string hostsFilePath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Staging.Default.HostsFile);
+
+            using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
+            {
+                stream.WriteLine();
+                stream.WriteLine(String.Format("{0} {1}", Settings.Staging.Default.FlsDedicatedIpAddress, Settings.Staging.Default.FlsProductionServerAddress));
             }
         }
 

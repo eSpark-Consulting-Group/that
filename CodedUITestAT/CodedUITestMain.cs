@@ -170,7 +170,7 @@ namespace CodedUITestAT
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartApplication();
+            SysHelper.StartApplication(DataHelper.GetEndpoint());
             
             CodedUITestEula useEula = new CodedUITestEula();
             useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
