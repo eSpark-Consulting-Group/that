@@ -1411,8 +1411,8 @@
         <Height>1.25542cm</Height>
         <Width>14.72458cm</Width>
         <ZIndex>3</ZIndex>
-        <Visibility>
-          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+        <Visibility>          
+		  <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -2618,6 +2618,10 @@
         </Field>
         <Field Name="FailedToAnalyzeFilesCount">
           <DataField>FailedToAnalyzeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+		<Field Name="TotalErrorFilesCount">
+          <DataField>TotalErrorFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="NetworkTrustLevel">
