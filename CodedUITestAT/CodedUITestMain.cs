@@ -593,7 +593,7 @@ namespace CodedUITestAT
             
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
             TestContext.WriteLine("CAM Credentials window appeared...\n");
-            UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = Settings.General.Default.CamKey;
+            UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = DataHelper.GetCamKey();
             UIMapCamCredentialsWindow.InputCamKey();
             UIMapCamCredentialsWindow.ClickOkButton();
             
@@ -710,7 +710,9 @@ namespace CodedUITestAT
                 TestContext.WriteLine(String.Format("Service '{0}' is present at endpoint '{1}' after another scan start.\n", scannerServiceName, endpoint.Name));
             else Assert.Fail(String.Format("Service '{0}' is not present at endpoint '{1}' after another scan start!\n", scannerServiceName, endpoint.Name));
 
-            StopScanning(TestContext); // A cleanup
+            // A cleanup
+            StopScanning(TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Stopped, TestContext);
         }
 
         [TestMethod]
@@ -796,7 +798,7 @@ namespace CodedUITestAT
                 Assert.Fail(String.Format("Scan is not '{0}' with invalid Username and invalid Password! Actual status is '{1}'.", ScanStatus.Failed, UIHelper.GetScanStatus(endpoint)));
             }
             TestContext.WriteLine(String.Format("Scan with invalid Username and invalid Password has '{0}' status.", UIHelper.GetScanStatus(endpoint)));            
-        }        
+        }
 
         #endregion
 

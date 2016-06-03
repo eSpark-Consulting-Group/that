@@ -7,7 +7,10 @@ namespace CodedUITestAT
     internal static class DataHelper
     {
         #region Constants
-        
+
+        /// <summary> Determines whether the autotests will run using staging FLS and Valkyrie servers. </summary>
+        internal const bool IsStaging = true;
+
         /// <summary> Default waiting time for tests. </summary>
         internal const int DefaultWaitTime = 15000; // Milliseconds
 
@@ -25,6 +28,13 @@ namespace CodedUITestAT
         internal static readonly string EncriptedPassword = Playback.EncryptText(Password);
 
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
+
+        /// <summary> Gets a proper CAM license key. </summary>
+        internal static string GetCamKey()
+        {
+            if (IsStaging) return Settings.Staging.Default.CamKeyStaging;
+            else return Settings.General.Default.CamKey;
+        }
 
         /// <summary> Gets data on an internal endpoint obtained from a local environment variable. </summary>
         internal static Computer GetEndpoint()

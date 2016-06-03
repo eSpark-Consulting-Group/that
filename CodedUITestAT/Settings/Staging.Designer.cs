@@ -67,5 +67,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["ValkyrieStagingIpAddress"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("99ad2659-a30e-4dcb-9a75-b71750a35398")]
+        public string CamKeyStaging {
+            get {
+                return ((string)(this["CamKeyStaging"]));
+            }
+        }
     }
 }

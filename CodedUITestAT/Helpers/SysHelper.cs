@@ -18,8 +18,11 @@ namespace CodedUITestAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static void StartApplication(Computer endpoint)
         {
-            RedirectToValkyrieStaging();
-            RedirectToFlsDedicated(endpoint);
+            if (DataHelper.IsStaging)
+            {
+                RedirectToValkyrieStaging();
+                RedirectToFlsDedicated(endpoint);
+            }
 
             StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
@@ -30,7 +33,11 @@ namespace CodedUITestAT
         /// <summary> Stops the application under test. </summary>
         internal static void StopApplication()
         {
-            if (IsThereProcess(Settings.General.Default.ATApplicationProcessName)) KillProcesses(Settings.General.Default.ATApplicationProcessName);
+            if (IsThereProcess(Settings.General.Default.ATApplicationProcessName))
+            { 
+                KillProcesses(Settings.General.Default.ATApplicationProcessName);
+                Playback.Wait(2000);
+            }
         }
 
         /// <summary> Gets the product version using its executable. </summary>
@@ -203,11 +210,16 @@ namespace CodedUITestAT
         private static void RedirectToValkyrieStaging()
         {
             string hostsFilePath = DataHelper.GetServerRoot() +  Settings.Staging.Default.HostsFile;
+            string address = String.Format(@"{0} {1}", Settings.Staging.Default.ValkyrieStagingIpAddress, Settings.Staging.Default.ValkyrieProductionServerAddress);
+            string initialFileContent;
 
+            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) { initialFileContent = stream.ReadToEnd(); }
+            
+            if (!initialFileContent.Contains(address))
             using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
             {
                stream.WriteLine();
-               stream.WriteLine(String.Format(@"{0} {1}", Settings.Staging.Default.ValkyrieStagingIpAddress, Settings.Staging.Default.ValkyrieProductionServerAddress));
+               stream.WriteLine(address);
             }
         }
 
@@ -216,11 +228,16 @@ namespace CodedUITestAT
         private static void RedirectToFlsDedicated(Computer endpoint)
         {
             string hostsFilePath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Staging.Default.HostsFile);
+            string address = String.Format("{0} {1}", Settings.Staging.Default.FlsDedicatedIpAddress, Settings.Staging.Default.FlsProductionServerAddress);
+            string initialFileContent;
 
+            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) { initialFileContent = stream.ReadToEnd(); }
+
+            if (!initialFileContent.Contains(address))
             using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
             {
                 stream.WriteLine();
-                stream.WriteLine(String.Format("{0} {1}", Settings.Staging.Default.FlsDedicatedIpAddress, Settings.Staging.Default.FlsProductionServerAddress));
+                stream.WriteLine(address);
             }
         }
 
