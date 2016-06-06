@@ -965,9 +965,6 @@
             <Height>0.52506cm</Height>
             <Width>4.74979cm</Width>
             <ZIndex>27</ZIndex>
-            <Visibility>
-              <Hidden>=Microsoft.VisualBasic.Interaction.iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet") &gt; 0, False, True)</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1003,9 +1000,6 @@
             <Height>0.52506cm</Height>
             <Width>9.48254cm</Width>
             <ZIndex>28</ZIndex>
-            <Visibility>
-              <Hidden>=Microsoft.VisualBasic.Interaction.iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet") &gt; 0, False, True)</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
