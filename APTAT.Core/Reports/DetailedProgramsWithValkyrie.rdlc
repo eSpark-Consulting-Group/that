@@ -1811,7 +1811,8 @@
                                 </Border>
                                 <BackgroundColor>=Switch(
 					  Fields!FileType.Value = "1", "#c03a3a",
-                      Fields!FileType.Value = "0", "#f9cc08")</BackgroundColor>
+                      Fields!FileType.Value = "0", "#f9cc08",
+					  Fields!FileType.Value = "2", "LightGrey")</BackgroundColor>
                               </Style>
                             </Rectangle>
                             <Textbox Name="Textbox55">
@@ -2486,7 +2487,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
