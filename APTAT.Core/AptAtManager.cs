@@ -59,8 +59,17 @@ namespace APTAT.Core
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         private IValkyrieClient _valkyrieClient;
-        
-        public List<FileResult> ValkyrieAnalysisResult { get; set; }
+        private List<FileResult> _valkyrieAnalyzezResults;
+        public List<FileResult> ValkyrieAnalysisResult
+        {
+            get { return _valkyrieAnalyzezResults; }
+            set
+            {
+                _valkyrieAnalyzezResults = value;
+                ValkyrieOperationUid = Guid.NewGuid();
+            }
+        }
+        public Guid ValkyrieOperationUid { get; set; }
    
 
         public AptAtManager()

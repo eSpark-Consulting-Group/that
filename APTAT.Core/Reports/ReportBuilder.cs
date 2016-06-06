@@ -28,7 +28,7 @@ namespace APTAT.Core.Reports
             if (data == null)
                 return null;
 
-            _fileName = GetFileName(data.OperationUid, reportType);
+            _fileName = GetFileName(data.OperationUid, data.ValkyrieOperationUid, reportType);
             if (File.Exists(_fileName))
                 return _fileName;
 
@@ -417,7 +417,7 @@ namespace APTAT.Core.Reports
             }
         }
 
-        private static string GetFileName(Guid operatationUid, ReportType reportType)
+        private static string GetFileName(Guid operatationUid, Guid valkyrieOperationUidGuid, ReportType reportType)
         {
             const string fileFormatString = "{0}{1}.pdf";
             switch (reportType)
@@ -425,17 +425,17 @@ namespace APTAT.Core.Reports
                 case ReportType.Executive:
                     return String.Format(fileFormatString, ExecutiveReportName, operatationUid);
                 case ReportType.ExecutiveWithValkyrie:
-                    return String.Format(fileFormatString, ExecutiveReportNameValkyrie, operatationUid);
+                    return String.Format(fileFormatString, ExecutiveReportNameValkyrie, valkyrieOperationUidGuid);
 
                 case ReportType.DetailedPerDevice:
                     return String.Format(fileFormatString, DetailedPerDeviceReportName, operatationUid);
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    return String.Format(fileFormatString, DetailedPerDeviceReportNameValkyrie, operatationUid);
+                    return String.Format(fileFormatString, DetailedPerDeviceReportNameValkyrie, valkyrieOperationUidGuid);
 
                 case ReportType.DetailedPerProgram:
                     return String.Format(fileFormatString, DetailedPerProgramReportName, operatationUid);
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    return String.Format(fileFormatString, DetailedPerProgramReportNameValkyrie, operatationUid);
+                    return String.Format(fileFormatString, DetailedPerProgramReportNameValkyrie, valkyrieOperationUidGuid);
 
                 default:
                     throw new ArgumentOutOfRangeException("reportType");

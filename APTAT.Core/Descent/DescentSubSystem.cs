@@ -252,7 +252,7 @@ namespace APTAT.Core.Descent
             wholeDescentCompletedDelegate = () =>
             {
                 LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
-                    "WmiScanCompleted event raised. Operation UID: {0}", result.OperationUid);
+                    "ScanCompleted event raised. Operation UID: {0}", result.OperationUid);
                 _tracker.UnregisterListener(result);
                 result.DescentCompleted -= wholeDescentCompletedDelegate;
                 OnDescentCompleted(scanner.GetDescentCompletedEventArgs(result));

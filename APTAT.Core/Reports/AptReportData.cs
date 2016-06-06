@@ -17,6 +17,7 @@ namespace APTAT.Core.Reports
         private int _malwareFilesCount = -1;
 
         public Guid OperationUid { get; set; }
+        public Guid ValkyrieOperationUid { get; set; }
         private int _emptyFilesCount = -1;
         private int _skippedFilesCount = -1;
         private int _errorFileCount = -1;

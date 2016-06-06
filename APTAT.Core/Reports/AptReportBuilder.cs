@@ -45,6 +45,7 @@ namespace APTAT.Core.Reports
                     TargetsSucceeded = operationContext.SucceededTargetsCount,
                     Targets = operationContext.ScanResults.Values.ToArray(),
                     ValkyrieAnalysisResult = _valkyrieSubSystem.ValkyrieAnalysisResult,
+                    ValkyrieOperationUid = _valkyrieSubSystem.ValkyrieOperationUid,
                     DevicesSourceDescription = operationContext.DevicesSourceDescription
                 };
 
