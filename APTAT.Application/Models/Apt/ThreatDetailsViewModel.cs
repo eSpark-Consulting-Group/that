@@ -155,6 +155,15 @@ namespace APTAT.Application.Models
             {
                 _isUnknown = value;
                 RaisePropertyChanged("IsUnknown");
+                RaisePropertyChanged("Clean");
+            }
+        }
+
+        public bool Clean
+        {
+            get
+            {
+                return !IsUnknown && !IsMalware;
             }
         }
 
@@ -165,6 +174,7 @@ namespace APTAT.Application.Models
             {
                 _isMalware = value;
                 RaisePropertyChanged("IsMalware");
+                RaisePropertyChanged("Clean");
             }
         }
 
