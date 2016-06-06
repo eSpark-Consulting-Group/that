@@ -652,7 +652,7 @@ namespace APTAT.Application.Models
                     else if (Computers.Any(_ => _.ComputerGuid == computer.TargetUid))
                     {
                         comp = new ComputerInformation(computer);
-                        comp.Count = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid).Items.Count;
+                        comp.Count = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid).DistinctItemsCount;
                         comp.MergeFiles(result);
                         ComputersValkyrie.Add(comp);
                     }

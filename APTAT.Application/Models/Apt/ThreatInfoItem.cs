@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
+using System.Linq;
 
 namespace APTAT.Application.Models
 {
@@ -277,6 +278,15 @@ namespace APTAT.Application.Models
             {
                 _items = value;
                 RaisePropertyChanged("Items");
+            }
+        }
+
+        public int DistinctItemsCount
+        {
+            get 
+            {
+                var items = Items.GroupBy(_ => _.BadFile.Sha1).Select(_ => _.Key);
+                return items.Count();
             }
         }
 
