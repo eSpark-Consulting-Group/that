@@ -230,6 +230,7 @@ namespace APTAT.Application.Models.Directory
             catch (ValidationException exc)
             {
                 Error = exc.Message;
+                args.Cancel = true;
                 return;
             }
             
@@ -237,7 +238,7 @@ namespace APTAT.Application.Models.Directory
             {
                 if (IpAddresses.Any(o => o.Text == ipAddress.Text))
                 {
-                    Error = "The same network address was already added";
+                    Error = "The same network address was already added.";
                     args.Cancel = true;
                 }
                 else
