@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClInclude Include="Bootstrapper.h" />
     <ClInclude Include="AutoHandle.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Fonts\segoeui.ttf">
@@ -104,6 +105,9 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="APTAT.Bootstrapper.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

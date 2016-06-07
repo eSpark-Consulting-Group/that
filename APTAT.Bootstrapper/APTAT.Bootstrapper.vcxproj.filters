@@ -32,6 +32,9 @@
     <ClInclude Include="AutoHandle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Fonts\segoeui.ttf">
@@ -43,5 +46,10 @@
     <None Include="Fonts\seguisb.ttf">
       <Filter>Fonts</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="APTAT.Bootstrapper.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
