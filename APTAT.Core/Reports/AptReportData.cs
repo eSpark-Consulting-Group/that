@@ -458,7 +458,10 @@ namespace APTAT.Core.Reports
 
                 foreach (var module in flsResult.Files)
                 {
-                    var fileResult = fileResults.FirstOrDefault(v => v.ValkyrieAnalysisResult != null && v.ValkyrieAnalysisResult.SHA1 != null && v.ValkyrieAnalysisResult.SHA1.ToUpper() == module.Sha1.ToUpper());
+                    FileResult fileResult = null;
+                    if (module.IsBad)
+                        fileResult =  fileResults.FirstOrDefault(v => v.ValkyrieAnalysisResult != null && 
+                            v.ValkyrieAnalysisResult.SHA1 != null && v.ValkyrieAnalysisResult.SHA1.ToUpper() == module.Sha1.ToUpper());
                     if (fileResult != null)
                     {
                         DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
