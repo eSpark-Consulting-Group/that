@@ -44,6 +44,54 @@ namespace CodedUITestAT
             timer.Stop();
         }
 
+        /// <summary>Wait for specified row at specified results screen</summary>
+        /// <param name="rowName">Set a row name</param>
+        /// <param name="resultsScreen">Set results screen</param>
+        /// <param name="testContext"> Set current Test Context</param>
+        /// <param name="waitForMilliseconds">Set wait time in milliseconds</param>
+        private static void WaitForResultsRow(string rowName, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds)
+        {
+            UITestControl row = null;
+            CodedUITestMain useMain = new CodedUITestMain();
+            var timer = Stopwatch.StartNew();
+            for (;;)
+            {
+                Playback.Wait(2000);                
+                switch (resultsScreen)
+                {
+                    case ResultsScreen.ScanningResults:
+                        {
+                            row = useMain.ScanningResultsTab().GetRow(rowName);
+                            break;
+                        }                        
+                    case ResultsScreen.ValkyrieAnalysis:
+                        {
+                            row = useMain.ValkyrieAnalysisResultsTab().GetRow(rowName);
+                            break;
+                        }                        
+                }
+                if (row != null)
+                {
+                    testContext.WriteLine("The given row '{0}' is found.\n", rowName);
+                    break;
+                }
+                if ((int)timer.ElapsedMilliseconds > waitForMilliseconds)
+                    throw new Microsoft.VisualStudio.TestTools.UITest.Extension.UITestControlNotFoundException(String.Format("The given row '{0}' is not found after {1} seconds!", rowName, waitForMilliseconds / 1000));
+            }
+            timer.Stop();
+
+        }
+
+        /// <summary>Wait for specified endpoint row at specified results screen</summary>
+        /// <param name="endpoint">Set an endpoint</param>
+        /// <param name="resultsScreen">Set results screen</param>
+        /// <param name="testContext">Set current test context</param>
+        /// <param name="waitForMilliseconds">Set wait time in milliseconds</param>
+        internal static void WaitForResultsRow(Computer endpoint, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
+        {
+            WaitForResultsRow(endpoint.RowName, resultsScreen, testContext, waitForMilliseconds);            
+        }        
+
         /// <summary> Determines whether a given UI control is cliackable. </summary>
         /// <param name="control">Set a UI control.</param>
         /// <returns>True, if the UI control is clickable.</returns>
@@ -159,7 +207,7 @@ namespace CodedUITestAT
         {
            var rows = tab.GetRows();
 
-           foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
+            foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
            
            return null;
         }

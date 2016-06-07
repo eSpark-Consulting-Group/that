@@ -104,8 +104,10 @@
             </TabItem>
         </TabControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 24 0" Visibility="{Binding GroupingEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
-        <ToggleButton Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}"/>
-        <ToggleButton Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}"/>
+        <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" 
+                      Content="Group by Computers" IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}"/>
+        <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" 
+                      Content="Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}"/>
       </StackPanel>
         
     </Grid>

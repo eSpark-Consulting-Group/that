@@ -309,7 +309,8 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <telerikMaskedTextBox:ExtendedTextBox x:Name="PART_ExtendedTextBox"
+                                    <telerikMaskedTextBox:ExtendedTextBox AutomationProperties.AutomationId="SearchTextBox"
+                                        x:Name="PART_ExtendedTextBox"
 										AcceptsReturn="{TemplateBinding AcceptReturn}" Cursor="{TemplateBinding Cursor}"
 										TabIndex="{TemplateBinding TabIndex}" IsTabStop="True"
 										Foreground="{TemplateBinding Foreground}"
@@ -347,7 +348,8 @@
                                         </Path>
                                     </Canvas>
 
-                                    <Button x:Name="ClearTextButton" SnapsToDevicePixels="True"  Height="10" Style="{StaticResource ClearTextButton}" Grid.Column="1" VerticalAlignment="Center" Margin="5, 7,5,8" Visibility="Collapsed"/>
+                                    <Button AutomationProperties.AutomationId="ClearSearchTextButton" 
+                                            x:Name="ClearTextButton" SnapsToDevicePixels="True"  Height="10" Style="{StaticResource ClearTextButton}" Grid.Column="1" VerticalAlignment="Center" Margin="5, 7,5,8" Visibility="Collapsed"/>
                                 </Grid>
 
                                 <Border x:Name="FocusedVisual" Opacity="0" BorderBrush="{StaticResource MarkerBrush}"
