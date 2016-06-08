@@ -97,85 +97,7 @@ namespace APTAT.Core.Valkyrie
             OnAnalyzeProgressChanged();
             if (_progressNotifyTimer != null)
                 _progressNotifyTimer.Change(1000, Timeout.Infinite);
-        }
-
-        //private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress,
-        //    string destPath)
-        //{
-        //    if (fileName == null) throw new ArgumentNullException("fileName");
-
-        //    System.Diagnostics.Process process = new System.Diagnostics.Process();
-        //    ProcessStartInfo startInfo = new ProcessStartInfo
-        //    {
-        //        WindowStyle = ProcessWindowStyle.Hidden,
-        //        FileName = "cmd.exe",
-        //        RedirectStandardOutput = true,
-        //        RedirectStandardError = true,
-        //        UseShellExecute = false,
-        //        CreateNoWindow = true
-
-
-        //    };
-        //    //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
-        //    var target = string.Format("\\\\{0}\\{1}", ipAddress, Path.GetPathRoot(fileName).Replace(":\\", "$"));
-
-        //    string destination = Path.Combine(destPath, sha1);
-        //    string destinationFile = string.Format("{0}.tmp", destination);
-        //    string source = target + fileName.Remove(0, 2);
-        //    startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password,
-        //        login, source, destinationFile);
-
-        //    process.StartInfo = startInfo;
-
-        //    process.Start();
-
-        //    string stdout = process.StandardOutput.ReadToEnd();
-        //    string stderr = process.StandardError.ReadToEnd();
-
-        //    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow,
-        //        string.Format("Started process. Copy file from {0} to {1}", source, destinationFile)));
-
-        //    process.WaitForExit();
-        //    Trace.WriteLine(String.Format("Process exit code : {0}", process.ExitCode));
-        //    Trace.WriteLine(String.Format("Process standard output : {0}", stdout));
-        //    if (String.IsNullOrWhiteSpace(stderr) == false)
-        //    {
-        //        Trace.WriteLine(String.Format("Process standard error : {0}", stderr));
-        //    }
-
-        //    Trace.Flush();
-        //    return destinationFile;
-        //}
-
-        //private static string CreateTmpFolder()
-        //{
-        //    var usrTempFolder = Environment.GetEnvironmentVariable("TEMP");
-        //    if (string.IsNullOrWhiteSpace(usrTempFolder))
-        //    {
-        //        usrTempFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        //    }
-        //    var valkyrieFolder = Path.Combine(usrTempFolder, "ValkyrieTmp");
-        //    bool exists = System.IO.Directory.Exists(valkyrieFolder);
-        //    if (!exists)
-        //    {
-        //        System.IO.Directory.CreateDirectory(valkyrieFolder);
-        //    }
-        //    else
-        //    {
-        //        DirectoryInfo downloadedMessageInfo = new DirectoryInfo(valkyrieFolder);
-
-        //        foreach (FileInfo file in downloadedMessageInfo.GetFiles())
-        //        {
-        //            file.Delete();
-        //        }
-        //        foreach (DirectoryInfo dir in downloadedMessageInfo.GetDirectories())
-        //        {
-        //            dir.Delete(true);
-        //        }
-        //    }
-
-        //    return valkyrieFolder;
-        //}
+        }        
 
         private Guid GetEndpointId()
         {
@@ -383,17 +305,7 @@ namespace APTAT.Core.Valkyrie
                 tmp(this, EventArgs.Empty);
             }
         }
-
-        //private byte[] ReadFile(ValkyrieFileInfo fileInfo, string login, string password)
-        //{
-        //    byte[] bytes;
-        //    var networkFilePath = fileInfo.GetNetworkPath();
-        //    using (var helper = new ImpersonationHelper(login, "", password, ImpersonationHelper.Logon32LogonType.NewCredentials))
-        //    {
-        //        bytes = File.ReadAllBytes(networkFilePath);
-        //    }
-        //    return bytes;
-        //}
+              
 
         private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, Guid endpointId)
         {

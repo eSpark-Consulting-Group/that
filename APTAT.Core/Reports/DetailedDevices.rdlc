@@ -35,24 +35,6 @@
       </Textbox>
       <Rectangle Name="Rectangle1">
         <ReportItems>
-          <Rectangle Name="Rectangle2">
-            <KeepTogether>true</KeepTogether>
-            <Top>0.24294cm</Top>
-            <Left>0.81174cm</Left>
-            <Height>8.221cm</Height>
-            <Width>0.09784cm</Width>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <BackgroundColor>=Switch(
-					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "4", "Silver",
-                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "3", "#c03a3a",
-                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "2", "#f9cc08",
-					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "1", "#D03D15",
-                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "0", "#3c963c")</BackgroundColor>
-            </Style>
-          </Rectangle>
           <Textbox Name="Textbox8">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -75,7 +57,6 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>1</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -108,7 +89,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>2</ZIndex>
+            <ZIndex>1</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -141,7 +122,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>3</ZIndex>
+            <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -174,7 +155,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>4</ZIndex>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -207,7 +188,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>5</ZIndex>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -240,7 +221,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>6</ZIndex>
+            <ZIndex>5</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -273,7 +254,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>7</ZIndex>
+            <ZIndex>6</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -306,7 +287,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>8</ZIndex>
+            <ZIndex>7</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -339,7 +320,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>9</ZIndex>
+            <ZIndex>8</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -374,7 +355,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>10</ZIndex>
+            <ZIndex>9</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -409,7 +390,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>11</ZIndex>
+            <ZIndex>10</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -444,7 +425,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>12</ZIndex>
+            <ZIndex>11</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -479,7 +460,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>13</ZIndex>
+            <ZIndex>12</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -514,7 +495,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>14</ZIndex>
+            <ZIndex>13</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -549,7 +530,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>15</ZIndex>
+            <ZIndex>14</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -584,7 +565,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>16</ZIndex>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -619,7 +600,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>17</ZIndex>
+            <ZIndex>16</ZIndex>
             <Visibility>
               <Hidden>=iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
             </Visibility>
@@ -657,7 +638,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>18</ZIndex>
+            <ZIndex>17</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -690,7 +671,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>19</ZIndex>
+            <ZIndex>18</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -725,7 +706,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>20</ZIndex>
+            <ZIndex>19</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -758,7 +739,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>21</ZIndex>
+            <ZIndex>20</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -793,7 +774,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>22</ZIndex>
+            <ZIndex>21</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -826,7 +807,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>23</ZIndex>
+            <ZIndex>22</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -861,7 +842,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>24</ZIndex>
+            <ZIndex>23</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -894,7 +875,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>25</ZIndex>
+            <ZIndex>24</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -929,7 +910,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>26</ZIndex>
+            <ZIndex>25</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -962,7 +943,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>27</ZIndex>
+            <ZIndex>26</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -997,7 +978,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>28</ZIndex>
+            <ZIndex>27</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1030,7 +1011,7 @@
             <Left>1.18345cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
-            <ZIndex>29</ZIndex>
+            <ZIndex>28</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1065,7 +1046,7 @@
             <Left>7.10622cm</Left>
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
-            <ZIndex>30</ZIndex>
+            <ZIndex>29</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1076,10 +1057,29 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Rectangle Name="Rectangle2">
+            <KeepTogether>true</KeepTogether>
+            <Top>0.14769cm</Top>
+            <Left>0.81174cm</Left>
+            <Height>9.14353cm</Height>
+            <Width>0.09784cm</Width>
+            <ZIndex>30</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>=Switch(
+					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "4", "Silver",
+                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "3", "#c03a3a",
+                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "2", "#f9cc08",
+					  First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "1", "#D03D15",
+                      First(Fields!TargetsSafetyLevel.Value, "AptReportDataSet") = "0", "#3c963c")</BackgroundColor>
+            </Style>
+          </Rectangle>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.23555cm</Top>
-        <Height>8.6474cm</Height>
+        <Height>9.63869cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
@@ -2239,24 +2239,6 @@
                                 <PaddingBottom>2pt</PaddingBottom>
                               </Style>
                             </Textbox>
-                            <Rectangle Name="Rectangle5">
-                              <KeepTogether>true</KeepTogether>
-                              <Top>1.34737cm</Top>
-                              <Left>0.78cm</Left>
-                              <Height>6.88344cm</Height>
-                              <Width>0.09784cm</Width>
-                              <ZIndex>20</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <BackgroundColor>=Switch(
-                      Fields!TargetVerdict.Value = "2", "#c03a3a",
-                      Fields!TargetVerdict.Value = "3", "#f9cc08",
-					  Fields!TargetVerdict.Value = "0", "#D03D15",
-                      Fields!TargetVerdict.Value = "1", "#3c963c")</BackgroundColor>
-                              </Style>
-                            </Rectangle>
                             <Textbox Name="Textbox55">
                               <CanGrow>true</CanGrow>
                               <KeepTogether>true</KeepTogether>
@@ -2278,7 +2260,7 @@
                               <Left>0.00001cm</Left>
                               <Height>1.09108cm</Height>
                               <Width>16.52525cm</Width>
-                              <ZIndex>21</ZIndex>
+                              <ZIndex>20</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -2312,7 +2294,7 @@
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>4.74979cm</Width>
-                              <ZIndex>22</ZIndex>
+                              <ZIndex>21</ZIndex>
                               <Visibility>
                                 <Hidden>=Not(Parameters!IsActiveDirectorySource.Value)</Hidden>
                               </Visibility>
@@ -2350,7 +2332,7 @@
                               <Left>5.98041cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>10.95609cm</Width>
-                              <ZIndex>23</ZIndex>
+                              <ZIndex>22</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -2383,7 +2365,7 @@
                               <Left>1.05423cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>4.74979cm</Width>
-                              <ZIndex>24</ZIndex>
+                              <ZIndex>23</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -2418,7 +2400,7 @@
                               <Left>5.98041cm</Left>
                               <Height>0.55681cm</Height>
                               <Width>10.95609cm</Width>
-                              <ZIndex>25</ZIndex>
+                              <ZIndex>24</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -2429,10 +2411,28 @@
                                 <PaddingBottom>2pt</PaddingBottom>
                               </Style>
                             </Textbox>
+                            <Rectangle Name="Rectangle5">
+                              <KeepTogether>true</KeepTogether>
+                              <Top>1.34737cm</Top>
+                              <Left>0.78cm</Left>
+                              <Height>7.17815cm</Height>
+                              <Width>0.09784cm</Width>
+                              <ZIndex>25</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <BackgroundColor>=Switch(
+                      Fields!TargetVerdict.Value = "2", "#c03a3a",
+                      Fields!TargetVerdict.Value = "3", "#f9cc08",
+					  Fields!TargetVerdict.Value = "0", "#D03D15",
+                      Fields!TargetVerdict.Value = "1", "#3c963c")</BackgroundColor>
+                              </Style>
+                            </Rectangle>
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Top>0.06576cm</Top>
-                          <Height>8.23081cm</Height>
+                          <Height>10.12653cm</Height>
                           <Width>16.93652cm</Width>
                           <ZIndex>2</ZIndex>
                           <Style>
@@ -2760,6 +2760,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.02646cm</Height>
           <Width>16.9365cm</Width>

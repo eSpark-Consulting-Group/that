@@ -48,6 +48,7 @@ namespace Valkyrie.WebApiProvider
         {
             get
             {
+                return false;
                 var url = GetBaseUri();
                 return url.ToString().Contains(("valkyrie.comodo.com"));
             }
