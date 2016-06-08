@@ -121,5 +121,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["NoValueAvailable"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("unknown.exe")]
+        public string UnknownName {
+            get {
+                return ((string)(this["UnknownName"]));
+            }
+        }
     }
 }

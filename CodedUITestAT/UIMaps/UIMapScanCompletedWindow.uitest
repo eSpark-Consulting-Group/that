@@ -37,23 +37,22 @@
   </Configuration>
   <InitializeActions />
   <ExecuteActions>
-    <MouseAction UIObjectName="UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIOKButton">
+    <AssertAction UIObjectName="UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText">
       <ParameterName />
-      <ModifierKeys>None</ModifierKeys>
-      <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="38" Y="14" />
-      <WheelDirection>0</WheelDirection>
-      <ActionType>Click</ActionType>
-      <MouseButton>Left</MouseButton>
-    </MouseAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="ClickOkButton">
+      <PropertyName>DisplayText</PropertyName>
+      <ExpectedValue>Scan Completed! </ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertScanCompletedTextBlockText">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
       <Outcome />
       <Disabled>false</Disabled>
       <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
+      <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
     <AssertAction UIObjectName="UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIComputerStatistics1TText">
       <ParameterName />
@@ -64,23 +63,6 @@
       <PropertyCondition>AreEqual</PropertyCondition>
     </AssertAction>
     <TestStepMarkerAction Comment="" MarkerInformation="AssertStatisticsTextBlock">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
-    </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText">
-      <ParameterName />
-      <PropertyName>DisplayText</PropertyName>
-      <ExpectedValue>Scan Completed! </ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>String</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertScanCompletedTextBlockText">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -107,6 +89,24 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIOKButton">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="38" Y="14" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="ClickOkButton">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
   <OnErrorActions />
@@ -118,6 +118,9 @@
           <WindowTitles>
             <WindowTitle>Unknown File Hunter</WindowTitle>
           </WindowTitles>
+          <SearchConfigurations>
+            <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+          </SearchConfigurations>
           <AndCondition>
             <PropertyCondition Name="ControlType">Window</PropertyCondition>
             <PropertyCondition Name="Name">Unknown File Hunter</PropertyCondition>
@@ -142,6 +145,9 @@
               <WindowTitles>
                 <WindowTitle>Unknown File Hunter</WindowTitle>
               </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+              </SearchConfigurations>
               <AndCondition>
                 <PropertyCondition Name="ControlType">Button</PropertyCondition>
                 <PropertyCondition Name="AutomationId">OkButton</PropertyCondition>
@@ -166,6 +172,9 @@
               <WindowTitles>
                 <WindowTitle>Unknown File Hunter</WindowTitle>
               </WindowTitles>
+              <SearchConfigurations>
+                <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+              </SearchConfigurations>
               <AndCondition>
                 <PropertyCondition Name="ControlType">Button</PropertyCondition>
                 <PropertyCondition Name="AutomationId">CancelButton</PropertyCondition>

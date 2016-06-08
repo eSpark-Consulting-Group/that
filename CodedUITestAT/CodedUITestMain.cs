@@ -424,6 +424,7 @@ namespace CodedUITestAT
             UIMapStartScanningWizard.ClickNetworkAddressButton();
 
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            CleanNetworkAddressesList();
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapNetworkAddresses.ClickAddButton();
@@ -973,6 +974,68 @@ namespace CodedUITestAT
 
             UIMapDetailsWindow.ClickCloseButton();
             UIHelper.WaitForControlIsClickable(StartScanningButton());
+        }
+
+        [TestMethod]
+        public void CheckScanResultPanelTest()
+        {
+            UIMapMain useMainMap = new UIMapMain();
+            Computer endpoint = DataHelper.GetEndpoint();
+            int expectedUnknownCount, expectedMalwareCount;
+
+            expectedUnknownCount = 0;
+            expectedMalwareCount = 1;
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            Malware malware = SysHelper.InfectForQuickScan(endpoint);
+            TestContext.WriteLine("Malware file '{0}' is copied to the endpoint.", malware.Name);
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+            UIMapScanCompletedWindow.ClickCancelButton();
+            useMainMap.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText= expectedUnknownCount.ToString();
+            useMainMap.AssertUnknownFilesCounterTextBlockText();
+            useMainMap.AssertMalwareFilesCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
+            useMainMap.AssertMalwareFilesCounterTextBlockText();
+            TestContext.WriteLine("Bottom bar shows '{0}' Unknown files and '{1}' Malware files.", expectedUnknownCount, expectedMalwareCount);
+
+            expectedUnknownCount = 1;
+            expectedMalwareCount = 0;
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            UnknownFile unknown = SysHelper.CopyUnknownFileForQuickScan(endpoint);
+            TestContext.WriteLine("Unknown file '{0}' is copied to the endpoint.", unknown.Name);
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+            UIMapScanCompletedWindow.ClickCancelButton();
+            useMainMap.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
+            useMainMap.AssertUnknownFilesCounterTextBlockText();
+            useMainMap.AssertMalwareFilesCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
+            useMainMap.AssertMalwareFilesCounterTextBlockText();
+            TestContext.WriteLine("Bottom bar shows '{0}' Unknown files and '{1}' Malware files.", expectedUnknownCount, expectedMalwareCount);
+
+            expectedUnknownCount = 1;
+            expectedMalwareCount = 1;
+            malware = SysHelper.InfectForQuickScan(endpoint);
+            TestContext.WriteLine("Unknown file '{0}' is copied to the endpoint.", unknown.Name);
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+            UIMapScanCompletedWindow.ClickCancelButton();
+            useMainMap.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
+            useMainMap.AssertUnknownFilesCounterTextBlockText();
+            useMainMap.AssertMalwareFilesCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
+            useMainMap.AssertMalwareFilesCounterTextBlockText();
+            TestContext.WriteLine("Bottom bar shows '{0}' Unknown files and '{1}' Malware files.", expectedUnknownCount, expectedMalwareCount);
+
+
+            expectedUnknownCount = 0;
+            expectedMalwareCount = 0;
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+            UIMapScanCompletedWindow.ClickOkButton();
+            useMainMap.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
+            useMainMap.AssertUnknownFilesCounterTextBlockText();
+            useMainMap.AssertMalwareFilesCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
+            useMainMap.AssertMalwareFilesCounterTextBlockText();
+            TestContext.WriteLine("Bottom bar shows '{0}' Unknown files and '{1}' Malware files.", expectedUnknownCount, expectedMalwareCount);
         }
 
         #endregion

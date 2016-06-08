@@ -289,6 +289,32 @@ namespace CodedUITestAT
             return checkSumString;
         }
 
+        internal static UnknownFile CopyUnknownFileForQuickScan(Computer endpoint)
+        {
+            string unknownName = Settings.General.Default.UnknownName;
+            string fileToBeScanned = String.Format(@"Users\{0}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{1}", DataHelper.Username, unknownName);
+            string source = String.Format(@"{0}\{1}", DataHelper.GetMalwaresFolder(true), unknownName);
+            string destination = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
+            File.Copy(source, destination, true);
+            UnknownFile unknown = new UnknownFile(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned), endpoint);
+
+            return unknown;
+        }
+
+        /// <summary>Removes files from Startup folder if there are any</summary>
+        /// <param name="endpoint">Set an endpoint</param>
+        internal static void DisinfectForQuickScan(Computer endpoint, TestContext testcontext)
+        {
+            string fileToBeScanned = String.Format(@"Users\{0}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\", DataHelper.Username);
+            string remoteDirPath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
+            DirectoryInfo remoteDir = new DirectoryInfo(remoteDirPath);
+            foreach (FileInfo file in remoteDir.GetFiles())
+            {
+                file.Delete();
+                testcontext.WriteLine("File deleted from the endpoint: {0}", file.Name);
+            }
+        }
+
         #endregion
     }
 }
