@@ -456,11 +456,13 @@ namespace APTAT.Core.Valkyrie
                         ReturnCode = ErrorCodesEnum.None
                     };
 
-                    var timeOut = TimeSpan.FromMinutes(5);
+                    var timeOutInMinutes = 5;
+                    var timeOut = (int)TimeSpan.FromMinutes(timeOutInMinutes).TotalMilliseconds;
                     bool success = false;
                     bool analyzeNotFinished = true;
-                    int elapsed = 0;
-                    while (analyzeNotFinished && (elapsed < timeOut.TotalMilliseconds))
+                    double elapsed = 0;
+                    DateTime utcStarted = DateTime.UtcNow;
+                    while (analyzeNotFinished && (elapsed < timeOut))
                     {
                         if (_cancellationTokenSource.IsCancellationRequested)
                         {
@@ -468,7 +470,7 @@ namespace APTAT.Core.Valkyrie
                         }
 
                         Thread.Sleep(1000);
-                        elapsed += 1000;
+                        elapsed = (int)(DateTime.UtcNow - utcStarted).TotalMilliseconds;
                         automaticAnalysisResponse =
                             ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest()
                             {
@@ -482,7 +484,7 @@ namespace APTAT.Core.Valkyrie
                     if (analyzeNotFinished)
                     {
                         throw new TimeoutException("Automatic analysis has not been completed after " +
-                                                   timeOut.TotalMinutes + " minutes");
+                                                   timeOutInMinutes + " minutes");
                     }
                     if (!success)
                     {
