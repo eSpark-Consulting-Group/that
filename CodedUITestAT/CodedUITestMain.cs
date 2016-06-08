@@ -919,6 +919,10 @@ namespace CodedUITestAT
             UIHelper.WaitForControl(CloseDetailsButton());
 
             // Checks all the threat details
+            UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
+            UIMapDetailsWindow.AssertMalwareNameTextBlockText();
+            TestContext.WriteLine(String.Format("Threat name is shown correctly: '{0}'.\n", malware.Name));
+
             UIMapDetailsWindow.AssertFileNameValueTextBlockTextExpectedValues.UIUnknownexeTextDisplayText = malware.Name;
             UIMapDetailsWindow.AssertFileNameValueTextBlockText();
             TestContext.WriteLine(String.Format("Threat 'File Name' parameter is shown correctly: '{0}'.\n", malware.Name));
@@ -968,6 +972,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.\n", malware.Product));
 
             UIMapDetailsWindow.ClickCloseButton();
+            UIHelper.WaitForControlIsClickable(StartScanningButton());
         }
 
         #endregion
