@@ -55,6 +55,162 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
             Mouse.Click(uICloseButton, new Point(42, 5));
         }
         
+        /// <summary>
+        /// AssertFileNameValueTextBlockText - Use 'AssertFileNameValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertFileNameValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIUnknownexeText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIUnknownexeText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Unknown.exe' label equals 'Unknown.exe'
+            Assert.AreEqual(this.AssertFileNameValueTextBlockTextExpectedValues.UIUnknownexeTextDisplayText, uIUnknownexeText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertVerdictValueTextBlockText - Use 'AssertVerdictValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertVerdictValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIUnknownText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIUnknownText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Unknown' label equals 'Unknown'
+            Assert.AreEqual(this.AssertVerdictValueTextBlockTextExpectedValues.UIUnknownTextDisplayText, uIUnknownText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertSizeValueTextBlockText - Use 'AssertSizeValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertSizeValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem159KBText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem159KBText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '159 KB' label equals '159 KB'
+            Assert.AreEqual(this.AssertSizeValueTextBlockTextExpectedValues.UIItem159KBTextDisplayText, uIItem159KBText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertCreatedValueTextBlockText - Use 'AssertCreatedValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertCreatedValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem66201631837PMText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem66201631837PMText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '6/6/2016 3:18:37 PM' label equals '6/6/2016 3:18:37 PM'
+            Assert.AreEqual(this.AssertCreatedValueTextBlockTextExpectedValues.UIItem66201631837PMTextDisplayText, uIItem66201631837PMText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertModifiedValueTextBlockText - Use 'AssertModifiedValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertModifiedValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem66201632241PMText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem66201632241PMText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '6/6/2016 3:22:41 PM' label equals '6/6/2016 3:22:41 PM'
+            Assert.AreEqual(this.AssertModifiedValueTextBlockTextExpectedValues.UIItem66201632241PMTextDisplayText, uIItem66201632241PMText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertAccessedValueTextBlockText - Use 'AssertAccessedValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertAccessedValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem66201631837PMText1 = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem66201631837PMText1;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '6/6/2016 3:18:37 PM' label equals '6/6/2016 3:18:37 PM'
+            Assert.AreEqual(this.AssertAccessedValueTextBlockTextExpectedValues.UIItem66201631837PMText1DisplayText, uIItem66201631837PMText1.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertHashValueTextBlockText - Use 'AssertHashValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertHashValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem2D93186A41CD331AText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem2D93186A41CD331AText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '2D93186A41CD331A9C98B0C8066F039CCED9CE87' label equals '2D93186A41CD331A9C98B0C8066F039CCED9CE87'
+            Assert.AreEqual(this.AssertHashValueTextBlockTextExpectedValues.UIItem2D93186A41CD331ATextDisplayText, uIItem2D93186A41CD331AText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertSignerValueTextBlockText - Use 'AssertSignerValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertSignerValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uINAText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UINAText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'n/a' label equals 'n/a'
+            Assert.AreEqual(this.AssertSignerValueTextBlockTextExpectedValues.UINATextDisplayText, uINAText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertDescriptionValueTextBlockText - Use 'AssertDescriptionValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertDescriptionValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem7zSFXText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem7zSFXText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '7z SFX' label equals '7z SFX'
+            Assert.AreEqual(this.AssertDescriptionValueTextBlockTextExpectedValues.UIItem7zSFXTextDisplayText, uIItem7zSFXText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertVersionValueTextBlockText - Use 'AssertVersionValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertVersionValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem920Text = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem920Text;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '9.20' label equals '9.20'
+            Assert.AreEqual(this.AssertVersionValueTextBlockTextExpectedValues.UIItem920TextDisplayText, uIItem920Text.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertCopyrightValueTextBlockText - Use 'AssertCopyrightValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertCopyrightValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uICopyrightc19992010IgText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UICopyrightc19992010IgText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Copyright (c) 1999-2010 Igor Pavlov' label equals 'Copyright (c) 1999-2010 Igor Pavlov'
+            Assert.AreEqual(this.AssertCopyrightValueTextBlockTextExpectedValues.UICopyrightc19992010IgTextDisplayText, uICopyrightc19992010IgText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertProductValueTextBlockText - Use 'AssertProductValueTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertProductValueTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem7ZipText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem7ZipText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '7-Zip' label equals '7-Zip'
+            Assert.AreEqual(this.AssertProductValueTextBlockTextExpectedValues.UIItem7ZipTextDisplayText, uIItem7ZipText.DisplayText);
+        }
+        
         #region Properties
         public virtual AssertMalwareNameTextBlockTextExpectedValues AssertMalwareNameTextBlockTextExpectedValues
         {
@@ -65,6 +221,150 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
                     this.mAssertMalwareNameTextBlockTextExpectedValues = new AssertMalwareNameTextBlockTextExpectedValues();
                 }
                 return this.mAssertMalwareNameTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertFileNameValueTextBlockTextExpectedValues AssertFileNameValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertFileNameValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertFileNameValueTextBlockTextExpectedValues = new AssertFileNameValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertFileNameValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertVerdictValueTextBlockTextExpectedValues AssertVerdictValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertVerdictValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertVerdictValueTextBlockTextExpectedValues = new AssertVerdictValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertVerdictValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertSizeValueTextBlockTextExpectedValues AssertSizeValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertSizeValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertSizeValueTextBlockTextExpectedValues = new AssertSizeValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertSizeValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertCreatedValueTextBlockTextExpectedValues AssertCreatedValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertCreatedValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertCreatedValueTextBlockTextExpectedValues = new AssertCreatedValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertCreatedValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertModifiedValueTextBlockTextExpectedValues AssertModifiedValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertModifiedValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertModifiedValueTextBlockTextExpectedValues = new AssertModifiedValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertModifiedValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertAccessedValueTextBlockTextExpectedValues AssertAccessedValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertAccessedValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertAccessedValueTextBlockTextExpectedValues = new AssertAccessedValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertAccessedValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertHashValueTextBlockTextExpectedValues AssertHashValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertHashValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertHashValueTextBlockTextExpectedValues = new AssertHashValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertHashValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertSignerValueTextBlockTextExpectedValues AssertSignerValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertSignerValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertSignerValueTextBlockTextExpectedValues = new AssertSignerValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertSignerValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertDescriptionValueTextBlockTextExpectedValues AssertDescriptionValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertDescriptionValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertDescriptionValueTextBlockTextExpectedValues = new AssertDescriptionValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertDescriptionValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertVersionValueTextBlockTextExpectedValues AssertVersionValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertVersionValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertVersionValueTextBlockTextExpectedValues = new AssertVersionValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertVersionValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertCopyrightValueTextBlockTextExpectedValues AssertCopyrightValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertCopyrightValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertCopyrightValueTextBlockTextExpectedValues = new AssertCopyrightValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertCopyrightValueTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertProductValueTextBlockTextExpectedValues AssertProductValueTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertProductValueTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertProductValueTextBlockTextExpectedValues = new AssertProductValueTextBlockTextExpectedValues();
+                }
+                return this.mAssertProductValueTextBlockTextExpectedValues;
             }
         }
         
@@ -84,6 +384,30 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
         #region Fields
         private AssertMalwareNameTextBlockTextExpectedValues mAssertMalwareNameTextBlockTextExpectedValues;
         
+        private AssertFileNameValueTextBlockTextExpectedValues mAssertFileNameValueTextBlockTextExpectedValues;
+        
+        private AssertVerdictValueTextBlockTextExpectedValues mAssertVerdictValueTextBlockTextExpectedValues;
+        
+        private AssertSizeValueTextBlockTextExpectedValues mAssertSizeValueTextBlockTextExpectedValues;
+        
+        private AssertCreatedValueTextBlockTextExpectedValues mAssertCreatedValueTextBlockTextExpectedValues;
+        
+        private AssertModifiedValueTextBlockTextExpectedValues mAssertModifiedValueTextBlockTextExpectedValues;
+        
+        private AssertAccessedValueTextBlockTextExpectedValues mAssertAccessedValueTextBlockTextExpectedValues;
+        
+        private AssertHashValueTextBlockTextExpectedValues mAssertHashValueTextBlockTextExpectedValues;
+        
+        private AssertSignerValueTextBlockTextExpectedValues mAssertSignerValueTextBlockTextExpectedValues;
+        
+        private AssertDescriptionValueTextBlockTextExpectedValues mAssertDescriptionValueTextBlockTextExpectedValues;
+        
+        private AssertVersionValueTextBlockTextExpectedValues mAssertVersionValueTextBlockTextExpectedValues;
+        
+        private AssertCopyrightValueTextBlockTextExpectedValues mAssertCopyrightValueTextBlockTextExpectedValues;
+        
+        private AssertProductValueTextBlockTextExpectedValues mAssertProductValueTextBlockTextExpectedValues;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
     }
@@ -100,6 +424,186 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
         /// Verify that the 'DisplayText' property of '91exestealth.exe' label equals '91exestealth.exe'
         /// </summary>
         public string UIItem91exestealthexeTextDisplayText = "91exestealth.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertFileNameValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertFileNameValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Unknown.exe' label equals 'Unknown.exe'
+        /// </summary>
+        public string UIUnknownexeTextDisplayText = "Unknown.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertVerdictValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertVerdictValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Unknown' label equals 'Unknown'
+        /// </summary>
+        public string UIUnknownTextDisplayText = "Unknown";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertSizeValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertSizeValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '159 KB' label equals '159 KB'
+        /// </summary>
+        public string UIItem159KBTextDisplayText = "159 KB";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertCreatedValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertCreatedValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '6/6/2016 3:18:37 PM' label equals '6/6/2016 3:18:37 PM'
+        /// </summary>
+        public string UIItem66201631837PMTextDisplayText = "6/6/2016 3:18:37 PM";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertModifiedValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertModifiedValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '6/6/2016 3:22:41 PM' label equals '6/6/2016 3:22:41 PM'
+        /// </summary>
+        public string UIItem66201632241PMTextDisplayText = "6/6/2016 3:22:41 PM";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertAccessedValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertAccessedValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '6/6/2016 3:18:37 PM' label equals '6/6/2016 3:18:37 PM'
+        /// </summary>
+        public string UIItem66201631837PMText1DisplayText = "6/6/2016 3:18:37 PM";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertHashValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertHashValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '2D93186A41CD331A9C98B0C8066F039CCED9CE87' label equals '2D93186A41CD331A9C98B0C8066F039CCED9CE87'
+        /// </summary>
+        public string UIItem2D93186A41CD331ATextDisplayText = "2D93186A41CD331A9C98B0C8066F039CCED9CE87";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertSignerValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertSignerValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'n/a' label equals 'n/a'
+        /// </summary>
+        public string UINATextDisplayText = "n/a";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertDescriptionValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertDescriptionValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '7z SFX' label equals '7z SFX'
+        /// </summary>
+        public string UIItem7zSFXTextDisplayText = "7z SFX";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertVersionValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertVersionValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '9.20' label equals '9.20'
+        /// </summary>
+        public string UIItem920TextDisplayText = "9.20";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertCopyrightValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertCopyrightValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Copyright (c) 1999-2010 Igor Pavlov' label equals 'Copyright (c) 1999-2010 Igor Pavlov'
+        /// </summary>
+        public string UICopyrightc19992010IgTextDisplayText = "Copyright (c) 1999-2010 Igor Pavlov";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertProductValueTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertProductValueTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '7-Zip' label equals '7-Zip'
+        /// </summary>
+        public string UIItem7ZipTextDisplayText = "7-Zip";
         #endregion
     }
     
@@ -181,12 +685,228 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
                 return this.mUICloseButton;
             }
         }
+        
+        public WpfText UIUnknownexeText
+        {
+            get
+            {
+                if ((this.mUIUnknownexeText == null))
+                {
+                    this.mUIUnknownexeText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIUnknownexeText.SearchProperties[WpfText.PropertyNames.AutomationId] = "FileNameValueTextBlock";
+                    this.mUIUnknownexeText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUnknownexeText;
+            }
+        }
+        
+        public WpfText UIUnknownText
+        {
+            get
+            {
+                if ((this.mUIUnknownText == null))
+                {
+                    this.mUIUnknownText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIUnknownText.SearchProperties[WpfText.PropertyNames.AutomationId] = "VerdictValueTextBlock";
+                    this.mUIUnknownText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUnknownText;
+            }
+        }
+        
+        public WpfText UIItem159KBText
+        {
+            get
+            {
+                if ((this.mUIItem159KBText == null))
+                {
+                    this.mUIItem159KBText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem159KBText.SearchProperties[WpfText.PropertyNames.AutomationId] = "SizeValueTextBlock";
+                    this.mUIItem159KBText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem159KBText;
+            }
+        }
+        
+        public WpfText UIItem66201631837PMText
+        {
+            get
+            {
+                if ((this.mUIItem66201631837PMText == null))
+                {
+                    this.mUIItem66201631837PMText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem66201631837PMText.SearchProperties[WpfText.PropertyNames.AutomationId] = "CreatedValueTextBlock";
+                    this.mUIItem66201631837PMText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem66201631837PMText;
+            }
+        }
+        
+        public WpfText UIItem66201632241PMText
+        {
+            get
+            {
+                if ((this.mUIItem66201632241PMText == null))
+                {
+                    this.mUIItem66201632241PMText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem66201632241PMText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ModifiedValueTextBlock";
+                    this.mUIItem66201632241PMText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem66201632241PMText;
+            }
+        }
+        
+        public WpfText UIItem66201631837PMText1
+        {
+            get
+            {
+                if ((this.mUIItem66201631837PMText1 == null))
+                {
+                    this.mUIItem66201631837PMText1 = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem66201631837PMText1.SearchProperties[WpfText.PropertyNames.AutomationId] = "AccessedValueTextBlock";
+                    this.mUIItem66201631837PMText1.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem66201631837PMText1;
+            }
+        }
+        
+        public WpfText UIItem2D93186A41CD331AText
+        {
+            get
+            {
+                if ((this.mUIItem2D93186A41CD331AText == null))
+                {
+                    this.mUIItem2D93186A41CD331AText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem2D93186A41CD331AText.SearchProperties[WpfText.PropertyNames.AutomationId] = "HashValueTextBlock";
+                    this.mUIItem2D93186A41CD331AText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem2D93186A41CD331AText;
+            }
+        }
+        
+        public WpfText UINAText
+        {
+            get
+            {
+                if ((this.mUINAText == null))
+                {
+                    this.mUINAText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUINAText.SearchProperties[WpfText.PropertyNames.AutomationId] = "SignerValueTextBlock";
+                    this.mUINAText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUINAText;
+            }
+        }
+        
+        public WpfText UIItem7zSFXText
+        {
+            get
+            {
+                if ((this.mUIItem7zSFXText == null))
+                {
+                    this.mUIItem7zSFXText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem7zSFXText.SearchProperties[WpfText.PropertyNames.AutomationId] = "DescriptionValueTextBlock";
+                    this.mUIItem7zSFXText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem7zSFXText;
+            }
+        }
+        
+        public WpfText UIItem920Text
+        {
+            get
+            {
+                if ((this.mUIItem920Text == null))
+                {
+                    this.mUIItem920Text = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem920Text.SearchProperties[WpfText.PropertyNames.AutomationId] = "VersionValueTextBlock";
+                    this.mUIItem920Text.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem920Text;
+            }
+        }
+        
+        public WpfText UICopyrightc19992010IgText
+        {
+            get
+            {
+                if ((this.mUICopyrightc19992010IgText == null))
+                {
+                    this.mUICopyrightc19992010IgText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUICopyrightc19992010IgText.SearchProperties[WpfText.PropertyNames.AutomationId] = "CopyrightValueTextBlock";
+                    this.mUICopyrightc19992010IgText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICopyrightc19992010IgText;
+            }
+        }
+        
+        public WpfText UIItem7ZipText
+        {
+            get
+            {
+                if ((this.mUIItem7ZipText == null))
+                {
+                    this.mUIItem7ZipText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem7ZipText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ProductValueTextBlock";
+                    this.mUIItem7ZipText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem7ZipText;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfText mUIItem91exestealthexeText;
         
         private WpfButton mUICloseButton;
+        
+        private WpfText mUIUnknownexeText;
+        
+        private WpfText mUIUnknownText;
+        
+        private WpfText mUIItem159KBText;
+        
+        private WpfText mUIItem66201631837PMText;
+        
+        private WpfText mUIItem66201632241PMText;
+        
+        private WpfText mUIItem66201631837PMText1;
+        
+        private WpfText mUIItem2D93186A41CD331AText;
+        
+        private WpfText mUINAText;
+        
+        private WpfText mUIItem7zSFXText;
+        
+        private WpfText mUIItem920Text;
+        
+        private WpfText mUICopyrightc19992010IgText;
+        
+        private WpfText mUIItem7ZipText;
         #endregion
     }
 }

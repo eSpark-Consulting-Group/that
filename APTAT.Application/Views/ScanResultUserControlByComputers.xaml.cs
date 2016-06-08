@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using APTAT.Application.Models;
@@ -26,11 +27,13 @@ namespace APTAT.Application
                 menu.IconColumnWidth = 0;
                 menu.Width = 160;
                 menu.Opened += menu_Opened;
+                AutomationProperties.SetAutomationId(menu, "ScanResultsByComputersContextMenu");
 
                 var item = new RadMenuItem();
                 item.Header = "Details";
                 item.Command = ViewModel.SelectCommand;
                 item.Click += item_Click;
+                AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
                 menu.Items.Add(item);
 
                 RadContextMenu.SetContextMenu(treeList, menu);

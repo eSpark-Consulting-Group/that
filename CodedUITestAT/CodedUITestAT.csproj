@@ -72,7 +72,7 @@
   <ItemGroup>
     <Compile Include="BusinessObjects\Computers\Computer.cs" />
     <Compile Include="BusinessObjects\Computers\ScanStatus.cs" />
-    <Compile Include="BusinessObjects\Files\ThreatType.cs" />
+    <Compile Include="BusinessObjects\Files\Verdict.cs" />
     <Compile Include="BusinessObjects\Files\Malware.cs" />
     <Compile Include="BusinessObjects\Files\Threat.cs" />
     <Compile Include="BusinessObjects\Files\UnknownFile.cs" />

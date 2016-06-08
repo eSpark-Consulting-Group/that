@@ -25,7 +25,7 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
     using MouseButtons = System.Windows.Forms.MouseButtons;
     
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public partial class UIMapScanCompletedWindow
     {
         
@@ -66,6 +66,19 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
 
             // Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! '
             Assert.AreEqual(this.AssertScanCompletedTextBlockTextExpectedValues.UIScanCompletedDoyouwaTextDisplayText, uIScanCompletedDoyouwaText.DisplayText);
+        }
+        
+        /// <summary>
+        /// ClickCancelButton
+        /// </summary>
+        public void ClickCancelButton()
+        {
+            #region Variable Declarations
+            WpfButton uICancelButton = this.UIUnknownFileHunterWindow.UICancelButton;
+            #endregion
+
+            // Click 'Cancel' button
+            Mouse.Click(uICancelButton, new Point(63, 17));
         }
         
         #region Properties
@@ -118,7 +131,7 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
     /// <summary>
     /// Parameters to be passed into 'AssertStatisticsTextBlock'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class AssertStatisticsTextBlockExpectedValues
     {
         
@@ -133,7 +146,7 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
     /// <summary>
     /// Parameters to be passed into 'AssertScanCompletedTextBlockText'
     /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class AssertScanCompletedTextBlockTextExpectedValues
     {
         
@@ -145,7 +158,7 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         #endregion
     }
     
-    [GeneratedCode("Coded UITest Builder", "11.0.50727.1")]
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
         
@@ -206,6 +219,22 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                 return this.mUIComputerStatistics1TText;
             }
         }
+        
+        public WpfButton UICancelButton
+        {
+            get
+            {
+                if ((this.mUICancelButton == null))
+                {
+                    this.mUICancelButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICancelButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CancelButton";
+                    this.mUICancelButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICancelButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -214,6 +243,8 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         private WpfButton mUIOKButton;
         
         private WpfText mUIComputerStatistics1TText;
+        
+        private WpfButton mUICancelButton;
         #endregion
     }
 }

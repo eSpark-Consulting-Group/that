@@ -5,6 +5,7 @@ using System.Text;
 using System.Management;
 using System.Diagnostics;
 using System.ServiceProcess;
+using System.Security.Cryptography;
 using Microsoft.Win32;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -214,13 +215,18 @@ namespace CodedUITestAT
             string address = String.Format(@"{0} {1}", Settings.Staging.Default.ValkyrieStagingIpAddress, Settings.Staging.Default.ValkyrieProductionServerAddress);
             string initialFileContent;
 
-            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) { initialFileContent = stream.ReadToEnd(); }
+            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) 
+            { 
+                initialFileContent = stream.ReadToEnd();
+                stream.Close();
+            }
             
             if (!initialFileContent.Contains(address))
             using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
             {
                stream.WriteLine();
                stream.WriteLine(address);
+               stream.Close();
             }
         }
 
@@ -232,13 +238,18 @@ namespace CodedUITestAT
             string address = String.Format("{0} {1}", Settings.Staging.Default.FlsDedicatedIpAddress, Settings.Staging.Default.FlsProductionServerAddress);
             string initialFileContent;
 
-            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) { initialFileContent = stream.ReadToEnd(); }
+            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) 
+            { 
+                initialFileContent = stream.ReadToEnd();
+                stream.Close();
+            }
 
             if (!initialFileContent.Contains(address))
             using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
             {
                 stream.WriteLine();
                 stream.WriteLine(address);
+                stream.Close();
             }
         }
 
@@ -256,9 +267,26 @@ namespace CodedUITestAT
             string source = String.Format(@"{0}\{1}", DataHelper.GetMalwaresFolder(true), threatName);
             string destination = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
             File.Copy(source, destination, true);
-            Malware malware = new Malware(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned));
+            Malware malware = new Malware(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned), endpoint);
 
             return malware;
+        }
+
+        /// <summary> Gets SHA1 hash of a given file. </summary>
+        /// <param name="fullFilePath">Set a full path to a file.</param>        
+        internal static string GetFileSha1(string fullFilePath)
+        {
+            string checkSumString = null;
+
+            using (FileStream stream = File.OpenRead(fullFilePath))
+            {
+                SHA1Managed sha1 = new SHA1Managed();
+                byte[] checkSum = sha1.ComputeHash(stream);
+                checkSumString = BitConverter.ToString(checkSum).Replace("-", String.Empty);
+                stream.Close();
+            }
+
+            return checkSumString;
         }
 
         #endregion

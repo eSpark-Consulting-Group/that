@@ -324,16 +324,16 @@ namespace CodedUITestAT
         /// <summary> Gets the number of files of a given type from Scan Completed window. Starts at Scan Completed window. </summary>
         /// <param name="fileType">Set a file type.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private int GetFoundFilesNumber(ThreatType fileType, TestContext testContext)
+        private int GetFoundFilesNumber(Verdict fileType, TestContext testContext)
         {
             string searchWord = null;
 
             switch (fileType)
             {
-                case ThreatType.Unknown:
+                case Verdict.Unknown:
                     searchWord = Settings.ScanCompleted.Default.UnknownFile;
                     break;
-                case ThreatType.Malware:
+                case Verdict.Malware:
                     searchWord = Settings.ScanCompleted.Default.Malware;
                     break;
                 default: throw new Exception(String.Format("Unexpected file type '{0}'!", fileType));
@@ -353,10 +353,10 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private int GetFoundFilesNumber(TestContext testContext)
         {
-            int unknownFilesNumber = GetFoundFilesNumber(ThreatType.Unknown, testContext);
+            int unknownFilesNumber = GetFoundFilesNumber(Verdict.Unknown, testContext);
             int malwaresNumber = 0;
             if (ScanStatisticsTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.Malware))
-                malwaresNumber = GetFoundFilesNumber(ThreatType.Malware, testContext);
+                malwaresNumber = GetFoundFilesNumber(Verdict.Malware, testContext);
             return unknownFilesNumber + malwaresNumber;
         }
 
@@ -455,7 +455,7 @@ namespace CodedUITestAT
         {
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            testContext.WriteLine("Start Scanning wizard appeared...");
+            testContext.WriteLine("Start Scanning wizard appeared...\n");
             UIMapStartScanningWizard.ClickNetworkAddressButton();
             
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -479,6 +479,26 @@ namespace CodedUITestAT
                 default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType.ToString()));
             }
             testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...", scanType.ToString(), endpoint.Name));
+        }
+
+        /// <summary> Waits for Scan Completed window. </summary>
+        /// <param name="scanType">Set a scan type.</param>
+        private void WaitForScanCompleted(ScanType scanType)
+        {
+            int waitTime;
+
+            switch (scanType)
+            {
+                case ScanType.Quick:
+                    waitTime = Settings.WaitingTime.Default.QuickScanWaitTime;
+                    break;
+                case ScanType.Full:
+                    waitTime = Settings.WaitingTime.Default.FullScanWaitTime;
+                    break;
+                default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType));
+            }
+
+            UIHelper.WaitForControl(ScanCompletedTextBlock(), waitTime);
         }
 
         /// <summary> Stops a scan. </summary>
@@ -514,8 +534,8 @@ namespace CodedUITestAT
             SysHelper.InfectForQuickScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            
-            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+            WaitForScanCompleted(ScanType.Quick);
+
             if (ScanCompletedTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.ScanCompletedText))
                 TestContext.WriteLine(String.Format("Scan Completed window appeared with text containing: '{0}'.\n", Settings.ScanCompleted.Default.ScanCompletedText));
             else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!\n", Settings.ScanCompleted.Default.ScanCompletedText));
@@ -569,7 +589,6 @@ namespace CodedUITestAT
             Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            //Malware malware = new Malware(String.Format(@"C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\{0}", Settings.General.Default.ThreatName));
             
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -586,8 +605,8 @@ namespace CodedUITestAT
             
             UIMapStartScanningWizard.ClickQuickScanButton();
             TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...\n", workgroupName));
-            
-            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+
+            WaitForScanCompleted(ScanType.Quick);
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickOkButton();
             
@@ -749,7 +768,7 @@ namespace CodedUITestAT
                else Assert.Fail(String.Format("File '{0}' does not exist!", filePath));
            }
 
-           UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+           WaitForScanCompleted(ScanType.Quick);
 
            // Checks whether the scanner process is not running any longer
            if (!SysHelper.IsThereProcess(procName, endpoint))
@@ -810,7 +829,7 @@ namespace CodedUITestAT
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanWaitTime);
+            WaitForScanCompleted(ScanType.Quick);
 
             // Gets the number of Unknown files and Malwares found at Scan Completed window
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
@@ -878,6 +897,77 @@ namespace CodedUITestAT
             }
             useResultsWindow.ClickClearSearchBoxButton();
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
+        }
+
+        [TestMethod]
+        public void VerifyThreatDetailsTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            Malware malware = SysHelper.InfectForQuickScan(endpoint);
+
+            // Performs a scan
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickCancelButton();
+            UIHelper.WaitForControlIsClickable(StartScanningButton());
+
+            // Opens a threat details via context menu
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, malware);
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, malware, MouseClick.Right);
+            UIMapResultsWindow.SelectDetailsByComputersContextMenuItem();
+            UIHelper.WaitForControl(CloseDetailsButton());
+
+            // Checks all the threat details
+            UIMapDetailsWindow.AssertFileNameValueTextBlockTextExpectedValues.UIUnknownexeTextDisplayText = malware.Name;
+            UIMapDetailsWindow.AssertFileNameValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'File Name' parameter is shown correctly: '{0}'.\n", malware.Name));
+
+            UIMapDetailsWindow.AssertVerdictValueTextBlockTextExpectedValues.UIUnknownTextDisplayText = malware.FileVerdict.ToString();
+            UIMapDetailsWindow.AssertVerdictValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Verdict' parameter is shown correctly: '{0}'.\n", malware.FileVerdict));
+
+            UIMapDetailsWindow.AssertSizeValueTextBlockTextExpectedValues.UIItem159KBTextDisplayText = malware.DisplaySize;
+            UIMapDetailsWindow.AssertSizeValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Size' parameter is shown correctly: '{0}'.\n", malware.DisplaySize));
+
+            UIMapDetailsWindow.AssertCreatedValueTextBlockTextExpectedValues.UIItem66201631837PMTextDisplayText = malware.Created;
+            UIMapDetailsWindow.AssertCreatedValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Created' parameter is shown correctly: '{0}'.\n", malware.Created));
+             
+            UIMapDetailsWindow.AssertModifiedValueTextBlockTextExpectedValues.UIItem66201632241PMTextDisplayText = malware.Modified;
+            UIMapDetailsWindow.AssertModifiedValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Modified' parameter is shown correctly: '{0}'.\n", malware.Modified));
+
+            UIMapDetailsWindow.AssertAccessedValueTextBlockTextExpectedValues.UIItem66201631837PMText1DisplayText = malware.Accessed;
+            UIMapDetailsWindow.AssertAccessedValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Accessed' parameter is shown correctly: '{0}'.\n", malware.Accessed));
+
+            UIMapDetailsWindow.AssertHashValueTextBlockTextExpectedValues.UIItem2D93186A41CD331ATextDisplayText = malware.Sha1;
+            UIMapDetailsWindow.AssertHashValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Hash' parameter is shown correctly: '{0}'.\n", malware.Sha1));
+
+            UIMapDetailsWindow.AssertSignerValueTextBlockTextExpectedValues.UINATextDisplayText = malware.Signer;
+            UIMapDetailsWindow.AssertSignerValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Signer' parameter is shown correctly: '{0}'.\n", malware.Signer));
+
+            UIMapDetailsWindow.AssertDescriptionValueTextBlockTextExpectedValues.UIItem7zSFXTextDisplayText = malware.Description;
+            UIMapDetailsWindow.AssertDescriptionValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Description' parameter is shown correctly: '{0}'.\n", malware.Description));
+
+            UIMapDetailsWindow.AssertVersionValueTextBlockTextExpectedValues.UIItem920TextDisplayText = malware.Version;
+            UIMapDetailsWindow.AssertVersionValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Version' parameter is shown correctly: '{0}'.\n", malware.Version));
+
+            UIMapDetailsWindow.AssertCopyrightValueTextBlockTextExpectedValues.UICopyrightc19992010IgTextDisplayText = malware.Copyright;
+            UIMapDetailsWindow.AssertCopyrightValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Copyright' parameter is shown correctly: '{0}'.\n", malware.Copyright));
+
+            UIMapDetailsWindow.AssertProductValueTextBlockTextExpectedValues.UIItem7ZipTextDisplayText = malware.Product;
+            UIMapDetailsWindow.AssertProductValueTextBlockText();
+            TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.\n", malware.Product));
+
+            UIMapDetailsWindow.ClickCloseButton();
         }
 
         #endregion

@@ -32,5 +32,8 @@
     <Setting Name="ProductExeName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ValkyrieHunter.exe</Value>
     </Setting>
+    <Setting Name="NoValueAvailable" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">n/a</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

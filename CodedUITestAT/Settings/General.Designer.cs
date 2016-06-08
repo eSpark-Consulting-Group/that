@@ -112,5 +112,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["ProductExeName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("n/a")]
+        public string NoValueAvailable {
+            get {
+                return ((string)(this["NoValueAvailable"]));
+            }
+        }
     }
 }
