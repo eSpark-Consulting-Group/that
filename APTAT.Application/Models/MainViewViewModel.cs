@@ -58,7 +58,7 @@ namespace APTAT.Application.Models
         private object _selectedValkyrieItem;
 
         private Collection<ThreatInfoItem> _items;
-        private ObservableCollection<ThreatInfoItem> _computers;
+        private Collection<ThreatInfoItem> _computers;
         private ObservableCollection<FileResult> _itemsValkyrie;
         private ObservableCollection<ComputerInformation> _computersValkyrie;
 
@@ -399,7 +399,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Computers
+        public Collection<ThreatInfoItem> Computers
         {
             get { return _computers; }
             set
@@ -445,8 +445,8 @@ namespace APTAT.Application.Models
         {
             IsQuickScan = (bool)arg;
 
-            Items = new ObservableCollection<ThreatInfoItem>();
-            Computers = new ObservableCollection<ThreatInfoItem>();
+            Items = new Collection<ThreatInfoItem>();
+            Computers = new Collection<ThreatInfoItem>();
             ItemsValkyrie = new ObservableCollection<FileResult>();
             ComputersValkyrie = new ObservableCollection<ComputerInformation>();
 
@@ -626,19 +626,31 @@ namespace APTAT.Application.Models
         {
             if (results == null)
                 return;
-            
+
+            if (!ItemsValkyrie.Any())
+            {
+                UnknownFilesCount = 0;
+                MalwareFilesCount = 0;
+            }
+
             foreach (var result in results)
             {
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
-                    file.MergeComputers(result.Computers);
-                else if (result.ValkyrieAnalysisResult != null)
                 {
-                    if (!ItemsValkyrie.Any())
+                    file.MergeComputers(result.Computers);
+                    if (file.Path != result.Path)
                     {
-                        UnknownFilesCount = 0;
-                        MalwareFilesCount = 0;
+                        file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result) && _.Path == result.Path);
+                        if (file == null)
+                        {
+                            UnknownFilesCount += result.IsUnknown ? 1 : 0;
+                            MalwareFilesCount += result.IsMalware ? 1 : 0;
+                        }
                     }
+                }
+                else
+                {
                     ItemsValkyrie.Add(result);
                     UnknownFilesCount += result.IsUnknown ? 1 : 0;
                     MalwareFilesCount += result.IsMalware ? 1 : 0;
@@ -652,7 +664,7 @@ namespace APTAT.Application.Models
                     else if (Computers.Any(_ => _.ComputerGuid == computer.TargetUid))
                     {
                         comp = new ComputerInformation(computer);
-                        comp.Count = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid).DistinctItemsCount;
+                        comp.Count = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid).Items.Count;
                         comp.MergeFiles(result);
                         ComputersValkyrie.Add(comp);
                     }
@@ -715,7 +727,7 @@ namespace APTAT.Application.Models
 
 
             _cacheComputers = new Collection<ThreatInfoItem>(items);
-            Computers = new ObservableCollection<ThreatInfoItem>(_cacheComputers);
+            Computers = new Collection<ThreatInfoItem>(_cacheComputers);
             
 
             foreach (var item in _cacheComputers)
@@ -975,16 +987,16 @@ namespace APTAT.Application.Models
 
             if (_cacheComputers.Any())
             {
-                Computers = new ObservableCollection<ThreatInfoItem>(
-                       _cacheComputers.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
+                Computers = new Collection<ThreatInfoItem>(
+                       _cacheComputers.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
 
                 SelectedItem = null;
             }
 
             if (_cache.Any())
             {
-                Items = new ObservableCollection<ThreatInfoItem>(
-                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)));
+                Items = new Collection<ThreatInfoItem>(
+                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
             }
 
             if (_cacheValkyrie.Any())

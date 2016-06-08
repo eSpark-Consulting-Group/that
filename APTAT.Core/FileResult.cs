@@ -7,11 +7,21 @@ using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace APTAT.Core
 {
-    public class FileResult : IEquatable<FileResult>
+    public class FileResult : IEquatable<FileResult>, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void RaisePropertyChanged(String name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
         public FileResult(Module badFile)
         {
             Computers = new ObservableCollection<ComputerInformation>();
@@ -189,6 +199,23 @@ namespace APTAT.Core
 
         public ObservableCollection<ComputerInformation> Computers { get; set; }
 
+        public string InstancesCount
+        {
+            get 
+            {
+                if (Computers == null || !Computers.Any())
+                    return string.Empty;
+
+                if (Computers.Count == 1)
+                    return "1 instance on 1 computer.";
+
+                var uniqueComputers = Computers.GroupBy(_ => _.FullName).Select(_ => _.Key).Count();
+
+                return string.Format("{0} instances on {1} computer{2}.", Computers.Count, 
+                    uniqueComputers, uniqueComputers > 1 ? "s" : string.Empty);
+            }
+        }
+
         public void MergeComputers(IEnumerable<ComputerInformation> computers)
         {
             foreach (var computer in computers)
@@ -196,6 +223,8 @@ namespace APTAT.Core
                 if (!Computers.Any(_ => _.Equals(computer)))
                     Computers.Add(computer);
             }
+
+            RaisePropertyChanged("InstancesCount");
         }
 
         public override string ToString()

@@ -112,7 +112,7 @@ namespace APTAT.Core
 
         public void MergeFiles(FileResult file)
         {
-            if (!Files.Any(_ => _.Equals(file)))
+            if (!Files.Any(_ => _.Equals(file) && _.Path == file.Path))
             {
                 Files.Add(new FileResult(file));
 
@@ -140,7 +140,7 @@ namespace APTAT.Core
 
         public bool Equals(ComputerInformation other)
         {
-            return FullName == other.FullName && FilePath == other.FilePath;
+            return TargetUid == other.TargetUid && FilePath == other.FilePath;
         }
 
         public override string ToString()

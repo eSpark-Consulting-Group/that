@@ -281,12 +281,20 @@ namespace APTAT.Application.Models
             }
         }
 
-        public int DistinctItemsCount
+        public string InstancesCount
         {
-            get 
+            get
             {
-                var items = Items.GroupBy(_ => _.BadFile.Sha1).Select(_ => _.Key);
-                return items.Count();
+                if (Computers == null || !Computers.Any())
+                    return string.Empty;
+
+                if (Computers.Count == 1)
+                    return "1 instance on 1 computer.";
+
+                var uniqueComputers = Computers.GroupBy(_ => _.ComputerGuid).Select(_ => _.Key).Count();
+
+                return string.Format("{0} instances on {1} computer{2}.", Computers.Count,
+                    uniqueComputers, uniqueComputers > 1 ? "s" : string.Empty);
             }
         }
 
