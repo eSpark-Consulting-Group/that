@@ -95,41 +95,60 @@ namespace APTAT.Valkyrie.Client
             return result;            
         }
         
-        public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, byte[] fileData, CancellationToken token)
+        //public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, byte[] fileData, CancellationToken token)
+        //{
+        //    if (token == null)
+        //        token = CancellationToken.None;
+
+        //    string originalFileName = Path.GetFileName(request.FilePath);
+        //    var payload = request.ToNameValueCollection();
+        //    var uploadResult = MultipartPostHelper.Post(fileData, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
+        //    var response = JsonConvert.DeserializeObject<SubmitToManualResponse>(uploadResult);
+        //    if (response.ReturnCode != ErrorCodesEnum.Success)
+        //    {
+        //        throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+        //    }
+
+        //    return response;
+        //}
+
+        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, FileStream fileStream, CancellationToken token)
         {
             if (token == null)
+            {
                 token = CancellationToken.None;
+            }
 
             string originalFileName = Path.GetFileName(request.FilePath);
             var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(fileData, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
-            var response = JsonConvert.DeserializeObject<SubmitToManualResponse>(uploadResult);
-            if (response.ReturnCode != ErrorCodesEnum.Success)
-            {
-                throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
-            }
-
-            return response;
-        }
-
-        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, string filePath, CancellationToken token)
-        {
-            if (token == null)
-            {
-                token = CancellationToken.None;
-            }
-
-            string originalFileName = Path.GetFileName(request.FilePath);
-            var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var uploadResult = MultipartPostHelper.Post(fileStream, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName, token);
             var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
             if (response.ReturnCode != ErrorCodesEnum.Success)
             {
                 throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
             }
-
+            fileStream.Dispose();
             return response;
         }
+
+        //public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, string filePath, CancellationToken token)
+        //{
+        //    if (token == null)
+        //    {
+        //        token = CancellationToken.None;
+        //    }
+
+        //    string originalFileName = Path.GetFileName(request.FilePath);
+        //    var payload = request.ToNameValueCollection();
+        //    var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName, token);
+        //    var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
+        //    if (response.ReturnCode != ErrorCodesEnum.Success)
+        //    {
+        //        throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+        //    }
+
+        //    return response;
+        //}
 
         public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {

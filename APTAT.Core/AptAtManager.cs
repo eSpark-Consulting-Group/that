@@ -178,7 +178,7 @@ namespace APTAT.Core
                 {
                     if (files.All(f => f.Sha1 != badFile.Sha1))
                     {
-                        files.Add(new ValkyrieFileInfo() { Ip = scanResult.Value.IpAddress, Path = badFile.Path, Sha1 = badFile.Sha1 });
+                        files.Add(new ValkyrieFileInfo() { Ip = scanResult.Value.IpAddress, Path = badFile.Path, Sha1 = badFile.Sha1, Size = badFile.Size });
                     }
                 }
             }

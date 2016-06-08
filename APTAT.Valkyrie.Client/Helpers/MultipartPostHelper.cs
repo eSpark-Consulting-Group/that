@@ -11,6 +11,16 @@ namespace Valkyrie.WebApiProvider.Helpers
 {
     internal static class MultipartPostHelper
     {
+
+        internal static string Post(FileStream fileStream, string url, NameValueCollection payload, string fileName, CancellationToken cancellationToken)
+        {
+            if (String.IsNullOrWhiteSpace(fileName))
+            {
+                throw new InvalidOperationException("file name is required");
+            }
+            return SubmitForm(url, fileStream, fileName, payload, cancellationToken);
+        }
+
         internal static string Post(byte[] uploadfileBytes, string url, NameValueCollection payload, string fileName, CancellationToken cancellationToken)
         {
             if (String.IsNullOrWhiteSpace(fileName))

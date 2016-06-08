@@ -15,6 +15,7 @@ using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using Valkyrie.WebApiProvider.Helpers;
 using Microsoft.Win32;
+using APTAT.Core.Descent;
 
 namespace APTAT.Core.Valkyrie
 {
@@ -98,83 +99,83 @@ namespace APTAT.Core.Valkyrie
                 _progressNotifyTimer.Change(1000, Timeout.Infinite);
         }
 
-        private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress,
-            string destPath)
-        {
-            if (fileName == null) throw new ArgumentNullException("fileName");
+        //private string GetRemoteFile(string fileName, string sha1, string login, string password, string ipAddress,
+        //    string destPath)
+        //{
+        //    if (fileName == null) throw new ArgumentNullException("fileName");
 
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
+        //    System.Diagnostics.Process process = new System.Diagnostics.Process();
+        //    ProcessStartInfo startInfo = new ProcessStartInfo
+        //    {
+        //        WindowStyle = ProcessWindowStyle.Hidden,
+        //        FileName = "cmd.exe",
+        //        RedirectStandardOutput = true,
+        //        RedirectStandardError = true,
+        //        UseShellExecute = false,
+        //        CreateNoWindow = true
 
 
-            };
-            //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
-            var target = string.Format("\\\\{0}\\{1}", ipAddress, Path.GetPathRoot(fileName).Replace(":\\", "$"));
+        //    };
+        //    //  Items.First(i => i.TempItems.Any(ti => ti.BadFile.Sha1.Equals(badFile.Sha1))).IpAddress;
+        //    var target = string.Format("\\\\{0}\\{1}", ipAddress, Path.GetPathRoot(fileName).Replace(":\\", "$"));
 
-            string destination = Path.Combine(destPath, sha1);
-            string destinationFile = string.Format("{0}.tmp", destination);
-            string source = target + fileName.Remove(0, 2);
-            startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password,
-                login, source, destinationFile);
+        //    string destination = Path.Combine(destPath, sha1);
+        //    string destinationFile = string.Format("{0}.tmp", destination);
+        //    string source = target + fileName.Remove(0, 2);
+        //    startInfo.Arguments = string.Format("/C net use \"{0}\" {1} /user:{2} & copy \"{3}\" {4}", target, password,
+        //        login, source, destinationFile);
 
-            process.StartInfo = startInfo;
+        //    process.StartInfo = startInfo;
 
-            process.Start();
+        //    process.Start();
 
-            string stdout = process.StandardOutput.ReadToEnd();
-            string stderr = process.StandardError.ReadToEnd();
+        //    string stdout = process.StandardOutput.ReadToEnd();
+        //    string stderr = process.StandardError.ReadToEnd();
 
-            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow,
-                string.Format("Started process. Copy file from {0} to {1}", source, destinationFile)));
+        //    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow,
+        //        string.Format("Started process. Copy file from {0} to {1}", source, destinationFile)));
 
-            process.WaitForExit();
-            Trace.WriteLine(String.Format("Process exit code : {0}", process.ExitCode));
-            Trace.WriteLine(String.Format("Process standard output : {0}", stdout));
-            if (String.IsNullOrWhiteSpace(stderr) == false)
-            {
-                Trace.WriteLine(String.Format("Process standard error : {0}", stderr));
-            }
+        //    process.WaitForExit();
+        //    Trace.WriteLine(String.Format("Process exit code : {0}", process.ExitCode));
+        //    Trace.WriteLine(String.Format("Process standard output : {0}", stdout));
+        //    if (String.IsNullOrWhiteSpace(stderr) == false)
+        //    {
+        //        Trace.WriteLine(String.Format("Process standard error : {0}", stderr));
+        //    }
 
-            Trace.Flush();
-            return destinationFile;
-        }
+        //    Trace.Flush();
+        //    return destinationFile;
+        //}
 
-        private static string CreateTmpFolder()
-        {
-            var usrTempFolder = Environment.GetEnvironmentVariable("TEMP");
-            if (string.IsNullOrWhiteSpace(usrTempFolder))
-            {
-                usrTempFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            }
-            var valkyrieFolder = Path.Combine(usrTempFolder, "ValkyrieTmp");
-            bool exists = System.IO.Directory.Exists(valkyrieFolder);
-            if (!exists)
-            {
-                System.IO.Directory.CreateDirectory(valkyrieFolder);
-            }
-            else
-            {
-                DirectoryInfo downloadedMessageInfo = new DirectoryInfo(valkyrieFolder);
+        //private static string CreateTmpFolder()
+        //{
+        //    var usrTempFolder = Environment.GetEnvironmentVariable("TEMP");
+        //    if (string.IsNullOrWhiteSpace(usrTempFolder))
+        //    {
+        //        usrTempFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        //    }
+        //    var valkyrieFolder = Path.Combine(usrTempFolder, "ValkyrieTmp");
+        //    bool exists = System.IO.Directory.Exists(valkyrieFolder);
+        //    if (!exists)
+        //    {
+        //        System.IO.Directory.CreateDirectory(valkyrieFolder);
+        //    }
+        //    else
+        //    {
+        //        DirectoryInfo downloadedMessageInfo = new DirectoryInfo(valkyrieFolder);
 
-                foreach (FileInfo file in downloadedMessageInfo.GetFiles())
-                {
-                    file.Delete();
-                }
-                foreach (DirectoryInfo dir in downloadedMessageInfo.GetDirectories())
-                {
-                    dir.Delete(true);
-                }
-            }
+        //        foreach (FileInfo file in downloadedMessageInfo.GetFiles())
+        //        {
+        //            file.Delete();
+        //        }
+        //        foreach (DirectoryInfo dir in downloadedMessageInfo.GetDirectories())
+        //        {
+        //            dir.Delete(true);
+        //        }
+        //    }
 
-            return valkyrieFolder;
-        }
+        //    return valkyrieFolder;
+        //}
 
         private Guid GetEndpointId()
         {
@@ -214,12 +215,12 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, string login, string password,
+       
+        private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, 
             CancellationToken cancellationToken)
         {
             _filesCount = badFiles.Count;
-            Guid endpointId = GetEndpointId();
-            var destFolder = CreateTmpFolder();
+            Guid endpointId = GetEndpointId();         
             var exceptions = new ConcurrentQueue<Exception>();
 
             ParallelOptions opt = new ParallelOptions
@@ -230,12 +231,9 @@ namespace APTAT.Core.Valkyrie
 
             Parallel.ForEach(badFiles, opt, f =>
             {
-
                 try
                 {
-                    var filePath = GetRemoteFile(f.Path, f.Sha1, login, password, f.Ip, destFolder);
-                    var orgPath = f.GetFullPath();
-                    var result = UploadFile(filePath, orgPath, endpointId);
+                    var result = UploadFile(f, endpointId);
                     if (result == null) throw new ArgumentException("ValkyrieAnalysisResult can not be null");
                     AddResult(result);
                 }
@@ -386,22 +384,31 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        private ValkyrieAnalysisResult UploadFile(string filePath, string originalFilePath, Guid endpointId)
+        //private byte[] ReadFile(ValkyrieFileInfo fileInfo, string login, string password)
+        //{
+        //    byte[] bytes;
+        //    var networkFilePath = fileInfo.GetNetworkPath();
+        //    using (var helper = new ImpersonationHelper(login, "", password, ImpersonationHelper.Logon32LogonType.NewCredentials))
+        //    {
+        //        bytes = File.ReadAllBytes(networkFilePath);
+        //    }
+        //    return bytes;
+        //}
+
+        private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, Guid endpointId)
         {
             ValkyrieAnalysisResult result = null;
+
             try
             {
-                var sha1 = HashCalculator.ComputeSHA1Hash(filePath);
-
+                var sha1 = fileInfo.Sha1;
+                var originalFilePath = fileInfo.GetFullPath();
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
                     return CancelOperation(originalFilePath, sha1);
                 }
 
-                FileInfo f = new FileInfo(filePath);
-
-
-                if (f.Length > MaxFileLenght)
+                if (fileInfo.Size > MaxFileLenght)
                 {
                     result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.",
                         SkippReasonEnum.Skipped);
@@ -412,7 +419,7 @@ namespace APTAT.Core.Valkyrie
                     return result;
                 }
 
-                var infoRequeast = new InfoRequest {SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId};
+                var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId };
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
@@ -431,7 +438,7 @@ namespace APTAT.Core.Valkyrie
                         string.Format(
                             "{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]",
                             DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
-                    Trace.Flush();
+                
                     var request = new SubmitToAutomaticRequest
                     {
                         ApiKey = _apiKey,
@@ -440,9 +447,10 @@ namespace APTAT.Core.Valkyrie
                         EndpointId = endpointId
                     };
 
-                    var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, filePath,
-                        _cancellationTokenSource.Token);
-
+                    //var data = ReadFile(fileInfo, login, password);
+                    var fStream = File.OpenRead(fileInfo.GetNetworkPath());
+                    var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
+                    
                     CheckAnalysisResultResponse automaticAnalysisResponse = new CheckAnalysisResultResponse()
                     {
                         ReturnCode = ErrorCodesEnum.None
@@ -484,20 +492,11 @@ namespace APTAT.Core.Valkyrie
 
                 }
             }
-            finally
-            {
-                try
-                {
-                    File.Delete(filePath);
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Delete {1}", DateTime.UtcNow, filePath));
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Delete Failed {1} with error: {2}",
-                        DateTime.UtcNow, filePath, ex.Message));
-                }
-                Trace.Flush();
+            finally 
+            { 
+
             }
+            
             return result;
         }
 
@@ -559,7 +558,12 @@ namespace APTAT.Core.Valkyrie
                 OnAnalyzeStarted();
                 Thread.Sleep(2000);
                 _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, Timeout.Infinite);
-                SubmitToAutomaticAnalysis(filesToAnaluyze, login, password, _cancellationTokenSource.Token);
+
+                using (ImpersonationHelper helper = new ImpersonationHelper(login, "", password, ImpersonationHelper.Logon32LogonType.NewCredentials))
+                {
+                    SubmitToAutomaticAnalysis(filesToAnaluyze, _cancellationTokenSource.Token);
+                }
+                
                 
             }, TaskCreationOptions.None, cancellationToken)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);

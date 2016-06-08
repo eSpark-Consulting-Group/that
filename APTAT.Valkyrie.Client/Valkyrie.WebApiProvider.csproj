@@ -67,7 +67,6 @@
     <Compile Include="Enums\EnumExt.cs" />
     <Compile Include="Enums\FileCategories.cs" />
     <Compile Include="Enums\SkippReasonEnum.cs" />
-    <Compile Include="Helpers\HashCalculator.cs" />
     <Compile Include="Helpers\ObjectToArrayConverter.cs" />
     <Compile Include="Helpers\MultipartPostHelper.cs" />
     <Compile Include="Contracts\InfoRequest.cs" />
