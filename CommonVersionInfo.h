@@ -5,7 +5,14 @@
 // Change also in Wintellect.TFSBuildNumber.targets, line 270
 #define szCopyright                 "Copyright © COMODO, 2016"
 
-#define szMajorMinorBuildRevision   "1.4.20524.2"
+#define szMajorMinorBuildRevision   "1.4.20601.1"
+#define rcMajor    1
+#define rcMinor    4
+#define rcBuild    20601
+#define rcRevision 1
+
+
+#define DWORD_VERSION rcMajor, rcMinor, rcBuild, rcRevision
 
 
 #endif // _SHAREDFILEVERSION_H
