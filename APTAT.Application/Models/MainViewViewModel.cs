@@ -659,10 +659,14 @@ namespace APTAT.Application.Models
                     var comp = ComputersValkyrie.FirstOrDefault(_ => _.FullName == computer.FullName);
                     if (comp != null)
                         comp.MergeFiles(result);
-                    else if (Computers.Any(_ => _.ComputerGuid == computer.TargetUid))
+                    else
                     {
+                        var c = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid);
+                        if (c == null) continue;
+
                         comp = new ComputerInformation(computer);
-                        comp.Count = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid).DistinctItemsCount;
+                        comp.Count = c.DistinctItemsCount;
+                        comp.TotalCount = c.Items.Count;
                         comp.MergeFiles(result);
                         ComputersValkyrie.Add(comp);
                     }

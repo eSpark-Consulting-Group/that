@@ -80,6 +80,8 @@ namespace APTAT.Core
 
         public double Count { get; set; }
 
+        public double TotalCount { get; set; }
+
         public string StatusText { get; set; }
 
         private bool _canceling;
@@ -105,7 +107,7 @@ namespace APTAT.Core
         {
             get
             {
-                return Canceling ? false : Files.Count < Count;
+                return Canceling ? false : Files.Count < TotalCount;
             }
         }
 
@@ -113,7 +115,7 @@ namespace APTAT.Core
         {
             get
             {
-                return Canceling ? false : Files.Count == Count;
+                return Canceling ? false : Files.Count == TotalCount;
             }
         }
 
@@ -131,7 +133,7 @@ namespace APTAT.Core
                 var malwareCount = Files.Count(_ => _.IsMalware);
                 var unknownCount = Files.Count(_ => _.IsUnknown);
 
-                if (Files.Count == Count)
+                if (Files.Count == TotalCount)
                     StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
                         Files.Count, unknownCount, malwareCount);
                 else
