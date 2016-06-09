@@ -235,6 +235,6 @@ namespace APTAT.Core
         public bool Equals(FileResult other)
         {
             return Sha1 == other.Sha1 && ValkyrieAnalysisResult != null && other.ValkyrieAnalysisResult != null;
-        }
+        } 
     }
 }

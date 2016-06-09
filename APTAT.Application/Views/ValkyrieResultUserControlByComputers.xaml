@@ -171,7 +171,7 @@
              ShowFieldFilters="False"
              Header="NAME"
              TextAlignment="Left"
-             Width="450*"
+             Width="470*"
           SortMemberPath="FullName"/>
 
          <telerik:GridViewColumn
@@ -188,7 +188,7 @@
              IsFilterable="False"
              Header="VERDICT"
              TextAlignment="Left"
-             Width="206*"/>
+             Width="186*"/>
 
          <telerik:GridViewColumn
              CellTemplateSelector="{StaticResource OperationStatusTemplateSelector}"

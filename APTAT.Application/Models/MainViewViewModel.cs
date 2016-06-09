@@ -216,6 +216,8 @@ namespace APTAT.Application.Models
                 {
                     if (Percentage == 0)
                         header = "Starting scan...";
+                    else if (Percentage == 100)
+                        header = "Finishing scan...";
                     else
                         header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
                     return String.Format("{0} ({1})", commonHeaderName, header);
@@ -641,12 +643,8 @@ namespace APTAT.Application.Models
                     file.MergeComputers(result.Computers);
                     if (file.Path != result.Path)
                     {
-                        file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result) && _.Path == result.Path);
-                        if (file == null)
-                        {
-                            UnknownFilesCount += result.IsUnknown ? 1 : 0;
-                            MalwareFilesCount += result.IsMalware ? 1 : 0;
-                        }
+                        UnknownFilesCount += result.IsUnknown ? 1 : 0;
+                        MalwareFilesCount += result.IsMalware ? 1 : 0;
                     }
                 }
                 else
@@ -664,7 +662,7 @@ namespace APTAT.Application.Models
                     else if (Computers.Any(_ => _.ComputerGuid == computer.TargetUid))
                     {
                         comp = new ComputerInformation(computer);
-                        comp.Count = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid).Items.Count;
+                        comp.Count = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid).DistinctItemsCount;
                         comp.MergeFiles(result);
                         ComputersValkyrie.Add(comp);
                     }

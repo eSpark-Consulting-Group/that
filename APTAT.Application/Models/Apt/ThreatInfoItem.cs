@@ -281,6 +281,15 @@ namespace APTAT.Application.Models
             }
         }
 
+        public int DistinctItemsCount
+        {
+            get
+            {
+                var items = Items.GroupBy(_ => _.BadFile.Sha1).Select(_ => _.Key);
+                return items.Count();
+            }
+        }
+
         public string InstancesCount
         {
             get

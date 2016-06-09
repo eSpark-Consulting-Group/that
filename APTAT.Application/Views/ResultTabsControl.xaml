@@ -12,12 +12,18 @@
 
         <converters:ContentToPathConverter x:Key="content2PathConverter" />
         
-        <Style TargetType="{x:Type TabItem}">
+        <Style TargetType="TabItem">
           <Setter Property="MinWidth" Value="100" />
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="TabItem">
                 <Grid>
+                  <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="FocusStates">
+                      <VisualState x:Name="Focused"/>
+                      <VisualState x:Name="Unfocused"/> 
+                    </VisualStateGroup>
+                  </VisualStateManager.VisualStateGroups>
                   <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" Margin="0 0 -23 0" Fill="White">
                     <Path.Data>
                       <PathGeometry>
@@ -50,7 +56,7 @@
           </Setter>
         </Style>
         
-        <Style TargetType="{x:Type ToggleButton}">
+        <Style TargetType="ToggleButton">
           <Setter Property="MinWidth" Value="100" />
           <Setter Property="Template">
             <Setter.Value>

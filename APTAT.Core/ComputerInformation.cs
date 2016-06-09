@@ -69,6 +69,15 @@ namespace APTAT.Core
 
         public ObservableCollection<FileResult> Files { get; set; }
 
+        public int DistinctCount
+        {
+            get 
+            {
+                var items = Files.GroupBy(_ => _.Sha1).Select(_ => _.Key);
+                return items.Count();
+            }
+        }
+
         public double Count { get; set; }
 
         public string StatusText { get; set; }
@@ -127,7 +136,8 @@ namespace APTAT.Core
                         Files.Count, unknownCount, malwareCount);
                 else
                     StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
-                        Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%", ((Files.Count / Count) * 100d)).Replace(".00", string.Empty));
+                        Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
+                        ((DistinctCount / Count) * 100d)).Replace(".00", string.Empty));
 
                 HasAnyUnknownOrMalware = malwareCount > 0 || unknownCount > 0;
 
