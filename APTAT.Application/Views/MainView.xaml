@@ -58,11 +58,11 @@
 
         <Application:TitleUpdater Header="{Binding Header}"/>
 
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent">
-            <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent">
+        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false">
+            <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false">
                 <Grid>
 
-                    <ContentControl x:Name="mainContent" />
+                    <ContentControl x:Name="mainContent" IsTabStop="false"/>
 
                     <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
                    HorizontalAlignment="Center">
@@ -139,7 +139,7 @@
               </telerik:RadButton>
 
                 <telerik:RadButton AutomationProperties.AutomationId="StopScanningButton"
-                                  Margin="0,-1,0,-1"  
+                                  Margin="0,-1,0,-1" 
                                   Padding="10,20"
                                   FontSize="16"
                                   Command="{Binding StopScanCommand}">

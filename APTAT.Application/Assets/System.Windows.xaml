@@ -1015,7 +1015,7 @@
 		<Setter Property="FontStyle" Value="Normal" />
 		<Setter Property="FontWeight" Value="Normal" />
 		<Setter Property="VerticalAlignment" Value="Center" />
-		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="5 2" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Navigation;
 using APTAT.Application.Models;
 using APTAT.Application.Services;
@@ -111,8 +110,8 @@ namespace APTAT.Application
             {
                 if (scanCompletedWindow.ShowDialog() == true)
                     ShowRegisterToValkyrieWindow();
-                else if (total == 0)
-                    _viewModel.IsAnalyseWithValkyrieEnabled = false;
+                else if (total > 0)
+                    _viewModel.IsAnalyseWithValkyrieEnabled = true;
             }
                 
         }
@@ -120,41 +119,21 @@ namespace APTAT.Application
         private CamCredentialsWindow _dialog;
         private void ShowRegisterToValkyrieWindow()
         {
-            var model = new ValkyrieRegistrationModel();
-
-            _dialog = new CamCredentialsWindow(model);
+            _dialog = new CamCredentialsWindow();
             _dialog.Owner = System.Windows.Application.Current.MainWindow;
-
             _dialog.OkClick += (sender, args) =>
             {
-                Dispatcher.Invoke((Action)delegate
-                {
-                    _dialog.loading.IsBusy = true;
-                    _dialog.ok.Visibility = Visibility.Collapsed;
-                });
-                _dialog.MarkPasswordValidation(model.ValidatePassword());
-
-                if (model.ValidateModel())
-                {
-                    var licid = _dialog.LicenseId;
-                    var name = _dialog.UserName.TrimEnd();
-                    var pass = _dialog.PasswordText.Password.TrimEnd();
-
-                    
-                    _viewModel.BeginValkyrieAnalysis(licid, name, pass);
-                }
-                else
-                {
+                if (_viewModel.BeginValkyrieAnalysis())
                     Dispatcher.Invoke((Action)delegate
                     {
-                        _dialog.ok.Visibility = Visibility.Visible;
-                        _dialog.loading.IsBusy = false;
+                        _dialog.loading.IsBusy = true;
+                        _dialog.ok.Visibility = Visibility.Collapsed;
                     });
-                }
             };
 
             _dialog.ShowDialog();
         }
+
         private void ViewModelOnValkyrieAnalyzeStarted(object sender, EventArgs eventArgs)
         {
             if (_dialog == null) return;
@@ -164,6 +143,7 @@ namespace APTAT.Application
                 _dialog = null;
             });
         }
+
         private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
             if (_onCompletedAction != null)
@@ -187,55 +167,6 @@ namespace APTAT.Application
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {            
             ShowRegisterToValkyrieWindow();
-        }
-
-
-
-        private ThreatInfoItem GetDataBoundItem(FrameworkElement element)
-        {
-            if(element == null)
-            {
-                return null;
-            }
-
-            if(element.Parent == null)
-            {
-                return null;
-            }
-
-            FrameworkElement parent = (FrameworkElement) element.Parent;
-            if(parent == null)
-            {
-                return null;
-            }
-
-            parent = (FrameworkElement) parent.Parent;
-            if(parent == null)
-            {
-                return null;
-            }
-
-            return parent.DataContext as ThreatInfoItem;
-        }
-
-        private void OnTreeDoubleClick(Object sender, MouseButtonEventArgs e)
-        {
-            if(e.OriginalSource != null)
-            {
-                FrameworkElement element = e.OriginalSource as FrameworkElement;
-                if(element == null)
-                {
-                    return;
-                }
-
-                ThreatInfoItem item = GetDataBoundItem(element);
-                if (_viewModel.SelectedItem != null && _viewModel.SelectedItem.IsRootItem == false && _viewModel.SelectedItem == item)
-                {
-                    ThreatDetailsWindow details = new ThreatDetailsWindow();
-                    details.Owner = System.Windows.Application.Current.MainWindow;
-                    details.ShowDialog();
-                }
-            }
         }
 
         private static void ShowReport()

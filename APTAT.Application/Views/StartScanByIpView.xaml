@@ -95,7 +95,7 @@
                                  BorderThickness="0"
                                  Margin="5" 
                                  Grid.Row="2" 
-                                 Grid.Column="1" PasswordChanged="OnPasswordChanged" ></PasswordBox>
+                                 Grid.Column="1" PasswordChanged="OnPasswordChanged" Height="22"></PasswordBox>
                
                     <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.AutomationId="TcpPortTextBox" x:Name="txtTcpPort" BorderThickness="0" Margin="5"                             
                              

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
 
+using Composition = APTAT.Application.Helpers.CompositionHelper;
+
 namespace APTAT.Application.Models
 {
-    public class ValkyrieRegistrationModel : ViewModel, IDataErrorInfo
+    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
+    public class ValkyrieRegistrationModel : ViewModel
     {
         private string _licenseId;
         private string _userName;
         private string _password;
         private string _errorMessage;
 
-        //    private readonly IAptService _service = AptService.Instance;
         public string LicenseId
         {
             get { return _licenseId; }
@@ -51,112 +53,60 @@ namespace APTAT.Application.Models
             }
         }
 
-        //public void ValidateModel()
-        //{
-        //  //  Error = null;
-
-        //    if (IsEmpty)
-        //    {
-        //     //   Error = "Please specify CAM LicenseID or CAM Credentials";
-        //    }
-
-        //    if (String.IsNullOrWhiteSpace(LicenseId))
-        //    {
-        //        if (String.IsNullOrWhiteSpace(UserName))
-        //        {
-
-        //            //var Error = "Please specify UserName";
-
-        //            return;
-        //        }
-
-        //        if (string.IsNullOrWhiteSpace(Password))
-        //        {
-        //            //Error = "Please specify Password";
-        //            return;
-        //        }
-        //    }
-        //}
-
-
-        public bool IsEmpty
-        {
-            get
-            {
-                return String.IsNullOrWhiteSpace(LicenseId) && String.IsNullOrWhiteSpace(UserName) &&
-                       String.IsNullOrWhiteSpace(Password);
-            }
-        }
-
-        public bool IsValidationMode { get; set; }
         public string this[string columnName]
         {
             get
             {
-                if (!IsValidationMode) return String.Empty;
+                string errorMessage = null;
 
-                string errorMessage = String.Empty;
                 switch (columnName)
                 {
                     case "UserName":
                         if (!ValidateUserName())
-                            errorMessage = "UserName should not be empty";
-
+                            errorMessage = "User Name is required.";
                         break;
 
                     case "Password":
                         if (!ValidatePassword())
-                            errorMessage = "Password should not be empty";
-
+                            errorMessage = "Password is required.";
                         break;
                     case "LicenseId":
-                        if (IsEmpty)
-                            errorMessage = "CAM LicenseID or CAM Credentials are required";
-
+                        if (!ValidateLicenseId())
+                            errorMessage = "CAM Credentials are required.";
                         break;
                 }
-
 
                 return errorMessage;
             }
         }
 
-
-        #region ValidateDate
-        public bool ValidatePassword()
-        {
-            if (!String.IsNullOrWhiteSpace(LicenseId)) return true;
-
-            return !String.IsNullOrWhiteSpace(this.Password);
-        }
-
-
         private bool ValidateUserName()
         {
-            if (!String.IsNullOrWhiteSpace(LicenseId)) return true;
-            return !String.IsNullOrWhiteSpace(this.UserName);
+            if (!string.IsNullOrEmpty(LicenseId)) return true;
+
+            return !string.IsNullOrEmpty(UserName);
         }
 
-        private bool FormValidation()
+        private bool ValidatePassword()
         {
-            if (!String.IsNullOrWhiteSpace(LicenseId)) return true; 
+            if (!string.IsNullOrEmpty(LicenseId)) return true;
 
-            if (!String.IsNullOrWhiteSpace(this.UserName) && !String.IsNullOrWhiteSpace(this.Password)) return true;
-            
-            return false;
+            return !string.IsNullOrEmpty(Password);
+        }
+
+        private bool ValidateLicenseId()
+        {
+            if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password)) return true;
+
+            return !string.IsNullOrEmpty(LicenseId);
         }
 
         public bool ValidateModel()
         {
-            IsValidationMode = true;
-            RaisePropertyChanged("UserName");
-            RaisePropertyChanged("Password");
-            RaisePropertyChanged("LicenseId");
-            IsValidationMode = false;
-            return FormValidation();
+            ErrorMessage = this["UserName"] ?? this["Password"] ?? this["LicenseId"];
+
+            return ErrorMessage == null;
         }
-        
-        #endregion
 
     }
 }

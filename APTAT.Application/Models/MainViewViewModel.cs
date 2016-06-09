@@ -15,6 +15,7 @@ using APTAT.Application.Extensions;
 using APTAT.Core.Descent;
 using System.Collections;
 using System.Windows.Threading;
+using APTAT.Application.Helpers;
 
 namespace APTAT.Application.Models
 {
@@ -82,11 +83,13 @@ namespace APTAT.Application.Models
             {
                 if (_cancelInProgress == value) return;
                 _cancelInProgress = value;
+
+                RaisePropertyChanged("Header");
+
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StopScanCommand.InvalidateCanExecute();
                 });
-                RaisePropertyChanged("Header");
             }
         }
 
@@ -104,6 +107,14 @@ namespace APTAT.Application.Models
                     StartScanCommand.InvalidateCanExecute();
                     StopScanCommand.InvalidateCanExecute();
                 });
+            }
+        }
+
+        public bool StopScanPredicate
+        {
+            get
+            {
+                return IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress;
             }
         }
 
@@ -436,7 +447,7 @@ namespace APTAT.Application.Models
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan), 
-                o => IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress);
+                o => StopScanPredicate);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
 
@@ -794,7 +805,7 @@ namespace APTAT.Application.Models
             
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
-            IsAnalyseWithValkyrieEnabled = enableReports;
+
             Set(() => GroupingEnabled, true);
 
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
@@ -823,19 +834,21 @@ namespace APTAT.Application.Models
             Set(() => ValkyrieSendingFiles, true);
         }
 
-        public void BeginValkyrieAnalysis(string camLicenseId, string camUserLogin, string camUserPassword)
+        public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
-            _camLicenseId = camLicenseId;
-            _camUserLogin = camUserLogin;
-            _camUserPassword = camUserPassword;
-            BeginValkyrieAnalysis();
-        }
+            var model = CompositionHelper.Instance.GetService<ValkyrieRegistrationModel>();
+            if (model.ValidateModel())
+            {
+                _camLicenseId = model.LicenseId;
+                _camUserLogin = model.UserName;
+                _camUserPassword = model.Password;
 
-        private void BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
-        {
-            
-            _aptService.BeginValkyrieAnalysis(_login, _password, _camLicenseId, _camUserLogin, _camUserPassword,
-                networkCredential);
+                _aptService.BeginValkyrieAnalysis(_login, _password, _camLicenseId, _camUserLogin, _camUserPassword,
+                    networkCredential);
+                return true;
+            }
+
+            return false;
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)

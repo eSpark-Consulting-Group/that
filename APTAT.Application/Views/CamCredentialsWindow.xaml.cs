@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Navigation;
+using APTAT.Application.Helpers;
 using APTAT.Application.Models;
 
 namespace APTAT.Application
@@ -14,31 +14,18 @@ namespace APTAT.Application
     public partial class CamCredentialsWindow : Window
     {
         private readonly ValkyrieRegistrationModel _model;
-        private readonly Brush _defaultBorderBrush;
-        public CamCredentialsWindow(ValkyrieRegistrationModel model)
+
+        public CamCredentialsWindow()
         {
             InitializeComponent();
-            _model = model;
-            this.RegistrationFormLayout.DataContext = model;
-            
-            _defaultBorderBrush = PasswordText.BorderBrush;
+            DataContext = _model = CompositionHelper.Instance.GetService<ValkyrieRegistrationModel>();
+            _model.Password = null; 
+            _model.ErrorMessage = null;
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
-            this.Close();
-        }
-
-        public void MarkPasswordValidation(bool isValid)
-        {
-            if (isValid)
-            {
-                this.PasswordText.BorderBrush = _defaultBorderBrush;
-            }
-            else
-            {
-                this.PasswordText.BorderBrush  = new SolidColorBrush(Colors.Red);
-            }
+            Close();
         }
 
         public event EventHandler OkClick;
@@ -54,16 +41,6 @@ namespace APTAT.Application
             _model.ErrorMessage = errorMessage;
         }
 
-        public string LicenseId
-        {
-            get { return this.LicenseIdText.Text.Trim(); }
-        }
-
-        public string UserName
-        {
-            get { return this.LoginText.Text.Trim(); }
-        }
-
         private void GetValkyrieButton_OnClick(object sender, RoutedEventArgs e)
         {
             var resource = TryFindResource("GETValkyrieLink");
@@ -73,8 +50,7 @@ namespace APTAT.Application
 
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
-            _model.Password = this.PasswordText.Password.Trim();
-//            PasswordText.InvalidateVisual();
+            _model.Password = PasswordText.Password;
         }
 
         protected virtual void OnOkClick()
