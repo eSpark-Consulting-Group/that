@@ -158,25 +158,12 @@ namespace APTAT.Core.Descent.Apt
             return (from file in files where file.IsBad select file).ToArray();
         }
 
-        public DetailedBadFile[] GetUniqueBadFiles()
+        public Module[] GetUknownFiles()
         {
-            Dictionary<string, DetailedBadFile> uniqueFiles = new Dictionary<string, DetailedBadFile>();
-
-            var allBadFiles = GetBadFiles();
-            foreach (var badFile in allBadFiles)
-            {
-                if (uniqueFiles.ContainsKey(badFile.Sha1))
-                {
-                    uniqueFiles[badFile.Sha1].Targets[0].BadFileInstances.Add(new DetailedBadFile.BadFileInstanceInfo(badFile));
-                }
-                else
-                {
-                    DetailedBadFile file = new DetailedBadFile(badFile, new ScannedTarget(this));
-                    uniqueFiles.Add(badFile.Sha1, file);
-                }
-            }
-            
-            return uniqueFiles.Values.ToArray();
+            var files = Files;
+            if (files == null)
+                return new Module[0];
+            return (from file in files where file.IsUnknownOrFailed select file).ToArray();
         }
 
         public void SetAptReportInstance(AptReport report)

@@ -4,6 +4,8 @@
     {
         Skipped,
         Cancelled,
+        FileNotFound, 
+        WebException,
         Failed
     }
 }

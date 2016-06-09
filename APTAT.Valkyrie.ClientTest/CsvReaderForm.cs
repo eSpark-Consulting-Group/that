@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using APTAT.Valkyrie.Client;
+using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Valkyrie.ClientTest

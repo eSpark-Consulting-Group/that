@@ -681,7 +681,7 @@ namespace APTAT.Application.Models
 
                         comp = new ComputerInformation(computer);
                         comp.Count = c.DistinctItemsCount;
-                        comp.TotalCount = c.Items.Count;
+                        comp.TotalCount = c.UnknownFilesCount;
                         comp.MergeFiles(result);
                         ComputersValkyrie.Add(comp);
                     }

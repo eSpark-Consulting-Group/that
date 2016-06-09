@@ -9,13 +9,12 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using APTAT.Valkyrie.Client;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
-using Valkyrie.WebApiProvider.Helpers;
 using Microsoft.Win32;
 using APTAT.Core.Descent;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core.Valkyrie
 {
@@ -29,6 +28,16 @@ namespace APTAT.Core.Valkyrie
         private readonly ConcurrentBag<ValkyrieAnalysisResult> _analysisResults;
         private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems
             = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
+
+        private List<ValkyrieAnalyseOperationContext> _automaticAnalyseInProgress
+            = new List<ValkyrieAnalyseOperationContext>();
+        private Dictionary<string, ValkyrieAnalyseOperationContext> _automaticAnalyseInProgressByHash
+            = new Dictionary<string, ValkyrieAnalyseOperationContext>(); 
+        private Object _automaticAnalyseSync = new object();
+
+        private HashSet<string> _lookupContexts = new HashSet<string>();
+        private Object _lookupSync = new object();
+
         private Timer _progressNotifyTimer;
         private int _machineCount;
 
@@ -169,12 +178,16 @@ namespace APTAT.Core.Valkyrie
                     }
                     else
                     {
+                        SkippReasonEnum s = SkippReasonEnum.Failed;
                         string m = e.Message;
                         if (e.Message.StartsWith("Could not find file"))
                         {
                             m = "Could not find file";
+                            s = SkippReasonEnum.FileNotFound;
                         }
-                        result = ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, m, SkippReasonEnum.Failed);
+                        else if (e is WebException)
+                            s = SkippReasonEnum.WebException;
+                        result = ValkyrieAnalysisResult.CreateSkipInfo(f.Sha1, m, s);
                     }
                     AddResult(result);
 
@@ -221,10 +234,16 @@ namespace APTAT.Core.Valkyrie
 
         private void OnAnalyzeCompleted(Task task)
         {
-            if (_progressNotifyTimer != null)
+            lock (_automaticAnalyseSync)
             {
-                _progressNotifyTimer.Dispose();
-                _progressNotifyTimer = null;
+                if (!_automaticAnalyseInProgress.Any())
+                {
+                    if (_progressNotifyTimer != null)
+                    {
+                        _progressNotifyTimer.Dispose();
+                        _progressNotifyTimer = null;
+                    }
+                }
             }
             Exception exception = null;
             if (task.Exception != null)
@@ -307,7 +326,7 @@ namespace APTAT.Core.Valkyrie
         }
               
 
-        private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, Guid endpointId)
+        private ValkyrieAnalysisResult UploadFileOldStyle(ValkyrieFileInfo fileInfo, Guid endpointId)
         {
             ValkyrieAnalysisResult result = null;
 
@@ -414,6 +433,89 @@ namespace APTAT.Core.Valkyrie
             return result;
         }
 
+        private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, Guid endpointId)
+        {
+            ValkyrieAnalysisResult result = null;
+
+            try
+            {
+                var sha1 = fileInfo.Sha1;
+                var originalFilePath = fileInfo.GetFullPath();
+                if (_cancellationTokenSource.IsCancellationRequested)
+                {
+                    return CancelOperation(originalFilePath, sha1);
+                }
+
+                var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId };
+                BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
+                if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
+                    throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}",
+                    DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                Trace.Flush();
+
+                if (!basicInfo.Upload || fileInfo.FlsCloud != CloudVerdict.FirstSeen)
+                {
+                    result = ValkyrieAnalysisResult.Create(basicInfo);
+                }
+                else
+                {
+                    lock (_automaticAnalyseSync)
+                    {
+                        ValkyrieAnalyseOperationContext context;
+                        _automaticAnalyseInProgressByHash.TryGetValue(fileInfo.Sha1, out context);
+                        if (context != null)
+                        {
+                            return ValkyrieAnalysisResult.Create(basicInfo, context.AnalysisId, true);
+                        }
+                    }
+                    if (fileInfo.Size > MaxFileLenght)
+                    {
+                        result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.",
+                            SkippReasonEnum.Skipped);
+                        Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} greater than 25 Mb",
+                            DateTime.UtcNow,
+                            originalFilePath));
+                        Trace.Flush();
+                        return result;
+                    }
+                    Trace.WriteLine(
+                        string.Format(
+                            "{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]",
+                            DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+
+                    var request = new SubmitToAutomaticRequest
+                    {
+                        ApiKey = _apiKey,
+                        SubmitToken = basicInfo.SubmitToken,
+                        FilePath = WebUtility.HtmlDecode(originalFilePath),
+                        EndpointId = endpointId
+                    };
+
+                    //var data = ReadFile(fileInfo, login, password);
+                    var fStream = File.OpenRead(fileInfo.GetNetworkPath());
+                    var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
+                    lock (_automaticAnalyseSync)
+                    {
+                        _automaticAnalyseInProgressByHash[fileInfo.Sha1] = new ValkyrieAnalyseOperationContext
+                        {
+                            AnalysisId = response.AnalysisId,
+                            HashSha1 = fileInfo.Sha1
+                        };
+                    }
+
+                    result = ValkyrieAnalysisResult.Create(basicInfo, response.AnalysisId, true);
+
+                }
+            }
+            finally
+            {
+
+            }
+
+            return result;
+        }
+
         private static ValkyrieAnalysisResult CancelOperation(string originalFilePath,  string sha1)
         {
             var result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled);
@@ -428,6 +530,16 @@ namespace APTAT.Core.Valkyrie
 
             Interlocked.Increment(ref _fileScanned);
             _analysedItems.TryAdd(result.SHA1, result);
+            if ((result.Verdict == ValkyrieVerdict.Undetected 
+                || result.Verdict == ValkyrieVerdict.Pending
+                || result.Verdict == ValkyrieVerdict.Failed)
+                && !result.IsSubmitted)
+            {
+                lock (_lookupSync)
+                {
+                    _lookupContexts.Add(result.SHA1);
+                }
+            }
 
             //Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
         }
@@ -471,7 +583,8 @@ namespace APTAT.Core.Valkyrie
 
                 OnAnalyzeStarted();
                 Thread.Sleep(2000);
-                _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, Timeout.Infinite);
+                if (_progressNotifyTimer != null)
+                    _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, Timeout.Infinite);
 
                 using (ImpersonationHelper helper = new ImpersonationHelper(login, "", password, ImpersonationHelper.Logon32LogonType.NewCredentials))
                 {

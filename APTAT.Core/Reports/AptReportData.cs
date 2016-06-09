@@ -6,6 +6,7 @@ using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
+using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 
 namespace APTAT.Core.Reports
 {

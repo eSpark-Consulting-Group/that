@@ -230,7 +230,18 @@ namespace APTAT.Core.Descent.Apt
         {
             get
             {
-                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Malware || Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FailedToAnalyze || Cloud == CloudVerdict.NoVerdict;
+                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Malware || 
+                    Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FailedToAnalyze || Cloud == CloudVerdict.NoVerdict;
+            }
+        }
+
+        [XmlIgnore]
+        public bool IsUnknownOrFailed
+        {
+            get
+            {
+                return Cloud == CloudVerdict.FirstSeen || Cloud == CloudVerdict.Unknown || 
+                    Cloud == CloudVerdict.FailedToAnalyze || Cloud == CloudVerdict.NoVerdict;
             }
         }
 

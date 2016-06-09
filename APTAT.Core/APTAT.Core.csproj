@@ -318,6 +318,8 @@
     <Compile Include="Valkyrie\AnalyzeCompletedEventArgs.cs" />
     <Compile Include="Valkyrie\AnalyzeCompletedEventHandler.cs" />
     <Compile Include="Valkyrie\CamRegistration.cs" />
+    <Compile Include="Valkyrie\MapperHelper.cs" />
+    <Compile Include="Valkyrie\ValkyrieAnalyseOperationContext.cs" />
     <Compile Include="Valkyrie\IValkyrieClient.cs" />
     <Compile Include="Valkyrie\ProgressInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

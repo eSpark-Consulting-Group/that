@@ -14,7 +14,7 @@ namespace APTAT.Core.Valkyrie
                 FirstAnalysisDate = basicInfo.FirstAnalysisDate,
                 LastAnalysisDate = basicInfo.LastAnalysisDate,
                 MalwareProbability = basicInfo.MalwareProbability,
-                Verdict = basicInfo.Verdict,
+                Verdict = basicInfo.Verdict.ToBusiness(),
                 IsWhiteListed = basicInfo.IsWhiteListed,
                 ReturnCode = basicInfo.ReturnCode
             };
@@ -25,7 +25,18 @@ namespace APTAT.Core.Valkyrie
             return result;
         }
 
-        
+        public static ValkyrieAnalysisResult Create(BasicInfoResponse basicInfo, string analyseId, bool submitted)
+        {
+            ValkyrieAnalysisResult result = new ValkyrieAnalysisResult
+            {
+                AnalyzeId = analyseId,
+                ReturnCode = ErrorCodesEnum.Success,
+                Verdict = ValkyrieVerdict.Pending,
+                IsSubmitted = submitted
+            };
+            result.OperationStatus = result.ReturnCode.ToString();
+            return result;
+        }
 
         public static ValkyrieAnalysisResult Create(CheckAnalysisResultResponse automaticResponse)
         {
@@ -34,7 +45,7 @@ namespace APTAT.Core.Valkyrie
                 SHA1 = automaticResponse.SHA1,
                 FirstAnalysisDate = automaticResponse.FirstAnalysisDate,
                 LastAnalysisDate = automaticResponse.LastAnalysisDate,
-                Verdict = automaticResponse.Verdict,
+                Verdict = automaticResponse.Verdict.ToBusiness(),
                 IsWhiteListed = automaticResponse.IsWhiteListed,
                 MalwareProbability = automaticResponse.MalwareProbability,
                 ReturnCode = automaticResponse.ReturnCode
@@ -42,10 +53,10 @@ namespace APTAT.Core.Valkyrie
             result.OperationStatus = result.ReturnCode.ToString();
             return result;
         }
-
+        public string AnalyzeId { get; private set; }
         public string SHA1 { get; private set; }
-        public string FilePath { get; private set; }
         public bool IsWhiteListed { get; private set; }
+        public bool IsSubmitted { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }
         public ValkyrieVerdict Verdict { get; private set; }
 
@@ -66,9 +77,12 @@ namespace APTAT.Core.Valkyrie
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
 
+        public SkippReasonEnum? SkipReasonAsEnum { get; private set; }
+
         public static ValkyrieAnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
-            var result = new ValkyrieAnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = ValkyrieVerdict.NotAnalyzed , IsWhiteListed = false, LastAnalysisDate = null};
+            var result = new ValkyrieAnalysisResult() {IsSkipped = true, SHA1 = sha1, SkipReason = reason, Verdict = ValkyrieVerdict.NotAnalyzed ,
+                IsWhiteListed = false, LastAnalysisDate = null};
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:
@@ -76,6 +90,13 @@ namespace APTAT.Core.Valkyrie
                     break;
                 case SkippReasonEnum.Cancelled:
                     result.OperationStatus = "Cancelled by user";
+                    break;
+                case SkippReasonEnum.WebException:
+                    result.Verdict = ValkyrieVerdict.Failed;
+                    result.OperationStatus = reason;
+                    break;
+                case SkippReasonEnum.FileNotFound:
+                    result.OperationStatus = reason;
                     break;
                 case SkippReasonEnum.Failed:
                     result.OperationStatus = reason;
@@ -93,5 +114,15 @@ namespace APTAT.Core.Valkyrie
         public ErrorCodesEnum ReturnCode { get; set; }
 
         public string OperationStatus { get; set; }
+    }
+    public enum ValkyrieVerdict
+    {
+        Clean,
+        Undetected,    
+        Malware,
+        PotentiallyUnwantedApplication,
+        NotAnalyzed,
+        Pending,
+        Failed
     }
 }

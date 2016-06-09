@@ -8,6 +8,7 @@ using Valkyrie.WebApiProvider.Enums;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 
 namespace APTAT.Core
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core.Valkyrie
 {
@@ -7,7 +8,8 @@ namespace APTAT.Core.Valkyrie
     {
         public string Path { get; set; }
         public string Sha1 { get; set; }
-        public string Ip { get; set; }
+        public string Ip { get; set; }     
+        public CloudVerdict FlsCloud { get; set; }
 
         public string GetFullPath()
         {

@@ -11,6 +11,7 @@ using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Reports;
 using APTAT.Core.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
+using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 
 namespace APTAT.Core
 {
@@ -184,6 +185,30 @@ namespace APTAT.Core
             }
             return files;
         }
+        public static List<ValkyrieFileInfo> GetDistinctUknownFileInfo(ConcurrentDictionary<Guid, AptScanResult> results)
+        {
+            Dictionary<string, AptScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.TargetUid.ToString());
+
+            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
+            foreach (var scanResult in scanResults)
+            {
+                foreach (var badFile in scanResult.Value.GetUnknownFiles())
+                {
+                    if (files.All(f => f.Sha1 != badFile.Sha1))
+                    {
+                        files.Add(new ValkyrieFileInfo()
+                        {
+                            Ip = scanResult.Value.IpAddress,
+                            Path = badFile.Path,
+                            Sha1 = badFile.Sha1,
+                            Size = badFile.Size,
+                            FlsCloud = badFile.Cloud
+                        });
+                    }
+                }
+            }
+            return files;
+        }
         public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
             DevicesSourceDescription devicesSourceDescription, string scanScope, string tcp, string udp)
         {
@@ -242,7 +267,7 @@ namespace APTAT.Core
         {
             var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
-            var distinctFileList = GetDistinctFileInfo(results);
+            var distinctFileList = GetDistinctUknownFileInfo(results);
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
             _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
             _valkyrieClient.AnalyzeStarted += OnValkyrieAnalyzeStarted;

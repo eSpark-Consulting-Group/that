@@ -17,6 +17,9 @@ namespace Valkyrie.WebApiProvider.Contracts
         /// </summary>
         [JsonProperty("presence")]
         public bool Presence { get; set; }
+
+        [JsonProperty("upload")]
+        public bool Upload { get; set; }
         [JsonProperty("return_code")]
         public ErrorCodesEnum ReturnCode { get; set; }
         [JsonProperty("sha1")]

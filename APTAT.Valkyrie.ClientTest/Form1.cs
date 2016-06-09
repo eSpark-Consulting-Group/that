@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using APTAT.Valkyrie.Client;
 using Microsoft.VisualBasic.FileIO;
+using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 
 //using APTAT.Valkyrie.Client;
