@@ -48,7 +48,7 @@
                 </DataTemplate>
            
                 <DataTemplate x:Key="FileInfoTemplate">
-                    <Grid Height="50">
+                    <Grid Height="50" Margin="-1 0 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
@@ -78,8 +78,8 @@
                         <Path SnapsToDevicePixels="True" Data="M1.188,7.9370117 C1.8441142,7.9370117 2.3759999,8.4688978 2.3759999,9.1250114 C2.3759999,9.781126 1.8441142,10.313012 1.188,10.313012 C0.53188568,10.313012 -7.4505806E-09,9.781126 0,9.1250114 C-7.4505806E-09,8.4688978 0.53188568,7.9370117 1.188,7.9370117 z M0.10499457,0 L2.2299945,0 L2.2299945,6.5619998 L0.10499457,6.5619998 z" Fill="White" Height="10.313" Stretch="Fill" Width="2.376" UseLayoutRounding="False" Canvas.Left="6.811" Canvas.Top="2.687"/>
                       </Canvas>
 
-                      <TextBlock Margin="-1,8,0,0" Text="{Binding FullName}" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding FullName}"/>
-                      <TextBlock Margin="-1,0,0,6" Text="{Binding InstancesCount}" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" />
+                      <TextBlock Margin="0,8,0,0" Text="{Binding FullName}" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding FullName}"/>
+                      <TextBlock Margin="0,0,0,6" Text="{Binding InstancesCount}" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" />
                     </Grid>
                 </DataTemplate>
            

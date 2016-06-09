@@ -643,8 +643,12 @@ namespace APTAT.Application.Models
                     file.MergeComputers(result.Computers);
                     if (file.Path != result.Path)
                     {
-                        UnknownFilesCount += result.IsUnknown ? 1 : 0;
-                        MalwareFilesCount += result.IsMalware ? 1 : 0;
+                        file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result) && _.Path == result.Path);
+                        if (file == null)
+                        {
+                            UnknownFilesCount += result.IsUnknown ? 1 : 0;
+                            MalwareFilesCount += result.IsMalware ? 1 : 0;
+                        }
                     }
                 }
                 else
@@ -962,7 +966,8 @@ namespace APTAT.Application.Models
                         item = new ThreatInfoItem(badFile);
 
                         var exist = _cache.FirstOrDefault(_ => _.BadFile.Sha1 == item.BadFile.Sha1);
-                        var comp = new ThreatInfoItem { IpAddress = parentItem.IpAddress, Name = parentItem.Name, ShortName = item.Name, IsRootItem = true };
+                        var comp = new ThreatInfoItem { IpAddress = parentItem.IpAddress, ComputerGuid = e.ScanResult.TargetUid, 
+                            Name = parentItem.Name, ShortName = item.Name, IsRootItem = true };
                         if (exist != null)
                             exist.Computers.Add(comp);
                         else

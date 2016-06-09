@@ -207,9 +207,9 @@ namespace APTAT.Core
                     return string.Empty;
 
                 if (Computers.Count == 1)
-                    return "1 instance on 1 computer.";
+                    return "1 instance.";
 
-                var uniqueComputers = Computers.GroupBy(_ => _.FullName).Select(_ => _.Key).Count();
+                var uniqueComputers = Computers.GroupBy(_ => _.TargetUid).Select(_ => _.Key).Count();
 
                 return string.Format("{0} instances on {1} computer{2}.", Computers.Count, 
                     uniqueComputers, uniqueComputers > 1 ? "s" : string.Empty);

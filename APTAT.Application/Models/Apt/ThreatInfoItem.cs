@@ -298,7 +298,7 @@ namespace APTAT.Application.Models
                     return string.Empty;
 
                 if (Computers.Count == 1)
-                    return "1 instance on 1 computer.";
+                    return "1 instance.";
 
                 var uniqueComputers = Computers.GroupBy(_ => _.ComputerGuid).Select(_ => _.Key).Count();
 
