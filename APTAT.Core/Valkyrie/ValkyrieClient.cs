@@ -450,8 +450,8 @@ namespace APTAT.Core.Valkyrie
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}",
-                    DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} FlsVerdict {3} Upload {4} Presence = {5}",
+                    DateTime.UtcNow, sha1, originalFilePath, fileInfo.FlsCloud, basicInfo.Upload, basicInfo.Presence));
                 Trace.Flush();
 
                 if (!basicInfo.Upload || fileInfo.FlsCloud != CloudVerdict.FirstSeen)

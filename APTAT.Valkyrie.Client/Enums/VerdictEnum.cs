@@ -20,6 +20,12 @@ namespace Valkyrie.WebApiProvider.Enums
         /// </summary>        
         Malware = 1,
 
+        /// <summary>
+        ///means file doesn't exist.
+        /// </summary> 
+        [Description("Pending")]
+        FirstSeen = 2,
+
         [Description("Potentially Unwanted Application")]
         PotentiallyUnwantedApplication = 3,
 

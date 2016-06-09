@@ -21,6 +21,8 @@ namespace APTAT.Core.Valkyrie
                     return ValkyrieVerdict.PotentiallyUnwantedApplication;
                 case DTO.ValkyrieVerdict.Undetected:
                     return ValkyrieVerdict.Undetected;
+                case DTO.ValkyrieVerdict.FirstSeen:
+                    return ValkyrieVerdict.FirstSeen;
                 default:
                     throw new ArgumentException("unsupported Valkyrie verdict");
             }

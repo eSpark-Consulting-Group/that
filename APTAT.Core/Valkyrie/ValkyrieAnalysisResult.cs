@@ -118,7 +118,8 @@ namespace APTAT.Core.Valkyrie
     public enum ValkyrieVerdict
     {
         Clean,
-        Undetected,    
+        Undetected,   
+        FirstSeen,
         Malware,
         PotentiallyUnwantedApplication,
         NotAnalyzed,
