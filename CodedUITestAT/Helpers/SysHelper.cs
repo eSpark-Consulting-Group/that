@@ -289,6 +289,9 @@ namespace CodedUITestAT
             return checkSumString;
         }
 
+        /// <summary>Copies unknown file to a given endpoint for a Quick Scan. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        /// <returns>Returns a unknown file object.</returns>
         internal static UnknownFile CopyUnknownFileForQuickScan(Computer endpoint)
         {
             string unknownName = Settings.General.Default.UnknownName;
