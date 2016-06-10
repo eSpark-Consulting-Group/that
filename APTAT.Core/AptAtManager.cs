@@ -10,7 +10,6 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Reports;
 using APTAT.Core.Valkyrie;
-using Valkyrie.WebApiProvider.Enums;
 using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 
 namespace APTAT.Core
@@ -56,7 +55,7 @@ namespace APTAT.Core
     public class AptAtManager : IDisposable
     {
         private readonly IDescentSubSystem _descentSubSystem;
-        public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
+        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         private IValkyrieClient _valkyrieClient;
@@ -93,7 +92,8 @@ namespace APTAT.Core
         {
             if (_valkyrieClient != null)
             {
-                _valkyrieClient.AnalyzeProgressChanged -= OnValkyrieClientProgressChanged;
+                if (!e.IsPendingExist)
+                    _valkyrieClient.AnalyzeProgressChanged -= OnValkyrieClientProgressChanged;
                 _valkyrieClient.AnalyzeCompleted -= OnValkyrieManagerAnalyzeCompleted;
                 _valkyrieClient.AnalyzeStarted -= OnValkyrieAnalyzeStarted;
             }
@@ -103,17 +103,22 @@ namespace APTAT.Core
             ValkyrieAnalysisResult = valkyrieAnalysisResult;
             if (handler != null)
             {
-                var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled, e.UserState);
+                var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
+                    , e.IsPendingExist, e.UserState);
                 handler(this, arg);
             }
         }
 
-        void OnValkyrieClientProgressChanged(object sender, ProgressChangedEventArgs e)
+        void OnValkyrieClientProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
         {
+            if (e.IsUpdate && !e.IsPendingExist)
+            {
+                _valkyrieClient.AnalyzeProgressChanged -= OnValkyrieClientProgressChanged;
+            }
             var handler = ValkyrieAnalyzeProgressChanged;
             if (handler != null)
             {
-                ProgressInfo<ValkyrieAnalysisResult> info = (ProgressInfo<ValkyrieAnalysisResult>)e.UserState;
+                ProgressInfo<ValkyrieAnalysisResult> info = e.ProgressInfo;
                 
                 var results = _descentSubSystem.GetFirstScanResults().ScanResults;
                 var valkyrieAnalysisResult = GetFullResult(info.Results, results);
@@ -126,7 +131,7 @@ namespace APTAT.Core
                 var unknownFilesCount = valkyrieAnalysisResult.Count - malwareFilesCount;
 
                 ProgressInfo<FileResult> progressInfo = new ProgressInfo<FileResult>(info.TotalFileCount, info.ProcessedFileCount, malwareFilesCount, unknownFilesCount, valkyrieAnalysisResult.ToArray());
-                handler(this, new ProgressChangedEventArgs(e.ProgressPercentage, progressInfo));
+                handler(this, new ValkyrieAnalyzeProgressChangedEventArgs<FileResult>(e.Percent, progressInfo, e.IsUpdate, e.IsPendingExist));
             }
         }
 
@@ -268,6 +273,7 @@ namespace APTAT.Core
             var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
             var results = _descentSubSystem.GetFirstScanResults().ScanResults;
             var distinctFileList = GetDistinctUknownFileInfo(results);
+            _valkyrieClient.AnalyzeProgressChanged -= OnValkyrieClientProgressChanged;
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
             _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
             _valkyrieClient.AnalyzeStarted += OnValkyrieAnalyzeStarted;

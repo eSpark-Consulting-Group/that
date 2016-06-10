@@ -360,6 +360,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Valkyrie\ValkyrieAnalysisResult.cs" />
+    <Compile Include="Valkyrie\ValkyrieAnalyzeProgressChangedEventArgs.cs" />
     <Compile Include="Valkyrie\ValkyrieClient.cs" />
     <Compile Include="Valkyrie\ValkyrieFileInfo.cs" />
     <Compile Include="Valkyrie\ValkyrieRegistrationFailedException.cs" />

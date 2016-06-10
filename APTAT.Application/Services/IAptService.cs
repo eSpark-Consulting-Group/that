@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Net;
 using APTAT.Application.Models;
 using APTAT.Core;
-using System.ComponentModel;
-using System.Net;
 using APTAT.Core.Descent;
 using APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.Valkyrie;
@@ -165,7 +164,7 @@ namespace APTAT.Application.Services
         event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;   
-        event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
+        event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
 

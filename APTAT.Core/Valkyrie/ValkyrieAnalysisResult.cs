@@ -30,6 +30,7 @@ namespace APTAT.Core.Valkyrie
             ValkyrieAnalysisResult result = new ValkyrieAnalysisResult
             {
                 AnalyzeId = analyseId,
+                SHA1 = basicInfo.SHA1,
                 ReturnCode = ErrorCodesEnum.Success,
                 Verdict = ValkyrieVerdict.Pending,
                 IsSubmitted = submitted
@@ -68,7 +69,7 @@ namespace APTAT.Core.Valkyrie
                 if (Verdict == ValkyrieVerdict.NotAnalyzed) return string.Format("Not Analysed ({0})", OperationStatus);
                 if (Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication) return "Potentially Unwanted";
                 if (Verdict == ValkyrieVerdict.Pending || Verdict == ValkyrieVerdict.FirstSeen)
-                    return "On Analysis";
+                    return "In Analysis";
                 if (Verdict == ValkyrieVerdict.Undetected) return "No Threat Found";
 
                 return Verdict.ToString();

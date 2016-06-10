@@ -13,7 +13,6 @@ using APTAT.Core.Valkyrie;
 using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
 using APTAT.Core.Descent;
-using System.Collections;
 using System.Windows.Threading;
 using APTAT.Application.Helpers;
 
@@ -631,11 +630,11 @@ namespace APTAT.Application.Models
         public bool SelectScan { get; set; }
         public bool SelectValkyrieScan { get; set; }
 
-        private void OnValkyrieAnalyzeProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
         {
             Set(() => ValkyrieSendingFiles, false);
 
-            var info = (ProgressInfo<FileResult>)e.UserState;
+            var info = e.ProgressInfo;
             if (info != null && !CancelInProgress)
             {
                 ValkyrieProgressInfo = info;

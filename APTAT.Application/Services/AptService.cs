@@ -29,7 +29,7 @@ namespace APTAT.Application.Services
 
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
 
-        public event ProgressChangedEventHandler ValkyrieAnalyzeProgressChanged;
+        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
 
@@ -64,8 +64,10 @@ namespace APTAT.Application.Services
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
-        void OnValkyrieAnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)
+        void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
         {
+            if (e.IsUpdate && !e.IsPendingExist)
+                _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             Action action = () =>
             {
                 var handler = ValkyrieAnalyzeProgressChanged;
@@ -80,7 +82,8 @@ namespace APTAT.Application.Services
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
             _manager.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
-            _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
+            if (!e.IsPendingExist)
+                _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             _manager.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
             Action action = () =>
             {
