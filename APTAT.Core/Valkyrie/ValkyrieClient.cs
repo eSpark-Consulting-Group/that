@@ -119,7 +119,7 @@ namespace APTAT.Core.Valkyrie
             if (_checkStatusesTimer != null)
                 _checkStatusesTimer.Change(Timeout.Infinite, Timeout.Infinite);
             var stopTimer = !CheckNewStatusesOnValkyrie();
-            OnAnalyzeProgressChanged(_pendingItemsResolved);
+            OnAnalyzeProgressChanged(_pendingItemsResolved, true, !stopTimer);
             if (!stopTimer && _checkStatusesTimer != null)
                 _checkStatusesTimer.Change(1000, Timeout.Infinite);
         }
@@ -374,7 +374,7 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items)
+        private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items, bool isUpdate = false, bool pendingItemsExists = false)
         {
             if (items.Count == 0) return;
 
@@ -405,7 +405,7 @@ namespace APTAT.Core.Valkyrie
 
                 tmp(this,
                     new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(progressInt,
-                        new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, malwareCount, 0, newResults)));
+                        new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, malwareCount, 0, newResults), isUpdate, pendingItemsExists));
 
             }
         }
