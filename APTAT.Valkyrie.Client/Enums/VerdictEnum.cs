@@ -27,11 +27,6 @@ namespace Valkyrie.WebApiProvider.Enums
         FirstSeen = 2,
 
         [Description("Potentially Unwanted Application")]
-        PotentiallyUnwantedApplication = 3,
-
-        [Description("Not Analysed")]
-        NotAnalyzed = 101
-
-
+        PotentiallyUnwantedApplication = 3
     }
 }

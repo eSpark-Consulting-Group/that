@@ -68,7 +68,7 @@ namespace APTAT.Core.Valkyrie
                 if (Verdict == ValkyrieVerdict.NotAnalyzed) return string.Format("Not Analysed ({0})", OperationStatus);
                 if (Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication) return "Potentially Unwanted";
                 if (Verdict == ValkyrieVerdict.Pending || Verdict == ValkyrieVerdict.FirstSeen)
-                    return "Pending Analysis";
+                    return "On Analysis";
                 if (Verdict == ValkyrieVerdict.Undetected) return "No Threat Found";
 
                 return Verdict.ToString();

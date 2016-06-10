@@ -15,8 +15,6 @@ namespace APTAT.Core.Valkyrie
                     return ValkyrieVerdict.Clean;
                 case DTO.ValkyrieVerdict.Malware:
                     return ValkyrieVerdict.Malware;
-                case DTO.ValkyrieVerdict.NotAnalyzed:
-                    return ValkyrieVerdict.NotAnalyzed;
                 case DTO.ValkyrieVerdict.PotentiallyUnwantedApplication:
                     return ValkyrieVerdict.PotentiallyUnwantedApplication;
                 case DTO.ValkyrieVerdict.Undetected:
