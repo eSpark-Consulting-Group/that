@@ -121,33 +121,50 @@ namespace APTAT.Core
 
         public bool HasAnyUnknownOrMalware { get; set; }
 
-        public void MergeFiles(FileResult file)
+        public void MergeFile(FileResult file)
         {
             if (!Files.Any(_ => _.Equals(file) && _.Path == file.Path))
             {
                 Files.Add(new FileResult(file));
-
-                if (Count == 0)
-                    return;
-
-                var malwareCount = Files.Count(_ => _.IsMalware);
-                var unknownCount = Files.Count(_ => _.IsUnknown);
-
-                if (Files.Count == TotalCount)
-                    StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
-                        Files.Count, unknownCount, malwareCount);
-                else
-                    StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
-                        Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
-                        ((DistinctCount / Count) * 100d)).Replace(".00", string.Empty));
-
-                HasAnyUnknownOrMalware = malwareCount > 0 || unknownCount > 0;
-
-                RaisePropertyChanged("HasAnyUnknownOrMalware");
-                RaisePropertyChanged("StatusText");
-                RaisePropertyChanged("InProgress");
-                RaisePropertyChanged("Completed");
+                UpdateHeader();
             }
+        }
+
+        public void UpdateFile(FileResult file)
+        {
+            foreach (var result in Files)
+            {
+                if (!result.Equals(file))
+                    continue;
+
+                result.UpdateValkyrieResult(file);
+                UpdateHeader();
+                break;
+            }
+        }
+
+        private void UpdateHeader()
+        {
+            if (Count == 0)
+                return;
+
+            var malwareCount = Files.Count(_ => _.IsMalware);
+            var unknownCount = Files.Count(_ => _.IsUnknown);
+
+            if (Files.Count == TotalCount)
+                StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
+                    Files.Count, unknownCount, malwareCount);
+            else
+                StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
+                    Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
+                    ((DistinctCount / Count) * 100d)).Replace(".00", string.Empty));
+
+            HasAnyUnknownOrMalware = malwareCount > 0 || unknownCount > 0;
+
+            RaisePropertyChanged("HasAnyUnknownOrMalware");
+            RaisePropertyChanged("StatusText");
+            RaisePropertyChanged("InProgress");
+            RaisePropertyChanged("Completed");
         }
 
         public bool Equals(ComputerInformation other)

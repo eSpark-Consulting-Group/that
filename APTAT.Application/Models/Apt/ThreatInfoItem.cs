@@ -299,11 +299,11 @@ namespace APTAT.Application.Models
             }
         }
 
-        public int DistinctItemsCount
+        public int DistinctUnknownFilesCount
         {
             get
             {
-                var items = Items.GroupBy(_ => _.BadFile.Sha1).Select(_ => _.Key);
+                var items = Items.Where(_ => _.IsUnknown).GroupBy(_ => _.BadFile.Sha1).Select(_ => _.Key);
                 return items.Count();
             }
         }

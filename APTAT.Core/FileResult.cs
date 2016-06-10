@@ -212,7 +212,11 @@ namespace APTAT.Core
         {
             ValkyrieAnalysisResult = result.ValkyrieAnalysisResult;
 
-            //TODO
+            RaisePropertyChanged("IsMalware");
+            RaisePropertyChanged("IsUnknown");
+            RaisePropertyChanged("Clean");
+            RaisePropertyChanged("Failed");
+            RaisePropertyChanged("Pending");
         }
 
         public ObservableCollection<ComputerInformation> Computers { get; set; }

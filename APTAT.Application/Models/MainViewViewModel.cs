@@ -622,13 +622,7 @@ namespace APTAT.Application.Models
 
             if (info != null && e.IsUpdate)
             {
-                foreach (var result in info.Results)
-                {
-                    var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
-                    if (file != null)
-                        file.UpdateValkyrieResult(result);
-                }
-                
+                UpdateResults(info.Results);
                 return;
             }
 
@@ -640,6 +634,32 @@ namespace APTAT.Application.Models
                 Percentage = info.Percentage;
                 RaisePropertyChanged("Header");
                 MergeResults(info.Results);
+            }
+        }
+
+        private void UpdateResults(FileResult[] results)
+        {
+            foreach (var result in results)
+            {
+                var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
+                if (file != null)
+                {
+                    file.UpdateValkyrieResult(result);
+
+                    if (file.IsUnknown)
+                        _unknownFilesCount += file.Computers.Count;
+                    else if (file.IsMalware)
+                        _malwareFilesCount += file.Computers.Count;
+                    RaisePropertyChanged("UnknownFilesCount");
+                    RaisePropertyChanged("MalwareFilesCount");
+
+                    foreach (var computer in file.Computers)
+                    {
+                        var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
+                        if (comp != null)
+                            comp.UpdateFile(result);
+                    }
+                }
             }
         }
 
@@ -680,18 +700,18 @@ namespace APTAT.Application.Models
 
                 foreach (var computer in result.Computers)
                 {
-                    var comp = ComputersValkyrie.FirstOrDefault(_ => _.FullName == computer.FullName);
+                    var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
                     if (comp != null)
-                        comp.MergeFiles(result);
+                        comp.MergeFile(result);
                     else
                     {
                         var c = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid);
                         if (c == null) continue;
 
                         comp = new ComputerInformation(computer);
-                        comp.Count = c.DistinctItemsCount;
+                        comp.Count = c.DistinctUnknownFilesCount;
                         comp.TotalCount = c.UnknownFilesCount;
-                        comp.MergeFiles(result);
+                        comp.MergeFile(result);
                         ComputersValkyrie.Add(comp);
                     }
                 }
