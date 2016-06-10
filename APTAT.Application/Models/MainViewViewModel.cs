@@ -941,6 +941,16 @@ namespace APTAT.Application.Models
                 noVerdictFiles += infoItem.NoVerdictFilesCount;
             }
 
+            if (unknownFiles > UnknownFilesCount)
+            {
+                UnknownFilesCount = unknownFiles;
+            }
+
+            if (malwareFiles > MalwareFilesCount)
+            {
+                MalwareFilesCount = malwareFiles;
+            }
+
             if (failedToAnalyzeFiles > FailedToAnalyzeFilesCount)
             {
                 FailedToAnalyzeFilesCount = failedToAnalyzeFiles;
@@ -954,7 +964,9 @@ namespace APTAT.Application.Models
             ScannedItemsCount = scanned;
 
             if (completed == OnlineItemsCount)
+            {
                 ScanCompleted(scanned > 0);
+            }
             else
                 _scanIteratorTimer.Start();
 
