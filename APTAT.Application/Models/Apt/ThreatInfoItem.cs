@@ -86,7 +86,7 @@ namespace APTAT.Application.Models
 
         public Boolean IsMalware { get; set; }
 
-        public Boolean Clean
+        public Boolean Failed
         {
             get 
             {

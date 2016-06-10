@@ -72,7 +72,7 @@ namespace APTAT.Application.Models
                         break;
                     case "LicenseId":
                         if (!ValidateLicenseId())
-                            errorMessage = "CAM Credentials are required.";
+                            errorMessage = "CAM license or CAM credentials are required.";
                         break;
                 }
 

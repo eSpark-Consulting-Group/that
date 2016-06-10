@@ -45,6 +45,8 @@ namespace APTAT.Application.Models
             {
                 _verdict = value;
                 RaisePropertyChanged("Verdict");
+                RaisePropertyChanged("Clean");
+                RaisePropertyChanged("Failed");
             }
         }
 
@@ -159,12 +161,16 @@ namespace APTAT.Application.Models
             }
         }
 
+        public bool Failed
+        {
+            get;
+            set;
+        }
+
         public bool Clean
         {
-            get
-            {
-                return !IsUnknown && !IsMalware;
-            }
+            get;
+            set;
         }
 
         public Boolean IsMalware
@@ -221,21 +227,27 @@ namespace APTAT.Application.Models
                 switch (badFile.Cloud)
                 {
                     case CloudVerdict.FailedToAnalyze:
+                        Failed = true;
                         Verdict = "Failed to analyse";
                         break;
-                        case CloudVerdict.FirstSeen:
-                        case CloudVerdict.Unknown:
+                    case CloudVerdict.FirstSeen:
+                    case CloudVerdict.Unknown:
                         Verdict = "Unknown";
                         break;
-                        case CloudVerdict.Malware:
+                    case CloudVerdict.Malware:
                         Verdict = "Malware";
                         break;
-                        case CloudVerdict.NoVerdict:
-                        Verdict = "No verdict";
+                    case CloudVerdict.NoVerdict:
+                        Failed = true;
+                        Verdict = "No verdict"; 
                         break;
                 }
             else
+            {
+                Clean = valkyrieFile.ValkyrieAnalysisResult.Verdict == Core.Valkyrie.ValkyrieVerdict.Clean;
+                Failed = valkyrieFile.ValkyrieAnalysisResult.Verdict == Core.Valkyrie.ValkyrieVerdict.Failed;
                 Verdict = valkyrieFile.ValkyrieAnalysisResult.VerdictString;
+            }
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
             Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();
             Modified = badFile != null ? badFile.Modified.ToLocalTime() : valkyrieFile.Modified.ToLocalTime();

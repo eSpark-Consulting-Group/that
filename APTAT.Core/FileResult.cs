@@ -131,11 +131,19 @@ namespace APTAT.Core
 
         }
 
-        public Boolean Clean
+        public bool Clean
         {
             get
             {
-                return !IsUnknown && !IsMalware;
+                return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Clean;
+            }
+        }
+
+        public bool Failed
+        {
+            get
+            {
+                return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Failed;
             }
         }
 
