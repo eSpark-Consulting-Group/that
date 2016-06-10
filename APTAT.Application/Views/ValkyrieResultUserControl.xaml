@@ -84,9 +84,6 @@
                 <DataTemplate x:Key="VerdictColumn">
                     <TextBlock  Text="{Binding ValkyrieAnalysisResult.VerdictString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
                 </DataTemplate>
-                <DataTemplate x:Key="OperationStatusColumn">
-                    <TextBlock  Text="{Binding ValkyrieAnalysisResult.OperationStatus}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
-                </DataTemplate>
 
                 <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="NameTemplateSelector" 
                                                                 FileTemplate="{StaticResource FileInfoTemplate}"
@@ -99,9 +96,6 @@
                                                                 ComputerTemplate="{x:Null}"/>
                 <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="VerdictTemplateSelector"
                                                                 FileTemplate="{StaticResource VerdictColumn}"
-                                                                ComputerTemplate="{x:Null}"/>
-                <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="OperationStatusTemplateSelector"
-                                                                FileTemplate="{StaticResource OperationStatusColumn}"
                                                                 ComputerTemplate="{x:Null}"/>
             </telerik:RadTreeListView.Resources>
 
@@ -118,7 +112,7 @@
                     ShowFieldFilters="False"                    
                     Header="NAME"
                     TextAlignment="Left"
-                    Width="470*" 
+                    Width="590*" 
                  SortMemberPath="FullName"/>
                
                 <telerik:GridViewColumn
@@ -135,15 +129,7 @@
                     IsFilterable="False"
                     Header="VERDICT"  
                     TextAlignment="Left"
-                    Width="186*"/>
-                
-                <telerik:GridViewColumn
-                    CellTemplateSelector="{StaticResource OperationStatusTemplateSelector}"
-                    SortMemberPath="ValkyrieAnalysisResult.OperationStatus"
-                    IsFilterable="False"
-                    Header="STATUS"  
-                    TextAlignment="Left"
-                    Width="140*" />
+                    Width="206*"/>
 
                 <telerik:GridViewColumn
                     CellTemplateSelector="{StaticResource WhiteListedTemplateSelector}"
