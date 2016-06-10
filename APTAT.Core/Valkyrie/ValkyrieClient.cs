@@ -584,7 +584,7 @@ namespace APTAT.Core.Valkyrie
 
                 OnAnalyzeStarted();
                 Thread.Sleep(2000);
-                if (_progressNotifyTimer != null)
+                //if (_progressNotifyTimer != null)
                     _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, 1000, Timeout.Infinite);
 
                 using (ImpersonationHelper helper = new ImpersonationHelper(login, "", password, ImpersonationHelper.Logon32LogonType.NewCredentials))
