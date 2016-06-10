@@ -15,6 +15,7 @@ using Valkyrie.WebApiProvider.Enums;
 using Microsoft.Win32;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
+using APTAT.Valkyrie.Client;
 
 namespace APTAT.Core.Valkyrie
 {
