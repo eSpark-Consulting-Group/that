@@ -80,7 +80,7 @@ namespace APTAT.Application
                 return;
             }
 
-            ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow(_viewModel);
+            ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
             scanCompletedWindow.Text.Text = String.Empty;
             scanCompletedWindow.Text.Text += "Computer Statistics:";
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
@@ -95,11 +95,11 @@ namespace APTAT.Application
             int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount+ e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount;
             if (e.FilesStatistics.TotalFilesCound > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total(s) found", Environment.NewLine, total);
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total found", Environment.NewLine, total);
             }
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown(s) found", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
+            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown programs found", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
             
-            if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware(s) found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
+            if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malwares found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
             if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed to analyse", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount);
             if (e.FilesStatistics.NoVerdictFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} No Verdict", Environment.NewLine, e.FilesStatistics.NoVerdictFilesCount);
 
@@ -108,6 +108,7 @@ namespace APTAT.Application
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             if (e.SuccededCount > 0)
             {
+                scanCompletedWindow.DataContext = DataContext;
                 if (scanCompletedWindow.ShowDialog() == true)
                     ShowRegisterToValkyrieWindow();
                 else if (e.FilesStatistics.UnknownFilesCount > 0)

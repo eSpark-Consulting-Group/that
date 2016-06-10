@@ -47,6 +47,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("Verdict");
                 RaisePropertyChanged("Clean");
                 RaisePropertyChanged("Failed");
+                RaisePropertyChanged("Pending");
             }
         }
 
@@ -173,6 +174,12 @@ namespace APTAT.Application.Models
             set;
         }
 
+        public bool Pending
+        { 
+            get; 
+            set; 
+        }
+
         public Boolean IsMalware
         {
             get { return _isMalware; }
@@ -180,7 +187,6 @@ namespace APTAT.Application.Models
             {
                 _isMalware = value;
                 RaisePropertyChanged("IsMalware");
-                RaisePropertyChanged("Clean");
             }
         }
 
@@ -246,6 +252,7 @@ namespace APTAT.Application.Models
             {
                 Clean = valkyrieFile.Clean;
                 Failed = valkyrieFile.Failed;
+                Pending = valkyrieFile.Pending;
                 Verdict = valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             }
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;

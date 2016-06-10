@@ -141,6 +141,14 @@ namespace APTAT.Core
             }
         }
 
+        public bool Pending
+        {
+            get
+            {
+                return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Pending || ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.FirstSeen;
+            }
+        }
+
         public string Name
         {
             get
@@ -200,6 +208,13 @@ namespace APTAT.Core
 
         public ValkyrieAnalysisResult ValkyrieAnalysisResult { get; set; }
 
+        public void UpdateValkyrieResult(FileResult result)
+        {
+            ValkyrieAnalysisResult = result.ValkyrieAnalysisResult;
+
+            //TODO
+        }
+
         public ObservableCollection<ComputerInformation> Computers { get; set; }
 
         public string InstancesCount
@@ -219,12 +234,15 @@ namespace APTAT.Core
             }
         }
 
-        public void MergeComputers(IEnumerable<ComputerInformation> computers)
+        public void MergeComputers(IEnumerable<ComputerInformation> computers, ref int count)
         {
             foreach (var computer in computers)
             {
                 if (!Computers.Any(_ => _.Equals(computer)))
+                {
                     Computers.Add(computer);
+                    count++;
+                }
             }
 
             RaisePropertyChanged("InstancesCount");

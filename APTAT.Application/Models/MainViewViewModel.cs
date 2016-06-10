@@ -161,8 +161,6 @@ namespace APTAT.Application.Models
                 _unknownFilesCount = value;
                 RaisePropertyChanged("UnknownFilesCount");
                 RaisePropertyChanged("IsUnknownFound");
-                RaisePropertyChanged("IsProtected");
-                RaisePropertyChanged("IsProtected2");
             }
         }
 
@@ -194,9 +192,6 @@ namespace APTAT.Application.Models
                 _malwareFilesCount = value;
                 RaisePropertyChanged("MalwareFilesCount");
                 RaisePropertyChanged("IsMalwaresFound");
-                RaisePropertyChanged("IsProtected");
-                RaisePropertyChanged("IsProtected2");
-
             }
         }
 
@@ -378,18 +373,9 @@ namespace APTAT.Application.Models
         {
             get
             {
-                return !IsUnknownFound;
-            }
-        }
-
-        public bool IsProtected2
-        {
-            get
-            {
                 return !IsUnknownFound && !IsMalwaresFound;
             }
         }
-
 
         public ObservableCollection<FileResult> ItemsValkyrie
         {
@@ -632,11 +618,22 @@ namespace APTAT.Application.Models
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
         {
-            if (e.IsUpdate)
+            var info = e.ProgressInfo;
+
+            if (info != null && e.IsUpdate)
+            {
+                foreach (var result in info.Results)
+                {
+                    var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
+                    if (file != null)
+                        file.UpdateValkyrieResult(result);
+                }
+                
                 return;
+            }
+
             Set(() => ValkyrieSendingFiles, false);
 
-            var info = e.ProgressInfo;
             if (info != null && !CancelInProgress)
             {
                 ValkyrieProgressInfo = info;
@@ -662,23 +659,24 @@ namespace APTAT.Application.Models
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
                 {
-                    file.MergeComputers(result.Computers);
-                    if (file.Path != result.Path)
-                    {
-                        file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result) && _.Path == result.Path);
-                        if (file == null)
-                        {
-                            UnknownFilesCount += result.IsUnknown ? 1 : 0;
-                            MalwareFilesCount += result.IsMalware ? 1 : 0;
-                        }
-                    }
+                    int dummy = 0;
+                    if (file.IsUnknown)
+                        file.MergeComputers(result.Computers, ref _unknownFilesCount);
+                    else if (file.IsMalware)
+                        file.MergeComputers(result.Computers, ref _malwareFilesCount);
+                    else
+                        file.MergeComputers(result.Computers, ref dummy);
                 }
                 else
                 {
                     ItemsValkyrie.Add(result);
-                    UnknownFilesCount += result.IsUnknown ? 1 : 0;
-                    MalwareFilesCount += result.IsMalware ? 1 : 0;
+                    if (result.IsUnknown)
+                        _unknownFilesCount += result.Computers.Count;
+                    else if (result.IsMalware)
+                        _malwareFilesCount += result.Computers.Count;
                 }
+                RaisePropertyChanged("UnknownFilesCount");
+                RaisePropertyChanged("MalwareFilesCount");
 
                 foreach (var computer in result.Computers)
                 {
@@ -965,9 +963,7 @@ namespace APTAT.Application.Models
             ScannedItemsCount = scanned;
 
             if (completed == OnlineItemsCount)
-            {
                 ScanCompleted(scanned > 0);
-            }
             else
                 _scanIteratorTimer.Start();
 

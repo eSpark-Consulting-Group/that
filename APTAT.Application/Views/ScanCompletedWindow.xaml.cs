@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using APTAT.Application.Models;
+﻿using APTAT.Application.Models;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -22,18 +21,9 @@ namespace APTAT.Application
             };
         }
 
-        public ScanCompletedWindow(MainViewViewModel currentViewModel)
-            :this()
-        {
-            DataContext = currentViewModel;
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool) ((FrameworkElement) e.Source).Tag)
-                DialogResult = false;
-            else
-                DialogResult = true;
+            DialogResult = (bool)((FrameworkElement)e.Source).Tag;
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
