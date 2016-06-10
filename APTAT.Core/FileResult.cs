@@ -121,12 +121,7 @@ namespace APTAT.Core
         {
             get
             {
-                if (this.ValkyrieAnalysisResult != null)
-                {
-
-                    return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Undetected || ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.NotAnalyzed;
-                }
-                return false;
+                return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Undetected;
             }
 
         }
