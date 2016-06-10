@@ -163,6 +163,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("UnknownFilesCount");
                 RaisePropertyChanged("IsUnknownFound");
                 RaisePropertyChanged("IsProtected");
+                RaisePropertyChanged("IsProtected2");
             }
         }
 
@@ -195,6 +196,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("MalwareFilesCount");
                 RaisePropertyChanged("IsMalwaresFound");
                 RaisePropertyChanged("IsProtected");
+                RaisePropertyChanged("IsProtected2");
 
             }
         }
@@ -377,7 +379,15 @@ namespace APTAT.Application.Models
         {
             get
             {
-                return !IsMalwaresFound && !IsUnknownFound && !IsErrorsFound;
+                return !IsUnknownFound;
+            }
+        }
+
+        public bool IsProtected2
+        {
+            get
+            {
+                return !IsUnknownFound && !IsMalwaresFound;
             }
         }
 
@@ -603,7 +613,7 @@ namespace APTAT.Application.Models
 
             Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
-            IsAnalyseWithValkyrieEnabled = true;
+            //IsAnalyseWithValkyrieEnabled = true;
             IsValkyrieReportEnabled = true;
             IsValkyrieAnalysCompleted = true;
 

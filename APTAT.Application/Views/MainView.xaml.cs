@@ -110,7 +110,7 @@ namespace APTAT.Application
             {
                 if (scanCompletedWindow.ShowDialog() == true)
                     ShowRegisterToValkyrieWindow();
-                else if (total > 0)
+                else if (e.FilesStatistics.UnknownFilesCount > 0)
                     _viewModel.IsAnalyseWithValkyrieEnabled = true;
             }
                 
