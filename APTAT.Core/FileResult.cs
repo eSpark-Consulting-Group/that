@@ -143,7 +143,7 @@ namespace APTAT.Core
         {
             get
             {
-                return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Failed;
+                return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.NotAnalyzed;
             }
         }
 

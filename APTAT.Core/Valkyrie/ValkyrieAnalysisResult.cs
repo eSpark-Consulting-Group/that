@@ -67,7 +67,8 @@ namespace APTAT.Core.Valkyrie
             {
                 if (Verdict == ValkyrieVerdict.NotAnalyzed) return "Not Analysed";
                 if (Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication) return "Potentially Unwanted";
-
+                if (Verdict == ValkyrieVerdict.Pending || Verdict == ValkyrieVerdict.FirstSeen)
+                    return "Pending Analysis";
                 if (Verdict == ValkyrieVerdict.Undetected) return "No Threat Found";
 
                 return Verdict.ToString();
@@ -92,7 +93,7 @@ namespace APTAT.Core.Valkyrie
                     result.OperationStatus = "Cancelled by user";
                     break;
                 case SkippReasonEnum.WebException:
-                    result.Verdict = ValkyrieVerdict.Failed;
+                    result.Verdict = ValkyrieVerdict.Pending;
                     result.OperationStatus = reason;
                     break;
                 case SkippReasonEnum.FileNotFound:
@@ -124,6 +125,5 @@ namespace APTAT.Core.Valkyrie
         PotentiallyUnwantedApplication,
         NotAnalyzed,
         Pending,
-        Failed
     }
 }

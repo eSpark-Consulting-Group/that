@@ -1,17 +1,15 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
-using Valkyrie.WebApiProvider;
+using Newtonsoft.Json;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using Valkyrie.WebApiProvider.Extensions;
 using Valkyrie.WebApiProvider.Helpers;
 
-namespace APTAT.Valkyrie.Client
+namespace Valkyrie.WebApiProvider
 {
 
     public static class ValkyrieWebApiProvider

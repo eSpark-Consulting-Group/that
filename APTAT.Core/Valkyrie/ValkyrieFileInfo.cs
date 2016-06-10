@@ -23,7 +23,16 @@ namespace APTAT.Core.Valkyrie
 
             return String.Format("\\\\{0}\\{1}", GetMachineName(), Path.Replace(":", "$"));
         }
+        public override int GetHashCode()
+        {
+            return Sha1.GetHashCode();
+        }
 
+        public override bool Equals(object obj)
+        {
+            ValkyrieFileInfo otherFileInfo = obj as ValkyrieFileInfo;
+            return otherFileInfo != null && otherFileInfo.Sha1 == Sha1;
+        }
         public string GetMachineName()
         {
             string machineName = string.Empty;

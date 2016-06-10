@@ -245,7 +245,7 @@ namespace APTAT.Application.Models
             else
             {
                 Clean = valkyrieFile.ValkyrieAnalysisResult.Verdict == Core.Valkyrie.ValkyrieVerdict.Clean;
-                Failed = valkyrieFile.ValkyrieAnalysisResult.Verdict == Core.Valkyrie.ValkyrieVerdict.Failed;
+                Failed = valkyrieFile.ValkyrieAnalysisResult.Verdict == Core.Valkyrie.ValkyrieVerdict.NotAnalyzed;
                 Verdict = valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             }
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
