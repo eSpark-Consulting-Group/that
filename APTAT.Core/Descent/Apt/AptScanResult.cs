@@ -39,6 +39,7 @@ namespace APTAT.Core.Descent.Apt
 
         public int FailedToAnalyzeFilesCount { get; set; }       
         public int NoVerdictFilesCount { get; set; }
+        public int PendingAnalysisFilesCount { get; set; }
         public int TotalErrorFilesCount
         {
             get
@@ -67,13 +68,11 @@ namespace APTAT.Core.Descent.Apt
                     return TargetVerdict.Unknown;
                 if (MalwareFilesCount > 0)
                     return TargetVerdict.Infected;
-                if (UnknownFilesCount > 0 || FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0)
+                if (UnknownFilesCount > 0 || FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0 || PendingAnalysisFilesCount > 0)
                     return TargetVerdict.Vulnerable;
                 if (ResultType == ScanResultType.NotPerformed)
                     return TargetVerdict.NotScanned;
-
                 return TargetVerdict.Safe;
-
             }
         }
 
@@ -182,6 +181,11 @@ namespace APTAT.Core.Descent.Apt
         public AptReport AptReport
         {
             get { return _aptReport; }
+        }
+
+        internal Module[] GetPendingAnalysisFiles()
+        {
+            return new Module[] { };
         }
     }
 

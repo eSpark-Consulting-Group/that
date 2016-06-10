@@ -15,7 +15,7 @@ namespace APTAT.Core
             int skippedFilesCount = 0;
             int errorFilesCount = 0;
             int serverErrorFilesCount = 0;
-
+            int pendingFilesCount = 0;
             foreach (var scanResult in results)
             {
                 if (scanResult.ResultType == ScanResultType.Completed)
@@ -28,6 +28,7 @@ namespace APTAT.Core
                     skippedFilesCount += scanResult.SkippedFilesCount;
                     errorFilesCount += scanResult.FailedToAnalyzeFilesCount;
                     serverErrorFilesCount += scanResult.NoVerdictFilesCount;
+                    pendingFilesCount += scanResult.PendingAnalysisFilesCount;
                 }
             }
             return new FilesStatistics
@@ -39,8 +40,8 @@ namespace APTAT.Core
                 UnknownFilesCount = unknownFilesCount,
                 SkippedFilesCount = skippedFilesCount,
                 FailedToAnalyzeFilesCount = errorFilesCount,
-                NoVerdictFilesCount = serverErrorFilesCount
-
+                NoVerdictFilesCount = serverErrorFilesCount,
+                PendingAnalysisFilesCount = pendingFilesCount
             };
         }
     }

@@ -84,6 +84,7 @@ namespace APTAT.Core.Reports
             SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.UnknownFiles.rdlc", ReportName = "UnknownFiles" };
             SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.MaliciousFiles.rdlc", ReportName = "MaliciousFiles" };
             SubReportContext failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeFiles.rdlc", ReportName = "FailedToAnalyzeFiles" };
+            //SubReportContext pendingAnalyzeFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.PendingAnalysisFiles.rdlc", ReportName = "PendingAnalysisFiles" };
             SubReportContext noVerdictFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.NoVerdictFiles.rdlc", ReportName = "NoVerdictFiles" };
 
             GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext, noVerdictFilesSubReportContext });
@@ -97,10 +98,11 @@ namespace APTAT.Core.Reports
             //ReportDataSource valkyrieVerdictDataSource = new ReportDataSource("ValkyrieDataSet", allBadFilesData);
             SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.UnknownFilesWithValkyrie.rdlc", ReportName = "UnknownFiles" };
             SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.MaliciousFilesWithValkyrie.rdlc", ReportName = "MaliciousFiles" };
-            SubReportContext failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeWithValkyrie.rdlc", ReportName = "FailedToAnalyzeFiles" };                        
+            SubReportContext failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeWithValkyrie.rdlc", ReportName = "FailedToAnalyzeFiles" };
+            SubReportContext pendingToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.PendingAnalysisFiles.rdlc", ReportName = "PendingAnalysisFiles" };                        
             //SubReportContext valkyrieVerdictSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.ValkyrieResult.rdlc", ReportName = "ValkyrieVerdict" };
 
-            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext/*, valkyrieVerdictSubReportContext*/ });
+            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext, pendingToAnalyzeFilesSubReportContext /*, valkyrieVerdictSubReportContext*/ });
         }
 
         private static void BuildDetailedPerProgramReport(string fileName, AptReportData data, string reportName)
@@ -186,6 +188,10 @@ namespace APTAT.Core.Reports
                                 else if (e.ReportPath == "NoVerdictFiles")
                                 {
                                     items = item.GetNoVerdictFiles();
+                                }
+                                else if (e.ReportPath == "PendingAnalysisFiles")
+                                {                                    
+                                    items = item.GetPendingAnalysisFiles();
                                 }
                                 
                                 e.DataSources.Add(new ReportDataSource(context.DataSourceName, items));
@@ -283,6 +289,20 @@ namespace APTAT.Core.Reports
                                 DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
                                 if (targets != null)
                                     e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.NotAnalyzed)));
+                            }
+                        }
+                    }
+                    else if (e.ReportPath == "PendingAnalysisFiles")
+                    {
+                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                        if (context != null)
+                        {
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
+                            if (targets != null)
+                            {
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.Pending).ToList()));
                             }
                         }
                     }     

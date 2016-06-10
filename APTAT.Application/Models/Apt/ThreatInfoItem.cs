@@ -76,6 +76,7 @@ namespace APTAT.Application.Models
         private Collection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _noVerdictFilesCount;
+        private int _pendingAnalysisFilesCount;
 
         public Boolean HasBadFiles
         {
@@ -244,6 +245,23 @@ namespace APTAT.Application.Models
 
                 _noVerdictFilesCount = value;
                 RaisePropertyChanged("NoVerdictFilesCount");
+                RaisePropertyChanged("HasBadFiles");
+            }
+        }
+
+
+        public Int32 PendingAnalysisFilesCount
+        {
+            get { return _pendingAnalysisFilesCount; }
+            set
+            {
+                if (_pendingAnalysisFilesCount == value)
+                {
+                    return;
+                }
+
+                _pendingAnalysisFilesCount = value;
+                RaisePropertyChanged("PendingAnalysisFilesCount");
                 RaisePropertyChanged("HasBadFiles");
             }
         }

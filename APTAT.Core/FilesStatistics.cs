@@ -10,5 +10,6 @@
         public int FailedToAnalyzeFilesCount { get; set; }
         public int SkippedFilesCount { get; set; }
         public int NoVerdictFilesCount { get; set; }
+        public int PendingAnalysisFilesCount { get; set; }
     }
 }
