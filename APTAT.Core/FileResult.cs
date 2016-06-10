@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Valkyrie;
-using Valkyrie.WebApiProvider.Enums;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;

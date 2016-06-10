@@ -632,6 +632,8 @@ namespace APTAT.Application.Models
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
         {
+            if (e.IsUpdate)
+                return;
             Set(() => ValkyrieSendingFiles, false);
 
             var info = e.ProgressInfo;

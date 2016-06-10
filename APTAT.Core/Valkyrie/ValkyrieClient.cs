@@ -109,22 +109,24 @@ namespace APTAT.Core.Valkyrie
         {
             if (_progressNotifyTimer != null)
                 _progressNotifyTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            OnAnalyzeProgressChanged();
+            OnAnalyzeProgressChanged(_analysedItems);
             if (_progressNotifyTimer != null)
-                _progressNotifyTimer.Change(1000, Timeout.Infinite);
+                _progressNotifyTimer.Change(10000, Timeout.Infinite);
         }
 
         private void CheckStatusesTimerCallback(object state)
         {
             if (_checkStatusesTimer != null)
                 _checkStatusesTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            CheckNewStatusesOnValkyrie();
-            if (_checkStatusesTimer != null)
+            var stopTimer = !CheckNewStatusesOnValkyrie();
+            OnAnalyzeProgressChanged(_pendingItemsResolved);
+            if (!stopTimer && _checkStatusesTimer != null)
                 _checkStatusesTimer.Change(1000, Timeout.Infinite);
         }
 
-        private void CheckNewStatusesOnValkyrie()
+        private bool CheckNewStatusesOnValkyrie()
         {
+            bool pendingExists = false;
             List<ValkyrieFileInfo> filesToAnalyze;
             lock (_lookupSync)
             {
@@ -138,16 +140,27 @@ namespace APTAT.Core.Valkyrie
             }
             foreach (var context in filesToCheckAnalysisResult)
             {
-                var automaticAnalysisResponse =
-                    ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest()
-                    {
-                        ApiKey = _apiKey,
-                        AnalysisId = context.AnalysisId
-                    });
-                if ( automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.Success
-                    || automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFound )
+                CheckAnalysisResultResponse automaticAnalysisResponse = null;
+                try
+                {
+                    automaticAnalysisResponse =
+                        ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest()
+                        {
+                            ApiKey = _apiKey,
+                            AnalysisId = context.AnalysisId
+                        });
+                }
+                catch (Exception)
+                {
+                    
+                }
+
+                if (automaticAnalysisResponse != null && (automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.Success
+                    || automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFound))
                     MergeAutomaticAnalysisResult(automaticAnalysisResponse, context);
             }
+            pendingExists = _lookupContexts.Any() || _automaticAnalyseInProgressByHash.Any();
+            return pendingExists;
         }
 
         private void MergeResult(ValkyrieAnalysisResult result, ValkyrieFileInfo fileInfo)
@@ -361,9 +374,9 @@ namespace APTAT.Core.Valkyrie
             }
         }
 
-        private void OnAnalyzeProgressChanged()
+        private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items)
         {
-            if (_analysedItems.Count == 0) return;
+            if (items.Count == 0) return;
 
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
@@ -382,12 +395,12 @@ namespace APTAT.Core.Valkyrie
                 }
                 var progressInt = Convert.ToInt32(progress);
 
-                var newResults = _analysedItems.Values.ToArray();
+                var newResults = items.Values.ToArray();
 
                 foreach (var item in newResults)
                 {
                     ValkyrieAnalysisResult result;
-                    _analysedItems.TryRemove(item.SHA1, out result);
+                    items.TryRemove(item.SHA1, out result);
                 }
 
                 tmp(this,
@@ -579,6 +592,8 @@ namespace APTAT.Core.Valkyrie
                     //var data = ReadFile(fileInfo, login, password);
                     var fStream = File.OpenRead(fileInfo.GetNetworkPath());
                     var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
+                    if (response.ReturnCode != ErrorCodesEnum.Success)
+                        throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
                     lock (_automaticAnalyseSync)
                     {
                         _automaticAnalyseInProgressByHash[fileInfo.Sha1] = new ValkyrieAnalyseOperationContext
