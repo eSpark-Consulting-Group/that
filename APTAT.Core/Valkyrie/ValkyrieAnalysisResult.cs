@@ -55,11 +55,11 @@ namespace APTAT.Core.Valkyrie
             return result;
         }
         public string AnalyzeId { get; private set; }
-        public string SHA1 { get; private set; }
+        public string SHA1 { get; set; }
         public bool IsWhiteListed { get; private set; }
         public bool IsSubmitted { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }
-        public ValkyrieVerdict Verdict { get; private set; }
+        public ValkyrieVerdict Verdict { get; set; }
 
         public string VerdictString
         {

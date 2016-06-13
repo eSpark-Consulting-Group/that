@@ -19,7 +19,12 @@ namespace APTAT.Core
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
-        
+
+        public ComputerInformation()
+        {
+            Files = new ObservableCollection<FileResult>();
+        }
+
         public ComputerInformation(Computer computer, Guid targetUid)
         {
             Files = new ObservableCollection<FileResult>();
@@ -115,7 +120,7 @@ namespace APTAT.Core
         {
             get
             {
-                return Canceling ? false : Files.Count == TotalCount;
+                return Canceling ? false : Files.Count >= TotalCount;
             }
         }
 
@@ -126,7 +131,7 @@ namespace APTAT.Core
             if (!Files.Any(_ => _.Equals(file) && _.Path == file.Path))
             {
                 Files.Add(new FileResult(file));
-                UpdateHeader();
+                UpdateStatus();
             }
         }
 
@@ -138,12 +143,12 @@ namespace APTAT.Core
                     continue;
 
                 result.UpdateValkyrieResult(file);
-                UpdateHeader();
+                UpdateStatus();
                 break;
             }
         }
 
-        private void UpdateHeader()
+        private void UpdateStatus()
         {
             if (Count == 0)
                 return;
@@ -151,13 +156,13 @@ namespace APTAT.Core
             var malwareCount = Files.Count(_ => _.IsMalware);
             var unknownCount = Files.Count(_ => _.IsUnknown);
 
-            if (Files.Count == TotalCount)
+            if (Files.Count >= TotalCount)
                 StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
                     Files.Count, unknownCount, malwareCount);
             else
                 StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
                     Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
-                    ((DistinctCount / Count) * 100d)).Replace(".00", string.Empty));
+                    (((DistinctCount > Count ? Count : DistinctCount) / Count) * 100d)).Replace(".00", string.Empty));
 
             HasAnyUnknownOrMalware = malwareCount > 0 || unknownCount > 0;
 

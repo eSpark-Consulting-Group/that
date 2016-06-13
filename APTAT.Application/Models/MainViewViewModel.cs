@@ -577,6 +577,53 @@ namespace APTAT.Application.Models
             }
         }
 
+        void CopyMalwaresFromScanResults()
+        {
+            var col = new Collection<FileResult>();
+            foreach (var file in Items)
+            {
+                if (!file.IsMalware)
+                    continue;
+
+                var fileResult = new FileResult();
+                fileResult.Path = file.BadFile.Name;
+                fileResult.Cloud = file.BadFile.Cloud;
+                fileResult.Size = file.Size;
+                fileResult.Attributes = file.BadFile.Attributes;
+                fileResult.Created = file.BadFile.Created;
+                fileResult.Modified = file.BadFile.Modified;
+                fileResult.Accessed = file.BadFile.Accessed;
+                fileResult.Sha1 = file.BadFile.Sha1.Trim().ToLower();
+                fileResult.Signer = file.BadFile.Signer;
+                fileResult.Description = file.BadFile.Description;
+                fileResult.Version = file.BadFile.Version;
+                fileResult.Copyright = file.BadFile.Copyright;
+                fileResult.Product = file.BadFile.Product;
+                fileResult.ValkyrieAnalysisResult = new ValkyrieAnalysisResult 
+                {
+                    SHA1 = file.BadFile.Sha1,
+                    Verdict = ValkyrieVerdict.Malware
+                };
+
+                foreach (var comp in file.Computers)
+                {
+                    var computer = new ComputerInformation();
+                    computer.Name = comp.Name;
+                    computer.IP = comp.IpAddress;
+                    computer.FilePath = comp.ShortName;
+                    computer.TargetUid = comp.ComputerGuid;
+
+                    fileResult.Computers.Add(computer);
+
+                    MalwareFilesCount++;
+                }
+
+                col.Add(fileResult);
+            }
+
+            MergeResults(col);
+        }
+
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
             if (e.Error != null)
@@ -595,6 +642,8 @@ namespace APTAT.Application.Models
                     comp.Canceling = true;
 
             CancelInProgress = false;
+
+            CopyMalwaresFromScanResults();
 
             Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
@@ -644,6 +693,9 @@ namespace APTAT.Application.Models
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
                 {
+                    if (file.IsUnknown)
+                        _unknownFilesCount -= file.Computers.Count;
+
                     file.UpdateValkyrieResult(result);
 
                     if (file.IsUnknown)
@@ -663,7 +715,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        private void MergeResults(FileResult[] results)
+        private void MergeResults(IEnumerable<FileResult> results)
         {
             if (results == null)
                 return;

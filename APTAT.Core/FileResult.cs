@@ -22,6 +22,12 @@ namespace APTAT.Core
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
+
+        public FileResult()
+        {
+            Computers = new ObservableCollection<ComputerInformation>();
+        }
+
         public FileResult(Module badFile)
         {
             Computers = new ObservableCollection<ComputerInformation>();
