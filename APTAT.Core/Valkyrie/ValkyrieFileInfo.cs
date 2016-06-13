@@ -10,6 +10,7 @@ namespace APTAT.Core.Valkyrie
         public string Sha1 { get; set; }
         public string Ip { get; set; }     
         public CloudVerdict FlsCloud { get; set; }
+        public ValkyrieVerdict PreviousValkyrieVerdict { get; set; }
 
         public string GetFullPath()
         {

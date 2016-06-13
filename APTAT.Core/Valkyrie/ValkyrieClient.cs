@@ -150,7 +150,7 @@ namespace APTAT.Core.Valkyrie
                             AnalysisId = context.AnalysisId
                         });
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     
                 }
@@ -165,16 +165,18 @@ namespace APTAT.Core.Valkyrie
 
         private void MergeResult(ValkyrieAnalysisResult result, ValkyrieFileInfo fileInfo)
         {
-            if (result.IsSubmitted || (result.Verdict != ValkyrieVerdict.Undetected
-                                       && result.Verdict != ValkyrieVerdict.FirstSeen &&
+            if (result.IsSubmitted || (result.Verdict != ValkyrieVerdict.FirstSeen &&
+                                        result.Verdict != ValkyrieVerdict.NotAnalyzed &&
                                        result.Verdict != ValkyrieVerdict.Pending))
             {
-                lock (_lookupSync)
+                if (result.Verdict != ValkyrieVerdict.Undetected)
+                    lock (_lookupSync)
+                    {
+                        _lookupContexts.Remove(fileInfo);
+                    }
+                if (result.Verdict != fileInfo.PreviousValkyrieVerdict)
                 {
-                    _lookupContexts.Remove(fileInfo);
-                }
-                if (!result.IsSubmitted)
-                {
+                    fileInfo.PreviousValkyrieVerdict = result.Verdict;
                     _pendingItemsResolved.TryAdd(result.SHA1, result);
                 }
             }
@@ -186,6 +188,7 @@ namespace APTAT.Core.Valkyrie
             {
                 lock (_lookupSync)
                 {
+                    fileInfo.ValkyrieFileInfo.PreviousValkyrieVerdict = ValkyrieVerdict.NotAnalyzed;
                     _lookupContexts.Add(fileInfo.ValkyrieFileInfo);
                 }
                 lock (_automaticAnalyseSync)
@@ -195,6 +198,12 @@ namespace APTAT.Core.Valkyrie
             }
             else if (result.ReturnCode == ErrorCodesEnum.Success)
             {
+                if (result.Verdict == global::Valkyrie.WebApiProvider.Enums.ValkyrieVerdict.Undetected)
+                    lock (_lookupSync)
+                    {
+                        fileInfo.ValkyrieFileInfo.PreviousValkyrieVerdict = result.Verdict.ToBusiness();
+                        _lookupContexts.Add(fileInfo.ValkyrieFileInfo);
+                    }
                 lock (_automaticAnalyseSync)
                 {
                     _automaticAnalyseInProgressByHash.Remove(fileInfo.HashSha1);
@@ -245,30 +254,25 @@ namespace APTAT.Core.Valkyrie
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, 
             CancellationToken cancellationToken, Action< ValkyrieAnalysisResult,ValkyrieFileInfo> addAction, bool parallels = true)
         {
-            using (ImpersonationHelper helper = new ImpersonationHelper(_login, "", _password, ImpersonationHelper.Logon32LogonType.NewCredentials))
+
+            _filesCount = badFiles.Count;
+            Guid endpointId = GetEndpointId();
+
+            ParallelOptions opt = new ParallelOptions
             {
-                _filesCount = badFiles.Count;
-                Guid endpointId = GetEndpointId();
-                var exceptions = new ConcurrentQueue<Exception>();
-
-                ParallelOptions opt = new ParallelOptions
+                CancellationToken = cancellationToken,
+                MaxDegreeOfParallelism = Environment.ProcessorCount
+            };
+            if (parallels)
+                Parallel.ForEach(badFiles, opt, f =>
                 {
-                    CancellationToken = cancellationToken,
-                    MaxDegreeOfParallelism = Environment.ProcessorCount
-                };
-                if (parallels)
-                    Parallel.ForEach(badFiles, opt, f =>
-                    {
-                        GetValkyrieVerdictForOneFile(f, endpointId, addAction);
-                    });
-                else
-                    foreach (var f in badFiles)
-                    {
-                        GetValkyrieVerdictForOneFile(f, endpointId, addAction);
-                    }
-
-            }
-
+                    GetValkyrieVerdictForOneFile(f, endpointId, addAction);
+                });
+            else
+                foreach (var f in badFiles)
+                {
+                    GetValkyrieVerdictForOneFile(f, endpointId, addAction);
+                }
         }
 
         private void GetValkyrieVerdictForOneFile(ValkyrieFileInfo f, Guid endpointId, Action<ValkyrieAnalysisResult, ValkyrieFileInfo> addAction)
@@ -588,10 +592,16 @@ namespace APTAT.Core.Valkyrie
                         FilePath = WebUtility.HtmlDecode(originalFilePath),
                         EndpointId = endpointId
                     };
-
-                    //var data = ReadFile(fileInfo, login, password);
-                    var fStream = File.OpenRead(fileInfo.GetNetworkPath());
-                    var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
+                    SubmitToAutomaticResponse response;
+                    using (
+                        ImpersonationHelper helper = new ImpersonationHelper(_login, "", _password,
+                            ImpersonationHelper.Logon32LogonType.NewCredentials))
+                    {
+                        //var data = ReadFile(fileInfo, login, password);
+                        var fStream = File.OpenRead(fileInfo.GetNetworkPath());
+                        response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream,
+                            _cancellationTokenSource.Token);
+                    }
                     if (response.ReturnCode != ErrorCodesEnum.Success)
                         throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
                     lock (_automaticAnalyseSync)
@@ -637,6 +647,7 @@ namespace APTAT.Core.Valkyrie
             {
                 lock (_lookupSync)
                 {
+                    info.PreviousValkyrieVerdict = result.Verdict;
                     _lookupContexts.Add(info);
                 }
             }
