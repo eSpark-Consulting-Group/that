@@ -614,8 +614,6 @@ namespace APTAT.Application.Models
                     computer.TargetUid = comp.ComputerGuid;
 
                     fileResult.Computers.Add(computer);
-
-                    MalwareFilesCount++;
                 }
 
                 col.Add(fileResult);
@@ -634,6 +632,9 @@ namespace APTAT.Application.Models
             }
 
             MergeResults(e.Result);
+
+            CopyMalwaresFromScanResults();
+
             _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
             _cacheValkyrieComputers = new Collection<ComputerInformation>(ComputersValkyrie);
 
@@ -642,8 +643,6 @@ namespace APTAT.Application.Models
                     comp.Canceling = true;
 
             CancelInProgress = false;
-
-            CopyMalwaresFromScanResults();
 
             Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
