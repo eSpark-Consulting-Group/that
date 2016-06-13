@@ -646,7 +646,7 @@ namespace APTAT.Application.Models
 
             Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
-            //IsAnalyseWithValkyrieEnabled = true;
+            IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = true;
             IsValkyrieAnalysCompleted = true;
 

@@ -25,10 +25,11 @@ namespace APTAT.Application
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            OnCancelClick();
         }
 
         public event EventHandler OkClick;
+        public event EventHandler CancelClick;
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -58,6 +59,15 @@ namespace APTAT.Application
             _model.ErrorMessage = String.Empty;
             var handler = OkClick;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnCancelClick()
+        {
+            _model.ErrorMessage = String.Empty;
+            var handler = CancelClick;
+            if (handler != null) handler(this, EventArgs.Empty);
+
+            Close();
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
