@@ -156,7 +156,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         public float malware_probability { get; set; }
         public int return_code { get; set; }
         public int score { get; set; }
-        public string session { get; set; }
+        //public string[] session { get; set; }
         public string sha1 { get; set; }
         public float undetected_probability { get; set; }
         public int verdict { get; set; }
@@ -166,7 +166,7 @@ namespace Valkyrie.WebApiProvider.Contracts
     {
         public float malware_probability { get; set; }
         public int return_code { get; set; }
-        public string session { get; set; }
+        //public string[] session { get; set; }
         public string sha1 { get; set; }
         public float undetected_probability { get; set; }
         public int verdict { get; set; }
@@ -177,7 +177,7 @@ namespace Valkyrie.WebApiProvider.Contracts
     {
         public float malware_probability { get; set; }
         public int return_code { get; set; }
-        public string session { get; set; }
+        //public string[] session { get; set; }
         public string sha1 { get; set; }
         public float undetected_probability { get; set; }
         public int verdict { get; set; }
