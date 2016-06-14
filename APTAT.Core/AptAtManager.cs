@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using APTAT.Core.Apt;
@@ -127,6 +126,16 @@ namespace APTAT.Core
                             .Count(i => i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware ||
                                 i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
 
+                if (e.IsUpdate)
+                {
+                    foreach (var fileResult in valkyrieAnalysisResult)
+                    {
+                        ValkyrieAnalysisResult.Remove(fileResult);
+                        ValkyrieAnalysisResult.Add(fileResult);
+                    }
+                    if (ValkyrieAnalysisResult.Any())
+                        ValkyrieOperationUid = Guid.NewGuid();
+                }
 
                 var unknownFilesCount = valkyrieAnalysisResult.Count - malwareFilesCount;
 

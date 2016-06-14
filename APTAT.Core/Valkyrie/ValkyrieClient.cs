@@ -19,6 +19,7 @@ namespace APTAT.Core.Valkyrie
 {
     internal sealed class ValkyrieClient : IValkyrieClient
     {
+        private int _changeTrakingIntervalInMs = (int)TimeSpan.FromSeconds(45).TotalMilliseconds;
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
@@ -121,7 +122,7 @@ namespace APTAT.Core.Valkyrie
             var stopTimer = !CheckNewStatusesOnValkyrie();
             OnAnalyzeProgressChanged(_pendingItemsResolved, true, !stopTimer);
             if (!stopTimer && _checkStatusesTimer != null)
-                _checkStatusesTimer.Change(1000, Timeout.Infinite);
+                _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
         }
 
         private bool CheckNewStatusesOnValkyrie()
@@ -374,7 +375,7 @@ namespace APTAT.Core.Valkyrie
             }
             if (anyPending)
             {
-                _checkStatusesTimer.Change(1000, Timeout.Infinite);
+                _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
             }
         }
 
