@@ -141,6 +141,8 @@ namespace APTAT.Core.Valkyrie
             }
             foreach (var context in filesToCheckAnalysisResult)
             {
+                if (_cancellationTokenSource.IsCancellationRequested)
+                    return false;
                 CheckAnalysisResultResponse automaticAnalysisResponse = null;
                 try
                 {
@@ -316,6 +318,8 @@ namespace APTAT.Core.Valkyrie
 
         public void AnalyzeAsyncCancel()
         {
+            _pendingItemsResolved.Clear();
+            _automaticAnalyseInProgressByHash.Clear();
             if (_cancellationTokenSource != null)
             {
                 _cancellationTokenSource.Cancel();
@@ -685,7 +689,8 @@ namespace APTAT.Core.Valkyrie
                     var ex = new ValkyrieRegistrationFailedException(regInfo);
                     throw ex;
                 }
-
+                _pendingItemsResolved.Clear();
+                _automaticAnalyseInProgressByHash.Clear();
                 var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(regInfo.Key));
                 if (startScanResult.ReturnCode != 0)
                 {

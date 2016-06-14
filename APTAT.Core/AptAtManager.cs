@@ -126,14 +126,15 @@ namespace APTAT.Core
                             .Count(i => i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware ||
                                 i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
 
-                if (e.IsUpdate)
+                var valkyrieAnalysisResultInternal = ValkyrieAnalysisResult;
+                if (e.IsUpdate && valkyrieAnalysisResultInternal != null)
                 {
                     foreach (var fileResult in valkyrieAnalysisResult)
                     {
-                        ValkyrieAnalysisResult.Remove(fileResult);
-                        ValkyrieAnalysisResult.Add(fileResult);
+                        valkyrieAnalysisResultInternal.Remove(fileResult);
+                        valkyrieAnalysisResultInternal.Add(fileResult);
                     }
-                    if (ValkyrieAnalysisResult.Any())
+                    if (valkyrieAnalysisResult.Any())
                         ValkyrieOperationUid = Guid.NewGuid();
                 }
 
@@ -239,6 +240,7 @@ namespace APTAT.Core
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
             ValkyrieAnalysisResult = null;
+            _valkyrieClient.AnalyzeAsyncCancel();
         }
 
         private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
