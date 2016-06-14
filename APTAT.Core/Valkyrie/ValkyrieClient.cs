@@ -25,7 +25,7 @@ namespace APTAT.Core.Valkyrie
         private int _fileScanned;
         private int _filesCount;
         private CancellationTokenSource _cancellationTokenSource;
-        private readonly ConcurrentBag<ValkyrieAnalysisResult> _analysisResults;
+        private ConcurrentBag<ValkyrieAnalysisResult> _analysisResults;
         private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems
             = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
 
@@ -691,6 +691,7 @@ namespace APTAT.Core.Valkyrie
                 }
                 _pendingItemsResolved.Clear();
                 _automaticAnalyseInProgressByHash.Clear();
+                _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(regInfo.Key));
                 if (startScanResult.ReturnCode != 0)
                 {
