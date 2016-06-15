@@ -1,0 +1,62 @@
+﻿<Window AutomationProperties.AutomationId="AgentWindow"
+        x:Class="APTAT.Application.AgentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Stop Scan"   Width="530" Height="240"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent" BorderThickness="3" WindowStyle="None"
+        SizeToContent="Height"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Border VerticalAlignment="Top">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="5" Color="Black" Opacity="0.8" ShadowDepth="0.5" />
+        </Border.Effect>
+
+        <Grid Background="White" MinHeight="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="#2A81BA" Height="35">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Agent requirements" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                        <Button AutomationProperties.AutomationId="CloseAboutCrossButton" Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            
+            <Grid Grid.Row="1" Background="#FCFCFC" Margin="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" MinHeight="80"/>
+                    <RowDefinition Height="Auto" MinHeight="25"/>
+                    <RowDefinition Height="Auto" MinHeight="25"/>
+                    <RowDefinition Height="Auto" MinHeight="60"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="138*"/>
+                    <ColumnDefinition Width="155*"/>
+                    <ColumnDefinition Width="228*"/>
+                </Grid.ColumnDefinitions>
+        
+                
+
+                <Button AutomationProperties.AutomationId="CloseAboutButton"
+                        Grid.Row="3" Grid.ColumnSpan="1" HorizontalAlignment="Right" Content="Close" Margin="0,0,15,5" 
+                        Click="OnBackClick" Style="{StaticResource ButtonHighlightStyle}" Grid.Column="2" Width="120"/>
+                
+                <TextBlock AutomationProperties.AutomationId="CopyrightTextBlock"
+                           Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Left"
+                           Text="© 2016 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
+                           Margin="24,20,0,0" Foreground="#878787" FontSize="13" ></TextBlock>
+            </Grid>
+
+        </Grid>
+
+    </Border>
+</Window>

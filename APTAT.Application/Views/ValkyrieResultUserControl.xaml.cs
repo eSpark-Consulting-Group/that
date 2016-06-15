@@ -5,6 +5,7 @@ using APTAT.Application.Models;
 using APTAT.Core;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
+using APTAT.Application.Extensions;
 
 namespace APTAT.Application
 {
@@ -25,7 +26,7 @@ namespace APTAT.Application
                 menu.Opened += menu_Opened;
 
                 var item = new RadMenuItem();
-                item.Header = "Details";
+                item.CreateHeaderDataTemplate("Details");
                 item.Command = ViewModel.SelectValkyrieCommand;
                 item.Click += item_Click;
                 menu.Items.Add(item);

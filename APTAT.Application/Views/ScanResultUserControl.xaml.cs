@@ -6,6 +6,7 @@ using System.Windows.Input;
 using APTAT.Application.Models;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
+using APTAT.Application.Extensions;
 
 namespace APTAT.Application
 {
@@ -30,7 +31,7 @@ namespace APTAT.Application
                 AutomationProperties.SetAutomationId(menu, "ScanResultsContextMenu");
 
                 var item = new RadMenuItem();
-                item.Header = "Details";
+                item.CreateHeaderDataTemplate("Details");
                 item.Command = ViewModel.SelectCommand;
                 item.Click += item_Click;
                 AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");

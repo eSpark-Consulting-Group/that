@@ -241,8 +241,16 @@ namespace APTAT.Application
 
         private void AboutClick(Object sender, RoutedEventArgs e)
         {
+            HelpButton.IsOpen = false;
             AboutWindow about = new AboutWindow {Owner = System.Windows.Application.Current.MainWindow};
             about.ShowDialog();
+        }
+
+        private void AgentClick(Object sender, RoutedEventArgs e)
+        {
+            HelpButton.IsOpen = false;
+            AgentWindow agent = new AgentWindow { Owner = System.Windows.Application.Current.MainWindow };
+            agent.ShowDialog();
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

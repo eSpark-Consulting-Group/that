@@ -129,6 +129,10 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ContentToPathConverter.cs" />
+    <Compile Include="AgentWindow.xaml.cs">
+      <DependentUpon>AgentWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="Services\ServicesComposition.cs" />
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
@@ -257,6 +261,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Assets\System.Windows.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AgentWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -400,6 +408,7 @@
     <Resource Include="Images\Image.png" />
     <Resource Include="Images\C1_banner.png" />
     <Resource Include="Images\C1banner.png" />
+    <Resource Include="Assets\checkmark.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
