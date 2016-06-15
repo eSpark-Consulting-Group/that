@@ -72,5 +72,14 @@ namespace CodedUITestAT.Settings {
                 return ((global::System.Collections.Specialized.StringCollection)(this["TxtFiles"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Users\\{0}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\")]
+        public string StartupFolder {
+            get {
+                return ((string)(this["StartupFolder"]));
+            }
+        }
     }
 }
