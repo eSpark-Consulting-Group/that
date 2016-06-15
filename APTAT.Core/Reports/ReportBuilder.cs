@@ -22,34 +22,57 @@ namespace APTAT.Core.Reports
         private string _fileName;
 
         public delegate string BuildReportDelegate(AptReportData data, ReportType reportType);
-
+        ReportNamesCache cache = ReportNamesCache.Instance;
         public string Build(AptReportData data, ReportType reportType)
         {
             if (data == null)
                 return null;
 
-            _fileName = GetFileName(data.OperationUid, data.ValkyrieOperationUid, reportType);
-            if (File.Exists(_fileName))
-                return _fileName;
+            
+            
+            var existentName = String.Empty;
+            var flsReportKey = data.OperationUid + "-" + reportType.ToString();
+            var valkyrieReportKey = data.ValkyrieOperationUid  + "-" + reportType.ToString();
 
+            if (cache.Reports.Keys.Contains(flsReportKey))
+            {
+                existentName = cache.Reports[flsReportKey];
+            }
+            else if (cache.Reports.Keys.Contains(valkyrieReportKey))
+            {
+                existentName = cache.Reports[valkyrieReportKey];
+            }
+            if (!String.IsNullOrWhiteSpace(existentName) && File.Exists(existentName))
+            {
+                _fileName = existentName;
+                return existentName;
+            }
+            
+            _fileName = GetFileName(reportType);
             switch (reportType)
             {
                 case ReportType.Executive:
+                    cache.Reports.Add(data.OperationUid + "-" + reportType.ToString(), _fileName);
                     BuildExecutiveReport(_fileName, data);
                     break;
                 case ReportType.ExecutiveWithValkyrie:
+                    cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
                     BuildExecutiveWithValkyrieReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerDevice:
+                    cache.Reports.Add(data.OperationUid + "-" + reportType.ToString(), _fileName);
                     BuildDetailedPerDeviceReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerDeviceWithValkyrie:
+                    cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
                     BuildDetailedPerDeviceWithValkyrieReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerProgram:
+                    cache.Reports.Add(data.OperationUid + "-" + reportType.ToString(), _fileName);
                     BuildDetailedPerProgramReport(_fileName, data, "APTAT.Core.Reports.DetailedPrograms.rdlc");
                     break;
                 case ReportType.DetailedPerProgramWithValkyrie:
+                    cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
                     BuildDetailedPerProgramReport(_fileName, data, "APTAT.Core.Reports.DetailedProgramsWithValkyrie.rdlc");
                     break;
                 default:
@@ -437,32 +460,42 @@ namespace APTAT.Core.Reports
             }
         }
 
-        private static string GetFileName(Guid operatationUid, Guid valkyrieOperationUidGuid, ReportType reportType)
+        private static string GetFileName(ReportType reportType)
         {
+            var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             const string fileFormatString = "{0}{1}.pdf";
             switch (reportType)
             {
                 case ReportType.Executive:
-                    return String.Format(fileFormatString, ExecutiveReportName, operatationUid);
+                    return String.Format(fileFormatString, ExecutiveReportName, timeStamp);
                 case ReportType.ExecutiveWithValkyrie:
-                    return String.Format(fileFormatString, ExecutiveReportNameValkyrie, valkyrieOperationUidGuid);
-
+                    return String.Format(fileFormatString, ExecutiveReportNameValkyrie, timeStamp);
                 case ReportType.DetailedPerDevice:
-                    return String.Format(fileFormatString, DetailedPerDeviceReportName, operatationUid);
+                    return String.Format(fileFormatString, DetailedPerDeviceReportName, timeStamp);
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    return String.Format(fileFormatString, DetailedPerDeviceReportNameValkyrie, valkyrieOperationUidGuid);
-
+                    return String.Format(fileFormatString, DetailedPerDeviceReportNameValkyrie, timeStamp);
                 case ReportType.DetailedPerProgram:
-                    return String.Format(fileFormatString, DetailedPerProgramReportName, operatationUid);
+                    return String.Format(fileFormatString, DetailedPerProgramReportName, timeStamp);
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    return String.Format(fileFormatString, DetailedPerProgramReportNameValkyrie, valkyrieOperationUidGuid);
+                    return String.Format(fileFormatString, DetailedPerProgramReportNameValkyrie, timeStamp);
 
                 default:
                     throw new ArgumentOutOfRangeException("reportType");
             }
         }
     }
-
+    
+    public sealed class ReportNamesCache
+    {
+        private static readonly ReportNamesCache instance = new ReportNamesCache();
+        static ReportNamesCache() { }
+        private ReportNamesCache() { }
+        public Dictionary<string, string> Reports = new Dictionary<string, string>();
+        public static ReportNamesCache Instance
+        {
+            get { return instance; }
+        }
+    }
     public class SubReportContext
     {
         public string DataSourceName { get; set; }
