@@ -42,8 +42,7 @@
             </Canvas>
 
           <Canvas Height="38" Canvas.Left="0" Canvas.Top="0" Width="38" VerticalAlignment="Center" Margin="0,0,0,0" HorizontalAlignment="Left" Opacity="{Binding Pending, Converter={StaticResource BoolToOpacityConverter}}">
-
-            <Path  Width="38" Height="38" Data="M6.8666667,4.7666667 L12,8.0105944 7,11.4 z M8,2 C4.6870003,2 2,4.6870003 2,8 2,11.313 4.6870003,14 8,14 11.313,14 14,11.313 14,8 14,4.6870003 11.313,2 8,2 z M8,0 C12.418999,0 16,3.5820007 16,8 16,12.417999 12.418999,16 8,16 L0,16 0,7 C0.49300003,3.0550003 3.9210014,0 8,0 z" Fill="{StaticResource AccentBrush}" Stretch="Fill" />
+            <Path  Width="38" Height="38" Data="M251,125.90482 L468,221.29267 251,320.32661 z M312,55.25 C182.79301,55.25 78,129.47838 78,221 78,312.52162 182.79301,386.75 312,386.75 441.207,386.75 546,312.52162 546,221 546,129.47838 441.207,55.25 312,55.25 z M312,0 C484.34097,0 624,98.952769 624,221 624,343.04723 484.34097,442 312,442 L0,442 0,193.375 C19.227005,84.394382 152.91906,0 312,0 z" Fill="{StaticResource AccentBrush}" Stretch="Fill" />
           </Canvas>
 
           <TextBlock  Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center" Text="{Binding FileName}" FontSize="20" Margin="30,8,20,8" Grid.Column="1" MaxWidth="750" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
