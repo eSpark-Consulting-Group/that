@@ -701,6 +701,7 @@ namespace APTAT.Application.Models
                         _unknownFilesCount += file.Computers.Count;
                     else if (file.IsMalware)
                         _malwareFilesCount += file.Computers.Count;
+
                     RaisePropertyChanged("UnknownFilesCount");
                     RaisePropertyChanged("MalwareFilesCount");
 
@@ -746,6 +747,7 @@ namespace APTAT.Application.Models
                     else if (result.IsMalware)
                         _malwareFilesCount += result.Computers.Count;
                 }
+
                 RaisePropertyChanged("UnknownFilesCount");
                 RaisePropertyChanged("MalwareFilesCount");
 
@@ -760,7 +762,7 @@ namespace APTAT.Application.Models
                         if (c == null) continue;
 
                         comp = new ComputerInformation(computer);
-                        comp.Count = c.DistinctUnknownFilesCount;
+                        comp.TotalDistinctCount = c.DistinctUnknownFilesCount;
                         comp.TotalCount = c.UnknownFilesCount;
                         comp.MergeFile(result);
                         ComputersValkyrie.Add(comp);

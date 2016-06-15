@@ -83,7 +83,7 @@ namespace APTAT.Core
             }
         }
 
-        public double Count { get; set; }
+        public double TotalDistinctCount { get; set; }
 
         public double TotalCount { get; set; }
 
@@ -126,6 +126,8 @@ namespace APTAT.Core
 
         public bool HasAnyUnknownOrMalware { get; set; }
 
+        public bool HasErrors { get; set; }
+
         public void MergeFile(FileResult file)
         {
             if (!Files.Any(_ => _.Equals(file) && _.Path == file.Path))
@@ -150,11 +152,12 @@ namespace APTAT.Core
 
         private void UpdateStatus()
         {
-            if (Count == 0)
+            if (TotalDistinctCount == 0)
                 return;
 
             var malwareCount = Files.Count(_ => _.IsMalware);
             var unknownCount = Files.Count(_ => _.IsUnknown);
+            var failedCount = Files.Count(_ => _.Failed);
 
             if (Files.Count >= TotalCount)
                 StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
@@ -162,11 +165,13 @@ namespace APTAT.Core
             else
                 StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
                     Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
-                    (((DistinctCount > Count ? Count : DistinctCount) / Count) * 100d)).Replace(".00", string.Empty));
+                    (((DistinctCount > TotalDistinctCount ? TotalDistinctCount : DistinctCount) / TotalDistinctCount) * 100d)).Replace(".00", string.Empty));
 
             HasAnyUnknownOrMalware = malwareCount > 0 || unknownCount > 0;
+            HasErrors = failedCount > 0;
 
             RaisePropertyChanged("HasAnyUnknownOrMalware");
+            RaisePropertyChanged("HasErrors");
             RaisePropertyChanged("StatusText");
             RaisePropertyChanged("InProgress");
             RaisePropertyChanged("Completed");
