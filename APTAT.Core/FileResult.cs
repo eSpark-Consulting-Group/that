@@ -218,6 +218,7 @@ namespace APTAT.Core
         {
             ValkyrieAnalysisResult = result.ValkyrieAnalysisResult;
 
+            RaisePropertyChanged("ValkyrieAnalysisResult");
             RaisePropertyChanged("IsMalware");
             RaisePropertyChanged("IsUnknown");
             RaisePropertyChanged("Clean");
