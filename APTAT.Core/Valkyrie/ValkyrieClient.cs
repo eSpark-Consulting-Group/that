@@ -112,7 +112,7 @@ namespace APTAT.Core.Valkyrie
                 _progressNotifyTimer.Change(Timeout.Infinite, Timeout.Infinite);
             OnAnalyzeProgressChanged(_analysedItems);
             if (_progressNotifyTimer != null)
-                _progressNotifyTimer.Change(10000, Timeout.Infinite);
+                _progressNotifyTimer.Change(1000, Timeout.Infinite);
         }
 
         private void CheckStatusesTimerCallback(object state)
@@ -169,7 +169,6 @@ namespace APTAT.Core.Valkyrie
         private void MergeResult(ValkyrieAnalysisResult result, ValkyrieFileInfo fileInfo)
         {
             if (result.IsSubmitted || (result.Verdict != ValkyrieVerdict.FirstSeen &&
-                                        result.Verdict != ValkyrieVerdict.NotAnalyzed &&
                                        result.Verdict != ValkyrieVerdict.Pending))
             {
                 if (result.Verdict != ValkyrieVerdict.Undetected)

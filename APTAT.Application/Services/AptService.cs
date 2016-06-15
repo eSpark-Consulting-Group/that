@@ -277,6 +277,7 @@ namespace APTAT.Application.Services
             NetworkCredential networkCredential = null)
         {
             _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
+            _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
             _manager.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
