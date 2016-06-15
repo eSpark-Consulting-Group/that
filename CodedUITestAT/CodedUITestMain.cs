@@ -499,6 +499,19 @@ namespace CodedUITestAT
             }
         }
 
+        /// <summary> Inputs CAM credentials at the respective popup window. </summary>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void InputCamCredentials(TestContext testContext)
+        {
+            UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
+            testContext.WriteLine("CAM Credentials window appeared...\n");
+            UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
+            UIMapCamCredentialsWindow.InputLogin();
+            UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
+            UIMapCamCredentialsWindow.InputPassword();
+            UIMapCamCredentialsWindow.ClickOkButton();
+        }
+
         #endregion
 
         #region Test methods
@@ -529,13 +542,7 @@ namespace CodedUITestAT
             }
             else
             {
-                UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-                TestContext.WriteLine("CAM Credentials window appeared...\n");
-                UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
-                UIMapCamCredentialsWindow.InputLogin();
-                UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
-                UIMapCamCredentialsWindow.InputPassword();
-                UIMapCamCredentialsWindow.ClickOkButton();
+                InputCamCredentials(TestContext);
                 
                 // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
                 WaitForValkyrieResults(TestContext);
@@ -794,12 +801,10 @@ namespace CodedUITestAT
         [TestMethod]
         public void SearchAtResultsScreenTest()
         {
-            CodedUITestMain useMain = new CodedUITestMain();
-            UIMapResultsWindow useResultsWindow = new UIMapResultsWindow();
-            string threatName = Settings.General.Default.ThreatName;
             Computer endpoint = DataHelper.GetEndpoint();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
-
+            string partialNameInput = endpoint.Name.Substring(1, (int) ((endpoint.Name.Length - 1) / 2));
+            string error = "error";
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
 
@@ -807,68 +812,60 @@ namespace CodedUITestAT
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickOkButton();
 
-            if (expectedFilesNumber == 0)
-            {
-                if (!AnalyseWithValkyrieButton().Enabled) TestContext.WriteLine("No unknown or malicious files found and Valkyrie analysis is not available.");
-                else Assert.Fail("No unknown or malicious files found but Valkyrie analysis is available!");
-            }
-            else
-            {
-                UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-                TestContext.WriteLine("CAM Credentials window appeared...\n");
-                UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
-                UIMapCamCredentialsWindow.InputLogin();
-                UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
-                UIMapCamCredentialsWindow.InputPassword();
-                UIMapCamCredentialsWindow.ClickOkButton();
-            }
+            InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
 
-            useResultsWindow.ClickGroupByComputersToggleButton();
-            useResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = endpoint.Name.Substring(endpoint.Name.Length - 6, 3);
-            useResultsWindow.InputTextToSearchBox();
-            TestContext.WriteLine("Part of endpoints name is entered to the searchbox at Valkyrie analysis results tab.");
+            // Searches with a correct input
+            UIMapResultsWindow.ClickGroupByComputersToggleButton();
+            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
+            UIMapResultsWindow.InputTextToSearchBox();
+            TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Valkyrie analysis results' tab.");
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
-            useResultsWindow.ClickClearSearchBoxButton();
+            UIMapResultsWindow.ClickClearSearchBoxButton();
 
-            useResultsWindow.GoToValkyrieAnalysisResultsTab();
-            TestContext.WriteLine("Incorrect search query is entered to the searchbox at Valkyrie analysis results tab.");
-            useResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = endpoint.Name.Substring(endpoint.Name.Length - 6, 3) + "err";
-            useResultsWindow.InputTextToSearchBox();
+            // Searches with an incorrect input
+            UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
+            TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Valkyrie analysis results' tab.");
+            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
+            UIMapResultsWindow.InputTextToSearchBox();
             try
             {
                 UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
-                Assert.Fail("Endpoint is shown on Valkyrie analysis results tab with incorrect search request!");
+                Assert.Fail(String.Format("Endpoint '{0}' is shown at 'Valkyrie analysis results' tab after an incorrect search query!", endpoint.Name));
             }
             catch (UITestControlNotFoundException)
             {
-                TestContext.WriteLine("Endpoint is not shown at Valkyrie analysis results tab with incorrect search query.\n");
+                TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown at 'Valkyrie analysis results' tab after an incorrect search query.\n", endpoint.Name));
             }
-            useResultsWindow.ClickClearSearchBoxButton();
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
+            UIMapResultsWindow.ClickClearSearchBoxButton();
+            
+            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext); // The endpoint should appear again
 
-            useResultsWindow.GoToScanningResultsTab();
-            useResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = endpoint.Name.Substring(endpoint.Name.Length - 6, 3);
-            useResultsWindow.InputTextToSearchBox();
-            TestContext.WriteLine("Part of endpoint name is entered to the searchbox at Scanning results tab.");
+            // Searches with a correct input
+            UIMapResultsWindow.GoToScanningResultsTab();
+            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
+            UIMapResultsWindow.InputTextToSearchBox();
+            TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Scanning results' tab.");
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
-            useResultsWindow.ClickClearSearchBoxButton();
+            UIMapResultsWindow.ClickClearSearchBoxButton();
 
-            useResultsWindow.GoToScanningResultsTab();
-            useResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = endpoint.Name.Substring(endpoint.Name.Length - 6, 3) + "err";
-            useResultsWindow.InputTextToSearchBox();
-            TestContext.WriteLine("Incorrect search query is entered to the searchbox at Scanning results tab.");
+            // Searches with an incorrect input
+            UIMapResultsWindow.GoToScanningResultsTab();
+            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
+            UIMapResultsWindow.InputTextToSearchBox();
+            TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Scanning results' tab.");
             try
             {
                 UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
-                Assert.Fail("Endpoint is shown on Scanning results tab with incorrect search request!");
+                Assert.Fail(String.Format("Endpoint '{0}' is shown on 'Scanning results' tab after an incorrect search query!", endpoint.Name));
             }
             catch (UITestControlNotFoundException)
             {
-                TestContext.WriteLine("Endpoint is not shown at Scanning results tab with incorrect search query.\n");
+                TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown on 'Scanning results' tab after an incorrect search query.\n", endpoint.Name));
             }
-            useResultsWindow.ClickClearSearchBoxButton();
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
+            UIMapResultsWindow.ClickClearSearchBoxButton();
+
+            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext); // The endpoint should appear again
         }
 
         [TestMethod]

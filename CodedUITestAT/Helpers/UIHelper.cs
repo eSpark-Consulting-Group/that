@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 
 namespace CodedUITestAT
@@ -44,17 +45,17 @@ namespace CodedUITestAT
             timer.Stop();
         }
 
-        /// <summary>Wait for specified row at specified results screen</summary>
-        /// <param name="rowName">Set a row name</param>
-        /// <param name="resultsScreen">Set results screen</param>
-        /// <param name="testContext"> Set current Test Context</param>
-        /// <param name="waitForMilliseconds">Set wait time in milliseconds</param>
+        /// <summary>Waits for a specified row at a given results screen.</summary>
+        /// <param name="rowName">Set a row name.</param>
+        /// <param name="resultsScreen">Set results screen.</param>
+        /// <param name="testContext"> Set current Test Context.</param>
+        /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
         private static void WaitForResultsRow(string rowName, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds)
         {
             UITestControl row = null;
             CodedUITestMain useMain = new CodedUITestMain();
             var timer = Stopwatch.StartNew();
-            for (;;)
+            for ( ; ; )
             {
                 Playback.Wait(2000);                
                 switch (resultsScreen)
@@ -63,30 +64,29 @@ namespace CodedUITestAT
                         {
                             row = useMain.ScanningResultsTab().GetRow(rowName);
                             break;
-                        }                        
+                        }
                     case ResultsScreen.ValkyrieAnalysis:
                         {
                             row = useMain.ValkyrieAnalysisResultsTab().GetRow(rowName);
                             break;
-                        }                        
+                        }
                 }
                 if (row != null)
                 {
-                    testContext.WriteLine("The given row '{0}' is found.\n", rowName);
+                    testContext.WriteLine(String.Format("The given row '{0}' is found.\n", rowName));
                     break;
                 }
-                if ((int)timer.ElapsedMilliseconds > waitForMilliseconds)
-                    throw new Microsoft.VisualStudio.TestTools.UITest.Extension.UITestControlNotFoundException(String.Format("The given row '{0}' is not found after {1} seconds!", rowName, waitForMilliseconds / 1000));
+                if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
+                    throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found after {1} seconds!", rowName, waitForMilliseconds / 1000));
             }
             timer.Stop();
-
         }
 
-        /// <summary>Wait for specified endpoint row at specified results screen</summary>
-        /// <param name="endpoint">Set an endpoint</param>
-        /// <param name="resultsScreen">Set results screen</param>
-        /// <param name="testContext">Set current test context</param>
-        /// <param name="waitForMilliseconds">Set wait time in milliseconds</param>
+        /// <summary>Waits for a specified endpoint row at a given results screen.</summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        /// <param name="resultsScreen">Set results screen.</param>
+        /// <param name="testContext">Set current test context.</param>
+        /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
         internal static void WaitForResultsRow(Computer endpoint, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
         {
             WaitForResultsRow(endpoint.RowName, resultsScreen, testContext, waitForMilliseconds);            
