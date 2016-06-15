@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -26,9 +27,7 @@ namespace APTAT.Core.Reports
         public string Build(AptReportData data, ReportType reportType)
         {
             if (data == null)
-                return null;
-
-            
+                return null;                      
             
             var existentName = String.Empty;
             var flsReportKey = data.OperationUid + "-" + reportType.ToString();
@@ -461,9 +460,10 @@ namespace APTAT.Core.Reports
         }
 
         private static string GetFileName(ReportType reportType)
-        {
-            var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            const string fileFormatString = "{0}{1}.pdf";
+        {            
+            var timeStamp = DateTime.Now.ToString("s", CultureInfo.CurrentCulture).Replace(":","").Replace("-","");
+            // .ToString("yyyyMMddHHmmss");
+            const string fileFormatString = "{0}-{1}.pdf";
             switch (reportType)
             {
                 case ReportType.Executive:

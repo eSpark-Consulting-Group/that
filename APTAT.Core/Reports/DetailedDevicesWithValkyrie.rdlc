@@ -1167,9 +1167,17 @@
                         <Style />
                       </ChartDataLabel>
                       <Style>
-                        <Color>=Switch(Fields!BadFileType.Value = "Infected", "Maroon", Fields!BadFileType.Value = "Unknown", "#ffc000", Fields!BadFileType.Value = "Not Analysed", "#c0c0c0")</Color>
+                        <Color>=Switch(
+						Fields!BadFileType.Value = "Infected", "Maroon", 
+						Fields!BadFileType.Value = "Unknown", "#ffc000", 
+						Fields!BadFileType.Value = "Pending", "#0092ff", 						
+						Fields!BadFileType.Value = "Not Analysed", "#c0c0c0")</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
-                        <BackgroundGradientEndColor>=Switch(Fields!BadFileType.Value = "Infected", "#993232", Fields!BadFileType.Value = "Unknown", "#ffecb2", Fields!BadFileType.Value = "Not Analysed", "#f2f2f2")</BackgroundGradientEndColor>
+                        <BackgroundGradientEndColor>=Switch(
+						Fields!BadFileType.Value = "Infected", "#993232", 
+						Fields!BadFileType.Value = "Unknown", "#ffecb2", 
+						Fields!BadFileType.Value = "Pending", "#b2deff", 						
+						Fields!BadFileType.Value = "Not Analysed", "#f2f2f2")</BackgroundGradientEndColor>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1296,7 +1304,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Unknown/Malicious/Not Analysed Programs Count</Caption>
+                      <Caption>Unknown/Malicious/Not Analysed/In Analysis Programs Count</Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
