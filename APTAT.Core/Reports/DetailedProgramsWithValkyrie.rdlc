@@ -1427,7 +1427,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>8.41011cm</Height>
+              <Height>8.97314cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1446,7 +1446,7 @@
                               <Value>=Parameters!IsActiveDirectorySource.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>7.48502cm</Top>
+                          <Top>8.12002cm</Top>
                           <Left>0.55775cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2142,7 +2142,7 @@
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>6.39103cm</Top>
                               <Left>4.21653cm</Left>
-                              <Height>0.65681cm</Height>
+                              <Height>1.48684cm</Height>
                               <Width>12.30873cm</Width>
                               <ZIndex>20</ZIndex>
                               <Style>
@@ -2191,7 +2191,7 @@
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Top>0.06576cm</Top>
-                          <Height>7.41087cm</Height>
+                          <Height>7.87787cm</Height>
                           <Width>16.82538cm</Width>
                           <ZIndex>1</ZIndex>
                           <Style>
@@ -2238,7 +2238,7 @@
         <DataSetName>DetailedBadFileDataSet</DataSetName>
         <Top>22.92982cm</Top>
         <Left>0.0635cm</Left>
-        <Height>8.41011cm</Height>
+        <Height>8.97314cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2248,7 +2248,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>12.408in</Height>
+    <Height>12.56022in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
@@ -2487,6 +2487,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
