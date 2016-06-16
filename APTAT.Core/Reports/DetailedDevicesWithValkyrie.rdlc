@@ -1011,7 +1011,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Pending Analysis</Value>
+                    <Value>In Analysis</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1459,7 +1459,7 @@
         <Width>16.9365cm</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
-          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+          <Hidden>=IIF((First(Fields!PendingAnalysisFilesCount.Value, "AptReportDataSet")+First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!MalwareFilesFound.Value, "AptReportDataSet")+First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -2371,7 +2371,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Pending Analysis:</Value>
+                                      <Value>In Analysis:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -2404,7 +2404,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!FailedToAnalyzeFilesCount.Value</Value>
+                                      <Value>=Fields!PendingAnalysisFilesCount.Value</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
