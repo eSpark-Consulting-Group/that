@@ -20,8 +20,9 @@ namespace APTAT.Core.Facade.Descent.DataContracts.DeploymentTargets
 	    }
 
 	    public bool IsOnline { get; set; }
+        public bool IsAptHost { get; set; }
 
-		public string IPAddress { get; set; }
+        public string IPAddress { get; set; }
 
         public string LdapPath { get; set; }
     }

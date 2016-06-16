@@ -238,7 +238,7 @@ namespace APTAT.Core.Facade.Descent.Commands
                           });
 
             results = results.Distinct(this).OrderBy(t => t.Name).ToArray();
-            //TargetsHelper.FindManagedTargetsAndEsmServerHost(results);
+            TargetsHelper.FindEsmServerHost(results);
             Response.Targets.AddRange(results);
         }
 

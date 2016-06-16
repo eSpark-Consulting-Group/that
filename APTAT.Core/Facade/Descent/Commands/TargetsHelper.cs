@@ -12,31 +12,21 @@ namespace APTAT.Core.Facade.Descent.Commands
 {
 	public static class TargetsHelper
 	{
-        // TODO: Commented
-        //public static void FindManagedTargetsAndEsmServerHost( IEnumerable<DeploymentTarget> targets )
-        //{
-        //    var storage = SubSystemFactory.Current.GetSubSystem<IEntityStorageSubsystem>();
-        //    Computer[] computers;
-        //    using (var unit = storage.Storage.GetContext())
-        //    {
-        //        computers = unit.ComputerRepository.GetAllVisible(cacheEntitiesInContext: false);
-        //    }
+        public static void FindEsmServerHost(IEnumerable<DeploymentTarget> targets)
+        {
+            var serverDnsName = NetHelp.GetLocalHostName(true);
+            var serverAddresses = NetHelp.GetSupportedExternalAddresses(true);
 
-        //    var serverDnsName = NetHelp.GetLocalHostName(true);
-        //    var serverAddresses = NetHelp.GetSupportedExternalAddresses(true);
-			
-        //    foreach( var target in targets )
-        //    {
-        //        var t = target; // To avoid "Access to modified closure" warning
-        //        t.Installed = computers.Any(c => c.IPAddress == t.IPAddress &&
-        //                                         String.Equals(c.DnsName, t.DnsName, StringComparison.InvariantCultureIgnoreCase));
+            foreach (var target in targets)
+            {
+                var t = target; // To avoid "Access to modified closure" warning
 
-        //        t.IsEsmServer = serverAddresses.Any(ip => ip == t.IPAddress) ||
-        //                        String.Equals(t.DnsName, serverDnsName, StringComparison.InvariantCultureIgnoreCase);
-        //    }
-        //}
+                t.IsAptHost = serverAddresses.Any(ip => ip == t.IPAddress) ||
+                                String.Equals(t.DnsName, serverDnsName, StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
 
-		public static void FindOnlineTargets( INetworkObserver networkObserver, IEnumerable<DeploymentTarget> computers )
+        public static void FindOnlineTargets( INetworkObserver networkObserver, IEnumerable<DeploymentTarget> computers )
 		{
 			//TODO: Check duplcated keys.
 			var computersDict = computers.ToDictionary( target => target.Name );
