@@ -181,7 +181,7 @@
                 <Setter Property="Mask" Value="aaaa"></Setter>
                 <Setter Property="MaskType" Value="Standard" />
                 <Setter Property="Foreground" Value="#FF767676"/>
-                <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+                <Setter Property="FontFamily" Value="Segoe UI Light" />
                 <Setter Property="Background" Value="{StaticResource MainBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
                 <Setter Property="BorderThickness" Value="1" />

@@ -35,7 +35,7 @@
                               Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource BoolToOpacityConverter}}"
                               Margin="0,0,10,0"/>
 
-                    <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="18" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="16" Margin="0,0,5,0" />
                 </Grid>
             </DataTemplate>
           <DataTemplate x:Key="AboutButtonContentTemplate">
@@ -59,7 +59,7 @@
                               Margin="0,0,10,0"
                               Width="20.115"/>
 
-              <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="18" Margin="0,0,5,0" />
+              <TextBlock Text="{Binding}" Grid.Column="1" FontFamily="Segoe UI Light" FontSize="16" Margin="0,0,5,0" />
             </Grid>
           </DataTemplate>
             <DataTemplate x:Key="ReportButtonListBoxItemTemplate">

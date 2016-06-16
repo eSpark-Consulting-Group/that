@@ -14,7 +14,7 @@ namespace APTAT.Application.Models
     public class StartScanWorkgroupViewModel : WizardViewModel
     {
         public const String SelectWorkgroup = "SelectWorkgroup";
-        public const String SelectTargets = "SelectTargets";
+
         ITargetsDiscoveryService _targetsDiscoveryService;
         IStorageService _storage;
 
@@ -206,25 +206,6 @@ namespace APTAT.Application.Models
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.Workgroup, Workgroup);
                 _targetsDiscoveryService.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
-            }
-            else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
-            {
-                if (CheckedItems == null || CheckedItems.Count == 0)
-                {
-                    Error = "Select at least one item";
-                }
-                else
-                {
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                    _storage.SetValue(KnownKeys.Login, _administrator);
-                    _storage.SetValue(KnownKeys.Password, _password);
-                    _storage.SetValue(KnownKeys.Workgroup, _workgroup);
-                    _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                    _storage.SetValue(KnownKeys.UdpPort, _udpPort);
-                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });
-                    success();
-                }
             }
             else
             {

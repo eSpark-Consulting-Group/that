@@ -68,7 +68,7 @@
               </TextBlock>
 
               <TextBlock  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Check if firewall on target computer is turned OFF" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="Check if Firewall on target computer is turned OFF" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
               </TextBlock>
 
               <TextBlock  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
@@ -80,7 +80,7 @@
               </TextBlock>
 
               <TextBlock  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Make sure Administrator password in correct" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="Make sure Administrator password is correct" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
               </TextBlock>
 
               <TextBlock  Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">

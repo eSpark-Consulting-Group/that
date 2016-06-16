@@ -75,34 +75,6 @@
             </Grid>
 
         </Grid>
-        <Grid x:Name="panelSelectComputers" Grid.Row="2" Background="White" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
-
-            <telerik:RadGridView 
-                x:Name="computersGrid"
-                CanUserFreezeColumns="False" 
-                AutoGenerateColumns="False" 
-                CanUserResizeColumns="False"
-                IsReadOnly="True"
-                TabIndex="1"
-                
-                EnableRowVirtualization="True"
-                SelectionChanged="OnSelectionChanged"
-                Margin="30,0,30,30"
-                SelectionMode="Extended"
-                ItemsSource="{Binding Items}">
-                <telerik:RadGridView.Columns>
-                    <telerik:GridViewSelectColumn />
-                    <telerik:GridViewDataColumn  IsFilterable="True" DataMemberBinding="{Binding Name}" Header="COMPUTER" Width="*"/>
-                    <telerik:GridViewDataColumn  IsFilterable="True" DataMemberBinding="{Binding IPAddress}" Header="IP ADDRESS" Width="*"/>
-                    <telerik:GridViewDataColumn  IsFilterable="True" DataMemberBinding="{Binding Status}" Header="STATUS" Width="*"/>
-                </telerik:RadGridView.Columns>
-            </telerik:RadGridView>
-            <!--<Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
-                
-            </Border>-->
-            
-            
-
-        </Grid>
+        
     </Grid>
 </UserControl>
