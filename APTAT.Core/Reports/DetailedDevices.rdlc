@@ -1506,7 +1506,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>12.0367cm</Height>
+              <Height>12.1637cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1522,7 +1522,7 @@
                               <Value>=Fields!UnknownFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>9.27214cm</Top>
+                          <Top>9.44402cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -1543,7 +1543,7 @@
                               <Value>=Fields!TotalErrorFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>11.18358cm</Top>
+                          <Top>11.31058cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2412,7 +2412,7 @@
                               <KeepTogether>true</KeepTogether>
                               <Top>1.34737cm</Top>
                               <Left>0.78cm</Left>
-                              <Height>7.17815cm</Height>
+                              <Height>7.0194cm</Height>
                               <Width>0.09784cm</Width>
                               <ZIndex>25</ZIndex>
                               <Style>
@@ -2429,7 +2429,7 @@
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Top>0.06576cm</Top>
-                          <Height>10.12653cm</Height>
+                          <Height>8.36677cm</Height>
                           <Width>16.93652cm</Width>
                           <ZIndex>2</ZIndex>
                           <Style>
@@ -2448,7 +2448,7 @@
                               <Value>=Fields!MalwareFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>8.32024cm</Top>
+                          <Top>8.51074cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2470,7 +2470,7 @@
                               <Value>=Fields!NoVerdictFilesCount.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>10.22757cm</Top>
+                          <Top>10.3773cm</Top>
                           <Left>0.62123cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2523,7 +2523,7 @@
         <DataSetName>ScanResultDataSet</DataSetName>
         <Top>24.23158cm</Top>
         <Left>0.0635cm</Left>
-        <Height>12.0367cm</Height>
+        <Height>12.1637cm</Height>
         <Width>16.93649cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2533,7 +2533,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>14.27885in</Height>
+    <Height>14.32885in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
@@ -2757,6 +2757,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.02646cm</Height>
           <Width>16.9365cm</Width>

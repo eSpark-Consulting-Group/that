@@ -41,11 +41,19 @@ namespace APTAT.Core.Reports
             {
                 existentName = cache.Reports[valkyrieReportKey];
             }
-            if (!String.IsNullOrWhiteSpace(existentName) && File.Exists(existentName))
+            if (!String.IsNullOrWhiteSpace(existentName))
             {
-                _fileName = existentName;
-                return existentName;
+                if (File.Exists(existentName))
+                {
+                    _fileName = existentName;
+                    return existentName;
+                }
+                else
+                {
+                    cache.Reports.Remove(valkyrieReportKey);
+                }
             }
+            
             
             _fileName = GetFileName(reportType);
             switch (reportType)
