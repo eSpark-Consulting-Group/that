@@ -6,7 +6,7 @@ using CodedUITestAT.UIMaps.UIMapHelpClasses;
 
 namespace CodedUITestAT
 {
-    /// <summary> Tests for About screen. </summary>
+    /// <summary> Tests for Help and About screens. </summary>
     [CodedUITest]
     public sealed class CodedUITestHelp
     {
@@ -58,7 +58,7 @@ namespace CodedUITestAT
 
         #region Control methods
 
-        private WpfButton HelpButton()
+        internal WpfButton HelpButton()
         {
             return UIMapHelp.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UIHelpButtonButton;
         }

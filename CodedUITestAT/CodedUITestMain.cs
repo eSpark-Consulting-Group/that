@@ -221,11 +221,6 @@ namespace CodedUITestAT
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIReportButtonButton;
         }
 
-        private WpfButton AboutButton()
-        {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
-        }
-
         private WpfText MainWindowTitleTextBlock()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
@@ -633,6 +628,8 @@ namespace CodedUITestAT
         [TestMethod]
         public void VerifyMainScreenDefaultsTest()
         {
+            CodedUITestHelp useHelp = new CodedUITestHelp();
+            
             UIMapMain.ClickResizeButton();
             if (MainWindow().Maximized) TestContext.WriteLine("Main window was successfully maximized using Resize button.\n");
             else Assert.Fail("Main window was not maximized after clicking Resize button!");
@@ -658,8 +655,8 @@ namespace CodedUITestAT
             if (!ReportsDropDownButton().Enabled) TestContext.WriteLine("Reports button is disabled by default.\n");
             else Assert.Fail("Reports button is enabled by default!\n");
 
-            if (AboutButton().Enabled) TestContext.WriteLine("About button is enabled by default.\n");
-            else Assert.Fail("About button is disabled by default!\n");
+            if (useHelp.HelpButton().Enabled) TestContext.WriteLine("Help button is enabled by default.\n");
+            else Assert.Fail("Help button is disabled by default!\n");
 
             if (!ScanningResultsTab().Exists) TestContext.WriteLine("'Unknown files' list is not shown by default.\n");
             else Assert.Fail("'Unknown files' list is shown by default!\n");
