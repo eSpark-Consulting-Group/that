@@ -32,14 +32,16 @@ namespace APTAT.Core.Reports
             var existentName = String.Empty;
             var flsReportKey = data.OperationUid + "-" + reportType.ToString();
             var valkyrieReportKey = data.ValkyrieOperationUid  + "-" + reportType.ToString();
-
+            var reportKey = String.Empty;
             if (cache.Reports.Keys.Contains(flsReportKey))
             {
                 existentName = cache.Reports[flsReportKey];
+                reportKey = flsReportKey;
             }
             else if (cache.Reports.Keys.Contains(valkyrieReportKey))
             {
                 existentName = cache.Reports[valkyrieReportKey];
+                reportKey = valkyrieReportKey;
             }
             if (!String.IsNullOrWhiteSpace(existentName))
             {
@@ -50,7 +52,7 @@ namespace APTAT.Core.Reports
                 }
                 else
                 {
-                    cache.Reports.Remove(valkyrieReportKey);
+                    cache.Reports.Remove(reportKey);
                 }
             }
             
