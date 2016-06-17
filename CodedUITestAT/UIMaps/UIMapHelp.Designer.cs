@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapAboutClasses
+namespace CodedUITestAT.UIMaps.UIMapHelpClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -26,7 +26,7 @@ namespace CodedUITestAT.UIMaps.UIMapAboutClasses
     
     
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public partial class UIMapAbout
+    public partial class UIMapHelp
     {
         
         /// <summary>
@@ -82,19 +82,6 @@ namespace CodedUITestAT.UIMaps.UIMapAboutClasses
         }
         
         /// <summary>
-        /// ClickAboutButton
-        /// </summary>
-        public void ClickAboutButton()
-        {
-            #region Variable Declarations
-            WpfButton uISystemWindowsControlButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
-            #endregion
-
-            // Click 'System.Windows.Controls.Grid' button
-            Mouse.Click(uISystemWindowsControlButton, new Point(38, 30));
-        }
-        
-        /// <summary>
         /// ClickCloseButton
         /// </summary>
         public void ClickCloseButton()
@@ -118,6 +105,32 @@ namespace CodedUITestAT.UIMaps.UIMapAboutClasses
 
             // Click 'CloseAboutCrossButton' button
             Mouse.Click(uICloseAboutCrossButtoButton, new Point(11, 21));
+        }
+        
+        /// <summary>
+        /// ClickHelpButton
+        /// </summary>
+        public void ClickHelpButton()
+        {
+            #region Variable Declarations
+            WpfButton uIHelpButtonButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UIHelpButtonButton;
+            #endregion
+
+            // Click 'HelpButton' button
+            Mouse.Click(uIHelpButtonButton, new Point(52, 33));
+        }
+        
+        /// <summary>
+        /// SelectAboutMenuItem
+        /// </summary>
+        public void SelectAboutMenuItem()
+        {
+            #region Variable Declarations
+            WpfMenuItem uIAboutMenuItem = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIAboutMenuItem;
+            #endregion
+
+            // Click 'About' menu item
+            Mouse.Click(uIAboutMenuItem, new Point(31, 22));
         }
         
         #region Properties
@@ -457,10 +470,24 @@ namespace CodedUITestAT.UIMaps.UIMapAboutClasses
                 return this.mUIRadToolBarToolBar;
             }
         }
+        
+        public UIRadContextMenuMenu UIRadContextMenuMenu
+        {
+            get
+            {
+                if ((this.mUIRadContextMenuMenu == null))
+                {
+                    this.mUIRadContextMenuMenu = new UIRadContextMenuMenu(this);
+                }
+                return this.mUIRadContextMenuMenu;
+            }
+        }
         #endregion
         
         #region Fields
         private UIRadToolBarToolBar mUIRadToolBarToolBar;
+        
+        private UIRadContextMenuMenu mUIRadContextMenuMenu;
         #endregion
     }
     
@@ -493,10 +520,64 @@ namespace CodedUITestAT.UIMaps.UIMapAboutClasses
                 return this.mUISystemWindowsControlButton;
             }
         }
+        
+        public WpfButton UIHelpButtonButton
+        {
+            get
+            {
+                if ((this.mUIHelpButtonButton == null))
+                {
+                    this.mUIHelpButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIHelpButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "HelpDropDownButton";
+                    this.mUIHelpButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIHelpButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUISystemWindowsControlButton;
+        
+        private WpfButton mUIHelpButtonButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UIRadContextMenuMenu : WpfMenu
+    {
+        
+        public UIRadContextMenuMenu(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfMenu.PropertyNames.Name] = "Rad Context Menu";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfMenuItem UIAboutMenuItem
+        {
+            get
+            {
+                if ((this.mUIAboutMenuItem == null))
+                {
+                    this.mUIAboutMenuItem = new WpfMenuItem(this);
+                    #region Search Criteria
+                    this.mUIAboutMenuItem.SearchProperties[WpfMenuItem.PropertyNames.AutomationId] = "AboutMenuItem";
+                    this.mUIAboutMenuItem.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIAboutMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfMenuItem mUIAboutMenuItem;
         #endregion
     }
 }

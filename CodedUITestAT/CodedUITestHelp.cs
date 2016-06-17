@@ -2,34 +2,34 @@
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.UIMapAboutClasses;
+using CodedUITestAT.UIMaps.UIMapHelpClasses;
 
 namespace CodedUITestAT
 {
     /// <summary> Tests for About screen. </summary>
     [CodedUITest]
-    public sealed class CodedUITestAbout
+    public sealed class CodedUITestHelp
     {
-        public CodedUITestAbout()
+        public CodedUITestHelp()
         {
         }
 
         #region UIMap properties
 
-        /// <summary> UIMap for About screen, UIMapAbout.uitest. </summary>
-        public UIMapAbout UIMapAbout
+        /// <summary> UIMap for Help screen, UIMapHelp.uitest. </summary>
+        public UIMapHelp UIMapHelp
         {
             get
             {
-                if ((this.mapAbout == null))
+                if ((this.mapHelp == null))
                 {
-                    this.mapAbout = new UIMapAbout();
+                    this.mapHelp = new UIMapHelp();
                 }
 
-                return this.mapAbout;
+                return this.mapHelp;
             }
         }
-        private UIMapAbout mapAbout;
+        private UIMapHelp mapHelp;
 
         #endregion
 
@@ -44,8 +44,8 @@ namespace CodedUITestAT
             useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
             useEula.UIMapEula.ClickContinueButton();
 
-            UIHelper.WaitForControl(AboutButton());
-            UIHelper.WaitForControlIsEnabled(AboutButton());
+            UIHelper.WaitForControl(HelpButton());
+            UIHelper.WaitForControlIsEnabled(HelpButton());
         }
 
         [TestCleanup]
@@ -58,9 +58,9 @@ namespace CodedUITestAT
 
         #region Control methods
 
-        private WpfButton AboutButton()
+        private WpfButton HelpButton()
         {
-            return UIMapAbout.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
+            return UIMapHelp.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UIHelpButtonButton;
         }
         
         #endregion
@@ -74,40 +74,43 @@ namespace CodedUITestAT
             string productVersion = SysHelper.GetProductVersion();
             string copyrightText = "© " + String.Format(Settings.General.Default.CopyrightText, DateTime.Now.Year.ToString());
 
-            UIMapAbout.ClickAboutButton();
+            UIMapHelp.ClickHelpButton();
+            UIMapHelp.SelectAboutMenuItem();
 
             // Checks the product name
-            UIMapAbout.AssertProductNameValueTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText = productName;
-            UIMapAbout.AssertProductNameValueTextBlockText();
+            UIMapHelp.AssertProductNameValueTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText = productName;
+            UIMapHelp.AssertProductNameValueTextBlockText();
             TestContext.WriteLine(String.Format("The product name is correct: '{0}'.", productName));
             
             // Checks the product version
-            UIMapAbout.AssertProductVersionValueTextBlockTextExpectedValues.UIItem14205242TextDisplayText = productVersion;
-            UIMapAbout.AssertProductVersionValueTextBlockText();
+            UIMapHelp.AssertProductVersionValueTextBlockTextExpectedValues.UIItem14205242TextDisplayText = productVersion;
+            UIMapHelp.AssertProductVersionValueTextBlockText();
             TestContext.WriteLine(String.Format("The product version is correct: '{0}'.", productVersion));
             
             // Checks the product copyright
-            UIMapAbout.AssertCopyrightTextBlockTextExpectedValues.UIItem2016ComodoSecuriTextDisplayText = copyrightText;
-            UIMapAbout.AssertCopyrightTextBlockText();
+            UIMapHelp.AssertCopyrightTextBlockTextExpectedValues.UIItem2016ComodoSecuriTextDisplayText = copyrightText;
+            UIMapHelp.AssertCopyrightTextBlockText();
             TestContext.WriteLine(String.Format("The product copyright text is correct: '{0}'.", copyrightText));
             
             // Checks Close button
-            UIMapAbout.ClickCloseButton();
-            UIHelper.WaitForControlIsEnabled(AboutButton());
-            UIMapAbout.AssertAboutWindowExpectedValues.UIWpfWindowExists = false;
-            UIMapAbout.AssertAboutWindow();            
+            UIMapHelp.ClickCloseButton();
+            UIHelper.WaitForControlIsEnabled(HelpButton());
+            UIMapHelp.AssertAboutWindowExpectedValues.UIWpfWindowExists = false;
+            UIMapHelp.AssertAboutWindow();
             TestContext.WriteLine("About window is successfully closed using Close button.");
             
             // Checks Close Cross button
-            UIMapAbout.ClickAboutButton();
-            UIMapAbout.ClickCloseCrossButton();
-            UIHelper.WaitForControlIsEnabled(AboutButton());
-            UIMapAbout.AssertAboutWindow();
+            UIMapHelp.ClickHelpButton();
+            UIMapHelp.SelectAboutMenuItem();
+            UIMapHelp.ClickCloseCrossButton();
+            UIHelper.WaitForControlIsEnabled(HelpButton());
+            UIMapHelp.AssertAboutWindow();
             TestContext.WriteLine("About window is successfully closed using Close Cross button.");
 
-            UIMapAbout.ClickAboutButton();
-            UIMapAbout.AssertAboutWindowExpectedValues.UIWpfWindowExists = true;
-            UIMapAbout.AssertAboutWindow();
+            UIMapHelp.ClickHelpButton();
+            UIMapHelp.SelectAboutMenuItem();
+            UIMapHelp.AssertAboutWindowExpectedValues.UIWpfWindowExists = true;
+            UIMapHelp.AssertAboutWindow();
             TestContext.WriteLine("About window can be opened again.");
         }
 

@@ -14,7 +14,7 @@
     using MouseButtons = System.Windows.Forms.MouseButtons;
     
     
-    public partial class UIMapAbout
+    public partial class UIMapHelp
     {
     }
 }

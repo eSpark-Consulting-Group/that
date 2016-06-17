@@ -10,9 +10,7 @@
                   xmlns:Application="clr-namespace:APTAT.Application"
                   xmlns:Controls="clr-namespace:APTAT.Application.Controls"
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
-                  d:DesignHeight="760" d:DesignWidth="1200"
-                 
-	                Background="White">
+                  d:DesignHeight="760" d:DesignWidth="1200" Background="White">
 
     <Grid>
         <Grid.Resources>
@@ -175,8 +173,6 @@
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                
-
                 <telerik:RadDropDownButton AutomationProperties.AutomationId="ReportsDropDownButton"
                                            AutoOpenDelay="0:0:0.0"
                                            Content="Reports"
@@ -199,10 +195,9 @@
                     </telerik:RadDropDownButton.DropDownContent>
                 </telerik:RadDropDownButton>
 
-              <telerik:RadDropDownButton AutomationProperties.AutomationId="AboutButton"
+              <telerik:RadDropDownButton AutomationProperties.AutomationId="HelpDropDownButton"
                                           AutoOpenDelay="0:0:0.0"
                                           Content="Help"
-                                          
                                           Style="{StaticResource RadDropDownButtonStyle2}"
                                           Margin="0,-1"
                                           ContentTemplate="{StaticResource AboutButtonContentTemplate}"
@@ -211,13 +206,11 @@
                                           Padding="10,20">
                 <telerik:RadDropDownButton.DropDownContent>
                   <telerik:RadContextMenu IconColumnWidth="0" Width="160" BorderThickness="0">
-                    <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="About" Click="AboutClick"  />
-                    <telerik:RadMenuItem HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Agent Requirements" Click="AgentClick"  />
+                  <telerik:RadMenuItem AutomationProperties.AutomationId="AboutMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="About" Click="AboutClick"  />
+                  <telerik:RadMenuItem AutomationProperties.AutomationId="AgentRequirementsMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Agent Requirements" Click="AgentClick"  />
                 </telerik:RadContextMenu>
                 </telerik:RadDropDownButton.DropDownContent>
               </telerik:RadDropDownButton>
-              
-               
 
             </telerik:RadToolBar>
 

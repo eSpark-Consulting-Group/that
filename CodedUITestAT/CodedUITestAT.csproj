@@ -79,7 +79,7 @@
     <Compile Include="BusinessObjects\MouseClick.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="BusinessObjects\Computers\ScanType.cs" />
-    <Compile Include="CodedUITestAbout.cs" />
+    <Compile Include="CodedUITestHelp.cs" />
     <Compile Include="CodedUITestEula.cs" />
     <Compile Include="CodedUITestMain.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
@@ -128,11 +128,11 @@
     <Compile Include="UIMaps\StartScanningWizard\UIMapWorkgroup.Designer.cs">
       <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\UIMapAbout.cs">
-      <DependentUpon>UIMapAbout.uitest</DependentUpon>
+    <Compile Include="UIMaps\UIMapHelp.cs">
+      <DependentUpon>UIMapHelp.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\UIMapAbout.Designer.cs">
-      <DependentUpon>UIMapAbout.uitest</DependentUpon>
+    <Compile Include="UIMaps\UIMapHelp.Designer.cs">
+      <DependentUpon>UIMapHelp.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapCamCredentialsWindow.cs">
       <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
@@ -215,7 +215,7 @@
     </None>
     <None Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapWorkgroup.uitest" />
-    <None Include="UIMaps\UIMapAbout.uitest" />
+    <None Include="UIMaps\UIMapHelp.uitest" />
     <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
     <None Include="UIMaps\UIMapDetailsWindow.uitest" />
     <None Include="UIMaps\UIMapEula.uitest" />
