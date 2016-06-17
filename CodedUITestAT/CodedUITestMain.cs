@@ -534,6 +534,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.CopyUnknownFileForQuickScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
@@ -585,6 +586,7 @@ namespace CodedUITestAT
             Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.CopyUnknownFileForQuickScan(endpoint);
             
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -816,6 +818,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.CopyUnknownFileForQuickScan(endpoint);
             string partialNameInput = endpoint.Name.Substring(1, (int) ((endpoint.Name.Length - 1) / 2));
             string error = "error";
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -886,6 +889,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.CopyUnknownFileForQuickScan(endpoint);
 
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -967,7 +971,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCancelButton();
+            UIMapScanCompletedWindow.ClickOkButton();
             AssertPanelCountersData(0, 1, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
