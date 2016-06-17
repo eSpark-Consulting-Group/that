@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 
@@ -120,11 +121,20 @@ namespace APTAT.Core.Valkyrie
     public enum ValkyrieVerdict
     {
         Clean,
-        Undetected,   
+
+        [Description("No Threat Found")]
+        Undetected,
+
+        [Description("In Analysis")]
         FirstSeen,
+
         Malware,
+
+        [Description("Potentially Unwanted Application")]
         PotentiallyUnwantedApplication,
         NotAnalyzed,
+
+        [Description("In Analysis")]
         Pending,
     }
 }
