@@ -1186,9 +1186,11 @@
                       </ChartDataLabel>
                       <Style>
                         <Color>=Switch(
-                      Fields!CloudVerdict.Value = "2", "#b22222",
+                      Fields!CloudVerdict.Value = "3", "#b22222",
                       Fields!CloudVerdict.Value = "1", "#ffc000",
-                      Fields!CloudVerdict.Value = "0", "#3c963c")</Color>
+                      Fields!CloudVerdict.Value = "0", "#3c963c",
+					  Fields!CloudVerdict.Value = "6", "LightBlue"
+					  )</Color>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1496,10 +1498,12 @@
                           </ChartDataLabel>
                           <Style>
                             <Color>=Switch(
-                      Fields!CloudVerdict.Value = "2", "#b22222",
-                      Fields!CloudVerdict.Value = "1", "#ffc000",
-                      Fields!CloudVerdict.Value = "0", "#3c963c",
-					  Fields!CloudVerdict.Value = "4", "#CCCCCC")</Color>
+                     Fields!CloudVerdict.Value = "3", "#b22222",
+	Fields!CloudVerdict.Value = "1", "#ffc000",
+    Fields!CloudVerdict.Value = "0", "#3c963c",
+	Fields!CloudVerdict.Value = "5", "#CCCCCC",
+	Fields!CloudVerdict.Value = "6", "LightBlue"
+					  )</Color>
                           </Style>
                           <ChartMarker>
                             <Style />
@@ -2549,7 +2553,7 @@
       <Fields>
         <Field Name="CloudVerdict">
           <DataField>CloudVerdict</DataField>
-          <rd:TypeName>APTAT.Core.CloudVerdict</rd:TypeName>
+          <rd:TypeName> APTAT.Core.Valkyrie.ValkyrieVerdict</rd:TypeName>
         </Field>
         <Field Name="Count">
           <DataField>Count</DataField>
@@ -2563,7 +2567,7 @@
       <rd:DataSetInfo>
         <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
         <rd:TableName>FileRatingInfo</rd:TableName>
-        <rd:ObjectDataSourceType>APTAT.Core.Reports.FileRatingInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType> APTAT.Core.Reports.FileRatingValkyrieInfo, APTAT.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="DevicesRatingDataSet">
