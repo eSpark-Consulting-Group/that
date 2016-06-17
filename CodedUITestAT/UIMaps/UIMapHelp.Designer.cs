@@ -126,11 +126,11 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
         public void SelectAboutMenuItem()
         {
             #region Variable Declarations
-            WpfMenuItem uIAboutMenuItem = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIAboutMenuItem;
+            WpfMenuItem uIAboutMenuItem = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu1.UIAboutMenuItem;
             #endregion
 
             // Click 'About' menu item
-            Mouse.Click(uIAboutMenuItem, new Point(31, 22));
+            Mouse.Click(uIAboutMenuItem, new Point(27, 18));
         }
         
         #region Properties
@@ -482,12 +482,26 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
                 return this.mUIRadContextMenuMenu;
             }
         }
+        
+        public UIRadContextMenuMenu1 UIRadContextMenuMenu1
+        {
+            get
+            {
+                if ((this.mUIRadContextMenuMenu1 == null))
+                {
+                    this.mUIRadContextMenuMenu1 = new UIRadContextMenuMenu1(this);
+                }
+                return this.mUIRadContextMenuMenu1;
+            }
+        }
         #endregion
         
         #region Fields
         private UIRadToolBarToolBar mUIRadToolBarToolBar;
         
         private UIRadContextMenuMenu mUIRadContextMenuMenu;
+        
+        private UIRadContextMenuMenu1 mUIRadContextMenuMenu1;
         #endregion
     }
     
@@ -554,6 +568,42 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
         {
             #region Search Criteria
             this.SearchProperties[WpfMenu.PropertyNames.Name] = "Rad Context Menu";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfMenuItem UIAboutMenuItem
+        {
+            get
+            {
+                if ((this.mUIAboutMenuItem == null))
+                {
+                    this.mUIAboutMenuItem = new WpfMenuItem(this);
+                    #region Search Criteria
+                    this.mUIAboutMenuItem.SearchProperties[WpfMenuItem.PropertyNames.AutomationId] = "AboutMenuItem";
+                    this.mUIAboutMenuItem.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIAboutMenuItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfMenuItem mUIAboutMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UIRadContextMenuMenu1 : WpfMenu
+    {
+        
+        public UIRadContextMenuMenu1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfMenu.PropertyNames.AutomationId] = "HelpContextMenu";
             this.WindowTitles.Add("Unknown File Hunter");
             #endregion
         }

@@ -205,7 +205,7 @@
                                           FontSize="16"
                                           Padding="10,20">
                 <telerik:RadDropDownButton.DropDownContent>
-                  <telerik:RadContextMenu IconColumnWidth="0" Width="160" BorderThickness="0">
+                  <telerik:RadContextMenu AutomationProperties.AutomationId="HelpContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0">
                   <telerik:RadMenuItem AutomationProperties.AutomationId="AboutMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="About" Click="AboutClick"  />
                   <telerik:RadMenuItem AutomationProperties.AutomationId="AgentRequirementsMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Agent Requirements" Click="AgentClick"  />
                 </telerik:RadContextMenu>
