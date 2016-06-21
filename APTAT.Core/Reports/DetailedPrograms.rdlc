@@ -1490,7 +1490,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>6.24052cm</Height>
+              <Height>6.46277cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1509,7 +1509,7 @@
                               <Value>=Parameters!IsActiveDirectorySource.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>5.3874cm</Top>
+                          <Top>5.60965cm</Top>
                           <Left>0.62125cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -1881,7 +1881,7 @@
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>4.34024cm</Top>
                               <Left>1.05424cm</Left>
-                              <Height>0.55681cm</Height>
+                              <Height>0.84731cm</Height>
                               <Width>2.65075cm</Width>
                               <ZIndex>10</ZIndex>
                               <Style>
@@ -1916,7 +1916,7 @@
                               <rd:DefaultName>Textbox3</rd:DefaultName>
                               <Top>4.34024cm</Top>
                               <Left>3.705cm</Left>
-                              <Height>0.55681cm</Height>
+                              <Height>0.94256cm</Height>
                               <Width>13.2315cm</Width>
                               <ZIndex>11</ZIndex>
                               <Style>
@@ -2052,7 +2052,7 @@
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Top>0.06576cm</Top>
-                          <Height>5.18755cm</Height>
+                          <Height>5.4098cm</Height>
                           <Width>16.93651cm</Width>
                           <ZIndex>1</ZIndex>
                           <Style>
@@ -2099,7 +2099,7 @@
         <DataSetName>DetailedBadFileDataSet</DataSetName>
         <Top>23.85057cm</Top>
         <Left>0.0635cm</Left>
-        <Height>6.24052cm</Height>
+        <Height>6.46277cm</Height>
         <Width>16.93649cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2109,7 +2109,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>11.84689in</Height>
+    <Height>11.93439in</Height>
     <Style />
   </Body>
   <Width>17cm</Width>
