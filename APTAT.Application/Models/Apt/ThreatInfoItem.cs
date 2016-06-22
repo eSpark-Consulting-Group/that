@@ -76,7 +76,6 @@ namespace APTAT.Application.Models
         private Collection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _noVerdictFilesCount;
-        private int _pendingAnalysisFilesCount;
 
         public Boolean HasBadFiles
         {
@@ -92,6 +91,30 @@ namespace APTAT.Application.Models
             get 
             {
                 return !IsUnknown && !IsMalware;
+            }
+        }
+
+        public Boolean HasMalwares
+        {
+            get 
+            {
+                return MalwareFilesCount > 0;
+            }
+        }
+
+        public Boolean HasUnknowns
+        {
+            get
+            {
+                return MalwareFilesCount == 0 && UnknownFilesCount > 0;
+            }
+        }
+
+        public Boolean HasFailed
+        {
+            get
+            {
+                return MalwareFilesCount == 0 && UnknownFilesCount == 0;
             }
         }
 
@@ -198,6 +221,8 @@ namespace APTAT.Application.Models
                 _unknownFilesCount = value;
                 RaisePropertyChanged("UnknownFilesCount");
                 RaisePropertyChanged("HasBadFiles");
+                RaisePropertyChanged("HasUnknowns");
+                RaisePropertyChanged("HasFailed");
             }
         }
 
@@ -214,6 +239,9 @@ namespace APTAT.Application.Models
                 _malwareFilesCount = value;
                 RaisePropertyChanged("MalwareFilesCount");
                 RaisePropertyChanged("HasBadFiles");
+                RaisePropertyChanged("HasMalwares");
+                RaisePropertyChanged("HasUnknowns");
+                RaisePropertyChanged("HasFailed");
             }
         }
 
@@ -230,6 +258,7 @@ namespace APTAT.Application.Models
                 _errorFilesCount = value;
                 RaisePropertyChanged("FailedToAnalyzeCount");
                 RaisePropertyChanged("HasBadFiles");
+                RaisePropertyChanged("HasFailed");
             }
         }
 
@@ -246,25 +275,12 @@ namespace APTAT.Application.Models
                 _noVerdictFilesCount = value;
                 RaisePropertyChanged("NoVerdictFilesCount");
                 RaisePropertyChanged("HasBadFiles");
+                RaisePropertyChanged("HasFailed");
             }
         }
 
 
-        public Int32 PendingAnalysisFilesCount
-        {
-            get { return _pendingAnalysisFilesCount; }
-            set
-            {
-                if (_pendingAnalysisFilesCount == value)
-                {
-                    return;
-                }
 
-                _pendingAnalysisFilesCount = value;
-                RaisePropertyChanged("PendingAnalysisFilesCount");
-                RaisePropertyChanged("HasBadFiles");
-            }
-        }
         public Int32 TotalFilesCount
         {
             get { return _totalFilesCount; }

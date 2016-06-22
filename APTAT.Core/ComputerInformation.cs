@@ -124,9 +124,15 @@ namespace APTAT.Core
             }
         }
 
-        public bool HasAnyUnknownOrMalware { get; set; }
+        public bool HasBadFiles { get; set; }
 
-        public bool HasErrors { get; set; }
+        public bool HasMalwares { get; set; }
+
+        public bool HasUnknowns { get; set; }
+
+        public bool HasPending { get; set; }
+
+        public bool HasFailed { get; set; }
 
         public void MergeFile(FileResult file)
         {
@@ -158,6 +164,7 @@ namespace APTAT.Core
             var malwareCount = Files.Count(_ => _.IsMalware);
             var unknownCount = Files.Count(_ => _.IsUnknown);
             var failedCount = Files.Count(_ => _.Failed);
+            var pendingCount = Files.Count(_ => _.Pending);
 
             if (Files.Count >= TotalCount)
                 StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
@@ -167,11 +174,18 @@ namespace APTAT.Core
                     Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
                     (((DistinctCount > TotalDistinctCount ? TotalDistinctCount : DistinctCount) / TotalDistinctCount) * 100d)).Replace(".00", string.Empty));
 
-            HasAnyUnknownOrMalware = malwareCount > 0 || unknownCount > 0;
-            HasErrors = failedCount > 0;
+            HasBadFiles = malwareCount > 0 || unknownCount > 0 || failedCount > 0 || pendingCount > 0;
+            HasMalwares = malwareCount > 0;
+            HasUnknowns = malwareCount == 0 && unknownCount > 0;
+            HasFailed = malwareCount == 0 && unknownCount == 0 && failedCount > 0;
+            HasPending = malwareCount == 0 && unknownCount == 0 && failedCount == 0 && pendingCount > 0;
 
-            RaisePropertyChanged("HasAnyUnknownOrMalware");
-            RaisePropertyChanged("HasErrors");
+            RaisePropertyChanged("HasBadFiles");
+            RaisePropertyChanged("HasMalwares");
+            RaisePropertyChanged("HasUnknowns");
+            RaisePropertyChanged("HasPending");
+            RaisePropertyChanged("HasFailed");
+
             RaisePropertyChanged("StatusText");
             RaisePropertyChanged("InProgress");
             RaisePropertyChanged("Completed");
