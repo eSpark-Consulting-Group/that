@@ -167,7 +167,7 @@ namespace APTAT.Core
             var pendingCount = Files.Count(_ => _.Pending);
 
             if (Files.Count >= TotalCount)
-                StatusText = string.Format("Completed. Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
+                StatusText = string.Format("Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
                     Files.Count, unknownCount, malwareCount);
             else
                 StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",

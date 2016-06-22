@@ -39,12 +39,11 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="20,15,10,10">
-                    <Canvas HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="38">
-                        <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" Fill="#FFFFAA00" Height="38" Stretch="Fill" Width="38" UseLayoutRounding="False"/>
-                        <Path Data="M17.001,8.133L20.999,8.133L20.999,21.667L17.001,21.667z" Fill="White" Height="13.534" Canvas.Left="17.001" Stretch="Fill" Canvas.Top="8.133" Width="3.998"/>
-                        <Path Data="M19,24.661C20.438,24.661,21.603,25.826,21.603,27.264C21.603,28.702,20.438,29.867,19,29.867C17.562,29.867,16.397,28.702,16.397,27.264C16.397,25.826,17.562,24.661,19,24.661" Fill="White" Height="5.206" Canvas.Left="16.397" Stretch="Fill" Canvas.Top="24.661" Width="5.206"/>
+                    <Canvas HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Margin="0 5 0 0">
+                      <Path Data="M7.9999999,8.0000027 L16,8.0000027 16,16.000003 7.9999999,16.000003 z M12,2 C6.4779997,2 1.9999995,6.4780002 1.9999995,12 1.9999995,17.522 6.4779997,22 12,22 17.521999,22 22,17.522 22,12 22,6.4780002 17.521999,2 12,2 z M12,0 C18.627,0 24,5.3730001 24,12 24,18.627 18.627,24 12,24 5.3729997,24 0,18.627 0,12 0,5.3730001 5.3729997,0 12,0 z" Fill="#FFD84332" Height="40" Stretch="Fill" Width="40"/>
+
                     </Canvas>
-                    <TextBlock Text="Warning!" VerticalAlignment="Center" Margin="15,0,0,0" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}"/>
+                    <TextBlock Text="Scan NOT Completed!" VerticalAlignment="Center" Margin="15,0,0,5" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}"/>
                 </StackPanel>
                 
                 <TextBlock x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10" Grid.Row="1" LineHeight="28" Foreground="#555"

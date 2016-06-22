@@ -207,7 +207,9 @@ namespace APTAT.Core
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
             foreach (var scanResult in scanResults)
             {
-                foreach (var badFile in scanResult.Value.GetUnknownFiles())
+                var modules = scanResult.Value.GetUnknownFiles();
+                
+                foreach (var badFile in modules)
                 {
                     if (files.All(f => f.Sha1 != badFile.Sha1))
                     {

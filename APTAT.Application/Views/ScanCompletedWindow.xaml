@@ -45,20 +45,14 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="20,15,10,10">
                     <Grid Margin="0 5 0 0">
-                        <Canvas x:Name="SuccessfulScanIcon" HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="38"
-							Opacity="{Binding IsProtected, Converter={StaticResource BoolToOpacityConverter}}">
-                            <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" 
-								Fill="#FF2A81BA" Height="38" Stretch="Fill" Width="38" UseLayoutRounding="False"/>
-                            <Path Data="M33.063763,0.00029530161 C33.960186,0.011159729 34.858345,0.32191291 35.596252,0.94608212 L35.626793,0.97191292 C35.732208,1.0610793 35.831856,1.1545329 35.925705,1.2517986 C37.333382,2.7107966 37.434978,5.0278573 36.09742,6.6091065 L19.475761,26.259159 C18.584061,27.313326 17.263781,27.790968 15.987189,27.652649 L15.813902,27.629641 L15.804477,27.629295 C14.846323,27.571163 13.905938,27.17 13.183233,26.428385 L1.1352502,14.065191 C-0.40652844,12.483078 -0.37378308,9.9506483 1.2083752,8.4088469 L1.2370236,8.380929 C2.8191845,6.8391294 5.3516369,6.871809 6.8934131,8.4539213 L16.054495,17.854687 L29.959003,1.4168409 C30.761536,0.46809176 31.911217,-0.013673776 33.063763,0.00029530161 z" 
-								Fill="White" Height="15.842" Stretch="Fill" Stroke="Black" StrokeThickness="0" UseLayoutRounding="False" Width="21.684" Canvas.Left="8.666" Canvas.Top="10.667"/>
+                        <Canvas x:Name="SuccessfulScanIcon" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Opacity="{Binding IsProtected, Converter={StaticResource BoolToOpacityConverter}}">
+                          <Path Data="M17.561001,7.7449989 L19,9.1839991 11.954002,16.230997 11.929003,16.255997 6.9540048,11.281999 8.3690042,9.8669987 11.904003,13.401998 z M12,1.9999999 C6.4779968,2 2,6.4779968 1.9999999,12 2,17.522003 6.4779968,22 12,22 17.522003,22 22,17.522003 22,12 22,6.4779968 17.522003,2 12,1.9999999 z M12,0 C18.626999,0 24,5.3730011 24,12 24,18.626999 18.626999,24 12,24 5.3730011,24 0,18.626999 0,12 0,5.3730011 5.3730011,0 12,0 z" Fill="#FF2C8841" Height="40" Stretch="Fill" Width="40"/>
+
                         </Canvas>
 
-                        <Canvas x:Name="MalwaresFoundScanIcon" HorizontalAlignment="Left" Height="38" VerticalAlignment="Top" Width="38"
-							Opacity="{Binding IsProtected, Converter={StaticResource InverseBoolToOpacityConverter}}">
-                            <Path Data="M8,0C12.418,0,16,3.582,16,8C16,12.418,12.418,16,8,16C3.582,16,0,12.418,0,8C0,3.582,3.582,0,8,0" 
-								Fill="#FFE54C3C" Height="37.833" Stretch="Fill" Width="39.083" UseLayoutRounding="False"/>
-                            <Path Data="M1.188,7.9370117 C1.8441142,7.9370117 2.3759999,8.4688978 2.3759999,9.1250114 C2.3759999,9.781126 1.8441142,10.313012 1.188,10.313012 C0.53188568,10.313012 -7.4505806E-09,9.781126 0,9.1250114 C-7.4505806E-09,8.4688978 0.53188568,7.9370117 1.188,7.9370117 z M0.10499457,0 L2.2299945,0 L2.2299945,6.5619998 L0.10499457,6.5619998 z" 
-								Fill="White" Height="24.386" Stretch="Fill" Width="5.804" UseLayoutRounding="False" Canvas.Left="16.931" Canvas.Top="5.833" />
+                        <Canvas x:Name="MalwaresFoundScanIcon" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Opacity="{Binding IsProtected, Converter={StaticResource InverseBoolToOpacityConverter}}">
+                          <Path Data="M12.000004,15 C12.552004,15 13.000004,15.448 13.000004,16 13.000004,16.552 12.552004,17 12.000004,17 11.447003,17 11.000004,16.552 11.000004,16 11.000004,15.448 11.447003,15 12.000004,15 z M11.000002,7.0000019 L13.000002,7.0000019 13.000002,14.000002 11.000002,14.000002 z M12,1.9999999 C6.4779968,2 2,6.4779968 1.9999999,12 2,17.522003 6.4779968,22 12,22 17.522003,22 22,17.522003 22,12 22,6.4779968 17.522003,2 12,1.9999999 z M12,0 C18.628006,0 24,5.3730011 24,12 24,18.626999 18.628006,24 12,24 5.3730011,24 0,18.626999 0,12 0,5.3730011 5.3730011,0 12,0 z" Fill="#FFD84332" Height="40" Stretch="Fill" Width="40"/>
+
                         </Canvas>
                     </Grid>
 

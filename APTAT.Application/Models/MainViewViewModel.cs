@@ -585,26 +585,6 @@ namespace APTAT.Application.Models
                 if (!file.IsMalware)
                     continue;
 
-                var fileResult = new FileResult();
-                fileResult.Path = file.BadFile.Name;
-                fileResult.Cloud = file.BadFile.Cloud;
-                fileResult.Size = file.Size;
-                fileResult.Attributes = file.BadFile.Attributes;
-                fileResult.Created = file.BadFile.Created;
-                fileResult.Modified = file.BadFile.Modified;
-                fileResult.Accessed = file.BadFile.Accessed;
-                fileResult.Sha1 = file.BadFile.Sha1.Trim().ToLower();
-                fileResult.Signer = file.BadFile.Signer;
-                fileResult.Description = file.BadFile.Description;
-                fileResult.Version = file.BadFile.Version;
-                fileResult.Copyright = file.BadFile.Copyright;
-                fileResult.Product = file.BadFile.Product;
-                fileResult.ValkyrieAnalysisResult = new ValkyrieAnalysisResult 
-                {
-                    SHA1 = file.BadFile.Sha1,
-                    Verdict = ValkyrieVerdict.Malware
-                };
-
                 foreach (var comp in file.Computers)
                 {
                     var computer = new ComputerInformation();
@@ -613,10 +593,28 @@ namespace APTAT.Application.Models
                     computer.FilePath = comp.ShortName;
                     computer.TargetUid = comp.ComputerGuid;
 
+                    var fileResult = new FileResult();
+                    fileResult.Path = computer.FilePath;
+                    fileResult.Cloud = file.BadFile.Cloud;
+                    fileResult.Size = file.Size;
+                    fileResult.Attributes = file.BadFile.Attributes;
+                    fileResult.Created = file.BadFile.Created;
+                    fileResult.Modified = file.BadFile.Modified;
+                    fileResult.Accessed = file.BadFile.Accessed;
+                    fileResult.Sha1 = file.BadFile.Sha1.Trim().ToLower();
+                    fileResult.Signer = file.BadFile.Signer;
+                    fileResult.Description = file.BadFile.Description;
+                    fileResult.Version = file.BadFile.Version;
+                    fileResult.Copyright = file.BadFile.Copyright;
+                    fileResult.Product = file.BadFile.Product;
+                    fileResult.ValkyrieAnalysisResult = new ValkyrieAnalysisResult
+                    {
+                        SHA1 = file.BadFile.Sha1,
+                        Verdict = ValkyrieVerdict.Malware
+                    };
                     fileResult.Computers.Add(computer);
+                    col.Add(fileResult);
                 }
-
-                col.Add(fileResult);
             }
 
             MergeResults(col);

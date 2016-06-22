@@ -114,7 +114,7 @@ namespace APTAT.Core.Descent.Apt
                         return notEmptyFiles.ToArray();
                     }
                 }
-                return null;
+                return new Module[0];
             }
         }
         
