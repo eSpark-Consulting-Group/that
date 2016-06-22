@@ -31,7 +31,7 @@ namespace APTAT.Core.Descent.Helpers
         {
             if (_descentThread != null)
             {
-                LogHelper.TraceInColor(ConsoleColor.DarkRed, TraceEventType.Warning, TraceCategory.Descent, "Descent thread re-assignment ignored.");
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, "Descent thread re-assignment ignored.");
                 return;
             }
             _descentThread = Thread.CurrentThread;
