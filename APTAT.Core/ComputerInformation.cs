@@ -152,7 +152,6 @@ namespace APTAT.Core
 
                 result.UpdateValkyrieResult(file);
                 UpdateStatus();
-                break;
             }
         }
 

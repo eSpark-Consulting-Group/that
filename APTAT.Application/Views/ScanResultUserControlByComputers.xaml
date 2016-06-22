@@ -85,7 +85,7 @@
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="UnknownFileTemplate">
-                    <Grid Height="50" Margin="-2,0,0,0">
+                    <Grid Height="50" Margin="-10,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
