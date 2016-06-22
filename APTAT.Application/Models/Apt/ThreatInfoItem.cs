@@ -319,6 +319,9 @@ namespace APTAT.Application.Models
         {
             get
             {
+                if (Items == null)
+                    return 0;
+                
                 var items = Items.Where(_ => _.IsUnknown).GroupBy(_ => _.BadFile.Sha1).Select(_ => _.Key);
                 return items.Count();
             }

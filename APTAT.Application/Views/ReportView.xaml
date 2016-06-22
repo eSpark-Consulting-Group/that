@@ -33,7 +33,7 @@
                 <converters:FixedDocumentViewerModeConverter x:Key="ModeConverter" />
             </telerik:RadToolBar.Resources>
 
-            <telerik:RadButton Click="OnShowInFolder" HorizontalAlignment="Left" VerticalAlignment="Stretch"  Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False" Margin="30,2,2,2">
+            <telerik:RadButton Click="OnShowInFolder" HorizontalAlignment="Left" VerticalAlignment="Stretch"  Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False" Margin="2">
                 <ToolTipService.ToolTip>
                     <TextBlock Text="Show In Folder" />
                 </ToolTipService.ToolTip>
