@@ -29,7 +29,7 @@
 
           <Path HorizontalAlignment="Left" VerticalAlignment="Center" Opacity="{Binding Failed, Converter={StaticResource BoolToOpacityConverter}}" Width="40" Height="40" Data="M14.829994,7.7570062 L12.000999,10.586001 9.1729965,7.757998 7.7589951,9.1719995 10.586998,12.000002 7.7589951,14.828005 9.1729965,16.242007 12.000999,13.414004 14.829994,16.242007 16.243996,14.828005 13.415001,12.000002 16.243996,9.1710076 z M12.000999,4.0000023 C16.418999,4.0000024 20.000999,7.580996 20.000999,12.000002 20.000999,16.418002 16.418999,20.000002 12.000999,20.000002 7.5820007,20.000002 4.0009995,16.418002 4.0009994,12.000002 4.0009995,7.580996 7.5820007,4.0000024 12.000999,4.0000023 z M11.999998,2 C6.477999,2 1.9999995,6.4780002 1.9999995,12 1.9999995,17.522 6.477999,22 11.999998,22 17.521997,22 21.999996,17.522 21.999996,12 21.999996,6.4780002 17.521997,2 11.999998,2 z M11.999998,0 C18.626997,0 23.999996,5.3720001 23.999996,12 23.999996,18.627 18.626997,24 11.999998,24 5.3729991,24 0,18.627 0,12 0,5.3720001 5.3729991,0 11.999998,0 z" Fill="#FFFCAF17" Stretch="Fill" />
 
-          <TextBlock AutomationProperties.AutomationId="MalwareNameTextBlock" Style="{StaticResource HeaderTextBlock}"  VerticalAlignment="Center" Text="{Binding FileName}" FontSize="22" Margin="28,8,20,8" Grid.Column="1" MaxWidth="750" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+          <TextBlock AutomationProperties.AutomationId="MalwareNameTextBlock" Style="{StaticResource HeaderTextBlock}"  VerticalAlignment="Center" Text="{Binding FileName}" FontSize="22" Margin="27,8,20,8" Grid.Column="1" MaxWidth="750" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
         </Grid>
         
         <Grid Background="White" Grid.Row="1" Margin="65,0,0,0">
@@ -82,10 +82,14 @@
                     <TextBox AutomationProperties.AutomationId="VerdictValueTextBox"
                                Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
-                    <TextBlock AutomationProperties.AutomationId="SizeValueTextBlock" Text="{Binding Size}" Grid.Column="1" Grid.Row="2"/>
-                    <TextBlock AutomationProperties.AutomationId="CreatedValueTextBlock" Text="{Binding Created}" Grid.Column="1" Grid.Row="3"/>
-                    <TextBlock AutomationProperties.AutomationId="ModifiedValueTextBlock" Text="{Binding Modified}" Grid.Column="1" Grid.Row="4"/>
-                    <TextBlock AutomationProperties.AutomationId="AccessedValueTextBlock" Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5"/>
+                    <TextBox AutomationProperties.AutomationId="SizeValueTextBlock" Text="{Binding Size}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="CreatedValueTextBlock" Text="{Binding Created}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="ModifiedValueTextBlock" Text="{Binding Modified}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="AccessedValueTextBlock" Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
                 </Grid>
                     <Grid x:Name="GeneralCol2" Grid.Column="1" Margin="20, 0,20,20" MinWidth="250">
                     <Grid.ColumnDefinitions>
@@ -117,7 +121,8 @@
                     <TextBox AutomationProperties.AutomationId="DescriptionValueTextBox"
                                Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="220" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
-                    <TextBlock AutomationProperties.AutomationId="VersionValueTextBlock" Text="{Binding Version}" Grid.Column="1" Grid.Row="3" />
+                    <TextBox AutomationProperties.AutomationId="VersionValueTextBlock" Text="{Binding Version}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
                     <TextBox AutomationProperties.AutomationId="CopyrightValueTextBox"
                                Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="220" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" 
                                Style="{StaticResource SelectTextStyle}"/>

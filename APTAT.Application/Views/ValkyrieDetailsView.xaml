@@ -35,7 +35,7 @@
 
           <Path HorizontalAlignment="Left" VerticalAlignment="Center" Opacity="{Binding Pending, Converter={StaticResource BoolToOpacityConverter}}" Width="40" Height="40" Data="M10,7.0000029 L16,12.000003 10,17.000003 z M12,2 C6.4779997,2 2,6.4780002 2,12 2,17.522 6.4779997,22 12,22 17.522,22 22,17.522 22,12 22,6.4780002 17.522,2 12,2 z M12,0 C18.627,0 24,5.3730001 24,12 24,18.627 18.627,24.000001 12,24.000001 5.3729997,24.000001 0,18.627 0,12 0,5.3730001 5.3729997,0 12,0 z" Fill="#FFFCAF17" Stretch="Fill" />
 
-          <TextBlock  Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center" Text="{Binding FileName}" FontSize="22" Margin="28,8,20,8" Grid.Column="1" MaxWidth="750" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
+          <TextBlock  Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center" Text="{Binding FileName}" FontSize="22" Margin="27,8,20,8" Grid.Column="1" MaxWidth="750" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" TextTrimming="WordEllipsis"/>
         </Grid>
         <Grid Background="White" Grid.Row="1" Margin="65,0,0,0">
             
@@ -85,11 +85,16 @@
                       
                     <TextBox Text="{Binding FileName}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
                     <TextBox Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBlock Text="{Binding Size}" Grid.Column="1" Grid.Row="2"/>
-                    <TextBlock Text="{Binding Created}" Grid.Column="1" Grid.Row="3"/>
-                    <TextBlock Text="{Binding Modified}" Grid.Column="1" Grid.Row="4"/>
-                    <TextBlock Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5"/>
-                    <TextBlock Text="{Binding IsWhitelisted}" Grid.Column="1" Grid.Row="6" />
+                    <TextBox Text="{Binding Size}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox Text="{Binding Created}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox Text="{Binding Modified}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox Text="{Binding IsWhitelisted}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
                 </Grid>
                     <Grid x:Name="GeneralCol2" Grid.Column="1" Margin="20, 0,20,20" MinWidth="250">
                     <Grid.ColumnDefinitions>
@@ -116,10 +121,12 @@
                     <TextBox Text="{Binding Hash}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding Hash}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
                     <TextBox Text="{Binding Signer}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
                     <TextBox Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="220" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBlock Text="{Binding Version}" Grid.Column="1" Grid.Row="3" />
+                    <TextBox Text="{Binding Version}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
                     <TextBox Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="220" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
                     <TextBox Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="220" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBlock Text="{Binding MalwareProbability}" Grid.Column="1" Grid.Row="6" />
+                    <TextBox Text="{Binding MalwareProbability}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left"
+                               Style="{StaticResource SelectTextStyle}"/>
 
 
                 </Grid>

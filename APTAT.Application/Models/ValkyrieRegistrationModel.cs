@@ -10,7 +10,6 @@ namespace APTAT.Application.Models
     {
         private string _licenseId;
         private string _userName;
-        private string _password;
         private string _passwordBuffer;
         private string _errorMessage;
 

@@ -61,7 +61,7 @@
                     </TextBlock>
                 
                     <TextBlock Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,0,0,5" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" Width="300">
-                        <Run Text="Scan Completed! Do you want to analyse Unknown programs with Valkyrie?" />
+                        <Run Text="Scan Completed! Do you want to analyse UNKNOWN programs with Valkyrie?" />
                     </TextBlock>
                 </StackPanel>
 
