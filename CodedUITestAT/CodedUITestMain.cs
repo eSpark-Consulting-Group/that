@@ -621,6 +621,7 @@ namespace CodedUITestAT
 
             // Verifies the scanning result at the Results screen
             UIMapResultsWindow.GoToScanningResultsTab();
+            UIHelper.GroupByComputers();
             UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpoint.Name));
             UIHelper.ClickRow(ResultsScreen.ScanningResults, malware, MouseClick.DoubleLeft);
@@ -629,9 +630,6 @@ namespace CodedUITestAT
             UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
-
-            // A cleanup
-            UIHelper.GroupByComputers();
         }
        
         [TestMethod]
