@@ -74,7 +74,7 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
-    <SetStateAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyComputersToggleButton">
+    <SetStateAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyComputersToggleButton">
       <ParameterName />
       <State>Pressed</State>
     </SetStateAction>
@@ -174,6 +174,19 @@
       <MouseButton>Left</MouseButton>
     </MouseAction>
     <TestStepMarkerAction Comment="" MarkerInformation="SelectDetailsByComputersContextMenuItem">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <SetStateAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton">
+      <ParameterName />
+      <State>Pressed</State>
+    </SetStateAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="ClickGroupByFilesToggleButton">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -427,6 +440,58 @@
                   </AndCondition>
                   <SupportLevel>0</SupportLevel>
                   <Descendants />
+                </UIObject>
+              </Descendants>
+            </UIObject>
+            <UIObject ControlType="Pane" Id="UIViewsMainViewxamlPane" FriendlyName="Views/MainView.xaml" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Unknown File Hunter</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="ControlType">Pane</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.Frame</PropertyCondition>
+                <PropertyCondition Name="AutomationId">MainFrame</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="Custom" Id="UIResultsScreenCustom" FriendlyName="ResultsScreen" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Unknown File Hunter</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="ControlType">Custom</PropertyCondition>
+                    <PropertyCondition Name="ClassName">Uia.ResultTabsControl</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">ResultsScreen</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="ToggleButton" Id="UIGroupbyFilesToggleButton" FriendlyName="Group by Files" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Unknown File Hunter</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="ControlType">ToggleButton</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">GroupByFilesToggleButton</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="ToggleButton" Id="UIGroupbyComputersToggleButton" FriendlyName="Group by Computers" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Unknown File Hunter</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="ControlType">ToggleButton</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">GroupByComputersToggleButton</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                  </Descendants>
                 </UIObject>
               </Descendants>
             </UIObject>

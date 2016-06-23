@@ -20,9 +20,12 @@ namespace CodedUITestAT
 
         internal static readonly string Username = Environment.GetEnvironmentVariable("_ServerLogin", EnvironmentVariableTarget.Machine);
         internal static readonly string Password = Environment.GetEnvironmentVariable("_ServerPassword", EnvironmentVariableTarget.Machine);
-        //internal static readonly string Username = "administrator";
+        //internal static readonly string Username = "administrator";        
         
         internal static readonly string EncriptedPassword = Playback.EncryptText(Password);
+
+        /// <summary> Determines whether 'Group by Files' view is currently selected. </summary>
+        internal static bool IsGroupedByFiles = false;
 
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
 

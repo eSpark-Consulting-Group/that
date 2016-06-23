@@ -61,7 +61,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void ClickGroupByComputersToggleButton()
         {
             #region Variable Declarations
-            WpfToggleButton uIGroupbyComputersToggleButton = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyComputersToggleButton;
+            WpfToggleButton uIGroupbyComputersToggleButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyComputersToggleButton;
             #endregion
 
             // Set to 'Pressed' state 'Group by Computers' toggle button
@@ -137,6 +137,19 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uIDetailsMenuItem, new Point(48, 9));
         }
         
+        /// <summary>
+        /// ClickGroupByFilesToggleButton - Use 'ClickGroupByFilesToggleButtonParams' to pass parameters into this method.
+        /// </summary>
+        public void ClickGroupByFilesToggleButton()
+        {
+            #region Variable Declarations
+            WpfToggleButton uIGroupbyFilesToggleButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton;
+            #endregion
+
+            // Set to 'Pressed' state 'Group by Files' toggle button
+            uIGroupbyFilesToggleButton.Pressed = this.ClickGroupByFilesToggleButtonParams.UIGroupbyFilesToggleButtonPressed;
+        }
+        
         #region Properties
         public virtual AssertUnknownFilesTreeExpectedValues AssertUnknownFilesTreeExpectedValues
         {
@@ -186,6 +199,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             }
         }
         
+        public virtual ClickGroupByFilesToggleButtonParams ClickGroupByFilesToggleButtonParams
+        {
+            get
+            {
+                if ((this.mClickGroupByFilesToggleButtonParams == null))
+                {
+                    this.mClickGroupByFilesToggleButtonParams = new ClickGroupByFilesToggleButtonParams();
+                }
+                return this.mClickGroupByFilesToggleButtonParams;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -219,6 +244,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private ClickGroupByComputersToggleButtonParams mClickGroupByComputersToggleButtonParams;
         
         private InputTextToSearchBoxParams mInputTextToSearchBoxParams;
+        
+        private ClickGroupByFilesToggleButtonParams mClickGroupByFilesToggleButtonParams;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -286,6 +313,21 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
     }
     
+    /// <summary>
+    /// Parameters to be passed into 'ClickGroupByFilesToggleButton'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class ClickGroupByFilesToggleButtonParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Set to 'Pressed' state 'Group by Files' toggle button
+        /// </summary>
+        public bool UIGroupbyFilesToggleButtonPressed = true;
+        #endregion
+    }
+    
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
@@ -347,6 +389,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIRadContextMenuMenu;
             }
         }
+        
+        public UIViewsMainViewxamlPane UIViewsMainViewxamlPane
+        {
+            get
+            {
+                if ((this.mUIViewsMainViewxamlPane == null))
+                {
+                    this.mUIViewsMainViewxamlPane = new UIViewsMainViewxamlPane(this);
+                }
+                return this.mUIViewsMainViewxamlPane;
+            }
+        }
         #endregion
         
         #region Fields
@@ -357,6 +411,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private UIResultsScreenCustom mUIResultsScreenCustom;
         
         private UIRadContextMenuMenu mUIRadContextMenuMenu;
+        
+        private UIViewsMainViewxamlPane mUIViewsMainViewxamlPane;
         #endregion
     }
     
@@ -674,39 +730,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     }
     
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class UIUnknownFileHunterWindow1 : WpfWindow
-    {
-        
-        public UIUnknownFileHunterWindow1()
-        {
-            #region Search Criteria
-            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Unknown File Hunter";
-            this.SearchProperties["FrameworkId"] = "WPF";
-            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
-            this.WindowTitles.Add("Unknown File Hunter");
-            #endregion
-        }
-        
-        #region Properties
-        public UIViewsMainViewxamlPane UIViewsMainViewxamlPane
-        {
-            get
-            {
-                if ((this.mUIViewsMainViewxamlPane == null))
-                {
-                    this.mUIViewsMainViewxamlPane = new UIViewsMainViewxamlPane(this);
-                }
-                return this.mUIViewsMainViewxamlPane;
-            }
-        }
-        #endregion
-        
-        #region Fields
-        private UIViewsMainViewxamlPane mUIViewsMainViewxamlPane;
-        #endregion
-    }
-    
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIViewsMainViewxamlPane : WpfPane
     {
         
@@ -714,7 +737,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 base(searchLimitContainer)
         {
             #region Search Criteria
-            this.SearchProperties["FrameworkId"] = "WPF";
             this.SearchProperties[WpfPane.PropertyNames.ClassName] = "Uia.Frame";
             this.SearchProperties[WpfPane.PropertyNames.AutomationId] = "MainFrame";
             this.WindowTitles.Add("Unknown File Hunter");
@@ -729,6 +751,128 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 if ((this.mUIResultsScreenCustom == null))
                 {
                     this.mUIResultsScreenCustom = new UIResultsScreenCustom1(this);
+                }
+                return this.mUIResultsScreenCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIResultsScreenCustom1 mUIResultsScreenCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UIResultsScreenCustom1 : WpfCustom
+    {
+        
+        public UIResultsScreenCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[UITestControl.PropertyNames.ClassName] = "Uia.ResultTabsControl";
+            this.SearchProperties["AutomationId"] = "ResultsScreen";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfToggleButton UIGroupbyFilesToggleButton
+        {
+            get
+            {
+                if ((this.mUIGroupbyFilesToggleButton == null))
+                {
+                    this.mUIGroupbyFilesToggleButton = new WpfToggleButton(this);
+                    #region Search Criteria
+                    this.mUIGroupbyFilesToggleButton.SearchProperties[WpfToggleButton.PropertyNames.AutomationId] = "GroupByFilesToggleButton";
+                    this.mUIGroupbyFilesToggleButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIGroupbyFilesToggleButton;
+            }
+        }
+        
+        public WpfToggleButton UIGroupbyComputersToggleButton
+        {
+            get
+            {
+                if ((this.mUIGroupbyComputersToggleButton == null))
+                {
+                    this.mUIGroupbyComputersToggleButton = new WpfToggleButton(this);
+                    #region Search Criteria
+                    this.mUIGroupbyComputersToggleButton.SearchProperties[WpfToggleButton.PropertyNames.AutomationId] = "GroupByComputersToggleButton";
+                    this.mUIGroupbyComputersToggleButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIGroupbyComputersToggleButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfToggleButton mUIGroupbyFilesToggleButton;
+        
+        private WpfToggleButton mUIGroupbyComputersToggleButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UIUnknownFileHunterWindow1 : WpfWindow
+    {
+        
+        public UIUnknownFileHunterWindow1()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Unknown File Hunter";
+            this.SearchProperties["FrameworkId"] = "WPF";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIViewsMainViewxamlPane1 UIViewsMainViewxamlPane
+        {
+            get
+            {
+                if ((this.mUIViewsMainViewxamlPane == null))
+                {
+                    this.mUIViewsMainViewxamlPane = new UIViewsMainViewxamlPane1(this);
+                }
+                return this.mUIViewsMainViewxamlPane;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIViewsMainViewxamlPane1 mUIViewsMainViewxamlPane;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UIViewsMainViewxamlPane1 : WpfPane
+    {
+        
+        public UIViewsMainViewxamlPane1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties["FrameworkId"] = "WPF";
+            this.SearchProperties[WpfPane.PropertyNames.ClassName] = "Uia.Frame";
+            this.SearchProperties[WpfPane.PropertyNames.AutomationId] = "MainFrame";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIResultsScreenCustom2 UIResultsScreenCustom
+        {
+            get
+            {
+                if ((this.mUIResultsScreenCustom == null))
+                {
+                    this.mUIResultsScreenCustom = new UIResultsScreenCustom2(this);
                 }
                 return this.mUIResultsScreenCustom;
             }
@@ -787,7 +931,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
         
         #region Fields
-        private UIResultsScreenCustom1 mUIResultsScreenCustom;
+        private UIResultsScreenCustom2 mUIResultsScreenCustom;
         
         private WpfText mUISearchText;
         
@@ -798,10 +942,10 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     }
     
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class UIResultsScreenCustom1 : WpfCustom
+    public class UIResultsScreenCustom2 : WpfCustom
     {
         
-        public UIResultsScreenCustom1(UITestControl searchLimitContainer) : 
+        public UIResultsScreenCustom2(UITestControl searchLimitContainer) : 
                 base(searchLimitContainer)
         {
             #region Search Criteria

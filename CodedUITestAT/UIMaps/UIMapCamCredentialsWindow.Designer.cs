@@ -48,11 +48,11 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
         public void InputPassword()
         {
             #region Variable Declarations
-            WpfEdit uIPasswordBoxEdit = this.UIUnknownFileHunterWindow.UIPasswordBoxEdit;
+            WpfEdit uIPasswordWatermarkTexEdit = this.UIUnknownFileHunterWindow.UIPasswordWatermarkTexEdit;
             #endregion
 
-            // Type '********' in 'PasswordBox' text box
-            Keyboard.SendKeys(uIPasswordBoxEdit, this.InputPasswordParams.UIPasswordBoxEditSendKeys, true);
+            // Type 'password' in 'PasswordWatermarkTextBox' text box
+            Keyboard.SendKeys(uIPasswordWatermarkTexEdit, this.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys, ModifierKeys.None);
         }
         
         /// <summary>
@@ -166,9 +166,9 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
         
         #region Fields
         /// <summary>
-        /// Type '********' in 'PasswordBox' text box
+        /// Type 'password' in 'PasswordWatermarkTextBox' text box
         /// </summary>
-        public string UIPasswordBoxEditSendKeys = "QWwOodIXpSM441BCNCWNvH9k+8fhegdI";
+        public string UIPasswordWatermarkTexEditSendKeys = "password";
         #endregion
     }
     
@@ -264,6 +264,22 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
                 return this.mUICamLicenseKeyWatermaEdit;
             }
         }
+        
+        public WpfEdit UIPasswordWatermarkTexEdit
+        {
+            get
+            {
+                if ((this.mUIPasswordWatermarkTexEdit == null))
+                {
+                    this.mUIPasswordWatermarkTexEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIPasswordWatermarkTexEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "PasswordWatermarkTextBox";
+                    this.mUIPasswordWatermarkTexEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPasswordWatermarkTexEdit;
+            }
+        }
         #endregion
         
         #region Fields
@@ -274,6 +290,8 @@ namespace CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses
         private WpfButton mUIOKButton;
         
         private WpfEdit mUICamLicenseKeyWatermaEdit;
+        
+        private WpfEdit mUIPasswordWatermarkTexEdit;
         #endregion
     }
 }

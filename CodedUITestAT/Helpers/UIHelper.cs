@@ -106,7 +106,10 @@ namespace CodedUITestAT
         /// <param name="resultsScreen">Set a results screen type.</param>
         internal static UITestControl[] GetRows(this WpfTabPage tab)
         {
-            var tree = tab.GetChildren()[2].GetChildren()[0] as WpfTree;
+            int treeShift = 2;
+            if (DataHelper.IsGroupedByFiles) treeShift++;
+            
+            var tree = tab.GetChildren()[treeShift].GetChildren()[0] as WpfTree;
             var rows = tree.GetRows();
 
             return rows;
@@ -284,6 +287,22 @@ namespace CodedUITestAT
         internal static void ClickRow(ResultsScreen screen, Threat threat, MouseClick click = MouseClick.Left)
         {
             ClickRow(screen, threat.RowName, click);
+        }
+
+        /// <summary> Switches the results screens to 'Group by Files' view. Starts at Main screen. </summary>
+        internal static void GroupByFiles()
+        {
+            CodedUITestMain useMain = new CodedUITestMain();
+            useMain.UIMapResultsWindow.ClickGroupByFilesToggleButton();
+            DataHelper.IsGroupedByFiles = true;
+        }
+
+        /// <summary> Switches the results screens to 'Group by Computers' view. Starts at Main screen. </summary>
+        internal static void GroupByComputers()
+        {
+            CodedUITestMain useMain = new CodedUITestMain();
+            useMain.UIMapResultsWindow.ClickGroupByComputersToggleButton();
+            DataHelper.IsGroupedByFiles = false;
         }
     }
 }

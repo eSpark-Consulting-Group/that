@@ -502,7 +502,7 @@ namespace CodedUITestAT
             testContext.WriteLine("CAM Credentials window appeared...\n");
             UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
             UIMapCamCredentialsWindow.InputLogin();
-            UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(Settings.General.Default.CamPassword);
+            UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = Settings.General.Default.CamPassword;
             UIMapCamCredentialsWindow.InputPassword();
             UIMapCamCredentialsWindow.ClickOkButton();
         }
@@ -555,6 +555,7 @@ namespace CodedUITestAT
                 
                 // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
                 WaitForValkyrieResults(TestContext);
+                UIHelper.GroupByFiles();                
                 AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
 
                 // Clicks Valkyrie link and checks the respective browser window URI
@@ -570,7 +571,11 @@ namespace CodedUITestAT
                 if (actualValkyrieUri.Contains(expectedValkyrieUri))
                     TestContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.\n", actualValkyrieUri));
                 else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualValkyrieUri);
+                
+                // A cleanup
                 valkyrieWebPage.Close();
+                UIHelper.GroupByComputers();
+                
                 if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
             }
         }
@@ -611,6 +616,7 @@ namespace CodedUITestAT
             
             // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
             WaitForValkyrieResults(TestContext);
+            UIHelper.GroupByFiles();
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
 
             // Verifies the scanning result at the Results screen
@@ -623,6 +629,9 @@ namespace CodedUITestAT
             UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
+
+            // A cleanup
+            UIHelper.GroupByComputers();
         }
        
         [TestMethod]
