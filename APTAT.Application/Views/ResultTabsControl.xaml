@@ -97,13 +97,13 @@
       </Grid.Resources>
         
         <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsTabStop="False" FocusVisualStyle="{x:Null}" >
-            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results" IsSelected="{Binding SelectScan, Mode=TwoWay}" IsTabStop="False">
+            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results" IsSelected="{Binding SelectScan, Mode=TwoWay}" IsTabStop="False" FocusVisualStyle="{x:Null}">
               <Grid>
                 <local:ScanResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <local:ScanResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
               </Grid>
-              </TabItem>
-            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" IsEnabled="{Binding ValkyrieEnabled}" IsTabStop="False">
+            </TabItem>
+            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" IsEnabled="{Binding ValkyrieEnabled}" IsTabStop="False" FocusVisualStyle="{x:Null}">
               <Grid>
                 <local:ValkyrieResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>

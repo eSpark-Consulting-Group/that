@@ -25,7 +25,7 @@
                                  HierarchyIndent="14"
                                  Validation.ErrorTemplate="{x:Null}"
                                  EnableRowVirtualization="True"
-                                 MouseDoubleClick="OnTreeDoubleClick" >
+                                 MouseDoubleClick="OnTreeDoubleClick" FocusVisualStyle="{x:Null}">
 
             <telerik:RadTreeListView.Resources>
 

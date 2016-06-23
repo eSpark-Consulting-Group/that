@@ -29,7 +29,7 @@
                                 
                                  EnableRowVirtualization="True"
                                  MouseDoubleClick="OnTreeDoubleClick" 
-                                 Validation.ErrorTemplate="{x:Null}">
+                                 Validation.ErrorTemplate="{x:Null}" FocusVisualStyle="{x:Null}">
             
        <telerik:RadTreeListView.Resources>
                 <DataTemplate x:Key="ComputerInfoTemplate">
