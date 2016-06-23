@@ -19,7 +19,8 @@ namespace APTAT.Application
         {
             InitializeComponent();
             DataContext = _model = CompositionHelper.Instance.GetService<ValkyrieRegistrationModel>();
-            _model.Password = null; 
+            _model.Password = null;
+            _model.PasswordBuffer = null; 
             _model.ErrorMessage = null;
         }
 
@@ -47,11 +48,6 @@ namespace APTAT.Application
             var resource = TryFindResource("GETValkyrieLink");
             Process.Start(new ProcessStartInfo(resource.ToString()));
             e.Handled = true;
-        }
-
-        private void OnPasswordChanged(object sender, RoutedEventArgs e)
-        {
-            _model.Password = PasswordText.Password;
         }
 
         protected virtual void OnOkClick()

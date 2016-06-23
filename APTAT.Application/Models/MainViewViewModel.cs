@@ -699,7 +699,7 @@ namespace APTAT.Application.Models
                         _unknownFilesCount += file.Computers.Count;
                     else if (file.IsMalware)
                         _malwareFilesCount += file.Computers.Count;
-
+                    
                     RaisePropertyChanged("UnknownFilesCount");
                     RaisePropertyChanged("MalwareFilesCount");
 
@@ -1059,8 +1059,16 @@ namespace APTAT.Application.Models
                         var exist = _cache.FirstOrDefault(_ => _.BadFile.Sha1 == item.BadFile.Sha1);
                         var comp = new ThreatInfoItem { IpAddress = parentItem.IpAddress, ComputerGuid = e.ScanResult.TargetUid, 
                             Name = parentItem.Name, ShortName = item.Name, IsRootItem = true };
+
                         if (exist != null)
+                        {
                             exist.Computers.Add(comp);
+                            if (exist.Failed && !item.Failed)
+                            {
+                                exist.IsUnknown = exist.BadFile.IsUnknown = badFile.IsUnknown;
+                                exist.IsMalware = exist.BadFile.IsMalware = badFile.IsMalware;
+                            }
+                        }
                         else
                         {
                             item.Computers = new Collection<ThreatInfoItem>();

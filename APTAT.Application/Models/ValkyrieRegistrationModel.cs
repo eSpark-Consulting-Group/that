@@ -11,6 +11,7 @@ namespace APTAT.Application.Models
         private string _licenseId;
         private string _userName;
         private string _password;
+        private string _passwordBuffer;
         private string _errorMessage;
 
         public string LicenseId
@@ -35,11 +36,40 @@ namespace APTAT.Application.Models
 
         public string Password
         {
-            get { return _password; }
+            get;
+            set;
+        }
+
+        public string PasswordBuffer
+        {
+            get { return _passwordBuffer; }
             set
             {
-                _password = value;
-                RaisePropertyChanged("Password");
+                _passwordBuffer = value;
+
+                if (string.IsNullOrEmpty(_passwordBuffer))
+                    Password = null;
+                else
+                {
+                    for (int i = 0; i < _passwordBuffer.Length; i++)
+                    {
+                        if (_passwordBuffer[i] != '*')
+                        {
+                            if (string.IsNullOrEmpty(Password))
+                                Password = string.Empty;
+                            Password += _passwordBuffer[i];
+                        }
+                    }
+
+                    if (Password.Length > _passwordBuffer.Length)
+                        Password = Password.Substring(0, _passwordBuffer.Length);
+
+                    _passwordBuffer = string.Empty;
+                    for (int i = 0; i < Password.Length; i++)
+                        _passwordBuffer += '*';
+                }
+
+                RaisePropertyChanged("PasswordBuffer");
             }
         }
 
@@ -65,14 +95,13 @@ namespace APTAT.Application.Models
                         if (!ValidateUserName())
                             errorMessage = "User Name is required.";
                         break;
-
                     case "Password":
                         if (!ValidatePassword())
                             errorMessage = "Password is required.";
                         break;
                     case "LicenseId":
                         if (!ValidateLicenseId())
-                            errorMessage = "CAM license or CAM credentials are required.";
+                            errorMessage = "CAM credentials are required.";
                         break;
                 }
 
