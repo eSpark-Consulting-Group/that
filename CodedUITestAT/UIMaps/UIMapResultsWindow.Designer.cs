@@ -69,6 +69,19 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         }
         
         /// <summary>
+        /// ClickGroupByFilesToggleButton - Use 'ClickGroupByFilesToggleButtonParams' to pass parameters into this method.
+        /// </summary>
+        public void ClickGroupByFilesToggleButton()
+        {
+            #region Variable Declarations
+            WpfToggleButton uIGroupbyFilesToggleButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton;
+            #endregion
+
+            // Set to 'Pressed' state 'Group by Files' toggle button
+            uIGroupbyFilesToggleButton.Pressed = this.ClickGroupByFilesToggleButtonParams.UIGroupbyFilesToggleButtonPressed;
+        }
+        
+        /// <summary>
         /// GoToScanningResultsTab
         /// </summary>
         public void GoToScanningResultsTab()
@@ -95,36 +108,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         }
         
         /// <summary>
-        /// InputTextToSearchBox - Use 'InputTextToSearchBoxParams' to pass parameters into this method.
-        /// </summary>
-        public void InputTextToSearchBox()
-        {
-            #region Variable Declarations
-            WpfText uISearchText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISearchText;
-            WpfEdit uISearchTextBoxEdit = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISearchTextBoxEdit;
-            #endregion
-
-            // Click 'Search' label
-            Mouse.Click(uISearchText, new Point(35, 12));
-
-            // Type 'textsearch' in 'SearchTextBox' text box
-            uISearchTextBoxEdit.Text = this.InputTextToSearchBoxParams.UISearchTextBoxEditText;
-        }
-        
-        /// <summary>
-        /// ClickClearSearchBoxButton
-        /// </summary>
-        public void ClickClearSearchBoxButton()
-        {
-            #region Variable Declarations
-            WpfButton uIClearSearchTextButtoButton = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIClearSearchTextButtoButton;
-            #endregion
-
-            // Click 'ClearSearchTextButton' button
-            Mouse.Click(uIClearSearchTextButtoButton, new Point(2, 3));
-        }
-        
-        /// <summary>
         /// SelectDetailsByComputersContextMenuItem
         /// </summary>
         public void SelectDetailsByComputersContextMenuItem()
@@ -135,19 +118,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
 
             // Click 'Details' menu item
             Mouse.Click(uIDetailsMenuItem, new Point(48, 9));
-        }
-        
-        /// <summary>
-        /// ClickGroupByFilesToggleButton - Use 'ClickGroupByFilesToggleButtonParams' to pass parameters into this method.
-        /// </summary>
-        public void ClickGroupByFilesToggleButton()
-        {
-            #region Variable Declarations
-            WpfToggleButton uIGroupbyFilesToggleButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton;
-            #endregion
-
-            // Set to 'Pressed' state 'Group by Files' toggle button
-            uIGroupbyFilesToggleButton.Pressed = this.ClickGroupByFilesToggleButtonParams.UIGroupbyFilesToggleButtonPressed;
         }
         
         #region Properties
@@ -184,18 +154,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                     this.mClickGroupByComputersToggleButtonParams = new ClickGroupByComputersToggleButtonParams();
                 }
                 return this.mClickGroupByComputersToggleButtonParams;
-            }
-        }
-        
-        public virtual InputTextToSearchBoxParams InputTextToSearchBoxParams
-        {
-            get
-            {
-                if ((this.mInputTextToSearchBoxParams == null))
-                {
-                    this.mInputTextToSearchBoxParams = new InputTextToSearchBoxParams();
-                }
-                return this.mInputTextToSearchBoxParams;
             }
         }
         
@@ -242,8 +200,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private AssertValkyrieResultsTreeExpectedValues mAssertValkyrieResultsTreeExpectedValues;
         
         private ClickGroupByComputersToggleButtonParams mClickGroupByComputersToggleButtonParams;
-        
-        private InputTextToSearchBoxParams mInputTextToSearchBoxParams;
         
         private ClickGroupByFilesToggleButtonParams mClickGroupByFilesToggleButtonParams;
         
@@ -295,21 +251,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         /// Set to 'Pressed' state 'Group by Computers' toggle button
         /// </summary>
         public bool UIGroupbyComputersToggleButtonPressed = true;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'InputTextToSearchBox'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class InputTextToSearchBoxParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Type 'textsearch' in 'SearchTextBox' text box
-        /// </summary>
-        public string UISearchTextBoxEditText = "textsearch";
         #endregion
     }
     

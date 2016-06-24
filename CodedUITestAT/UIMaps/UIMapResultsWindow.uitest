@@ -87,6 +87,19 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
+    <SetStateAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton">
+      <ParameterName />
+      <State>Pressed</State>
+    </SetStateAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="ClickGroupByFilesToggleButton">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
     <MouseAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage1">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
@@ -123,47 +136,6 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISearchText">
-      <ParameterName />
-      <ModifierKeys>None</ModifierKeys>
-      <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="35" Y="12" />
-      <WheelDirection>0</WheelDirection>
-      <ActionType>Click</ActionType>
-      <MouseButton>Left</MouseButton>
-    </MouseAction>
-    <SetValueAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISearchTextBoxEdit">
-      <ParameterName />
-      <Value Encoded="false">textsearch</Value>
-      <Type>String</Type>
-    </SetValueAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="InputTextToSearchBox">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIClearSearchTextButtoButton">
-      <ParameterName />
-      <ModifierKeys>None</ModifierKeys>
-      <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="2" Y="3" />
-      <WheelDirection>0</WheelDirection>
-      <ActionType>Click</ActionType>
-      <MouseButton>Left</MouseButton>
-    </MouseAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="ClickClearSearchBoxButton">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
     <MouseAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIRadContextMenuMenu.UIDetailsMenuItem">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
@@ -174,19 +146,6 @@
       <MouseButton>Left</MouseButton>
     </MouseAction>
     <TestStepMarkerAction Comment="" MarkerInformation="SelectDetailsByComputersContextMenuItem">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <SetStateAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton">
-      <ParameterName />
-      <State>Pressed</State>
-    </SetStateAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="ClickGroupByFilesToggleButton">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>

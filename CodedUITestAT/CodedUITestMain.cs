@@ -827,27 +827,23 @@ namespace CodedUITestAT
             string error = "error";
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-
-            // Gets the number of Unknown files and Malwares found at Scan Completed window
-            int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickOkButton();
 
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
 
             // Searches with a correct input
-            UIMapResultsWindow.ClickGroupByComputersToggleButton();
-            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
-            UIMapResultsWindow.InputTextToSearchBox();
+            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
+            UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Valkyrie analysis results' tab.");
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
-            UIMapResultsWindow.ClickClearSearchBoxButton();
+            UIMapMain.ClickClearSearchTextButton();
 
             // Searches with an incorrect input
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
             TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Valkyrie analysis results' tab.");
-            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
-            UIMapResultsWindow.InputTextToSearchBox();
+            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
+            UIMapMain.InputTextToSearchBox();
             try
             {
                 UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
@@ -857,22 +853,22 @@ namespace CodedUITestAT
             {
                 TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown at 'Valkyrie analysis results' tab after an incorrect search query.\n", endpoint.Name));
             }
-            UIMapResultsWindow.ClickClearSearchBoxButton();
+            UIMapMain.ClickClearSearchTextButton();
             
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext); // The endpoint should appear again
 
             // Searches with a correct input
             UIMapResultsWindow.GoToScanningResultsTab();
-            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
-            UIMapResultsWindow.InputTextToSearchBox();
+            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
+            UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Scanning results' tab.");
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
-            UIMapResultsWindow.ClickClearSearchBoxButton();
+            UIMapMain.ClickClearSearchTextButton();
 
             // Searches with an incorrect input
             UIMapResultsWindow.GoToScanningResultsTab();
-            UIMapResultsWindow.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
-            UIMapResultsWindow.InputTextToSearchBox();
+            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
+            UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Scanning results' tab.");
             try
             {
@@ -883,7 +879,7 @@ namespace CodedUITestAT
             {
                 TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown on 'Scanning results' tab after an incorrect search query.\n", endpoint.Name));
             }
-            UIMapResultsWindow.ClickClearSearchBoxButton();
+            UIMapMain.ClickClearSearchTextButton();
 
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext); // The endpoint should appear again
         }
