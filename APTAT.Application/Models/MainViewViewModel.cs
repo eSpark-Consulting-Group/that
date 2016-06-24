@@ -17,7 +17,6 @@ using APTAT.Application.Helpers;
 
 namespace APTAT.Application.Models
 {
-
     public sealed class MainViewViewModel : ViewModel
     {
         public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
@@ -65,6 +64,9 @@ namespace APTAT.Application.Models
         private Collection<ThreatInfoItem> _cacheComputers;
         private Collection<FileResult> _cacheValkyrie;
         private Collection<ComputerInformation> _cacheValkyrieComputers;
+
+        private DispatcherTimer _scanIteratorTimer;
+        private Dictionary<Guid, ScanProgressItem> _scanIterator;
 
         public bool IsAnyScanInProgress
         {
@@ -150,7 +152,6 @@ namespace APTAT.Application.Models
         }
 
         public ProgressInfo<FileResult> ValkyrieProgressInfo { get; set; }
-
 
         public Int32 UnknownFilesCount
         {
@@ -273,16 +274,17 @@ namespace APTAT.Application.Models
             }
         }
 
-        private bool _IsAnalyseWithValkyrieEnabled;
-        public Boolean IsAnalyseWithValkyrieEnabled
+        private bool _isAnalyseWithValkyrieEnabled;
+        public bool IsAnalyseWithValkyrieEnabled
         {
-            get { return _IsAnalyseWithValkyrieEnabled; }
+            get { return _isAnalyseWithValkyrieEnabled; }
             set
             {
-                _IsAnalyseWithValkyrieEnabled = value;
+                _isAnalyseWithValkyrieEnabled = value;
                 RaisePropertyChanged("IsAnalyseWithValkyrieEnabled");
             }
         }
+
         public bool ShowFlsReportsMenu
         {
             get { return !IsValkyrieReportEnabled; }
@@ -417,6 +419,39 @@ namespace APTAT.Application.Models
             }
         }
 
+        public bool ValkyrieSendingFiles { get; set; }
+        public bool SelectScan { get; set; }
+        public bool SelectValkyrieScan { get; set; }
+        public bool IsQuickScan { get; set; }
+        public bool GroupingEnabled { get; set; }
+        public bool ValkyrieEnabled { get; set; }
+
+        private bool _groupByFiles;
+        public bool GroupByFiles
+        {
+            get { return _groupByFiles; }
+            set
+            {
+                _groupByFiles = value;
+                _groupByComputers = !value;
+                RaisePropertyChanged("GroupByFiles");
+                RaisePropertyChanged("GroupByComputers");
+            }
+        }
+
+        private bool _groupByComputers = true;
+        public bool GroupByComputers
+        {
+            get { return _groupByComputers; }
+            set
+            {
+                _groupByFiles = !value;
+                _groupByComputers = value;
+                RaisePropertyChanged("GroupByFiles");
+                RaisePropertyChanged("GroupByComputers");
+            }
+        }
+
         public DelegateCommand StartScanCommand { get; private set; }
         public DelegateCommand StopScanCommand { get; private set; }
 
@@ -431,9 +466,6 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService = targetsDiscoveryService;
             _wmiService = wmiService;
             _storage = storage;
-
-
-            _isValkyrieAnalysCompleted = false;
 
             StartScanCommand = new DelegateCommand(o =>
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
@@ -656,10 +688,6 @@ namespace APTAT.Application.Models
             }
         }
 
-        public bool ValkyrieSendingFiles { get; set; }
-        public bool SelectScan { get; set; }
-        public bool SelectValkyrieScan { get; set; }
-
         private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
         {
             var info = e.ProgressInfo;
@@ -858,7 +886,6 @@ namespace APTAT.Application.Models
             {
                 IsScanInProgress = false;
             }
-
         }
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
@@ -870,6 +897,8 @@ namespace APTAT.Application.Models
             _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
             _scanIteratorTimer.Tick += IterateThroughScan;
             _scanIteratorTimer.Start();
+
+            IsValkyrieAnalysCompleted = false;
         }
 
         private void ScanCompleted(Boolean enableReports)
@@ -885,7 +914,6 @@ namespace APTAT.Application.Models
             Set(() => GroupingEnabled, true);
 
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
-
         }
 
         public void OnBeforeBeginValkyrieAnalysis()
@@ -940,8 +968,6 @@ namespace APTAT.Application.Models
             }
         }
 
-        private DispatcherTimer _scanIteratorTimer;
-        private Dictionary<Guid, ScanProgressItem> _scanIterator;
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
             foreach (var scan in e.ScanProgress)
@@ -1114,39 +1140,6 @@ namespace APTAT.Application.Models
                        _cacheValkyrieComputers.Where(item => item.FullName.ContainsString(Keyword)));
             }
         }
-
-
-        public bool IsQuickScan { get; set; }
-
-        private bool _groupByFiles;
-        public bool GroupByFiles
-        {
-            get { return _groupByFiles; }
-            set 
-            {
-                _groupByFiles = value;
-                _groupByComputers = !value;
-                RaisePropertyChanged("GroupByFiles");
-                RaisePropertyChanged("GroupByComputers");
-            }
-        }
-
-        private bool _groupByComputers = true;
-        public bool GroupByComputers
-        {
-            get { return _groupByComputers; }
-            set
-            {
-                _groupByFiles = !value;
-                _groupByComputers = value;
-                RaisePropertyChanged("GroupByFiles");
-                RaisePropertyChanged("GroupByComputers");
-            }
-        }
-
-        public bool GroupingEnabled { get; set; }
-
-        public bool ValkyrieEnabled { get; set; }
 
         public void SetReportKind(ReportKind kind)
         {

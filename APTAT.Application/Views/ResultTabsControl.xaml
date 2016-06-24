@@ -14,7 +14,6 @@
 
         <Style TargetType="TabItem">
           <Setter Property="MinWidth" Value="100" />
-          <Setter Property="FocusVisualStyle" Value="{x:Null}" />
           <Setter Property="Template">
             <Setter.Value>
               <ControlTemplate TargetType="TabItem">
@@ -96,7 +95,7 @@
         </Style>
       </Grid.Resources>
         
-        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsTabStop="False" FocusVisualStyle="{x:Null}" >
+        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >
             <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results" IsSelected="{Binding SelectScan, Mode=TwoWay}" >
               <Grid>
                 <local:ScanResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
