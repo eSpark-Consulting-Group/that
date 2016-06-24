@@ -226,10 +226,8 @@ namespace APTAT.Application.Models
             if (badFile == null && valkyrieFile == null)
                 return;
 
-            FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
-            IsMalware = badFile != null ? badFile.IsMalware : valkyrieFile.IsMalware;
-            IsUnknown = badFile != null ? badFile.IsUnknown : valkyrieFile.IsUnknown;
             if (badFile != null)
+            {
                 switch (badFile.Cloud)
                 {
                     case CloudVerdict.FailedToAnalyze:
@@ -239,22 +237,28 @@ namespace APTAT.Application.Models
                     case CloudVerdict.FirstSeen:
                     case CloudVerdict.Unknown:
                         Verdict = "Unknown";
+                        IsUnknown = true;
                         break;
                     case CloudVerdict.Malware:
                         Verdict = "Malware";
+                        IsMalware = true;
                         break;
                     case CloudVerdict.NoVerdict:
                         Failed = true;
-                        Verdict = "No verdict"; 
+                        Verdict = "No verdict";
                         break;
                 }
+            }
             else
             {
+                IsMalware = valkyrieFile.IsMalware;
+                IsUnknown = valkyrieFile.IsUnknown;
                 Clean = valkyrieFile.Clean;
                 Failed = valkyrieFile.Failed;
                 Pending = valkyrieFile.Pending;
                 Verdict = valkyrieFile.ValkyrieAnalysisResult.VerdictString;
             }
+            FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
             Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();
             Modified = badFile != null ? badFile.Modified.ToLocalTime() : valkyrieFile.Modified.ToLocalTime();
