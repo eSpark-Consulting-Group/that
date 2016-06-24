@@ -30,6 +30,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     {
         
         /// <summary>
+        /// AssertMainWindow - Use 'AssertMainWindowExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMainWindow()
+        {
+            #region Variable Declarations
+            WpfWindow uIUnknownFileHunterWindow = this.UIUnknownFileHunterWindow;
+            #endregion
+
+            // Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
+            Assert.AreEqual(this.AssertMainWindowExpectedValues.UIUnknownFileHunterWindowExists, uIUnknownFileHunterWindow.Exists);
+        }
+        
+        /// <summary>
         /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertMainWindowTitleTextBlockText()
@@ -40,6 +53,58 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
 
             // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
             Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertMalwaresCounterTextBlockText - Use 'AssertMalwaresCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMalwaresCounterTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem0Text1 = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text1;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '0' label equals '0'
+            Assert.AreEqual(this.AssertMalwaresCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText, uIItem0Text1.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertNoScansTextBlockText - Use 'AssertNoScansTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertNoScansTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uITherearenoscanshavebText = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UITherearenoscanshavebText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'There are no scans have been performed yet.' label equals 'There are no scans have been performed yet.'
+            Assert.AreEqual(this.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText, uITherearenoscanshavebText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertUnknownFilesCounterTextBlockText - Use 'AssertUnknownFilesCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertUnknownFilesCounterTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem0Text = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '0' label equals '0'
+            Assert.AreEqual(this.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText, uIItem0Text.DisplayText);
+        }
+        
+        /// <summary>
+        /// ClickAboutButton
+        /// </summary>
+        public void ClickAboutButton()
+        {
+            #region Variable Declarations
+            WpfButton uISystemWindowsControlButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
+            #endregion
+
+            // Click 'System.Windows.Controls.Grid' button
+            Mouse.Click(uISystemWindowsControlButton, new Point(39, 17));
         }
         
         /// <summary>
@@ -56,68 +121,16 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// ClickStartScanningButton
+        /// ClickClearSearchTextButton
         /// </summary>
-        public void ClickStartScanningButton()
+        public void ClickClearSearchTextButton()
         {
             #region Variable Declarations
-            WpfButton uIStartScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
+            WpfButton uIClearSearchTextButtoButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIClearSearchTextButtoButton;
             #endregion
 
-            // Click 'StartScanningButton' button
-            Mouse.Click(uIStartScanningButtonButton, new Point(45, 35));
-        }
-        
-        /// <summary>
-        /// ClickStartScanningNowButton
-        /// </summary>
-        public void ClickStartScanningNowButton()
-        {
-            #region Variable Declarations
-            WpfButton uIStartScanningNowButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
-            #endregion
-
-            // Click 'Start Scanning Now!' button
-            Mouse.Click(uIStartScanningNowButton, new Point(76, 12));
-        }
-        
-        /// <summary>
-        /// ClickValkyrieLink
-        /// </summary>
-        public void ClickValkyrieLink()
-        {
-            #region Variable Declarations
-            WpfHyperlink uIPleaseclickheretoseeHyperlink = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
-            #endregion
-
-            // Click 'Please click here to see the detailed results' link
-            Mouse.Click(uIPleaseclickheretoseeHyperlink, new Point(50, 13));
-        }
-        
-        /// <summary>
-        /// AssertMainWindow - Use 'AssertMainWindowExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertMainWindow()
-        {
-            #region Variable Declarations
-            WpfWindow uIUnknownFileHunterWindow = this.UIUnknownFileHunterWindow;
-            #endregion
-
-            // Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
-            Assert.AreEqual(this.AssertMainWindowExpectedValues.UIUnknownFileHunterWindowExists, uIUnknownFileHunterWindow.Exists);
-        }
-        
-        /// <summary>
-        /// ClickResizeButton
-        /// </summary>
-        public void ClickResizeButton()
-        {
-            #region Variable Declarations
-            WpfButton uIResizeButtonButton = this.UIUnknownFileHunterWindow.UIResizeButtonButton;
-            #endregion
-
-            // Click 'ResizeButton' button
-            Mouse.Click(uIResizeButtonButton, new Point(21, 19));
+            // Click 'ClearSearchTextButton' button
+            Mouse.Click(uIClearSearchTextButtoButton, new Point(5, 4));
         }
         
         /// <summary>
@@ -147,19 +160,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// ClickStopScanningButton
-        /// </summary>
-        public void ClickStopScanningButton()
-        {
-            #region Variable Declarations
-            WpfButton uIStopScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
-            #endregion
-
-            // Click 'StopScanningButton' button
-            Mouse.Click(uIStopScanningButtonButton, new Point(58, 36));
-        }
-        
-        /// <summary>
         /// ClickReportsDropDownButton
         /// </summary>
         public void ClickReportsDropDownButton()
@@ -173,55 +173,68 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// ClickAboutButton
+        /// ClickResizeButton
         /// </summary>
-        public void ClickAboutButton()
+        public void ClickResizeButton()
         {
             #region Variable Declarations
-            WpfButton uISystemWindowsControlButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
+            WpfButton uIResizeButtonButton = this.UIUnknownFileHunterWindow.UIResizeButtonButton;
             #endregion
 
-            // Click 'System.Windows.Controls.Grid' button
-            Mouse.Click(uISystemWindowsControlButton, new Point(39, 17));
+            // Click 'ResizeButton' button
+            Mouse.Click(uIResizeButtonButton, new Point(21, 19));
         }
         
         /// <summary>
-        /// AssertNoScansTextBlockText - Use 'AssertNoScansTextBlockTextExpectedValues' to pass parameters into this method.
+        /// ClickStartScanningButton
         /// </summary>
-        public void AssertNoScansTextBlockText()
+        public void ClickStartScanningButton()
         {
             #region Variable Declarations
-            WpfText uITherearenoscanshavebText = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UITherearenoscanshavebText;
+            WpfButton uIStartScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
             #endregion
 
-            // Verify that the 'DisplayText' property of 'There are no scans have been performed yet.' label equals 'There are no scans have been performed yet.'
-            Assert.AreEqual(this.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText, uITherearenoscanshavebText.DisplayText);
+            // Click 'StartScanningButton' button
+            Mouse.Click(uIStartScanningButtonButton, new Point(45, 35));
         }
         
         /// <summary>
-        /// AssertUnknownFilesCounterTextBlockText - Use 'AssertUnknownFilesCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// ClickStartScanningNowButton
         /// </summary>
-        public void AssertUnknownFilesCounterTextBlockText()
+        public void ClickStartScanningNowButton()
         {
             #region Variable Declarations
-            WpfText uIItem0Text = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem0Text;
+            WpfButton uIStartScanningNowButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
             #endregion
 
-            // Verify that the 'DisplayText' property of '0' label equals '0'
-            Assert.AreEqual(this.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText, uIItem0Text.DisplayText);
+            // Click 'Start Scanning Now!' button
+            Mouse.Click(uIStartScanningNowButton, new Point(76, 12));
         }
         
         /// <summary>
-        /// AssertMalwareFilesCounterTextBlockText - Use 'AssertMalwareFilesCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// ClickStopScanningButton
         /// </summary>
-        public void AssertMalwareFilesCounterTextBlockText()
+        public void ClickStopScanningButton()
         {
             #region Variable Declarations
-            WpfText uIItem0Text1 = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem0Text1;
+            WpfButton uIStopScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
             #endregion
 
-            // Verify that the 'DisplayText' property of '0' label equals '0'
-            Assert.AreEqual(this.AssertMalwareFilesCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText, uIItem0Text1.DisplayText);
+            // Click 'StopScanningButton' button
+            Mouse.Click(uIStopScanningButtonButton, new Point(58, 36));
+        }
+        
+        /// <summary>
+        /// ClickValkyrieLink
+        /// </summary>
+        public void ClickValkyrieLink()
+        {
+            #region Variable Declarations
+            WpfHyperlink uIPleaseclickheretoseeHyperlink = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
+            #endregion
+
+            // Click 'Please click here to see the detailed results' link
+            Mouse.Click(uIPleaseclickheretoseeHyperlink, new Point(50, 13));
         }
         
         /// <summary>
@@ -237,20 +250,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             uISearchTextBoxEdit.Text = this.InputTextToSearchBoxParams.UISearchTextBoxEditText;
         }
         
-        /// <summary>
-        /// ClickClearSearchTextButton
-        /// </summary>
-        public void ClickClearSearchTextButton()
+        #region Properties
+        public virtual AssertMainWindowExpectedValues AssertMainWindowExpectedValues
         {
-            #region Variable Declarations
-            WpfButton uIClearSearchTextButtoButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIClearSearchTextButtoButton;
-            #endregion
-
-            // Click 'ClearSearchTextButton' button
-            Mouse.Click(uIClearSearchTextButtoButton, new Point(5, 4));
+            get
+            {
+                if ((this.mAssertMainWindowExpectedValues == null))
+                {
+                    this.mAssertMainWindowExpectedValues = new AssertMainWindowExpectedValues();
+                }
+                return this.mAssertMainWindowExpectedValues;
+            }
         }
         
-        #region Properties
         public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
         {
             get
@@ -263,15 +275,15 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             }
         }
         
-        public virtual AssertMainWindowExpectedValues AssertMainWindowExpectedValues
+        public virtual AssertMalwaresCounterTextBlockTextExpectedValues AssertMalwaresCounterTextBlockTextExpectedValues
         {
             get
             {
-                if ((this.mAssertMainWindowExpectedValues == null))
+                if ((this.mAssertMalwaresCounterTextBlockTextExpectedValues == null))
                 {
-                    this.mAssertMainWindowExpectedValues = new AssertMainWindowExpectedValues();
+                    this.mAssertMalwaresCounterTextBlockTextExpectedValues = new AssertMalwaresCounterTextBlockTextExpectedValues();
                 }
-                return this.mAssertMainWindowExpectedValues;
+                return this.mAssertMalwaresCounterTextBlockTextExpectedValues;
             }
         }
         
@@ -296,18 +308,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                     this.mAssertUnknownFilesCounterTextBlockTextExpectedValues = new AssertUnknownFilesCounterTextBlockTextExpectedValues();
                 }
                 return this.mAssertUnknownFilesCounterTextBlockTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertMalwareFilesCounterTextBlockTextExpectedValues AssertMalwareFilesCounterTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertMalwareFilesCounterTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertMalwareFilesCounterTextBlockTextExpectedValues = new AssertMalwareFilesCounterTextBlockTextExpectedValues();
-                }
-                return this.mAssertMalwareFilesCounterTextBlockTextExpectedValues;
             }
         }
         
@@ -361,15 +361,15 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #endregion
         
         #region Fields
+        private AssertMainWindowExpectedValues mAssertMainWindowExpectedValues;
+        
         private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
         
-        private AssertMainWindowExpectedValues mAssertMainWindowExpectedValues;
+        private AssertMalwaresCounterTextBlockTextExpectedValues mAssertMalwaresCounterTextBlockTextExpectedValues;
         
         private AssertNoScansTextBlockTextExpectedValues mAssertNoScansTextBlockTextExpectedValues;
         
         private AssertUnknownFilesCounterTextBlockTextExpectedValues mAssertUnknownFilesCounterTextBlockTextExpectedValues;
-        
-        private AssertMalwareFilesCounterTextBlockTextExpectedValues mAssertMalwareFilesCounterTextBlockTextExpectedValues;
         
         private InputTextToSearchBoxParams mInputTextToSearchBoxParams;
         
@@ -378,6 +378,21 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMainWindow'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertMainWindowExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
+        /// </summary>
+        public bool UIUnknownFileHunterWindowExists = true;
         #endregion
     }
     
@@ -397,17 +412,17 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertMainWindow'
+    /// Parameters to be passed into 'AssertMalwaresCounterTextBlockText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertMainWindowExpectedValues
+    public class AssertMalwaresCounterTextBlockTextExpectedValues
     {
         
         #region Fields
         /// <summary>
-        /// Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
+        /// Verify that the 'DisplayText' property of '0' label equals '0'
         /// </summary>
-        public bool UIUnknownFileHunterWindowExists = true;
+        public string UIItem0Text1DisplayText = "0";
         #endregion
     }
     
@@ -438,21 +453,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Verify that the 'DisplayText' property of '0' label equals '0'
         /// </summary>
         public string UIItem0TextDisplayText = "0";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertMalwareFilesCounterTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertMalwareFilesCounterTextBlockTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of '0' label equals '0'
-        /// </summary>
-        public string UIItem0Text1DisplayText = "0";
         #endregion
     }
     
@@ -711,6 +711,38 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIClearSearchTextButtoButton;
             }
         }
+        
+        public WpfText UIItem0Text
+        {
+            get
+            {
+                if ((this.mUIItem0Text == null))
+                {
+                    this.mUIItem0Text = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem0Text.SearchProperties[WpfText.PropertyNames.AutomationId] = "UnknownFilesCounterTextBlock";
+                    this.mUIItem0Text.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem0Text;
+            }
+        }
+        
+        public WpfText UIItem0Text1
+        {
+            get
+            {
+                if ((this.mUIItem0Text1 == null))
+                {
+                    this.mUIItem0Text1 = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem0Text1.SearchProperties[WpfText.PropertyNames.AutomationId] = "MalwareFilesCounterTextBlock";
+                    this.mUIItem0Text1.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem0Text1;
+            }
+        }
         #endregion
         
         #region Fields
@@ -723,6 +755,10 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private WpfEdit mUISearchTextBoxEdit;
         
         private WpfButton mUIClearSearchTextButtoButton;
+        
+        private WpfText mUIItem0Text;
+        
+        private WpfText mUIItem0Text1;
         #endregion
     }
     

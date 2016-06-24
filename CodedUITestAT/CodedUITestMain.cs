@@ -515,8 +515,8 @@ namespace CodedUITestAT
         {
             UIMapMain.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
             UIMapMain.AssertUnknownFilesCounterTextBlockText();
-            UIMapMain.AssertMalwareFilesCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
-            UIMapMain.AssertMalwareFilesCounterTextBlockText();
+            UIMapMain.AssertMalwaresCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
+            UIMapMain.AssertMalwaresCounterTextBlockText();
             testContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
         }
 
