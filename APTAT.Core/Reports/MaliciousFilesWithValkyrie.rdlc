@@ -164,10 +164,10 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>0.81445cm</Top>
+                          <Top>0.77917cm</Top>
                           <Left>6.7147cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.5748cm</Width>
+                          <Width>2.23625cm</Width>
                           <ZIndex>3</ZIndex>
                           <Style>
                             <Border>
@@ -232,10 +232,10 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>1.26911cm</Top>
+                          <Top>1.20561cm</Top>
                           <Left>6.7147cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.5748cm</Width>
+                          <Width>2.23625cm</Width>
                           <ZIndex>5</ZIndex>
                           <Style>
                             <Border>
@@ -300,10 +300,10 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>1.72376cm</Top>
+                          <Top>1.69201cm</Top>
                           <Left>6.71471cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.57479cm</Width>
+                          <Width>2.23625cm</Width>
                           <ZIndex>7</ZIndex>
                           <Style>
                             <Border>
@@ -368,10 +368,10 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>2.17842cm</Top>
+                          <Top>2.11492cm</Top>
                           <Left>6.72881cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.57479cm</Width>
+                          <Width>2.23625cm</Width>
                           <ZIndex>9</ZIndex>
                           <Style>
                             <Border>
@@ -390,7 +390,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Copyright</Value>
+                                  <Value>Copyright::</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -402,10 +402,10 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>2.64351cm</Top>
+                          <Top>2.58001cm</Top>
                           <Left>6.71471cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.57479cm</Width>
+                          <Width>2.23625cm</Width>
                           <ZIndex>10</ZIndex>
                           <Style>
                             <Border>
@@ -473,9 +473,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>0.77917cm</Top>
-                          <Left>8.28948cm</Left>
+                          <Left>8.98425cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.20202cm</Width>
                           <ZIndex>12</ZIndex>
                           <Style>
                             <Border>
@@ -509,9 +509,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>1.23383cm</Top>
-                          <Left>8.28948cm</Left>
+                          <Left>8.98425cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.20202cm</Width>
                           <ZIndex>13</ZIndex>
                           <Style>
                             <Border>
@@ -545,9 +545,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>1.68848cm</Top>
-                          <Left>8.28949cm</Left>
+                          <Left>8.98425cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83526cm</Width>
+                          <Width>7.20202cm</Width>
                           <ZIndex>14</ZIndex>
                           <Style>
                             <Border>
@@ -581,9 +581,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>2.14314cm</Top>
-                          <Left>8.2895cm</Left>
+                          <Left>8.98425cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83526cm</Width>
+                          <Width>7.20202cm</Width>
                           <ZIndex>15</ZIndex>
                           <Style>
                             <Border>
@@ -797,9 +797,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>2.6047cm</Top>
-                          <Left>8.28949cm</Left>
+                          <Left>8.98425cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.20202cm</Width>
                           <ZIndex>21</ZIndex>
                           <Style>
                             <Border>
@@ -888,7 +888,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Whitelisted:</Value>
+                                  <Value>Trusted Vendor:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -903,7 +903,7 @@
                           <Top>3.09449cm</Top>
                           <Left>6.71272cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.57479cm</Width>
+                          <Width>2.23625cm</Width>
                           <ZIndex>24</ZIndex>
                           <Style>
                             <Border>
@@ -937,9 +937,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>3.08743cm</Top>
-                          <Left>8.351cm</Left>
+                          <Left>8.98425cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.20202cm</Width>
                           <ZIndex>25</ZIndex>
                           <Style>
                             <Border>

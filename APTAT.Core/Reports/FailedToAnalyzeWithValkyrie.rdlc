@@ -167,7 +167,7 @@
                           <Top>0.78623cm</Top>
                           <Left>6.7147cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.5748cm</Width>
+                          <Width>2.20616cm</Width>
                           <ZIndex>3</ZIndex>
                           <Style>
                             <Border>
@@ -235,7 +235,7 @@
                           <Top>1.24788cm</Top>
                           <Left>6.7147cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.5748cm</Width>
+                          <Width>2.20616cm</Width>
                           <ZIndex>5</ZIndex>
                           <Style>
                             <Border>
@@ -303,7 +303,7 @@
                           <Top>1.70953cm</Top>
                           <Left>6.71471cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.57479cm</Width>
+                          <Width>2.20616cm</Width>
                           <ZIndex>7</ZIndex>
                           <Style>
                             <Border>
@@ -371,7 +371,7 @@
                           <Top>2.17119cm</Top>
                           <Left>6.72881cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.57479cm</Width>
+                          <Width>2.20616cm</Width>
                           <ZIndex>9</ZIndex>
                           <Style>
                             <Border>
@@ -390,7 +390,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Copyright</Value>
+                                  <Value>Copyright:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -405,7 +405,7 @@
                           <Top>2.63284cm</Top>
                           <Left>6.71471cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>1.57479cm</Width>
+                          <Width>2.20616cm</Width>
                           <ZIndex>10</ZIndex>
                           <Style>
                             <Border>
@@ -473,9 +473,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>0.78623cm</Top>
-                          <Left>8.28948cm</Left>
+                          <Left>8.95416cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.17059cm</Width>
                           <ZIndex>12</ZIndex>
                           <Style>
                             <Border>
@@ -509,9 +509,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>1.24788cm</Top>
-                          <Left>8.28948cm</Left>
+                          <Left>8.95416cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.17059cm</Width>
                           <ZIndex>13</ZIndex>
                           <Style>
                             <Border>
@@ -545,9 +545,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>1.70953cm</Top>
-                          <Left>8.28948cm</Left>
+                          <Left>8.95416cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.17059cm</Width>
                           <ZIndex>14</ZIndex>
                           <Style>
                             <Border>
@@ -581,9 +581,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>2.17119cm</Top>
-                          <Left>8.28948cm</Left>
+                          <Left>8.95416cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.17059cm</Width>
                           <ZIndex>15</ZIndex>
                           <Style>
                             <Border>
@@ -797,9 +797,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>2.63284cm</Top>
-                          <Left>8.28948cm</Left>
+                          <Left>8.95416cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>7.83527cm</Width>
+                          <Width>7.17059cm</Width>
                           <ZIndex>21</ZIndex>
                           <Style>
                             <Border>
@@ -903,7 +903,7 @@
                           <Top>3.09449cm</Top>
                           <Left>6.71272cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>2.68241cm</Width>
+                          <Width>2.20616cm</Width>
                           <ZIndex>24</ZIndex>
                           <Style>
                             <Border>
@@ -937,9 +937,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Top>3.09449cm</Top>
-                          <Left>9.46568cm</Left>
+                          <Left>8.95416cm</Left>
                           <Height>0.55681cm</Height>
-                          <Width>6.65907cm</Width>
+                          <Width>7.17059cm</Width>
                           <ZIndex>25</ZIndex>
                           <Style>
                             <Border>
