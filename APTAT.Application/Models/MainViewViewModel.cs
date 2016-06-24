@@ -67,6 +67,11 @@ namespace APTAT.Application.Models
         private Collection<FileResult> _cacheValkyrie;
         private Collection<ComputerInformation> _cacheValkyrieComputers;
 
+        private DispatcherTimer _scanTickTimer;
+        private int _scanTicks;
+        private DispatcherTimer _scanIteratorTimer;
+        private Dictionary<Guid, ScanProgressItem> _scanIterator;
+
         public bool IsAnyScanInProgress
         {
             get
@@ -136,12 +141,21 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsValkyrieScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
 
+                if (!_scanTickTimer.IsEnabled && _isValkyrieScanInProgress.GetValueOrDefault())
+                {
+                    _scanTicks = 0;
+                    _scanTickTimer.Start();
+                }
+                else if (_scanTickTimer.IsEnabled && !_isValkyrieScanInProgress.GetValueOrDefault())
+                {
+                    _scanTickTimer.Stop();
+                }
+
                 App.Current.Dispatcher.BeginInvoke((Action) delegate 
                 { 
                     StartScanCommand.InvalidateCanExecute();
                     StopScanCommand.InvalidateCanExecute();
                 });
-
             }
         }
 
@@ -222,21 +236,40 @@ namespace APTAT.Application.Models
                 if (IsScanInProgress == true)
                 {
                     if (Percentage == 0)
+                    {
                         header = "Starting scan...";
+                    }
                     else if (Percentage == 100)
+                    {
                         header = "Finishing scan...";
+                    }
                     else
                         header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
-                    return String.Format("{0} ({1})", commonHeaderName, header);
+
+                    return String.Format("{0} ({1} {2})", commonHeaderName, header, _scanTicks > 0 ? TimeSpanToString(TimeSpan.FromSeconds(_scanTicks)) : string.Empty);
                 }
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
                     header = String.Format("{0:0.00}% Valkyrie scanning...", Percentage).Replace(".00", string.Empty);
-                    return String.Format("{0} ({1})", commonHeaderName, header);
+                    return String.Format("{0} ({1} {2:h:m:s})", commonHeaderName, header, _scanTicks > 0 ? TimeSpanToString(TimeSpan.FromSeconds(_scanTicks)) : string.Empty);
                 }
 
                 return commonHeaderName;
             }
+        }
+
+        private string TimeSpanToString(TimeSpan span)
+        {
+            string formatted = string.Format("{0}{1}{2}",
+                span.Duration().Hours > 0 ? string.Format("{0:0} hour{1}, ", span.Hours, span.Hours == 1 ? String.Empty : "s") : string.Empty,
+                span.Duration().Minutes > 0 ? string.Format("{0:0} minute{1}, ", span.Minutes, span.Minutes == 1 ? String.Empty : "s") : string.Empty,
+                span.Duration().Seconds > 0 ? string.Format("{0:0} second{1}", span.Seconds, span.Seconds == 1 ? String.Empty : "s") : string.Empty);
+
+            if (formatted.EndsWith(", ")) formatted = formatted.Substring(0, formatted.Length - 2);
+
+            if (string.IsNullOrEmpty(formatted)) formatted = "0 seconds";
+
+            return formatted;
         }
 
         public Int32 OnlineItemsCount
@@ -863,23 +896,30 @@ namespace APTAT.Application.Models
 
         }
 
-        private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
+        private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs args)
         {
-            IsValkyrieScanInProgress = false;
-            IsValkyrieAnalysCompleted = false;
-            _operationGuid = e.OperationGuid;
+            _operationGuid = args.OperationGuid;
 
             _scanIterator = new Dictionary<Guid, ScanProgressItem>();
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
             _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
             _scanIteratorTimer.Tick += IterateThroughScan;
             _scanIteratorTimer.Start();
+
+            _scanTicks = 0;
+            _scanTickTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
+            _scanTickTimer.Interval = TimeSpan.FromSeconds(1);
+            _scanTickTimer.Tick += (s, e) => _scanTicks++;
+            _scanTickTimer.Start();
         }
 
         private void ScanCompleted(Boolean enableReports)
         {
             if (_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Stop();
+
+            if (_scanTickTimer.IsEnabled)
+                _scanTickTimer.Stop();
 
             CancelInProgress = false;
             
@@ -944,8 +984,6 @@ namespace APTAT.Application.Models
             }
         }
 
-        private DispatcherTimer _scanIteratorTimer;
-        private Dictionary<Guid, ScanProgressItem> _scanIterator;
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
             foreach (var scan in e.ScanProgress)
