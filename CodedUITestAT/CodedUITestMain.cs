@@ -913,52 +913,52 @@ namespace CodedUITestAT
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();
             TestContext.WriteLine(String.Format("Threat name is shown correctly: '{0}'.\n", malware.Name));
 
-            UIMapDetailsWindow.AssertFileNameValueTextBlockTextExpectedValues.UIUnknownexeTextDisplayText = malware.Name;
-            UIMapDetailsWindow.AssertFileNameValueTextBlockText();
+            UIMapDetailsWindow.AssertFileNameValueTextBoxTextExpectedValues.UIFileNameValueTextBoxEditText = malware.Name;
+            UIMapDetailsWindow.AssertFileNameValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'File Name' parameter is shown correctly: '{0}'.\n", malware.Name));
 
-            UIMapDetailsWindow.AssertVerdictValueTextBlockTextExpectedValues.UIUnknownTextDisplayText = malware.FileVerdict.ToString();
-            UIMapDetailsWindow.AssertVerdictValueTextBlockText();
+            UIMapDetailsWindow.AssertVerdictValueTextBoxTextExpectedValues.UIVerdictValueTextBoxEditText = malware.FileVerdict.ToString();
+            UIMapDetailsWindow.AssertVerdictValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Verdict' parameter is shown correctly: '{0}'.\n", malware.FileVerdict));
 
-            UIMapDetailsWindow.AssertSizeValueTextBlockTextExpectedValues.UIItem159KBTextDisplayText = malware.DisplaySize;
-            UIMapDetailsWindow.AssertSizeValueTextBlockText();
+            UIMapDetailsWindow.AssertSizeValueTextBoxTextExpectedValues.UISizeValueTextBoxEditText = malware.DisplaySize;
+            UIMapDetailsWindow.AssertSizeValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Size' parameter is shown correctly: '{0}'.\n", malware.DisplaySize));
 
-            UIMapDetailsWindow.AssertCreatedValueTextBlockTextExpectedValues.UIItem66201631837PMTextDisplayText = malware.Created;
-            UIMapDetailsWindow.AssertCreatedValueTextBlockText();
+            UIMapDetailsWindow.AssertCreatedValueTextBoxTextExpectedValues.UICreatedValueTextBoxEditText = malware.Created;
+            UIMapDetailsWindow.AssertCreatedValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Created' parameter is shown correctly: '{0}'.\n", malware.Created));
              
-            UIMapDetailsWindow.AssertModifiedValueTextBlockTextExpectedValues.UIItem66201632241PMTextDisplayText = malware.Modified;
-            UIMapDetailsWindow.AssertModifiedValueTextBlockText();
+            UIMapDetailsWindow.AssertModifiedValueTextBoxTextExpectedValues.UIModifiedValueTextBoxEditText = malware.Modified;
+            UIMapDetailsWindow.AssertModifiedValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Modified' parameter is shown correctly: '{0}'.\n", malware.Modified));
 
-            UIMapDetailsWindow.AssertAccessedValueTextBlockTextExpectedValues.UIItem66201631837PMText1DisplayText = malware.Accessed;
-            UIMapDetailsWindow.AssertAccessedValueTextBlockText();
+            UIMapDetailsWindow.AssertAccessedValueTextBoxTextExpectedValues.UIAccessedValueTextBoxEditText = malware.Accessed;
+            UIMapDetailsWindow.AssertAccessedValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Accessed' parameter is shown correctly: '{0}'.\n", malware.Accessed));
 
-            UIMapDetailsWindow.AssertHashValueTextBlockTextExpectedValues.UIItem2D93186A41CD331ATextDisplayText = malware.Sha1;
-            UIMapDetailsWindow.AssertHashValueTextBlockText();
+            UIMapDetailsWindow.AssertHashValueTextBoxTextExpectedValues.UIHashValueTextBoxEditText = malware.Sha1;
+            UIMapDetailsWindow.AssertHashValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Hash' parameter is shown correctly: '{0}'.\n", malware.Sha1));
 
-            UIMapDetailsWindow.AssertSignerValueTextBlockTextExpectedValues.UINATextDisplayText = malware.Signer;
-            UIMapDetailsWindow.AssertSignerValueTextBlockText();
+            UIMapDetailsWindow.AssertSignerValueTextBoxTextExpectedValues.UISignerValueTextBoxEditText = malware.Signer;
+            UIMapDetailsWindow.AssertSignerValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Signer' parameter is shown correctly: '{0}'.\n", malware.Signer));
 
-            UIMapDetailsWindow.AssertDescriptionValueTextBlockTextExpectedValues.UIItem7zSFXTextDisplayText = malware.Description;
-            UIMapDetailsWindow.AssertDescriptionValueTextBlockText();
+            UIMapDetailsWindow.AssertDescriptionValueTextBoxTextExpectedValues.UIDescriptionValueTextEditText = malware.Description;
+            UIMapDetailsWindow.AssertDescriptionValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Description' parameter is shown correctly: '{0}'.\n", malware.Description));
 
-            UIMapDetailsWindow.AssertVersionValueTextBlockTextExpectedValues.UIItem920TextDisplayText = malware.Version;
-            UIMapDetailsWindow.AssertVersionValueTextBlockText();
+            UIMapDetailsWindow.AssertVersionValueTextBoxTextExpectedValues.UIVersionValueTextBoxEditText = malware.Version;
+            UIMapDetailsWindow.AssertVersionValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Version' parameter is shown correctly: '{0}'.\n", malware.Version));
 
-            UIMapDetailsWindow.AssertCopyrightValueTextBlockTextExpectedValues.UICopyrightc19992010IgTextDisplayText = malware.Copyright;
-            UIMapDetailsWindow.AssertCopyrightValueTextBlockText();
+            UIMapDetailsWindow.AssertCopyrightValueTextBoxTextExpectedValues.UICopyrightValueTextBoEditText = malware.Copyright;
+            UIMapDetailsWindow.AssertCopyrightValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Copyright' parameter is shown correctly: '{0}'.\n", malware.Copyright));
 
-            UIMapDetailsWindow.AssertProductValueTextBlockTextExpectedValues.UIItem7ZipTextDisplayText = malware.Product;
-            UIMapDetailsWindow.AssertProductValueTextBlockText();
+            UIMapDetailsWindow.AssertProductValueTextBoxTextExpectedValues.UIProductValueTextBoxEditText = malware.Product;
+            UIMapDetailsWindow.AssertProductValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.\n", malware.Product));
 
             UIMapDetailsWindow.ClickCloseButton();

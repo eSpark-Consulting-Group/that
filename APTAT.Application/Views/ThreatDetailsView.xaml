@@ -82,13 +82,13 @@
                     <TextBox AutomationProperties.AutomationId="VerdictValueTextBox"
                                Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox AutomationProperties.AutomationId="SizeValueTextBlock" Text="{Binding Size}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                    <TextBox AutomationProperties.AutomationId="SizeValueTextBox" Text="{Binding Size}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox AutomationProperties.AutomationId="CreatedValueTextBlock" Text="{Binding Created}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                    <TextBox AutomationProperties.AutomationId="CreatedValueTextBox" Text="{Binding Created}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox AutomationProperties.AutomationId="ModifiedValueTextBlock" Text="{Binding Modified}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"
+                    <TextBox AutomationProperties.AutomationId="ModifiedValueTextBox" Text="{Binding Modified}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox AutomationProperties.AutomationId="AccessedValueTextBlock" Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"
+                    <TextBox AutomationProperties.AutomationId="AccessedValueTextBox" Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
                 </Grid>
                     <Grid x:Name="GeneralCol2" Grid.Column="1" Margin="20, 0,20,20" MinWidth="250">
@@ -121,7 +121,7 @@
                     <TextBox AutomationProperties.AutomationId="DescriptionValueTextBox"
                                Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="220" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox AutomationProperties.AutomationId="VersionValueTextBlock" Text="{Binding Version}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
+                    <TextBox AutomationProperties.AutomationId="VersionValueTextBox" Text="{Binding Version}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
                                Style="{StaticResource SelectTextStyle}"/>
                     <TextBox AutomationProperties.AutomationId="CopyrightValueTextBox"
                                Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="220" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" 
