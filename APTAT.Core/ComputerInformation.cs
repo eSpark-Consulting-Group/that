@@ -173,6 +173,9 @@ namespace APTAT.Core
                     Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
                     (((DistinctCount > TotalDistinctCount ? TotalDistinctCount : DistinctCount) / TotalDistinctCount) * 100d)).Replace(".00", string.Empty));
 
+            if (failedCount > 0)
+                StatusText += string.Format(" Not analysed: {0}.", failedCount);
+
             HasBadFiles = malwareCount > 0 || unknownCount > 0 || failedCount > 0 || pendingCount > 0;
             HasMalwares = malwareCount > 0;
             HasUnknowns = malwareCount == 0 && unknownCount > 0;

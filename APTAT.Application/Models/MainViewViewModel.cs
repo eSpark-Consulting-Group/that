@@ -7,7 +7,6 @@ using System.Net;
 using System.Windows;
 using APTAT.Application.Services;
 using Telerik.Windows.Controls;
-using Telerik.Windows.Data;
 using APTAT.Core;
 using APTAT.Core.Valkyrie;
 using APTAT.Application.Messages;
@@ -231,7 +230,7 @@ namespace APTAT.Application.Models
                 }
                 if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
                 {
-                    header = String.Format("{0:0.00}% Valkyrie scanning...", Percentage).Replace(".00", string.Empty);
+                    header = String.Format("{0:0.00}% Valkyrie analysis...", Percentage).Replace(".00", string.Empty);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
 
@@ -428,7 +427,6 @@ namespace APTAT.Application.Models
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService, 
             IAptService aptService, IStorageService storage, IWmiService wmiService)
         {
-            
             _aptService = aptService;
             _targetsDiscoveryService = targetsDiscoveryService;
             _wmiService = wmiService;
@@ -865,8 +863,6 @@ namespace APTAT.Application.Models
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
         {
-            IsValkyrieScanInProgress = false;
-            IsValkyrieAnalysCompleted = false;
             _operationGuid = e.OperationGuid;
 
             _scanIterator = new Dictionary<Guid, ScanProgressItem>();
@@ -1163,5 +1159,4 @@ namespace APTAT.Application.Models
             InvokeStopScan(null);
         }
     }
-
 }
