@@ -294,11 +294,10 @@ namespace CodedUITestAT
         /// <returns>Returns an unknown file.</returns>
         internal static UnknownFile CopyUnknownFileForQuickScan(Computer endpoint)
         {
-            string unknownName = Settings.General.Default.UnknownName;
-            string fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, unknownName);
-            string source = String.Format(@"{0}\{1}", DataHelper.GetMalwaresFolder(true), unknownName);
+            string newUnknownPath = GenerateUnknownFile();
+            string fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, Path.GetFileName(newUnknownPath));
             string destination = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
-            File.Copy(source, destination, true);
+            File.Copy(newUnknownPath, destination, true);
             UnknownFile unknown = new UnknownFile(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned), endpoint);
 
             return unknown;
@@ -317,6 +316,25 @@ namespace CodedUITestAT
                 file.Delete();
                 testContext.WriteLine(String.Format("File '{0}' deleted from the endpoint: '{1}'.\n", file.Name, endpoint.Name));
             }
+        }
+
+        /// <summary> Generates a unique unknown file from an existing one. </summary>
+        /// <returns>Returns a local path to it.</returns>
+        private static string GenerateUnknownFile()
+        {
+            string initialFilePath = Path.Combine(DataHelper.GetMalwaresFolder(true), Settings.General.Default.UnknownName);
+            string newFileName = TextHelper.GenerateName() + ".exe";
+            string newFilePath = Path.Combine(DataHelper.GetMalwaresFolder(true), newFileName);
+            File.Copy(initialFilePath, newFilePath);
+
+            byte[] data = Encoding.ASCII.GetBytes(newFileName);
+            using (FileStream appendingStream = new FileStream(newFilePath, FileMode.Append, FileAccess.Write))
+            {
+                appendingStream.Write(data, 0, data.Length);
+                appendingStream.Close();
+            }
+
+            return newFilePath;
         }
 
         #endregion
