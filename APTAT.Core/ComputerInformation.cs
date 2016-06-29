@@ -164,7 +164,7 @@ namespace APTAT.Core
 
             for (int i = 0; i < Files.Count; i++)
             {
-                var file = Files[0];
+                var file = Files[i];
                 if (file.IsMalware)
                     malwareCount++;
                 else if (file.IsUnknown)
