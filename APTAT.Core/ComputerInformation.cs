@@ -160,18 +160,31 @@ namespace APTAT.Core
             if (TotalDistinctCount == 0)
                 return;
 
-            var malwareCount = Files.Count(_ => _.IsMalware);
-            var unknownCount = Files.Count(_ => _.IsUnknown);
-            var failedCount = Files.Count(_ => _.Failed);
-            var pendingCount = Files.Count(_ => _.Pending);
+            int malwareCount = 0, unknownCount = 0, failedCount = 0, pendingCount = 0, distinctCount = 0;
+
+            for (int i = 0; i < Files.Count; i++)
+            {
+                var file = Files[0];
+                if (file.IsMalware)
+                    malwareCount++;
+                else if (file.IsUnknown)
+                    unknownCount++;
+                else if (file.Failed)
+                    failedCount++;
+                else if (file.Pending)
+                    pendingCount++;
+            }
 
             if (Files.Count >= TotalCount)
                 StatusText = string.Format("Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
                     Files.Count, unknownCount, malwareCount);
             else
+            {
+                distinctCount = DistinctCount;
                 StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
                     Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
-                    (((DistinctCount > TotalDistinctCount ? TotalDistinctCount : DistinctCount) / TotalDistinctCount) * 100d)).Replace(".00", string.Empty));
+                    (((distinctCount > TotalDistinctCount ? TotalDistinctCount : distinctCount) / TotalDistinctCount) * 100d)).Replace(".00", string.Empty));
+            }
 
             if (failedCount > 0)
                 StatusText += string.Format(" Not analysed: {0}.", failedCount);

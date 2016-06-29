@@ -64,35 +64,35 @@
                             Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="7" />
               
               <TextBlock  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Check if target computer is powered and connected to the network" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="Check whether a target computer is turned on and connected to the network." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
               </TextBlock>
 
               <TextBlock  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Check if Firewall on target computer is turned OFF" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="Check whether firewall on a target computer is turned Off." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
               </TextBlock>
 
               <TextBlock  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Check if IP address of target computer is correct" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="Check whether IP address of a target computer is correct." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
               </TextBlock>
 
               <TextBlock  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="In the Network Neighbourhood run Network Wizard, enable file sharing" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="In the Network Neighbourhood run Network Wizard, enable file sharing." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
               </TextBlock>
 
               <TextBlock  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Make sure Administrator password is correct" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="Make sure Administrator password is not blank and correct." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
               </TextBlock>
 
               <TextBlock  Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Check if 'Forceguest' option on target computer is disabled" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="Check whether 'Forceguest' option on target computer is disabled:" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
                 <Run Text="HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa" FontFamily="Segoe UI" Foreground="#FF3A7FBF" FontSize="13"/>
-                <Run Text="forceguest REG_DWORD data set to 0" FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
+                <Run Text="'forceguest' dword is 0." FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
               </TextBlock>
 
               <TextBlock  Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                <Run Text="Check if the account is not a built-in Administrator" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                <Run Text="If the account is not a built-in Administrator, check whether:" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
                 <Run Text="HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System" FontFamily="Segoe UI" Foreground="#FF3A7FBF" FontSize="13"/>
-                <Run Text="LocalAccountTokenFilterPolicy REG_DWORD data set to 1" FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
+                <Run Text="'LocalAccountTokenFilterPolicy' dword is 1." FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
               </TextBlock>
 
               <Button AutomationProperties.AutomationId="CloseAboutButton"
