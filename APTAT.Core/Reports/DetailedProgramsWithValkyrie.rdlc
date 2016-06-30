@@ -1295,7 +1295,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Unknown/Malicious Program Entries </Caption>
+                      <Caption>Unknown/Malicious/ In Analysis Program Entries </Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -1899,7 +1899,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Name.Value &amp; "(Instances: " &amp; Fields!InstancesTotalCount.Value &amp; ")"</Value>
+                                      <Value>=Fields!Name.Value &amp; " (Instances: " &amp; Fields!InstancesTotalCount.Value &amp; ")"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>18pt</FontSize>
