@@ -420,7 +420,7 @@ namespace APTAT.Core.Reports
                               new MostWantedBadFileInfo()
                               {
                                   BadFileType = file.FileType,
-                                  Count = file.Targets.Count,
+                                  Count = file.Targets.Sum(t => t.BadFileInstances.Count),
                                   Hash = file.Sha1,
                                   Name = file.Name
                               }).Take(10);
@@ -693,7 +693,8 @@ namespace APTAT.Core.Reports
             MergeResults(Targets, ValkyrieAnalysisResult, out targets, out allUniqueBadFiles, out allNonUniqueBadFiles);
 
             //return (from file in globallyUniqueFiles.Values orderby file.Targets.Count descending select file).ToArray();
-            return (isUniqueSetOfFiles ? allUniqueBadFiles : allNonUniqueBadFiles).OrderByDescending(file => file.Targets.Count).ThenBy(file => file.Name).ToArray();
+            return (isUniqueSetOfFiles ? allUniqueBadFiles : allNonUniqueBadFiles)
+                .OrderByDescending(file => file.Targets.Sum(t => t.BadFileInstances.Count)).ThenBy(file => file.Name).ToArray();
         }
 
         public List<FileResult> ValkyrieAnalysisResult { get; set; }
