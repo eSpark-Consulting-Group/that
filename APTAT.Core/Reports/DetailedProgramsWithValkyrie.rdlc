@@ -1888,7 +1888,8 @@
                                 <BackgroundColor>=Switch(
 					  Fields!FileType.Value = "1", "#c03a3a",
                       Fields!FileType.Value = "0", "#f9cc08",
-					  Fields!FileType.Value = "2", "LightGrey")</BackgroundColor>
+					  Fields!FileType.Value = "2", "LightGrey",
+					  Fields!FileType.Value = "3", "LightSkyBlue")</BackgroundColor>
                               </Style>
                             </Rectangle>
                             <Textbox Name="Textbox55">
