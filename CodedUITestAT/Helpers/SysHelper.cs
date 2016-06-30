@@ -6,6 +6,7 @@ using System.Management;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Security.Cryptography;
+using System.DirectoryServices.ActiveDirectory;
 using Microsoft.Win32;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -181,13 +182,21 @@ namespace CodedUITestAT
 
         #region OS-related methods
 
-        /// <summary> Gets the current workgroup name. </summary>
+        /// <summary> Gets a current workgroup name. </summary>
         /// <returns>The current Workgroup name.</returns>
         internal static string GetWorkgroupName()
         {
             var mos = new ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem");
             foreach (ManagementObject mo in mos.Get()) if (mo["Workgroup"] != null) return mo["Workgroup"].ToString().ToUpper();
             return "WORKGROUP";
+        }
+
+        /// <summary> Gets a current domain name. </summary>
+        /// <returns>A current domain name.</returns>
+        internal static string GetDomainName()
+        {
+            Domain domain = Domain.GetComputerDomain();
+            return domain.Name;
         }
 
         /// <summary> Indicates whether a given remote machine is 64-bit using its registry. </summary>

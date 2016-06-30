@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
@@ -253,6 +254,7 @@ namespace CodedUITestAT
                     useMain.UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
                     tab = useMain.ValkyrieAnalysisResultsTab();
                     rows = tab.GetRows();
+                    rowName = Path.GetFileName(rowName);
                     break;
                 default: throw new Exception("Unexpected Results screen!");
             }

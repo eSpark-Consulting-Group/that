@@ -81,6 +81,32 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
             Mouse.Click(uIFullScanButton, new Point(51, 13));
         }
         
+        /// <summary>
+        /// ClickActiveDirectoryButton
+        /// </summary>
+        public void ClickActiveDirectoryButton()
+        {
+            #region Variable Declarations
+            WpfButton uIScancomputersbyselecButton1 = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyselecButton1;
+            #endregion
+
+            // Click 'Scan computers by selecting them from active direc...' button
+            Mouse.Click(uIScancomputersbyselecButton1, new Point(68, 33));
+        }
+        
+        /// <summary>
+        /// ClickNextButton
+        /// </summary>
+        public void ClickNextButton()
+        {
+            #region Variable Declarations
+            WpfButton uINextButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
+            #endregion
+
+            // Click 'Next' button
+            Mouse.Click(uINextButton, new Point(25, 22));
+        }
+        
         #region Properties
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
@@ -206,6 +232,22 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
                 return this.mUIFullScanButton;
             }
         }
+        
+        public WpfButton UINextButton
+        {
+            get
+            {
+                if ((this.mUINextButton == null))
+                {
+                    this.mUINextButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUINextButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "NextButton";
+                    this.mUINextButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUINextButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -216,6 +258,8 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         private WpfButton mUIQuickScanButton;
         
         private WpfButton mUIFullScanButton;
+        
+        private WpfButton mUINextButton;
         #endregion
     }
     
@@ -248,10 +292,28 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
                 return this.mUIScancomputersbyselecButton;
             }
         }
+        
+        public WpfButton UIScancomputersbyselecButton1
+        {
+            get
+            {
+                if ((this.mUIScancomputersbyselecButton1 == null))
+                {
+                    this.mUIScancomputersbyselecButton1 = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScancomputersbyselecButton1.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ActiveDirectoryButton";
+                    this.mUIScancomputersbyselecButton1.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIScancomputersbyselecButton1;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUIScancomputersbyselecButton;
+        
+        private WpfButton mUIScancomputersbyselecButton1;
         #endregion
     }
 }

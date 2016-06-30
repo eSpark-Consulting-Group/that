@@ -24,6 +24,11 @@ namespace APTAT.Application.Models
         public String Status { get; set; }
 
         public Boolean IsOnline { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public class DirectoryItem : DeploymentItem

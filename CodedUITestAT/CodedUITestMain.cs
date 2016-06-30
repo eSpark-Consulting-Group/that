@@ -15,6 +15,8 @@ using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
+using CodedUITestAT.UIMaps.StartScanningWizard.UIMapActiveDirectoryClasses;
+using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 
 namespace CodedUITestAT
 {
@@ -88,6 +90,21 @@ namespace CodedUITestAT
         }
         private UIMapWorkgroup mapWorkgroup;
 
+        /// <summary> UIMap for Active Directory Scanning Wizard screen branch, UIMapActiveDirectory.uitest. </summary>
+        public UIMapActiveDirectory UIMapActiveDirectory
+        {
+            get
+            {
+                if ((this.mapActiveDirectory == null))
+                {
+                    this.mapActiveDirectory = new UIMapActiveDirectory();
+                }
+
+                return this.mapActiveDirectory;
+            }
+        }
+        private UIMapActiveDirectory mapActiveDirectory;
+
         /// <summary> UIMap for Scan Completed window, UIMapScanCompletedWindow.uitest. </summary>
         public UIMapScanCompletedWindow UIMapScanCompletedWindow
         {
@@ -148,6 +165,21 @@ namespace CodedUITestAT
         }
         private UIMapDetailsWindow mapDetailsWindow;
 
+        /// <summary> UIMap for Valkyrie Details window, UIMapValkyrieDetailsWindow.uitest. </summary>
+        public UIMapValkyrieDetailsWindow UIMapValkyrieDetailsWindow
+        {
+            get
+            {
+                if ((this.mapValkyrieDetailsWindow == null))
+                {
+                    this.mapValkyrieDetailsWindow = new UIMapValkyrieDetailsWindow();
+                }
+
+                return this.mapValkyrieDetailsWindow;
+            }
+        }
+        private UIMapValkyrieDetailsWindow mapValkyrieDetailsWindow;
+
         /// <summary> UIMap for Stop Scan window, UIMapStopScanWindow.uitest. </summary>
         public UIMapStopScanWindow UIMapStopScanWindow
         {
@@ -182,7 +214,10 @@ namespace CodedUITestAT
         [TestCleanup]
         public void ATTestCleanup()
         {
+            Computer endpoint = DataHelper.GetEndpoint();
+
             SysHelper.StopApplication();
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
         }
 
         #endregion
@@ -248,6 +283,16 @@ namespace CodedUITestAT
         private WpfList NetworkAddressesList()
         {
             return UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
+        }
+
+        private WpfButton NextButton()
+        {
+            return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
+        }
+
+        private WpfTree AdTree()
+        {
+           return UIMapActiveDirectory.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree;
         }
 
         #endregion
@@ -520,6 +565,24 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
         }
 
+        /// <summary> Expands a given row in Active Directory tree. In accordance with DeploymentItem.cs. </summary>
+        /// <param name="rowName">Set a unique row name.</param>
+        private void ExpandAdRow(string rowName)
+        {
+            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
+                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
+            UIMapActiveDirectory.ExpandAdRow();
+        }
+
+        /// <summary> Checks a given row in Active Directory tree. In accordance with DeploymentItem.cs. </summary>
+        /// <param name="rowName">Set a unique row name.</param>
+        private void CheckAdRow(string rowName)
+        {
+            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
+                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
+            UIMapActiveDirectory.CheckAdRow();
+        }
+
         #endregion
 
         #region Test methods
@@ -555,7 +618,7 @@ namespace CodedUITestAT
                 
                 // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
                 WaitForValkyrieResults(TestContext);
-                UIHelper.GroupByFiles();                
+                UIHelper.GroupByFiles();
                 AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
 
                 // Clicks Valkyrie link and checks the respective browser window URI
@@ -598,7 +661,7 @@ namespace CodedUITestAT
             UIMapWorkgroup.InputWorkgroup();
             UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
             UIMapWorkgroup.InputLogin();
-            UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncriptedPassword;
+            UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapWorkgroup.InputPassword();
             
             UIMapStartScanningWizard.ClickQuickScanButton();
@@ -623,11 +686,11 @@ namespace CodedUITestAT
             UIMapResultsWindow.GoToScanningResultsTab();
             UIHelper.GroupByComputers();
             UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Unknown files' screen.\n", endpoint.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Scanning results' screen.\n", endpoint.Name));
             UIHelper.ClickRow(ResultsScreen.ScanningResults, malware, MouseClick.DoubleLeft);
             TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
             UIHelper.WaitForControl(CloseDetailsButton());
-            UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = Settings.General.Default.ThreatName;
+            UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapDetailsWindow.AssertMalwareNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
         }
@@ -983,7 +1046,6 @@ namespace CodedUITestAT
             AssertPanelCountersData(1, 0, TestContext);
                         
             malware = SysHelper.InfectForQuickScan(endpoint);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickCancelButton();
@@ -994,6 +1056,51 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickOkButton();
             AssertPanelCountersData(0, 0, TestContext);
+        }
+
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        public void AdQuickScanTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            string domainName = SysHelper.GetDomainName();
+            Malware malware = SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.CopyUnknownFileForQuickScan(endpoint);
+
+            UIMapMain.ClickStartScanningNowButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIHelper.WaitForControlIsEnabled(NextButton());
+            
+            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
+            UIMapActiveDirectory.InputDomainController();
+            UIMapActiveDirectory.InputAdministratorParams.UIAdministratorTextBoxEditText = DataHelper.Username;
+            UIMapActiveDirectory.InputAdministrator();
+            UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapActiveDirectory.InputPassword();
+            UIMapStartScanningWizard.ClickNextButton();
+            UIHelper.WaitForControl(AdTree());
+
+            ExpandAdRow("Computers");
+            CheckAdRow(endpoint.Name);
+
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            WaitForScanCompleted(ScanType.Quick);
+            int expectedFilesNumber = GetFoundFilesNumber(TestContext);
+            UIMapScanCompletedWindow.ClickOkButton();
+            InputCamCredentials(TestContext);
+            WaitForValkyrieResults(TestContext);
+            UIHelper.GroupByFiles();
+            AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
+            UIHelper.GroupByComputers();
+            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Valkyrie analysis results' screen.\n", endpoint.Name));
+            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, malware, MouseClick.DoubleLeft);
+            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
+            
+            UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
+            UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();
+            UIMapValkyrieDetailsWindow.ClickCloseButton();
+            UIHelper.WaitForControlIsClickable(StartScanningButton());
         }
 
         #endregion

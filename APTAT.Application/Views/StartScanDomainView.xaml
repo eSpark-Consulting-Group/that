@@ -39,7 +39,6 @@
             <TextBlock  Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center"  Text="Select Computers" FontSize="20" Margin="30,8,20,8" Grid.Column="1"/>
         </Grid>
 
-
         <Grid x:Name="panelSelectDomain" Grid.Row="2" Background="White" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectDomain, FallbackValue=Collapsed}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -65,18 +64,20 @@
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="3" Text="FLS TCP Port:"/>
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="4" Text="FLS UDP Port:"/>
 
-                <TextBox x:Name="txtDomainController" BorderThickness="0" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding DomainController, Mode=TwoWay, ValidatesOnExceptions=True}" >
+                <TextBox AutomationProperties.AutomationId="DomainControllerTextBox"
+                         x:Name="txtDomainController" BorderThickness="0" VerticalAlignment="Top" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding DomainController, Mode=TwoWay, ValidatesOnExceptions=True}">
                 </TextBox>
-                <TextBox x:Name="txtAdministrator" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}" ></TextBox>
-                <PasswordBox x:Name="password"  BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged" ></PasswordBox>
-                <TextBox Grid.Row="3" Grid.Column="1" AutomationProperties.AutomationId="TcpPortTextBox" x:Name="TextTcpPort" BorderThickness="0" Margin="5"                             
-                             Text="{Binding TcpPort, Mode=TwoWay, ValidatesOnExceptions=True}" PreviewTextInput="NumberValidationTextBox" ></TextBox>
-
-                <TextBox Grid.Row="4" Grid.Column="1"  AutomationProperties.AutomationId="UdpPortTextBox" x:Name="TextUdpPort" BorderThickness="0" Margin="5"                             
-                             Text="{Binding UdpPort, Mode=TwoWay, ValidatesOnExceptions=True}" PreviewTextInput="NumberValidationTextBox" ></TextBox>
-
+                <TextBox AutomationProperties.AutomationId="AdministratorTextBox"
+                         x:Name="txtAdministrator" BorderThickness="0" Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Administrator, Mode=TwoWay, ValidatesOnExceptions=True}"></TextBox>
+                <PasswordBox AutomationProperties.AutomationId="PasswordBox"
+                         x:Name="password"  BorderThickness="0" Margin="5" Grid.Row="2" Grid.Column="1"  PasswordChanged="OnPasswordChanged"></PasswordBox>
+                <TextBox AutomationProperties.AutomationId="FlsTcpPortTextBox"
+                         Grid.Row="3" Grid.Column="1" x:Name="TextTcpPort" BorderThickness="0" Margin="5"                             
+                         Text="{Binding TcpPort, Mode=TwoWay, ValidatesOnExceptions=True}" PreviewTextInput="NumberValidationTextBox"></TextBox>
+                <TextBox AutomationProperties.AutomationId="FlsUdpPortTextBox"
+                         Grid.Row="4" Grid.Column="1" x:Name="TextUdpPort" BorderThickness="0" Margin="5"                             
+                         Text="{Binding UdpPort, Mode=TwoWay, ValidatesOnExceptions=True}" PreviewTextInput="NumberValidationTextBox"></TextBox>
             </Grid>
-
 
         </Grid>
         <Grid x:Name="panelSelectComputers" Grid.Row="2" Background="White" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
@@ -93,9 +94,8 @@
             </Grid.Resources>
 
             <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
-
-                <telerik:RadTreeView x:Name="domainTree" 
-                               
+                <telerik:RadTreeView AutomationProperties.AutomationId="AdTree"
+                                 x:Name="domainTree"                               
                                  SnapsToDevicePixels="True"
                                  IsOptionElementsEnabled="True"
                                  IsTriStateMode="True"

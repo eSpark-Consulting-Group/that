@@ -58,6 +58,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceProcess" />
@@ -117,6 +118,18 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>WaitingTime.settings</DependentUpon>
     </Compile>
+    <Compile Include="UIMaps\Details\UIMapValkyrieDetailsWindow.cs">
+      <DependentUpon>UIMapValkyrieDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\Details\UIMapValkyrieDetailsWindow.Designer.cs">
+      <DependentUpon>UIMapValkyrieDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanningWizard\UIMapActiveDirectory.cs">
+      <DependentUpon>UIMapActiveDirectory.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanningWizard\UIMapActiveDirectory.Designer.cs">
+      <DependentUpon>UIMapActiveDirectory.uitest</DependentUpon>
+    </Compile>
     <Compile Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.cs">
       <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
     </Compile>
@@ -141,10 +154,10 @@
     <Compile Include="UIMaps\UIMapCamCredentialsWindow.Designer.cs">
       <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\UIMapDetailsWindow.cs">
+    <Compile Include="UIMaps\Details\UIMapDetailsWindow.cs">
       <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\UIMapDetailsWindow.Designer.cs">
+    <Compile Include="UIMaps\Details\UIMapDetailsWindow.Designer.cs">
       <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapEula.cs">
@@ -214,11 +227,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>WaitingTime.Designer.cs</LastGenOutput>
     </None>
+    <None Include="UIMaps\Details\UIMapValkyrieDetailsWindow.uitest" />
+    <None Include="UIMaps\StartScanningWizard\UIMapActiveDirectory.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapWorkgroup.uitest" />
     <None Include="UIMaps\UIMapHelp.uitest" />
     <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
-    <None Include="UIMaps\UIMapDetailsWindow.uitest" />
+    <None Include="UIMaps\Details\UIMapDetailsWindow.uitest" />
     <None Include="UIMaps\UIMapEula.uitest" />
     <None Include="UIMaps\UIMapMain.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.uitest" />
