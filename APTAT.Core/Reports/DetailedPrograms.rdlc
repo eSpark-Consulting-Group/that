@@ -1153,9 +1153,17 @@
                         <Style />
                       </ChartDataLabel>
                       <Style>
-                        <Color>=IIF(Fields!BadFileType.Value = 0, "#ff9900", "Maroon")</Color>
+                        <Color>=Switch(
+						Fields!BadFileType.Value = 0, "#ffc000", 
+						Fields!BadFileType.Value = 1, "Maroon", 
+						Fields!BadFileType.Value = 2, "#c0c0c0",
+						Fields!BadFileType.Value = 3, "#0092ff")</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
-                        <BackgroundGradientEndColor>=IIF(Fields!BadFileType.Value = 0, "#ffc64c", "#c03a3a")</BackgroundGradientEndColor>
+                        <BackgroundGradientEndColor>=Switch(
+						Fields!BadFileType.Value = 0, "#ffecb2", 
+						Fields!BadFileType.Value = 1, "#993232", 
+						Fields!BadFileType.Value = 2, "#f2f2f2",
+						Fields!BadFileType.Value = 3, "#b2deff")</BackgroundGradientEndColor>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -2622,10 +2630,10 @@
           <DataField>Version</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-		<Field Name="InstancesTotalCount">
+        <Field Name="InstancesTotalCount">
           <DataField>InstancesTotalCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>		
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
