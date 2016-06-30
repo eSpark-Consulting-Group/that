@@ -569,6 +569,8 @@ namespace CodedUITestAT
         /// <param name="rowName">Set a unique row name.</param>
         private void ExpandAdRow(string rowName)
         {
+            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.
+                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = GetAdRootRowName();
             UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
                                                                                             SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
             UIMapActiveDirectory.ExpandAdRow();
@@ -578,9 +580,17 @@ namespace CodedUITestAT
         /// <param name="rowName">Set a unique row name.</param>
         private void CheckAdRow(string rowName)
         {
+            UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.
+                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = GetAdRootRowName();
             UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
                                                                                             SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
             UIMapActiveDirectory.CheckAdRow();
+        }
+
+        /// <summary> Gets root (domain controller) row name for Active Directory tree. </summary>
+        private string GetAdRootRowName()
+        {
+            return "DC=" + SysHelper.GetDomainName(true);
         }
 
         #endregion
@@ -1102,7 +1112,7 @@ namespace CodedUITestAT
             UIMapValkyrieDetailsWindow.ClickCloseButton();
             UIHelper.WaitForControlIsClickable(StartScanningButton());
         }
-
+        
         #endregion
 
         #region Test Context property

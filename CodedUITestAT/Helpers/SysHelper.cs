@@ -191,12 +191,16 @@ namespace CodedUITestAT
             return "WORKGROUP";
         }
 
-        /// <summary> Gets a current domain name. </summary>
+        /// <summary> Gets either absolute or relative domain name. </summary>
+        ///<param name="isRelative">Indicate whether the requested domain name should be relative.</param>
         /// <returns>A current domain name.</returns>
-        internal static string GetDomainName()
+        internal static string GetDomainName(bool isRelative = false)
         {
             Domain domain = Domain.GetComputerDomain();
-            return domain.Name;
+            string name = domain.Name;
+            if (isRelative) name = name.Remove(name.IndexOf("."));
+
+            return name;
         }
 
         /// <summary> Indicates whether a given remote machine is 64-bit using its registry. </summary>
@@ -306,7 +310,7 @@ namespace CodedUITestAT
             string newUnknownPath = GenerateUnknownFile();
             string fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, Path.GetFileName(newUnknownPath));
             string destination = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
-            File.Copy(newUnknownPath, destination, true);
+            File.Move(newUnknownPath, destination);
             UnknownFile unknown = new UnknownFile(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned), endpoint);
 
             return unknown;
