@@ -1890,7 +1890,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Name.Value + "(Instances: " + Fields!InstancesTotalCount + ")"</Value>
+                                      <Value>=Fields!Name.Value &amp; "(Instances: " &amp; Fields!InstancesTotalCount.Value &amp; ")"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>18pt</FontSize>

@@ -1955,7 +1955,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Name.Value</Value>
+                                      <Value>=Fields!Name.Value &amp; "(Instances: " &amp; Fields!InstancesTotalCount.Value &amp; ")"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>18pt</FontSize>
@@ -2333,7 +2333,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
@@ -2623,6 +2622,10 @@
           <DataField>Version</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+		<Field Name="InstancesTotalCount">
+          <DataField>InstancesTotalCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>		
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>APTAT.Core.Reports</rd:DataSetName>
