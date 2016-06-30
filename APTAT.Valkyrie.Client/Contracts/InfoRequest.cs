@@ -10,6 +10,12 @@ namespace Valkyrie.WebApiProvider.Contracts
 
         [JsonProperty("endpoint_id")]
         public Guid EndpointId{ get; set; }
+        
+        /// <summary>
+        /// Path of File on Origin, Optional
+        /// </summary>
+        [JsonProperty("file_path")]
+        public Guid FilePath { get; set; }
     }
 
 

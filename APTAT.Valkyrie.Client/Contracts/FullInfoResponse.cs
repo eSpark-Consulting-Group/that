@@ -35,8 +35,17 @@ namespace Valkyrie.WebApiProvider.Contracts
         [JsonProperty("presense")]
         public bool Presence { get; set; }
 
+        [JsonProperty("upload")]
+        public bool Upload { get; set; }
+
         [JsonProperty("return_code")]
         public int ReturnCode { get; set; }
+
+        [JsonProperty("result_description")]
+        public string ResultDescription { get; set; }
+
+        [JsonProperty("result_message")]
+        public string ResultMessage { get; set; }
 
         [JsonProperty("sha1")]
         public string SHA1 { get; set; }
@@ -52,6 +61,13 @@ namespace Valkyrie.WebApiProvider.Contracts
 
         [JsonProperty("white_listed")]
         public bool WhiteListed { get; set; }
+        
+        [JsonProperty("category_ids")]
+        public FileCategories[] CategoryIds { get; set; }
+
+        public string file_name { get; set; }
+
+        public string file_path { get; set; }
     }
 
     

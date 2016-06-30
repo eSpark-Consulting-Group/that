@@ -176,7 +176,8 @@ namespace Valkyrie.WebApiProvider
                 }
                 byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Started for API_KEY = {1}", DateTime.UtcNow, apiUri.ToString() + " " + responseEncoded));
+                //Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Call {1}", DateTime.UtcNow, apiUri.ToString()));
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Call {1}", DateTime.UtcNow, apiUri.ToString() + " " + Environment.NewLine + responseEncoded));
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;
             }

@@ -14,12 +14,22 @@ namespace Valkyrie.WebApiProvider.Enums
         Adware = 102,
         [Description("Potentially Unwanted Program")]
         PUP = 103,
+        [Description("Programming Tool")]
         ProgrammingTool = 104,
+        
         Finance = 105,
+        
         Utilities = 106,
+        
+        [Description("Software Tool")]
         SoftwareTool = 107,
+        
+        [Description("Networking Software")]        
         NetworkingSoftware = 108,
+
+        [Description("Business Software")]
         BusinessSoftware = 109,
+
         ManufacturingTools = 110,
         SocialNetworks = 111,
         P2PApplications = 112,
