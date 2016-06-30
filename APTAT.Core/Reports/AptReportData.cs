@@ -117,6 +117,16 @@ namespace APTAT.Core.Reports
             }
         }
 
+        public int NotAnalyzedFilesCount
+        {
+            get
+            {
+                if (_errorFileCount == -1 || _noVerdictFileCount == -1)
+                    CalculateTotal();
+                return _errorFileCount + _noVerdictFileCount;
+            }
+        }
+
 
         public int NoVerdictFilesCount
         {
@@ -286,7 +296,7 @@ namespace APTAT.Core.Reports
                 new FileRatingValkyrieInfo (){CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = "Unknown Programs"},                
                 new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" },
                 new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" },
-                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = FailedToAnalyzeFilesCount, Value = "Not Analysed" }                
+                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Not Analysed" }                
             };
 
             return itemRatingInfoList.ToArray();
@@ -399,8 +409,9 @@ namespace APTAT.Core.Reports
                     devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 if (scanResult.MalwareFilesCount > 0)
                     devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                if (scanResult.FailedToAnalyzeFilesCount > 0)
-                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.FailedToAnalyzeFilesCount, BadFileType = "Not Analysed", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                if (scanResult.NotAnalyzedFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount,
+                        BadFileType = "Not Analysed", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 if (scanResult.PendingAnalysisFilesCount > 0)
                     devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.PendingAnalysisFilesCount, BadFileType = "Pending", Name = scanResult.HostName, Uid = scanResult.TargetUid });
             }
@@ -786,6 +797,7 @@ namespace APTAT.Core.Reports
                 _malwareFilesCount = value;
             }
         }
+        public int NotAnalyzedFilesCount { get { return FailedToAnalyzeFilesCount + NoVerdictFilesCount; } }
         public int FailedToAnalyzeFilesCount { get; set; }
         public int NoVerdictFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }

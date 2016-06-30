@@ -976,7 +976,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!FailedToAnalyzeFilesCount.Value, "AptReportDataSet")</Value>
+                    <Value>=First(Fields!NotAnalyzedFilesCount.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -1491,7 +1491,7 @@
         <Width>14.72458cm</Width>
         <ZIndex>3</ZIndex>
         <Visibility>
-          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!FailedToAnalyzeFilesCount.Value, "AptReportDataSet")+ First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
+          <Hidden>=IIF((First(Fields!UnknownFilesFound.Value, "AptReportDataSet") + First(Fields!NotAnalyzedFilesCount.Value, "AptReportDataSet")+ First(Fields!MalwareFilesFound.Value, "AptReportDataSet")) &gt; 0, False, True)</Hidden>
         </Visibility>
         <Style>
           <Border>
@@ -2336,7 +2336,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!FailedToAnalyzeFilesCount.Value</Value>
+                                      <Value>=Fields!NotAnalyzedFilesCount.Value</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -2897,6 +2897,10 @@
           <DataField>FailedToAnalyzeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+		<Field Name="NotAnalyzedFilesCount">
+          <DataField>NotAnalyzedFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="PendingAnalysisFilesCount">
           <DataField>PendingAnalysisFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -3045,6 +3049,10 @@
         </Field>
         <Field Name="FailedToAnalyzeFilesCount">
           <DataField>FailedToAnalyzeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+		<Field Name="NotAnalyzedFilesCount">
+          <DataField>NotAnalyzedFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="PendingAnalysisFilesCount">

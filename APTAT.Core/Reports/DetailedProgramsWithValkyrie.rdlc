@@ -982,7 +982,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!TotalErrorFilesCount.Value, "AptReportDataSet")</Value>
+                    <Value>=First(Fields!NotAnalyzedFilesCount.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -2680,6 +2680,10 @@
         </Field>
         <Field Name="FailedToAnalyzeFilesCount">
           <DataField>FailedToAnalyzeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+		<Field Name="NotAnalyzedFilesCount">
+          <DataField>NotAnalyzedFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="PendingAnalysisFilesCount">
