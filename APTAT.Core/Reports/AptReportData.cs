@@ -431,7 +431,7 @@ namespace APTAT.Core.Reports
                               new MostWantedBadFileInfo()
                               {
                                   BadFileType = file.FileType,
-                                  Count = file.Targets.Sum(t => t.BadFileInstances.Count),
+                                  Count = file.InstancesTotalCount,
                                   Hash = file.Sha1,
                                   Name = file.Name
                               }).Take(10);
@@ -705,7 +705,7 @@ namespace APTAT.Core.Reports
 
             //return (from file in globallyUniqueFiles.Values orderby file.Targets.Count descending select file).ToArray();
             return (isUniqueSetOfFiles ? allUniqueBadFiles : allNonUniqueBadFiles)
-                .OrderByDescending(file => file.Targets.Sum(t => t.BadFileInstances.Count)).ThenBy(file => file.Name).ToArray();
+                .OrderByDescending(file => file.InstancesTotalCount).ThenBy(file => file.Name).ToArray();
         }
 
         public List<FileResult> ValkyrieAnalysisResult { get; set; }
@@ -976,6 +976,13 @@ namespace APTAT.Core.Reports
             get { return _targets; }
         }
 
+        public int InstancesTotalCount 
+        {
+            get 
+            {
+                return _targets.Sum(t => t.BadFileInstances.Count);
+            }
+        }
         public class BadFileInstanceInfo
         {
             public BadFileInstanceInfo()

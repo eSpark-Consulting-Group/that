@@ -1890,7 +1890,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Name.Value</Value>
+                                      <Value>=Fields!Name.Value + "(Instances: " + Fields!InstancesTotalCount + ")"</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>18pt</FontSize>
@@ -2682,7 +2682,7 @@
           <DataField>FailedToAnalyzeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-		<Field Name="NotAnalyzedFilesCount">
+        <Field Name="NotAnalyzedFilesCount">
           <DataField>NotAnalyzedFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
@@ -2859,6 +2859,10 @@
         <Field Name="WhiteListed">
           <DataField>WhiteListed</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="InstancesTotalCount">
+          <DataField>InstancesTotalCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
