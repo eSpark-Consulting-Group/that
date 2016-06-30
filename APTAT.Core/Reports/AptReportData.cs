@@ -167,7 +167,7 @@ namespace APTAT.Core.Reports
                     return AptRiskAssessmentLevel.Unknown;
                 if (MalwareFilesFound > 0)
                     return AptRiskAssessmentLevel.High;
-                if (UnknownFilesFound > 0 || FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0)
+                if (UnknownFilesFound > 0 || FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0 || PendingAnalysisFilesCount > 0)
                     return AptRiskAssessmentLevel.Medium;
                 return AptRiskAssessmentLevel.Ok;
             }
