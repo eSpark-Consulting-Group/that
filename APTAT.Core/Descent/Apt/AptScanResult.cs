@@ -37,6 +37,11 @@ namespace APTAT.Core.Descent.Apt
         }
         public int EmptyFilesCount { get; set; }
 
+        public int NotAnalyzedFilesCount
+        {
+            get { return FailedToAnalyzeFilesCount + NoVerdictFilesCount; }
+        }
+
         public int FailedToAnalyzeFilesCount { get; set; }       
         public int NoVerdictFilesCount { get; set; }
         public int PendingAnalysisFilesCount { get; set; }
