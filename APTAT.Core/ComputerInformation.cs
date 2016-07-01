@@ -157,10 +157,11 @@ namespace APTAT.Core
 
         private void UpdateStatus()
         {
-            if (TotalDistinctCount == 0)
-                return;
-
-            int malwareCount = 0, unknownCount = 0, failedCount = 0, pendingCount = 0, distinctCount = 0;
+            int malwareCount = 0, 
+                unknownCount = 0, 
+                failedCount = 0, 
+                pendingCount = 0, 
+                distinctCount = 0;
 
             for (int i = 0; i < Files.Count; i++)
             {
@@ -176,9 +177,11 @@ namespace APTAT.Core
             }
 
             if (Files.Count >= TotalCount)
+            {
                 StatusText = string.Format("Completed: Total programs scanned: {0}. Unknown programs found: {1}. Malwares found: {2}.",
                     Files.Count, unknownCount, malwareCount);
-            else
+            }
+            else if (TotalDistinctCount > 0)
             {
                 distinctCount = DistinctCount;
                 StatusText = string.Format("{0} programs scanned ({3}). Unknown programs found: {1}. Malwares found: {2}.",
