@@ -33,7 +33,7 @@ namespace APTAT.Application.Converters
                 return FailedBrush;
             }
 
-            if (item.Equals(new ScanStatus(ScanStatusEnum.Cancelled)))
+            if (item.Equals(new ScanStatus(ScanStatusEnum.Canceled)))
             {
                 return CanceledBrush;
             }

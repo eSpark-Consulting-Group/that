@@ -73,7 +73,7 @@ namespace APTAT.Application.Extensions
                 int i = Int32.Parse(((TextBox)sender).Text + e.Text);
                 e.Handled = (i > 65535 || i < 1);                
             }
-            catch (Exception ex)
+            catch
             {
                 e.Handled = true;                
             }           

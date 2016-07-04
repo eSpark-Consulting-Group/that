@@ -125,9 +125,9 @@ namespace APTAT.Application
         {
             e.ItemsSource = new[]
             {
-                new ScanStatus(ScanStatusEnum.Cancelled),
-                new ScanStatus(ScanStatusEnum.Completed),
                 new ScanStatus(ScanStatusEnum.InProgress),
+                new ScanStatus(ScanStatusEnum.Canceled),
+                new ScanStatus(ScanStatusEnum.Completed),
                 new ScanStatus(ScanStatusEnum.Failed),
                 new ScanStatus(ScanStatusEnum.Offline)
             };

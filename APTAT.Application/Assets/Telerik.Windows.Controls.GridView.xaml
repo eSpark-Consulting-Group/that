@@ -316,20 +316,20 @@
 	</DataTemplate>
 
 	<ControlTemplate x:Key="FilteringControlTemplate" TargetType="grid:FilteringControl">
-		<Border BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"
+		<Border BorderThickness="{TemplateBinding BorderThickness}" Background="White"
 				Margin="{TemplateBinding Margin}" 
-				CornerRadius="1" 
+				CornerRadius="0" 
 				BorderBrush="{TemplateBinding BorderBrush}">
 			<Grid>
-				<StackPanel MinWidth="200" MaxWidth="350" Margin="{TemplateBinding Padding}" 
+				<StackPanel MinWidth="180" MaxWidth="360" Margin="{TemplateBinding Padding}" 
 							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
 					<StackPanel x:Name="PART_DistinctFilter" Visibility="{TemplateBinding DistinctFiltersVisibility}">
 						<CheckBox x:Name="PART_SelectAllCheckBox"
 								  IsChecked="{Binding SelectAll, Mode=TwoWay}"
-								  Margin="0,2"
+								  Margin="0,2" 
 								  telerik:LocalizationManager.ResourceKey="GridViewFilterSelectAll"
-								  telerik:StyleManager.Theme="{StaticResource Theme}"/>
+								  telerik:StyleManager.Theme="{StaticResource Theme}" Visibility="Collapsed"/>
 
 
 						<ListBox x:Name="PART_DistinctValuesList"
@@ -337,7 +337,7 @@
 								 telerik:StyleManager.Theme="{StaticResource Theme}"
 								 ScrollViewer.HorizontalScrollBarVisibility="Auto"
 							ItemContainerStyle="{StaticResource DistinctValueListBoxItemStyle}"
-								 SelectionMode="Multiple">
+								 SelectionMode="Multiple" BorderThickness="0" Background="Transparent">
 							<ListBox.ItemsPanel>
 								<ItemsPanelTemplate>
 									<VirtualizingStackPanel  MaxHeight="242"/>
@@ -346,10 +346,10 @@
 						
 							<ListBox.ItemTemplate>
 								<DataTemplate>
-									<CheckBox IsChecked="{Binding IsActive, Mode=TwoWay}"
+									<CheckBox IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0"
 											  Content="{Binding ConvertedValue, Converter={StaticResource DistinctValueConverter}}"
-											  VerticalContentAlignment="Center"
-											  telerik:StyleManager.Theme="{StaticResource Theme}"/>
+											  
+											  telerik:StyleManager.Theme="{StaticResource Theme}" VerticalContentAlignment="Top" Padding="6 -2 0 0" FontFamily="Segoe UI Light" FontSize="13"/>
 								</DataTemplate>
 							</ListBox.ItemTemplate>
 						</ListBox>
@@ -398,12 +398,12 @@
 								telerik:LocalizationManager.ResourceKey="GridViewFilter"
 								telerik:StyleManager.Theme="{StaticResource Theme}" />
 						<Button x:Name="PART_ClearFilterButton" Grid.Column="1"
-								Margin="2,2,0,2" Height="22"
+								Margin="0 2 -5 5" 
 								telerik:LocalizationManager.ResourceKey="GridViewClearFilter"
-								telerik:StyleManager.Theme="{StaticResource Theme}" />
+								Height="23" Width="75" />
 					</Grid>
 				</StackPanel>
-				<telerik:RadButton x:Name="PART_FilterCloseButton"  Grid.Column="1" Margin="{TemplateBinding Padding}"  HorizontalAlignment="Right" VerticalAlignment="Top" telerik:StyleManager.Theme="{StaticResource Theme}" Width="13" Height="13">
+				<telerik:RadButton x:Name="PART_FilterCloseButton" Visibility="Collapsed"  Grid.Column="1" Margin="{TemplateBinding Padding}"  HorizontalAlignment="Right" VerticalAlignment="Top" telerik:StyleManager.Theme="{StaticResource Theme}" Width="13" Height="13">
 					<Path Fill="{StaticResource StrongBrush}"
 									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 									VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
