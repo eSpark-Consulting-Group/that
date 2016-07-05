@@ -447,7 +447,13 @@ namespace APTAT.Core.Descent
 
 		    public void Release()
 			{
-				DeleteDescentAgentService();
+		        try
+		        {
+                    DeleteDescentAgentService();
+                }
+                catch (Exception)
+		        {
+		        }
 				_serviceHelper.Release();
 				
                 // Remove file system content
@@ -594,6 +600,7 @@ namespace APTAT.Core.Descent
 
                     try
                     {
+                        bool isServiceRunning = _serviceHelper.IsServiceRunning();
                         using (FileStream fs = new FileStream(_responseFilePathForCurrentComputer, FileMode.Open,
                                 FileAccess.Read, FileShare.ReadWrite))
                         {
@@ -678,7 +685,7 @@ namespace APTAT.Core.Descent
 
                             EnAptStage status = (EnAptStage) statusInt;
 
-                            if (!_serviceHelper.IsServiceRunning() && status != EnAptStage.EnApt_Complete &&
+                            if (!isServiceRunning && status != EnAptStage.EnApt_Complete &&
                                 status != EnAptStage.EnApt_Failed)
                                 throw new DescentException(DescentStatus.status_error, "scanner was crashed.", 0);
 
