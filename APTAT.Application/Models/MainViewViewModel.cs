@@ -658,10 +658,14 @@ namespace APTAT.Application.Models
                 if (webException != null)
                     HandleWebException(webException);
             }
+            else
+            {
+                IsValkyrieReportEnabled = true;
 
-            MergeResults(e.Result);
+                MergeResults(e.Result);
 
-            CopyMalwaresFromScanResults();
+                CopyMalwaresFromScanResults();
+            }
 
             _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
             _cacheValkyrieComputers = new Collection<ComputerInformation>(ComputersValkyrie);
@@ -675,7 +679,6 @@ namespace APTAT.Application.Models
             Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
             IsAnalyseWithValkyrieEnabled = false;
-            IsValkyrieReportEnabled = true;
             IsValkyrieAnalysCompleted = true;
 
             RaisePropertyChanged("Header");
