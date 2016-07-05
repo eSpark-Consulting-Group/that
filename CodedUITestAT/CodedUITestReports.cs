@@ -1,0 +1,183 @@
+﻿using System;
+using System.IO;
+using Microsoft.VisualStudio.TestTools.UITesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UITest.Extension;
+using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
+using CodedUITestAT.UIMaps.UIMapReportsClasses;
+
+namespace CodedUITestAT
+{
+    /// <summary> Tests for reports. </summary>
+    [CodedUITest]
+    public class CodedUITestReports
+    {
+        public CodedUITestReports()
+        {
+        }
+
+        #region UIMap properties
+
+        public UIMapReports UIMapReports
+        {
+            get
+            {
+                if ((this.mapReports == null))
+                {
+                    this.mapReports = new UIMapReports();
+                }
+
+                return this.mapReports;
+            }
+        }
+        private UIMapReports mapReports;
+
+        #endregion
+
+        #region Initialize and cleanup
+
+        [TestInitialize]
+        public void ATTestInitialize()
+        {
+            SysHelper.StartApplication(DataHelper.GetEndpoint());
+
+            CodedUITestEula useEula = new CodedUITestEula();
+            CodedUITestMain useMain = new CodedUITestMain();
+            useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
+            useEula.UIMapEula.ClickContinueButton();
+
+            UIHelper.WaitForControlIsEnabled(useMain.StartScanningButton());
+        }
+
+        [TestCleanup]
+        public void ATTestCleanup()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+
+            SysHelper.StopApplication();
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+        }
+
+        #endregion
+
+        #region Control methods
+
+        private WpfButton ShowInFolderButton()
+        {
+            return UIMapReports.UIUnknownFileHunterWindow.UIReportWindowCustom.UIRadToolBarToolBar1.UISystemWindowsControlButton;
+        }
+
+        #endregion
+
+        #region Local helper methods
+
+        /// <summary> Asserts whether an opened report pdf-view contains a given text. </summary>        
+        /// <param name="textToFind">Set a text to find in the report pdf-view.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void AssertReportPdfViewContains(string textToFind, TestContext testContext)
+        {
+            UIMapReports.AssertReportPdfViewerTextContainsExpectedValues.UIReportPdfViewerEditText = textToFind;
+            UIMapReports.AssertReportPdfViewerTextContains();
+            testContext.WriteLine(String.Format("Opened report pdf-view contains text: '{0}'.", textToFind));
+        }
+
+        /// <summary> Asserts a given report pdf-view title. </summary>
+        /// <param name="report">Set a report.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void AssertReportPdfViewTitle(Report report, TestContext testContext)
+        {
+            UIMapReports.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText = report.Title;
+            UIMapReports.AssertReportTitle();
+            testContext.WriteLine(String.Format("Opened report pdf-view title '{0}' is correct.\n", report.Title));
+        }
+
+        /// <summary> Waits for a report pdf-viewer screen. </summary>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void WaitForReportViewer(TestContext testContext)
+        {
+            UIHelper.WaitForControl(ShowInFolderButton());
+            UIHelper.WaitForControlIsClickable(ShowInFolderButton());
+            testContext.WriteLine("Report pdf-viewer screen appeared...");
+        }
+
+        /// <summary> Checks whether a given report file exists. </summary>
+        /// <param name="report">Set a report.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void CheckReportFile(Report report, TestContext testContext)
+        {
+            if (report.IsThereReportFile()) testContext.WriteLine(String.Format("Report file '{0}' created after '{1}' exists.\n", report.FileNamePattern, report.ExpectedCreationTime));
+            else Assert.Fail(String.Format("Report file '{0}' created after '{1}' does not exist!", report.FileNamePattern, report.ExpectedCreationTime));        
+        }
+
+        /// <summary> Performs a common report test. </summary>
+        /// <param name="report">Set a report.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void CommonReportTest(Report report, TestContext testContext)
+        {
+            CheckReportFile(report, TestContext);
+            AssertReportPdfViewTitle(report, TestContext);
+            AssertReportPdfViewContains(report.Title, TestContext);
+
+            if (report.Type == ReportType.ExecutiveValkyrie || report.Type == ReportType.PerDeviceValkyrie || report.Type == ReportType.PerProgramValkyrie) 
+                AssertReportPdfViewContains(Settings.Reports.Default.ValkyrieOnlyVerdict, TestContext);
+        }
+
+        #endregion
+
+        #region Test methods
+
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        public void BuildBothExecutiveReportsTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            CodedUITestMain useMain = new CodedUITestMain();
+            
+            useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            useMain.WaitForScanCompleted(ScanType.Quick);
+            useMain.UIMapScanCompletedWindow.ClickCancelButton();
+            
+            Report report = new Report(ReportType.Executive, DateTime.Now); // Notes the time of report creation
+            UIMapReports.ClickReportsDropDownButton();
+            UIMapReports.SelectExecutiveMenuItem();
+            WaitForReportViewer(TestContext);
+
+            CommonReportTest(report, TestContext);
+            UIMapReports.ClickCloseReportButton();
+
+            useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
+            useMain.InputCamCredentials(TestContext);
+            useMain.WaitForValkyrieResults(TestContext);
+            
+            report = new Report(ReportType.ExecutiveValkyrie, DateTime.Now); // Notes the time of report creation
+            UIMapReports.ClickReportsDropDownButton();
+            UIMapReports.SelectExecutiveValkyrieMenuItem();
+            WaitForReportViewer(TestContext);
+
+            CommonReportTest(report, TestContext);
+            UIMapReports.ClickCloseReportButton();
+
+            UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
+        }
+
+        #endregion
+
+        #region Test Context property
+
+        public TestContext TestContext
+        {
+            get
+            {
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
+            }
+        }
+        private TestContext testContextInstance;
+
+        #endregion
+    }
+}

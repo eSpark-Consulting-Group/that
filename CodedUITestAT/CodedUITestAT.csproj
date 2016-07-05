@@ -77,12 +77,16 @@
     <Compile Include="BusinessObjects\Files\Malware.cs" />
     <Compile Include="BusinessObjects\Files\Threat.cs" />
     <Compile Include="BusinessObjects\Files\UnknownFile.cs" />
+    <Compile Include="BusinessObjects\IRow.cs" />
     <Compile Include="BusinessObjects\MouseClick.cs" />
+    <Compile Include="BusinessObjects\Reports\Report.cs" />
+    <Compile Include="BusinessObjects\Reports\ReportType.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="BusinessObjects\Computers\ScanType.cs" />
     <Compile Include="CodedUITestHelp.cs" />
     <Compile Include="CodedUITestEula.cs" />
     <Compile Include="CodedUITestMain.cs" />
+    <Compile Include="CodedUITestReports.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\SysHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
@@ -92,6 +96,11 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>General.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Reports.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Reports.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings\Results.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -178,6 +187,12 @@
     <Compile Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.Designer.cs">
       <DependentUpon>UIMapStartScanningWizard.uitest</DependentUpon>
     </Compile>
+    <Compile Include="UIMaps\UIMapReports.cs">
+      <DependentUpon>UIMapReports.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapReports.Designer.cs">
+      <DependentUpon>UIMapReports.uitest</DependentUpon>
+    </Compile>
     <Compile Include="UIMaps\UIMapResultsWindow.cs">
       <DependentUpon>UIMapResultsWindow.uitest</DependentUpon>
     </Compile>
@@ -206,6 +221,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>General.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Settings\Reports.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
     </None>
     <None Include="Settings\Results.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -237,6 +256,7 @@
     <None Include="UIMaps\UIMapEula.uitest" />
     <None Include="UIMaps\UIMapMain.uitest" />
     <None Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.uitest" />
+    <None Include="UIMaps\UIMapReports.uitest" />
     <None Include="UIMaps\UIMapResultsWindow.uitest" />
     <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
     <None Include="UIMaps\UIMapStopScanWindow.uitest" />

@@ -106,6 +106,31 @@ namespace CodedUITestAT
             return processes;
         }
 
+        /// <summary> Gets a given local process location. </summary>
+        /// <param name="processName">Set a process name.</param>
+        internal static string GetProcessLocation(string processName)
+        {
+            string location = null;
+            string wmiQuery = "SELECT ProcessId, ExecutablePath FROM Win32_Process";
+
+            using (var searcher = new ManagementObjectSearcher(wmiQuery))
+            using (var results = searcher.Get())
+            {
+                var query = from proc in Process.GetProcesses()
+                            join mo in results.Cast<ManagementObject>()
+                            on proc.Id equals (int) (uint) mo["ProcessId"]
+                            select new
+                            {
+                                Process = proc,
+                                Path = (string) mo["ExecutablePath"]
+                            };
+
+                foreach (var item in query) if (item.Process.ProcessName == processName) location = item.Path;
+            }
+
+            return location;
+        }
+
         #endregion
 
         #region Service-related methods
@@ -305,7 +330,7 @@ namespace CodedUITestAT
         /// <summary>Copies an unknown file to a given endpoint for a Quick Scan. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
         /// <returns>Returns an unknown file.</returns>
-        internal static UnknownFile CopyUnknownFileForQuickScan(Computer endpoint)
+        internal static UnknownFile AddUnknownFileForQuickScan(Computer endpoint)
         {
             string newUnknownPath = GenerateUnknownFile();
             string fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, Path.GetFileName(newUnknownPath));
@@ -348,6 +373,12 @@ namespace CodedUITestAT
             }
 
             return newFilePath;
+        }
+
+        /// <summary> Gets a directory containing the product files. </summary>
+        internal static string GetProductDirectory()
+        {
+            return Path.GetDirectoryName(SysHelper.GetProcessLocation(Settings.General.Default.ATApplicationProcessName));
         }
 
         #endregion

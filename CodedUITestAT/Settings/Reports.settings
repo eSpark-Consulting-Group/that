@@ -1,0 +1,42 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CodedUITestAT.Settings" GeneratedClassName="Reports">
+  <Profiles />
+  <Settings>
+    <Setting Name="ReportFilesExtension" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.pdf</Value>
+    </Setting>
+    <Setting Name="ExecutiveReportFileNameBeginning" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ExecutiveAptReport</Value>
+    </Setting>
+    <Setting Name="ReportFilesEndingPattern" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">-{0}T*</Value>
+    </Setting>
+    <Setting Name="PerDeviceReportFileNameBeginning" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DetailedPerDeviceAptReport</Value>
+    </Setting>
+    <Setting Name="PerProgramReportFileNameBeginning" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DetailedPerProgramAptReport</Value>
+    </Setting>
+    <Setting Name="ExecutiveValkyrieReportFileNameBeginning" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ExecutiveAptReportValkyrie</Value>
+    </Setting>
+    <Setting Name="PerDeviceValkyrieReportFileNameBeginning" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DetailedPerDeviceAptReportValkyrie</Value>
+    </Setting>
+    <Setting Name="PerProgramValkyrieReportFileNameBeginning" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DetailedPerProgramAptReportValkyrie</Value>
+    </Setting>
+    <Setting Name="ExecutiveReportTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Executive Report</Value>
+    </Setting>
+    <Setting Name="PerDeviceReportTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Detailed Report per Device</Value>
+    </Setting>
+    <Setting Name="PerProgramReportTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Detailed Report per Program</Value>
+    </Setting>
+    <Setting Name="ValkyrieOnlyVerdict" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">In Analysis</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

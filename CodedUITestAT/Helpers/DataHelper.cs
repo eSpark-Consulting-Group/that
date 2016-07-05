@@ -21,6 +21,7 @@ namespace CodedUITestAT
         internal static readonly string Username = Environment.GetEnvironmentVariable("_ServerLogin", EnvironmentVariableTarget.Machine);
         internal static readonly string Password = Environment.GetEnvironmentVariable("_ServerPassword", EnvironmentVariableTarget.Machine);
         //internal static readonly string Username = @"administrator";
+        //internal static readonly string Password = @"test";
         
         internal static readonly string EncryptedPassword = Playback.EncryptText(Password);
 

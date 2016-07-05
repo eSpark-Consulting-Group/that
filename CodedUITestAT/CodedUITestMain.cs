@@ -414,7 +414,7 @@ namespace CodedUITestAT
 
         /// <summary> Waits until the Valkyrie results are received. </summary>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void WaitForValkyrieResults(TestContext testContext)
+        internal void WaitForValkyrieResults(TestContext testContext)
         {
             int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
             UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
@@ -456,9 +456,9 @@ namespace CodedUITestAT
         /// <param name="endpoint">Set an endpoint.</param>
         /// <param name="scanType">Set a scan type.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void StartEndpointScan(Computer endpoint, ScanType scanType, TestContext testContext)
+        internal void StartEndpointScan(Computer endpoint, ScanType scanType, TestContext testContext)
         {
-            StartEndpointScan(endpoint, scanType, DataHelper.Username, DataHelper.Password, TestContext);
+            StartEndpointScan(endpoint, scanType, DataHelper.Username, DataHelper.Password, testContext);
         }
 
         /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch using set credentials. Starts at main screen. </summary>
@@ -499,7 +499,7 @@ namespace CodedUITestAT
 
         /// <summary> Waits for Scan Completed window. </summary>
         /// <param name="scanType">Set a scan type.</param>
-        private void WaitForScanCompleted(ScanType scanType)
+        internal void WaitForScanCompleted(ScanType scanType)
         {
             int waitTime;
 
@@ -541,7 +541,7 @@ namespace CodedUITestAT
 
         /// <summary> Inputs CAM credentials at the respective popup window. </summary>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void InputCamCredentials(TestContext testContext)
+        internal void InputCamCredentials(TestContext testContext)
         {
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
             testContext.WriteLine("CAM Credentials window appeared...\n");
@@ -602,7 +602,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.CopyUnknownFileForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
@@ -659,7 +659,7 @@ namespace CodedUITestAT
             Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.CopyUnknownFileForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
             
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -895,7 +895,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.CopyUnknownFileForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
             string partialNameInput = endpoint.Name.Substring(1, (int) ((endpoint.Name.Length - 1) / 2));
             string error = "error";
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -962,7 +962,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.CopyUnknownFileForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
 
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -1048,7 +1048,7 @@ namespace CodedUITestAT
             AssertPanelCountersData(0, 1, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            UnknownFile unknown = SysHelper.CopyUnknownFileForQuickScan(endpoint);
+            UnknownFile unknown = SysHelper.AddUnknownFileForQuickScan(endpoint);
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
@@ -1074,7 +1074,7 @@ namespace CodedUITestAT
             Computer endpoint = DataHelper.GetEndpoint();
             string domainName = SysHelper.GetDomainName();
             Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.CopyUnknownFileForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
 
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1092,8 +1092,9 @@ namespace CodedUITestAT
 
             ExpandAdRow("Computers");
             CheckAdRow(endpoint.Name);
-
             UIMapStartScanningWizard.ClickQuickScanButton();
+            TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}' from domain '{1}'...", endpoint.Name, domainName));
+
             WaitForScanCompleted(ScanType.Quick);
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickOkButton();
@@ -1105,7 +1106,7 @@ namespace CodedUITestAT
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Valkyrie analysis results' screen.\n", endpoint.Name));
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, malware, MouseClick.DoubleLeft);
-            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
+            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Name));
             
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();

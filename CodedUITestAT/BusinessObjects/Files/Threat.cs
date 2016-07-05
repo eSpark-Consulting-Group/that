@@ -9,14 +9,14 @@ using System.Security.Cryptography.X509Certificates;
 namespace CodedUITestAT
 {
     /// <summary> Represents a general threat. </summary>
-    internal abstract class Threat
+    internal abstract class Threat : IRow
     {
         /// <summary> A threat name. </summary>
         internal string Name { get { return _name; } }
         /// <summary> A threat location. </summary>
         internal string Location { get { return _location; } }
         /// <summary> A threat row name at application UI. </summary>
-        internal string RowName { get { return _rowName; } }
+        public string RowName { get { return _rowName; } }
         /// <summary> A threat size in kbytes. </summary>
         internal long Size { get { return _size; } }
         /// <summary> A threat size in kbytes. </summary>
