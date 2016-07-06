@@ -65,7 +65,7 @@ namespace CodedUITestAT
         private WpfButton ShowInFolderButton()
         {
             return UIMapReports.UIUnknownFileHunterWindow.UIReportWindowCustom.UIRadToolBarToolBar1.UISystemWindowsControlButton;
-        }
+        }        
 
         #endregion
 
@@ -95,7 +95,7 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private void WaitForReportViewer(TestContext testContext)
         {
-            UIHelper.WaitForControl(ShowInFolderButton());
+            UIHelper.WaitForControl(ShowInFolderButton(), Settings.WaitingTime.Default.ReportCreationWaitTime);
             UIHelper.WaitForControlIsClickable(ShowInFolderButton());
             testContext.WriteLine("Report pdf-viewer screen appeared...");
         }
@@ -142,6 +142,7 @@ namespace CodedUITestAT
             UIMapReports.ClickReportsDropDownButton();
             UIMapReports.SelectExecutiveMenuItem();
             WaitForReportViewer(TestContext);
+            report.WaitForReportFile();
 
             CommonReportTest(report, TestContext);
             UIMapReports.ClickCloseReportButton();
@@ -154,6 +155,7 @@ namespace CodedUITestAT
             UIMapReports.ClickReportsDropDownButton();
             UIMapReports.SelectExecutiveValkyrieMenuItem();
             WaitForReportViewer(TestContext);
+            report.WaitForReportFile();
 
             CommonReportTest(report, TestContext);
             UIMapReports.ClickCloseReportButton();

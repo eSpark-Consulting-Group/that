@@ -76,5 +76,14 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["FullScanWaitTime"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30000")]
+        public int ReportCreationWaitTime {
+            get {
+                return ((int)(this["ReportCreationWaitTime"]));
+            }
+        }
     }
 }

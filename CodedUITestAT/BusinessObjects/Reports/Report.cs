@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UITesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CodedUITestAT
 {
@@ -66,7 +69,7 @@ namespace CodedUITestAT
             return IsThereReportFile(_containingDirectory, _fileNamePattern, _expectedCreationTime);
         }
         
-        /// <summary> Determines whether the report file exists. </summary>
+        /// <summary> Determines whether the report file exists using its creation time as a criterion. </summary>
         /// <param name="reportDirectory">Set the report directory.</param>
         /// <param name="searchPattern">Set the report file search pattern.</param>
         /// <param name="expectedCreationTime">Set the report file expected time.</param>
@@ -74,14 +77,25 @@ namespace CodedUITestAT
         {
            string[] files = Directory.GetFiles(reportDirectory, searchPattern);
 
-
-           foreach (string file in files)
-           {   
-               var dt = File.GetCreationTime(file);
-               var t = File.GetCreationTime(file).CompareTo(expectedCreationTime);
-               if (File.GetCreationTime(file).CompareTo(expectedCreationTime) >= 0) return true;
-           }
+           if (files.Length > 0)
+               foreach (string file in files) if (File.GetCreationTime(file).CompareTo(expectedCreationTime) >= 0) return true;
+           
            return false;
+        }
+        
+        /// <summary> Waits for a report file creation. </summary>
+        internal void WaitForReportFile()
+        {
+            var timer = Stopwatch.StartNew();
+            for (; ; )
+            {
+                Playback.Wait(1000);
+                if (IsThereReportFile()) break;
+
+                if ( (int) timer.ElapsedMilliseconds > Settings.WaitingTime.Default.ReportCreationWaitTime)
+                    throw new Exception(String.Format("There is no report file after {1} seconds!", Settings.WaitingTime.Default.ReportCreationWaitTime / 1000));
+            }
+            timer.Stop();
         }
 
         private ReportType _type;

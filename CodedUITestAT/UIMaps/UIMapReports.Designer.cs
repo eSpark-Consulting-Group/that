@@ -43,6 +43,32 @@ namespace CodedUITestAT.UIMaps.UIMapReportsClasses
         }
         
         /// <summary>
+        /// AssertReportTitle - Use 'AssertReportTitleExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertReportTitle()
+        {
+            #region Variable Declarations
+            WpfText uIExecutiveReportText = this.UIUnknownFileHunterWindow.UIExecutiveReportText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Executive Report' label equals 'Executive Report'
+            Assert.AreEqual(this.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText, uIExecutiveReportText.DisplayText);
+        }
+        
+        /// <summary>
+        /// ClickCloseReportButton
+        /// </summary>
+        public void ClickCloseReportButton()
+        {
+            #region Variable Declarations
+            WpfButton uICloseReportButtonButton = this.UIUnknownFileHunterWindow.UICloseReportButtonButton;
+            #endregion
+
+            // Click 'CloseReportButton' button
+            Mouse.Click(uICloseReportButtonButton, new Point(10, 18));
+        }
+        
+        /// <summary>
         /// ClickReportsDropDownButton
         /// </summary>
         public void ClickReportsDropDownButton()
@@ -79,32 +105,6 @@ namespace CodedUITestAT.UIMaps.UIMapReportsClasses
 
             // Click 'Executive' menu item
             Mouse.Click(uIExecutiveMenuItem, new Point(38, 15));
-        }
-        
-        /// <summary>
-        /// AssertReportTitle - Use 'AssertReportTitleExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertReportTitle()
-        {
-            #region Variable Declarations
-            WpfText uIExecutiveReportText = this.UIUnknownFileHunterWindow.UIExecutiveReportText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of 'Executive Report' label equals 'Executive Report'
-            Assert.AreEqual(this.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText, uIExecutiveReportText.DisplayText);
-        }
-        
-        /// <summary>
-        /// ClickCloseReportButton
-        /// </summary>
-        public void ClickCloseReportButton()
-        {
-            #region Variable Declarations
-            WpfButton uICloseReportButtonButton = this.UIUnknownFileHunterWindow.UICloseReportButtonButton;
-            #endregion
-
-            // Click 'CloseReportButton' button
-            Mouse.Click(uICloseReportButtonButton, new Point(10, 18));
         }
         
         /// <summary>
@@ -572,6 +572,7 @@ namespace CodedUITestAT.UIMaps.UIMapReportsClasses
                     this.mUIReportPdfViewerEdit = new WpfEdit(this);
                     #region Search Criteria
                     this.mUIReportPdfViewerEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "ReportPdfViewer";
+                    this.mUIReportPdfViewerEdit.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
                     this.mUIReportPdfViewerEdit.WindowTitles.Add("Unknown File Hunter");
                     #endregion
                 }
