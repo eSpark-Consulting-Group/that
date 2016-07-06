@@ -865,10 +865,10 @@ namespace APTAT.Core.Reports
                 Name = System.IO.Path.GetFileName(module.Path);
                 Path = module.Path;
                 Size = module.Size;
-                Signer = module.Signer;
+                Signer = module.Signer.TrimTo();
                 Version = module.Version;
-                Copyright = module.Copyright;
-                Product = module.Product;
+                Copyright = module.Copyright.TrimTo();
+                Product = module.Product.TrimTo();
                 Cloud = module.Cloud;
                 FileSizeFormatted = module.FileSizeFormatted;
                 Created = module.Created;

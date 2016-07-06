@@ -315,6 +315,7 @@
     <Compile Include="Reports\IAptReportBuilder.cs" />
     <Compile Include="Reports\ReportCompletedEventArgs.cs" />
     <Compile Include="Directory\TargetsManager.cs" />
+    <Compile Include="Reports\StringExt.cs" />
     <Compile Include="Valkyrie\AnalyzeCompletedEventArgs.cs" />
     <Compile Include="Valkyrie\AnalyzeCompletedEventHandler.cs" />
     <Compile Include="Valkyrie\CamRegistration.cs" />
