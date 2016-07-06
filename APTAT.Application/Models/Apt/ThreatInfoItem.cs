@@ -66,7 +66,6 @@ namespace APTAT.Application.Models
 
     public class ThreatInfoItem : DomainObject
     {
-        private Int32 _progress;
         private Int32 _totalFilesCount;
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
@@ -292,16 +291,6 @@ namespace APTAT.Application.Models
                 }
                 _totalFilesCount = value;
                 RaisePropertyChanged("TotalFilesCount");
-            }
-        }
-
-        public Int32 Progress
-        {
-            get { return _progress; }
-            set
-            {
-                _progress = value;
-                RaisePropertyChanged("Progress");
             }
         }
 

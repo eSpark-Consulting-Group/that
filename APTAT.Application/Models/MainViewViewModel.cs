@@ -1081,19 +1081,13 @@ namespace APTAT.Application.Models
                         items.Add(item);
                         item = new ThreatInfoItem(badFile);
 
-                        var exist = _cache.FirstOrDefault(_ => _.BadFile.Sha1 == item.BadFile.Sha1);
+                        var exist = _cache.FirstOrDefault(_ => 
+                            _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown && _.IsMalware == item.IsMalware);
                         var comp = new ThreatInfoItem { IpAddress = parentItem.IpAddress, ComputerGuid = e.ScanResult.TargetUid, 
                             Name = parentItem.Name, ShortName = item.Name, IsRootItem = true };
 
                         if (exist != null)
-                        {
                             exist.Computers.Add(comp);
-                            if (exist.Failed && !item.Failed)
-                            {
-                                exist.IsUnknown = exist.BadFile.IsUnknown = badFile.IsUnknown;
-                                exist.IsMalware = exist.BadFile.IsMalware = badFile.IsMalware;
-                            }
-                        }
                         else
                         {
                             item.Computers = new Collection<ThreatInfoItem>();
