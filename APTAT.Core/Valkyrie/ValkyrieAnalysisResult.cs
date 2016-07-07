@@ -133,7 +133,7 @@ namespace APTAT.Core.Valkyrie
         [Description("Potentially Unwanted Application")]
         PotentiallyUnwantedApplication,
         
-        [Description("Not Analyzed")]
+        [Description("Not Analysed")]
         NotAnalyzed,
 
         [Description("In Analysis")]
