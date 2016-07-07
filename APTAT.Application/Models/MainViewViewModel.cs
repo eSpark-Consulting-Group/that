@@ -753,6 +753,8 @@ namespace APTAT.Application.Models
                 MalwareFilesCount = 0;
             }
 
+            var computersDict = Computers.ToDictionary(_ => _.ComputerGuid);
+
             foreach (var result in results)
             {
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
@@ -780,14 +782,21 @@ namespace APTAT.Application.Models
 
                 foreach (var computer in result.Computers)
                 {
+                    ThreatInfoItem c;
+                    if (!computersDict.TryGetValue(computer.TargetUid, out c)) continue;
+
+                    if (c.HasFailed)
+                    {
+                        var exist = c.Items.FirstOrDefault(_ => _.Name == result.Path);
+                        if (exist != null && exist.Failed)
+                            continue;
+                    }
+                    
                     var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
                     if (comp != null)
                         comp.MergeFile(result);
                     else
                     {
-                        var c = Computers.FirstOrDefault(_ => _.ComputerGuid == computer.TargetUid);
-                        if (c == null) continue;
-
                         comp = new ComputerInformation(computer);
                         comp.TotalDistinctCount = c.DistinctUnknownFilesCount;
                         comp.TotalCount = c.UnknownFilesCount;
@@ -1075,7 +1084,7 @@ namespace APTAT.Application.Models
 
                 if (e.ScanResult.BadFiles != null)
                 {
-                    foreach (BadFileItem badFile in e.ScanResult.BadFiles)
+                    foreach (var badFile in e.ScanResult.BadFiles)
                     {
                         var item = new ThreatInfoItem(badFile);
                         items.Add(item);
