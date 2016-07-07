@@ -1295,7 +1295,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Unknown/Malicious/ In Analysis Program Entries </Caption>
+                      <Caption>Unknown/Malicious/ In Analysis/ Not Analysed Program Entries </Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
