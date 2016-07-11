@@ -86,7 +86,7 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private void AssertReportPdfViewTitle(Report report, TestContext testContext)
         {
-            UIMapReports.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText = report.Title;
+            UIMapReports.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText = report.Title.ToUpperFirst();
             UIMapReports.AssertReportTitle();
             testContext.WriteLine(String.Format("Opened report pdf-view title '{0}' is correct.\n", report.Title));
         }
@@ -138,9 +138,8 @@ namespace CodedUITestAT
             useMain.WaitForScanCompleted(ScanType.Quick);
             useMain.UIMapScanCompletedWindow.ClickCancelButton();
             
-            Report report = new Report(ReportType.Executive, DateTime.Now); // Notes the time of report creation
-            UIMapReports.ClickReportsDropDownButton();
-            UIMapReports.SelectExecutiveMenuItem();
+            Report report = new Report(ReportType.Executive);
+            report.Generate();
             WaitForReportViewer(TestContext);
             report.WaitForReportFile();
 
@@ -151,9 +150,43 @@ namespace CodedUITestAT
             useMain.InputCamCredentials(TestContext);
             useMain.WaitForValkyrieResults(TestContext);
             
-            report = new Report(ReportType.ExecutiveValkyrie, DateTime.Now); // Notes the time of report creation
-            UIMapReports.ClickReportsDropDownButton();
-            UIMapReports.SelectExecutiveValkyrieMenuItem();
+            report = new Report(ReportType.ExecutiveValkyrie);
+            report.Generate();
+            WaitForReportViewer(TestContext);
+            report.WaitForReportFile();
+
+            CommonReportTest(report, TestContext);
+            UIMapReports.ClickCloseReportButton();
+
+            UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
+        }
+
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        public void BuildBothPerDeviceReportsTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            CodedUITestMain useMain = new CodedUITestMain();
+
+            useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            useMain.WaitForScanCompleted(ScanType.Quick);
+            useMain.UIMapScanCompletedWindow.ClickCancelButton();
+
+            Report report = new Report(ReportType.PerDevice);
+            report.Generate();
+            WaitForReportViewer(TestContext);
+            report.WaitForReportFile();
+
+            CommonReportTest(report, TestContext);
+            UIMapReports.ClickCloseReportButton();
+
+            useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
+            useMain.InputCamCredentials(TestContext);
+            useMain.WaitForValkyrieResults(TestContext);
+
+            report = new Report(ReportType.PerDeviceValkyrie);
+            report.Generate();
             WaitForReportViewer(TestContext);
             report.WaitForReportFile();
 

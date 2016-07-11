@@ -120,6 +120,58 @@ namespace CodedUITestAT.UIMaps.UIMapReportsClasses
             Mouse.Click(uIExecutiveValkyrieMenuItem, new Point(61, 7));
         }
         
+        /// <summary>
+        /// SelectPerDeviceMenuItem
+        /// </summary>
+        public void SelectPerDeviceMenuItem()
+        {
+            #region Variable Declarations
+            WpfMenuItem uIPerDeviceMenuItem = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIPerDeviceMenuItem;
+            #endregion
+
+            // Click 'Per Device' menu item
+            Mouse.Click(uIPerDeviceMenuItem, new Point(60, 18));
+        }
+        
+        /// <summary>
+        /// SelectPerProgramMenuItem
+        /// </summary>
+        public void SelectPerProgramMenuItem()
+        {
+            #region Variable Declarations
+            WpfMenuItem uIPerProgramMenuItem = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIPerProgramMenuItem;
+            #endregion
+
+            // Click 'Per Program' menu item
+            Mouse.Click(uIPerProgramMenuItem, new Point(51, 12));
+        }
+        
+        /// <summary>
+        /// SelectPerDeviceValkyrieMenuItem
+        /// </summary>
+        public void SelectPerDeviceValkyrieMenuItem()
+        {
+            #region Variable Declarations
+            WpfMenuItem uIPerDeviceValkyrieMenuItem = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIPerDeviceValkyrieMenuItem;
+            #endregion
+
+            // Click 'Per Device Valkyrie' menu item
+            Mouse.Click(uIPerDeviceValkyrieMenuItem, new Point(84, 15));
+        }
+        
+        /// <summary>
+        /// SelectPerProgramValkyrieMenuItem
+        /// </summary>
+        public void SelectPerProgramValkyrieMenuItem()
+        {
+            #region Variable Declarations
+            WpfMenuItem uIPerProgramValkyrieMenuItem = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIPerProgramValkyrieMenuItem;
+            #endregion
+
+            // Click 'Per Program Valkyrie' menu item
+            Mouse.Click(uIPerProgramValkyrieMenuItem, new Point(63, 19));
+        }
+        
         #region Properties
         public virtual AssertReportPdfViewerTextContainsExpectedValues AssertReportPdfViewerTextContainsExpectedValues
         {
@@ -407,12 +459,84 @@ namespace CodedUITestAT.UIMaps.UIMapReportsClasses
                 return this.mUIExecutiveValkyrieMenuItem;
             }
         }
+        
+        public WpfMenuItem UIPerDeviceMenuItem
+        {
+            get
+            {
+                if ((this.mUIPerDeviceMenuItem == null))
+                {
+                    this.mUIPerDeviceMenuItem = new WpfMenuItem(this);
+                    #region Search Criteria
+                    this.mUIPerDeviceMenuItem.SearchProperties[WpfMenuItem.PropertyNames.AutomationId] = "PerDeviceReportMenuItem";
+                    this.mUIPerDeviceMenuItem.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPerDeviceMenuItem;
+            }
+        }
+        
+        public WpfMenuItem UIPerProgramMenuItem
+        {
+            get
+            {
+                if ((this.mUIPerProgramMenuItem == null))
+                {
+                    this.mUIPerProgramMenuItem = new WpfMenuItem(this);
+                    #region Search Criteria
+                    this.mUIPerProgramMenuItem.SearchProperties[WpfMenuItem.PropertyNames.AutomationId] = "PerProgramReportMenuItem";
+                    this.mUIPerProgramMenuItem.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPerProgramMenuItem;
+            }
+        }
+        
+        public WpfMenuItem UIPerDeviceValkyrieMenuItem
+        {
+            get
+            {
+                if ((this.mUIPerDeviceValkyrieMenuItem == null))
+                {
+                    this.mUIPerDeviceValkyrieMenuItem = new WpfMenuItem(this);
+                    #region Search Criteria
+                    this.mUIPerDeviceValkyrieMenuItem.SearchProperties[WpfMenuItem.PropertyNames.AutomationId] = "PerDeviceValkyrieReportMenuItem";
+                    this.mUIPerDeviceValkyrieMenuItem.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPerDeviceValkyrieMenuItem;
+            }
+        }
+        
+        public WpfMenuItem UIPerProgramValkyrieMenuItem
+        {
+            get
+            {
+                if ((this.mUIPerProgramValkyrieMenuItem == null))
+                {
+                    this.mUIPerProgramValkyrieMenuItem = new WpfMenuItem(this);
+                    #region Search Criteria
+                    this.mUIPerProgramValkyrieMenuItem.SearchProperties[WpfMenuItem.PropertyNames.AutomationId] = "PerProgramValkyrieReportMenuItem";
+                    this.mUIPerProgramValkyrieMenuItem.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPerProgramValkyrieMenuItem;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfMenuItem mUIExecutiveMenuItem;
         
         private WpfMenuItem mUIExecutiveValkyrieMenuItem;
+        
+        private WpfMenuItem mUIPerDeviceMenuItem;
+        
+        private WpfMenuItem mUIPerProgramMenuItem;
+        
+        private WpfMenuItem mUIPerDeviceValkyrieMenuItem;
+        
+        private WpfMenuItem mUIPerProgramValkyrieMenuItem;
         #endregion
     }
     
