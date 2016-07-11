@@ -87,9 +87,11 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private void AssertReportPdfViewTitle(Report report, TestContext testContext)
         {
-            UIMapReports.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText = report.Title.ToUpperFirst();
+            string title = report.Title.ToUpperFirst();
+
+            UIMapReports.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText = title;
             UIMapReports.AssertReportTitle();
-            testContext.WriteLine(String.Format("Opened report pdf-view title '{0}' is correct.\n", report.Title));
+            testContext.WriteLine(String.Format("Opened report pdf-view title '{0}' is correct.\n", title));
         }
 
         /// <summary> Waits for a report pdf-viewer screen. </summary>
