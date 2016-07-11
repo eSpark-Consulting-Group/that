@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
@@ -95,8 +96,28 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private void WaitForReportViewer(TestContext testContext)
         {
-            UIHelper.WaitForControl(ShowInFolderButton(), Settings.WaitingTime.Default.ReportCreationWaitTime);
+            int reportCreationTime = Settings.WaitingTime.Default.ReportCreationWaitTime;
+            
+            UIHelper.WaitForControl(ShowInFolderButton(), reportCreationTime);
             UIHelper.WaitForControlIsClickable(ShowInFolderButton());
+
+            var timer = Stopwatch.StartNew();
+            for (; ; )
+            {
+                Playback.Wait(1000);
+                
+                try 
+	            {	        
+		          AssertReportPdfViewContains(" ", testContext);
+                  break;
+	            }
+	            catch (Exception) { }
+
+                if ((int)timer.ElapsedMilliseconds > reportCreationTime)
+                    throw new Exception(String.Format("Report pdf-viewer screen is not available after {0} seconds!", reportCreationTime / 1000));
+            }
+            timer.Stop();
+
             testContext.WriteLine("Report pdf-viewer screen appeared...");
         }
 

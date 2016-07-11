@@ -104,7 +104,7 @@ namespace CodedUITestAT
                 if (IsThereReportFile()) break;
 
                 if ( (int) timer.ElapsedMilliseconds > Settings.WaitingTime.Default.ReportCreationWaitTime)
-                    throw new Exception(String.Format("There is no report file after {1} seconds!", Settings.WaitingTime.Default.ReportCreationWaitTime / 1000));
+                    throw new Exception(String.Format("There is no report file after {0} seconds!", Settings.WaitingTime.Default.ReportCreationWaitTime / 1000));
             }
             timer.Stop();
         }
