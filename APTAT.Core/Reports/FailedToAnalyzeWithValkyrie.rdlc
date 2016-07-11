@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Failed To Analyse (" + Parameters!Count.Value + "):"</Value>
+                <Value>="Not Analysed (" + Parameters!Count.Value + "):"</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>18pt</FontSize>
