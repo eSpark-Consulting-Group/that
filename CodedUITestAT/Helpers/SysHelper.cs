@@ -378,9 +378,10 @@ namespace CodedUITestAT
         /// <summary> Gets a directory containing the product files. </summary>
         internal static string GetProductDirectory()
         {
-            string productProcessLocation = SysHelper.GetProcessLocation(Settings.General.Default.ATApplicationProcessName);
+            string procName = Settings.General.Default.ATApplicationProcessName;
+            string productProcessLocation = SysHelper.GetProcessLocation(procName);
 
-            if (String.IsNullOrEmpty(productProcessLocation)) throw new Exception("The product process and directory not found!");
+            if (String.IsNullOrEmpty(productProcessLocation)) throw new Exception(String.Format("The product process '{0}' and directory not found!", procName));
             else return Path.GetDirectoryName(productProcessLocation);
         }
 

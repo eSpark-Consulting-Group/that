@@ -91,7 +91,7 @@ namespace CodedUITestAT
 
             UIMapReports.AssertReportTitleExpectedValues.UIExecutiveReportTextDisplayText = title;
             UIMapReports.AssertReportTitle();
-            testContext.WriteLine(String.Format("Opened report pdf-view title '{0}' is correct.\n", title));
+            testContext.WriteLine(String.Format("Opened report pdf-view title '{0}' is correct.", title));
         }
 
         /// <summary> Waits for a report pdf-viewer screen. </summary>
@@ -128,21 +128,28 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         private void CheckReportFile(Report report, TestContext testContext)
         {
-            if (report.IsThereReportFile()) testContext.WriteLine(String.Format("Report file '{0}' created after '{1}' exists.\n", report.FileNamePattern, report.ExpectedCreationTime));
+            if (report.IsThereReportFile()) testContext.WriteLine(String.Format("Report file '{0}' created after '{1}' exists.", report.FileNamePattern, report.ExpectedCreationTime));
             else Assert.Fail(String.Format("Report file '{0}' created after '{1}' does not exist!", report.FileNamePattern, report.ExpectedCreationTime));        
         }
-
-        /// <summary> Performs a common report test. </summary>
-        /// <param name="report">Set a report.</param>
+        
+        /// <summary> Generates a report at Main screen and performs a basic report test. After all closes the report. </summary>
+        /// <param name="reportType">Set a report type.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void CommonReportTest(Report report, TestContext testContext)
+        private void BasicReportTest(ReportType reportType, TestContext testContext)
         {
-            CheckReportFile(report, TestContext);
-            AssertReportPdfViewTitle(report, TestContext);
-            AssertReportPdfViewContains(report.Title, TestContext);
+            Report report = new Report(reportType);
+            report.Generate();
+            report.WaitForReportFile();
+            WaitForReportViewer(testContext);
 
-            if (report.Type == ReportType.ExecutiveValkyrie || report.Type == ReportType.PerDeviceValkyrie || report.Type == ReportType.PerProgramValkyrie) 
-                AssertReportPdfViewContains(Settings.Reports.Default.ValkyrieOnlyVerdict, TestContext);
+            CheckReportFile(report, testContext);
+            AssertReportPdfViewTitle(report, testContext);
+            AssertReportPdfViewContains(report.Title, testContext);
+
+            if (report.Type == ReportType.ExecutiveValkyrie || report.Type == ReportType.PerDeviceValkyrie || report.Type == ReportType.PerProgramValkyrie)
+                AssertReportPdfViewContains(Settings.Reports.Default.ValkyrieOnlyVerdict, testContext);
+
+            UIMapReports.ClickCloseReportButton();
         }
 
         #endregion
@@ -160,26 +167,14 @@ namespace CodedUITestAT
             useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);
             useMain.UIMapScanCompletedWindow.ClickCancelButton();
+
+            BasicReportTest(ReportType.Executive, TestContext);
             
-            Report report = new Report(ReportType.Executive);
-            report.Generate();
-            WaitForReportViewer(TestContext);
-            report.WaitForReportFile();
-
-            CommonReportTest(report, TestContext);
-            UIMapReports.ClickCloseReportButton();
-
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
             useMain.InputCamCredentials(TestContext);
             useMain.WaitForValkyrieResults(TestContext);
-            
-            report = new Report(ReportType.ExecutiveValkyrie);
-            report.Generate();
-            WaitForReportViewer(TestContext);
-            report.WaitForReportFile();
 
-            CommonReportTest(report, TestContext);
-            UIMapReports.ClickCloseReportButton();
+            BasicReportTest(ReportType.ExecutiveValkyrie, TestContext);
 
             UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
         }
@@ -196,25 +191,36 @@ namespace CodedUITestAT
             useMain.WaitForScanCompleted(ScanType.Quick);
             useMain.UIMapScanCompletedWindow.ClickCancelButton();
 
-            Report report = new Report(ReportType.PerDevice);
-            report.Generate();
-            WaitForReportViewer(TestContext);
-            report.WaitForReportFile();
+            BasicReportTest(ReportType.PerDevice, TestContext);
 
-            CommonReportTest(report, TestContext);
-            UIMapReports.ClickCloseReportButton();
+            useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
+            useMain.InputCamCredentials(TestContext);
+            useMain.WaitForValkyrieResults(TestContext);
+            
+            BasicReportTest(ReportType.PerDeviceValkyrie, TestContext);
+            
+            UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
+        }
+
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        public void BuildBothPerProgramReportsTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            SysHelper.InfectForQuickScan(endpoint);
+            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            CodedUITestMain useMain = new CodedUITestMain();
+
+            useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            useMain.WaitForScanCompleted(ScanType.Quick);
+            useMain.UIMapScanCompletedWindow.ClickCancelButton();
+
+            BasicReportTest(ReportType.PerProgram, TestContext);
 
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
             useMain.InputCamCredentials(TestContext);
             useMain.WaitForValkyrieResults(TestContext);
 
-            report = new Report(ReportType.PerDeviceValkyrie);
-            report.Generate();
-            WaitForReportViewer(TestContext);
-            report.WaitForReportFile();
-
-            CommonReportTest(report, TestContext);
-            UIMapReports.ClickCloseReportButton();
+            BasicReportTest(ReportType.PerProgramValkyrie, TestContext);
 
             UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
         }

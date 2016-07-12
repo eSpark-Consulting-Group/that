@@ -3,12 +3,12 @@
 namespace CodedUITestAT
 {
     /// <summary> Represents a computer. </summary>
-    internal sealed class Computer
+    internal sealed class Computer : IRow
     {
         /// <summary> A network computer name. </summary>
         internal string Name { get { return _name; } }
         /// <summary> A computer row name at the application UI. </summary>
-        internal string RowName { get { return _rowName; } }
+        public string RowName { get { return _rowName; } }
 
         /// <summary> Represents a local network computer. </summary>
         /// <param name="computerName">Set a computer isolated network name.</param>
