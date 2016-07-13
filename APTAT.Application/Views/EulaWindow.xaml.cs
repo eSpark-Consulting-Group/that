@@ -36,7 +36,7 @@ namespace APTAT.Application
             BorderThickness = new Thickness(1);
             BorderBrush = new SolidColorBrush(Color.FromRgb(214,212,212));
             
-            string fileName = @"Unknown File Hunter EULA (11-18-2015).rtf";
+            string fileName = @"Unknown File Hunter EULA.rtf";
             
             if (System.IO.File.Exists(fileName))
             {

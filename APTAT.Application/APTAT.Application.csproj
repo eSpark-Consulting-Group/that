@@ -402,6 +402,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Unknown File Hunter EULA.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="Assets\arrows.png" />
     <Resource Include="Images\banner_1.png" />
     <Resource Include="Images\banner_2.png" />
@@ -429,9 +432,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Unknown File Hunter EULA %2811-18-2015%29.rtf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="SfxPackage\CreateSfx.bat" />
     <Resource Include="Assets\comodo_white.png" />
     <Resource Include="SfxPackage\config.txt" />
