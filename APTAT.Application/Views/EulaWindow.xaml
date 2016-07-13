@@ -1,6 +1,7 @@
 ﻿<Window AutomationProperties.AutomationId="EulaWindow"
         x:Class="APTAT.Application.EulaWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         Title="COMODO Unknown File Hunter"  WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" Height="600" Width="800">
  
@@ -21,7 +22,7 @@
       </StackPanel>
 
       <ScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <RichTextBox AutomationProperties.AutomationId="EulaRichTextBox" x:Name="EulaRichTextBox" Margin="-1 -1 0 -1"></RichTextBox>
+            <telerik:RadPdfViewer x:Name="EulaRichTextBox" AutomationProperties.AutomationId="EulaRichTextBox" HorizontalAlignment="Left" Margin="-1 -1 0 -1" />            
       </ScrollViewer>
 
       <Grid AutomationProperties.AutomationId="EulaAcceptGrid"

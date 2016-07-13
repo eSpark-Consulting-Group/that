@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -10,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Telerik.Windows.Documents.Fixed.FormatProviders;
+using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
+using Telerik.Windows.Documents.Fixed.Model;
 
 namespace APTAT.Application
 {
@@ -35,18 +39,33 @@ namespace APTAT.Application
             EulaRichTextBox.BorderThickness = new Thickness(0);
             BorderThickness = new Thickness(1);
             BorderBrush = new SolidColorBrush(Color.FromRgb(214,212,212));
+
+            string fileName = @"Unknown File Hunter EULA.pdf";
             
-            string fileName = @"Unknown File Hunter EULA.rtf";
-            
-            if (System.IO.File.Exists(fileName))
+            //
+            //string pdfFilePath = "Sample.pdf";
+            MemoryStream stream = new MemoryStream();
+
+            using (Stream input = File.OpenRead(fileName))
             {
-                var textRange = new TextRange(EulaRichTextBox.Document.ContentStart, EulaRichTextBox.Document.ContentEnd);
-                
-                using (System.IO.FileStream fileStream = new System.IO.FileStream(fileName, System.IO.FileMode.OpenOrCreate))
-                {
-                    textRange.Load(fileStream, System.Windows.DataFormats.Rtf);
-                }
+                input.CopyTo(stream);
             }
+
+            FormatProviderSettings settings = new FormatProviderSettings(ReadingMode.OnDemand);
+            PdfFormatProvider provider = new PdfFormatProvider(stream, settings);
+            RadFixedDocument doc = provider.Import();
+            this.EulaRichTextBox.Document = doc;
+
+            //
+            //if (System.IO.File.Exists(fileName))
+            //{
+            //    var textRange = new TextRange(EulaRichTextBox.Document.ContentStart, EulaRichTextBox.Document.ContentEnd);
+                
+            //    using (System.IO.FileStream fileStream = new System.IO.FileStream(fileName, System.IO.FileMode.OpenOrCreate))
+            //    {
+            //        textRange.Load(fileStream, System.Windows.DataFormats.Rtf);
+            //    }
+            //}
         }
 
         private void OnOkButtonClick(object sender, RoutedEventArgs e)
