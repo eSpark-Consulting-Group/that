@@ -79,7 +79,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
         public int ReportCreationWaitTime {
             get {
                 return ((int)(this["ReportCreationWaitTime"]));
