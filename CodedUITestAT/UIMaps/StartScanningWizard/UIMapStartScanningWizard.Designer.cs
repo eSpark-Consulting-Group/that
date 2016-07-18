@@ -107,6 +107,32 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
             Mouse.Click(uINextButton, new Point(25, 22));
         }
         
+        /// <summary>
+        /// ClickBackButton
+        /// </summary>
+        public void ClickBackButton()
+        {
+            #region Variable Declarations
+            WpfButton uIBackButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIBackButton;
+            #endregion
+
+            // Click 'Back' button
+            Mouse.Click(uIBackButton, new Point(90, 13));
+        }
+        
+        /// <summary>
+        /// ClickCancelButton
+        /// </summary>
+        public void ClickCancelButton()
+        {
+            #region Variable Declarations
+            WpfButton uICancelButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UICancelButton;
+            #endregion
+
+            // Click 'Cancel' button
+            Mouse.Click(uICancelButton, new Point(67, 12));
+        }
+        
         #region Properties
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
@@ -248,6 +274,38 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
                 return this.mUINextButton;
             }
         }
+        
+        public WpfButton UIBackButton
+        {
+            get
+            {
+                if ((this.mUIBackButton == null))
+                {
+                    this.mUIBackButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIBackButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "BackButton";
+                    this.mUIBackButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIBackButton;
+            }
+        }
+        
+        public WpfButton UICancelButton
+        {
+            get
+            {
+                if ((this.mUICancelButton == null))
+                {
+                    this.mUICancelButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICancelButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CancelButton";
+                    this.mUICancelButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICancelButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -260,6 +318,10 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         private WpfButton mUIFullScanButton;
         
         private WpfButton mUINextButton;
+        
+        private WpfButton mUIBackButton;
+        
+        private WpfButton mUICancelButton;
         #endregion
     }
     

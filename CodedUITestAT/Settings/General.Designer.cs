@@ -130,5 +130,23 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["UnknownName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int DefaultFlsTcpPort {
+            get {
+                return ((int)(this["DefaultFlsTcpPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("53")]
+        public int DefaultFlsUdpPort {
+            get {
+                return ((int)(this["DefaultFlsUdpPort"]));
+            }
+        }
     }
 }

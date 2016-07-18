@@ -359,6 +359,11 @@ namespace APTAT.Application.Models
         {
             return CompareTo(obj as IpAddressWrapper);
         }
+
+        public override string ToString()
+        {
+            return FormattedText;
+        }
     }
 
     public class DomainObject<T> : DomainObject

@@ -68,6 +68,84 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
             Keyboard.SendKeys(uIPasswordBoxEdit, this.InputPasswordParams.UIPasswordBoxEditSendKeys, true);
         }
         
+        /// <summary>
+        /// InputTcpPort - Use 'InputTcpPortParams' to pass parameters into this method.
+        /// </summary>
+        public void InputTcpPort()
+        {
+            #region Variable Declarations
+            WpfEdit uITcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UITcpPortTextBoxEdit;
+            #endregion
+
+            // Type '123' in 'TcpPortTextBox' text box
+            uITcpPortTextBoxEdit.Text = this.InputTcpPortParams.UITcpPortTextBoxEditText;
+        }
+        
+        /// <summary>
+        /// InputUdpPort - Use 'InputUdpPortParams' to pass parameters into this method.
+        /// </summary>
+        public void InputUdpPort()
+        {
+            #region Variable Declarations
+            WpfEdit uIUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIUdpPortTextBoxEdit;
+            #endregion
+
+            // Type '123' in 'UdpPortTextBox' text box
+            uIUdpPortTextBoxEdit.Text = this.InputUdpPortParams.UIUdpPortTextBoxEditText;
+        }
+        
+        /// <summary>
+        /// AssertWorkgroupTextBoxText - Use 'AssertWorkgroupTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertWorkgroupTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIWorkgroupTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIWorkgroupTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'WorkgroupTextBox' text box equals 'ww'
+            Assert.AreEqual(this.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupTextBoxEditText, uIWorkgroupTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLoginTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uILoginTextBoxEdit = this.UIUnknownFileHunterWindow.UIWorkgroupViewCustom.UILoginTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'LoginTextBox' text box equals 'ww'
+            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText, uILoginTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertTcpPortTextBoxText - Use 'AssertTcpPortTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertTcpPortTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uITcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIWorkgroupViewCustom.UITcpPortTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'TcpPortTextBox' text box equals '123'
+            Assert.AreEqual(this.AssertTcpPortTextBoxTextExpectedValues.UITcpPortTextBoxEditText, uITcpPortTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertUdpPortTextBoxText - Use 'AssertUdpPortTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertUdpPortTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIWorkgroupViewCustom.UIUdpPortTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'UdpPortTextBox' text box equals '123'
+            Assert.AreEqual(this.AssertUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText, uIUdpPortTextBoxEdit.Text);
+        }
+        
         #region Properties
         public virtual InputWorkgroupParams InputWorkgroupParams
         {
@@ -105,6 +183,78 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
             }
         }
         
+        public virtual InputTcpPortParams InputTcpPortParams
+        {
+            get
+            {
+                if ((this.mInputTcpPortParams == null))
+                {
+                    this.mInputTcpPortParams = new InputTcpPortParams();
+                }
+                return this.mInputTcpPortParams;
+            }
+        }
+        
+        public virtual InputUdpPortParams InputUdpPortParams
+        {
+            get
+            {
+                if ((this.mInputUdpPortParams == null))
+                {
+                    this.mInputUdpPortParams = new InputUdpPortParams();
+                }
+                return this.mInputUdpPortParams;
+            }
+        }
+        
+        public virtual AssertWorkgroupTextBoxTextExpectedValues AssertWorkgroupTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertWorkgroupTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertWorkgroupTextBoxTextExpectedValues = new AssertWorkgroupTextBoxTextExpectedValues();
+                }
+                return this.mAssertWorkgroupTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
+                }
+                return this.mAssertLoginTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertTcpPortTextBoxTextExpectedValues AssertTcpPortTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertTcpPortTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertTcpPortTextBoxTextExpectedValues = new AssertTcpPortTextBoxTextExpectedValues();
+                }
+                return this.mAssertTcpPortTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertUdpPortTextBoxTextExpectedValues AssertUdpPortTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertUdpPortTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertUdpPortTextBoxTextExpectedValues = new AssertUdpPortTextBoxTextExpectedValues();
+                }
+                return this.mAssertUdpPortTextBoxTextExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -124,6 +274,18 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
         private InputLoginParams mInputLoginParams;
         
         private InputPasswordParams mInputPasswordParams;
+        
+        private InputTcpPortParams mInputTcpPortParams;
+        
+        private InputUdpPortParams mInputUdpPortParams;
+        
+        private AssertWorkgroupTextBoxTextExpectedValues mAssertWorkgroupTextBoxTextExpectedValues;
+        
+        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
+        
+        private AssertTcpPortTextBoxTextExpectedValues mAssertTcpPortTextBoxTextExpectedValues;
+        
+        private AssertUdpPortTextBoxTextExpectedValues mAssertUdpPortTextBoxTextExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
@@ -174,6 +336,96 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
         #endregion
     }
     
+    /// <summary>
+    /// Parameters to be passed into 'InputTcpPort'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class InputTcpPortParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Type '123' in 'TcpPortTextBox' text box
+        /// </summary>
+        public string UITcpPortTextBoxEditText = "123";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'InputUdpPort'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class InputUdpPortParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Type '123' in 'UdpPortTextBox' text box
+        /// </summary>
+        public string UIUdpPortTextBoxEditText = "123";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertWorkgroupTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertWorkgroupTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'WorkgroupTextBox' text box equals 'ww'
+        /// </summary>
+        public string UIWorkgroupTextBoxEditText = "ww";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLoginTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertLoginTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'LoginTextBox' text box equals 'ww'
+        /// </summary>
+        public string UILoginTextBoxEditText = "ww";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertTcpPortTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertTcpPortTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'TcpPortTextBox' text box equals '123'
+        /// </summary>
+        public string UITcpPortTextBoxEditText = "123";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertUdpPortTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertUdpPortTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'UdpPortTextBox' text box equals '123'
+        /// </summary>
+        public string UIUdpPortTextBoxEditText = "123";
+        #endregion
+    }
+    
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
     public class UIUnknownFileHunterWindow : WpfWindow
     {
@@ -199,10 +451,24 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
                 return this.mUIScanningWizardWindowCustom;
             }
         }
+        
+        public UIWorkgroupViewCustom1 UIWorkgroupViewCustom
+        {
+            get
+            {
+                if ((this.mUIWorkgroupViewCustom == null))
+                {
+                    this.mUIWorkgroupViewCustom = new UIWorkgroupViewCustom1(this);
+                }
+                return this.mUIWorkgroupViewCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIScanningWizardWindowCustom mUIScanningWizardWindowCustom;
+        
+        private UIWorkgroupViewCustom1 mUIWorkgroupViewCustom;
         #endregion
     }
     
@@ -301,6 +567,38 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
                 return this.mUIPasswordBoxEdit;
             }
         }
+        
+        public WpfEdit UITcpPortTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUITcpPortTextBoxEdit == null))
+                {
+                    this.mUITcpPortTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUITcpPortTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "TcpPortTextBox";
+                    this.mUITcpPortTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUITcpPortTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIUdpPortTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIUdpPortTextBoxEdit == null))
+                {
+                    this.mUIUdpPortTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIUdpPortTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "UdpPortTextBox";
+                    this.mUIUdpPortTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUdpPortTextBoxEdit;
+            }
+        }
         #endregion
         
         #region Fields
@@ -309,6 +607,83 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses
         private WpfEdit mUILoginTextBoxEdit;
         
         private WpfEdit mUIPasswordBoxEdit;
+        
+        private WpfEdit mUITcpPortTextBoxEdit;
+        
+        private WpfEdit mUIUdpPortTextBoxEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class UIWorkgroupViewCustom1 : WpfCustom
+    {
+        
+        public UIWorkgroupViewCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[UITestControl.PropertyNames.ClassName] = "Uia.StartScanWorkgroupView";
+            this.SearchProperties["AutomationId"] = "WorkgroupView";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfEdit UILoginTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUILoginTextBoxEdit == null))
+                {
+                    this.mUILoginTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUILoginTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "LoginTextBox";
+                    this.mUILoginTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUILoginTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UITcpPortTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUITcpPortTextBoxEdit == null))
+                {
+                    this.mUITcpPortTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUITcpPortTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "TcpPortTextBox";
+                    this.mUITcpPortTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUITcpPortTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIUdpPortTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIUdpPortTextBoxEdit == null))
+                {
+                    this.mUIUdpPortTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIUdpPortTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "UdpPortTextBox";
+                    this.mUIUdpPortTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUdpPortTextBoxEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfEdit mUILoginTextBoxEdit;
+        
+        private WpfEdit mUITcpPortTextBoxEdit;
+        
+        private WpfEdit mUIUdpPortTextBoxEdit;
         #endregion
     }
 }

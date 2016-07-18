@@ -107,6 +107,71 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
             Keyboard.SendKeys(uIPasswordBoxEdit, this.InputPasswordParams.UIPasswordBoxEditSendKeys, true);
         }
         
+        /// <summary>
+        /// InputTcpPort - Use 'InputTcpPortParams' to pass parameters into this method.
+        /// </summary>
+        public void InputTcpPort()
+        {
+            #region Variable Declarations
+            WpfEdit uITcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UITcpPortTextBoxEdit;
+            #endregion
+
+            // Type '100' in 'TcpPortTextBox' text box
+            uITcpPortTextBoxEdit.Text = this.InputTcpPortParams.UITcpPortTextBoxEditText;
+        }
+        
+        /// <summary>
+        /// InputUdpPort - Use 'InputUdpPortParams' to pass parameters into this method.
+        /// </summary>
+        public void InputUdpPort()
+        {
+            #region Variable Declarations
+            WpfEdit uIUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UIUdpPortTextBoxEdit;
+            #endregion
+
+            // Type '200' in 'UdpPortTextBox' text box
+            uIUdpPortTextBoxEdit.Text = this.InputUdpPortParams.UIUdpPortTextBoxEditText;
+        }
+        
+        /// <summary>
+        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLoginTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uILoginTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UILoginTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'LoginTextBox' text box equals 'administrator'
+            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText, uILoginTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertFlsTcpPortTextBoxText - Use 'AssertFlsTcpPortTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertFlsTcpPortTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uITcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UITcpPortTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'TcpPortTextBox' text box equals '80'
+            Assert.AreEqual(this.AssertFlsTcpPortTextBoxTextExpectedValues.UITcpPortTextBoxEditText, uITcpPortTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertFlsUdpPortTextBoxText - Use 'AssertFlsUdpPortTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertFlsUdpPortTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UIUdpPortTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'UdpPortTextBox' text box equals '53'
+            Assert.AreEqual(this.AssertFlsUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText, uIUdpPortTextBoxEdit.Text);
+        }
+        
         #region Properties
         public virtual AssertNetworkAddressesListEnabledExpectedValues AssertNetworkAddressesListEnabledExpectedValues
         {
@@ -156,6 +221,66 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
             }
         }
         
+        public virtual InputTcpPortParams InputTcpPortParams
+        {
+            get
+            {
+                if ((this.mInputTcpPortParams == null))
+                {
+                    this.mInputTcpPortParams = new InputTcpPortParams();
+                }
+                return this.mInputTcpPortParams;
+            }
+        }
+        
+        public virtual InputUdpPortParams InputUdpPortParams
+        {
+            get
+            {
+                if ((this.mInputUdpPortParams == null))
+                {
+                    this.mInputUdpPortParams = new InputUdpPortParams();
+                }
+                return this.mInputUdpPortParams;
+            }
+        }
+        
+        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
+                }
+                return this.mAssertLoginTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertFlsTcpPortTextBoxTextExpectedValues AssertFlsTcpPortTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertFlsTcpPortTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertFlsTcpPortTextBoxTextExpectedValues = new AssertFlsTcpPortTextBoxTextExpectedValues();
+                }
+                return this.mAssertFlsTcpPortTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertFlsUdpPortTextBoxTextExpectedValues AssertFlsUdpPortTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertFlsUdpPortTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertFlsUdpPortTextBoxTextExpectedValues = new AssertFlsUdpPortTextBoxTextExpectedValues();
+                }
+                return this.mAssertFlsUdpPortTextBoxTextExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -177,6 +302,16 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         private InputNetworkAddressParams mInputNetworkAddressParams;
         
         private InputPasswordParams mInputPasswordParams;
+        
+        private InputTcpPortParams mInputTcpPortParams;
+        
+        private InputUdpPortParams mInputUdpPortParams;
+        
+        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
+        
+        private AssertFlsTcpPortTextBoxTextExpectedValues mAssertFlsTcpPortTextBoxTextExpectedValues;
+        
+        private AssertFlsUdpPortTextBoxTextExpectedValues mAssertFlsUdpPortTextBoxTextExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
@@ -239,6 +374,81 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
         /// Type '********' in 'PasswordBox' text box
         /// </summary>
         public string UIPasswordBoxEditSendKeys = "QWwOodIXpSM441BCNCWNvH9k+8fhegdI";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'InputTcpPort'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class InputTcpPortParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Type '100' in 'TcpPortTextBox' text box
+        /// </summary>
+        public string UITcpPortTextBoxEditText = "100";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'InputUdpPort'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class InputUdpPortParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Type '200' in 'UdpPortTextBox' text box
+        /// </summary>
+        public string UIUdpPortTextBoxEditText = "200";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLoginTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertLoginTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'LoginTextBox' text box equals 'administrator'
+        /// </summary>
+        public string UILoginTextBoxEditText = "administrator";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertFlsTcpPortTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertFlsTcpPortTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'TcpPortTextBox' text box equals '80'
+        /// </summary>
+        public string UITcpPortTextBoxEditText = "80";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertFlsUdpPortTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertFlsUdpPortTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'UdpPortTextBox' text box equals '53'
+        /// </summary>
+        public string UIUdpPortTextBoxEditText = "53";
         #endregion
     }
     
@@ -314,10 +524,28 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
                 return this.mUITextEntryListViewCustom;
             }
         }
+        
+        public WpfEdit UIUdpPortTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIUdpPortTextBoxEdit == null))
+                {
+                    this.mUIUdpPortTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIUdpPortTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "UdpPortTextBox";
+                    this.mUIUdpPortTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUdpPortTextBoxEdit;
+            }
+        }
         #endregion
         
         #region Fields
         private UITextEntryListViewCustom mUITextEntryListViewCustom;
+        
+        private WpfEdit mUIUdpPortTextBoxEdit;
         #endregion
     }
     
@@ -491,12 +719,48 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses
                 return this.mUIPasswordBoxEdit;
             }
         }
+        
+        public WpfEdit UITcpPortTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUITcpPortTextBoxEdit == null))
+                {
+                    this.mUITcpPortTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUITcpPortTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "TcpPortTextBox";
+                    this.mUITcpPortTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUITcpPortTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIUdpPortTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIUdpPortTextBoxEdit == null))
+                {
+                    this.mUIUdpPortTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIUdpPortTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "UdpPortTextBox";
+                    this.mUIUdpPortTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUdpPortTextBoxEdit;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfEdit mUILoginTextBoxEdit;
         
         private WpfEdit mUIPasswordBoxEdit;
+        
+        private WpfEdit mUITcpPortTextBoxEdit;
+        
+        private WpfEdit mUIUdpPortTextBoxEdit;
         #endregion
     }
 }

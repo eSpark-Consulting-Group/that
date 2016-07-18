@@ -278,12 +278,7 @@ namespace CodedUITestAT
         private WpfButton QuickScanButton()
         {
             return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
-        }
-
-        private WpfList NetworkAddressesList()
-        {
-            return UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
-        }
+        }        
 
         private WpfButton NextButton()
         {
@@ -294,6 +289,15 @@ namespace CodedUITestAT
         {
            return UIMapActiveDirectory.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree;
         }
+
+        #region Network Addresses
+
+        private WpfList NetworkAddressesList()
+        {
+            return UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
+        }
+
+        #endregion
 
         #endregion
 
@@ -527,15 +531,13 @@ namespace CodedUITestAT
             testContext.WriteLine("The scanning has been stopped.");
         }
 
-        /// <summary>Cleans Network Addresses list</summary>
+        /// <summary> Cleans Network Addresses list. </summary>
         private void CleanNetworkAddressesList()
         {
-
             while (NetworkAddressesList().Items.Count > 0)
             {
-                Mouse.Click(NetworkAddressesList().Items[0]);
-                UIMapNetworkAddresses useNetworkAddresses = new UIMapNetworkAddresses();
-                useNetworkAddresses.ClickRemoveButton();                
+              Mouse.Click(NetworkAddressesList().Items[0]);
+              UIMapNetworkAddresses.ClickRemoveButton();
             }
         }
 
@@ -591,6 +593,99 @@ namespace CodedUITestAT
         private string GetAdRootRowName()
         {
             return "DC=" + SysHelper.GetDomainName(true);
+        }
+
+        /// <summary> Checks whether the given data are stored at Network Addresses wizard branch. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        /// <param name="login">Set a login.</param>
+        /// <param name="tcpPort">Set a TCP port.</param>
+        /// <param name="udpPort">Set a UDP port.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void CheckStoredDataAtNetworkAddresses(Computer endpoint, string login, string tcpPort, string udpPort, TestContext testContext)
+        {
+            // Network address
+            var networkAddresses = NetworkAddressesList().Items;
+            bool thereIsNoEndpointName = true;
+            foreach (var networkAddress in networkAddresses)
+            {
+                if (networkAddress.Name == endpoint.Name)
+                {
+                    testContext.WriteLine(String.Format("Endpoint name '{0}' is still present in Network Addresses list.", endpoint.Name));
+                    thereIsNoEndpointName = false;
+                    break;
+                }
+            }
+            if (thereIsNoEndpointName) Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpoint.Name));
+
+            // Login
+            UIMapNetworkAddresses.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText = login;
+            UIMapNetworkAddresses.AssertLoginTextBoxText();
+            testContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", login));
+
+            // Password
+
+
+            // FLS Ports
+            UIMapNetworkAddresses.AssertFlsTcpPortTextBoxTextExpectedValues.UITcpPortTextBoxEditText = tcpPort;
+            UIMapNetworkAddresses.AssertFlsTcpPortTextBoxText();
+            testContext.WriteLine(String.Format("FLS TCP Port '{0}' is stored in the respective text box.", tcpPort));
+            UIMapNetworkAddresses.AssertFlsUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText = udpPort;
+            UIMapNetworkAddresses.AssertFlsUdpPortTextBoxText();
+            testContext.WriteLine(String.Format("FLS UDP Port '{0}' is stored in the respective text box.", udpPort));
+        }
+
+        /// <summary> Checks whether the given data are stored at Workgroup wizard branch. </summary>
+        /// <param name="workgroupName">Set a workgroup name.</param>
+        /// <param name="login">Set a login.</param>
+        /// <param name="tcpPort">Set a TCP port.</param>
+        /// <param name="udpPort">Set a UDP port.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void CheckStoredDataAtWorkgroup(string workgroupName, string login, string tcpPort, string udpPort, TestContext testContext)
+        {
+            // Workgroup
+            UIMapWorkgroup.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupTextBoxEditText = workgroupName;
+            UIMapWorkgroup.AssertWorkgroupTextBoxText();
+            testContext.WriteLine(String.Format("Workgroup name '{0}' is stored in the respective text box.", workgroupName));
+            
+            // Login
+            UIMapWorkgroup.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText = login;
+            UIMapWorkgroup.AssertLoginTextBoxText();
+            testContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", login));
+            
+            // FLS Ports
+            UIMapWorkgroup.AssertTcpPortTextBoxTextExpectedValues.UITcpPortTextBoxEditText = tcpPort;
+            UIMapWorkgroup.AssertTcpPortTextBoxText();
+            testContext.WriteLine(String.Format("TCP Port '{0}' is stored in the respective text box.", tcpPort));
+            UIMapWorkgroup.AssertUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText = udpPort;
+            UIMapWorkgroup.AssertUdpPortTextBoxText();
+            testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
+        }
+
+        /// <summary> Checks whether the given data are stored at Active Directory wizard branch. </summary>
+        /// <param name="domainName">Set a workgroup name.</param>
+        /// <param name="login">Set a login.</param>
+        /// <param name="tcpPort">Set a TCP port.</param>
+        /// <param name="udpPort">Set a UDP port.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void CheckStoredDataAtActiveDirectory(string domainName, string login, string tcpPort, string udpPort, TestContext testContext)
+        {
+            // Domain Controller
+            UIMapActiveDirectory.AssertDomainControllerTextBoxTextExpectedValues.UIDomainControllerTextEditText = domainName;
+            UIMapActiveDirectory.AssertDomainControllerTextBoxText();
+            testContext.WriteLine(String.Format("Domain Controller '{0}' is stored in the respective text box.", domainName));
+
+            // Administrator
+            UIMapActiveDirectory.AssertAdministratorTextBoxTextExpectedValues.UIAdministratorTextBoxEditText = login;
+            UIMapActiveDirectory.AssertAdministratorTextBoxText();
+            testContext.WriteLine(String.Format("Administrator '{0}' is stored in the respective text box.", login));
+
+            // FLS Ports
+            UIMapActiveDirectory.AssertTcpPortTextBoxTextExpectedValues.UIFlsTcpPortTextBoxEditText = tcpPort;
+            UIMapActiveDirectory.AssertTcpPortTextBoxText();
+            testContext.WriteLine(String.Format("TCP Port '{0}' is stored in the respective text box.", tcpPort));
+            UIMapActiveDirectory.AssertUdpPortTextBoxTextExpectedValues.UIFlsUdpPortTextBoxEditText = udpPort;
+            UIMapActiveDirectory.AssertUdpPortTextBoxText();
+            testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
         }
 
         #endregion
@@ -1112,6 +1207,145 @@ namespace CodedUITestAT
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();
             UIMapValkyrieDetailsWindow.ClickCloseButton();
             UIHelper.WaitForControlIsClickable(StartScanningButton());
+        }
+
+        [TestMethod]
+        public void ScanningWizardNavigationNetworkAddressesTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            Random rand = new Random();
+            string newTcpPort = (Settings.General.Default.DefaultFlsTcpPort + rand.Next(1, 32768)).ToString();
+            string newUdpPort = (Settings.General.Default.DefaultFlsUdpPort + rand.Next(1, 32768)).ToString();
+            
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            
+            // Inputs some non-default parameters
+            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
+            UIMapNetworkAddresses.InputNetworkAddress();
+            UIMapNetworkAddresses.ClickAddButton();
+            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLogin();
+            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapNetworkAddresses.InputPassword();
+            UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = newTcpPort;
+            UIMapNetworkAddresses.InputTcpPort();
+            UIMapNetworkAddresses.InputUdpPortParams.UIUdpPortTextBoxEditText = newUdpPort;
+            UIMapNetworkAddresses.InputUdpPort();
+
+            UIMapStartScanningWizard.ClickBackButton();
+            TestContext.WriteLine("Back button clicked...");
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Checks whether the inputted parameters are stored after clicking Back button
+            CheckStoredDataAtNetworkAddresses(endpoint, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+
+            UIMapStartScanningWizard.ClickCancelButton();
+            TestContext.WriteLine("Cancel button clicked...");
+            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Checks whether the inputted parameters are stored after clicking Cancel button
+            CheckStoredDataAtNetworkAddresses(endpoint, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+        }
+
+        [TestMethod]
+        public void ScanningWizardNavigationWorkgroupTest()
+        {
+            string workgroupName = SysHelper.GetWorkgroupName();
+            Random rand = new Random();
+            string newTcpPort = (Settings.General.Default.DefaultFlsTcpPort + rand.Next(1, 32768)).ToString();
+            string newUdpPort = (Settings.General.Default.DefaultFlsUdpPort + rand.Next(1, 32768)).ToString();
+
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Inputs some non-default parameters
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroupName;
+            UIMapWorkgroup.InputWorkgroup();
+            UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapWorkgroup.InputLogin();
+            UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapWorkgroup.InputPassword();
+            UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = newTcpPort;
+            UIMapWorkgroup.InputTcpPort();
+            UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = newUdpPort;
+            UIMapWorkgroup.InputUdpPort();
+
+            UIMapStartScanningWizard.ClickBackButton();
+            TestContext.WriteLine("Back button clicked...");
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Checks whether the inputted parameters are stored after clicking Back button
+            CheckStoredDataAtWorkgroup(workgroupName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+
+            UIMapStartScanningWizard.ClickCancelButton();
+            TestContext.WriteLine("Cancel button clicked...");
+            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Checks whether the inputted parameters are stored after clicking Cancel button
+            CheckStoredDataAtWorkgroup(workgroupName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+        }
+
+        [TestMethod]
+        public void ScanningWizardNavigationActiveDirectoryTest()
+        {
+            string domainName = SysHelper.GetDomainName();
+            Random rand = new Random();
+            string newTcpPort = (Settings.General.Default.DefaultFlsTcpPort + rand.Next(1, 32768)).ToString();
+            string newUdpPort = (Settings.General.Default.DefaultFlsUdpPort + rand.Next(1, 32768)).ToString();
+
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Inputs some non-default parameters
+            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
+            UIMapActiveDirectory.InputDomainController();
+            UIMapActiveDirectory.InputAdministratorParams.UIAdministratorTextBoxEditText = DataHelper.Username;
+            UIMapActiveDirectory.InputAdministrator();
+            UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapActiveDirectory.InputPassword();
+            UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = newTcpPort;
+            UIMapActiveDirectory.InputTcpPort();
+            UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = newUdpPort;
+            UIMapActiveDirectory.InputUdpPort();
+
+            UIMapStartScanningWizard.ClickBackButton();
+            TestContext.WriteLine("Back button clicked...");
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Checks whether the inputted parameters are stored after clicking Back button
+            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+
+            UIMapStartScanningWizard.ClickCancelButton();
+            TestContext.WriteLine("Cancel button clicked...");
+            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+
+            // Checks whether the inputted parameters are stored after clicking Cancel button
+            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
         }
         
         #endregion
