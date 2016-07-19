@@ -465,7 +465,7 @@ namespace CodedUITestAT
             timer.Stop();
         }
 
-        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at main screen. </summary>
+        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at Main screen. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
         /// <param name="scanType">Set a scan type.</param>
         /// <param name="testContext">Set a current TestContext.</param>
@@ -484,7 +484,7 @@ namespace CodedUITestAT
         {
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            testContext.WriteLine("Start Scanning wizard appeared...\n");
+            testContext.WriteLine("Start Scanning wizard appeared...");
             UIMapStartScanningWizard.ClickNetworkAddressButton();
             
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -723,8 +723,8 @@ namespace CodedUITestAT
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
@@ -780,8 +780,8 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             string workgroupName = SysHelper.GetWorkgroupName();
-            Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
             
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1016,8 +1016,8 @@ namespace CodedUITestAT
         public void SearchAtResultsScreenTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
             string partialNameInput = endpoint.Name.Substring(1, (int) ((endpoint.Name.Length - 1) / 2));
             string error = "error";
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -1083,8 +1083,8 @@ namespace CodedUITestAT
         public void VerifyThreatDetailsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
 
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -1162,7 +1162,7 @@ namespace CodedUITestAT
             Computer endpoint = DataHelper.GetEndpoint();            
             
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            Malware malware = SysHelper.InfectForQuickScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
@@ -1170,14 +1170,14 @@ namespace CodedUITestAT
             AssertPanelCountersData(0, 1, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            UnknownFile unknown = SysHelper.AddUnknownFileForQuickScan(endpoint);
+            UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickCancelButton();
             AssertPanelCountersData(1, 0, TestContext);
                         
-            malware = SysHelper.InfectForQuickScan(endpoint);
+            malware = SysHelper.InfectForScan(endpoint);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickCancelButton();
@@ -1195,8 +1195,8 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
             string domainName = SysHelper.GetDomainName();
-            Malware malware = SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
 
             UIMapMain.ClickStartScanningNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1373,6 +1373,27 @@ namespace CodedUITestAT
 
             // Checks whether the inputted parameters are stored after clicking Cancel button
             CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+        }
+
+        [TestMethod, Timeout(DataHelper.LongestTestTimeout)]
+        public void EndpointFullScanTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            ScanType scanType = ScanType.Full;
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            Malware malware = SysHelper.InfectForScan(endpoint, scanType);
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint, scanType);            
+
+            StartEndpointScan(endpoint, scanType, TestContext);
+            WaitForScanCompleted(scanType);
+            TestContext.WriteLine(String.Format("Scan '{0}' completed.", scanType));
+            
+            UIMapScanCompletedWindow.ClickCancelButton();
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, malware);
+            TestContext.WriteLine(String.Format("Threat '{0}' found at 'Scanning results' screen.", malware.Location));
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
+            TestContext.WriteLine(String.Format("Threat '{0}' found at 'Scanning results' screen.", unknownFile.Location));
         }
         
         #endregion

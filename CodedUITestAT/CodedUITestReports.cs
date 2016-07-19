@@ -160,8 +160,8 @@ namespace CodedUITestAT
         public void BuildBothExecutiveReportsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
             CodedUITestMain useMain = new CodedUITestMain();
             
             useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -183,8 +183,8 @@ namespace CodedUITestAT
         public void BuildBothPerDeviceReportsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
             CodedUITestMain useMain = new CodedUITestMain();
 
             useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -206,8 +206,8 @@ namespace CodedUITestAT
         public void BuildBothPerProgramReportsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            SysHelper.InfectForQuickScan(endpoint);
-            SysHelper.AddUnknownFileForQuickScan(endpoint);
+            SysHelper.InfectForScan(endpoint);
+            SysHelper.AddUnknownFileForScan(endpoint);
             CodedUITestMain useMain = new CodedUITestMain();
 
             useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);

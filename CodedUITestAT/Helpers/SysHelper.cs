@@ -295,15 +295,29 @@ namespace CodedUITestAT
 
         #region File- and directory-related methods
 
-        /// <summary> Infects a given endpoint for a Quick Scan. </summary>
+        /// <summary> Infects a given endpoint for a scan. </summary>
         /// <param name="endpoint">Set an endpoint to infect.</param>
+        /// <param name="scanType">Set a scan type.</param>
         /// <returns>Returns a malware.</returns>
-        internal static Malware InfectForQuickScan(Computer endpoint)
+        internal static Malware InfectForScan(Computer endpoint, ScanType scanType = ScanType.Quick)
         {
             string threatName = Settings.General.Default.ThreatName;
-            string fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, threatName);
+            string fileToBeScanned;
+
+            switch (scanType)
+            {
+                case ScanType.Quick:
+                    fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, threatName);
+                    break;
+                case ScanType.Full:
+                    fileToBeScanned = String.Format(TextHelper.GenerateName() + @"\{0}", threatName);
+                    break;
+                default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType));
+            }
+
             string source = String.Format(@"{0}\{1}", DataHelper.GetMalwaresFolder(true), threatName);
             string destination = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
+            if (!Directory.Exists(Path.GetDirectoryName(destination))) Directory.CreateDirectory(Path.GetDirectoryName(destination));
             File.Copy(source, destination, true);
             Malware malware = new Malware(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned), endpoint);
 
@@ -327,14 +341,28 @@ namespace CodedUITestAT
             return checkSumString;
         }
 
-        /// <summary>Copies an unknown file to a given endpoint for a Quick Scan. </summary>
+        /// <summary>Copies an unknown file to a given endpoint for a scan. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
+        /// <param name="scanType">Set a scan type.</param>
         /// <returns>Returns an unknown file.</returns>
-        internal static UnknownFile AddUnknownFileForQuickScan(Computer endpoint)
+        internal static UnknownFile AddUnknownFileForScan(Computer endpoint, ScanType scanType = ScanType.Quick)
         {
             string newUnknownPath = GenerateUnknownFile();
-            string fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, Path.GetFileName(newUnknownPath));
+            string fileToBeScanned;
+
+            switch (scanType)
+            {
+                case ScanType.Quick:
+                     fileToBeScanned = String.Format(Settings.Scanner.Default.StartupFolder + "{1}", DataHelper.Username, Path.GetFileName(newUnknownPath));
+                     break;
+                case ScanType.Full:
+                     fileToBeScanned = String.Format(TextHelper.GenerateName() + @"\{0}", Path.GetFileName(newUnknownPath));
+                    break;
+                default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType));
+            }
+            
             string destination = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
+            if (!Directory.Exists(Path.GetDirectoryName(destination))) Directory.CreateDirectory(Path.GetDirectoryName(destination));
             File.Move(newUnknownPath, destination);
             UnknownFile unknown = new UnknownFile(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned), endpoint);
 
@@ -352,7 +380,7 @@ namespace CodedUITestAT
             foreach (FileInfo file in remoteDir.GetFiles())
             {
                 file.Delete();
-                testContext.WriteLine(String.Format("File '{0}' deleted from the endpoint: '{1}'.\n", file.Name, endpoint.Name));
+                testContext.WriteLine(String.Format("File '{0}' deleted from the endpoint: '{1}'.", file.Name, endpoint.Name));
             }
         }
 

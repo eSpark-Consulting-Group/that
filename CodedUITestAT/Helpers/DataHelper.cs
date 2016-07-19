@@ -14,6 +14,9 @@ namespace CodedUITestAT
         /// <summary> Timeout for long-lasting tests. </summary>
         internal const int LongTestTimeout = 3600000; // Milliseconds
 
+        /// <summary> Timeout for very long-lasting tests. </summary>
+        internal const int LongestTestTimeout = 18000000; // Milliseconds
+
         #endregion
 
         #region Environment variables
@@ -50,7 +53,6 @@ namespace CodedUITestAT
         {
            string computerName = Environment.GetEnvironmentVariable("_EndpointName", EnvironmentVariableTarget.Machine);
            return new Computer(computerName);
-           //return "as06w8x64";
         }
 
         /// <summary> Gets working folder from a local environment variable. </summary>
