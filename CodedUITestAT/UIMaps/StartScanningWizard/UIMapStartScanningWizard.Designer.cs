@@ -133,7 +133,32 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
             Mouse.Click(uICancelButton, new Point(67, 12));
         }
         
+        /// <summary>
+        /// AssertErrorTextBlockText - Use 'AssertErrorTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertErrorTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIPleaseSpecifyPassworText = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Please Specify Password' label equals 'Please Specify Password'
+            Assert.AreEqual(this.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText, uIPleaseSpecifyPassworText.DisplayText);
+        }
+        
         #region Properties
+        public virtual AssertErrorTextBlockTextExpectedValues AssertErrorTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertErrorTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertErrorTextBlockTextExpectedValues = new AssertErrorTextBlockTextExpectedValues();
+                }
+                return this.mAssertErrorTextBlockTextExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -148,7 +173,24 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         #endregion
         
         #region Fields
+        private AssertErrorTextBlockTextExpectedValues mAssertErrorTextBlockTextExpectedValues;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertErrorTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertErrorTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Please Specify Password' label equals 'Please Specify Password'
+        /// </summary>
+        public string UIPleaseSpecifyPassworTextDisplayText = "Please Specify Password";
         #endregion
     }
     
@@ -306,6 +348,22 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
                 return this.mUICancelButton;
             }
         }
+        
+        public WpfText UIPleaseSpecifyPassworText
+        {
+            get
+            {
+                if ((this.mUIPleaseSpecifyPassworText == null))
+                {
+                    this.mUIPleaseSpecifyPassworText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIPleaseSpecifyPassworText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ErrorTextBlock";
+                    this.mUIPleaseSpecifyPassworText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPleaseSpecifyPassworText;
+            }
+        }
         #endregion
         
         #region Fields
@@ -322,6 +380,8 @@ namespace CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClass
         private WpfButton mUIBackButton;
         
         private WpfButton mUICancelButton;
+        
+        private WpfText mUIPleaseSpecifyPassworText;
         #endregion
     }
     

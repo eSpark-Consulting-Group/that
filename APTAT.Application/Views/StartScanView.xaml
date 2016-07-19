@@ -170,7 +170,7 @@
                     <GradientStop Color="#FF931919" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
-            <TextBlock Foreground="White" Text="{Binding Error}" Margin="20,5"/>
+            <TextBlock AutomationProperties.AutomationId="ErrorTextBlock" Foreground="White" Text="{Binding Error}" Margin="20,5"/>
         </Border>
 
         <Border BorderBrush="#CCC" Grid.Row="2"  Height="60" BorderThickness="0,0,0,0" >

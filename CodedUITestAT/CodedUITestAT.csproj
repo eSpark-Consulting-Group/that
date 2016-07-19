@@ -93,6 +93,11 @@
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\Errors.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Errors.settings</DependentUpon>
+    </Compile>
     <Compile Include="Settings\General.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -217,6 +222,10 @@
     <None Include="app.config" />
     <None Include="Deployment.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Settings\Errors.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
     </None>
     <None Include="Settings\General.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

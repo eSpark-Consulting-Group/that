@@ -285,16 +285,25 @@ namespace CodedUITestAT
             return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
         }
 
+        #region Active Directory
+
         private WpfTree AdTree()
         {
            return UIMapActiveDirectory.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree;
         }
+
+        #endregion
 
         #region Network Addresses
 
         private WpfList NetworkAddressesList()
         {
             return UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
+        }
+
+        private WpfText ErrorTextBlock()
+        {
+            return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
         }
 
         #endregion
@@ -621,10 +630,7 @@ namespace CodedUITestAT
             UIMapNetworkAddresses.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText = login;
             UIMapNetworkAddresses.AssertLoginTextBoxText();
             testContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", login));
-
-            // Password
-
-
+            
             // FLS Ports
             UIMapNetworkAddresses.AssertFlsTcpPortTextBoxTextExpectedValues.UITcpPortTextBoxEditText = tcpPort;
             UIMapNetworkAddresses.AssertFlsTcpPortTextBoxText();
@@ -632,6 +638,13 @@ namespace CodedUITestAT
             UIMapNetworkAddresses.AssertFlsUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText = udpPort;
             UIMapNetworkAddresses.AssertFlsUdpPortTextBoxText();
             testContext.WriteLine(String.Format("FLS UDP Port '{0}' is stored in the respective text box.", udpPort));
+            
+            // Password
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIHelper.WaitForControlIsEnabled(ErrorTextBlock()); 
+            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = Settings.Errors.Default.SpecifyPassword;
+            UIMapStartScanningWizard.AssertErrorTextBlockText();
+            testContext.WriteLine(String.Format("Expected error '{0}' appeared after an attempt to proceed with the scan.", Settings.Errors.Default.SpecifyPassword));
         }
 
         /// <summary> Checks whether the given data are stored at Workgroup wizard branch. </summary>
@@ -659,6 +672,13 @@ namespace CodedUITestAT
             UIMapWorkgroup.AssertUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText = udpPort;
             UIMapWorkgroup.AssertUdpPortTextBoxText();
             testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
+            
+            // Password
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIHelper.WaitForControlIsEnabled(ErrorTextBlock());
+            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = Settings.Errors.Default.SpecifyPassword;
+            UIMapStartScanningWizard.AssertErrorTextBlockText();
+            testContext.WriteLine(String.Format("Expected error '{0}' appeared after an attempt to proceed with the scan.", Settings.Errors.Default.SpecifyPassword));
         }
 
         /// <summary> Checks whether the given data are stored at Active Directory wizard branch. </summary>
@@ -686,6 +706,13 @@ namespace CodedUITestAT
             UIMapActiveDirectory.AssertUdpPortTextBoxTextExpectedValues.UIFlsUdpPortTextBoxEditText = udpPort;
             UIMapActiveDirectory.AssertUdpPortTextBoxText();
             testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
+
+            // Password
+            UIMapStartScanningWizard.ClickNextButton();
+            UIHelper.WaitForControlIsEnabled(ErrorTextBlock());
+            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = Settings.Errors.Default.SpecifyPassword;
+            UIMapStartScanningWizard.AssertErrorTextBlockText();
+            testContext.WriteLine(String.Format("Expected error '{0}' appeared after an attempt to proceed with the scan.", Settings.Errors.Default.SpecifyPassword));
         }
 
         #endregion
@@ -1331,7 +1358,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Back button clicked...");
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIHelper.WaitForControlIsEnabled(NextButton());
 
             // Checks whether the inputted parameters are stored after clicking Back button
             CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
@@ -1342,7 +1369,7 @@ namespace CodedUITestAT
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIHelper.WaitForControlIsEnabled(NextButton());
 
             // Checks whether the inputted parameters are stored after clicking Cancel button
             CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
