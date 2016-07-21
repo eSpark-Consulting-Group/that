@@ -1392,10 +1392,8 @@ namespace CodedUITestAT
             
             UIMapScanCompletedWindow.ClickCancelButton();
             UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
-            UIHelper.ClickRow(ResultsScreen.ScanningResults, malware);
-            TestContext.WriteLine(String.Format("Threat '{0}' found at 'Scanning results' screen.", malware.Location));
-            UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
-            TestContext.WriteLine(String.Format("Threat '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+            UIHelper.FindRow(malware, ResultsScreen.ScanningResults, TestContext, Settings.WaitingTime.Default.RowSearchWaitTime);
+            UIHelper.FindRow(unknownFile, ResultsScreen.ScanningResults, TestContext, Settings.WaitingTime.Default.RowSearchWaitTime);
         }
 
         [TestMethod]
@@ -1549,7 +1547,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
             AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
         }
-     
+      
         #endregion
 
         #region Test Context property

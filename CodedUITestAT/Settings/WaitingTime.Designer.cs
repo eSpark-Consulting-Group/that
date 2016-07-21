@@ -103,5 +103,14 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["DomainDiscoveryWaitTime"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("240000")]
+        public int RowSearchWaitTime {
+            get {
+                return ((int)(this["RowSearchWaitTime"]));
+            }
+        }
     }
 }

@@ -363,7 +363,7 @@ namespace CodedUITestAT
             
             string destination = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), fileToBeScanned);
             if (!Directory.Exists(Path.GetDirectoryName(destination))) Directory.CreateDirectory(Path.GetDirectoryName(destination));
-            File.Move(newUnknownPath, destination);
+            if (!File.Exists(destination)) File.Move(newUnknownPath, destination);
             UnknownFile unknown = new UnknownFile(String.Format(@"{0}{1}", DataHelper.GetEndpointRoot(), fileToBeScanned), endpoint);
 
             return unknown;

@@ -29,5 +29,8 @@
     <Setting Name="DomainDiscoveryWaitTime" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">120000</Value>
     </Setting>
+    <Setting Name="RowSearchWaitTime" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">240000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

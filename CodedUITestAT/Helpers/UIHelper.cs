@@ -58,7 +58,7 @@ namespace CodedUITestAT
             var timer = Stopwatch.StartNew();
             for ( ; ; )
             {
-                Playback.Wait(2000);                
+                Playback.Wait(1000);                
                 switch (resultsScreen)
                 {
                     case ResultsScreen.ScanningResults:
@@ -74,7 +74,7 @@ namespace CodedUITestAT
                 }
                 if (row != null)
                 {
-                    testContext.WriteLine(String.Format("The given row '{0}' is found.\n", rowName));
+                    testContext.WriteLine(String.Format("The given row '{0}' is found.", rowName));
                     break;
                 }
                 if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
@@ -83,15 +83,15 @@ namespace CodedUITestAT
             timer.Stop();
         }
 
-        /// <summary>Waits for a specified endpoint row at a given results screen.</summary>
-        /// <param name="endpoint">Set an endpoint.</param>
+        /// <summary>Waits for a specified row at a given results screen.</summary>
+        /// <param name="row">Set a row.</param>
         /// <param name="resultsScreen">Set results screen.</param>
         /// <param name="testContext">Set current test context.</param>
         /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
-        internal static void WaitForResultsRow(Computer endpoint, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
+        internal static void WaitForResultsRow(IRow row, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
         {
-            WaitForResultsRow(endpoint.RowName, resultsScreen, testContext, waitForMilliseconds);            
-        }        
+            WaitForResultsRow(row.RowName, resultsScreen, testContext, waitForMilliseconds);            
+        }
 
         /// <summary> Determines whether a given UI control is cliackable. </summary>
         /// <param name="control">Set a UI control.</param>
@@ -235,7 +235,6 @@ namespace CodedUITestAT
         private static void ClickRow(ResultsScreen screen, string rowName, MouseClick click)
         {
             WpfButton expandRowButton;
-            WpfTabPage tab;
             UITestControl[] rows;
             CodedUITestMain useMain = new CodedUITestMain();
 
@@ -245,15 +244,13 @@ namespace CodedUITestAT
                     if (useMain.ScanningResultsTab().Exists)
                     {
                         useMain.UIMapResultsWindow.GoToScanningResultsTab();
-                        tab = useMain.ScanningResultsTab();
-                        rows = tab.GetRows();
+                        rows = useMain.ScanningResultsTab().GetRows();
                     }
                     else rows = useMain.ScanningResultsTree().GetRows();                    
                     break;
                 case ResultsScreen.ValkyrieAnalysis:
                     useMain.UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
-                    tab = useMain.ValkyrieAnalysisResultsTab();
-                    rows = tab.GetRows();
+                    rows = useMain.ValkyrieAnalysisResultsTab().GetRows();
                     rowName = Path.GetFileName(rowName);
                     break;
                 default: throw new Exception(String.Format("Unexpected results screen '{0}'!", screen));
@@ -270,25 +267,58 @@ namespace CodedUITestAT
                     return;
                 }
             }
-            throw new Exception(String.Format("Row '{0}' not found at screen '{1}'!", rowName, screen));
+            throw new UITestControlNotFoundException(String.Format("Row '{0}' not found at screen '{1}'!", rowName, screen));
         }
 
-        /// <summary> Clicks a given computer at a specified results screen. Starts at Results screen. </summary>
+        /// <summary> Clicks a given row at a specified results screen. Starts at Results screen. </summary>
         ///<param name="screen">Set a results screen.</param>
-        /// <param name="computer">Set a computer.</param>
+        /// <param name="row">Set a computer.</param>
         /// <param name="click">Set a mouse click type.</param>
-        internal static void ClickRow(ResultsScreen screen, Computer computer, MouseClick click = MouseClick.Left)
+        internal static void ClickRow(ResultsScreen screen, IRow row, MouseClick click = MouseClick.Left)
         {
-            ClickRow(screen, computer.RowName, click);
+            ClickRow(screen, row.RowName, click);
         }
 
-        /// <summary> Clicks a given threat at a specified results screen. Starts at Results screen. </summary>
-        ///<param name="screen">Set a results screen.</param>
-        /// <param name="threat">Set a threat.</param>
-        /// <param name="click">Set a mouse click type.</param>
-        internal static void ClickRow(ResultsScreen screen, Threat threat, MouseClick click = MouseClick.Left)
+        /// <summary> Looks for a given row at a provided results screen. The indicated screen should be opened. </summary>
+        /// <param name="row">Set a row.</param>
+        /// <param name="resultsScreen">Set a results screen.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        /// <param name="waitForMilliseconds">Set waiting time in milliseconds.</param>
+        internal static void FindRow(IRow row, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
         {
-            ClickRow(screen, threat.RowName, click);
+            CodedUITestMain useMain = new CodedUITestMain();
+            UITestControl[] rows;
+            
+            var timer = Stopwatch.StartNew();
+            for (; ; )
+            {
+                try
+                {
+                    ClickRow(resultsScreen, row);
+                    testContext.WriteLine(String.Format("Row '{0}' found at screen '{1}'.", row.RowName, resultsScreen));
+                    break;
+                }
+                catch (UITestControlNotFoundException) { }
+
+                // Clicks any visible row at the screen before scrolling
+                switch (resultsScreen)
+                {
+                    case ResultsScreen.ScanningResults:
+                        rows = useMain.ScanningResultsTab().GetRows();
+                        ClickRow(resultsScreen, rows.FirstOrDefault().GetRowName(), MouseClick.Left);
+                        break;
+                    case ResultsScreen.ValkyrieAnalysis:
+                        rows = useMain.ValkyrieAnalysisResultsTab().GetRows();
+                        ClickRow(resultsScreen, rows.FirstOrDefault().GetRowName(), MouseClick.Left);
+                        break;
+                    default: throw new Exception(String.Format("Unexpected results screen '{0}'!", resultsScreen));
+                }
+                Mouse.MoveScrollWheel(-5);
+
+                if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
+                    throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found after {1} seconds!", row.RowName, waitForMilliseconds / 1000));
+            }
+            timer.Stop();
         }
 
         /// <summary> Switches the results screens to 'Group by Files' view. Starts at Main screen. </summary>
