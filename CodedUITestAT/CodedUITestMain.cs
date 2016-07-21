@@ -1489,7 +1489,8 @@ namespace CodedUITestAT
             UIMapWorkgroup.InputUdpPort();
 
             // Non-existent workgroup
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup + "error";
+            string error = "error";
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup.Remove(workgroup.Length - error.Length) + error;
             UIMapWorkgroup.InputWorkgroup();
             UIMapStartScanningWizard.ClickQuickScanButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
@@ -1548,7 +1549,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
             AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
         }
-        
+     
         #endregion
 
         #region Test Context property
