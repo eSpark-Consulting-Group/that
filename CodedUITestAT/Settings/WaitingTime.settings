@@ -23,5 +23,11 @@
     <Setting Name="ReportCreationWaitTime" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">120000</Value>
     </Setting>
+    <Setting Name="WorkgroupDiscoveryWaitTime" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">120000</Value>
+    </Setting>
+    <Setting Name="DomainDiscoveryWaitTime" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">120000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

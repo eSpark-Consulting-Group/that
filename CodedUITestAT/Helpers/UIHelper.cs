@@ -256,7 +256,7 @@ namespace CodedUITestAT
                     rows = tab.GetRows();
                     rowName = Path.GetFileName(rowName);
                     break;
-                default: throw new Exception("Unexpected Results screen!");
+                default: throw new Exception(String.Format("Unexpected results screen '{0}'!", screen));
             }
 
             foreach (var row in rows)

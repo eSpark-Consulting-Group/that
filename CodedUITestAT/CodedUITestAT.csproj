@@ -79,6 +79,7 @@
     <Compile Include="BusinessObjects\Files\UnknownFile.cs" />
     <Compile Include="BusinessObjects\IRow.cs" />
     <Compile Include="BusinessObjects\MouseClick.cs" />
+    <Compile Include="BusinessObjects\PortType.cs" />
     <Compile Include="BusinessObjects\Reports\Report.cs" />
     <Compile Include="BusinessObjects\Reports\ReportType.cs" />
     <Compile Include="BusinessObjects\ResultsScreen.cs" />

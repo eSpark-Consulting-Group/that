@@ -641,10 +641,8 @@ namespace CodedUITestAT
             
             // Password
             UIMapStartScanningWizard.ClickQuickScanButton();
-            UIHelper.WaitForControlIsEnabled(ErrorTextBlock()); 
-            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = Settings.Errors.Default.SpecifyPassword;
-            UIMapStartScanningWizard.AssertErrorTextBlockText();
-            testContext.WriteLine(String.Format("Expected error '{0}' appeared after an attempt to proceed with the scan.", Settings.Errors.Default.SpecifyPassword));
+            testContext.WriteLine("Quick button clicked...");
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
         }
 
         /// <summary> Checks whether the given data are stored at Workgroup wizard branch. </summary>
@@ -675,10 +673,8 @@ namespace CodedUITestAT
             
             // Password
             UIMapStartScanningWizard.ClickQuickScanButton();
-            UIHelper.WaitForControlIsEnabled(ErrorTextBlock());
-            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = Settings.Errors.Default.SpecifyPassword;
-            UIMapStartScanningWizard.AssertErrorTextBlockText();
-            testContext.WriteLine(String.Format("Expected error '{0}' appeared after an attempt to proceed with the scan.", Settings.Errors.Default.SpecifyPassword));
+            testContext.WriteLine("Quick button clicked...");
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
         }
 
         /// <summary> Checks whether the given data are stored at Active Directory wizard branch. </summary>
@@ -709,10 +705,19 @@ namespace CodedUITestAT
 
             // Password
             UIMapStartScanningWizard.ClickNextButton();
-            UIHelper.WaitForControlIsEnabled(ErrorTextBlock());
-            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = Settings.Errors.Default.SpecifyPassword;
+            testContext.WriteLine("Next button clicked...");
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
+        }
+
+        /// <summary> Asserts a text of regular error message. </summary>
+        /// <param name="expectedErrorText">Set expected error text.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void AssertErrorText(string expectedErrorText, TestContext testContext)
+        {
+            UIHelper.WaitForControlIsClickable(ErrorTextBlock());
+            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = expectedErrorText;
             UIMapStartScanningWizard.AssertErrorTextBlockText();
-            testContext.WriteLine(String.Format("Expected error '{0}' appeared after an attempt to proceed with the scan.", Settings.Errors.Default.SpecifyPassword));
+            testContext.WriteLine(String.Format("Expected regular error message '{0}' appeared.", expectedErrorText));
         }
 
         #endregion
@@ -1240,9 +1245,8 @@ namespace CodedUITestAT
         public void ScanningWizardNavigationNetworkAddressesTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            Random rand = new Random();
-            string newTcpPort = (Settings.General.Default.DefaultFlsTcpPort + rand.Next(1, 32768)).ToString();
-            string newUdpPort = (Settings.General.Default.DefaultFlsUdpPort + rand.Next(1, 32768)).ToString();
+            string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
+            string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
             
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1287,9 +1291,8 @@ namespace CodedUITestAT
         public void ScanningWizardNavigationWorkgroupTest()
         {
             string workgroupName = SysHelper.GetWorkgroupName();
-            Random rand = new Random();
-            string newTcpPort = (Settings.General.Default.DefaultFlsTcpPort + rand.Next(1, 32768)).ToString();
-            string newUdpPort = (Settings.General.Default.DefaultFlsUdpPort + rand.Next(1, 32768)).ToString();
+            string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
+            string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
 
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1333,9 +1336,8 @@ namespace CodedUITestAT
         public void ScanningWizardNavigationActiveDirectoryTest()
         {
             string domainName = SysHelper.GetDomainName();
-            Random rand = new Random();
-            string newTcpPort = (Settings.General.Default.DefaultFlsTcpPort + rand.Next(1, 32768)).ToString();
-            string newUdpPort = (Settings.General.Default.DefaultFlsUdpPort + rand.Next(1, 32768)).ToString();
+            string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
+            string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
 
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1394,6 +1396,157 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Threat '{0}' found at 'Scanning results' screen.", malware.Location));
             UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
             TestContext.WriteLine(String.Format("Threat '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+        }
+
+        [TestMethod]
+        public void InvalidInputHandlingInNetworkAddressesTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+
+            UIMapMain.ClickStartScanningNowButton();            
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsClickable(QuickScanButton());
+
+            // Network Address
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
+            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
+            UIMapNetworkAddresses.InputNetworkAddress();
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
+            UIMapNetworkAddresses.ClickAddButton();
+
+            // Login
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
+            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLogin();
+
+            // Password
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapNetworkAddresses.InputPassword();
+
+            // TCP port
+            UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = String.Empty;
+            UIMapNetworkAddresses.InputTcpPort();
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
+            UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
+            UIMapNetworkAddresses.InputTcpPort();
+
+            // UDP port
+            UIMapNetworkAddresses.InputUdpPortParams.UIUdpPortTextBoxEditText = String.Empty;
+            UIMapNetworkAddresses.InputUdpPort();
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
+        }
+
+        [TestMethod]
+        public void InvalidInputHandlingInWorkgroupTest()
+        {
+            string workgroup = SysHelper.GetWorkgroupName();
+
+            UIMapMain.ClickStartScanningNowButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIHelper.WaitForControlIsClickable(QuickScanButton());
+
+            // Workgroup input
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext);
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup;
+            UIMapWorkgroup.InputWorkgroup();
+
+            // Login
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
+            UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapWorkgroup.InputLogin();
+
+            // Password
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapWorkgroup.InputPassword();
+
+            // TCP port
+            UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = String.Empty;
+            UIMapWorkgroup.InputTcpPort();
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
+            UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
+            UIMapWorkgroup.InputTcpPort();
+
+            // UDP port
+            UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = String.Empty;
+            UIMapWorkgroup.InputUdpPort();
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
+            UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Udp);
+            UIMapWorkgroup.InputUdpPort();
+
+            // Non-existent workgroup
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup + "error";
+            UIMapWorkgroup.InputWorkgroup();
+            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
+            AssertErrorText(Settings.Errors.Default.WorkgroupNotFound, TestContext);
+        }
+
+        [TestMethod]
+        public void InvalidInputHandlingInActiveDirectoryTest()
+        {
+            string domainName = SysHelper.GetDomainName();
+
+            UIMapMain.ClickStartScanningNowButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIHelper.WaitForControlIsClickable(NextButton());
+
+            // Domain Controller input
+            UIMapStartScanningWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyDomainController, TestContext);
+            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
+            UIMapActiveDirectory.InputDomainController();
+
+            // Administrator
+            UIMapStartScanningWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
+            UIMapActiveDirectory.InputAdministratorParams.UIAdministratorTextBoxEditText = DataHelper.Username;
+            UIMapActiveDirectory.InputAdministrator();
+
+            // Password
+            UIMapStartScanningWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapActiveDirectory.InputPassword();
+
+            // TCP port
+            UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = String.Empty;
+            UIMapActiveDirectory.InputTcpPort();
+            UIMapStartScanningWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
+            UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
+            UIMapActiveDirectory.InputTcpPort();
+
+            // UDP port
+            UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = String.Empty;
+            UIMapActiveDirectory.InputUdpPort();
+            UIMapStartScanningWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
+            UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Udp);
+            UIMapActiveDirectory.InputUdpPort();
+
+            // Non-existent domain
+            string nonExistentDomainName = domainName + ".test";
+            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = nonExistentDomainName;
+            UIMapActiveDirectory.InputDomainController();
+            UIMapStartScanningWizard.ClickNextButton();
+            UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
+            AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
         }
         
         #endregion

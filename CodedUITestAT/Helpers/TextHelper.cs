@@ -31,5 +31,29 @@ namespace CodedUITestAT
 
             return newStr.Remove(newStr.Length - 1);
         }
+
+        /// <summary> Generates a non-default port value. </summary>
+        /// <param name="portType">Set a port type.</param>
+        internal static string GenerateNonDefaultPort(PortType portType)
+        {
+            int port;
+            const int maxPort = 65635;
+            Random rand = new Random();
+
+            switch (portType)
+            {
+                case PortType.Tcp:
+                    port = Settings.General.Default.DefaultFlsTcpPort;
+                    break;
+                case PortType.Udp:
+                    port = Settings.General.Default.DefaultFlsUdpPort;
+                    break;
+                default: throw new Exception(String.Format("Unexpected port type '{0}'!", portType));
+            }
+
+            port += rand.Next(1, maxPort - port);
+
+            return port.ToString();
+        }
     }
 }

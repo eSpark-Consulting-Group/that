@@ -31,5 +31,78 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["SpecifyPassword"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Enter at least one network address")]
+        public string SpecifyNetworkAddress {
+            get {
+                return ((string)(this["SpecifyNetworkAddress"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify Administrator Login")]
+        public string SpecifyLogin {
+            get {
+                return ((string)(this["SpecifyLogin"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify TCP port")]
+        public string SpecifyTcpPort {
+            get {
+                return ((string)(this["SpecifyTcpPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify UDP port")]
+        public string SpecifyUdpPort {
+            get {
+                return ((string)(this["SpecifyUdpPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify Workgroup")]
+        public string SpecifyWorkgroup {
+            get {
+                return ((string)(this["SpecifyWorkgroup"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify Domain Controller")]
+        public string SpecifyDomainController {
+            get {
+                return ((string)(this["SpecifyDomainController"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Workgroup not found.")]
+        public string WorkgroupNotFound {
+            get {
+                return ((string)(this["WorkgroupNotFound"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Domain \'{0}\' does not exist or could not be contacted under the specified credent" +
+            "ials.")]
+        public string DomainNotFound {
+            get {
+                return ((string)(this["DomainNotFound"]));
+            }
+        }
     }
 }

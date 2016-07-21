@@ -85,5 +85,23 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["ReportCreationWaitTime"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
+        public int WorkgroupDiscoveryWaitTime {
+            get {
+                return ((int)(this["WorkgroupDiscoveryWaitTime"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
+        public int DomainDiscoveryWaitTime {
+            get {
+                return ((int)(this["DomainDiscoveryWaitTime"]));
+            }
+        }
     }
 }
