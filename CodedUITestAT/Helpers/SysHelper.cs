@@ -391,7 +391,7 @@ namespace CodedUITestAT
             string initialFilePath = Path.Combine(DataHelper.GetMalwaresFolder(true), Settings.General.Default.UnknownName);
             string newFileName = TextHelper.GenerateName() + ".exe";
             string newFilePath = Path.Combine(DataHelper.GetMalwaresFolder(true), newFileName);
-            File.Copy(initialFilePath, newFilePath);
+            if (!File.Exists(newFilePath)) File.Copy(initialFilePath, newFilePath);
 
             byte[] data = Encoding.ASCII.GetBytes(newFileName);
             using (FileStream appendingStream = new FileStream(newFilePath, FileMode.Append, FileAccess.Write))

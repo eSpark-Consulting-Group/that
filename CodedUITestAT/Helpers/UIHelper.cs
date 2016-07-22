@@ -305,11 +305,11 @@ namespace CodedUITestAT
                 {
                     case ResultsScreen.ScanningResults:
                         rows = useMain.ScanningResultsTab().GetRows();
-                        ClickRow(resultsScreen, rows.FirstOrDefault().GetRowName(), MouseClick.Left);
+                        ClickRow(resultsScreen, rows.Last().GetRowName(), MouseClick.Left);
                         break;
                     case ResultsScreen.ValkyrieAnalysis:
                         rows = useMain.ValkyrieAnalysisResultsTab().GetRows();
-                        ClickRow(resultsScreen, rows.FirstOrDefault().GetRowName(), MouseClick.Left);
+                        ClickRow(resultsScreen, rows.Last().GetRowName(), MouseClick.Left);
                         break;
                     default: throw new Exception(String.Format("Unexpected results screen '{0}'!", resultsScreen));
                 }

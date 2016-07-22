@@ -106,7 +106,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("240000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("600000")]
         public int RowSearchWaitTime {
             get {
                 return ((int)(this["RowSearchWaitTime"]));
