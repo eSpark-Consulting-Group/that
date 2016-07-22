@@ -1381,8 +1381,8 @@ namespace CodedUITestAT
         public void EndpointFullScanTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            ScanType scanType = ScanType.Quick;
-            //SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            ScanType scanType = ScanType.Full;
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             Malware malware = SysHelper.InfectForScan(endpoint, scanType);
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint, scanType);
 
