@@ -74,11 +74,11 @@ namespace CodedUITestAT
                 }
                 if (row != null)
                 {
-                    testContext.WriteLine(String.Format("The given row '{0}' is found.", rowName));
+                    testContext.WriteLine(String.Format("The given row '{0}' is found at '{1}'.", rowName, resultsScreen));
                     break;
                 }
                 if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
-                    throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found after {1} seconds!", rowName, waitForMilliseconds / 1000));
+                    throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found at '{1}' after {2} seconds!", rowName, resultsScreen, waitForMilliseconds / 1000));
             }
             timer.Stop();
         }
