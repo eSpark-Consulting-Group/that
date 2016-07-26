@@ -1,5 +1,5 @@
 ﻿namespace CodedUITestAT
 {
-    /// <summary> Possible found threats types. </summary>
+    /// <summary> Possible threat types for FLS. </summary>
     internal enum Verdict { Unknown,  Malware };
 }

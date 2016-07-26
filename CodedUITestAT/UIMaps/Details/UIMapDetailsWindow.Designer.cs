@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
+namespace CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -108,19 +108,6 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
         }
         
         /// <summary>
-        /// AssertMalwareNameTextBlockText - Use 'AssertMalwareNameTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertMalwareNameTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIItem91exestealthexeText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem91exestealthexeText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of '91exestealth.exe' label equals '91exestealth.exe'
-            Assert.AreEqual(this.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText, uIItem91exestealthexeText.DisplayText);
-        }
-        
-        /// <summary>
         /// AssertModifiedValueTextBoxText - Use 'AssertModifiedValueTextBoxTextExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertModifiedValueTextBoxText()
@@ -170,6 +157,19 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
 
             // Verify that the 'Text' property of 'SizeValueTextBox' text box equals '180 KB'
             Assert.AreEqual(this.AssertSizeValueTextBoxTextExpectedValues.UISizeValueTextBoxEditText, uISizeValueTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertThreatNameTextBlockText - Use 'AssertThreatNameTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertThreatNameTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem91exestealthexeText = this.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UIItem91exestealthexeText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '91exestealth.exe' label equals '91exestealth.exe'
+            Assert.AreEqual(this.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText, uIItem91exestealthexeText.DisplayText);
         }
         
         /// <summary>
@@ -284,18 +284,6 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
             }
         }
         
-        public virtual AssertMalwareNameTextBlockTextExpectedValues AssertMalwareNameTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertMalwareNameTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertMalwareNameTextBlockTextExpectedValues = new AssertMalwareNameTextBlockTextExpectedValues();
-                }
-                return this.mAssertMalwareNameTextBlockTextExpectedValues;
-            }
-        }
-        
         public virtual AssertModifiedValueTextBoxTextExpectedValues AssertModifiedValueTextBoxTextExpectedValues
         {
             get
@@ -341,6 +329,18 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
                     this.mAssertSizeValueTextBoxTextExpectedValues = new AssertSizeValueTextBoxTextExpectedValues();
                 }
                 return this.mAssertSizeValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertThreatNameTextBlockTextExpectedValues AssertThreatNameTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertThreatNameTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertThreatNameTextBlockTextExpectedValues = new AssertThreatNameTextBlockTextExpectedValues();
+                }
+                return this.mAssertThreatNameTextBlockTextExpectedValues;
             }
         }
         
@@ -394,8 +394,6 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
         
         private AssertHashValueTextBoxTextExpectedValues mAssertHashValueTextBoxTextExpectedValues;
         
-        private AssertMalwareNameTextBlockTextExpectedValues mAssertMalwareNameTextBlockTextExpectedValues;
-        
         private AssertModifiedValueTextBoxTextExpectedValues mAssertModifiedValueTextBoxTextExpectedValues;
         
         private AssertProductValueTextBoxTextExpectedValues mAssertProductValueTextBoxTextExpectedValues;
@@ -403,6 +401,8 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
         private AssertSignerValueTextBoxTextExpectedValues mAssertSignerValueTextBoxTextExpectedValues;
         
         private AssertSizeValueTextBoxTextExpectedValues mAssertSizeValueTextBoxTextExpectedValues;
+        
+        private AssertThreatNameTextBlockTextExpectedValues mAssertThreatNameTextBlockTextExpectedValues;
         
         private AssertVerdictValueTextBoxTextExpectedValues mAssertVerdictValueTextBoxTextExpectedValues;
         
@@ -503,21 +503,6 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertMalwareNameTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
-    public class AssertMalwareNameTextBlockTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of '91exestealth.exe' label equals '91exestealth.exe'
-        /// </summary>
-        public string UIItem91exestealthexeTextDisplayText = "91exestealth.exe";
-        #endregion
-    }
-    
-    /// <summary>
     /// Parameters to be passed into 'AssertModifiedValueTextBoxText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
@@ -574,6 +559,21 @@ namespace CodedUITestAT.UIMaps.UIMapDetailsWindowClasses
         /// Verify that the 'Text' property of 'SizeValueTextBox' text box equals '180 KB'
         /// </summary>
         public string UISizeValueTextBoxEditText = "180 KB";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertThreatNameTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertThreatNameTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '91exestealth.exe' label equals '91exestealth.exe'
+        /// </summary>
+        public string UIItem91exestealthexeTextDisplayText = "91exestealth.exe";
         #endregion
     }
     

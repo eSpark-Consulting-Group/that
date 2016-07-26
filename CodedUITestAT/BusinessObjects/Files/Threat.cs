@@ -39,11 +39,17 @@ namespace CodedUITestAT
         internal string Copyright { get { return _copyright; } }
         /// <summary> A threat product name. </summary>
         internal string Product { get { return _product; } }
+        /// <summary> A threat trusted vendor name. </summary>
+        internal string TrustedVendor { get { return _trustedVendor; } }
+        /// <summary> A threat malware probability. </summary>
+        internal string MalwareProbability { get { return _malwareProbability; } }
 
         /// <summary> Search word to find the respective data in Scan Statistics. </summary>
         internal abstract string SearchWord { get; }
         /// <summary> A threat verdict. </summary>
         internal abstract Verdict FileVerdict { get; }
+        /// <summary> A threat Valkyrie verdict. </summary>
+        internal abstract ValkyrieVerdict FileValkyrieVerdict { get; }
 
         /// <summary> Represents a general threat. </summary>
         /// <param name="fileLocation">Set a threat location.</param>
@@ -66,7 +72,7 @@ namespace CodedUITestAT
             else if (!Path.IsPathRooted(fileLocation)) throw new Exception("The provided file location is not rooted!");
             else _location = fileLocation.ToLower();
             
-            _name = Path.GetFileName(fileLocation).ToLower();
+            _name = Path.GetFileName(fileLocation);
 
             _rowName = _location;
 
@@ -103,6 +109,10 @@ namespace CodedUITestAT
             _copyright = fileVersionInfo.LegalCopyright;
 
             _product = fileVersionInfo.ProductName;
+
+            _trustedVendor = Settings.General.Default.ThreatTrustedVendor;
+
+            _malwareProbability = Settings.General.Default.NoValueAvailable;
         }
 
         private string _name;
@@ -119,5 +129,7 @@ namespace CodedUITestAT
         private string _version;
         private string _copyright;
         private string _product;
+        private string _trustedVendor;
+        private string _malwareProbability;
     }
 }

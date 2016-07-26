@@ -148,5 +148,14 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["DefaultFlsUdpPort"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("no")]
+        public string ThreatTrustedVendor {
+            get {
+                return ((string)(this["ThreatTrustedVendor"]));
+            }
+        }
     }
 }

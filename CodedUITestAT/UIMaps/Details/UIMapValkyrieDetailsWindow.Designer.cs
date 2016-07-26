@@ -30,6 +30,149 @@ namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
     {
         
         /// <summary>
+        /// AssertAccessedValueTextBoxText - Use 'AssertAccessedValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertAccessedValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIAccessedTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIAccessedTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'AccessedTextBox' text box equals '7/22/2016 5:55:34 PM'
+            Assert.AreEqual(this.AssertAccessedValueTextBoxTextExpectedValues.UIAccessedTextBoxEditText, uIAccessedTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertCopyrightValueTextBoxText - Use 'AssertCopyrightValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertCopyrightValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uICopyrightTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UICopyrightTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'CopyrightTextBox' text box equals 'Copyright (c) 1999-2010 Igor Pavlov'
+            Assert.AreEqual(this.AssertCopyrightValueTextBoxTextExpectedValues.UICopyrightTextBoxEditText, uICopyrightTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertCreatedValueTextBoxText - Use 'AssertCreatedValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertCreatedValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uICreatedTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UICreatedTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'CreatedTextBox' text box equals '7/22/2016 5:55:34 PM'
+            Assert.AreEqual(this.AssertCreatedValueTextBoxTextExpectedValues.UICreatedTextBoxEditText, uICreatedTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertDescriptionValueTextBoxText - Use 'AssertDescriptionValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertDescriptionValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIDescriptionTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIDescriptionTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'DescriptionTextBox' text box equals '7z SFX'
+            Assert.AreEqual(this.AssertDescriptionValueTextBoxTextExpectedValues.UIDescriptionTextBoxEditText, uIDescriptionTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertFileNameValueTextBoxText - Use 'AssertFileNameValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertFileNameValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIFileNameTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIFileNameTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'FileNameTextBox' text box equals 'TestName2016072217553388.exe'
+            Assert.AreEqual(this.AssertFileNameValueTextBoxTextExpectedValues.UIFileNameTextBoxEditText, uIFileNameTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertHashValueTextBoxText - Use 'AssertHashValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertHashValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIHashTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIHashTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'HashTextBox' text box equals '4c5aebd7f462c7e7965f882aed9a764811ada0b1'
+            Assert.AreEqual(this.AssertHashValueTextBoxTextExpectedValues.UIHashTextBoxEditText, uIHashTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertMalwareProbabilityValueTextBoxText - Use 'AssertMalwareProbabilityValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMalwareProbabilityValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIMalwareProbabilityTeEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIMalwareProbabilityTeEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'MalwareProbabilityTextBox' text box equals '14.37 %'
+            Assert.AreEqual(this.AssertMalwareProbabilityValueTextBoxTextExpectedValues.UIMalwareProbabilityTeEditText, uIMalwareProbabilityTeEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertModifiedValueTextBoxText - Use 'AssertModifiedValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertModifiedValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIModifiedTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIModifiedTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'ModifiedTextBox' text box equals '7/22/2016 5:55:33 PM'
+            Assert.AreEqual(this.AssertModifiedValueTextBoxTextExpectedValues.UIModifiedTextBoxEditText, uIModifiedTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertProductValueTextBoxText - Use 'AssertProductValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertProductValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIProductTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIProductTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'ProductTextBox' text box equals '7-Zip'
+            Assert.AreEqual(this.AssertProductValueTextBoxTextExpectedValues.UIProductTextBoxEditText, uIProductTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertSignerValueTextBoxText - Use 'AssertSignerValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertSignerValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uISignerTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UISignerTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'SignerTextBox' text box equals 'n/a'
+            Assert.AreEqual(this.AssertSignerValueTextBoxTextExpectedValues.UISignerTextBoxEditText, uISignerTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertSizeValueTextBoxText - Use 'AssertSizeValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertSizeValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uISizeTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UISizeTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'SizeTextBox' text box equals '159 KB'
+            Assert.AreEqual(this.AssertSizeValueTextBoxTextExpectedValues.UISizeTextBoxEditText, uISizeTextBoxEdit.Text);
+        }
+        
+        /// <summary>
         /// AssertThreatNameTextBlockText - Use 'AssertThreatNameTextBlockTextExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertThreatNameTextBlockText()
@@ -40,6 +183,45 @@ namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
 
             // Verify that the 'DisplayText' property of '91exestealth.exe' label equals '91exestealth.exe'
             Assert.AreEqual(this.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText, uIItem91exestealthexeText.DisplayText);
+        }
+        
+        /// <summary>
+        /// AssertTrustedVendorValueTextBoxText - Use 'AssertTrustedVendorValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertTrustedVendorValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uITrustedVendorTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UITrustedVendorTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'TrustedVendorTextBox' text box equals 'no'
+            Assert.AreEqual(this.AssertTrustedVendorValueTextBoxTextExpectedValues.UITrustedVendorTextBoxEditText, uITrustedVendorTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertVerdictValueTextBoxText - Use 'AssertVerdictValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertVerdictValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIVerdictTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIVerdictTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'VerdictTextBox' text box equals 'No Threat Found'
+            Assert.AreEqual(this.AssertVerdictValueTextBoxTextExpectedValues.UIVerdictTextBoxEditText, uIVerdictTextBoxEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertVersionValueTextBoxText - Use 'AssertVersionValueTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertVersionValueTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIVersionTextBoxEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIVersionTextBoxEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'VersionTextBox' text box equals '9.20'
+            Assert.AreEqual(this.AssertVersionValueTextBoxTextExpectedValues.UIVersionTextBoxEditText, uIVersionTextBoxEdit.Text);
         }
         
         /// <summary>
@@ -55,7 +237,152 @@ namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
             Mouse.Click(uICloseButton, new Point(34, 9));
         }
         
+        /// <summary>
+        /// AssertMalwareProbabilityValueTextBoxTextMatches - Use 'AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMalwareProbabilityValueTextBoxTextMatches()
+        {
+            #region Variable Declarations
+            WpfEdit uIMalwareProbabilityTeEdit = this.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UIMalwareProbabilityTeEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'MalwareProbabilityTextBox' text box matches '14.37 %'
+            StringAssert.Matches(uIMalwareProbabilityTeEdit.Text, new Regex(this.AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues.UIMalwareProbabilityTeEditText));
+        }
+        
         #region Properties
+        public virtual AssertAccessedValueTextBoxTextExpectedValues AssertAccessedValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertAccessedValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertAccessedValueTextBoxTextExpectedValues = new AssertAccessedValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertAccessedValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertCopyrightValueTextBoxTextExpectedValues AssertCopyrightValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertCopyrightValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertCopyrightValueTextBoxTextExpectedValues = new AssertCopyrightValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertCopyrightValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertCreatedValueTextBoxTextExpectedValues AssertCreatedValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertCreatedValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertCreatedValueTextBoxTextExpectedValues = new AssertCreatedValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertCreatedValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertDescriptionValueTextBoxTextExpectedValues AssertDescriptionValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertDescriptionValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertDescriptionValueTextBoxTextExpectedValues = new AssertDescriptionValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertDescriptionValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertFileNameValueTextBoxTextExpectedValues AssertFileNameValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertFileNameValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertFileNameValueTextBoxTextExpectedValues = new AssertFileNameValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertFileNameValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertHashValueTextBoxTextExpectedValues AssertHashValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertHashValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertHashValueTextBoxTextExpectedValues = new AssertHashValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertHashValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertMalwareProbabilityValueTextBoxTextExpectedValues AssertMalwareProbabilityValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMalwareProbabilityValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertMalwareProbabilityValueTextBoxTextExpectedValues = new AssertMalwareProbabilityValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertMalwareProbabilityValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertModifiedValueTextBoxTextExpectedValues AssertModifiedValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertModifiedValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertModifiedValueTextBoxTextExpectedValues = new AssertModifiedValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertModifiedValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertProductValueTextBoxTextExpectedValues AssertProductValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertProductValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertProductValueTextBoxTextExpectedValues = new AssertProductValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertProductValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertSignerValueTextBoxTextExpectedValues AssertSignerValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertSignerValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertSignerValueTextBoxTextExpectedValues = new AssertSignerValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertSignerValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertSizeValueTextBoxTextExpectedValues AssertSizeValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertSizeValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertSizeValueTextBoxTextExpectedValues = new AssertSizeValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertSizeValueTextBoxTextExpectedValues;
+            }
+        }
+        
         public virtual AssertThreatNameTextBlockTextExpectedValues AssertThreatNameTextBlockTextExpectedValues
         {
             get
@@ -65,6 +392,54 @@ namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
                     this.mAssertThreatNameTextBlockTextExpectedValues = new AssertThreatNameTextBlockTextExpectedValues();
                 }
                 return this.mAssertThreatNameTextBlockTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertTrustedVendorValueTextBoxTextExpectedValues AssertTrustedVendorValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertTrustedVendorValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertTrustedVendorValueTextBoxTextExpectedValues = new AssertTrustedVendorValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertTrustedVendorValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertVerdictValueTextBoxTextExpectedValues AssertVerdictValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertVerdictValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertVerdictValueTextBoxTextExpectedValues = new AssertVerdictValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertVerdictValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertVersionValueTextBoxTextExpectedValues AssertVersionValueTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertVersionValueTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertVersionValueTextBoxTextExpectedValues = new AssertVersionValueTextBoxTextExpectedValues();
+                }
+                return this.mAssertVersionValueTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues == null))
+                {
+                    this.mAssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues = new AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues();
+                }
+                return this.mAssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues;
             }
         }
         
@@ -82,9 +457,204 @@ namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
         #endregion
         
         #region Fields
+        private AssertAccessedValueTextBoxTextExpectedValues mAssertAccessedValueTextBoxTextExpectedValues;
+        
+        private AssertCopyrightValueTextBoxTextExpectedValues mAssertCopyrightValueTextBoxTextExpectedValues;
+        
+        private AssertCreatedValueTextBoxTextExpectedValues mAssertCreatedValueTextBoxTextExpectedValues;
+        
+        private AssertDescriptionValueTextBoxTextExpectedValues mAssertDescriptionValueTextBoxTextExpectedValues;
+        
+        private AssertFileNameValueTextBoxTextExpectedValues mAssertFileNameValueTextBoxTextExpectedValues;
+        
+        private AssertHashValueTextBoxTextExpectedValues mAssertHashValueTextBoxTextExpectedValues;
+        
+        private AssertMalwareProbabilityValueTextBoxTextExpectedValues mAssertMalwareProbabilityValueTextBoxTextExpectedValues;
+        
+        private AssertModifiedValueTextBoxTextExpectedValues mAssertModifiedValueTextBoxTextExpectedValues;
+        
+        private AssertProductValueTextBoxTextExpectedValues mAssertProductValueTextBoxTextExpectedValues;
+        
+        private AssertSignerValueTextBoxTextExpectedValues mAssertSignerValueTextBoxTextExpectedValues;
+        
+        private AssertSizeValueTextBoxTextExpectedValues mAssertSizeValueTextBoxTextExpectedValues;
+        
         private AssertThreatNameTextBlockTextExpectedValues mAssertThreatNameTextBlockTextExpectedValues;
         
+        private AssertTrustedVendorValueTextBoxTextExpectedValues mAssertTrustedVendorValueTextBoxTextExpectedValues;
+        
+        private AssertVerdictValueTextBoxTextExpectedValues mAssertVerdictValueTextBoxTextExpectedValues;
+        
+        private AssertVersionValueTextBoxTextExpectedValues mAssertVersionValueTextBoxTextExpectedValues;
+        
+        private AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues mAssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertAccessedValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertAccessedValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'AccessedTextBox' text box equals '7/22/2016 5:55:34 PM'
+        /// </summary>
+        public string UIAccessedTextBoxEditText = "7/22/2016 5:55:34 PM";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertCopyrightValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertCopyrightValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'CopyrightTextBox' text box equals 'Copyright (c) 1999-2010 Igor Pavlov'
+        /// </summary>
+        public string UICopyrightTextBoxEditText = "Copyright (c) 1999-2010 Igor Pavlov";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertCreatedValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertCreatedValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'CreatedTextBox' text box equals '7/22/2016 5:55:34 PM'
+        /// </summary>
+        public string UICreatedTextBoxEditText = "7/22/2016 5:55:34 PM";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertDescriptionValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertDescriptionValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'DescriptionTextBox' text box equals '7z SFX'
+        /// </summary>
+        public string UIDescriptionTextBoxEditText = "7z SFX";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertFileNameValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertFileNameValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'FileNameTextBox' text box equals 'TestName2016072217553388.exe'
+        /// </summary>
+        public string UIFileNameTextBoxEditText = "TestName2016072217553388.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertHashValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertHashValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'HashTextBox' text box equals '4c5aebd7f462c7e7965f882aed9a764811ada0b1'
+        /// </summary>
+        public string UIHashTextBoxEditText = "4c5aebd7f462c7e7965f882aed9a764811ada0b1";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMalwareProbabilityValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertMalwareProbabilityValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'MalwareProbabilityTextBox' text box equals '14.37 %'
+        /// </summary>
+        public string UIMalwareProbabilityTeEditText = "14.37 %";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertModifiedValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertModifiedValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'ModifiedTextBox' text box equals '7/22/2016 5:55:33 PM'
+        /// </summary>
+        public string UIModifiedTextBoxEditText = "7/22/2016 5:55:33 PM";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertProductValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertProductValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'ProductTextBox' text box equals '7-Zip'
+        /// </summary>
+        public string UIProductTextBoxEditText = "7-Zip";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertSignerValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertSignerValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'SignerTextBox' text box equals 'n/a'
+        /// </summary>
+        public string UISignerTextBoxEditText = "n/a";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertSizeValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertSizeValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'SizeTextBox' text box equals '159 KB'
+        /// </summary>
+        public string UISizeTextBoxEditText = "159 KB";
         #endregion
     }
     
@@ -100,6 +670,66 @@ namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
         /// Verify that the 'DisplayText' property of '91exestealth.exe' label equals '91exestealth.exe'
         /// </summary>
         public string UIItem91exestealthexeTextDisplayText = "91exestealth.exe";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertTrustedVendorValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertTrustedVendorValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'TrustedVendorTextBox' text box equals 'no'
+        /// </summary>
+        public string UITrustedVendorTextBoxEditText = "no";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertVerdictValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertVerdictValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'VerdictTextBox' text box equals 'No Threat Found'
+        /// </summary>
+        public string UIVerdictTextBoxEditText = "No Threat Found";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertVersionValueTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertVersionValueTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'VersionTextBox' text box equals '9.20'
+        /// </summary>
+        public string UIVersionTextBoxEditText = "9.20";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMalwareProbabilityValueTextBoxTextMatches'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "11.0.60315.1")]
+    public class AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'MalwareProbabilityTextBox' text box matches '14.37 %'
+        /// </summary>
+        public string UIMalwareProbabilityTeEditText = "14.37 %";
         #endregion
     }
     
@@ -181,12 +811,264 @@ namespace CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses
                 return this.mUICloseButton;
             }
         }
+        
+        public WpfEdit UIFileNameTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIFileNameTextBoxEdit == null))
+                {
+                    this.mUIFileNameTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIFileNameTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "FileNameTextBox";
+                    this.mUIFileNameTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIFileNameTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIVerdictTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIVerdictTextBoxEdit == null))
+                {
+                    this.mUIVerdictTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIVerdictTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "VerdictTextBox";
+                    this.mUIVerdictTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIVerdictTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UISizeTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUISizeTextBoxEdit == null))
+                {
+                    this.mUISizeTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUISizeTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "SizeTextBox";
+                    this.mUISizeTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUISizeTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UICreatedTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUICreatedTextBoxEdit == null))
+                {
+                    this.mUICreatedTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUICreatedTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "CreatedTextBox";
+                    this.mUICreatedTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICreatedTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIModifiedTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIModifiedTextBoxEdit == null))
+                {
+                    this.mUIModifiedTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIModifiedTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "ModifiedTextBox";
+                    this.mUIModifiedTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIModifiedTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIAccessedTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIAccessedTextBoxEdit == null))
+                {
+                    this.mUIAccessedTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIAccessedTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "AccessedTextBox";
+                    this.mUIAccessedTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIAccessedTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UITrustedVendorTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUITrustedVendorTextBoxEdit == null))
+                {
+                    this.mUITrustedVendorTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUITrustedVendorTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "TrustedVendorTextBox";
+                    this.mUITrustedVendorTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUITrustedVendorTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIHashTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIHashTextBoxEdit == null))
+                {
+                    this.mUIHashTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIHashTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "HashTextBox";
+                    this.mUIHashTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIHashTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UISignerTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUISignerTextBoxEdit == null))
+                {
+                    this.mUISignerTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUISignerTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "SignerTextBox";
+                    this.mUISignerTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUISignerTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIDescriptionTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIDescriptionTextBoxEdit == null))
+                {
+                    this.mUIDescriptionTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIDescriptionTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "DescriptionTextBox";
+                    this.mUIDescriptionTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIDescriptionTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIVersionTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIVersionTextBoxEdit == null))
+                {
+                    this.mUIVersionTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIVersionTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "VersionTextBox";
+                    this.mUIVersionTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIVersionTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UICopyrightTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUICopyrightTextBoxEdit == null))
+                {
+                    this.mUICopyrightTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUICopyrightTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "CopyrightTextBox";
+                    this.mUICopyrightTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICopyrightTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIProductTextBoxEdit
+        {
+            get
+            {
+                if ((this.mUIProductTextBoxEdit == null))
+                {
+                    this.mUIProductTextBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIProductTextBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "ProductTextBox";
+                    this.mUIProductTextBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIProductTextBoxEdit;
+            }
+        }
+        
+        public WpfEdit UIMalwareProbabilityTeEdit
+        {
+            get
+            {
+                if ((this.mUIMalwareProbabilityTeEdit == null))
+                {
+                    this.mUIMalwareProbabilityTeEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIMalwareProbabilityTeEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "MalwareProbabilityTextBox";
+                    this.mUIMalwareProbabilityTeEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIMalwareProbabilityTeEdit;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfText mUIItem91exestealthexeText;
         
         private WpfButton mUICloseButton;
+        
+        private WpfEdit mUIFileNameTextBoxEdit;
+        
+        private WpfEdit mUIVerdictTextBoxEdit;
+        
+        private WpfEdit mUISizeTextBoxEdit;
+        
+        private WpfEdit mUICreatedTextBoxEdit;
+        
+        private WpfEdit mUIModifiedTextBoxEdit;
+        
+        private WpfEdit mUIAccessedTextBoxEdit;
+        
+        private WpfEdit mUITrustedVendorTextBoxEdit;
+        
+        private WpfEdit mUIHashTextBoxEdit;
+        
+        private WpfEdit mUISignerTextBoxEdit;
+        
+        private WpfEdit mUIDescriptionTextBoxEdit;
+        
+        private WpfEdit mUIVersionTextBoxEdit;
+        
+        private WpfEdit mUICopyrightTextBoxEdit;
+        
+        private WpfEdit mUIProductTextBoxEdit;
+        
+        private WpfEdit mUIMalwareProbabilityTeEdit;
         #endregion
     }
 }

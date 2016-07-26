@@ -73,26 +73,31 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="File Name:"  Grid.Column="0" Grid.Row="0"/>
-                    <TextBlock Text="Verdict:" Grid.Column="0" Grid.Row="1"/>
-                    <TextBlock Text="Size:" Grid.Column="0" Grid.Row="2"/>
-                    <TextBlock Text="Created:" Grid.Column="0" Grid.Row="3"/>
-                    <TextBlock Text="Modified:" Grid.Column="0" Grid.Row="4"/>
-                    <TextBlock Text="Accessed:" Grid.Column="0" Grid.Row="5"/>
-                    <TextBlock Text="Trusted Vendor:" Grid.Column="0" Grid.Row="6"/>
+                    <TextBlock AutomationProperties.AutomationId="FileNameTextBlock" Text="File Name:"  Grid.Column="0" Grid.Row="0"/>
+                    <TextBlock AutomationProperties.AutomationId="VerdictTextBlock" Text="Verdict:" Grid.Column="0" Grid.Row="1"/>
+                    <TextBlock AutomationProperties.AutomationId="SizeTextBlock" Text="Size:" Grid.Column="0" Grid.Row="2"/>
+                    <TextBlock AutomationProperties.AutomationId="CreatedTextBlock" Text="Created:" Grid.Column="0" Grid.Row="3"/>
+                    <TextBlock AutomationProperties.AutomationId="ModifiedTextBlock" Text="Modified:" Grid.Column="0" Grid.Row="4"/>
+                    <TextBlock AutomationProperties.AutomationId="AccessedTextBlock" Text="Accessed:" Grid.Column="0" Grid.Row="5"/>
+                    <TextBlock AutomationProperties.AutomationId="TrustedVendorTextBlock" Text="Trusted Vendor:" Grid.Column="0" Grid.Row="6"/>
                       
-                    <TextBox Text="{Binding FileName}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Size}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
-                               Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Created}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
-                               Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Modified}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"
-                               Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"
-                               Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding IsWhitelisted}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left"
-                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="FileNameTextBox"
+                             Text="{Binding FileName}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding FileName}" HorizontalAlignment="Left" 
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="VerdictTextBox"
+                             Text="{Binding Verdict}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Verdict}" HorizontalAlignment="Left" 
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="SizeTextBox"
+                             Text="{Binding Size}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="CreatedTextBox"
+                             Text="{Binding Created}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="ModifiedTextBox"
+                             Text="{Binding Modified}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="AccessedTextBox"
+                             Text="{Binding Accessed}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="TrustedVendorTextBox" 
+                             Text="{Binding IsWhitelisted}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
                 </Grid>
                     <Grid x:Name="GeneralCol2" Grid.Column="1" Margin="20, 0,20,20" MinWidth="250">
                     <Grid.ColumnDefinitions>
@@ -108,24 +113,43 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Hash (SHA1):" Grid.Column="0" Grid.Row="0"/>
-                    <TextBlock Text="Signer:" Grid.Column="0" Grid.Row="1"/>
-                    <TextBlock Text="Description:" Grid.Column="0" Grid.Row="2"/>
-                    <TextBlock Text="Version:" Grid.Column="0" Grid.Row="3"/>
-                    <TextBlock Text="Copyright:" Grid.Column="0" Grid.Row="4"/>
-                    <TextBlock Text="Product:" Grid.Column="0" Grid.Row="5"/>
-                    <TextBlock Text="Malware Probability:" Grid.Column="0" Grid.Row="6"/>
-                    <TextBox Text="{Binding Hash}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding Hash}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Signer}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="220" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Version}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left"
-                               Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="220" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="220" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox Text="{Binding MalwareProbability}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left"
-                               Style="{StaticResource SelectTextStyle}"/>
+                    <TextBlock AutomationProperties.AutomationId="HashTextBlock"
+                               Text="Hash (SHA1):" Grid.Column="0" Grid.Row="0"/>
+                    <TextBlock AutomationProperties.AutomationId="SignerTextBlock"
+                               Text="Signer:" Grid.Column="0" Grid.Row="1"/>
+                    <TextBlock AutomationProperties.AutomationId="DescriptionTextBlock"
+                               Text="Description:" Grid.Column="0" Grid.Row="2"/>
+                    <TextBlock AutomationProperties.AutomationId="VersionTextBlock"
+                               Text="Version:" Grid.Column="0" Grid.Row="3"/>
+                    <TextBlock AutomationProperties.AutomationId="CopyrightTextBlock"
+                               Text="Copyright:" Grid.Column="0" Grid.Row="4"/>
+                    <TextBlock AutomationProperties.AutomationId="ProductTextBlock"
+                               Text="Product:" Grid.Column="0" Grid.Row="5"/>
+                    <TextBlock AutomationProperties.AutomationId="MalwareProbabilityTextBlock"
+                               Text="Malware Probability:" Grid.Column="0" Grid.Row="6"/>
+
+                    <TextBox AutomationProperties.AutomationId="HashTextBox"
+                             Text="{Binding Hash}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding Hash}" HorizontalAlignment="Left" 
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="SignerTextBox"
+                             Text="{Binding Signer}" Grid.Column="1" Grid.Row="1" MaxWidth="220" ToolTipService.ToolTip="{Binding Signer}" HorizontalAlignment="Left" 
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="DescriptionTextBox"
+                             Text="{Binding Description}" Grid.Column="1" Grid.Row="2" MaxWidth="220" ToolTipService.ToolTip="{Binding Description}" HorizontalAlignment="Left" 
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="VersionTextBox"
+                             Text="{Binding Version}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="CopyrightTextBox"
+                             Text="{Binding Copyright}" Grid.Column="1" Grid.Row="4" MaxWidth="220" ToolTipService.ToolTip="{Binding Copyright}" HorizontalAlignment="Left" 
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="ProductTextBox"
+                             Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="220" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left" 
+                             Style="{StaticResource SelectTextStyle}"/>
+                    <TextBox AutomationProperties.AutomationId="MalwareProbabilityTextBox"
+                             Text="{Binding MalwareProbability}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left"
+                             Style="{StaticResource SelectTextStyle}"/>
                 </Grid>
-            </Grid>            
+            </Grid>
         </Grid>
         
         <StackPanel Orientation="Horizontal" Grid.Row="3" Height="50"  Margin="0,0,30,20" HorizontalAlignment="Right" >

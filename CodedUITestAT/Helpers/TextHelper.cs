@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace CodedUITestAT
 {
@@ -54,6 +55,21 @@ namespace CodedUITestAT
             port += rand.Next(1, maxPort - port);
 
             return port.ToString();
+        }
+
+        /// <summary> Converts a given enumeration value to its UI analogue.  </summary>
+        /// <param name="enumeration">Set an enumeration.</param>
+        internal static string ToUi(this Enum enumeration)
+        {
+            string str;
+
+            var type = enumeration.GetType();
+            var memInfo = type.GetMember(enumeration.ToString());
+            var attributes = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+            if (attributes.Length > 0) str = ((DescriptionAttribute) attributes[0]).Description;
+            else str = enumeration.ToString();
+
+            return str;
         }
     }
 }

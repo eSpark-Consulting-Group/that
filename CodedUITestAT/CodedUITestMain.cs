@@ -13,7 +13,7 @@ using CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
-using CodedUITestAT.UIMaps.UIMapDetailsWindowClasses;
+using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.StartScanningWizard.UIMapActiveDirectoryClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
@@ -357,6 +357,15 @@ namespace CodedUITestAT
         private WpfButton CloseDetailsButton()
         {
             return UIMapDetailsWindow.UIUnknownFileHunterWindow.UIThreatDetailsWindowCustom.UICloseButton;
+        }
+
+        #endregion
+
+        #region Valkyrie Details window
+
+        private WpfButton CloseValkyrieDetailsButton()
+        {
+            return UIMapValkyrieDetailsWindow.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UICloseButton;
         }
 
         #endregion
@@ -827,8 +836,8 @@ namespace CodedUITestAT
             UIHelper.ClickRow(ResultsScreen.ScanningResults, malware, MouseClick.DoubleLeft);
             TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
             UIHelper.WaitForControl(CloseDetailsButton());
-            UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
-            UIMapDetailsWindow.AssertMalwareNameTextBlockText();
+            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
+            UIMapDetailsWindow.AssertThreatNameTextBlockText();
             UIMapDetailsWindow.ClickCloseButton();
         }
        
@@ -1105,8 +1114,8 @@ namespace CodedUITestAT
             UIHelper.WaitForControl(CloseDetailsButton());
 
             // Checks all the threat details
-            UIMapDetailsWindow.AssertMalwareNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
-            UIMapDetailsWindow.AssertMalwareNameTextBlockText();
+            UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
+            UIMapDetailsWindow.AssertThreatNameTextBlockText();
             TestContext.WriteLine(String.Format("Threat name is shown correctly: '{0}'.\n", malware.Name));
 
             UIMapDetailsWindow.AssertFileNameValueTextBoxTextExpectedValues.UIFileNameValueTextBoxEditText = malware.Name;
@@ -1546,6 +1555,89 @@ namespace CodedUITestAT
             UIMapStartScanningWizard.ClickNextButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
             AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
+        }
+
+        [TestMethod]
+        public void VerifyThreatValkyrieDetailsTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
+
+            // Performs a scan
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();
+            InputCamCredentials(TestContext);
+            WaitForValkyrieResults(TestContext);
+
+            // Opens a threat details via context menu
+            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, unknownFile, MouseClick.DoubleLeft);
+            UIHelper.WaitForControl(CloseValkyrieDetailsButton());
+
+            // Checks all the threat details
+            UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = unknownFile.Name;
+            UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();
+            TestContext.WriteLine(String.Format("Threat name is shown correctly: '{0}'.", unknownFile.Name));
+
+            UIMapValkyrieDetailsWindow.AssertFileNameValueTextBoxTextExpectedValues.UIFileNameTextBoxEditText = unknownFile.Name;
+            UIMapValkyrieDetailsWindow.AssertFileNameValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'File Name' parameter is shown correctly: '{0}'.", unknownFile.Name));
+
+            UIMapValkyrieDetailsWindow.AssertVerdictValueTextBoxTextExpectedValues.UIVerdictTextBoxEditText = unknownFile.FileValkyrieVerdict.ToUi();
+            UIMapValkyrieDetailsWindow.AssertVerdictValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Verdict' parameter is shown correctly: '{0}'.", unknownFile.FileValkyrieVerdict.ToUi()));
+
+            UIMapValkyrieDetailsWindow.AssertSizeValueTextBoxTextExpectedValues.UISizeTextBoxEditText = unknownFile.DisplaySize;
+            UIMapValkyrieDetailsWindow.AssertSizeValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Size' parameter is shown correctly: '{0}'.", unknownFile.DisplaySize));
+
+            UIMapValkyrieDetailsWindow.AssertCreatedValueTextBoxTextExpectedValues.UICreatedTextBoxEditText = unknownFile.Created;
+            UIMapValkyrieDetailsWindow.AssertCreatedValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Created' parameter is shown correctly: '{0}'.", unknownFile.Created));
+
+            UIMapValkyrieDetailsWindow.AssertModifiedValueTextBoxTextExpectedValues.UIModifiedTextBoxEditText = unknownFile.Modified;
+            UIMapValkyrieDetailsWindow.AssertModifiedValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Modified' parameter is shown correctly: '{0}'.", unknownFile.Modified));
+
+            UIMapValkyrieDetailsWindow.AssertAccessedValueTextBoxTextExpectedValues.UIAccessedTextBoxEditText = unknownFile.Accessed;
+            UIMapValkyrieDetailsWindow.AssertAccessedValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Accessed' parameter is shown correctly: '{0}'.", unknownFile.Accessed));
+
+            UIMapValkyrieDetailsWindow.AssertTrustedVendorValueTextBoxTextExpectedValues.UITrustedVendorTextBoxEditText = unknownFile.TrustedVendor;
+            UIMapValkyrieDetailsWindow.AssertTrustedVendorValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Trusted Vendor' parameter is shown correctly: '{0}'.", unknownFile.TrustedVendor));
+            
+            UIMapValkyrieDetailsWindow.AssertHashValueTextBoxTextExpectedValues.UIHashTextBoxEditText = unknownFile.Sha1;
+            UIMapValkyrieDetailsWindow.AssertHashValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Hash' parameter is shown correctly: '{0}'.", unknownFile.Sha1));
+            
+            UIMapValkyrieDetailsWindow.AssertSignerValueTextBoxTextExpectedValues.UISignerTextBoxEditText = unknownFile.Signer;
+            UIMapValkyrieDetailsWindow.AssertSignerValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Signer' parameter is shown correctly: '{0}'.", unknownFile.Signer));
+
+            UIMapValkyrieDetailsWindow.AssertDescriptionValueTextBoxTextExpectedValues.UIDescriptionTextBoxEditText = unknownFile.Description;
+            UIMapValkyrieDetailsWindow.AssertDescriptionValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Description' parameter is shown correctly: '{0}'.", unknownFile.Description));
+
+            UIMapValkyrieDetailsWindow.AssertVersionValueTextBoxTextExpectedValues.UIVersionTextBoxEditText = unknownFile.Version;
+            UIMapValkyrieDetailsWindow.AssertVersionValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Version' parameter is shown correctly: '{0}'.", unknownFile.Version));
+
+            UIMapValkyrieDetailsWindow.AssertCopyrightValueTextBoxTextExpectedValues.UICopyrightTextBoxEditText = unknownFile.Copyright;
+            UIMapValkyrieDetailsWindow.AssertCopyrightValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Copyright' parameter is shown correctly: '{0}'.", unknownFile.Copyright));
+
+            UIMapValkyrieDetailsWindow.AssertProductValueTextBoxTextExpectedValues.UIProductTextBoxEditText = unknownFile.Product;
+            UIMapValkyrieDetailsWindow.AssertProductValueTextBoxText();
+            TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.", unknownFile.Product));
+            
+            UIMapValkyrieDetailsWindow.AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues.UIMalwareProbabilityTeEditText = unknownFile.MalwareProbability; //@"\d{1,2}.\d{2}\s%";
+            UIMapValkyrieDetailsWindow.AssertMalwareProbabilityValueTextBoxTextMatches();
+            TestContext.WriteLine(String.Format("Threat 'Malware Probability' parameter matches an expected pattern correctly: '{0}'.", unknownFile.Product));
+            
+            UIMapValkyrieDetailsWindow.ClickCloseButton();
+            UIHelper.WaitForControlIsClickable(StartScanningButton());
         }
       
         #endregion
