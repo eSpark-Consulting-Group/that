@@ -283,42 +283,26 @@ namespace CodedUITestAT
         /// <param name="row">Set a row.</param>
         /// <param name="resultsScreen">Set a results screen.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        /// <param name="waitForMilliseconds">Set waiting time in milliseconds.</param>
-        internal static void FindRow(IRow row, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
+        internal static void FindRow(IRow row, ResultsScreen resultsScreen, TestContext testContext)
         {
             CodedUITestMain useMain = new CodedUITestMain();
-            UITestControl[] rows;
-            
-            var timer = Stopwatch.StartNew();
-            for (; ; )
+
+            GroupByFiles();
+            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = Path.GetFileName(row.RowName);
+            useMain.UIMapMain.InputTextToSearchBox();
+
+            try
             {
-                try
-                {
-                    ClickRow(resultsScreen, row);
-                    testContext.WriteLine(String.Format("Row '{0}' found at screen '{1}'.", row.RowName, resultsScreen));
-                    break;
-                }
-                catch (UITestControlNotFoundException) { }
-
-                // Clicks any visible row at the screen before scrolling
-                switch (resultsScreen)
-                {
-                    case ResultsScreen.ScanningResults:
-                        rows = useMain.ScanningResultsTab().GetRows();
-                        ClickRow(resultsScreen, rows.Last().GetRowName(), MouseClick.Left);
-                        break;
-                    case ResultsScreen.ValkyrieAnalysis:
-                        rows = useMain.ValkyrieAnalysisResultsTab().GetRows();
-                        ClickRow(resultsScreen, rows.Last().GetRowName(), MouseClick.Left);
-                        break;
-                    default: throw new Exception(String.Format("Unexpected results screen '{0}'!", resultsScreen));
-                }
-                Mouse.MoveScrollWheel(-5);
-
-                if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
-                    throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found after {1} seconds!", row.RowName, waitForMilliseconds / 1000));
+                WaitForResultsRow(row, resultsScreen, testContext);
+                useMain.UIMapMain.ClickClearSearchTextButton();
+                GroupByComputers();
             }
-            timer.Stop();
+            catch(UITestControlNotFoundException)
+            {
+                useMain.UIMapMain.ClickClearSearchTextButton();
+                GroupByComputers();
+                Assert.Fail(String.Format("Row '{0}' not found at screen '{1}'!", row.RowName, resultsScreen));
+            }
         }
 
         /// <summary> Switches the results screens to 'Group by Files' view. Starts at Main screen. </summary>

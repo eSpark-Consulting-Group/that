@@ -1390,8 +1390,8 @@ namespace CodedUITestAT
         public void EndpointFullScanTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            ScanType scanType = ScanType.Full;
-            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            ScanType scanType = ScanType.Quick;
+            //SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             Malware malware = SysHelper.InfectForScan(endpoint, scanType);
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint, scanType);
 
@@ -1400,9 +1400,8 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Scan '{0}' completed.", scanType));
             
             UIMapScanCompletedWindow.ClickCancelButton();
-            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
-            UIHelper.FindRow(malware, ResultsScreen.ScanningResults, TestContext, Settings.WaitingTime.Default.RowSearchWaitTime);
-            UIHelper.FindRow(unknownFile, ResultsScreen.ScanningResults, TestContext, Settings.WaitingTime.Default.RowSearchWaitTime);
+            UIHelper.FindRow(malware, ResultsScreen.ScanningResults, TestContext);
+            UIHelper.FindRow(unknownFile, ResultsScreen.ScanningResults, TestContext);
         }
 
         [TestMethod]
