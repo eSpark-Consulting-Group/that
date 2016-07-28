@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
@@ -452,7 +453,7 @@ namespace CodedUITestAT
             }
             timer.Stop();
 
-            // CodedUI for some reasons does not detect a tab content without switching the tabs
+            // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
             UIMapResultsWindow.GoToScanningResultsTab();
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
@@ -469,10 +470,10 @@ namespace CodedUITestAT
                     break;
                 }
                 catch (Exception) { }
-                if ((int)timer.ElapsedMilliseconds > treeWaitTime) throw new Exception(String.Format("Valkyrie results cannot be obtained from UI after {0} seconds!", treeWaitTime / 1000));
+                if ((int) timer.ElapsedMilliseconds > treeWaitTime) throw new Exception(String.Format("Valkyrie results cannot be obtained from UI after {0} seconds!", treeWaitTime / 1000));
             }
             timer.Stop();
-        }
+        }        
 
         /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at Main screen. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
@@ -1637,6 +1638,41 @@ namespace CodedUITestAT
             
             UIMapValkyrieDetailsWindow.ClickCloseButton();
             UIHelper.WaitForControlIsClickable(StartScanningButton());
+        }
+
+        [TestMethod]
+        public void CheckAllScanResultsTest()
+        { 
+            Computer endpoint = DataHelper.GetEndpoint();
+            string error = "error";
+            int waitTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
+            
+            // Offline endpoint
+            IPAddress offlineIp = SysHelper.FindOfflineIp();
+            Computer offlineComputer = new Computer(offlineIp);
+            
+            StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);
+            UIHelper.WaitForControlIsEnabled(ScanningResultsTab(), waitTime);
+            
+            // Refreshes the results screen
+            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = error;
+            UIMapMain.InputTextToSearchBox();
+            Playback.Wait(2000);
+            UIMapMain.ClickClearSearchTextButton();
+            Playback.Wait(2000);
+            
+            UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
+            
+            // Failed scan
+            StartEndpointScan(endpoint, ScanType.Quick, DataHelper.Username + error, DataHelper.Password, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, waitTime);
+            
+            // Completed scan
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Running, TestContext, waitTime);
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
         }
       
         #endregion

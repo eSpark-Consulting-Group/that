@@ -170,8 +170,8 @@ namespace CodedUITestAT
             return row.GetScanStatus();
         }
 
-        /// <summary>Gets a current full scan status message for a given computer</summary>
-        /// <param name="endpoint">Set an endpoint</param>        
+        /// <summary> Gets a current full scan status message for a given computer. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
         internal static string GetFullScanStatusMessage(this Computer endpoint)
         {
             UITestControl row;

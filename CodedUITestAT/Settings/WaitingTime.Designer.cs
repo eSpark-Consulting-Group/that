@@ -103,5 +103,14 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["DomainDiscoveryWaitTime"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("70000")]
+        public int EndpointResolvingWaitTime {
+            get {
+                return ((int)(this["EndpointResolvingWaitTime"]));
+            }
+        }
     }
 }

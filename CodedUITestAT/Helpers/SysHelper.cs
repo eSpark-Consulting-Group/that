@@ -2,10 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Net;
+using System.Net.Sockets;
 using System.Management;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Security.Cryptography;
+using System.Net.NetworkInformation;
 using System.DirectoryServices.ActiveDirectory;
 using Microsoft.Win32;
 using Microsoft.VisualStudio.TestTools.UITesting;
@@ -54,6 +57,49 @@ namespace CodedUITestAT
                 return versionInfo.ProductVersion;
             }
             catch (FileNotFoundException) { return null; }
+        }
+
+        /// <summary> Looks for an offline machine IP address in local subnet 10.100.65. </summary>
+        internal static IPAddress FindOfflineIp()
+        {
+            Ping ping = new Ping();
+            IPAddress ipAddress;
+            string ipAddressStr = null;
+
+            for (int i = 1; i < 255; i++)
+            {
+                string ip = String.Format("10.100.65.{0}", i);
+                PingReply pingReply = ping.Send(ip);
+
+                if (pingReply.Status != IPStatus.Success)
+                {
+                    ipAddressStr = ip;
+                    break;
+                }
+            }
+
+            if (!IPAddress.TryParse(ipAddressStr, out ipAddress)) throw new Exception("No valid offline IP found!");
+            else return ipAddress;
+        }
+
+        /// <summary> Gets IPv4-address of the machine running the tests. </summary>        
+        internal static IPAddress GetLocalIpAddress()
+        {
+            IPAddress ipAddress = null;
+
+            var nets = NetworkInterface.GetAllNetworkInterfaces();
+            var net = nets.FirstOrDefault(n => n.GetIPProperties().GatewayAddresses.Any()); // A network interface with a Gateway
+            var addresses = net.GetIPProperties().UnicastAddresses; // A list of addresses of the above network interface
+            foreach (var address in addresses)
+            {
+                if (address.Address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    ipAddress = address.Address;
+                    break;
+                }
+            }
+
+            return ipAddress;
         }
 
         #region Process-related methods
@@ -380,7 +426,7 @@ namespace CodedUITestAT
             foreach (FileInfo file in remoteDir.GetFiles())
             {
                 file.Delete();
-                testContext.WriteLine(String.Format("File '{0}' deleted from the endpoint: '{1}'.", file.Name, endpoint.Name));
+                testContext.WriteLine(String.Format("File '{0}' deleted from the endpoint: '{1}'.", file.FullName, endpoint.Name));
             }
         }
 
