@@ -1503,7 +1503,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>8.97314cm</Height>
+              <Height>8.65564cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1522,7 +1522,7 @@
                               <Value>=Parameters!IsActiveDirectorySource.Value</Value>
                             </Parameter>
                           </Parameters>
-                          <Top>8.12002cm</Top>
+                          <Top>7.70727cm</Top>
                           <Left>0.55775cm</Left>
                           <Height>0.85312cm</Height>
                           <Width>16.31526cm</Width>
@@ -2129,74 +2129,6 @@
                                 <PaddingBottom>2pt</PaddingBottom>
                               </Style>
                             </Textbox>
-                            <Textbox Name="Textbox62">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>Malware Probability:</Value>
-                                      <Style>
-                                        <FontFamily>Segoe UI Light</FontFamily>
-                                        <Color>Gray</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>5.81783cm</Top>
-                              <Left>1.03337cm</Left>
-                              <Height>0.55681cm</Height>
-                              <Width>3.14788cm</Width>
-                              <ZIndex>18</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox63">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Microsoft.VisualBasic.Interaction.IIF(Fields!MalwareProbabilityFormatted.Value &lt;&gt; "", Fields!MalwareProbabilityFormatted.Value, "N/A")</Value>
-                                      <Style>
-                                        <FontFamily>Segoe UI</FontFamily>
-                                        <Color>DimGray</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style>
-                                    <TextAlign>Left</TextAlign>
-                                  </Style>
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>5.8119cm</Top>
-                              <Left>4.21653cm</Left>
-                              <Height>0.55681cm</Height>
-                              <Width>12.30872cm</Width>
-                              <ZIndex>19</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
                             <Textbox Name="Textbox52">
                               <CanGrow>true</CanGrow>
                               <KeepTogether>true</KeepTogether>
@@ -2217,11 +2149,11 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>6.39103cm</Top>
+                              <Top>5.91478cm</Top>
                               <Left>4.21653cm</Left>
                               <Height>1.48684cm</Height>
                               <Width>12.30873cm</Width>
-                              <ZIndex>20</ZIndex>
+                              <ZIndex>18</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -2250,11 +2182,11 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox3</rd:DefaultName>
-                              <Top>6.39103cm</Top>
+                              <Top>5.91478cm</Top>
                               <Left>1.05628cm</Left>
                               <Height>0.73619cm</Height>
                               <Width>2.65076cm</Width>
-                              <ZIndex>21</ZIndex>
+                              <ZIndex>19</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -2268,7 +2200,7 @@
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Top>0.06576cm</Top>
-                          <Height>7.87787cm</Height>
+                          <Height>7.50745cm</Height>
                           <Width>16.82538cm</Width>
                           <ZIndex>1</ZIndex>
                           <Style>
@@ -2315,7 +2247,7 @@
         <DataSetName>DetailedBadFileDataSet</DataSetName>
         <Top>23.56482cm</Top>
         <Left>0.0635cm</Left>
-        <Height>8.97314cm</Height>
+        <Height>8.65564cm</Height>
         <Width>16.9365cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -2328,7 +2260,7 @@
     <Height>12.81022in</Height>
     <Style />
   </Body>
-  <Width>17cm</Width>
+  <Width>17.00001cm</Width>
   <Page>
     <PageHeader>
       <Height>3.09562cm</Height>
@@ -2541,7 +2473,7 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>0.73174cm</Height>
+      <Height>0.74229cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -2564,7 +2496,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Left>0.0635cm</Left>
+          <Left>0.06351cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
           <Style>
@@ -2619,7 +2551,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox3</rd:DefaultName>
-          <Top>0.09556cm</Top>
+          <Top>0.10611cm</Top>
           <Left>8.53886cm</Left>
           <Height>0.63618cm</Height>
           <Width>8.39765cm</Width>

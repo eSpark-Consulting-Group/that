@@ -51,8 +51,29 @@ namespace Valkyrie.WebApiProvider
 
         public static StartAndFinalizeScanResponse EndScan(EndScanRequest request)
         {
-            var response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.EndScan, request);
+            bool success = false;
+            int retry = 0;
+            StartAndFinalizeScanResponse response = new StartAndFinalizeScanResponse();
+            const int interval = 10000;
+            const int timeout = 180000;
+            int attempts = timeout / interval;
+
+            while (!success && retry < attempts)
+            {
+                try
+                {
+                    response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.EndScan, request);
+                    success = response.ReturnCode == ErrorCodesEnum.Success;
+
+                }
+                catch (Exception)
+                {
+                    retry++;
+                }
+                Thread.Sleep(interval);
+            }
             return response;
+
         }
 
 

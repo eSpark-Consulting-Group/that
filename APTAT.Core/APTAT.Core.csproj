@@ -65,6 +65,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AptAtManager.cs" />
+    <Compile Include="AptScanInProgressEventArgs.cs" />
     <Compile Include="AptScanStage.cs" />
     <Compile Include="Apt\AptScanner.cs" />
     <Compile Include="ComputerInformation.cs" />
@@ -300,6 +301,7 @@
     <Compile Include="IActiveDirectoryObserver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IAptScanner.cs" />
     <Compile Include="LogHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -316,6 +318,9 @@
     <Compile Include="Reports\ReportCompletedEventArgs.cs" />
     <Compile Include="Directory\TargetsManager.cs" />
     <Compile Include="Reports\StringExt.cs" />
+    <Compile Include="ScanCompletedEventArgs.cs" />
+    <Compile Include="ScanInProgressEventArgs.cs" />
+    <Compile Include="ScanStartedEventArgs.cs" />
     <Compile Include="Valkyrie\AnalyzeCompletedEventArgs.cs" />
     <Compile Include="Valkyrie\AnalyzeCompletedEventHandler.cs" />
     <Compile Include="Valkyrie\CamRegistration.cs" />

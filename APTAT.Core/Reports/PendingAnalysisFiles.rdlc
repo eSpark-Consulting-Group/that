@@ -811,76 +811,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <Textbox Name="Textbox57">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Malware Probability:</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>3.09449cm</Top>
-                          <Left>0.5495cm</Left>
-                          <Height>0.55681cm</Height>
-                          <Width>2.60667cm</Width>
-                          <ZIndex>22</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox58">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=IIF(Fields!MalwareProbabilityFormatted.Value &lt;&gt; "", Fields!MalwareProbabilityFormatted.Value, "N/A")</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>DimGray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>3.09449cm</Top>
-                          <Left>2.98527cm</Left>
-                          <Height>0.55681cm</Height>
-                          <Width>3.72942cm</Width>
-                          <ZIndex>23</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
                         <Textbox Name="Textbox59">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -904,7 +834,7 @@
                           <Left>6.71272cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>2.25908cm</Width>
-                          <ZIndex>24</ZIndex>
+                          <ZIndex>22</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -940,7 +870,7 @@
                           <Left>9.00707cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>7.11768cm</Width>
-                          <ZIndex>25</ZIndex>
+                          <ZIndex>23</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>

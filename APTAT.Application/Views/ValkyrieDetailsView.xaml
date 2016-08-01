@@ -125,8 +125,6 @@
                                Text="Copyright:" Grid.Column="0" Grid.Row="4"/>
                     <TextBlock AutomationProperties.AutomationId="ProductTextBlock"
                                Text="Product:" Grid.Column="0" Grid.Row="5"/>
-                    <TextBlock AutomationProperties.AutomationId="MalwareProbabilityTextBlock"
-                               Text="Malware Probability:" Grid.Column="0" Grid.Row="6"/>
 
                     <TextBox AutomationProperties.AutomationId="HashTextBox"
                              Text="{Binding Hash}" Grid.Column="1" Grid.Row="0" MaxWidth="220" ToolTipService.ToolTip="{Binding Hash}" HorizontalAlignment="Left" 
@@ -145,9 +143,7 @@
                     <TextBox AutomationProperties.AutomationId="ProductTextBox"
                              Text="{Binding Product}" Grid.Column="1" Grid.Row="5" MaxWidth="220" ToolTipService.ToolTip="{Binding Product}" HorizontalAlignment="Left" 
                              Style="{StaticResource SelectTextStyle}"/>
-                    <TextBox AutomationProperties.AutomationId="MalwareProbabilityTextBox"
-                             Text="{Binding MalwareProbability}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left"
-                             Style="{StaticResource SelectTextStyle}"/>
+                
                 </Grid>
             </Grid>
         </Grid>

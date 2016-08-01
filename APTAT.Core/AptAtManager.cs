@@ -13,42 +13,6 @@ using ValkyrieVerdict = APTAT.Core.Valkyrie.ValkyrieVerdict;
 
 namespace APTAT.Core
 {
-    public interface IAptScanner
-    {
-        void BeginScan(object state = null);
-        event EventHandler<ScanStartedEventArgs> ScanStarted;
-        event EventHandler<ScanCompletedEventArgs> ScanCompleted;
-        event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
-    }
-
-    public class ScanStartedEventArgs : EventArgs
-    {
-        public Exception Error { get; set; }
-        public Guid OperationUid { get; set; }
-        public object State { get; set; }
-    }
-
-    public class ScanCompletedEventArgs : EventArgs
-    {
-        public Guid OperationUid { get; set; }
-        public int TotalCount { get; set; }
-        public int NotPerformedCount { get; set; }
-        public int SucceededCount { get; set; }
-        public int FailedCount { get; set; }
-        public int CalceledCount { get; set; }
-
-        public FilesStatistics FilesStatistics { get; set; }
-    }
-
-    public class ScanInProgressEventArgs : EventArgs
-    {
-        public Guid OperationUid { get; set; }
-        public double Percentage { get; set; }
-    }
-    public class AptScanInProgressEventArgs : ScanInProgressEventArgs
-    {
-        public DescentProgressItem[] ProgressItems { get; set; }
-    }
 
 
     public class AptAtManager : IDisposable
