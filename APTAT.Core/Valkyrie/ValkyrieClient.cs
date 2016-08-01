@@ -19,7 +19,7 @@ namespace APTAT.Core.Valkyrie
 {
     internal sealed class ValkyrieClient : IValkyrieClient
     {
-        private int _changeTrakingIntervalInMs = (int)TimeSpan.FromSeconds(45).TotalMilliseconds;
+        private int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
@@ -363,6 +363,7 @@ namespace APTAT.Core.Valkyrie
             else
                 Task.Factory.StartNew(t =>
                     { 
+                       
                         ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount)); 
                     }, TaskCreationOptions.None);
 
