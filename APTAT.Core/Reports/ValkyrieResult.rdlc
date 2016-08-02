@@ -11,7 +11,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>2.84396cm</Height>
+              <Height>2.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -150,40 +150,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <Textbox Name="Textbox49">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Malware probability:</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>Gray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>2.14314cm</Top>
-                          <Left>0.54949cm</Left>
-                          <Height>0.55681cm</Height>
-                          <Width>2.56983cm</Width>
-                          <ZIndex>4</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
                         <Textbox Name="Textbox38">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -209,7 +175,7 @@
                           <Left>3.15459cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>12.97017cm</Width>
-                          <ZIndex>5</ZIndex>
+                          <ZIndex>4</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -245,7 +211,7 @@
                           <Left>3.15459cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>12.97017cm</Width>
-                          <ZIndex>6</ZIndex>
+                          <ZIndex>5</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -281,43 +247,7 @@
                           <Left>3.15459cm</Left>
                           <Height>0.55681cm</Height>
                           <Width>12.97017cm</Width>
-                          <ZIndex>7</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox50">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!MalwareProbabilityFormatted.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>DimGray</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Top>2.14314cm</Top>
-                          <Left>3.15459cm</Left>
-                          <Height>0.55681cm</Height>
-                          <Width>12.97017cm</Width>
-                          <ZIndex>8</ZIndex>
+                          <ZIndex>6</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -361,7 +291,7 @@
         </TablixRowHierarchy>
         <DataSetName>ValkyrieDataSet</DataSetName>
         <Top>0.93874cm</Top>
-        <Height>2.84396cm</Height>
+        <Height>2.5cm</Height>
         <Width>16.12476cm</Width>
         <Style>
           <Border>
@@ -383,7 +313,7 @@
         </Style>
       </Image>
     </ReportItems>
-    <Height>1.48925in</Height>
+    <Height>1.35384in</Height>
     <Style />
   </Body>
   <Width>16.12476cm</Width>
