@@ -15,7 +15,7 @@ namespace CodedUITestAT
         internal const int LongTestTimeout = 3600000; // Milliseconds
 
         /// <summary> Timeout for very long-lasting tests. </summary>
-        internal const int LongestTestTimeout = 18000000; // Milliseconds
+        internal const int LongestTestTimeout = 25200000; // Milliseconds
 
         #endregion
 

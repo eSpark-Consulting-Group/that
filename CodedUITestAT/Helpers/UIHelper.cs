@@ -93,6 +93,44 @@ namespace CodedUITestAT
             WaitForResultsRow(row.RowName, resultsScreen, testContext, waitForMilliseconds);            
         }
 
+        /// <summary>Waits for a specified row to be absent at a given results screen.</summary>
+        /// <param name="rowName">Set a row name.</param>
+        /// <param name="resultsScreen">Set results screen.</param>
+        /// <param name="testContext"> Set current Test Context.</param>
+        /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
+        internal static void WaitForAbsentResultsRow(IRow row, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
+        {
+            UITestControl expectedRow = null;
+            CodedUITestMain useMain = new CodedUITestMain();
+
+            var timer = Stopwatch.StartNew();
+            for (; ; )
+            {
+                Playback.Wait(1000);
+                switch (resultsScreen)
+                {
+                    case ResultsScreen.ScanningResults:
+                        {
+                            expectedRow = useMain.ScanningResultsTab().GetRow(row.RowName);
+                            break;
+                        }
+                    case ResultsScreen.ValkyrieAnalysis:
+                        {
+                            expectedRow = useMain.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
+                            break;
+                        }
+                }
+                if (expectedRow == null)
+                {
+                    testContext.WriteLine(String.Format("The given row '{0}' is not found at '{1}'.", row.RowName, resultsScreen));
+                    break;
+                }
+                if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
+                    throw new Exception(String.Format("The given row '{0}' is still present at '{1}' after {2} seconds!", row.RowName, resultsScreen, waitForMilliseconds / 1000));
+            }
+            timer.Stop();
+        }
+
         /// <summary> Determines whether a given UI control is cliackable. </summary>
         /// <param name="control">Set a UI control.</param>
         /// <returns>True, if the UI control is clickable.</returns>
@@ -149,9 +187,9 @@ namespace CodedUITestAT
         {
             string rowStatus = row.GetRowStatus();
 
-            foreach (var str in Settings.Results.Default.ScanStatusIndicatorRunning) if (rowStatus.Contains(str)) return ScanStatus.Running;
+            foreach (var str in Settings.Results.Default.ScanStatusIndicatorRunning) if (rowStatus.Contains(str)) return ScanStatus.InProgress;
             if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorCompleted)) return ScanStatus.Completed;
-            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorStopped)) return ScanStatus.Stopped;
+            else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorCanceled)) return ScanStatus.Canceled;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorFailed)) return ScanStatus.Failed;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorNotAccessible)) return ScanStatus.NotAccessible;
             else if (rowStatus.Contains(Settings.Results.Default.ScanStatusIndicatorConnecting)) return ScanStatus.Connecting;
@@ -272,7 +310,7 @@ namespace CodedUITestAT
 
         /// <summary> Clicks a given row at a specified results screen. Starts at Results screen. </summary>
         ///<param name="screen">Set a results screen.</param>
-        /// <param name="row">Set a computer.</param>
+        /// <param name="row">Set a row.</param>
         /// <param name="click">Set a mouse click type.</param>
         internal static void ClickRow(ResultsScreen screen, IRow row, MouseClick click = MouseClick.Left)
         {

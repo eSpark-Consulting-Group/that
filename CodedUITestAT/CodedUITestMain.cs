@@ -267,6 +267,11 @@ namespace CodedUITestAT
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
         }
 
+        private WpfEdit SearchBox()
+        {
+          return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISearchTextBoxEdit;
+        }
+
         #endregion
 
         #region Start Scanning wizard
@@ -473,35 +478,29 @@ namespace CodedUITestAT
                 if ((int) timer.ElapsedMilliseconds > treeWaitTime) throw new Exception(String.Format("Valkyrie results cannot be obtained from UI after {0} seconds!", treeWaitTime / 1000));
             }
             timer.Stop();
-        }        
-
-        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at Main screen. </summary>
-        /// <param name="endpoint">Set an endpoint.</param>
-        /// <param name="scanType">Set a scan type.</param>
-        /// <param name="testContext">Set a current TestContext.</param>
-        internal void StartEndpointScan(Computer endpoint, ScanType scanType, TestContext testContext)
-        {
-            StartEndpointScan(endpoint, scanType, DataHelper.Username, DataHelper.Password, testContext);
         }
 
-        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch using set credentials. Starts at main screen. </summary>
-        /// <param name="endpoint">Set an endpoint.</param>
+        /// <summary> Starts a scan of a given type at indicated endpoints via Network Addresses branch using set credentials. Starts at Main screen. </summary>        
         /// <param name="scanType">Set a scan type.</param>
         /// <param name="username">Set a username.</param>
         /// <param name="password">Set a password.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void StartEndpointScan(Computer endpoint, ScanType scanType, string username, string password, TestContext testContext)
+        /// <param name="endpoints">Set endpoints.</param>
+        private void StartEndpointScan(ScanType scanType, string username, string password, TestContext testContext, params Computer[] endpoints)
         {
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             testContext.WriteLine("Start Scanning wizard appeared...");
             UIMapStartScanningWizard.ClickNetworkAddressButton();
-            
+
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
             CleanNetworkAddressesList();
-            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
-            UIMapNetworkAddresses.InputNetworkAddress();
-            UIMapNetworkAddresses.ClickAddButton();
+            foreach (var endpoint in endpoints)
+            {
+                UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
+                UIMapNetworkAddresses.InputNetworkAddress();
+                UIMapNetworkAddresses.ClickAddButton();
+            }
             UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = username;
             UIMapNetworkAddresses.InputLogin();
             UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(password);
@@ -517,9 +516,28 @@ namespace CodedUITestAT
                     break;
                 default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType.ToString()));
             }
-            testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...", scanType.ToString(), endpoint.Name));
+            
+            foreach (var endpoint in endpoints) testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...", scanType.ToString(), endpoint.Name));
         }
 
+        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at Main screen. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        /// <param name="scanType">Set a scan type.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        internal void StartEndpointScan(Computer endpoint, ScanType scanType, TestContext testContext)
+        {
+            StartEndpointScan(scanType, DataHelper.Username, DataHelper.Password, testContext, endpoint);
+        }
+
+        /// <summary> Starts a scan of a given type at indicated endpoints via Network Addresses branch. Starts at Main screen. </summary>        
+        /// <param name="scanType">Set a scan type.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        /// <param name="endpoints">Set endpoints.</param>
+        internal void StartEndpointScan(ScanType scanType, TestContext testContext, params Computer[] endpoints)
+        {
+            StartEndpointScan(scanType, DataHelper.Username, DataHelper.Password, testContext, endpoints);
+        }
+        
         /// <summary> Waits for Scan Completed window. </summary>
         /// <param name="scanType">Set a scan type.</param>
         internal void WaitForScanCompleted(ScanType scanType)
@@ -547,7 +565,7 @@ namespace CodedUITestAT
             UIMapMain.ClickStopScanningButton();
             UIHelper.WaitForControl(YesDialogButton());
             UIMapStopScanWindow.ClickYesButton();
-            testContext.WriteLine("The scanning has been stopped.");
+            testContext.WriteLine("The scanning has been canceled.");
         }
 
         /// <summary> Cleans Network Addresses list. </summary>
@@ -730,6 +748,46 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("Expected regular error message '{0}' appeared.", expectedErrorText));
         }
 
+        /// <summary> Refreshes the results screen using Search box. </summary>
+        private void RefreshResultsScreen()
+        {
+            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = Guid.NewGuid().ToString();
+            UIMapMain.InputTextToSearchBox();
+            Playback.Wait(2000);
+            UIMapMain.ClickClearSearchTextButton();
+            Playback.Wait(2000);
+        }
+
+        /// <summary> Sets a given scan status to the results screen filter. </summary>
+        /// <param name="scanStatus">Set scan status.</param>
+        private void SetStatusFilter(ScanStatus scanStatus, TestContext testContext)
+        {
+            UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenByCCustom.UIFilteringDropDownCustom.UIFilterDropDownButtonButton.Container = ScanningResultsTab();
+            UIMapResultsWindow.ClickFilterDropDownButton();
+
+            switch (scanStatus)
+            {
+                case ScanStatus.Completed:
+                    UIMapResultsWindow.CheckCompletedFilterCheckBox();
+                    break;
+                case ScanStatus.Failed:
+                    UIMapResultsWindow.CheckFailedFilterCheckBox();
+                    break;
+                case ScanStatus.Canceled:
+                    UIMapResultsWindow.CheckCanceledFilterCheckBox();
+                    break;
+                case ScanStatus.InProgress:
+                    UIMapResultsWindow.CheckInProgressFilterCheckBox();
+                    break;
+                case ScanStatus.NotAccessible:
+                    UIMapResultsWindow.CheckOfflineFilterCheckBox();
+                    break;
+                default: throw new Exception(String.Format("Unexpected scan status!", scanStatus));
+            }
+
+            testContext.WriteLine(String.Format("Scan status '{0}' checked at the results screen filter.", scanStatus));
+        }
+
         #endregion
 
         #region Test methods
@@ -908,7 +966,7 @@ namespace CodedUITestAT
             UIMapStopScanWindow.ClickNoButton();
 
             ScanStatus endpointStatus = endpoint.GetScanStatus();
-            if (endpointStatus != ScanStatus.Running) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed!", endpoint.Name, endpointStatus));
+            if (endpointStatus != ScanStatus.InProgress) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed!", endpoint.Name, endpointStatus));
             else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is not confirmed.\n", endpoint.Name, endpointStatus));
 
             if (SysHelper.IsThereService(scannerServiceName, endpoint))
@@ -919,7 +977,7 @@ namespace CodedUITestAT
             StopScanning(TestContext);
 
             endpointStatus = endpoint.GetScanStatus();
-            if (endpointStatus != ScanStatus.Stopped) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed!", endpoint.Name, endpointStatus));
+            if (endpointStatus != ScanStatus.Canceled) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed!", endpoint.Name, endpointStatus));
             else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after the scan stop is confirmed.\n", endpoint.Name, endpointStatus));
 
             if (!SysHelper.IsThereService(scannerServiceName, endpoint))
@@ -934,7 +992,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Full, TestContext);
 
             endpointStatus = endpoint.GetScanStatus();
-            if (endpointStatus != ScanStatus.Running) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after another scan start!", endpoint.Name, endpointStatus));
+            if (endpointStatus != ScanStatus.InProgress) Assert.Fail(String.Format("Computer '{0}' scan status is '{1}' after another scan start!", endpoint.Name, endpointStatus));
             else TestContext.WriteLine(String.Format("Computer '{0}' scan status is '{1}' after another scan start.\n", endpoint.Name, endpointStatus));
 
             if (SysHelper.IsThereService(scannerServiceName, endpoint))
@@ -943,7 +1001,7 @@ namespace CodedUITestAT
 
             // A cleanup
             StopScanning(TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Stopped, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Canceled, TestContext);
         }
 
         [TestMethod]
@@ -953,7 +1011,7 @@ namespace CodedUITestAT
             string procName;
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Running, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext);
 
             if (SysHelper.IsOs64Bit(endpoint)) procName = Settings.Scanner.Default.ExeName64;
             else procName = Settings.Scanner.Default.ExeName86;
@@ -1003,7 +1061,7 @@ namespace CodedUITestAT
             int failedStatusWaitTime = Settings.WaitingTime.Default.ScanStatusFailedWaitTime;
 
             // Scan with a correct login and invalid password
-            StartEndpointScan(endpoint, ScanType.Quick, correctLogin, invalidPassword, TestContext);
+            StartEndpointScan(ScanType.Quick, correctLogin, invalidPassword, TestContext, endpoint);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             ScanStatus actualScanStatus = UIHelper.GetScanStatus(endpoint);
             if (actualScanStatus != ScanStatus.Failed)
@@ -1011,7 +1069,7 @@ namespace CodedUITestAT
             else TestContext.WriteLine(String.Format("Scan with a correct Username and invalid Password has '{0}' status.", actualScanStatus));
 
             // Scan with an invalid login and correct password
-            StartEndpointScan(endpoint, ScanType.Full, invalidLogin, correctPassword, TestContext);
+            StartEndpointScan(ScanType.Full, invalidLogin, correctPassword, TestContext, endpoint);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             actualScanStatus = UIHelper.GetScanStatus(endpoint);
             if (actualScanStatus != ScanStatus.Failed)
@@ -1019,7 +1077,7 @@ namespace CodedUITestAT
             else TestContext.WriteLine(String.Format("Scan with an invalid Username and correct Password has '{0}' status.", actualScanStatus));
 
             // Scan with an invalid login and invalid password
-            StartEndpointScan(endpoint, ScanType.Quick, invalidLogin, invalidPassword, TestContext);
+            StartEndpointScan(ScanType.Quick, invalidLogin, invalidPassword, TestContext, endpoint);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, failedStatusWaitTime);
             actualScanStatus = UIHelper.GetScanStatus(endpoint);
             if (actualScanStatus != ScanStatus.Failed)
@@ -1640,11 +1698,10 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(StartScanningButton());
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void CheckAllScanResultsTest()
         { 
             Computer endpoint = DataHelper.GetEndpoint();
-            string error = "error";
             int waitTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
             
             // Offline endpoint
@@ -1653,26 +1710,85 @@ namespace CodedUITestAT
             
             StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);
             UIHelper.WaitForControlIsEnabled(ScanningResultsTab(), waitTime);
-            
-            // Refreshes the results screen
-            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = error;
-            UIMapMain.InputTextToSearchBox();
-            Playback.Wait(2000);
-            UIMapMain.ClickClearSearchTextButton();
-            Playback.Wait(2000);
-            
+            RefreshResultsScreen();
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
             
             // Failed scan
-            StartEndpointScan(endpoint, ScanType.Quick, DataHelper.Username + error, DataHelper.Password, TestContext);
+            StartEndpointScan(ScanType.Quick, DataHelper.Username + "error", DataHelper.Password, TestContext, endpoint);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext, waitTime);
             
             // Completed scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Running, TestContext, waitTime);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickOkButton();
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
+        }
+
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
+        public void FilterDifferentScanResultsTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            int waitTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
+            string error = "error";
+            
+            // Offline endpoint
+            IPAddress offlineIp = SysHelper.FindOfflineIp();
+            Computer offlineComputer = new Computer(offlineIp);
+            
+            StartEndpointScan(ScanType.Quick, DataHelper.Username, DataHelper.Password + error, TestContext, offlineComputer, endpoint);
+            UIHelper.WaitForControlIsEnabled(StartScanningButton(), waitTime);
+            UIHelper.WaitForControlIsEnabled(SearchBox(), waitTime);
+            RefreshResultsScreen();
+            UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
+                        
+            SetStatusFilter(ScanStatus.NotAccessible, TestContext);
+            UIHelper.WaitForResultsRow(offlineComputer, ResultsScreen.ScanningResults, TestContext);
+            UIHelper.WaitForAbsentResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
+            UIMapResultsWindow.ClickClearFilterButton();
+        
+            // Failed scan
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
+            SetStatusFilter(ScanStatus.Failed, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
+            UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanningResults, TestContext);
+            UIMapResultsWindow.ClickClearFilterButton();
+            
+            // In Progress scan
+            StartEndpointScan(ScanType.Quick, TestContext, endpoint, offlineComputer);
+            UIHelper.WaitForControlIsEnabled(StopScanningButton(), waitTime);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext);
+            UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
+            
+            SetStatusFilter(ScanStatus.InProgress, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
+            UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanningResults, TestContext);
+            UIMapResultsWindow.ClickClearFilterButton();
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
+            
+            // Completed scan
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();            
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);            
+            
+            SetStatusFilter(ScanStatus.Completed, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
+            UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanningResults, TestContext);
+            UIMapResultsWindow.ClickClearFilterButton();
+            
+            // Canceled scan
+            StartEndpointScan(ScanType.Full, TestContext, endpoint, offlineComputer);
+            UIHelper.WaitForControlIsEnabled(StopScanningButton(), waitTime);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
+            UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
+            StopScanning(TestContext);
+            UIHelper.WaitForScanStatus(endpoint, ScanStatus.Canceled, TestContext, waitTime);
+
+            SetStatusFilter(ScanStatus.Canceled, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
+            UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanningResults, TestContext);
+            UIMapResultsWindow.ClickClearFilterButton();
         }
       
         #endregion

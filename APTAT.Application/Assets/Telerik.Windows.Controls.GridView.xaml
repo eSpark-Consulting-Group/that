@@ -253,7 +253,8 @@
 
 	<ControlTemplate TargetType="grid:FilteringDropDown" x:Key="DistinctFilterControlTemplate">
 		<Grid>
-			<Button x:Name="PART_DropDownButton">
+            <Button AutomationProperties.AutomationId="FilterDropDownButton"
+                    x:Name="PART_DropDownButton">
 				<Button.Template>
 					<ControlTemplate TargetType="Button">
 						<ContentPresenter />
@@ -332,11 +333,12 @@
 								  telerik:StyleManager.Theme="{StaticResource Theme}" Visibility="Collapsed"/>
 
 
-						<ListBox x:Name="PART_DistinctValuesList"
+                        <ListBox AutomationProperties.AutomationId="FilterListBox"
+                                 x:Name="PART_DistinctValuesList"
 								 ItemsSource="{Binding DistinctValues}"
 								 telerik:StyleManager.Theme="{StaticResource Theme}"
 								 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-							ItemContainerStyle="{StaticResource DistinctValueListBoxItemStyle}"
+							     ItemContainerStyle="{StaticResource DistinctValueListBoxItemStyle}"
 								 SelectionMode="Multiple" BorderThickness="0" Background="Transparent">
 							<ListBox.ItemsPanel>
 								<ItemsPanelTemplate>
@@ -346,9 +348,9 @@
 						
 							<ListBox.ItemTemplate>
 								<DataTemplate>
-									<CheckBox IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0"
+                                    <CheckBox AutomationProperties.AutomationId="{Binding ConvertedValue}"
+                                              IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0"
 											  Content="{Binding ConvertedValue, Converter={StaticResource DistinctValueConverter}}"
-											  
 											  telerik:StyleManager.Theme="{StaticResource Theme}" VerticalContentAlignment="Top" Padding="6 -2 0 0" FontFamily="Segoe UI Light" FontSize="13"/>
 								</DataTemplate>
 							</ListBox.ItemTemplate>
@@ -397,7 +399,8 @@
 								Visibility="{TemplateBinding FilterButtonVisibility}"
 								telerik:LocalizationManager.ResourceKey="GridViewFilter"
 								telerik:StyleManager.Theme="{StaticResource Theme}" />
-						<Button x:Name="PART_ClearFilterButton" Grid.Column="1"
+						<Button AutomationProperties.AutomationId="ClearFilterButton"
+                                x:Name="PART_ClearFilterButton" Grid.Column="1"
 								Margin="0 2 -5 5" 
 								telerik:LocalizationManager.ResourceKey="GridViewClearFilter"
 								Height="23" Width="75" />
@@ -480,9 +483,9 @@
 							VerticalContentAlignment="Stretch" Margin="3,3,0,3"/>
 
 				<telerik:RadDropDownButton x:Name="PART_DropDownButton"
-									   Grid.Column="1"
-									   KeepOpen="False" Style="{StaticResource FieldFilterDropDownButtonStyle}"
-									   DropDownIndicatorVisibility="Collapsed">
+									       Grid.Column="1"
+									       KeepOpen="False" Style="{StaticResource FieldFilterDropDownButtonStyle}"
+									       DropDownIndicatorVisibility="Collapsed">
 					<Border Cursor="Hand" Width="22" Height="22" Background="Transparent">
 						<Grid Width="12" Height="13">
 							<Path Data="M0.93340254,0 L4.934082,0 L6.934082,0 L10.93358,0 C11.996876,0 12.199773,0.75 11.668063,1.359375 L8.4335356,5.5 C8.100522,5.8975558 7.983531,6.062263 7.9429321,6.2736206 L7.934082,6.3298788 L7.934082,10.332101 C7.934082,10.332101 3.9340818,14.997499 3.9340818,14.997499 L3.9340818,6.3293748 L3.9286206,6.3012671 C3.8825667,6.1045012 3.751812,5.9296875 3.3865709,5.5 L0.24589038,1.40625 C-0.2067349,0.84375 -0.066181421,1.2241071E-16 0.93340254,0 z" Fill="{StaticResource StrongBrush}"  Stretch="Fill" Margin="2,1,2,2" Width="8" Height="11"/>
@@ -490,7 +493,7 @@
 						</Grid>
 					</Border>
 					<telerik:RadDropDownButton.DropDownContent>
-						<ListBox x:Name="PART_FilterOperatorsListBox"
+                        <ListBox x:Name="PART_FilterOperatorsListBox"
 								 ItemsSource="{Binding AvailableOperatorViewModels}"
 								 SelectedItem="{Binding SelectedOperatorViewModel, Mode=TwoWay}" 
 							 telerik:StyleManager.Theme="{StaticResource Theme}"/>

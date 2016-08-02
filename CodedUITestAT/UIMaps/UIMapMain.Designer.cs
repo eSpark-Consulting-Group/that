@@ -95,19 +95,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// ClickAboutButton
-        /// </summary>
-        public void ClickAboutButton()
-        {
-            #region Variable Declarations
-            WpfButton uISystemWindowsControlButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UISystemWindowsControlButton;
-            #endregion
-
-            // Click 'System.Windows.Controls.Grid' button
-            Mouse.Click(uISystemWindowsControlButton, new Point(39, 17));
-        }
-        
-        /// <summary>
         /// ClickAnalyseWithValkyrieButton
         /// </summary>
         public void ClickAnalyseWithValkyrieButton()
