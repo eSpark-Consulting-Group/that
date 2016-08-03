@@ -73,7 +73,7 @@ namespace Valkyrie.WebApiProvider
                 Thread.Sleep(interval);
             }
             return response;
-
+            Trace.Flush();
         }
 
 
@@ -183,22 +183,24 @@ namespace Valkyrie.WebApiProvider
 
         private static T CallValkyrie<T>(Uri apiUri, object request)
         {
+            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Call {1}", DateTime.UtcNow, apiUri.ToString()));
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
             {
-
+#if DEBUG
                 if (!ValkyrieApiUrls.IsProduction)
                 {
                     ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 }
+#endif
                 if (ProxySettings.Proxy != null)
                 {
                     client.Proxy = ProxySettings.Proxy;
                 }
                 byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
-                //Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Call {1}", DateTime.UtcNow, apiUri.ToString()));
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Call {1}", DateTime.UtcNow, apiUri.ToString() + " " + Environment.NewLine + responseEncoded));
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Response for {1}", DateTime.UtcNow, apiUri.ToString() 
+                    + " " + Environment.NewLine + responseEncoded));
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;
             }
