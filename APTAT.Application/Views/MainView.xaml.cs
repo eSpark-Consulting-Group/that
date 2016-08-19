@@ -43,7 +43,10 @@ namespace APTAT.Application
             switch (message.Message)
             {
                 case ChangeScreenTypes.Scan:
-                    mainContent.Content = new ResultTabsControl();
+                    _viewModel.SetReportKind(ReportKind.DetailedPerProgram);
+                    ReportButton.IsOpen = false;
+                    ShowReport();
+                    //mainContent.Content = new ResultTabsControl();
                     break;
                 case ChangeScreenTypes.ValkyrieScan:
                     if (mainContent.Content != null && mainContent.Content is ResultTabsControl)
