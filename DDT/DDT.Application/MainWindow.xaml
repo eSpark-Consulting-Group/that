@@ -15,7 +15,7 @@
         WindowStyle="None" WindowStartupLocation="CenterScreen"
         MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
         ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
-        x:Name="this"
+        x:Name="this" Title="Discovery and Deployment Tool"
         Height="768" MinHeight="768" Width="948" MinWidth="948" 
         helpers:ThemeHelper.Theme="{Binding Theme}">
     <Border x:Name="Border" BorderThickness="1" BorderBrush="{DynamicResource StrongBrush}">
