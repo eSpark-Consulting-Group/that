@@ -7,7 +7,6 @@ using System.ComponentModel;
 using DDT.Application.Messages;
 using DDT.Application.ViewModels;
 using System.Windows.Controls;
-using DDT.Application.Helpers;
 using System.Windows.Data;
 using System;
 using APTAT.Common;
@@ -23,7 +22,7 @@ namespace DDT.Application
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                DataContext = CompositionHelper.Instance.GetService<MainViewModel>();
+                DataContext = CompositionHelper.Instance.Resolve<MainViewModel>();
 
                 BindingOperations.SetBinding(this, ErrorMessageProperty, new Binding("ErrorMessage"));
                 BindingOperations.SetBinding(this, DisclaimerMessageProperty, new Binding("DisclaimerMessage"));

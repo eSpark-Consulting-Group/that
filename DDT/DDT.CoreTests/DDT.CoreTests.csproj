@@ -50,9 +50,8 @@
     <Reference Include="Telerik.JustMock">
       <HintPath>..\..\Common\ThirdParty\Telerik.JustMock.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Reporting, Version=10.1.16.615, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Branches\APTAT\DeploymentTool\DDT\ThirdParty\Telerik.Reporting.dll</HintPath>
+    <Reference Include="Telerik.Reporting">
+      <HintPath>..\..\..\..\DeploymentTool\DDT\ThirdParty\Telerik.Reporting.dll</HintPath>
     </Reference>
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>

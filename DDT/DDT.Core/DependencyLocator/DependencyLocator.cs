@@ -1,7 +1,7 @@
 ﻿using APTAT.Common;
 using DDT.Core.Reports;
 
-namespace DDT.Core.DependencyLocator
+namespace DDT.Core
 {
     public class DependencyLocator : IDependencyLocatorModule
     {
@@ -10,7 +10,6 @@ namespace DDT.Core.DependencyLocator
             resolver.Register<IFileHelper, FileHelper>(true);
             resolver.Register<IReportRenderer, TelerikReportRenderer>(false);
             resolver.Register<IReportBuilder, ReportBuilder>(false);
-            
         }
     }
 }

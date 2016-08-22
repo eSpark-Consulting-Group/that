@@ -12,17 +12,17 @@ namespace APTAT.DeploymentCore.UnitTests.DependencyLocator
         [Fact]
         public void RegisterTest()
         {
-            var target = new DeploymentCore.DependencyLocator.DependencyLocator();
+            var target = new DeploymentCore.DependencyLocator();
 
             var dependencyResolver = Mock.Create<ICompositionHelper>(Behavior.Strict);
-            Mock.Arrange(() => dependencyResolver.Register<INetworkObserver, NetworkObserver>(false));
+            Mock.Arrange(() => dependencyResolver.Register<INetworkObserver, NetworkObserver>());
             Mock.Arrange(() => dependencyResolver.Register<IDescentSubSystem, DescentSubSystem>(true))
                 .OccursOnce();
-            Mock.Arrange(() => dependencyResolver.Register<IActiveDirectoryObserver, ActiveDirectoryObserver>(false))
+            Mock.Arrange(() => dependencyResolver.Register<IActiveDirectoryObserver, ActiveDirectoryObserver>())
                 .OccursOnce();
-            Mock.Arrange(() => dependencyResolver.Register<IWorkgroupObserver, WorkgroupObserver>(false))
+            Mock.Arrange(() => dependencyResolver.Register<IWorkgroupObserver, WorkgroupObserver>())
                 .OccursOnce();
-            Mock.Arrange(() => dependencyResolver.Register<INetworkBrowser, NetworkBrowser>(false))
+            Mock.Arrange(() => dependencyResolver.Register<INetworkBrowser, NetworkBrowser>())
                 .OccursOnce();
             Mock.Arrange(() => dependencyResolver.Register<ICommandFactory, CommandFactory>(true))
                 .OccursOnce();

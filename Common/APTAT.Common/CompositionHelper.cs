@@ -3,10 +3,11 @@ using System.Linq;
 using System.Reflection;
 using SimpleInjector;
 using SimpleInjector.Advanced;
+using System.Collections.Generic;
 
 namespace APTAT.Common
 {
-    public class CompositionHelper : IServiceProvider, ICompositionHelper
+    public class CompositionHelper : ICompositionHelper
     {
         internal static Lifestyle InstancePerDependencyLifestyle { get; } = new InstancePerDependencyLifestyle();
         public class MostResolvableConstructorBehavior : IConstructorResolutionBehavior
@@ -99,68 +100,11 @@ namespace APTAT.Common
             _container = new Container();
             _container.Options.ConstructorResolutionBehavior = new MostResolvableConstructorBehavior(_container);
             _container.Options.LifestyleSelectionBehavior = new AttributeBasedLifestyleSelectionBehavior();
-            
         }
 
         static CompositionHelper()
         {
             Instance = new CompositionHelper();
-        }
-        public static void Initialize(bool autoLoadModules = true)
-        {
-            if (autoLoadModules)
-            {
-                // Find all assemblies and all classes implementing the IDependencyLocatorModule
-                // for each of these, register the dependencies
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where( a => a.FullName.StartsWith("APT") ||
-                    a.FullName.StartsWith("DDT"));
-                foreach (var assembly in assemblies)
-                {
-                    var q = from t in assembly.GetTypes()
-                            where t.IsClass && typeof(IDependencyLocatorModule).IsAssignableFrom(t)
-                            select t;
-                    q.ToList().ForEach(t => LoadModule(t, Instance));
-                }
-            }
-        }
-        private static void LoadModule(Type type, ICompositionHelper resolver)
-        {
-            ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes);
-            if (constructorInfo == null)
-            {
-                // Log an error
-            }
-            else
-            {
-                var locatorModule = constructorInfo.Invoke(new object[] { }) as IDependencyLocatorModule;
-                if (locatorModule == null)
-                {
-                    // Could not instantiate the locator module, log an error and continue
-                }
-                else
-                {
-                    locatorModule.RegisterDependencies(resolver);
-                }
-            }
-        }
-
-        public object GetService(Type serviceType)
-        {
-            IServiceProvider serviceProvider = _container;
-
-            return serviceProvider.GetService(serviceType);
-        }
-
-        public TService GetService<TService>() where TService : class
-        {
-            IServiceProvider serviceProvider = _container;
-
-            return serviceProvider.GetService(typeof(TService)) as TService;
-        }
-
-        public void Register<TService>() where TService : class
-        {
-            _container.Register<TService>();
         }
 
         public void Register<TIService, TService>()
@@ -170,25 +114,30 @@ namespace APTAT.Common
             _container.Register<TIService, TService>();
         }
 
-        public void Register<TIService, TService>(Boolean isSingelton)
+        public void Register<TIService, TService>(Boolean isSingleton)
             where TIService : class
             where TService : class, TIService
         {
-            if (isSingelton)
-                _container.Register<TIService, TService>(Lifestyle.Singleton);
+            if (isSingleton)
+                _container.RegisterSingleton<TIService, TService>();
             else
                 _container.Register<TIService, TService>(InstancePerDependencyLifestyle);
         }
 
-        public T Resolve<T>() where T:class
+        public void RegisterModules(IEnumerable<Type> moduleTypes)
+        {
+            using (var container = new Container())
+            {
+                container.RegisterCollection<IDependencyLocatorModule>(moduleTypes);
+                container.RegisterInitializer<IDependencyLocatorModule>(_ => _.RegisterDependencies(this));
+                container.Verify();
+                _container.Verify();
+            }
+        }
+
+        public T Resolve<T>() where T : class
         {
             return _container.GetInstance<T>();
-        }
-        
-
-        public void Verify()
-        {
-            _container.Verify();
         }
     }
 }

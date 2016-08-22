@@ -146,7 +146,7 @@ namespace DDT.Application.Views
             s.Children.Add(widthAnimation);
             s.Children.Add(opacityAnimation);
 
-            s.Completed += (o, args) => b.Width = 0;
+            s.Completed += (o, args) => { b.Width = 0; b.Visibility = Visibility.Collapsed; };
             s.Begin();
         }
 

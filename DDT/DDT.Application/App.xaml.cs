@@ -17,21 +17,18 @@ namespace DDT.Application
         {
             Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            InitTraceListener();
 
+            CompositionHelper.Instance.RegisterModules(new[] 
+            {
+                typeof(APTAT.Common.DependencyLocator),
+                typeof(APTAT.DeploymentCore.DependencyLocator),
+                typeof(Core.DependencyLocator),
+                typeof(DependencyLocator)
+            });
+
+            InitTraceListener();
             Trace.WriteLine($"DDT started: {DateTime.UtcNow}");
             Trace.Flush();
-
-            IDependencyLocatorModule d = new APTAT.Common.DependencyLocator();
-            d.RegisterDependencies(CompositionHelper.Instance);
-            d = new APTAT.DeploymentCore.DependencyLocator.DependencyLocator();
-            d.RegisterDependencies(CompositionHelper.Instance);
-            d = new DDT.Core.DependencyLocator.DependencyLocator();
-            d.RegisterDependencies(CompositionHelper.Instance);
-            d = new Services.DependencyLocator();
-            d.RegisterDependencies(CompositionHelper.Instance);
-            
-            CompositionHelper.Instance.Verify();
         }
 
         public void Dispose()
