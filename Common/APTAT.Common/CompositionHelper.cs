@@ -111,17 +111,14 @@ namespace APTAT.Common
             where TIService : class
             where TService : class, TIService
         {
-            _container.Register<TIService, TService>();
+            _container.Register<TIService, TService>(InstancePerDependencyLifestyle);
         }
 
-        public void Register<TIService, TService>(Boolean isSingleton)
+        public void RegisterSingleton<TIService, TService>()
             where TIService : class
             where TService : class, TIService
         {
-            if (isSingleton)
-                _container.RegisterSingleton<TIService, TService>();
-            else
-                _container.Register<TIService, TService>(InstancePerDependencyLifestyle);
+            _container.RegisterSingleton<TIService, TService>();
         }
 
         public void RegisterModules(IEnumerable<Type> moduleTypes)

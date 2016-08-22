@@ -16,7 +16,7 @@ namespace APTAT.DeploymentCore.UnitTests.DependencyLocator
 
             var dependencyResolver = Mock.Create<ICompositionHelper>(Behavior.Strict);
             Mock.Arrange(() => dependencyResolver.Register<INetworkObserver, NetworkObserver>());
-            Mock.Arrange(() => dependencyResolver.Register<IDescentSubSystem, DescentSubSystem>(true))
+            Mock.Arrange(() => dependencyResolver.RegisterSingleton<IDescentSubSystem, DescentSubSystem>())
                 .OccursOnce();
             Mock.Arrange(() => dependencyResolver.Register<IActiveDirectoryObserver, ActiveDirectoryObserver>())
                 .OccursOnce();
@@ -24,11 +24,11 @@ namespace APTAT.DeploymentCore.UnitTests.DependencyLocator
                 .OccursOnce();
             Mock.Arrange(() => dependencyResolver.Register<INetworkBrowser, NetworkBrowser>())
                 .OccursOnce();
-            Mock.Arrange(() => dependencyResolver.Register<ICommandFactory, CommandFactory>(true))
+            Mock.Arrange(() => dependencyResolver.RegisterSingleton<ICommandFactory, CommandFactory>())
                 .OccursOnce();
-            Mock.Arrange(() => dependencyResolver.Register<ITargetsManager, TargetsManager>(true))
+            Mock.Arrange(() => dependencyResolver.RegisterSingleton<ITargetsManager, TargetsManager>())
                 .OccursOnce();
-            Mock.Arrange(() => dependencyResolver.Register<IIPSatretegySelectionProvider, IPSatretegySelectionProvider>(true))
+            Mock.Arrange(() => dependencyResolver.RegisterSingleton<IIPSatretegySelectionProvider, IPSatretegySelectionProvider>())
                 .OccursOnce();
             target.RegisterDependencies(dependencyResolver);
         }

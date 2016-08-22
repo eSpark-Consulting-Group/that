@@ -8,8 +8,8 @@ namespace DDT.Application
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            resolver.Register<ITargetsDiscoveryService, TargetsDiscoveryService>(false);
-            resolver.Register<IDeploymentService, DeploymentService>(false);
+            resolver.Register<ITargetsDiscoveryService, TargetsDiscoveryService>();
+            resolver.Register<IDeploymentService, DeploymentService>();
             resolver.Register<IReportService, ReportService>();
         }
     }

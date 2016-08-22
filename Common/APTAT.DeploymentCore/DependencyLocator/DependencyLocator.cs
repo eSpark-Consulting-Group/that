@@ -10,14 +10,14 @@ namespace APTAT.DeploymentCore
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            resolver.Register<IDescentSubSystem, DescentSubSystem>(true);
-            resolver.Register<INetworkObserver, NetworkObserver>(false);
-            resolver.Register<IActiveDirectoryObserver, ActiveDirectoryObserver>(false);
-            resolver.Register<IWorkgroupObserver, WorkgroupObserver>(false);
-            resolver.Register<INetworkBrowser, NetworkBrowser>(false); 
-            resolver.Register<ICommandFactory, CommandFactory>(true);
-            resolver.Register<ITargetsManager, TargetsManager>(true); 
-            resolver.Register<IIPSatretegySelectionProvider, IPSatretegySelectionProvider>(true);
+            resolver.RegisterSingleton<IDescentSubSystem, DescentSubSystem>();
+            resolver.Register<INetworkObserver, NetworkObserver>();
+            resolver.Register<IActiveDirectoryObserver, ActiveDirectoryObserver>();
+            resolver.Register<IWorkgroupObserver, WorkgroupObserver>();
+            resolver.Register<INetworkBrowser, NetworkBrowser>(); 
+            resolver.RegisterSingleton<ICommandFactory, CommandFactory>();
+            resolver.RegisterSingleton<ITargetsManager, TargetsManager>(); 
+            resolver.RegisterSingleton<IIPSatretegySelectionProvider, IPSatretegySelectionProvider>();
         }
     }
 }

@@ -7,9 +7,9 @@ namespace DDT.Core
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            resolver.Register<IFileHelper, FileHelper>(true);
-            resolver.Register<IReportRenderer, TelerikReportRenderer>(false);
-            resolver.Register<IReportBuilder, ReportBuilder>(false);
+            resolver.RegisterSingleton<IFileHelper, FileHelper>();
+            resolver.Register<IReportRenderer, TelerikReportRenderer>();
+            resolver.Register<IReportBuilder, ReportBuilder>();
         }
     }
 }

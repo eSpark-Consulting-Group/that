@@ -7,7 +7,7 @@ namespace APTAT.Common
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            resolver.Register<IChangeTrackingSubSystem, ChangeTrackingSubSystem>(true);
+            resolver.RegisterSingleton<IChangeTrackingSubSystem, ChangeTrackingSubSystem>();
         }
     }
 }
