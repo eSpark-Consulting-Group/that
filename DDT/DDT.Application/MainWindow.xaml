@@ -48,7 +48,7 @@
                 </Grid>
             </Border>
 
-            <Grid Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="grid2" Background="{DynamicResource ErrorBrush}" Opacity="0">
+            <Grid Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="grid2" Background="{DynamicResource ErrorBrush}" Opacity="0" >
                 <Grid.RenderTransform>
                     <TranslateTransform x:Name="translate4" Y="-60" />
                 </Grid.RenderTransform>
@@ -133,12 +133,12 @@
                 </VisualStateManager.VisualStateGroups>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <TextBlock Margin="20 7 20 8"  VerticalAlignment="Center" FontSize="15" Foreground="{DynamicResource TextBrush3}" FontFamily="{StaticResource myriadpro}" Text="{Binding ErrorMessage}" />
-                    <Button Style="{StaticResource CloseButton}" Background="{DynamicResource TextBrush3}" Command="{Binding ClearErrorMessageCommand}" Grid.Column="1" Margin="0 0 10 0" Width="12" Height="12"   ToolTip="Hide" />
+                    <Button Style="{StaticResource CloseButton}" Background="{DynamicResource TextBrush3}" Command="{Binding ClearErrorMessageCommand}" Grid.Column="1" Margin="2 0 5 0" Width="12" Height="12"   ToolTip="Hide" />
                 </StackPanel>
                 
             </Grid>
 
-            <Grid Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="grid3" Background="{DynamicResource AccentBrush}" Opacity="0">
+            <Grid Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="grid3" Background="{DynamicResource AccentBrush}" Opacity="0" Margin="0 0 19 0">
                 <Grid.RenderTransform>
                     <TranslateTransform x:Name="translate5" Y="-60" />
                 </Grid.RenderTransform>
@@ -223,7 +223,7 @@
                 </VisualStateManager.VisualStateGroups>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <TextBlock Margin="20 7 20 8"  VerticalAlignment="Center" MaxWidth="400" FontSize="13" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" FontFamily="{StaticResource myriadpro}" Text="{Binding DisclaimerMessage}" />
-                    <Button Style="{StaticResource CloseButton}" Background="{DynamicResource TextBrush3}" Command="{Binding ClearDisclaimerMessageCommand}" Grid.Column="1" Margin="0 0 10 0" Width="12" Height="12"   ToolTip="Hide" />
+                    <Button Style="{StaticResource CloseButton}" Background="{DynamicResource TextBrush3}" Command="{Binding ClearDisclaimerMessageCommand}" Grid.Column="1" Margin="2 0 5 0" Width="12" Height="12"   ToolTip="Hide" />
                 </StackPanel>
 
             </Grid>
@@ -350,7 +350,7 @@
                     </TextBlock>
 
                     <TextBlock Margin="0,0,20,0" Foreground="{DynamicResource NameBrush}" MaxWidth="340" FontSize="13" FontFamily="{StaticResource myriadpro}" x:Name="Welcome" HorizontalAlignment="Right" VerticalAlignment="Center" TextWrapping="Wrap">
-                        <Run Text="This tool can be used to discover endpoints and deploy installation packages on those. To start, you need to accept the"/><Run Text=" EULA " Foreground="White"/><Run Text="below."/>
+                        <Run Text="This tool is designed to deploy installation packages to the devices discovered on the network. To start, you need to accept the"/><Run Text=" EULA " Foreground="White"/><Run Text="below."/>
                     </TextBlock>
 
                     <Grid x:Name="HeaderMenuGrid" HorizontalAlignment="Right" VerticalAlignment="Center" Height="62" Margin="0,0,0,0" Grid.Column="1" Grid.Row="1"  Opacity="0" Visibility="Collapsed">
@@ -464,7 +464,7 @@
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" >
                     <StackPanel>
                         <ProgressBar RangeBase.Minimum="0" RangeBase.Maximum="100" Value="{Binding Progress, Mode=TwoWay}" VerticalAlignment="Top"  />
-                        <TextBlock HorizontalAlignment="Right" Margin="0 4 3 0" Style="{StaticResource SubTitleTextStyle}" FontSize="13" Text="{Binding ProgressMessage}"/>
+                        <TextBlock HorizontalAlignment="Center" Margin="0 4 0 0" Style="{StaticResource SubTitleTextStyle}" FontSize="13" Text="{Binding ProgressMessage}"/>
                     </StackPanel>
                 </Grid>
             </Grid>
@@ -472,7 +472,7 @@
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" >
                     <StackPanel>
                         <ProgressBar RangeBase.Minimum="0" RangeBase.Maximum="100" Value="{Binding InternalProgress, Mode=TwoWay}" VerticalAlignment="Top"  />
-                        <TextBlock HorizontalAlignment="Right" Margin="0 4 3 0" Style="{StaticResource SubTitleTextStyle}" FontSize="13" Text="{Binding ProgressMessage}"/>
+                        <TextBlock HorizontalAlignment="Center" Margin="0 4 0 0" Style="{StaticResource SubTitleTextStyle}" FontSize="13" Text="{Binding ProgressMessage}"/>
                     </StackPanel>
                 </Grid>
             </Grid>
