@@ -8,32 +8,38 @@ using Telerik.Reporting.Processing;
 
 namespace DDT.Core.Reports
 {
-
-    public class ReportBuilder
+    public interface IReportBuilder
+    {
+        string Build(IReportData data, ReportType reportType);
+    }
+    public class ReportBuilder : IReportBuilder
     {
         private const string DeploymentReportName = "DeploymentReport";
-        private readonly ReportNamesCache cache = ReportNamesCache.Instance;        
+        private readonly ReportNamesCache cache = ReportNamesCache.Instance;
         private const string _reportDefinitionPath = "DDT.Core.Reports";
+        private readonly IReportRenderer _reportRenderer;
+        private readonly IFileHelper _fileHelper;
 
-
-        public string Build(ReportData data, ReportType reportType)
+        public ReportBuilder(IReportRenderer reportRenderer, IFileHelper fileHelper)
         {
-            
-            if (data == null)
-                return null;
+            _fileHelper = fileHelper;
+            _reportRenderer = reportRenderer;
+        }
 
+        private string LookupForExistentReport(string operationUid, ReportType reportType)
+        {
             var existentName = String.Empty;
-            var flsReportKey = string.Format("{0}-{1}", data.OperationUid, reportType);
-            var reportKey = String.Empty;
-            if (cache.Reports.Keys.Contains(flsReportKey))
+            var reportKey = string.Format("{0}-{1}", operationUid, reportType);
+
+            if (cache.Reports.Keys.Contains(reportKey))
             {
-                existentName = cache.Reports[flsReportKey];
-                reportKey = flsReportKey;
+                existentName = cache.Reports[reportKey];
             }
+
             string fileName;
             if (!String.IsNullOrWhiteSpace(existentName))
             {
-                if (File.Exists(existentName))
+                if (_fileHelper.IsFileExists(existentName))
                 {
                     fileName = existentName;
                     return existentName;
@@ -43,14 +49,20 @@ namespace DDT.Core.Reports
                     cache.Reports.Remove(reportKey);
                 }
             }
+            return null;
+        }
+        public string Build(IReportData data, ReportType reportType)
+        {
+            if (data == null) return null;
+            var foundReportFileName = LookupForExistentReport(data.OperationUid, reportType);
+            if (!string.IsNullOrEmpty(foundReportFileName)) return foundReportFileName;
 
-            fileName = GetFileName(reportType);
+            var fileName = GetFileName(reportType);
             switch (reportType)
             {
                 case ReportType.DeploymentReport:
                     cache.Reports.Add(string.Format("{0}-{1}", data.OperationUid, reportType), fileName);
-                    var reportSource = BuildDeploymentReport(data);
-                    RenderReportToPdf(fileName, reportSource);
+                    _reportRenderer.Render(new DeploymentReportModern(), data, fileName);
                     break;
 
                 default:
@@ -58,27 +70,7 @@ namespace DDT.Core.Reports
             }
 
             return fileName;
-        }
-
-        private ReportSource BuildDeploymentReport(ReportData data)
-        {
-            InstanceReportSource reportSource = new InstanceReportSource();
-            DeploymentReportModern report = new DeploymentReportModern();
-            report.DataSource = data;
-            reportSource.ReportDocument = report;
-            return reportSource;
-        }
-
-        private static void RenderReportToPdf(string fileName, ReportSource reportSource)
-        {
-            ReportProcessor reportProcessor = new ReportProcessor();
-            RenderingResult renderResult = reportProcessor.RenderReport("PDF", reportSource, new System.Collections.Hashtable());
-
-            using (FileStream fs = new FileStream(fileName, FileMode.Create))
-            {
-                fs.Write(renderResult.DocumentBytes, 0, renderResult.DocumentBytes.Length);
-            }
-        }
+        }        
 
         private static string GetFileName(ReportType reportType)
         {

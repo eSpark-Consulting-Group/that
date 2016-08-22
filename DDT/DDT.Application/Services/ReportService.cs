@@ -15,11 +15,11 @@ namespace DDT.Application.Services
 {
     public class ReportService: IReportService
     {
-        private readonly ReportBuilder _reportBuilder;
+        private readonly IReportBuilder _reportBuilder;
 
-        public ReportService()
+        public ReportService(IReportBuilder reportBuilder)
         {
-            _reportBuilder = new ReportBuilder();
+            _reportBuilder = reportBuilder;
         }
 
         public async Task<string>  BuildDiscoveryAndDeploymentReport(DeploymentItem[] targetsByIp, DeploymentItem[] targetsByDomain, DeploymentItem[] targetsByWorkgroup, Guid operationUid)
@@ -32,9 +32,6 @@ namespace DDT.Application.Services
             string pdfReportPath = await Task.Run( () => _reportBuilder.Build(data, ReportType.DeploymentReport));                
             return pdfReportPath;
         }
-
-
-
         
         private static DeploymentReportModel MapTo(IEnumerable<DeploymentItem> items)
         {

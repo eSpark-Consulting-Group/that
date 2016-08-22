@@ -7,7 +7,8 @@ using System.Text;
 
 namespace DDT.Core.Reports
 {
-    public class ReportData
+
+    public class ReportData : IReportData
     {
         public ReportData()
         {

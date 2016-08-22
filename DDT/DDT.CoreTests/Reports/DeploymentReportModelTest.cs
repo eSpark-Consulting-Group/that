@@ -17,11 +17,7 @@ namespace DDT.CoreTests.Reports
             var list = GetDetailsOfScan();
             var model = new DeploymentReportModel(list);
             var endpointsByOs = model.WindowsEndpoints + model.LinuxEndpoints + model.MacEndpoints + model.OthersDevices;
-
-            Assert.Equal(endpointsByOs, model.FoundDevices);
-
-            var endpointsByStatus = model.FailedDeployments + model.SkippedDeployments + model.StoppedDeployments + model.SkippedDeployments;
-
+            Assert.Equal(endpointsByOs, model.FoundDevices);   
         }
 
         [Fact()]
@@ -30,9 +26,7 @@ namespace DDT.CoreTests.Reports
             var list = GetDetailsOfScan();
             var model = new DeploymentReportModel(list);
             var endpointsByStatus = model.FailedDeployments + model.SkippedDeployments + model.StoppedDeployments + model.SuccessfulDeployments;
-
             Assert.Equal(endpointsByStatus, model.FoundDevices);            
-
         }
 
         [Fact()]
@@ -78,8 +72,7 @@ namespace DDT.CoreTests.Reports
             List<IDetailsOfScan> list = new List<IDetailsOfScan>();
             list.AddRange(new []{ details1,details2, details3, details4, details5});
 
-            return list;
-            
+            return list;            
         }
 
     }

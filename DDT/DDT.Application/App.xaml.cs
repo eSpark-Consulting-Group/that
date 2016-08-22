@@ -26,9 +26,11 @@ namespace DDT.Application
             d.RegisterDependencies(CompositionHelper.Instance);
             d = new APTAT.DeploymentCore.DependencyLocator.DependencyLocator();
             d.RegisterDependencies(CompositionHelper.Instance);
+            d = new DDT.Core.DependencyLocator.DependencyLocator();
+            d.RegisterDependencies(CompositionHelper.Instance);
             d = new Services.DependencyLocator();
             d.RegisterDependencies(CompositionHelper.Instance);
-
+            
             CompositionHelper.Instance.Verify();
         }
 
