@@ -1,0 +1,216 @@
+﻿<UserControl x:Class="DDT.Application.Views.DiscoveryTargetsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DDT.Application.Views"
+      xmlns:converters="clr-namespace:DDT.Application.Converters"
+      xmlns:enums="clr-namespace:DDT.Application.Messages"
+      xmlns:helpers="clr-namespace:DDT.Application.Helpers"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300" helpers:ThemeHelper.Theme="{Binding Theme}">
+    
+
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Style="{DynamicResource SubTitleTextStyle}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" FontSize="16"  VerticalAlignment="Top" Margin="3,40,0,0">
+                Discovery Target(s)
+        </TextBlock>
+        <Border Margin="0,62,0,0" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0" x:Name="scroll">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition RowDefinition.Height="Auto" />
+                            <RowDefinition RowDefinition.Height="Auto" />
+                            <RowDefinition RowDefinition.Height="*"  />
+                        </Grid.RowDefinitions>
+
+                        <Button Click="Button_Click" CommandParameter="{x:Static enums:ChangeScreenTypes.ActiveDirectoryCredentials}" Tag="{Binding ActiveDirectoryHeader}" ToolTipService.ToolTip="{Binding ActiveDirectoryHeader}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <FrameworkTemplate.Resources>
+                                        <ResourceDictionary>
+                                            <Storyboard x:Key="AnimaFocused"  />
+                                            <Storyboard x:Key="AnimaMouseEnter" >
+                                                <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                            <Storyboard x:Key="AnimaMouseLeave" >
+                                                <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </ResourceDictionary>
+                                    </FrameworkTemplate.Resources>
+                                    <Grid>
+                                        <Grid Background="{DynamicResource AccentBrush}" Height="80">
+                                            <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                            <Grid Margin="22 0">
+                                                <Path SnapsToDevicePixels="True" x:Name="path" Data="F1M350,244.1104L315,244.1104L324,225.1104L351,225.1104L353,225.1104L359,225.1104z M314,225.1104L314,220.1104L314,218.1104L314,216.1104L314,215.1104L314,214.1104L326,214.1104L326,215.1104L326,216.1104L326,218.1104L351,218.1104L351,223.1104L322,223.1104L314,241.5104z M353,223.1104L353,216.1104L328,216.1104L328,212.1104L312,212.1104L312,216.1104L312,246.1104L314,246.1104L352,246.1104L362,223.1104z" Height="34" Stretch="Fill" Width="50" Fill="{DynamicResource StrongBrush}" Margin="0 0 0 0" HorizontalAlignment="Left" />
+
+                                                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="70 0 0 0">
+                                                    <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush3}"  >
+                                                        <TextBlock.Text>
+                                                            Active Directory
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5" Margin="0 0 40 0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
+                                                </StackPanel>
+                                                <Path SnapsToDevicePixels="True" Margin="0 0 0 0" HorizontalAlignment="Right"  Fill="{DynamicResource TextBrush3}" Data="F1M442.9355,197.6104L429.4995,184.1744L428.0855,185.5894L440.1065,197.6104L428.0855,209.6314L429.4995,211.0464L442.9255,197.6204L442.9155,197.6104z" Height="27" Stretch="Fill" Width="15"/>
+                                            </Grid>
+                                        </Grid>
+                                        <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}"  Visibility="{Binding HasActiveDirectory, Converter={converters:BoolToVisibilityConverter}}">
+                                            <Button Style="{StaticResource CloseButton}" x:Name="close" Background="{DynamicResource TextBrush3}" Command="{Binding ClearActiveDirectoryCommand}"  Margin="5" Width="12" Height="12"   ToolTip="Clear" />
+
+                                        </Border>
+                                    </Grid>
+                                    
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                            <TriggerBase.ExitActions>
+                                                <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                            </TriggerBase.ExitActions>
+                                            <TriggerBase.EnterActions>
+                                                <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                            </TriggerBase.EnterActions>
+                                        </Trigger>
+                                        <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                            <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button Grid.Row="1" Margin="0 17 0 0" Click="Button_Click" CommandParameter="{x:Static enums:ChangeScreenTypes.WorkgroupCredentials}" Tag="{Binding WorkgroupHeader}" ToolTipService.ToolTip="{Binding WorkgroupHeader}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <FrameworkTemplate.Resources>
+                                        <ResourceDictionary>
+                                            <Storyboard x:Key="AnimaFocused"  />
+                                            <Storyboard x:Key="AnimaMouseEnter" >
+                                                <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                            <Storyboard x:Key="AnimaMouseLeave" >
+                                                <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </ResourceDictionary>
+                                    </FrameworkTemplate.Resources>
+                                    <Grid>
+                                        <Grid Background="{DynamicResource AccentBrush}" Height="80">
+                                            <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                            <Grid Margin="22 0">
+                                                <Path SnapsToDevicePixels="True" x:Name="path" Data="M22.002379,34.626498 L21.854242,34.712235 C20.448626,35.474845 18.287319,35.999999 14.999954,35.999999 10.999967,35.999999 9.9999695,39.999999 9.9999695,39.999999 L9.9999695,40.999999 9.9999695,44.999999 24.999924,44.999999 32.999899,44.999999 47.999853,44.999999 47.999853,39.999999 C47.999853,39.999999 46.999857,35.999999 42.999868,35.999999 40.263126,35.999999 38.306992,35.58403 36.917627,34.941831 L36.592592,34.781904 29,39.000011 z M33.703897,30.723999 C32.299901,31.534999 30.700907,31.999999 28.999911,31.999999 27.312917,31.999999 25.726922,31.543999 24.330925,30.744999 24.344988,31.716718 24.073627,32.932113 22.947888,33.949226 L22.887976,34.000011 23,34.000011 29,37.000011 35.621715,34.162133 35.460646,34.034979 C34.267919,33.037749 33.821553,31.810561 33.703897,30.723999 z M16.33095,24.744999 C16.36095,26.817999 15.091954,29.999999 6.999979,29.999999 2.9999905,29.999999 1.9999943,33.999999 1.9999943,33.999999 L1.9999943,39 8.1239748,39 C8.470974,37.293999 9.8109703,33.999999 14.999954,33.999999 21.148935,33.999999 22.380932,31.353999 22.418931,29.314999 21.422935,28.373999 20.592937,27.229999 19.994939,25.932999 18.683943,25.788999 17.444947,25.382998 16.33095,24.744999 z M28.999911,7.9999981 C25.538922,7.9999981 21.770934,11.617998 20.999936,15.136999 20.339938,15.4 19.999939,16.022999 19.999939,16.749998 L19.999939,20.249999 C19.999939,20.909999 20.235938,21.477999 20.801936,21.774999 21.159935,25.829999 25.138923,29.999999 28.948912,29.999999 32.7599,29.999999 36.789887,25.829999 37.149887,21.774999 37.714886,21.477999 37.999884,20.909999 37.999884,20.249999 L37.999884,16.749998 C37.999884,16.022999 37.666885,15.4 37.007887,15.136999 36.235889,11.617998 32.460901,7.9999981 28.999911,7.9999981 z M20.999936,2 C17.538946,2 13.770958,5.6179981 12.99996,9.1369991 12.339962,9.3999996 11.999964,10.022999 11.999964,10.749998 L11.999964,14.249998 C11.999964,14.909998 12.235963,15.477999 12.801961,15.775 13.10596,19.224998 16.031951,22.747999 19.244941,23.725999 19.107942,23.140999 19.005942,22.540998 18.958942,21.922998 18.403944,21.728999 17.999945,21.169999 17.999945,20.499999 L17.999945,16.499998 C17.999945,15.778999 18.464944,15.179998 19.085941,15.033998 19.856939,10.379999 23.307929,6.7529984 27.633916,6.1109982 26.04692,3.8089981 23.445928,2 20.999936,2 z M20.999936,0 C24.936924,0 28.330914,2.4669991 29.988909,6.0559998 34.491895,6.5339985 38.120884,10.244999 38.912882,15.033998 39.53388,15.179998 39.999878,15.778999 39.999878,16.499998 L39.999878,20.499999 C39.999878,21.169999 39.594879,21.728999 39.039881,21.922998 38.822882,24.765999 37.615885,27.298999 35.796891,29.115999 35.721891,31.176999 36.774888,33.999999 43.126869,33.999999 50.126846,33.999999 49.999847,39.999999 49.999847,39.999999 L49.999847,43.999999 49.999847,45.999999 49.999847,46.999999 32.999899,46.999999 25.290923,46.999999 7.9999752,46.999999 7.9999752,45.999999 7.9999752,43.999999 7.9999752,40.999999 0,40.999999 0,39.999999 0,37.999999 0,33.999999 C0,33.999999 0,27.999999 6.999979,28 13.14896,27.999999 14.380956,25.353999 14.418955,23.314999 12.481962,21.485999 11.184966,18.873999 10.958966,15.922998 10.403968,15.728998 9.9999695,15.169998 9.9999695,14.499998 L9.9999695,10.499998 C9.9999695,9.7789993 10.464968,9.1799984 11.085966,9.0339985 11.936964,3.8979988 16.046951,0 20.999936,0 z" Height="39" Width="41.489" Fill="{DynamicResource StrongBrush}" Stretch="Fill" Margin="3 0 0 0" HorizontalAlignment="Left" />
+
+                                                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="70 0 0 0">
+                                                    <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush3}"  >
+                                                        <TextBlock.Text>
+                                                            Workgroup
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5" Margin="0 0 40 0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
+                                                </StackPanel>
+                                                <Path SnapsToDevicePixels="True" Margin="0 0 0 0" HorizontalAlignment="Right"  Fill="{DynamicResource TextBrush3}" Data="F1M442.9355,197.6104L429.4995,184.1744L428.0855,185.5894L440.1065,197.6104L428.0855,209.6314L429.4995,211.0464L442.9255,197.6204L442.9155,197.6104z" Height="27" Stretch="Fill" Width="15"/>
+                                            </Grid>
+                                        </Grid>
+                                        <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}"  Visibility="{Binding HasWorkgroup, Converter={converters:BoolToVisibilityConverter}}">
+                                            <Button Style="{StaticResource CloseButton}" x:Name="close" Background="{DynamicResource TextBrush3}" Command="{Binding ClearWorkgroupCommand}" Margin="5" Width="12" Height="12"   ToolTip="Clear" />
+
+                                        </Border>
+                                    </Grid>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                            <TriggerBase.ExitActions>
+                                                <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                            </TriggerBase.ExitActions>
+                                            <TriggerBase.EnterActions>
+                                                <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                            </TriggerBase.EnterActions>
+                                        </Trigger>
+                                        <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                            <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button Grid.Row="2" Margin="0 17 0 0" VerticalAlignment="Top" Click="Button_Click" CommandParameter="{x:Static enums:ChangeScreenTypes.NetworkAddresses}" Tag="{Binding NetworkAddressHeader}" ToolTipService.ToolTip="{Binding NetworkAddressHeader}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <FrameworkTemplate.Resources>
+                                        <ResourceDictionary>
+                                            <Storyboard x:Key="AnimaFocused"  />
+                                            <Storyboard x:Key="AnimaMouseEnter" >
+                                                <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                            <Storyboard x:Key="AnimaMouseLeave" >
+                                                <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </ResourceDictionary>
+                                    </FrameworkTemplate.Resources>
+                                    <Grid>
+                                        <Grid Background="{DynamicResource AccentBrush}" Height="80">
+                                            <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                            <Grid Margin="22 0">
+                                                <Path SnapsToDevicePixels="True" x:Name="path" Data="M45,34.999988 C45.553001,34.999988 46,35.447986 46,35.999988 46,36.551986 45.553001,36.999988 45,36.999988 44.446999,36.999988 44,36.551986 44,35.999988 44,35.447986 44.446999,34.999988 45,34.999988 z M42,34.999988 C42.553001,34.999988 43,35.447986 43,35.999988 43,36.551986 42.553001,36.999988 42,36.999988 41.446999,36.999988 41,36.551986 41,35.999988 41,35.447986 41.446999,34.999988 42,34.999988 z M39,34.999988 C39.553001,34.999988 40,35.447986 40,35.999988 40,36.551986 39.553001,36.999988 39,36.999988 38.446999,36.999988 38,36.551986 38,35.999988 38,35.447986 38.446999,34.999988 39,34.999988 z M6.9999998,34.999988 C7.553,34.999988 8,35.447986 8.0000002,35.999988 8,36.551986 7.553,36.999988 6.9999998,36.999988 6.447,36.999988 6,36.551986 5.9999999,35.999988 6,35.447986 6.447,34.999988 6.9999998,34.999988 z M3.9999998,34.999988 C4.553,34.999988 5,35.447986 5.0000002,35.999988 5,36.551986 4.553,36.999988 3.9999998,36.999988 3.447,36.999988 3,36.551986 3,35.999988 3,35.447986 3.447,34.999988 3.9999998,34.999988 z M1,34.999988 C1.553,34.999988 2,35.447986 2.0000002,35.999988 2,36.551986 1.553,36.999988 1,36.999988 0.44700003,36.999988 0,36.551986 0,35.999988 0,35.447986 0.44700003,34.999988 1,34.999988 z M20,32.999999 L26,32.999999 26,33.999999 29,33.999999 29,34.999999 37,34.999999 37,36.999999 29,36.999999 29,37.999999 26,37.999999 26,38.999999 20,38.999999 20,37.999999 17,37.999999 17,36.999999 9,36.999999 9,34.999999 17,34.999999 17,33.999999 20,33.999999 z M23,11.999993 L23,15.999992 26,15.999992 C27.104,15.999992 28,15.103992 28,13.999993 28,12.895993 27.104,11.999993 26,11.999993 z M20,8.9999942 L23,8.9999942 26,8.9999942 C28.761999,8.9999942 31,11.237994 31,13.999993 31,16.761992 28.761999,18.999993 26,18.999993 L23,18.999993 23,22.999991 20,22.999991 20,18.999993 20,15.999992 20,11.999993 z M15,8.9990215 L18,8.9990215 18,22.999017 15,22.999017 z M9.9999995,4.9999961 L9.9999995,26.999989 20,26.999989 21.827999,28.999989 23,30.171988 24.171999,28.999989 26,26.999989 36,26.999989 36,4.9999961 z M6.9999998,1.9999967 L6.9999998,23.999991 7.9999995,23.999991 7.9999995,2.9999966 33,2.9999966 33,1.9999967 z M5.0000002,0 L35,0 35,1.9999967 35,2.9999966 38,2.9999966 38,28.999989 27,28.999989 23,32.999988 19,28.999989 7.9999995,28.999989 7.9999995,25.999991 6.9999998,25.999991 5.0000002,25.999991 z" Height="39" Width="46" Fill="{DynamicResource StrongBrush}" Stretch="Fill" Margin="3 0 0 0" HorizontalAlignment="Left" />
+
+                                                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="70 0 0 0">
+                                                    <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush3}"  >
+                                                        <TextBlock.Text>
+                                                            Network Address
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5" Margin="0 0 40 0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
+                                                </StackPanel>
+                                                <Path SnapsToDevicePixels="True" Margin="0 0 0 0" HorizontalAlignment="Right"  Fill="{DynamicResource TextBrush3}" Data="F1M442.9355,197.6104L429.4995,184.1744L428.0855,185.5894L440.1065,197.6104L428.0855,209.6314L429.4995,211.0464L442.9255,197.6204L442.9155,197.6104z" Height="27" Stretch="Fill" Width="15"/>
+                                            </Grid>
+                                        </Grid>
+                                        <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}"  Visibility="{Binding HasNetworkAddress, Converter={converters:BoolToVisibilityConverter}}">
+                                            <Button Style="{StaticResource CloseButton}" x:Name="close" Background="{DynamicResource TextBrush3}" Command="{Binding ClearNetworkAddressCommand}" Margin="5" Width="12" Height="12"   ToolTip="Clear" />
+                                        </Border>
+                                    </Grid>
+
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                            <TriggerBase.ExitActions>
+                                                <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                            </TriggerBase.ExitActions>
+                                            <TriggerBase.EnterActions>
+                                                <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                            </TriggerBase.EnterActions>
+                                        </Trigger>
+                                        <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                            <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                    </Grid>
+                </ScrollViewer>
+
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Next" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DeploymentCredentials}" />
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Back" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.Packages}" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

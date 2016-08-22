@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="DDT.Application.Views.NetworkAddressesView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DDT.Application.Views"
+      xmlns:enums="clr-namespace:DDT.Application.Messages"
+      xmlns:converters="clr-namespace:DDT.Application.Converters"
+      xmlns:behaviors="clr-namespace:DDT.Application.Behaviors"
+      xmlns:helpers="clr-namespace:DDT.Application.Helpers"
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+      xmlns:triggers="clr-namespace:DDT.Application.Triggers"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300" helpers:ThemeHelper.Theme="{Binding Theme}">
+
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Style="{DynamicResource SubTitleTextStyle}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" FontSize="16"  VerticalAlignment="Top" Margin="3,40,0,0">
+                Network Addresses
+        </TextBlock>
+        <Border Margin="0,62,0,0" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid VerticalAlignment="Top" Background="{DynamicResource AccentBrush}">
+                    <Grid Margin="22 22 22 22">
+                        <telerik:RadWatermarkTextBox x:Name="text" Margin="0 0 100 0" Padding="10 8 30 0" Text="{Binding NetworkAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <telerik:RadWatermarkTextBox.WatermarkContent>
+                                <TextBlock Text="{Binding NetworkAddressExample}" Foreground="{DynamicResource TextBrush2}" />
+                            </telerik:RadWatermarkTextBox.WatermarkContent>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger>
+                                    <triggers:KeyToCommandAction Command="{Binding AddNetworkAddressCommand}" Key="Enter"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </telerik:RadWatermarkTextBox>
+
+                        <Button Content="Add" Command="{Binding AddNetworkAddressCommand}" Click="Button_Click" Foreground="{DynamicResource TextBrush3}" MinWidth="83" HorizontalAlignment="Right" BorderBrush="{DynamicResource BasicBrush}" Background="{DynamicResource BasicBrush}"/>
+
+                        <Path SnapsToDevicePixels="True" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 6 106 0" Data="F1M324,154.1104L322,154.1104L317,154.1104L317,156.1104L313,153.1104L317,150.1104L317,152.1104L322,152.1104L322,145.1104L324,145.1104z M316,138.1104L316,148.1104L310,148.1104L310,158.1104L316,158.1104L323,158.1104L329,158.1104L329,138.1104z" Fill="{DynamicResource TextBrush2}" Height="20" Stretch="Fill" Width="19"/>
+
+                    </Grid>
+                </Grid>
+
+                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Margin="0 15 0 49" Grid.Row="1" x:Name="scroll">
+                    <ListBox x:Name="list" Margin="-2 0" Background="{DynamicResource MainBrush}" Padding="0 0 0 2" BorderThickness="0" ItemsSource="{Binding NetworkAddresses}"  >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox HorizontalAlignment="Stretch" Margin="0 0 0 0" Padding="20 8 0 0" Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource TextBrush4}" CaretBrush="Black">
+                                    </TextBox>
+
+                                    <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}" Grid.Column="1">
+                                        <Button Style="{StaticResource CloseButton}" Command="{Binding RemoveCommand}" CommandParameter="{Binding}"  Background="{DynamicResource TextBrush3}"  Margin="5" Width="12" Height="12"   ToolTip="Remove" />
+
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+
+                <Border Background="{DynamicResource AccentBrush}" IsHitTestVisible="False" VerticalAlignment="Top" Grid.Row="1" Height="30" Margin="0 17 17 0" Visibility="{Binding ElementName=scroll, Path=ComputedVerticalScrollBarVisibility}">
+                    <UIElement.OpacityMask>
+                        <LinearGradientBrush LinearGradientBrush.StartPoint="0,0" LinearGradientBrush.EndPoint="0,1">
+                            <GradientStop GradientStop.Offset="0" GradientStop.Color="White" />
+                            <GradientStop GradientStop.Offset="0.5" GradientStop.Color="Transparent" />
+                        </LinearGradientBrush>
+                    </UIElement.OpacityMask>
+                </Border>
+
+                <Border Background="{DynamicResource AccentBrush}" IsHitTestVisible="False" VerticalAlignment="Bottom" Grid.Row="1" Height="30" Margin="0 0 17 49" Visibility="{Binding ElementName=scroll, Path=ComputedVerticalScrollBarVisibility}">
+                    <UIElement.OpacityMask>
+                        <LinearGradientBrush LinearGradientBrush.StartPoint="0,0" LinearGradientBrush.EndPoint="0,1">
+                            <GradientStop GradientStop.Offset="0.5" GradientStop.Color="Transparent" />
+                            <GradientStop GradientStop.Offset="1" GradientStop.Color="White" />
+                        </LinearGradientBrush>
+                    </UIElement.OpacityMask>
+                </Border>
+
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Ok" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Back" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

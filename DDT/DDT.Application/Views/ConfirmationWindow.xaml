@@ -1,0 +1,57 @@
+﻿<Window x:Class="DDT.Application.Views.ConfirmationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="clr-namespace:DDT.Application.Helpers" 
+        Width="412"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+        WindowStyle="None" SizeToContent="Height" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Border x:Name="Border" BorderThickness="1" BorderBrush="{DynamicResource StrongBrush}">
+
+        <Grid Background="{DynamicResource MainBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="62"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="20,18,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource TextBrush3}" FontFamily="{StaticResource myriadpro}" Text="Stop Deployment" />
+
+                    <Button Style="{StaticResource CloseButton}" HorizontalAlignment="Right" Grid.Column="1" Click="OnCloseClick" Width="18" Height="18" Margin="20 0" ToolTip="Close"/>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="20,10,10,10">
+
+                    <Path Shape.Fill="{DynamicResource StrongBrush}" Shape.Stretch="Fill" HorizontalAlignment="Left" Width="40" Path.Data="M8.8950004,9.076 L18.894,9.076 18.894,19.076 8.8950004,19.076 z M13.9375,2.333334 C7.495167,2.333334 2.270834,7.5576674 2.270834,14 2.270834,20.442333 7.557667,25.666666 14,25.666666 20.442334,25.666666 25.666668,20.442333 25.666668,14 25.666668,7.5576674 20.379834,2.333334 13.9375,2.333334 z M14,0 C21.731501,0 28,6.2685006 28,14 28,21.731502 21.731501,28 14,28 6.2685003,28 0,21.731502 0,14 0,6.2685006 6.2685003,0 14,0 z" Height="40" VerticalAlignment="Center" Margin="2,0,0,0" SnapsToDevicePixels="True"/>
+
+                    <TextBlock Text="Deployment is not yet completed" VerticalAlignment="Center" Margin="20,0,0,0" Style="{DynamicResource SubTitleTextStyle}" />
+                </StackPanel>
+
+                <TextBlock x:Name="Text" HorizontalAlignment="Center" Margin="48, 10, 0,17" Grid.Row="1" LineHeight="28" Style="{DynamicResource SubTitleTextStyle}" TextWrapping="Wrap">
+                    <Run>
+                        This operation will stop all active deployments.
+                    </Run>
+                    <LineBreak/>
+                    <Run>
+                         Are you sure you want to continue?
+                    </Run>
+                </TextBlock>
+
+                <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="17" Orientation="Horizontal">
+                    <Button Content="Yes"  Click="YesClick" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}"/>
+                    <Button Content="No"  Margin="17,0,0,0" Click="NoClick" />
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Border>
+</Window>

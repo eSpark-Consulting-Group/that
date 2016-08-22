@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="DDT.Application.Views.DeploymentResultsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DDT.Application.Views"
+      xmlns:helpers="clr-namespace:DDT.Application.Helpers"
+      xmlns:converters="clr-namespace:DDT.Application.Converters"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:enums="clr-namespace:DDT.Application.Messages"
+      xmlns:triggers="clr-namespace:DDT.Application.Triggers"
+      xmlns:templates="clr-namespace:DDT.Application.TemplateSelectors"
+      xmlns:behaviors="clr-namespace:DDT.Application.Behaviors"
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300" helpers:ThemeHelper.Theme="{Binding Theme}">
+    
+    <Grid Visibility="{Binding HasProgress, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=!}" >
+        <TextBlock HorizontalAlignment="Left" Style="{DynamicResource SubTitleTextStyle}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" FontSize="16"  VerticalAlignment="Top" Margin="3,40,0,0">
+                Deployment Results
+        </TextBlock>
+        <Border Margin="0,62,0,0" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <telerik:RadTreeListView x:Name="tree" CanUserFreezeColumns="False" AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True" ItemsSource="{Binding Results}"   
+                                 AutoExpandItems="False" HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" CanUserResizeColumns="False"  FocusVisualStyle="{x:Null}" ScrollMode="Deferred" >
+                    <telerik:RadTreeListView.Resources>
+                        <DataTemplate x:Key="ComputerTemplate">
+                            <Grid >
+                                <TextBlock Opacity="0.5">
+                                                <Run Text="{Binding IP, Mode=OneWay, StringFormat='{}[{0}]'}"  />
+                                                <Run Text="{Binding Name, Mode=OneWay, StringFormat='{} {0} '}" Foreground="Transparent" FontSize="15"/>
+                                                <Run Text="{Binding OS, Mode=OneWay, StringFormat='{}({0})'}" />
+                                </TextBlock>
+                                <TextBlock>
+                                                <Run Text="{Binding IP, Mode=OneWay, StringFormat='{}[{0}]'}"  Foreground="Transparent"/>
+                                                <Run Text="{Binding Name, Mode=OneWay, StringFormat='{} {0} '}" FontSize="15"/>
+                                </TextBlock>
+                                <ContentControl ContentTemplate="{StaticResource TreeListViewRowConnectingLines}" Content=""/>
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate x:Key="DeploymentTemplate">
+                            <Grid >
+                                <TextBlock Margin="3 1 0 0" >
+                                                <Run Text="{Binding Name, Mode=OneWay}" FontSize="15"/>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate x:Key="StatusColumn">
+                            <Grid>
+                                <Grid Visibility="{Binding InProgress, Converter={converters:BoolToVisibilityConverter}}">
+                                    <TextBlock Text="{Binding Value}" Foreground="{DynamicResource StrongBrush}" FontSize="13"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Right" Margin=" 0 0 5 0"/>
+                                </Grid>
+                                <Grid Visibility="{Binding InProgress, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=!}">
+                                    <TextBlock Text="{Binding Value}" FontSize="13" VerticalAlignment="Center" Visibility="{Binding Failed, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=!}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Right" Margin=" 0 0 5 0"/>
+                                    <TextBlock Text="{Binding Value}" Foreground="{DynamicResource ErrorBrush2}" Visibility="{Binding Failed, Converter={converters:BoolToVisibilityConverter}}" FontSize="13"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Right" Margin=" 0 0 5 0"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate x:Key="PackageColumn">
+                            <Grid>
+                                <TextBlock Text="{Binding PackageName}" FontSize="13"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding PackageName}" Visibility="{Binding HasPackageName, Converter={converters:BoolToVisibilityConverter}}" TextAlignment="Left" Margin=" 0 0 5 0"/>
+                            </Grid>
+                        </DataTemplate>
+                        <templates:ResultsTemplateSelector x:Key="TemplateSelector" DeploymentTemplate="{StaticResource DeploymentTemplate}" ComputerTemplate="{StaticResource ComputerTemplate}"/>
+                    </telerik:RadTreeListView.Resources>
+                    <telerik:RadTreeListView.ChildTableDefinitions>
+                        <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
+                    </telerik:RadTreeListView.ChildTableDefinitions>
+                    <telerik:RadTreeListView.Columns>
+                        <telerik:GridViewColumn IsFilterable="False" ShowFilterButton="False" Focusable="False" ShowFieldFilters="False" CellTemplateSelector="{StaticResource TemplateSelector}" Header="Target" IsReadOnly="True" Width="600*" SortMemberPath="Name" />
+                        <telerik:GridViewColumn  CellTemplate="{StaticResource PackageColumn}" SortMemberPath="PackageName" IsFilterable="False" Header="Package"  Focusable="False" IsReadOnly="True" TextAlignment="Left" MinWidth="256" MaxWidth="256"/>
+                        <telerik:GridViewColumn  CellTemplate="{StaticResource StatusColumn}" SortMemberPath="Value" IsFilterable="False" Header="Status"  Focusable="False" IsReadOnly="True" TextAlignment="Right" MinWidth="256" MaxWidth="256"/>
+                    </telerik:RadTreeListView.Columns>
+                </telerik:RadTreeListView>
+
+                <Grid Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" >
+                    <Button Content="Generate Report" Command="{Binding GenerateReportCommand}"/>
+                </Grid>
+                
+            </Grid>
+        </Border>
+        
+        <local:SearchUserControl Target="{Binding ElementName=tree}" Keyword="{Binding KeywordResults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9E80A126-241C-4079-8975-E16204D03E8D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>APTAT.Core</RootNamespace>
+    <AssemblyName>APTAT.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SccProjectName>%24/ComodoESM SME/Sources/APTAT/APTAT/APTAT.Core</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccAuxPath>http://pss05v:8080/tfs/defaultcollection</SccAuxPath>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AptAtManager.cs" />
+    <Compile Include="AptScanInProgressEventArgs.cs" />
+    <Compile Include="AptScanStage.cs" />
+    <Compile Include="Apt\AptScanner.cs" />
+    <Compile Include="ComputerInformation.cs" />
+    <Compile Include="DataNotReadyException.cs" />
+    <Compile Include="Descent\Apt\AptDescentProgressItem.cs" />
+    <Compile Include="Descent\Apt\AptReportData.cs" />
+    <Compile Include="Descent\Apt\AptScanCompletedEventArgs.cs" />
+    <Compile Include="Descent\Apt\AptDescentScanner.cs" />
+    <Compile Include="Descent\Apt\AptDescentHelper.cs" />
+    <Compile Include="Descent\Apt\AptDescentMod.cs" />
+    <Compile Include="Descent\Apt\IAptDescentProgressItem.cs" />
+    <Compile Include="Descent\IDescentQueryResult.cs" />
+    <Compile Include="Descent\Wmi\WmiScanner.cs" />
+    <Compile Include="Descent\Wmi\WmiScanOperationContext.cs" />
+    <Compile Include="Descent\Apt\AptScanOperationContext.cs" />
+    <Compile Include="Descent\Wmi\WmiScanResult.cs" />
+    <Compile Include="ExtendedResourceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileResult.cs" />
+    <Compile Include="FilesStatistics.cs" />
+    <Compile Include="IAptScanner.cs" />
+    <Compile Include="OsInfoHelper.cs" />
+    <Compile Include="Reports\AptReportBuilder.cs" />
+    <Compile Include="Reports\IAptReportBuilder.cs" />
+    <Compile Include="Reports\ReportCompletedEventArgs.cs" />
+    <Compile Include="Reports\StringExt.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Reports\AptReportData.cs" />
+    <Compile Include="Reports\ReportBuilder.cs" />
+    <Compile Include="Reports\ReportType.cs" />
+    <Compile Include="ScanCanceledException.cs" />
+    <Compile Include="Descent\Apt\AptScanResult.cs" />
+    <Compile Include="ScanCompletedEventArgs.cs" />
+    <Compile Include="ScanInProgressEventArgs.cs" />
+    <Compile Include="ScanResultsProcessor.cs" />
+    <Compile Include="ScanStartedEventArgs.cs" />
+    <Compile Include="StatisticsCalculator.cs" />
+    <Compile Include="Storage\Storage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\DataSources\APTAT.Core.Reports.AptReportData.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.DetailedBadFile.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.FileRatingInfo.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.MostWantedBadFileInfo.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.ScannedTarget.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.TargetRatingInfo.datasource" />
+    <None Include="Properties\DataSources\APTAT.Core.Reports.VulnerableDeviceInfoEx.datasource" />
+    <None Include="Properties\DataSources\Module.datasource" />
+    <None Include="Properties\DataSources\ScanResult.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\PendingAnalysisFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\NoVerdictFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\FailedToAnalyzeWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\FailedToAnalyzeFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\DetailedDevicesWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\DetailedDevices.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\DetailedProgramsWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\DetailedPrograms.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Devices.rdlc" />
+    <EmbeddedResource Include="Reports\ExecutiveWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Executive.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\MaliciousFilesWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\MaliciousFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\UnknownFilesWithValkyrie.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\UnknownFiles.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ValkyrieResult.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">
+      <Project>{49ba3c32-1495-4ea5-8d32-3997788ade2f}</Project>
+      <Name>APTAT.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\APTAT.DeploymentCore\APTAT.DeploymentCore.csproj">
+      <Project>{8c99a7f4-76f5-4899-8e57-c032f1e2ec41}</Project>
+      <Name>APTAT.DeploymentCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj">
+      <Project>{851e6095-dd19-4c19-8f9c-20e134fb6f5a}</Project>
+      <Name>Valkyrie.WebApiProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APTAT.Valkyrie\APTAT.Valkyrie.csproj">
+      <Project>{46f67d2c-9368-456a-875a-f96628c18f90}</Project>
+      <Name>APTAT.Valkyrie</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

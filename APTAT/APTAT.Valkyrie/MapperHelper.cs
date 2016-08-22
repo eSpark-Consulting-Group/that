@@ -1,0 +1,27 @@
+﻿using System;
+using DTO = Valkyrie.WebApiProvider.Enums;
+
+namespace APTAT.Valkyrie
+{
+    public static class MapperHelper
+    {
+        public static ValkyrieVerdict ToBusiness(this DTO.ValkyrieVerdict verdict)
+        {
+            switch (verdict)
+            {
+                case DTO.ValkyrieVerdict.Clean:
+                    return ValkyrieVerdict.Clean;
+                case DTO.ValkyrieVerdict.Malware:
+                    return ValkyrieVerdict.Malware;
+                case DTO.ValkyrieVerdict.PotentiallyUnwantedApplication:
+                    return ValkyrieVerdict.PotentiallyUnwantedApplication;
+                case DTO.ValkyrieVerdict.Undetected:
+                    return ValkyrieVerdict.Undetected;
+                case DTO.ValkyrieVerdict.FirstSeen:
+                    return ValkyrieVerdict.FirstSeen;
+                default:
+                    throw new ArgumentException(message: "Unsupported Valkyrie verdict");
+            }
+        }
+    }
+}

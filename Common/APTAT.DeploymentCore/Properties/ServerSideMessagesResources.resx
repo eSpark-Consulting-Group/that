@@ -1,0 +1,610 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AcceptLiteral" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="AgentDescentTimeoutMessage" xml:space="preserve">
+    <value>Agent deployment operation took too much time and was cancelled</value>
+  </data>
+  <data name="AgentDescentTimeoutSuggestionMessage" xml:space="preserve">
+    <value>1. Check if your network operates normally
+2. Check if firewall on target computer is turned OFF
+3. Try to start deployment again later</value>
+  </data>
+  <data name="AgentIsAlreadyInstalledAndServerDiffersMessage" xml:space="preserve">
+    <value>Agent is already installed but configured to connect to another CESM server</value>
+  </data>
+  <data name="AgentIsAlreadyInstalledAndServerDiffersSuggestionMessage" xml:space="preserve">
+    <value>Please uninstall agent and try again</value>
+  </data>
+  <data name="AgentIsAlreadyInstalledMessage" xml:space="preserve">
+    <value>Agent is already installed</value>
+  </data>
+  <data name="AgentIsNotInstalledMessage" xml:space="preserve">
+    <value>Agent is not installed on target workstation</value>
+  </data>
+  <data name="AgentIsUptodateMessage" xml:space="preserve">
+    <value>Agent has been successfully updated</value>
+  </data>
+  <data name="AgentUninstallationFailedMessage" xml:space="preserve">
+    <value>Agent uninstallation failed</value>
+  </data>
+  <data name="AgentUninstallationSucceededMessage" xml:space="preserve">
+    <value>Agent uninstallation finished successfully</value>
+  </data>
+  <data name="AgentUpdateFailedMessage" xml:space="preserve">
+    <value>Agent update failed</value>
+  </data>
+  <data name="AgnCore_ActionFactoryNotFound" xml:space="preserve">
+    <value>Action factory not found</value>
+  </data>
+  <data name="AnotherInstallationInProgressMessage" xml:space="preserve">
+    <value>Another installation process is in progress</value>
+  </data>
+  <data name="AnotherInstallationInProgressSuggestionMessage" xml:space="preserve">
+    <value>Try again when it is finished</value>
+  </data>
+  <data name="CannotCopyFileMessage" xml:space="preserve">
+    <value>Can not copy installation file(s) to the remote computer.</value>
+  </data>
+  <data name="CannotCopyFileSuggestionMessage" xml:space="preserve">
+    <value>1. Check that credentials you have specified have Administrator privilegies and allow to write to the target's system WINDOWS folder
+2. Check if there is enough space on the target's system disk
+3. It is possible that some processes are using installation files at the moment (for example after previous unfinished deployment), in this case please wait some time until the files are released</value>
+  </data>
+  <data name="CannotEnableWarrantyOnComputerMessageFormat" xml:space="preserve">
+    <value>Cannot enable warranty on '{0}': {1}</value>
+  </data>
+  <data name="CannotRemoveRemoteServiceMessage" xml:space="preserve">
+    <value>Cannot remove remote service</value>
+  </data>
+  <data name="CannotResolveHostMessage" xml:space="preserve">
+    <value>CESM Server cannot resolve target computer's name</value>
+  </data>
+  <data name="CannotResolveHostSuggestionMessage" xml:space="preserve">
+    <value>1. Check DNS settings on CESM Server.
+2. Check if target computer name is correctly resolved on CESM Server</value>
+  </data>
+  <data name="CannotSetupDescentServiceMessage" xml:space="preserve">
+    <value>Cannot get access to the remote computer's service manager</value>
+  </data>
+  <data name="CannotSetupDescentServiceSuggestionMessage" xml:space="preserve">
+    <value>1. Check if entered account has administrator privileges.
+2. Check if firewall is disabled on remote computer</value>
+  </data>
+  <data name="CannotStartRemoteServiceMessage" xml:space="preserve">
+    <value>Cannot start remote service</value>
+  </data>
+  <data name="CesmActionFailedNotRunningOnAgent" xml:space="preserve">
+    <value>Action failed: not running on the agent</value>
+  </data>
+  <data name="CesmActualStateIsUnknownServerError" xml:space="preserve">
+    <value>Actual state is unknown due to the server error</value>
+  </data>
+  <data name="CesmComputerIsAlreadyOnlineFormat" xml:space="preserve">
+    <value>Computer {0} is already online</value>
+  </data>
+  <data name="CesmFailedToSendNetworkPacket" xml:space="preserve">
+    <value>Failed to send network packet</value>
+  </data>
+  <data name="CesmIncompatibleAgentVersion" xml:space="preserve">
+    <value>Incompatible agent version. Update agent and try again</value>
+  </data>
+  <data name="CesmOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="CesmTimeout" xml:space="preserve">
+    <value>Timeout</value>
+  </data>
+  <data name="CesmUnknownMacAddress" xml:space="preserve">
+    <value>Unknown MAC address. Install agent on this computer first</value>
+  </data>
+  <data name="CisRequiresRebootingAfterScanMessage" xml:space="preserve">
+    <value>CES has finished AV scanning and requires machine reboot.</value>
+  </data>
+  <data name="ComputerShoudBeManagedToPerformAgentInstallationMessage" xml:space="preserve">
+    <value>Computer should be managed to perform agent installation.</value>
+  </data>
+  <data name="ComputerShoudBeManagedToPerformAgentUninstallationMessage" xml:space="preserve">
+    <value>Computer should be managed to perform agent uninstallation.</value>
+  </data>
+  <data name="ComputersOverflowMessageFormat" xml:space="preserve">
+    <value>The number of actually managed endpoints ({0}) is more than allowed by your license.</value>
+  </data>
+  <data name="ComputerTryConnect" xml:space="preserve">
+    <value>Computer {0} tries to connect</value>
+  </data>
+  <data name="DeclineLiteral" xml:space="preserve">
+    <value>Decline</value>
+  </data>
+  <data name="DescentAgentWaitingConnectionMessage" xml:space="preserve">
+    <value>Waiting for agent connection...</value>
+  </data>
+  <data name="DescentFormatDescriptionWithoutSuggestion" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="DescentInstallAgentFailedFormat" xml:space="preserve">
+    <value>Deployment failed.
+{0}
+
+Technical details:
+{1}
+{2}
+{3}</value>
+  </data>
+  <data name="DescentInstallAgentFailedTinyFormat" xml:space="preserve">
+    <value>Deployment failed.
+{0}
+
+Technical details:
+{1}
+{2} ({3})</value>
+  </data>
+  <data name="DescentInstallAgentSuccess" xml:space="preserve">
+    <value>Agent installation finished successfully</value>
+  </data>
+  <data name="DescentInstallAgentSuccessUpdated" xml:space="preserve">
+    <value>Agent is successfully updated</value>
+  </data>
+  <data name="DescentInstallPackageMessage" xml:space="preserve">
+    <value>Installing CES...</value>
+  </data>
+  <data name="DescentOutdatedCisUninstallDiscoveryMessage" xml:space="preserve">
+    <value>Searching outdated CES installations...</value>
+  </data>
+  <data name="DescentOutdatedCisUninstallRemovingMessage" xml:space="preserve">
+    <value>Uninstalling...</value>
+  </data>
+  <data name="DescentPackageCompleted" xml:space="preserve">
+    <value>CES installed.</value>
+  </data>
+  <data name="DescentPackageCompletedRebootingInProgress" xml:space="preserve">
+    <value>CES installed, computer is being rebooted.</value>
+  </data>
+  <data name="DescentPackageCompletedRebootRequired" xml:space="preserve">
+    <value>CES installed, computer reboot required.</value>
+  </data>
+  <data name="DescentProgressAgentInstallConfiguringHelperService" xml:space="preserve">
+    <value>Configuring remote deployment service...</value>
+  </data>
+  <data name="DescentProgressAgentInstallConnectingToTarget" xml:space="preserve">
+    <value>Connecting to the target computer...</value>
+  </data>
+  <data name="DescentProgressAgentInstallCopyingAgentPackage" xml:space="preserve">
+    <value>Copying agent installation package to the target computer...</value>
+  </data>
+  <data name="DescentProgressAgentInstallCopyingHelperServicePackage" xml:space="preserve">
+    <value>Copying remote deployment service package to the target computer...</value>
+  </data>
+  <data name="DescentProgressAgentInstallFinalizingAgentInstallation" xml:space="preserve">
+    <value>Finalizing agent istallation...</value>
+  </data>
+  <data name="DescentProgressAgentInstallInstallingAgentPackage" xml:space="preserve">
+    <value>Installing agent package...</value>
+  </data>
+  <data name="DescentProgressAgentInstallSearchingExistingInstallations" xml:space="preserve">
+    <value>Searching for existing agent installation on the target computer...</value>
+  </data>
+  <data name="DescentProgressAgentInstallStartingHelperService" xml:space="preserve">
+    <value>Starting remote deployment service...</value>
+  </data>
+  <data name="DescentQueryAgentInfoFailedFormat" xml:space="preserve">
+    <value>{0}
+
+Technical details:
+{1}
+{2}
+{3}</value>
+  </data>
+  <data name="DescentStatusDescriptionWithSuggestionFormat" xml:space="preserve">
+    <value>{0}
+
+{1}.</value>
+  </data>
+  <data name="DescentTimeoutSystemMessage" xml:space="preserve">
+    <value>Descent operation exceeded timeout of: {0}.</value>
+  </data>
+  <data name="InstallationTimeoutMessage" xml:space="preserve">
+    <value>Installation exceeded timeout of: {0}.</value>
+  </data>
+  <data name="DescentUninstallAgentFailedFormat" xml:space="preserve">
+    <value>Agent uninstallation failed.
+{0}
+
+Technical details:
+{1}
+{2}
+{3}</value>
+  </data>
+  <data name="DescentUninstallAgentFailedTinyFormat" xml:space="preserve">
+    <value>Agent uninstallation failed.
+{0}
+
+Technical details:
+{1}
+{2} ({3})</value>
+  </data>
+  <data name="DescentUninstallAgentSuccess" xml:space="preserve">
+    <value>Agent uninstallation finished successfully</value>
+  </data>
+  <data name="DescentUninstallIncompatibleDiscoveryMessage" xml:space="preserve">
+    <value>Searching for incompatible software...</value>
+  </data>
+  <data name="DescentUninstallIncompatiblePartiallyUnsupportedMessage" xml:space="preserve">
+    <value>Some of incompatible software could not be uninstalled automatically.</value>
+  </data>
+  <data name="DescentUninstallIncompatiblePartiallyUnsupportedSuggestionMessage" xml:space="preserve">
+    <value>Product uninstaller has detected the following software which should be uninstalled manually on the target computer:
+{0}.
+The following products were uninstalled successfully:
+{1}</value>
+  </data>
+  <data name="DescentUninstallIncompatibleUnsupportedMessage" xml:space="preserve">
+    <value>Software that should be uninstalled manually detected.</value>
+  </data>
+  <data name="DescentUninstallIncompatibleUnsupportedSuggestionMessage" xml:space="preserve">
+    <value>Product uninstaller has detected the following software which should be uninstalled manually on the target computer:
+{0}</value>
+  </data>
+  <data name="DescentUninstallOutdatedPackageMessage" xml:space="preserve">
+    <value>Uninstalling outdated CES...</value>
+  </data>
+  <data name="DirectoryComputerAgentVersionOutdatedFormat" xml:space="preserve">
+    <value>New version of CESM agent is available for the workstation {0}. Perform Install Agent action on the workstation to update CESM Agent</value>
+  </data>
+  <data name="DirectoryComputerDnsDifferFormat" xml:space="preserve">
+    <value>Computer "{0}" changed DNS name to "{1}"</value>
+  </data>
+  <data name="DirectoryComputerIPDifferFormat" xml:space="preserve">
+    <value>Computer "{0}" changed IP address to "{1}"</value>
+  </data>
+  <data name="DirectoryComputerNotFoundFormat" xml:space="preserve">
+    <value>Computer {0} is not in Computers Tree. If you want to manage this computer click on "Accept" answer.</value>
+  </data>
+  <data name="ErrorCodeMessageFormat" xml:space="preserve">
+    <value>Code: {0}</value>
+  </data>
+  <data name="ExpirationInDaysWarningMessageFormat" xml:space="preserve">
+    <value>Your CESM license will expire in {0} day(s).</value>
+  </data>
+  <data name="ExpirationInHoursWarningMessageFormat" xml:space="preserve">
+    <value>Your CESM license will expire in {0} hours.</value>
+  </data>
+  <data name="FatalInstallationErrorMessage" xml:space="preserve">
+    <value>A fatal error occurred during installation</value>
+  </data>
+  <data name="HostNotAccessibleMessage" xml:space="preserve">
+    <value>CESM Server cannot be accessed from target computer</value>
+  </data>
+  <data name="HostNotAccessibleSuggestionMessage" xml:space="preserve">
+    <value>1. Check DNS server settings on target computer.
+2. Check if CESM Server name is correctly resolved on target computer</value>
+  </data>
+  <data name="IgnoreExternalWarrantyStatus" xml:space="preserve">
+    <value>IgnoreExternalWarrantyStatus</value>
+  </data>
+  <data name="InternetAccessDescriptionFormatMessage" xml:space="preserve">
+    <value>Internet access problems ({0}).</value>
+  </data>
+  <data name="InvalidResponseMessage" xml:space="preserve">
+    <value>Invalid response from the remote computer.</value>
+  </data>
+  <data name="InvalidUserNameMessage" xml:space="preserve">
+    <value>Login problem: invalid username.</value>
+  </data>
+  <data name="InvalidUserNameOrPasswordMessage" xml:space="preserve">
+    <value>Login problem: invalid username or bad password.</value>
+  </data>
+  <data name="InvalidUserNameOrPasswordSuggestionMessage" xml:space="preserve">
+    <value>1. Make sure if login and password are correct and you use administrator's account credentials.
+2. Check if "Forceguest" option on target computer is disabled.    (HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\forceguest = 0)</value>
+  </data>
+  <data name="LicenseInvalidMessage" xml:space="preserve">
+    <value>Your CESM license is absent or invalid.</value>
+  </data>
+  <data name="LoginProblemMessage" xml:space="preserve">
+    <value>Login problem (access denied).</value>
+  </data>
+  <data name="LoginProblemSuggestionMessage" xml:space="preserve">
+    <value>1. Make sure if login and password are correct and you use administrator's account credentials.
+2. Check if "Forceguest" option on target computer is disabled.    (HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\forceguest = 0)
+3. If the account is not a built-in Administrator, check if HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\system\\LocalAccountTokenFilterPolicy DWORD registry value is set to 1</value>
+  </data>
+  <data name="NetworkLostMessageFormat" xml:space="preserve">
+    <value>Dowloading package {0} of {1} was terminated because of network connection problem.</value>
+  </data>
+  <data name="NewVersionRequestMessageFormat" xml:space="preserve">
+    <value>Version {0} of \"{1}\" is available.
+
+Would you like to download and register it in the ESM?</value>
+  </data>
+  <data name="NoCompatibleMsiFoundMessage" xml:space="preserve">
+    <value>No compatible agent installation package is  available. Remote computer's architecture is not supported</value>
+  </data>
+  <data name="NoLiteral" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="OkExternalWarrantyStatus" xml:space="preserve">
+    <value>OkExternalWarrantyStatus</value>
+  </data>
+  <data name="PackageDescentTimeoutMessage" xml:space="preserve">
+    <value>Agent deployment was successful, but CES package deployment operation took too much time and was cancelled because endpoint has not connected in an acceptable time period</value>
+  </data>
+  <data name="PackageDescentTimeoutSuggestionMessage" xml:space="preserve">
+    <value>1. Check if your network operates normally
+2. Check if antivirus or firewall software on target computer is turned OFF and does not block agent service (Comodo ESM Agent)
+3. Try to start deployment again later</value>
+  </data>
+  <data name="PackageDownloadedMessageFormat" xml:space="preserve">
+    <value>Package {0} of {1} was successfully downloaded and registered.</value>
+  </data>
+  <data name="PackageDownloadingFailWithReasonMessageFormat" xml:space="preserve">
+    <value>Failed to download {0} package of {1}: {2}</value>
+  </data>
+  <data name="PackageDownloadingMessageFormat" xml:space="preserve">
+    <value>Failed to download {0} package of {1}.</value>
+  </data>
+  <data name="PackageFileIsCorruptedOrIsNotTheOriginalOneFormat" xml:space="preserve">
+    <value>Package file is corrupted or is not the original one.</value>
+  </data>
+  <data name="PackageNotFoundMessageFormat" xml:space="preserve">
+    <value>Package {0} of {1} was not found on the server.</value>
+  </data>
+  <data name="PendingExternalWarrantyStatus" xml:space="preserve">
+    <value>PendingExternalWarrantyStatus</value>
+  </data>
+  <data name="ProductAlreadyInstalledMessage" xml:space="preserve">
+    <value>Product is already installed</value>
+  </data>
+  <data name="ProductIsAlreadyDownloadedMessageFormat" xml:space="preserve">
+    <value>Version {0} of \"{1}\" is either being downloaded or already downloaded.</value>
+  </data>
+  <data name="ProductsOverflowMessageFormat" xml:space="preserve">
+    <value>The number of currently managed products ({0}) is more than allowed by your license.</value>
+  </data>
+  <data name="RequestAnswerFailedOnComputerMessageFormat" xml:space="preserve">
+    <value>Request answer failed on computer '{0}'</value>
+  </data>
+  <data name="ScanTerminatedUnexpectedlyMessage" xml:space="preserve">
+    <value>Terminated unexpectedly</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TargetComputerNotManagedMessage" xml:space="preserve">
+    <value>Target computer is no longer managed.</value>
+  </data>
+  <data name="TargetComputerNotRespondingMessage" xml:space="preserve">
+    <value>Cannot access target computer</value>
+  </data>
+  <data name="TargetComputerNotRespondingSuggestionMessage" xml:space="preserve">
+    <value>1. Check if target computer is powered and connected to the network
+2. Check if firewall on target computer is turned OFF
+3. Check if IP address of target computer is correct
+4. In the Network Neighbourhood run Network Wizard, enable file sharing
+5. Make sure Administrator password is not blank
+6. Check if "Forceguest" option on target computer is disabled.    (HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\forceguest = 0)</value>
+  </data>
+  <data name="TrustedRelationshipFailureMessage" xml:space="preserve">
+    <value>Login problem: the trust relationship between this workstation and the primary domain failed</value>
+  </data>
+  <data name="UnknownErrorMessage" xml:space="preserve">
+    <value>Unknown error</value>
+  </data>
+  <data name="UnknownProductMessage" xml:space="preserve">
+    <value>Product is not installed</value>
+  </data>
+  <data name="UnsupportedErrorMessage" xml:space="preserve">
+    <value>Unsupported error</value>
+  </data>
+  <data name="UpdateAvailableMessageFormat" xml:space="preserve">
+    <value>The new version of CESM is available on {0}.</value>
+  </data>
+  <data name="WarrantyActivatedOnComputerMessageFormat" xml:space="preserve">
+    <value>Warranty is enabled on '{0}'</value>
+  </data>
+  <data name="WarrantyAvBasesOutdatedMessage" xml:space="preserve">
+    <value>CES anivirus bases are outdated.</value>
+  </data>
+  <data name="WarrantyCisFailedMessage" xml:space="preserve">
+    <value>There is CES internal problem.</value>
+  </data>
+  <data name="WarrantyComputerInfectedMessage" xml:space="preserve">
+    <value>Computer is infected.</value>
+  </data>
+  <data name="WarrantyCorruptedOnComputerMessageFormat" xml:space="preserve">
+    <value>Warranty is corrupted on '{0}': {1}</value>
+  </data>
+  <data name="WarrantyDisabledOnComputerMessageFormat" xml:space="preserve">
+    <value>Warranty is disabled on '{0}'</value>
+  </data>
+  <data name="WarrantyExpiredWithSolutionMessageFormat" xml:space="preserve">
+    <value>Warranty is expired on '{0}'.
+To solve this problem use the Upgrade License Wizard to activate the warranty. Then disable and enable warranty again.</value>
+  </data>
+  <data name="WarrantyLicenseExpiredMessage" xml:space="preserve">
+    <value>License with warranty is expired.</value>
+  </data>
+  <data name="WarrantyOverflowMessageFormat" xml:space="preserve">
+    <value>The number of computers under warranty ({0}) is more than allowed by your license.</value>
+  </data>
+  <data name="WarrantyProblemAntivirusDisabledMessage" xml:space="preserve">
+    <value>CES Antivirus is disabled.</value>
+  </data>
+  <data name="WarrantyProblemAvBasesOutdatedMessage" xml:space="preserve">
+    <value>Update of antivirus database is required. To solve this problem update antivirus bases.</value>
+  </data>
+  <data name="WarrantyProblemAvNotAllCisEnginesReadyMessage" xml:space="preserve">
+    <value>Not all components of Comodo Endpoint Security are ready.</value>
+  </data>
+  <data name="WarrantyProblemAvNotInstalledMessage" xml:space="preserve">
+    <value>Comodo Endpoint Security antivirus component is not installed.
+Please reinstall/update Comodo Endpoint Security with appropriate component.</value>
+  </data>
+  <data name="WarrantyProblemCisInLocalModeMessage" xml:space="preserve">
+    <value>Comodo Endpoint Security is in Local Mode.
+Please switch CES to remote mode.</value>
+  </data>
+  <data name="WarrantyProblemCisInternalErrorMessage" xml:space="preserve">
+    <value>Internal CES error.
+To solve this problem try to reinstall CES.</value>
+  </data>
+  <data name="WarrantyProblemCisNotConnectedMessage" xml:space="preserve">
+    <value>Comodo Endpoint Security is not connected to ESM.
+Please ensure that appropriate CES edition is correctly installed.</value>
+  </data>
+  <data name="WarrantyProblemComputerInfectedMessage" xml:space="preserve">
+    <value>Warranty cannot be enabled because the target computer is infected. To solve this problem perform full system scan at Endpoint Security tab of this screen.</value>
+  </data>
+  <data name="WarrantyProblemDefensePlusDisabledMessage" xml:space="preserve">
+    <value>CES Defense Plus is disabled</value>
+  </data>
+  <data name="WarrantyProblemFirewallDisabledMessage" xml:space="preserve">
+    <value>CES Firewall is disabled.</value>
+  </data>
+  <data name="WarrantyProblemLicenseExpiredMessage" xml:space="preserve">
+    <value>Your license with warranty is expired.
+To solve this problem use the Upgrade License Wizard to activate the warranty. Then disable and enable warranty again.</value>
+  </data>
+  <data name="WarrantyProblemLoggedOffModeMessage" xml:space="preserve">
+    <value>Comodo Endpoint Security cannot function properly when user is logged off. Please log on to the target computer.</value>
+  </data>
+  <data name="WarrantyProblemNotSupportedInCisMessage" xml:space="preserve">
+    <value>Not supported in CES.
+To solve this problem try to reinstall CES.</value>
+  </data>
+  <data name="WarrantyProblemScanFailedMessage" xml:space="preserve">
+    <value>Cannot process scan.
+To solve this problem try to update antivirus bases and then perform full system scan using corresponding menu items in a computer context menu.</value>
+  </data>
+  <data name="WarrantyProblemUnknownErrorMessage" xml:space="preserve">
+    <value>Unknown error.
+Please apply for support.</value>
+  </data>
+  <data name="WarrantyRestoredOnComputerMessageFormat" xml:space="preserve">
+    <value>Warranty is restored on '{0}'</value>
+  </data>
+  <data name="WarrantyUndefinedErrorMessage" xml:space="preserve">
+    <value>Undefined error.</value>
+  </data>
+  <data name="YesLiteral" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+</root>

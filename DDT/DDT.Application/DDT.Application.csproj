@@ -1,0 +1,388 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3B4CE4E0-1899-459C-BB42-34A52B74260B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DDT.Application</RootNamespace>
+    <AssemblyName>DDT.Application</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>DDT.Application.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ddt_logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="Telerik.Windows.Controls">
+      <HintPath>Lib\Telerik.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.FixedDocumentViewers">
+      <HintPath>Lib\Telerik.Windows.Controls.FixedDocumentViewers.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.GridView">
+      <HintPath>Lib\Telerik.Windows.Controls.GridView.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data">
+      <HintPath>Lib\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Core">
+      <HintPath>Lib\Telerik.Windows.Documents.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Fixed">
+      <HintPath>Lib\Telerik.Windows.Documents.Fixed.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Zip">
+      <HintPath>Lib\Telerik.Windows.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Behaviors\TextPatternBehavior.cs" />
+    <Compile Include="Converters\IntToConverters.cs" />
+    <Compile Include="Converters\BoolToConverters.cs" />
+    <Compile Include="Extensions\DelayedOperations.cs" />
+    <Compile Include="Helpers\DialogHelper.cs" />
+    <Compile Include="Extensions\SystemKindExtensions.cs" />
+    <Compile Include="Helpers\ThemeHelper.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />
+    <Compile Include="Messages\MessageManager.cs" />
+    <Compile Include="Messages\MessageTokens.cs" />
+    <Compile Include="Models\ComputerDescentResultModel.cs" />
+    <Compile Include="Models\DeploymentItem.cs" />
+    <Compile Include="Models\DescentResultModel.cs" />
+    <Compile Include="Models\DirectoryItem.cs" />
+    <Compile Include="Models\DnsNameAddressWrapper.cs" />
+    <Compile Include="Models\DomainObject.cs" />
+    <Compile Include="Models\EndpointAddressWrapper.cs" />
+    <Compile Include="Models\IpAddressValidator.cs" />
+    <Compile Include="Models\IpAddressWrapper.cs" />
+    <Compile Include="Models\IpRangeAddressWrapper.cs" />
+    <Compile Include="Models\MapHelper.cs" />
+    <Compile Include="Models\ResultMapper.cs" />
+    <Compile Include="Models\SingleIPAddressWrapper.cs" />
+    <Compile Include="Models\SubnetAddressWrapper.cs" />
+    <Compile Include="Services\AggregatedDeploymentItemsResolvedEventArgs.cs" />
+    <Compile Include="Services\EnumerateWorkgroupsResponse.cs" />
+    <Compile Include="Services\GetDomainNameResponse.cs" />
+    <Compile Include="Services\DeploymentService.cs" />
+    <Compile Include="Services\DeploymentStartedEventArgs.cs" />
+    <Compile Include="Services\DomainEventArgs.cs" />
+    <Compile Include="Services\GetByIpAddressEventArgs.cs" />
+    <Compile Include="Services\GetByMixedConditionCompletedEventArgs.cs" />
+    <Compile Include="Services\GetDirectoryItemsEventArgs.cs" />
+    <Compile Include="Services\GetModifiedComputerResultsForOperationEventArgs.cs" />
+    <Compile Include="Services\GetResultForOperationEventArgs.cs" />
+    <Compile Include="Services\GetResultForTargetEventArgs.cs" />
+    <Compile Include="Services\GetWorkgroupEventArgs.cs" />
+    <Compile Include="Services\IDeploymentService.cs" />
+    <Compile Include="Services\IReportService.cs" />
+    <Compile Include="Services\ITargetsDiscoveryService.cs" />
+    <Compile Include="Services\ReportService.cs" />
+    <Compile Include="Services\ServicesComposition.cs" />
+    <Compile Include="Services\TargetsDiscoveryService.cs" />
+    <Compile Include="..\CommonAssemlyInfo.cs">
+      <Link>Properties\CommonAssemlyInfo.cs</Link>
+    </Compile>
+    <Compile Include="TemplateSelectors\DirectoryItemsTemplateSelector.cs" />
+    <Compile Include="TemplateSelectors\ResultsTemplateSelector.cs" />
+    <Compile Include="Transitions\CubeTransition.cs" />
+    <Compile Include="Transitions\Strategies\CubeTransitionStrategy.cs" />
+    <Compile Include="Transitions\Strategies\NoneTransitionStrategy.cs" />
+    <Compile Include="Transitions\Strategies\TransitionStrategyBase.cs" />
+    <Compile Include="Transitions\Transition.cs" />
+    <Compile Include="Transitions\TransitionManager.cs" />
+    <Compile Include="Transitions\TransitionPresenter.cs" />
+    <Compile Include="Triggers\KeyToCommandAction.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\Partial\ActiveDirectoryViewModel.cs" />
+    <Compile Include="ViewModels\Partial\NetworkAddressesViewModel.cs" />
+    <Compile Include="ViewModels\Partial\ObtainResultsViewModel.cs" />
+    <Compile Include="ViewModels\Partial\ReportViewModel.cs" />
+    <Compile Include="ViewModels\Partial\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\Partial\WorkgroupViewModel.cs" />
+    <Compile Include="Models\DiscoveryTargetWrapper.cs" />
+    <Compile Include="Models\SelectableItemWrapper.cs" />
+    <Compile Include="Views\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ActiveDirectoryCredentialsView.xaml.cs">
+      <DependentUpon>ActiveDirectoryCredentialsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ActiveDirectoryView.xaml.cs">
+      <DependentUpon>ActiveDirectoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConfirmationWindow.xaml.cs">
+      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeploymentCredentialsView.xaml.cs">
+      <DependentUpon>DeploymentCredentialsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeploymentResultsView.xaml.cs">
+      <DependentUpon>DeploymentResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DiscoveryTargetsView.xaml.cs">
+      <DependentUpon>DiscoveryTargetsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportView.xaml.cs">
+      <DependentUpon>ReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EULAView.xaml.cs">
+      <DependentUpon>EULAView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginPasswordUserControl.xaml.cs">
+      <DependentUpon>LoginPasswordUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NetworkAddressesView.xaml.cs">
+      <DependentUpon>NetworkAddressesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OptionsView.xaml.cs">
+      <DependentUpon>OptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PackagesView.xaml.cs">
+      <DependentUpon>PackagesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchUserControl.xaml.cs">
+      <DependentUpon>SearchUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WorkgroupCredentialsView.xaml.cs">
+      <DependentUpon>WorkgroupCredentialsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WorkgroupView.xaml.cs">
+      <DependentUpon>WorkgroupView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Resource Include="Fonts\myriadproregular-webfont.ttf" />
+    <None Include="CreateSfx.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="EULA.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">
+      <Project>{49BA3C32-1495-4EA5-8D32-3997788ADE2F}</Project>
+      <Name>APTAT.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\APTAT.DeploymentCore\APTAT.DeploymentCore.csproj">
+      <Project>{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}</Project>
+      <Name>APTAT.DeploymentCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DDT.Core\DDT.Core.csproj">
+      <Project>{7316822A-DB33-4133-809D-AA82F491E714}</Project>
+      <Name>DDT.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\DarkCyan.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\LightBlue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\LightCyan.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AboutView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ActiveDirectoryCredentialsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ActiveDirectoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ConfirmationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DeploymentCredentialsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DeploymentResultsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DiscoveryTargetsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ReportView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EULAView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginPasswordUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NetworkAddressesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PackagesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SearchUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WorkgroupCredentialsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WorkgroupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ddt_logo.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(TargetDir)DescentHelper.exe" xcopy "$(SolutionDir)out\bin.$(Configuration).Win32\DescentHelper.exe"  "$(TargetDir)" /Y /F
+
+del "$(TargetDir)DDT.exe"
+xcopy "$(SolutionDir)$(ConfigurationName)\DDT.Bootstrapper.exe" "$(TargetDir)" /Y
+"$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.rtf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)DDT.Application.exe" "$(TargetDir)DescentHelper.exe" "$(TargetDir)DDT.Application.exe.config" "$(TargetDir)DDT.Bootstrapper.exe" "$(TargetDir)Fonts" || goto :error
+copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)DDT.exe" || goto :error
+del  "$(TargetDir)archive.7z"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

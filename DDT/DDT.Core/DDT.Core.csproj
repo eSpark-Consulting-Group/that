@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7316822A-DB33-4133-809D-AA82F491E714}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DDT.Core</RootNamespace>
+    <AssemblyName>DDT.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Reporting, Version=10.1.16.615, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\Telerik.Reporting.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Descent\InstallPackageInfo.cs" />
+    <Compile Include="Descent\PackageComputerDescentResult.cs" />
+    <Compile Include="Descent\PackageDescentHelper.cs" />
+    <Compile Include="Descent\DescentScanner.cs" />
+    <Compile Include="Descent\PackageDescentMod.cs" />
+    <Compile Include="Descent\PackageNameSpecified.cs" />
+    <Compile Include="Descent\SystemKindItem.cs" />
+    <Compile Include="Descent\PackageDescentResult.cs" />
+    <Compile Include="Helper\CheckNmapInstallation.cs" />
+    <Compile Include="NMap\NmapScanner.cs" />
+    <Compile Include="NMap\osclass.cs" />
+    <Compile Include="NMap\osmatch.cs" />
+    <Compile Include="NMap\ParseHelpers.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\ChartData.cs" />
+    <Compile Include="Reports\DeploymentReportModel.cs" />
+    <Compile Include="Reports\DetailsOfScan.cs" />
+    <Compile Include="Reports\IDeploymentReportModel.cs" />
+    <Compile Include="Reports\IDetailsOfScan.cs" />
+    <Compile Include="Reports\ReportBuilder.cs" />
+    <Compile Include="Reports\ReportData.cs" />
+    <Compile Include="Reports\ReportNamesCache.cs" />
+    <Compile Include="Reports\ReportType.cs" />
+    <Compile Include="TelerikReports\DeploymentReportModern.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\DeploymentReportModern.Designer.cs">
+      <DependentUpon>DeploymentReportModern.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\DeploymentSubReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\DeploymentSubReport.Designer.cs">
+      <DependentUpon>DeploymentSubReport.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">
+      <Project>{49ba3c32-1495-4ea5-8d32-3997788ade2f}</Project>
+      <Name>APTAT.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\APTAT.DeploymentCore\APTAT.DeploymentCore.csproj">
+      <Project>{8c99a7f4-76f5-4899-8e57-c032f1e2ec41}</Project>
+      <Name>APTAT.DeploymentCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\DDT.Core.Reports.DeploymentReportModel.datasource" />
+    <None Include="Properties\DataSources\DDT.Core.Reports.DetailsOfScan.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="TelerikReports\DeploymentReportModern.resx">
+      <DependentUpon>DeploymentReportModern.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\DeploymentSubReport.resx">
+      <DependentUpon>DeploymentSubReport.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

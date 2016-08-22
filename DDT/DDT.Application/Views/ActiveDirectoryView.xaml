@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="DDT.Application.Views.ActiveDirectoryView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DDT.Application.Views"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:enums="clr-namespace:DDT.Application.Messages"
+      xmlns:triggers="clr-namespace:DDT.Application.Triggers"
+      xmlns:behaviors="clr-namespace:DDT.Application.Behaviors"
+      xmlns:converters="clr-namespace:DDT.Application.Converters"
+      xmlns:templates="clr-namespace:DDT.Application.TemplateSelectors"
+      xmlns:helpers="clr-namespace:DDT.Application.Helpers"
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300" helpers:ThemeHelper.Theme="{Binding Theme}">
+
+    <Grid Visibility="{Binding HasProgress, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=!}">
+
+        <TextBlock HorizontalAlignment="Left" Style="{DynamicResource SubTitleTextStyle}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" FontSize="16"  VerticalAlignment="Top" Margin="3,40,0,0">
+                Active Directory Computers
+        </TextBlock>
+        <Border Margin="0,62,0,0" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <telerik:RadTreeListView x:Name="tree" CanUserFreezeColumns="False" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="True" ItemsSource="{Binding ActiveDirectoryItems}"   
+                                 AutoExpandItems="False"  HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred" IsHitTestVisible="{Binding HasInternalProgress, Converter={converters:BoolInvertConverter}}" RowIsExpandedChanging="RadTreeListView_RowIsExpandedChanging">
+                    <telerik:RadTreeListView.Resources>
+                        <DataTemplate x:Key="ComputerTemplate">
+                            <Grid HorizontalAlignment="Stretch" >
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="{Binding Name}" HorizontalAlignment="Left" FontSize="15"/>
+
+                                <ContentControl ContentTemplate="{StaticResource TreeListViewRowConnectingLines}" Content=""/>
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate x:Key="RootTemplate">
+                            <Grid HorizontalAlignment="Stretch">
+                                <CheckBox Margin="3 1 0 0" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="{Binding Name}" FontSize="15" HorizontalAlignment="Left"/>
+
+                            </Grid>
+                        </DataTemplate>
+                        <templates:DirectoryItemsTemplateSelector x:Key="TemplateSelector" RootTemplate="{StaticResource RootTemplate}" ComputerTemplate="{StaticResource ComputerTemplate}"/>
+
+                    </telerik:RadTreeListView.Resources>
+                    <telerik:RadTreeListView.ChildTableDefinitions>
+                        <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
+                    </telerik:RadTreeListView.ChildTableDefinitions>
+                    <telerik:RadTreeListView.Columns>
+                        <telerik:GridViewColumn IsFilterable="False" ShowFilterButton="False" Focusable="False" ShowFieldFilters="False" CellTemplateSelector="{StaticResource TemplateSelector}" Header="Target" IsReadOnly="True" Width="*" SortMemberPath="Name" />
+                    </telerik:RadTreeListView.Columns>
+                </telerik:RadTreeListView>
+
+                <Button Content="Ok" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
+                <Button Content="Back" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.ActiveDirectoryCredentials}" />
+                <Button Content="Cancel" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Grid.Row="1" Margin="0 17 197 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="{DynamicResource TextBrush3}" Template="{StaticResource BackButton}" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
+
+            </Grid>
+        </Border>
+        <local:SearchUserControl Target="{Binding ElementName=tree}" Keyword="{Binding KeywordActiveDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+    </Grid>
+</UserControl>

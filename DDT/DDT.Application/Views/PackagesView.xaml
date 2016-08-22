@@ -1,0 +1,446 @@
+﻿<UserControl x:Class="DDT.Application.Views.PackagesView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DDT.Application.Views"
+      xmlns:enums="clr-namespace:DDT.Application.Messages"
+      xmlns:converters="clr-namespace:DDT.Application.Converters"
+      xmlns:behaviors="clr-namespace:DDT.Application.Behaviors"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"  
+      xmlns:helpers="clr-namespace:DDT.Application.Helpers"
+      xmlns:triggers="clr-namespace:DDT.Application.Triggers"
+      mc:Ignorable="d" x:Name="this"
+      d:DesignHeight="300" d:DesignWidth="300" helpers:ThemeHelper.Theme="{Binding Theme}">
+
+    <Grid>
+
+        <TextBlock HorizontalAlignment="Left" Style="{DynamicResource SubTitleTextStyle}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" FontSize="16"  VerticalAlignment="Top" Margin="3,40,0,0">
+                Deployment Package(s)
+        </TextBlock>
+        <Border Margin="0,62,0,0" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0" x:Name="scroll">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition RowDefinition.Height="Auto" />
+                            <RowDefinition RowDefinition.Height="*"  />
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button HorizontalAlignment="Right" Grid.Column="1"  Opacity="0" Visibility="Collapsed" Margin="2 0 0 0" x:Name="b1" MinWidth="0" Width="0" Tag="{Binding Transform, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="OpenFileDialog3"  ToolTipService.ToolTip="{Binding Transform}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" Height="80">
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="22 0">
+                                                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 0 0 0">
+                                                        <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush}"  >
+                                                            <TextBlock.Text>
+                                                                MST transform (optional)
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+
+                                                        <TextBlock Opacity="0.5" Style="{DynamicResource SubTitleTextStyle}" Margin="0 0 40 0" TextTrimming="CharacterEllipsis"  HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
+                                                    </StackPanel>
+                                                    <Path SnapsToDevicePixels="True" Margin="0 0 0 0" HorizontalAlignment="Right"  Fill="{DynamicResource TextBrush3}" Data="F1M442.9355,197.6104L429.4995,184.1744L428.0855,185.5894L440.1065,197.6104L428.0855,209.6314L429.4995,211.0464L442.9255,197.6204L442.9155,197.6104z" Height="27" Stretch="Fill" Width="15"/>
+                                                </Grid>
+                                            </Grid>
+                                            <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}"  Visibility="{Binding HasTransform, Converter={converters:BoolToVisibilityConverter}}">
+                                                <Button Style="{StaticResource CloseButton}" x:Name="close" Background="{DynamicResource TextBrush3}"  Margin="5" Width="12" Height="12"   ToolTip="Clear" />
+
+                                            </Border>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Click="OpenFileDialog" x:Name="button1"  Tag="{Binding Package, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTipService.ToolTip="{Binding Package}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" Height="80">
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="22 0">
+                                                    <Path SnapsToDevicePixels="True" x:Name="path" Data="M20.999991,27.999001 L26.999991,27.999001 26.999991,28.999001 20.999991,28.999001 z M35.665977,27.111002 L31.999991,32.000002 33.571006,34.095003 z M20.999991,25.999002 L28.999991,25.999002 28.999991,26.999001 20.999991,26.999001 z M20.999991,23.999002 L31.999991,23.999002 31.999991,24.999002 20.999991,24.999002 z M17.999992,20.000002 L17.999992,36.000002 32.999991,36.000002 29.999991,32.000002 35.999991,24.000002 35.999991,20.000002 z M3.9999914,17.999002 L9.9999914,17.999002 9.9999914,18.999002 3.9999914,18.999002 z M3.9999914,15.999002 L11.999991,15.999002 11.999991,16.999002 3.9999914,16.999002 z M3.9999914,13.999001 L14.999992,13.999001 14.999992,14.999002 3.9999914,14.999002 z M30.209006,12.000002 L30.209006,18.000002 34.596,18.000002 34.596,16.928003 31.678,16.928003 31.678,15.433008 34.153007,15.433008 34.153007,14.361001 31.678,14.361001 31.678,13.071001 34.603995,13.071001 34.603995,12.000002 z M24.157981,12.000002 L25.965995,14.975007 24.109977,18.000002 25.800986,18.000002 26.875998,15.936006 27.95098,18.000002 29.728995,18.000002 27.780997,14.975007 29.589988,12.000002 27.898002,12.000002 26.857993,14.023004 25.83599,12.000002 z M19.493979,12.000002 L19.493979,18.000002 23.881003,18.000002 23.881003,16.928003 20.963004,16.928003 20.963004,15.433008 23.43798,15.433008 23.43798,14.361001 20.963004,14.361001 20.963004,13.071001 23.888999,13.071001 23.888999,12.000002 z M16.914,2.0829997 L16.914,7.9160004 18.375,7.9160004 18.375,2.0829997 z M3.4939995,2.0829997 L3.4939995,7.9160004 4.9630003,7.9160004 4.9630003,6.4690003 4.8239994,3.842 4.8499994,3.8379998 6.3549995,7.9160004 7.3439999,7.9160004 8.8639998,3.8010001 8.8899999,3.8050003 8.7519999,6.4690003 8.7519999,7.9160004 10.221,7.9160004 10.221,2.0829997 8.2879996,2.0829997 6.8569994,6.1650002 6.8319998,6.1650002 5.4180002,2.0829997 z M13.628,2 C12.923,2 12.342,2.1500001 11.883,2.4520001 11.426,2.7530003 11.196,3.1490002 11.196,3.638 11.196,4.1390004 11.389,4.5230002 11.772999,4.7890005 12.157,5.0550003 12.748,5.3040004 13.546,5.5360003 13.928,5.6620002 14.191,5.7810001 14.339,5.8930001 14.486,6.0050001 14.56,6.1640003 14.56,6.3699999 14.56,6.5510001 14.485,6.6970003 14.337,6.8100004 14.187,6.9220002 13.962,6.9790001&#xd;&#xa;13.658,6.9789999 13.26,6.9790001 12.962,6.9060001 12.765,6.7609999 12.568,6.6180003 12.471,6.3770001 12.471,6.0410001 L11.045001,6.0410001 11.036,6.0650003 C11.021,6.6900003 11.275,7.1680002 11.799,7.5 12.322,7.8330002 12.941,8.0000002 13.658,8.0000005 14.372,8.0000002 14.945,7.8540001 15.377,7.5650003 15.808,7.2750001 16.025,6.8740003 16.025,6.3610005 16.025,5.8560004 15.844,5.46 15.48,5.171 15.118,4.8830004 14.578,4.6410003 13.862,4.4430003 13.396,4.2880001 13.08,4.1590004 12.91,4.0560002 12.742,3.9530001 12.657,3.816&#xd;&#xa;12.657,3.6450005 12.657,3.4690003 12.74,3.3210001 12.908,3.2010002 13.076,3.0810003 13.307,3.02 13.601,3.02 13.902,3.02 14.139,3.0930004 14.308,3.2390003 14.478,3.3850002 14.564,3.5730004 14.564,3.8050003 L15.986,3.8050003 15.994,3.7820001 C16.01,3.2580004 15.793,2.8310003 15.347,2.4980001 14.9,2.1660004 14.327,2 13.628,2 z M0,0 L22,0 22,10.000001 37.999991,10.000001 37.999991,26.000002 34.999991,38.000002 15.999991,38.000002 15.999991,10.000001 20,10.000001 2,10 2,26 12,26 12,28 0,28 z" Fill="{DynamicResource StrongBrush}" Height="38" Stretch="Fill" Width="38" Margin="5 0 0 0" HorizontalAlignment="Left" />
+
+                                                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="70 0 0 0">
+                                                        <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush3}"  >
+                                                            <TextBlock.Text>
+                                                                Package
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                        <TextBlock Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5" Margin="0 0 40 0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
+                                                    </StackPanel>
+                                                    <Path SnapsToDevicePixels="True" Margin="0 0 0 0" HorizontalAlignment="Right"  Fill="{DynamicResource TextBrush3}" Data="F1M442.9355,197.6104L429.4995,184.1744L428.0855,185.5894L440.1065,197.6104L428.0855,209.6314L429.4995,211.0464L442.9255,197.6204L442.9155,197.6104z" Height="27" Stretch="Fill" Width="15"/>
+                                                </Grid>
+                                            </Grid>
+                                            <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}"  Visibility="{Binding HasPackage, Converter={converters:BoolToVisibilityConverter}}">
+                                                <Button Style="{StaticResource CloseButton}" x:Name="close" Background="{DynamicResource TextBrush3}"  Margin="5" Width="12" Height="12"   ToolTip="Clear" />
+
+                                            </Border>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                        </Grid>
+
+                        <Grid Grid.Row="1" Margin="0 17 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button HorizontalAlignment="Right" Grid.Column="1" MinWidth="0" Width="0" Margin="2 0 0 0" VerticalAlignment="Top" Opacity="0" Visibility="Collapsed" x:Name="b2" Tag="{Binding Transform64, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="OpenFileDialog3"  ToolTipService.ToolTip="{Binding Transform64}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" Height="80">
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="22 0">
+                                                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 0 0 0">
+                                                        <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush}"  >
+                                                            <TextBlock.Text>
+                                                                MST transform (optional)
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+
+                                                        <TextBlock Opacity="0.5" Style="{DynamicResource SubTitleTextStyle}" Margin="0 0 40 0" TextTrimming="CharacterEllipsis"  HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
+                                                    </StackPanel>
+                                                    <Path SnapsToDevicePixels="True" Margin="0 0 0 0" HorizontalAlignment="Right"  Fill="{DynamicResource TextBrush3}" Data="F1M442.9355,197.6104L429.4995,184.1744L428.0855,185.5894L440.1065,197.6104L428.0855,209.6314L429.4995,211.0464L442.9255,197.6204L442.9155,197.6104z" Height="27" Stretch="Fill" Width="15"/>
+                                                </Grid>
+                                            </Grid>
+                                            <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}"  Visibility="{Binding HasTransform64, Converter={converters:BoolToVisibilityConverter}}">
+                                                <Button Style="{StaticResource CloseButton}" x:Name="close" Background="{DynamicResource TextBrush3}"  Margin="5" Width="12" Height="12"   ToolTip="Clear" />
+
+                                            </Border>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button  Click="OpenFileDialog2" VerticalAlignment="Top" x:Name="button2" Tag="{Binding Package64, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTipService.ToolTip="{Binding Package64}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" Height="80">
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="22 0">
+                                                    <Path SnapsToDevicePixels="True" x:Name="path" Data="M20.999991,27.999001 L26.999991,27.999001 26.999991,28.999001 20.999991,28.999001 z M35.665977,27.111002 L31.999991,32.000002 33.571006,34.095003 z M20.999991,25.999002 L28.999991,25.999002 28.999991,26.999001 20.999991,26.999001 z M20.999991,23.999002 L31.999991,23.999002 31.999991,24.999002 20.999991,24.999002 z M17.999992,20.000002 L17.999992,36.000002 32.999991,36.000002 29.999991,32.000002 35.999991,24.000002 35.999991,20.000002 z M3.9999914,17.999002 L9.9999914,17.999002 9.9999914,18.999002 3.9999914,18.999002 z M3.9999914,15.999002 L11.999991,15.999002 11.999991,16.999002 3.9999914,16.999002 z M3.9999914,13.999001 L14.999992,13.999001 14.999992,14.999002 3.9999914,14.999002 z M30.209006,12.000002 L30.209006,18.000002 34.596,18.000002 34.596,16.928003 31.678,16.928003 31.678,15.433008 34.153007,15.433008 34.153007,14.361001 31.678,14.361001 31.678,13.071001 34.603995,13.071001 34.603995,12.000002 z M24.157981,12.000002 L25.965995,14.975007 24.109977,18.000002 25.800986,18.000002 26.875998,15.936006 27.95098,18.000002 29.728995,18.000002 27.780997,14.975007 29.589988,12.000002 27.898002,12.000002 26.857993,14.023004 25.83599,12.000002 z M19.493979,12.000002 L19.493979,18.000002 23.881003,18.000002 23.881003,16.928003 20.963004,16.928003 20.963004,15.433008 23.43798,15.433008 23.43798,14.361001 20.963004,14.361001 20.963004,13.071001 23.888999,13.071001 23.888999,12.000002 z M16.914,2.0829997 L16.914,7.9160004 18.375,7.9160004 18.375,2.0829997 z M3.4939995,2.0829997 L3.4939995,7.9160004 4.9630003,7.9160004 4.9630003,6.4690003 4.8239994,3.842 4.8499994,3.8379998 6.3549995,7.9160004 7.3439999,7.9160004 8.8639998,3.8010001 8.8899999,3.8050003 8.7519999,6.4690003 8.7519999,7.9160004 10.221,7.9160004 10.221,2.0829997 8.2879996,2.0829997 6.8569994,6.1650002 6.8319998,6.1650002 5.4180002,2.0829997 z M13.628,2 C12.923,2 12.342,2.1500001 11.883,2.4520001 11.426,2.7530003 11.196,3.1490002 11.196,3.638 11.196,4.1390004 11.389,4.5230002 11.772999,4.7890005 12.157,5.0550003 12.748,5.3040004 13.546,5.5360003 13.928,5.6620002 14.191,5.7810001 14.339,5.8930001 14.486,6.0050001 14.56,6.1640003 14.56,6.3699999 14.56,6.5510001 14.485,6.6970003 14.337,6.8100004 14.187,6.9220002 13.962,6.9790001&#xd;&#xa;13.658,6.9789999 13.26,6.9790001 12.962,6.9060001 12.765,6.7609999 12.568,6.6180003 12.471,6.3770001 12.471,6.0410001 L11.045001,6.0410001 11.036,6.0650003 C11.021,6.6900003 11.275,7.1680002 11.799,7.5 12.322,7.8330002 12.941,8.0000002 13.658,8.0000005 14.372,8.0000002 14.945,7.8540001 15.377,7.5650003 15.808,7.2750001 16.025,6.8740003 16.025,6.3610005 16.025,5.8560004 15.844,5.46 15.48,5.171 15.118,4.8830004 14.578,4.6410003 13.862,4.4430003 13.396,4.2880001 13.08,4.1590004 12.91,4.0560002 12.742,3.9530001 12.657,3.816&#xd;&#xa;12.657,3.6450005 12.657,3.4690003 12.74,3.3210001 12.908,3.2010002 13.076,3.0810003 13.307,3.02 13.601,3.02 13.902,3.02 14.139,3.0930004 14.308,3.2390003 14.478,3.3850002 14.564,3.5730004 14.564,3.8050003 L15.986,3.8050003 15.994,3.7820001 C16.01,3.2580004 15.793,2.8310003 15.347,2.4980001 14.9,2.1660004 14.327,2 13.628,2 z M0,0 L22,0 22,10.000001 37.999991,10.000001 37.999991,26.000002 34.999991,38.000002 15.999991,38.000002 15.999991,10.000001 20,10.000001 2,10 2,26 12,26 12,28 0,28 z" Fill="{DynamicResource StrongBrush}" Height="38" Stretch="Fill" Width="38" Margin="5 0 0 0" HorizontalAlignment="Left" />
+
+                                                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="70 0 0 0">
+                                                        <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush3}"  >
+                                                            <TextBlock.Text>
+                                                                64-bit Package
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                        <TextBlock Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5" Margin="0 0 40 0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
+                                                    </StackPanel>
+                                                    <Path SnapsToDevicePixels="True" Margin="0 0 0 0" HorizontalAlignment="Right"  Fill="{DynamicResource TextBrush3}" Data="F1M442.9355,197.6104L429.4995,184.1744L428.0855,185.5894L440.1065,197.6104L428.0855,209.6314L429.4995,211.0464L442.9255,197.6204L442.9155,197.6104z" Height="27" Stretch="Fill" Width="15"/>
+                                                </Grid>
+                                            </Grid>
+                                            <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}"  Visibility="{Binding HasPackage64, Converter={converters:BoolToVisibilityConverter}}">
+                                                <Button Style="{StaticResource CloseButton}" x:Name="close" Background="{DynamicResource TextBrush3}"  Margin="5" Width="12" Height="12"   ToolTip="Clear" />
+
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                        
+                        <Grid Background="{DynamicResource AccentBrush}" VerticalAlignment="Top" Grid.Row="1">
+                            <Grid.RenderTransform>
+                                <TranslateTransform x:Name="translate1" Y="17" />
+                            </Grid.RenderTransform>
+
+                            <Grid x:Name="grid1">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="SeparateStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Down">
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="Y" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="114" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="button2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="b2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Down2">
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="Y" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="114" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="button2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="1" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="b2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="1" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Up">
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="Y" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="17" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="button2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="b2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Up2">
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="Y" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="17" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="button2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="b2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <CheckBox Visibility="Collapsed" Content="Re-deploy the package even if previous deployment has been detected" IsChecked="{Binding Redeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="22 22 0 0" HorizontalAlignment="Left"  />
+                                <CheckBox Visibility="Collapsed" Content="Run remotely as currently logged-in user" IsChecked="{Binding RunAsUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="22 17 0 0" Grid.Row="1" HorizontalAlignment="Left"  />
+
+                                <Grid Margin="22 15 22 5" Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="160"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="320"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="ParametersCheckbox" Content="Specify parameters"  Margin="0 1 0 0" 
+                                                  HorizontalAlignment="Left" Checked="ParametersCheckbox_Checked"
+                                                  IsChecked="{Binding IsInstallationParametersSpecified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                    <telerik:RadWatermarkTextBox x:Name="Parameters"  Grid.Column="1" Margin="0 0 0 -2" Text="{Binding InstallationParameters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Opacity="{Binding IsInstallationParametersSpecified, Converter={converters:BoolToOpacityConverter}}" >
+                                        <telerik:RadWatermarkTextBox.WatermarkContent>
+                                            <TextBlock Text="{Binding ParametersExample}" Foreground="{DynamicResource TextBrush2}" />
+                                        </telerik:RadWatermarkTextBox.WatermarkContent>
+                                    </telerik:RadWatermarkTextBox>
+
+                                    <Grid Grid.Column="2" Margin="20 0 0 0" Visibility="{Binding IsInstallationParametersSpecified, Converter={converters:BoolToVisibilityConverter}}">
+                                        <CheckBox x:Name="Parameters64Checkbox" Content="Override parameters for 64-bit application" IsChecked="{Binding IsInstallationParameters64Specified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      Visibility="{Binding SeparatePackages, Converter={converters:BoolToVisibilityConverter}}"   Margin="0 1 0 0" HorizontalAlignment="Left" Checked="Parameters64Checkbox_Checked"/>
+                                    </Grid>
+
+                                    <Grid Grid.Column="3" Visibility="{Binding SeparatePackages, Converter={converters:BoolToVisibilityConverter}}">
+                                        <Grid Visibility="{Binding IsInstallationParametersSpecified, Converter={converters:BoolToVisibilityConverter}}">
+                                            <telerik:RadWatermarkTextBox x:Name="Parameters64" Margin="0 0 0 -2"  Visibility="{Binding IsInstallationParameters64Specified, Converter={converters:BoolToVisibilityConverter}}" Text="{Binding InstallationParameters64, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  >
+                                                <telerik:RadWatermarkTextBox.WatermarkContent>
+                                                    <TextBlock Text="{Binding ParametersExample}" Foreground="{DynamicResource TextBrush2}" />
+                                                </telerik:RadWatermarkTextBox.WatermarkContent>
+                                            </telerik:RadWatermarkTextBox>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+
+                                <CheckBox x:Name="SeparateCheckbox" Grid.Row="3" IsChecked="{Binding SeparatePackages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Use separate packages for 32-bit and 64-bit applications"  Margin="22 7 0 21" HorizontalAlignment="Left" Checked="SeparateCheckbox_Checked" Unchecked="SeparateCheckbox_Unchecked" />
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Next" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}"  />
+
+            </Grid>
+        </Border>
+
+
+    </Grid>
+</UserControl>
