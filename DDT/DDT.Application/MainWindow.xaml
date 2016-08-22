@@ -138,7 +138,7 @@
                 
             </Grid>
 
-            <Grid Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="grid3" Background="{DynamicResource AccentBrush}" Opacity="0" Margin="0 0 19 0">
+            <Grid Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="grid3" Background="{DynamicResource AccentBrush}" Opacity="0" Margin="0 0 17 0">
                 <Grid.RenderTransform>
                     <TranslateTransform x:Name="translate5" Y="-60" />
                 </Grid.RenderTransform>

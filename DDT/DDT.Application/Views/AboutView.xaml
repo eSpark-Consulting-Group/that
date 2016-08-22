@@ -65,32 +65,39 @@
                         </TextBlock>
                         
                         <TextBlock  Grid.Row="1"  TextWrapping="Wrap" Margin="0,0,0,0">
+                            <Run Text="● " Foreground="{DynamicResource StrongBrush}" />
                             <Run Text="Check whether a target computer is turned on and connected to the network."  />
                         </TextBlock>
 
                         <TextBlock  Grid.Row="2"  TextWrapping="Wrap" Margin="0,15,0,0">
+                            <Run Text="● " Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="Check whether firewall on a target computer is turned Off."  />
                         </TextBlock>
 
                         <TextBlock  Grid.Row="3" TextWrapping="Wrap" Margin="0,15,0,0">
+                            <Run Text="● " Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="Check whether IP address of a target computer is correct."  />
                         </TextBlock>
 
                         <TextBlock  Grid.Row="4"  TextWrapping="Wrap" Margin="0,15,0,0">
+                            <Run Text="● " Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="In the Network Neighbourhood run Network Wizard, enable file sharing."  />
                         </TextBlock>
 
                         <TextBlock  Grid.Row="5"  TextWrapping="Wrap" Margin="0,15,0,0">
+                            <Run Text="● " Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="Make sure Administrator password is not blank and correct."  />
                         </TextBlock>
 
                         <TextBlock  Grid.Row="6"  TextWrapping="Wrap" Margin="0,15,0,0">
+                            <Run Text="● " Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="Check whether 'Forceguest' option on target computer is disabled:"  />
                             <Run Text="HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa" Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="'forceguest' dword is 0." />
                         </TextBlock>
 
                         <TextBlock  Grid.Row="7"  TextWrapping="Wrap" Margin="0,15,0,0">
+                            <Run Text="● " Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="If the account is not a built-in Administrator, check whether:" />
                             <Run Text="HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System" Foreground="{DynamicResource StrongBrush}"/>
                             <Run Text="'LocalAccountTokenFilterPolicy' dword is 1." />
@@ -98,7 +105,6 @@
 
                     </Grid>
                 </Grid>
-
 
                 <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Back" Grid.Row="2" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Command="{Binding ChangeScreenPreviousCommand}"  />
 
