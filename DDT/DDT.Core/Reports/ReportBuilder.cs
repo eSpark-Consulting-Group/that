@@ -49,7 +49,8 @@ namespace DDT.Core.Reports
             {
                 case ReportType.DeploymentReport:
                     cache.Reports.Add(string.Format("{0}-{1}", data.OperationUid, reportType), fileName);
-                    BuildDeploymentReportModern(data, fileName);
+                    var reportSource = BuildDeploymentReport(data);
+                    RenderReportToPdf(fileName, reportSource);
                     break;
 
                 default:
@@ -59,20 +60,13 @@ namespace DDT.Core.Reports
             return fileName;
         }
 
-        public ReportSource BuildDeploymentReport(ReportData data)
+        private ReportSource BuildDeploymentReport(ReportData data)
         {
             InstanceReportSource reportSource = new InstanceReportSource();
             DeploymentReportModern report = new DeploymentReportModern();
             report.DataSource = data;
             reportSource.ReportDocument = report;
-            return reportSource;        
-        }
-
-        private void BuildDeploymentReportModern(ReportData data, string fileName)
-        {
-            var reportSource = BuildDeploymentReport(data);
-
-            RenderReportToPdf(fileName, reportSource);
+            return reportSource;
         }
 
         private static void RenderReportToPdf(string fileName, ReportSource reportSource)
