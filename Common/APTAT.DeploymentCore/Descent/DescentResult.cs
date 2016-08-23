@@ -21,19 +21,13 @@ namespace APTAT.DeploymentCore.Descent
 
 		private readonly object _sync = new object();
 
-		private int _inprogressCount;
-		protected int SucceededCount;
-        protected int FailedCount;
+        
 
-        public DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription)
-            :this(computers, devicesSourceDescription, new ComputerDescentResultFactory())
-        { }
-
-        protected DescentResult( IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
-            IComputerDescentResultFactory computerDescentResultFactory)
+        public DescentResult( IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
+            IComputerDescentResultFactory computerDescentResultFactory = null)
 		{
             if (computerDescentResultFactory == null)
-                throw new ArgumentNullException(nameof(computerDescentResultFactory));
+                computerDescentResultFactory = new ComputerDescentResultFactory();
             _descentWatcher = new DescentWatcher(Settings.Default.AgentDescentingTimeout, OnDescentTimeout);
 		    DevicesSourceDescription = devicesSourceDescription;
 
@@ -47,13 +41,13 @@ namespace APTAT.DeploymentCore.Descent
 
 			OperationUid = Guid.NewGuid();
 			CompletedTime = null;
-			_inprogressCount = ResultsByUid.Count(r => !r.Value.Completed);
+            InProgressCount = ResultsByUid.Count(r => !r.Value.Completed);
 		    TotalTargetsCount = ResultsByUid.Count;
 			StartTime = DateTime.UtcNow;
             _descentWatcher.Start();
         }
 
-        protected interface IComputerDescentResultFactory
+        public interface IComputerDescentResultFactory
         {
             IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer);
         }
@@ -71,10 +65,12 @@ namespace APTAT.DeploymentCore.Descent
             = new ConcurrentDictionary<Guid, IComputerDescentResultInternal>();
 
         public IDevicesSourceDescription DevicesSourceDescription { get; }
-
-        public int TotalTargetsCount { get; set; }
+        public int InProgressCount { get; private set; }
+        public int SucceededCount { get; private set; }
+        public int FailedCount { get; private set; }
+        public int TotalTargetsCount { get; }
         public Guid OperationUid { get; }
-		public bool Completed { get { return _inprogressCount == 0; } }
+		public bool Completed { get { return InProgressCount == 0; } }
 		public DateTime? CompletedTime { get; private set; }
 
 		public virtual void OnDescendOperationEvent( bool ok, Guid computerUid, FormattedText errorMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage )
@@ -119,20 +115,20 @@ namespace APTAT.DeploymentCore.Descent
 					else
 						FailedCount++;
 
-					_inprogressCount--;
+                    InProgressCount--;
 					_reportedByUid[uid] = true;
                     _descentWatcher.ExcludeIdentity(uid);
 
                     CheckCompletion();
 				}
-				count = _inprogressCount;
+				count = InProgressCount;
 			}
 			return count;
 		}
 
         private void CheckCompletion()
 		{
-			if (_inprogressCount == 0 && CompletedTime == null)
+			if (InProgressCount == 0 && CompletedTime == null)
 			{
 				CompletedTime = DateTime.UtcNow;
 				LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,

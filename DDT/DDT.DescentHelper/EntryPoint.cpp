@@ -47,9 +47,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			return 0;
 		}
 	}
-#ifdef DEBUG
+//#ifdef DEBUG
 	g_pLoggerAutoInit->m_logger.init(true, L"descentAgn.log");
-#endif
+//#endif
     static const SERVICE_TABLE_ENTRY ste[] = { { L"", ServiceMain }, { } };
     StartServiceCtrlDispatcher(ste);
     return 0;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Common;
@@ -144,6 +145,26 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                 }
                 catch (DescentException ex)
                 {
+                    if (ex._status == DescentStatus.status_agent_was_crashed)
+                    {
+                        try
+                        {
+                            string strToLog;
+
+                            using (TextReader sr = new StreamReader(dh.RemoteWorkingDirectory +
+                                                                    @"\CESM_AGENT_LOGS\descentAgn.log",
+                                System.Text.Encoding.Unicode))
+                            {
+                                strToLog = sr.ReadToEnd();
+                            }
+                            LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, strToLog);
+                        }
+                        catch (Exception)
+                        {
+                            LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent, "{0} occurred in getting logs from remote endpoints: {1}",
+                                ex.GetType().Name, ex.Message);
+                        }
+                    }
                     //if( tp.DescentCallback != null )
                     //	tp.DescentCallback.OnDescentCallback( ex._status, ex._win32error, ex._errorString );
                     LogHelper.Trace(TraceEventType.Error, TraceCategory.Descent, "{0} occurred in descent thread: {1}",
