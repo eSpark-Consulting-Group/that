@@ -7,6 +7,7 @@ namespace DDT.Core
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
+            resolver.RegisterSingleton<IReportNamesCache, ReportNamesCache>();
             resolver.RegisterSingleton<IFileHelper, FileHelper>();
             resolver.Register<IReportRenderer, TelerikReportRenderer>();
             resolver.Register<IReportBuilder, ReportBuilder>();

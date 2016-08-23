@@ -72,6 +72,7 @@
     <Compile Include="Reports\IReportData.cs" />
     <Compile Include="Reports\ReportBuilder.cs" />
     <Compile Include="Reports\ReportData.cs" />
+    <Compile Include="Reports\IReportNamesCache.cs" />
     <Compile Include="Reports\ReportNamesCache.cs" />
     <Compile Include="Reports\ReportType.cs" />
     <Compile Include="Reports\TelerikReportRenderer.cs" />

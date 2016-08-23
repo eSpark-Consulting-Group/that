@@ -71,6 +71,7 @@
     <Compile Include="Reports\DeploymentReportModelTest.cs" />
     <Compile Include="Reports\ReportBuilderTests.cs" />
     <Compile Include="Reports\ReportDataTests.cs" />
+    <Compile Include="Reports\ReportNamesCacheTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -12,23 +12,21 @@ namespace DDT.Core.Reports.Tests
 {
     public class ReportBuilderTests
     {
-        
+
         [Fact()]
         public void BuildTest()
         {
             IFileHelper fileHelper = new FileHelper();
-            ReportBuilder builder = new ReportBuilder(new TelerikReportRenderer(), fileHelper );
+            ReportBuilder builder = new ReportBuilder(new TelerikReportRenderer(), fileHelper, new ReportNamesCache());
             var newReportData = new ReportData();
-            var result = builder.Build(newReportData, ReportType.DeploymentReport);            
-            Assert.NotNull(result);            
+            var result = builder.Build(newReportData, ReportType.DeploymentReport);
+            Assert.NotNull(result);
         }
 
 
-      
-
-      [Theory]
-      [InlineData(true)]
-      [InlineData(false)]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void BuildTestGetExistentReportFromCache(bool fileExists)
         {
             var fileHelper = Mock.Create<IFileHelper>();
@@ -37,7 +35,7 @@ namespace DDT.Core.Reports.Tests
             var renderer = Mock.Create<IReportRenderer>();
             Mock.Arrange(() => renderer.Render(new DeploymentReportModern(), new ReportData(), "")).DoNothing();
 
-            ReportBuilder builder = new ReportBuilder(renderer, fileHelper);
+            ReportBuilder builder = new ReportBuilder(renderer, fileHelper, new ReportNamesCache());
 
             string guid = Guid.NewGuid().ToString();
             var data1 = Mock.Create<IReportData>();
@@ -50,7 +48,7 @@ namespace DDT.Core.Reports.Tests
             var result1 = builder.Build(data1, ReportType.DeploymentReport);
 
             System.Threading.Thread.Sleep(2000);
-            
+
             var result2 = builder.Build(data2, ReportType.DeploymentReport);
             if (fileExists)
             {
@@ -71,7 +69,7 @@ namespace DDT.Core.Reports.Tests
             var fileHelper = Mock.Create<IFileHelper>();
             Mock.Arrange(() => fileHelper.IsFileExists("")).IgnoreArguments().Returns(true);
 
-            ReportBuilder builder = new ReportBuilder(r, fileHelper);
+            ReportBuilder builder = new ReportBuilder(r, fileHelper, new ReportNamesCache());
 
             var data1 = Mock.Create<IReportData>();
             Mock.Arrange(() => data1.OperationUid).Returns(Guid.NewGuid().ToString());

@@ -4,15 +4,42 @@ using System.Linq;
 
 namespace DDT.Core.Reports
 {
-    public sealed class ReportNamesCache
+    public sealed class ReportNamesCache : IReportNamesCache
     {
-        private static readonly ReportNamesCache instance = new ReportNamesCache();
-        static ReportNamesCache() { }
-        private ReportNamesCache() { }
-        public Dictionary<string, string> Reports = new Dictionary<string, string>();
-        public static ReportNamesCache Instance
+        private readonly Dictionary<string, string> _reports;
+
+        public  ReportNamesCache()
         {
-            get { return instance; }
+            _reports = new Dictionary<string, string>();
+        }
+
+        public string Find(string operationUid, ReportType reportType)
+        {
+            string existentName = null;
+            string reportKey = GetReportKey(operationUid, reportType);
+
+            if (_reports.Keys.Contains(reportKey))
+            {
+                existentName = _reports[reportKey];
+            }
+            return existentName;
+        }
+
+        private static string GetReportKey(string operationUid, ReportType reportType)
+        {
+            return string.Format("{0}-{1}", operationUid, reportType);
+        }
+
+        public void Remove(string operationUid, ReportType reportType)
+        {            
+            var key = GetReportKey(operationUid, reportType);
+            _reports.Remove(key);
+        }
+
+        public void Add(string operationUid, ReportType reportType, string fileName)
+        {
+            var key = GetReportKey(operationUid, reportType);
+            _reports.Add(key, fileName);
         }
     }
 }

@@ -15,38 +15,31 @@ namespace DDT.Core.Reports
     public class ReportBuilder : IReportBuilder
     {
         private const string DeploymentReportName = "DeploymentReport";
-        private readonly ReportNamesCache cache = ReportNamesCache.Instance;
+        private readonly IReportNamesCache _cache;
         private const string _reportDefinitionPath = "DDT.Core.Reports";
         private readonly IReportRenderer _reportRenderer;
         private readonly IFileHelper _fileHelper;
 
-        public ReportBuilder(IReportRenderer reportRenderer, IFileHelper fileHelper)
+        public ReportBuilder(IReportRenderer reportRenderer, IFileHelper fileHelper, IReportNamesCache reportNameCache)
         {
             _fileHelper = fileHelper;
             _reportRenderer = reportRenderer;
+            _cache = reportNameCache;
         }
 
         private string LookupForExistentReport(string operationUid, ReportType reportType)
         {
-            var existentName = String.Empty;
-            var reportKey = string.Format("{0}-{1}", operationUid, reportType);
-
-            if (cache.Reports.Keys.Contains(reportKey))
-            {
-                existentName = cache.Reports[reportKey];
-            }
-
-            string fileName;
+            string existentName = _cache.Find(operationUid, reportType);
+            
             if (!String.IsNullOrWhiteSpace(existentName))
             {
                 if (_fileHelper.IsFileExists(existentName))
-                {
-                    fileName = existentName;
+                {                    
                     return existentName;
                 }
                 else
                 {
-                    cache.Reports.Remove(reportKey);
+                    _cache.Remove(operationUid, reportType);
                 }
             }
             return null;
@@ -61,7 +54,7 @@ namespace DDT.Core.Reports
             switch (reportType)
             {
                 case ReportType.DeploymentReport:
-                    cache.Reports.Add(string.Format("{0}-{1}", data.OperationUid, reportType), fileName);
+                    _cache.Add(data.OperationUid, reportType, fileName);
                     _reportRenderer.Render(new DeploymentReportModern(), data, fileName);
                     break;
 
