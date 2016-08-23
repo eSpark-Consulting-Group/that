@@ -41,7 +41,7 @@ namespace DDT.Application.Services
                 PackageName = i.PackageName,
                 DeviceName = i.Name,
                 IP = i.IP,
-                Status = !i.Failed ? i.Stopping? "Stopped": "Succeded" : "Failed",
+                Status = !i.Failed ? i.Stopping? "Stopped": "Succeeded" : "Failed",
                 Details = i.Value,
                 DeploymentStatus = i.CalculateDeploymentStatus(),                
                 SystemFamilyKind = i.SystemKind.GetValueOrDefault().ToSystemFamilyKind(),                
