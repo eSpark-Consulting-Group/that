@@ -1,17 +1,16 @@
-﻿using APTAT.Common;
+﻿using APTAT.Application.Services;
+using APTAT.Common;
 
-namespace APTAT.Application.Services
+namespace APTAT.Application
 {
-    public class ServicesComposition
+    public class DependencyLocator : IDependencyLocatorModule
     {
-        public static void Init()
+        public void RegisterDependencies(ICompositionHelper resolver)
         {
             CompositionHelper.Instance.Register<ITargetsDiscoveryService, TargetsDiscoveryService>();
             CompositionHelper.Instance.Register<IAptService, AptService>();
             CompositionHelper.Instance.Register<IStorageService, StorageService>();
             CompositionHelper.Instance.Register<IWmiService, WmiService>();
-
-            CompositionHelper.Instance.Verify();
         }
     }
 }

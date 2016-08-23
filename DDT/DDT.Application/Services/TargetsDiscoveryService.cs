@@ -8,12 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Composition = APTAT.Common.CompositionHelper;
-
 
 namespace DDT.Application.Services
 {
-    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class TargetsDiscoveryService : ITargetsDiscoveryService
     {
         private readonly ITargetsManager _manager;

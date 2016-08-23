@@ -954,7 +954,7 @@ namespace APTAT.Application.Models
 
         public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
-            var model = CompositionHelper.Instance.GetService<ValkyrieRegistrationModel>();
+            var model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
             if (model.ValidateModel())
             {
                 _camLicenseId = model.LicenseId;

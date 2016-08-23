@@ -132,7 +132,7 @@
       <DependentUpon>AgentWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UserControlExtensions.cs" />
-    <Compile Include="Services\ServicesComposition.cs" />
+    <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
     </Compile>

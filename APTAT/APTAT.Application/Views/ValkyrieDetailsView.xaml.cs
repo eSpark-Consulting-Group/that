@@ -14,7 +14,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            DataContext = CompositionHelper.Instance.GetService<ThreatDetailsViewModel>();
+            DataContext = CompositionHelper.Instance.Resolve<ThreatDetailsViewModel>();
         }
 
         private void OnBackClick(Object sender, RoutedEventArgs e)

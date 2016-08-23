@@ -30,7 +30,7 @@ namespace APTAT.Application
                 MessageManager.Instance.RegisterListener(this);
             }
 
-            DataContext = _viewModel = CompositionHelper.Instance.GetService<MainViewViewModel>();
+            DataContext = _viewModel = CompositionHelper.Instance.Resolve<MainViewViewModel>();
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;

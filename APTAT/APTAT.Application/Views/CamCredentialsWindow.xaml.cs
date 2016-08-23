@@ -19,7 +19,7 @@ namespace APTAT.Application
         public CamCredentialsWindow()
         {
             InitializeComponent();
-            DataContext = _model = CompositionHelper.Instance.GetService<ValkyrieRegistrationModel>();
+            DataContext = _model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
             _model.Password = null;
             _model.PasswordBuffer = null; 
             _model.ErrorMessage = null;

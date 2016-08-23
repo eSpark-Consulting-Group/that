@@ -33,7 +33,7 @@ namespace APTAT.Application
         public ReportView()
         {
             InitializeComponent();
-            DataContext = _viewModel = CompositionHelper.Instance.GetService<ReportViewModel>();
+            DataContext = _viewModel = CompositionHelper.Instance.Resolve<ReportViewModel>();
             _viewModel.ReportOpened += OnReportOpened;
 
             Unloaded += OnUnloaded;

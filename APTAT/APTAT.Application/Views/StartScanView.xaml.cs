@@ -56,9 +56,9 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            _scanDomainViewModel = CompositionHelper.Instance.GetService<StartScanDomainViewModel>();
-            _scanWorkgroupViewModel = CompositionHelper.Instance.GetService<StartScanWorkgroupViewModel>();
-            _scanByIpViewModel = CompositionHelper.Instance.GetService<StartScanByIpViewModel>();
+            _scanDomainViewModel = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
+            _scanWorkgroupViewModel = CompositionHelper.Instance.Resolve<StartScanWorkgroupViewModel>();
+            _scanByIpViewModel = CompositionHelper.Instance.Resolve<StartScanByIpViewModel>();
 
             viewScanByIp.DataContext = _scanByIpViewModel;
             viewScanDomain.DataContext = _scanDomainViewModel;

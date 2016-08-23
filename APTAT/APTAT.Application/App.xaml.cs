@@ -52,27 +52,24 @@ namespace APTAT.Application
 
 
         private void Application_Startup(object sender, StartupEventArgs e)
-        {
-            // Global exception handling  
-            System.Windows.Application.Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
-
+        { 
+            Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            InitTraceListener();
 
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             string version = fvi.FileVersion;
 
+            CompositionHelper.Instance.RegisterModules(new[]
+            {
+                typeof(Common.DependencyLocator),
+                typeof(DeploymentCore.DependencyLocator),
+                typeof(DependencyLocator)
+            });
+
+            InitTraceListener();
             Trace.WriteLine(String.Format("APTAT Tool {0} started : {1}", version, DateTime.UtcNow));
             Trace.Flush();
-
-            IDependencyLocatorModule d = new DependencyLocator();
-            d.RegisterDependencies(CompositionHelper.Instance);
-            d = new APTAT.DeploymentCore.DependencyLocator.DependencyLocator();
-            d.RegisterDependencies(CompositionHelper.Instance);
-
-            ServicesComposition.Init();
-            CompositionHelper.Instance.Verify();
         }
 
         private static void InitTraceListener()
