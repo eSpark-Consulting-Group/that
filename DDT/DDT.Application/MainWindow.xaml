@@ -337,11 +337,17 @@
                             </VisualState>
                         </VisualStateGroup>
                     </VisualStateManager.VisualStateGroups>
-                    <TextBlock Margin="20,20,0,0" SnapsToDevicePixels="True" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Foreground="{DynamicResource NameBrush}" FontFamily="{StaticResource myriadpro}"  Text="Discovery and Deployment Tool">
-                        <TextBlock.RenderTransform>
+
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.RenderTransform>
                             <TranslateTransform x:Name="translate2" Y="0" />
-                        </TextBlock.RenderTransform>
-                    </TextBlock>
+                        </Grid.RenderTransform>
+                        <TextBlock Margin="20,20,0,0"  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Foreground="{DynamicResource NameBrush}" FontFamily="{StaticResource myriadpro}"  Text="Discovery and Deployment Tool">
+                        </TextBlock>
+                        <TextBlock Margin="316 20 0 0" Foreground="{DynamicResource WhiteBrush}" FontSize="22" FontFamily="{StaticResource myriadpro}" HorizontalAlignment="Left" VerticalAlignment="Top" Text="beta">
+                        </TextBlock>
+                    </Grid>
+                    
 
                     <TextBlock x:Name="appearing" Opacity="0" Margin="20,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" Foreground="{DynamicResource WhiteBrush}" FontFamily="{StaticResource myriadpro}" Text="{Binding ElementName=this, Path=WizardHeader}">
                         <TextBlock.RenderTransform>

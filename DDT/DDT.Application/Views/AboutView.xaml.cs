@@ -9,7 +9,7 @@ namespace DDT.Application.Views
         {
             InitializeComponent();
 
-            version.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            version.Text = $"{Assembly.GetExecutingAssembly().GetName().Version} beta";
         }
     }
 }

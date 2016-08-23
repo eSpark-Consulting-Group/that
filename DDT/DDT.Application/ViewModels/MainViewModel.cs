@@ -528,7 +528,7 @@ namespace DDT.Application.ViewModels
                                     ErrorMessage = "Please specify parameters";
                                     return;
                                 }
-                                ErrorMessage = !HasPackage ? "Please select package" : "Please select 64-bit package";
+                                ErrorMessage = !HasPackage ? "Please select the package" : "Please select the 64-bit package";
                                 return;
                             case ChangeScreenTypes.NetworkAddresses:
                                 if (HasNetworkAddress)
