@@ -1,6 +1,4 @@
-﻿
-
-using APTAT.DeploymentCore.Messages;
+﻿using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.DeploymentCore.Descent
 {

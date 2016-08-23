@@ -95,6 +95,15 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     QueryResult.OnDescendOperationEvent(true, _computer.Uid, text, text, status.ToString(), win32Error, response);
                 }
             }
+            else if (status == DescentStatus.status_success_reboot_required)
+            {
+                FormattedText text;
+               _scanner.GetDescentStatusDescription(status, out text) ;
+                if (QueryResult != null)
+                {
+                    QueryResult.OnDescendOperationEvent(true, _computer.Uid, text, text, status.ToString(), win32Error, response);
+                }
+            }
             else if (status == DescentStatus.status_operation_canceled)
             {
                 if (QueryResult != null)
@@ -103,7 +112,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     FormattedText description = _scanner.GetDescentStatusDescription(status, out shortMessage);
                     _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem(_computer.Uid,
                         _computer.Name, QueryResult.OperationUid, shortMessage, 100, false, true)
-                        {IsCanceled =  true}), false);
+                    { IsCanceled = true }), false);
 
                     QueryResult.OnDescendOperationEvent(true, _computer.Uid, description, shortMessage, status.ToString(), win32Error, response);
                 }

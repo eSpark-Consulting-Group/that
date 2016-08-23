@@ -258,7 +258,7 @@ Technical details:
 {2} ({3})</value>
   </data>
   <data name="DescentInstallAgentSuccess" xml:space="preserve">
-    <value>Agent installation finished successfully</value>
+    <value>Successfully completed.</value>
   </data>
   <data name="DescentInstallAgentSuccessUpdated" xml:space="preserve">
     <value>Agent is successfully updated</value>

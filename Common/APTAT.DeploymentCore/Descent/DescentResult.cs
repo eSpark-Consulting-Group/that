@@ -88,7 +88,7 @@ namespace APTAT.DeploymentCore.Descent
 			}
 			else
 			{
-				operationResult = new OperationDescentResult(true, FormattedText.Empty, FormattedText.Empty, String.Empty, String.Empty, 0 );
+				operationResult = new OperationDescentResult(true, FormattedText.Empty, shortStatusMessage, String.Empty, String.Empty, 0 );
 			}
 
 			var inprogressCount = ProcessResult(computerUid, operationResult);

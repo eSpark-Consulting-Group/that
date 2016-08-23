@@ -261,7 +261,7 @@ namespace DDT.Application.ViewModels
 
                                 if (updated.Succeeded)
                                 {
-                                    deploymentItem.Value = "Successfully completed.";
+                                    deploymentItem.Value = updated.ShortStatusMessage.ToString();
                                     deploymentItem.Succeded = true;
                                 }
                                 else
