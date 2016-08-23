@@ -54,13 +54,8 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBox HorizontalAlignment="Stretch" Margin="0 0 0 0" Padding="20 8 0 0" Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource TextBrush4}" CaretBrush="Black">
-                                    </TextBox>
-
-                                    <Border VerticalAlignment="Top" HorizontalAlignment="Right" Background="{DynamicResource BasicBrush}" Grid.Column="1">
-                                        <Button Style="{StaticResource CloseButton}" Command="{Binding RemoveCommand}" CommandParameter="{Binding}"  Background="{DynamicResource TextBrush3}"  Margin="5" Width="12" Height="12"   ToolTip="Remove" />
-
-                                    </Border>
+                                    <TextBox HorizontalAlignment="Stretch" Margin="0 0 0 0" Padding="20 8 0 0" Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"  Foreground="{DynamicResource TextBrush4}" />
+                                    <Button Style="{StaticResource CloseButton}" HorizontalAlignment="Right" Grid.Column="1" Command="{Binding RemoveCommand}" CommandParameter="{Binding}"  Background="{DynamicResource TextBrush3}"  Margin="5" Width="12" Height="12"   ToolTip="Remove" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
