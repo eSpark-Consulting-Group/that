@@ -17,13 +17,37 @@ namespace DDT.Core.Reports.Tests
         public void BuildTest()
         {
             IFileHelper fileHelper = new FileHelper();
-            ReportBuilder builder = new ReportBuilder(new TelerikReportRenderer(), fileHelper, new ReportNamesCache());
+            ReportBuilder builder = new ReportBuilder(fileHelper, new ReportNamesCache());
             var newReportData = new ReportData();
-            var result = builder.Build(newReportData, ReportType.DeploymentReport);
+            var result = builder.Build(newReportData, ReportType.DeploymentReport, ReportFormat.CSV);
             Assert.NotNull(result);
         }
 
+        [Fact]
+        public void NullArgTest()
+        {
+            IFileHelper fileHelper = new FileHelper();
+            ReportBuilder builder = new ReportBuilder(fileHelper, new ReportNamesCache());
+            var result = builder.Build(null, ReportType.DeploymentReport, ReportFormat.PDF);
+            Assert.Null(result);
+        }
 
+        [Fact]
+        public void ReportBuildExceptionThrownTest()
+        {
+            IFileHelper fileHelper = new FileHelper();
+            ReportBuilder builder = new ReportBuilder(fileHelper, new ReportNamesCache());
+
+            var maxV = Enum.GetValues(typeof(ReportType)).Cast<int>().Max();
+            maxV++;
+
+            Assert.Throws<ArgumentOutOfRangeException>(
+                () =>
+                {
+                    var result = builder.Build(new ReportData(), (ReportType) maxV,ReportFormat.PDF);
+                }
+                );
+        }
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -32,10 +56,10 @@ namespace DDT.Core.Reports.Tests
             var fileHelper = Mock.Create<IFileHelper>();
             Mock.Arrange(() => fileHelper.IsFileExists("")).IgnoreArguments().Returns(fileExists);
 
-            var renderer = Mock.Create<IReportRenderer>();
-            Mock.Arrange(() => renderer.Render(new DeploymentReportModern(), new ReportData(), "")).DoNothing();
+            
+            
 
-            ReportBuilder builder = new ReportBuilder(renderer, fileHelper, new ReportNamesCache());
+            ReportBuilder builder = new ReportBuilder(fileHelper, new ReportNamesCache());
 
             string guid = Guid.NewGuid().ToString();
             var data1 = Mock.Create<IReportData>();
@@ -45,11 +69,11 @@ namespace DDT.Core.Reports.Tests
             Mock.Arrange(() => data2.OperationUid).Returns(guid);
 
 
-            var result1 = builder.Build(data1, ReportType.DeploymentReport);
+            var result1 = builder.Build(data1, ReportType.DeploymentReport, ReportFormat.PDF);
 
             System.Threading.Thread.Sleep(2000);
 
-            var result2 = builder.Build(data2, ReportType.DeploymentReport);
+            var result2 = builder.Build(data2, ReportType.DeploymentReport, ReportFormat.PDF);
             if (fileExists)
             {
                 Assert.Equal(result1, result2);
@@ -63,13 +87,13 @@ namespace DDT.Core.Reports.Tests
         [Fact()]
         public void BuildReportForDifferentOperationUid()
         {
-            var r = Mock.Create<IReportRenderer>();
-            Mock.Arrange(() => r.Render(new DeploymentReportModern(), new ReportData(), "")).DoNothing();
+            
+            
 
             var fileHelper = Mock.Create<IFileHelper>();
             Mock.Arrange(() => fileHelper.IsFileExists("")).IgnoreArguments().Returns(true);
 
-            ReportBuilder builder = new ReportBuilder(r, fileHelper, new ReportNamesCache());
+            ReportBuilder builder = new ReportBuilder(fileHelper, new ReportNamesCache());
 
             var data1 = Mock.Create<IReportData>();
             Mock.Arrange(() => data1.OperationUid).Returns(Guid.NewGuid().ToString());
@@ -77,11 +101,11 @@ namespace DDT.Core.Reports.Tests
 
             var data2 = Mock.Create<IReportData>();
             Mock.Arrange(() => data2.OperationUid).Returns(Guid.NewGuid().ToString());
-            
 
-            var resultA = builder.Build(data1, ReportType.DeploymentReport);
+
+            var resultA = builder.Build(data1, ReportType.DeploymentReport, ReportFormat.PDF);
             System.Threading.Thread.Sleep(2000);
-            var resultB = builder.Build(data2, ReportType.DeploymentReport);
+            var resultB = builder.Build(data2, ReportType.DeploymentReport, ReportFormat.PDF);
 
             Assert.NotEqual(resultA.ToUpperInvariant(), resultB.ToUpperInvariant());
         }

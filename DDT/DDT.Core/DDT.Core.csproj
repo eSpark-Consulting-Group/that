@@ -59,6 +59,7 @@
     <Compile Include="Descent\PackageDescentResult.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="Helper\CheckNmapInstallation.cs" />
+    <Compile Include="Helper\CSVHelper.cs" />
     <Compile Include="NMap\NmapScanner.cs" />
     <Compile Include="NMap\osclass.cs" />
     <Compile Include="NMap\osmatch.cs" />
@@ -69,13 +70,16 @@
     <Compile Include="Reports\DetailsOfScan.cs" />
     <Compile Include="Reports\IDeploymentReportModel.cs" />
     <Compile Include="Reports\IDetailsOfScan.cs" />
+    <Compile Include="Reports\IRenderStrategy.cs" />
     <Compile Include="Reports\IReportData.cs" />
+    <Compile Include="Reports\RenderCsvStrategy.cs" />
+    <Compile Include="Reports\RenderPdfStrategy.cs" />
+    <Compile Include="Reports\RenderStrategyFactory.cs" />
     <Compile Include="Reports\ReportBuilder.cs" />
     <Compile Include="Reports\ReportData.cs" />
     <Compile Include="Reports\IReportNamesCache.cs" />
     <Compile Include="Reports\ReportNamesCache.cs" />
     <Compile Include="Reports\ReportType.cs" />
-    <Compile Include="Reports\TelerikReportRenderer.cs" />
     <Compile Include="TelerikReports\DeploymentReportModern.cs">
       <SubType>Component</SubType>
     </Compile>

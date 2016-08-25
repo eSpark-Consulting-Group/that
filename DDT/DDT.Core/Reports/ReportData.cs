@@ -64,13 +64,7 @@ namespace DDT.Core.Reports
         public IDeploymentReportModel DeploymentByDomain { get; private set; }
         public IDeploymentReportModel DeploymentByIPRange { get; private set; }
         public IDeploymentReportModel DeploymentByWorkgroup { get; private set; }
-        private IDeploymentReportModel[] DeploymentReports
-        {
-            get
-            {
-                return new[] { DeploymentByDomain, DeploymentByIPRange, DeploymentByWorkgroup };
-            }
-        }
+     
         public string OperationUid { get; set; }
 
         public ReportData(IDeploymentReportModel deploymentByWorkgroup, IDeploymentReportModel deploymentByIPRange, IDeploymentReportModel deploymentByDomain)
