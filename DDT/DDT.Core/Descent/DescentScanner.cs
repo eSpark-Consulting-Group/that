@@ -8,6 +8,7 @@ using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.DeploymentCore.Messages;
+using APTAT.DeploymentCore.Properties;
 
 namespace DDT.Core.Descent
 {
@@ -128,6 +129,13 @@ namespace DDT.Core.Descent
                 case DescentStatus.status_exe_error:
                 {
                     var text = new FormattedText(new ResourceText("", "null", $"Installation finished with error code \"{win32Error}\""));
+                    shortMessage = text;
+                    return text;
+                }
+                case DescentStatus.status_installing_timeout:
+                {
+                    var resource = ServerSideMessagesResources.InstallationTimeoutMessage;
+                    var text = new FormattedText(resource, _timeout.Minutes);
                     shortMessage = text;
                     return text;
                 }

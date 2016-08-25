@@ -30,7 +30,7 @@ namespace APTAT.DeploymentCore.Descent
 			SystemMessage = result.SystemMessage;
 			SystemCode = result.SystemCode;
             Succeeded = result.Succeeded;
-		    Percentage = 100;
+            Percentage = 100;
             Completed = true;
         }
 
