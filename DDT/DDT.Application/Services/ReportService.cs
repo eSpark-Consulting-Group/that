@@ -29,7 +29,8 @@ namespace DDT.Application.Services
             var deploymentByWorkgroup = MapTo(targetsByWorkgroup);
             ReportData data = new ReportData(deploymentByWorkgroup, deploymentByIPRange, deploymentByDomain);
             data.OperationUid = operationUid.ToString();
-            string pdfReportPath = await Task.Run( () => _reportBuilder.Build(data, ReportType.DeploymentReport));                
+            string pdfReportPath = await Task.Run( () => _reportBuilder.Build(data, ReportType.DeploymentReport, ReportFormat.PDF));
+         
             return pdfReportPath;
         }
         
