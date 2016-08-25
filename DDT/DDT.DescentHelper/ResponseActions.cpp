@@ -135,14 +135,14 @@ bool RemoteInstallerService::writeStatusToFile(CString responseFile, bool forceW
 
 		if(responseFile.Find(L'\\') != -1)
 		{
-			swprintf_s(outputFile, L"%s", responseFile);
+			swprintf_s(outputFile, L"%s", responseFile.GetBuffer());
 		}
 		else
 		{
 			GetModuleFileNameW(NULL, currentFolder, MAX_PATH - 1);
 			memset(wcsrchr(currentFolder, '\\') + 1, 0, wcslen(wcsrchr(currentFolder, '\\')));
 			//::GetWindowsDirectoryW(currentFolder, _countof(currentFolder));
-			swprintf_s(outputFile, L"%s%s", currentFolder, responseFile);
+			swprintf_s(outputFile, L"%s%s", currentFolder, responseFile.GetBuffer());
 		}
 		::DeleteFile(outputFile);
 
@@ -350,21 +350,53 @@ int RemoteInstallerService::action_install_exe(int argc, LPTSTR argv[], int time
 {
 	DWORD dwExitCode;
 	DO_LOG(L"Creating process token..."); 
+	setStatus(status_prepairing_for_create_process);
+	writeStatusToFile(m_responseFile, true);
 	wchar_t loggedStr[100];
 	swprintf_s(loggedStr, L"%d arguments", argc);
 	DO_LOG(loggedStr);
 	CString parameters;
-	CString strPath;
-	extractParametersFromPath(argv[0], strPath, parameters);
+	CString originalStrPath;
+	wchar_t strPath[MAX_PATH];
+	wchar_t fileName[MAX_PATH];
+	wchar_t extension[MAX_PATH];
+	extractParametersFromPath(argv[0], originalStrPath, parameters);
+
+	_wsplitpath(originalStrPath, NULL, NULL, fileName, extension);
+	wchar_t buf[MAX_PATH] = {};
+	::GetTempPath(_countof(buf), buf);
+	swprintf_s(strPath, L"%s\\%s%s", buf, fileName, extension);
+	wchar_t messageToLog[MAX_PATH] = {};
+	swprintf_s(messageToLog, L"%s%s", "Copying exe file to %s", strPath);
+	DO_LOG(messageToLog);
+	if (!::CopyFile(originalStrPath, strPath, false))
+	{
+		CWin32LastError error;
+		DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = error.GetCode()));
+		if (error.GetCode() == ERROR_SHARING_VIOLATION)
+		{
+			wchar_t tempPath[MAX_PATH] = {};
+			::GetTempFileName(buf, L"ddt_____", 0, tempPath);
+			swprintf_s(strPath, L"%s%s", tempPath, extension);
+			swprintf_s(messageToLog, L"%s%s", "Copying exe file to %s", strPath);
+			DO_LOG(messageToLog);
+			if (!::CopyFile(originalStrPath, strPath,false))
+			{
+				CWin32LastError error;
+				DO_LOG(L"CopyFile Failed failed: %s (%d)", error.GetMessage(), (dwExitCode = error.GetCode()));
+				m_responseString = error.GetMessage();
+				m_err = error.GetCode();
+				setStatus(status_installer_fatal_error);
+				return m_err;
+			}
+		}
+	}
 	PROCESS_INFORMATION pi = { 0 };
 	STARTUPINFO pStartUp = { 0 };
 	pStartUp.cb = sizeof(STARTUPINFO);
 	pStartUp.dwFlags = STARTF_FORCEOFFFEEDBACK; // disable waiting cursor when launched the programwchar_t outputFile[MAX_PATH];
 	wchar_t parametersStr[MAX_PATH];
 	swprintf_s(parametersStr, L"%s %s", strPath, parameters);
-	
-	setStatus(status_prepairing_for_create_process);
-	writeStatusToFile(m_responseFile, true);
 	auto impersonate = false;
 	
 	if (argc > 2)
@@ -420,6 +452,7 @@ int RemoteInstallerService::action_install_exe(int argc, LPTSTR argv[], int time
 		m_responseString = error.GetMessage();
 		m_err = error.GetCode();
 		setStatus(status_cannot_create_process);
+		DeleteFileW(strPath);
 		return m_err;
 	}
 	else
@@ -427,7 +460,8 @@ int RemoteInstallerService::action_install_exe(int argc, LPTSTR argv[], int time
 		setStatus(status_install_in_progress);
 		writeStatusToFile(m_responseFile, true);
 	}
-	DO_LOG(L"Process information: PID=%d, TID=%d, PHND=%08X, THND=%08X", pi.dwProcessId, pi.dwThreadId, pi.hProcess, pi.hThread);
+	DO_LOG(L"Process information: PID=%d, TID=%d, PHND=%08X, THND=%08X", pi.dwProcessId,
+		pi.dwThreadId, pi.hProcess, pi.hThread);
 	DO_LOG(L"Resuming main thread...");
 	::ResumeThread(pi.hThread);
 	DO_LOG(L"Waiting for quit..");
@@ -467,6 +501,7 @@ int RemoteInstallerService::action_install_exe(int argc, LPTSTR argv[], int time
 	
 	if (impersonate)
 		hImpersonationHandle.Close();
+	DeleteFileW(strPath);
 	return dwExitCode;
 }
 

@@ -26,7 +26,8 @@ namespace DDT.Core.Descent
         {
             var dtp = (PackageDeploymentThreadParams) tp;
             
-            var dh =  new PackageDescentHelper(tp.RemoteHostInfo, dtp.PackageInfoX86, dtp.PackageInfoX64);
+            var dh =  new PackageDescentHelper(tp.RemoteHostInfo, dtp.PackageInfoX86, dtp.PackageInfoX64,
+                TaskFactory.CancellationToken);
             dh.InstallProgressChanged += OnInstallProgressChanged;
             dh.SystemKindSpeciefied += OnSystemKindSpecified;
             return dh;

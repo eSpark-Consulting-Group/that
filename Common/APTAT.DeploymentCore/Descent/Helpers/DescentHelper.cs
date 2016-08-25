@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -430,15 +431,17 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     {
                         ServiceHelper.StopService();
                     }
-                    catch (Win32Exception)
+                    catch (Win32Exception ex)
                     {
+                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,$"Cannot stop remote service ({ex.NativeErrorCode})");
                     }
 
 					ServiceHelper.DeleteService();
 				}
 				catch ( Win32Exception ex )
-				{
-					throw new DescentException( DescentStatus.status_remote_cannot_cleanup_descent_service,
+                {
+                    LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent, $"Cannot delete remote service ({ex.NativeErrorCode})");
+                    throw new DescentException( DescentStatus.status_remote_cannot_cleanup_descent_service,
 						ex.Message, ex.NativeErrorCode );
 				}
 			}

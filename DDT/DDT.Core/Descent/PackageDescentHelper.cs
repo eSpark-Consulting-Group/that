@@ -19,14 +19,17 @@ namespace DDT.Core.Descent
         public EventHandler<SystemKindSpecifyEventArgs> SystemKindSpeciefied; 
         private readonly InstallPackageInfo _packageInfoX86;
         private readonly InstallPackageInfo _packageInfoX64;
+        private readonly CancellationToken _cancellationToken;
 
-        public PackageDescentHelper(RemoteHostInfo remoteHostInfo, InstallPackageInfo packageInfoX86
-            , InstallPackageInfo packageInfoX64) 
+        public PackageDescentHelper(RemoteHostInfo remoteHostInfo, InstallPackageInfo packageInfoX86, 
+            InstallPackageInfo packageInfoX64, CancellationToken cancellationToken) 
             : base(remoteHostInfo)
         {
             if (packageInfoX86 == null) throw new ArgumentNullException("packageInfoX86 can not be null");
             _packageInfoX64 = packageInfoX64?? packageInfoX86;
             _packageInfoX86 = packageInfoX86;
+            _packageInfoX64 = packageInfoX64;
+            _cancellationToken = cancellationToken;
         }
 
         protected override void InitPaths()
@@ -94,7 +97,6 @@ namespace DDT.Core.Descent
             int checkFileHeaderAttemptsCount = 20;
             int readFileAttemptsCount = 20;
             int checkAgentRunning = 20;
-            int? percentage = null;
             SystemKind? systemKind = null;
             while (attemptsCount > 0)
             {
@@ -102,7 +104,7 @@ namespace DDT.Core.Descent
                 try
                 {
                     string[] lines = new string[4];
-                    bool isServiceRunning = ServiceHelper.IsServiceRunning();
+                    bool? isServiceRunning = ServiceHelper.IsServiceRunning();
                     using (TextReader sr = new StreamReader(_responseFilePathForCurrentComputer,
                         System.Text.Encoding.Unicode))
                     {
@@ -147,11 +149,15 @@ namespace DDT.Core.Descent
                         || Response.Status == DescentStatus.status_prepairing_for_create_process
                         || Response.Status == DescentStatus.status_before_msi_started)
                     {
-                        if (!isServiceRunning && checkAgentRunning-- ==0)
+                        if (_cancellationToken.IsCancellationRequested)
+                        {
+                            throw new OperationCanceledException();
+                        }
+                        if (isServiceRunning.HasValue && !isServiceRunning.Value && checkAgentRunning-- ==0)
                         {
                             throw new DescentException(DescentStatus.status_agent_was_crashed, "Agent was crashed.", 0);
                         }
-                        else if (isServiceRunning)
+                        else if (checkAgentRunning >= 0)
                             checkAgentRunning = 20;
                         string[] splittedProgress = lines[2]?.Split(';', '#');
                         if (splittedProgress != null && splittedProgress.Length != 2)
@@ -162,11 +168,8 @@ namespace DDT.Core.Descent
                         var currentPercentage = Int32.Parse(splittedProgress[0]);
 
 
-                        if (percentage == null || currentPercentage != percentage.Value)
-                        {
-                            percentage = currentPercentage;
-                            InvokeInstallProgressChanged(RemoteHostInfo.TargetUid, percentage.Value, actionName);
-                        }
+                        InvokeInstallProgressChanged(RemoteHostInfo.TargetUid, currentPercentage, actionName);
+
                         Thread.Sleep(1000);
                     }
                     else
@@ -217,7 +220,7 @@ namespace DDT.Core.Descent
             {
                 try
                 {
-                    bool isServiceRunning = ServiceHelper.IsServiceRunning();
+                    var isServiceRunning = ServiceHelper.IsServiceRunning();
                 }
                 catch (Exception ex)
                 {

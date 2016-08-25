@@ -39,7 +39,9 @@ RemoteInstallerService::RemoteInstallerService() : m_ssh(0), m_status(status_err
 	::InitializeCriticalSection(&m_cs);
 	memset(&m_ss, 0, sizeof(m_ss));
 	m_ss.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
+
 	m_ss.dwControlsAccepted = SERVICE_CONTROL_INTERROGATE;
+	m_ss.dwControlsAccepted |= SERVICE_ACCEPT_STOP;
 }
 RemoteInstallerService::~RemoteInstallerService()
 {
@@ -81,7 +83,7 @@ bool RemoteInstallerService::InitService(DWORD dwArgc, LPTSTR* lpszArgv)
 		if (m_ssh == 0)
 			return false;
 
-		m_ss.dwCurrentState = SERVICE_RUNNING;
+		m_ss.dwCurrentState = SERVICE_RUNNING; 
 		SetServiceStatus(m_ssh, &m_ss);
 	}
 
@@ -100,6 +102,7 @@ bool RemoteInstallerService::InitService(DWORD dwArgc, LPTSTR* lpszArgv)
 
 void RemoteInstallerService::ReleaseService()
 {
+	DO_LOG("Stopping service");
 	for (int i = 0; i < m_argc; i++)
 	{
 		delete[] m_argv[i];
@@ -119,11 +122,15 @@ void RemoteInstallerService::ReleaseService()
 
 DWORD WINAPI RemoteInstallerService::Handler(DWORD dwControl)
 {
+	DO_LOG("CtrlHandler %d", dwControl);
 	switch (dwControl)
 	{
 		case SERVICE_CONTROL_INTERROGATE:
 			return NO_ERROR;
-
+		case SERVICE_CONTROL_STOP:
+			DO_LOG("Service stop request")
+			ReleaseService();
+			return NO_ERROR;
 		default:
 			return ERROR_CALL_NOT_IMPLEMENTED;
 	}

@@ -173,8 +173,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     ProcessErrorOrCancel(ex._status, ex._win32error, ex._errorString, tp);
                 }
                 catch (ScanCanceledException)
-                {
-                    dh.Release();
+                { 
                     //ProcessScanCancelation(tp);
                     LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
                         "Scan was canceled for '{0}' computer.",
@@ -185,7 +184,6 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                 {
                     LogHelper.Trace(TraceEventType.Warning, TraceCategory.Descent,
                         "Scan was canceled for '{0}' computer.", tp.RemoteHostInfo.HostName);
-                    dh.Release();
                     ProcessErrorOrCancel(DescentStatus.status_operation_canceled, 0, String.Empty, tp);
                 }
                 catch (ThreadAbortException ex)

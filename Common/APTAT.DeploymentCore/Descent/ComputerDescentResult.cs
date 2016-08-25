@@ -34,16 +34,24 @@ namespace APTAT.DeploymentCore.Descent
             Completed = true;
         }
 
-        public void UpdateStatus(FormattedText statusMessage, double percentage)			
-		{
-			Percentage = percentage;
-            Modified = DateTime.UtcNow;
+        public void UpdateStatus(FormattedText statusMessage, double percentage)
+        {
+            var update = false;
+            if (Math.Abs(percentage - Percentage) > 0.1)
+            {
+                Percentage = percentage;
+                update = true;
+            }
 
-            if (statusMessage != null && !String.IsNullOrEmpty(statusMessage.ToString()))
+            if (statusMessage != null && !String.IsNullOrEmpty(statusMessage.ToString())
+                && !Equals(statusMessage, ShortStatusMessage))
             {
                 StatusMessage = statusMessage;
                 ShortStatusMessage = statusMessage;
+                update = true;
             }
+            if (update)
+                Modified = DateTime.UtcNow;
 		}
 
 

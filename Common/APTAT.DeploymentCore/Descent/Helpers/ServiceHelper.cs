@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using APTAT.Common;
 
 namespace APTAT.DeploymentCore.Descent.Helpers
 {
@@ -438,7 +440,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                                                          IntPtr lpdwTagId, [In] char[] lpDependencies, String lpServiceStartName, String lpPassword,
                                                          String lpDisplayName);
 
-        [DllImport("advapi32.dll", EntryPoint = "QueryServiceStatus", CharSet = CharSet.Auto)]
+        [DllImport("advapi32.dll", EntryPoint = "QueryServiceStatus", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool QueryServiceStatus(IntPtr hService, ref SERVICE_STATUS dwServiceStatus);
 
 
@@ -526,11 +528,13 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             }
 
             bool res = DeleteService(m_serviceHandle);
+            if (!res)
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot delete service ({Marshal.GetLastWin32Error()})");
             CloseServiceHandle(m_serviceHandle);
             m_serviceHandle = IntPtr.Zero;
         }
 
-        public bool IsServiceRunning()
+        public bool? IsServiceRunning()
         {
             SERVICE_STATUS ss = new SERVICE_STATUS();
 
@@ -541,8 +545,10 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                 {
                     return true;
                 }
+                else return false;
             }
-            return false;
+            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({Marshal.GetLastWin32Error()})");
+            return null;
         }
 
         public void StopService()
@@ -567,6 +573,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     QueryServiceStatus(m_serviceHandle, ref ss);
                 }
             }
+            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({Marshal.GetLastWin32Error()})");
         }
 
         public void RunService(string[] parameters, bool waitToStop, int waitTimeoutMs)
