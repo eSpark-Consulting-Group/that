@@ -1,5 +1,7 @@
 using APTAT.DeploymentCore;
 using System;
+using System.ComponentModel;
+
 namespace DDT.Core.Reports
 {
     public enum DeploymentStatus
@@ -13,11 +15,10 @@ namespace DDT.Core.Reports
     public class DetailsOfScan : IEquatable<DetailsOfScan>, IDetailsOfScan
     {
         public string IP { get; set; }
+             
         public string DeviceName { get; set; }
 
-        public string OS { get; set; }
-
-        public string Status { get; set; }
+        public string OS { get; set; }        
         public Guid TargetUid { get; set; }
 
         public SystemFamilyKind SystemFamilyKind { get; set; }

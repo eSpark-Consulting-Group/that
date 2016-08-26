@@ -56,10 +56,10 @@ namespace DDT.Core.TelerikReports
             this.textBox27 = new Telerik.Reporting.TextBox();
             this.textBox28 = new Telerik.Reporting.TextBox();
             this.textBox29 = new Telerik.Reporting.TextBox();
+            this.textBox31 = new Telerik.Reporting.TextBox();
+            this.textBox30 = new Telerik.Reporting.TextBox();
             this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
             this.objectDataSource1 = new Telerik.Reporting.ObjectDataSource();
-            this.textBox30 = new Telerik.Reporting.TextBox();
-            this.textBox31 = new Telerik.Reporting.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // textBox1
@@ -286,12 +286,12 @@ namespace DDT.Core.TelerikReports
             // table1
             // 
             this.table1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=Fields.Details"));
-            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172919273376465D)));
-            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172919273376465D)));
-            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172919273376465D)));
-            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172919273376465D)));
-            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172919273376465D)));
-            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172919273376465D)));
+            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172916889190674D)));
+            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172916889190674D)));
+            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172916889190674D)));
+            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172916889190674D)));
+            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172916889190674D)));
+            this.table1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.6172916889190674D)));
             this.table1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(0.5D)));
             this.table1.Body.SetCellContent(0, 0, this.textBox24);
             this.table1.Body.SetCellContent(0, 1, this.textBox25);
@@ -388,7 +388,7 @@ namespace DDT.Core.TelerikReports
             this.textBox28.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(2.6172919273376465D), Telerik.Reporting.Drawing.Unit.Cm(0.5D));
             this.textBox28.Style.Font.Name = "Microsoft Sans Serif";
             this.textBox28.StyleName = "Solstice.TableBody";
-            this.textBox28.Value = "= Fields.Status";
+            this.textBox28.Value = "= Fields.DeploymentStatus";
             // 
             // textBox29
             // 
@@ -400,15 +400,12 @@ namespace DDT.Core.TelerikReports
             this.textBox29.StyleName = "Solstice.TableBody";
             this.textBox29.Value = "=Fields.Details";
             // 
-            // pageFooterSection1
+            // textBox31
             // 
-            this.pageFooterSection1.Height = Telerik.Reporting.Drawing.Unit.Cm(0.13229167461395264D);
-            this.pageFooterSection1.Name = "pageFooterSection1";
-            // 
-            // objectDataSource1
-            // 
-            this.objectDataSource1.DataSource = typeof(DDT.Core.Reports.DeploymentReportModel);
-            this.objectDataSource1.Name = "objectDataSource1";
+            this.textBox31.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(8.90250015258789D), Telerik.Reporting.Drawing.Unit.Cm(3.5454165935516357D));
+            this.textBox31.Name = "textBox31";
+            this.textBox31.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(5.2000002861022949D), Telerik.Reporting.Drawing.Unit.Cm(0.60000050067901611D));
+            this.textBox31.Value = "Stopped Deployments:";
             // 
             // textBox30
             // 
@@ -418,12 +415,15 @@ namespace DDT.Core.TelerikReports
             this.textBox30.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
             this.textBox30.Value = "= Fields.StoppedDeployments";
             // 
-            // textBox31
+            // pageFooterSection1
             // 
-            this.textBox31.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(8.90250015258789D), Telerik.Reporting.Drawing.Unit.Cm(3.5454165935516357D));
-            this.textBox31.Name = "textBox31";
-            this.textBox31.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(5.2000002861022949D), Telerik.Reporting.Drawing.Unit.Cm(0.60000050067901611D));
-            this.textBox31.Value = "Stopped Deployments:";
+            this.pageFooterSection1.Height = Telerik.Reporting.Drawing.Unit.Cm(0.13229167461395264D);
+            this.pageFooterSection1.Name = "pageFooterSection1";
+            // 
+            // objectDataSource1
+            // 
+            this.objectDataSource1.DataSource = typeof(DDT.Core.Reports.DeploymentReportModel);
+            this.objectDataSource1.Name = "objectDataSource1";
             // 
             // DeploymentSubReport
             // 
