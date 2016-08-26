@@ -378,10 +378,10 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(TargetDir)DescentHelper.exe" xcopy "$(SolutionDir)out\bin.$(Configuration).Win32\DescentHelper.exe"  "$(TargetDir)" /Y /F
 
-del "$(TargetDir)DDT.exe"
+del "$(TargetDir)ADDT.exe"
 xcopy "$(SolutionDir)$(ConfigurationName)\DDT.Bootstrapper.exe" "$(TargetDir)" /Y
 "$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.rtf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)DDT.Application.exe" "$(TargetDir)DescentHelper.exe" "$(TargetDir)DDT.Application.exe.config" "$(TargetDir)DDT.Bootstrapper.exe" "$(TargetDir)Fonts" || goto :error
-copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)DDT.exe" || goto :error
+copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)ADDT.exe" || goto :error
 del  "$(TargetDir)archive.7z"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
