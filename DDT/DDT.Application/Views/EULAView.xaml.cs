@@ -1,7 +1,7 @@
 ﻿
 using System.IO;
 using System.Windows;
-using System.Windows.Documents;
+using Telerik.Windows.Documents.Fixed;
 
 namespace DDT.Application.Views
 {
@@ -16,15 +16,18 @@ namespace DDT.Application.Views
 
         private void EULAView_Loaded(object sender, RoutedEventArgs e)
         {
-            string fileName = @"EULA.rtf";
+            string fileName = @"EULA.pdf";
 
             if (File.Exists(fileName))
             {
-                var textRange = new TextRange(EulaRichTextBox.Document.ContentStart, EulaRichTextBox.Document.ContentEnd);
-
                 using (var stream = File.OpenRead(fileName))
-                    textRange.Load(stream, DataFormats.Rtf);
+                    pdf.DocumentSource = new PdfDocumentSource(stream);
             }
+        }
+
+        private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)
+        {
+            pdf.ScaleFactor = 1.16d;
         }
     }
 }

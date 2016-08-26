@@ -245,7 +245,7 @@
     <None Include="CreateSfx.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="EULA.rtf">
+    <None Include="EULA.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
