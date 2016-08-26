@@ -1,5 +1,5 @@
 ﻿
-using System.IO;
+using System;
 using System.Windows;
 using Telerik.Windows.Documents.Fixed;
 
@@ -16,13 +16,10 @@ namespace DDT.Application.Views
 
         private void EULAView_Loaded(object sender, RoutedEventArgs e)
         {
-            string fileName = @"EULA.pdf";
-
-            if (File.Exists(fileName))
-            {
-                using (var stream = File.OpenRead(fileName))
+            var sri = App.GetResourceStream(new Uri("EULA.pdf", UriKind.Relative));
+            if (sri != null)
+                using (var stream = sri.Stream)
                     pdf.DocumentSource = new PdfDocumentSource(stream);
-            }
         }
 
         private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)
