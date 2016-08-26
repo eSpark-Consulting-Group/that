@@ -54,10 +54,10 @@
                     </telerik:RadTreeListView.Columns>
                 </telerik:RadTreeListView>
 
-                <Button Content="Ok" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Next" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DeploymentCredentials}" />
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Add More Targets" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Grid.Row="1" Margin="0 17 197 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
                 <Button Content="Back" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.ActiveDirectoryCredentials}" />
-                <Button Content="Cancel" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Grid.Row="1" Margin="0 17 197 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="{DynamicResource TextBrush3}" Template="{StaticResource BackButton}" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
-
+                
             </Grid>
         </Border>
         <local:SearchUserControl Target="{Binding ElementName=tree}" Keyword="{Binding KeywordActiveDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ButtonsAvailable, Converter={converters:BoolToVisibilityConverter}}" VerticalAlignment="Top" HorizontalAlignment="Right" />

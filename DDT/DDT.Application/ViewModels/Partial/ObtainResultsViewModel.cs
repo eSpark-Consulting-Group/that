@@ -184,6 +184,10 @@ namespace DDT.Application.ViewModels
                 StopAvailable = false;
                 Progress = 0;
             }
+
+            foreach (var result in Results)
+                if (!result.Items.Any(_ => _.IsOnline))
+                    result.Value = "Completed with errors.";
         }
 
         private void OnDeploymentStarted(DeploymentStartedEventArgs e)

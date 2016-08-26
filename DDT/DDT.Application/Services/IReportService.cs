@@ -6,6 +6,6 @@ namespace DDT.Application.Services
 {
     public interface IReportService
     {
-        Task<string> BuildDiscoveryAndDeploymentReport(DeploymentItem[] targetsByIp, DeploymentItem[] targetsByDomain, DeploymentItem[] targetsByWorkgroup, Guid operationUid);    
+        Task<Tuple<string, string>> BuildDiscoveryAndDeploymentReport(DeploymentItem[] targetsByIp, DeploymentItem[] targetsByDomain, DeploymentItem[] targetsByWorkgroup, Guid operationUid);    
     }
 }

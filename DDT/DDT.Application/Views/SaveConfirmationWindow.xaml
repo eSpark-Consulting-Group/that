@@ -1,0 +1,59 @@
+﻿<Window x:Class="DDT.Application.Views.SaveConfirmationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="clr-namespace:DDT.Application.Helpers" 
+        xmlns:behaviors="clr-namespace:DDT.Application.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Width="414"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+        WindowStyle="None" SizeToContent="Height" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Border x:Name="Border" BorderThickness="1" BorderBrush="{DynamicResource StrongBrush}">
+
+        <Grid Background="{DynamicResource MainBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="62"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="20,18,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource TextBrush3}" FontFamily="{StaticResource myriadpro}" Text="Save Changes" />
+
+                    <Button Style="{StaticResource CloseButton}" HorizontalAlignment="Right" Grid.Column="1" Click="OnCloseClick" Width="18" Height="18" Margin="20 0" ToolTip="Close"/>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Path SnapsToDevicePixels="True" Margin="17 26 0 0" VerticalAlignment="Top" Grid.Row="1" Data="M9.0519981,13.051002 L11.051998,13.051002 11.051998,15.051002 9.0519981,15.051002 z M10.051998,5.0510017 C11.708004,5.0510015 13.051998,6.3940001 13.051998,8.0510018 13.051998,9.3550024 12.214001,10.454001 11.051998,10.867003 L11.051998,12.051002 9.0519981,12.051002 9.0519981,11.051002 9.0519981,10.867003 9.0519981,9.0510015 10.051998,9.0510015 C10.604992,9.0510015 11.051998,8.6029997 11.051998,8.0510018 11.051998,7.4990034 10.604992,7.0510015 10.051998,7.0510018 9.4990044,7.0510015 9.0519981,7.4990034 9.0519981,8.0510018 L7.0519981,8.0510018 C7.0519981,6.3940001 8.3959923,5.0510015 10.051998,5.0510017 z M10.051999,2.0510004 C5.6339996,2.0510004 2.052,5.6330006 2.052,10.051001 2.052,14.469001 5.6339996,18.051002 10.051999,18.051002 14.469999,18.051002 18.051998,14.469001 18.051998,10.051001 18.051998,5.6330006 14.469999,2.0510004 10.051999,2.0510004 z M10.025999,0 C15.563998,0 20.051998,4.4880005 20.051998,10.026001 20.051998,15.561001 15.563998,20.051002 10.025999,20.051002 4.4889996,20.051002 0,15.561001 0,10.026001 0,4.4880005 4.4889996,0 10.025999,0 z" Fill="{DynamicResource StrongBrush}" Height="30" Stretch="Fill" Width="30" HorizontalAlignment="Left"/>
+
+                <TextBlock x:Name="Text" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="48, 24, 0,17" Grid.Row="1" LineHeight="28" Style="{DynamicResource SubTitleTextStyle}" TextWrapping="Wrap">
+                    <Run>
+                        There are some unsaved changes.
+                    </Run>
+                    <LineBreak/>
+                    <Run>
+                         Do you want to save the changes before continuing?
+                    </Run>
+                </TextBlock>
+
+                <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="17" Orientation="Horizontal">
+                    <Button Content="Yes"  Click="YesClick">
+                        <i:Interaction.Behaviors>
+                            <behaviors:FocusBehavior />
+                        </i:Interaction.Behaviors>
+                    </Button>
+                    <Button Content="No"  Margin="17,0,0,0" Click="NoClick" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}"/>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Border>
+</Window>

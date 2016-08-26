@@ -18,16 +18,17 @@ namespace DDT.Application.Messages
         Report,
         Options,
         About,
-        Confirmation
+        StopConfirmation, 
+        SaveConfirmation
     }
 
-    public sealed class ChangeScreen
+    public sealed class ChangeScreen<T>
     {
         public ChangeScreenTypes Screen { get; private set; }
-        public Action<ChangeScreenTypes> Action { get; private set; }
+        public Action<T> Action { get; private set; }
         public Direction? Direction { get; private set; }
 
-        public ChangeScreen(ChangeScreenTypes screen, Action<ChangeScreenTypes> action, Direction? direction = null)
+        public ChangeScreen(ChangeScreenTypes screen, Action<T> action, Direction? direction = null)
         {
             Screen = screen;
             Action = action;
@@ -39,9 +40,9 @@ namespace DDT.Application.Messages
     {
         public static class ChangeScreenMessage
         {
-            public static void Send(ChangeScreenTypes message, Action<ChangeScreenTypes> action, Direction? direction = null)
+            public static void Send<T>(ChangeScreenTypes message, Action<T> action, Direction? direction = null)
             {
-                MessageManager.Instance.PublishMessage(new ChangeScreen(message, action, direction));
+                MessageManager.Instance.PublishMessage(new ChangeScreen<T>(message, action, direction));
             }
         }
     }

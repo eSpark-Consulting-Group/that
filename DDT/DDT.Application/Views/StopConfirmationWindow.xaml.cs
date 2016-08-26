@@ -4,15 +4,16 @@ using System.Windows.Input;
 
 namespace DDT.Application.Views
 {
-    public partial class ConfirmationWindow : Window
+    public partial class StopConfirmationWindow : Window
     {
-        public ConfirmationWindow()
+        public StopConfirmationWindow()
         {
             InitializeComponent();
         }
  
         private void OnCloseClick(Object sender, RoutedEventArgs e)
         {
+            DialogResult = null;
             Close();
         }
 

@@ -113,10 +113,46 @@ namespace DDT.Application.Models
                 _systemKind = value;
                 RaisePropertyChanged(nameof(SystemKind));
                 RaisePropertyChanged(nameof(OS));
+                RaisePropertyChanged(nameof(FullName));
+                RaisePropertyChanged(nameof(IsWindows));
+                RaisePropertyChanged(nameof(IsLinux));
+                RaisePropertyChanged(nameof(IsMac));
+                RaisePropertyChanged(nameof(IsAndroid));
+                RaisePropertyChanged(nameof(IsUnknown));
             }
         }
 
+        public bool IsWindows
+        {
+            get { return SystemKind.HasValue && (SystemKind & APTAT.DeploymentCore.SystemKind.Windows) != 0; }
+        }
+
+        public bool IsLinux
+        {
+            get { return SystemKind.HasValue && (SystemKind & APTAT.DeploymentCore.SystemKind.Linux) != 0; }
+        }
+
+        public bool IsMac
+        {
+            get { return SystemKind.HasValue && (SystemKind & APTAT.DeploymentCore.SystemKind.MacOS) != 0; }
+        }
+
+        public bool IsAndroid
+        {
+            get { return false; }
+        }
+
+        public bool IsUnknown
+        {
+            get { return !IsWindows && !IsLinux && !IsMac && !IsAndroid; }
+        }
+
         public string OS { get { return _systemKind.ToFormattedString(Is64); } }
+
+        public string FullName
+        {
+            get { return $"{Name} ({OS})"; }
+        }
 
         public string DnsName { get; set; }
         public bool IsAptHost { get; set; }

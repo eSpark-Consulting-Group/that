@@ -168,7 +168,7 @@ namespace DDT.Application
         #endregion
 
         [MessageReceiver]
-        public void AcceptMessage(ChangeScreen message)
+        public void AcceptMessage(ChangeScreen<ChangeScreenTypes> message)
         {
             Welcome.Visibility = Visibility.Collapsed;
             HeaderMenuGrid.Visibility = Visibility.Visible;
@@ -259,12 +259,25 @@ namespace DDT.Application
                         WizardHeader = null;
                     }
                     break;
-                case ChangeScreenTypes.Confirmation:
-                    var confirmation = new ConfirmationWindow();
-                    confirmation.Owner = App.Current.MainWindow;
-                    confirmation.Resources = confirmation.Owner.Resources;
-                    if (confirmation.ShowDialog() == true)
-                        message.Action(ChangeScreenTypes.Confirmation);
+            }
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(ChangeScreen<bool?> message)
+        {
+            switch (message.Screen)
+            {
+                case ChangeScreenTypes.StopConfirmation:
+                    var stop = new StopConfirmationWindow();
+                    stop.Owner = App.Current.MainWindow;
+                    stop.Resources = stop.Owner.Resources;
+                    message.Action(stop.ShowDialog());
+                    break;
+                case ChangeScreenTypes.SaveConfirmation:
+                    var save = new SaveConfirmationWindow();
+                    save.Owner = App.Current.MainWindow;
+                    save.Resources = save.Owner.Resources;
+                    message.Action(save.ShowDialog());
                     break;
             }
         }

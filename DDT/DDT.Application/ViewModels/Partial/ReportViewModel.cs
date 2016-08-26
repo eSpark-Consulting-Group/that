@@ -20,14 +20,25 @@ namespace DDT.Application.ViewModels
 
         public Action StopGenerateReportProgress { get; private set; }
 
-        private string _reportPath;
-        public string ReportPath
+        private string _reportPDFPath;
+        public string ReportPDFPath
         {
-            get { return _reportPath; }
+            get { return _reportPDFPath; }
             set
             {
-                _reportPath = value;
-                RaisePropertyChanged(nameof(ReportPath));
+                _reportPDFPath = value;
+                RaisePropertyChanged(nameof(ReportPDFPath));
+            }
+        }
+
+        private string _reportCSVPath;
+        public string ReportCSVPath
+        {
+            get { return _reportCSVPath; }
+            set
+            {
+                _reportCSVPath = value;
+                RaisePropertyChanged(nameof(ReportCSVPath));
             }
         }
 
@@ -35,14 +46,19 @@ namespace DDT.Application.ViewModels
         {
             ButtonsAvailable = false;
 
-            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Report, async _ =>
+            AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.Report, async _ =>
             {
                 SetCurrentScreen(_);
 
-                ReportPath = null;
-                ReportPath = await TryAction(GenerateReport());
+                ReportPDFPath = null;
+                ReportCSVPath = null;
 
-                if (string.IsNullOrEmpty(ReportPath))
+                var tuple = await TryAction(GenerateReport());
+
+                ReportPDFPath = tuple.Item1;
+                ReportCSVPath = tuple.Item2;
+
+                if (string.IsNullOrEmpty(ReportPDFPath))
                     InternalProgress = 0;
             });
         }
@@ -52,7 +68,7 @@ namespace DDT.Application.ViewModels
             return GenerateReportAvailable;
         }
 
-        private async Task<string> GenerateReport()
+        private async Task<Tuple<string, string>> GenerateReport()
         {
             ProgressMessage = "Generating Report...";
             InternalProgress = 100;

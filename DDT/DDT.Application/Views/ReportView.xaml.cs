@@ -18,24 +18,25 @@ namespace DDT.Application.Views
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                BindingOperations.SetBinding(this, ReportPathProperty, new Binding("ReportPath"));
+                BindingOperations.SetBinding(this, ReportPDFPathProperty, new Binding("ReportPDFPath"));
+                BindingOperations.SetBinding(this, ReportCSVPathProperty, new Binding("ReportCSVPath"));
                 BindingOperations.SetBinding(this, ReportActionProperty, new Binding("StopGenerateReportProgress"));
             }
         }
 
-        #region ReportPathProperty (DependencyProperty)
+        #region ReportPDFPathProperty (DependencyProperty)
 
-        public string ReportPath
+        public string ReportPDFPath
         {
-            get { return (string)GetValue(ReportPathProperty); }
-            set { SetValue(ReportPathProperty, value); }
+            get { return (string)GetValue(ReportPDFPathProperty); }
+            set { SetValue(ReportPDFPathProperty, value); }
         }
 
-        public static readonly DependencyProperty ReportPathProperty =
-            DependencyProperty.Register("ReportPath", typeof(string), typeof(ReportView),
-            new PropertyMetadata(null, OnReportPathChanged));
+        public static readonly DependencyProperty ReportPDFPathProperty =
+            DependencyProperty.Register("ReportPDFPath", typeof(string), typeof(ReportView),
+            new PropertyMetadata(null, OnReportPDFPathChanged));
 
-        private static void OnReportPathChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        private static void OnReportPDFPathChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             var control = obj as ReportView;
             var value = e.NewValue as string;
@@ -45,6 +46,20 @@ namespace DDT.Application.Views
                 using (var stream = File.OpenRead(value))
                     control.pdf.DocumentSource = new PdfDocumentSource(stream);
         }
+
+        #endregion
+
+        #region ReportCSVPathProperty (DependencyProperty)
+
+        public string ReportCSVPath
+        {
+            get { return (string)GetValue(ReportCSVPathProperty); }
+            set { SetValue(ReportCSVPathProperty, value); }
+        }
+
+        public static readonly DependencyProperty ReportCSVPathProperty =
+            DependencyProperty.Register("ReportCSVPath", typeof(string), typeof(ReportView),
+            new PropertyMetadata(null));
 
         #endregion
 
@@ -76,13 +91,13 @@ namespace DDT.Application.Views
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var saveDialog = new SaveFileDialog();
-            saveDialog.Filter = "PDF File|*.pdf";
+            saveDialog.Filter = "PDF File|*.pdf|CSV File|*.csv";
 
             bool? dialogResult = saveDialog.ShowDialog();
-            if (dialogResult == true && File.Exists(ReportPath))
+            if (dialogResult == true && File.Exists(ReportPDFPath))
             {
                 using (var output = File.Create(saveDialog.FileName))
-                using (var input = File.OpenRead(ReportPath))
+                using (var input = File.OpenRead(saveDialog.FilterIndex == 1 ? ReportPDFPath : ReportCSVPath))
                 {
                     input.Seek(0, SeekOrigin.Begin);
                     input.CopyTo(output);

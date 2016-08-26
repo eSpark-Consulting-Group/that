@@ -124,7 +124,7 @@ namespace DDT.Application.ViewModels
 
             ButtonsAvailable = false;
 
-            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Workgroup, async _ =>
+            AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.Workgroup, async _ =>
             {
                 SetCurrentScreen(_);
 
@@ -163,7 +163,7 @@ namespace DDT.Application.ViewModels
             if (WorkgroupItems.Any())
                 Progress = 0;
             else
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.WorkgroupCredentials, _ =>
+                AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.WorkgroupCredentials, _ =>
                 {
                     SetCurrentScreen(_, () =>
                     {
@@ -198,7 +198,7 @@ namespace DDT.Application.ViewModels
             if (WorkgroupItems.Any())
                 Progress = 0;
             else
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.WorkgroupCredentials, _ =>
+                AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.WorkgroupCredentials, _ =>
                 {
                     SetCurrentScreen(_, () =>
                     {

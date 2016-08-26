@@ -22,7 +22,7 @@ namespace DDT.Application.Services
             _reportBuilder = reportBuilder;
         }
 
-        public async Task<string>  BuildDiscoveryAndDeploymentReport(DeploymentItem[] targetsByIp, DeploymentItem[] targetsByDomain, DeploymentItem[] targetsByWorkgroup, Guid operationUid)
+        public async Task<Tuple<string, string>>  BuildDiscoveryAndDeploymentReport(DeploymentItem[] targetsByIp, DeploymentItem[] targetsByDomain, DeploymentItem[] targetsByWorkgroup, Guid operationUid)
         {
             var deploymentByDomain = MapTo(targetsByDomain);
             var deploymentByIPRange = MapTo(targetsByIp);
@@ -30,8 +30,9 @@ namespace DDT.Application.Services
             ReportData data = new ReportData(deploymentByWorkgroup, deploymentByIPRange, deploymentByDomain);
             data.OperationUid = operationUid.ToString();
             string pdfReportPath = await Task.Run( () => _reportBuilder.Build(data, ReportType.DeploymentReport, ReportFormat.PDF));
-         
-            return pdfReportPath;
+            string csvReportPath = await Task.Run(() => _reportBuilder.Build(data, ReportType.DeploymentReport, ReportFormat.CSV));
+
+            return Tuple.Create(pdfReportPath, csvReportPath);
         }
         
         private static DeploymentReportModel MapTo(IEnumerable<DeploymentItem> items)

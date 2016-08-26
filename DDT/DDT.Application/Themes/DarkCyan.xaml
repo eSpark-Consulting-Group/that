@@ -15,5 +15,6 @@
     <SolidColorBrush x:Key="NameBrush" Color="#FF065E70" />
     <SolidColorBrush x:Key="ErrorBrush" Color="#FFAD2E29" />
     <SolidColorBrush x:Key="ErrorBrush2" Color="#FFFCD9D9" />
+    <SolidColorBrush x:Key="DisclaimerBrush" Color="#FFF2A54D" />
 
 </ResourceDictionary>

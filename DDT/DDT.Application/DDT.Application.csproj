@@ -102,6 +102,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behaviors\FocusBehavior.cs" />
     <Compile Include="Behaviors\TextPatternBehavior.cs" />
     <Compile Include="Converters\IntToConverters.cs" />
     <Compile Include="Converters\BoolToConverters.cs" />
@@ -179,8 +180,11 @@
     <Compile Include="Views\ActiveDirectoryView.xaml.cs">
       <DependentUpon>ActiveDirectoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConfirmationWindow.xaml.cs">
-      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
+    <Compile Include="Views\SaveConfirmationWindow.xaml.cs">
+      <DependentUpon>SaveConfirmationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StopConfirmationWindow.xaml.cs">
+      <DependentUpon>StopConfirmationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeploymentCredentialsView.xaml.cs">
       <DependentUpon>DeploymentCredentialsView.xaml</DependentUpon>
@@ -312,7 +316,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ConfirmationWindow.xaml">
+    <Page Include="Views\SaveConfirmationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StopConfirmationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -23,6 +23,7 @@ namespace DDT.Application.ViewModels
         public DelegateCommand AddNetworkAddressCommand { get; private set; }
         public DelegateCommand ClearNetworkAddressCommand { get; private set; }
 
+        private bool _networkAddressesMemento, _changeNetworkAddressesMemento;
         private ObservableCollection<IpAddressWrapper> _networkAddresses;
         public ObservableCollection<IpAddressWrapper> NetworkAddresses { get; private set; }
 
@@ -71,6 +72,9 @@ namespace DDT.Application.ViewModels
         {
             Action refresh = () =>
             {
+                if (_changeNetworkAddressesMemento)
+                    _networkAddressesMemento = true;
+
                 RaisePropertyChanged(nameof(HasNetworkAddress));
 
                 ErrorMessage = null;
@@ -93,7 +97,7 @@ namespace DDT.Application.ViewModels
             {
                 if (NetworkAddresses.Any(_ => _.Value.ToLower() == wrapper.Value.ToLower()))
                 {
-                    ErrorMessage = "Network Address is already in the list";
+                    ErrorMessage = "Please add unique network addresses that are not in the list";
                     return;
                 }
                 NetworkAddresses.Add(wrapper);
@@ -121,7 +125,7 @@ namespace DDT.Application.ViewModels
                     values.Add(wrapper.Value.ToLower());
                 else
                 {
-                    validationMessage = "Network Address is already in the list";
+                    validationMessage = "Please add unique network addresses that are not in the list";
                     return false;
                 }
             }
@@ -150,10 +154,19 @@ namespace DDT.Application.ViewModels
                     ValueChangedAction = item.ValueChangedAction,
                     RemoveCommand = item.RemoveCommand
                 });
+
+            if (HasNetworkAddress)
+            {
+                _changeNetworkAddressesMemento = true;
+                _networkAddressesMemento = false;
+            }
+            else
+                _changeNetworkAddressesMemento = false;
         }
 
         private void RestoreNetworkAddressMemento(bool reset = false)
         {
+            _networkAddressesMemento = false;
             NetworkAddresses = !reset ? _networkAddresses : new ObservableCollection<IpAddressWrapper>();
             RaisePropertyChanged(nameof(NetworkAddresses));
 
