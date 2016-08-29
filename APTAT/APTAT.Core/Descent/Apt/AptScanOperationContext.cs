@@ -16,7 +16,7 @@ namespace APTAT.Core.Descent.Apt
 
         public AptScanOperationContext(IEnumerable<IComputer> computers, int totalTargetCount,
             IDevicesSourceDescription devicesSourceDescription)
-            : base(computers, devicesSourceDescription)
+            : base(computers, devicesSourceDescription, totalTargetCount)
         {
             _scanResults = new ConcurrentDictionary<Guid, AptScanResult>();
             var scanResultType = ScanResultType.InProgress;
@@ -34,8 +34,6 @@ namespace APTAT.Core.Descent.Apt
                        });
 
             }
-            TotalTargetsCount = totalTargetCount;
-
         }
         public DateTime Started { get { return StartTime; } }
 

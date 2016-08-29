@@ -43,7 +43,6 @@ namespace Valkyrie.WebApiProvider
             var strUrl = String.Format(url);
             return new Uri(strUrl);
         }
-#if DEBUG
         public static bool IsProduction
         {
             get
@@ -52,6 +51,5 @@ namespace Valkyrie.WebApiProvider
                 return url.ToString().Contains(("valkyrie.comodo.com"));
             }
         }
-#endif
     }
 }

@@ -146,7 +146,6 @@ namespace Valkyrie.WebApiProvider
             {
                 throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
             }
-            fileStream.Dispose();
             return response;
         }
 
@@ -187,12 +186,10 @@ namespace Valkyrie.WebApiProvider
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
             {
-#if DEBUG
                 if (!ValkyrieApiUrls.IsProduction)
                 {
                     ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 }
-#endif
                 if (ProxySettings.Proxy != null)
                 {
                     client.Proxy = ProxySettings.Proxy;

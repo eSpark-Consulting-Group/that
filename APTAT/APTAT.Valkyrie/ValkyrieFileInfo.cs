@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
+using APTAT.Common;
 
 
 namespace APTAT.Valkyrie
@@ -45,6 +47,9 @@ namespace APTAT.Valkyrie
             }
             catch (Exception ex)
             {
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"{ex.GetType()} occurred during getting host name for {Ip}");
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, ex.ToString());
+                machineName = Ip;
                 // Machine not found...
             }
             return machineName;

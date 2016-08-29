@@ -511,7 +511,7 @@ xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.DataVisualization.dll" "$
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.ProcessingObjectModel.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)ThirdParty\Microsoft.ReportViewer.WinForms.dll" "$(TargetDir)" /Y
 xcopy "$(SolutionDir)$(ConfigurationName)\APTAT.Bootstrapper.exe" "$(TargetDir)" /Y
-"$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.rtf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)UnknownFileHunter.exe" "$(TargetDir)UnknownFileHunter.exe.config" "$(TargetDir)APTAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
+"$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.pdf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)UnknownFileHunter.exe" "$(TargetDir)UnknownFileHunter.exe.config" "$(TargetDir)APTAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
 copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)ValkyrieHunter.exe" || goto :error
 del  "$(TargetDir)archive.7z"</PostBuildEvent>
   </PropertyGroup>

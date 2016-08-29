@@ -7,10 +7,10 @@ namespace APTAT.Application
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            CompositionHelper.Instance.Register<ITargetsDiscoveryService, TargetsDiscoveryService>();
-            CompositionHelper.Instance.Register<IAptService, AptService>();
-            CompositionHelper.Instance.Register<IStorageService, StorageService>();
-            CompositionHelper.Instance.Register<IWmiService, WmiService>();
+            CompositionHelper.Instance.RegisterSingleton<ITargetsDiscoveryService, TargetsDiscoveryService>();
+            CompositionHelper.Instance.RegisterSingleton<IAptService, AptService>();
+            CompositionHelper.Instance.RegisterSingleton<IStorageService, StorageService>();
+            CompositionHelper.Instance.RegisterSingleton<IWmiService, WmiService>();
         }
     }
 }
