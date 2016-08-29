@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Descent\DescentScannerTests.cs" />
     <Compile Include="Descent\InstallPackageInfoTests.cs" />
+    <Compile Include="Helper\CSVHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\DeploymentReportModelTest.cs" />
     <Compile Include="Reports\ReportBuilderTests.cs" />
