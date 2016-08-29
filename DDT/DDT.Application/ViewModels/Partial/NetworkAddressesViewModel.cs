@@ -23,7 +23,6 @@ namespace DDT.Application.ViewModels
         public DelegateCommand AddNetworkAddressCommand { get; private set; }
         public DelegateCommand ClearNetworkAddressCommand { get; private set; }
 
-        private bool _networkAddressesMemento, _changeNetworkAddressesMemento;
         private ObservableCollection<IpAddressWrapper> _networkAddresses;
         public ObservableCollection<IpAddressWrapper> NetworkAddresses { get; private set; }
 
@@ -72,9 +71,6 @@ namespace DDT.Application.ViewModels
         {
             Action refresh = () =>
             {
-                if (_changeNetworkAddressesMemento)
-                    _networkAddressesMemento = true;
-
                 RaisePropertyChanged(nameof(HasNetworkAddress));
 
                 ErrorMessage = null;
@@ -154,19 +150,10 @@ namespace DDT.Application.ViewModels
                     ValueChangedAction = item.ValueChangedAction,
                     RemoveCommand = item.RemoveCommand
                 });
-
-            if (HasNetworkAddress)
-            {
-                _changeNetworkAddressesMemento = true;
-                _networkAddressesMemento = false;
-            }
-            else
-                _changeNetworkAddressesMemento = false;
         }
 
         private void RestoreNetworkAddressMemento(bool reset = false)
         {
-            _networkAddressesMemento = false;
             NetworkAddresses = !reset ? _networkAddresses : new ObservableCollection<IpAddressWrapper>();
             RaisePropertyChanged(nameof(NetworkAddresses));
 

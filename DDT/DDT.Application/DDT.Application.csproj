@@ -180,9 +180,6 @@
     <Compile Include="Views\ActiveDirectoryView.xaml.cs">
       <DependentUpon>ActiveDirectoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SaveConfirmationWindow.xaml.cs">
-      <DependentUpon>SaveConfirmationWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\StopConfirmationWindow.xaml.cs">
       <DependentUpon>StopConfirmationWindow.xaml</DependentUpon>
     </Compile>
@@ -311,10 +308,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ActiveDirectoryView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\SaveConfirmationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

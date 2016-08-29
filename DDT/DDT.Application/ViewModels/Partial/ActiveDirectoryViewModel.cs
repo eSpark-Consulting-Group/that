@@ -167,7 +167,7 @@ namespace DDT.Application.ViewModels
 
             ButtonsAvailable = false;
 
-            AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.ActiveDirectory, async _ =>
+            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ActiveDirectory, async _ =>
             {
                 SetCurrentScreen(_);
 
@@ -203,7 +203,7 @@ namespace DDT.Application.ViewModels
             if (ActiveDirectoryItems.Any())
                 Progress = 0;
             else
-                AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.ActiveDirectoryCredentials, _ =>
+                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ActiveDirectoryCredentials, _ =>
                 {
                     SetCurrentScreen(_, () =>
                     {

@@ -453,7 +453,7 @@ namespace DDT.Application.ViewModels
                 if (screen == _currentScreen)
                     return;
 
-                AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(screen, _ => SetCurrentScreen(_),
+                AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_),
                     _currentScreen != ChangeScreenTypes.EULA ? Direction.RightToLeft : (Direction?)null);
                 ButtonsAvailable = false;
                 ErrorMessage = null;
@@ -476,7 +476,7 @@ namespace DDT.Application.ViewModels
                         break;
                 }
 
-                AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(_previousScreen, _ => SetCurrentScreen(_));
+                AppMessages.ChangeScreenMessage.Send(_previousScreen, _ => SetCurrentScreen(_));
                 ButtonsAvailable = false;
                 ErrorMessage = null;
             }
@@ -518,20 +518,6 @@ namespace DDT.Application.ViewModels
                 if (screen == _currentScreen)
                     return;
 
-                Action<Action> action = _ =>
-                {
-                    AppMessages.ChangeScreenMessage.Send<bool?>(ChangeScreenTypes.SaveConfirmation, __ =>
-                    {
-                        if (__ == false)
-                            DispatcherAction(_);
-
-                        AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(screen, ___ => SetCurrentScreen(___), null);
-                        ButtonsAvailable = false;
-                        ErrorMessage = null;
-                        DisclaimerMessage = null;
-                    });
-                };
-
                 switch (screen)
                 {
                     case ChangeScreenTypes.NetworkAddresses:
@@ -567,49 +553,27 @@ namespace DDT.Application.ViewModels
                                 ErrorMessage = "Please select any discovery target";
                                 return;
                             case ChangeScreenTypes.NetworkAddresses:
-                                if (HasNetworkAddress)
-                                {
-                                    if (_networkAddressesMemento)
-                                    {
-                                        action(() => RestoreNetworkAddressMemento());
-                                        return;
-                                    }
+                                if (HasNetworkAddress || screen == ChangeScreenTypes.DiscoveryTargets)
                                     break;
-                                }
                                 ErrorMessage = "Please add any IPv4 address subnet or range";
                                 return;
                             case ChangeScreenTypes.Workgroup:
-                                if (HasWorkgroup)
-                                {
-                                    if (_workgroupMementoActions.Count > 0)
-                                    {
-                                        action(() => RestoreWorkgroupMemento());
-                                        return;
-                                    }
+                                if (HasWorkgroup || screen == ChangeScreenTypes.DiscoveryTargets)
                                     break;
-                                }
                                 ErrorMessage = "Please select any computer or workgroup";
                                 return;
                             case ChangeScreenTypes.ActiveDirectory:
-                                if (HasActiveDirectory)
-                                {
-                                    if (_activeDirectoryMementoActions.Count > 0)
-                                    {
-                                        action(() => RestoreActiveDirectoryMemento());
-                                        return;
-                                    }
+                                if (HasActiveDirectory || screen == ChangeScreenTypes.DiscoveryTargets)
                                     break;
-                                }
                                 ErrorMessage = "Please select any computer or directory";
                                 return;
                         }
                         break;
                 }
 
-                AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(screen, ___ => SetCurrentScreen(___), null);
+                AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_), null);
                 ButtonsAvailable = false;
                 ErrorMessage = null;
-                DisclaimerMessage = null;
             }
         }
 
@@ -649,7 +613,7 @@ namespace DDT.Application.ViewModels
 
             ButtonsAvailable = false;
 
-            AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.DeploymentResults, async _ =>
+            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.DeploymentResults, async _ =>
             {
                 SetCurrentScreen(_);
 
@@ -671,7 +635,7 @@ namespace DDT.Application.ViewModels
                         StopAvailable = false;
 
                         if (_previousScreen == ChangeScreenTypes.DeploymentResults)
-                            AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.DeploymentResults, __ => SetCurrentScreen(__));
+                            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.DeploymentResults, __ => SetCurrentScreen(__));
 
                         _deploymentService.StopDeployment(true);
 
@@ -734,7 +698,7 @@ namespace DDT.Application.ViewModels
             switch (_currentScreen)
             {
                 case ChangeScreenTypes.ActiveDirectory:
-                    AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.ActiveDirectoryCredentials, _ =>
+                    AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ActiveDirectoryCredentials, _ =>
                     {
                         SetCurrentScreen(_, () =>
                         {
@@ -744,7 +708,7 @@ namespace DDT.Application.ViewModels
                     }, Direction.RightToLeft);
                     break;
                 case ChangeScreenTypes.Workgroup:
-                    AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.WorkgroupCredentials, _ =>
+                    AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.WorkgroupCredentials, _ =>
                     {
                         SetCurrentScreen(_, () =>
                         {

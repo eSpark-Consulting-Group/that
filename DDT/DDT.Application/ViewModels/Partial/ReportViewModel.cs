@@ -46,7 +46,7 @@ namespace DDT.Application.ViewModels
         {
             ButtonsAvailable = false;
 
-            AppMessages.ChangeScreenMessage.Send<ChangeScreenTypes>(ChangeScreenTypes.Report, async _ =>
+            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Report, async _ =>
             {
                 SetCurrentScreen(_);
 

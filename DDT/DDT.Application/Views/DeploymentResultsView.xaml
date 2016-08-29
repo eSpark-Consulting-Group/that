@@ -59,11 +59,11 @@
                         <DataTemplate x:Key="StatusColumn">
                             <Grid>
                                 <Grid Visibility="{Binding InProgress, Converter={converters:BoolToVisibilityConverter}}">
-                                    <TextBlock Text="{Binding Value}" Foreground="{DynamicResource StrongBrush}" FontSize="13"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Right" Margin=" 0 0 5 0"/>
+                                    <TextBlock Text="{Binding Value}" Foreground="{DynamicResource StrongBrush}" FontSize="13"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Left" Margin=" 0 0 5 0"/>
                                 </Grid>
                                 <Grid Visibility="{Binding InProgress, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=!}">
-                                    <TextBlock Text="{Binding Value}" FontSize="13" VerticalAlignment="Center" Visibility="{Binding Failed, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=!}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Right" Margin=" 0 0 5 0"/>
-                                    <TextBlock Text="{Binding Value}" Foreground="{DynamicResource ErrorBrush2}" Visibility="{Binding Failed, Converter={converters:BoolToVisibilityConverter}}" FontSize="13"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Right" Margin=" 0 0 5 0"/>
+                                    <TextBlock Text="{Binding Value}" FontSize="13" VerticalAlignment="Center" Visibility="{Binding Failed, Converter={converters:BoolToVisibilityConverter}, ConverterParameter=!}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Left" Margin=" 0 0 5 0"/>
+                                    <TextBlock Text="{Binding Value}" Foreground="{DynamicResource ErrorBrush2}" Visibility="{Binding Failed, Converter={converters:BoolToVisibilityConverter}}" FontSize="13"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Value}" TextAlignment="Left" Margin=" 0 0 5 0"/>
                                 </Grid>
                             </Grid>
                         </DataTemplate>
@@ -80,7 +80,7 @@
                     <telerik:RadTreeListView.Columns>
                         <telerik:GridViewColumn IsFilterable="False" ShowFilterButton="False" Focusable="False" ShowFieldFilters="False" CellTemplateSelector="{StaticResource TemplateSelector}" Header="Target" IsReadOnly="True" Width="600*" SortMemberPath="Name" />
                         <telerik:GridViewColumn  CellTemplate="{StaticResource PackageColumn}" SortMemberPath="PackageName" IsFilterable="False" Header="Package"  Focusable="False" IsReadOnly="True" TextAlignment="Left" MinWidth="256" MaxWidth="256"/>
-                        <telerik:GridViewColumn  CellTemplate="{StaticResource StatusColumn}" SortMemberPath="Value" IsFilterable="False" Header="Status"  Focusable="False" IsReadOnly="True" TextAlignment="Right" MinWidth="256" MaxWidth="256"/>
+                        <telerik:GridViewColumn  CellTemplate="{StaticResource StatusColumn}" SortMemberPath="Value" IsFilterable="False" Header="Status"  Focusable="False" IsReadOnly="True" TextAlignment="Left" MinWidth="256" MaxWidth="256"/>
                     </telerik:RadTreeListView.Columns>
                 </telerik:RadTreeListView>
 

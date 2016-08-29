@@ -273,12 +273,6 @@ namespace DDT.Application
                     stop.Resources = stop.Owner.Resources;
                     message.Action(stop.ShowDialog());
                     break;
-                case ChangeScreenTypes.SaveConfirmation:
-                    var save = new SaveConfirmationWindow();
-                    save.Owner = App.Current.MainWindow;
-                    save.Resources = save.Owner.Resources;
-                    message.Action(save.ShowDialog());
-                    break;
             }
         }
 

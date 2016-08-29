@@ -18,8 +18,7 @@ namespace DDT.Application.Messages
         Report,
         Options,
         About,
-        StopConfirmation, 
-        SaveConfirmation
+        StopConfirmation
     }
 
     public sealed class ChangeScreen<T>
@@ -43,6 +42,11 @@ namespace DDT.Application.Messages
             public static void Send<T>(ChangeScreenTypes message, Action<T> action, Direction? direction = null)
             {
                 MessageManager.Instance.PublishMessage(new ChangeScreen<T>(message, action, direction));
+            }
+
+            public static void Send(ChangeScreenTypes message, Action<ChangeScreenTypes> action, Direction? direction = null)
+            {
+                MessageManager.Instance.PublishMessage(new ChangeScreen<ChangeScreenTypes>(message, action, direction));
             }
         }
     }
