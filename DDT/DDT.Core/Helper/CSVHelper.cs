@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DDT.Core.Helper
 {
@@ -12,15 +12,14 @@ namespace DDT.Core.Helper
         public static string ToCsv<T>(string separator, IEnumerable<T> objectlist)
         {
             Type t = typeof(T);
-            PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] ordered = Sort(typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance));
 
-          
+            string[] columnNames = new string[ordered.Count()];
 
-            string[] columnNames = new string[properties.Count()];
-
-            for (int i = 0; i < properties.Count(); i++)
-            {                
-                columnNames[i] = GetNameOrDescription(properties[i]);
+            
+            for (int i = 0; i < ordered.Count(); i++)
+            {
+                columnNames[i] = GetNameOrDescription(ordered[i]);
             }
 
             StringBuilder csvdata = new StringBuilder();
@@ -31,9 +30,46 @@ namespace DDT.Core.Helper
             csvdata.AppendLine(header);
 
             foreach (var o in objectlist)
-                csvdata.AppendLine(ToCsvFields(separator, properties, o));
+                csvdata.AppendLine(ToCsvFields(separator, ordered, o));
 
             return csvdata.ToString();
+        }
+
+        private static PropertyInfo[] Sort(PropertyInfo[] properties)
+        {
+            List<Tuple<int?, PropertyInfo>> list = new List<Tuple<int?, PropertyInfo>>();
+            
+            foreach (var item in properties)
+            {
+                if (Ignore(item)) continue;
+                Tuple<int?, PropertyInfo> info = new Tuple<int?, PropertyInfo>(GetOrder(item), item);
+                list.Add(info);
+            }
+
+            var result = list.ToLookup((i) => i.Item1, (j) => j.Item2).OrderBy(lk => lk.Key).SelectMany(x => x.ToList()).ToArray();
+            return result;
+        }
+
+        private static bool Ignore(PropertyInfo prop)
+        {
+            object[] attrs = prop.GetCustomAttributes(true);
+
+            if (attrs != null)
+            {
+                return attrs.Any(a => a is IgnoreDataMemberAttribute);
+            }
+            return false;
+        }
+        private static int? GetOrder(PropertyInfo prop)
+        {
+            object[] attrs = prop.GetCustomAttributes(true);
+            if (attrs.Any())
+            {
+                var dataMemberAttr = attrs.Where(a => a is DataMemberAttribute).FirstOrDefault();
+                if (dataMemberAttr != null)
+                    return ((DataMemberAttribute) dataMemberAttr).Order;
+            }
+            return null;
         }
 
         private static string GetNameOrDescription(PropertyInfo prop)
@@ -41,10 +77,10 @@ namespace DDT.Core.Helper
             object[] attrs = prop.GetCustomAttributes(true);
             if (attrs.Any())
             {
-                var desc = attrs[0] as System.ComponentModel.DescriptionAttribute;
-                if (desc != null && desc.Description != null)
-                    return  desc.Description;
-               
+                var desc = attrs[0] as DataMemberAttribute;
+                if (desc != null && desc.Name != null)
+                    return desc.Name;
+
             }
             return prop.Name;
         }
@@ -55,8 +91,6 @@ namespace DDT.Core.Helper
 
             foreach (PropertyInfo prop in properties)
             {
-                
-
                 if (linie.Length > 0)
                     linie.Append(separator);
 
