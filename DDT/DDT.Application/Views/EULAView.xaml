@@ -27,7 +27,7 @@
                     <telerik:RadPdfViewer x:Name="pdf" Mode="TextSelection" DocumentChanged="pdf_DocumentChanged" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource AccentBrush}" />
                 </Border>
 
-                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Accept" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.Packages}"/>
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="I Accept" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.Packages}"/>
 
             </Grid>
         </Border>

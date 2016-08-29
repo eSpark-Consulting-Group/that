@@ -94,7 +94,7 @@ namespace DDT.Application.Views
             saveDialog.Filter = "PDF File|*.pdf|CSV File|*.csv";
 
             bool? dialogResult = saveDialog.ShowDialog();
-            if (dialogResult == true && File.Exists(ReportPDFPath))
+            if (dialogResult == true && File.Exists(saveDialog.FilterIndex == 1 ? ReportPDFPath : ReportCSVPath))
             {
                 using (var output = File.Create(saveDialog.FileName))
                 using (var input = File.OpenRead(saveDialog.FilterIndex == 1 ? ReportPDFPath : ReportCSVPath))
