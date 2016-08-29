@@ -6,7 +6,6 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
           xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              xmlns:converters="clr-namespace:APTAT.Application.Converters"
-             xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=System.Windows"
              mc:Ignorable="d" Loaded="ListLoaded"
              d:DesignHeight="300" d:DesignWidth="400">
    

@@ -21,7 +21,11 @@ namespace APTAT.DeploymentCore.Descent
 
 		private readonly object _sync = new object();
 
-        
+	    protected DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
+	        int totalComputersCount) : this(computers, devicesSourceDescription)
+	    {
+	        TotalTargetsCount = totalComputersCount;
+	    }
 
         public DescentResult( IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
             IComputerDescentResultFactory computerDescentResultFactory = null)

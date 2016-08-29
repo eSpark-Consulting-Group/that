@@ -322,7 +322,7 @@ Technical details:
     <value>Descent operation exceeded timeout of: {0}.</value>
   </data>
   <data name="InstallationTimeoutMessage" xml:space="preserve">
-    <value>Installation exceeded timeout of: {0} minutes.</value>
+    <value>Installation exceeded timeout of {0} minutes.</value>
   </data>
   <data name="DescentUninstallAgentFailedFormat" xml:space="preserve">
     <value>Agent uninstallation failed.

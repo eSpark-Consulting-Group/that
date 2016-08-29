@@ -259,7 +259,7 @@ namespace APTAT.Core.Descent.Apt
 
                     try
                     {
-                        bool isServiceRunning = ServiceHelper.IsServiceRunning();
+                        bool? isServiceRunning = ServiceHelper.IsServiceRunning();
                         using (FileStream fs = new FileStream(_responseFilePathForCurrentComputer, FileMode.Open,
                             FileAccess.Read, FileShare.ReadWrite))
                         {
@@ -344,7 +344,7 @@ namespace APTAT.Core.Descent.Apt
 
                             EnAptStage status = (EnAptStage) statusInt;
 
-                            if (!isServiceRunning && status != EnAptStage.EnApt_Complete &&
+                            if (isServiceRunning.HasValue && !isServiceRunning.Value && status != EnAptStage.EnApt_Complete &&
                                 status != EnAptStage.EnApt_Failed)
                                 throw new DescentException(DescentStatus.status_error, "scanner was crashed.", 0);
 

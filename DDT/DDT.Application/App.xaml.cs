@@ -27,8 +27,7 @@ namespace DDT.Application
             });
 
             InitTraceListener();
-            Trace.WriteLine($"DDT started: {DateTime.UtcNow}");
-            Trace.Flush();
+            LogHelper.Trace(TraceEventType.Information, TraceCategory.Descent,$"DDT started: {DateTime.UtcNow}");
         }
 
         public void Dispose()

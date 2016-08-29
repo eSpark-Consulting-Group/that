@@ -471,8 +471,13 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             }
         }
 
+        public string Name { get; private set; }
+        public string HostName { get; private set; }
+
         public void InitializeService(string hostName, string binPath, string name, string displayName, string[] parameters)
         {
+            HostName = hostName;
+            Name = name;
             m_databaseHandle = OpenSCManager( hostName, null, ( uint )SCM_ACCESS.SC_MANAGER_ALL_ACCESS );
             if (m_databaseHandle == IntPtr.Zero)
             {
@@ -520,7 +525,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
         }
 
 
-        public void DeleteService()
+        public void DeleteService(int c = 0)
         {
             if (m_databaseHandle == IntPtr.Zero || m_serviceHandle == IntPtr.Zero)
             {
@@ -529,12 +534,20 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
             bool res = DeleteService(m_serviceHandle);
             if (!res)
-                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot delete service ({Marshal.GetLastWin32Error()})");
+            { 
+                var error = Marshal.GetLastWin32Error();
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot delete service ({error})");
+                if (error == 6 && c < 4)
+                {
+                    ReInitialize();
+                    DeleteService(++c);
+                }
+            }
             CloseServiceHandle(m_serviceHandle);
             m_serviceHandle = IntPtr.Zero;
         }
 
-        public bool? IsServiceRunning()
+        public bool? IsServiceRunning(int c = 0)
         {
             SERVICE_STATUS ss = new SERVICE_STATUS();
 
@@ -547,11 +560,17 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                 }
                 else return false;
             }
-            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({Marshal.GetLastWin32Error()})");
+            var error = Marshal.GetLastWin32Error();
+            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({error})");
+            if (error == 6 && c < 4)
+            {
+                ReInitialize();
+                return IsServiceRunning(++c);
+            }
             return null;
         }
 
-        public void StopService()
+        public void StopService(int c = 0)
         {
             if (m_databaseHandle == IntPtr.Zero || m_serviceHandle == IntPtr.Zero)
                 return;
@@ -562,7 +581,19 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             {
                 if (ss.currentState != (int)SERVICE_STATE.SERVICE_STOPPED)
                     if (!ControlService(m_serviceHandle, SERVICE_CONTROL.STOP, ref ss))
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                    {
+                        var errorInt = Marshal.GetLastWin32Error();
+                        LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot stop service ({errorInt})");
+                        if (errorInt == 6 && c < 4)
+                        {
+                            ReInitialize();
+                            StopService(++c);
+                        }
+                        else
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                    }
                 var timeOut = TimeSpan.FromMinutes(1).TotalMilliseconds;
                 int elapsed = 0;
                 while (ss.currentState == (int)SERVICE_STATE.SERVICE_STOP_PENDING &&
@@ -573,7 +604,24 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     QueryServiceStatus(m_serviceHandle, ref ss);
                 }
             }
-            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({Marshal.GetLastWin32Error()})");
+            var error = Marshal.GetLastWin32Error();
+            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({error})");
+            if (error == 6 && c < 4)
+            {
+                ReInitialize();
+                StopService(++c);
+            }
+        }
+
+        private void ReInitialize()
+        {
+            Release();
+            m_databaseHandle = OpenSCManager(HostName, null, (uint) SCM_ACCESS.SC_MANAGER_ALL_ACCESS);
+            if (m_databaseHandle == IntPtr.Zero)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+            m_serviceHandle = OpenService(m_databaseHandle, Name, (uint) SERVICE_ACCESS.SERVICE_ALL_ACCESS);
         }
 
         public void RunService(string[] parameters, bool waitToStop, int waitTimeoutMs)
