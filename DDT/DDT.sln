@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDT.ApplicationTests", "DDT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDT.CoreTests", "DDT.CoreTests\DDT.CoreTests.csproj", "{B458A66E-D8B5-4E93-B45F-9F6268634CB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceCopyTool", "..\Common\ResourceCopyTool\ResourceCopyTool.csproj", "{B6C9A9AB-9105-488A-9444-FA07D7D95011}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,8 @@ Global
 		{B458A66E-D8B5-4E93-B45F-9F6268634CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B458A66E-D8B5-4E93-B45F-9F6268634CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B458A66E-D8B5-4E93-B45F-9F6268634CB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6C9A9AB-9105-488A-9444-FA07D7D95011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6C9A9AB-9105-488A-9444-FA07D7D95011}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,7 +90,7 @@ Global
 		{B458A66E-D8B5-4E93-B45F-9F6268634CB4} = {EB243CAC-FB62-4AB6-9647-90F37DBD2748}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -120,5 +124,8 @@ Global
 		SccProjectTopLevelParentUniqueName9 = DDT.sln
 		SccProjectName9 = DDT.CoreTests
 		SccLocalPath9 = DDT.CoreTests
+		SccProjectUniqueName10 = ..\\Common\\ResourceCopyTool\\ResourceCopyTool.csproj
+		SccProjectName10 = ../Common/ResourceCopyTool
+		SccLocalPath10 = ..\\Common\\ResourceCopyTool
 	EndGlobalSection
 EndGlobal
