@@ -24,7 +24,7 @@ namespace DDT.Application.Views
 
         private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)
         {
-            pdf.ScaleFactor = 1.16d;
+            pdf.ScaleFactor = 1.15d;
         }
     }
 }

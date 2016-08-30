@@ -116,13 +116,15 @@ namespace DDT.Application.ViewModels
             get { return _errorMessage; }
             set
             {
-                _errorMessage = value;
-                if (!string.IsNullOrEmpty(value))
-                    DisclaimerMessage = null;
+                _errorMessage = value; 
                 RaisePropertyChanged(nameof(ErrorMessage));
+
+                if (!string.IsNullOrEmpty(value) && DisclaimerMessage != null)
+                    DisclaimerMessage = string.Empty;
             }
         }
 
+        private const string _disclaimerText = @"You are going to deploy EXE package which will be installed silently. If the installation process requires any user interaction, it may fail due to no response.";
         private string _disclaimerMessage;
         public string DisclaimerMessage
         {
@@ -237,7 +239,7 @@ namespace DDT.Application.ViewModels
                     ErrorMessage = null;
 
                     if (_package.ToLower().EndsWith("exe"))
-                        DisclaimerMessage = @"You are going to deploy EXE package which will be installed silently. If the installation process requires any user interaction, it may fail due to no response.";
+                        DisclaimerMessage = _disclaimerText;
                 }
             }
         }
@@ -453,6 +455,14 @@ namespace DDT.Application.ViewModels
                 if (screen == _currentScreen)
                     return;
 
+                switch (screen)
+                {
+                    case ChangeScreenTypes.Packages:
+                        if (DisclaimerMessage == string.Empty && _package.ToLower().EndsWith("exe"))
+                            DisclaimerMessage =_disclaimerText;
+                        break;
+                }
+
                 AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_),
                     _currentScreen != ChangeScreenTypes.EULA ? Direction.RightToLeft : (Direction?)null);
                 ButtonsAvailable = false;
@@ -574,6 +584,9 @@ namespace DDT.Application.ViewModels
                 AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_), null);
                 ButtonsAvailable = false;
                 ErrorMessage = null;
+
+                if (DisclaimerMessage != null)
+                    DisclaimerMessage = string.Empty;
             }
         }
 

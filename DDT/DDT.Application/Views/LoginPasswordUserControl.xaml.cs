@@ -53,6 +53,7 @@ namespace DDT.Application.Views
                     if (control.PasswordMasked.Visibility == Visibility.Visible)
                         return;
                     control.PasswordMasked.Visibility = Visibility.Visible;
+                    control.PasswordMasked.IsTabStop = true;
                     control.PasswordMasked.Password = value;
                     control.SetPasswordBoxSelection(value.Length);
                 }
@@ -61,6 +62,7 @@ namespace DDT.Application.Views
                     if (control.PasswordMasked.Visibility == Visibility.Collapsed)
                         return;
                     control.PasswordMasked.Visibility = Visibility.Collapsed;
+                    control.PasswordMasked.IsTabStop = false;
                     control.PasswordUnmasked.DelayedFocus();
                 }
             }
@@ -117,14 +119,18 @@ namespace DDT.Application.Views
 
             if (OpenedEye.Visibility == Visibility.Visible)
             {
-                PasswordMasked.Visibility = OpenedEye.Visibility = Visibility.Collapsed;
                 ClosedEye.Visibility = Visibility.Visible;
+                PasswordMasked.Visibility = OpenedEye.Visibility = Visibility.Collapsed;
+                PasswordMasked.IsTabStop = false;
+
                 PasswordUnmasked.DelayedFocus();
             }
             else
             {
                 ClosedEye.Visibility = Visibility.Collapsed;
                 PasswordMasked.Visibility = OpenedEye.Visibility = Visibility.Visible;
+                PasswordMasked.IsTabStop = true;
+
                 if (string.IsNullOrEmpty(PasswordUnmasked.Text))
                 {
                     PasswordMasked.Password = string.Empty;
