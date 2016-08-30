@@ -7,6 +7,12 @@ using System.Text;
 
 namespace DDT.Core.Helper
 {
+    class PropertyShortInfo
+    {
+        internal int Order { get; set; }
+        internal string Name { get; set; }
+    }
+
     public static class CSVHelper
     {
         public static string ToCsv<T>(string separator, IEnumerable<T> objectlist)
@@ -16,7 +22,7 @@ namespace DDT.Core.Helper
 
             string[] columnNames = new string[ordered.Count()];
 
-            
+
             for (int i = 0; i < ordered.Count(); i++)
             {
                 columnNames[i] = GetNameOrDescription(ordered[i]);
@@ -37,16 +43,18 @@ namespace DDT.Core.Helper
 
         private static PropertyInfo[] Sort(PropertyInfo[] properties)
         {
-            List<Tuple<int?, PropertyInfo>> list = new List<Tuple<int?, PropertyInfo>>();
-            
+            var list = new List<Tuple<PropertyShortInfo, PropertyInfo>>();
+
             foreach (var item in properties)
             {
                 if (Ignore(item)) continue;
-                Tuple<int?, PropertyInfo> info = new Tuple<int?, PropertyInfo>(GetOrder(item), item);
+                var info = new Tuple<PropertyShortInfo, PropertyInfo>(GetShortInfo(item), item);
                 list.Add(info);
             }
 
-            var result = list.ToLookup((i) => i.Item1, (j) => j.Item2).OrderBy(lk => lk.Key).SelectMany(x => x.ToList()).ToArray();
+            var result = list.ToLookup((i) => i.Item1, (j) => j.Item2)
+                .OrderBy(lk => lk.Key.Order).ThenBy(i=>i.Key.Name).SelectMany(x => x.ToList()).ToArray();
+
             return result;
         }
 
@@ -60,16 +68,25 @@ namespace DDT.Core.Helper
             }
             return false;
         }
-        private static int? GetOrder(PropertyInfo prop)
+        private static PropertyShortInfo GetShortInfo(PropertyInfo prop)
         {
             object[] attrs = prop.GetCustomAttributes(true);
-            if (attrs.Any())
+            PropertyShortInfo info = new PropertyShortInfo();
+            var dataMemberAttr = attrs.Where(a => a is DataMemberAttribute).FirstOrDefault();
+            if (dataMemberAttr != null)
             {
-                var dataMemberAttr = attrs.Where(a => a is DataMemberAttribute).FirstOrDefault();
-                if (dataMemberAttr != null)
-                    return ((DataMemberAttribute) dataMemberAttr).Order;
+                var data = ((DataMemberAttribute) dataMemberAttr);
+                info.Order = data.Order;
+                info.Name = data.Name;
+            
             }
-            return null;
+            else
+            {
+                info.Order = 0;
+                info.Name = prop.Name;
+            }
+
+            return info;
         }
 
         private static string GetNameOrDescription(PropertyInfo prop)

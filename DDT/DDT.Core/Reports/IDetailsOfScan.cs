@@ -1,6 +1,5 @@
 using APTAT.DeploymentCore;
 using System;
-using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace DDT.Core.Reports
