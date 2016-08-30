@@ -54,8 +54,9 @@ namespace DDT.Core.Reports
             {
                 case ReportType.DeploymentReport:
 
-                    _cache.Add(data.OperationUid, reportType, fileName);
-                    return renderer.Render(new DeploymentReportModern(), data, fileName);
+                    var filePath = renderer.Render(new DeploymentReportModern(), data, fileName);
+                    _cache.Add(data.OperationUid, reportType, filePath);
+                    return filePath;
                 
                 default:
                     throw new ArgumentOutOfRangeException("reportType");
