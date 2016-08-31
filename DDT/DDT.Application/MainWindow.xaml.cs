@@ -179,14 +179,14 @@ namespace DDT.Application
                     if (ApplyTransition(boxPackages, StartButton, message.Direction))
                     {
                         message.Action(message.Screen);
-                        WizardHeader = "Start Deployment (1/3)";
+                        WizardHeader = "New Deployment (1/3)";
                     }
                     break;
                 case ChangeScreenTypes.DiscoveryTargets:
                     if (ApplyTransition(boxDiscoveryTargets, StartButton, message.Direction))
                     {
                         message.Action(message.Screen);
-                        WizardHeader = "Start Deployment (2/3)";
+                        WizardHeader = "New Deployment (2/3)";
                     }
                     break;
                 case ChangeScreenTypes.ActiveDirectoryCredentials:
@@ -228,7 +228,7 @@ namespace DDT.Application
                     if (ApplyTransition(boxDeploymentCredentials, StartButton, message.Direction))
                     {
                         message.Action(message.Screen);
-                        WizardHeader = "Start Deployment (3/3)";
+                        WizardHeader = "New Deployment (3/3)";
                     }
                     break;
                 case ChangeScreenTypes.DeploymentResults:
