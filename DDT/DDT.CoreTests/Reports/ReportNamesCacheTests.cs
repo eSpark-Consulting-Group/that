@@ -14,7 +14,7 @@ namespace DDT.Core.Reports.Tests
         public void FindTestNotExisting()
         {
             ReportNamesCache cache = new ReportNamesCache();
-            var result = cache.Find(Guid.NewGuid().ToString(), ReportType.DeploymentReport);
+            var result = cache.Find(Guid.NewGuid().ToString(), ReportType.DeploymentReport, ReportFormat.PDF);
             Assert.Null(result);
         }
 
@@ -24,8 +24,8 @@ namespace DDT.Core.Reports.Tests
             string fileName = "report.pdf";
             ReportNamesCache cache = new ReportNamesCache();
             var uid = Guid.NewGuid().ToString();
-            cache.Add(uid, ReportType.DeploymentReport, fileName);
-            var result = cache.Find(uid, ReportType.DeploymentReport);
+            cache.Add(uid, ReportType.DeploymentReport,  ReportFormat.PDF, fileName);
+            var result = cache.Find(uid, ReportType.DeploymentReport, ReportFormat.PDF);
             Assert.Equal(fileName, result);
         }
 
@@ -37,12 +37,12 @@ namespace DDT.Core.Reports.Tests
             ReportNamesCache cache = new ReportNamesCache();
             var uid = Guid.NewGuid().ToString();
 
-            cache.Add(uid, ReportType.DeploymentReport, fileName);
-            var result = cache.Find(uid, ReportType.DeploymentReport);
+            cache.Add(uid, ReportType.DeploymentReport, ReportFormat.PDF, fileName);
+            var result = cache.Find(uid, ReportType.DeploymentReport,ReportFormat.PDF);
             Assert.Equal(fileName, result);
 
-            cache.Remove(uid, ReportType.DeploymentReport);
-            var result2 = cache.Find(uid, ReportType.DeploymentReport);
+            cache.Remove(uid, ReportType.DeploymentReport, ReportFormat.PDF);
+            var result2 = cache.Find(uid, ReportType.DeploymentReport, ReportFormat.PDF);
             Assert.Null(result2);
         }
 
@@ -53,7 +53,7 @@ namespace DDT.Core.Reports.Tests
             
             ReportNamesCache cache = new ReportNamesCache();
             
-            cache.Remove(Guid.NewGuid().ToString(), ReportType.DeploymentReport);
+            cache.Remove(Guid.NewGuid().ToString(), ReportType.DeploymentReport, ReportFormat.PDF);
             
             
         }

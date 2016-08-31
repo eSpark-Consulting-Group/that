@@ -26,9 +26,9 @@ namespace DDT.Core.Reports
             _cache = reportNameCache;
         }
 
-        private string LookupForExistentReport(string operationUid, ReportType reportType)
+        private string LookupForExistentReport(string operationUid, ReportType reportType, ReportFormat reportFormat)
         {
-            string existentName = _cache.Find(operationUid, reportType);
+            string existentName = _cache.Find(operationUid, reportType, reportFormat);
 
             if (!String.IsNullOrWhiteSpace(existentName))
             {
@@ -38,7 +38,7 @@ namespace DDT.Core.Reports
                 }
                 else
                 {
-                    _cache.Remove(operationUid, reportType);
+                    _cache.Remove(operationUid, reportType, reportFormat);
                 }
             }
             return null;
@@ -46,7 +46,7 @@ namespace DDT.Core.Reports
         public string Build(IReportData data, ReportType reportType, ReportFormat reportFormat)
         {
             if (data == null) return null;
-            var foundReportFileName = LookupForExistentReport(data.OperationUid, reportType);
+            var foundReportFileName = LookupForExistentReport(data.OperationUid, reportType, reportFormat);
             if (!string.IsNullOrEmpty(foundReportFileName)) return foundReportFileName;
             var fileName = GetFileName(reportType);
             var renderer = RenderStrategyFactory.GetRenderStrategy(reportFormat);
@@ -55,12 +55,12 @@ namespace DDT.Core.Reports
                 case ReportType.DeploymentReport:
 
                     var filePath = renderer.Render(new DeploymentReportModern(), data, fileName);
-                    _cache.Add(data.OperationUid, reportType, filePath);
+                    _cache.Add(data.OperationUid, reportType, reportFormat, filePath);
                     return filePath;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException("reportType");
-            }            
+            }
         }
 
         private static string GetFileName(ReportType reportType)

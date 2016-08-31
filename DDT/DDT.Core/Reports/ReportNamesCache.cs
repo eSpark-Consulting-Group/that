@@ -13,10 +13,10 @@ namespace DDT.Core.Reports
             _reports = new Dictionary<string, string>();
         }
 
-        public string Find(string operationUid, ReportType reportType)
+        public string Find(string operationUid, ReportType reportType, ReportFormat reportFormat)
         {
             string existentName = null;
-            string reportKey = GetReportKey(operationUid, reportType);
+            string reportKey = GetReportKey(operationUid, reportType, reportFormat);
 
             if (_reports.Keys.Contains(reportKey))
             {
@@ -25,20 +25,20 @@ namespace DDT.Core.Reports
             return existentName;
         }
 
-        private static string GetReportKey(string operationUid, ReportType reportType)
+        private static string GetReportKey(string operationUid, ReportType reportType, ReportFormat reportFormat)
         {
-            return string.Format("{0}-{1}", operationUid, reportType);
+            return string.Format("{0}-{1}-{2}", operationUid, reportType, reportFormat);
         }
 
-        public void Remove(string operationUid, ReportType reportType)
+        public void Remove(string operationUid, ReportType reportType, ReportFormat reportFormat)
         {            
-            var key = GetReportKey(operationUid, reportType);
+            var key = GetReportKey(operationUid, reportType, reportFormat);
             _reports.Remove(key);
         }
 
-        public void Add(string operationUid, ReportType reportType, string fileName)
+        public void Add(string operationUid, ReportType reportType, ReportFormat reportFormat, string fileName)
         {
-            var key = GetReportKey(operationUid, reportType);
+            var key = GetReportKey(operationUid, reportType, reportFormat);
             _reports.Add(key, fileName);
         }
     }
