@@ -243,7 +243,7 @@ namespace DDT.Core.TelerikReports
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(2.09999942779541D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
             this.textBox11.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
-            this.textBox11.Value = "= Fields.LinuxEndpoints";
+            this.textBox11.Value = "= Fields.MacEndpoints";
             // 
             // textBox12
             // 
