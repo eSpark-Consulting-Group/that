@@ -458,7 +458,7 @@ namespace DDT.Application.ViewModels
                 switch (screen)
                 {
                     case ChangeScreenTypes.Packages:
-                        if (DisclaimerMessage == string.Empty && _package.ToLower().EndsWith("exe"))
+                        if (DisclaimerMessage == string.Empty)
                             DisclaimerMessage =_disclaimerText;
                         break;
                 }
@@ -475,6 +475,10 @@ namespace DDT.Application.ViewModels
 
                 switch (_previousScreen)
                 {
+                    case ChangeScreenTypes.Packages:
+                        if (DisclaimerMessage == string.Empty)
+                            DisclaimerMessage = _disclaimerText;
+                        break;
                     case ChangeScreenTypes.NetworkAddresses:
                         DispatcherAction(SaveNetworkAddressMemento);
                         break;

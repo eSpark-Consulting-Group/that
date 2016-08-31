@@ -68,7 +68,7 @@ namespace DDT.Application.Models
                         return "Workgroup";
                     default:
                     case DiscoveryTargetType.NetworkAddress:
-                        return "Network Address";
+                        return "Network Addresses";
                 }
             }
         }

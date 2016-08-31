@@ -174,7 +174,7 @@
                                                 <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="70 0 0 0">
                                                     <TextBlock Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource TextBrush3}"  >
                                                         <TextBlock.Text>
-                                                            Network Address
+                                                            Network Addresses
                                                         </TextBlock.Text>
                                                     </TextBlock>
                                                     <TextBlock Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5" Margin="0 0 40 0" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" Text="{TemplateBinding Tag}"/>
