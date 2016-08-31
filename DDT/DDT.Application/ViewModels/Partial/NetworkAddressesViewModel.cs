@@ -144,12 +144,18 @@ namespace DDT.Application.ViewModels
         {
             _networkAddresses = new ObservableCollection<IpAddressWrapper>();
             foreach (var item in NetworkAddresses)
-                _networkAddresses.Add(new IpAddressWrapper
+            {
+                string validationMessage;
+                var wrapper = new IpAddressWrapper
                 {
                     Value = item.Value,
                     ValueChangedAction = item.ValueChangedAction,
                     RemoveCommand = item.RemoveCommand
-                });
+                };
+                if (_validator.Validate1(wrapper, out validationMessage) &&
+                    _validator.Validate2(wrapper, out validationMessage))
+                    _networkAddresses.Add(wrapper);
+            }
         }
 
         private void RestoreNetworkAddressMemento(bool reset = false)
