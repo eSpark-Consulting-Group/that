@@ -27,7 +27,7 @@
                 </Grid.RowDefinitions>
                 
                 <telerik:RadTreeListView x:Name="tree" CanUserFreezeColumns="False" AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True" ItemsSource="{Binding Results}"   
-                                 AutoExpandItems="False" HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" CanUserResizeColumns="False"  FocusVisualStyle="{x:Null}" ScrollMode="Deferred" >
+                                 AutoExpandItems="False" HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" FocusVisualStyle="{x:Null}" ScrollMode="Deferred" >
                     <telerik:RadTreeListView.Resources>
                         <DataTemplate x:Key="ComputerTemplate">
                             <Grid ToolTip="{Binding FullName, Mode=OneWay}">
@@ -78,9 +78,9 @@
                         <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
                     </telerik:RadTreeListView.ChildTableDefinitions>
                     <telerik:RadTreeListView.Columns>
-                        <telerik:GridViewColumn IsFilterable="False" ShowFilterButton="False" Focusable="False" ShowFieldFilters="False" CellTemplateSelector="{StaticResource TemplateSelector}" Header="Target" IsReadOnly="True" Width="600*" SortMemberPath="Name" />
-                        <telerik:GridViewColumn  CellTemplate="{StaticResource PackageColumn}" SortMemberPath="PackageName" IsFilterable="False" Header="Package"  Focusable="False" IsReadOnly="True" TextAlignment="Left" MinWidth="256" MaxWidth="256"/>
-                        <telerik:GridViewColumn  CellTemplate="{StaticResource StatusColumn}" SortMemberPath="Value" IsFilterable="False" Header="Status"  Focusable="False" IsReadOnly="True" TextAlignment="Left" MinWidth="256" MaxWidth="256"/>
+                        <telerik:GridViewColumn IsFilterable="False" ShowFilterButton="False" Focusable="False" ShowFieldFilters="False" CellTemplateSelector="{StaticResource TemplateSelector}" Header="Target" IsReadOnly="True" Width="600*" MinWidth="300" SortMemberPath="Name" />
+                        <telerik:GridViewColumn  CellTemplate="{StaticResource PackageColumn}" SortMemberPath="PackageName" IsFilterable="False" Header="Package"  Focusable="False" IsReadOnly="True" TextAlignment="Left" MinWidth="200"/>
+                        <telerik:GridViewColumn  CellTemplate="{StaticResource StatusColumn}" SortMemberPath="Value" IsFilterable="False" Header="Status"  Focusable="False" IsReadOnly="True" TextAlignment="Left" MinWidth="200"/>
                     </telerik:RadTreeListView.Columns>
                 </telerik:RadTreeListView>
 

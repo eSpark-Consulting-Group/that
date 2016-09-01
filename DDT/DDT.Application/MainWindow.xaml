@@ -16,7 +16,7 @@
         MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
         ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
         x:Name="this" Title="Auto Discovery and Deployment Tool"
-        Height="760" MinHeight="760" Width="1016" MinWidth="1016" 
+        Height="760" MinHeight="760" Width="1015" MinWidth="1015" 
         helpers:ThemeHelper.Theme="{Binding Theme}">
     <Border x:Name="Border" BorderThickness="1" BorderBrush="{DynamicResource StrongBrush}">
 
