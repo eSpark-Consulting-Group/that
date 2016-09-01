@@ -244,6 +244,7 @@ namespace DDT.Application.ViewModels
         private void ClearWorkgroup(object o)
         {
             DiscoverWorkgroupCommand.InvalidateCanExecute();
+            ErrorMessage = null;
 
             if (HasWorkgroup)
                 RestoreWorkgroupMemento(true);
@@ -284,12 +285,11 @@ namespace DDT.Application.ViewModels
 
                 WorkgroupItems = _workgroupItems;
                 RaisePropertyChanged(nameof(WorkgroupItems));
-
-                ChangeScreenCommand.InvalidateCanExecute();
             }
 
             RaisePropertyChanged(nameof(WorkgroupHeader));
             RaisePropertyChanged(nameof(HasWorkgroup));
+            ChangeScreenCommand.InvalidateCanExecute();
         }
     }
 }

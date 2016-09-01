@@ -250,6 +250,7 @@ namespace DDT.Application.ViewModels
         private void ClearActiveDirectory(object o)
         {
             DiscoverActiveDirectoryCommand.InvalidateCanExecute();
+            ErrorMessage = null;
 
             if (HasActiveDirectory)
                 RestoreActiveDirectoryMemento(true);
@@ -296,12 +297,11 @@ namespace DDT.Application.ViewModels
 
                 ActiveDirectoryItems = _activeDirectoryItems;
                 RaisePropertyChanged(nameof(ActiveDirectoryItems));
-
-                ChangeScreenCommand.InvalidateCanExecute();
             }
 
             RaisePropertyChanged(nameof(ActiveDirectoryHeader));
             RaisePropertyChanged(nameof(HasActiveDirectory));
+            ChangeScreenCommand.InvalidateCanExecute();
         }
     }
 }
