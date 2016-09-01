@@ -172,8 +172,10 @@ namespace DDT.Application.ViewModels
             }
         }
 
+        [Obsolete]
         public bool Redeploy { get; set; } = true;
 
+        [Obsolete]
         public bool RunAsUser { get; set; }
 
         public string ParametersExample
@@ -193,7 +195,18 @@ namespace DDT.Application.ViewModels
                 ChangeScreenCommand.InvalidateCanExecute();
             }
         }
-        public string InstallationParameters { get; set; }
+
+        private string _installationParameters;
+        public string InstallationParameters
+        {
+            get { return _installationParameters; }
+            set
+            {
+                _installationParameters = value;
+                RaisePropertyChanged(nameof(InstallationParameters));
+                ChangeScreenCommand.InvalidateCanExecute();
+            }
+        }
 
         private bool _isInstallationParameters64Specified;
         public bool IsInstallationParameters64Specified
@@ -205,6 +218,7 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(IsInstallationParameters64Specified));
             }
         }
+
         public string InstallationParameters64 { get; set; }
 
         private bool _separatePackages;
@@ -594,9 +608,12 @@ namespace DDT.Application.ViewModels
             }
             _currentScreen = screen;
 
-            Action a = () => { ButtonsAvailable = true; ChangeScreenCommand.InvalidateCanExecute(); };
-            if (action != null)
-                a = (Action)Delegate.Combine(a, action);
+            Action a = () => 
+            {
+                ButtonsAvailable = true;
+                ChangeScreenCommand.InvalidateCanExecute(); 
+                action?.Invoke();
+            };
 
             if (TransitionManager.CurrentStrategy is NoneTransitionStrategy)
                 a();
