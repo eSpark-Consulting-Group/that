@@ -15,7 +15,7 @@ namespace DDT.Application.ViewModels
     {
         partial void InitializeWorkgroup()
         {
-            DiscoverWorkgroupCommand = new DelegateCommand(DiscoverWorkgroup);
+            DiscoverWorkgroupCommand = new DelegateCommand(DiscoverWorkgroup, CanDiscoverWorkgroup);
             ExpandWorkgroupCommand = new DelegateCommand(ExpandWorkgroupTree, CanExpandWorkgroupTree);
             ClearWorkgroupCommand = new DelegateCommand(ClearWorkgroup);
 
@@ -116,12 +116,6 @@ namespace DDT.Application.ViewModels
 
         private void DiscoverWorkgroup(object o)
         {
-            if (!EnumerateWorkgroups && string.IsNullOrEmpty(WorkgroupName))
-            {
-                ErrorMessage = "Please enter Workgroup Name";
-                return;
-            }
-
             ButtonsAvailable = false;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Workgroup, async _ =>
@@ -138,6 +132,11 @@ namespace DDT.Application.ViewModels
             });
         }
 
+        private bool CanDiscoverWorkgroup(object o)
+        {
+            return EnumerateWorkgroups || !string.IsNullOrEmpty(WorkgroupName);
+        }
+
         private async Task GetWorkgroup()
         {
             KeywordWorkgroup = null;
@@ -151,7 +150,7 @@ namespace DDT.Application.ViewModels
             {
                 RaisePropertyChanged(nameof(HasWorkgroup));
 
-                ErrorMessage = null;
+                ChangeScreenCommand.InvalidateCanExecute();
             });
 
             if (e.Exception == null)
@@ -186,7 +185,7 @@ namespace DDT.Application.ViewModels
             {
                 RaisePropertyChanged(nameof(HasWorkgroup));
 
-                ErrorMessage = null;
+                ChangeScreenCommand.InvalidateCanExecute();
             });
 
             if (e.Exception == null)
@@ -230,7 +229,7 @@ namespace DDT.Application.ViewModels
             {
                 RaisePropertyChanged(nameof(HasWorkgroup));
 
-                ErrorMessage = null;
+                ChangeScreenCommand.InvalidateCanExecute();
             });
 
             if (result.Exception != null)
@@ -244,7 +243,7 @@ namespace DDT.Application.ViewModels
 
         private void ClearWorkgroup(object o)
         {
-            ErrorMessage = null;
+            DiscoverWorkgroupCommand.InvalidateCanExecute();
 
             if (HasWorkgroup)
                 RestoreWorkgroupMemento(true);
@@ -277,7 +276,7 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(WorkgroupName));
                 RaisePropertyChanged(nameof(EnumerateWorkgroups));
 
-                ErrorMessage = null;
+                DiscoverWorkgroupCommand.InvalidateCanExecute();
 
                 foreach (var action in _workgroupMementoActions)
                     action.Invoke();
@@ -285,6 +284,8 @@ namespace DDT.Application.ViewModels
 
                 WorkgroupItems = _workgroupItems;
                 RaisePropertyChanged(nameof(WorkgroupItems));
+
+                ChangeScreenCommand.InvalidateCanExecute();
             }
 
             RaisePropertyChanged(nameof(WorkgroupHeader));

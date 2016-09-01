@@ -14,7 +14,7 @@ namespace DDT.Application.ViewModels
     {
         partial void InitializeActiveDirectory()
         {
-            DiscoverActiveDirectoryCommand = new DelegateCommand(DiscoverActiveDirectory);
+            DiscoverActiveDirectoryCommand = new DelegateCommand(DiscoverActiveDirectory, CanDiscoverActiveDirectory);
             ExpandActiveDirectoryCommand = new DelegateCommand(ExpandActiveDirectoryTree, CanExpandActiveDirectoryTree);
             ClearActiveDirectoryCommand = new DelegateCommand(ClearActiveDirectory);
 
@@ -147,24 +147,6 @@ namespace DDT.Application.ViewModels
 
         private void DiscoverActiveDirectory(object o)
         {
-            if (!UseCurrentDomainForActiveDirectory && string.IsNullOrEmpty(DomainController))
-            {
-                ErrorMessage = "Please enter Domain Controller";
-                return;
-            }
-
-            if (!UseCurrentDomainForActiveDirectory && string.IsNullOrEmpty(ActiveDirectoryLogin))
-            {
-                ErrorMessage = "Please enter Login";
-                return;
-            }
-
-            if (!UseCurrentDomainForActiveDirectory && string.IsNullOrEmpty(ActiveDirectoryPassword))
-            {
-                ErrorMessage = "Please enter Password";
-                return;
-            }
-
             ButtonsAvailable = false;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ActiveDirectory, async _ =>
@@ -174,6 +156,11 @@ namespace DDT.Application.ViewModels
                 if (!HasActiveDirectory)
                     await TryAction(GetActiveDirectoryRoot());
             });
+        }
+
+        private bool CanDiscoverActiveDirectory(object o)
+        {
+            return UseCurrentDomainForActiveDirectory || (!string.IsNullOrEmpty(DomainController) && !string.IsNullOrEmpty(ActiveDirectoryLogin) && !string.IsNullOrEmpty(ActiveDirectoryPassword));
         }
 
         private async Task GetActiveDirectoryRoot()
@@ -191,7 +178,7 @@ namespace DDT.Application.ViewModels
             {
                 RaisePropertyChanged(nameof(HasActiveDirectory));
 
-                ErrorMessage = null;
+                ChangeScreenCommand.InvalidateCanExecute();
             });
 
             if (e.Exception == null)
@@ -235,7 +222,7 @@ namespace DDT.Application.ViewModels
             {
                 RaisePropertyChanged(nameof(HasActiveDirectory));
 
-                ErrorMessage = null;
+                ChangeScreenCommand.InvalidateCanExecute();
             });
 
             if (result.Exception != null)
@@ -262,7 +249,7 @@ namespace DDT.Application.ViewModels
 
         private void ClearActiveDirectory(object o)
         {
-            ErrorMessage = null;
+            DiscoverActiveDirectoryCommand.InvalidateCanExecute();
 
             if (HasActiveDirectory)
                 RestoreActiveDirectoryMemento(true);
@@ -301,7 +288,7 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(ActiveDirectoryPassword));
                 RaisePropertyChanged(nameof(UseCurrentDomainForActiveDirectory));
 
-                ErrorMessage = null;
+                DiscoverActiveDirectoryCommand.InvalidateCanExecute();
 
                 foreach (var action in _activeDirectoryMementoActions)
                     action.Invoke();
@@ -309,6 +296,8 @@ namespace DDT.Application.ViewModels
 
                 ActiveDirectoryItems = _activeDirectoryItems;
                 RaisePropertyChanged(nameof(ActiveDirectoryItems));
+
+                ChangeScreenCommand.InvalidateCanExecute();
             }
 
             RaisePropertyChanged(nameof(ActiveDirectoryHeader));

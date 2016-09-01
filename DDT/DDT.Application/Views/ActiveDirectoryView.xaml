@@ -55,7 +55,7 @@
                 </telerik:RadTreeListView>
 
                 <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Next" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DeploymentCredentials}" />
-                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Add More Targets" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Grid.Row="1" Margin="0 17 197 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.DiscoveryTargets}" />
+                <Button Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Content="Add More Targets" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Grid.Row="1" Margin="0 17 197 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding AddMoreTargetsCommand}" />
                 <Button Content="Back" Opacity="{Binding ButtonsAvailable, Converter={converters:BoolToOpacityConverter}}" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Template="{StaticResource BackButton}" Foreground="{DynamicResource TextBrush3}" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.ActiveDirectoryCredentials}" />
                 
             </Grid>

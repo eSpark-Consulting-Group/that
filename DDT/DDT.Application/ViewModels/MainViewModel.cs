@@ -29,9 +29,10 @@ namespace DDT.Application.ViewModels
         private void Initialize()
         {
             OnLoadedCommand = new DelegateCommand(OnLoaded);
-            ChangeScreenCommand = new DelegateCommand(ChangeScreen);
+            ChangeScreenCommand = new DelegateCommand(ChangeScreen, CanChangeScreen);
             ChangeScreenPreviousCommand = new DelegateCommand(ChangeScreenPrevious);
-            DeployCommand = new DelegateCommand(Deploy);
+            AddMoreTargetsCommand = new DelegateCommand(AddMoreTargets);
+            DeployCommand = new DelegateCommand(Deploy, CanDeploy);
             StopDeployCommand = new DelegateCommand(StopDeploy);
             ClearErrorMessageCommand = new DelegateCommand(ClearErrorMessage);
             ClearDisclaimerMessageCommand = new DelegateCommand(ClearDisclaimerMessage);
@@ -54,6 +55,7 @@ namespace DDT.Application.ViewModels
         public DelegateCommand OnLoadedCommand { get; private set; }
         public DelegateCommand ChangeScreenCommand { get; private set; }
         public DelegateCommand ChangeScreenPreviousCommand { get; private set; }
+        public DelegateCommand AddMoreTargetsCommand { get; private set; }
         public DelegateCommand DeployCommand { get; private set; }
         public DelegateCommand StopDeployCommand { get; private set; }
         public DelegateCommand ClearErrorMessageCommand { get; private set; }
@@ -187,7 +189,8 @@ namespace DDT.Application.ViewModels
             {
                 _isInstallationParametersSpecified = value;
                 RaisePropertyChanged(nameof(IsInstallationParametersSpecified));
-                ErrorMessage = null;
+
+                ChangeScreenCommand.InvalidateCanExecute();
             }
         }
         public string InstallationParameters { get; set; }
@@ -214,7 +217,7 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(SeparatePackages));
                 RaisePropertyChanged(nameof(PackageHeader));
 
-                ErrorMessage = null;
+                ChangeScreenCommand.InvalidateCanExecute();
             }
         }
 
@@ -236,10 +239,10 @@ namespace DDT.Application.ViewModels
                 DisclaimerMessage = null;
                 if (value != null)
                 {
-                    ErrorMessage = null;
-
                     if (_package.ToLower().EndsWith("exe"))
                         DisclaimerMessage = _disclaimerText;
+
+                    ChangeScreenCommand.InvalidateCanExecute();
                 }
             }
         }
@@ -259,8 +262,7 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(Package64));
                 RaisePropertyChanged(nameof(HasPackage64));
 
-                if (value != null)
-                    ErrorMessage = null;
+                ChangeScreenCommand.InvalidateCanExecute();
             }
         }
 
@@ -321,7 +323,8 @@ namespace DDT.Application.ViewModels
             {
                 _login = value;
                 RaisePropertyChanged(nameof(Login));
-                ErrorMessage = null;
+
+                DeployCommand.InvalidateCanExecute();
             }
         }
 
@@ -333,7 +336,8 @@ namespace DDT.Application.ViewModels
             {
                 _password = value;
                 RaisePropertyChanged(nameof(Password));
-                ErrorMessage = null;
+
+                DeployCommand.InvalidateCanExecute();
             }
         }
 
@@ -383,7 +387,8 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
                 RaisePropertyChanged(nameof(Login));
                 RaisePropertyChanged(nameof(Password));
-                ErrorMessage = null;
+
+                DeployCommand.InvalidateCanExecute();
             }
         }
 
@@ -504,16 +509,13 @@ namespace DDT.Application.ViewModels
             switch (_currentScreen)
             {
                 case ChangeScreenTypes.NetworkAddresses:
-                    if (HasNetworkAddress)
-                        NetworkAddress = null;
-
+                    NetworkAddress = null;
                     string validationMessage = null;
                     if (o != null && !ValidateNetworkAddresses(out validationMessage))
                     {
                         ErrorMessage = validationMessage;
                         return;
                     }
-
                     RaisePropertyChanged(nameof(NetworkAddressHeader));
                     break;
                 case ChangeScreenTypes.WorkgroupCredentials:
@@ -547,42 +549,6 @@ namespace DDT.Application.ViewModels
                         if (HasActiveDirectory)
                             screen = ChangeScreenTypes.ActiveDirectory;
                         break;
-                    case ChangeScreenTypes.DeploymentCredentials:
-                    case ChangeScreenTypes.DiscoveryTargets:
-                        switch (_currentScreen)
-                        {
-                            case ChangeScreenTypes.Packages:
-                                if (HasPackage && (SeparatePackages ? HasPackage64 : true))
-                                {
-                                    if (!IsInstallationParametersSpecified || !string.IsNullOrEmpty(InstallationParameters))
-                                        break;
-                                    ErrorMessage = "Please specify parameters";
-                                    return;
-                                }
-                                ErrorMessage = !HasPackage ? (SeparatePackages ? "Please select the 32-bit package" : "Please select the package") : "Please select the 64-bit package";
-                                return;
-                            case ChangeScreenTypes.DiscoveryTargets:
-                                if (HasActiveDirectory || HasWorkgroup || HasNetworkAddress)
-                                    break;
-                                ErrorMessage = "Please select any discovery target";
-                                return;
-                            case ChangeScreenTypes.NetworkAddresses:
-                                if (HasNetworkAddress || screen == ChangeScreenTypes.DiscoveryTargets)
-                                    break;
-                                ErrorMessage = "Please add any IPv4 address subnet or range";
-                                return;
-                            case ChangeScreenTypes.Workgroup:
-                                if (HasWorkgroup || screen == ChangeScreenTypes.DiscoveryTargets)
-                                    break;
-                                ErrorMessage = "Please select any computer or workgroup";
-                                return;
-                            case ChangeScreenTypes.ActiveDirectory:
-                                if (HasActiveDirectory || screen == ChangeScreenTypes.DiscoveryTargets)
-                                    break;
-                                ErrorMessage = "Please select any computer or directory";
-                                return;
-                        }
-                        break;
                 }
 
                 AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_), null);
@@ -592,6 +558,25 @@ namespace DDT.Application.ViewModels
                 if (DisclaimerMessage != null)
                     DisclaimerMessage = string.Empty;
             }
+        }
+
+        private bool CanChangeScreen(object o)
+        {
+            switch (_currentScreen)
+            {
+                case ChangeScreenTypes.Packages:
+                    return HasPackage && (SeparatePackages ? HasPackage64 : true) && (!IsInstallationParametersSpecified || !string.IsNullOrEmpty(InstallationParameters));
+                case ChangeScreenTypes.DiscoveryTargets:
+                    return HasActiveDirectory || HasWorkgroup || HasNetworkAddress;
+                case ChangeScreenTypes.NetworkAddresses:
+                    return HasNetworkAddress;
+                case ChangeScreenTypes.Workgroup:
+                    return HasWorkgroup;
+                case ChangeScreenTypes.ActiveDirectory:
+                    return HasActiveDirectory;
+            }
+
+            return true;
         }
 
         private void SetCurrentScreen(ChangeScreenTypes screen, Action action = null)
@@ -604,7 +589,7 @@ namespace DDT.Application.ViewModels
             }
             _currentScreen = screen;
 
-            Action a = () => ButtonsAvailable = true;
+            Action a = () => { ButtonsAvailable = true; ChangeScreenCommand.InvalidateCanExecute(); };
             if (action != null)
                 a = (Action)Delegate.Combine(a, action);
 
@@ -614,20 +599,13 @@ namespace DDT.Application.ViewModels
                 Task.Delay(1000).ContinueWith(_ => DispatcherAction(a));
         }
 
+        private void AddMoreTargets(object o)
+        {
+            ChangeScreenCommand.Execute(ChangeScreenTypes.DiscoveryTargets);
+        }
+
         private void Deploy(object o)
         {
-            if (!UseCurrentDomainForDeploy && string.IsNullOrEmpty(Login))
-            {
-                ErrorMessage = "Please enter Login";
-                return;
-            }
-
-            if (!UseCurrentDomainForDeploy && string.IsNullOrEmpty(Password))
-            {
-                ErrorMessage = "Please enter Password";
-                return;
-            }
-
             ButtonsAvailable = false;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.DeploymentResults, async _ =>
@@ -636,6 +614,11 @@ namespace DDT.Application.ViewModels
 
                 await TryAction(ResolveAggregatedDeploymentItems());
             });
+        }
+
+        private bool CanDeploy(object o)
+        {
+            return UseCurrentDomainForDeploy || (!string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Password));
         }
 
         private void StopDeploy(object o)
@@ -665,11 +648,6 @@ namespace DDT.Application.ViewModels
             }
             else if (o != null)
                 ((Action)o).Invoke();
-        }
-
-        private bool CanStopDeploy(object o)
-        {
-            return Results.Count > 0;
         }
 
         private void ClearErrorMessage(object o)
