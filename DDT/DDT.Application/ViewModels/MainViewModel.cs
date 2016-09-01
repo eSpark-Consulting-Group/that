@@ -466,6 +466,11 @@ namespace DDT.Application.ViewModels
                         if (DisclaimerMessage == string.Empty)
                             DisclaimerMessage =_disclaimerText;
                         break;
+                    case ChangeScreenTypes.Options:
+                    case ChangeScreenTypes.About:
+                        if (DisclaimerMessage != null)
+                            DisclaimerMessage = string.Empty;
+                        break;
                 }
 
                 AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_),
