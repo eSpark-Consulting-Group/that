@@ -73,6 +73,7 @@ namespace DDT.Application.ViewModels
             {
                 RaisePropertyChanged(nameof(HasNetworkAddress));
 
+                ErrorMessage = null;
                 ChangeScreenCommand.InvalidateCanExecute();
             };
 
@@ -163,10 +164,9 @@ namespace DDT.Application.ViewModels
             NetworkAddresses = !reset ? _networkAddresses : new ObservableCollection<IpAddressWrapper>();
             RaisePropertyChanged(nameof(NetworkAddresses));
 
-            ChangeScreenCommand.InvalidateCanExecute();
-
             RaisePropertyChanged(nameof(NetworkAddressHeader));
             RaisePropertyChanged(nameof(HasNetworkAddress));
+            ChangeScreenCommand.InvalidateCanExecute();
         }
     }
 }
