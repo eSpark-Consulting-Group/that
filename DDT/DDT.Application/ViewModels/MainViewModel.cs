@@ -469,7 +469,7 @@ namespace DDT.Application.ViewModels
                 }
 
                 AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_),
-                    _currentScreen != ChangeScreenTypes.EULA ? Direction.RightToLeft : (Direction?)null);
+                    _currentScreen != ChangeScreenTypes.EULA && (int)_currentScreen < 11 ? Direction.RightToLeft : (Direction?)null);
                 ButtonsAvailable = false;
                 ErrorMessage = null;
             }
