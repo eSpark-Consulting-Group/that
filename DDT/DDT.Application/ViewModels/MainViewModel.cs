@@ -236,13 +236,13 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(Package));
                 RaisePropertyChanged(nameof(HasPackage));
 
+                ChangeScreenCommand.InvalidateCanExecute();
+
                 DisclaimerMessage = null;
                 if (value != null)
                 {
                     if (_package.ToLower().EndsWith("exe"))
                         DisclaimerMessage = _disclaimerText;
-
-                    ChangeScreenCommand.InvalidateCanExecute();
                 }
             }
         }
