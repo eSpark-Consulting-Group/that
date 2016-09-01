@@ -462,8 +462,8 @@
                                 <Border x:Name="Bd" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                                     <ScrollViewer x:Name="PART_ContentHost" BorderThickness="0"   Padding="{TemplateBinding Padding}" />
                                 </Border>
-                                <Border x:Name="Overlay" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush}" />
-                                <Border x:Name="Overlay2" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush2}" />
+                                <Border x:Name="Overlay" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush}" SnapsToDevicePixels="True"/>
+                                <Border x:Name="Overlay2" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush2}" SnapsToDevicePixels="True"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -533,8 +533,8 @@
                                         </ControlTemplate>
                                     </Control.Template>
                                 </ContentControl>
-                                <Border x:Name="Overlay" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush}" />
-                                <Border x:Name="Overlay2" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush2}" />
+                                <Border x:Name="Overlay" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush}" SnapsToDevicePixels="True"/>
+                                <Border x:Name="Overlay2" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush2}" SnapsToDevicePixels="True"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -587,8 +587,8 @@
                                 <Border x:Name="Bd" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource BasicBrush}" SnapsToDevicePixels="True">
                                     <ScrollViewer x:Name="PART_ContentHost" BorderThickness="0"   Padding="{TemplateBinding Padding}" />
                                 </Border>
-                                <Border x:Name="Overlay" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush}" />
-                                <Border x:Name="Overlay2" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush2}" />
+                                <Border x:Name="Overlay" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush}" SnapsToDevicePixels="True"/>
+                                <Border x:Name="Overlay2" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="2" Opacity="0" Background="{DynamicResource StrongBrush2}" SnapsToDevicePixels="True"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>

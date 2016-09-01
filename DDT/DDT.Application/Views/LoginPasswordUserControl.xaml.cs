@@ -43,9 +43,6 @@ namespace DDT.Application.Views
             var control = obj as LoginPasswordUserControl;
             var value = e.NewValue as string;
 
-            if (value == null)
-                return;
-
             if (control.OpenedEye.Visibility == Visibility.Visible)
             {
                 if (!string.IsNullOrEmpty(value))
