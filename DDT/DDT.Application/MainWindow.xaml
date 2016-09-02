@@ -411,7 +411,7 @@
                                 <Path Shape.Fill="{DynamicResource WhiteBrush}" Shape.Stretch="Fill" HorizontalAlignment="Left" Width="28" Path.Data="M8.8950004,9.076 L18.894,9.076 18.894,19.076 8.8950004,19.076 z M13.9375,2.333334 C7.495167,2.333334 2.270834,7.5576674 2.270834,14 2.270834,20.442333 7.557667,25.666666 14,25.666666 20.442334,25.666666 25.666668,20.442333 25.666668,14 25.666668,7.5576674 20.379834,2.333334 13.9375,2.333334 z M14,0 C21.731501,0 28,6.2685006 28,14 28,21.731502 21.731501,28 14,28 6.2685003,28 0,21.731502 0,14 0,6.2685006 6.2685003,0 14,0 z" Height="28" VerticalAlignment="Center" Margin="2,0,0,0" SnapsToDevicePixels="True"/>
                             </Grid>
                         </ToggleButton>
-                        <ToggleButton x:Name="OptionsButton" Grid.Column="1"  Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.Options}" ToolTip="Options">
+                        <ToggleButton x:Name="OptionsButton" Grid.Column="1" Command="{Binding OptionsCommand}" ToolTip="Options">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -421,7 +421,7 @@
                                 <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0,0,5" Text="Options"/>
                             </Grid>
                         </ToggleButton>
-                        <ToggleButton x:Name="AboutButton" Grid.Column="2" Command="{Binding ChangeScreenPreviousCommand}" CommandParameter="{x:Static enums:ChangeScreenTypes.About}" ToolTip="About">
+                        <ToggleButton x:Name="AboutButton" Grid.Column="2" Command="{Binding AboutCommand}" ToolTip="About">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />

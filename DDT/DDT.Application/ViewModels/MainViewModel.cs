@@ -34,6 +34,8 @@ namespace DDT.Application.ViewModels
             AddMoreTargetsCommand = new DelegateCommand(AddMoreTargets);
             DeployCommand = new DelegateCommand(Deploy, CanDeploy);
             StopDeployCommand = new DelegateCommand(StopDeploy);
+            OptionsCommand = new DelegateCommand(OpenOptions);
+            AboutCommand = new DelegateCommand(OpenAbout);
             ClearErrorMessageCommand = new DelegateCommand(ClearErrorMessage);
             ClearDisclaimerMessageCommand = new DelegateCommand(ClearDisclaimerMessage);
         }
@@ -58,6 +60,8 @@ namespace DDT.Application.ViewModels
         public DelegateCommand AddMoreTargetsCommand { get; private set; }
         public DelegateCommand DeployCommand { get; private set; }
         public DelegateCommand StopDeployCommand { get; private set; }
+        public DelegateCommand OptionsCommand { get; private set; }
+        public DelegateCommand AboutCommand { get; private set; }
         public DelegateCommand ClearErrorMessageCommand { get; private set; }
         public DelegateCommand ClearDisclaimerMessageCommand { get; private set; }
 
@@ -172,10 +176,8 @@ namespace DDT.Application.ViewModels
             }
         }
 
-        [Obsolete]
         public bool Redeploy { get; set; } = true;
 
-        [Obsolete]
         public bool RunAsUser { get; set; }
 
         public string ParametersExample
@@ -252,12 +254,11 @@ namespace DDT.Application.ViewModels
 
                 ChangeScreenCommand.InvalidateCanExecute();
 
-                DisclaimerMessage = null;
-                if (value != null)
-                {
-                    if (_package.ToLower().EndsWith("exe"))
-                        DisclaimerMessage = _disclaimerText;
-                }
+                if (!_package64.ToLower().EndsWith("exe"))
+                    DisclaimerMessage = null;
+
+                if (value != null && _package.ToLower().EndsWith("exe"))
+                    DisclaimerMessage = _disclaimerText;
             }
         }
 
@@ -277,6 +278,12 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(HasPackage64));
 
                 ChangeScreenCommand.InvalidateCanExecute();
+
+                if (!_package.ToLower().EndsWith("exe"))
+                    DisclaimerMessage = null;
+
+                if (value != null && _package64.ToLower().EndsWith("exe"))
+                    DisclaimerMessage = _disclaimerText;
             }
         }
 
@@ -488,7 +495,7 @@ namespace DDT.Application.ViewModels
                 }
 
                 AppMessages.ChangeScreenMessage.Send(screen, _ => SetCurrentScreen(_),
-                    _currentScreen != ChangeScreenTypes.EULA && (int)_currentScreen < 11 ? Direction.RightToLeft : (Direction?)null);
+                    _currentScreen != ChangeScreenTypes.EULA ? Direction.RightToLeft : (Direction?)null);
                 ButtonsAvailable = false;
                 ErrorMessage = null;
             }
@@ -670,6 +677,16 @@ namespace DDT.Application.ViewModels
             }
             else if (o != null)
                 ((Action)o).Invoke();
+        }
+
+        private void OpenOptions(object o)
+        {
+            ChangeScreenCommand.Execute(ChangeScreenTypes.Options);
+        }
+
+        private void OpenAbout(object o)
+        {
+            ChangeScreenCommand.Execute(ChangeScreenTypes.About);
         }
 
         private void ClearErrorMessage(object o)

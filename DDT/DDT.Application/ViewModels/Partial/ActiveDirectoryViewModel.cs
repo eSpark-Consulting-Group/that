@@ -188,7 +188,10 @@ namespace DDT.Application.ViewModels
             }
 
             if (ActiveDirectoryItems.Any())
+            {
+                await ExpandActiveDirectoryTree(ActiveDirectoryItems[0]);
                 Progress = 0;
+            }
             else
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ActiveDirectoryCredentials, _ =>
                 {
