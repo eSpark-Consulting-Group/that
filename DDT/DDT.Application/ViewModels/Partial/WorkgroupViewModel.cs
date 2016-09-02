@@ -117,6 +117,7 @@ namespace DDT.Application.ViewModels
         private void DiscoverWorkgroup(object o)
         {
             ButtonsAvailable = false;
+            ErrorMessage = null;
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Workgroup, async _ =>
             {

@@ -603,7 +603,7 @@ namespace DDT.Application.ViewModels
             switch (_currentScreen)
             {
                 case ChangeScreenTypes.Packages:
-                    return HasPackage && (SeparatePackages ? HasPackage64 : true) && (!IsInstallationParametersSpecified || !string.IsNullOrEmpty(InstallationParameters));
+                    return HasPackage && (!SeparatePackages || HasPackage64) && (!IsInstallationParametersSpecified || !string.IsNullOrEmpty(InstallationParameters));
                 case ChangeScreenTypes.DiscoveryTargets:
                     return HasActiveDirectory || HasWorkgroup || HasNetworkAddress;
                 case ChangeScreenTypes.NetworkAddresses:
