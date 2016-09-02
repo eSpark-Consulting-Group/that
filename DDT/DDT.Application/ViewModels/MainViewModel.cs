@@ -206,6 +206,7 @@ namespace DDT.Application.ViewModels
             {
                 _installationParameters = value;
                 RaisePropertyChanged(nameof(InstallationParameters));
+
                 ChangeScreenCommand.InvalidateCanExecute();
             }
         }
@@ -234,6 +235,17 @@ namespace DDT.Application.ViewModels
                 RaisePropertyChanged(nameof(PackageHeader));
 
                 ChangeScreenCommand.InvalidateCanExecute();
+
+                if (!_separatePackages)
+                {
+                    if (_package64.ToLower().EndsWith("exe") && !_package.ToLower().EndsWith("exe"))
+                        DisclaimerMessage = null;
+                }
+                else
+                {
+                    if (_package64.ToLower().EndsWith("exe") || _package.ToLower().EndsWith("exe"))
+                        DisclaimerMessage = _disclaimerText;
+                }
             }
         }
 

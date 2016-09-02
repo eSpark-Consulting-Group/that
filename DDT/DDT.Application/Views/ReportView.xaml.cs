@@ -85,7 +85,7 @@ namespace DDT.Application.Views
         private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)
         {
             ReportAction?.Invoke();
-            pdf.ScaleFactor = 1.15d;
+            pdf.ScaleFactor = 1.18d;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
