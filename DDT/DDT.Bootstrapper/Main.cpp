@@ -6,7 +6,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE crap, LPSTR lpCmdLine, int nSh
 {
 	Bootstrapper bootstrapper;
 	bool isFrameworkInstalled = bootstrapper.IsMinimumFrameworkVersionInstalled();
-	if (isFrameworkInstalled == false)
+	if (!isFrameworkInstalled)
 	{
 		if (MessageBoxExW(nullptr,
 			L"To run APTAT tool you must install Microsoft .NET Framework 4.6.\n"
@@ -18,11 +18,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE crap, LPSTR lpCmdLine, int nSh
 	}
 	else
 	{
-		bool ok = bootstrapper.PrepareFonts();
-		if (ok == false)
-		{
-			MessageBoxExW(nullptr, L"Fonts are not installed", L"Fonts", MB_OK, 0);
-		}
 		bootstrapper.LaunchApplication();
 	}
 

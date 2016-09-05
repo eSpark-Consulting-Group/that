@@ -1,10 +1,6 @@
 ﻿using DDT.Core.TelerikReports;
 using System;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using Telerik.Reporting;
-using Telerik.Reporting.Processing;
 
 namespace DDT.Core.Reports
 {

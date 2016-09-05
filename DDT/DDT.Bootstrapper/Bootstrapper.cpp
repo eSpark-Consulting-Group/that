@@ -12,22 +12,8 @@ const wchar_t FRAMEWORK_DOWNLOAD_LINK[] = L"https://go.microsoft.com/fwlink/?Lin
 const wchar_t APP[] = L"DDT.Application.exe";
 const wchar_t ExpectedVersion[] = L"4.6";
 
-const wchar_t FONT_REGISTRY_KEY[] = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
-const wchar_t FONT1[] = L"segoeui.ttf";
-const wchar_t FONT2[] = L"segoeuil.ttf";
-const wchar_t FONT3[] = L"seguisb.ttf";
-const wchar_t FONTS_FOLDER[] = L"Fonts";
 
-
-Bootstrapper::Bootstrapper()
-{
-}
-
-Bootstrapper::~Bootstrapper()
-{
-}
-
-bool Bootstrapper::IsMinimumFrameworkVersionInstalled()
+bool Bootstrapper::IsMinimumFrameworkVersionInstalled() const
 {
 	HKEY hKey;
 	LONG lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, PATH, 0, KEY_READ, &hKey);
@@ -62,7 +48,7 @@ bool Bootstrapper::IsMinimumFrameworkVersionInstalled()
 	return false;
 }
 
-bool Bootstrapper::StandardVersionCheck(LPCWSTR expectedVersion, LPCWSTR actualVersion)
+bool Bootstrapper::StandardVersionCheck(LPCWSTR expectedVersion, LPCWSTR actualVersion) const
 {
 	// expectedVersion is policy version
 	// actualVersion is installed version
@@ -88,7 +74,7 @@ bool Bootstrapper::StandardVersionCheck(LPCWSTR expectedVersion, LPCWSTR actualV
 	return result;
 }
 
-bool Bootstrapper::TryParseVersion(LPCWSTR versionText, uint32_t& major, uint32_t& minor)
+bool Bootstrapper::TryParseVersion(LPCWSTR versionText, uint32_t& major, uint32_t& minor) const
 {
 	if (versionText == NULL || versionText[0] == L'\0')
 		return false;
@@ -160,67 +146,5 @@ void Bootstrapper::LaunchApplication()
 	free(szCmdline);
 
 	WaitForSingleObject(pi.hProcess, INFINITE);
-}
-
-bool  Bootstrapper::FileExists(LPCTSTR szPath)
-{
-	DWORD dwAttrib = GetFileAttributes(szPath);
-
-	return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
-		!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
-}
-
-bool  Bootstrapper::InstallFont(LPCTSTR font, LPCTSTR registryKey)
-{
-	TCHAR fontFolderPathBuffer[MAX_PATH];
-	if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_FONTS, NULL, 0, fontFolderPathBuffer)) == false)
-	{
-		return false;
-	}
-
-	TCHAR fontPathBuffer[MAX_PATH];
-	wcscpy_s(fontPathBuffer, fontFolderPathBuffer);
-
-	LPCWSTR fontTargetPath = lstrcat(fontPathBuffer, L"\\");
-	fontTargetPath = lstrcat(fontPathBuffer, font);
-	if (FileExists(fontTargetPath))
-	{
-		return true;
-	}
-
-	TCHAR sourcePathBuffer[MAX_PATH * 2];
-	wcscpy_s(sourcePathBuffer, FONTS_FOLDER);
-
-	LPCWSTR xcopyCmdLine = lstrcat(sourcePathBuffer, L"\\");
-	xcopyCmdLine = lstrcat(sourcePathBuffer, font);
-	xcopyCmdLine = lstrcat(sourcePathBuffer, L" ");
-	xcopyCmdLine = lstrcat(sourcePathBuffer, fontFolderPathBuffer);
-
-	ShellExecute(NULL, L"open", L"xcopy", xcopyCmdLine, NULL, SW_HIDE);
-
-	HKEY   hkey;
-	DWORD dwType, dwSize;
-	LONG r = RegOpenKeyEx(HKEY_LOCAL_MACHINE, FONT_REGISTRY_KEY, 0, KEY_WRITE | KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hkey);
-	if (r == ERROR_SUCCESS)
-	{
-		dwType = REG_SZ;
-		dwSize = (_tcslen(font) + 1) * sizeof(TCHAR);
-
-		RegSetValueEx(hkey, registryKey, 0, dwType, (LPBYTE)font, dwSize);
-		RegCloseKey(hkey);
-
-		return true;
-	}
-
-	return false;
-}
-
-bool Bootstrapper::PrepareFonts()
-{
-	bool font1 = InstallFont(FONT1, L"Segoe UI (TrueType)");
-	bool font2 = InstallFont(FONT2, L"Segoe UI Light (TrueType)");
-	bool font3 = InstallFont(FONT3, L"Segoe UI SemiBold (TrueType)");
-
-	return font1 && font2 && font3;
 }
 

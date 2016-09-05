@@ -20,11 +20,6 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Fonts\segoeui.ttf" />
-    <Font Include="Fonts\segoeuil.ttf" />
-    <Font Include="Fonts\seguisb.ttf" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="DDT.Bootstrapper.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

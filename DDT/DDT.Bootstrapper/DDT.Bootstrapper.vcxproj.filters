@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Fonts">
-      <UniqueIdentifier>{2af4db3c-bd90-40cf-b52b-5d58c33b58df}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bootstrapper.h">
@@ -35,17 +32,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="Fonts\segoeui.ttf">
-      <Filter>Fonts</Filter>
-    </Font>
-    <Font Include="Fonts\segoeuil.ttf">
-      <Filter>Fonts</Filter>
-    </Font>
-    <Font Include="Fonts\seguisb.ttf">
-      <Filter>Fonts</Filter>
-    </Font>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DDT.Bootstrapper.rc">

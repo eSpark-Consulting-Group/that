@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.DirectoryServices;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -10,7 +9,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using APTAT.Common;
-using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade;
 using APTAT.DeploymentCore.Properties;
 

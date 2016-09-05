@@ -15,7 +15,6 @@ namespace APTAT.DeploymentCore.Descent
         private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks 
             = new ConcurrentDictionary<Guid, Action<TimeSpan>>();
         private readonly IDescentWatcher _descentWatcher;
-	    protected readonly DateTime StartTime;
 
         private readonly Dictionary<Guid, bool> _reportedByUid = new Dictionary<Guid, bool>();
 
@@ -28,11 +27,14 @@ namespace APTAT.DeploymentCore.Descent
 	    }
 
         public DescentResult( IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
-            IComputerDescentResultFactory computerDescentResultFactory = null)
+            IComputerDescentResultFactory computerDescentResultFactory = null, IDescentWatcherFactory descentWatcherFactory = null)
 		{
+            if (descentWatcherFactory == null)
+                descentWatcherFactory = new DescentWatcherFactory();
             if (computerDescentResultFactory == null)
                 computerDescentResultFactory = new ComputerDescentResultFactory();
-            _descentWatcher = new DescentWatcher(Settings.Default.AgentDescentingTimeout, OnDescentTimeout);
+
+            _descentWatcher = descentWatcherFactory.CreateDescentWatcher(OnDescentTimeout);
 		    DevicesSourceDescription = devicesSourceDescription;
 
             foreach ( var computer in computers )
@@ -49,6 +51,19 @@ namespace APTAT.DeploymentCore.Descent
 		    TotalTargetsCount = ResultsByUid.Count;
 			StartTime = DateTime.UtcNow;
             _descentWatcher.Start();
+        }
+
+	    public interface IDescentWatcherFactory
+	    {
+	        IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeou);
+	    }
+        protected sealed class DescentWatcherFactory : IDescentWatcherFactory
+        {
+            public IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout)
+            {
+                return new DescentWatcher(Settings.Default.AgentDescentingTimeout, onDescentTimeout);
+            }
+
         }
 
         public interface IComputerDescentResultFactory
@@ -76,6 +91,7 @@ namespace APTAT.DeploymentCore.Descent
         public Guid OperationUid { get; }
 		public bool Completed { get { return InProgressCount == 0; } }
 		public DateTime? CompletedTime { get; private set; }
+        public DateTime StartTime { get; }
 
 		public virtual void OnDescendOperationEvent( bool ok, Guid computerUid, FormattedText errorMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage )
 		{

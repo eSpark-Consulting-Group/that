@@ -27,6 +27,13 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
 
         private static readonly DescentResult.IComputerDescentResultFactory _computerDescentResultFactory;
 
+        static DescentResult.IDescentWatcherFactory CreateDescentWatcherFactory(IDescentWatcher descentWatcher)
+        {
+            var factory =  Mock.Create<DescentResult.IDescentWatcherFactory>(Behavior.Strict);
+            return factory;
+
+        }
+
         static DescentResultTests()
         {
             Mock.Arrange(() => Computer1.Uid).Returns(Comp1Uid);
@@ -108,6 +115,24 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Assert.Equal(2, target.SucceededCount);
             Assert.Equal(1, target.FailedCount);
             Assert.Equal(0, target.InProgressCount);
+            Assert.Equal(3, target.TotalTargetsCount);
+            Assert.Equal(3, target.ComputerDescentResults.Count);
+        }
+
+        [Fact]
+        public void OnDescentOperationSecondCallForSameComputerShouldNotUpdateResults()
+        {
+            var target = new DescentResult(Targets, _deviceSourceDescription, _computerDescentResultFactory);
+            var errorCodeFormatted = new FormattedText(new ResourceText("", ""));
+            var shortStatusFormatted = new FormattedText(new ResourceText("", ""));
+            target.OnDescendOperationEvent(true, Computer1.Uid, errorCodeFormatted, shortStatusFormatted, "", 3, "");
+            target.OnDescendOperationEvent(true, Computer2.Uid, errorCodeFormatted, shortStatusFormatted, "", 3, "");
+            target.OnDescendOperationEvent(false, Computer2.Uid, errorCodeFormatted, shortStatusFormatted, "", 3, "");
+            Assert.Null(target.CompletedTime);
+            Assert.False(target.Completed);
+            Assert.Equal(2, target.SucceededCount);
+            Assert.Equal(0, target.FailedCount);
+            Assert.Equal(1, target.InProgressCount);
             Assert.Equal(3, target.TotalTargetsCount);
             Assert.Equal(3, target.ComputerDescentResults.Count);
         }
