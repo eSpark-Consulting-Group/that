@@ -344,10 +344,7 @@
                         </Grid.RenderTransform>
                         <TextBlock Margin="20,20,0,0"  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Foreground="{DynamicResource NameBrush}" FontFamily="{StaticResource myriadpro}"  Text="Auto Discovery and Deployment Tool">
                         </TextBlock>
-                        <TextBlock Margin="365 20 0 0" Foreground="{DynamicResource WhiteBrush}" FontSize="22" FontFamily="{StaticResource myriadpro}" HorizontalAlignment="Left" VerticalAlignment="Top" Text="beta">
-                        </TextBlock>
                     </Grid>
-                    
 
                     <TextBlock x:Name="appearing" Opacity="0" Margin="20,34,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" Foreground="{DynamicResource WhiteBrush}" FontFamily="{StaticResource myriadpro}" Text="{Binding ElementName=this, Path=WizardHeader}">
                         <TextBlock.RenderTransform>

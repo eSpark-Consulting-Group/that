@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Windows;
 
 namespace DDT.Application.Views
 {
@@ -9,7 +8,7 @@ namespace DDT.Application.Views
         {
             InitializeComponent();
 
-            version.Text = $"{Assembly.GetExecutingAssembly().GetName().Version} beta";
+            version.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

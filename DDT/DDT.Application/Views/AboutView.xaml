@@ -28,7 +28,7 @@
                         <TextBlock SnapsToDevicePixels="True" Margin="140,-4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Foreground="{DynamicResource StrongBrush}" FontFamily="{StaticResource myriadpro}"  Text="Auto Discovery and Deployment Tool">
                         </TextBlock>
 
-                        <TextBlock x:Name="version" Margin="398 18 0 0" Foreground="{DynamicResource TextBrush}" FontSize="13" FontFamily="{StaticResource myriadpro}" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap">
+                        <TextBlock x:Name="version" Margin="425 18 0 0" Foreground="{DynamicResource TextBrush}" FontSize="13" FontFamily="{StaticResource myriadpro}" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap">
                         </TextBlock>
 
                         <TextBlock Margin="0 -3 0 0" MaxWidth="330" Foreground="{DynamicResource TextBrush}" FontSize="13" FontFamily="{StaticResource myriadpro}" HorizontalAlignment="Right" VerticalAlignment="Top" TextWrapping="Wrap">
