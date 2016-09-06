@@ -1,10 +1,4 @@
 ﻿using Xunit;
-using DDT.Core.Reports;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DDT.Core.Reports.Tests
 {
@@ -15,8 +9,17 @@ namespace DDT.Core.Reports.Tests
         [InlineData(ReportFormat.CSV)]
         public void GetRenderStrategyTest(ReportFormat reportFormat)
         {
-            var ttt = RenderStrategyFactory.GetRenderStrategy(reportFormat);
-            Assert.NotNull(ttt);
+            var strategy = RenderStrategyFactory.GetRenderStrategy(reportFormat);
+            Assert.NotNull(strategy);
+
+            if (reportFormat == ReportFormat.PDF)
+            {
+                Assert.IsType(typeof(RenderPdfStrategy), strategy);
+            }
+            else if (reportFormat == ReportFormat.CSV)
+            {
+                Assert.IsType(typeof(RenderCsvStrategy), strategy);
+            }
         }
     }
 }

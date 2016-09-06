@@ -57,20 +57,18 @@ namespace DDT.Core.Helper
             bool result = true;
 
             var key86 =
-                Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinPcapInst",
-                    true);
+                Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinPcapInst");
 
-            Console.WriteLine("key86: " + key86);
+          
             var key64 =
                 Registry.LocalMachine.OpenSubKey(
-                    @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\WinPcapInst", true);
-            Console.WriteLine("key64: " + key64);
+                    @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\WinPcapInst");
+          
 
             if (key86 != null || key64 != null)
             {
                 if (!File.Exists(@"C:\Windows\System32\drivers\NPF.sys"))
-                {
-                    Console.WriteLine(@"C:\Windows\System32\drivers\NPF.sys does not exist");
+                {                
                     result = false;
                 }
             }

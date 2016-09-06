@@ -15,15 +15,15 @@ namespace DDT.Core.Descent.Tests
         [Fact()]
         public void GetDescentStatusInformationTest()
         {
-            var packageX64 = Mock.Create<InstallPackageInfo>(typeof(InstallPackageInfo), Behavior.Loose);
+            var packageX64 = InstallPackageInfo.CreateMsiPackageInfo("path.msi", null, null, TargetSystemType.x64, false);
             InstallPackageInfo packageX86 = null;
             TimeSpan timeout = default(TimeSpan);
             APTAT.DeploymentCore.Directory.IDevicesSourceDescription description = null;
 
             DescentScanner scanner = new DescentScanner(new List<DeploymentTarget>(),"login", "pwd", description, timeout, packageX86, packageX64);
 
-            
-          //  Assert.True(false, "This test needs an implementation");
+            Assert.NotNull(scanner);
+          
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DDT.Core.Reports.Tests
 {
@@ -14,7 +15,7 @@ namespace DDT.Core.Reports.Tests
         public void FindTestNotExisting()
         {
             ReportNamesCache cache = new ReportNamesCache();
-            var result = cache.Find(Guid.NewGuid().ToString(), ReportType.DeploymentReport, ReportFormat.PDF);
+            var result = cache.Find(Guid.NewGuid().ToString(), ReportType.DeploymentReport, ReportFormat.PDF);            
             Assert.Null(result);
         }
 
@@ -27,6 +28,8 @@ namespace DDT.Core.Reports.Tests
             cache.Add(uid, ReportType.DeploymentReport,  ReportFormat.PDF, fileName);
             var result = cache.Find(uid, ReportType.DeploymentReport, ReportFormat.PDF);
             Assert.Equal(fileName, result);
+            var ext = Path.GetExtension(result);
+            Assert.Equal(ext, ".pdf");
         }
 
 
