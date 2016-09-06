@@ -46,7 +46,7 @@ namespace DDT.Application
             if (!createdNew)
             {
                 _mutex = null;
-                MessageBox.Show("DDT is already running");
+                MessageBox.Show("Auto Discovery and Deployment Tool is already running","Auto Discovery and Deployment Tool");
                 Current.Shutdown();
                 return;
             }
