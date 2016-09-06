@@ -6,7 +6,7 @@ namespace DDT.Core.Reports
 {
     public class RenderPdfStrategy : IRenderStrategy
     {
-        public  string Render(Telerik.Reporting.Report report, object data, string fileName)
+        public  string Render(Telerik.Reporting.Report report, IReportData data, string fileName)
         {
             var path = fileName + ".pdf";
             InstanceReportSource reportSource = new InstanceReportSource();

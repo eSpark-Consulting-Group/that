@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DDT.Core.Reports
 {
@@ -15,6 +13,7 @@ namespace DDT.Core.Reports
 
                 case ReportFormat.CSV:
                     return new RenderCsvStrategy();
+
                 default:
                     throw new ArgumentOutOfRangeException("Not supported report format");
 

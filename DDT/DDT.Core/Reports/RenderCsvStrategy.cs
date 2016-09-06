@@ -6,11 +6,11 @@ namespace DDT.Core.Reports
 {
     public class RenderCsvStrategy : IRenderStrategy
     {
-        public string Render(Telerik.Reporting.Report report, object data, string fileName)
+        public string Render(Telerik.Reporting.Report report, IReportData data, string fileName)
         {
             var path = fileName + ".csv";
             const string separator = ",";
-            ReportData dt = (ReportData) data;
+            IReportData dt = (IReportData) data;
             StringBuilder sb = new StringBuilder();
             if (dt.DeploymentByIPRange.Details.Any())
             {
