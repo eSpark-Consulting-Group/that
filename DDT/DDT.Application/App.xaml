@@ -9,7 +9,7 @@
                 xmlns:controls="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.GridView"
                 xmlns:fixedui="clr-namespace:Telerik.Windows.Documents.Fixed.UI;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
                 xmlns:ui="clr-namespace:Telerik.Windows.Documents.UI;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
-                StartupUri="MainWindow.xaml" Startup="Application_Startup">
+                StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
 
