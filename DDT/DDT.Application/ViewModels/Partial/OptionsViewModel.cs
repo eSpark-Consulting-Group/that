@@ -76,7 +76,18 @@ namespace DDT.Application.ViewModels
             }
         }
 
-        public int DeployTimeout { get; set; } = 20; 
+        private int _deployTimeout = 20;
+        public int DeployTimeout
+        {
+            get { return _deployTimeout; }
+            set
+            {
+                _deployTimeout = value;
+                if (_deployTimeout == 0)
+                    _deployTimeout = 1;
+                RaisePropertyChanged(nameof(DeployTimeout));
+            }
+        }
 
         private Uri _darkThemeUri = new Uri("/DDT.Application;component/Themes/DarkCyan.xaml", UriKind.Relative);
         private Uri _lightThemeUri = new Uri("/DDT.Application;component/Themes/LightCyan.xaml", UriKind.Relative);
