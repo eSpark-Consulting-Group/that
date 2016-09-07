@@ -15,6 +15,7 @@ namespace DDT.Application
         private static string appGuid = "F49126C7-111C-46E5-B790-62B7BD1FD858";
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            InitTraceListener();
             Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -25,9 +26,6 @@ namespace DDT.Application
                 typeof(Core.DependencyLocator),
                 typeof(DependencyLocator)
             });
-
-            InitTraceListener();
-            LogHelper.Trace(TraceEventType.Information, TraceCategory.Descent,$"DDT started: {DateTime.UtcNow}");
         }
 
         public void Dispose()
@@ -46,7 +44,7 @@ namespace DDT.Application
             if (!createdNew)
             {
                 _mutex = null;
-                MessageBox.Show("Auto Discovery and Deployment Tool is already running","Auto Discovery and Deployment Tool");
+                MessageBox.Show("Tool is already running.", "Auto Discovery and Deployment Tool");
                 Current.Shutdown();
                 return;
             }
@@ -56,13 +54,11 @@ namespace DDT.Application
 
         private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-#if DEBUG // In debug mode do not custom-handle the exception, let Visual Studio handle it
+            #if DEBUG 
                 e.Handled = false;
-
-#else
-
-            ShowUnhandeledException(e);
-#endif
+            #else
+                ShowUnhandeledException(e);
+            #endif
         }
         private void ShowUnhandeledException(DispatcherUnhandledExceptionEventArgs e)
         {
@@ -77,15 +73,15 @@ namespace DDT.Application
                 Directory.CreateDirectory(path);
             }
 
-            path = Path.Combine(path, "DDT");
+            path = Path.Combine(path, "ADDT");
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            path = Path.Combine(path, "ddt.log");
-            Trace.Listeners.Add(new TextWriterTraceListener(path, "DDTListener"));
+            path = Path.Combine(path, "trace.log");
+            Trace.Listeners.Add(new TextWriterTraceListener(path, "ADDTListener"));
         }
 
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
