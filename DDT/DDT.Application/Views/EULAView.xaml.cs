@@ -18,8 +18,11 @@ namespace DDT.Application.Views
         {
             var sri = App.GetResourceStream(new Uri("EULA.pdf", UriKind.Relative));
             if (sri != null)
-                using (var stream = sri.Stream)
-                    pdf.DocumentSource = new PdfDocumentSource(stream);
+                Dispatcher.BeginInvoke((Action)delegate
+                {
+                    using (var stream = sri.Stream)
+                        pdf.DocumentSource = new PdfDocumentSource(stream);
+                });
         }
 
         private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)

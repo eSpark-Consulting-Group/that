@@ -26,20 +26,12 @@ namespace DDT.Application
 
                 BindingOperations.SetBinding(this, ErrorMessageProperty, new Binding("ErrorMessage"));
                 BindingOperations.SetBinding(this, DisclaimerMessageProperty, new Binding("DisclaimerMessage"));
-                BindingOperations.SetBinding(this, OnLoadedCommandProperty, new Binding("OnLoadedCommand"));
 
                 TransitionManager.Presenter = transitionPresenter;
                 TransitionManager.CurrentStrategy.CurrentTarget = boxEULA;
 
                 MessageManager.Instance.RegisterListener(this);
-
-                Loaded += MainWindow_Loaded;
             }
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            OnLoadedCommand?.Execute(null);
         }
 
         #region WizardHeaderProperty (DependencyProperty)
@@ -150,20 +142,6 @@ namespace DDT.Application
                     VisualStateManager.GoToElementState(control.grid3, "NoDisclaimer", false);
             }
         }
-
-        #endregion
-
-        #region OnLoadedCommandProperty (DependencyProperty)
-
-        public ICommand OnLoadedCommand
-        {
-            get { return (ICommand)GetValue(OnLoadedCommandProperty); }
-            set { SetValue(OnLoadedCommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty OnLoadedCommandProperty =
-            DependencyProperty.Register("OnLoadedCommand", typeof(ICommand), typeof(MainWindow),
-            new PropertyMetadata(null));
 
         #endregion
 

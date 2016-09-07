@@ -43,8 +43,11 @@ namespace DDT.Application.Views
 
             control.pdf.DocumentSource = null;
             if (!string.IsNullOrEmpty(value))
-                using (var stream = File.OpenRead(value))
-                    control.pdf.DocumentSource = new PdfDocumentSource(stream);
+                control.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    using (var stream = File.OpenRead(value))
+                        control.pdf.DocumentSource = new PdfDocumentSource(stream);
+                });
         }
 
         #endregion

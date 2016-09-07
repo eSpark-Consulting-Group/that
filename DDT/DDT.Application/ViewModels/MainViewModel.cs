@@ -28,7 +28,6 @@ namespace DDT.Application.ViewModels
 
         private void Initialize()
         {
-            OnLoadedCommand = new DelegateCommand(OnLoaded);
             ChangeScreenCommand = new DelegateCommand(ChangeScreen, CanChangeScreen);
             ChangeScreenPreviousCommand = new DelegateCommand(ChangeScreenPrevious);
             AddMoreTargetsCommand = new DelegateCommand(AddMoreTargets);
@@ -54,7 +53,6 @@ namespace DDT.Application.ViewModels
 
         #region Commands
 
-        public DelegateCommand OnLoadedCommand { get; private set; }
         public DelegateCommand ChangeScreenCommand { get; private set; }
         public DelegateCommand ChangeScreenPreviousCommand { get; private set; }
         public DelegateCommand AddMoreTargetsCommand { get; private set; }
@@ -427,7 +425,7 @@ namespace DDT.Application.ViewModels
 
         #endregion
 
-        private async void OnLoaded(object o)
+        private async void OnLoaded()
         {
             var name = await TryAction(GetCurrentDomainName());
 
@@ -546,6 +544,9 @@ namespace DDT.Application.ViewModels
 
             switch (_currentScreen)
             {
+                case ChangeScreenTypes.EULA:
+                    DispatcherAction(OnLoaded);
+                    break;
                 case ChangeScreenTypes.NetworkAddresses:
                     NetworkAddress = null;
                     string validationMessage = null;
