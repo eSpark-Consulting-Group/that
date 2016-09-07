@@ -564,7 +564,8 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({error})");
             if (error == 6 && c < 4)
             {
-                ReInitialize();
+                if (!ReInitialize())
+                    return null;
                 return IsServiceRunning(++c);
             }
             return null;
@@ -586,7 +587,8 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                         LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot stop service ({errorInt})");
                         if (errorInt == 6 && c < 4)
                         {
-                            ReInitialize();
+                            if (!ReInitialize())
+                                throw new Win32Exception(Marshal.GetLastWin32Error());
                             StopService(++c);
                         }
                         else
@@ -608,20 +610,24 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({error})");
             if (error == 6 && c < 4)
             {
-                ReInitialize();
+                if (!ReInitialize())
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
                 StopService(++c);
             }
         }
 
-        private void ReInitialize()
+        private bool ReInitialize()
         {
             Release();
             m_databaseHandle = OpenSCManager(HostName, null, (uint) SCM_ACCESS.SC_MANAGER_ALL_ACCESS);
             if (m_databaseHandle == IntPtr.Zero)
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                var error = Marshal.GetLastWin32Error();
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot open service handle ({error})");
+                return false;
             }
             m_serviceHandle = OpenService(m_databaseHandle, Name, (uint) SERVICE_ACCESS.SERVICE_ALL_ACCESS);
+            return true;
         }
 
         public void RunService(string[] parameters, bool waitToStop, int waitTimeoutMs)
