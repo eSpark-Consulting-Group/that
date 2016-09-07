@@ -15,17 +15,7 @@ namespace DDT.Application
         private static string appGuid = "F49126C7-111C-46E5-B790-62B7BD1FD858";
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            InitTraceListener();
-            Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            CompositionHelper.Instance.RegisterModules(new[] 
-            {
-                typeof(APTAT.Common.DependencyLocator),
-                typeof(APTAT.DeploymentCore.DependencyLocator),
-                typeof(Core.DependencyLocator),
-                typeof(DependencyLocator)
-            });
         }
 
         public void Dispose()
@@ -39,12 +29,23 @@ namespace DDT.Application
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            InitTraceListener();
+            Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            CompositionHelper.Instance.RegisterModules(new[]
+            {
+                typeof(APTAT.Common.DependencyLocator),
+                typeof(APTAT.DeploymentCore.DependencyLocator),
+                typeof(Core.DependencyLocator),
+                typeof(DependencyLocator)
+            });
             bool createdNew;
             _mutex = new Mutex(true, "Global\\" + appGuid, out createdNew);
             if (!createdNew)
             {
                 _mutex = null;
-                MessageBox.Show("Tool is already running.", "Auto Discovery and Deployment Tool");
+                MessageBox.Show("Auto Discovery and Deployment Tool is already running.", "Auto Discovery and Deployment Tool");
                 Current.Shutdown();
                 return;
             }
