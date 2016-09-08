@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Telerik.Windows.Documents.Fixed;
 using Telerik.Windows.Documents.Fixed.FormatProviders;
 using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using Telerik.Windows.Documents.Fixed.Model;
@@ -36,36 +37,18 @@ namespace APTAT.Application
 
         void EulaWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            EulaRichTextBox.Background = new SolidColorBrush(Colors.White);
             EulaRichTextBox.BorderThickness = new Thickness(0);
             BorderThickness = new Thickness(1);
             BorderBrush = new SolidColorBrush(Color.FromRgb(214,212,212));
 
-            string fileName = @"Unknown File Hunter EULA.pdf";
-            
-            //
-            //string pdfFilePath = "Sample.pdf";
-            MemoryStream stream = new MemoryStream();
-
-            using (Stream input = File.OpenRead(fileName))
-            {
-                input.CopyTo(stream);
-            }
-
-            FormatProviderSettings settings = new FormatProviderSettings(ReadingMode.OnDemand);
-            PdfFormatProvider provider = new PdfFormatProvider(stream, settings);
-            RadFixedDocument doc = provider.Import();
-            this.EulaRichTextBox.Document = doc;
-
-            //
-            //if (System.IO.File.Exists(fileName))
-            //{
-            //    var textRange = new TextRange(EulaRichTextBox.Document.ContentStart, EulaRichTextBox.Document.ContentEnd);
-                
-            //    using (System.IO.FileStream fileStream = new System.IO.FileStream(fileName, System.IO.FileMode.OpenOrCreate))
-            //    {
-            //        textRange.Load(fileStream, System.Windows.DataFormats.Rtf);
-            //    }
-            //}
+            var sri = App.GetResourceStream(new Uri("EULA.pdf", UriKind.Relative));
+            if (sri != null)
+                Dispatcher.BeginInvoke((Action)delegate
+                {
+                    using (var stream = sri.Stream)
+                        EulaRichTextBox.DocumentSource = new PdfDocumentSource(stream);
+                });
         }
 
         private void OnOkButtonClick(object sender, RoutedEventArgs e)

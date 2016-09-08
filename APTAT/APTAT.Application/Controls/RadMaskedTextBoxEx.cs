@@ -4,7 +4,7 @@ using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Controls
 {
-    public class RadMaskedTextBoxEx : RadMaskedTextBox
+    public class RadMaskedTextBoxEx : RadMaskedTextInput
     {
         private const String ClearTextPart = "ClearTextButton";
 

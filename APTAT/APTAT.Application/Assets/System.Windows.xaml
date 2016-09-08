@@ -4,19 +4,19 @@
     
     
 
-	xmlns:telerik="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls.Primitives;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"    
-    xmlns:dragDrop="clr-namespace:Telerik.Windows.Controls.DragDrop;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-	xmlns:telerikDragDrop="clr-namespace:Telerik.Windows.DragDrop;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-    xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-    xmlns:telerikChromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
+	xmlns:telerik="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls"
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls.Primitives;assembly=Telerik.Windows.Controls"    
+    xmlns:dragDrop="clr-namespace:Telerik.Windows.Controls.DragDrop;assembly=Telerik.Windows.Controls"
+	xmlns:telerikDragDrop="clr-namespace:Telerik.Windows.DragDrop;assembly=Telerik.Windows.Controls"
+    xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Telerik.Windows.Controls"
+    xmlns:telerikChromes="clr-namespace:Telerik.Windows.Controls.Chromes;assembly=Telerik.Windows.Controls"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-	xmlns:telerikTransitions="clr-namespace:Telerik.Windows.Controls.TransitionEffects;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-    xmlns:telerikTransitonControl="clr-namespace:Telerik.Windows.Controls.TransitionControl;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-	xmlns:filteringEditors="clr-namespace:Telerik.Windows.Controls.Filtering.Editors;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-	xmlns:telerikShapes="clr-namespace:Telerik.Windows.Shapes;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-	xmlns:transitionControl="clr-namespace:Telerik.Windows.Controls.TransitionControl;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
-    xmlns:touch="clr-namespace:Telerik.Windows.Input.Touch;assembly=Telerik.Windows.Controls,Version=2012.3.1129.40,Culture=neutral,PublicKeyToken=5803cfa389c90ce7"
+	xmlns:telerikTransitions="clr-namespace:Telerik.Windows.Controls.TransitionEffects;assembly=Telerik.Windows.Controls"
+    xmlns:telerikTransitonControl="clr-namespace:Telerik.Windows.Controls.TransitionControl;assembly=Telerik.Windows.Controls"
+	xmlns:filteringEditors="clr-namespace:Telerik.Windows.Controls.Filtering.Editors;assembly=Telerik.Windows.Controls"
+	xmlns:telerikShapes="clr-namespace:Telerik.Windows.Shapes;assembly=Telerik.Windows.Controls"
+	xmlns:transitionControl="clr-namespace:Telerik.Windows.Controls.TransitionControl;assembly=Telerik.Windows.Controls"
+    xmlns:touch="clr-namespace:Telerik.Windows.Input.Touch;assembly=Telerik.Windows.Controls"
                     xmlns:External="clr-namespace:Telerik.Windows.Controls.External;assembly=Telerik.Windows.Themes.Windows8">
 
 	<!--  Brushes-->

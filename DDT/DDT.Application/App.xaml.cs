@@ -45,24 +45,9 @@ namespace DDT.Application
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _mutex?.Dispose();
+            _mutex?.Close();
 
             base.OnExit(e);
-        }
-
-        private void AppDispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-#if DEBUG 
-            e.Handled = false;
-#else
-            e.Handled = true;
-            LogHelper.Trace(TraceEventType.Error, e.Exception + (e.Exception.InnerException != null ? "\n InnerException :" + (e.Exception).InnerException : null));
-#endif
-        }
-
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            LogHelper.Trace(TraceEventType.Error, e.ExceptionObject + (e.ExceptionObject is Exception && ((Exception)e.ExceptionObject).InnerException != null ? "\n InnerException : " + ((Exception)e.ExceptionObject).InnerException : null));
         }
 
         private void InitTraceListener()
@@ -82,6 +67,21 @@ namespace DDT.Application
 
             path = Path.Combine(path, "trace.log");
             Trace.Listeners.Add(new TextWriterTraceListener(path, "ADDTListener"));
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            LogHelper.Trace(TraceEventType.Error, e.ExceptionObject + (e.ExceptionObject is Exception && ((Exception)e.ExceptionObject).InnerException != null ? "\n InnerException : " + ((Exception)e.ExceptionObject).InnerException : null));
+        }
+
+        private void AppDispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+#if DEBUG 
+            e.Handled = false;
+#else
+            e.Handled = true;
+            LogHelper.Trace(TraceEventType.Error, e.Exception + (e.Exception.InnerException != null ? "\n InnerException :" + (e.Exception).InnerException : null));
+#endif
         }
     }
 }

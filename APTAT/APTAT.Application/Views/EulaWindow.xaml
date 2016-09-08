@@ -21,9 +21,8 @@
         <TextBlock FontSize="14">To continue you must accept the terms of this agreement. </TextBlock>
       </StackPanel>
 
-      <ScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <telerik:RadPdfViewer x:Name="EulaRichTextBox" AutomationProperties.AutomationId="EulaRichTextBox" HorizontalAlignment="Left" Margin="-1 -1 0 -1" />            
-      </ScrollViewer>
+
+      <telerik:RadPdfViewer x:Name="EulaRichTextBox" Grid.Row="2" AutomationProperties.AutomationId="EulaRichTextBox"  />            
 
       <Grid AutomationProperties.AutomationId="EulaAcceptGrid"
             Grid.Row="3" Margin="0 15 0 0" >

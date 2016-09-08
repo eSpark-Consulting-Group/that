@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Converters="clr-namespace:APTAT.Application.Converters"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-             Startup="Application_Startup"
+             
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:telerikMaskedTextBox="clr-namespace:Telerik.Windows.Controls.MaskedTextBox;assembly=Telerik.Windows.Controls.Input"
+             
              xmlns:properties="clr-namespace:APTAT.Application.Properties"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
@@ -18,7 +18,6 @@
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml"/>
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Input.xaml"/>
                 <ResourceDictionary Source="/Assets/Telerik.Windows.Controls.GridView.xaml"/>
-                <!--<ResourceDictionary Source="/Telerik.Windows.Themes.Windows7;component/Themes/Telerik.Windows.Controls.GridView.xaml"/>-->
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <properties:Settings x:Key="Settings" />
@@ -149,37 +148,10 @@
                 </Setter>
             </Style>
             
-            <Style x:Key="ExtendedTextBoxStyle" TargetType="telerikMaskedTextBox:ExtendedTextBox">
-                <Setter Property="AcceptsReturn" Value="False" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="telerikMaskedTextBox:ExtendedTextBox">
-                            <Grid x:Name="RootElement">
-                                <Border x:Name="Border" Opacity="1" CornerRadius="1" Padding="{TemplateBinding Padding}"
-								Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-                                    <Grid Cursor="IBeam">
-                                        <ScrollViewer Foreground="Orange" Padding="0"
-										telerik:StyleManager.Theme="{StaticResource Theme}" BorderBrush="Transparent"
-										Background="Transparent" BorderThickness="0" IsTabStop="False"
-										VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
-											  
-									 x:Name="PART_ContentHost"
-									 />
-                                    </Grid>
-                                </Border>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style BasedOn="{StaticResource ExtendedTextBoxStyle}" TargetType="telerikMaskedTextBox:ExtendedTextBox" />
-            <Style TargetType="telerik:RadMaskedTextBox" x:Key="SearchBoxStyle">
+            
+            <Style TargetType="telerik:RadMaskedTextInput" x:Key="SearchBoxStyle">
                 <Setter Property="Mask" Value="aaaa"></Setter>
-                <Setter Property="MaskType" Value="Standard" />
+                
                 <Setter Property="Foreground" Value="#FF767676"/>
                 <Setter Property="FontFamily" Value="Segoe UI Light" />
                 <Setter Property="Background" Value="{StaticResource MainBrush}" />
@@ -194,7 +166,7 @@
                 <Setter Property="IsTabStop" Value="False" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="telerik:RadMaskedTextBox">
+                        <ControlTemplate TargetType="telerik:RadMaskedTextInput">
                             <Grid  SnapsToDevicePixels="True"
                          >
 
@@ -309,9 +281,9 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <telerikMaskedTextBox:ExtendedTextBox AutomationProperties.AutomationId="SearchTextBox"
-                                        x:Name="PART_ExtendedTextBox"
-										AcceptsReturn="{TemplateBinding AcceptReturn}" Cursor="{TemplateBinding Cursor}"
+                                    <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="SearchTextBox"
+                                        x:Name="PART_ExtendedTextBox" BorderThickness="0" Background="Transparent" WatermarkContent="Search"
+										 Cursor="{TemplateBinding Cursor}"
 										TabIndex="{TemplateBinding TabIndex}" IsTabStop="True"
 										Foreground="{TemplateBinding Foreground}"
 										IsReadOnly="{TemplateBinding IsReadOnly}"
@@ -320,14 +292,7 @@
 										VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                                     <Border x:Name="EmptyContentPresenter"
 										IsHitTestVisible="False" Visibility="Collapsed">
-                                        <ContentControl x:Name="ContentElement" 
-													IsTabStop="False" FontStyle="Italic" 
-													Foreground="{TemplateBinding Foreground}"
-													Content="{TemplateBinding EmptyContent}"
-													ContentTemplate="{TemplateBinding EmptyContentTemplate}"
-													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-													Margin="{TemplateBinding Padding}" />
+                                        
                                     </Border>
                                     <Canvas HorizontalAlignment="Right" SnapsToDevicePixels="True" Height="15" VerticalAlignment="Center" Width="12" Grid.Column="1" Margin="5" x:Name="SearchIcon">
                                         <Ellipse Height="11" Width="11" Stroke="#555" StrokeThickness="2">
