@@ -16,6 +16,8 @@ namespace APTAT.Application.Services
 
         void GetWorkgroup(String workgroupName, Object userState);
 
+        Task<GetWorkgroupEventArgs> GetWorkgroups(Action selectAction, Object userState);
+
         void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
 
         void GetDirectoryRoot(String domainController, String admin, String password, Object userState);

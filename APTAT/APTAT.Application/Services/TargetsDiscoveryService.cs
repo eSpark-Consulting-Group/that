@@ -9,6 +9,7 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointA
 using Composition = APTAT.Common.CompositionHelper;
 using System.Threading.Tasks;
 using System.Security.Principal;
+using System.Linq;
 
 namespace APTAT.Application.Services
 {
@@ -193,13 +194,43 @@ namespace APTAT.Application.Services
                 App.Current.Dispatcher.BeginInvoke(action);
             }
         }
-        public void GetWorkgroup(String workgroupName, Object userState)
+        public void GetWorkgroup(String workgroupName, object userState)
         {
             IWorkgroupDiscoverer discoverer = _manager.GetWorkgroupDiscoverer(workgroupName);
             discoverer.Discovered += OnWorkgroupDiscovered;
             discoverer.BeginDiscover(userState);
         }
 
+        public async Task<GetWorkgroupEventArgs> GetWorkgroups(Action selectAction, object userState)
+        {
+            IWorkgroupDiscoverer discoverer = _manager.GetWorkgroupDiscoverer(null);
+            try
+            {
+                var targets = await discoverer.EnumerateWorkgroups();
+
+                var result = new DirectoryItem[targets.Length];
+
+                for (var i = 0; i < targets.Length; ++i)
+                {
+                    result[i] = new DirectoryItem
+                    {
+                        IsWorkgroup = true,
+                        Name = targets[i],
+                        Type = DirectoryItemType.Root,
+                        IsSelected = false,
+                        SelectionChangedAction = selectAction,
+                        Items = new System.Collections.ObjectModel.ObservableCollection<DirectoryItem>()
+                    };
+                }
+
+                var t = result.ToArray();
+                return new GetWorkgroupEventArgs(t, userState);
+            }
+            catch (Exception ex)
+            {
+                return new GetWorkgroupEventArgs(null, ex);
+            }
+        }
         private void OnWorkgroupDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
             if (e.Error == null)

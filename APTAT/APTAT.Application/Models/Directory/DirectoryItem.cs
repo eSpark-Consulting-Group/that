@@ -50,5 +50,9 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("Items");
             }
         }
+
+        public bool IsWorkgroup { get; internal set; }
+        public bool IsSelected { get; internal set; }
+        public Action SelectionChangedAction { get; internal set; }
     }
 }
