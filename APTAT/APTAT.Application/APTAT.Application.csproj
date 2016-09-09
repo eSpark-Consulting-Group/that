@@ -146,8 +146,6 @@
     <Compile Include="Views\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RadMaskedTextBoxEx.cs" />
-    <Compile Include="Controls\RadMaskedTextBoxUpdateSourceBehavior.cs" />
     <Compile Include="Converters\EmptyStringToBoolConverter.cs" />
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
     <Compile Include="Converters\SelectedIndexToBoolConverter.cs" />
@@ -166,6 +164,9 @@
     <Compile Include="Controls\TitleUpdater.cs" />
     <Compile Include="Views\ScanResultUserControl.xaml.cs">
       <DependentUpon>ScanResultUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchUserControl.xaml.cs">
+      <DependentUpon>SearchUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ValkyrieResultUserControlByComputers.xaml.cs">
       <DependentUpon>ValkyrieResultUserControlByComputers.xaml</DependentUpon>
@@ -283,6 +284,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ScanResultUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SearchUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -8,7 +8,7 @@
                   xmlns:Models="clr-namespace:APTAT.Application.Models"
                   xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
                   xmlns:Application="clr-namespace:APTAT.Application"
-                  xmlns:Controls="clr-namespace:APTAT.Application.Controls" 
+                  xmlns:Controls="clr-namespace:APTAT.Application.Views" 
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                   d:DesignHeight="760" d:DesignWidth="1200" Background="White">
 
@@ -220,19 +220,17 @@
 
             </telerik:RadToolBar>
 
-            <Controls:RadMaskedTextBoxEx 
+            <Controls:SearchUserControl
                 AutomationProperties.AutomationId="SearchBox"
-                Style="{StaticResource SearchBoxStyle}"
-               
+                
+               Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 x:Name="SearchTextBox" 
-                Grid.Column="1" VerticalAlignment="Center"   TabIndex="0"
-                UpdateValueEvent="PropertyChanged" FontSize="13"
-                EmptyContent="Search"   Margin="20" HorizontalAlignment="Stretch"  
-                 SelectionOnFocus="SelectAll" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
-                <i:Interaction.Behaviors>
-                    <Controls:RadMaskedTextBoxUpdateSourceBehavior Delay="True" Value="{Binding Keyword, Mode=TwoWay}"/>
-                </i:Interaction.Behaviors>
-            </Controls:RadMaskedTextBoxEx>
+                Grid.Column="1" VerticalAlignment="Top"   TabIndex="0"
+                 
+                   Margin="20 3" Width="140" HorizontalAlignment="Right"  
+                 IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
+                
+            </Controls:SearchUserControl>
 
         </Grid>
 

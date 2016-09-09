@@ -7,7 +7,7 @@
                 xmlns:Models="clr-namespace:APTAT.Application.Models"
                 xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
                 xmlns:Application="clr-namespace:APTAT.Application"
-                xmlns:Controls="clr-namespace:APTAT.Application.Controls"
+               
                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                 xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
                 d:DesignHeight="400" d:DesignWidth="1000">

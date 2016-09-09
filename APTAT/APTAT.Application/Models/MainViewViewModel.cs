@@ -1118,10 +1118,10 @@ namespace APTAT.Application.Models
         {
             base.OnKeywordChanged(oldValue, newValue);
 
-            if (newValue == oldValue)
+            if (newValue == oldValue || (newValue != null && newValue.Length < 3))
                 return;
 
-            if (_cacheComputers.Any())
+            if (_cacheComputers != null && _cacheComputers.Any())
             {
                 Computers = new Collection<ThreatInfoItem>(
                        _cacheComputers.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
@@ -1129,20 +1129,20 @@ namespace APTAT.Application.Models
                 SelectedItem = null;
             }
 
-            if (_cache.Any())
+            if (_cache != null && _cache.Any())
             {
                 Items = new Collection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
             }
 
-            if (_cacheValkyrie.Any())
+            if (_cacheValkyrie != null && _cacheValkyrie.Any())
             {
                 ItemsValkyrie = new ObservableCollection<FileResult>(
                        _cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
                 SelectedValkyrieItem = null;
             }
 
-            if (_cacheValkyrieComputers.Any())
+            if (_cacheValkyrieComputers != null && _cacheValkyrieComputers.Any())
             {
                 ComputersValkyrie = new ObservableCollection<ComputerInformation>(
                        _cacheValkyrieComputers.Where(item => item.FullName.ContainsString(Keyword)));

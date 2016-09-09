@@ -76,245 +76,6 @@
                 </Style.Triggers>
             </Style>
             
-            <!-- SEARCH BOX-->
-
-            <Style TargetType="Button" x:Key="ClearTextButton">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Grid Background="Transparent">
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal"/>
-                                        <VisualState x:Name="MouseOver">
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Over" Storyboard.TargetProperty="Opacity" Duration="0:0:0.0" To="1"/>
-                                                <DoubleAnimation Storyboard.TargetName="NormalBackground" Storyboard.TargetProperty="Opacity" Duration="0:0:0.0" To="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Pressed">
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Over" Storyboard.TargetProperty="Opacity" Duration="0:0:0.0" To="1"/>
-                                                <DoubleAnimation Storyboard.TargetName="NormalBackground" Storyboard.TargetProperty="Opacity" Duration="0:0:0.0" To="0"/>
-                                            </Storyboard>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                                <Canvas HorizontalAlignment="Right" Height="10" VerticalAlignment="Center" Width="10" x:Name="NormalBackground">
-                                    <Path Data="M426.83334,85.75 L437.87698,96.793633" Height="10.044" Stretch="Fill" Stroke="#555" StrokeThickness="2" UseLayoutRounding="False" Width="10.044">
-                                        <Path.Fill>
-                                            <RadialGradientBrush Center="0.51,0.52" GradientOrigin="0.51,0.52" RadiusY="1.036" RadiusX="0.51">
-                                                <GradientStop Color="White" Offset="0"/>
-                                                <GradientStop Color="White" Offset="1"/>
-                                            </RadialGradientBrush>
-                                        </Path.Fill>
-                                    </Path>
-                                    <Path Data="M426.83334,85.75 L437.87698,96.793633" Height="9.794" Stretch="Fill" Stroke="#555" StrokeThickness="2" UseLayoutRounding="False" Width="9.794" RenderTransformOrigin="0.5,0.5" Canvas.Left="0.125" Canvas.Top="0.125">
-                                        <Path.RenderTransform>
-                                            <RotateTransform Angle="90"/>
-                                        </Path.RenderTransform>
-                                        <Path.Fill>
-                                            <RadialGradientBrush Center="0.51,0.52" GradientOrigin="0.51,0.52" RadiusY="1.036" RadiusX="0.51">
-                                                <GradientStop Color="White" Offset="0"/>
-                                                <GradientStop Color="White" Offset="1"/>
-                                            </RadialGradientBrush>
-                                        </Path.Fill>
-                                    </Path>
-                                </Canvas>
-                                <Canvas HorizontalAlignment="Right" Height="10" VerticalAlignment="Center" Width="10" x:Name="Over" Opacity="0">
-                                    <Path Data="M426.83334,85.75 L437.87698,96.793633" Height="10.044" Stretch="Fill" Stroke="{StaticResource AccentBrush}" StrokeThickness="2" UseLayoutRounding="False" Width="10.044">
-                                        <Path.Fill>
-                                            <RadialGradientBrush Center="0.51,0.52" GradientOrigin="0.51,0.52" RadiusY="1.036" RadiusX="0.51">
-                                                <GradientStop Color="White" Offset="0"/>
-                                                <GradientStop Color="White" Offset="1"/>
-                                            </RadialGradientBrush>
-                                        </Path.Fill>
-                                    </Path>
-                                    <Path Data="M426.83334,85.75 L437.87698,96.793633" Height="9.794" Stretch="Fill" Stroke="{StaticResource AccentBrush}" StrokeThickness="2" UseLayoutRounding="False" Width="9.794" RenderTransformOrigin="0.5,0.5" Canvas.Left="0.125" Canvas.Top="0.125">
-                                        <Path.RenderTransform>
-                                            <RotateTransform Angle="90"/>
-                                        </Path.RenderTransform>
-                                        <Path.Fill>
-                                            <RadialGradientBrush Center="0.51,0.52" GradientOrigin="0.51,0.52" RadiusY="1.036" RadiusX="0.51">
-                                                <GradientStop Color="White" Offset="0"/>
-                                                <GradientStop Color="White" Offset="1"/>
-                                            </RadialGradientBrush>
-                                        </Path.Fill>
-                                    </Path>
-                                </Canvas>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            
-            
-            <Style TargetType="telerik:RadMaskedTextInput" x:Key="SearchBoxStyle">
-                <Setter Property="Mask" Value="aaaa"></Setter>
-                
-                <Setter Property="Foreground" Value="#FF767676"/>
-                <Setter Property="FontFamily" Value="Segoe UI Light" />
-                <Setter Property="Background" Value="{StaticResource MainBrush}" />
-                <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="IsReadOnly" Value="False" />
-                <Setter Property="Placeholder" Value="_" />
-                <Setter Property="MinHeight" Value="22" />
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="Padding" Value="5 2" />
-                <Setter Property="IsTabStop" Value="False" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="telerik:RadMaskedTextInput">
-                            <Grid  SnapsToDevicePixels="True"
-                         >
-
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal" />
-                                        <VisualState x:Name="ReadOnly">
-                                            <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Border" Storyboard.TargetProperty="Background" >
-                                                    <DiscreteObjectKeyFrame KeyTime="0">
-                                                        <DiscreteObjectKeyFrame.Value>
-                                                            <SolidColorBrush Color="Transparent" />
-                                                        </DiscreteObjectKeyFrame.Value>
-                                                    </DiscreteObjectKeyFrame>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush" >
-                                                    <DiscreteObjectKeyFrame KeyTime="0">
-                                                        <DiscreteObjectKeyFrame.Value>
-                                                            <SolidColorBrush Color="Transparent" />
-                                                        </DiscreteObjectKeyFrame.Value>
-                                                    </DiscreteObjectKeyFrame>
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="Disabled">
-                                            <Storyboard Duration="0">
-                                                <DoubleAnimation Duration="0" Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" To="0.5" />
-                                                <DoubleAnimation Duration="0" Storyboard.TargetName="PART_ExtendedTextBox" Storyboard.TargetProperty="Opacity" To="0.3" />
-
-                                            </Storyboard>
-                                        </VisualState>
-                                        <VisualState x:Name="MouseOver">
-                                            <Storyboard Duration="0">
-                                                <ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush" >
-                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource StrongBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                    <VisualStateGroup x:Name="FocusStates">
-                                        <VisualState x:Name="Unfocused" />
-                                        <VisualState x:Name="Focused" >
-                                            <Storyboard Duration="0">
-                                                <DoubleAnimation Duration="0" Storyboard.TargetName="FocusedVisual" Storyboard.TargetProperty="Opacity" To="0.2" />
-                                            </Storyboard>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                    <VisualStateGroup x:Name="EmptyStates">
-                                        <VisualState x:Name="NonEmpty" >
-                                            <Storyboard Duration="0">
-                                                <ObjectAnimationUsingKeyFrames
-												    Storyboard.TargetName="ClearTextButton"
-												    Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0">
-                                                        <DiscreteObjectKeyFrame.Value>
-                                                            <Visibility>Visible</Visibility>
-                                                        </DiscreteObjectKeyFrame.Value>
-                                                    </DiscreteObjectKeyFrame>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames
-												    Storyboard.TargetName="SearchIcon"
-												    Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0">
-                                                        <DiscreteObjectKeyFrame.Value>
-                                                            <Visibility>Collapsed</Visibility>
-                                                        </DiscreteObjectKeyFrame.Value>
-                                                    </DiscreteObjectKeyFrame>
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="Empty">
-                                            <Storyboard Duration="0">
-                                                <ObjectAnimationUsingKeyFrames
-												    Storyboard.TargetName="SearchIcon"
-												    Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0">
-                                                        <DiscreteObjectKeyFrame.Value>
-                                                            <Visibility>Visible</Visibility>
-                                                        </DiscreteObjectKeyFrame.Value>
-                                                    </DiscreteObjectKeyFrame>
-                                                </ObjectAnimationUsingKeyFrames>
-                                               
-                                              
-                                            </Storyboard>
-                                        </VisualState>
-                                    </VisualStateGroup>
-
-
-                                </VisualStateManager.VisualStateGroups>
-
-
-                                <Border BorderThickness="{TemplateBinding BorderThickness}"
-								Background="{TemplateBinding Background}"
-								BorderBrush="{TemplateBinding BorderBrush}" x:Name="Border" />
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="SearchTextBox"
-                                        x:Name="PART_ExtendedTextBox" BorderThickness="0" Background="Transparent" WatermarkContent="Search"
-										 Cursor="{TemplateBinding Cursor}" 
-										TabIndex="{TemplateBinding TabIndex}" IsTabStop="True"
-										Foreground="{TemplateBinding Foreground}"
-										IsReadOnly="{TemplateBinding IsReadOnly}"
-										Margin="{TemplateBinding Padding}"
-										HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-										VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                    
-                                    <Canvas HorizontalAlignment="Right" SnapsToDevicePixels="True" Height="15" VerticalAlignment="Center" Width="12" Grid.Column="1" Margin="5" x:Name="SearchIcon">
-                                        <Ellipse Height="11" Width="11" Stroke="#555" StrokeThickness="2">
-                                            <Ellipse.Fill>
-                                                <RadialGradientBrush Center="0.51,0.52" GradientOrigin="0.51,0.52" RadiusY="1.036" RadiusX="0.51">
-                                                    <GradientStop Color="White" Offset="0"/>
-                                                    <GradientStop Color="White" Offset="1"/>
-                                                </RadialGradientBrush>
-                                            </Ellipse.Fill>
-                                        </Ellipse>
-                                        <Path Data="M442.5,92.833336 L446,98" Height="7.25" Stretch="Fill" Stroke="#555" StrokeThickness="2" UseLayoutRounding="False" Width="5.625" Canvas.Left="6.25" Canvas.Top="7.583">
-                                            <Path.Fill>
-                                                <RadialGradientBrush Center="0.51,0.52" GradientOrigin="0.51,0.52" RadiusY="1.036" RadiusX="0.51">
-                                                    <GradientStop Color="White" Offset="0"/>
-                                                    <GradientStop Color="White" Offset="1"/>
-                                                </RadialGradientBrush>
-                                            </Path.Fill>
-                                        </Path>
-                                    </Canvas>
-
-                                    <Button AutomationProperties.AutomationId="ClearSearchTextButton" 
-                                            x:Name="ClearTextButton" SnapsToDevicePixels="True"  Height="10" Style="{StaticResource ClearTextButton}" Grid.Column="1" VerticalAlignment="Center" Margin="5, 7,5,8" Visibility="Collapsed"/>
-                                </Grid>
-
-                                <Border x:Name="FocusedVisual" Opacity="0" BorderBrush="{StaticResource MarkerBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}" />
-
-                                <!--Error Visual Element-->
-
-                                
-                            </Grid>
-
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-
-            </Style>
-
-            <!-- END OF SEARCH BOX -->
             
             <Style  x:Key="ButtonNormalStyle" TargetType="Button">
                 <Setter Property="Background" Value="#878787"/>
@@ -1090,6 +851,36 @@
                 </Setter>
             </Style>
 
+
+            <Style TargetType="Button" x:Key="CloseButton2">
+                <Setter Property="FocusVisualStyle" Setter.Value="{x:Null}" />
+                <Setter Property="Background" Value="#FF555555" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Background="Transparent" Cursor="Hand">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Storyboard.TargetName="path2" Duration="0:0:0.1"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Storyboard.TargetName="path2" Duration="0:0:0.1"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Normal"/>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Path x:Name="path" Stretch="Fill" Path.Data="F1M406.8477,138.8467L399.7777,145.9177L392.7067,138.8467C392.3167,138.4557,391.6837,138.4567,391.2927,138.8467C390.9027,139.2377,390.9027,139.8697,391.2927,140.2607L398.3637,147.3317L391.2927,154.4027C390.9027,154.7937,390.9027,155.4267,391.2927,155.8177C391.6837,156.2077,392.3167,156.2077,392.7067,155.8177L399.7777,148.7457L406.8497,155.8167C407.2407,156.2077,407.8727,156.2077,408.2637,155.8167C408.6527,155.4267,408.6547,154.7937,408.2637,154.4027L401.1917,147.3317L408.2637,140.2617C408.6547,139.8707,408.6547,139.2367,408.2637,138.8467C407.8727,138.4557,407.2387,138.4557,406.8477,138.8467" SnapsToDevicePixels="true" Fill="{TemplateBinding Background}" />
+                                <Path x:Name="path2" Stretch="Fill" Opacity="0" Path.Data="F1M406.8477,138.8467L399.7777,145.9177L392.7067,138.8467C392.3167,138.4557,391.6837,138.4567,391.2927,138.8467C390.9027,139.2377,390.9027,139.8697,391.2927,140.2607L398.3637,147.3317L391.2927,154.4027C390.9027,154.7937,390.9027,155.4267,391.2927,155.8177C391.6837,156.2077,392.3167,156.2077,392.7067,155.8177L399.7777,148.7457L406.8497,155.8167C407.2407,156.2077,407.8727,156.2077,408.2637,155.8167C408.6527,155.4267,408.6547,154.7937,408.2637,154.4027L401.1917,147.3317L408.2637,140.2617C408.6547,139.8707,408.6547,139.2367,408.2637,138.8467C407.8727,138.4557,407.2387,138.4557,406.8477,138.8467" SnapsToDevicePixels="true" Fill="{TemplateBinding Background}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
         </ResourceDictionary>
         
