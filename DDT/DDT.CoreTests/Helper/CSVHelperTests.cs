@@ -54,7 +54,7 @@ namespace DDT.Core.Helper.Tests
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             List<IDetailsOfScan> d = GetDetailsOfScan(testConditions, "10.100.65");
 
             var result = CSVHelper.ToCsv(",",d);

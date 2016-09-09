@@ -54,7 +54,7 @@ namespace DDT.Core.Reports.Tests
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             var d = GetDetailsOfScan(testConditions, "10.100.65");
 
 
@@ -63,7 +63,7 @@ namespace DDT.Core.Reports.Tests
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 4 });
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 7 });
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 2 });
-            testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 3 });
+            testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 3 });
             var d2 = GetDetailsOfScan(testConditions2, "10.100.66");
 
             var testConditions3 = new List<TestConditionByStatus>();
@@ -71,7 +71,7 @@ namespace DDT.Core.Reports.Tests
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 0 });
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 0 });
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 0 });
-            testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 4 });
+            testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 4 });
             var d3 = GetDetailsOfScan(testConditions3, "10.100.67");
 
             IDeploymentReportModel model1 = Mock.Create<IDeploymentReportModel>(Behavior.Strict);
@@ -101,7 +101,7 @@ namespace DDT.Core.Reports.Tests
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             var d = GetDetailsOfScan(testConditions, "10.100.65", true);
 
             var testConditions2 = new List<TestConditionByStatus>();
@@ -109,7 +109,7 @@ namespace DDT.Core.Reports.Tests
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             var d2 = GetDetailsOfScan(testConditions2, "10.100.65", true);
 
 
@@ -118,7 +118,7 @@ namespace DDT.Core.Reports.Tests
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             var d3 = GetDetailsOfScan(testConditions2, "10.100.65", true);
 
 
@@ -147,7 +147,7 @@ namespace DDT.Core.Reports.Tests
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             var d = GetDetailsOfScan(testConditions, "10.100.65", false);
 
             var testConditions2 = new List<TestConditionByStatus>();
@@ -155,7 +155,7 @@ namespace DDT.Core.Reports.Tests
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions2.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             var d2 = GetDetailsOfScan(testConditions2, "10.100.65", false);
 
 
@@ -164,7 +164,7 @@ namespace DDT.Core.Reports.Tests
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 3 });
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Skipped, Count = 5 });
             testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Failed, Count = 8 });
-            testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stoped, Count = 1 });
+            testConditions3.Add(new TestConditionByStatus() { Status = DeploymentStatus.Stopped, Count = 1 });
             var d3 = GetDetailsOfScan(testConditions2, "10.100.65", false);
 
 

@@ -84,7 +84,7 @@ namespace DDT.Core.Reports
             LinuxEndpoints = _allItems.Count(i => i.SystemFamilyKind == SystemFamilyKind.Linux);
 
             SkippedDeployments = _allItems.Count(d => d.DeploymentStatus == DeploymentStatus.Skipped);
-            StoppedDeployments = _allItems.Count(d => d.DeploymentStatus == DeploymentStatus.Stoped);
+            StoppedDeployments = _allItems.Count(d => d.DeploymentStatus == DeploymentStatus.Stopped);
             FailedDeployments = _allItems.Count(d => d.DeploymentStatus == DeploymentStatus.Failed);
             SuccessfulDeployments = _allItems.Count(d => d.DeploymentStatus == DeploymentStatus.Succeded);            
         }

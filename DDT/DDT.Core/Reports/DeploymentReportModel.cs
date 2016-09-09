@@ -77,7 +77,7 @@ namespace DDT.Core.Reports
         {
             get
             {
-                return Details.Count(d => d.DeploymentStatus == DeploymentStatus.Stoped);
+                return Details.Count(d => d.DeploymentStatus == DeploymentStatus.Stopped);
             }
         }
     }

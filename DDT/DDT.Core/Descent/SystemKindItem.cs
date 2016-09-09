@@ -16,7 +16,7 @@ namespace DDT.Core.Descent
         Guid OperationUid { get; }
         Guid TargetUid { get; }
     }
-    class SystemKindItem : ISystemKindItem
+    public class SystemKindItem : ISystemKindItem
     {
         public SystemKind SystemKind { get; }
         public Guid OperationUid { get; }

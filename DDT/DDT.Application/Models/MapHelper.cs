@@ -13,7 +13,7 @@ namespace DDT.Application.Models
         {
             if (!item.Succeded && !item.IsOnline) return DeploymentStatus.Skipped;
             if (!item.Succeded && !item.Stopping && item.IsOnline) return DeploymentStatus.Failed;
-            if (item.Stopping) return DeploymentStatus.Stoped;
+            if (item.Stopping) return DeploymentStatus.Stopped;
             if (item.Succeded) return DeploymentStatus.Succeded;
 
             throw new InvalidOperationException("Deployment status calculatiion error");

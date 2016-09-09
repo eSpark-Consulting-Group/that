@@ -8,7 +8,7 @@ namespace DDT.Core.Reports
     {
         Failed,
         Skipped,
-        Stoped,
+        Stopped,
         Succeded
     }
 
