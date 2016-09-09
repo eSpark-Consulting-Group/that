@@ -9,7 +9,10 @@
       d:DesignHeight="300" d:DesignWidth="300" >
     <Grid Margin="0 17 0 0" >
 
-        <telerik:RadWatermarkTextBox MinHeight="24" BorderThickness="1" BorderBrush="#FFD6D4D4" IsHitTestVisible="{Binding SearchAvailable}" x:Name="search" Padding="24 0" Text="{Binding ElementName=this, Path=Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" WatermarkContent="Search">
+        <telerik:RadWatermarkTextBox MinHeight="24" BorderThickness="1" BorderBrush="#FFD6D4D4" IsHitTestVisible="{Binding SearchAvailable}" x:Name="search" Padding="24 0" Text="{Binding ElementName=this, Path=Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" >
+            <telerik:RadWatermarkTextBox.WatermarkContent>
+                <TextBlock Text="Search" FontStyle="Normal" />
+            </telerik:RadWatermarkTextBox.WatermarkContent>
         </telerik:RadWatermarkTextBox>
 
         <Path HorizontalAlignment="Left" Margin="8 0 0 0" SnapsToDevicePixels="True" VerticalAlignment="Center" Data="F1M477,149.1104C476.473,149.1104,475.972,149.0034,475.511,148.8174C474.502,148.4114,473.699,147.6084,473.293,146.5994C473.107,146.1384,473,145.6374,473,145.1104C473,142.9014,474.791,141.1104,477,141.1104C479.209,141.1104,481,142.9014,481,145.1104C481,147.3194,479.209,149.1104,477,149.1104 M477,139.1104C473.687,139.1104,471,141.7974,471,145.1104C471,146.0364,471.216,146.9094,471.59,147.6924L468.586,150.6964C467.805,151.4774,467.805,152.7434,468.586,153.5244C469.366,154.3054,470.633,154.3054,471.414,153.5244L474.418,150.5204C475.201,150.8944,476.074,151.1104,477,151.1104C480.313,151.1104,483,148.4234,483,145.1104C483,141.7974,480.313,139.1104,477,139.1104" Fill="{DynamicResource StrongBrush}" Height="15" Stretch="Fill" Width="15" />

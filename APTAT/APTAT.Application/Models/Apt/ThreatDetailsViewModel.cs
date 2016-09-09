@@ -263,7 +263,7 @@ namespace APTAT.Application.Models
             Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();
             Modified = badFile != null ? badFile.Modified.ToLocalTime() : valkyrieFile.Modified.ToLocalTime();
             Accessed = badFile != null ? badFile.Accessed.ToLocalTime() : valkyrieFile.Accessed.ToLocalTime();
-            Hash = NAIfEmpty(badFile != null ? badFile.Sha1 : valkyrieFile.Sha1);
+            Hash = NAIfEmpty(badFile != null ? badFile.Sha1?.ToUpper() : valkyrieFile.Sha1?.ToUpper());
             Signer = NAIfEmpty(badFile != null ? badFile.Signer : valkyrieFile.Signer);
             Description = NAIfEmpty(badFile != null ? badFile.Description : valkyrieFile.Description);
             Version = NAIfEmpty(badFile != null ? badFile.Version : valkyrieFile.Version);
