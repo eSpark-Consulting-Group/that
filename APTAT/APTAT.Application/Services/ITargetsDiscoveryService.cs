@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using APTAT.Application.Models;
+using System.Threading.Tasks;
 
 namespace APTAT.Application.Services
 {
@@ -20,5 +21,7 @@ namespace APTAT.Application.Services
         void GetDirectoryRoot(String domainController, String admin, String password, Object userState);
 
         void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState);
+
+        Task<GetDomainNameResponse> GetCurrentDomainName();
     }
 }

@@ -7,6 +7,7 @@ using APTAT.DeploymentCore.Directory.Resolvers;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using Composition = APTAT.Common.CompositionHelper;
+using System.Threading.Tasks;
 
 namespace APTAT.Application.Services
 {
@@ -56,23 +57,39 @@ namespace APTAT.Application.Services
                 DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(null, e.State, e.Error);
                 Action action = () =>
                 {
-                    if (DirectoryItemsResolved != null)
-                    {
-                        DirectoryItemsResolved(this, args);
-                    }
+                    DirectoryItemsResolved?.Invoke(this, args);
                 };
                 App.Current.Dispatcher.BeginInvoke(action);
             }
         }
 
-        public void GetDirectoryRoot(String domainController, String admin, String password, Object userState)
+        public void GetDirectoryRoot(string domainController, string admin, string password, object userState)
         {
             IDomainDiscoverer d = _manager.GetDomainDiscoverer(null, true, domainController, admin, password);
             d.Discovered += OnRootDiscovered;
             d.BeginDiscover(userState);
         }
+        
+        public async Task<GetDomainNameResponse> GetCurrentDomainName()
+        {
+            IDomainDiscoverer discoverer = _manager.GetDomainDiscoverer(null, true, null, null, null);
+            TargetsDiscovererEventArgs e = await discoverer.DiscoverAwaitable();
+            if (e.Error == null)
+            {
+                DomainTarget domainRoot = (DomainTarget)e.Targets[0];
+                return new GetDomainNameResponse(domainRoot.DomainName, null);
 
-        private void OnRootDiscovered(Object sender, TargetsDiscovererEventArgs e)
+            }
+            else if (e.Error is DirectoryQueryException &&
+                     ((DirectoryQueryException)e.Error).Error == DirectoryError.DefaultDomainNotFound)
+            {
+                DomainTarget domainRoot = (DomainTarget)e.Targets[0];
+                return new GetDomainNameResponse(null, null);
+            }
+            return new GetDomainNameResponse(null, e.Error);
+        }
+
+        private void OnRootDiscovered(object sender, TargetsDiscovererEventArgs e)
         {
             if (e.Error == null)
             {
