@@ -8,6 +8,7 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using Composition = APTAT.Common.CompositionHelper;
 using System.Threading.Tasks;
+using System.Security.Principal;
 
 namespace APTAT.Application.Services
 {
@@ -89,6 +90,14 @@ namespace APTAT.Application.Services
             return new GetDomainNameResponse(null, e.Error);
         }
 
+        public string GetLoggedInUser()
+        {
+            if (!String.IsNullOrEmpty(Environment.UserDomainName))
+            {
+                return Environment.UserDomainName + "\\" + Environment.UserName;
+            }
+            return Environment.UserName;
+        }
         private void OnRootDiscovered(object sender, TargetsDiscovererEventArgs e)
         {
             if (e.Error == null)
