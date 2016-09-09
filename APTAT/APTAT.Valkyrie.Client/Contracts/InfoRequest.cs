@@ -15,7 +15,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         /// Path of File on Origin, Optional
         /// </summary>
         [JsonProperty("file_path")]
-        public Guid FilePath { get; set; }
+        public string FilePath { get; set; }
     }
 
 

@@ -547,7 +547,11 @@ namespace APTAT.Valkyrie
                     return CancelOperation(originalFilePath, sha1);
                 }
 
-                var infoRequeast = new InfoRequest {SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId};
+                var infoRequeast = new InfoRequest
+                {
+                    SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId,
+                    FilePath = WebUtility.HtmlDecode(originalFilePath)
+                };
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
