@@ -550,7 +550,7 @@ namespace APTAT.Valkyrie
                 var infoRequeast = new InfoRequest
                 {
                     SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId,
-                    FilePath = WebUtility.HtmlDecode(originalFilePath)
+                    FilePath = WebUtility.HtmlDecode(fileInfo.Path)
                 };
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
