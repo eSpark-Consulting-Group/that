@@ -7,7 +7,7 @@ namespace APTAT.Core
     {
         public static FilesStatistics Calculate(IEnumerable<AptScanResult> results)
         {
-            int totalFilesCound = 0;
+            int totalFilesCount = 0;
             int safeFilesCount = 0;
             int unknownFilesCount = 0;
             int malwareFilesCount = 0;
@@ -20,7 +20,7 @@ namespace APTAT.Core
             {
                 if (scanResult.ResultType == ScanResultType.Completed)
                 {
-                    totalFilesCound += scanResult.TotalFilesCount;
+                    totalFilesCount += scanResult.TotalFilesCount;
                     safeFilesCount += scanResult.SafeFilesCount;
                     unknownFilesCount += scanResult.UnknownFilesCount;
                     malwareFilesCount += scanResult.MalwareFilesCount;
@@ -36,7 +36,7 @@ namespace APTAT.Core
                 EmptyFilesCount = emptyFilesCount,
                 MalwareFilesCount = malwareFilesCount,
                 SafeFilesCount = safeFilesCount,
-                TotalFilesCound = totalFilesCound,
+                TotalFilesCount = totalFilesCount,
                 UnknownFilesCount = unknownFilesCount,
                 SkippedFilesCount = skippedFilesCount,
                 FailedToAnalyzeFilesCount = errorFilesCount,

@@ -2,7 +2,7 @@
 {
     public class FilesStatistics
     {
-        public int TotalFilesCound { get; set; }
+        public int TotalFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
         public int MalwareFilesCount { get; set; }

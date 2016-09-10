@@ -96,7 +96,7 @@ namespace APTAT.Application
 
             scanCompletedWindow.Text.Text += Environment.NewLine +"File Statistics:";
             int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount+ e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount;
-            if (e.FilesStatistics.TotalFilesCound > 0)
+            if (e.FilesStatistics.TotalFilesCount > 0)
             {
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total found", Environment.NewLine, total);
             }
@@ -116,6 +116,9 @@ namespace APTAT.Application
                     ShowRegisterToValkyrieWindow();
                 else if (e.FilesStatistics.UnknownFilesCount > 0)
                     _viewModel.IsAnalyseWithValkyrieEnabled = true;
+
+                if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
+                    _viewModel.GroupingEnabled = true;
             }
                 
         }

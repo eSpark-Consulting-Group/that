@@ -425,8 +425,18 @@ namespace APTAT.Application.Models
         public bool SelectScan { get; set; }
         public bool SelectValkyrieScan { get; set; }
         public bool IsQuickScan { get; set; }
-        public bool GroupingEnabled { get; set; }
         public bool ValkyrieEnabled { get; set; }
+
+        private bool _groupingEnabled;
+        public bool GroupingEnabled
+        {
+            get { return _groupingEnabled; }
+            set
+            {
+                _groupingEnabled = value;
+                RaisePropertyChanged("GroupingEnabled");
+            }
+        }
 
         private bool _groupByFiles;
         public bool GroupByFiles
@@ -510,8 +520,8 @@ namespace APTAT.Application.Models
 
             AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Scan);
             Set(() => SelectScan, true);
-            Set(() => GroupingEnabled, false);
             Set(() => ValkyrieEnabled, false);
+            GroupingEnabled = false;
             GroupByComputers = true;
 
             ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
@@ -925,7 +935,7 @@ namespace APTAT.Application.Models
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
 
-            Set(() => GroupingEnabled, true);
+
 
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
         }

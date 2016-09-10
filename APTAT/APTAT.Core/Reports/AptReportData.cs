@@ -269,7 +269,7 @@ namespace APTAT.Core.Reports
             _skippedFilesCount = statistics.SkippedFilesCount;
             _errorFileCount = statistics.FailedToAnalyzeFilesCount;
             _noVerdictFileCount = statistics.NoVerdictFilesCount;
-            _totalFilesCound = statistics.TotalFilesCound;
+            _totalFilesCound = statistics.TotalFilesCount;
             _pendingAnalysisFilesCount = statistics.PendingAnalysisFilesCount;
         }
 
@@ -458,7 +458,7 @@ namespace APTAT.Core.Reports
                 return;
             }
 
-            int totalFilesCound = 0;
+            int totalFilesCount = 0;
             int safeFilesCount = 0;
             int unknownFilesCount = 0;
             int malwareFilesCount = 0;
@@ -633,7 +633,7 @@ namespace APTAT.Core.Reports
                 malwareFilesCount += mergedMalwareCount;
                 errorFilesCount += mergedErrorFilesCount;
                 noVerdictFilesCount +=mergedNoVerdictCount;
-                totalFilesCound += flsResult.TotalFilesCount;
+                totalFilesCount += flsResult.TotalFilesCount;
                 emptyFilesCount += flsResult.EmptyFilesCount;
                 skippedFilesCount += flsResult.SkippedFilesCount;
                 pendingAnalysisFilesCount += mergedPendingFilesCount;
@@ -646,7 +646,7 @@ namespace APTAT.Core.Reports
                 EmptyFilesCount = emptyFilesCount,
                 MalwareFilesCount = malwareFilesCount,
                 SafeFilesCount = safeFilesCount,
-                TotalFilesCound = totalFilesCound,
+                TotalFilesCount = totalFilesCount,
                 UnknownFilesCount = unknownFilesCount,
                 SkippedFilesCount = skippedFilesCount,
                 FailedToAnalyzeFilesCount = errorFilesCount,
