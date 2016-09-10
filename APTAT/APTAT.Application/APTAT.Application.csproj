@@ -151,7 +151,6 @@
     <Compile Include="Converters\SelectedIndexToBoolConverter.cs" />
     <Compile Include="Converters\StringToHyperlinkConverter.cs" />
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
-    <Compile Include="Helpers\ThreadHelper.cs" />
     <Compile Include="Messages\MessageManager.cs" />
     <Compile Include="Messages\MessageTokens.cs" />
     <Compile Include="Models\DomainObject.cs" />

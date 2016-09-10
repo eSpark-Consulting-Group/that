@@ -2,7 +2,7 @@
                 x:Class="APTAT.Application.MainWindow"
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                Title="Unknown File Hunter" MinHeight="300" MinWidth="920"  Height="768" Width="1024" 
+                Title="Unknown File Hunter" Height="760" MinHeight="760" Width="1015" MinWidth="945" 
                 WindowStyle="None" WindowStartupLocation="CenterScreen"
                 AllowsTransparency="True" Background="Transparent" BorderThickness="3"
                 ResizeMode="CanResizeWithGrip">

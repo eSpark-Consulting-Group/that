@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using APTAT.Application.Helpers;
+
 using APTAT.Application.Models;
 using APTAT.Common;
 

@@ -13,7 +13,7 @@ using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
 using APTAT.Core.Descent;
 using System.Windows.Threading;
-using APTAT.Application.Helpers;
+
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 

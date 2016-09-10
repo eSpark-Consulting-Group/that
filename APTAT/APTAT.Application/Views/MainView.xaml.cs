@@ -12,7 +12,7 @@ using Process = System.Diagnostics.Process;
 using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
 using APTAT.Application.Messages;
-using APTAT.Application.Helpers;
+
 using APTAT.Common;
 
 namespace APTAT.Application
