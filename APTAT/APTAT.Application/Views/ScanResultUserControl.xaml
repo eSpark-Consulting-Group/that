@@ -91,7 +91,7 @@
                  SortMemberPath="ShortName" />
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource SizeColumn}"
-                    SortMemberPath="Size"
+                    SortMemberPath="SizeString"
                     IsFilterable="False"
                     Header="SIZE"  
                     TextAlignment="Right"
