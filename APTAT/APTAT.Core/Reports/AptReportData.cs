@@ -280,7 +280,7 @@ namespace APTAT.Core.Reports
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = "Trusted Programs"},
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = "Unknown Programs"},
                 //**
-                new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" },
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malware Items" },
                 new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = FailedToAnalyzeFilesCount, Value = "Failed To Analyse" },
                 new FileRatingInfo() { CloudVerdict = CloudVerdict.NoVerdict, Count = NoVerdictFilesCount, Value = "No Verdict" }
 
@@ -295,7 +295,7 @@ namespace APTAT.Core.Reports
             {                
                 new FileRatingValkyrieInfo (){CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = "Trusted Programs"},
                 new FileRatingValkyrieInfo (){CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = "Unknown Programs"},                
-                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malwares" },
+                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malware Items" },
                 new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" },
                 new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Not Analysed" }                
             };

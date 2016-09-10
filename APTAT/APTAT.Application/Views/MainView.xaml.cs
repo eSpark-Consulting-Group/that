@@ -102,7 +102,7 @@ namespace APTAT.Application
             }
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown programs found", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
             
-            if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malwares found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
+            if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware items found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
             if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed to analyse", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount);
             if (e.FilesStatistics.NoVerdictFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} No Verdict", Environment.NewLine, e.FilesStatistics.NoVerdictFilesCount);
 

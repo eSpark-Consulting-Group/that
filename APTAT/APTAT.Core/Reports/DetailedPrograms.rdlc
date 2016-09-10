@@ -307,7 +307,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Malwares Found:</Value>
+                    <Value>Malware Items Found:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
