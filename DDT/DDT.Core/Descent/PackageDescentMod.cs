@@ -160,6 +160,8 @@ namespace DDT.Core.Descent
             
             //dh.CopyFile(package.Path, true);
             var packageParams = package.Parameters;
+            if (packageParams == null)
+                packageParams = String.Empty;
             if (package.PackageType == InstallPackageType.Msi && !String.IsNullOrEmpty(package.MstPath))
             {
                 var remoteMstPath = helper.GetRemotePath(package.MstPath);
