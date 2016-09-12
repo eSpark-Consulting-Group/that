@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Fonts">
-      <UniqueIdentifier>{3f4b2a85-e771-4c8d-9b01-37e0f2008d7e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -35,17 +32,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Fonts\segoeui.ttf">
-      <Filter>Fonts</Filter>
-    </None>
-    <None Include="Fonts\segoeuil.ttf">
-      <Filter>Fonts</Filter>
-    </None>
-    <None Include="Fonts\seguisb.ttf">
-      <Filter>Fonts</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="APTAT.Bootstrapper.rc">
