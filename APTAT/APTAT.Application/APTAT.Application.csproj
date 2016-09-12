@@ -419,6 +419,7 @@
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <SplashScreen Include="Images\loading.gif" />
     <Content Include="trl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
