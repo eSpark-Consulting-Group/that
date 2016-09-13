@@ -50,7 +50,11 @@ namespace CodedUITestAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static void StopScanner(Computer endpoint)
         {
-            if (IsThereProcess(Settings.Scanner.Default.ProcessName, endpoint)) KillProcessesRemotely(Settings.Scanner.Default.ProcessName, endpoint);
+            string procName;
+            if (IsOs64Bit(endpoint)) procName = Settings.Scanner.Default.ExeName64;
+            else procName = Settings.Scanner.Default.ExeName86;
+
+            if (IsThereProcess(procName, endpoint)) KillProcessesRemotely(procName, endpoint);
         }
 
         /// <summary> Gets the product version using its executable. </summary>

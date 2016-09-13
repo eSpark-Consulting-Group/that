@@ -81,14 +81,5 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["StartupFolder"]));
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("cmd.exe")]
-        public string ProcessName {
-            get {
-                return ((string)(this["ProcessName"]));
-            }
-        }
     }
 }

@@ -25,8 +25,5 @@
     <Setting Name="StartupFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Users\{0}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\</Value>
     </Setting>
-    <Setting Name="ProcessName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">cmd.exe</Value>
-    </Setting>
   </Settings>
 </SettingsFile>
