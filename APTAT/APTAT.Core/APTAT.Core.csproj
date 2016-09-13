@@ -99,7 +99,6 @@
     <Compile Include="Reports\AptReportData.cs" />
     <Compile Include="Reports\ReportBuilder.cs" />
     <Compile Include="Reports\ReportType.cs" />
-    <Compile Include="ScanCanceledException.cs" />
     <Compile Include="Descent\Apt\AptScanResult.cs" />
     <Compile Include="ScanCompletedEventArgs.cs" />
     <Compile Include="ScanInProgressEventArgs.cs" />
