@@ -57,6 +57,7 @@ namespace CodedUITestAT
 
             SysHelper.StopApplication();
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            SysHelper.StopScanner(endpoint);
         }
 
         #endregion

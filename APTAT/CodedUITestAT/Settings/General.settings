@@ -47,5 +47,8 @@
     <Setting Name="ThreatTrustedVendor" Type="System.String" Scope="Application">
       <Value Profile="(Default)">no</Value>
     </Setting>
+    <Setting Name="KillProcToolExe" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">pskill.exe</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

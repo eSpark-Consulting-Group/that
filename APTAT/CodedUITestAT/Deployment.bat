@@ -60,6 +60,8 @@ xcopy "%BuildLocation%\%ProductExeName%" "%TargetDir%\" /y
 
 xcopy "\\esmbuildstorage\%DataSource%\%MalwaresFolder%" "%ServerRoot%:\%MalwaresFolder%\" /e /y
 
+xcopy "%BuildLocation%\PsSysinternalsTools\ps*.exe" "%TargetDir%\" /e /y
+
 
 
 REM Copies files necessary for testing to the endpoint VM

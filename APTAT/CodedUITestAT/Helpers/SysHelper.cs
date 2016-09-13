@@ -46,6 +46,13 @@ namespace CodedUITestAT
             }
         }
 
+        /// <summary> Stops the application scanner at a given computer. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        internal static void StopScanner(Computer endpoint)
+        {
+            if (IsThereProcess(Settings.Scanner.Default.ProcessName, endpoint)) KillProcessesRemotely(Settings.Scanner.Default.ProcessName, endpoint);
+        }
+
         /// <summary> Gets the product version using its executable. </summary>
         /// <returns> Returns the product version or null in the case the product file is not found. </returns>
         internal static string GetProductVersion()
@@ -129,6 +136,15 @@ namespace CodedUITestAT
                 proc.CloseMainWindow();
                 if (!proc.WaitForExit(2000)) proc.Kill();
             }
+        }
+
+        /// <summary> Kills all the given processes on a remote machine using "pskill" Sysinternals tool. </summary>
+        /// <param name="procName">Set a process name.</param>
+        /// <param name="machine">Set a computer.</param>
+        internal static void KillProcessesRemotely(string procName, Computer machine = null)
+        {
+            if (machine == null) machine = new Computer();
+            StartProcess(DataHelper.GetWorkingFolder(), Settings.General.Default.KillProcToolExe, String.Format(@"\\{0} {1}", machine.Name, procName));
         }
 
         /// <summary> Checks whether a given process is present at an indicated endpoint. </summary>

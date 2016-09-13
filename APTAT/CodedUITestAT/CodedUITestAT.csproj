@@ -273,7 +273,14 @@
     <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
     <None Include="UIMaps\UIMapStopScanWindow.uitest" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="PsSysinternalsTools\PsExec.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="PsSysinternalsTools\pskill.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
