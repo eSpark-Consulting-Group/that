@@ -352,9 +352,9 @@ namespace CodedUITestAT
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
         }
 
-        internal WpfTree ScanningResultsTree()
-        {
-            return UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenCustom.UIRadTreeListViewTree2;
+        internal WpfTable ScanningResultsTable()
+        {            
+            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable;
         }
 
         #endregion

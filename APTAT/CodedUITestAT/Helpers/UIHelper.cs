@@ -145,24 +145,30 @@ namespace CodedUITestAT
         /// <param name="resultsScreen">Set a results screen type.</param>
         internal static UITestControl[] GetRows(this WpfTabPage tab)
         {
+            if (tab == null) throw new Exception("The provided WPF tab is null!");
+
             int treeShift = 2;
             if (DataHelper.IsGroupedByFiles) treeShift++;
             
-            var tree = tab.GetChildren()[treeShift].GetChildren()[0] as WpfTree;
-            var rows = tree.GetRows();
+            var table = tab.GetChildren()[treeShift].GetChildren()[0] as WpfTable;
+            if (table == null) throw new Exception("The resulting WPF table is null!");
+
+            var rows = table.GetRows();
 
             return rows;
         }
 
-        /// <summary> Gets rows from a given tree control. </summary>
-        /// <param name="tab">Set a tree control.</param>
-        internal static UITestControl[] GetRows(this WpfTree tree)
-        {            
-            var rowsCollection = tree.GetChildren()[2].GetChildren();
+        /// <summary> Gets rows from a given table control. </summary>
+        /// <param name="table">Set a table control.</param>
+        internal static UITestControl[] GetRows(this WpfTable table)
+        {
+            if (table == null) throw new Exception("The provided WPF table is null!");
+
+            var rowsCollection = table.GetChildren()[1].GetChildren();
 
             return rowsCollection.ToArray();
         }
-
+        
         /// <summary> Gets a given row name. In accordance with Application.Models.ThreatInfoItem or Core.FileResults. </summary>
         /// <param name="row">Set a row control.</param>
         internal static string GetRowName(this UITestControl row)
@@ -203,7 +209,7 @@ namespace CodedUITestAT
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
             if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(endpoint.RowName);
-            else row = useMain.ScanningResultsTree().GetRow(endpoint.RowName);
+            else row = useMain.ScanningResultsTable().GetRow(endpoint.RowName);
 
             return row.GetScanStatus();
         }
@@ -215,7 +221,7 @@ namespace CodedUITestAT
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
             if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(endpoint.RowName);
-            else row = useMain.ScanningResultsTree().GetRow(endpoint.RowName);
+            else row = useMain.ScanningResultsTable().GetRow(endpoint.RowName);
 
             return row.GetRowStatus();
         }
@@ -249,17 +255,17 @@ namespace CodedUITestAT
         {
            var rows = tab.GetRows();
 
-            foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
+           foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
            
            return null;
         }
 
-        /// <summary> Gets a row with a given name from the indicated tree. Returns null, if a row with the given name was not found in the tree. </summary>
-        /// <param name="tab">Set a tree.</param>
+        /// <summary> Gets a row with a given name from the indicated table. Returns null, if a row with the given name was not found in the tree. </summary>
+        /// <param name="table">Set a table.</param>
         /// <param name="rowName">Set a unique row name.</param>
-        internal static UITestControl GetRow(this WpfTree tree, string rowName)
+        internal static UITestControl GetRow(this WpfTable table, string rowName)
         {
-            var rows = tree.GetRows();
+            var rows = table.GetRows();
 
             foreach (var row in rows) if (row.GetRowName().Contains(rowName)) return row;
 
@@ -284,7 +290,7 @@ namespace CodedUITestAT
                         useMain.UIMapResultsWindow.GoToScanningResultsTab();
                         rows = useMain.ScanningResultsTab().GetRows();
                     }
-                    else rows = useMain.ScanningResultsTree().GetRows();                    
+                    else rows = useMain.ScanningResultsTable().GetRows();                    
                     break;
                 case ResultsScreen.ValkyrieAnalysis:
                     useMain.UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
