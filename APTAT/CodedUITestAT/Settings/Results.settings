@@ -21,6 +21,7 @@
   &lt;string&gt;Initializing&lt;/string&gt;
   &lt;string&gt;Starting&lt;/string&gt;
   &lt;string&gt;Enumerating&lt;/string&gt;
+  &lt;string&gt;Configuring&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="ScanStatusIndicatorConnecting" Type="System.String" Scope="Application">
