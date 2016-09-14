@@ -332,7 +332,7 @@ namespace CodedUITestAT
             CodedUITestMain useMain = new CodedUITestMain();
 
             GroupByFiles();
-            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = Path.GetFileName(row.RowName);
+            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = Path.GetFileName(row.RowName);
             useMain.UIMapMain.InputTextToSearchBox();
 
             try

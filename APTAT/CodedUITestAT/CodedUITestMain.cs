@@ -752,7 +752,7 @@ namespace CodedUITestAT
         /// <summary> Refreshes the results screen using Search box. </summary>
         private void RefreshResultsScreen()
         {
-            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = Guid.NewGuid().ToString();
+            UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = Guid.NewGuid().ToString();
             UIMapMain.InputTextToSearchBox();
             Playback.Wait(2000);
             UIMapMain.ClickClearSearchTextButton();
@@ -1090,7 +1090,7 @@ namespace CodedUITestAT
         public void SearchAtResultsScreenTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            Malware malware = SysHelper.InfectForScan(endpoint);
+            SysHelper.InfectForScan(endpoint);
             SysHelper.AddUnknownFileForScan(endpoint);
             string partialNameInput = endpoint.Name.Substring(1, (int) ((endpoint.Name.Length - 1) / 2));
             string error = "error";
@@ -1102,7 +1102,7 @@ namespace CodedUITestAT
             WaitForValkyrieResults(TestContext);
 
             // Searches with a correct input
-            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
+            UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput;
             UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Valkyrie analysis results' tab.");
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
@@ -1111,7 +1111,7 @@ namespace CodedUITestAT
             // Searches with an incorrect input
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
             TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Valkyrie analysis results' tab.");
-            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
+            UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput + error;
             UIMapMain.InputTextToSearchBox();
             try
             {
@@ -1128,7 +1128,7 @@ namespace CodedUITestAT
 
             // Searches with a correct input
             UIMapResultsWindow.GoToScanningResultsTab();
-            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput;
+            UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput;
             UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Scanning results' tab.");
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanningResults, TestContext);
@@ -1136,7 +1136,7 @@ namespace CodedUITestAT
 
             // Searches with an incorrect input
             UIMapResultsWindow.GoToScanningResultsTab();
-            UIMapMain.InputTextToSearchBoxParams.UISearchTextBoxEditText = partialNameInput + error;
+            UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput + error;
             UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Scanning results' tab.");
             try

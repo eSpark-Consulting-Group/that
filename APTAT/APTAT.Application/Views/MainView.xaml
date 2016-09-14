@@ -221,15 +221,10 @@
             </telerik:RadToolBar>
 
             <Controls:SearchUserControl
-                AutomationProperties.AutomationId="SearchBox"
-                
-               Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                x:Name="SearchTextBox" 
-                Grid.Column="1" VerticalAlignment="Top"   TabIndex="0"
-                 
-                   Margin="20 3" Width="140" HorizontalAlignment="Right"  
-                 IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
-                
+                                        AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        x:Name="SearchTextBox" Grid.Column="1" VerticalAlignment="Top"   TabIndex="0"                 
+                                        Margin="20 3" Width="140" HorizontalAlignment="Right"  
+                                        IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
             </Controls:SearchUserControl>
 
         </Grid>
