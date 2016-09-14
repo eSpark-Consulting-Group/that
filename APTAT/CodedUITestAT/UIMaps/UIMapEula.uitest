@@ -54,24 +54,6 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow.UIContinueButton">
-      <ParameterName />
-      <ModifierKeys>None</ModifierKeys>
-      <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="34" Y="18" />
-      <WheelDirection>0</WheelDirection>
-      <ActionType>Click</ActionType>
-      <MouseButton>Left</MouseButton>
-    </MouseAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="ClickContinueButton">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
     <MouseAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow.UICancelButton">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
@@ -90,378 +72,33 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow.UIItemPane.UIEulaRichTextBoxEdit">
+    <MouseAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow.UIContinueButton">
       <ParameterName />
-      <PropertyName>Text</PropertyName>
-      <ExpectedValue>Unknown File Hunter EULA (07-12-2016)
-END USER LICENSE AGREEMENT
-UNKNOWN FILE HUNTER
-THIS AGREEMENT CONTAINS A BINDING ARBITRATION CLAUSE
-IMPORTANT – PLEASE READ THESE TERMS CAREFULLY BEFORE DOWNLOADING, INSTALLING,
-OR USING THE UNKNOWN FILE HUNTER SOFTWARE (THE “PRODUCT”). THE PRODUCT MEANS
-ALL OF THE ELECTRONIC FILES PROVIDED EITHER BY DOWNLOAD OR ON PHYSICAL MEDIA
-(CD-ROM, DVD OR OTHER MEDIA THAT IS PROVIDED WITH THIS LICENSE AGREEMENT.
-BY DOWNLOADING, INSTALLING, OR USING THE PRODUCT, OR BY CLICKING ON “I ACCEPT”
-BELOW, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS AGREEMENT, THAT YOU
-UNDERSTAND IT, AND THAT YOU AGREE TO BE BOUND BY ITS TERMS. IF YOU DO NOT AGREE
-TO THE TERMS HEREIN, DO NOT DOWNLOAD OR USE THE SOFTWARE, SUBSCRIBE TO OR USE
-THE SERVICES, OR CLICK ON “I ACCEPT”.
-Product Functions: The Product identifies and collects an executable file(s) list from identified
-computers. The files are then checked from Comodo’s File intelligence platforms to determine if it is a
-known good or bad file. If the file has not been validated before, the Product submits the file to Comodo
-for a determination if it is malware, and generates a report for the operation outcome.
-This end user license and subscriber agreement is between you (“you” or “Subscriber”), as either an
-individual or as a business entity, and Comodo Security Solutions, Inc., which has its principal place of
-business at 1255 Broad Street, Suite 100, Clifton, New Jersey 07013, (referred to herein as “Comodo)”.
-In exchange for your use of the Product, you agree as follows:
-1. License
-1.1. Grant of License. Subject to the limits herein, Comodo grants you a non-exclusive, non-
-sublicensable, and revocable license to download, install, back-up, and use the Software,
-including any documentation files or website information accompanying it, on a single
-network. You shall not resell, lease, sell, modify, reverse engineer, decompile, or create
-derivative works of the Software. All rights not expressly granted herein are reserved to
-Comodo.
-1.2. Restrictions. The licenses granted herein are only valid if:
-(i) the Product is NOT modified in any manner;
-(ii) the Product is only installed and used in accordance with your network security
-policies,
-(iii) you possess the necessary authority and power to install and use the Product,
-(iv) you promptly pay all license fees when due, and
-(v) this agreement is accepted without modification and has not been breached.
-1.3. Registration. When registering the Product, you must provide accurate information and must
-update the registration information if it changes. Comodo may limit your ability to use the
-Product if you fail to complete a required registration process. You may also be required to
-select a username and password. Maintaining the confidentiality of this password and
-username is your responsibility. You must notify Comodo immediately of any unauthorized
-use of your account.
-1.4. Limited License. If this is a paid product, the licenses granted herein are only for the number
-of computers for which you paid for the Product. You can secure additional computers by
-obtaining a separate license for each computer, which might require an additional fee. You
-must have a license for each computer that accesses or uses the Product prior to installing or
-Unknown File Hunter EULA (07-12-2016)
-using the Product.
-1.5. Updates. Comodo is not obligated to provide updates to the Product. If an update is
-provided and the update is not accompanied by an additional agreement, this agreement
-applies to your use and installation of the update. The Product may update automatically
-without notice.
-1.6. Trial, Free, Evaluation, and Beta. If this agreement pertains to a trial, free, beta, or evaluation
-version, the licenses granted herein terminate at the end of the trial or evaluation period or
-when Comodo disables access to the Product. For a trial version of the Product if no term is
-agreed or specifically set forth in the documentation that you receive with this Product, then
-the term for the licenses granted herein shall be for the term that you purchased. All trial,
-evaluation, and beta licenses are limited to one per customer. Generally, credit card or
-account information is required to access a free trial. However, Comodo shall not charge
-your credit card or account until the trial period has ended. At the end of the trial period,
-Comodo may bill the credit card or account for the Product without further notice.
-Participants in a free trial are not entitled to a 30 day refund period as described in section
-5.4. Your termination of this agreement prior to the end of the free trial is required to avoid
-fees for the Product. Annual subscriptions expire one year from the end of the trial period.
-Comodo may deny or revoke a free trial for any reason.
-2. Ownership
-2.1. No Ownership Rights. The Product is being licensed, not sold. Comodo retains all
-ownership rights in and to the Product, including any intellectual property rights therein.
-2.2. Copyright. The Product contains material that is protected by United States and foreign
-intellectual property laws, including copyright, trade secret, and patent law. All rights not
-granted to you herein are expressly reserved by Comodo. You may not remove any copyright
-or other proprietary notice of Comodo from the Product.
-2.3. Content. Content, including files, links, images, and text, made available or accessible
-through the Product is the sole responsibility of the person or entity from whom it originated
-and is the property of the applicable owner. This agreement does not give any rights to such
-content. Comodo does not endorse any such content. You accept all responsibility for
-security risks and any damage resulting from any content viewed or accessed through the
-Product, and Comodo is not responsible for any damage or loss caused by your use or
-reliance on any of the content, goods or services, or information available through third party
-sources regardless of how presented.
-2.4. Submissions. Any communications sent to Comodo are the property of Comodo or its
-affiliates. Unless stated otherwise herein, submissions are not considered confidential, and
-Comodo is not liable for any use or disclosure of a submission. Except as noted herein,
-Comodo is entitled to unrestricted use of any submissions for any purpose whatsoever
-without compensation to the provider of the submission.
-3. Payment
-3.1. Fees. If this is a paid product, you may use the Software only after paying Comodo any
-applicable fees for the Software. For other Comodo Products, you must pay the fee listed on
-any applicable purchase order or Comodo’s website prior to using or accessing those
-Products. Free and paid for Product are listed on www.comodo.com. Comodo may modify
-fees for paid products in its sole discretion. Your failure to terminate this agreement after a
-fee change is posted to Comodo’s website constitutes your acceptance of amended prices,
-which will apply upon your renewal of the Product.
-3.2. Method of Payment. All fees must be paid in advance. Comodo may automatically charge
-the credit card or account provided for renewing subscriptions to the Product. However, you
-remain solely responsible for any renewal payment. If renewal payments are not made
-Unknown File Hunter EULA (07-12-2016)
-before a subscription expires, Comodo may, without notice, restrict or remove your access to
-the Product.
-3.3. Rejected Charges. If any charges are rejected by your credit card issuer or the account
-provided is closed, then Comodo may deactivate your account until payment is successfully
-received. Comodo may deactivate any account that has a disputed charge until Comodo, in
-its sole discretion, determines the dispute resolved.
-3.4. Billing Issues. You shall provide Comodo notice of any billing problems or disputes within 60
-days after the charge first appears on a statement you receive from your bank, credit card
-company, invoice, or other billing company. Failure to notify Comodo of the problem within
-the 60 day period is your acceptance of the charges. Comodo is not obligated to provide a
-refund for any unused Product.
-4. Restrictions
-4.1. Lawful Use. The Product are solely for lawful purposes and use. You are responsible for
-ensuring that your use of the Product is in accordance with this agreement and any
-applicable laws, statutes, ordinances, regulations, rules and other government authority.
-4.2. Compliance. You shall (1) not interfere or disrupt networks connected to Comodo’s services;
-(2) comply with all regulations, policies and procedures of networks connected to the
-services; (3) not use the Product to infringe the privacy or intellectual property rights of a third
-party; (4) not use the Product to distribute or transmit any file that contains malware, (5) not
-attempt to gain unauthorized access to other computer systems; and (6) not use the Product
-to transmit any unlawful, harassing, libelous, defamatory, racist, indecent, abusive, violent,
-threatening, intimidating, harmful, vulgar, obscene, offensive or otherwise objectionable
-material of any kind or nature.
-4.3. Export. You represent that you are not located in and will not modify, export or re-export,
-either directly or indirectly, the Product to any country or entity under United States
-restrictions or to any country or entity subject to applicable trade sanctions. The United States
-restricted country and persons list is subject to change without notice from Comodo, and you
-must comply with the list as it exists in fact. COMODO SHALL NOT BE LIABLE FOR YOUR
-VIOLATION OF ANY SUCH EXPORT OR IMPORT LAWS, WHETHER UNDER UNITED
-STATES LAW OR FOREIGN LAW.
-5. Termination.
-5.1. Term. This agreement is effective until terminated by you or by Comodo. You may only use
-paid Product during the period for which you have paid the subscription fee. The subscription
-may be renewed by paying an additional license fee as set forth on the Comodo website.
-5.2. Termination by You. For free software, you may terminate this agreement at any time by
-removing all copies of the software in your possession or under your control. All paid Product
-may be terminated by removing all copies of any related software and notifying Comodo of
-your intent to terminate this agreement. Notification of termination must be sent by email to
-support@comodo.com. Your termination will be effective upon Comodo’s receipt and
-processing of the email. Processing may take up to 24 hours.
-5.3. Termination by Comodo. Comodo may terminate this agreement for non-payment by
-delivering notice of the termination or sending an email to the address provided during your
-registration for the Product. Comodo may monitor its systems for excessive consumption of
-network resources and may take technical or other remedies deemed necessary to prevent
-or eliminate any excessive consumption. If Comodo deems your use to be excessive,
-Comodo may, with email notice, terminate your account or adjust the price of the Product.
-5.4. Refunds. After purchasing the Product, you may cancel your subscription at any time. Unless
-you have participated in a promotion under section 1.6, you may be entitled to a refund. If
-you cancel your subscription within the first 30 days after making payment and are eligible for
-Unknown File Hunter EULA (07-12-2016)
-a refund, Comodo shall refund to you the full amount paid by you. To request a refund, you
-must email refunds@comodo.com within 30 days of the purchase date.
-5.5. Events Upon Termination. Upon termination, you must immediately cease using the Product
-and delete all copies of any related software found on your computer and any backup copies
-made. Upon termination, Comodo may disable further use of the Product without further
-notice and may delete, remove, and erase any account information, any backup data stored
-by Comodo, and any other information stored or collected by Comodo. Such deletions are in
-Comodo’s sole discretion and may occur without notice to you. No refunds shall be given for
-any reason.
-6. Indemnification.
-6.1. Indemnification By You. You shall indemnify (i) Comodo, (ii) Comodo’s affiliates, and (iii)
-Comodo’s and its affiliate’s directors, officers, employees, and agents (each an “Indemnified
-Person”) against all liabilities, losses, expenses, or costs (including reasonable attorney’s
-fees) (collectively “Losses”) that, directly or indirectly, are based on your breach of this
-agreement, information provided by you, or your infringement on the rights of a third party.
-6.2 Indemnification By Comodo. Comodo hereby agrees to indemnify, defend and hold harmless
-You (an “Indemnified Person”), from and against, any and all Losses incurred by You in
-connection with any claim, action, suit or proceeding by a third party (each, a “Claim”) to the
-extent such Claim arises out of or results from Comodo’s direct infringement or
-misappropriation of a trade secret of a third party or of any U.S. patent, registered copyright,
-or registered trademark (“Intellectual Property Infringement”) related to the use of the
-Product. Comodo’s indemnification obligations shall not apply to the extent any such
-infringement or misappropriation is the result of: (a) Your independent modification of the
-Product, or any other product, software or service provided under this agreement where
-without such modification the Product or other product would not infringe, (b) Your
-combination of the Product or any other product, software or service provided under this
-agreement with any other product, or use with any other product, (c) Comodo’s adherence to
-Your express written instructions where such instructions and any modifications, changes or
-combinations made as a result of said instructions are solely responsible for the claim of
-infringement, (d) any Claim based on open source software or other third party code
-included with the Product, (e) any unauthorized use of the Product, or (f) use of the Product
-other than in accordance with the Documentation (any applicable administration guide for the
-current version of the Product).
-6.2.1. Remedy and Liability: In the event that a court of final determination and of competent
-jurisdiction holds that the Product constitutes a direct infringement or use of the Product
-is enjoined, Comodo shall, at its sole discretion, do one or more of the following: (i)
-procure for you the right to continue use of the Product, (ii) provide a modification to the
-Product so that its use becomes non-infringing, (iii) replace the Product with software that
-is substantially similar in functionality and performance or (iv), if none of the foregoing
-alternatives is reasonably available to Comodo, Comodo shall refund the residual value
-of the purchase price paid by you for the infringing Product, depreciated using a straight-
-line method of depreciation over a three (3) year period from the date of delivery of the
-Product to you. Comodo may also request You to remove all copies of any Product held
-to be infringing or giving rise to a Claim.
-THE AGGREGATE LIABILITY OF COMODO AND ITS AFFILIATES, AND THEIR
-OFFICERS, DIRECTORS, PARTNERS, EMPLOYEES, AND CONTRACTORS,
-RESULTING FROM OR CONNECTED TO THIS SECTION OF THE AGREEMENT
-SHALL BE LIMITED IN THE AGGREGATE TO THE AMOUNT PAID OR PAYABLE BY
-YOU UNDER THIS AGREEMENT DURING THE TWELVE (12) MONTH PERIOD
-IMMEDIATELY PRECEDING THE EVENTS GIVING RISE TO A CLAIM. THIS SECTION
-STATES COMODO’S SOLE LIABILITY AND YOUR EXCLUSIVE REMEDY FOR
-INTELLECTUAL PROPERTY INFRINGEMENT CLAIMS.
-Unknown File Hunter EULA (07-12-2016)
-6.3 Indemnification Procedure. Each Indemnified Person must notify the other party promptly
-(within 14 days) of a demand for indemnification. However, an Indemnified Person’s
-failure to notify will not relieve the other party from its indemnification obligations except
-to the extent that the failure to notify materially prejudices a party. The Indemnitor may
-assume the defense of any action, suit, or proceeding giving rise to an indemnification
-obligation unless assuming the defense would result in potential conflicting interests as
-determined by the Indemnified Person in good faith. Indemnitor may not settle any claim,
-action, suit or proceeding related to this Agreement unless the settlement also includes
-an unconditional release of all Indemnified Persons from liability.
-6.4 Additional Liability. Your indemnification obligations are not Comodo’s sole remedy for a
-breach and are in addition to any other remedies Comodo may have against you under
-this agreement. Your indemnification obligations survive the termination of this
-agreement.
-7. Disclaimers and Limitation of Liability.
-Internet. You acknowledge that the Product are subject to the operation and
-telecommunications infrastructures of the Internet and the operation of your Internet
-connection services, all of which are beyond Comodo’s control.
-Guarantee Disclaimer; Assumption of Risk. EXCEPT AS SPECIFICALLY STATED
-OTHERWISE IN THIS AGREEMENT, COMODO EXPRESSLY DISCLAIMS ALL IMPLIED
-AND EXPRESS WARRANTIES IN THE PRODUCT. THIS DISCLAIMER INCLUDES ALL
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
-NON-INFRINGEMENT AND IS EFFECTIVE TO THE MAXIMUM EXTENT ALLOWED BY
-LAW. COMODO DOES NOT GUARANTEE THAT 1) THE PRODUCT WILL MEET YOUR
-REQUIREMENTS OR EXPECTATIONS OR 2) THAT ACCESS TO THE PRODUCT WILL
-BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE.
-Damage Limitation. THE TOTAL LIABILITY OF COMODO AND ITS AFFILIATES, AND
-EACH OF THEIR OFFICERS, DIRECTORS, PARTNERS, EMPLOYEES, AND
-CONTRACTORS, RESULTING FROM OR CONNECTED TO THIS AGREEMENT IS
-LIMITED TO THE AMOUNT PAID BY YOU FOR THE PRODUCT. YOU WAIVE ALL
-LIABILITY FOR SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES.
-THIS WAIVER INCLUDES ALL DAMAGES FOR LOST PROFITS, REVENUE, USE, OR
-DATA AND APPLIES EVEN IF COMODO IS AWARE OF THE POSSIBILITY OF SUCH
-DAMAGES. These limitations apply to the maximum extent permitted by law regardless of 1)
-the reason for or nature of the liability, including tort claims, 2) the number of claims, 3) the
-extent or nature of the damages, and 4) whether any other provisions of this agreement have
-been breached or proven ineffective.
-Data Transfer. ALL MATERIAL AND/OR DATA DOWNLOADED OR OBTAINED THROUGH
-THE PRODUCT IS AT YOUR OWN RISK. YOU ARE SOLELY RESPONSIBLE FOR THE
-USE OR YOUR POSSESSION OF SUCH DATA OR MATERIAL. COMODO DOES NOT
-ACTIVELY MONITOR ANY INFORMATION OR MATERIAL TRANSFERRED THROUGH
-ITS PRODUCT AND CANNOT WARRANT THE CONTENT OF SUCH MATERIAL OR
-DATA.
-Exceptions. If any legal right disallows an exclusion of warranties or disallows limiting certain
-damages, then the disclaimers of guarantee and limitations on liability herein apply to the
-maximum extent allowed by law.
-Limitations on Remedy. Except for actions and claims related to a party’s indemnification
-obligations, all actions or claims relating to this agreement must be brought within one (1)
-year from the date when the cause of action occurred.
-Unknown File Hunter EULA (07-12-2016)
-8. Privacy.
-8.1. Privacy Policy. Comodo shall follow the privacy policy posted on its website at
-http://www.comodo.com/repository/privacy_agreement.html when collecting and using
-information from you. Comodo may amend the privacy policy at any time by posting the
-amended privacy policy on its website.
-8.2. Disclosure. Comodo will disclose information where required by a subpoena, interception
-order or other lawful process. Comodo may also disclose information when it believes that
-such disclosure is necessary to protect the rights or safety of others or to enforce, or protect
-Comodo’s rights under this Agreement.
-8.3. Opt Out. You may opt-out of having information used for purposes not directly related to the
-Product by emailing a clear notice to optout@comodo.com. By clicking “I AGREE”, you
-affirmatively consent to receiving Comodo’s and its affiliates’ promotional material.
-8.4 File Submission. This product may automatically submit to Comodo any files or programs that
-are identified as potential malware or unknown, including information on the actions taken by
-such files. The collected files could contain personally identifiable information that has been
-obtained in the file without your permission. Files of this type are being collected by Comodo
-only for the purpose of improving the ability of Comodo’s products to detect malicious
-behavior. Comodo will not correlate these files with any personally identifiable information.
-The automatic submission function can be cancelled by closing the application.
-9. Miscellaneous
-9.1. Notices. All questions, notices, demands, or requests to Comodo with respect to this
-Agreement shall be made in English writing to: Comodo Security Solutions, Inc., 1255 Broad
-Street, Suite 100, Clifton, New Jersey 07013. All notices to you shall be made by posting the
-notice on the Comodo website.
-9.2. Entire Agreement. This agreement, along with the attached schedules and any documents
-referred to herein, is the entire agreement between the parties with respect to the subject
-matter, superseding all other agreements that may exist with respect to the subject matter.
-Section headings are for reference and convenience only and are not part of the
-interpretation of the agreement.
-9.3. Modifications. Comodo may amend or discontinue certain Product offered under this
-agreement in its sole discretion, including modifying renewal license fees, availability,
-equipment and software requirements, and limiting or restricting use of the Product.
-Comodo may amend this agreement to the extent allowed by law. Comodo will give you
-notice of these amendments by posting the modified agreement to its website. You must
-periodically visit Comodo’s website to be aware of any changes. Continued use of a Product
-after an amendment constitutes your acceptance of the change.
-9.4. Waiver. A party’s failure to enforce a provision of this agreement does not waive the party’s
-right to enforce the same provision later or right to enforce any other provision of this
-agreement. To be effective, all waivers must be both in writing and signed by the party
-benefiting from the waived provision.
-9.5. Force Majeure and Internet Frailties. Other than for payment obligations by you, neither party
-will be liable for a delay or failure to perform an obligation to the extent that the delay or
-failure is caused by an occurrence beyond the party's reasonable control. Each party
-acknowledges that the operation of the Internet is beyond the other party’s reasonable
-control, and neither party will be liable for a delay or failure caused by an interruption or
-failure of telecommunication or digital transmission links, Internet slow-downs or failures, or
-other such transmission failure.
-9.6. Arbitration and Governing Law. You agree that any dispute, claim or controversy arising out
-of this agreement shall be determined by binding arbitration. Before you may begin arbitration
-with respect to a dispute involving any aspect of this Agreement, you shall notify Comodo and
-Unknown File Hunter EULA (07-12-2016)
-any other party to the dispute for the purpose of seeking dispute resolution. The notice to
-Comodo should be addressed to 1255 Broad Street, Clifton, New Jersey 07013.
-If the dispute is not resolved within sixty (60) days after the initial notice, then a
-party may proceed in accordance with the following: Any unresolved dispute arising under the
-terms of this Agreement shall be decided by arbitration conducted through the services of the
-Commercial Arbitration Rules of the American Arbitration Association (hereinafter referred to
-as the “AAA”). Notice of demand for an arbitration hearing shall be in writing and properly
-served upon the parties to this Agreement. Arbitration hearings shall be held in the state of
-New Jersey at a location mutually agreeable to the parties.
-The laws of the state of New Jersey govern the interpretation, construction and enforcement
-of this agreement and all proceedings arising out of it without regard to any conflicts of laws
-principles. Both parties agree to the exclusive venue and jurisdiction of state or U.S. federal
-courts located in New Jersey.
-The United Nations Convention on Contracts for the International Sale of Goods and the
-Uniform Computer Information Transaction Act shall not apply to this agreement and are
-specifically excluded.
-9.7. Assignment. You may not assign any of your rights or obligations under this agreement,
-whether by merger, consolidation, operation of law, or any other manner, without the prior
-written consent of Comodo. For purposes of this section only, a change in control is deemed
-an assignment. Any transfer without consent is void. To the extent allowed by law, Comodo
-may assign its rights and obligations without your consent.
-9.8. Severability. Any provision held invalid or unenforceable will be reformed to the minimum
-extent necessary to make the provision valid and enforceable. If reformation is not possible,
-the provision is deemed omitted and the balance of the agreement remains valid and
-enforceable.
-9.9. Survival. All provisions relating to confidentiality, proprietary rights, indemnification, and
-limitations of liability survive the termination of the agreement.
-9.10. Rights of Third Parties. There are no third party beneficiaries under the agreement.
-ACCEPTANCE
-BY CLICKING “I ACCEPT” BELOW, YOU AGREE THAT YOU HAVE READ AND UNDERSTAND THIS
-AGREEMENT AND THAT YOU WILL BE BOUND BY AND COMPLY WITH ALL OF ITS TERMS. DO
-NOT CLICK THE “I ACCEPT” BUTTON IF YOU DO NOT AGREE TO THE TERMS OF THIS
-AGREEMENT.
-Unknown File Hunter EULA (07-12-2016)
-SCHEDULE A
-Json.net (MIT License):
-The MIT License (MIT)
-Copyright (c) 2007 James Newton-King
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
-persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
-Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
-AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-SimpleInjector (MIT License)
-https://github.com/simpleinjector/SimpleInjector/blob/master/licence.txt
-Copyright (c) 2013 - 2015 Simple Injector Contributors
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
-persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
-Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
-AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</ExpectedValue>
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="34" Y="18" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="ClickContinueButton">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow1.UIEulaDocumentDocument">
+      <ParameterName />
+      <PropertyName>Exists</PropertyName>
+      <ExpectedValue>True</ExpectedValue>
       <MessageOnValidationFailure />
       <Type>String</Type>
       <PropertyCondition>AreEqual</PropertyCondition>
     </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertEulaText">
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertEulaDocument">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -545,6 +182,34 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</ExpectedValue>
               <AndCondition>
                 <PropertyCondition Name="ControlType">Button</PropertyCondition>
                 <PropertyCondition Name="AutomationId">CancelButton</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UICOMODOUnknownFileHunWindow1" FriendlyName="COMODO Unknown File Hunter" SpecialControlType="None" SessionId="9244418">
+          <TechnologyName>UIA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>COMODO Unknown File Hunter</WindowTitle>
+          </WindowTitles>
+          <AndCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+            <PropertyCondition Name="Name">COMODO Unknown File Hunter</PropertyCondition>
+            <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+            <PropertyCondition Name="ClassName" Operator="Contains">HwndWrapper</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>0</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Document" Id="UIEulaDocumentDocument" FriendlyName="EulaDocument" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>COMODO Unknown File Hunter</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Document</PropertyCondition>
+                <PropertyCondition Name="AutomationId">EulaDocument</PropertyCondition>
               </AndCondition>
               <SupportLevel>0</SupportLevel>
               <Descendants />

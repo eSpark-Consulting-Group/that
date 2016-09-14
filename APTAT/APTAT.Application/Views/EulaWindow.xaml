@@ -22,7 +22,7 @@
       </StackPanel>
 
 
-      <telerik:RadPdfViewer x:Name="EulaRichTextBox" Grid.Row="2" AutomationProperties.AutomationId="EulaRichTextBox"  />            
+      <telerik:RadPdfViewer x:Name="EulaRichTextBox" Grid.Row="2" AutomationProperties.AutomationId="EulaDocument"  />            
 
       <Grid AutomationProperties.AutomationId="EulaAcceptGrid"
             Grid.Row="3" Margin="0 15 0 0" >

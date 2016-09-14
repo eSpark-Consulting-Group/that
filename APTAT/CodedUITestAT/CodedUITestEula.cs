@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UITesting;
+﻿using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapEulaClasses;
@@ -59,7 +58,7 @@ namespace CodedUITestAT
         private WpfButton ContinueButton()
         {
             return UIMapEula.UICOMODOUnknownFileHunWindow.UIContinueButton;
-        }
+        }        
 
         #endregion
 
@@ -74,8 +73,8 @@ namespace CodedUITestAT
             if (!ContinueButton().Enabled) TestContext.WriteLine("Continue button is disabled by default.\n");
             else Assert.Fail("Continue button is enabled by default!\n");
 
-            UIMapEula.AssertEulaText();
-            TestContext.WriteLine("EULA text is correct.\n");
+            UIMapEula.AssertEulaDocument();
+            TestContext.WriteLine("EULA document is shown.\n");
 
             UIMapEula.ClickCancelButton();
             CodedUITestMain useMain = new CodedUITestMain();
