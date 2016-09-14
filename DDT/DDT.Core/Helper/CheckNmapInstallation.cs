@@ -9,15 +9,23 @@ using System.IO;
 
 namespace DDT.Core.Helper
 {
-    public sealed class CheckNmapInstallation
-    {        
+    public sealed class CheckNmapInstallation : ICheckNmapInstallation
+    {
+        private IProcessHelper _processHelper;
+        private IRegistryHelper _registry;
+
+        public CheckNmapInstallation(IProcessHelper processHelper, IRegistryHelper registryHelper)
+        {
+            _processHelper = processHelper;
+            _registry = registryHelper;
+        }
         public bool Check(out string message)
         {
             string errorMessage = String.Empty;
             if (!IsVCRedist2013Installed())
-            {                
+            {
                 message = "Visual C++ Redistributable 2013 is not installed";
-                return false;                
+                return false;
             }
 
             if (!IsApplicationWinPcapInstalled())
@@ -33,10 +41,10 @@ namespace DDT.Core.Helper
             }
 
             message = String.Empty;
-            return true;          
+            return true;
         }
 
-        private static bool IsApplicationNmapInstalled()
+        private bool IsApplicationNmapInstalled()
         {
             var result = true;
 
@@ -52,34 +60,34 @@ namespace DDT.Core.Helper
             }
             return result;
         }
-        private static bool IsApplicationWinPcapInstalled()
-        {            
+        private bool IsApplicationWinPcapInstalled()
+        {
             bool result = true;
 
             var key86 =
-                Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinPcapInst");
+                _registry.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinPcapInst");
 
-          
+
             var key64 =
-                Registry.LocalMachine.OpenSubKey(
+                _registry.OpenSubKey(
                     @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\WinPcapInst");
-          
+
 
             if (key86 != null || key64 != null)
             {
                 if (!File.Exists(@"C:\Windows\System32\drivers\NPF.sys"))
-                {                
+                {
                     result = false;
                 }
             }
             else
             {
                 result = false;
-            }            
+            }
             return result;
         }
 
-        private static bool IsVCRedist2013Installed()
+        private bool IsVCRedist2013Installed()
         {
             if (Environment.Is64BitOperatingSystem)
             {
@@ -100,48 +108,15 @@ namespace DDT.Core.Helper
                 return GetValueOfInstalled(keyX86);
             }
         }
-        
-        private static bool IsProcessExist(string path)
+
+        private bool IsProcessExist(string path)
         {
-            var result = true;
-            Process processNmap = null;
-
-            try
-            {
-                processNmap = new Process
-                {
-                    StartInfo =
-                    {
-                        CreateNoWindow = true,
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        FileName = path,
-                        Arguments = "-sP"
-                    }
-                };
-
-                processNmap.Start();
-            }
-            catch
-            {
-                
-                result = false;
-            }
-            finally
-            {
-                if (processNmap != null && result)
-                {
-                    processNmap.Close();
-                }
-            }            
-            
-            return result;
+            return _processHelper.IsProcessExist(path);
         }
 
-        private static bool GetValueOfInstalled(string key)
+        private bool GetValueOfInstalled(string key)
         {
-            var subKey = Registry.LocalMachine.OpenSubKey(key);
+            var subKey = _registry.OpenSubKey(key);
             if (subKey == null)
                 return false;
             var isInstalled = subKey.GetValue("Installed") as Nullable<int>;

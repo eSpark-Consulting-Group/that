@@ -61,7 +61,12 @@
     <Compile Include="Descent\PackageDescentResult.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="Helper\CheckNmapInstallation.cs" />
+    <Compile Include="Helper\ICheckNmapInstallation.cs" />
+    <Compile Include="Helper\IRegistryHelper.cs" />
+    <Compile Include="Helper\ProcessHelper.cs" />
     <Compile Include="Helper\CSVHelper.cs" />
+    <Compile Include="Helper\IProcessHelper.cs" />
+    <Compile Include="Helper\RegistryHelper.cs" />
     <Compile Include="NMap\NmapScanner.cs" />
     <Compile Include="NMap\osclass.cs" />
     <Compile Include="NMap\osmatch.cs" />

@@ -16,9 +16,12 @@ namespace DDT.Application.Services
     public class DeploymentService : IDeploymentService
     {
         private readonly IDescentSubSystem _descent;
-        public DeploymentService(IDescentSubSystem descent)
+        private ICheckNmapInstallation _nmapHelper;
+
+        public DeploymentService(IDescentSubSystem descent, ICheckNmapInstallation nmapHelper)
         {
             _descent = descent;
+            _nmapHelper = nmapHelper;
         }
 
         public async Task<DeploymentStartedEventArgs> BeginDeployment(DeploymentItem[] items, String login, 
@@ -73,9 +76,9 @@ namespace DDT.Application.Services
         [Obsolete]
         public bool IsNmapInstalled(out string errorMesage)
         {
-            CheckNmapInstallation nmapHelper = new CheckNmapInstallation();            
-            var isInstalled = nmapHelper.Check(out errorMesage);
-            return isInstalled;
+            
+            return  _nmapHelper.Check(out errorMesage);
+            
         }
     }
 }
