@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapReportsClasses;
 
@@ -96,8 +94,9 @@ namespace CodedUITestAT
         }
 
         /// <summary> Waits for a report pdf-viewer screen. </summary>
+        /// <param name="report">Set a report.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void WaitForReportViewer(TestContext testContext)
+        private void WaitForReportViewer(Report report, TestContext testContext)
         {
             int reportCreationTime = Settings.WaitingTime.Default.ReportCreationWaitTime;
             
@@ -109,9 +108,10 @@ namespace CodedUITestAT
             {
                 Playback.Wait(1000);
                 
-                try 
-	            {	        
-		          AssertReportPdfViewContains(" ", testContext);
+                try
+                {
+                    AssertReportPdfViewTitle(report, testContext);
+		          //AssertReportPdfViewContains(" ", testContext);
                   break;
 	            }
 	            catch (Exception) { }
@@ -141,15 +141,18 @@ namespace CodedUITestAT
             Report report = new Report(reportType);
             report.Generate();
             report.WaitForReportFile();
-            WaitForReportViewer(testContext);
+            WaitForReportViewer(report, testContext);
 
             CheckReportFile(report, testContext);
             AssertReportPdfViewTitle(report, testContext);
-            AssertReportPdfViewContains(report.Title, testContext);
+            
+            // The report viewer pdf text is no longer available for CodedUI Test after Telerik controls update
+            /*
+               AssertReportPdfViewContains(report.Title, testContext);
 
             if (report.Type == ReportType.ExecutiveValkyrie || report.Type == ReportType.PerDeviceValkyrie || report.Type == ReportType.PerProgramValkyrie)
                 AssertReportPdfViewContains(Settings.Reports.Default.ValkyrieOnlyVerdict, testContext);
-
+            */
             UIMapReports.ClickCloseReportButton();
         }
 
