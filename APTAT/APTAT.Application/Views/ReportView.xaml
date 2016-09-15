@@ -165,7 +165,7 @@
                     </telerik:RadButton>
                 </telerik:RadToolBar>
 
-                <telerik:RadPdfViewer AutomationProperties.AutomationId="ReportPdfViewer" HorizontalAlignment="Left" x:Name="pdfViewer" Grid.Row="1"/>
+                <telerik:RadPdfViewer AutomationProperties.AutomationId="ReportPdfViewer" x:Name="pdfViewer" Grid.Row="1"/>
 
             </Grid>
         </telerik:RadBusyIndicator>

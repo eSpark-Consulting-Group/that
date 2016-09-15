@@ -76,9 +76,9 @@ namespace APTAT.Application
 
         private void TbFindKeyDown(Object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && (tbFind.Text ?? string.Empty).Length > 2)
             {
-                pdfViewer.Commands.FindCommand.Execute(this.tbFind.Text);
+                pdfViewer.CommandDescriptors.FindCommandDescriptor.Command.Execute(tbFind.Text);
                 btnPrev.Visibility = Visibility.Visible;
                 btnNext.Visibility = Visibility.Visible;
             }
