@@ -304,7 +304,9 @@ namespace CodedUITestAT
             {
                 if (row.GetRowName().Contains(rowName))
                 {
-                    expandRowButton = row.GetChildren()[0] as WpfButton;
+                    var button = row.GetChildren().FirstOrDefault(c => c is WpfButton); // First WPF button in the row
+                    expandRowButton = button as WpfButton;
+                    if (expandRowButton == null) throw new Exception("The resulting WPF button is null!");
                     if (click == MouseClick.DoubleLeft) Mouse.DoubleClick(expandRowButton);
                     else if (click == MouseClick.Right) Mouse.Click(expandRowButton, MouseButtons.Right);
                     else Mouse.Click(expandRowButton);
