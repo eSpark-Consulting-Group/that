@@ -41,9 +41,10 @@ namespace CodedUITestAT
         internal string Product { get { return _product; } }
         /// <summary> A threat trusted vendor name. </summary>
         internal string TrustedVendor { get { return _trustedVendor; } }
+        /*
         /// <summary> A threat malware probability. </summary>
         internal string MalwareProbability { get { return _malwareProbability; } }
-
+        */
         /// <summary> Search word to find the respective data in Scan Statistics. </summary>
         internal abstract string SearchWord { get; }
         /// <summary> A threat verdict. </summary>
@@ -112,7 +113,7 @@ namespace CodedUITestAT
 
             _trustedVendor = Settings.General.Default.ThreatTrustedVendor;
 
-            _malwareProbability = Settings.General.Default.NoValueAvailable;
+            //_malwareProbability = Settings.General.Default.NoValueAvailable;
         }
 
         private string _name;
@@ -130,6 +131,6 @@ namespace CodedUITestAT
         private string _copyright;
         private string _product;
         private string _trustedVendor;
-        private string _malwareProbability;
+        //private string _malwareProbability;
     }
 }

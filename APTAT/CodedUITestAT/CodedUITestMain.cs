@@ -1690,11 +1690,13 @@ namespace CodedUITestAT
             UIMapValkyrieDetailsWindow.AssertProductValueTextBoxTextExpectedValues.UIProductTextBoxEditText = unknownFile.Product;
             UIMapValkyrieDetailsWindow.AssertProductValueTextBoxText();
             TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.", unknownFile.Product));
-            
+
+            // Currently excluded from UI
+            /*
             UIMapValkyrieDetailsWindow.AssertMalwareProbabilityValueTextBoxTextMatchesExpectedValues.UIMalwareProbabilityTeEditText = unknownFile.MalwareProbability; //@"\d{1,2}.\d{2}\s%";
             UIMapValkyrieDetailsWindow.AssertMalwareProbabilityValueTextBoxTextMatches();
             TestContext.WriteLine(String.Format("Threat 'Malware Probability' parameter matches an expected pattern correctly: '{0}'.", unknownFile.Product));
-            
+            */
             UIMapValkyrieDetailsWindow.ClickCloseButton();
             UIHelper.WaitForControlIsClickable(StartScanningButton());
         }
