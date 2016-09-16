@@ -9,9 +9,19 @@ namespace DDT.Core.Helper
 {
     public class RegistryHelper : IRegistryHelper
     {
-        public RegistryKey OpenSubKey(String key)
+        public bool IsSubKeyExists(string key)
         {
-           return Registry.LocalMachine.OpenSubKey(key);            
+            var subKey = Registry.LocalMachine.OpenSubKey(key);
+            return subKey != null;
+        }
+
+        public bool IsValueExists(string key, string valueName)
+        {
+            var subKey = Registry.LocalMachine.OpenSubKey(key);
+            if (subKey == null)
+                return false;
+            var isInstalled = subKey.GetValue(valueName) as bool?;
+            return isInstalled == true;
         }
     }
 }

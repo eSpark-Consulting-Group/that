@@ -13,6 +13,7 @@ namespace DDT.Core
             resolver.Register<IReportBuilder, ReportBuilder>();
             resolver.Register<IRegistryHelper, RegistryHelper>();
             resolver.Register<IProcessHelper, ProcessHelper>();
+            resolver.Register<IEnvironmentHelper, EnvironmentHelper>();
             resolver.Register<ICheckNmapInstallation, CheckNmapInstallation>();
         }
     }
