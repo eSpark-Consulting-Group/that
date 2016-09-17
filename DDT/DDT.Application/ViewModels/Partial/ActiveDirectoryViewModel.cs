@@ -69,7 +69,7 @@ namespace DDT.Application.ViewModels
 
         public string DomainControllerMask
         {
-            get { return "Enter Domain Controller"; }
+            get { return "Enter Domain Name"; }
         }
 
         private string _activeDirectoryLoginMemento;

@@ -410,13 +410,13 @@
                                         </telerik:RadWatermarkTextBox.WatermarkContent>
                                     </telerik:RadWatermarkTextBox>
 
-                                    <Grid Grid.Column="2" Margin="20 0 0 0" Visibility="{Binding IsInstallationParametersSpecified, Converter={converters:BoolToVisibilityConverter}}">
+                                    <Grid Grid.Column="2" Margin="20 0 0 0" Visibility="{Binding SeparatePackages, Converter={converters:BoolToVisibilityConverter}}">
                                         <CheckBox x:Name="Parameters64Checkbox" Content="Override parameters for 64-bit application" IsChecked="{Binding IsInstallationParameters64Specified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      Visibility="{Binding SeparatePackages, Converter={converters:BoolToVisibilityConverter}}"   Margin="0 1 0 0" HorizontalAlignment="Left" Checked="Parameters64Checkbox_Checked"/>
+                                                      Margin="0 1 0 0" HorizontalAlignment="Left" Checked="Parameters64Checkbox_Checked"/>
                                     </Grid>
 
                                     <Grid Grid.Column="3" Visibility="{Binding SeparatePackages, Converter={converters:BoolToVisibilityConverter}}">
-                                        <Grid Visibility="{Binding IsInstallationParametersSpecified, Converter={converters:BoolToVisibilityConverter}}">
+                                        <Grid>
                                             <telerik:RadWatermarkTextBox x:Name="Parameters64" Margin="0 0 0 -2"  Visibility="{Binding IsInstallationParameters64Specified, Converter={converters:BoolToVisibilityConverter}}" Text="{Binding InstallationParameters64, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  >
                                                 <telerik:RadWatermarkTextBox.WatermarkContent>
                                                     <TextBlock Text="{Binding ParametersExample}" Foreground="{DynamicResource TextBrush2}" />

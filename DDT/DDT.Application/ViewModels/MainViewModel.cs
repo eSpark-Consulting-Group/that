@@ -217,10 +217,23 @@ namespace DDT.Application.ViewModels
             {
                 _isInstallationParameters64Specified = value;
                 RaisePropertyChanged(nameof(IsInstallationParameters64Specified));
+
+                ChangeScreenCommand.InvalidateCanExecute();
             }
         }
 
-        public string InstallationParameters64 { get; set; }
+        private string _installationParameters64;
+        public string InstallationParameters64
+        {
+            get { return _installationParameters64; }
+            set
+            {
+                _installationParameters64 = value;
+                RaisePropertyChanged(nameof(InstallationParameters64));
+
+                ChangeScreenCommand.InvalidateCanExecute();
+            }
+        }
 
         private bool _separatePackages;
         public bool SeparatePackages
@@ -604,7 +617,9 @@ namespace DDT.Application.ViewModels
             switch (_currentScreen)
             {
                 case ChangeScreenTypes.Packages:
-                    return HasPackage && (!SeparatePackages || HasPackage64) && (!IsInstallationParametersSpecified || !string.IsNullOrEmpty(InstallationParameters));
+                    return HasPackage && (!SeparatePackages || HasPackage64) && 
+                        (!IsInstallationParametersSpecified || !string.IsNullOrEmpty(InstallationParameters)) && 
+                        (!IsInstallationParameters64Specified || !string.IsNullOrEmpty(InstallationParameters64));
                 case ChangeScreenTypes.DiscoveryTargets:
                     return HasActiveDirectory || HasWorkgroup || HasNetworkAddress;
                 case ChangeScreenTypes.NetworkAddresses:

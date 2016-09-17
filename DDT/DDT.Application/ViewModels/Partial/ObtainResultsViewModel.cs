@@ -109,7 +109,7 @@ namespace DDT.Application.ViewModels
 
             Func<string, string> getPath = _ => _.Remove(0, _.IndexOf("] ") + 2);
 
-            var installationParameters = IsInstallationParametersSpecified ? InstallationParameters : String.Empty;
+            var installationParameters = IsInstallationParametersSpecified ? InstallationParameters : string.Empty;
             var packagePath = getPath(_package);
             var transformPath = !HasTransform ? null : getPath(_transform);
             var package = packagePath.ToLower().EndsWith("exe") ?
