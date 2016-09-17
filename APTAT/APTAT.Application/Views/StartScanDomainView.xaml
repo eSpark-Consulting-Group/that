@@ -58,8 +58,8 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <TextBlock VerticalAlignment="Center" Grid.Row="0" FontSize="14" Margin="5" Text="Domain Controller:"/>
-                <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="5" Text="Administrator:"/>
+                <TextBlock VerticalAlignment="Center" Grid.Row="0" FontSize="14" Margin="5" Text="Domain Name:"/>
+                <TextBlock VerticalAlignment="Center" Grid.Row="1"  FontSize="14" Margin="5" Text="Domain Administrator:"/>
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="2" Text="Password:"/>
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="3" Text="FLS TCP Port:"/>
                 <TextBlock VerticalAlignment="Center" Margin="5" FontSize="14" Grid.Row="4" Text="FLS UDP Port:"/>
