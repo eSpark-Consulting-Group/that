@@ -2,7 +2,7 @@
         x:Class="APTAT.Application.AboutWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Stop Scan"   Width="530" Height="240"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+        Title="About" Width="530" Height="240" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent" BorderThickness="3" WindowStyle="None"
         SizeToContent="Height"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">

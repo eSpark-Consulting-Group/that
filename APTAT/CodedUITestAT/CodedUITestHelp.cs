@@ -62,7 +62,20 @@ namespace CodedUITestAT
         {
             return UIMapHelp.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UIHelpButtonButton;
         }
-        
+
+        #endregion
+
+        #region
+        /// <summary> Asserts whether 'Agent requirements' window exists. </summary>
+        /// <param name="exists">Set an expected result.</param>
+        private void AssertAgentWindow(bool exists)
+        {
+           UIMapHelp.UIUnknownFileHunterWindow1.UIWpfWindow2.SearchProperties.Clear();           
+           UIMapHelp.UIUnknownFileHunterWindow1.UIWpfWindow2.SearchProperties[WpfWindow.PropertyNames.Name] = "AgentRequirementsWindow";
+           UIMapHelp.AssertAgentRequirementsWindowExpectedValues.UIWpfWindow2Exists = exists;
+           UIMapHelp.AssertAgentRequirementsWindow();
+        }
+
         #endregion
 
         #region Test methods
@@ -93,7 +106,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("The product copyright text is correct: '{0}'.", copyrightText));
             
             // Checks Close button
-            UIMapHelp.ClickCloseButton();
+            UIMapHelp.ClickCloseAboutButton();
             UIHelper.WaitForControlIsEnabled(HelpButton());
             UIMapHelp.AssertAboutWindowExpectedValues.UIWpfWindowExists = false;
             UIMapHelp.AssertAboutWindow();
@@ -102,7 +115,7 @@ namespace CodedUITestAT
             // Checks Close Cross button
             UIMapHelp.ClickHelpButton();
             UIMapHelp.SelectAboutMenuItem();
-            UIMapHelp.ClickCloseCrossButton();
+            UIMapHelp.ClickCloseAboutCrossButton();
             UIHelper.WaitForControlIsEnabled(HelpButton());
             UIMapHelp.AssertAboutWindow();
             TestContext.WriteLine("About window is successfully closed using Close Cross button.");
@@ -112,6 +125,53 @@ namespace CodedUITestAT
             UIMapHelp.AssertAboutWindowExpectedValues.UIWpfWindowExists = true;
             UIMapHelp.AssertAboutWindow();
             TestContext.WriteLine("About window can be opened again.");
+        }
+
+        [TestMethod]
+        public void VerifyAgentRequirementsWindowContentTest()
+        {
+            UIMapHelp.ClickHelpButton();
+            UIMapHelp.SelectAgentRequirementsMenuItem();
+                        
+            UIMapHelp.AssertTurnedOnTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' requirement is shown correctly.", UIMapHelp.AssertTurnedOnTextBlockTextExpectedValues.UICheckwhetheratargetcTextDisplayText));
+
+            UIMapHelp.AssertFirewallOffTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' requirement is shown correctly.", UIMapHelp.AssertFirewallOffTextBlockTextExpectedValues.UICheckwhetherfirewallTextDisplayText));
+
+            UIMapHelp.AssertIpAddressTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' requirement is shown correctly.", UIMapHelp.AssertIpAddressTextBlockTextExpectedValues.UICheckwhetherIPaddresTextDisplayText));
+
+            UIMapHelp.AssertEnableSharingTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' requirement is shown correctly.", UIMapHelp.AssertEnableSharingTextBlockTextExpectedValues.UIIntheNetworkNeighbouTextDisplayText));
+
+            UIMapHelp.AssertPasswordNotBlankTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' requirement is shown correctly.", UIMapHelp.AssertPasswordNotBlankTextBlockTextExpectedValues.UIMakesureAdministratoTextDisplayText));
+
+            UIMapHelp.AssertForceguestTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' requirement is shown correctly.", UIMapHelp.AssertForceguestTextBlockTextExpectedValues.UICheckwhetherForcegueTextDisplayText));
+
+            UIMapHelp.AssertLocalAccountTokenTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' requirement is shown correctly.", UIMapHelp.AssertLocalAccountTokenTextBlockTextExpectedValues.UIIftheaccountisnotabuTextDisplayText));
+
+            // Close button
+            UIMapHelp.ClickCloseAgentRequirementsButton();
+            UIHelper.WaitForControlIsEnabled(HelpButton());
+            AssertAgentWindow(false);
+            TestContext.WriteLine("'Agent requirements' window is successfully closed using Close button.");
+
+            // Close cross button
+            UIMapHelp.ClickHelpButton();
+            UIMapHelp.SelectAgentRequirementsMenuItem();
+            UIMapHelp.ClickCloseAgentRequirementsCrossButton();
+            UIHelper.WaitForControlIsEnabled(HelpButton());
+            AssertAgentWindow(false);
+            TestContext.WriteLine("'Agent requirements' window is successfully closed using Close cross button.");
+
+            UIMapHelp.ClickHelpButton();
+            UIMapHelp.SelectAgentRequirementsMenuItem();
+            AssertAgentWindow(true);
+            TestContext.WriteLine("'Agent requirements' window can be opened again.");
         }
 
         #endregion
