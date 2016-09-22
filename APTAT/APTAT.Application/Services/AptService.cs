@@ -124,13 +124,13 @@ namespace APTAT.Application.Services
         }
 
         public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
-            IDevicesSourceDescription devicesSourceDescription, string scanScope, string tcpPort, string udpPort)
+            IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
             //Logger.Clear();
             //Logger.WriteLog("================= Begin Scan");
             
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, 
-                devicesSourceDescription, scanScope, tcpPort, udpPort);
+                devicesSourceDescription, options);
             scanner.ScanStarted += OnScanStarted;
             scanner.ScanCompleted += OnScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;

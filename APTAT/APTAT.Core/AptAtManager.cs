@@ -223,13 +223,11 @@ namespace APTAT.Core
         }
 
         public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
-            IDevicesSourceDescription devicesSourceDescription, string scanScope, string tcp, string udp)
-        {
-            if (scanScope == null)
-                scanScope = Properties.Settings.Default.ScanScope;
+            IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+        {           
 
             if (_scanner != null) throw new AnotherScanIsInProgressException();
-            _scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, scanScope, tcp, udp);
+            _scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
             _scanner.ScanCompleted += OnScanCompleted;
             return _scanner;

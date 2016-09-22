@@ -10,19 +10,15 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 namespace APTAT.Core.Descent.Apt
 {
     public class AptDescentScanner : Scanner
-    {
-        private readonly string _scanScope;
+    {        
         private AptDescentMod _descentMod;
-        private readonly string _tcpPort;
-        private readonly string _udpPort;
+        private ScanOptions _scanOptions;
 
         public AptDescentScanner(IEnumerable<DeploymentTarget> targets, string login, string password,
-            IDevicesSourceDescription devicesSourceDescription,string scanScope, string tcpPort, string udpPort) 
+            IDevicesSourceDescription devicesSourceDescription, ScanOptions scanOptions) 
             : base(targets, login, password,devicesSourceDescription)
         {
-            _scanScope = scanScope;
-            _tcpPort = tcpPort;
-            _udpPort = udpPort;
+            _scanOptions = scanOptions;
         }
 
         public override IDescentQueryResult ValidateAndGetResult()
@@ -71,7 +67,7 @@ namespace APTAT.Core.Descent.Apt
                 scanResults.ScanResults.TryGetValue(computer.Uid, out scanResult);
 
                 var job = new RemoteInstallerJob(result, changeTrackingSubSystem, this, computer);
-                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, result.OperationUid, _scanScope, _tcpPort, _udpPort);
+                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, result.OperationUid, _scanOptions);
             }
         }
         private static void CalculateOperationStatistics(IEnumerable<AptScanResult> results, out int failed, out int notPerformed, out int succeeded, out int total, out int canceled)

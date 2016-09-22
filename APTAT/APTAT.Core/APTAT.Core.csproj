@@ -74,6 +74,8 @@
     <Compile Include="Descent\Apt\AptDescentHelper.cs" />
     <Compile Include="Descent\Apt\AptDescentMod.cs" />
     <Compile Include="Descent\Apt\IAptDescentProgressItem.cs" />
+    <Compile Include="Descent\Apt\ScanKind.cs" />
+    <Compile Include="Descent\Apt\ScanOption.cs" />
     <Compile Include="Descent\IDescentQueryResult.cs" />
     <Compile Include="Descent\Wmi\WmiScanner.cs" />
     <Compile Include="Descent\Wmi\WmiScanOperationContext.cs" />

@@ -23,12 +23,11 @@ namespace APTAT.Core.Descent.Apt
         protected class AptInstallAgentThreadParams : InstallAgentThreadParams
         {
             public AptScanResult Result { get; set; }
-            public string TcpPort { get; set; }
-            public string UdpPort { get; set; }
-            public string ScanScope { get; set; }
+         
+            public ScanOptions Options { get; set; }
         }
         public void StartAptScan(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity,
-            AptScanResult result, Guid operationUid, string scanScope, string tcpPort, string udpPort)
+            AptScanResult result, Guid operationUid,  ScanOptions scanOptions)
         {
             AptInstallAgentThreadParams tp = new AptInstallAgentThreadParams
             {
@@ -37,9 +36,8 @@ namespace APTAT.Core.Descent.Apt
                 AgentIdentity = agentIdentity,
                 OperationUid = operationUid,
                 Result = result,
-                ScanScope = scanScope,
-                TcpPort = tcpPort,
-                UdpPort = udpPort
+         
+                Options = scanOptions
             };
             _paramsPerTargetUid[agentIdentity] = tp;
             StartDeploymentThread(tp);
@@ -133,7 +131,7 @@ namespace APTAT.Core.Descent.Apt
         protected override DescentHelper CreateDescentHelper(InstallAgentThreadParams agentTp)
         {
             var tp = (AptInstallAgentThreadParams)agentTp;
-            var dh = new AptDescentHelper(tp.RemoteHostInfo, tp.ScanScope, tp.TcpPort, tp.UdpPort);
+            var dh = new AptDescentHelper(tp.RemoteHostInfo, tp.Options);
             
             dh.ScanProgressChanged += OnScanProgressChanged;
             dh.ScanCompleted += OnScanCompleted;

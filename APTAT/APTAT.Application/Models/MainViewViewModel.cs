@@ -16,6 +16,7 @@ using System.Windows.Threading;
 
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Application.Models
 {
@@ -897,14 +898,18 @@ namespace APTAT.Application.Models
                     throw new InvalidOperationException("specify FLS tcp and udp ports");
                 }
 
-                string scanScope = @"?:";
+                ScanKind scanKind = ScanKind.Quick;
                 if (IsQuickScan)
                 {
-                    scanScope = @"processes|drivers|autoruns";
+                    scanKind = ScanKind.Quick;
                 }
-
-                _aptService.BeginScan(e.Items, _login, _password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false)
-                    , scanScope, _tcpPort, _udpPort);
+                else
+                {
+                    scanKind = ScanKind.Full;
+                }
+                
+                ScanOptions options = new ScanOptions(_tcpPort, _udpPort, new string[] { }, scanKind);
+                _aptService.BeginScan(e.Items, _login, _password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
             }
             else
             {

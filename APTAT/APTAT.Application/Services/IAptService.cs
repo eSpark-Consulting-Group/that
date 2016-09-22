@@ -5,6 +5,7 @@ using APTAT.Core;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Application.Services
 {
@@ -168,7 +169,7 @@ namespace APTAT.Application.Services
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
 
-        void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem, IDevicesSourceDescription devicesSourceDescription, String scanScope, String tcpPort, String udpPort);
+        void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         void GetScanResult(Guid targetUid, Object userState);
 

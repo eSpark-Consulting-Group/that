@@ -43,7 +43,7 @@ namespace APTAT.Core.Descent.Apt
             private string[] _additionFiles = new[] { TvlFileName, TrlFileName };
 
             private const string AptScannerTempFolderName = "ComodoAptAtScanner";
-            private readonly string _scanScope;
+       
 
             
             protected override string[] GetAdditionalFilesToCopy(bool isX64)
@@ -54,12 +54,10 @@ namespace APTAT.Core.Descent.Apt
 		    protected override string ServiceName { get {return "ScannerService.exe"; } }
             protected override string ServiceDisplayName { get { return "Comodo APT Scanner"; } }
 
-            public AptDescentHelper( RemoteHostInfo info, string scanScope, string tcpPort, string udpPort )
+            public AptDescentHelper( RemoteHostInfo info, ScanOptions options)
                 : base (info)
 			{
-			    _scanScope = scanScope;
-			    _tcpPort = tcpPort;
-			    _udpPort = udpPort;
+                _options = options;
 			}
 
 			protected override void InitPaths()
@@ -200,15 +198,10 @@ namespace APTAT.Core.Descent.Apt
             }
             //======================================================================
 
-			
+		    
+            private readonly ScanOptions _options;
 
-		    private readonly string _udpPort;
-		    private readonly string _tcpPort;
-            
-
-
-			
-		    protected override string GetPackageFileName(bool is64)
+            protected override string GetPackageFileName(bool is64)
 		    {
                 if (is64)
                     return ScannerServiceX64FileName;
@@ -217,16 +210,17 @@ namespace APTAT.Core.Descent.Apt
 
             protected override string[] GetServiceParams()
             {
+                var scanScope = GetScanScope();
                 List<string> serviceParams = new List<string>();
-                serviceParams.Add(String.Format(ScopeParamFormat, _scanScope));
+                serviceParams.Add(String.Format(ScopeParamFormat, scanScope));
                 serviceParams.Add(String.Format(StatusFileParamFormat, _responseFilePathForCurrentComputer));
                 serviceParams.Add(String.Format(OutputFileParamFormat, _resultsFile));
                 serviceParams.Add(String.Format(TvlParamFormat, _tvlFile));
                 serviceParams.Add(String.Format(TrlParamFormat, _trlFile));
                 serviceParams.Add("--filter \"*\"");
                 serviceParams.Add("--scanPeOnly on");
-                serviceParams.Add(String.Format(UdpPortParamFormat, _udpPort));
-                serviceParams.Add(String.Format(TcpPortParamFormat, _tcpPort));
+                serviceParams.Add(String.Format(UdpPortParamFormat, _options.UdpPort));
+                serviceParams.Add(String.Format(TcpPortParamFormat, _options.TcpPort));
                 
                 if (Properties.Settings.Default.SkipGac)
                     serviceParams.Add(SkipGacParam);
@@ -234,7 +228,27 @@ namespace APTAT.Core.Descent.Apt
                 return serviceParams.ToArray();
             }
 
-		    protected override void CleanUpBeforeActionStarted()
+            private string GetScanScope()
+            {
+                switch (_options.ScanKind)
+                {
+                    case ScanKind.Quick:
+                        return @"processes|drivers|autoruns"; 
+                        
+                    case ScanKind.Full:
+                        return @"?:";
+                        
+                    case ScanKind.Custom:
+                        return "";
+                        
+                    default:
+                        throw new InvalidOperationException("Not supported scan kind");
+                        
+                }
+                
+            }
+
+            protected override void CleanUpBeforeActionStarted()
 		    {
 		        base.CleanUpBeforeActionStarted();
                 if (File.Exists(_responseFilePathForCurrentComputer))
