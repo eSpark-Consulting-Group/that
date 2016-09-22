@@ -10,6 +10,9 @@ using Composition = APTAT.Common.CompositionHelper;
 using System.Threading.Tasks;
 using System.Security.Principal;
 using System.Linq;
+using System.Net;
+using APTAT.DeploymentCore.Descent.Helpers;
+using APTAT.DeploymentCore;
 
 namespace APTAT.Application.Services
 {
@@ -17,10 +20,12 @@ namespace APTAT.Application.Services
     public class TargetsDiscoveryService : ITargetsDiscoveryService
     {
         private readonly ITargetsManager _manager;
+        private readonly INetworkObserver _networkHelper;
 
-        public TargetsDiscoveryService(ITargetsManager manager)
+        public TargetsDiscoveryService(ITargetsManager manager, INetworkObserver networkHelper)
         {
             _manager = manager;
+            _networkHelper = networkHelper;            
         }
 
         public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
@@ -45,6 +50,7 @@ namespace APTAT.Application.Services
             if (e.Error == null)
             {
                 DirectoryItemsResolvedEventArgs args = new DirectoryItemsResolvedEventArgs(e.Targets, e.State);
+                SetLocalHostItem(e.Targets);
                 Action action = () =>
                 {
                     if (DirectoryItemsResolved != null)
@@ -149,12 +155,37 @@ namespace APTAT.Application.Services
             d.BeginDiscover(context);
         }
 
+        private void SetLocalHostItem(DeploymentTarget[] targets )
+        {
+            IPHostEntry hostInfo = _networkHelper.GetHostEntry();
+                            
+            var target = targets.FirstOrDefault(t => hostInfo.AddressList.Contains(t.GetIPAddress()));
+            if (target != null)
+            {
+                target.IsAptHost = true;
+            }
+            else
+            {
+                var targetByName = targets.FirstOrDefault(t => t.DnsName == hostInfo.HostName);
+                if (targetByName != null)
+                {
+                    targetByName.IsAptHost = true;
+                }
+            }
+        }
+
         private void OnDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
             GetDirectoryItemsContext context = (GetDirectoryItemsContext)e.State;
             if (e.Error == null)
             {
                 DeploymentTarget[] targets = e.Targets;
+                var filtered = targets.Where(t => ((DomainTarget)t).EntryType == DomainEntryType.Computer).ToArray();
+                if (filtered.Any())
+                {
+                    SetLocalHostItem(filtered);
+                }
+
                 DirectoryItem[] result = new DirectoryItem[targets.Length];
                 for (Int32 i = 0; i < targets.Length; ++i)
                 {
@@ -293,6 +324,8 @@ namespace APTAT.Application.Services
             if (e.Error == null)
             {
                 DeploymentTarget[] targets = e.Targets;
+                SetLocalHostItem(targets);
+
                 DeploymentItem[] result = new DeploymentItem[targets.Length];
                 for (Int32 i = 0; i < targets.Length; ++i)
                 {

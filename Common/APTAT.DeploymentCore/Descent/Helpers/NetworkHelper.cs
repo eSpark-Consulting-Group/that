@@ -7,7 +7,7 @@ using APTAT.Common;
 
 namespace APTAT.DeploymentCore.Descent.Helpers
 {
-    public class NetworkHelper
+    public class NetworkHelper : INetworkHelper
     {
         ImpersonationHelper _impersonation = null;
         private string _remotePath = null;

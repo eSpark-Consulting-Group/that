@@ -32,6 +32,10 @@ namespace APTAT.DeploymentCore
 
         #region INetworkObserver Members
 
+        public IPHostEntry GetHostEntry()
+        {
+            return Dns.GetHostEntry(String.Empty);
+        }
         public virtual IPAddress[] ResolveIpByDns(string dnsName)
         {
             return NetHelp.SafeResolveDns(dnsName);
@@ -478,5 +482,6 @@ namespace APTAT.DeploymentCore
         bool IsValidDnsName(string hostName);
         bool IsValidIpAddress(string hostName);
         IPStatus SendPing(string toString);
+        IPHostEntry GetHostEntry();
     }
 }

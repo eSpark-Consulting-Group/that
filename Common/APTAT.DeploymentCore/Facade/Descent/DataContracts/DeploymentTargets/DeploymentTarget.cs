@@ -27,6 +27,13 @@ namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
         public bool IsAptHost { get; set; }
 
         public string IPAddress { get; set; }
+
+        public System.Net.IPAddress GetIPAddress()
+        {
+            if (this.IPAddress == null) return null;
+            System.Net.IPAddress address = System.Net.IPAddress.Parse(this.IPAddress);
+            return address;
+        }
         public SystemKind? SystemKind { get; set; }
 
         public string LdapPath { get; set; }
