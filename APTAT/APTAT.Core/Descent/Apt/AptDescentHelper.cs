@@ -210,7 +210,7 @@ namespace APTAT.Core.Descent.Apt
 
             protected override string[] GetServiceParams()
             {
-                var scanScope = GetScanScope();
+                var scanScope = GetScanScope(_options);
                 List<string> serviceParams = new List<string>();
                 serviceParams.Add(String.Format(ScopeParamFormat, scanScope));
                 serviceParams.Add(String.Format(StatusFileParamFormat, _responseFilePathForCurrentComputer));
@@ -228,9 +228,9 @@ namespace APTAT.Core.Descent.Apt
                 return serviceParams.ToArray();
             }
 
-            private string GetScanScope()
+            private static string GetScanScope(ScanOptions options)
             {
-                switch (_options.ScanKind)
+                switch (options.ScanKind)
                 {
                     case ScanKind.Quick:
                         return @"processes|drivers|autoruns"; 
@@ -238,8 +238,8 @@ namespace APTAT.Core.Descent.Apt
                     case ScanKind.Full:
                         return @"?:";
                         
-                    case ScanKind.Custom:
-                        return "";
+                    case ScanKind.Custom:                        
+                        return String.Join("|", options.ScanPaths); 
                         
                     default:
                         throw new InvalidOperationException("Not supported scan kind");
