@@ -237,15 +237,24 @@ namespace APTAT.Core.Descent.Apt
                         
                     case ScanKind.Full:
                         return @"?:";
-                        
-                    case ScanKind.Custom:                        
-                        return String.Join("|", options.ScanPaths); 
-                        
+
+                    case ScanKind.Custom:
+                        return GetScanRegionArgs(options);
+
                     default:
-                        throw new InvalidOperationException("Not supported scan kind");
-                        
+                        throw new InvalidOperationException("Not supported scan kind");                        
                 }
                 
+            }
+
+            private static string GetScanRegionArgs(ScanOptions options)
+            {
+                List<string> regions = new List<string>();
+                if (options.ScanProcesses) regions.Add("processes");
+                if (options.ScanDrivers) regions.Add("drivers");
+                if (options.ScanAutoruns) regions.Add("autoruns");
+                regions.AddRange(options.ScanPaths);
+                return String.Join("|", regions);
             }
 
             protected override void CleanUpBeforeActionStarted()

@@ -842,6 +842,8 @@ namespace APTAT.Application.Models
                 ScanProcessCompleted(this, e);
             }
         }
+        public bool ScanCriticalAreasInCustomScan { get; set; }
+        public string [] ScanPaths { get; set; }
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
@@ -906,9 +908,19 @@ namespace APTAT.Application.Models
                 else
                 {
                     scanKind = ScanKind.Full;
+                }         
+
+                ScanOptions options;
+
+                if (scanKind == ScanKind.Custom)
+                {                       
+                    options = new ScanOptions(_tcpPort, _udpPort, ScanPaths, ScanCriticalAreasInCustomScan);
                 }
-                
-                ScanOptions options = new ScanOptions(_tcpPort, _udpPort, new string[] { }, scanKind);
+                else
+                {
+                    options = new ScanOptions(_tcpPort, _udpPort, scanKind);
+                }
+
                 _aptService.BeginScan(e.Items, _login, _password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
             }
             else
