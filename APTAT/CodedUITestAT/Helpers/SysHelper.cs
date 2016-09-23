@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Management;
 using System.Diagnostics;
 using System.ServiceProcess;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Net.NetworkInformation;
 using System.DirectoryServices.ActiveDirectory;
@@ -94,12 +95,15 @@ namespace CodedUITestAT
         }
 
         /// <summary> Gets IPv4-address of the machine running the tests. </summary>        
-        internal static IPAddress GetLocalIpAddress()
+        ///<param name="isInternal">Determine whether the required IPv4-address should be internal or not.</param>
+        internal static IPAddress GetLocalIpAddress(bool isInternal = false)
         {
             IPAddress ipAddress = null;
+            NetworkInterface net;
 
             var nets = NetworkInterface.GetAllNetworkInterfaces();
-            var net = nets.FirstOrDefault(n => n.GetIPProperties().GatewayAddresses.Any()); // A network interface with a Gateway
+            if (!isInternal) net = nets.FirstOrDefault(n => n.GetIPProperties().GatewayAddresses.Any()); // A network interface with a Gateway, corresponds to external local IP for network isolated VM
+            else net = nets.FirstOrDefault(n => !n.GetIPProperties().GatewayAddresses.Any()); // A network interface without a Gateway, corresponds to internal IP for network isolated VM
             var addresses = net.GetIPProperties().UnicastAddresses; // A list of addresses of the above network interface
             foreach (var address in addresses)
             {
@@ -111,6 +115,17 @@ namespace CodedUITestAT
             }
 
             return ipAddress;
+        }
+
+        /// <summary> Changes the last byte in a given IPv4-address to the provided new value. </summary>
+        /// <param name="ipAddress">Set IPv4-address.</param>
+        /// <param name="newByteValue">Set a new value for the last byte.</param>
+        internal static IPAddress ChangeLastByte(this IPAddress ipAddress, byte newByteValue)
+        {
+            List<byte> bytes = ipAddress.GetAddressBytes().ToList();
+            bytes.Remove(bytes.Last());
+            bytes.Add(newByteValue);
+            return new IPAddress(bytes.ToArray());
         }
 
         #region Process-related methods

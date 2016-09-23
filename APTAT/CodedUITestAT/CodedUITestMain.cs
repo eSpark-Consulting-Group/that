@@ -1793,6 +1793,47 @@ namespace CodedUITestAT
             UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanningResults, TestContext);
             UIMapResultsWindow.ClickClearFilterButton();
         }
+
+        [TestMethod]
+        public void QuickScanOfIpRangeTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            Computer server = new Computer();
+            IPAddress internalAddress = SysHelper.GetLocalIpAddress(true);
+            string ipRange = String.Format("{0}-{1}", internalAddress.ChangeLastByte(0), internalAddress.ChangeLastByte(255));
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
+
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            CleanNetworkAddressesList();
+            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = ipRange;
+            UIMapNetworkAddresses.InputNetworkAddress();
+            UIMapNetworkAddresses.ClickAddButton();
+
+            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLogin();
+            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapNetworkAddresses.InputPassword();
+
+            UIMapStartScanningWizard.ClickQuickScanButton();
+
+            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+
+            // Verifies the scanning results
+            //UIMapResultsWindow.GoToScanningResultsTab();
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, server);
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", server.Name));
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", endpoint.Name));
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, malware);
+            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", malware.Location));
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
+            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+        }
       
         #endregion
 
