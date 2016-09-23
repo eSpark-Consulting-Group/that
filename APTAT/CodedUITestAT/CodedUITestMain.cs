@@ -1822,9 +1822,9 @@ namespace CodedUITestAT
             UIMapStartScanningWizard.ClickQuickScanButton();
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+            UIMapScanCompletedWindow.ClickCancelButton();
 
             // Verifies the scanning results
-            //UIMapResultsWindow.GoToScanningResultsTab();
             UIHelper.ClickRow(ResultsScreen.ScanningResults, server);
             TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", server.Name));
             UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
@@ -1832,7 +1832,7 @@ namespace CodedUITestAT
             UIHelper.ClickRow(ResultsScreen.ScanningResults, malware);
             TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", malware.Location));
             UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
-            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+            TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scanning results' screen.", unknownFile.Location));
         }
       
         #endregion
