@@ -149,7 +149,10 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 			private void InitializeInternal( bool impersonateAsNetworkService )
 			{
 				string userName, domain;
-				if ( ExtractUserNameAndDomain( RemoteHostInfo.Login, out userName, out domain ) )
+                if (RemoteHostInfo.IsLocalComputer && TryLogin(impersonateAsNetworkService, null))
+                    return;
+
+                if ( ExtractUserNameAndDomain( RemoteHostInfo.Login, out userName, out domain ) )
 				{
 					string login;
 

@@ -21,7 +21,7 @@ namespace APTAT.DeploymentCore.Facade.Descent.Commands
             {
                 var t = target; // To avoid "Access to modified closure" warning
 
-                t.IsAptHost = serverAddresses.Any(ip => ip == t.IPAddress) ||
+                t.IsLocalComputer = serverAddresses.Any(ip => ip == t.IPAddress) ||
                                 String.Equals(t.DnsName, serverDnsName, StringComparison.InvariantCultureIgnoreCase);
             }
         }

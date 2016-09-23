@@ -47,7 +47,7 @@ namespace DDT.Application.Services
 
         public void StopDeployment(bool stopInProgressItems)
         {
-            _descent.AbortAllThreads(stopInProgressItems ? DescentScanner.CancelAllITems : DescentScanner.CancelItemsInQueue);
+            _descent.StopAllScans(stopInProgressItems ? DescentScanner.CancelAllITems : DescentScanner.CancelItemsInQueue);
         }
 
         [Obsolete]

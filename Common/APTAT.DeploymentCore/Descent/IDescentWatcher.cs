@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using APTAT.DeploymentCore.Descent.Helpers;
+using Timer = System.Threading.Timer;
 
 namespace APTAT.DeploymentCore.Descent
 {
@@ -22,7 +24,8 @@ namespace APTAT.DeploymentCore.Descent
         private readonly TimeSpan _timeout;
         private readonly Action<Guid> _timeoutCallback;
 
-        public DescentWatcher(TimeSpan timeout, Action<Guid> timeoutCallback)
+        public DescentWatcher(TimeSpan timeout, Action<Guid> timeoutCallback
+            , ITimer timer)
         {
             _timeout = timeout;
             _timeoutCallback = timeoutCallback;
@@ -30,6 +33,13 @@ namespace APTAT.DeploymentCore.Descent
             _access = new object();
             _computersActivity = new Dictionary<Guid, DateTime>();
             _timer = new Timer(TimerCallback);
+
+        }
+
+        public DescentWatcher(TimeSpan timeout, Action<Guid> timeoutCallback)
+            :this(timeout, timeoutCallback, new Helpers.Timer())
+        {
+
         }
 
         public TimeSpan DescentTimeout

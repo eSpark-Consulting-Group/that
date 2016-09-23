@@ -46,6 +46,11 @@ namespace APTAT.Core.Descent.Apt
             return new AptScanCompletedEventArgs() { OperationUid = result.OperationUid, Context = aptResult };
         }
 
+        public override void StopScan(Guid targetUid)
+        {
+            _descentMod.StopScan(targetUid);
+        }
+
         public override void StartScan(IChangeTrackingSubSystem changeTrackingSubSystem, IDescentQueryResult result)
         {
             var scanResults = (AptScanOperationContext)result;
@@ -56,13 +61,9 @@ namespace APTAT.Core.Descent.Apt
             _descentMod = new AptDescentMod(TaskFactory, changeTrackingSubSystem);
             foreach (var computer in OnlineTargets)
             {
-                RemoteHostInfo ri = new RemoteHostInfo
-                {
-                    HostName = (computer.IPAddress != null) ? computer.IPAddress.ToString() : computer.DnsName,
-                    Login = Login,
-                    Password = Password,
-                    TargetUid = computer.Uid
-                };
+                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid, 
+                    (computer.IPAddress != null) ? computer.IPAddress.ToString() : computer.DnsName,
+                    Login, Password, computer.IsLocalComputer);
                 AptScanResult scanResult;
                 scanResults.ScanResults.TryGetValue(computer.Uid, out scanResult);
 

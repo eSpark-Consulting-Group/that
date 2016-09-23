@@ -272,7 +272,7 @@ namespace APTAT.Core
 
         public void StopScan()
         {
-            _descentSubSystem.AbortAllThreads(0);
+            _descentSubSystem.StopAllScans(0);
             _valkyrieClient.AnalyzeAsyncCancel();
         }
         

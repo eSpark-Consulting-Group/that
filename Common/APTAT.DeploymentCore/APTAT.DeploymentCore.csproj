@@ -75,6 +75,7 @@
     <Compile Include="Descent\IDescentQueryResult.cs" />
     <Compile Include="Descent\IDescentResult.cs" />
     <Compile Include="Descent\IDescentSubSystem.cs" />
+    <Compile Include="Descent\Helpers\Timer.cs" />
     <Compile Include="Descent\IDescentWatcher.cs" />
     <Compile Include="Descent\IOperationDescentResult.cs" />
     <Compile Include="Descent\IScanner.cs" />

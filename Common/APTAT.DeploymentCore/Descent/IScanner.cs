@@ -15,5 +15,7 @@ namespace APTAT.DeploymentCore.Descent
             string errorString, out FormattedText shortMessage);
         FormattedText GetDescentStatusDescription(DescentStatus status, out FormattedText shortMessage);
 
+        void StopScan(Guid targetUid);
+
     }
 }

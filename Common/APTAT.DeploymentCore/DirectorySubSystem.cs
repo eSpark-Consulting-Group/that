@@ -24,6 +24,7 @@ namespace APTAT.DeploymentCore
         string OrganizationUnit { get; }
         string LdapPath { get; set; }
         SystemKind? SystemKind { get; set; }
+        Boolean IsLocalComputer { get; }
         DeploymentTargetSource Source { get; set; }
     }
 

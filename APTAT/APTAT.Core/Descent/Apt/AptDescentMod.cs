@@ -82,9 +82,12 @@ namespace APTAT.Core.Descent.Apt
         protected virtual void OnScanCompleted(object sender, AptDescentHelper.ScanCompletedEventArgs args)
         {
             var tp = _paramsPerTargetUid[args.TargetUid];
-            string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyse: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
+            string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ?
+                $"Failed to analyse: {args.FailedToAnalyzeFilesCount}."
+                : String.Empty;
 
-            string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount) : String.Empty;
+            string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? $"No Verdict: {args.NoVerdictFilesCount}."
+                : String.Empty;
 
             ResourceText text = new ResourceText("null", String.Format("{0} programs scanned ({3}%). Unknown programs found: {1}. Malware items found: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, string.Format("{0:0.00}", args.Percentage).Replace(".00", string.Empty), errorCounterText, serverErrorCounterText));
 
@@ -95,7 +98,7 @@ namespace APTAT.Core.Descent.Apt
         protected virtual void OnScanFailed(object sender, AptDescentHelper.ScanFailedEventArgs args)
         {
             var tp = _paramsPerTargetUid[args.TargetUid];
-            var text = new ResourceText("null", String.Format("Scan failed: {0}.", args.Status));
+            var text = new ResourceText("null", $"Scan failed: {args.Status}.");
             NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanFailed, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, 100, args.FailedToAnalyzeFilesCount, args.NoVerdictFilesCount);
 
         }
@@ -166,10 +169,8 @@ namespace APTAT.Core.Descent.Apt
             if (result != null)
             {
                 var text = new ResourceText("null",
-                    String.Format("Scan results received. Total programs scanned: {0}. " +
-                                  "Unknown programs found: {1}. Malware items found: {2}.", result.TotalFilesCount,
-                        result.UnknownFilesCount,
-                        result.MalwareFilesCount));
+                    $"Scan results received. Total programs scanned: {result.TotalFilesCount}. " +
+                    $"Unknown programs found: {result.UnknownFilesCount}. Malware items found: {result.MalwareFilesCount}.");
                 NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text,
                     AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount,
                     result.MalwareFilesCount, result.SafeFilesCount, 100, result.FailedToAnalyzeFilesCount,
@@ -201,8 +202,9 @@ namespace APTAT.Core.Descent.Apt
         {
             if ((percentage == 0 || double.IsInfinity(percentage)) && scanStage == AptScanStage.ScanInProgress)
                 return;
-            
-            if (TaskFactory.CancellationToken.IsCancellationRequested) 
+
+            var tp = _paramsPerTargetUid[computerUid];
+            if (TaskFactory.CancellationToken.IsCancellationRequested || tp.IsCancelled) 
                 throw new OperationCanceledException();
             FormattedText formattedText = new FormattedText(resourceMessage);
             Tracker?.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, 

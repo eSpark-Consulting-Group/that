@@ -51,14 +51,10 @@ namespace DDT.Core.Descent
             }
             _descentMod = new PackageDescentMod(TaskFactory, changeTrackingSubSystem);
             foreach (var computer in OnlineTargets)
-            { 
-                RemoteHostInfo ri = new RemoteHostInfo
-                {
-                    HostName = computer.IPAddress != null ? computer.IPAddress.ToString() : computer.DnsName,
-                    Login = Login,
-                    Password = Password,
-                    TargetUid = computer.Uid
-                };
+            {
+                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid,
+                    computer.IPAddress != null ? computer.IPAddress.ToString() : computer.DnsName,
+                    Login, Password, computer.IsLocalComputer);
 
                 var job = new RemoteInstallerJob(result, changeTrackingSubSystem, this, computer);
                 _descentMod.StartDeployment(ri, job, computer.Uid, result.OperationUid, _timeout,
@@ -71,6 +67,11 @@ namespace DDT.Core.Descent
             if (code == CancelAllITems)
                 _descentMod.SetCancellationToken();
             base.AbortAllThread(code);
+        }
+
+        public override void StopScan(Guid targetUid)
+        {   
+            throw new NotImplementedException();
         }
 
         protected override void GetDescriptionAndSuggestionByStatus(DescentStatus status, out ResourceText description, out ResourceText suggestion)

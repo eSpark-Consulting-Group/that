@@ -4,9 +4,20 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 {
     public struct RemoteHostInfo
     {
-        public string HostName;
-        public string Login;
-        public string Password;
-        public Guid TargetUid;
+        public RemoteHostInfo(Guid targetUid, string hostName, string login, 
+            string password, bool isLocalComputer)
+        {
+            HostName = hostName;
+            Login = login;
+            Password = password;
+            TargetUid = targetUid;
+            IsLocalComputer = isLocalComputer;
+        }
+
+        public string HostName { get; set; }
+        public string Login { get;  }
+        public string Password { get;  }
+        public bool IsLocalComputer { get;  }
+        public Guid TargetUid { get;  }
     }
 }

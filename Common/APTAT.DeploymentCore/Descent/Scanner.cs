@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -116,6 +117,8 @@ namespace APTAT.DeploymentCore.Descent
             ResourceText format = ServerSideMessagesResources.DescentStatusDescriptionWithSuggestionFormat;
             return new FormattedText(format, description, suggestion);
         }
+
+        public abstract void StopScan(Guid targetUid);
 
         protected virtual void GetDescriptionAndSuggestionByStatus(DescentStatus status,
             out ResourceText description, out ResourceText suggestion)

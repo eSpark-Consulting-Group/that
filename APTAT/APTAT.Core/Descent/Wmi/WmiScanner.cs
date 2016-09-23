@@ -183,18 +183,19 @@ namespace APTAT.Core.Descent.Wmi
             var scanResults = (WmiScanOperationContext) result;
             foreach (var computer in Targets)
             {
-                RemoteHostInfo ri = new RemoteHostInfo
-                {
-                    HostName = (computer.IPAddress != null) ? computer.IPAddress.ToString() : computer.DnsName,
-                    Login = Login,
-                    Password = Password,
-                    TargetUid = computer.Uid
-                };
+                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid,
+                    (computer.IPAddress != null) ? computer.IPAddress.ToString() : computer.DnsName,
+                    Login, Password, computer.IsLocalComputer);
                 WmiScanResult scanResult;
                 scanResults.ScanResults.TryGetValue(computer.Uid, out scanResult);
                 var job = new RemoteInstallerJob(result, changeTrackingSubSystem, this, computer);
                 StartWmiScan(ri, job, computer.Uid, scanResult, result.OperationUid);
             }
+        }
+
+        public override void StopScan(Guid targetUid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

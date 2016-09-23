@@ -101,13 +101,23 @@ namespace APTAT.DeploymentCore.Descent
             scanner.StartScan(_tracker,result);
         }
 
-        public void AbortAllThreads(int code = 0)
+        public void StopAllScans(int code = 0)
         {
             foreach (var scanner in _scanners)
             {
                 scanner.Value.AbortAllThread(code);
             }
         }
+
+        public void StopOperationForTargetUid(Guid operationUid, Guid targetUid)
+        {
+            IScanner scanner;
+            if(_scanners.TryGetValue(operationUid, out scanner))
+            {
+                scanner.StopScan(targetUid);
+            }
+        }
+
         #endregion
 
         #region ISubSystem Members

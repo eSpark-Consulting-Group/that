@@ -17,8 +17,9 @@ namespace APTAT.DeploymentCore.Descent
         //WmiScanOperationContext GetWmiScanResultsByOperationUid(Guid operationUid);
         //AptScanOperationContext GetFirstScanResults();
 
-        void AbortAllThreads(int code = 0);
+        void StopAllScans(int code = 0);
+	    void StopOperationForTargetUid(Guid operationUid, Guid targetUid);
 
-	    event EventHandler<DescentEventArgs> DescentCompleted;
+        event EventHandler<DescentEventArgs> DescentCompleted;
     }
 }

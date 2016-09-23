@@ -55,7 +55,7 @@ namespace DDT.Application.Models
                     SystemKind = item.SystemKind,
                     Source = item.Source.ToBusiness(),
                     DnsName = item.DnsName,
-                    IsAptHost = item.IsAptHost,
+                    IsLocalComputer = item.IsAptHost,
                     LdapPath = item.LdapPath
 
                 };
@@ -79,7 +79,7 @@ namespace DDT.Application.Models
                     IsOnline = target.IsOnline,
                     Source =  target.Source.MapFromTargetSource(),
                     DnsName = target.DnsName,
-                    IsAptHost = target.IsAptHost,
+                    IsAptHost = target.IsLocalComputer,
                     LdapPath = target.LdapPath
                 };                
             }

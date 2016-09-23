@@ -162,14 +162,14 @@ namespace APTAT.Application.Services
             var target = targets.FirstOrDefault(t => hostInfo.AddressList.Contains(t.GetIPAddress()));
             if (target != null)
             {
-                target.IsAptHost = true;
+                target.IsLocalComputer = true;
             }
             else
             {
                 var targetByName = targets.FirstOrDefault(t => t.DnsName == hostInfo.HostName);
                 if (targetByName != null)
                 {
-                    targetByName.IsAptHost = true;
+                    targetByName.IsLocalComputer = true;
                 }
             }
         }
