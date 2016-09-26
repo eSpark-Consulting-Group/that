@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Models
 {
@@ -17,6 +18,13 @@ namespace APTAT.Application.Models
 
     public class DomainObject : INotifyPropertyChanged
     {
+        public DomainObject()
+        {
+            ClearErrorMessageCommand = new DelegateCommand(o => Error = null);
+        }
+
+        public DelegateCommand ClearErrorMessageCommand { get; private set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Boolean _hasErrors;

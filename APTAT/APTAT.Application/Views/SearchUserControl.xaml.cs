@@ -5,7 +5,7 @@ using System.Windows;
 namespace APTAT.Application.Views
 {
     public partial class SearchUserControl
-    { 
+    {
         public SearchUserControl()
         {
             InitializeComponent();

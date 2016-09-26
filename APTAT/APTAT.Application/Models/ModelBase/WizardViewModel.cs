@@ -66,11 +66,16 @@ namespace APTAT.Application.Models
         private Int32 _entryIndex;
         private String _currentStep;
 
+        public object ParentViewModel
+        {
+            get { return App.Current.MainWindow.DataContext; }
+        }
+
         public Int32 StepsCount
         {
             get { return _steps.Length; }
         }
-        
+
         public String CurrentStep
         {
             get { return _currentStep; }
@@ -187,7 +192,7 @@ namespace APTAT.Application.Models
 
                     OnStepChanged();
                     commandContext.RaiseCompleted();
-                }      
+                }
             }, CurrentStep, commandContext);
         }
 

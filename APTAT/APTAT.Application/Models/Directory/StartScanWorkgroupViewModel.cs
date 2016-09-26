@@ -15,14 +15,14 @@ namespace APTAT.Application.Models
     public class StartScanWorkgroupViewModel : WizardViewModel
     {
         public const String SelectWorkgroup = "SelectWorkgroup";
+        public const String SelectTargets = "SelectTargets";
+        public const String SelectPort = "SelectPort";
 
         ITargetsDiscoveryService _targetsDiscoveryService;
         IStorageService _storage;
 
 
         private String _workgroup;
-        private String _administrator;
-        private String _password;
 
         private ObservableCollection<DeploymentItem> _items;
 
@@ -60,103 +60,62 @@ namespace APTAT.Application.Models
             }
         }
 
-        public String Administrator
-        {
-            get { return _administrator; }
-            set
-            {
-                _administrator = value;
+        public DelegateCommand ExpandCommand { get; private set; }
 
-                if (String.IsNullOrWhiteSpace(_administrator))
-                {
-                    RaiseValidationError("Administrator", "Please Specify Administrator Login");
-                }
-                else
-                {
-                    ClearError("Administrator");
-                }
-            }
-        }
-
-        public String Password
-        {
-            get { return _password; }
-            set
-            {
-                _password = value;
-            }
-        }
 
         public DelegateCommand CheckItemCommand { get; private set; }
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
+        private string _workgroupName;
+        public string WorkgroupName
+        {
+            get { return EnumerateWorkgroups ? null : _workgroupName; }
+            set
+            {
+                _workgroupName = value;
+                RaisePropertyChanged(nameof(WorkgroupName));
+            }
+        }
+
+        private bool _enumerateWorkgroups = true;
+        public bool EnumerateWorkgroups
+        {
+            get { return _enumerateWorkgroups; }
+            set
+            {
+                _enumerateWorkgroups = value;
+                RaisePropertyChanged(nameof(EnumerateWorkgroups));
+                RaisePropertyChanged(nameof(WorkgroupName));
+            }
+        }
+
+        public string WorkgroupMask
+        {
+            get { return "Enter Workgroup Name"; }
+        }
+
         public StartScanWorkgroupViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _storage = storage;
-            
-            SetSteps(new[] { null, SelectWorkgroup });
-            
-            TcpPort = "80";
-            UdpPort = "53";
+
+            SetSteps(new[] { null, SelectWorkgroup, SelectTargets, SelectPort });
+
+
         }
 
-        private string _tcpPort = String.Empty;
-        public String TcpPort
-        {
-            get { return _tcpPort; }
-            set
-            {
-                _tcpPort = value;
-                bool hasError = false;
-                var errorMessage = value.ValidateTCP(out hasError);
-                if (hasError)
-                {
-                    RaiseValidationError("TcpPort", errorMessage);
-                }
-                if (!hasError)
-                {
-                    ClearError("TcpPort");
-                }
-            }
-        }
 
-        private string _udpPort = String.Empty;
-        public String UdpPort
-        {
-            get { return _udpPort; }
-            set
-            {
-                _udpPort = value;
-                bool hasError = false;
-                var errorMessage = value.ValidateUDP(out hasError);
-                if (hasError)
-                {
-                    RaiseValidationError("UdpPort", errorMessage);
-                }
-                if (!hasError)
-                {
-                    ClearError("UdpPort");
-                }
-            }
-        }
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
-            _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
-            //if (_administrator != null)
-            {
-                RaisePropertyChanged("Administrator");
-            }
-            _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
-            //if (_workgroup != null)
-            {
-                RaisePropertyChanged("Workgroup");
-            }
 
+            _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
+            RaisePropertyChanged("Workgroup");
+
+            _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
             _targetsDiscoveryService.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
-           
+
         }
 
         protected override void InvokeViewUnloaded(Object arg)
@@ -170,39 +129,13 @@ namespace APTAT.Application.Models
         {
             if (previousStep == SelectWorkgroup && context.IsForward(CurrentStepIndex))
             {
-                if (String.IsNullOrEmpty(Workgroup))
+                if (String.IsNullOrEmpty(Workgroup) && !EnumerateWorkgroups)
                 {
                     Error = "Please Specify Workgroup";
                     return;
                 }
 
-                if (String.IsNullOrEmpty(Administrator))
-                {
-                    Error = "Please Specify Administrator Login";
-                    return;
-                }
 
-                if (String.IsNullOrEmpty(Password))
-                {
-                    Error = "Please Specify Password";
-                    return;
-                }
-
-                bool isTcpPortHasError = false;
-                var msgTcp = TcpPort.ValidateTCP(out isTcpPortHasError);
-                if (isTcpPortHasError)
-                {
-                    Error = msgTcp;
-                    return;
-                }
-
-                bool isUdpPortHasError = false;
-                var msgUdp = UdpPort.ValidateUDP(out isUdpPortHasError);
-                if (isUdpPortHasError)
-                {
-                    Error = msgUdp;
-                    return;
-                }
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.Workgroup, Workgroup);
@@ -215,7 +148,6 @@ namespace APTAT.Application.Models
                     Error = null;
                 }
 
-                _storage.SetValue(KnownKeys.Login, _administrator);
                 _storage.SetValue(KnownKeys.Workgroup, _workgroup);
 
                 base.OnStepChanging(success, previousStep, context);
@@ -240,13 +172,10 @@ namespace APTAT.Application.Models
             {
                 CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                _storage.SetValue(KnownKeys.Login, _administrator);
-                _storage.SetValue(KnownKeys.Password, _password);
                 _storage.SetValue(KnownKeys.Workgroup, _workgroup);
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });              
-                _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                _storage.SetValue(KnownKeys.UdpPort, _udpPort);
+                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });
+
 
                 context.Success();
             }

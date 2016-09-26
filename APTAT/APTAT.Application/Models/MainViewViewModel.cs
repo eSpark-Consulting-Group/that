@@ -11,12 +11,13 @@ using APTAT.Core;
 using APTAT.Valkyrie;
 using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
-using APTAT.Core.Descent;
+
 using System.Windows.Threading;
 
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
+using System.Threading.Tasks;
 
 namespace APTAT.Application.Models
 {
@@ -32,8 +33,8 @@ namespace APTAT.Application.Models
         private string _camLicenseId;
         private string _camUserLogin;
         private string _camUserPassword;
-        private string _tcpPort;
-        private string _udpPort;
+        private string _tcpPort = "80";
+        private string _udpPort = "53";
 
         private readonly IAptService _aptService;
         private readonly IWmiService _wmiService;
@@ -70,6 +71,134 @@ namespace APTAT.Application.Models
 
         private DispatcherTimer _scanIteratorTimer;
         private Dictionary<Guid, ScanProgressItem> _scanIterator;
+
+        public string Uri { get; set; } = "/Views/EULAView.xaml";
+
+        public string CurrentDomainName { get; set; }
+
+        public bool HasCurrentDomainName
+        {
+            get { return !string.IsNullOrEmpty(CurrentDomainName); }
+        }
+
+        private bool _useCurrentDomainForDeploy;
+        public bool UseCurrentDomainForDeploy
+        {
+            get { return _useCurrentDomainForDeploy; }
+            set
+            {
+                _useCurrentDomainForDeploy = value;
+                RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
+                RaisePropertyChanged(nameof(Login));
+                RaisePropertyChanged(nameof(Password));
+
+
+            }
+        }
+
+        public string Login
+        {
+            get { return _login; }
+            set
+            {
+                _login = value;
+                RaisePropertyChanged(nameof(Login));
+            }
+        }
+
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                _password = value;
+                RaisePropertyChanged(nameof(Password));
+            }
+        }
+
+
+        public String TcpPort
+        {
+            get { return _tcpPort; }
+            set
+            {
+                _tcpPort = value;
+                bool hasError = false;
+                var errorMessage = value.ValidateTCP(out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("TcpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("TcpPort");
+                }
+            }
+        }
+
+
+        public String UdpPort
+        {
+            get { return _udpPort; }
+            set
+            {
+                _udpPort = value;
+                bool hasError = false;
+                var errorMessage = value.ValidateUDP(out hasError);
+                if (hasError)
+                {
+                    RaiseValidationError("UdpPort", errorMessage);
+                }
+                if (!hasError)
+                {
+                    ClearError("UdpPort");
+                }
+            }
+        }
+
+        public string LoginMask
+        {
+            get { return "Enter Login"; }
+        }
+
+        public string PasswordMask
+        {
+            get { return "Enter Password"; }
+        }
+
+        public string PortMask
+        {
+            get { return "Enter FLS Port"; }
+        }
+
+        private async void OnLoaded()
+        {
+            var name = await TryAction(GetCurrentDomainName());
+
+            CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
+
+            if (HasCurrentDomainName)
+            {
+                CurrentDomainName = $"Use Current Domain Credentials ({CurrentDomainName})";
+
+                UseCurrentDomainForDeploy = true;
+            }
+
+            RaisePropertyChanged(nameof(CurrentDomainName));
+            RaisePropertyChanged(nameof(HasCurrentDomainName));
+        }
+
+        private async Task<string> GetCurrentDomainName()
+        {
+            var result = await _targetsDiscoveryService.GetCurrentDomainName();
+
+            if (result.Exception != null)
+            {
+                return null;
+            }
+
+            return result.Name;
+        }
 
         public bool IsAnyScanInProgress
         {
@@ -214,9 +343,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                var commonHeaderName = (string)System.Windows.Application.Current.FindResource("APTApplicationTitle");
-                if (commonHeaderName == null)
-                    throw new ArgumentNullException("Failed to obtain window header value from application resources");
+                var commonHeaderName = "Unknown File Hunter";
 
                 string header = "Canceling...";
                 if (CancelInProgress)
@@ -464,7 +591,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("GroupByComputers");
             }
         }
-
+        public DelegateCommand ChangeScreenCommand { get; private set; }
         public DelegateCommand StartScanCommand { get; private set; }
         public DelegateCommand StopScanCommand { get; private set; }
 
@@ -479,6 +606,12 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService = targetsDiscoveryService;
             _wmiService = wmiService;
             _storage = storage;
+
+            ChangeScreenCommand = new DelegateCommand(o =>
+            {
+                Set(() => Uri, "/Views/MainView.xaml");
+                OnLoaded();
+            });
 
             StartScanCommand = new DelegateCommand(o =>
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
@@ -534,15 +667,15 @@ namespace APTAT.Application.Models
                     IsBusy = true;
                     IsScanInProgress = null;
                     
-                    _login = _storage.GetValue<String>(KnownKeys.Login, false);
-                    _password = _storage.GetValue<String>(KnownKeys.Password, true);
+                    //_login = _storage.GetValue<String>(KnownKeys.Login, false);
+                    //_password = _storage.GetValue<String>(KnownKeys.Password, true);
                     _tcpPort= _storage.GetValue<String>(KnownKeys.TcpPort, false);
                     _udpPort = _storage.GetValue<String>(KnownKeys.UdpPort, false);
 
-                    if (_login == null || _password == null)
-                    {
-                        throw new InvalidOperationException("specify login and password");
-                    }
+                    //if (_login == null || _password == null)
+                    //{
+                        //throw new InvalidOperationException("specify login and password");
+                    //}
 
                     _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
 
@@ -890,10 +1023,10 @@ namespace APTAT.Application.Models
 
             if (_onlineItems.Length > 0)
             {
-                if (_login == null || _password == null)
-                {
-                    throw new InvalidOperationException("specify login and password");
-                }
+                //if (_login == null || _password == null)
+                //{
+                //    throw new InvalidOperationException("specify login and password");
+                //}
 
                 if (String.IsNullOrWhiteSpace(_udpPort) || String.IsNullOrWhiteSpace(_tcpPort))
                 {
@@ -1185,6 +1318,39 @@ namespace APTAT.Application.Models
         {
             IsBusy = true;
             InvokeStopScan(null);
+        }
+
+        private async Task TryAction(Task task)
+        {
+            try
+            {
+                await task;
+            }
+            catch (Exception ex)
+            {
+                TryActionException(ex);
+            }
+        }
+
+        private async Task<T> TryAction<T>(Task<T> task) where T : class
+        {
+            T taskResult = default(T);
+            try
+            {
+                taskResult = await task;
+            }
+            catch (Exception ex)
+            {
+                TryActionException(ex);
+            }
+            return taskResult;
+        }
+
+        private void TryActionException(Exception ex)
+        {
+
+
+            LogHelper.Trace(TraceEventType.Error, $"TryAction error: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
         }
     }
 }

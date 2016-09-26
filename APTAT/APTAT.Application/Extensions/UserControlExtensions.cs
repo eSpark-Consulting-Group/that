@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application.Extensions
@@ -18,6 +21,23 @@ namespace APTAT.Application.Extensions
             template.VisualTree = text;
             menuItem.HeaderTemplate = template;
             menuItem.Header = header;
+        }
+
+        public static void DelayedFocus(this UIElement uiElement)
+        {
+            uiElement.Dispatcher.BeginInvoke(
+            new Action(delegate
+            {
+                if (uiElement.Focusable)
+                {
+                    uiElement.Focus();
+                    Keyboard.Focus(uiElement);
+                    if (uiElement is TextBox)
+                        ((TextBox)uiElement).CaretIndex =
+                        ((TextBox)uiElement).Text.Length;
+                }
+            }),
+            DispatcherPriority.Render);
         }
     }
 }

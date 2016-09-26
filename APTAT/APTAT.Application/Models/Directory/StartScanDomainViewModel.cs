@@ -3,27 +3,24 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Telerik.Windows.Controls;
-using APTAT.Application.Extensions;
 using APTAT.Application.Services;
-using APTAT.Core.Descent;
 using APTAT.DeploymentCore.Directory;
+using APTAT.Application.Messages;
 
 namespace APTAT.Application.Models
 {
     public class StartScanDomainViewModel : WizardViewModel
     {
-        ITargetsDiscoveryService _targetsDiscoveryService; 
+        ITargetsDiscoveryService _targetsDiscoveryService;
         IStorageService _storage;
-  
+
         private DirectoryItem[] _items;
         private readonly ICollection<Object> _checkedItems;
-        private String _domainController;
-        private String _administrator;
-        private String _password;
 
-      
+
         public const String SelectDomain = "SelectDomain";
         public const String SelectTargets = "SelectTargets";
+        public const String SelectPort = "SelectPort";
 
         public DirectoryItem[] Items
         {
@@ -35,95 +32,63 @@ namespace APTAT.Application.Models
             }
         }
 
-        public String DomainController
+
+        public string DomainControllerMask
         {
-            get { return _domainController; }
+            get { return "Enter Domain Name"; }
+        }
+
+
+        private string _domainController;
+        public string DomainController
+        {
+            get { return UseCurrentDomainForActiveDirectory ? null : _domainController; }
             set
             {
                 _domainController = value;
+                RaisePropertyChanged(nameof(DomainController));
 
-                if (String.IsNullOrWhiteSpace(_domainController))
-                {
-                    RaiseValidationError("DomainController", "Please Specify Domain Controller");
-                }
-                else
-                {
-                    ClearError("DomainController");
-                }
             }
         }
 
-        public String Administrator
+        private string _activeDirectoryLogin;
+        public string ActiveDirectoryLogin
         {
-            get { return _administrator; }
+            get { return UseCurrentDomainForActiveDirectory ? null : _activeDirectoryLogin; }
             set
             {
-                _administrator = value;
+                _activeDirectoryLogin = value;
+                RaisePropertyChanged(nameof(ActiveDirectoryLogin));
 
-                if (String.IsNullOrWhiteSpace(_administrator))
-                {
-                    RaiseValidationError("Administrator", "Please Specify Administrator Login");
-                }
-                else
-                {
-                    ClearError("Administrator");
-                }
             }
         }
 
-        public String Password
+        private string _activeDirectoryPassword;
+        public string ActiveDirectoryPassword
         {
-            get { return _password; }
+            get { return UseCurrentDomainForActiveDirectory ? null : _activeDirectoryPassword; }
             set
             {
-                _password = value;
-              
-            }
-        }
-        private string _tcpPort = String.Empty;
-        public String TcpPort
-        {            
-            get
-            {
-                return _tcpPort;
-            }
-            set
-            {
-                _tcpPort = value;
-                bool hasError;
-                var errorMessage = value.ValidateTCP(out hasError);
-                if (hasError)
-                {
-                    RaiseValidationError("TcpPort", errorMessage);
-                }
-                if (!hasError)
-                {
-                    ClearError("TcpPort");                
-                }            
+                _activeDirectoryPassword = value;
+                RaisePropertyChanged(nameof(ActiveDirectoryPassword));
+
             }
         }
 
-        private string _udpPort = String.Empty;
-        public String UdpPort
+        private bool _useCurrentDomainForActiveDirectory;
+        public bool UseCurrentDomainForActiveDirectory
         {
-            get { return _udpPort; }
+            get { return _useCurrentDomainForActiveDirectory; }
             set
             {
-                _udpPort = value;
-                bool hasError = false;
-                var errorMessage = value.ValidateUDP(out hasError);
-                if (hasError)
-                {
-                    RaiseValidationError("UdpPort", errorMessage);
-                }
-                if (!hasError)
-                {
-                    ClearError("UdpPort");
-                }
+                _useCurrentDomainForActiveDirectory = value;
+                RaisePropertyChanged(nameof(UseCurrentDomainForActiveDirectory));
+                RaisePropertyChanged(nameof(DomainController));
+                RaisePropertyChanged(nameof(ActiveDirectoryLogin));
+                RaisePropertyChanged(nameof(ActiveDirectoryPassword));
+
             }
         }
-
-
 
         public DelegateCommand ExpandCommand { get; private set; }
 
@@ -131,26 +96,26 @@ namespace APTAT.Application.Models
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
-        public StartScanDomainViewModel(ITargetsDiscoveryService targetsDiscoveryService,IStorageService storage)
+        public StartScanDomainViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _storage = storage;
 
-            SetSteps(new[] { null, SelectDomain, SelectTargets });
+            SetSteps(new[] { null, SelectDomain, SelectTargets, SelectPort });
 
             ExpandCommand = new DelegateCommand(InvokeExpand);
             CheckItemCommand = new DelegateCommand(InvokeCheckItem);
             UncheckItemCommand = new DelegateCommand(InvokeUncheckItem);
 
             _checkedItems = new Collection<Object>();
-            TcpPort = "80";
-            UdpPort = "53";
+
+
         }
 
         private void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
-            _targetsDiscoveryService.GetDirectoryItems(DomainController, Administrator, Password, (DirectoryItem)commandContext.DirectoryItem, new OperationContext { UserState = this, Arg = commandContext });
+            _targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, (DirectoryItem)commandContext.DirectoryItem, new OperationContext { UserState = this, Arg = commandContext });
         }
 
         private void InvokeCheckItem(Object arg)
@@ -168,43 +133,29 @@ namespace APTAT.Application.Models
         {
             if (previousStep == SelectDomain && context.IsForward(CurrentStepIndex))
             {
-                if (String.IsNullOrEmpty(DomainController))
+                if (String.IsNullOrEmpty(DomainController) && !UseCurrentDomainForActiveDirectory)
                 {
-                    Error = "Please Specify Domain Controller";
+                    Error = "Please Specify Domain Name";
                     return;
                 }
 
-                if (String.IsNullOrEmpty(Administrator))
+                if (String.IsNullOrEmpty(ActiveDirectoryLogin) && !UseCurrentDomainForActiveDirectory)
                 {
-                    Error = "Please Specify Administrator Login";
+                    Error = "Please Specify Domain Administrator";
                     return;
                 }
 
-                if (String.IsNullOrEmpty(Password))
+                if (String.IsNullOrEmpty(ActiveDirectoryPassword) && !UseCurrentDomainForActiveDirectory)
                 {
                     Error = "Please Specify Password";
                     return;
                 }
 
-                bool isTcpPortHasError = false;
-                var msgTcp = TcpPort.ValidateTCP(out isTcpPortHasError);
-                if (isTcpPortHasError)
-                {
-                    Error = msgTcp;
-                    return;
-                }
 
-                bool isUdpPortHasError = false;
-                var msgUdp = UdpPort.ValidateUDP(out isUdpPortHasError);
-                if (isUdpPortHasError)
-                {
-                    Error = msgUdp;
-                    return;
-                }
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.Domain, DomainController);
-                _targetsDiscoveryService.GetDirectoryRoot(DomainController, Administrator, Password, new OperationContext { UserState = this, Success = success });
+                _targetsDiscoveryService.GetDirectoryRoot(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, new OperationContext { UserState = this, Success = success });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -215,11 +166,9 @@ namespace APTAT.Application.Models
                 else
                 {
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
-                    _storage.SetValue(KnownKeys.Login, _administrator);
-                    _storage.SetValue(KnownKeys.Password, _password);
+                    _storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
+                    _storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
                     _storage.SetValue(KnownKeys.Domain, _domainController);
-                    _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                    _storage.SetValue(KnownKeys.UdpPort, _udpPort);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
                     success();
@@ -232,7 +181,7 @@ namespace APTAT.Application.Models
                     Error = null;
                 }
 
-                _storage.SetValue(KnownKeys.Login, _administrator);
+                _storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
                 _storage.SetValue(KnownKeys.Domain, _domainController);
 
                 base.OnStepChanging(success, previousStep, context);
@@ -241,23 +190,16 @@ namespace APTAT.Application.Models
 
         protected override void OnStepChanged()
         {
-            
+
         }
 
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
 
-            _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
-            //if (_administrator != null)
-            {
-                RaisePropertyChanged("Administrator");
-            }
-            _domainController = _storage.GetValue<String>(KnownKeys.Domain, false);
-            //if (_domainController != null)
-            {
-                RaisePropertyChanged("DomainController");
-            }
+            var model = ParentViewModel as MainViewViewModel;
+            UseCurrentDomainForActiveDirectory = model.HasCurrentDomainName;
+
 
             _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
@@ -281,13 +223,13 @@ namespace APTAT.Application.Models
             }
 
             IsBusy = false;
-            
+
             Items = e.Items;
             if (e.Exception == null)
             {
                 if (Items != null && Items.Length > 0)
                 {
-                    _targetsDiscoveryService.GetDirectoryItems(DomainController, Administrator, Password, Items[0], new OperationContext { UserState = this, Arg = this });
+                    _targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, Items[0], new OperationContext { UserState = this, Arg = this });
                 }
 
                 Error = null;

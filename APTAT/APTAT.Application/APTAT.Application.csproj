@@ -56,6 +56,7 @@
     <Reference Include="FluentValidation">
       <HintPath>..\APTAT.Libraries\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -130,13 +131,17 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToConverters.cs" />
     <Compile Include="Converters\ContentToPathConverter.cs" />
     <Compile Include="AgentWindow.xaml.cs">
       <DependentUpon>AgentWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
+    <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />
+    <Compile Include="Models\Directory\StartScanLocalViewModel.cs" />
     <Compile Include="Services\GetDomainNameResponse.cs" />
+    <Compile Include="Triggers\KeyToCommandAction.cs" />
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
     </Compile>
@@ -160,12 +165,20 @@
     <Compile Include="Services\IWmiService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="Extensions\PortValidationExtensions.cs" />
-    <Compile Include="Controls\TitleUpdater.cs" />
+    <Compile Include="Views\EULAView.xaml.cs">
+      <DependentUpon>EULAView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginPasswordUserControl.xaml.cs">
+      <DependentUpon>LoginPasswordUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ScanResultUserControl.xaml.cs">
       <DependentUpon>ScanResultUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchUserControl.xaml.cs">
       <DependentUpon>SearchUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartScanLocalView.xaml.cs">
+      <DependentUpon>StartScanLocalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ValkyrieResultUserControlByComputers.xaml.cs">
       <DependentUpon>ValkyrieResultUserControlByComputers.xaml</DependentUpon>
@@ -178,9 +191,6 @@
     </Compile>
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EulaWindow.xaml.cs">
-      <DependentUpon>EulaWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Directory\IpAddressItem.cs" />
     <Compile Include="Models\Directory\OperationContext.cs" />
@@ -215,7 +225,6 @@
       <DependentUpon>ScanResultUserControlByComputers.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\SearchExtensions.cs" />
-    <Compile Include="Controls\SelectorButton.cs" />
     <Compile Include="Services\AptService.cs" />
     <Compile Include="Models\ModelBase\BasePage.cs" />
     <Compile Include="Models\Directory\DirectoryItem.cs" />
@@ -262,10 +271,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Assets\System.Windows.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="AgentWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -282,6 +287,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\EULAView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginPasswordUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ScanResultUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -289,6 +302,10 @@
     <Page Include="Views\SearchUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StartScanLocalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ValkyrieResultUserControlByComputers.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -303,10 +320,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ErrorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EulaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -409,7 +422,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="EULA.pdf" />
-    <Resource Include="Assets\arrows.png" />
     <Resource Include="Images\banner_1.png" />
     <Resource Include="Images\banner_2.png" />
     <Resource Include="Images\Image.png" />
@@ -426,19 +438,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="APT.ico" />
-    <Resource Include="Assets\comodo_dark.png" />
-    <Resource Include="Assets\comodo_cto.png" />
     <Content Include="cmdapt86.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SfxPackage\7za.exe" />
     <None Include="buildScript.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
-    <None Include="SfxPackage\CreateSfx.bat" />
-    <Resource Include="Assets\comodo_white.png" />
-    <Resource Include="SfxPackage\config.txt" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -446,7 +451,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="SfxPackage\7zSD.sfx" />
     <Content Include="Fonts\segoeui.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -484,9 +488,6 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="warning.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">

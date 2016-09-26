@@ -19,7 +19,7 @@ namespace APTAT.Application
                 this.HideMinimizeAndMaximizeButtons();
             };
             txtProductName.Text = "Unknown File Hunter";
-            txtProductVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            txtProductVersion.Text = "2.0";// Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void Window_MouseLeftButtonDown(Object sender, MouseButtonEventArgs e)

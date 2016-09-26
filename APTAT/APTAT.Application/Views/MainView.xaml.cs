@@ -13,11 +13,9 @@ using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs
 using System.ComponentModel;
 using APTAT.Application.Messages;
 
-using APTAT.Common;
-
 namespace APTAT.Application
 {
-    public partial class MainView 
+    public partial class MainView
     {
         private MainViewViewModel _viewModel;
 
@@ -30,7 +28,8 @@ namespace APTAT.Application
                 MessageManager.Instance.RegisterListener(this);
             }
 
-            DataContext = _viewModel = CompositionHelper.Instance.Resolve<MainViewViewModel>();
+            DataContext = App.Current.MainWindow.DataContext;
+            _viewModel = DataContext as MainViewViewModel;
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
@@ -72,7 +71,7 @@ namespace APTAT.Application
             ErrorWindow error = new ErrorWindow();
             error.Text.Text = e.Exception.Message;
             error.Owner = System.Windows.Application.Current.MainWindow;
-            error.ShowDialog();          
+            error.ShowDialog();
         }
 
         private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
@@ -94,14 +93,14 @@ namespace APTAT.Application
             if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
             if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Not Performed Scans", Environment.NewLine, e.NotPerformedCount);
 
-            scanCompletedWindow.Text.Text += Environment.NewLine +"File Statistics:";
-            int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount+ e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount;
+            scanCompletedWindow.Text.Text += Environment.NewLine + "File Statistics:";
+            int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount + e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount;
             if (e.FilesStatistics.TotalFilesCount > 0)
             {
                 scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total found", Environment.NewLine, total);
             }
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown programs found", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
-            
+
             if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malware items found", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
             if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed to analyse", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount);
             if (e.FilesStatistics.NoVerdictFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} No Verdict", Environment.NewLine, e.FilesStatistics.NoVerdictFilesCount);
@@ -120,9 +119,9 @@ namespace APTAT.Application
                 if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
                     _viewModel.GroupingEnabled = true;
             }
-                
+
         }
-        
+
         private CamCredentialsWindow _dialog;
         private void ShowRegisterToValkyrieWindow()
         {
@@ -176,7 +175,7 @@ namespace APTAT.Application
         }
 
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
-        {            
+        {
             ShowRegisterToValkyrieWindow();
         }
 
@@ -217,7 +216,7 @@ namespace APTAT.Application
 
         private void OnPerDeviceReportValkyrieClick(Object sender, RadRoutedEventArgs e)
         {
-           _viewModel.SetReportKind(ReportKind.DetailedPerDeviceWithValkyrie);
+            _viewModel.SetReportKind(ReportKind.DetailedPerDeviceWithValkyrie);
             ReportButton.IsOpen = false;
             ShowReport();
         }
@@ -248,7 +247,7 @@ namespace APTAT.Application
         private void AboutClick(Object sender, RoutedEventArgs e)
         {
             HelpButton.IsOpen = false;
-            AboutWindow about = new AboutWindow {Owner = System.Windows.Application.Current.MainWindow};
+            AboutWindow about = new AboutWindow { Owner = System.Windows.Application.Current.MainWindow };
             about.ShowDialog();
         }
 

@@ -1,19 +1,9 @@
 ﻿using APTAT.Application.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Telerik.Windows;
 using Telerik.Windows.Controls;
 using APTAT.Application.Extensions;
@@ -35,15 +25,7 @@ namespace APTAT.Application
             InitializeComponent();
         }
 
-        private void OnPasswordChanged(Object sender, RoutedEventArgs e)
-        {
-            ViewModel.Password = password.Password;
-        }
 
-        public void ClearPasswordBox()
-        {
-            password.Password = "";
-        }
 
         private void OnLoadOnDemand(Object sender, RadRoutedEventArgs e)
         {
@@ -59,7 +41,7 @@ namespace APTAT.Application
         private void OnExpandCompleted(ExpandCommandContext context)
         {
             RadTreeViewItem treeViewItem = (RadTreeViewItem)context.TreeItem;
-            DirectoryItem directoryItem = (DirectoryItem) context.DirectoryItem;
+            DirectoryItem directoryItem = (DirectoryItem)context.DirectoryItem;
 
             treeViewItem.ItemsSource = directoryItem.Items;
             treeViewItem.IsLoadOnDemandEnabled = false;
@@ -80,8 +62,8 @@ namespace APTAT.Application
 
         private void OnChecked(Object sender, RadRoutedEventArgs e)
         {
-            RadTreeViewItem treeViewItem = (RadTreeViewItem) e.OriginalSource;
-            if(treeViewItem.CheckState == ToggleState.On)
+            RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
+            if (treeViewItem.CheckState == ToggleState.On)
             {
                 ViewModel.CheckItemCommand.Execute(treeViewItem.Item);
             }
@@ -89,7 +71,7 @@ namespace APTAT.Application
             {
                 ViewModel.UncheckItemCommand.Execute(treeViewItem.Item);
             }
-            
+
         }
 
         private void OnUnchecked(Object sender, RadRoutedEventArgs e)
@@ -106,8 +88,8 @@ namespace APTAT.Application
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {         
-            PortValidationExtensions.ValidateInput(sender, e);       
+        {
+            PortValidationExtensions.ValidateInput(sender, e);
         }
     }
 }

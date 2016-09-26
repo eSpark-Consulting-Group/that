@@ -8,22 +8,20 @@ using APTAT.Application.Services;
 using APTAT.Core.Descent;
 using APTAT.DeploymentCore.Directory;
 using Telerik.Windows.Controls;
+using APTAT.Application.Views;
 
 namespace APTAT.Application.Models.Directory
 {
- 
+
 
     public class StartScanByIpViewModel : WizardViewModel
     {
         public const String SelectIp = "SelectIp";
-        public const String SelectTargets = "SelectTargets";
+        public const String SelectPort = "SelectPort";
 
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
-        private String _administrator;
-        private String _password;
-        
         private ObservableCollection<DeploymentItem> _items;
 
         public ICollection<Object> CheckedItems
@@ -81,33 +79,7 @@ namespace APTAT.Application.Models.Directory
                 }
             }
         }
-        public String Administrator
-        {
-            get { return _administrator; }
-            set
-            {
-                _administrator = value;
 
-                if (String.IsNullOrWhiteSpace(_administrator))
-                {
-                    RaiseValidationError("Administrator", "Please Specify Administrator Login");
-                }
-                else
-                {
-                    ClearError("Administrator");
-                }
-            }
-        }
-
-        public String Password
-        {
-            get { return _password; }
-            set 
-            {
-                _password = value;
-          
-            }
-        }
 
         public ObservableCollection<IpAddressWrapper> IpAddresses { get; private set; }
 
@@ -151,7 +123,7 @@ namespace APTAT.Application.Models.Directory
             _targetsDiscoveryService = targetsDiscoveryService;
             _storage = storage;
 
-            SetSteps(new[] { null, SelectIp });
+            SetSteps(new[] { null, SelectIp, SelectPort });
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
             DeleteIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
@@ -162,9 +134,6 @@ namespace APTAT.Application.Models.Directory
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
-            
-            _administrator = _storage.GetValue<String>(KnownKeys.Login, false);
-            RaisePropertyChanged("Administrator");
 
             // restore IP addresses list 
             ObservableCollection<IpAddressWrapper> storedIpAddresses = _storage.GetValue<ObservableCollection<IpAddressWrapper>>(KnownKeys.IpAddresses, false);
@@ -188,9 +157,10 @@ namespace APTAT.Application.Models.Directory
                     }
                 }
 
-                RaisePropertyChanged("IpAddresses");                
+                RaisePropertyChanged("IpAddresses");
             }
 
+            _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
         }
 
@@ -234,8 +204,8 @@ namespace APTAT.Application.Models.Directory
                 args.Cancel = true;
                 return;
             }
-            
-            if ( ValidateProperty(ipAddress, "Text", IpAddressWrapper.Validator ))
+
+            if (ValidateProperty(ipAddress, "Text", IpAddressWrapper.Validator))
             {
                 if (IpAddresses.Any(o => o.Text == ipAddress.Text))
                 {
@@ -251,7 +221,7 @@ namespace APTAT.Application.Models.Directory
             else
             {
                 args.Cancel = true;
-            }        
+            }
         }
 
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
@@ -266,17 +236,6 @@ namespace APTAT.Application.Models.Directory
                     return;
                 }
 
-                if(String.IsNullOrEmpty(Administrator))
-                {
-                    Error = "Please Specify Administrator Login";
-                    return;
-                }
-
-                if (String.IsNullOrEmpty(Password))
-                {
-                    Error = "Please Specify Password";
-                    return;
-                }
 
                 bool isTcpPortHasError = false;
                 var msgTcp = TcpPort.ValidateTCP(out isTcpPortHasError);
@@ -298,30 +257,23 @@ namespace APTAT.Application.Models.Directory
                 _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
                 _targetsDiscoveryService.GetByIpAddresses(IpAddresses, new OperationContext { Success = success, UserState = this });
             }
-            else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
+            else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
             {
-             
-                if (CheckedItems == null || CheckedItems.Count == 0)
-                {
-                    Error = "Select at least one item";
-                }
-                else
-                {
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                    _storage.SetValue(KnownKeys.Login, _administrator);
-                    _storage.SetValue(KnownKeys.Password, _password);
-                    _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                    _storage.SetValue(KnownKeys.UdpPort, _udpPort);
-                    _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
-                    var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
-                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                        new DevicesSourceDescription()
-                        {
-                            Type = ETargetsDiscovererType.NetworkAddresses,
-                            Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
-                        });
-                    success();
-                }
+
+
+                _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
+                _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                _storage.SetValue(KnownKeys.UdpPort, _udpPort);
+                _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
+                var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
+                _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription()
+                    {
+                        Type = ETargetsDiscovererType.NetworkAddresses,
+                        Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
+                    });
+                success();
+
             }
             else
             {
@@ -329,9 +281,6 @@ namespace APTAT.Application.Models.Directory
                 {
                     Error = null;
                 }
-
-                _storage.SetValue(KnownKeys.Login, _administrator);
-                _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
 
                 base.OnStepChanging(success, previousStep, context);
             }
@@ -344,15 +293,13 @@ namespace APTAT.Application.Models.Directory
             {
                 return;
             }
-            
+
             EnableDefaultButtons = true;
             IsBusy = false;
             if (e.Exception == null)
             {
                 CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                _storage.SetValue(KnownKeys.Login, _administrator);
-                _storage.SetValue(KnownKeys.Password, _password);
                 _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
                 _storage.SetValue(KnownKeys.UdpPort, _udpPort);
                 var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();

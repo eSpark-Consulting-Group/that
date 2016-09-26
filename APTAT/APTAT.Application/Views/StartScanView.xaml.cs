@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using APTAT.Application.Models;
 using APTAT.Application.Models.Directory;
 using APTAT.Common;
 
 namespace APTAT.Application
 {
-    public class Steps
-    {
-        public const Int32 InitialStep = 0;
-        public const Int32 SettingsStep = 1;
-        public const Int32 FinishStep = 2;
-    }
+
 
     public class StartScanEventArgs : EventArgs
     {
@@ -27,30 +21,15 @@ namespace APTAT.Application
         public event EventHandler CancelClick;
         public event EventHandler<StartScanEventArgs> FinishClick;
 
-        //private readonly StartScanViewModel _viewModel;
         private readonly WizardViewModel _scanDomainViewModel;
         private readonly WizardViewModel _scanWorkgroupViewModel;
         private readonly WizardViewModel _scanByIpViewModel;
+        private readonly WizardViewModel _scanLocalViewModel;
 
         private WizardViewModel _currentViewModel;
-        
-        ToolTip tooltip;
+
+
         private bool _isQuickScan;
-        public bool IsTooltipOpen 
-        {
-            get
-            {
-                if (tooltip != null)
-                    return tooltip.IsOpen;
-                else
-                    return false;
-            }
-            set
-            {
-                if (tooltip != null)
-                    tooltip.IsOpen = value;
-            }
-        }
 
         public StartScanView()
         {
@@ -59,17 +38,19 @@ namespace APTAT.Application
             _scanDomainViewModel = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
             _scanWorkgroupViewModel = CompositionHelper.Instance.Resolve<StartScanWorkgroupViewModel>();
             _scanByIpViewModel = CompositionHelper.Instance.Resolve<StartScanByIpViewModel>();
+            _scanLocalViewModel = CompositionHelper.Instance.Resolve<StartScanLocalViewModel>();
 
             viewScanByIp.DataContext = _scanByIpViewModel;
             viewScanDomain.DataContext = _scanDomainViewModel;
             viewScanWorkgroup.DataContext = _scanWorkgroupViewModel;
+            viewScanLocal.DataContext = _scanLocalViewModel;
 
             Unloaded += OnUnloaded;
         }
 
         private void OnCancelClick(Object sender, RoutedEventArgs e)
         {
-            if(CancelClick != null)
+            if (CancelClick != null)
             {
                 CancelClick(this, EventArgs.Empty);
             }
@@ -77,10 +58,10 @@ namespace APTAT.Application
 
         private void OnFinishClick(Object sender, RoutedEventArgs e)
         {
-        
+
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
-                
+
                 Step = _currentViewModel.CurrentStepIndex + 1,
                 Completed = ctx =>
                 {
@@ -95,58 +76,28 @@ namespace APTAT.Application
                 Step = _currentViewModel.CurrentStepIndex + 1,
                 Completed = ctx =>
                 {
-                   // if(_currentViewModel.CurrentStep = 
                 }
             });
         }
 
-        //private void OnNextClick(Object sender, RoutedEventArgs e)
-        //{
-        //    txtDomainController.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-        //    txtAdministrator.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-
-        //    if (Validation.GetHasError(txtDomainController) == false &&
-        //        Validation.GetHasError(txtAdministrator) == false)
-        //    {
-        //        _viewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
-        //        {
-        //            Step = 1,
-        //            Completed = ctx =>
-        //            {
-        //                UpdateButtonsVisibility();
-                      
-
-        //            }
-        //        });
-        //    }
-        //}
-
         private void OnBackClick(Object sender, RoutedEventArgs e)
         {
-            IsTooltipOpen = false;
 
-            ClearPasswordBox();
+
+
 
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
                 Step = _currentViewModel.CurrentStepIndex - 1,
-                Completed = ctx =>
-                {
-                    
-                }
+
             });
-        
+
+            if (_currentViewModel == null)
+                cancel.Visibility = Visibility.Visible;
+
+
         }
 
-        private void ClearPasswordBox()
-        {
-            if (viewScanDomain.Visibility == Visibility.Visible)
-                viewScanDomain.ClearPasswordBox();
-            else if (viewScanByIp.Visibility == Visibility.Visible)
-                viewScanByIp.ClearPasswordBox();
-            else if (viewScanWorkgroup.Visibility == Visibility.Visible)
-                viewScanWorkgroup.ClearPasswordBox();
-        }
 
         private void OnActiveDirectoryClick(object sender, RoutedEventArgs e)
         {
@@ -163,6 +114,12 @@ namespace APTAT.Application
         private void OnIpClick(object sender, RoutedEventArgs e)
         {
             SetCurrentViewModel(_scanByIpViewModel);
+            UpdateViewVisibility();
+        }
+
+        private void OnThisClick(object sender, RoutedEventArgs e)
+        {
+            SetCurrentViewModel(_scanLocalViewModel);
             UpdateViewVisibility();
         }
 
@@ -193,7 +150,7 @@ namespace APTAT.Application
             SetCurrentViewModel(null);
             wizardBorder.Visibility = Visibility.Collapsed;
             pathSelector.Visibility = Visibility.Visible;
-            ToolTipIcon.Visibility = Visibility.Collapsed;
+
         }
 
         private void OnWizardCompleted(Object sender, EventArgs e)
@@ -211,7 +168,7 @@ namespace APTAT.Application
             {
                 _currentViewModel.ViewUnloadedCommand.Execute(null);
 
-                IsTooltipOpen = false;
+
             }
         }
 
@@ -220,53 +177,36 @@ namespace APTAT.Application
             viewScanByIp.Visibility = Visibility.Collapsed;
             viewScanDomain.Visibility = Visibility.Collapsed;
             viewScanWorkgroup.Visibility = Visibility.Collapsed;
-            ToolTipIcon.Visibility = Visibility.Collapsed;
+            viewScanLocal.Visibility = Visibility.Collapsed;
+            cancel.Visibility = Visibility.Visible;
 
-            if(_currentViewModel == null)
+            if (_currentViewModel == null)
             {
                 return;
             }
 
+            cancel.Visibility = Visibility.Collapsed;
             if (_currentViewModel is StartScanDomainViewModel)
             {
                 viewScanDomain.Visibility = Visibility.Visible;
             }
             else if (_currentViewModel is StartScanWorkgroupViewModel)
             {
-                viewScanWorkgroup.Visibility = Visibility.Visible;    
+                viewScanWorkgroup.Visibility = Visibility.Visible;
             }
             else if (_currentViewModel is StartScanByIpViewModel)
             {
-                ToolTipIcon.Visibility = Visibility.Visible;
                 viewScanByIp.Visibility = Visibility.Visible;
-    
-                string toolTipText = @"Note: The following templates of IP addresses or hostnames are allowed (for example).
-IP             : 10.0.0.1
-IP Range  : 10.0.0.1-10.0.0.5
-IP Subnet : 10.0.0.0/24 -or- 10.0.0.0/255.255.255.0
-Computer Name: HomeComputer";
-
-                //ToolTipService.SetToolTip(ToolTipIcon, toolTipText);
-
-                tooltip = new ToolTip { Content = toolTipText };
-                tooltip.IsOpen = true;
-                tooltip.PlacementTarget = ToolTipIcon;
-                tooltip.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-
-                ToolTipIcon.ToolTip = tooltip;
             }
-        }
-
-        private void Grid_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (tooltip != null)
-                tooltip.IsOpen = false;
-
+            else if (_currentViewModel is StartScanLocalViewModel)
+            {
+                viewScanLocal.Visibility = Visibility.Visible;
+            }
         }
 
         private void OnQuickScanClick(object sender, RoutedEventArgs e)
         {
-            _isQuickScan = true;            
+            _isQuickScan = true;
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
 
