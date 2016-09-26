@@ -1813,6 +1813,7 @@ namespace CodedUITestAT
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = ipRange;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapNetworkAddresses.ClickAddButton();
+            TestContext.WriteLine(String.Format("IP range {0} added to the addresses list.", ipRange));
 
             UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
             UIMapNetworkAddresses.InputLogin();
@@ -1834,7 +1835,49 @@ namespace CodedUITestAT
             UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
             TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scanning results' screen.", unknownFile.Location));
         }
-      
+
+        [TestMethod]
+        public void QuickScanOfSubnetTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            Computer server = new Computer();
+            IPAddress internalAddress = SysHelper.GetLocalIpAddress(true);
+            string subnet = String.Format("{0}/{1}", internalAddress.ChangeLastByte(0), 24);
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
+
+            UIMapMain.ClickStartScanningButton();
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanningWizard.ClickNetworkAddressButton();
+
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            CleanNetworkAddressesList();
+            UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = subnet;
+            UIMapNetworkAddresses.InputNetworkAddress();
+            UIMapNetworkAddresses.ClickAddButton();
+            TestContext.WriteLine(String.Format("Subnet {0} added to the addresses list.", subnet));
+
+            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLogin();
+            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
+            UIMapNetworkAddresses.InputPassword();
+
+            UIMapStartScanningWizard.ClickQuickScanButton();
+
+            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+            UIMapScanCompletedWindow.ClickCancelButton();
+
+            // Verifies the scanning results
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, server);
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", server.Name));
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", endpoint.Name));
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, malware);
+            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", malware.Location));
+            UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
+            TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+        }
+
         #endregion
 
         #region Test Context property
