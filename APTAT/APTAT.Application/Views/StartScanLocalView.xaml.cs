@@ -15,9 +15,9 @@ namespace APTAT.Application
     /// </summary>
     public partial class StartScanLocalView : UserControl
     {
-        public StartScanDomainViewModel ViewModel
+        public StartScanLocalViewModel ViewModel
         {
-            get { return (StartScanDomainViewModel)DataContext; }
+            get { return (StartScanLocalViewModel)DataContext; }
         }
 
         public StartScanLocalView()

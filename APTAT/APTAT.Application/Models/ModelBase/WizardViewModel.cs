@@ -31,6 +31,8 @@ namespace APTAT.Application.Models
 
         public Boolean Cancel { get; set; }
 
+        public Boolean IsNext { get; set; }
+
         public void RaiseCompleted()
         {
             if (Completed != null)

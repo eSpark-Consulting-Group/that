@@ -74,6 +74,7 @@ namespace APTAT.Application
             _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
             {
                 Step = _currentViewModel.CurrentStepIndex + 1,
+                IsNext =  true,
                 Completed = ctx =>
                 {
                 }

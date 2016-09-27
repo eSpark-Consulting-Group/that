@@ -23,16 +23,9 @@ namespace APTAT.Core.Descent.Apt
 
         public override IDescentQueryResult ValidateAndGetResult()
         {
-            if (Login == null)
-                throw new ArgumentException("Login name not specified.", "login");
-            if (Password == null)
-                throw new ArgumentException("Password not specified.", "password");
-            
             var result = new AptScanOperationContext(OnlineTargets, Targets.Length, DevicesSourceDescription);
             return result;
-            //         //DescentResult result = new DescentResult(onlineTargetUidComputerPairs);
-            //         var result = new AptScanOperationContext(onlineTargetUidComputerPairs, computers.Length);
-        }
+          }
 
         public override DescentEventArgs GetDescentCompletedEventArgs(IDescentQueryResult result)
         {
@@ -61,7 +54,7 @@ namespace APTAT.Core.Descent.Apt
             _descentMod = new AptDescentMod(TaskFactory, changeTrackingSubSystem);
             foreach (var computer in OnlineTargets)
             {
-                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid, 
+                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid,
                     (computer.IPAddress != null) ? computer.IPAddress.ToString() : computer.DnsName,
                     Login, Password, computer.IsLocalComputer);
                 AptScanResult scanResult;

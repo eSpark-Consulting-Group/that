@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using APTAT.Application.Extensions;
 using Telerik.Windows.Controls;
 using APTAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
@@ -17,7 +18,7 @@ namespace APTAT.Application.Models
         private DirectoryItem[] _items;
         private readonly ICollection<Object> _checkedItems;
 
-
+   
 
         public const String SelectTargets = "SelectTargets";
         public const String SelectPort = "SelectPort";
@@ -75,11 +76,33 @@ namespace APTAT.Application.Models
 
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
-            
-            
+            if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
+            {
+
+                if (!context.IsNext)
+                {
+                    IsBusy = true;
+                    SetSteps(new[] { null, SelectPort });
+                    _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
+                    {
+                        new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
+                    }, new OperationContext { Success = success, UserState = this });
+                }
+            }
+            else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
+            {
+                success();
+            }
+            else
+            {
+                if (context.IsBackward(CurrentStepIndex))
+                {
+                    Error = null;
+                }
+                
 
                 base.OnStepChanging(success, previousStep, context);
-
+            }
         }
 
         protected override void OnStepChanged()
@@ -90,7 +113,8 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
-
+            _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
+            _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
 
 
         }
@@ -98,6 +122,7 @@ namespace APTAT.Application.Models
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
+            _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
 
         }
 
@@ -138,6 +163,36 @@ namespace APTAT.Application.Models
         }
 
 
+        private void OnGetByIpAddressesCompleted(Object sender, GetByIpAddressEventArgs e)
+        {
+            OperationContext context = (OperationContext)e.UserState;
+            if (context.UserState != this)
+            {
+                return;
+            }
+            
+            IsBusy = false;
+            if (e.Exception == null)
+            {
+                var items = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
+                _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
+                _storage.SetValue(KnownKeys.Login, null);
+                _storage.SetValue(KnownKeys.Password, null);
+                _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                new DevicesSourceDescription()
+                {
+                    Type = ETargetsDiscovererType.NetworkAddresses,
+                    Description = DevicesSourceDescription.GetNetworkDescription(new[] { "localhost" })
+                });
+                
+                context.Success();
+            }
+            else
+            {
+                //Items = new ObservableCollection<DeploymentItem>();
+                Error = e.Exception.Message;
+            }
 
+        }
     }
 }

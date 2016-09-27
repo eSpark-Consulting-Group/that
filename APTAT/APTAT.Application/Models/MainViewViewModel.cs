@@ -669,8 +669,8 @@ namespace APTAT.Application.Models
                     
                     //_login = _storage.GetValue<String>(KnownKeys.Login, false);
                     //_password = _storage.GetValue<String>(KnownKeys.Password, true);
-                    _tcpPort= _storage.GetValue<String>(KnownKeys.TcpPort, false);
-                    _udpPort = _storage.GetValue<String>(KnownKeys.UdpPort, false);
+                    //_tcpPort= _storage.GetValue<String>(KnownKeys.TcpPort, false);
+                    //_udpPort = _storage.GetValue<String>(KnownKeys.UdpPort, false);
 
                     //if (_login == null || _password == null)
                     //{
