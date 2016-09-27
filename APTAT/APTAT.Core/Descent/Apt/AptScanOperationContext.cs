@@ -27,6 +27,7 @@ namespace APTAT.Core.Descent.Apt
                        new AptScanResult()
                        {
                            HostName = target.Name,
+                           IsLocalComputer = target.IsLocalComputer,
                            IpAddress = target.IPAddress != null ? target.IPAddress.ToString() : String.Empty,
                            ResultType = scanResultType,
                            TargetUid = target.Uid,

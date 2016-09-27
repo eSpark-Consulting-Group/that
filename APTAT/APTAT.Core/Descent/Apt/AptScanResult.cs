@@ -10,6 +10,7 @@ namespace APTAT.Core.Descent.Apt
         public Guid TargetUid { get; set; }
         public string HostName { get; set; }
         public string IpAddress { get; set; }
+        public bool IsLocalComputer { get; set; }
         public string OsName
         {
             get

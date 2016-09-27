@@ -20,6 +20,7 @@ namespace APTAT.Valkyrie
         }
 
         public long Size { get; set; }
+        public bool IsLocalComputer { get; set; }
 
         public string GetNetworkPath()
         {

@@ -597,9 +597,7 @@ namespace APTAT.Valkyrie
                         EndpointId = endpointId
                     };
                     SubmitToAutomaticResponse response;
-                    using (
-                        ImpersonationHelper helper = new ImpersonationHelper(_login, "", _password,
-                            ImpersonationHelper.Logon32LogonType.NewCredentials))
+                    using (fileInfo.IsLocalComputer ? null: new ImpersonationHelper(_login, "", _password, ImpersonationHelper.Logon32LogonType.NewCredentials))
                     {
                         //var data = ReadFile(fileInfo, login, password);
                         var remoteFilePath = fileInfo.GetNetworkPath();

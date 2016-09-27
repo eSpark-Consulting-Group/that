@@ -171,7 +171,7 @@ namespace APTAT.Core
         }
         public static List<ValkyrieFileInfo> GetDistinctUknownFileInfo(ConcurrentDictionary<Guid, AptScanResult> results)
         {
-            Dictionary<string, AptScanResult> scanResults = results.Select(r => r.Value).ToDictionary(t => t.TargetUid.ToString());
+            Dictionary<string, AptScanResult> scanResults = results.OrderByDescending(r=>r.Value.IsLocalComputer).Select(r => r.Value).ToDictionary(t => t.TargetUid.ToString());
 
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
             foreach (var scanResult in scanResults)
@@ -188,7 +188,8 @@ namespace APTAT.Core
                             Path = badFile.Path,
                             Sha1 = badFile.Sha1,
                             Size = badFile.Size,
-                            FlsCloud = MapCloud(badFile.Cloud)
+                            FlsCloud = MapCloud(badFile.Cloud),
+                            IsLocalComputer = scanResult.Value.IsLocalComputer
                         });
                     }
                 }
