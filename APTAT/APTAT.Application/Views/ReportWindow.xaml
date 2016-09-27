@@ -7,31 +7,27 @@
         ResizeMode="CanResizeWithGrip" MouseLeftButtonDown="Window_MouseLeftButtonDown"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
 
-    <Border>
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="5" Color="Black" Opacity="0.8" ShadowDepth="0.5" />
-        </Border.Effect>
-
-        <Grid Background="White">
+    <Border x:Name="Border" BorderThickness="1" BorderBrush="{DynamicResource StrongBrush}" Background="#FFFAF9F9">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-            <Border Background="#2A81BA" Height="35">
+            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock AutomationProperties.AutomationId="ReportTitleTextBlock" 
-                               x:Name="txtTitle" Text="REPORT" FontSize="18" Foreground="White" Margin="10,5,5,5"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                        <Button AutomationProperties.AutomationId="CloseReportButton" Style="{StaticResource CloseButton}" Click="OnCloseClick"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 15 20 0">
+                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                     </StackPanel>
+
+                    <TextBlock Text="Report Preview" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                 </Grid>
             </Border>
-            <Application:ReportView Grid.Row="1"/>
+            <Application:ReportView Grid.Row="1" Grid.ColumnSpan="2"/>
         </Grid>
     </Border>
 </Window>

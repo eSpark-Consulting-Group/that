@@ -15,9 +15,10 @@ namespace APTAT.Application.Extensions
         {
             var template = new DataTemplate();
             var text = new FrameworkElementFactory(typeof(TextBlock));
+            text.SetValue(TextBlock.MarginProperty, new Thickness(0, 5, 0, 5));
             text.SetBinding(TextBlock.TextProperty, new Binding());
-            text.SetValue(TextBlock.FontSizeProperty, 16d);
-            text.SetValue(TextBlock.FontFamilyProperty, new FontFamily("Segoe UI Light"));
+            text.SetValue(TextBlock.FontSizeProperty, 15d);
+            text.SetValue(TextBlock.FontFamilyProperty, new FontFamily("Segoe UI"));
             template.VisualTree = text;
             menuItem.HeaderTemplate = template;
             menuItem.Header = header;

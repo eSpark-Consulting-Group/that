@@ -24,7 +24,7 @@
                                  RowHeight="50"
                                  HierarchyIndent="14"
                                  Validation.ErrorTemplate="{x:Null}"
-                                 EnableRowVirtualization="True"
+                                 EnableRowVirtualization="True" IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred"
                                  MouseDoubleClick="OnTreeDoubleClick" FocusVisualStyle="{x:Null}">
 
             <telerik:RadTreeListView.Resources>
@@ -70,7 +70,7 @@
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="SizeColumn">
-                    <TextBlock Text="{Binding SizeString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding SizeString}" TextAlignment="Right" Margin=" 0 0 5 0"/>
+                    <TextBlock Text="{Binding SizeString}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding SizeString}" TextAlignment="Right" Margin=" 0 0 5 0"/>
                 </DataTemplate>
                 <TemplateSelectors:MainViewNameTemplateSelector x:Key="NameTemplateSelector" 
                                                                 UnknownFileTemplate="{StaticResource UnknownFileTemplate}"
@@ -85,7 +85,7 @@
                     ShowFilterButton="False"
                     ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
-                    Header="NAME"
+                    Header="Name"
                     
                     Width="700*" 
                  SortMemberPath="ShortName" />
@@ -93,7 +93,7 @@
                     CellTemplate="{StaticResource SizeColumn}"
                     SortMemberPath="SizeString"
                     IsFilterable="False"
-                    Header="SIZE"  
+                    Header="Size"  
                     TextAlignment="Right"
                     Width="80*"/>
             </telerik:RadTreeListView.Columns>

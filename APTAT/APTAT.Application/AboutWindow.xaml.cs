@@ -14,10 +14,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            SourceInitialized += (x, y) =>
-            {
-                this.HideMinimizeAndMaximizeButtons();
-            };
+
             txtProductName.Text = "Unknown File Hunter";
             txtProductVersion.Text = "2.0";// Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }

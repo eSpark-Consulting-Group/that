@@ -176,8 +176,8 @@ namespace APTAT.Application.Models
             {
                 var items = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
-                _storage.SetValue(KnownKeys.Login, null);
-                _storage.SetValue(KnownKeys.Password, null);
+                //_storage.SetValue(KnownKeys.Login, null);
+                //_storage.SetValue(KnownKeys.Password, null);
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                 new DevicesSourceDescription()
                 {

@@ -22,10 +22,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            SourceInitialized += (x, y) =>
-            {
-                this.HideMinimizeAndMaximizeButtons();
-            };
+
         }
 
         private void OnBackClick(object sender, EventArgs e)

@@ -146,7 +146,7 @@
                 </DataTemplate>
             </Grid.Resources>
 
-            <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
+            <Border Margin="160,30,160,30" BorderThickness="0" Background="White">
                 <telerik:RadTreeView AutomationProperties.AutomationId="AdTree"
                                  x:Name="domainTree"                               
                                  SnapsToDevicePixels="True"

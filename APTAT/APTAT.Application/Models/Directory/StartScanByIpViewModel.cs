@@ -262,8 +262,8 @@ namespace APTAT.Application.Models.Directory
 
 
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                _storage.SetValue(KnownKeys.UdpPort, _udpPort);
+                //_storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                //_storage.SetValue(KnownKeys.UdpPort, _udpPort);
                 _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
                 var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
@@ -300,8 +300,8 @@ namespace APTAT.Application.Models.Directory
             {
                 CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                _storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                _storage.SetValue(KnownKeys.UdpPort, _udpPort);
+                //_storage.SetValue(KnownKeys.TcpPort, _tcpPort);
+                //_storage.SetValue(KnownKeys.UdpPort, _udpPort);
                 var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription()

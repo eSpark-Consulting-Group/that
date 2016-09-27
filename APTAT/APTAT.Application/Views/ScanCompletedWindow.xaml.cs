@@ -15,10 +15,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            SourceInitialized += (x, y) =>
-            {
-                this.HideMinimizeAndMaximizeButtons();
-            };
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

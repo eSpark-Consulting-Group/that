@@ -166,8 +166,8 @@ namespace APTAT.Application.Models
                 else
                 {
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
-                    _storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
-                    _storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
+                    //storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
+                    //_storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
                     _storage.SetValue(KnownKeys.Domain, _domainController);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
@@ -181,7 +181,7 @@ namespace APTAT.Application.Models
                     Error = null;
                 }
 
-                _storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
+                //_storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
                 _storage.SetValue(KnownKeys.Domain, _domainController);
 
                 base.OnStepChanging(success, previousStep, context);
@@ -224,9 +224,13 @@ namespace APTAT.Application.Models
 
             IsBusy = false;
 
-            Items = e.Items;
+            
             if (e.Exception == null)
             {
+                if (e.Items != null && e.Items.Length > 0)
+                    e.Items[0].Name = e.Items[0].Name.Replace("DC=","");
+
+                Items = e.Items;
                 if (Items != null && Items.Length > 0)
                 {
                     _targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, Items[0], new OperationContext { UserState = this, Arg = this });

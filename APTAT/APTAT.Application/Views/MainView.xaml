@@ -85,7 +85,7 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="ReportButtonListBoxItemTemplate">
-                <TextBlock Text="{Binding}" Style="{StaticResource HeaderTextBlock}" Margin="0 5" FontSize="14"/>
+                <TextBlock Text="{Binding}" Style="{StaticResource HeaderTextBlock}" Margin="0 5" FontSize="15"/>
             </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -96,7 +96,7 @@
         </Grid.RowDefinitions>
 
 
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+        <telerik:RadBusyIndicator Grid.Row="1" Margin="-17,0" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
             <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
                 <Grid>
 

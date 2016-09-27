@@ -136,6 +136,7 @@
     <Compile Include="AgentWindow.xaml.cs">
       <DependentUpon>AgentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\IntToConverters.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />
@@ -266,7 +267,6 @@
     <Compile Include="Views\ValkyrieResultUserControl.xaml.cs">
       <DependentUpon>ValkyrieResultUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\WindowExtensions.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

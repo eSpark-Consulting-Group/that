@@ -26,7 +26,7 @@
                                  AutoExpandItems="False"
                                  RowHeight="50"
                                  HierarchyIndent="14"
-                                
+                                IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred"
                                  EnableRowVirtualization="True"
                                  MouseDoubleClick="OnTreeDoubleClick" 
                                  Validation.ErrorTemplate="{x:Null}" FocusVisualStyle="{x:Null}">
@@ -79,13 +79,13 @@
                 </DataTemplate>
            
                 <DataTemplate x:Key="SizeColumn">
-                    <TextBlock Text="{Binding FileSizeFormatted}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" TextAlignment="Right" Margin="0 0 5 0"/>
+                    <TextBlock Text="{Binding FileSizeFormatted}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding FileSizeFormatted, ValidatesOnDataErrors=False, ValidatesOnExceptions=False}" TextAlignment="Right" Margin="0 0 5 0"/>
                 </DataTemplate>
                 <DataTemplate x:Key="WhiteListedColumn">
-                    <TextBlock Text="{Binding ValkyrieAnalysisResult.IsWhiteListed,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1"  TextAlignment="Center"/>
+                    <TextBlock Text="{Binding ValkyrieAnalysisResult.IsWhiteListed,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1"  TextAlignment="Center"/>
                 </DataTemplate>
                 <DataTemplate x:Key="VerdictColumn">
-                    <TextBlock  Text="{Binding ValkyrieAnalysisResult.VerdictString}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
+                    <TextBlock  Text="{Binding ValkyrieAnalysisResult.VerdictString}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
                 </DataTemplate>
 
                 <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="NameTemplateSelector" 
@@ -113,7 +113,7 @@
                     IsFilterable="False"
                     ShowFilterButton="False"                    
                     ShowFieldFilters="False"                    
-                    Header="NAME"
+                    Header="Name"
                     TextAlignment="Left"
                     Width="590*" 
                  SortMemberPath="FullName"/>
@@ -122,7 +122,7 @@
                     CellTemplateSelector="{StaticResource SizeTemplateSelector}"
                     SortMemberPath="FileSizeFormatted"
                     IsFilterable="False"
-                    Header="SIZE"  
+                    Header="Size"  
                     TextAlignment="Right"
                     Width="80*"/>
 
@@ -130,7 +130,7 @@
                     CellTemplateSelector="{StaticResource VerdictTemplateSelector}"
                     SortMemberPath="ValkyrieAnalysisResult.VerdictString"
                     IsFilterable="False"
-                    Header="VERDICT"  
+                    Header="Verdict"  
                     TextAlignment="Left"
                     Width="206*"/>
 
@@ -138,7 +138,7 @@
                     CellTemplateSelector="{StaticResource WhiteListedTemplateSelector}"
                     SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
                     IsFilterable="False"
-                    Header="TRUSTED VENDOR"  
+                    Header="Trusted Vendor"  
                     TextAlignment="Center"
                     Width="110*"/>
 

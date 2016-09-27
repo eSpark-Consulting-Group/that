@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:APTAT.Application" x:Class="APTAT.Application.ResultTabsControl" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="900">
-    <Grid>
+    <Grid Background="#FFFAF9F9">
       <Grid.Resources>
 
         <converters:ContentToPathConverter x:Key="content2PathConverter" />
@@ -24,7 +24,7 @@
                       <VisualState x:Name="Unfocused"/> 
                     </VisualStateGroup>
                   </VisualStateManager.VisualStateGroups>
-                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" Margin="0 0 -23 0" Fill="White">
+                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" Margin="-2 -2 -23 0" Fill="White">
                     <Path.Data>
                       <PathGeometry>
                         <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={StaticResource content2PathConverter}}">
@@ -35,17 +35,18 @@
                       <ScaleTransform ScaleY="-1"/>
                     </Path.LayoutTransform>
                   </Path>
-                  <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"  Margin="15,5,0,2" ContentSource="Header"
+                  <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"  Margin="15,0,0,0" ContentSource="Header"
                                           TextBlock.Foreground="#FF767676" TextBlock.FontSize="13"/>
-                  <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,5,0,2" ContentSource="Header"
-                                          TextBlock.Foreground="#FF767676" TextBlock.FontSize="13" TextBlock.FontFamily="Segoe UI Semibold"/>
+                  <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,0,0,0" ContentSource="Header"
+                                          TextBlock.Foreground="White" TextBlock.FontSize="13" TextBlock.FontFamily="Segoe UI Semibold"/>
                 </Grid>
                 <ControlTemplate.Triggers>
                   <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Fill" TargetName="TabPath" Value="#FFD6D4D4" />
+                                    <Setter Property="Fill" TargetName="TabPath" Value="#FFBBDEF5" />
                   </Trigger>
                   <Trigger Property="Selector.IsSelected" Value="True">
-                    <Setter Property="Fill" TargetName="TabPath" Value="#FFE3E3E3"/>
+                    <Setter Property="Fill" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
+                      <Setter Property="Stroke" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
                     <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
                     <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
                     <Setter Property="Panel.ZIndex" Value="2"/>
@@ -76,15 +77,16 @@
                   <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"  Margin="15,5,0,2" ContentSource="Content"
                                           TextBlock.Foreground="#FF767676" TextBlock.FontSize="13"/>
                   <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,5,0,2" ContentSource="Content"
-                                          TextBlock.Foreground="#FF767676" TextBlock.FontSize="13" TextBlock.FontFamily="Segoe UI Semibold"/>
+                                          TextBlock.Foreground="White" TextBlock.FontSize="13" TextBlock.FontFamily="Segoe UI Semibold"/>
                 </Grid>
                 <ControlTemplate.Triggers>
                   <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Fill" TargetName="TabPath" Value="#FFD6D4D4" />
+                                    <Setter Property="Fill" TargetName="TabPath" Value="{StaticResource StrongBrush}" />
                   </Trigger>
                   <Trigger Property="ToggleButton.IsChecked" Value="True">
-                    <Setter Property="Fill" TargetName="TabPath" Value="#FFE3E3E3"/>
-                    <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
+                                    <Setter Property="Fill" TargetName="TabPath" Value="#FFFAF9F9"/>
+                                    <Setter Property="Stroke" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
+                                    <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
                     <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
                     <Setter Property="Panel.ZIndex" Value="2"/>
                   </Trigger>
@@ -95,7 +97,7 @@
         </Style>
       </Grid.Resources>
         
-        <TabControl AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >
+        <TabControl  AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >
             <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results" IsSelected="{Binding SelectScan, Mode=TwoWay}" >
               <Grid>
                 <local:ScanResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>

@@ -14,10 +14,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            SourceInitialized += (x, y) =>
-            {
-                this.HideMinimizeAndMaximizeButtons();
-            };
+
 
         }
 

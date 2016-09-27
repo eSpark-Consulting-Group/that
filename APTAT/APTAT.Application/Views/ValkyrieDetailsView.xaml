@@ -149,7 +149,7 @@
         </Grid>
         
         <StackPanel Orientation="Horizontal" Grid.Row="3" Height="50"  Margin="0,0,30,20" HorizontalAlignment="Right" >
-            <Button AutomationProperties.AutomationId="CloseButton" Content="Close" Margin="5"  Click="OnBackClick" Style="{StaticResource ButtonHighlightStyle}"/>
+            <Button AutomationProperties.AutomationId="CloseButton" Content="Close" Margin="5"  Click="OnBackClick" />
         </StackPanel>
     </Grid>
 </Models:BaseView>
