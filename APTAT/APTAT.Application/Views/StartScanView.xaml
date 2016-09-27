@@ -509,7 +509,18 @@
                             IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
                             IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
                             Content="Full Scan" 
-                            Click="OnFinishClick" Margin="12 5 0 5"   />
+                            Click="OnFinishClick" Margin="5 5 0 5"   />
+
+                    <Grid   Margin="10 5 0 5" Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" >
+                        <Button AutomationProperties.AutomationId="NextButton"
+                            x:Name="btnNext"  
+                            
+                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
+                            Content="{Binding NextName}" Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
+                            
+                            Click="OnNextClick"  
+                            />
+                    </Grid>
                 </StackPanel>
 
                 <Button 
@@ -519,16 +530,7 @@
                             Click="OnCancelClick"  
                             />
 
-                <Grid HorizontalAlignment="Right"  Margin="5 5 17 5" Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" >
-                    <Button AutomationProperties.AutomationId="NextButton"
-                            x:Name="btnNext"  
-                            
-                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
-                            Content="Next" Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
-                            
-                            Click="OnNextClick"  
-                            />
-                </Grid>
+                
 
 
 

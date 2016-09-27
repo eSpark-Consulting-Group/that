@@ -57,7 +57,7 @@ namespace APTAT.Application.Models
         public event EventHandler Cancelled;
 
         public DelegateCommand ChangeStepCommand { get; private set; }
-        private String[] _steps;
+        protected String[] _steps;
         private Boolean _isNextEnabled;
         private Boolean _isBackEnabled;
         private Boolean _isFinishEnabled;
@@ -136,6 +136,11 @@ namespace APTAT.Application.Models
             }
         }
 
+        public virtual string NextName
+        {
+            get { return "Next"; }
+        }
+
         public void SetSteps(String[] steps)
         {
             _steps = steps;
@@ -196,7 +201,7 @@ namespace APTAT.Application.Models
             }, CurrentStep, commandContext);
         }
 
-        private void UpdateState()
+        protected virtual void UpdateState()
         {
             if (CurrentStepIndex == 0 && CurrentStepIndex == _steps.Length - 1)
             {

@@ -18,7 +18,7 @@ namespace APTAT.Application.Models
         private readonly ICollection<Object> _checkedItems;
 
 
-        public const String SelectDomain = "SelectDomain";
+
         public const String SelectTargets = "SelectTargets";
         public const String SelectPort = "SelectPort";
 
@@ -33,63 +33,6 @@ namespace APTAT.Application.Models
         }
 
 
-        public string DomainControllerMask
-        {
-            get { return "Enter Domain Name"; }
-        }
-
-
-        private string _domainController;
-        public string DomainController
-        {
-            get { return UseCurrentDomainForActiveDirectory ? null : _domainController; }
-            set
-            {
-                _domainController = value;
-                RaisePropertyChanged(nameof(DomainController));
-
-            }
-        }
-
-        private string _activeDirectoryLogin;
-        public string ActiveDirectoryLogin
-        {
-            get { return UseCurrentDomainForActiveDirectory ? null : _activeDirectoryLogin; }
-            set
-            {
-                _activeDirectoryLogin = value;
-                RaisePropertyChanged(nameof(ActiveDirectoryLogin));
-
-            }
-        }
-
-        private string _activeDirectoryPassword;
-        public string ActiveDirectoryPassword
-        {
-            get { return UseCurrentDomainForActiveDirectory ? null : _activeDirectoryPassword; }
-            set
-            {
-                _activeDirectoryPassword = value;
-                RaisePropertyChanged(nameof(ActiveDirectoryPassword));
-
-            }
-        }
-
-        private bool _useCurrentDomainForActiveDirectory;
-        public bool UseCurrentDomainForActiveDirectory
-        {
-            get { return _useCurrentDomainForActiveDirectory; }
-            set
-            {
-                _useCurrentDomainForActiveDirectory = value;
-                RaisePropertyChanged(nameof(UseCurrentDomainForActiveDirectory));
-                RaisePropertyChanged(nameof(DomainController));
-                RaisePropertyChanged(nameof(ActiveDirectoryLogin));
-                RaisePropertyChanged(nameof(ActiveDirectoryPassword));
-
-            }
-        }
-
         public DelegateCommand ExpandCommand { get; private set; }
 
         public DelegateCommand CheckItemCommand { get; private set; }
@@ -101,7 +44,7 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService = targetsDiscoveryService;
             _storage = storage;
 
-            SetSteps(new[] { null, SelectDomain, SelectTargets, SelectPort });
+            SetSteps(new[] { null, SelectPort, SelectTargets });
 
             ExpandCommand = new DelegateCommand(InvokeExpand);
             CheckItemCommand = new DelegateCommand(InvokeCheckItem);
@@ -116,7 +59,7 @@ namespace APTAT.Application.Models
         private void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
-            _targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, (DirectoryItem)commandContext.DirectoryItem, new OperationContext { UserState = this, Arg = commandContext });
+            
         }
 
         private void InvokeCheckItem(Object arg)
@@ -132,61 +75,11 @@ namespace APTAT.Application.Models
 
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
-            if (previousStep == SelectDomain && context.IsForward(CurrentStepIndex))
-            {
-                if (String.IsNullOrEmpty(DomainController))
-                {
-                    Error = "Please Specify Domain Name";
-                    return;
-                }
-
-                if (String.IsNullOrEmpty(ActiveDirectoryLogin))
-                {
-                    Error = "Please Specify Domain Administrator";
-                    return;
-                }
-
-                if (String.IsNullOrEmpty(ActiveDirectoryPassword))
-                {
-                    Error = "Please Specify Password";
-                    return;
-                }
-
-
-
-                IsBusy = true;
-                _storage.SetValue(KnownKeys.Domain, DomainController);
-                _targetsDiscoveryService.GetDirectoryRoot(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, new OperationContext { UserState = this, Success = success });
-            }
-            else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
-            {
-                if (_checkedItems == null || _checkedItems.Count == 0)
-                {
-                    Error = "Select at least one item";
-                }
-                else
-                {
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
-                    _storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
-                    _storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
-                    _storage.SetValue(KnownKeys.Domain, _domainController);
-                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
-                    success();
-                }
-            }
-            else
-            {
-                if (context.IsBackward(CurrentStepIndex))
-                {
-                    Error = null;
-                }
-
-                _storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
-                _storage.SetValue(KnownKeys.Domain, _domainController);
+            
+            
 
                 base.OnStepChanging(success, previousStep, context);
-            }
+
         }
 
         protected override void OnStepChanged()
@@ -200,71 +93,51 @@ namespace APTAT.Application.Models
 
 
 
-            _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
-            _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
         }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
 
-            _targetsDiscoveryService.GetDirectoryItemsCompleted -= OnGetDirectoryItemsCompleted;
-            _targetsDiscoveryService.GetDirectoryRootCompleted -= OnGetDirectoryRootCompleted;
         }
 
-
-        private void OnGetDirectoryRootCompleted(Object sender, GetDirectoryItemsEventArgs e)
+        protected override void UpdateState()
         {
-            OperationContext context = (OperationContext)e.UserState;
-            if (context.UserState != this)
+            if (CurrentStepIndex == 0 && CurrentStepIndex == _steps.Length - 1)
             {
-                return;
+                IsBackEnabled = false;
+                IsNextEnabled = false;
+                IsFinishEnabled = true;
             }
-
-            IsBusy = false;
-
-            Items = e.Items;
-            if (e.Exception == null)
+            else if (CurrentStepIndex == 0)
             {
-                if (Items != null && Items.Length > 0)
-                {
-                    _targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, Items[0], new OperationContext { UserState = this, Arg = this });
-                }
-
-                Error = null;
-                context.Success();
+                IsBackEnabled = false;
+                IsNextEnabled = false;
+                IsFinishEnabled = true;
+            }
+            else if (CurrentStepIndex == _steps.Length - 1)
+            {
+                IsBackEnabled = true;
+                IsNextEnabled = true;
+                IsFinishEnabled = false;
             }
             else
             {
-                Error = e.Exception.Message;
+                IsBackEnabled = true;
+                IsNextEnabled = true;
+                IsFinishEnabled = true;
             }
+
+            RaisePropertyChanged(nameof(NextName));
         }
 
-        private void OnGetDirectoryItemsCompleted(Object sender, GetDirectoryItemsEventArgs e)
+
+        public override string NextName
         {
-            OperationContext context = (OperationContext)e.UserState;
-            if (context.UserState != this)
-            {
-                return;
-            }
-
-            if (e.Exception == null)
-            {
-                e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
-            }
-            else
-            {
-                e.Parent.Items = new ObservableCollection<DirectoryItem>();
-                Error = e.Exception.Message;
-            }
-
-            ExpandCommandContext cmdContext = context.Arg as ExpandCommandContext;
-            if (cmdContext != null)
-            {
-                cmdContext.RaiseCompleted();
-            }
-
+            get { return CurrentStepIndex == _steps.Length - 1 ? "Scan" : "Custom Scan"; }
         }
+
+
 
     }
 }
