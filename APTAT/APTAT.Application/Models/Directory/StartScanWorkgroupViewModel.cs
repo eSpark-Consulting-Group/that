@@ -7,7 +7,9 @@ using Telerik.Windows.Controls;
 using APTAT.Application.Extensions;
 using APTAT.Core.Descent;
 using APTAT.DeploymentCore.Directory;
-
+using System.Threading.Tasks;
+using APTAT.Common;
+using System.Diagnostics;
 
 namespace APTAT.Application.Models
 {
@@ -22,9 +24,9 @@ namespace APTAT.Application.Models
         IStorageService _storage;
 
 
-        private String _workgroup;
+        
 
-        private ObservableCollection<DeploymentItem> _items;
+        
 
         public ICollection<Object> CheckedItems
         {
@@ -32,7 +34,8 @@ namespace APTAT.Application.Models
             set;
         }
 
-        public ObservableCollection<DeploymentItem> Items
+        private ObservableCollection<DirectoryItem> _items;
+        public ObservableCollection<DirectoryItem> Items
         {
             get { return _items; }
             set
@@ -42,6 +45,7 @@ namespace APTAT.Application.Models
             }
         }
 
+        private String _workgroup;
         public String Workgroup
         {
             get { return _workgroup; }
@@ -110,8 +114,8 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
-            RaisePropertyChanged("Workgroup");
+            //_workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
+            //RaisePropertyChanged("Workgroup");
 
             _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
             _targetsDiscoveryService.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
@@ -125,7 +129,19 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
         }
 
-        protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
+        private async Task<GetDirectoryItemsEventArgs> GetWorkgroups()
+        {
+            var result = await _targetsDiscoveryService.GetWorkgroups(this);
+
+            if (result.Exception != null)
+            {
+                return null;
+            }
+
+            return result;
+        }
+
+        protected async override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
             if (previousStep == SelectWorkgroup && context.IsForward(CurrentStepIndex))
             {
@@ -138,8 +154,20 @@ namespace APTAT.Application.Models
 
 
                 IsBusy = true;
-                _storage.SetValue(KnownKeys.Workgroup, Workgroup);
-                _targetsDiscoveryService.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
+
+
+                if (EnumerateWorkgroups)
+                {
+                    var groups = await TryAction(GetWorkgroups());
+                    Items = new ObservableCollection<DirectoryItem>(groups.Items);
+                    IsBusy = false;
+                    base.OnStepChanging(success, previousStep, context);
+                }
+                else
+                {
+                    //_storage.SetValue(KnownKeys.Workgroup, Workgroup);
+                    _targetsDiscoveryService.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
+                }
             }
             else
             {
@@ -148,7 +176,7 @@ namespace APTAT.Application.Models
                     Error = null;
                 }
 
-                _storage.SetValue(KnownKeys.Workgroup, _workgroup);
+                //_storage.SetValue(KnownKeys.Workgroup, _workgroup);
 
                 base.OnStepChanging(success, previousStep, context);
             }
@@ -159,7 +187,7 @@ namespace APTAT.Application.Models
 
         }
 
-        private void OnGetWorkgroupCompleted(Object sender, GetWorkgroupEventArgs e)
+        private void OnGetWorkgroupCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
             OperationContext context = (OperationContext)e.UserState;
             if (context.UserState != this)
@@ -172,7 +200,7 @@ namespace APTAT.Application.Models
             {
                 CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                _storage.SetValue(KnownKeys.Workgroup, _workgroup);
+               // _storage.SetValue(KnownKeys.Workgroup, _workgroup);
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });
 
@@ -186,6 +214,27 @@ namespace APTAT.Application.Models
             }
 
 
+        }
+
+        private async Task<T> TryAction<T>(Task<T> task) where T : class
+        {
+            T taskResult = default(T);
+            try
+            {
+                taskResult = await task;
+            }
+            catch (Exception ex)
+            {
+                TryActionException(ex);
+            }
+            return taskResult;
+        }
+
+        private void TryActionException(Exception ex)
+        {
+
+
+            LogHelper.Trace(TraceEventType.Error, $"TryAction error: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
         }
     }
 }

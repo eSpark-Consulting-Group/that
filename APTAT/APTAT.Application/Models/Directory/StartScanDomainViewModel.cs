@@ -154,7 +154,7 @@ namespace APTAT.Application.Models
 
 
                 IsBusy = true;
-                _storage.SetValue(KnownKeys.Domain, DomainController);
+                //_storage.SetValue(KnownKeys.Domain, DomainController);
                 _targetsDiscoveryService.GetDirectoryRoot(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, new OperationContext { UserState = this, Success = success });
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
@@ -168,7 +168,7 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                     //storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
                     //_storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
-                    _storage.SetValue(KnownKeys.Domain, _domainController);
+                    //_storage.SetValue(KnownKeys.Domain, _domainController);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
                     success();
@@ -182,7 +182,7 @@ namespace APTAT.Application.Models
                 }
 
                 //_storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
-                _storage.SetValue(KnownKeys.Domain, _domainController);
+                //_storage.SetValue(KnownKeys.Domain, _domainController);
 
                 base.OnStepChanging(success, previousStep, context);
             }

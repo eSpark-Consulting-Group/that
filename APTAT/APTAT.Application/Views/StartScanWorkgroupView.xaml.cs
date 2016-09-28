@@ -34,12 +34,12 @@ namespace APTAT.Application
         private void OnLoadOnDemand(Object sender, RadRoutedEventArgs e)
         {
             RadTreeViewItem clickedItem = e.OriginalSource as RadTreeViewItem;
-            ViewModel.ExpandCommand.Execute(new ExpandCommandContext
+            /*ViewModel.ExpandCommand.Execute(new ExpandCommandContext
             {
                 DirectoryItem = clickedItem.Item,
                 TreeItem = clickedItem,
                 Completed = OnExpandCompleted
-            });
+            });*/
         }
 
         private void OnExpandCompleted(ExpandCommandContext context)

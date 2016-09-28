@@ -182,9 +182,9 @@
                 </DataTemplate>
             </Grid.Resources>
 
-            <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
-                <telerik:RadTreeView AutomationProperties.AutomationId="AdTree"
-                                 x:Name="domainTree"                               
+            <Border Margin="160,30,160,30" BorderThickness="0" Background="White">
+                <telerik:RadTreeView AutomationProperties.AutomationId="WTree"
+                                 x:Name="workgroupTree"                               
                                  SnapsToDevicePixels="True"
                                  IsOptionElementsEnabled="True"
                                  IsTriStateMode="True"
@@ -195,7 +195,7 @@
                                  ItemTemplate="{StaticResource DomainTreeItemTemplate}"
                                  LoadOnDemand="OnLoadOnDemand" 
                                  ItemsSource="{Binding Items}" 
-                                 IsLoadOnDemandEnabled="True" />
+                                 IsLoadOnDemandEnabled="False" />
             </Border>
 
         </Grid>

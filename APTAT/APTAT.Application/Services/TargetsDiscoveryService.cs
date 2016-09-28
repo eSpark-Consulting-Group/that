@@ -31,7 +31,7 @@ namespace APTAT.Application.Services
         public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
-        public event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
+        public event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
         public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState)
         {
@@ -232,7 +232,7 @@ namespace APTAT.Application.Services
             discoverer.BeginDiscover(userState);
         }
 
-        public async Task<GetWorkgroupEventArgs> GetWorkgroups(Action selectAction, object userState)
+        public async Task<GetDirectoryItemsEventArgs> GetWorkgroups(object userState)
         {
             IWorkgroupDiscoverer discoverer = _manager.GetWorkgroupDiscoverer(null);
             try
@@ -249,17 +249,16 @@ namespace APTAT.Application.Services
                         Name = targets[i],
                         Type = DirectoryItemType.Root,
                         IsSelected = false,
-                        SelectionChangedAction = selectAction,
                         Items = new System.Collections.ObjectModel.ObservableCollection<DirectoryItem>()
                     };
                 }
 
                 var t = result.ToArray();
-                return new GetWorkgroupEventArgs(t, userState);
+                return new GetDirectoryItemsEventArgs(null, t, userState);
             }
             catch (Exception ex)
             {
-                return new GetWorkgroupEventArgs(null, ex);
+                return new GetDirectoryItemsEventArgs(null, null, ex);
             }
         }
         private void OnWorkgroupDiscovered(Object sender, TargetsDiscovererEventArgs e)
@@ -267,11 +266,11 @@ namespace APTAT.Application.Services
             if (e.Error == null)
             {
                 DeploymentTarget[] targets = e.Targets;
-                DeploymentItem[] result = new DeploymentItem[targets.Length];
+                DirectoryItem[] result = new DirectoryItem[targets.Length];
                 for (Int32 i = 0; i < targets.Length; ++i)
                 {
                     DeploymentTarget target = targets[i];
-                    result[i] = new DeploymentItem
+                    result[i] = new DirectoryItem
                     {
                         Name = target.Name,
                         TargetUid = target.Uid,
@@ -281,26 +280,20 @@ namespace APTAT.Application.Services
                     };
                 }
 
-                GetWorkgroupEventArgs args = new GetWorkgroupEventArgs(result, e.State);
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, result, e.State);
                 Action action = () =>
                 {
-                    if (GetWorkgroupCompleted != null)
-                    {
-                        GetWorkgroupCompleted(this, args);
-                    }
+                    GetWorkgroupCompleted?.Invoke(this, args);
                 };
                 App.Current.Dispatcher.BeginInvoke(action);
 
             }
             else
             {
-                GetWorkgroupEventArgs args = new GetWorkgroupEventArgs(null, e.State, e.Error);
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null, e.Error);
                 Action action = () =>
                 {
-                    if (GetWorkgroupCompleted != null)
-                    {
-                        GetWorkgroupCompleted(this, args);
-                    }
+                    GetWorkgroupCompleted?.Invoke(this, args);
                 };
                 App.Current.Dispatcher.BeginInvoke(action);
             }

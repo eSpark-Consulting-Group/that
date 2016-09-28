@@ -499,14 +499,14 @@
                     <Button AutomationProperties.AutomationId="QuickScanButton"
                             x:Name="btnQuickScan"
                             Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
+                            
                             IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
                             Content="Quick Scan" 
                             Click="OnQuickScanClick" Margin="5"    />
                     <Button AutomationProperties.AutomationId="FullScanButton"
                             x:Name="btnFinish"
                             Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"
-                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
+                            
                             IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  
                             Content="Full Scan" 
                             Click="OnFinishClick" Margin="5 5 0 5"   />
@@ -515,7 +515,7 @@
                         <Button AutomationProperties.AutomationId="NextButton"
                             x:Name="btnNext"  
                             
-                            IsDefault="{Binding EnableDefaultButtons, FallbackValue=True}" 
+                           
                             Content="{Binding NextName}" Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
                             
                             Click="OnNextClick"  

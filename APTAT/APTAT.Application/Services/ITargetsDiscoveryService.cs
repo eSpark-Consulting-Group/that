@@ -10,13 +10,13 @@ namespace APTAT.Application.Services
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryItemsCompleted;
         event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
-        event EventHandler<GetWorkgroupEventArgs> GetWorkgroupCompleted;
+        event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
         void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState);
 
         void GetWorkgroup(String workgroupName, Object userState);
 
-        Task<GetWorkgroupEventArgs> GetWorkgroups(Action selectAction, Object userState);
+        Task<GetDirectoryItemsEventArgs> GetWorkgroups(Object userState);
 
         void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState);
 

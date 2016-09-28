@@ -11,7 +11,7 @@
     <Grid Margin="0 17 0 0" >
 
         <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="SearchWatermarkTextBox"
-                                     MinHeight="24" MaxHeight="24"  BorderThickness="1" BorderBrush="#FFD6D4D4" IsHitTestVisible="{Binding SearchAvailable}" x:Name="search" Padding="24 2 24 0" 
+                                     MinHeight="24" MaxHeight="24"  BorderThickness="1" BorderBrush="#FFD6D4D4" IsHitTestVisible="{Binding SearchAvailable, FallbackValue=false}" x:Name="search" Padding="24 2 24 0" 
                                      Text="{Binding ElementName=this, Path=Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" >
             <telerik:RadWatermarkTextBox.WatermarkContent>
                 <TextBlock Text="Search"  FontSize="13" Margin="0 0 0 0" Style="{DynamicResource SubTitleTextStyle}" Opacity="0.5"/>

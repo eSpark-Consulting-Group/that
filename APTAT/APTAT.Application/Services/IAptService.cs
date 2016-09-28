@@ -28,18 +28,6 @@ namespace APTAT.Application.Services
         }
     }
 
-    public class GetWorkgroupEventArgs : DomainEventArgs
-    {
-        public DeploymentItem[] Items { get; private set; }
-
-        public GetWorkgroupEventArgs(DeploymentItem[] items, Object userState, Exception error = null)
-        {
-            Items = items;
-            UserState = userState;
-            Exception = error;
-        }
-    }
-
     public class GetDirectoryItemsEventArgs : DomainEventArgs
     {
         public DirectoryItem Parent { get; private set; }
