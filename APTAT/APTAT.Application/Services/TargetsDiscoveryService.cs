@@ -300,7 +300,7 @@ namespace APTAT.Application.Services
         }
 
         public void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState)
-        {
+        {   
             EndpointAddressCollection ipAddressCollection = new EndpointAddressCollection();
             foreach (IpAddressWrapper ipAddress in ipAddresses)
             {
@@ -422,6 +422,23 @@ namespace APTAT.Application.Services
             }
 
             throw new ArgumentException("type");
+        }
+
+        public bool IsLocalAddress(IpAddressWrapper ip)
+        {   
+            if (ip.IsRange || ip.IsMask) return false;
+
+            IPHostEntry hostInfo = _networkHelper.GetHostEntry();
+            if (ip.IsDnsName)
+            {                
+                var host = Dns.GetHostEntry(ip.FormattedText);
+                return host.HostName == hostInfo.HostName;      
+            }
+            else
+            {
+                IPAddress address = IPAddress.Parse(ip.FormattedText);
+                return hostInfo.AddressList.Contains(address);    
+            }
         }
     }
 
