@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using APTAT.Application.Extensions;
 using Telerik.Windows.Controls;
 using APTAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Application.Messages;
 using APTAT.Application.Models.Apt;
+using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application.Models
 {
@@ -67,12 +69,15 @@ namespace APTAT.Application.Models
             }
         }
 
-        private void InvokeExpand(Object arg)
+        private async void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
             var parentFolder = (FolderItem) commandContext.DirectoryItem;
-            var folders = _fileBrowserService.GetFolders(parentFolder);
-            parentFolder.Items = new ObservableCollection<FolderItem>(folders);
+            
+                var folders = await _fileBrowserService.GetFolders(parentFolder);
+                parentFolder.Items = new ObservableCollection<FolderItem>(folders);
+                commandContext.RaiseCompleted();
+            
             //if (e.Exception == null)
             //{
             //    e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
@@ -82,18 +87,62 @@ namespace APTAT.Application.Models
             //    e.Parent.Items = new ObservableCollection<DirectoryItem>();
             //    Error = e.Exception.Message;
             //}
-            commandContext.RaiseCompleted();
         }
 
         private void InvokeCheckItem(Object arg)
         {
             _checkedItems.Add(arg);
+            var item = arg as ISelectableItem;
+            if (item != null)
+            {
+                item.IsSelected = true;
+            } 
             Error = null;
         }
 
         private void InvokeUncheckItem(Object arg)
         {
             _checkedItems.Remove(arg);
+            var item = arg as ISelectableItem;
+            if (item != null)
+            {
+                item.IsSelected = false;
+            }
+
+        }
+
+        public FolderItem[] GetCheckedFolderItems()
+        {
+            var items = new List<FolderItem>();
+            var stack = new Stack<FolderItem>();
+            foreach (var item in Items)
+            {
+                var node = item;
+                while (true)
+                {
+                    if (node.IsSelected)
+                    {
+                        items.Add(node);
+                        break;
+                    }
+                    if(node.Items == null)
+                        break;
+                    foreach (var nodeChild in node.Items)
+                    {
+                        if (nodeChild.IsSelected)
+                            items.Add(nodeChild);
+                        else
+                            stack.Push(nodeChild);
+                    }
+                    if (stack.Any())
+                    {
+                        node = stack.Pop();
+                    }
+                    else
+                        break;
+                }
+            }
+            return items.ToArray();
         }
 
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
@@ -126,7 +175,7 @@ namespace APTAT.Application.Models
 
                     IsBusy = true;
                     _storage.SetValue(KnownKeys.CustomScanOptions, 
-                        new CustomScanOptions(_checkedItems.OfType<FolderItem>().ToArray(), _scanCriticalAreas));
+                        new CustomScanOptions(GetCheckedFolderItems(), _scanCriticalAreas));
                     _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
                     {
                         new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
@@ -150,14 +199,18 @@ namespace APTAT.Application.Models
 
         }
 
-        protected override void InvokeViewLoaded(Object arg)
+        protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
+            Action a = async () =>
+            {
+                Items = await _fileBrowserService.GetAvailableDrives();
 
-            Items = _fileBrowserService.GetAvailableDrives();
+            };
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
 
+            a.Invoke();
 
         }
 

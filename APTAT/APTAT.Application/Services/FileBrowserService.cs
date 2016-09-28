@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using APTAT.Application.Models;
 
@@ -10,16 +7,26 @@ namespace APTAT.Application.Services
 {
     public class FileBrowserService : IFileBrowserService
     {
-        public FolderItem[] GetAvailableDrives()
+        public async Task<FolderItem[]> GetAvailableDrives()
         {
-            var drives = DriveInfo.GetDrives();
-            return drives.Where(d => d.DriveType == DriveType.Fixed).Select(d => new FolderItem(d.Name, false)).ToArray();
+            FolderItem[] drives = new FolderItem[0];
+            await Task.Run(() =>
+            {
+                var drivesInternal = DriveInfo.GetDrives();
+                drives = drivesInternal.Where(d => d.DriveType == DriveType.Fixed).Select(d => new FolderItem(d.Name, false)).ToArray();
+            });
+            return drives;
         }
 
-        public FolderItem[] GetFolders(FolderItem folderItem)
+        public async Task<FolderItem[]> GetFolders(FolderItem folderItem)
         {
-            var folders = Directory.GetDirectories(folderItem.FullName);
-            return folders.Select(d => new FolderItem(d, true)).ToArray();
+            FolderItem[] folders = new FolderItem[0];
+            await Task.Run(() =>
+            {
+                var foldersInternal = Directory.GetDirectories(folderItem.FullName);
+                folders = foldersInternal.Select(d => new FolderItem(d, true)).ToArray();
+            });
+            return folders;
         }
     }
 }
