@@ -107,7 +107,7 @@
                 </DataTemplate>
             </Grid.Resources>
 
-            <Border BorderBrush="LightGray" Margin="30,0,30,0" BorderThickness="0">
+            <Border Margin="160,30,160,30" BorderThickness="0" Background="White">
                 <telerik:RadTreeView AutomationProperties.AutomationId="fileBrowserTree"
                                  x:Name="fileBrowserTree"                               
                                  SnapsToDevicePixels="True"
@@ -120,8 +120,10 @@
                                  ItemTemplate="{StaticResource DomainTreeItemTemplate}"
                                  LoadOnDemand="OnLoadOnDemand" 
                                  ItemsSource="{Binding Items}" 
-                                 IsLoadOnDemandEnabled="True"/>
+                                 IsLoadOnDemandEnabled="True" />
             </Border>
+
+
 
         </Grid>
         <Grid x:Name="panelSelectPort" Grid.Row="2" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectPort, FallbackValue=Collapsed}">
@@ -156,8 +158,8 @@
             </telerik:RadWatermarkTextBox>
         </Grid>
         <Grid x:Name="customScanOptions" Grid.Row="3" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
-            <CheckBox IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left"
-                      Content="Scan critical areas of computer which are most often targeted by malware"></CheckBox>
+            <CheckBox IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left" Margin="160, 0, 0, 30"
+                      Content="Scan critical areas of computer (which are most often targeted by malware)"></CheckBox>
         </Grid>
     </Grid>
 </UserControl>

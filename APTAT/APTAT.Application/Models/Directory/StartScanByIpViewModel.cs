@@ -40,46 +40,7 @@ namespace APTAT.Application.Models.Directory
             }
         }
 
-        private string _tcpPort = String.Empty;
-        public String TcpPort
-        {
-            get { return _tcpPort; }
-            set
-            {
-                _tcpPort = value;
-                bool hasError;
-                var errorMessage = value.ValidateTCP(out hasError);
-                if (hasError)
-                {
-                    RaiseValidationError("TcpPort", errorMessage);
-                }
-                if (!hasError)
-                {
-                    ClearError("TcpPort");
-                }
-            }
-        }
-
-        private string _udpPort = String.Empty;
-        public String UdpPort
-        {
-            get { return _udpPort; }
-            set
-            {
-                _udpPort = value;
-                bool hasError = false;
-                var errorMessage = value.ValidateUDP(out hasError);
-                if (hasError)
-                {
-                    RaiseValidationError("UdpPort", errorMessage);
-                }
-                if (!hasError)
-                {
-                    ClearError("UdpPort");
-                }
-            }
-        }
-
+      
 
         public ObservableCollection<IpAddressWrapper> IpAddresses { get; private set; }
 
@@ -127,8 +88,7 @@ namespace APTAT.Application.Models.Directory
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
             DeleteIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
-            TcpPort = "80";
-            UdpPort = "53";
+
         }
 
         protected override void InvokeViewLoaded(object arg)
@@ -232,26 +192,10 @@ namespace APTAT.Application.Models.Directory
             {
                 if (IpAddresses.Count == 0)
                 {
-                    Error = "Enter at least one network address";
+                    Error = "Please add at least one network address";
                     return;
                 }
 
-
-                bool isTcpPortHasError = false;
-                var msgTcp = TcpPort.ValidateTCP(out isTcpPortHasError);
-                if (isTcpPortHasError)
-                {
-                    Error = msgTcp;
-                    return;
-                }
-
-                bool isUdpPortHasError = false;
-                var msgUdp = UdpPort.ValidateUDP(out isUdpPortHasError);
-                if (isUdpPortHasError)
-                {
-                    Error = msgUdp;
-                    return;
-                }
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);

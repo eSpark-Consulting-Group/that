@@ -96,7 +96,7 @@
         </Grid.RowDefinitions>
 
 
-        <telerik:RadBusyIndicator Grid.Row="1" Margin="-17,0" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+        <telerik:RadBusyIndicator Grid.Row="1" Margin="-17,0 -17,-17" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
             <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
                 <Grid>
 

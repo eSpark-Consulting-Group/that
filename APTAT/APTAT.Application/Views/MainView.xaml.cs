@@ -97,7 +97,7 @@ namespace APTAT.Application
             int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount + e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount;
             if (e.FilesStatistics.TotalFilesCount > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total found", Environment.NewLine, total);
+                scanCompletedWindow.Text.Text += String.Format("{0}- {1} Total threats found", Environment.NewLine, total);
             }
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown programs found", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
 
