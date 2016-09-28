@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore;
+using System.Collections.ObjectModel;
 
 namespace APTAT.Application.Services
 {
@@ -225,11 +226,11 @@ namespace APTAT.Application.Services
                 App.Current.Dispatcher.BeginInvoke(action);
             }
         }
-        public void GetWorkgroup(String workgroupName, object userState)
+        public void GetWorkgroup(String workgroupName, DirectoryItem parent, object userState)
         {
             IWorkgroupDiscoverer discoverer = _manager.GetWorkgroupDiscoverer(workgroupName);
             discoverer.Discovered += OnWorkgroupDiscovered;
-            discoverer.BeginDiscover(userState);
+            discoverer.BeginDiscover(Tuple.Create(workgroupName, parent, userState));
         }
 
         public async Task<GetDirectoryItemsEventArgs> GetWorkgroups(object userState)
@@ -247,9 +248,9 @@ namespace APTAT.Application.Services
                     {
                         IsWorkgroup = true,
                         Name = targets[i],
-                        Type = DirectoryItemType.Root,
+                        
                         IsSelected = false,
-                        Items = new System.Collections.ObjectModel.ObservableCollection<DirectoryItem>()
+                        Items = new ObservableCollection<DirectoryItem>()
                     };
                 }
 
@@ -263,24 +264,32 @@ namespace APTAT.Application.Services
         }
         private void OnWorkgroupDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
+            var tuple = e.State as Tuple<string, DirectoryItem, object>;
+
             if (e.Error == null)
             {
                 DeploymentTarget[] targets = e.Targets;
-                DirectoryItem[] result = new DirectoryItem[targets.Length];
+                ObservableCollection<DirectoryItem> result = new ObservableCollection<DirectoryItem>();
                 for (Int32 i = 0; i < targets.Length; ++i)
                 {
                     DeploymentTarget target = targets[i];
-                    result[i] = new DirectoryItem
+                    result.Add(new DirectoryItem
                     {
                         Name = target.Name,
                         TargetUid = target.Uid,
                         IPAddress = target.IPAddress ?? "Unknown",
                         Status = target.IsOnline ? "Ready" : "Offline",
-                        IsOnline = target.IsOnline
-                    };
+                        IsOnline = target.IsOnline, 
+                    });
                 }
 
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, result, e.State);
+                
+
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(tuple.Item2, 
+                    tuple.Item2 != null ? 
+                    result.ToArray() : 
+                    new[] { new DirectoryItem { Items = result, Name = tuple.Item1, IsWorkgroup = true, IsLoadOnDemand = true } }, 
+                    tuple.Item3);
                 Action action = () =>
                 {
                     GetWorkgroupCompleted?.Invoke(this, args);

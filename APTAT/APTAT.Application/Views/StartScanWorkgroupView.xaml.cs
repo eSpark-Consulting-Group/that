@@ -34,12 +34,22 @@ namespace APTAT.Application
         private void OnLoadOnDemand(Object sender, RadRoutedEventArgs e)
         {
             RadTreeViewItem clickedItem = e.OriginalSource as RadTreeViewItem;
-            /*ViewModel.ExpandCommand.Execute(new ExpandCommandContext
+            DirectoryItem item = clickedItem.Item as DirectoryItem;
+            var context = new ExpandCommandContext
             {
-                DirectoryItem = clickedItem.Item,
+                DirectoryItem = item,
                 TreeItem = clickedItem,
                 Completed = OnExpandCompleted
-            });*/
+            };
+
+            if (item.IsLoadOnDemand || !item.IsWorkgroup)
+                ViewModel.ExpandCommand.Execute(context);
+            else
+            {
+                item.IsLoadOnDemand = true;
+                clickedItem.IsLoadingOnDemand = false;
+            }
+
         }
 
         private void OnExpandCompleted(ExpandCommandContext context)

@@ -51,6 +51,7 @@ namespace APTAT.Application.Models
             }
         }
 
+        public bool IsLoadOnDemand { get; internal set; }
         public bool IsWorkgroup { get; internal set; }
         public bool IsSelected { get; internal set; }
         public Action SelectionChangedAction { get; internal set; }

@@ -195,7 +195,7 @@
                                  ItemTemplate="{StaticResource DomainTreeItemTemplate}"
                                  LoadOnDemand="OnLoadOnDemand" 
                                  ItemsSource="{Binding Items}" 
-                                 IsLoadOnDemandEnabled="False" />
+                                 IsLoadOnDemandEnabled="true" />
             </Border>
 
         </Grid>

@@ -14,7 +14,7 @@ namespace APTAT.Application.Services
         event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
         void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState);
 
-        void GetWorkgroup(String workgroupName, Object userState);
+        void GetWorkgroup(String workgroupName, DirectoryItem parent, Object userState);
 
         Task<GetDirectoryItemsEventArgs> GetWorkgroups(Object userState);
 

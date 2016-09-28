@@ -161,7 +161,7 @@ namespace APTAT.Application.Models
             {
                 if (_checkedItems == null || _checkedItems.Count == 0)
                 {
-                    Error = "Select at least one item";
+                    Error = "Please select at least one item";
                 }
                 else
                 {
@@ -228,11 +228,11 @@ namespace APTAT.Application.Models
             if (e.Exception == null)
             {
                 if (e.Items != null && e.Items.Length > 0)
+                { 
                     e.Items[0].Name = e.Items[0].Name.Replace("DC=","");
 
                 Items = e.Items;
-                if (Items != null && Items.Length > 0)
-                {
+                
                     _targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, Items[0], new OperationContext { UserState = this, Arg = this });
                 }
 

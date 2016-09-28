@@ -24,10 +24,10 @@ namespace APTAT.Application.Models
         IStorageService _storage;
 
 
-        
 
-        
 
+
+        private readonly ICollection<Object> _checkedItems;
         public ICollection<Object> CheckedItems
         {
             get;
@@ -45,24 +45,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        private String _workgroup;
-        public String Workgroup
-        {
-            get { return _workgroup; }
-            set
-            {
-                _workgroup = value;
 
-                if (String.IsNullOrWhiteSpace(_workgroup))
-                {
-                    RaiseValidationError("Workgroup", "Please Specify Workgroup");
-                }
-                else
-                {
-                    ClearError("Workgroup");
-                }
-            }
-        }
 
         public DelegateCommand ExpandCommand { get; private set; }
 
@@ -106,7 +89,33 @@ namespace APTAT.Application.Models
 
             SetSteps(new[] { null, SelectWorkgroup, SelectTargets, SelectPort });
 
+            ExpandCommand = new DelegateCommand(InvokeExpand);
+            CheckItemCommand = new DelegateCommand(InvokeCheckItem);
+            UncheckItemCommand = new DelegateCommand(InvokeUncheckItem);
 
+            _checkedItems = new Collection<Object>();
+        }
+
+        private void InvokeExpand(Object arg)
+        {
+            ExpandCommandContext commandContext = (ExpandCommandContext)arg;
+            var item = (DirectoryItem)commandContext.DirectoryItem;
+            if (item != null && item.Items != null && !item.Items.Any())
+                _targetsDiscoveryService.GetWorkgroup(item.Name, item, new OperationContext
+                { UserState = this, Success = () => commandContext.RaiseCompleted() });
+            else
+                commandContext.RaiseCompleted();
+        }
+
+        private void InvokeCheckItem(Object arg)
+        {
+            _checkedItems.Add(arg);
+            Error = null;
+        }
+
+        private void InvokeUncheckItem(Object arg)
+        {
+            _checkedItems.Remove(arg);
         }
 
 
@@ -145,7 +154,7 @@ namespace APTAT.Application.Models
         {
             if (previousStep == SelectWorkgroup && context.IsForward(CurrentStepIndex))
             {
-                if (String.IsNullOrEmpty(Workgroup) && !EnumerateWorkgroups)
+                if (String.IsNullOrEmpty(WorkgroupName) && !EnumerateWorkgroups)
                 {
                     Error = "Please Specify Workgroup";
                     return;
@@ -161,16 +170,36 @@ namespace APTAT.Application.Models
                     var groups = await TryAction(GetWorkgroups());
                     Items = new ObservableCollection<DirectoryItem>(groups.Items);
                     IsBusy = false;
+
+                    
+
                     base.OnStepChanging(success, previousStep, context);
                 }
                 else
                 {
                     //_storage.SetValue(KnownKeys.Workgroup, Workgroup);
-                    _targetsDiscoveryService.GetWorkgroup(Workgroup, new OperationContext { Success = success, UserState = this });
+                    _targetsDiscoveryService.GetWorkgroup(WorkgroupName, null, new OperationContext { Success = success, UserState = this });
+                }
+            }
+            else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
+            {
+                if (_checkedItems == null || _checkedItems.Count == 0)
+                {
+                    Error = "Please select at least one item";
+                }
+                else
+                {
+                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
+                   
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = WorkgroupName });
+                    success();
                 }
             }
             else
             {
+                
+
                 if (context.IsBackward(CurrentStepIndex))
                 {
                     Error = null;
@@ -198,14 +227,15 @@ namespace APTAT.Application.Models
             IsBusy = false;
             if (e.Exception == null)
             {
-                CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
-                _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-               // _storage.SetValue(KnownKeys.Workgroup, _workgroup);
-                _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                    new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = _workgroup });
+                if (e.Parent == null)
+                    Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
+                else
+                    e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
+
+                // _storage.SetValue(KnownKeys.Workgroup, _workgroup);
 
 
-                context.Success();
+               context.Success();
             }
             else
             {

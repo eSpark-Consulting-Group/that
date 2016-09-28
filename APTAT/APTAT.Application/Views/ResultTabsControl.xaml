@@ -100,7 +100,7 @@
       </Grid.Resources>
         
         <TabControl  AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >
-            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results" IsSelected="{Binding SelectScan, Mode=TwoWay}" >
+            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results   " IsSelected="{Binding SelectScan, Mode=TwoWay}" >
               <Grid>
                 <local:ScanResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <local:ScanResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
