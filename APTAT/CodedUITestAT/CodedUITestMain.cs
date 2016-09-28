@@ -1886,8 +1886,7 @@ namespace CodedUITestAT
             Computer endpoint = DataHelper.GetEndpoint();
             
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
-            UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);
-            
+            UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);                        
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
@@ -1895,9 +1894,13 @@ namespace CodedUITestAT
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);            
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
-            UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, 3, "No Threat Found", TestContext, 60000);
+            UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(), 
+                                                                                                                TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
             AssertPanelCountersData(1, 0, TestContext);
-                        
+
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            unknown = SysHelper.AddUnknownFileForScan(endpoint);
+            TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             Malware malware = SysHelper.InfectForScan(endpoint);
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
@@ -1905,6 +1908,9 @@ namespace CodedUITestAT
             UIMapScanCompletedWindow.ClickOkButton();
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
+            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(),
+                                                                                                                TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
             AssertPanelCountersData(1, 1, TestContext);
         }
 

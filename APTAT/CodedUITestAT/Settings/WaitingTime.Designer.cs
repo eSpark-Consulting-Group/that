@@ -121,5 +121,14 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["QuickScanRangeWaitTime"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
+        public int NoThreatFoundVerdictWaitTime {
+            get {
+                return ((int)(this["NoThreatFoundVerdictWaitTime"]));
+            }
+        }
     }
 }

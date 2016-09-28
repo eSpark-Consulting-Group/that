@@ -115,6 +115,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Results.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings\ResultsValkyrie.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>ResultsValkyrie.settings</DependentUpon>
+    </Compile>
     <Compile Include="Settings\ScanCompleted.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -221,7 +226,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Deployment.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -241,6 +248,10 @@
     <None Include="Settings\Results.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Results.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\ResultsValkyrie.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ResultsValkyrie.Designer.cs</LastGenOutput>
     </None>
     <None Include="Settings\ScanCompleted.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
