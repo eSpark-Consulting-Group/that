@@ -136,7 +136,6 @@
     <Compile Include="AgentWindow.xaml.cs">
       <DependentUpon>AgentWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\IntToConverters.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />
@@ -381,10 +380,6 @@
     <Page Include="Views\StartScanWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Assets\Telerik.Windows.Controls.GridView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\StartScanWorkgroupView.xaml">
       <SubType>Designer</SubType>

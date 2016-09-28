@@ -269,7 +269,7 @@
 
         </Grid>
 
-        <Border Grid.Row="2" Background="{StaticResource FooterDarkBrush}" Height="35" Opacity="0.85" Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Border Grid.Row="2" Background="{StaticResource StrongBrush}" Margin="-17 0 -17 -17" Height="35"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
             <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
                        x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#B1F984" FontSize="16">
@@ -278,8 +278,8 @@
             </TextBlock>
         </Border>
 
-        <Border Grid.Row="3"   Height="35" >
-            <DockPanel  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" Height="35" >
+        <Border Grid.Row="3"  Margin="-17 0 -17 -17" Height="35" Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+            <DockPanel   Height="35" >
                 <TextBlock Margin="10,0,0,0" />
                 <TextBlock AutomationProperties.AutomationId="UnknownFilesCounterTextBlock" 
                            Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>

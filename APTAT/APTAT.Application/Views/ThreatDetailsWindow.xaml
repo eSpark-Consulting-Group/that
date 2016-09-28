@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
         Title="DETAILS"
         MaxWidth="850" 
-        MaxHeight="420"
+       MaxHeight="400"
         MinWidth="915" 
-        MinHeight="420"
+        
         WindowStyle="None"
                 AllowsTransparency="True" Background="Transparent" BorderThickness="3"
                 ResizeMode="NoResize" MouseLeftButtonDown="Window_MouseLeftButtonDown"

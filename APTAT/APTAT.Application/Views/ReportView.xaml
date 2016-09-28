@@ -92,35 +92,28 @@
 
                     <telerik:RadButton AutomationProperties.AutomationId="ZoomInButton"
                                        x:Name="btnZoomIn" Command="{Binding ZoomInCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2" Padding="0"
-                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False">
-                        <ToolTipService.ToolTip>
-                            <TextBlock Text="Zoom in" />
-                        </ToolTipService.ToolTip>
+                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False" ToolTip="Zoom in">
+                       
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/zoom-in.png" Stretch="None" />
                     </telerik:RadButton>
 
                     <telerik:RadButton AutomationProperties.AutomationId="ZoomOutButton"
                                        x:Name="btnZoomOut" Command="{Binding ZoomOutCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2" Padding="0" 
-                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False">
-                        <ToolTipService.ToolTip>
-                            <TextBlock Text="Zoom out" />
-                        </ToolTipService.ToolTip>
+                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False" ToolTip="Zoom out">
+                       
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/zoom-out.png" Stretch="None" />
                     </telerik:RadButton>
 
                     <telerik:RadComboBox AutomationProperties.AutomationId="ScaleComboBox"  
                                          IsEditable="True" Margin="2" Width="70" SelectedIndex="4" x:Name="cbScale"
                                          Text="{Binding FixedDocumentViewer.ScaleFactor, Converter={StaticResource doubleToStringPercentConverter}, Mode=TwoWay}">
-                        <telerik:RadComboBoxItem Content="10%" />
-                        <telerik:RadComboBoxItem Content="25%" />
+
                         <telerik:RadComboBoxItem Content="50%" />
                         <telerik:RadComboBoxItem Content="75%" />
                         <telerik:RadComboBoxItem Content="100%" />
                         <telerik:RadComboBoxItem Content="150%" />
                         <telerik:RadComboBoxItem Content="200%" />
-                        <telerik:RadComboBoxItem Content="500%" />
-                        <telerik:RadComboBoxItem Content="1000%" />
-                        <telerik:RadComboBoxItem Content="2000%" />
+
                     </telerik:RadComboBox>
                     <telerik:RadToolBarSeparator />
 
@@ -170,8 +163,7 @@
             </Grid>
         </telerik:RadBusyIndicator>
         
-        <Border Grid.Row="1"  Background="{StaticResource FooterDarkBrush}" Height="35">
-        </Border>
+
         
     </Grid>
     

@@ -1,14 +1,14 @@
-﻿using System;
+﻿using APTAT.Application.MarkupExtensions;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 
 namespace APTAT.Application.Converters
 {
-    public class ContentToPathConverter : IValueConverter
+    public class ContentToPathConverter : ConverterMarkupExtension<ContentToPathConverter>
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var ps = new PathSegmentCollection(3);
             ContentPresenter cp = (ContentPresenter)value;
@@ -16,11 +16,11 @@ namespace APTAT.Application.Converters
             double w = 1.15 * cp.ActualWidth;
             ps.Add(new LineSegment(new Point(0, h), true));
             ps.Add(new LineSegment(new Point(w, h), true));
-            ps.Add(new BezierSegment(new Point(w + 0.6 * h, h), new Point(w + h, 0), new Point(w + h * 1.3, 0), true));
+            ps.Add(new BezierSegment(new Point(w + 0.6 * h, h), new Point(w + h, 0), new Point(w + h, 0), true));
             return ps;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }
