@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Application.Models;
 
@@ -7,26 +9,56 @@ namespace APTAT.Application.Services
 {
     public class FileBrowserService : IFileBrowserService
     {
-        public async Task<FolderItem[]> GetAvailableDrives()
+        public void GetAvailableDrives(Object userState)
         {
-            FolderItem[] drives = new FolderItem[0];
-            await Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
-                var drivesInternal = DriveInfo.GetDrives();
-                drives = drivesInternal.Where(d => d.DriveType == DriveType.Fixed).Select(d => new FolderItem(d.Name, false)).ToArray();
+                FolderItem[] drives = new FolderItem[0];
+                Exception e = null;
+                try
+                {
+                    var drivesInternal = DriveInfo.GetDrives();
+
+
+                    drives =
+                        drivesInternal.Where(d => d.DriveType == DriveType.Fixed)
+                            .Select(d => new FolderItem(d.Name, false))
+                            .ToArray();
+                }
+                catch (Exception ex)
+                {
+                    
+                    e = ex;
+                }
+                
+                App.Current.Dispatcher.Invoke(() =>
+                        GetAvailableDrivesCompleted?.Invoke(this, new GetFoldersEventArgs(null, drives, userState, e)));
             });
-            return drives;
         }
 
-        public async Task<FolderItem[]> GetFolders(FolderItem folderItem)
+        public void GetFolders(FolderItem folderItem, Object userState)
         {
-            FolderItem[] folders = new FolderItem[0];
-            await Task.Run(() =>
+            Task.Factory.StartNew( ()=> 
             {
-                var foldersInternal = Directory.GetDirectories(folderItem.FullName);
-                folders = foldersInternal.Select(d => new FolderItem(d, true)).ToArray();
+                FolderItem[] folders = new FolderItem[0];
+                Exception e = null;
+                try
+                {
+                    var foldersInternal = Directory.GetDirectories(folderItem.FullName);
+                    folders = foldersInternal.Select(d => new FolderItem(d, true)).ToArray();
+                }
+                catch (Exception ex)
+                {
+
+                    e = ex;
+                }
+
+                App.Current.Dispatcher.Invoke(() =>
+                        GetFoldersCompleted?.Invoke(this, new GetFoldersEventArgs(folderItem, folders, userState, e)));
             });
-            return folders;
         }
+
+        public event EventHandler<GetFoldersEventArgs> GetAvailableDrivesCompleted;
+        public event EventHandler<GetFoldersEventArgs> GetFoldersCompleted;
     }
 }

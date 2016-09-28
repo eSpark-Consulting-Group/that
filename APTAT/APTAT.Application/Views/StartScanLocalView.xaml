@@ -114,6 +114,7 @@
                                  IsOptionElementsEnabled="True"
                                  IsTriStateMode="True"
                                  Checked="OnChecked"
+                                     IsVirtualizing="True"
                                  FontSize="14"
                                  Unchecked="OnUnchecked"
                                  ItemPrepared="OnItemPrepared"

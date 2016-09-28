@@ -19,7 +19,7 @@ namespace APTAT.Application.Models
         private readonly IFileBrowserService _fileBrowserService;
         private readonly IStorageService _storage;
 
-        private FolderItem[] _items;
+        private ObservableCollection<FolderItem> _items;
         private readonly ICollection<Object> _checkedItems;
         private bool _scanCriticalAreas;
 
@@ -59,7 +59,7 @@ namespace APTAT.Application.Models
 
         }
 
-        public FolderItem[] Items
+        public ObservableCollection<FolderItem> Items
         {
             get { return _items; }
             set
@@ -69,24 +69,15 @@ namespace APTAT.Application.Models
             }
         }
 
-        private async void InvokeExpand(Object arg)
+        private void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
             var parentFolder = (FolderItem) commandContext.DirectoryItem;
             
-                var folders = await _fileBrowserService.GetFolders(parentFolder);
-                parentFolder.Items = new ObservableCollection<FolderItem>(folders);
-                commandContext.RaiseCompleted();
-            
-            //if (e.Exception == null)
-            //{
-            //    e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
-            //}
-            //else
-            //{
-            //    e.Parent.Items = new ObservableCollection<DirectoryItem>();
-            //    Error = e.Exception.Message;
-            //}
+            _fileBrowserService.GetFolders(parentFolder, new OperationContext
+            {
+                UserState = this, Success = () => commandContext.RaiseCompleted()
+            });
         }
 
         private void InvokeCheckItem(Object arg)
@@ -202,22 +193,48 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
-            Action a = async () =>
-            {
-                Items = await _fileBrowserService.GetAvailableDrives();
-
-            };
+            _fileBrowserService.GetAvailableDrives(new OperationContext { UserState = this});
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
+            _fileBrowserService.GetAvailableDrivesCompleted -= OnGetAvailableDrivesCompleted;
+            _fileBrowserService.GetAvailableDrivesCompleted += OnGetAvailableDrivesCompleted;
+            _fileBrowserService.GetFoldersCompleted -= OnGetAvailableDrivesCompleted;
+            _fileBrowserService.GetFoldersCompleted += OnGetAvailableDrivesCompleted;
 
-            a.Invoke();
+        }
 
+        private void OnGetAvailableDrivesCompleted(object sender, GetFoldersEventArgs e)
+        {
+            OperationContext context = (OperationContext)e.UserState;
+            if (context.UserState != this)
+            {
+                return;
+            }
+
+            IsBusy = false;
+            if (e.Exception == null)
+            {
+                if (e.Parent == null)
+                    Items = new ObservableCollection<FolderItem>(e.Items);
+                else
+                    e.Parent.Items = new ObservableCollection<FolderItem>(e.Items);
+
+                // _storage.SetValue(KnownKeys.Workgroup, _workgroup);
+                context.Success?.Invoke();
+            }
+            else
+            {
+                //  Items = new ObservableCollection<DeploymentItem>();
+                Error = e.Exception.Message;
+            }
         }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
+            _fileBrowserService.GetAvailableDrivesCompleted -= OnGetAvailableDrivesCompleted;
+            _fileBrowserService.GetFoldersCompleted -= OnGetAvailableDrivesCompleted;
 
         }
 
