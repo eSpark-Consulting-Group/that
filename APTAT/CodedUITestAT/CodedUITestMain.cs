@@ -583,10 +583,11 @@ namespace CodedUITestAT
         /// <param name="testContext">Set a current TestContext.</param>
         internal void InputCamCredentials(TestContext testContext)
         {
-            UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-            testContext.WriteLine("CAM Credentials window appeared...\n");
+            WpfEdit camLoginTextBox = CamLoginTextBox();
+            UIHelper.WaitForControlIsEnabled(camLoginTextBox);
+            testContext.WriteLine("CAM Credentials window appeared...");
             UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
-            UIMapCamCredentialsWindow.InputLogin();
+            if (camLoginTextBox.Text == "Enter User Name") UIMapCamCredentialsWindow.InputLogin();
             UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = Settings.General.Default.CamPassword;
             UIMapCamCredentialsWindow.InputPassword();
             UIMapCamCredentialsWindow.ClickOkButton();
@@ -1252,6 +1253,7 @@ namespace CodedUITestAT
             AssertPanelCountersData(1, 0, TestContext);
                         
             malware = SysHelper.InfectForScan(endpoint);
+            TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickCancelButton();
@@ -1876,6 +1878,34 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", malware.Location));
             UIHelper.ClickRow(ResultsScreen.ScanningResults, unknownFile);
             TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+        }
+
+        [TestMethod]
+        public void CheckValkyrieAnalysisResultsPanelTest()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
+            UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);
+            
+            TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();
+            InputCamCredentials(TestContext);
+            WaitForValkyrieResults(TestContext);            
+            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, 3, "No Threat Found", TestContext, 60000);
+            AssertPanelCountersData(1, 0, TestContext);
+                        
+            Malware malware = SysHelper.InfectForScan(endpoint);
+            TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
+            StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();
+            InputCamCredentials(TestContext);
+            WaitForValkyrieResults(TestContext);
+            AssertPanelCountersData(1, 1, TestContext);
         }
 
         #endregion

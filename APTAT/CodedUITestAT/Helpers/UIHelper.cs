@@ -173,6 +173,7 @@ namespace CodedUITestAT
         /// <param name="row">Set a row control.</param>
         internal static string GetRowName(this UITestControl row)
         {
+            if (row == null) throw new Exception("The provided row is null!");
             return row.GetChildren()[1].Name.ToLower();
         }
 
@@ -185,6 +186,91 @@ namespace CodedUITestAT
             var text = cellElement.GetChildren()[2];
 
             return text.Name;
+        }
+
+        /// <summary> Gets a content of given cell in a provided row. </summary>
+        /// <param name="row">Set a row.</param>
+        /// <param name="cellNumber">Set a cell number.</param>
+        private static string GetCellContent(this UITestControl row, int cellNumber)
+        {
+            var cells = row.GetChildren();
+            var cell = cells.FirstOrDefault(c => c.GetChildren().Any()); // Finds the first nonempty cell in the row
+            if (cell == null) throw new Exception("There is no nonempty cell in the given row!");
+            cellNumber += cells.IndexOf(cell) - 1; // Corrects the given cell index in the row
+
+            var cellElement = cells[cellNumber].GetChildren()[0];
+            int iterations = 4;
+            for (int i = 1; i < iterations; i++)
+            {
+               if (cellElement is WpfText) break;
+               cellElement = cellElement.GetChildren()[0];
+               if (i == iterations) throw new Exception(String.Format("No WPF text found in a given cell #{0} after {1} iterations!", cellNumber, iterations));
+            }
+
+            WpfText text = cellElement as WpfText;
+
+            return text.DisplayText;
+        }
+
+        /// <summary> Gets a content of given cell in a provided row. </summary>
+        /// <param name="resultsScreen">Set a results screen.</param>
+        /// <param name="row">Set a row.</param>
+        /// <param name="cellNumber">Set a cell number.</param>
+        internal static string GetCellContent(ResultsScreen resultsScreen, IRow row, int cellNumber)
+        {
+            CodedUITestMain useMain = new CodedUITestMain();
+            UITestControl rowControl;
+
+            switch (resultsScreen)
+            {
+                case ResultsScreen.ScanningResults:
+                    rowControl = useMain.ScanningResultsTab().GetRow(row.RowName);
+                    break;
+                case ResultsScreen.ValkyrieAnalysis:
+                    rowControl = useMain.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
+                    break;
+                default: throw new Exception(String.Format("Unxepected results screen '{0}'!", resultsScreen));
+            }
+
+            return rowControl.GetCellContent(cellNumber);
+        }
+
+        /// <summary> Waits for a given cell content in a provided row. </summary>
+        /// <param name="resultsScreen">Set a results screen.</param>
+        /// <param name="row">Set a row.</param>
+        /// <param name="cellNumber">Set a cell number.</param>
+        /// <param name="expectedContent">Set an expected content to wait for.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        /// <param name="waitTime">Set waiting time in milliseconds.</param>
+        internal static void WaitForCellContent(ResultsScreen resultsScreen, IRow row, int cellNumber, string expectedContent, TestContext testContext, int waitTime)
+        {
+            var timer = Stopwatch.StartNew();
+            string successMessage = String.Format("Expected content '{0}' appeared for row '{1}'.", expectedContent, row.RowName);
+            string failureMessage = String.Format("Expected content '{0}' did not appear for row '{1}' after {2} second(s)!", expectedContent, row.RowName, waitTime / 1000);
+            string actualStatus = null;
+
+            for (;;)
+            {
+                Playback.Wait(2000);                
+                try // The row may be in the state of refreshing and therefore may have no child controls, if a screen is automatically refreshed
+                {
+                    actualStatus = GetCellContent(resultsScreen, row, cellNumber);
+                }
+                catch (Exception) { }
+
+                if (String.Equals(actualStatus, expectedContent, StringComparison.OrdinalIgnoreCase))
+                {
+                    testContext.WriteLine(successMessage);
+                    break;
+                }
+
+                if ((int) timer.ElapsedMilliseconds > waitTime)
+                {
+                    Assert.Fail(failureMessage);
+                    break;
+                }
+            }
+            timer.Stop();
         }
 
         /// <summary> Gets a current scan status for a given row. </summary>
