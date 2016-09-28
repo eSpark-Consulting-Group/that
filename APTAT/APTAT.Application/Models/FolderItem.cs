@@ -9,7 +9,7 @@ using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application.Models
 {
-    public class FolderItem : DomainObject
+    public class FolderItem : DomainObject, ISelectableItem
     {
         private ObservableCollection<FolderItem> _items;
 
@@ -20,6 +20,7 @@ namespace APTAT.Application.Models
             Name = isFolder ? Path.GetFileName(FullName) : FullName;
         }
 
+        public Boolean IsSelected { get; set; }
         public string FullName { get;  }
         public string Name { get; }
 

@@ -145,11 +145,10 @@
     <Compile Include="Models\Apt\CustomScanOptions.cs" />
     <Compile Include="Models\Directory\StartScanLocalViewModel.cs" />
     <Compile Include="Models\FolderItem.cs" />
-    <Compile Include="Models\ModelBase\SelectableItemWrapper.cs" />
+    <Compile Include="Models\ModelBase\ISelectableItem.cs" />
     <Compile Include="Services\FileBrowserService.cs" />
     <Compile Include="Services\GetDomainNameResponse.cs" />
     <Compile Include="Services\IFileBrowserService.cs" />
-    <Compile Include="TemplateSelectors\FilebrowserTemplateSelector.cs" />
     <Compile Include="Triggers\KeyToCommandAction.cs" />
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
