@@ -280,6 +280,7 @@ namespace DDT.Application.Services
                         WorkgroupTarget deploymentTarget = new WorkgroupTarget();
                         deploymentTarget.IsGroup = FromDirectoryItemType(directoryItem.Type) == DomainEntryType.Root;
                         deploymentTarget.SmbName = item.Name;
+                        deploymentTarget.Name = item.Name;
                         collection.Add(deploymentTarget);
                     }
                     else

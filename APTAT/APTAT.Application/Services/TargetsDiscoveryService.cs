@@ -37,6 +37,7 @@ namespace APTAT.Application.Services
         public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState)
         {
             DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
+            
             IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets, admin, password);
 
             resolver.TargetsResolved += OnTargetsResolved;
@@ -248,7 +249,7 @@ namespace APTAT.Application.Services
                     {
                         IsWorkgroup = true,
                         Name = targets[i],
-                        
+                        Type = DirectoryItemType.Root,
                         IsSelected = false,
                         Items = new ObservableCollection<DirectoryItem>()
                     };
@@ -276,7 +277,9 @@ namespace APTAT.Application.Services
                     result.Add(new DirectoryItem
                     {
                         Name = target.Name,
+                        Type = DirectoryItemType.Computer,
                         TargetUid = target.Uid,
+                        IsWorkgroup = true,
                         IPAddress = target.IPAddress ?? "Unknown",
                         Status = target.IsOnline ? "Ready" : "Offline",
                         IsOnline = target.IsOnline, 
@@ -373,14 +376,26 @@ namespace APTAT.Application.Services
                 if (item is DirectoryItem)
                 {
                     DirectoryItem directoryItem = (DirectoryItem)item;
-                    DomainTarget deploymentTarget = new DomainTarget();
-                    deploymentTarget.LdapPath = directoryItem.LdapPath;
-                    deploymentTarget.EntryType = FromDirectoryItemType(directoryItem.Type);
-                    deploymentTarget.DnsName = directoryItem.DnsName;
-                    deploymentTarget.Name = item.Name;
-                    deploymentTarget.Uid = item.TargetUid;
-                    collection.Add(deploymentTarget);
+                    if (directoryItem.IsWorkgroup)
+                    {
+                        WorkgroupTarget deploymentTarget = new WorkgroupTarget();
+                        deploymentTarget.IsGroup = FromDirectoryItemType(directoryItem.Type) == DomainEntryType.Root;
+                        deploymentTarget.SmbName = item.Name;
+                        deploymentTarget.Name = item.Name;
+                        collection.Add(deploymentTarget);
+                    }
+                    else
+                    {
+                        DomainTarget deploymentTarget = new DomainTarget();
+                        deploymentTarget.LdapPath = directoryItem.LdapPath;
+                        deploymentTarget.EntryType = FromDirectoryItemType(directoryItem.Type);
+                        deploymentTarget.DnsName = directoryItem.DnsName;
+                        deploymentTarget.Name = item.Name;
+                        deploymentTarget.Uid = item.TargetUid;
+                        collection.Add(deploymentTarget);
+                    }
                 }
+                    
                 else
                 {
                     DeploymentTarget deploymentTarget = new DeploymentTarget();
