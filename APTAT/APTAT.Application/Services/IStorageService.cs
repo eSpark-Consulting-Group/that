@@ -14,6 +14,7 @@ namespace APTAT.Application.Services
         public const String ReportKind = "ReportKind";
         public const String DevicesSourceDescription = "DevicesSourceDescription";
         public const String IpAddresses = "IpAddresses";
+        public const String CustomScanOptions = "CustomScanOptions";
         //public const String TcpPort = "TcpPort";
         //public const String UdpPort = "UdpPort";
     }
@@ -23,5 +24,7 @@ namespace APTAT.Application.Services
         void SetValue(String key, Object value);
 
         T GetValue<T>(String key, Boolean remove);
+
+        bool ContainsKey(string key);
     }
 }

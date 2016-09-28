@@ -7,32 +7,33 @@ using Telerik.Windows.Controls;
 using APTAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Application.Messages;
+using APTAT.Application.Models.Apt;
 
 namespace APTAT.Application.Models
 {
     public class StartScanLocalViewModel : WizardViewModel
     {
-        ITargetsDiscoveryService _targetsDiscoveryService;
-        IStorageService _storage;
+        private readonly ITargetsDiscoveryService _targetsDiscoveryService;
+        private readonly IFileBrowserService _fileBrowserService;
+        private readonly IStorageService _storage;
 
-        private DirectoryItem[] _items;
+        private FolderItem[] _items;
         private readonly ICollection<Object> _checkedItems;
+        private bool _scanCriticalAreas;
 
-   
 
         public const String SelectTargets = "SelectTargets";
         public const String SelectPort = "SelectPort";
 
-        public DirectoryItem[] Items
+        public Boolean ScanCriticalAreas
         {
-            get { return _items; }
+            get { return _scanCriticalAreas; }
             set
             {
-                _items = value;
-                RaisePropertyChanged("Items");
+                _scanCriticalAreas = value;
+                RaisePropertyChanged("ScanCriticalAreas");
             }
         }
-
 
         public DelegateCommand ExpandCommand { get; private set; }
 
@@ -40,8 +41,9 @@ namespace APTAT.Application.Models
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
-        public StartScanLocalViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
+        public StartScanLocalViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage, IFileBrowserService fileBrowserService)
         {
+            _fileBrowserService = fileBrowserService;
             _targetsDiscoveryService = targetsDiscoveryService;
             _storage = storage;
 
@@ -55,12 +57,32 @@ namespace APTAT.Application.Models
 
         }
 
-
+        public FolderItem[] Items
+        {
+            get { return _items; }
+            set
+            {
+                _items = value;
+                RaisePropertyChanged("Items");
+            }
+        }
 
         private void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
-            
+            var parentFolder = (FolderItem) commandContext.DirectoryItem;
+            var folders = _fileBrowserService.GetFolders(parentFolder);
+            parentFolder.Items = new ObservableCollection<FolderItem>(folders);
+            //if (e.Exception == null)
+            //{
+            //    e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
+            //}
+            //else
+            //{
+            //    e.Parent.Items = new ObservableCollection<DirectoryItem>();
+            //    Error = e.Exception.Message;
+            //}
+            commandContext.RaiseCompleted();
         }
 
         private void InvokeCheckItem(Object arg)
@@ -88,10 +110,28 @@ namespace APTAT.Application.Models
                         new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
                     }, new OperationContext { Success = success, UserState = this });
                 }
+                else
+                {
+                    success();
+                }
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
-                success();
+                if (_checkedItems == null || _checkedItems.Count == 0)
+                {
+                    Error = "Select at least one folder to scan";
+                }
+                else
+                {
+
+                    IsBusy = true;
+                    _storage.SetValue(KnownKeys.CustomScanOptions, 
+                        new CustomScanOptions(_checkedItems.OfType<FolderItem>().ToArray(), _scanCriticalAreas));
+                    _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
+                    {
+                        new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
+                    }, new OperationContext { Success = success, UserState = this });
+                }
             }
             else
             {
@@ -113,6 +153,8 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
+
+            Items = _fileBrowserService.GetAvailableDrives();
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
 

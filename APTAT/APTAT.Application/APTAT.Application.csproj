@@ -56,6 +56,9 @@
     <Reference Include="FluentValidation">
       <HintPath>..\APTAT.Libraries\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ShDocVw, Version=8.0.50705.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -139,8 +142,14 @@
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />
+    <Compile Include="Models\Apt\CustomScanOptions.cs" />
     <Compile Include="Models\Directory\StartScanLocalViewModel.cs" />
+    <Compile Include="Models\FolderItem.cs" />
+    <Compile Include="Models\ModelBase\SelectableItemWrapper.cs" />
+    <Compile Include="Services\FileBrowserService.cs" />
     <Compile Include="Services\GetDomainNameResponse.cs" />
+    <Compile Include="Services\IFileBrowserService.cs" />
+    <Compile Include="TemplateSelectors\FilebrowserTemplateSelector.cs" />
     <Compile Include="Triggers\KeyToCommandAction.cs" />
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>

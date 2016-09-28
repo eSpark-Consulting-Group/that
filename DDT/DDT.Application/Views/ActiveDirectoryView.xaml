@@ -27,8 +27,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <telerik:RadTreeListView x:Name="tree" CanUserFreezeColumns="False" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="True" ItemsSource="{Binding ActiveDirectoryItems}"   
-                                 AutoExpandItems="False"  HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred" IsHitTestVisible="{Binding HasInternalProgress, Converter={converters:BoolInvertConverter}}" RowIsExpandedChanging="RadTreeListView_RowIsExpandedChanging">
+                <telerik:RadTreeListView x:Name="tree" CanUserFreezeColumns="False" AutoGenerateColumns="False" 
+                   IsReadOnly="True" EnableRowVirtualization="True" 
+                   ItemsSource="{Binding ActiveDirectoryItems}" 
+                   AutoExpandItems="False"  HierarchyIndent="12" CanUserReorderColumns="False" 
+                   IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred" 
+                   IsHitTestVisible="{Binding HasInternalProgress, Converter={converters:BoolInvertConverter}}" 
+                   RowIsExpandedChanging="RadTreeListView_RowIsExpandedChanging">
                     <telerik:RadTreeListView.Resources>
                         <DataTemplate x:Key="ComputerTemplate">
                             <Grid HorizontalAlignment="Stretch" >

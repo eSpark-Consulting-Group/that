@@ -41,7 +41,7 @@ namespace APTAT.Application
         private void OnExpandCompleted(ExpandCommandContext context)
         {
             RadTreeViewItem treeViewItem = (RadTreeViewItem)context.TreeItem;
-            DirectoryItem directoryItem = (DirectoryItem)context.DirectoryItem;
+            var directoryItem = (FolderItem)context.DirectoryItem;
 
             treeViewItem.ItemsSource = directoryItem.Items;
             treeViewItem.IsLoadOnDemandEnabled = false;
@@ -49,15 +49,16 @@ namespace APTAT.Application
 
         private void OnItemPrepared(object sender, RadTreeViewItemPreparedEventArgs e)
         {
-            DirectoryItem directoryItem = (DirectoryItem)e.PreparedItem.Item;
-            if (directoryItem.Type == DirectoryItemType.Computer)
-            {
-                e.PreparedItem.IsLoadOnDemandEnabled = false;
-            }
-            else if (directoryItem.Type == DirectoryItemType.Root)
-            {
-                e.PreparedItem.IsExpanded = true;
-            }
+            var directoryItem = (FolderItem)e.PreparedItem.Item;
+            //e.PreparedItem.IsExpanded = true;
+            //if (directoryItem.Type == DirectoryItemType.Computer)
+            //{
+            //    e.PreparedItem.IsLoadOnDemandEnabled = false;
+            //}
+            //else if (directoryItem.Type == DirectoryItemType.Root)
+            //{
+            //    e.PreparedItem.IsExpanded = true;
+            //}
         }
 
         private void OnChecked(Object sender, RadRoutedEventArgs e)

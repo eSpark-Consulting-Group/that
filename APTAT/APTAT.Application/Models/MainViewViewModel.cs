@@ -18,6 +18,7 @@ using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
+using APTAT.Application.Models.Apt;
 
 namespace APTAT.Application.Models
 {
@@ -666,7 +667,7 @@ namespace APTAT.Application.Models
                 {
                     IsBusy = true;
                     IsScanInProgress = null;
-                    
+
                     //_login = _storage.GetValue<String>(KnownKeys.Login, false);
                     //_password = _storage.GetValue<String>(KnownKeys.Password, true);
                     //_tcpPort= _storage.GetValue<String>(KnownKeys.TcpPort, false);
@@ -674,9 +675,15 @@ namespace APTAT.Application.Models
 
                     //if (_login == null || _password == null)
                     //{
-                        //throw new InvalidOperationException("specify login and password");
+                    //throw new InvalidOperationException("specify login and password");
                     //}
 
+
+                    if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+                    {
+                        _login = null;
+                        _password = null;
+                    }
                     _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
 
                 }
@@ -975,8 +982,6 @@ namespace APTAT.Application.Models
                 ScanProcessCompleted(this, e);
             }
         }
-        public bool ScanCriticalAreasInCustomScan { get; set; }
-        public string [] ScanPaths { get; set; }
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
@@ -1044,10 +1049,13 @@ namespace APTAT.Application.Models
                 }         
 
                 ScanOptions options;
-
-                if (scanKind == ScanKind.Custom)
-                {                       
-                    options = new ScanOptions(_tcpPort, _udpPort, ScanPaths, ScanCriticalAreasInCustomScan);
+                CustomScanOptions customScanOptions = null;
+                if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+                {
+                    customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                    scanKind = ScanKind.Custom;
+                    options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
+                        customScanOptions.ScanCriticalAreas);
                 }
                 else
                 {

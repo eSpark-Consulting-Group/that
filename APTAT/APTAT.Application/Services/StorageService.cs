@@ -20,6 +20,11 @@ namespace APTAT.Application.Services
             _dictionary[key] = value;
         }
 
+        public bool ContainsKey(string key)
+        {
+            return _dictionary.ContainsKey(key);
+        }
+
         public T GetValue<T>(String key, Boolean remove)
         {
             if(_dictionary.ContainsKey(key) == false)

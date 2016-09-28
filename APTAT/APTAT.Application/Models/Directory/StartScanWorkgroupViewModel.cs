@@ -141,7 +141,7 @@ namespace APTAT.Application.Models
             return result;
         }
 
-        protected async override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
+        protected override async void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
             if (previousStep == SelectWorkgroup && context.IsForward(CurrentStepIndex))
             {
