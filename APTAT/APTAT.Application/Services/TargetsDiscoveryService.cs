@@ -300,7 +300,7 @@ namespace APTAT.Application.Services
         }
 
         public void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState)
-        {   
+        {
             EndpointAddressCollection ipAddressCollection = new EndpointAddressCollection();
             foreach (IpAddressWrapper ipAddress in ipAddresses)
             {
@@ -427,10 +427,14 @@ namespace APTAT.Application.Services
         public bool IsLocalAddress(IpAddressWrapper ip)
         {   
             if (ip.IsRange || ip.IsMask) return false;
-
+            
             IPHostEntry hostInfo = _networkHelper.GetHostEntry();
             if (ip.IsDnsName)
-            {                
+            {
+                if (_networkHelper.IsLoopbackAddress(ip.FormattedText)) return true;
+
+                NetworkObserver observer = new NetworkObserver();
+                
                 var host = Dns.GetHostEntry(ip.FormattedText);
                 return host.HostName == hostInfo.HostName;      
             }
@@ -439,6 +443,7 @@ namespace APTAT.Application.Services
                 IPAddress address = IPAddress.Parse(ip.FormattedText);
                 return hostInfo.AddressList.Contains(address);    
             }
+
         }
     }
 

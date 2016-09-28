@@ -92,6 +92,11 @@ namespace APTAT.DeploymentCore
             return NetHelp.SendPing(toString);
         }
 
+        public bool IsLoopbackAddress(string nameOrAddress)
+        {
+            return NetHelp.IsLoopbackAddress(nameOrAddress);
+        }
+
         #endregion
 
         #region NetHelper
@@ -426,7 +431,7 @@ namespace APTAT.DeploymentCore
                     && Regex.IsMatch(address, atLeastOneLetterPattern) && Regex.IsMatch(address, dnsNamePattern);
             }
 
-            private static bool IsLoopbackAddress(string nameOrAddress)
+            public static bool IsLoopbackAddress(string nameOrAddress)
             {
                 if (nameOrAddress == null) throw new ArgumentNullException("nameOrAddress");
                 IPAddress ip;
@@ -484,5 +489,6 @@ namespace APTAT.DeploymentCore
         bool IsValidIpAddress(string hostName);
         IPStatus SendPing(string toString);
         IPHostEntry GetHostEntry();
+        bool IsLoopbackAddress(string nameOrAddress);
     }
 }
