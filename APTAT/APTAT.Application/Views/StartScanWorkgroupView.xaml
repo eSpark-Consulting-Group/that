@@ -159,11 +159,7 @@
                     <telerik:RadWatermarkTextBox.WatermarkContent>
                         <TextBlock Text="{Binding WorkgroupMask}" Foreground="{DynamicResource TextBrush2}" />
                     </telerik:RadWatermarkTextBox.WatermarkContent>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger>
-                            <triggers:KeyToCommandAction Command="{Binding DiscoverWorkgroupCommand}" Key="Enter"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                   
                 </telerik:RadWatermarkTextBox>
 
             </Grid>

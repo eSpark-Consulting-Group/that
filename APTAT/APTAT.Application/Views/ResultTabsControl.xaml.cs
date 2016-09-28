@@ -13,5 +13,13 @@ namespace APTAT.Application
         {
             InitializeComponent();
         }
+
+        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            var relativePoint = (sender as UserControl).TransformToAncestor(this).Transform(new Point(0, 0));
+
+            if (relativePoint.Y > 33)
+                grd1.Margin = grd2.Margin = new Thickness(-2);
+        }
     }
 }

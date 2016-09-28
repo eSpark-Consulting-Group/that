@@ -938,7 +938,7 @@
                             </grid:GridViewScrollViewer.NewRow>
                             <treelist:TreeListViewVirtualizingPanel x:Name="PART_GridViewVirtualizingPanel" VirtualizingStackPanel.VirtualizationMode="Recycling"/>
                         </grid:GridViewScrollViewer>
-
+                        <Border Background="{StaticResource StrongBrush}" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0 31 0 0"/>
                         <grid:ScrollPositionIndicator x:Name="PART_ScrollPositionIndicator" Margin="0,0,28,0"  IsHitTestVisible="False" HorizontalAlignment="Right"  Grid.Row="2" Grid.ColumnSpan="2" Visibility="Collapsed"
 												  ContentTemplate="{TemplateBinding ScrollPositionIndicatorTemplate}" />
 

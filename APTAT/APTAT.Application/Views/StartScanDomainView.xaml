@@ -129,7 +129,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="-90 -50 0 0" >
-                <local:LoginPasswordUserControl Margin="0" ShowDomainController="true"  Grid.ColumnSpan="3" Login="{Binding ActiveDirectoryLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ActiveDirectoryPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding UseCurrentDomainForActiveDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding DiscoverActiveDirectoryCommand}"/>
+                <local:LoginPasswordUserControl Margin="0" ShowDomainController="true"  Grid.ColumnSpan="3" Login="{Binding ActiveDirectoryLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ActiveDirectoryPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding UseCurrentDomainForActiveDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
         </Grid>

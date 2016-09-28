@@ -120,7 +120,7 @@
                
                 <telerik:GridViewColumn
                     CellTemplateSelector="{StaticResource SizeTemplateSelector}"
-                    SortMemberPath="FileSizeFormatted"
+                    SortMemberPath="Size"
                     IsFilterable="False"
                     Header="Size"  
                     TextAlignment="Right"

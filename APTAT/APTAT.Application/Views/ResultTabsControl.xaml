@@ -23,7 +23,7 @@
                       <VisualState x:Name="Unfocused"/> 
                     </VisualStateGroup>
                   </VisualStateManager.VisualStateGroups>
-                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" Margin="-2 -2 -23 0" Fill="White">
+                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" VerticalAlignment="Bottom" Margin="-2 0 -23 0" Fill="White">
                     <Path.Data>
                       <PathGeometry>
                         <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={converters:ContentToPathConverter}}">
@@ -64,7 +64,7 @@
             <Setter.Value>
               <ControlTemplate TargetType="ToggleButton">
                 <Grid>
-                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" Margin="-2 -2 -23 0" Fill="White">
+                                <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" VerticalAlignment="Bottom" Margin="-2 0 -23 0" Fill="White">
                     <Path.Data>
                       <PathGeometry>
                                             <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={converters:ContentToPathConverter}}">
@@ -100,21 +100,21 @@
       </Grid.Resources>
         
         <TabControl  AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >
-            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" Header="Scanning results   " IsSelected="{Binding SelectScan, Mode=TwoWay}" >
-              <Grid>
-                <local:ScanResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                <local:ScanResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" x:Name="tab" Header="Scanning results   " IsSelected="{Binding SelectScan, Mode=TwoWay}"  >
+              <Grid Background="White" x:Name="grd1">
+                    <local:ScanResultUserControlByComputers   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}" Loaded="TabItem_Loaded" />
+                    <local:ScanResultUserControl  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}" />
               </Grid>
             </TabItem>
             <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" IsEnabled="{Binding ValkyrieEnabled}" >
-              <Grid>                                                
-                <local:ValkyrieResultUserControlByComputers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                <local:ValkyrieResultUserControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Grid Background="White" x:Name="grd2">
+                    <local:ValkyrieResultUserControlByComputers  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"  />
+                    <local:ValkyrieResultUserControl  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"  />
               </Grid>
             </TabItem>
         </TabControl>
         
-        <Border Background="{StaticResource StrongBrush}" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0 62 0 0"/>
+        
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 23 0" Visibility="{Binding GroupingEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
         <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" 
                       Content="Group by Computers   " IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}"/>

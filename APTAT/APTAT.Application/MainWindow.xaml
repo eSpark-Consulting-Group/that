@@ -31,7 +31,7 @@
                 </Grid>
             </Border>
 
-            <Frame x:Name="MainFrame" Source="{Binding Uri}" NavigationUIVisibility="Hidden" Grid.Row="1" Margin="17 0 17 17"/>
+            <Frame x:Name="MainFrame" Source="{Binding Uri}" NavigationUIVisibility="Hidden" Grid.Row="1" />
         </Grid>
     </Border>
 </Window>

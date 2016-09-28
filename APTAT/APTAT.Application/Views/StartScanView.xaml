@@ -19,8 +19,8 @@
         </Grid.RowDefinitions>
 
 
-        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
-            <Grid>
+        
+            <Grid Grid.Row="1">
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
                    FontFamily="Segoe UI"   VerticalAlignment="Top" Margin="23,37,0,0">
                 Select Scanning Targets
@@ -472,6 +472,7 @@
                 </Border>
 
             </Grid>
+        <telerik:RadBusyIndicator Grid.RowSpan="3" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
         </telerik:RadBusyIndicator>
 
         <Border Grid.Row="0" BorderThickness="0" Background="{DynamicResource ErrorBrush2}" BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" 

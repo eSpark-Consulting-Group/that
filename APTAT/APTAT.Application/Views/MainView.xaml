@@ -96,7 +96,7 @@
         </Grid.RowDefinitions>
 
 
-        <telerik:RadBusyIndicator Grid.Row="1" Margin="-17,0 -17,-17" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+        <telerik:RadBusyIndicator Grid.Row="1"  IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
             <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
                 <Grid>
 
@@ -137,7 +137,7 @@
             </telerik:RadBusyIndicator>
         </telerik:RadBusyIndicator>
 
-        <Grid Background="#FFFAF9F9" Margin="-17,0">
+        <Grid Background="#FFFAF9F9" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="180"/>
@@ -269,7 +269,7 @@
 
         </Grid>
 
-        <Grid Grid.Row="2" Margin="-17 0 -17 0" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+        <Grid Grid.Row="2"  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
             <Border  Background="{StaticResource StrongBrush}"  Height="35"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -282,7 +282,7 @@
         </Grid>
         
 
-        <Border Grid.Row="3"  Margin="-17 0 -17 -17" Height="35" Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+        <Border Grid.Row="3"  Height="35" Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
             <DockPanel   Height="35" >
                 <TextBlock Margin="10,0,0,0" />
                 <TextBlock AutomationProperties.AutomationId="UnknownFilesCounterTextBlock" 
