@@ -221,7 +221,7 @@ namespace APTAT.Application.Models
             foreach (var address in _checkedItems)
             {
                 var depItem = (DirectoryItem)address;
-                if (depItem.Type == DirectoryItemType.Root) return false;
+                if (depItem.Type != DirectoryItemType.Computer) return false;
                 if (!_targetsDiscoveryService.IsLocalAddress(depItem.Name))
                 {
                     onlyLocal = false;

@@ -14,6 +14,7 @@ using System.Net;
 using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore;
 using System.Collections.ObjectModel;
+using System.Net.Sockets;
 
 namespace APTAT.Application.Services
 {
@@ -34,10 +35,12 @@ namespace APTAT.Application.Services
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
         public event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
-        public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState)
+
+        public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password,
+            Object userState)
         {
             DeploymentTargetsCollection deploymentTargets = ToDeploymentTargetsCollection(directoryItems);
-            
+
             IDomainTargetsResolver resolver = _manager.GetDomainTargetsResolver(deploymentTargets, admin, password);
 
             resolver.TargetsResolved += OnTargetsResolved;
@@ -86,14 +89,14 @@ namespace APTAT.Application.Services
             TargetsDiscovererEventArgs e = await discoverer.DiscoverAwaitable();
             if (e.Error == null)
             {
-                DomainTarget domainRoot = (DomainTarget)e.Targets[0];
+                DomainTarget domainRoot = (DomainTarget) e.Targets[0];
                 return new GetDomainNameResponse(domainRoot.DomainName, null);
 
             }
             else if (e.Error is DirectoryQueryException &&
-                     ((DirectoryQueryException)e.Error).Error == DirectoryError.DefaultDomainNotFound)
+                     ((DirectoryQueryException) e.Error).Error == DirectoryError.DefaultDomainNotFound)
             {
-                DomainTarget domainRoot = (DomainTarget)e.Targets[0];
+                DomainTarget domainRoot = (DomainTarget) e.Targets[0];
                 return new GetDomainNameResponse(null, null);
             }
             return new GetDomainNameResponse(null, e.Error);
@@ -107,11 +110,12 @@ namespace APTAT.Application.Services
             }
             return Environment.UserName;
         }
+
         private void OnRootDiscovered(object sender, TargetsDiscovererEventArgs e)
         {
             if (e.Error == null)
             {
-                DomainTarget domainRoot = (DomainTarget)e.Targets[0];
+                DomainTarget domainRoot = (DomainTarget) e.Targets[0];
                 DirectoryItem root = new DirectoryItem
                 {
                     DnsName = domainRoot.DnsName,
@@ -120,7 +124,7 @@ namespace APTAT.Application.Services
                     TargetUid = domainRoot.Uid,
                     Type = FromDomainEntryType(domainRoot.EntryType)
                 };
-                DirectoryItem[] result = new[] { root };
+                DirectoryItem[] result = new[] {root};
                 GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, result, e.State);
                 Action action = () =>
                 {
@@ -145,7 +149,8 @@ namespace APTAT.Application.Services
             }
         }
 
-        public void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent, Object userState)
+        public void GetDirectoryItems(String domainController, String admin, String password, DirectoryItem parent,
+            Object userState)
         {
             GetDirectoryItemsContext context = new GetDirectoryItemsContext
             {
@@ -178,11 +183,11 @@ namespace APTAT.Application.Services
 
         private void OnDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
-            GetDirectoryItemsContext context = (GetDirectoryItemsContext)e.State;
+            GetDirectoryItemsContext context = (GetDirectoryItemsContext) e.State;
             if (e.Error == null)
             {
                 DeploymentTarget[] targets = e.Targets;
-                var filtered = targets.Where(t => ((DomainTarget)t).EntryType == DomainEntryType.Computer).ToArray();
+                var filtered = targets.Where(t => ((DomainTarget) t).EntryType == DomainEntryType.Computer).ToArray();
                 if (filtered.Any())
                 {
                     SetLocalHostItem(filtered);
@@ -191,7 +196,7 @@ namespace APTAT.Application.Services
                 DirectoryItem[] result = new DirectoryItem[targets.Length];
                 for (Int32 i = 0; i < targets.Length; ++i)
                 {
-                    DomainTarget target = (DomainTarget)targets[i];
+                    DomainTarget target = (DomainTarget) targets[i];
 
                     result[i] = new DirectoryItem
                     {
@@ -203,7 +208,8 @@ namespace APTAT.Application.Services
                     };
                 }
 
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, result, context.UserState);
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, result,
+                    context.UserState);
                 Action action = () =>
                 {
                     if (GetDirectoryItemsCompleted != null)
@@ -216,7 +222,8 @@ namespace APTAT.Application.Services
             }
             else
             {
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, null, context.UserState, e.Error);
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(context.Parent, null, context.UserState,
+                    e.Error);
                 Action action = () =>
                 {
                     if (GetDirectoryItemsCompleted != null)
@@ -227,6 +234,7 @@ namespace APTAT.Application.Services
                 App.Current.Dispatcher.BeginInvoke(action);
             }
         }
+
         public void GetWorkgroup(String workgroupName, DirectoryItem parent, object userState)
         {
             IWorkgroupDiscoverer discoverer = _manager.GetWorkgroupDiscoverer(workgroupName);
@@ -263,6 +271,7 @@ namespace APTAT.Application.Services
                 return new GetDirectoryItemsEventArgs(null, null, ex);
             }
         }
+
         private void OnWorkgroupDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
             var tuple = e.State as Tuple<string, DirectoryItem, object>;
@@ -282,16 +291,25 @@ namespace APTAT.Application.Services
                         IsWorkgroup = true,
                         IPAddress = target.IPAddress ?? "Unknown",
                         Status = target.IsOnline ? "Ready" : "Offline",
-                        IsOnline = target.IsOnline, 
+                        IsOnline = target.IsOnline,
                     });
                 }
 
-                
 
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(tuple.Item2, 
-                    tuple.Item2 != null ? 
-                    result.ToArray() : 
-                    new[] { new DirectoryItem { Items = result, Name = tuple.Item1, IsWorkgroup = true, IsLoadOnDemand = true } }, 
+
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(tuple.Item2,
+                    tuple.Item2 != null
+                        ? result.ToArray()
+                        : new[]
+                        {
+                            new DirectoryItem
+                            {
+                                Items = result,
+                                Name = tuple.Item1,
+                                IsWorkgroup = true,
+                                IsLoadOnDemand = true
+                            }
+                        },
                     tuple.Item3);
                 Action action = () =>
                 {
@@ -302,7 +320,7 @@ namespace APTAT.Application.Services
             }
             else
             {
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null,tuple.Item3, e.Error);
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null, tuple.Item3, e.Error);
                 Action action = () =>
                 {
                     GetWorkgroupCompleted?.Invoke(this, args);
@@ -368,6 +386,7 @@ namespace APTAT.Application.Services
                 App.Current.Dispatcher.BeginInvoke(action);
             }
         }
+
         private DeploymentTargetsCollection ToDeploymentTargetsCollection(DeploymentItem[] deploymentItems)
         {
             DeploymentTargetsCollection collection = new DeploymentTargetsCollection(deploymentItems.Length);
@@ -375,7 +394,7 @@ namespace APTAT.Application.Services
             {
                 if (item is DirectoryItem)
                 {
-                    DirectoryItem directoryItem = (DirectoryItem)item;
+                    DirectoryItem directoryItem = (DirectoryItem) item;
                     if (directoryItem.IsWorkgroup)
                     {
                         WorkgroupTarget deploymentTarget = new WorkgroupTarget();
@@ -396,7 +415,7 @@ namespace APTAT.Application.Services
                         collection.Add(deploymentTarget);
                     }
                 }
-                    
+
                 else
                 {
                     DeploymentTarget deploymentTarget = new DeploymentTarget();
@@ -477,7 +496,16 @@ namespace APTAT.Application.Services
             if (_networkHelper.IsLoopbackAddress(name)) return true;
 
             NetworkObserver observer = new NetworkObserver();
-            var host = Dns.GetHostEntry(name);
+            IPHostEntry host;
+            try
+            {
+
+                host = Dns.GetHostEntry(name);
+            }
+            catch (SocketException ex)
+            {
+                return false;
+            }
             return host.HostName == hostInfo.HostName;
 
         }
