@@ -15,5 +15,6 @@ namespace APTAT.Application.Models.ModelBase
         string UdpPort { get;  }
 
         bool ValidateCredentials(out string errorMessage);
+        bool ValidatePorts(out string errorMessage);
     }
 }

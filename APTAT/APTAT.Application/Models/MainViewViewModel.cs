@@ -1332,17 +1332,29 @@ namespace APTAT.Application.Models
         public bool ValidateCredentials(out string errorMessage)
         {
             errorMessage = null;
-            if (Password == null)
+            if (UseCurrentDomainForDeploy)
+                return true;
+            if (String.IsNullOrEmpty(Password))
             {
-                errorMessage = "Please specify Password.";
+                errorMessage = "Please specify Password";
                 return false;
             }
-            else if (Login == null)
+            if (String.IsNullOrEmpty(Login))
             {
-                errorMessage = "Please specify Login.";
+                errorMessage = "Please specify Login";
                 return false;
             }
-            else return true;
+            return true;
+        }
+
+        public bool ValidatePorts(out string errorMessage)
+        {
+            bool hasError;
+            errorMessage = TcpPort.ValidateTCP(out hasError);
+            if (hasError) return false;
+            errorMessage = UdpPort.ValidateUDP(out hasError);
+            if (hasError) return false;
+            return true;
         }
     }
 }

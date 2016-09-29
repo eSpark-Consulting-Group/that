@@ -221,12 +221,12 @@ namespace APTAT.Application.Models.Directory
                 if (parent != null)
                 {
                     string errorMessage;
-                    if (!parent.ValidateCredentials(out errorMessage))
+                    if (parent.ValidateCredentials(out errorMessage) && parent.ValidatePorts(out errorMessage))
                     {
-                        Error = errorMessage;
+                        success();
                     }
                     else
-                        success();
+                        Error = errorMessage;
                 }
                 else
                 {
