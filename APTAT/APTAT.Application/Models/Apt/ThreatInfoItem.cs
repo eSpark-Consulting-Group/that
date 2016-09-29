@@ -72,7 +72,7 @@ namespace APTAT.Application.Models
         private String _statusMessage;
 
         private ScanStage _scanStage;
-        private Collection<ThreatInfoItem> _items;
+        private ObservableCollection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _noVerdictFilesCount;
 
@@ -294,7 +294,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public Collection<ThreatInfoItem> Items
+        public ObservableCollection<ThreatInfoItem> Items
         {
             get { return _items; }
             set
@@ -340,6 +340,8 @@ namespace APTAT.Application.Models
         public ThreatInfoItem()
         {
             StatusMessage = "Initializing...";
+
+            _items = new ObservableCollection<ThreatInfoItem>();
         }
 
         public ThreatInfoItem(DeploymentTarget deploymentTarget) : this()

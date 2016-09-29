@@ -140,7 +140,7 @@
 
          <telerik:GridViewColumn
              CellTemplateSelector="{StaticResource SizeTemplateSelector}"
-             SortMemberPath="Size"
+             
              IsFilterable="False"
              Header="Size"
              TextAlignment="Right"
@@ -148,7 +148,7 @@
 
          <telerik:GridViewColumn
              CellTemplateSelector="{StaticResource VerdictTemplateSelector}"
-             SortMemberPath="ValkyrieAnalysisResult.VerdictString"
+             
              IsFilterable="False"
              Header="Verdict"
              TextAlignment="Left"
@@ -156,7 +156,7 @@
 
          <telerik:GridViewColumn
              CellTemplateSelector="{StaticResource WhiteListedTemplateSelector}"
-             SortMemberPath="ValkyrieAnalysisResult.IsWhiteListed"
+             
              IsFilterable="False"
              Header="Trusted Vendor"
              TextAlignment="Center"

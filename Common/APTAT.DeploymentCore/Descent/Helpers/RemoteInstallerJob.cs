@@ -135,7 +135,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     if (status == DescentStatus.status_error)
                         formattedText = new FormattedText(new ResourceText("null", "Failed: {0}"), response);
                     else
-                        formattedText = new FormattedText(new ResourceText("null", "Failed: {0}. {1}"), shortMessage, response);
+                        formattedText = new FormattedText(new ResourceText("null", "Failed: {0} {1}"), shortMessage, response);
                     _changeTrackingSubSystem.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, new DescentProgressItem
                         (_computer.Uid, _computer.Name, QueryResult.OperationUid, formattedText, 100, false, true)), false);
 

@@ -928,7 +928,8 @@
                             <ColumnDefinition x:Name="ScrollBarColumn" MinWidth="0" Width="0"/>
                         </Grid.ColumnDefinitions>
                         <Border x:Name="PART_FrozenColumnsPreview" Grid.Row="1" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Stretch" Grid.RowSpan="4" Width="5"/>
-                        <grid:GridViewScrollViewer x:Name="PART_ItemsScrollViewer" Background="Transparent" FocusVisualStyle="{x:Null}"
+                        <Border Background="{StaticResource StrongBrush}" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" Grid.RowSpan="2"  Margin="0 31 0 0"/>
+                        <grid:GridViewScrollViewer x:Name="PART_ItemsScrollViewer" Background="White" FocusVisualStyle="{x:Null}"
 									   CanContentScroll="True" Template="{StaticResource GridViewScrollViewerTemplate}" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2">
                             <grid:GridViewScrollViewer.HeaderRow>
                                 <grid:GridViewHeaderRow x:Name="PART_HeaderRow" IndentLevel="{TemplateBinding GroupCount}" />
@@ -938,7 +939,8 @@
                             </grid:GridViewScrollViewer.NewRow>
                             <treelist:TreeListViewVirtualizingPanel x:Name="PART_GridViewVirtualizingPanel" VirtualizingStackPanel.VirtualizationMode="Recycling"/>
                         </grid:GridViewScrollViewer>
-                        <Border Background="{StaticResource StrongBrush}" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0 31 0 0"/>
+                        
+
                         <grid:ScrollPositionIndicator x:Name="PART_ScrollPositionIndicator" Margin="0,0,28,0"  IsHitTestVisible="False" HorizontalAlignment="Right"  Grid.Row="2" Grid.ColumnSpan="2" Visibility="Collapsed"
 												  ContentTemplate="{TemplateBinding ScrollPositionIndicatorTemplate}" />
 

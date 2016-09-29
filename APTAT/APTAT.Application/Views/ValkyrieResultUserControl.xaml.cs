@@ -6,6 +6,8 @@ using APTAT.Core;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 using APTAT.Application.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace APTAT.Application
 {
@@ -86,6 +88,34 @@ namespace APTAT.Application
                     details.ShowDialog();
                 }
             }
+        }
+
+        IEnumerable<FileResult> _items;
+        private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
+        {
+            if (e.DataControl.ItemsSource == null || e.Column.SortMemberPath != "Size")
+                return;
+
+            if (_items == null)
+                _items = e.DataControl.ItemsSource as IEnumerable<FileResult>;
+
+            if (e.OldSortingState == SortingState.None)
+            {
+                e.NewSortingState = SortingState.Ascending;
+                e.DataControl.ItemsSource = _items.OrderBy(_ => _.Size);
+            }
+            else if (e.OldSortingState == SortingState.Ascending)
+            {
+                e.NewSortingState = SortingState.Descending;
+                e.DataControl.ItemsSource = _items.OrderByDescending(_ => _.Size);
+            }
+            else
+            {
+                e.NewSortingState = SortingState.None;
+                e.DataControl.ItemsSource = _items;
+            }
+
+            e.Cancel = true;
         }
 
     }

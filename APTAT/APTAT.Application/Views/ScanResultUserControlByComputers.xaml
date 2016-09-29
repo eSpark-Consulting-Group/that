@@ -20,11 +20,12 @@
                                  IsReadOnly="True" ItemsSource="{Binding Computers}"   
                                  RowStyle="{StaticResource rowStyleCompleted}"
                                  TabIndex="1"
+                                 
                                  AutoExpandItems="False"
                                  RowHeight="50"
                                  HierarchyIndent="14"
                                  Validation.ErrorTemplate="{x:Null}"
-                                 DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
+                                 
                                  EnableRowVirtualization="True" IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred"
                                  MouseDoubleClick="OnTreeDoubleClick" FocusVisualStyle="{x:Null}">
 
@@ -115,18 +116,18 @@
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
-                    IsFilterable="True"
+                    IsFilterable="False"
                     ShowFilterButton="False"
-                    FilterMemberPath="ScanStatus"
+                    
                     ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="Name"
-                    
+
                     Width="700*" 
                  SortMemberPath="NameAndIpAddress" />
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource SizeColumn}"
-                    SortMemberPath="Size"
+                    
                     IsFilterable="False"
                     Header="Size"  
                     TextAlignment="Right"

@@ -8,6 +8,7 @@ using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 using APTAT.Application.Extensions;
 
+
 namespace APTAT.Application
 {
     /// <summary>
@@ -121,16 +122,7 @@ namespace APTAT.Application
             }
         }
 
-        private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
-        {
-            e.ItemsSource = new[]
-            {
-                new ScanStatus(ScanStatusEnum.InProgress),
-                new ScanStatus(ScanStatusEnum.Canceled),
-                new ScanStatus(ScanStatusEnum.Completed),
-                new ScanStatus(ScanStatusEnum.Failed),
-                new ScanStatus(ScanStatusEnum.Offline)
-            };
-        }
+
+
     }
 }

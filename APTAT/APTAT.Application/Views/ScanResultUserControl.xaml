@@ -21,6 +21,7 @@
                                  RowStyle="{StaticResource rowStyleCompleted}"
                                  TabIndex="1"
                                  AutoExpandItems="False"
+                                 Sorting="treeList_Sorting"
                                  RowHeight="50"
                                  HierarchyIndent="14"
                                  Validation.ErrorTemplate="{x:Null}"
@@ -81,7 +82,7 @@
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
-                    IsFilterable="True"
+                    IsFilterable="False"
                     ShowFilterButton="False"
                     ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"

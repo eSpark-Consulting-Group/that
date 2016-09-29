@@ -1250,14 +1250,13 @@ namespace APTAT.Application.Models
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-                var items = new Collection<ThreatInfoItem>();
-
+                
                 if (e.ScanResult.BadFiles != null)
                 {
                     foreach (var badFile in e.ScanResult.BadFiles)
                     {
                         var item = new ThreatInfoItem(badFile);
-                        items.Add(item);
+                        parentItem.Items.Add(item);
                         item = new ThreatInfoItem(badFile);
 
                         var exist = _cache.FirstOrDefault(_ => 
@@ -1277,7 +1276,7 @@ namespace APTAT.Application.Models
                     }
                 }
 
-                parentItem.Items = items;
+                
                 parentItem.ScanStage = parentItem.ScanStage;
             }
         }

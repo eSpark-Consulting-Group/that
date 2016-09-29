@@ -26,6 +26,7 @@
                                  AutoExpandItems="False"
                                  RowHeight="50"
                                  HierarchyIndent="14"
+                                 Sorting="treeList_Sorting"
                                 IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred"
                                  EnableRowVirtualization="True"
                                  MouseDoubleClick="OnTreeDoubleClick" 
