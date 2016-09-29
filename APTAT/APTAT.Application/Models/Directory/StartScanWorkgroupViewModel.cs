@@ -10,6 +10,7 @@ using APTAT.DeploymentCore.Directory;
 using System.Threading.Tasks;
 using APTAT.Common;
 using System.Diagnostics;
+using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application.Models
 {
@@ -156,12 +157,9 @@ namespace APTAT.Application.Models
                     Error = "Please Specify Workgroup";
                     return;
                 }
-
-
-
+                
                 IsBusy = true;
-
-
+                
                 if (EnumerateWorkgroups)
                 {
                     var groups = await TryAction(GetWorkgroups());
@@ -194,6 +192,23 @@ namespace APTAT.Application.Models
                     success();
                 }
             }
+            else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
+            {
+                var parent = ParentViewModel as IMainViewModel;
+                if (parent != null)
+                {
+                    string errorMessage;
+                    if (parent.ValidateCredentials(out errorMessage))
+                    {
+                        success();
+                    }
+                    else Error = errorMessage;
+                }
+                else
+                {
+                    success();
+                }
+            }
             else
             {
                 
@@ -211,7 +226,7 @@ namespace APTAT.Application.Models
 
         protected override void OnStepChanged()
         {
-
+            Error = null;
         }
 
         private void OnGetWorkgroupCompleted(Object sender, GetDirectoryItemsEventArgs e)

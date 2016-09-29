@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using APTAT.Application.Extensions;
+using APTAT.Application.Models.ModelBase;
 using APTAT.Application.Services;
 using APTAT.Core.Descent;
 using APTAT.DeploymentCore.Directory;
@@ -216,7 +217,21 @@ namespace APTAT.Application.Models.Directory
                         Type = ETargetsDiscovererType.NetworkAddresses,
                         Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
                     });
-                success();
+                var parent = ParentViewModel as IMainViewModel;
+                if (parent != null)
+                {
+                    string errorMessage;
+                    if (!parent.ValidateCredentials(out errorMessage))
+                    {
+                        Error = errorMessage;
+                    }
+                    else
+                        success();
+                }
+                else
+                {
+                    success();
+                }
 
             }
             else

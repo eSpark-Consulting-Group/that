@@ -145,6 +145,7 @@
     <Compile Include="Models\Apt\CustomScanOptions.cs" />
     <Compile Include="Models\Directory\StartScanLocalViewModel.cs" />
     <Compile Include="Models\FolderItem.cs" />
+    <Compile Include="Models\ModelBase\IMainViewModel.cs" />
     <Compile Include="Models\ModelBase\ISelectableItem.cs" />
     <Compile Include="Services\FileBrowserService.cs" />
     <Compile Include="Services\GetDomainNameResponse.cs" />

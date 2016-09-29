@@ -6,6 +6,7 @@ using Telerik.Windows.Controls;
 using APTAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Application.Messages;
+using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application.Models
 {
@@ -171,6 +172,23 @@ namespace APTAT.Application.Models
                     //_storage.SetValue(KnownKeys.Domain, _domainController);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
+                    success();
+                }
+            }
+            else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
+            {
+                var parent = ParentViewModel as IMainViewModel;
+                if (parent != null)
+                {
+                    string errorMessage;
+                    if (parent.ValidateCredentials(out errorMessage))
+                    {
+                        success();
+                    }
+                    else Error = errorMessage;
+                }
+                else
+                {
                     success();
                 }
             }

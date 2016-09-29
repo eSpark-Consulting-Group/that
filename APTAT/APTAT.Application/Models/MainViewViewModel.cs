@@ -19,10 +19,11 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
 using APTAT.Application.Models.Apt;
+using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application.Models
 {
-    public sealed class MainViewViewModel : ViewModel
+    public sealed class MainViewViewModel : ViewModel, IMainViewModel
     {
         public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
@@ -1326,6 +1327,22 @@ namespace APTAT.Application.Models
 
 
             LogHelper.Trace(TraceEventType.Error, $"TryAction error: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+        }
+
+        public bool ValidateCredentials(out string errorMessage)
+        {
+            errorMessage = null;
+            if (Password == null)
+            {
+                errorMessage = "Please specify Password.";
+                return false;
+            }
+            else if (Login == null)
+            {
+                errorMessage = "Please specify Login.";
+                return false;
+            }
+            else return true;
         }
     }
 }
