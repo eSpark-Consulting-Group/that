@@ -302,7 +302,7 @@ namespace APTAT.Application.Services
             }
             else
             {
-                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null, e.Error);
+                GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null,tuple.Item3, e.Error);
                 Action action = () =>
                 {
                     GetWorkgroupCompleted?.Invoke(this, args);
@@ -382,6 +382,7 @@ namespace APTAT.Application.Services
                         deploymentTarget.IsGroup = FromDirectoryItemType(directoryItem.Type) == DomainEntryType.Root;
                         deploymentTarget.SmbName = item.Name;
                         deploymentTarget.Name = item.Name;
+                        deploymentTarget.Uid = item.TargetUid;
                         collection.Add(deploymentTarget);
                     }
                     else

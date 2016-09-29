@@ -281,6 +281,7 @@ namespace DDT.Application.Services
                         deploymentTarget.IsGroup = FromDirectoryItemType(directoryItem.Type) == DomainEntryType.Root;
                         deploymentTarget.SmbName = item.Name;
                         deploymentTarget.Name = item.Name;
+                        deploymentTarget.Uid = item.TargetUid;
                         collection.Add(deploymentTarget);
                     }
                     else
