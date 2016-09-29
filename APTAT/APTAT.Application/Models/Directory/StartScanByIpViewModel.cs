@@ -253,27 +253,9 @@ namespace APTAT.Application.Models.Directory
 
 
         private void CheckIfCanUseCurrentCredentials()
-        {            
+        {
             var parentView = ((MainViewViewModel)base.ParentViewModel);
-            parentView.UseCurrentCredentials = false;
-         
-
-            if (parentView.HasCurrentDomainName)
-            {
-                parentView.UseCurrentCredentials = true;
-            }
-            else
-            {
-                if (IsOnlyLocalComputer())
-                {
-                    parentView.UseCurrentCredentials = true;
-                    parentView.UseCurrentDomainForDeploy = true;
-                }
-                else
-                {
-                    parentView.UseCurrentDomainForDeploy = false;
-                }
-            }
+            parentView.UseCurrentCredentials = IsOnlyLocalComputer();
         }
 
         private bool IsOnlyLocalComputer()

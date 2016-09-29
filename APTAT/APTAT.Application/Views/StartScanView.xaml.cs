@@ -103,19 +103,13 @@ namespace APTAT.Application
         private void OnActiveDirectoryClick(object sender, RoutedEventArgs e)
         {
             
-            SetCurrentViewModel(_scanDomainViewModel);
-            var parent = (MainViewViewModel)_currentViewModel.ParentViewModel;
-            parent.UseCurrentCredentials = true;
-            parent.UseCurrentDomainForDeploy = false;
+            SetCurrentViewModel(_scanDomainViewModel);            
             UpdateViewVisibility();
         }
 
         private void OnWorkgroupClick(object sender, RoutedEventArgs e)
         {
-            SetCurrentViewModel(_scanWorkgroupViewModel);
-            var parent = (MainViewViewModel)_currentViewModel.ParentViewModel;
-            parent.UseCurrentCredentials = true;
-            parent.UseCurrentDomainForDeploy = false;
+            SetCurrentViewModel(_scanWorkgroupViewModel);            
             UpdateViewVisibility();
         }
 

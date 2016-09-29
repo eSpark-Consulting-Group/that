@@ -79,18 +79,20 @@ namespace APTAT.Application.Models
         public string CurrentDomainName { get; set; }
 
         public bool HasCurrentDomainName
-        {  
-           get { return !string.IsNullOrEmpty(CurrentDomainName); }
+        {
+            get { return !string.IsNullOrEmpty(CurrentDomainName); }
         }
 
         private bool _useCurrentCredentials;
         public bool UseCurrentCredentials
         {
-            get { return _useCurrentCredentials; }
+            get { return _useCurrentCredentials || HasCurrentDomainName; }
 
             set
             {
                 _useCurrentCredentials = value;
+                UseCurrentDomainForDeploy = UseCurrentCredentials;
+
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
             }
         }
@@ -182,12 +184,12 @@ namespace APTAT.Application.Models
             {
                 CurrentDomainName = $"Use Current Domain Credentials ({CurrentDomainName})";
                 UseCurrentDomainForDeploy = true;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
             }
             else
             {
                 var user = _targetsDiscoveryService.GetLoggedInUser();
                 CurrentDomainName = $"Use Current User Credentials ({user})";
-                UseCurrentDomainForDeploy = true;
             }
 
             RaisePropertyChanged(nameof(CurrentDomainName));
@@ -275,11 +277,11 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsValkyrieScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
 
-                App.Current.Dispatcher.BeginInvoke((Action) delegate 
-                { 
-                    StartScanCommand.InvalidateCanExecute();
-                    StopScanCommand.InvalidateCanExecute();
-                });
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+               {
+                   StartScanCommand.InvalidateCanExecute();
+                   StopScanCommand.InvalidateCanExecute();
+               });
 
             }
         }
@@ -354,7 +356,7 @@ namespace APTAT.Application.Models
                 string header = "Canceling...";
                 if (CancelInProgress)
                     return String.Format("{0} ({1})", commonHeaderName, header);
-                
+
                 if (IsScanInProgress == true)
                 {
                     if (Percentage == 0)
@@ -604,8 +606,8 @@ namespace APTAT.Application.Models
         public DelegateCommand SelectCommand { get; private set; }
         public DelegateCommand SelectValkyrieCommand { get; private set; }
 
-        
-        public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService, 
+
+        public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
             IAptService aptService, IStorageService storage, IWmiService wmiService)
         {
             _aptService = aptService;
@@ -623,7 +625,7 @@ namespace APTAT.Application.Models
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan), 
+                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
                 o => StopScanPredicate);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
@@ -674,14 +676,14 @@ namespace APTAT.Application.Models
                     IsScanInProgress = null;
 
 
-                   
-                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, 
-                        _storage.ContainsKey(KnownKeys.CustomScanOptions) ? null : Login, 
+
+                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets,
+                        _storage.ContainsKey(KnownKeys.CustomScanOptions) ? null : Login,
                         _storage.ContainsKey(KnownKeys.CustomScanOptions) ? null : Password, this);
 
                 }
             }
-        }        
+        }
 
         private void InvokeStopScan(Object arg)
         {
@@ -745,7 +747,7 @@ namespace APTAT.Application.Models
                         NetworkCredential cred = new NetworkCredential(window.LoginTextBox.Text,
                             window.PasswordBox.Password);
                         Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
- 
+
                         BeginValkyrieAnalysis(cred);
                         return;
                     }
@@ -874,7 +876,7 @@ namespace APTAT.Application.Models
                         _unknownFilesCount += file.Computers.Count;
                     else if (file.IsMalware)
                         _malwareFilesCount += file.Computers.Count;
-                    
+
                     RaisePropertyChanged("UnknownFilesCount");
                     RaisePropertyChanged("MalwareFilesCount");
 
@@ -937,7 +939,7 @@ namespace APTAT.Application.Models
                         if (exist != null && exist.Failed)
                             continue;
                     }
-                    
+
                     var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
                     if (comp != null)
                         comp.MergeFile(result);
@@ -1009,7 +1011,7 @@ namespace APTAT.Application.Models
 
             _cacheComputers = new Collection<ThreatInfoItem>(items);
             Computers = new Collection<ThreatInfoItem>(_cacheComputers);
-            
+
 
             foreach (var item in _cacheComputers)
             {
@@ -1021,7 +1023,7 @@ namespace APTAT.Application.Models
 
             if (_onlineItems.Length > 0)
             {
-                
+
 
                 ScanKind scanKind = ScanKind.Quick;
                 if (IsQuickScan)
@@ -1031,7 +1033,7 @@ namespace APTAT.Application.Models
                 else
                 {
                     scanKind = ScanKind.Full;
-                }         
+                }
 
                 ScanOptions options;
                 CustomScanOptions customScanOptions = null;
@@ -1075,7 +1077,7 @@ namespace APTAT.Application.Models
                 _scanIteratorTimer.Stop();
 
             CancelInProgress = false;
-            
+
             IsScanInProgress = false;
             IsReportEnabled = enableReports;
 
@@ -1194,7 +1196,7 @@ namespace APTAT.Application.Models
 
                 if (infoItem.ScanStage == ScanStage.OperationCompleted)
                     scanned++;
-                
+
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
                 failedToAnalyzeFiles += infoItem.FailedToAnalyzeCount;
@@ -1236,7 +1238,7 @@ namespace APTAT.Application.Models
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-                
+
                 if (e.ScanResult.BadFiles != null)
                 {
                     foreach (var badFile in e.ScanResult.BadFiles)
@@ -1245,10 +1247,16 @@ namespace APTAT.Application.Models
                         parentItem.Items.Add(item);
                         item = new ThreatInfoItem(badFile);
 
-                        var exist = _cache.FirstOrDefault(_ => 
+                        var exist = _cache.FirstOrDefault(_ =>
                             _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown && _.IsMalware == item.IsMalware);
-                        var comp = new ThreatInfoItem { IpAddress = parentItem.IpAddress, ComputerGuid = e.ScanResult.TargetUid, 
-                            Name = parentItem.Name, ShortName = item.Name, IsRootItem = true };
+                        var comp = new ThreatInfoItem
+                        {
+                            IpAddress = parentItem.IpAddress,
+                            ComputerGuid = e.ScanResult.TargetUid,
+                            Name = parentItem.Name,
+                            ShortName = item.Name,
+                            IsRootItem = true
+                        };
 
                         if (exist != null)
                             exist.Computers.Add(comp);
@@ -1262,7 +1270,7 @@ namespace APTAT.Application.Models
                     }
                 }
 
-                
+
                 parentItem.ScanStage = parentItem.ScanStage;
             }
         }
