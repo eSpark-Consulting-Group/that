@@ -1,5 +1,6 @@
 ﻿using System;
 using APTAT.DeploymentCore.Facade.Descent.Commands;
+using APTAT.Common;
 
 namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
 {      
@@ -30,8 +31,19 @@ namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
 
         public System.Net.IPAddress GetIPAddress()
         {
-            if (this.IPAddress == null) return null;
-            System.Net.IPAddress address = System.Net.IPAddress.Parse(this.IPAddress);
+            LogHelper.Trace(System.Diagnostics.TraceEventType.Information, "GetIPAddress was called  IP" + (String.IsNullOrWhiteSpace(this.IPAddress)? "Empty": this.IPAddress));
+
+            if (String.IsNullOrWhiteSpace(this.IPAddress))
+            {
+                LogHelper.Trace(System.Diagnostics.TraceEventType.Warning, this.IPAddress + " IP Address is empty");
+                return null;
+            }
+            System.Net.IPAddress address;
+            System.Net.IPAddress.TryParse( this.IPAddress, out address);
+            if (address == null)
+            {
+                LogHelper.Trace(System.Diagnostics.TraceEventType.Warning, this.IPAddress + " is not correct IP Address format");
+            }
             return address;
         }
         public SystemKind? SystemKind { get; set; }
