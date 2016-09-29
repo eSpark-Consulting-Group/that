@@ -317,12 +317,12 @@
             </DockPanel >
         </Border>
 
-        <Grid Grid.Row="3"  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" HorizontalAlignment="Right" Margin="0 -1 10 0">
-            <Border  Background="{StaticResource StrongBrush}"  Height="35"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid Grid.Row="3"  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" HorizontalAlignment="Right" Margin="0 -2 10 0">
+            <Border  Background="Transparent"  Height="35"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
-                       x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFFCE2A1" FontSize="16">
+                       x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFF7E78C" FontSize="16">
                        Please click here to see the detailed results
             </Hyperlink>
                 </TextBlock>

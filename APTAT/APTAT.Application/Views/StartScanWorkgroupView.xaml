@@ -69,7 +69,7 @@
                 <Path Data="F1M638,227C638,226.448,638.447,226,639,226C639.553,226,640,226.448,640,227C640,227.552,639.553,228,639,228C638.447,228,638,227.552,638,227" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="93" Canvas.Top="49"/>
                 <Path Data="F1M638,224C638,223.448,638.447,223,639,223C639.553,223,640,223.448,640,224C640,224.552,639.553,225,639,225C638.447,225,638,224.552,638,224" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="93" Canvas.Top="46"/>
             </Canvas>
-            <TextBlock Text="Workgroup Credentials" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+            <TextBlock Text="Specify Workgroup" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
         <Grid  x:Name="txtSelectComputers" Grid.Row="1" Margin="30,0,0,0" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
