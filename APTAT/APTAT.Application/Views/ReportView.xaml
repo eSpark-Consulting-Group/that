@@ -70,7 +70,7 @@
 
                     <telerik:RadToolBarSeparator/>
 
-                    <telerik:RadButton AutomationProperties.AutomationId="PageUpButton"
+                    <!--<telerik:RadButton AutomationProperties.AutomationId="PageUpButton"
                                        x:Name="btnPageUp" Command="{Binding PageUpCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2" 
                                        Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False">
                         <ToolTipService.ToolTip>
@@ -141,7 +141,7 @@
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/text-selection.png" Stretch="None" />
                     </telerik:RadToggleButton>
 
-                    <telerik:RadToolBarSeparator/>
+                    <telerik:RadToolBarSeparator/>-->
 
                     <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FindTextBox"
                                                  Margin="2" x:Name="tbFind" KeyDown="TbFindKeyDown" Width="100">

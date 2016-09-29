@@ -1,4 +1,5 @@
-﻿using APTAT.Application.Models;
+﻿using APTAT.Application.Extensions;
+using APTAT.Application.Models;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -15,7 +16,12 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
+            Loaded += ScanCompletedWindow_Loaded;
+        }
 
+        private void ScanCompletedWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            yes.DelayedFocus();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

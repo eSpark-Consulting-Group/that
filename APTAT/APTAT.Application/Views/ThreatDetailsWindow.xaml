@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
         Title="DETAILS"
         MaxWidth="850" 
-       MaxHeight="400"
+       MaxHeight="420"
         MinWidth="915" 
         
         WindowStyle="None"

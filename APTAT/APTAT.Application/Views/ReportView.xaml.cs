@@ -38,19 +38,19 @@ namespace APTAT.Application
         private void OnUnloaded(Object sender, RoutedEventArgs e)
         {
             btnPrintPdfDocument.Command = null;
-            btnPageDown.Command = null;
-            btnPageUp.Command = null;
+            //btnPageDown.Command = null;
+            //btnPageUp.Command = null;
             btnNext.Command = null;
             btnPrev.Command = null;
-            btnZoomIn.Command = null;
-            btnZoomOut.Command = null;
+            //btnZoomIn.Command = null;
+            //btnZoomOut.Command = null;
             tbFind.Text = null;
-            tbPagesCount.Text = null;
+            //tbPagesCount.Text = null;
 
-            BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
-            BindingOperations.ClearBinding(cbScale, RadComboBox.TextProperty);
-            BindingOperations.ClearBinding(btnTogglePan, RadToggleButton.IsCheckedProperty);
-            BindingOperations.ClearBinding(btnToggleTextSelection, RadToggleButton.IsCheckedProperty);
+            //BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
+           // BindingOperations.ClearBinding(cbScale, RadComboBox.TextProperty);
+           // BindingOperations.ClearBinding(btnTogglePan, RadToggleButton.IsCheckedProperty);
+            //BindingOperations.ClearBinding(btnToggleTextSelection, RadToggleButton.IsCheckedProperty);
 
             _viewModel.ReportOpened -= OnReportOpened;
             pdfViewer.DocumentSource = null;

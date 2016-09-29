@@ -288,17 +288,7 @@
 
         </Grid>
 
-        <Grid Grid.Row="2"  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-            <Border  Background="{StaticResource StrongBrush}"  Height="35"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
-
-                <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
-                       x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#B1F984" FontSize="16">
-                       Please click here to see the detailed results
-            </Hyperlink>
-                </TextBlock>
-            </Border>
-        </Grid>
+        
         
 
         <Border Grid.Row="3"  Height="35" Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
@@ -326,6 +316,18 @@
 
             </DockPanel >
         </Border>
+
+        <Grid Grid.Row="3"  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" HorizontalAlignment="Right" Margin="0 -1 10 0">
+            <Border  Background="{StaticResource StrongBrush}"  Height="35"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
+                       x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFFCE2A1" FontSize="16">
+                       Please click here to see the detailed results
+            </Hyperlink>
+                </TextBlock>
+            </Border>
+        </Grid>
 
 
     </Grid>

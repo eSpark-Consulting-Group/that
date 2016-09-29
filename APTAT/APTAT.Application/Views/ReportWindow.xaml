@@ -1,7 +1,7 @@
 ﻿<Window x:Class="APTAT.Application.ReportWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
-        MinHeight="300" MinWidth="640"  Height="768" Width="1024"  WindowStyle="None"
+        MinHeight="760" MinWidth="1015"  Height="760" Width="1015"  WindowStyle="None"
         
         AllowsTransparency="True" Background="Transparent" 
         ResizeMode="CanResizeWithGrip" MouseLeftButtonDown="Window_MouseLeftButtonDown"

@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:APTAT.Application"
         xmlns:converters="clr-namespace:APTAT.Application.Converters"
         x:Class="APTAT.Application.ScanCompletedWindow"
-          Width="400"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+          Width="410"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent"  WindowStyle="None"
             SizeToContent="Height"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
@@ -34,7 +34,7 @@
                                         <Button Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                                     </StackPanel>
 
-                                    <TextBlock Text="Scan Completed" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock Text="Scan Results" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
                             <Grid Grid.Row="1" Grid.ColumnSpan="2" Background="White">
@@ -46,34 +46,34 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Margin="20,15,10,10">
                                     <Grid Margin="0 5 0 0">
-                                        <Canvas x:Name="SuccessfulScanIcon" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Opacity="{Binding IsProtected, Converter={StaticResource BoolToOpacityConverter}}">
-                                            <Path Data="M17.561001,7.7449989 L19,9.1839991 11.954002,16.230997 11.929003,16.255997 6.9540048,11.281999 8.3690042,9.8669987 11.904003,13.401998 z M12,1.9999999 C6.4779968,2 2,6.4779968 1.9999999,12 2,17.522003 6.4779968,22 12,22 17.522003,22 22,17.522003 22,12 22,6.4779968 17.522003,2 12,1.9999999 z M12,0 C18.626999,0 24,5.3730011 24,12 24,18.626999 18.626999,24 12,24 5.3730011,24 0,18.626999 0,12 0,5.3730011 5.3730011,0 12,0 z" Fill="#FF2C8841" Height="40" Stretch="Fill" Width="40"/>
 
-                                        </Canvas>
+                                        <Path SnapsToDevicePixels="True" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Opacity="{Binding IsProtected, Converter={StaticResource BoolToOpacityConverter}}" Data="M17.561001,7.7449989 L19,9.1839991 11.954002,16.230997 11.929003,16.255997 6.9540048,11.281999 8.3690042,9.8669987 11.904003,13.401998 z M12,1.9999999 C6.4779968,2 2,6.4779968 1.9999999,12 2,17.522003 6.4779968,22 12,22 17.522003,22 22,17.522003 22,12 22,6.4779968 17.522003,2 12,1.9999999 z M12,0 C18.626999,0 24,5.3730011 24,12 24,18.626999 18.626999,24 12,24 5.3730011,24 0,18.626999 0,12 0,5.3730011 5.3730011,0 12,0 z" Fill="#FF2C8841" Stretch="Fill" />
+                                        <Path SnapsToDevicePixels="True" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Opacity="{Binding IsProtected, Converter={StaticResource InverseBoolToOpacityConverter}}" Data="M12.000004,15 C12.552004,15 13.000004,15.448 13.000004,16 13.000004,16.552 12.552004,17 12.000004,17 11.447003,17 11.000004,16.552 11.000004,16 11.000004,15.448 11.447003,15 12.000004,15 z M11.000002,7.0000019 L13.000002,7.0000019 13.000002,14.000002 11.000002,14.000002 z M12,1.9999999 C6.4779968,2 2,6.4779968 1.9999999,12 2,17.522003 6.4779968,22 12,22 17.522003,22 22,17.522003 22,12 22,6.4779968 17.522003,2 12,1.9999999 z M12,0 C18.628006,0 24,5.3730011 24,12 24,18.626999 18.628006,24 12,24 5.3730011,24 0,18.626999 0,12 0,5.3730011 5.3730011,0 12,0 z" Fill="#FFD84332" Stretch="Fill" />
 
-                                        <Canvas x:Name="MalwaresFoundScanIcon" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Opacity="{Binding IsProtected, Converter={StaticResource InverseBoolToOpacityConverter}}">
-                                            <Path Data="M12.000004,15 C12.552004,15 13.000004,15.448 13.000004,16 13.000004,16.552 12.552004,17 12.000004,17 11.447003,17 11.000004,16.552 11.000004,16 11.000004,15.448 11.447003,15 12.000004,15 z M11.000002,7.0000019 L13.000002,7.0000019 13.000002,14.000002 11.000002,14.000002 z M12,1.9999999 C6.4779968,2 2,6.4779968 1.9999999,12 2,17.522003 6.4779968,22 12,22 17.522003,22 22,17.522003 22,12 22,6.4779968 17.522003,2 12,1.9999999 z M12,0 C18.628006,0 24,5.3730011 24,12 24,18.626999 18.628006,24 12,24 5.3730011,24 0,18.626999 0,12 0,5.3730011 5.3730011,0 12,0 z" Fill="#FFD84332" Height="40" Stretch="Fill" Width="40"/>
-
-                                        </Canvas>
                                     </Grid>
 
-                                    <TextBlock AutomationProperties.AutomationId="ScanCompletedTextBlock" Visibility="{Binding IsUnknownFound, Converter={StaticResource InverseBoolToVisibilityConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,0,0,5" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" Width="300">
-                        <Run Text="Scan Completed"/>
-                                    </TextBlock>
-
-                                    <TextBlock Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,0,0,5" Grid.Row="0" FontSize="21"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" Width="300">
-                        <Run Text="Scan Completed. Do you want to analyse Unknown programs with Valkyrie?" />
-                                    </TextBlock>
+                                    <TextBlock Text="Scan completed"  
+                           Style="{StaticResource HeaderTextBlock}"
+                           FontSize="20" 
+                           Foreground="#555" 
+                           FontFamily="Segoe UI"
+                           TextWrapping="Wrap" HorizontalAlignment="Center"
+                           TextAlignment="Center" VerticalAlignment="Center" Margin="18,0,0,0"/>
                                 </StackPanel>
+                                <TextBlock Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="78,0,0,20" Grid.Row="1" FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" >
+                        <Run Text="Do you want to analyse unknown files with Valkyrie?" />
+                                        </TextBlock>
 
-                                <TextBlock AutomationProperties.AutomationId="StatisticsTextBlock" x:Name="Text" HorizontalAlignment="Center" FontSize="14"  Margin="30, 10" Grid.Row="1" LineHeight="28" Foreground="#555"/>
+
+
+                                <TextBlock AutomationProperties.AutomationId="StatisticsTextBlock" x:Name="Text" FontSize="14"  Margin="78,0,0,20" Grid.Row="2" LineHeight="28" Foreground="#555"/>
 
 
 
                                 <StackPanel AutomationProperties.AutomationId="ToolBarPanel" HorizontalAlignment="Center" Grid.Row="3" Margin="0,10,0,0" Orientation="Horizontal">
-                                    <Button AutomationProperties.AutomationId="OkButton" Content="OK"  Margin="5,5,5,15" Click="Button_Click"  
+                                    <Button AutomationProperties.AutomationId="OkButton" Content="Yes" x:Name="yes" Margin="5,5,5,15" Click="Button_Click"  
                             Tag="{Binding IsUnknownFound, Mode=OneWay}"/>
-                                    <Button AutomationProperties.AutomationId="CancelButton" Content="Cancel"  Margin="5,5,5,15" Click="CancelButton_Click"  
+                                    <Button AutomationProperties.AutomationId="CancelButton" Content="No"  Margin="5,5,5,15" Click="CancelButton_Click"  
                             Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
                                 </StackPanel>
                             </Grid>
