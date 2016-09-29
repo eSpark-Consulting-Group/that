@@ -478,8 +478,15 @@ namespace APTAT.Application.Services
                 if (_networkHelper.IsLoopbackAddress(ip.FormattedText)) return true;
 
                 NetworkObserver observer = new NetworkObserver();
-
-                var host = Dns.GetHostEntry(ip.FormattedText);
+                IPHostEntry host;
+                try
+                {
+                    host = Dns.GetHostEntry(ip.FormattedText);
+                }
+                catch (SocketException ex)
+                {
+                    return false;
+                }
                 return host.HostName == hostInfo.HostName;
             }
             else

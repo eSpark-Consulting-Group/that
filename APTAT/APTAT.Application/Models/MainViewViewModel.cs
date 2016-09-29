@@ -80,8 +80,7 @@ namespace APTAT.Application.Models
 
         public bool HasCurrentDomainName
         {
-            //get { return !string.IsNullOrEmpty(CurrentDomainName); }
-            get { return false; }
+            get { return !string.IsNullOrEmpty(CurrentDomainName); }
         }
 
         private bool _useCurrentCredentials;
