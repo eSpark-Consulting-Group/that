@@ -28,6 +28,8 @@ namespace APTAT.Application.Services
 
         bool IsLocalAddress(IpAddressWrapper ipAddress);
 
+        bool IsLocalAddress(string name);
+
         string GetLoggedInUser();
     }
 }

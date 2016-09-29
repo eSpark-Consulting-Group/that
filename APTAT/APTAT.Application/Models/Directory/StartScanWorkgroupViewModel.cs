@@ -185,6 +185,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
+                    CheckIfCanUseCurrentCredentials();
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                    
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
@@ -230,6 +231,47 @@ namespace APTAT.Application.Models
             Error = null;
         }
 
+        private void CheckIfCanUseCurrentCredentials()
+        {
+            var parentView = ((MainViewViewModel)base.ParentViewModel);
+            parentView.UseCurrentCredentials = false;
+
+
+            if (parentView.HasCurrentDomainName)
+            {
+                parentView.UseCurrentCredentials = true;
+            }
+            else
+            {
+                if (IsOnlyLocalComputer())
+                {
+                    parentView.UseCurrentCredentials = true;
+                    parentView.UseCurrentDomainForDeploy = true;
+                }
+                else
+                {
+                    parentView.UseCurrentDomainForDeploy = false;
+                }
+            }
+        }
+
+        private bool IsOnlyLocalComputer()
+        {
+
+            bool onlyLocal = true;
+            foreach (var address in _checkedItems)
+            {
+                var depItem = (DirectoryItem)address;
+                if (depItem.Type == DirectoryItemType.Root) continue;
+                if (!_targetsDiscoveryService.IsLocalAddress(depItem.Name))
+                {
+                    onlyLocal = false;
+                    break;
+                }
+            }
+
+            return onlyLocal;
+        }
         private void OnGetWorkgroupCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
             OperationContext context = (OperationContext)e.UserState;

@@ -200,7 +200,12 @@ namespace APTAT.Application.Models.Directory
 
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
+
+                CheckIfCanUseCurrentCredentials();
+
+
                 _targetsDiscoveryService.GetByIpAddresses(IpAddresses, new OperationContext { Success = success, UserState = this });
+
             }
             else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
             {
@@ -245,6 +250,47 @@ namespace APTAT.Application.Models.Directory
             }
         }
 
+
+
+        private void CheckIfCanUseCurrentCredentials()
+        {            
+            var parentView = ((MainViewViewModel)base.ParentViewModel);
+            parentView.UseCurrentCredentials = false;
+         
+
+            if (parentView.HasCurrentDomainName)
+            {
+                parentView.UseCurrentCredentials = true;
+            }
+            else
+            {
+                if (IsOnlyLocalComputer())
+                {
+                    parentView.UseCurrentCredentials = true;
+                    parentView.UseCurrentDomainForDeploy = true;
+                }
+                else
+                {
+                    parentView.UseCurrentDomainForDeploy = false;
+                }
+            }
+        }
+
+        private bool IsOnlyLocalComputer()
+        {
+            bool onlyLocal = true;
+            foreach (var address in IpAddresses)
+            {
+                if (!_targetsDiscoveryService.IsLocalAddress(address))
+                {
+                    onlyLocal = false;
+                    break;
+                }
+            }
+
+            return onlyLocal;
+        }
+
         private void OnGetByIpAddressesCompleted(Object sender, GetByIpAddressEventArgs e)
         {
             OperationContext context = (OperationContext)e.UserState;
@@ -257,6 +303,7 @@ namespace APTAT.Application.Models.Directory
             IsBusy = false;
             if (e.Exception == null)
             {
+
                 CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                 //_storage.SetValue(KnownKeys.TcpPort, _tcpPort);

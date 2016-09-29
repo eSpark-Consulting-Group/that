@@ -133,7 +133,7 @@ namespace APTAT.Application.Models
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
             if (previousStep == SelectDomain && context.IsForward(CurrentStepIndex))
-            {
+            {          
                 if (String.IsNullOrEmpty(DomainController) && !UseCurrentDomainForActiveDirectory)
                 {
                     Error = "Please Specify Domain Name";
@@ -166,6 +166,8 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
+                    CheckIfCanUseCurrentCredentials();
+                //    var item = (DeploymentItem)_checkedItems.ToArray()[0];
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                     //storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
                     //_storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
@@ -207,6 +209,43 @@ namespace APTAT.Application.Models
             }
         }
 
+        private void CheckIfCanUseCurrentCredentials()
+        {
+            var parentView = ((MainViewViewModel)base.ParentViewModel);
+            parentView.UseCurrentCredentials = false;
+            //parentView.UseCurrentDomainForDeploy = false;
+
+            if (parentView.HasCurrentDomainName)
+            {
+                parentView.UseCurrentCredentials = true;
+            }
+            else
+            {
+                if (IsOnlyLocalComputer())
+                {
+                    parentView.UseCurrentCredentials = true;
+                    parentView.UseCurrentDomainForDeploy = true;
+                }
+            }
+        }
+
+        private bool IsOnlyLocalComputer()
+        {
+            bool onlyLocal = true;
+            foreach (var address in _checkedItems)
+            {
+                var depItem = (DirectoryItem)address;
+                if (depItem.Type == DirectoryItemType.Root) return false;
+                if (!_targetsDiscoveryService.IsLocalAddress(depItem.Name))
+                {
+                    onlyLocal = false;
+                    break;
+                }
+            }
+
+            return onlyLocal;
+        }
+
         protected override void OnStepChanged()
         {
 
@@ -217,8 +256,8 @@ namespace APTAT.Application.Models
             base.InvokeViewLoaded(arg);
 
             var model = ParentViewModel as MainViewViewModel;
-            UseCurrentDomainForActiveDirectory = model.HasCurrentDomainName;
-
+            UseCurrentDomainForActiveDirectory =  model.HasCurrentDomainName;
+      //      this.ParentViewModel
 
             _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;

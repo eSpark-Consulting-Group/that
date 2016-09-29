@@ -26,7 +26,7 @@ namespace APTAT.Application.Services
         public TargetsDiscoveryService(ITargetsManager manager, INetworkObserver networkHelper)
         {
             _manager = manager;
-            _networkHelper = networkHelper;            
+            _networkHelper = networkHelper;
         }
 
         public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
@@ -79,7 +79,7 @@ namespace APTAT.Application.Services
             d.Discovered += OnRootDiscovered;
             d.BeginDiscover(userState);
         }
-        
+
         public async Task<GetDomainNameResponse> GetCurrentDomainName()
         {
             IDomainDiscoverer discoverer = _manager.GetDomainDiscoverer(null, true, null, null, null);
@@ -157,10 +157,10 @@ namespace APTAT.Application.Services
             d.BeginDiscover(context);
         }
 
-        private void SetLocalHostItem(DeploymentTarget[] targets )
+        private void SetLocalHostItem(DeploymentTarget[] targets)
         {
             IPHostEntry hostInfo = _networkHelper.GetHostEntry();
-                            
+
             var target = targets.FirstOrDefault(t => hostInfo.AddressList.Contains(t.GetIPAddress()));
             if (target != null)
             {
@@ -450,24 +450,35 @@ namespace APTAT.Application.Services
         }
 
         public bool IsLocalAddress(IpAddressWrapper ip)
-        {   
+        {
             if (ip.IsRange || ip.IsMask) return false;
-            
+
             IPHostEntry hostInfo = _networkHelper.GetHostEntry();
             if (ip.IsDnsName)
             {
                 if (_networkHelper.IsLoopbackAddress(ip.FormattedText)) return true;
 
                 NetworkObserver observer = new NetworkObserver();
-                
+
                 var host = Dns.GetHostEntry(ip.FormattedText);
-                return host.HostName == hostInfo.HostName;      
+                return host.HostName == hostInfo.HostName;
             }
             else
             {
                 IPAddress address = IPAddress.Parse(ip.FormattedText);
-                return hostInfo.AddressList.Contains(address);    
+                return hostInfo.AddressList.Contains(address);
             }
+        }
+
+        public bool IsLocalAddress(string name)
+        {
+            IPHostEntry hostInfo = _networkHelper.GetHostEntry();
+
+            if (_networkHelper.IsLoopbackAddress(name)) return true;
+
+            NetworkObserver observer = new NetworkObserver();
+            var host = Dns.GetHostEntry(name);
+            return host.HostName == hostInfo.HostName;
 
         }
     }

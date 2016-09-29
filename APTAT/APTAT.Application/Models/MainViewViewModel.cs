@@ -79,8 +79,20 @@ namespace APTAT.Application.Models
         public string CurrentDomainName { get; set; }
 
         public bool HasCurrentDomainName
+        {  
+           get { return !string.IsNullOrEmpty(CurrentDomainName); }
+        }
+
+        private bool _useCurrentCredentials;
+        public bool UseCurrentCredentials
         {
-            get { return !string.IsNullOrEmpty(CurrentDomainName); }
+            get { return _useCurrentCredentials; }
+
+            set
+            {
+                _useCurrentCredentials = value;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
+            }
         }
 
         private bool _useCurrentDomainForDeploy;
@@ -169,7 +181,12 @@ namespace APTAT.Application.Models
             if (HasCurrentDomainName)
             {
                 CurrentDomainName = $"Use Current Domain Credentials ({CurrentDomainName})";
-
+                UseCurrentDomainForDeploy = true;
+            }
+            else
+            {
+                var user = _targetsDiscoveryService.GetLoggedInUser();
+                CurrentDomainName = $"Use Current User Credentials ({user})";
                 UseCurrentDomainForDeploy = true;
             }
 

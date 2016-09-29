@@ -10,6 +10,7 @@ namespace APTAT.Application.Views
         public LoginPasswordUserControl()
         {
             InitializeComponent();
+        
         }
 
         #region LoginProperty (DependencyProperty)
