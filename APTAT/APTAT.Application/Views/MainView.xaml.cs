@@ -98,15 +98,15 @@ namespace APTAT.Application
             int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount + e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount;
             if (e.FilesStatistics.TotalFilesCount > 0)
             {
-                scanCompletedWindow.Text.Text += String.Format("{0}{1} Total Threats Found (*)", Environment.NewLine, total);
+                scanCompletedWindow.Text.Text += String.Format("{0}{1} Total Threats Found*", Environment.NewLine, total);
             }
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown Files", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
 
             if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malicious Files", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
-            if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed to Analyze", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount);
+            if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed to Analyse", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount);
             if (e.FilesStatistics.NoVerdictFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} No Verdict", Environment.NewLine, e.FilesStatistics.NoVerdictFilesCount);
 
-            scanCompletedWindow.Text.Text += String.Format("{0}{1}(*) {2} files have unique hash values", Environment.NewLine, Environment.NewLine, e.DistinctFileFound);
+            scanCompletedWindow.Text.Text += String.Format("{0}{1}* {2} files have unique hash values", Environment.NewLine, Environment.NewLine, e.DistinctFileFound);
 
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             if (e.SuccededCount > 0)

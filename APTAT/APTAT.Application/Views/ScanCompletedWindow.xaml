@@ -65,8 +65,9 @@
                                         </TextBlock>
 
 
-
-                                <TextBlock AutomationProperties.AutomationId="StatisticsTextBlock" x:Name="Text" FontSize="14"  Margin="78,0,0,20" Grid.Row="2" LineHeight="28" Foreground="#555"/>
+                                <Border Background="#FFFAF9F9" Margin="78,10,78,20" Grid.Row="2">
+                                    <TextBlock AutomationProperties.AutomationId="StatisticsTextBlock" x:Name="Text" FontSize="14" Margin="10 10 0 10"  LineHeight="28" Foreground="#555"/>
+                                </Border>
 
 
 

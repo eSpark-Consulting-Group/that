@@ -147,14 +147,14 @@
             </telerik:RadBusyIndicator>
         </telerik:RadBusyIndicator>
 
-        <Grid Background="#FFFAF9F9" >
+        <Grid Background="#FFFAF9F9" FocusVisualStyle="{x:Null}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="180"/>
                 <ColumnDefinition Width="0"/>
             </Grid.ColumnDefinitions>
 
-            <telerik:RadToolBar AutomationProperties.AutomationId="MainToolBar" Padding="0"
+            <telerik:RadToolBar AutomationProperties.AutomationId="MainToolBar" Padding="0" FocusVisualStyle="{x:Null}"
                                  VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed"  BorderThickness="0" Background="#FFFAF9F9">
 
                 <telerik:RadToolBar.Resources>
@@ -296,12 +296,12 @@
                 <TextBlock Margin="10,0,0,0" />
                 <TextBlock AutomationProperties.AutomationId="UnknownFilesCounterTextBlock" 
                            Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
-                <TextBlock Foreground="White" Text=" Unknown programs found" VerticalAlignment="Center" Margin="0,5" FontSize="14" />
+                <TextBlock Foreground="White" Text=" Unknown files" VerticalAlignment="Center" Margin="0,5" FontSize="14" />
                 <StackPanel  Orientation="Horizontal" >
                     <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
                     <TextBlock AutomationProperties.AutomationId="MalwareFilesCounterTextBlock" 
                            Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
-                    <TextBlock Foreground="White" Text=" Malware items found" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                    <TextBlock Foreground="White" Text=" Malicious files" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 </StackPanel>
 
                 <TextBlock Foreground="White" Text=" (" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>

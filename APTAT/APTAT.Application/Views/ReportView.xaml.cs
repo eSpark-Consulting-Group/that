@@ -33,21 +33,28 @@ namespace APTAT.Application
             Unloaded += OnUnloaded;
 
             pdfViewer.DefaultFormatProviderSettings = FormatProviderSettings.ReadOnDemand;
+            pdfViewer.DocumentChanged += PdfViewer_DocumentChanged;
+            pdfViewer.Mode = Telerik.Windows.Documents.Fixed.UI.FixedDocumentViewerMode.TextSelection;
+        }
+
+        private void PdfViewer_DocumentChanged(object sender, DocumentChangedEventArgs e)
+        {
+            pdfViewer.ScaleFactor = 1.22d;
         }
 
         private void OnUnloaded(Object sender, RoutedEventArgs e)
         {
             btnPrintPdfDocument.Command = null;
-            //btnPageDown.Command = null;
-            //btnPageUp.Command = null;
-            btnNext.Command = null;
-            btnPrev.Command = null;
+           btnPageDown.Command = null;
+           btnPageUp.Command = null;
+            //btnNext.Command = null;
+            //btnPrev.Command = null;
             //btnZoomIn.Command = null;
             //btnZoomOut.Command = null;
             tbFind.Text = null;
-            //tbPagesCount.Text = null;
+           tbPagesCount.Text = null;
 
-            //BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
+           BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
            // BindingOperations.ClearBinding(cbScale, RadComboBox.TextProperty);
            // BindingOperations.ClearBinding(btnTogglePan, RadToggleButton.IsCheckedProperty);
             //BindingOperations.ClearBinding(btnToggleTextSelection, RadToggleButton.IsCheckedProperty);
@@ -60,6 +67,7 @@ namespace APTAT.Application
         private void OnReportOpened(Object sender, EventArgs e)
         {
             pdfViewer.DocumentSource = new PdfDocumentSource(_viewModel.ReportStream);
+            
         }
 
         private void TbCurrentPageKeyDown(Object sender, KeyEventArgs e)
@@ -79,8 +87,8 @@ namespace APTAT.Application
             if (e.Key == Key.Enter && (tbFind.Text ?? string.Empty).Length > 2)
             {
                 pdfViewer.CommandDescriptors.FindCommandDescriptor.Command.Execute(tbFind.Text);
-                btnPrev.Visibility = Visibility.Visible;
-                btnNext.Visibility = Visibility.Visible;
+                //btnPrev.Visibility = Visibility.Visible;
+                //btnNext.Visibility = Visibility.Visible;
             }
         }
 
