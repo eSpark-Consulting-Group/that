@@ -88,5 +88,14 @@ namespace APTAT.Application
             }
         }
 
+        private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
+        {
+            if (ViewModel.IsAnyScanInProgress)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿
 
 using Composition = APTAT.Common.CompositionHelper;
 
@@ -20,6 +19,7 @@ namespace APTAT.Application.Models
             {
                 _licenseId = value;
                 RaisePropertyChanged("LicenseId");
+                ErrorMessage = null;
             }
         }
 
@@ -30,6 +30,7 @@ namespace APTAT.Application.Models
             {
                 _userName = value;
                 RaisePropertyChanged("UserName");
+                ErrorMessage = null;
             }
         }
 
@@ -69,6 +70,7 @@ namespace APTAT.Application.Models
                 }
 
                 RaisePropertyChanged("PasswordBuffer");
+                ErrorMessage = null;
             }
         }
 
@@ -100,7 +102,7 @@ namespace APTAT.Application.Models
                         break;
                     case "LicenseId":
                         if (!ValidateLicenseId())
-                            errorMessage = "CAM credentials are required.";
+                            errorMessage = "License is required or incorrect.";
                         break;
                 }
 
@@ -126,7 +128,7 @@ namespace APTAT.Application.Models
         {
             if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password)) return true;
 
-            return !string.IsNullOrEmpty(LicenseId);
+            return !string.IsNullOrEmpty(LicenseId) && LicenseId.Length == 36;
         }
 
         public bool ValidateModel()

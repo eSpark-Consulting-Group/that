@@ -8,6 +8,24 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="900">
     <Grid Background="#FFFAF9F9">
+        <Grid.RenderTransform>
+            <TranslateTransform x:Name="translate1" X="1100" />
+        </Grid.RenderTransform>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
       <Grid.Resources>
 
 

@@ -24,7 +24,7 @@ namespace APTAT.Application
             {
                 if (RadContextMenu.GetContextMenu(treeList) != null)
                     return;
-                
+
                 var menu = new RadContextMenu();
                 menu.IconColumnWidth = 0;
                 menu.Width = 160;
@@ -71,7 +71,7 @@ namespace APTAT.Application
 
         public MainViewViewModel ViewModel
         {
-            get { return this.DataContext as MainViewViewModel; }     
+            get { return this.DataContext as MainViewViewModel; }
         }
 
         private ThreatInfoItem GetDataBoundItem(FrameworkElement element)
@@ -122,7 +122,13 @@ namespace APTAT.Application
             }
         }
 
-
-
+        private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
+        {
+            if (ViewModel.IsAnyScanInProgress)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
     }
 }

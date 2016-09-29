@@ -126,6 +126,11 @@ namespace APTAT.Application
         IEnumerable<ThreatInfoItem> _items;
         private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
         {
+            if (ViewModel.IsAnyScanInProgress)
+            {
+                e.Cancel = true;
+                return;
+            }
             if (e.DataControl.ItemsSource == null || e.Column.SortMemberPath != "Size")
                 return;
 

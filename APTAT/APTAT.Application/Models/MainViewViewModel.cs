@@ -668,23 +668,11 @@ namespace APTAT.Application.Models
                     IsBusy = true;
                     IsScanInProgress = null;
 
-                    //_login = _storage.GetValue<String>(KnownKeys.Login, false);
-                    //_password = _storage.GetValue<String>(KnownKeys.Password, true);
-                    //_tcpPort= _storage.GetValue<String>(KnownKeys.TcpPort, false);
-                    //_udpPort = _storage.GetValue<String>(KnownKeys.UdpPort, false);
 
-                    //if (_login == null || _password == null)
-                    //{
-                    //throw new InvalidOperationException("specify login and password");
-                    //}
-
-
-                    if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
-                    {
-                        _login = null;
-                        _password = null;
-                    }
-                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, _login, _password, this);
+                   
+                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, 
+                        _storage.ContainsKey(KnownKeys.CustomScanOptions) ? null : Login, 
+                        _storage.ContainsKey(KnownKeys.CustomScanOptions) ? null : Password, this);
 
                 }
             }
@@ -1028,15 +1016,7 @@ namespace APTAT.Application.Models
 
             if (_onlineItems.Length > 0)
             {
-                //if (_login == null || _password == null)
-                //{
-                //    throw new InvalidOperationException("specify login and password");
-                //}
-
-                if (String.IsNullOrWhiteSpace(_udpPort) || String.IsNullOrWhiteSpace(_tcpPort))
-                {
-                    throw new InvalidOperationException("specify FLS tcp and udp ports");
-                }
+                
 
                 ScanKind scanKind = ScanKind.Quick;
                 if (IsQuickScan)
@@ -1062,7 +1042,8 @@ namespace APTAT.Application.Models
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind);
                 }
 
-                _aptService.BeginScan(e.Items, _login, _password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _aptService.BeginScan(e.Items, Login, Password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                Password = null;
             }
             else
             {
