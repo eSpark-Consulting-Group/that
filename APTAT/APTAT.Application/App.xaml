@@ -16,13 +16,7 @@
     <Application.Resources>
 
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                
-                <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml"/>
-                <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Input.xaml"/>
 
-                <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="StrongBrush" Color="#FF2A80B9" />
             <SolidColorBrush x:Key="StrongBrush2" Color="#FF62B2E3" />

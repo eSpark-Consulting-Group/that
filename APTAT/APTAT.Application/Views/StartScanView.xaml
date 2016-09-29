@@ -413,7 +413,7 @@
 
                                                 <TextBlock HorizontalAlignment="Center" Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource StrongBrush}" Grid.Column="1" Margin="0 50 0 0">
                                                     <TextBlock.Text>
-                                                        This Computer
+                                                        Local Scan
                                                     </TextBlock.Text>
                                                 </TextBlock>
 
@@ -464,16 +464,15 @@
 
                 <Border x:Name="wizardBorder" Visibility="Collapsed" >
                     <Grid>
-                        <App:StartScanDomainView AutomationProperties.AutomationId="ActiveDirectoryView" x:Name="viewScanDomain" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
-                        <App:StartScanWorkgroupView AutomationProperties.AutomationId="WorkgroupView" x:Name="viewScanWorkgroup"  IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
-                        <App:StartScanByIpView AutomationProperties.AutomationId="NetworkAddressesView" x:Name="viewScanByIp" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
-                        <App:StartScanLocalView x:Name="viewScanLocal" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"  />
+                        <App:StartScanDomainView AutomationProperties.AutomationId="ActiveDirectoryView" x:Name="viewScanDomain" Visibility="Collapsed"  />
+                    <App:StartScanWorkgroupView AutomationProperties.AutomationId="WorkgroupView" x:Name="viewScanWorkgroup" Visibility="Collapsed"   />
+                    <App:StartScanByIpView AutomationProperties.AutomationId="NetworkAddressesView" x:Name="viewScanByIp" Visibility="Collapsed"  />
+                    <App:StartScanLocalView x:Name="viewScanLocal" Visibility="Collapsed"  />
                     </Grid>
                 </Border>
 
             </Grid>
-        <telerik:RadBusyIndicator Grid.RowSpan="3" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
-        </telerik:RadBusyIndicator>
+       
 
         <Border Grid.Row="0" BorderThickness="0" Background="{DynamicResource ErrorBrush2}" BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" 
                 Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}">
@@ -539,6 +538,15 @@
 
         </Border>
 
+        <telerik:RadBusyIndicator Grid.RowSpan="3" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
+            <telerik:RadBusyIndicator.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </telerik:RadBusyIndicator.Resources>
+        </telerik:RadBusyIndicator>
     </Grid>
 
 </Models:BaseView>

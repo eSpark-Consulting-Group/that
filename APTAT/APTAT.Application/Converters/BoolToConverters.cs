@@ -5,7 +5,7 @@ using APTAT.Application.MarkupExtensions;
 
 namespace APTAT.Application.Converters
 {
-    public class BoolToVisibilityConverter2 : ConverterMarkupExtension<BoolToVisibilityConverter>
+    public class BoolToVisibilityConverter2 : ConverterMarkupExtension<BoolToVisibilityConverter2>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -28,7 +28,7 @@ namespace APTAT.Application.Converters
         }
     }
 
-    public class BoolToOpacityConverter2 : ConverterMarkupExtension<BoolToOpacityConverter>
+    public class BoolToOpacityConverter2 : ConverterMarkupExtension<BoolToOpacityConverter2>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

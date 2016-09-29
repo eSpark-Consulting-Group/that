@@ -44,6 +44,7 @@ namespace APTAT.Application
             {
                 case ChangeScreenTypes.Scan:
                     mainContent.Content = new ResultTabsControl();
+                    empty.Visibility = Visibility.Collapsed;
                     break;
                 case ChangeScreenTypes.ValkyrieScan:
                     if (mainContent.Content != null && mainContent.Content is ResultTabsControl)

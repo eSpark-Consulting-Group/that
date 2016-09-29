@@ -27,7 +27,7 @@ namespace APTAT.Application
 
         private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)
         {
-            pdf.ScaleFactor = 1.15d;
+            pdf.ScaleFactor = 1.14d;
         }
     }
 }

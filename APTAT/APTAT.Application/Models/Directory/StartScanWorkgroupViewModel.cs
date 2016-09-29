@@ -77,10 +77,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public string WorkgroupMask
-        {
-            get { return "Enter Workgroup Name"; }
-        }
+
 
         public StartScanWorkgroupViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
@@ -171,9 +168,10 @@ namespace APTAT.Application.Models
                     Items = new ObservableCollection<DirectoryItem>(groups.Items);
                     IsBusy = false;
 
-                    
-
-                    base.OnStepChanging(success, previousStep, context);
+                    if (Items.Any())
+                        base.OnStepChanging(success, previousStep, context);
+                    else
+                        Error = "No Workgroups Found";
                 }
                 else
                 {
@@ -240,7 +238,7 @@ namespace APTAT.Application.Models
             else
             {
                 //  Items = new ObservableCollection<DeploymentItem>();
-                Error = e.Exception.Message;
+                Error = "No Workgroups Found";
             }
 
 

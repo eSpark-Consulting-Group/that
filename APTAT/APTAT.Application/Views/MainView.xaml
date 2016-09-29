@@ -95,45 +95,55 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="1">
 
-        <telerik:RadBusyIndicator Grid.Row="1"  IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
-            <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
-                <Grid>
+            <ContentControl x:Name="mainContent" IsTabStop="false" FocusVisualStyle="{x:Null}"/>
 
-                    <ContentControl x:Name="mainContent" IsTabStop="false" FocusVisualStyle="{x:Null}"/>
+            <Grid VerticalAlignment="Center" 
+                   HorizontalAlignment="Center" x:Name="empty">
+            <StackPanel  Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"   >
 
-                    <StackPanel Orientation="Vertical" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" 
-                   HorizontalAlignment="Center"  Opacity="{Binding IsScanInProgress, Converter={StaticResource InverseBoolToOpacityConverter}}">
-
-                        <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="There are no scans have been performed yet."
+                <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="There are no scans have been performed yet."
                    Opacity="0.5"
                    
                    FontSize="13" Style="{DynamicResource SubTitleTextStyle}"/>
 
-                        <Button AutomationProperties.AutomationId="StartScanningNowButton"
+                <Button AutomationProperties.AutomationId="StartScanningNowButton"
                     Margin="0,10,0,0"  HorizontalAlignment="Center"
                     
                     Style="{StaticResource LinkButton}" 
                    
                     Command="{Binding StartScanCommand}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
                               Fill="{DynamicResource StrongBrush}"
                               Height="24"
                               Width="24"
                               Margin="0,0,10,-1"/>
-                                <TextBlock Text="Start Scanning Now"  Grid.Column="1"  FontSize="20"
+                        <TextBlock Text="Start Scanning Now"  Grid.Column="1"  FontSize="20"
                    FontFamily="Segoe UI Light"/>
-                            </Grid>
-                        </Button>
+                    </Grid>
+                </Button>
 
-                    </StackPanel>
+            </StackPanel>
+            </Grid>
+        </Grid>
 
-                </Grid>
+
+        <telerik:RadBusyIndicator Grid.Row="1"  IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+            <telerik:RadBusyIndicator.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </telerik:RadBusyIndicator.Resources>
+            <telerik:RadBusyIndicator IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+                
             </telerik:RadBusyIndicator>
         </telerik:RadBusyIndicator>
 
@@ -147,6 +157,15 @@
             <telerik:RadToolBar AutomationProperties.AutomationId="MainToolBar" Padding="0"
                                  VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed"  BorderThickness="0" Background="#FFFAF9F9">
 
+                <telerik:RadToolBar.Resources>
+
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+
+                            <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </telerik:RadToolBar.Resources>
                 <telerik:RadButton AutomationProperties.AutomationId="StartScanningButton"
                                Margin="-2,-2,0,-2"  
                                FontSize="16"

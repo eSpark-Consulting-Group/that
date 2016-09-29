@@ -18,7 +18,14 @@
         </Grid.RowDefinitions>
 
 
-        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}">
+        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
+            <telerik:RadBusyIndicator.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </telerik:RadBusyIndicator.Resources>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

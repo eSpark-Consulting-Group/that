@@ -28,8 +28,15 @@
         </Grid.Triggers>
       <Grid.Resources>
 
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
 
-        <Style TargetType="TabItem">
+
+
+                    <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+
+                <Style TargetType="TabItem">
           <Setter Property="MinWidth" Value="100" />
           <Setter Property="Template">
             <Setter.Value>
@@ -115,6 +122,8 @@
             </Setter.Value>
           </Setter>
         </Style>
+
+                </ResourceDictionary>
       </Grid.Resources>
         
         <TabControl  AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >

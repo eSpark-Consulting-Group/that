@@ -144,17 +144,17 @@
             </Grid.ColumnDefinitions>
 
 
-            <TextBlock Text="TCP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="1"  Margin="0 24 0 0" HorizontalAlignment="Right" />
+            <TextBlock Text="FLS TCP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="1"  Margin="0 24 0 0" HorizontalAlignment="Right" />
             <telerik:RadWatermarkTextBox Grid.Column="2" Margin="0 17 0 17" HorizontalAlignment="Left" Grid.Row="1" Width="289" Text="{Binding  ParentViewModel.TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox">
                 <telerik:RadWatermarkTextBox.WatermarkContent>
-                    <TextBlock Text="{Binding ParentViewModel.PortMask}" Foreground="{DynamicResource TextBrush2}" />
+                    <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
                 </telerik:RadWatermarkTextBox.WatermarkContent>
             </telerik:RadWatermarkTextBox>
 
-            <TextBlock Text="UDP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="2"  Margin="0 7 0 0" HorizontalAlignment="Right" />
+            <TextBlock Text="FLS UDP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="2"  Margin="0 7 0 0" HorizontalAlignment="Right" />
             <telerik:RadWatermarkTextBox Grid.Column="2" Margin="0 0 0 17" HorizontalAlignment="Left" Grid.Row="2" Width="289" Text="{Binding  ParentViewModel.UdpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox">
                 <telerik:RadWatermarkTextBox.WatermarkContent>
-                    <TextBlock Text="{Binding ParentViewModel.PortMask}" Foreground="{DynamicResource TextBrush2}" />
+                    <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
                 </telerik:RadWatermarkTextBox.WatermarkContent>
             </telerik:RadWatermarkTextBox>
         </Grid>

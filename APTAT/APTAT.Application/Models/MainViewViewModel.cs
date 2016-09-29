@@ -157,20 +157,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public string LoginMask
-        {
-            get { return "Enter Login"; }
-        }
 
-        public string PasswordMask
-        {
-            get { return "Enter Password"; }
-        }
-
-        public string PortMask
-        {
-            get { return "Enter FLS Port"; }
-        }
 
         private async void OnLoaded()
         {

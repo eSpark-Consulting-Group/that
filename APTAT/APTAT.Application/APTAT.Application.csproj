@@ -153,9 +153,6 @@
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BannerUserControl.xaml.cs">
-      <DependentUpon>BannerUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
@@ -283,10 +280,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CamCredentialsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BannerUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -425,11 +418,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="EULA.pdf" />
-    <Resource Include="Images\banner_1.png" />
-    <Resource Include="Images\banner_2.png" />
-    <Resource Include="Images\Image.png" />
-    <Resource Include="Images\C1_banner.png" />
-    <Resource Include="Images\C1banner.png" />
     <Resource Include="Assets\checkmark.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
