@@ -1,5 +1,6 @@
 ﻿using APTAT.Application.Extensions;
 using APTAT.Application.Models;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -21,10 +22,13 @@ namespace APTAT.Application
 
         private void ScanCompletedWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (ok.Visibility == Visibility.Visible)
-                ok.Focus();
-            else
-                yes.DelayedFocus();
+            Dispatcher.BeginInvoke((Action)delegate
+            {
+                if (ok.Visibility == Visibility.Visible)
+                    ok.Focus();
+                else
+                    yes.DelayedFocus();
+            });
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -61,7 +61,7 @@
                            TextAlignment="Center" VerticalAlignment="Center" Margin="18,0,0,0"/>
                                 </StackPanel>
                                 <TextBlock Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="78,0,0,20" Grid.Row="1" FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}" >
-                        <Run Text="Do you want to analyse unknown files with Valkyrie?" />
+                        <Run Text="Do you want to analyze unknown files with Valkyrie?" />
                                         </TextBlock>
 
 

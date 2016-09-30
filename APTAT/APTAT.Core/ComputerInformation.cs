@@ -162,7 +162,7 @@ namespace APTAT.Core
                 failedCount = 0, 
                 pendingCount = 0, 
                 distinctCount = 0,
-                clean = 0;
+                cleanCount = 0;
 
             for (int i = 0; i < Files.Count; i++)
             {
@@ -176,22 +176,24 @@ namespace APTAT.Core
                 else if (file.Pending)
                     pendingCount++;
                 else
-                    clean++;
+                    cleanCount++;
             }
 
             if (Files.Count >= TotalCount)
             {
-                StatusText = string.Format("Completed: Total files scanned: {0}. Unknown files: {1}. Malicious files: {2}. Trusted/Clean files: {3}.",
-                    Files.Count, unknownCount, malwareCount, clean);
+                StatusText = string.Format("Completed: Total files scanned: {0}. Unknown files: {1}. Malicious files: {2}.",
+                    Files.Count, unknownCount, malwareCount);
             }
             else if (TotalDistinctCount > 0)
             {
                 distinctCount = DistinctCount;
-                StatusText = string.Format("{0} files scanned ({4}). Unknown files: {1}. Malicious files: {2}. Trusted/Clean files: {3}.",
-                    Files.Count, unknownCount, malwareCount, clean, string.Format("{0:0.00}%",
+                StatusText = string.Format("{0} files scanned ({3}). Unknown files: {1}. Malicious files: {2}.",
+                    Files.Count, unknownCount, malwareCount, string.Format("{0:0.00}%",
                     (((distinctCount > TotalDistinctCount ? TotalDistinctCount : distinctCount) / TotalDistinctCount) * 100d)).Replace(".00", string.Empty));
             }
 
+            if (cleanCount > 0)
+                StatusText += string.Format(" Trusted/Clean files: {0}.", cleanCount);
             if (failedCount > 0)
                 StatusText += string.Format(" Not analyzed: {0}.", failedCount);
 
