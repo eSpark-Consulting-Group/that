@@ -170,7 +170,7 @@ namespace APTAT.Application.Services
             {
                 var address = item.GetIPAddress();
                 if (address != null)
-                    item.IsLocalComputer = hostInfo.AddressList.Contains(address);
+                    item.IsLocalComputer = IPAddress.IsLoopback(address) || hostInfo.AddressList.Contains(address);
                 else
                     item.IsLocalComputer = IsLocalAddress(item.DnsName);
             }
