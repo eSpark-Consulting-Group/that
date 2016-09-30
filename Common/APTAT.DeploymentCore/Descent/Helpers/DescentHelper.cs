@@ -130,22 +130,6 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				return true;
 			}
 
-			private bool TryAlternativeLogin1(bool impersonateAsNetworkService)
-			{
-				// Try alternative way
-				// HostName\\Login
-				string login = RemoteHostInfo.HostName + '\\' + RemoteHostInfo.Login;
-				return TryLogin(impersonateAsNetworkService, login);
-			}
-
-			private bool TryAlternativeLogin2( bool impersonateAsNetworkService )
-			{
-				// Try alternative way
-				// Login@HostName
-				string login = RemoteHostInfo.Login + "@" + RemoteHostInfo.HostName;
-				return TryLogin( impersonateAsNetworkService, login );
-			}
-
 			private void InitializeInternal( bool impersonateAsNetworkService )
 			{
 				string userName, domain;
