@@ -60,7 +60,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Source:</Value>
+                    <Value>Device Source:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -159,7 +159,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Scanned:</Value>
+                    <Value>Scan Attempts:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -192,7 +192,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Failed:</Value>
+                    <Value>Failed Scans:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -225,7 +225,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Total Programs Scanned:</Value>
+                    <Value>Total Files Scanned:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -258,7 +258,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Unknown Programs Found:</Value>
+                    <Value>Unknown Files Found:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -291,7 +291,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Malware Items Found:</Value>
+                    <Value>Malicious Files Found:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -739,7 +739,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Inaccessible:</Value>
+                    <Value>Inaccessible Devices:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -807,7 +807,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Succeeded:</Value>
+                    <Value>Successful Scans:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -875,7 +875,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Trusted Programs Found:</Value>
+                    <Value>Trusted Files Found:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -943,7 +943,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Not Analysed:</Value>
+                    <Value>Not Analyzed:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1171,13 +1171,13 @@
 						Fields!BadFileType.Value = "Infected", "Maroon", 
 						Fields!BadFileType.Value = "Unknown", "#ffc000", 
 						Fields!BadFileType.Value = "Pending", "#0092ff", 						
-						Fields!BadFileType.Value = "Not Analysed", "#c0c0c0")</Color>
+						Fields!BadFileType.Value = "Not Analyzed", "#c0c0c0")</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
                         <BackgroundGradientEndColor>=Switch(
 						Fields!BadFileType.Value = "Infected", "#993232", 
 						Fields!BadFileType.Value = "Unknown", "#ffecb2", 
 						Fields!BadFileType.Value = "Pending", "#b2deff", 						
-						Fields!BadFileType.Value = "Not Analysed", "#f2f2f2")</BackgroundGradientEndColor>
+						Fields!BadFileType.Value = "Not Analyzed", "#f2f2f2")</BackgroundGradientEndColor>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1304,7 +1304,8 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Unknown/Malicious/Not Analysed/In Analysis Programs Count</Caption>
+                      <Caption>Number of Unknown Files/Malicious Files/Not Analyzed Files /In Analysis Fiiles 
+</Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -1705,7 +1706,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Total Programs Scanned:</Value>
+                                      <Value>Total Files Scanned:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -1773,7 +1774,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Trusted Programs Found:</Value>
+                                      <Value>Trusted Files Found:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -1841,7 +1842,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Unknown Programs Found:</Value>
+                                      <Value>Unknown Files Found:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -1909,7 +1910,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Malware Items Found:</Value>
+                                      <Value>Malicious Files Found:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -2303,7 +2304,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Not Analysed:</Value>
+                                      <Value>Not Analyzed:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -2897,7 +2898,7 @@
           <DataField>FailedToAnalyzeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-		<Field Name="NotAnalyzedFilesCount">
+        <Field Name="NotAnalyzedFilesCount">
           <DataField>NotAnalyzedFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
@@ -3051,7 +3052,7 @@
           <DataField>FailedToAnalyzeFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-		<Field Name="NotAnalyzedFilesCount">
+        <Field Name="NotAnalyzedFilesCount">
           <DataField>NotAnalyzedFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>

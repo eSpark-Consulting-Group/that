@@ -193,7 +193,7 @@ namespace APTAT.Core
             }
 
             if (failedCount > 0)
-                StatusText += string.Format(" Not analysed: {0}.", failedCount);
+                StatusText += string.Format(" Not analyzed: {0}.", failedCount);
 
             HasBadFiles = malwareCount > 0 || unknownCount > 0 || failedCount > 0 || pendingCount > 0;
             HasMalwares = malwareCount > 0;

@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Not Analysed (" + Parameters!Count.Value + "):"</Value>
+                <Value>="Not Analyzed (" + Parameters!Count.Value + "):"</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>18pt</FontSize>
@@ -424,7 +424,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Program Age:</Value>
+                                  <Value>File Age:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>8pt</FontSize>

@@ -67,7 +67,7 @@ namespace APTAT.Valkyrie
 
             get
             {
-                if (Verdict == ValkyrieVerdict.NotAnalyzed) return string.Format("Not Analysed ({0})", OperationStatus.Replace(Environment.NewLine, ""));
+                if (Verdict == ValkyrieVerdict.NotAnalyzed) return string.Format("Not Analyzed ({0})", OperationStatus.Replace(Environment.NewLine, ""));
                 if (Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication) return "Potentially Unwanted";
                 if (Verdict == ValkyrieVerdict.Pending || Verdict == ValkyrieVerdict.FirstSeen)
                     return "In Analysis";
@@ -133,7 +133,7 @@ namespace APTAT.Valkyrie
         [Description("Potentially Unwanted Application")]
         PotentiallyUnwantedApplication,
         
-        [Description("Not Analysed")]
+        [Description("Not Analyzed")]
         NotAnalyzed,
 
         [Description("In Analysis")]

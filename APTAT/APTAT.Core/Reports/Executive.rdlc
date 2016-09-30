@@ -75,7 +75,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Source:</Value>
+                    <Value>Device Source:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -173,7 +173,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Scanned:</Value>
+                    <Value>Scan Attempts:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -206,7 +206,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Failed:</Value>
+                    <Value>Failed Scans:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -239,7 +239,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Total Programs Scanned:</Value>
+                    <Value>Total Files Scanned:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -272,7 +272,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Unknown Programs Found:</Value>
+                    <Value>Unknown Files Found:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -305,7 +305,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Malware Items Found:</Value>
+                    <Value>Malicious Files Found:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -753,7 +753,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Inaccessible:</Value>
+                    <Value>Inaccessible Devices:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -821,7 +821,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Succeeded:</Value>
+                    <Value>Successful Scans:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -889,7 +889,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Trusted Programs Found:</Value>
+                    <Value>Trusted Files Found:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -976,7 +976,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>No Verdict:</Value>
+                    <Value>Files with No Verdict:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1044,7 +1044,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Failed To Analyse:</Value>
+                    <Value>Failed to Analyze:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1126,7 +1126,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Programs Rating Over Scanned Devices</Value>
+                    <Value>Scanned Devices' File Rating</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>14pt</FontSize>
@@ -1734,7 +1734,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Scanned Devices Rating</Value>
+                    <Value>Device Assessment</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>14pt</FontSize>
@@ -2001,7 +2001,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>

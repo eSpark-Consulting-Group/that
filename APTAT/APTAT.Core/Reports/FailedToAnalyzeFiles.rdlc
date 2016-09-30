@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Failed To Analyse (" + Parameters!Count.Value + "):"</Value>
+                <Value>="Failed To Analyze (" + Parameters!Count.Value + "):"</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>18pt</FontSize>
@@ -423,7 +423,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Program Age:</Value>
+                                  <Value>File Age:</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>8pt</FontSize>

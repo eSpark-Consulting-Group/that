@@ -83,7 +83,7 @@ namespace APTAT.Core.Descent.Apt
         {
             var tp = _paramsPerTargetUid[args.TargetUid];
             string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ?
-                $"Failed to analyse: {args.FailedToAnalyzeFilesCount}."
+                $"Failed to analyze: {args.FailedToAnalyzeFilesCount}."
                 : String.Empty;
 
             string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? $"No Verdict: {args.NoVerdictFilesCount}."
@@ -185,7 +185,7 @@ namespace APTAT.Core.Descent.Apt
                         String.Format(
                             "Completed: Total files scanned: {0}. Unknown files: {1}. Malicious files: {2}.",
                             result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount) +
-                            (result.FailedToAnalyzeFilesCount > 0 ? String.Format(" Failed to analyse: {0}.", result.FailedToAnalyzeFilesCount) : String.Empty) +
+                            (result.FailedToAnalyzeFilesCount > 0 ? String.Format(" Failed to analyze: {0}.", result.FailedToAnalyzeFilesCount) : String.Empty) +
                             (result.NoVerdictFilesCount > 0 ? String.Format(" No Verdict: {0}.", result.NoVerdictFilesCount) : String.Empty)),
                     AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount,
                     result.MalwareFilesCount, result.SafeFilesCount, 100, result.FailedToAnalyzeFilesCount,
@@ -239,7 +239,7 @@ namespace APTAT.Core.Descent.Apt
 
         protected virtual void OnScanProgressChanged(object sender, AptDescentHelper.ScanProgressChangedEventArgs args)
         {
-            string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyse: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
+            string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
 
             string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount) : String.Empty;
 

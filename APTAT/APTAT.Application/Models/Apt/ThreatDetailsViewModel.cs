@@ -232,7 +232,7 @@ namespace APTAT.Application.Models
                 {
                     case CloudVerdict.FailedToAnalyze:
                         Failed = true;
-                        Verdict = "Failed to analyse";
+                        Verdict = "Failed to analyze";
                         break;
                     case CloudVerdict.FirstSeen:
                     case CloudVerdict.Unknown:
