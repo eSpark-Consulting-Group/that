@@ -33,13 +33,12 @@ namespace APTAT.Application
             Unloaded += OnUnloaded;
 
             pdfViewer.DefaultFormatProviderSettings = FormatProviderSettings.ReadOnDemand;
-            pdfViewer.DocumentChanged += PdfViewer_DocumentChanged;
-            pdfViewer.Mode = Telerik.Windows.Documents.Fixed.UI.FixedDocumentViewerMode.TextSelection;
+           
         }
 
-        private void PdfViewer_DocumentChanged(object sender, DocumentChangedEventArgs e)
+        private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)
         {
-            pdfViewer.ScaleFactor = 1.22d;
+            pdfViewer.ScaleFactor = 1.175d;
         }
 
         private void OnUnloaded(Object sender, RoutedEventArgs e)

@@ -26,7 +26,7 @@
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
             </telerik:RadBusyIndicator.Resources>
-            <Grid>
+            <Grid Background="White">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
@@ -40,10 +40,10 @@
                             <GradientStop Color="#FF931919" Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
-                    <TextBlock Foreground="White"  Text="{Binding Error}" Margin="20,0" FontSize="16" Height="26" VerticalAlignment="Stretch"/>
+                    <TextBlock Foreground="Red"  Text="{Binding Error}" Margin="20,0" FontSize="16" Height="26" VerticalAlignment="Stretch"/>
                 </Border>
                 <telerik:RadToolBar AutomationProperties.AutomationId="ReportToolBar" DataContext="{Binding ElementName=pdfViewer, Path=Commands}" Padding="0"
-                                 VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed"  BorderThickness="0" Background="#FFFAF9F9">
+                                 VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed"  BorderThickness="0" Background="White">
 
                     <telerik:RadToolBar.Resources>
 
@@ -170,7 +170,10 @@
                     </telerik:RadButton>-->
                 </telerik:RadToolBar>
 
-                <telerik:RadPdfViewer AutomationProperties.AutomationId="ReportPdfViewer" x:Name="pdfViewer" Grid.Row="1" Margin="0 0 0 5"/>
+                <Border Background="{DynamicResource AccentBrush}" Margin=" 17 16 17 17"  Grid.Row="1">
+                    <telerik:RadPdfViewer  AutomationProperties.AutomationId="ReportPdfViewer" x:Name="pdfViewer" Mode="TextSelection" DocumentChanged="pdf_DocumentChanged" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource AccentBrush}" />
+                </Border>
+
 
             </Grid>
         </telerik:RadBusyIndicator>

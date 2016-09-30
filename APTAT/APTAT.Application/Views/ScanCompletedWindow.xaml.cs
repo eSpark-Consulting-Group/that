@@ -21,7 +21,10 @@ namespace APTAT.Application
 
         private void ScanCompletedWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            yes.DelayedFocus();
+            if (ok.Visibility == Visibility.Visible)
+                ok.Focus();
+            else
+                yes.DelayedFocus();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

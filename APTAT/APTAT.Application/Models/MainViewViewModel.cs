@@ -92,9 +92,9 @@ namespace APTAT.Application.Models
             {
                 if (UseCurrentCredentials == value) return;
                 _useCurrentCredentials = value;
-                UseCurrentDomainForDeploy = UseCurrentCredentials;
-
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
+
+                UseCurrentDomainForDeploy = UseCurrentCredentials;
             }
         }
 
@@ -108,14 +108,12 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
                 RaisePropertyChanged(nameof(Login));
                 RaisePropertyChanged(nameof(Password));
-
-
             }
         }
 
         public string Login
         {
-            get { return _login; }
+            get { return UseCurrentDomainForDeploy ? null : _login; }
             set
             {
                 _login = value;
@@ -125,7 +123,7 @@ namespace APTAT.Application.Models
 
         public string Password
         {
-            get { return _password; }
+            get { return UseCurrentDomainForDeploy ? null : _password; }
             set
             {
                 _password = value;
