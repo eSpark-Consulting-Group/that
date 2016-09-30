@@ -14,8 +14,6 @@ using APTAT.Application.Models;
 
 namespace APTAT.Application.Models.Directory
 {
-
-
     public class StartScanByIpViewModel : WizardViewModel
     {
         public const String SelectIp = "SelectIp";

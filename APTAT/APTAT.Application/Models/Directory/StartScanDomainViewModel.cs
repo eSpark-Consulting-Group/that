@@ -166,7 +166,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    //CheckIfCanUseCurrentCredentials();
+                    CheckIfCanUseCurrentCredentials();
                 //    var item = (DeploymentItem)_checkedItems.ToArray()[0];
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                     //storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
@@ -209,7 +209,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        /*private void CheckIfCanUseCurrentCredentials()
+        private void CheckIfCanUseCurrentCredentials()
         {
             var parentView = ((MainViewViewModel)base.ParentViewModel);
             parentView.UseCurrentCredentials = IsOnlyLocalComputer();
@@ -231,7 +231,7 @@ namespace APTAT.Application.Models
             }
 
             return onlyLocal;
-        }*/
+        }
 
         protected override void OnStepChanged()
         {

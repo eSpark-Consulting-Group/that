@@ -25,8 +25,9 @@ namespace APTAT.Application.Services
         void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password, Object userState);
 
         Task<GetDomainNameResponse> GetCurrentDomainName();
+        bool IsLocalAddress(string name);
 
-       
+
 
 
         string GetLoggedInUser();

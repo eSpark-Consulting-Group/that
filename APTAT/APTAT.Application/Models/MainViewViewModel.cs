@@ -91,6 +91,7 @@ namespace APTAT.Application.Models
             set
             {
                 if (UseCurrentCredentials == value) return;
+                if (HasCurrentDomainName) return;
                 _useCurrentCredentials = value;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
 

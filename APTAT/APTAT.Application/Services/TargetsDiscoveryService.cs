@@ -364,8 +364,8 @@ namespace APTAT.Application.Services
                     };
                 }
 
-                if (userState.Item1 != null)
-                    App.Current.Dispatcher.BeginInvoke((Action) delegate { userState.Item1(targets.Any(_ => _.IsLocalComputer)); });
+                if (userState.Item1 != null )
+                    App.Current.Dispatcher.BeginInvoke((Action) delegate { userState.Item1(targets.All(_ => _.IsLocalComputer)); });
 
 
                
@@ -493,7 +493,7 @@ namespace APTAT.Application.Services
             }
         }
 
-        private bool IsLocalAddress(string name)
+        public bool IsLocalAddress(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return false; 
 
