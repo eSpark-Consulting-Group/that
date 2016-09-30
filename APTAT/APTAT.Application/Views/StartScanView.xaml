@@ -413,7 +413,7 @@
 
                                                 <TextBlock HorizontalAlignment="Center" Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource StrongBrush}" Grid.Column="1" Margin="0 50 0 0">
                                                     <TextBlock.Text>
-                                                        Local Scan
+                                                        This Computer
                                                     </TextBlock.Text>
                                                 </TextBlock>
 

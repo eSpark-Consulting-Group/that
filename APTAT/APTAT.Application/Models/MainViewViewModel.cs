@@ -77,7 +77,18 @@ namespace APTAT.Application.Models
         public string Uri { get; set; } = "/Views/EULAView.xaml";
 
         public string CurrentDomainName { get; set; }
+        public string CurrentUser { get; set; }
 
+        public string CurrentDomainNameContent
+        {
+            get
+            {
+                return HasCurrentDomainName
+                    ? $"Use Current Domain Credentials ({CurrentDomainName})"
+                    : $"Use Current User Credentials ({CurrentUser})";
+
+            }
+        }
         public bool HasCurrentDomainName
         {
             get { return !string.IsNullOrEmpty(CurrentDomainName); }
@@ -93,9 +104,8 @@ namespace APTAT.Application.Models
                 if (UseCurrentCredentials == value) return;
                 if (HasCurrentDomainName) return;
                 _useCurrentCredentials = value;
-                RaisePropertyChanged(nameof(UseCurrentCredentials));
-
                 UseCurrentDomainForDeploy = UseCurrentCredentials;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
             }
         }
 
@@ -177,22 +187,17 @@ namespace APTAT.Application.Models
         private async void OnLoaded()
         {
             var name = await TryAction(GetCurrentDomainName());
+            CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
 
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
 
             if (HasCurrentDomainName)
             {
-                CurrentDomainName = $"Use Current Domain Credentials ({CurrentDomainName})";
                 UseCurrentDomainForDeploy = true;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
             }
-            else
-            {
-                var user = _targetsDiscoveryService.GetLoggedInUser();
-                CurrentDomainName = $"Use Current User Credentials ({user})";
-            }
 
-            RaisePropertyChanged(nameof(CurrentDomainName));
+            RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }
 
