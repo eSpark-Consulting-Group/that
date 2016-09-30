@@ -25,6 +25,7 @@ namespace APTAT.Application.Models
 
         public Boolean IsOnline { get; set; }
 
+        public Boolean IsLocalComputer { get;set;}
         public override string ToString()
         {
             return Name;

@@ -287,6 +287,7 @@ namespace APTAT.Application.Services
                         IPAddress = target.IPAddress ?? "Unknown",
                         Status = target.IsOnline ? "Ready" : "Offline",
                         IsOnline = target.IsOnline,
+                        IsLocalComputer = target.IsLocalComputer
                     });
                 }
 
@@ -303,6 +304,7 @@ namespace APTAT.Application.Services
                                 Name = tuple.Item1,
                                 IsWorkgroup = true,
                                 IsLoadOnDemand = true
+                                
                             }
                         },
                     tuple.Item3);
@@ -360,7 +362,8 @@ namespace APTAT.Application.Services
                         TargetUid = target.Uid,
                         IPAddress = target.IPAddress == null ? "Unknown" : target.IPAddress,
                         Status = target.IsOnline ? "Ready" : "Offline",
-                        IsOnline = target.IsOnline
+                        IsOnline = target.IsOnline,                        
+                        IsLocalComputer = target.IsLocalComputer
                     };
                 }
 
@@ -410,6 +413,7 @@ namespace APTAT.Application.Services
                         deploymentTarget.SmbName = item.Name;
                         deploymentTarget.Name = item.Name;
                         deploymentTarget.Uid = item.TargetUid;
+                        deploymentTarget.IsLocalComputer = item.IsLocalComputer;
                         collection.Add(deploymentTarget);
                     }
                     else
@@ -419,6 +423,7 @@ namespace APTAT.Application.Services
                         deploymentTarget.EntryType = FromDirectoryItemType(directoryItem.Type);
                         deploymentTarget.DnsName = directoryItem.DnsName;
                         deploymentTarget.Name = item.Name;
+                        deploymentTarget.IsLocalComputer = item.IsLocalComputer;
                         deploymentTarget.Uid = item.TargetUid;
                         collection.Add(deploymentTarget);
                     }
@@ -429,6 +434,7 @@ namespace APTAT.Application.Services
                     DeploymentTarget deploymentTarget = new DeploymentTarget();
                     deploymentTarget.Name = item.Name;
                     deploymentTarget.Uid = item.TargetUid;
+                    deploymentTarget.IsLocalComputer = item.IsLocalComputer;
                     collection.Add(deploymentTarget);
                 }
             }
