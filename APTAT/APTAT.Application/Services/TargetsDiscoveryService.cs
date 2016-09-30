@@ -495,6 +495,8 @@ namespace APTAT.Application.Services
 
         private bool IsLocalAddress(string name)
         {
+            if (string.IsNullOrWhiteSpace(name)) return false; 
+
             IPHostEntry hostInfo = _networkHelper.GetHostEntry();
 
             if (_networkHelper.IsLoopbackAddress(name)) return true;
