@@ -4,8 +4,8 @@ namespace APTAT.Application.Models.ModelBase
 {
     public interface IMainViewModel
     {
-        string Login { get;  }
-        string Password { get;  }
+        string Login { get; set; }
+        string Password { get; set; }
         bool HasCurrentDomainName { get; }
         bool UseCurrentCredentials { get; set; }
         string TcpPort { get;  }

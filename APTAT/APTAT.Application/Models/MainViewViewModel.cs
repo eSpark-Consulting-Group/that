@@ -32,6 +32,8 @@ namespace APTAT.Application.Models
 
         private string _login;
         private string _password;
+        private string _loginInternal;
+        private string _passwordInternal;
         private string _camLicenseId;
         private string _camUserLogin;
         private string _camUserPassword;
@@ -1053,8 +1055,9 @@ namespace APTAT.Application.Models
                 {
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind);
                 }
-
-                _aptService.BeginScan(e.Items, Login, Password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _loginInternal = Login;
+                _passwordInternal = Password;
+                _aptService.BeginScan(e.Items, _loginInternal, _passwordInternal, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
                 Password = null;
             }
             else
@@ -1122,7 +1125,7 @@ namespace APTAT.Application.Models
                 _camUserLogin = model.UserName;
                 _camUserPassword = model.Password;
 
-                _aptService.BeginValkyrieAnalysis(_login, _password, _camLicenseId, _camUserLogin, _camUserPassword,
+                _aptService.BeginValkyrieAnalysis(_loginInternal, _passwordInternal, _camLicenseId, _camUserLogin, _camUserPassword,
                     networkCredential);
                 return true;
             }

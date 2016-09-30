@@ -290,6 +290,9 @@ namespace APTAT.Application.Models
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
                 //_storage.SetValue(KnownKeys.Login, null);
                 //_storage.SetValue(KnownKeys.Password, null);
+                var main = (IMainViewModel) ParentViewModel;
+                main.Login = null;
+                main.Password = null;
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                 new DevicesSourceDescription()
                 {
