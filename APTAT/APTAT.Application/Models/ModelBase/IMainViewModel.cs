@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace APTAT.Application.Models.ModelBase
 {
@@ -10,7 +6,8 @@ namespace APTAT.Application.Models.ModelBase
     {
         string Login { get;  }
         string Password { get;  }
-        bool HasCurrentDomainName { get;  }
+        bool HasCurrentDomainName { get; }
+        bool UseCurrentCredentials { get; set; }
         string TcpPort { get;  }
         string UdpPort { get;  }
 

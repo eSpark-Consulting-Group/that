@@ -148,7 +148,7 @@ namespace APTAT.Application.Models
                     _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
                     {
                         new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
-                    }, new OperationContext { Success = success, UserState = this });
+                    }, null, new OperationContext { Success = success, UserState = this });
                 }
                 else
                 {
@@ -170,7 +170,7 @@ namespace APTAT.Application.Models
                     _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
                     {
                         new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
-                    }, new OperationContext { Success = success, UserState = this });
+                    }, null, new OperationContext { Success = success, UserState = this });
                 }
             }
             else

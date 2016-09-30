@@ -30,7 +30,7 @@
                                 </Grid>
                             </Border>
 
-                            <Grid Grid.Row="1" Grid.ColumnSpan="2" Background="White">
+                            <Grid Grid.Row="1" Grid.ColumnSpan="2" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition/>

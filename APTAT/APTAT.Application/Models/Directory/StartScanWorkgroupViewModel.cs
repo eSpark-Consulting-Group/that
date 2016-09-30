@@ -185,7 +185,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    CheckIfCanUseCurrentCredentials();
+                    //CheckIfCanUseCurrentCredentials();
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                    
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
@@ -231,7 +231,7 @@ namespace APTAT.Application.Models
             Error = null;
         }
 
-        private void CheckIfCanUseCurrentCredentials()
+        /*private void CheckIfCanUseCurrentCredentials()
         {
             var parentView = ((MainViewViewModel)base.ParentViewModel);
             parentView.UseCurrentCredentials = IsOnlyLocalComputer();
@@ -253,7 +253,8 @@ namespace APTAT.Application.Models
             }
 
             return onlyLocal;
-        }
+        }*/
+
         private void OnGetWorkgroupCompleted(Object sender, GetDirectoryItemsEventArgs e)
         {
             OperationContext context = (OperationContext)e.UserState;

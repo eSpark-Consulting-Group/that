@@ -122,6 +122,7 @@
                         Grid.Column="1" Grid.ColumnSpan="2"
                         AddCommand="{Binding AddIpCommand}"
                         RemoveCommand="{Binding DeleteIpCommand}"
+                                         RemoveAllCommand="{Binding DeleteAllIpCommand}"
                         ItemTemplate="{StaticResource ItemTemplate}"
                         ItemsSource="{Binding IpAddresses}"/>
             </Grid>

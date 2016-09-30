@@ -166,18 +166,13 @@ namespace APTAT.Application.Services
         {
             IPHostEntry hostInfo = _networkHelper.GetHostEntry();
 
-            var target = targets.FirstOrDefault(t => hostInfo.AddressList.Contains(t.GetIPAddress()));
-            if (target != null)
+            foreach (var item in targets)
             {
-                target.IsLocalComputer = true;
-            }
-            else
-            {
-                var targetByName = targets.FirstOrDefault(t => t.DnsName == hostInfo.HostName);
-                if (targetByName != null)
-                {
-                    targetByName.IsLocalComputer = true;
-                }
+                var address = item.GetIPAddress();
+                if (address != null)
+                    item.IsLocalComputer = hostInfo.AddressList.Contains(address);
+                else
+                    item.IsLocalComputer = IsLocalAddress(item.DnsName);
             }
         }
 
@@ -329,25 +324,31 @@ namespace APTAT.Application.Services
             }
         }
 
-        public void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState)
+        public void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Action<bool> localAction, Object userState)
         {
             EndpointAddressCollection ipAddressCollection = new EndpointAddressCollection();
             foreach (IpAddressWrapper ipAddress in ipAddresses)
             {
                 ipAddressCollection.Add(ipAddress.GetEndpointAddress().BaseEntity);
+
             }
 
             IIpAddressDiscoverer discoverer = _manager.GetIpAddressDiscoverer(ipAddressCollection);
             discoverer.Discovered += OnComputersByIpAddressesDiscovered;
-            discoverer.BeginDiscover(userState);
+            discoverer.BeginDiscover(Tuple.Create(localAction, userState));
         }
 
         private void OnComputersByIpAddressesDiscovered(Object sender, TargetsDiscovererEventArgs e)
         {
+            var userState = e.State as Tuple<Action<bool>, object>;
+
             if (e.Error == null)
             {
                 DeploymentTarget[] targets = e.Targets;
+
+
                 SetLocalHostItem(targets);
+
 
                 DeploymentItem[] result = new DeploymentItem[targets.Length];
                 for (Int32 i = 0; i < targets.Length; ++i)
@@ -363,7 +364,12 @@ namespace APTAT.Application.Services
                     };
                 }
 
-                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(result, e.State);
+                if (userState.Item1 != null)
+                    App.Current.Dispatcher.BeginInvoke((Action) delegate { userState.Item1(targets.Any(_ => _.IsLocalComputer)); });
+
+
+               
+                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(result, userState.Item2);
                 Action action = () =>
                 {
                     if (GetByIpAddressesCompleted != null)
@@ -372,10 +378,12 @@ namespace APTAT.Application.Services
                     }
                 };
                 App.Current.Dispatcher.BeginInvoke(action);
+
+
             }
             else
             {
-                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(null, e.State, e.Error);
+                GetByIpAddressEventArgs args = new GetByIpAddressEventArgs(null, userState.Item2, e.Error);
                 Action action = () =>
                 {
                     if (GetByIpAddressesCompleted != null)
@@ -468,35 +476,24 @@ namespace APTAT.Application.Services
             throw new ArgumentException("type");
         }
 
-        public bool IsLocalAddress(IpAddressWrapper ip)
+        private bool IsLocalAddress(IpAddressWrapper ip)
         {
             if (ip.IsRange || ip.IsMask) return false;
 
-            IPHostEntry hostInfo = _networkHelper.GetHostEntry();
+            
             if (ip.IsDnsName)
             {
-                if (_networkHelper.IsLoopbackAddress(ip.FormattedText)) return true;
-
-                NetworkObserver observer = new NetworkObserver();
-                IPHostEntry host;
-                try
-                {
-                    host = Dns.GetHostEntry(ip.FormattedText);
-                }
-                catch (SocketException ex)
-                {
-                    return false;
-                }
-                return host.HostName == hostInfo.HostName;
+                return IsLocalAddress(ip.FormattedText);
             }
             else
             {
+                IPHostEntry hostInfo = _networkHelper.GetHostEntry();
                 IPAddress address = IPAddress.Parse(ip.FormattedText);
                 return hostInfo.AddressList.Contains(address);
             }
         }
 
-        public bool IsLocalAddress(string name)
+        private bool IsLocalAddress(string name)
         {
             IPHostEntry hostInfo = _networkHelper.GetHostEntry();
 
@@ -509,7 +506,7 @@ namespace APTAT.Application.Services
 
                 host = Dns.GetHostEntry(name);
             }
-            catch (SocketException ex)
+            catch (SocketException)
             {
                 return false;
             }

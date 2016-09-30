@@ -10,6 +10,7 @@ using APTAT.Core.Descent;
 using APTAT.DeploymentCore.Directory;
 using Telerik.Windows.Controls;
 using APTAT.Application.Views;
+using APTAT.Application.Models;
 
 namespace APTAT.Application.Models.Directory
 {
@@ -69,16 +70,13 @@ namespace APTAT.Application.Models.Directory
             private set;
         }
 
-        private Boolean _enableDefaultButtons;
-        public Boolean EnableDefaultButtons
+        public DelegateCommand DeleteAllIpCommand
         {
-            get { return _enableDefaultButtons; }
-            set
-            {
-                _enableDefaultButtons = value;
-                RaisePropertyChanged("EnableDefaultButtons");
-            }
+            get;
+            private set;
         }
+
+
 
         public StartScanByIpViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
@@ -89,7 +87,7 @@ namespace APTAT.Application.Models.Directory
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
             DeleteIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
-
+            DeleteAllIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
         }
 
         protected override void InvokeViewLoaded(object arg)
@@ -150,6 +148,8 @@ namespace APTAT.Application.Models.Directory
             }
         }
 
+
+
         private void InvokeAddIpCommand(Object e)
         {
             Error = null;
@@ -188,12 +188,12 @@ namespace APTAT.Application.Models.Directory
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
             Error = null;
-            EnableDefaultButtons = false;
+            
             if (previousStep == SelectIp && context.IsForward(CurrentStepIndex))
             {
                 if (IpAddresses.Count == 0)
                 {
-                    Error = "Please add at least one network address";
+                    Error = "Please enter at least one network address";
                     return;
                 }
 
@@ -201,10 +201,9 @@ namespace APTAT.Application.Models.Directory
                 IsBusy = true;
                 _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
 
-                CheckIfCanUseCurrentCredentials();
 
 
-                _targetsDiscoveryService.GetByIpAddresses(IpAddresses, new OperationContext { Success = success, UserState = this });
+                _targetsDiscoveryService.GetByIpAddresses(IpAddresses, CheckIfCanUseCurrentCredentials, new OperationContext { Success = success, UserState = this });
 
             }
             else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
@@ -252,26 +251,13 @@ namespace APTAT.Application.Models.Directory
 
 
 
-        private void CheckIfCanUseCurrentCredentials()
+        private void CheckIfCanUseCurrentCredentials(bool local)
         {
-            var parentView = ((MainViewViewModel)base.ParentViewModel);
-            parentView.UseCurrentCredentials = IsOnlyLocalComputer();
+            var parent = ParentViewModel as IMainViewModel;
+            if (parent != null)
+                parent.UseCurrentCredentials = local;
         }
 
-        private bool IsOnlyLocalComputer()
-        {
-            bool onlyLocal = true;
-            foreach (var address in IpAddresses)
-            {
-                if (!_targetsDiscoveryService.IsLocalAddress(address))
-                {
-                    onlyLocal = false;
-                    break;
-                }
-            }
-
-            return onlyLocal;
-        }
 
         private void OnGetByIpAddressesCompleted(Object sender, GetByIpAddressEventArgs e)
         {
@@ -281,7 +267,7 @@ namespace APTAT.Application.Models.Directory
                 return;
             }
 
-            EnableDefaultButtons = true;
+            
             IsBusy = false;
             if (e.Exception == null)
             {

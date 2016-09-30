@@ -12,7 +12,7 @@ namespace APTAT.Application.Services
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
-        void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Object userState);
+        void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Action<bool> localAction, Object userState);
 
         void GetWorkgroup(String workgroupName, DirectoryItem parent, Object userState);
 
@@ -26,9 +26,8 @@ namespace APTAT.Application.Services
 
         Task<GetDomainNameResponse> GetCurrentDomainName();
 
-        bool IsLocalAddress(IpAddressWrapper ipAddress);
+       
 
-        bool IsLocalAddress(string name);
 
         string GetLoggedInUser();
     }

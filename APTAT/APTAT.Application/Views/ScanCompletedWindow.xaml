@@ -37,7 +37,7 @@
                                     <TextBlock Text="Scan Results" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
-                            <Grid Grid.Row="1" Grid.ColumnSpan="2" Background="White">
+                            <Grid Grid.Row="1" Grid.ColumnSpan="2" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition/>
@@ -65,7 +65,7 @@
                                         </TextBlock>
 
 
-                                <Border Background="#FFFAF9F9" Margin="78,10,78,20" Grid.Row="2">
+                                <Border Background="White" Margin="78,10,78,20" Grid.Row="2">
                                     <TextBlock AutomationProperties.AutomationId="StatisticsTextBlock" x:Name="Text" FontSize="14" Margin="10 10 0 10"  LineHeight="28" Foreground="#555"/>
                                 </Border>
 

@@ -70,6 +70,12 @@ namespace APTAT.Application.Views
             typeof(TextEntryListView),
             null);
 
+        public static readonly DependencyProperty RemoveAllCommandProperty = DependencyProperty.Register(
+            "RemoveAllCommand",
+            typeof(ICommand),
+            typeof(TextEntryListView),
+            null);
+
 
 
         private void SourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -77,7 +83,10 @@ namespace APTAT.Application.Views
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 ItemsList.SelectedItem = e.NewItems[0];
+                RemoveAllButton.IsEnabled = true;
             }
+            else if (!ItemsList.HasItems)
+                RemoveAllButton.IsEnabled = false;
         }
 
         public DataTemplate ItemTemplate
@@ -104,7 +113,11 @@ namespace APTAT.Application.Views
             set { SetValue(RemoveCommandProperty, value); }
         }
 
-
+        public ICommand RemoveAllCommand
+        {
+            get { return (ICommand)GetValue(RemoveAllCommandProperty); }
+            set { SetValue(RemoveAllCommandProperty, value); }
+        }
 
         public TextEntryListView()
         {
@@ -112,6 +125,7 @@ namespace APTAT.Application.Views
 
             AddButton.Click += AddButton_Click;
             RemoveButton.Click += RemoveButton_Click;
+            RemoveAllButton.Click += RemoveAllButton_Click;
             InputTextBox.KeyDown += InputTextBox_KeyDown;
             InputTextBox.MouseEnter += InputTextBox_MouseEnter;
             InputTextBox.MouseLeave += InputTextBox_MouseLeave;
@@ -200,6 +214,20 @@ Computer Name: HomeComputer";
 
             if (RemoveCommand != null && RemoveCommand.CanExecute(args))
                 RemoveCommand.Execute(args);
+        }
+
+        private void RemoveAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<Object> items = from Object selectedItem in ItemsList.Items select selectedItem;
+            var args = new CancelItemArgs
+            {
+
+                Item = items.ToList(),
+                Cancel = false,
+            };
+
+            if (RemoveAllCommand != null && RemoveAllCommand.CanExecute(args))
+                RemoveAllCommand.Execute(args);
         }
 
         private void InputTextBox_KeyDown(object sender, KeyEventArgs e)
