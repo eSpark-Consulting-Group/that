@@ -23,7 +23,7 @@
             <Grid Grid.Row="1">
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
                    FontFamily="Segoe UI"   VerticalAlignment="Top" Margin="23,37,0,0">
-                Select Scanning Targets
+                Select Scan Targets
                 </TextBlock>
                 <Border x:Name="pathSelector" Margin="0 42 0 0">
                     <Grid >

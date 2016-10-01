@@ -178,6 +178,7 @@ namespace APTAT.Application
         private void OnPropertiesClick(Object sender, RoutedEventArgs e)
         {
             ShowRegisterToValkyrieWindow();
+
         }
 
         private static void ShowReport()

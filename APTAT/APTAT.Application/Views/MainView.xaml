@@ -102,7 +102,7 @@
             <Grid  x:Name="empty">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"   >
 
-                <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="There are no scans have been performed yet."
+                <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="No scans have been performed yet."
                    Opacity="0.5"  FontSize="13" Style="{DynamicResource SubTitleTextStyle}"/>
 
                 <Button AutomationProperties.AutomationId="StartScanningNowButton"
@@ -119,7 +119,7 @@
                               Height="24"
                               Width="24"
                               Margin="0,0,10,-1"/>
-                        <TextBlock Text="Start Scanning Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
+                        <TextBlock Text="Scan Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
                     </Grid>
                 </Button>
 
@@ -181,7 +181,7 @@
                               Height="24"
                               Width="24"
                               Margin="0,0,10,0"/>
-                            <TextBlock Text="Start Scanning" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16"
+                            <TextBlock Text="Start Scan" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16"
                    FontFamily="Segoe UI"/>
                         </Grid>
                     </telerik:RadButton.Content>
@@ -224,7 +224,7 @@
                               Fill="{DynamicResource StrongBrush}" 
                               Height="24" 
                               Width="24" Margin="0,0,10,0"/>
-                            <TextBlock Text="Stop Scanning" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16"
+                            <TextBlock Text="Stop Scan" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16"
                    FontFamily="Segoe UI"/>
                         </Grid>
                     </telerik:RadButton.Content>

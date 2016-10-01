@@ -38,7 +38,6 @@
             <sys:String x:Key="GETValkyrieLink">https://accounts.comodo.com/valkyrie/management/signup</sys:String>
 
 
-            <SolidColorBrush x:Key="GreenLightBrush" Color="#2cb42c"  telerik:Windows8Colors.Color="BoundColor" />
             <Converters:StringToVisibiltyConverter x:Key="StringToVisibiltyConverter"/>
             <Converters:NullableConverter x:Key="NullableConverter"/>
             <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -1494,8 +1493,6 @@
                     <Setter Property="IsExpandable" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=DataContext.ScanCompleted}" />
                 </Style.Setters>
             </Style>
-
-
         </ResourceDictionary>
 
     </Application.Resources>

@@ -132,7 +132,7 @@
                 <Path Data="F1M636,665.1416L636,674.9996L618.142,674.9996C618.588,676.7216,620.139,677.9996,622,677.9996L635,677.9996C637.209,677.9996,639,676.2086,639,673.9996L639,668.9996C639,667.1386,637.723,665.5876,636,665.1416" Fill="#FF457FAD" Height="12.858" Opacity="0.19999699294567108" Stretch="Fill" Width="20.858" Canvas.Left="72.142" Canvas.Top="15.142"/>
             </Canvas>
 
-            <TextBlock Text="Scanning Credentials" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+            <TextBlock Text="Scan Credentials" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
         <Grid x:Name="panelSelectDomain" Grid.Row="2" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectWorkgroup, FallbackValue=Collapsed}">
