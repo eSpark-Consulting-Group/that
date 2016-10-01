@@ -41,7 +41,7 @@ namespace APTAT.Application.Models
         private string _udpPort = "53";
 
         private readonly IAptService _aptService;
-        private readonly IWmiService _wmiService;
+
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
@@ -615,11 +615,11 @@ namespace APTAT.Application.Models
 
 
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
-            IAptService aptService, IStorageService storage, IWmiService wmiService)
+            IAptService aptService, IStorageService storage)
         {
             _aptService = aptService;
             _targetsDiscoveryService = targetsDiscoveryService;
-            _wmiService = wmiService;
+
             _storage = storage;
 
             ChangeScreenCommand = new DelegateCommand(o =>

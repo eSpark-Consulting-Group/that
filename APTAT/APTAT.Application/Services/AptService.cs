@@ -15,7 +15,7 @@ using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Application.Services
 {
-    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
+
     public class AptService : IAptService
     {
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;

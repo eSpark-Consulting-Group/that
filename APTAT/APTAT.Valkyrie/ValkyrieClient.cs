@@ -152,7 +152,7 @@ namespace APTAT.Valkyrie
                             AnalysisId = context.AnalysisId
                         });
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     
                 }

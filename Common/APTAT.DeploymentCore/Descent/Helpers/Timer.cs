@@ -13,7 +13,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
     public sealed class Timer : ITimer
     {
         private readonly System.Threading.Timer _timer;
-        private TimeSpan _dueTime;
+        //private TimeSpan _dueTime;
         private TimeSpan _period;
         public event EventHandler TimeoutCallback;
 

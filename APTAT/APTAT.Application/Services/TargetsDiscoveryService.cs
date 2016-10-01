@@ -6,19 +6,21 @@ using APTAT.DeploymentCore.Directory.Discoverers;
 using APTAT.DeploymentCore.Directory.Resolvers;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
-using Composition = APTAT.Common.CompositionHelper;
+
 using System.Threading.Tasks;
-using System.Security.Principal;
+
 using System.Linq;
 using System.Net;
-using APTAT.DeploymentCore.Descent.Helpers;
+
 using APTAT.DeploymentCore;
 using System.Collections.ObjectModel;
 using System.Net.Sockets;
 
 namespace APTAT.Application.Services
 {
-    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
+
+
+
     public class TargetsDiscoveryService : ITargetsDiscoveryService
     {
         private readonly ITargetsManager _manager;
@@ -528,5 +530,16 @@ namespace APTAT.Application.Services
         public DirectoryItem Parent { get; set; }
 
         public Object UserState { get; set; }
+    }
+
+    public class GetDomainNameResponse : DomainEventArgs
+    {
+        public GetDomainNameResponse(string name, Exception exception)
+        {
+            Name = name;
+            Exception = exception;
+        }
+
+        public string Name { get; }
     }
 }

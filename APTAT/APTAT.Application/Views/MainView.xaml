@@ -12,7 +12,7 @@
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                   d:DesignHeight="760" d:DesignWidth="1200" Background="White">
 
-    <Grid >
+    <Grid>
         <Grid.RenderTransform>
             <TranslateTransform x:Name="translate1" X="1100" />
         </Grid.RenderTransform>
@@ -102,28 +102,28 @@
             <Grid  x:Name="empty">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"   >
 
-                <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="No scans have been performed yet."
+                    <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="No scans have been performed yet."
                    Opacity="0.5"  FontSize="13" Style="{DynamicResource SubTitleTextStyle}"/>
 
-                <Button AutomationProperties.AutomationId="StartScanningNowButton"
+                    <Button AutomationProperties.AutomationId="StartScanningNowButton"
                     Margin="0,10,0,0"  HorizontalAlignment="Center"
                     Style="{StaticResource LinkButton}" 
                     Command="{Binding StartScanCommand}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
                               Fill="{DynamicResource StrongBrush}"
                               Height="24"
                               Width="24"
                               Margin="0,0,10,-1"/>
-                        <TextBlock Text="Scan Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
-                    </Grid>
-                </Button>
+                            <TextBlock Text="Scan Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
+                        </Grid>
+                    </Button>
 
-            </StackPanel>
+                </StackPanel>
 
                 <TextBlock TextWrapping="Wrap" FontSize="13" TextAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 30"  Width="500">
                     This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit
@@ -141,7 +141,7 @@
                 </ResourceDictionary>
             </telerik:RadBusyIndicator.Resources>
             <telerik:RadBusyIndicator IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
-                
+
             </telerik:RadBusyIndicator>
         </telerik:RadBusyIndicator>
 
@@ -286,9 +286,6 @@
 
         </Grid>
 
-        
-        
-
         <Border Grid.Row="3"  Height="35" Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
             <DockPanel   Height="35" >
                 <TextBlock Margin="10,0,0,0" />
@@ -309,8 +306,6 @@
                 <TextBlock AutomationProperties.AutomationId="TotalItemsCountTextBlock" 
                            Foreground="White" Text="{Binding TotalItemsCount}" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 <TextBlock  Foreground="White" Text=" Computers scanned)" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
-
-
 
             </DockPanel >
         </Border>

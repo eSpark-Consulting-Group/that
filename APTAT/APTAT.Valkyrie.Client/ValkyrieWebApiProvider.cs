@@ -73,7 +73,7 @@ namespace Valkyrie.WebApiProvider
                 Thread.Sleep(interval);
             }
             return response;
-            Trace.Flush();
+
         }
 
 

@@ -5,7 +5,7 @@ using Composition = APTAT.Common.CompositionHelper;
 
 namespace APTAT.Application.Services
 {
-    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
+
     public class StorageService : IStorageService
     {
         public StorageService()

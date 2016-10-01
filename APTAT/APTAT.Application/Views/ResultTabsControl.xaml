@@ -26,128 +26,126 @@
                 </BeginStoryboard>
             </EventTrigger>
         </Grid.Triggers>
-      <Grid.Resources>
+        <Grid.Resources>
 
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-
-
 
                     <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
 
                 <Style TargetType="TabItem">
-          <Setter Property="MinWidth" Value="100" />
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="TabItem">
-                <Grid>
-                  <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="FocusStates">
-                      <VisualState x:Name="Focused"/>
-                      <VisualState x:Name="Unfocused"/> 
-                    </VisualStateGroup>
-                  </VisualStateManager.VisualStateGroups>
-                  <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" VerticalAlignment="Bottom" Margin="-2 0 -23 0" Fill="White">
-                    <Path.Data>
-                      <PathGeometry>
-                        <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={converters:ContentToPathConverter}}">
-                        </PathFigure>
-                      </PathGeometry>
-                    </Path.Data>
-                    <Path.LayoutTransform>
-                      <ScaleTransform ScaleY="-1"/>
-                    </Path.LayoutTransform>
-                  </Path>
-                  <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="20,4,0,0" ContentSource="Header"
+                    <Setter Property="MinWidth" Value="100" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Grid>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="FocusStates">
+                                            <VisualState x:Name="Focused"/>
+                                            <VisualState x:Name="Unfocused"/>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" VerticalAlignment="Bottom" Margin="-2 0 -23 0" Fill="White">
+                                        <Path.Data>
+                                            <PathGeometry>
+                                                <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={converters:ContentToPathConverter}}">
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </Path.Data>
+                                        <Path.LayoutTransform>
+                                            <ScaleTransform ScaleY="-1"/>
+                                        </Path.LayoutTransform>
+                                    </Path>
+                                    <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="20,4,0,0" ContentSource="Header"
                                           TextBlock.Foreground="#FF767676" TextBlock.FontSize="14" TextBlock.TextAlignment="Right"/>
-                  <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,0,0,0" ContentSource="Header"
+                                    <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,0,0,0" ContentSource="Header"
                                           TextBlock.Foreground="White" TextBlock.FontSize="14" />
-                </Grid>
-                <ControlTemplate.Triggers>
-                  <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Fill" TargetName="TabPath" Value="#FF25A0DA" />
-                                    <Setter Property="TextBlock.Foreground" TargetName="ContentSite" Value="White" />
-                                </Trigger>
-                  <Trigger Property="Selector.IsSelected" Value="True">
-                    <Setter Property="Fill" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
-                      <Setter Property="Stroke" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Fill" TargetName="TabPath" Value="#FF25A0DA" />
+                                        <Setter Property="TextBlock.Foreground" TargetName="ContentSite" Value="White" />
+                                    </Trigger>
+                                    <Trigger Property="Selector.IsSelected" Value="True">
+                                        <Setter Property="Fill" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
+                                        <Setter Property="Stroke" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
 
-                                    <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
-                    <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
-                    <Setter Property="Panel.ZIndex" Value="2"/>
-                  </Trigger>
-                </ControlTemplate.Triggers>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-        </Style>
-        
-        <Style TargetType="ToggleButton">
-          <Setter Property="MinWidth" Value="100" />
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="ToggleButton">
-                <Grid>
-                                <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" VerticalAlignment="Bottom" Margin="-2 0 -23 0" Fill="White">
-                    <Path.Data>
-                      <PathGeometry>
-                                            <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={converters:ContentToPathConverter}}">
-                        </PathFigure>
-                      </PathGeometry>
-                    </Path.Data>
-                    <Path.LayoutTransform>
-                      <ScaleTransform ScaleY="-1"/>
-                    </Path.LayoutTransform>
-                  </Path>
-                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="20,4,0,0" ContentSource="Content"
+                                        <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
+                                        <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
+                                        <Setter Property="Panel.ZIndex" Value="2"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style TargetType="ToggleButton">
+                    <Setter Property="MinWidth" Value="100" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Grid>
+                                    <Path x:Name="TabPath" Stroke="#FFE3E3E3" SnapsToDevicePixels="true" VerticalAlignment="Bottom" Margin="-2 0 -23 0" Fill="White">
+                                        <Path.Data>
+                                            <PathGeometry>
+                                                <PathFigure IsClosed="False" StartPoint="0,0" Segments="{Binding ElementName=ContentSite, Converter={converters:ContentToPathConverter}}">
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </Path.Data>
+                                        <Path.LayoutTransform>
+                                            <ScaleTransform ScaleY="-1"/>
+                                        </Path.LayoutTransform>
+                                    </Path>
+                                    <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="20,4,0,0" ContentSource="Content"
                                           TextBlock.Foreground="#FF767676" TextBlock.FontSize="14" TextBlock.TextAlignment="Right"/>
-                  <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,0,0,0" ContentSource="Content"
+                                    <ContentPresenter x:Name="ContentSite2" Opacity="0" VerticalAlignment="Center"  Margin="10,0,0,0" ContentSource="Content"
                                           TextBlock.Foreground="White" TextBlock.FontSize="14" />
-                </Grid>
-                <ControlTemplate.Triggers>
-                  <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Fill" TargetName="TabPath" Value="#FF25A0DA" />
-                                    <Setter Property="TextBlock.Foreground" TargetName="ContentSite" Value="White" />
-                                </Trigger>
-                  <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter Property="Fill" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
-                                    <Setter Property="Stroke" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
-                                    <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
-                    <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
-                    <Setter Property="Panel.ZIndex" Value="2"/>
-                  </Trigger>
-                </ControlTemplate.Triggers>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-        </Style>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Fill" TargetName="TabPath" Value="#FF25A0DA" />
+                                        <Setter Property="TextBlock.Foreground" TargetName="ContentSite" Value="White" />
+                                    </Trigger>
+                                    <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                        <Setter Property="Fill" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
+                                        <Setter Property="Stroke" TargetName="TabPath" Value="{StaticResource StrongBrush}"/>
+                                        <Setter Property="Opacity" TargetName="ContentSite" Value="0"/>
+                                        <Setter Property="Opacity" TargetName="ContentSite2" Value="1"/>
+                                        <Setter Property="Panel.ZIndex" Value="2"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
 
-                </ResourceDictionary>
-      </Grid.Resources>
-        
+            </ResourceDictionary>
+        </Grid.Resources>
+
         <TabControl  AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >
             <TabItem AutomationProperties.AutomationId="UnknownFilesTab" x:Name="tab" Header="Scan results   " IsSelected="{Binding SelectScan, Mode=TwoWay}"  >
-              <Grid Background="White" x:Name="grd1">
+                <Grid Background="White" x:Name="grd1">
                     <local:ScanResultUserControlByComputers   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}" Loaded="TabItem_Loaded" />
                     <local:ScanResultUserControl  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}" />
-              </Grid>
+                </Grid>
             </TabItem>
             <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" IsEnabled="{Binding ValkyrieEnabled}" >
                 <Grid Background="White" x:Name="grd2">
                     <local:ValkyrieResultUserControlByComputers  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"  />
                     <local:ValkyrieResultUserControl  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"  />
-              </Grid>
+                </Grid>
             </TabItem>
         </TabControl>
-        
-        
+
+
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 23 0" Visibility="{Binding GroupingEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
-        <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" 
+            <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" 
                       Content="Group by Computers   " IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}"/>
-        <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" 
+            <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" 
                       Content="  Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}"/>
-      </StackPanel>
-        
+        </StackPanel>
+
     </Grid>
 </UserControl>

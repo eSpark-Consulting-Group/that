@@ -17,7 +17,7 @@ namespace APTAT.Core.Apt
         private readonly IDevicesSourceDescription _devicesSourceDescription;
         private readonly string _password;
         private readonly string _login;
-        private readonly string _scanScope;
+        //private readonly string _scanScope;
         private Guid _operationUid;
         private readonly IEnumerable<DeploymentTarget> _targets;
         

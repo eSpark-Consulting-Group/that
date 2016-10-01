@@ -11,7 +11,7 @@ namespace APTAT.Application
             CompositionHelper.Instance.RegisterSingleton<IAptService, AptService>();
             CompositionHelper.Instance.RegisterSingleton<IStorageService, StorageService>();
             CompositionHelper.Instance.RegisterSingleton<IFileBrowserService, FileBrowserService>();
-            CompositionHelper.Instance.RegisterSingleton<IWmiService, WmiService>();
+
         }
     }
 }

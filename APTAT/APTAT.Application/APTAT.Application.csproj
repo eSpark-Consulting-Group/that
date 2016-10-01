@@ -148,7 +148,6 @@
     <Compile Include="Models\ModelBase\IMainViewModel.cs" />
     <Compile Include="Models\ModelBase\ISelectableItem.cs" />
     <Compile Include="Services\FileBrowserService.cs" />
-    <Compile Include="Services\GetDomainNameResponse.cs" />
     <Compile Include="Services\IFileBrowserService.cs" />
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
@@ -166,8 +165,6 @@
     <Compile Include="Models\DomainObject.cs" />
     <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Services\ITargetsDiscoveryService.cs" />
-    <Compile Include="Services\WmiService.cs" />
-    <Compile Include="Services\IWmiService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="Extensions\PortValidationExtensions.cs" />
     <Compile Include="Views\EULAView.xaml.cs">
