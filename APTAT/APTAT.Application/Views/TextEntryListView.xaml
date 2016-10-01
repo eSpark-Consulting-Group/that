@@ -9,7 +9,7 @@
              mc:Ignorable="d" Loaded="ListLoaded"
              
      
-      xmlns:triggers="clr-namespace:APTAT.Application.Triggers"
+     
              d:DesignHeight="300" d:DesignWidth="400" x:Name="this">
 
     <Grid x:Name="LayoutRoot" Margin="0,0,10,0">

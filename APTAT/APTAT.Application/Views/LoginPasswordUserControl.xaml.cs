@@ -96,19 +96,7 @@ namespace APTAT.Application.Views
 
         #endregion
 
-        #region CommandProperty (DependencyProperty)
 
-        public ICommand Command
-        {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(ICommand), typeof(LoginPasswordUserControl),
-            new PropertyMetadata(null));
-
-        #endregion
 
         private void SwitchMask(object sender, RoutedEventArgs e)
         {

@@ -141,7 +141,7 @@
                             </Button.Triggers>
                         </Button>
 
-                        <Button Click="OnWorkgroupClick" ToolTip="Scan selected computers from workgroup" Grid.Row="1" Margin="17 17 0 0">
+                    <Button Click="OnWorkgroupClick" ToolTip="Scan computers by selecting them from Workgroup" Grid.Row="1" Margin="17 17 0 0">
                             <Button.Template>
                                 <ControlTemplate TargetType="{x:Type Button}">
                                     <FrameworkTemplate.Resources>
@@ -257,7 +257,7 @@
                             </Button.Triggers>
                         </Button>
 
-                        <Button ToolTip="Scan computers by specifying IP addresses or hostnames manually" Grid.Column="1" Margin="17 17 17 0" Click="OnIpClick">
+                        <Button ToolTip="Scan computers by specifying IP addresses or endpoint names" Grid.Column="1" Margin="17 17 17 0" Click="OnIpClick">
                             <Button.Template>
                                 <ControlTemplate TargetType="{x:Type Button}">
                                     <FrameworkTemplate.Resources>

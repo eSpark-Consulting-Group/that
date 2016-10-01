@@ -150,7 +150,6 @@
     <Compile Include="Services\FileBrowserService.cs" />
     <Compile Include="Services\GetDomainNameResponse.cs" />
     <Compile Include="Services\IFileBrowserService.cs" />
-    <Compile Include="Triggers\KeyToCommandAction.cs" />
     <Compile Include="Views\CamCredentialsWindow.xaml.cs">
       <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
     </Compile>
