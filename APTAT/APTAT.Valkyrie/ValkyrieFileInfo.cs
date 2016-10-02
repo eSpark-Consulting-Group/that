@@ -16,7 +16,9 @@ namespace APTAT.Valkyrie
 
         public string GetFullPath()
         {
-            return String.Format("\\\\{0}\\{1}", Ip, Path);
+            if (Path.StartsWith("\\\\"))
+                return Path;
+            return $"\\\\{Ip}\\{Path}";
         }
 
         public long Size { get; set; }
@@ -24,8 +26,9 @@ namespace APTAT.Valkyrie
 
         public string GetNetworkPath()
         {
-
-            return String.Format("\\\\{0}\\{1}", GetMachineName(), Path.Replace(":", "$"));
+            if (Path.StartsWith("\\\\"))
+                return Path.Replace(":", "$");
+            return $"\\\\{GetMachineName()}\\{Path.Replace(":", "$")}";
         }
         public override int GetHashCode()
         {
