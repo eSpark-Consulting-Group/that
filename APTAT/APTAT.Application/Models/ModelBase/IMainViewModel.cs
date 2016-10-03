@@ -8,6 +8,7 @@ namespace APTAT.Application.Models.ModelBase
         string Password { get; set; }
         bool HasCurrentDomainName { get; }
         bool UseCurrentCredentials { get; set; }
+        bool UseCurrentDomainForDeploy { get; set; }
         string TcpPort { get;  }
         string UdpPort { get;  }
 

@@ -11,12 +11,10 @@
                 xmlns:ui="clr-namespace:Telerik.Windows.Documents.UI;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
              xmlns:converters="clr-namespace:APTAT.Application.Converters"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:properties="clr-namespace:APTAT.Application.Properties"
+
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
         <ResourceDictionary>
-
 
             <SolidColorBrush x:Key="StrongBrush" Color="#FF2A80B9" />
             <SolidColorBrush x:Key="StrongBrush2" Color="#FF62B2E3" />
@@ -36,7 +34,6 @@
             <sys:String x:Key="CESMLink">https://www.comodo.com/endpoint-protection/endpoint-security.php</sys:String>
             <sys:String x:Key="CDMLink">https://one.comodo.com/signup/enterprise</sys:String>
             <sys:String x:Key="GETValkyrieLink">https://accounts.comodo.com/valkyrie/management/signup</sys:String>
-
 
             <Converters:StringToVisibiltyConverter x:Key="StringToVisibiltyConverter"/>
             <Converters:NullableConverter x:Key="NullableConverter"/>
@@ -69,7 +66,6 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-
                             <ContentPresenter />
                         </ControlTemplate>
                     </Setter.Value>
@@ -324,6 +320,18 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Pressed">
+                                        </VisualState>
+
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="PART_ContentHost" Storyboard.TargetProperty="Opacity" To="0.4" Duration="0:0:0"/>
+                                                <DoubleAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="Opacity" To="0.4" Duration="0:0:0"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
                                     <VisualStateGroup x:Name="CheckStates">
                                         <VisualState x:Name="Checked">
                                             <Storyboard>
@@ -339,7 +347,7 @@
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
                                 <Grid Opacity="0" Background="{DynamicResource MarkerBrush}" x:Name="Root" SnapsToDevicePixels="True"/>
-                                <Border>
+                                <Border x:Name="Bd">
                                     <Grid Height="16" Width="16">
                                         <Path x:Name="Icon" SnapsToDevicePixels="True" Data="F1M67,284.11L55,284.11L55,272.11L67,272.11z M53,286.11L69,286.11L69,270.11L53,270.11z" Fill="{Binding ElementName=Root, Path=Background}" Height="16" Stretch="Fill" Width="16"/>
 
@@ -932,7 +940,7 @@
                             </grid:GridViewScrollViewer.NewRow>
                             <treelist:TreeListViewVirtualizingPanel x:Name="PART_GridViewVirtualizingPanel" VirtualizingStackPanel.VirtualizationMode="Recycling"/>
                         </grid:GridViewScrollViewer>
-                        
+
 
                         <grid:ScrollPositionIndicator x:Name="PART_ScrollPositionIndicator" Margin="0,0,28,0"  IsHitTestVisible="False" HorizontalAlignment="Right"  Grid.Row="2" Grid.ColumnSpan="2" Visibility="Collapsed"
 												  ContentTemplate="{TemplateBinding ScrollPositionIndicatorTemplate}" />
@@ -997,7 +1005,7 @@
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                     </ObjectAnimationUsingKeyFrames>
-                                    
+
                                 </Storyboard>
                             </VisualState>
                             <VisualState x:Name="Ascending">
@@ -1074,7 +1082,7 @@
 
             <Style TargetType="grid:GridViewHeaderCell">
                 <Setter Property="TextWrapping" Value="NoWrap" />
-               
+
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                 <Setter Property="Template" Value="{StaticResource GridViewHeaderCellTemplate}" />
@@ -1213,7 +1221,6 @@
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
                 <Setter Property="Background" Value="{StaticResource MainBrush}" />
-
                 <Setter Property="FontFamily" Value="Segoe UI" />
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -1238,8 +1245,6 @@
                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="CommonStatesWrapper" Storyboard.TargetProperty="Opacity">
                                                     <DiscreteDoubleKeyFrame KeyTime="00:00:00.0" Value="0" />
                                                 </DoubleAnimationUsingKeyFrames>
-
-
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="Disabled">
@@ -1399,7 +1404,6 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-
                                     <ContentControl x:Name="Content" IsTabStop="False" 
                                 Foreground="{StaticResource MainBrush}"
 								Grid.Row="1" Grid.Column="1"
@@ -1411,7 +1415,6 @@
 								ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}">
 
                                     </ContentControl>
-
 
                                     <Path x:Name="DropDownIndicator"
 								     Grid.Row="2" Grid.Column="1"
@@ -1425,8 +1428,6 @@
 								    Data="M0,0 L5,0 5,1 4,1 4,2 3,2 3,3 2,3 2,2 1,2 1,1 0,1 0,0 z"
 								 SnapsToDevicePixels="True"  />
                                 </Grid>
-
-
 
                                 <Popup x:Name="DropDownPopup" 
 						    AllowsTransparency="True" StaysOpen="False" Focusable="false" Placement="Bottom">

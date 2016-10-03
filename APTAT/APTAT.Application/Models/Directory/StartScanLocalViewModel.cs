@@ -167,7 +167,7 @@ namespace APTAT.Application.Models
                 if (parent != null)
                 {
                     string errorMessage;
-                    if (parent.ValidateCredentials(out errorMessage) && parent.ValidatePorts(out errorMessage))
+                    if (parent.ValidatePorts(out errorMessage))
                     {
                         action();
                     }

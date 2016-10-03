@@ -174,7 +174,23 @@ namespace APTAT.Application.Models
                     //_storage.SetValue(KnownKeys.Domain, _domainController);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
-                    success();
+
+                    var parent = ParentViewModel as IMainViewModel;
+                    if (parent != null)
+                    {
+                        if (!UseCurrentDomainForActiveDirectory)
+                        {
+                            parent.UseCurrentDomainForDeploy = false;
+                            parent.Login = ActiveDirectoryLogin;
+                            parent.Password = ActiveDirectoryPassword;
+
+                        }
+                        else
+                            parent.UseCurrentDomainForDeploy = true;
+                    }
+
+
+                        success();
                 }
             }
             else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
@@ -238,13 +254,18 @@ namespace APTAT.Application.Models
 
         }
 
+        private bool _useCurrentNameDeterminied;
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
 
             var model = ParentViewModel as MainViewViewModel;
-            UseCurrentDomainForActiveDirectory =  model.HasCurrentDomainName;
-      //      this.ParentViewModel
+
+            if (!_useCurrentNameDeterminied)
+            {
+                UseCurrentDomainForActiveDirectory = model.HasCurrentDomainName;
+                _useCurrentNameDeterminied = true;
+            }
 
             _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
