@@ -157,9 +157,10 @@ namespace APTAT.Application.Models
                 {
                     RaiseValidationError("TcpPort", errorMessage);
                 }
-                if (!hasError)
+                else
                 {
                     ClearError("TcpPort");
+                    RaisePropertyChanged(nameof(TcpPort));
                 }
             }
         }
@@ -177,14 +178,28 @@ namespace APTAT.Application.Models
                 {
                     RaiseValidationError("UdpPort", errorMessage);
                 }
-                if (!hasError)
+                else
                 {
                     ClearError("UdpPort");
+                    RaisePropertyChanged(nameof(UdpPort));
                 }
+                
             }
         }
 
+        public void RestorePorts()
+        {
+            bool tcperror, udperror;
 
+            TcpPort.ValidateTCP(out tcperror);
+            TcpPort.ValidateUDP(out udperror);
+
+            if (tcperror)
+                TcpPort = "80";
+
+            if (udperror)
+                UdpPort = "53";
+        }
 
         private async void OnLoaded()
         {

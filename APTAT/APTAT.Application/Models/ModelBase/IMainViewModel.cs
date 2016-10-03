@@ -13,5 +13,7 @@ namespace APTAT.Application.Models.ModelBase
 
         bool ValidateCredentials(out string errorMessage);
         bool ValidatePorts(out string errorMessage);
+
+        void RestorePorts();
     }
 }

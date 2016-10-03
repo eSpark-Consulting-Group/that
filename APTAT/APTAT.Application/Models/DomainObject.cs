@@ -83,7 +83,7 @@ namespace APTAT.Application.Models
                 Error = _errors.First().Message;
             }
 
-            throw new ValidationException(errorMessage);
+            //throw new ValidationException(errorMessage);
         }
 
         protected void ClearError(String propertyName)

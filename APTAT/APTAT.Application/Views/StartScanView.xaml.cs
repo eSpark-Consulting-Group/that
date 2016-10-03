@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using APTAT.Application.Models;
 using APTAT.Application.Models.Directory;
 using APTAT.Common;
+using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application
 {
@@ -144,6 +145,8 @@ namespace APTAT.Application
                 _currentViewModel.ViewLoadedCommand.Execute(null);
                 _currentViewModel.Completed += OnWizardCompleted;
                 _currentViewModel.Cancelled += OnWizardCancelled;
+
+                (_currentViewModel.ParentViewModel as IMainViewModel).RestorePorts();
             }
         }
 

@@ -52,7 +52,7 @@
                 <Path Data="F1M625,493L624.858,535.262L553.165,535.262L553,493C553,493,553,492,554,492L610.654,491.975L624,492C625,492,625,493,625,493 M596,538L581,538C580.104,538,580.165,536.614,580.189,536.614L597.148,536.614C597.171,536.614,596.895,538,596,538 M567,490L554,490C551,490,551,493,551,493L551,537L578.823,536.614C578.823,536.614,578.806,539,581,539L596,539C598.237,539,598.514,536.614,598.514,536.614L627,537L627,493C627,493,627,490,624,490" Fill="#FF457FAD" Height="49" Stretch="Fill" Width="76" Canvas.Left="7"/>
                 <Path Data="F1M622,531C622,532,621,532,621,532L557,532C557,532,556,532,556,531L556,512L556,496C556,495,557,495,557,495L621,495C621,495,622,495,622,496z M621,494L557,494C554.972,494,555,496,555,496L555,512L555,531C555,533,557,533,557,533L621,533C621,533,623,533.029,623,531L623,496C623,496,623.238,494,621,494" Fill="#FF457FAD" Height="39" Opacity="0.5" Stretch="Fill" Width="68.007" Canvas.Left="11" Canvas.Top="4"/>
             </Canvas>
-            <TextBlock Text="Local Scan" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+            <TextBlock Text="{Binding ComputerName}" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
         <Grid  x:Name="txtSelectComputers" Grid.Row="1" Margin="30,0,0,0" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
@@ -159,7 +159,7 @@
             </telerik:RadWatermarkTextBox>
         </Grid>
         <Grid x:Name="customScanOptions" Grid.Row="3" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
-            <CheckBox IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left" Margin="160, 0, 0, 30"
+            <CheckBox IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left" Margin="160, 0, 0, 30" IsEnabled="{Binding ScanCriticalAvailable}"
                       Content="Scan critical areas of computer which are most often targeted by malware"></CheckBox>
         </Grid>
     </Grid>

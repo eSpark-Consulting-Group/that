@@ -89,6 +89,8 @@ namespace APTAT.Application.Models
                 item.IsSelected = true;
             } 
             Error = null;
+
+            RaisePropertyChanged(nameof(ScanCriticalAvailable));
         }
 
         private void InvokeUncheckItem(Object arg)
@@ -99,6 +101,8 @@ namespace APTAT.Application.Models
             {
                 item.IsSelected = false;
             }
+
+            RaisePropertyChanged(nameof(ScanCriticalAvailable));
 
         }
 
@@ -143,12 +147,20 @@ namespace APTAT.Application.Models
                 Action action = () =>
                 {
                     Error = null;
-                    IsBusy = true;
-                    SetSteps(new[] { null, SelectPort });
-                    _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
+
+                    if (context.IsNext)
                     {
-                        new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
-                    }, null, new OperationContext { Success = success, UserState = this });
+                        base.OnStepChanging(success, previousStep, context);
+                    }
+                    else
+                    {
+                        IsBusy = true;
+                        SetSteps(new[] { null, SelectPort });
+                        _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
+                        {
+                            new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
+                        }, null, new OperationContext { Success = success, UserState = this });
+                    }
                 };
 
                 var parent = ParentViewModel as IMainViewModel;
@@ -289,6 +301,15 @@ namespace APTAT.Application.Models
             get { return CurrentStepIndex == _steps.Length - 1 ? "Scan" : "Custom Scan"; }
         }
 
+        public string ComputerName
+        {
+            get { return $"Local Scan ({Environment.MachineName})"; }
+        }
+
+        public bool ScanCriticalAvailable
+        {
+            get { return _checkedItems.Any(); }
+        }
 
         private void OnGetByIpAddressesCompleted(Object sender, GetByIpAddressEventArgs e)
         {
