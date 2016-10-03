@@ -140,20 +140,35 @@ namespace APTAT.Application.Models
         {
             if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
             {
-
-                if (!context.IsNext)
+                Action action = () =>
                 {
+                    Error = null;
                     IsBusy = true;
                     SetSteps(new[] { null, SelectPort });
                     _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
                     {
                         new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
                     }, null, new OperationContext { Success = success, UserState = this });
+                };
+
+                var parent = ParentViewModel as IMainViewModel;
+                if (parent != null)
+                {
+                    string errorMessage;
+                    if (parent.ValidateCredentials(out errorMessage) && parent.ValidatePorts(out errorMessage))
+                    {
+                        action();
+                    }
+                    else
+                    {
+                        Error = errorMessage;
+                    }
                 }
                 else
                 {
-                    success();
+                    action();
                 }
+
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {

@@ -16,7 +16,7 @@ namespace APTAT.Application
 
 
             txtProductName.Text = "Unknown File Hunter";
-            txtProductVersion.Text = "2.0";// Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            txtProductVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void Window_MouseLeftButtonDown(Object sender, MouseButtonEventArgs e)
