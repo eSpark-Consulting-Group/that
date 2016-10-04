@@ -178,7 +178,7 @@ namespace APTAT.Application.Models
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
 
                     var parent = ParentViewModel as IMainViewModel;
-                    if (parent != null)
+                    if (parent != null && !_credentialsDetermined)
                     {
                         if (!UseCurrentDomainForActiveDirectory)
                         {
@@ -189,6 +189,8 @@ namespace APTAT.Application.Models
                         }
                         else
                             parent.UseCurrentDomainForDeploy = true;
+
+                        _credentialsDetermined = true;
                     }
 
 
@@ -256,7 +258,7 @@ namespace APTAT.Application.Models
 
         }
 
-        private bool _useCurrentNameDeterminied;
+        private bool _useCurrentNameDeterminied, _credentialsDetermined;
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
