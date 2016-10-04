@@ -159,7 +159,7 @@ namespace APTAT.Application.Models
                 }
                 
                 IsBusy = true;
-                
+                _checkedItems.Clear();
                 if (EnumerateWorkgroups)
                 {
                     var groups = await TryAction(GetWorkgroups());

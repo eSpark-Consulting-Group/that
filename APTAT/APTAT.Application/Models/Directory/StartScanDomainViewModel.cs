@@ -155,8 +155,10 @@ namespace APTAT.Application.Models
 
 
                 IsBusy = true;
+                _checkedItems.Clear();
                 //_storage.SetValue(KnownKeys.Domain, DomainController);
                 _targetsDiscoveryService.GetDirectoryRoot(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, new OperationContext { UserState = this, Success = success });
+                
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -167,7 +169,7 @@ namespace APTAT.Application.Models
                 else
                 {
                     CheckIfCanUseCurrentCredentials();
-                //    var item = (DeploymentItem)_checkedItems.ToArray()[0];
+                    //var item = (DeploymentItem)_checkedItems.ToArray()[0];
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
                     //storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
                     //_storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
@@ -277,6 +279,8 @@ namespace APTAT.Application.Models
 
             _targetsDiscoveryService.GetDirectoryItemsCompleted -= OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted -= OnGetDirectoryRootCompleted;
+
+
         }
 
 
