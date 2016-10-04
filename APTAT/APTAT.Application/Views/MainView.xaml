@@ -310,8 +310,11 @@
             </DockPanel >
         </Border>
 
-        <Grid Grid.Row="3"  Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}" HorizontalAlignment="Right" Margin="0 -2 10 0">
-            <Border  Background="Transparent"  Height="35"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Border Grid.Row="2"  Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+
+
+
+            <Border  Background="Transparent"  Height="30"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
 
                 <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
@@ -320,7 +323,7 @@
             </Hyperlink>
                 </TextBlock>
             </Border>
-        </Grid>
+        </Border>
 
 
     </Grid>
