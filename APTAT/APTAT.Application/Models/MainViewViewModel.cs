@@ -192,7 +192,7 @@ namespace APTAT.Application.Models
             bool tcperror, udperror;
 
             TcpPort.ValidateTCP(out tcperror);
-            TcpPort.ValidateUDP(out udperror);
+            UdpPort.ValidateUDP(out udperror);
 
             if (tcperror)
                 TcpPort = "80";
