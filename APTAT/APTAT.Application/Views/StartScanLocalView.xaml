@@ -159,7 +159,7 @@
             </telerik:RadWatermarkTextBox>
         </Grid>
         <Grid x:Name="customScanOptions" Grid.Row="3" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
-            <CheckBox IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left" Margin="160, 0, 0, 30" IsEnabled="{Binding ScanCriticalAvailable}"
+            <CheckBox IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left" Margin="160, 0, 0, 30" 
                       Content="Scan critical areas of computer which are most often targeted by malware"></CheckBox>
         </Grid>
     </Grid>

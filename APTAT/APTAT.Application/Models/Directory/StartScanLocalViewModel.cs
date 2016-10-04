@@ -89,9 +89,7 @@ namespace APTAT.Application.Models
                 item.IsSelected = true;
             } 
             Error = null;
-
-            RaisePropertyChanged(nameof(ScanCriticalAvailable));
-        }
+            }
 
         private void InvokeUncheckItem(Object arg)
         {
@@ -101,9 +99,6 @@ namespace APTAT.Application.Models
             {
                 item.IsSelected = false;
             }
-
-            RaisePropertyChanged(nameof(ScanCriticalAvailable));
-
         }
 
         public FolderItem[] GetCheckedFolderItems()
@@ -304,11 +299,6 @@ namespace APTAT.Application.Models
         public string ComputerName
         {
             get { return $"Local Scan ({Environment.MachineName})"; }
-        }
-
-        public bool ScanCriticalAvailable
-        {
-            get { return _checkedItems.Any(); }
         }
 
         private void OnGetByIpAddressesCompleted(Object sender, GetByIpAddressEventArgs e)
