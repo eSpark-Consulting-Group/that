@@ -12,16 +12,25 @@ namespace APTAT.Application.Models
     public class FolderItem : DomainObject, ISelectableItem
     {
         private ObservableCollection<FolderItem> _items;
+        private readonly string _fullName;
 
         public FolderItem(string fullName, bool isFolder)
         {
             IsFolder = isFolder;
-            FullName = fullName;
-            Name = isFolder ? Path.GetFileName(FullName) : FullName;
+            _fullName = fullName;
+            Name = isFolder ? Path.GetFileName(FullName) : _fullName;
         }
 
         public Boolean IsSelected { get; set; }
-        public string FullName { get;  }
+
+        public string FullName
+        {
+            get
+            {
+                return IsFolder? _fullName: _fullName.TrimEnd('\\');
+            }
+        }
+
         public string Name { get; }
 
         public FolderItem Parent { get; set; }
