@@ -34,12 +34,9 @@ namespace APTAT.Application.Models
         }
 
 
-        public string DomainControllerMask
-        {
-            get { return "Enter Domain Name"; }
-        }
 
-        private bool _domainCredentialsChanged;
+
+        private bool _domainCredentialsChanged = true;
         
         private string _domainController;
         public string DomainController

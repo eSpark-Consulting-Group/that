@@ -117,6 +117,7 @@
                     Header="Name"
                     TextAlignment="Left"
                     Width="590*" 
+                    MinWidth="300"
                  SortMemberPath="FullName"/>
                
                 <telerik:GridViewColumn
@@ -125,7 +126,7 @@
                     IsFilterable="False"
                     Header="Size"  
                     TextAlignment="Right"
-                    Width="80*"/>
+                    Width="80*" MinWidth="80"/>
 
                 <telerik:GridViewColumn
                     CellTemplateSelector="{StaticResource VerdictTemplateSelector}"
@@ -133,7 +134,7 @@
                     IsFilterable="False"
                     Header="Verdict"  
                     TextAlignment="Left"
-                    Width="206*"/>
+                    Width="206*" MinWidth="80"/>
 
                 <telerik:GridViewColumn
                     CellTemplateSelector="{StaticResource WhiteListedTemplateSelector}"
@@ -141,7 +142,7 @@
                     IsFilterable="False"
                     Header="Trusted Vendor"  
                     TextAlignment="Center"
-                    Width="110*"/>
+                    Width="110*" MinWidth="80"/>
 
             </telerik:RadTreeListView.Columns>
             

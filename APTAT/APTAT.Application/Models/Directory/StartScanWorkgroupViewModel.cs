@@ -55,7 +55,7 @@ namespace APTAT.Application.Models
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
-        private bool _workgroupCredentialsChanged;
+        private bool _workgroupCredentialsChanged = true;
 
         private string _workgroupName;
         public string WorkgroupName

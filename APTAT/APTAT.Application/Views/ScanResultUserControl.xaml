@@ -88,7 +88,7 @@
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="Name"
                     
-                    Width="700*" 
+                    Width="700*" MinWidth="300"
                  SortMemberPath="ShortName" />
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource SizeColumn}"
@@ -96,7 +96,7 @@
                     IsFilterable="False"
                     Header="Size"  
                     TextAlignment="Right"
-                    Width="80*"/>
+                    Width="80*" MinWidth="80"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>

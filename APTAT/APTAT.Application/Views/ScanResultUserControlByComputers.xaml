@@ -122,7 +122,7 @@
                     ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="Name"
-
+MinWidth="300"
                     Width="700*" 
                  SortMemberPath="NameAndIpAddress" />
                 <telerik:GridViewColumn 
@@ -131,7 +131,7 @@
                     IsFilterable="False"
                     Header="Size"  
                     TextAlignment="Right"
-                    Width="80*"/>
+                    Width="80*" MinWidth="80"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>
