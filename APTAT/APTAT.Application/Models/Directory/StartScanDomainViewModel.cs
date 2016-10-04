@@ -271,6 +271,8 @@ namespace APTAT.Application.Models
                 _useCurrentNameDeterminied = true;
             }
 
+            ActiveDirectoryPassword = null;
+
             _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
         }
