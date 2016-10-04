@@ -55,12 +55,17 @@ namespace APTAT.Application.Models
 
         public DelegateCommand UncheckItemCommand { get; private set; }
 
+        private bool _workgroupCredentialsChanged;
+
         private string _workgroupName;
         public string WorkgroupName
         {
             get { return EnumerateWorkgroups ? null : _workgroupName; }
             set
             {
+                if (_workgroupName != value)
+                    _workgroupCredentialsChanged = true;
+
                 _workgroupName = value;
                 RaisePropertyChanged(nameof(WorkgroupName));
             }
@@ -72,6 +77,9 @@ namespace APTAT.Application.Models
             get { return _enumerateWorkgroups; }
             set
             {
+                if (_enumerateWorkgroups != value)
+                    _workgroupCredentialsChanged = true;
+
                 _enumerateWorkgroups = value;
                 RaisePropertyChanged(nameof(EnumerateWorkgroups));
                 RaisePropertyChanged(nameof(WorkgroupName));
@@ -157,25 +165,31 @@ namespace APTAT.Application.Models
                     Error = "Please Specify Workgroup";
                     return;
                 }
-                
-                IsBusy = true;
-                _checkedItems.Clear();
-                if (EnumerateWorkgroups)
-                {
-                    var groups = await TryAction(GetWorkgroups());
-                    Items = new ObservableCollection<DirectoryItem>(groups.Items);
-                    IsBusy = false;
 
-                    if (Items.Any())
-                        base.OnStepChanging(success, previousStep, context);
+                if (_workgroupCredentialsChanged)
+                {
+                    IsBusy = true;
+                    _checkedItems.Clear();
+                    if (EnumerateWorkgroups)
+                    {
+                        var groups = await TryAction(GetWorkgroups());
+                        Items = new ObservableCollection<DirectoryItem>(groups.Items);
+                        IsBusy = false;
+
+                        if (Items.Any())
+                            base.OnStepChanging(success, previousStep, context);
+                        else
+                            Error = "No Workgroups Found";
+                    }
                     else
-                        Error = "No Workgroups Found";
+                        _targetsDiscoveryService.GetWorkgroup(WorkgroupName, null, new OperationContext { Success = success, UserState = this });
+                    _workgroupCredentialsChanged = false;
                 }
                 else
-                {
-                    //_storage.SetValue(KnownKeys.Workgroup, Workgroup);
-                    _targetsDiscoveryService.GetWorkgroup(WorkgroupName, null, new OperationContext { Success = success, UserState = this });
-                }
+                    success();
+
+               
+                
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {

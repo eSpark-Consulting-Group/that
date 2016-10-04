@@ -39,16 +39,19 @@ namespace APTAT.Application.Models
             get { return "Enter Domain Name"; }
         }
 
-
+        private bool _domainCredentialsChanged;
+        
         private string _domainController;
         public string DomainController
         {
             get { return UseCurrentDomainForActiveDirectory ? null : _domainController; }
             set
             {
+                if (_domainController != value)
+                    _domainCredentialsChanged = true;
+
                 _domainController = value;
                 RaisePropertyChanged(nameof(DomainController));
-
             }
         }
 
@@ -82,6 +85,9 @@ namespace APTAT.Application.Models
             get { return _useCurrentDomainForActiveDirectory; }
             set
             {
+                if (_useCurrentDomainForActiveDirectory != value)
+                    _domainCredentialsChanged = true;
+
                 _useCurrentDomainForActiveDirectory = value;
                 RaisePropertyChanged(nameof(UseCurrentDomainForActiveDirectory));
                 RaisePropertyChanged(nameof(DomainController));
@@ -154,10 +160,15 @@ namespace APTAT.Application.Models
 
 
 
-                IsBusy = true;
-                _checkedItems.Clear();
-                //_storage.SetValue(KnownKeys.Domain, DomainController);
-                _targetsDiscoveryService.GetDirectoryRoot(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, new OperationContext { UserState = this, Success = success });
+                if (_domainCredentialsChanged)
+                {
+                    IsBusy = true;
+                    _checkedItems.Clear();
+                    _targetsDiscoveryService.GetDirectoryRoot(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, new OperationContext { UserState = this, Success = success });
+                    _domainCredentialsChanged = false;
+                }
+                else
+                    success();
                 
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
@@ -169,11 +180,7 @@ namespace APTAT.Application.Models
                 else
                 {
                     CheckIfCanUseCurrentCredentials();
-                    //var item = (DeploymentItem)_checkedItems.ToArray()[0];
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
-                    //storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
-                    //_storage.SetValue(KnownKeys.Password, ActiveDirectoryPassword);
-                    //_storage.SetValue(KnownKeys.Domain, _domainController);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
 
@@ -193,8 +200,7 @@ namespace APTAT.Application.Models
                         _credentialsDetermined = true;
                     }
 
-
-                        success();
+                    success();
                 }
             }
             else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
@@ -221,9 +227,6 @@ namespace APTAT.Application.Models
                 {
                     Error = null;
                 }
-
-                //_storage.SetValue(KnownKeys.Login, ActiveDirectoryLogin);
-                //_storage.SetValue(KnownKeys.Domain, _domainController);
 
                 base.OnStepChanging(success, previousStep, context);
             }
