@@ -178,6 +178,8 @@ namespace APTAT.Application
 
 
             }
+
+            _tooltip.IsOpen = false;
         }
 
         private void UpdateViewVisibility()
@@ -225,12 +227,14 @@ namespace APTAT.Application
             });
         }
 
+
+        private ToolTip _tooltip = new ToolTip();
         private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var button = sender as Button;
 
             if (button.GetValue(ToolTipHelper.ToolTipProperty) == null)
-                button.SetValue(ToolTipHelper.ToolTipProperty, new ToolTip());
+                button.SetValue(ToolTipHelper.ToolTipProperty, _tooltip);
         }
 
         private void Button_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
