@@ -42,8 +42,7 @@ namespace CodedUITestAT
 
             CodedUITestEula useEula = new CodedUITestEula();
             CodedUITestMain useMain = new CodedUITestMain();
-            useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
-            useEula.UIMapEula.ClickContinueButton();
+            useEula.UIMapEula.ClickIAcceptButton();
 
             UIHelper.WaitForControlIsEnabled(useMain.StartScanningButton());
         }

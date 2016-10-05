@@ -33,8 +33,8 @@ namespace CodedUITestAT
             StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
-            UIHelper.WaitForControl(useEula.IAcceptTermsOfThisAgreementCheckBox(), Settings.WaitingTime.Default.LaunchAppWaitTime);        
-            UIHelper.WaitForControlIsEnabled(useEula.IAcceptTermsOfThisAgreementCheckBox());
+            UIHelper.WaitForControl(useEula.IAcceptButton(), Settings.WaitingTime.Default.LaunchAppWaitTime);        
+            UIHelper.WaitForControlIsEnabled(useEula.IAcceptButton());
         }
 
         /// <summary> Stops the application under test. </summary>

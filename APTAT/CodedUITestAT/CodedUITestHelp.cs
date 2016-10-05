@@ -40,9 +40,8 @@ namespace CodedUITestAT
         {
             SysHelper.StartApplication(DataHelper.GetEndpoint());
 
-            CodedUITestEula useEula = new CodedUITestEula();
-            useEula.UIMapEula.CheckIAcceptTermsOfThisAgreementCheckBox();
-            useEula.UIMapEula.ClickContinueButton();
+            CodedUITestEula useEula = new CodedUITestEula();            
+            useEula.UIMapEula.ClickIAcceptButton();
 
             UIHelper.WaitForControl(HelpButton());
             UIHelper.WaitForControlIsEnabled(HelpButton());

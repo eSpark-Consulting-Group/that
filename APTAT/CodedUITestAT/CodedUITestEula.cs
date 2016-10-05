@@ -50,15 +50,10 @@ namespace CodedUITestAT
 
         #region Control methods
 
-        internal WpfCheckBox IAcceptTermsOfThisAgreementCheckBox()
+        internal WpfButton IAcceptButton()
         {
-            return UIMapEula.UICOMODOUnknownFileHunWindow.UIIacceptthetermsofthiCheckBox;
+            return UIMapEula.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIIAcceptButton;
         }
-
-        private WpfButton ContinueButton()
-        {
-            return UIMapEula.UICOMODOUnknownFileHunWindow.UIContinueButton;
-        }        
 
         #endregion
 
@@ -67,19 +62,13 @@ namespace CodedUITestAT
         [TestMethod]
         public void VerifyEulaDefaultsTest()
         {
-            if (!IAcceptTermsOfThisAgreementCheckBox().Checked) TestContext.WriteLine("'I accept the terms of this agreement' checkbox is unchecked by default.\n");
-            else Assert.Fail("'I accept the terms of this agreement' checkbox is checked by default!\n");
-
-            if (!ContinueButton().Enabled) TestContext.WriteLine("Continue button is disabled by default.\n");
-            else Assert.Fail("Continue button is enabled by default!\n");
-
             UIMapEula.AssertEulaDocument();
-            TestContext.WriteLine("EULA document is shown.\n");
+            TestContext.WriteLine("EULA document is shown.");
 
-            UIMapEula.ClickCancelButton();
+            UIMapEula.ClickIAcceptButton();
             CodedUITestMain useMain = new CodedUITestMain();
-            if (!useMain.MainWindow().Exists) TestContext.WriteLine("Application EULA window was successfully closed using Cancel button.\n");
-            else Assert.Fail("Application EULA window was not closed after clicking Cancel button!");
+            if (useMain.MainWindow().Exists) TestContext.WriteLine("Main application window is successfully opened after clicking 'I Accept' button.");
+            else Assert.Fail("Main application window is not opened after clicking 'I Accept' button!");
         }
 
         #endregion

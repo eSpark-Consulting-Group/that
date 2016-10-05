@@ -1,4 +1,5 @@
-﻿<UserControl x:Class="APTAT.Application.EULAView"
+﻿<UserControl AutomationProperties.AutomationId="EulaWindow"
+      x:Class="APTAT.Application.EULAView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,10 +17,11 @@
                 <Run Text="To continue you must accept the"/><Run Text=" EULA " /><Run Text="below."/>
         </TextBlock>
 
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
+        <TextBlock AutomationProperties.AutomationId="TitleTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
                    FontFamily="Segoe UI"   VerticalAlignment="Top" Margin="3,40,0,0">
                 End User License Agreement
         </TextBlock>
+        
         <Border Margin="0,62,0,0" >
             <Grid>
                 <Grid.RowDefinitions>
@@ -28,12 +30,15 @@
                 </Grid.RowDefinitions>
 
                 <Border Background="{DynamicResource AccentBrush}" >
-                    <telerik:RadPdfViewer x:Name="pdf" Mode="TextSelection" DocumentChanged="pdf_DocumentChanged" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource AccentBrush}" />
+                    <telerik:RadPdfViewer AutomationProperties.AutomationId="EulaDocument"
+                                          x:Name="pdf" Mode="TextSelection" DocumentChanged="pdf_DocumentChanged" BorderThickness="0" VerticalAlignment="Stretch" 
+                                          HorizontalAlignment="Stretch" Background="{DynamicResource AccentBrush}" />
                 </Border>
 
-                <Button Content="I Accept" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding ChangeScreenCommand}" />
-
+                <Button AutomationProperties.AutomationId="IAcceptButton" Content="I Accept" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                        Command="{Binding ChangeScreenCommand}" />
             </Grid>
         </Border>
+        
     </Grid>
 </UserControl>

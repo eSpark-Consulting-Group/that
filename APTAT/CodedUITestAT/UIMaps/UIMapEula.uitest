@@ -41,29 +41,16 @@
   </Configuration>
   <InitializeActions />
   <ExecuteActions>
-    <SetStateAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow.UIIacceptthetermsofthiCheckBox">
-      <ParameterName />
-      <State>Checked</State>
-    </SetStateAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="CheckIAcceptTermsOfThisAgreementCheckBox">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow.UICancelButton">
+    <MouseAction UIObjectName="UIMapEula.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIIAcceptButton">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
       <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="38" Y="10" />
+      <Location X="99" Y="8" />
       <WheelDirection>0</WheelDirection>
       <ActionType>Click</ActionType>
       <MouseButton>Left</MouseButton>
     </MouseAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="ClickCancelButton">
+    <TestStepMarkerAction Comment="" MarkerInformation="ClickIAcceptButton">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -72,25 +59,7 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow.UIContinueButton">
-      <ParameterName />
-      <ModifierKeys>None</ModifierKeys>
-      <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="34" Y="18" />
-      <WheelDirection>0</WheelDirection>
-      <ActionType>Click</ActionType>
-      <MouseButton>Left</MouseButton>
-    </MouseAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="ClickContinueButton">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapEula.UICOMODOUnknownFileHunWindow1.UIEulaDocumentDocument">
+    <AssertAction UIObjectName="UIMapEula.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIEulaDocumentDocument">
       <ParameterName />
       <PropertyName>Exists</PropertyName>
       <ExpectedValue>True</ExpectedValue>
@@ -213,6 +182,77 @@
               </AndCondition>
               <SupportLevel>0</SupportLevel>
               <Descendants />
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UIUnknownFileHunterWindow" FriendlyName="Unknown File Hunter" SpecialControlType="None" SessionId="3278004">
+          <TechnologyName>UIA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>Unknown File Hunter</WindowTitle>
+          </WindowTitles>
+          <AndCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+            <PropertyCondition Name="Name">Unknown File Hunter</PropertyCondition>
+            <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+            <PropertyCondition Name="ClassName" Operator="Contains">HwndWrapper</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>0</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Pane" Id="UIViewsEULAViewxamlPane" FriendlyName="Views/EULAView.xaml" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Unknown File Hunter</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Pane</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.Frame</PropertyCondition>
+                <PropertyCondition Name="AutomationId">MainFrame</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="Custom" Id="UIEulaWindowCustom" FriendlyName="EulaWindow" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Unknown File Hunter</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">Custom</PropertyCondition>
+                    <PropertyCondition Name="ClassName">Uia.EULAView</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">EulaWindow</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="Document" Id="UIEulaDocumentDocument" FriendlyName="EulaDocument" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Unknown File Hunter</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">Document</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">EulaDocument</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="Button" Id="UIIAcceptButton" FriendlyName="I Accept" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Unknown File Hunter</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">Button</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">IAcceptButton</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                  </Descendants>
+                </UIObject>
+              </Descendants>
             </UIObject>
           </Descendants>
         </TopLevelWindow>

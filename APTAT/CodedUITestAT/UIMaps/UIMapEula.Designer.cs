@@ -30,42 +30,16 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
     {
         
         /// <summary>
-        /// CheckIAcceptTermsOfThisAgreementCheckBox - Use 'CheckIAcceptTermsOfThisAgreementCheckBoxParams' to pass parameters into this method.
+        /// ClickIAcceptButton
         /// </summary>
-        public void CheckIAcceptTermsOfThisAgreementCheckBox()
+        public void ClickIAcceptButton()
         {
             #region Variable Declarations
-            WpfCheckBox uIIacceptthetermsofthiCheckBox = this.UICOMODOUnknownFileHunWindow.UIIacceptthetermsofthiCheckBox;
+            WpfButton uIIAcceptButton = this.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIIAcceptButton;
             #endregion
 
-            // Select 'I accept the terms of this agreement' check box
-            uIIacceptthetermsofthiCheckBox.Checked = this.CheckIAcceptTermsOfThisAgreementCheckBoxParams.UIIacceptthetermsofthiCheckBoxChecked;
-        }
-        
-        /// <summary>
-        /// ClickCancelButton
-        /// </summary>
-        public void ClickCancelButton()
-        {
-            #region Variable Declarations
-            WpfButton uICancelButton = this.UICOMODOUnknownFileHunWindow.UICancelButton;
-            #endregion
-
-            // Click 'Cancel' button
-            Mouse.Click(uICancelButton, new Point(38, 10));
-        }
-        
-        /// <summary>
-        /// ClickContinueButton
-        /// </summary>
-        public void ClickContinueButton()
-        {
-            #region Variable Declarations
-            WpfButton uIContinueButton = this.UICOMODOUnknownFileHunWindow.UIContinueButton;
-            #endregion
-
-            // Click 'Continue' button
-            Mouse.Click(uIContinueButton, new Point(34, 18));
+            // Click 'I Accept' button
+            Mouse.Click(uIIAcceptButton, new Point(99, 8));
         }
         
         /// <summary>
@@ -74,7 +48,7 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
         public void AssertEulaDocument()
         {
             #region Variable Declarations
-            WpfControl uIEulaDocumentDocument = this.UICOMODOUnknownFileHunWindow1.UIEulaDocumentDocument;
+            WpfControl uIEulaDocumentDocument = this.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIEulaDocumentDocument;
             #endregion
 
             // Verify that the 'Exists' property of 'EulaDocument' document equals 'True'
@@ -82,18 +56,6 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
         }
         
         #region Properties
-        public virtual CheckIAcceptTermsOfThisAgreementCheckBoxParams CheckIAcceptTermsOfThisAgreementCheckBoxParams
-        {
-            get
-            {
-                if ((this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams == null))
-                {
-                    this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams = new CheckIAcceptTermsOfThisAgreementCheckBoxParams();
-                }
-                return this.mCheckIAcceptTermsOfThisAgreementCheckBoxParams;
-            }
-        }
-        
         public virtual AssertEulaDocumentExpectedValues AssertEulaDocumentExpectedValues
         {
             get
@@ -129,31 +91,28 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
                 return this.mUICOMODOUnknownFileHunWindow1;
             }
         }
+        
+        public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
+        {
+            get
+            {
+                if ((this.mUIUnknownFileHunterWindow == null))
+                {
+                    this.mUIUnknownFileHunterWindow = new UIUnknownFileHunterWindow();
+                }
+                return this.mUIUnknownFileHunterWindow;
+            }
+        }
         #endregion
         
         #region Fields
-        private CheckIAcceptTermsOfThisAgreementCheckBoxParams mCheckIAcceptTermsOfThisAgreementCheckBoxParams;
-        
         private AssertEulaDocumentExpectedValues mAssertEulaDocumentExpectedValues;
         
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
         private UICOMODOUnknownFileHunWindow1 mUICOMODOUnknownFileHunWindow1;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'CheckIAcceptTermsOfThisAgreementCheckBox'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class CheckIAcceptTermsOfThisAgreementCheckBoxParams
-    {
         
-        #region Fields
-        /// <summary>
-        /// Select 'I accept the terms of this agreement' check box
-        /// </summary>
-        public bool UIIacceptthetermsofthiCheckBoxChecked = true;
+        private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         #endregion
     }
     
@@ -328,6 +287,127 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
         
         #region Fields
         private WpfControl mUIEulaDocumentDocument;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIUnknownFileHunterWindow : WpfWindow
+    {
+        
+        public UIUnknownFileHunterWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Unknown File Hunter";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIViewsEULAViewxamlPane UIViewsEULAViewxamlPane
+        {
+            get
+            {
+                if ((this.mUIViewsEULAViewxamlPane == null))
+                {
+                    this.mUIViewsEULAViewxamlPane = new UIViewsEULAViewxamlPane(this);
+                }
+                return this.mUIViewsEULAViewxamlPane;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIViewsEULAViewxamlPane mUIViewsEULAViewxamlPane;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIViewsEULAViewxamlPane : WpfPane
+    {
+        
+        public UIViewsEULAViewxamlPane(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfPane.PropertyNames.ClassName] = "Uia.Frame";
+            this.SearchProperties[WpfPane.PropertyNames.AutomationId] = "MainFrame";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIEulaWindowCustom UIEulaWindowCustom
+        {
+            get
+            {
+                if ((this.mUIEulaWindowCustom == null))
+                {
+                    this.mUIEulaWindowCustom = new UIEulaWindowCustom(this);
+                }
+                return this.mUIEulaWindowCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIEulaWindowCustom mUIEulaWindowCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIEulaWindowCustom : WpfCustom
+    {
+        
+        public UIEulaWindowCustom(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.EULAView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "EulaWindow";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfControl UIEulaDocumentDocument
+        {
+            get
+            {
+                if ((this.mUIEulaDocumentDocument == null))
+                {
+                    this.mUIEulaDocumentDocument = new WpfControl(this);
+                    #region Search Criteria
+                    this.mUIEulaDocumentDocument.SearchProperties[WpfControl.PropertyNames.ControlType] = "Document";
+                    this.mUIEulaDocumentDocument.SearchProperties[WpfControl.PropertyNames.AutomationId] = "EulaDocument";
+                    this.mUIEulaDocumentDocument.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIEulaDocumentDocument;
+            }
+        }
+        
+        public WpfButton UIIAcceptButton
+        {
+            get
+            {
+                if ((this.mUIIAcceptButton == null))
+                {
+                    this.mUIIAcceptButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIIAcceptButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "IAcceptButton";
+                    this.mUIIAcceptButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIIAcceptButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfControl mUIEulaDocumentDocument;
+        
+        private WpfButton mUIIAcceptButton;
         #endregion
     }
 }
