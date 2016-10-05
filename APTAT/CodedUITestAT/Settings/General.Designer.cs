@@ -79,7 +79,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("There are no scans have been performed yet.")]
+        [global::System.Configuration.DefaultSettingValueAttribute("No scans have been performed yet.")]
         public string NoScansTextBlockText {
             get {
                 return ((string)(this["NoScansTextBlockText"]));

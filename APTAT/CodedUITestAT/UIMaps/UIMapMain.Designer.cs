@@ -139,11 +139,11 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         public void ClickMinimizeButton()
         {
             #region Variable Declarations
-            WpfButton uIMinimizeButtonButton = this.UIUnknownFileHunterWindow.UIMinimizeButtonButton;
+            WpfButton uIMinimizeButtonButton = this.UIUnknownFileHunterWindow1.UIMinimizeButtonButton;
             #endregion
 
             // Click 'MinimizeButton' button
-            Mouse.Click(uIMinimizeButtonButton, new Point(21, 21));
+            Mouse.Click(uIMinimizeButtonButton, new Point(15, 14));
         }
         
         /// <summary>
@@ -165,11 +165,11 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         public void ClickResizeButton()
         {
             #region Variable Declarations
-            WpfButton uIResizeButtonButton = this.UIUnknownFileHunterWindow.UIResizeButtonButton;
+            WpfButton uIResizeButtonButton = this.UIUnknownFileHunterWindow1.UIResizeButtonButton;
             #endregion
 
             // Click 'ResizeButton' button
-            Mouse.Click(uIResizeButtonButton, new Point(21, 19));
+            Mouse.Click(uIResizeButtonButton, new Point(9, 7));
         }
         
         /// <summary>
@@ -984,12 +984,48 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUISearchControlCustom;
             }
         }
+        
+        public WpfButton UIResizeButtonButton
+        {
+            get
+            {
+                if ((this.mUIResizeButtonButton == null))
+                {
+                    this.mUIResizeButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIResizeButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ResizeButton";
+                    this.mUIResizeButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIResizeButtonButton;
+            }
+        }
+        
+        public WpfButton UIMinimizeButtonButton
+        {
+            get
+            {
+                if ((this.mUIMinimizeButtonButton == null))
+                {
+                    this.mUIMinimizeButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIMinimizeButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "MinimizeButton";
+                    this.mUIMinimizeButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIMinimizeButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
         private UIViewsMainViewxamlPane mUIViewsMainViewxamlPane;
         
         private UISearchControlCustom1 mUISearchControlCustom;
+        
+        private WpfButton mUIResizeButtonButton;
+        
+        private WpfButton mUIMinimizeButtonButton;
         #endregion
     }
     

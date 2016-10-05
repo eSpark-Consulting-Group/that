@@ -63,7 +63,7 @@ namespace CodedUITestAT
                 {
                     case ResultsScreen.ScanningResults:
                         {
-                            row = useMain.ScanningResultsTab().GetRow(rowName);
+                            row = useMain.ScanResultsTab().GetRow(rowName);
                             break;
                         }
                     case ResultsScreen.ValkyrieAnalysis:
@@ -111,7 +111,7 @@ namespace CodedUITestAT
                 {
                     case ResultsScreen.ScanningResults:
                         {
-                            expectedRow = useMain.ScanningResultsTab().GetRow(row.RowName);
+                            expectedRow = useMain.ScanResultsTab().GetRow(row.RowName);
                             break;
                         }
                     case ResultsScreen.ValkyrieAnalysis:
@@ -224,7 +224,7 @@ namespace CodedUITestAT
             switch (resultsScreen)
             {
                 case ResultsScreen.ScanningResults:
-                    rowControl = useMain.ScanningResultsTab().GetRow(row.RowName);
+                    rowControl = useMain.ScanResultsTab().GetRow(row.RowName);
                     break;
                 case ResultsScreen.ValkyrieAnalysis:
                     rowControl = useMain.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
@@ -294,7 +294,7 @@ namespace CodedUITestAT
         {
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
-            if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(endpoint.RowName);
+            if (useMain.ScanResultsTab().Exists) row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
             else row = useMain.ScanningResultsTable().GetRow(endpoint.RowName);
 
             return row.GetScanStatus();
@@ -306,7 +306,7 @@ namespace CodedUITestAT
         {
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
-            if (useMain.ScanningResultsTab().Exists) row = useMain.ScanningResultsTab().GetRow(endpoint.RowName);
+            if (useMain.ScanResultsTab().Exists) row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
             else row = useMain.ScanningResultsTable().GetRow(endpoint.RowName);
 
             return row.GetRowStatus();
@@ -371,10 +371,10 @@ namespace CodedUITestAT
             switch (screen)
             {
                 case ResultsScreen.ScanningResults:
-                    if (useMain.ScanningResultsTab().Exists)
+                    if (useMain.ScanResultsTab().Exists)
                     {
                         useMain.UIMapResultsWindow.GoToScanningResultsTab();
-                        rows = useMain.ScanningResultsTab().GetRows();
+                        rows = useMain.ScanResultsTab().GetRows();
                     }
                     else rows = useMain.ScanningResultsTable().GetRows();                    
                     break;

@@ -44,7 +44,7 @@ namespace CodedUITestAT
             CodedUITestMain useMain = new CodedUITestMain();
             useEula.UIMapEula.ClickIAcceptButton();
 
-            UIHelper.WaitForControlIsEnabled(useMain.StartScanningButton());
+            UIHelper.WaitForControlIsEnabled(useMain.StartScanButton());
         }
 
         [TestCleanup]
@@ -179,7 +179,7 @@ namespace CodedUITestAT
 
             BasicReportTest(ReportType.ExecutiveValkyrie, TestContext);
 
-            UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
+            UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -202,7 +202,7 @@ namespace CodedUITestAT
             
             BasicReportTest(ReportType.PerDeviceValkyrie, TestContext);
             
-            UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
+            UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -225,7 +225,7 @@ namespace CodedUITestAT
 
             BasicReportTest(ReportType.PerProgramValkyrie, TestContext);
 
-            UIHelper.WaitForControlIsClickable(useMain.StartScanningButton());
+            UIHelper.WaitForControlIsClickable(useMain.StartScanButton());
         }
 
         #endregion

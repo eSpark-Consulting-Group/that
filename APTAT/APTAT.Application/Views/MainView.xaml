@@ -93,46 +93,9 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>        
 
-        <Grid Grid.Row="1">
-
-            <ContentControl x:Name="mainContent" IsTabStop="false" FocusVisualStyle="{x:Null}"/>
-
-            <Grid  x:Name="empty">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"   >
-
-                    <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="No scans have been performed yet."
-                   Opacity="0.5"  FontSize="13" Style="{DynamicResource SubTitleTextStyle}"/>
-
-                    <Button AutomationProperties.AutomationId="StartScanningNowButton"
-                    Margin="0,10,0,0"  HorizontalAlignment="Center"
-                    Style="{StaticResource LinkButton}" 
-                    Command="{Binding StartScanCommand}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}"
-                              Height="24"
-                              Width="24"
-                              Margin="0,0,10,-1"/>
-                            <TextBlock Text="Scan Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
-                        </Grid>
-                    </Button>
-
-                </StackPanel>
-
-                <TextBlock TextWrapping="Wrap" FontSize="13" TextAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 30"  Width="500">
-                    This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit
-                <Hyperlink NavigateUri="https://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"> one.comodo.com</Hyperlink></TextBlock>
-            </Grid>
-        </Grid>
-
-
-        <telerik:RadBusyIndicator Grid.Row="1"  IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+        <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
             <telerik:RadBusyIndicator.Resources>
                 <ResourceDictionary>
                     <ResourceDictionary.MergedDictionaries>
@@ -141,7 +104,41 @@
                 </ResourceDictionary>
             </telerik:RadBusyIndicator.Resources>
             <telerik:RadBusyIndicator IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+                <Grid>
+                    <ContentControl x:Name="mainContent" IsTabStop="false" FocusVisualStyle="{x:Null}"/>
 
+                    <Grid x:Name="empty">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"   >
+
+                            <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="No scans have been performed yet."
+                   Opacity="0.5"  FontSize="13" Style="{DynamicResource SubTitleTextStyle}"/>
+
+                            <Button AutomationProperties.AutomationId="StartScanningNowButton"
+                    Margin="0,10,0,0"  HorizontalAlignment="Center"
+                    Style="{StaticResource LinkButton}" 
+                    Command="{Binding StartScanCommand}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
+                              Fill="{DynamicResource StrongBrush}"
+                              Height="24"
+                              Width="24"
+                              Margin="0,0,10,-1"/>
+                                    <TextBlock Text="Scan Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
+                                </Grid>
+                            </Button>
+
+                        </StackPanel>
+
+                        <TextBlock AutomationProperties.AutomationId="ComodoOneReferralTextBlock"
+                                   TextWrapping="Wrap" FontSize="13" TextAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 30"  Width="500">
+                    This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit
+                <Hyperlink NavigateUri="https://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"> one.comodo.com</Hyperlink></TextBlock>
+                    </Grid>
+                </Grid>
             </telerik:RadBusyIndicator>
         </telerik:RadBusyIndicator>
 
@@ -324,7 +321,6 @@
                 </TextBlock>
             </Border>
         </Border>
-
 
     </Grid>
 </Models:BasePage>

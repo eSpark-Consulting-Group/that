@@ -208,7 +208,7 @@ namespace CodedUITestAT
             CodedUITestEula useEula = new CodedUITestEula();            
             useEula.UIMapEula.ClickIAcceptButton();
 
-            UIHelper.WaitForControlIsEnabled(StartScanningButton());
+            UIHelper.WaitForControlIsEnabled(StartScanButton());
         }
         
         [TestCleanup]
@@ -232,22 +232,22 @@ namespace CodedUITestAT
             return UIMapMain.UIUnknownFileHunterWindow;
         }
         
-        internal WpfButton StartScanningButton()
+        internal WpfButton StartScanButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
         }
 
-        private WpfButton StartScanningNowButton()
+        private WpfButton ScanNowButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
         }
 
-        private WpfButton StopScanningButton()
+        private WpfButton StopScanButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
         }
 
-        private WpfButton AnalyseWithValkyrieButton()
+        private WpfButton AnalyzeWithValkyrieButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIAnalyseWithValkyrieBButton;
         }
@@ -274,7 +274,7 @@ namespace CodedUITestAT
 
         #endregion
 
-        #region Start Scanning wizard
+        #region Start Scan wizard
 
         private WpfButton NetworkAddressButton()
         {
@@ -341,7 +341,7 @@ namespace CodedUITestAT
 
         #region Results window
 
-        internal WpfTabPage ScanningResultsTab()
+        internal WpfTabPage ScanResultsTab()
         {     
             return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage;
         }
@@ -561,7 +561,7 @@ namespace CodedUITestAT
         /// <summary> Stops a scan. </summary>
         private void StopScanning(TestContext testContext)
         {
-            UIHelper.WaitForControlIsClickable(StopScanningButton());
+            UIHelper.WaitForControlIsClickable(StopScanButton());
             UIMapMain.ClickStopScanningButton();
             UIHelper.WaitForControl(YesDialogButton());
             UIMapStopScanWindow.ClickYesButton();
@@ -763,7 +763,7 @@ namespace CodedUITestAT
         /// <param name="scanStatus">Set scan status.</param>
         private void SetStatusFilter(ScanStatus scanStatus, TestContext testContext)
         {
-            UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenByCCustom.UIFilteringDropDownCustom.UIFilterDropDownButtonButton.Container = ScanningResultsTab();
+            UIMapResultsWindow.UIUnknownFileHunterWindow.UIScanResultsScreenByCCustom.UIFilteringDropDownCustom.UIFilterDropDownButtonButton.Container = ScanResultsTab();
             UIMapResultsWindow.ClickFilterDropDownButton();
 
             switch (scanStatus)
@@ -815,7 +815,7 @@ namespace CodedUITestAT
             // In the case no unknown or malicious files found - the analysis is not available
             if (expectedFilesNumber == 0) 
             {
-                if (!AnalyseWithValkyrieButton().Enabled) TestContext.WriteLine("No unknown or malicious files found and Valkyrie analysis is not available.");
+                if (!AnalyzeWithValkyrieButton().Enabled) TestContext.WriteLine("No unknown or malicious files found and Valkyrie analysis is not available.");
                 else Assert.Fail("No unknown or malicious files found but Valkyrie analysis is available!");
             }
             else
@@ -907,45 +907,45 @@ namespace CodedUITestAT
             CodedUITestHelp useHelp = new CodedUITestHelp();
             
             UIMapMain.ClickResizeButton();
-            if (MainWindow().Maximized) TestContext.WriteLine("Main window was successfully maximized using Resize button.\n");
+            if (MainWindow().Maximized) TestContext.WriteLine("Main window was successfully maximized using Resize button.");
             else Assert.Fail("Main window was not maximized after clicking Resize button!");
 
             UIMapMain.ClickResizeButton();
-            if (!MainWindow().Maximized) TestContext.WriteLine("Main window is not maximized after clicking Resize button again.\n");
+            if (!MainWindow().Maximized) TestContext.WriteLine("Main window is not maximized after clicking Resize button again.");
             else Assert.Fail("Main window is maximized after clicking Resize button again!");
 
             UIMapMain.ClickMinimizeButton();
-            if (MainWindow().Minimized) TestContext.WriteLine("Main window is successfully minimized after clicking Minimize button.\n");
+            if (MainWindow().Minimized) TestContext.WriteLine("Main window is successfully minimized after clicking Minimize button.");
             else Assert.Fail("Main window is not minimized after clicking Minimize button!");
             MainWindow().Minimized = false;
 
-            if (StartScanningButton().Enabled) TestContext.WriteLine("Start Scanning button is enabled by default.\n");
-            else Assert.Fail("Start Scanning button is disabled by default!\n");
+            if (StartScanButton().Enabled) TestContext.WriteLine("Start Scan button is enabled by default.");
+            else Assert.Fail("Start Scan button is disabled by default!");
 
-            if (!StopScanningButton().Enabled) TestContext.WriteLine("Stop Scanning button is disabled by default.\n");
-            else Assert.Fail("Stop Scanning button is enabled by default!\n");
+            if (!StopScanButton().Enabled) TestContext.WriteLine("Stop Scan button is disabled by default.");
+            else Assert.Fail("Stop Scan button is enabled by default!");
 
-            if (!AnalyseWithValkyrieButton().Enabled) TestContext.WriteLine("'Analyse with Valkyrie' button is disabled by default.\n");
-            else Assert.Fail("'Analyse with Valkyrie' button is enabled by default!\n");
+            if (!AnalyzeWithValkyrieButton().Enabled) TestContext.WriteLine("'Analyze with Valkyrie' button is disabled by default.");
+            else Assert.Fail("'Analyse with Valkyrie' button is enabled by default!");
             
             if (!ReportsDropDownButton().Enabled) TestContext.WriteLine("Reports button is disabled by default.\n");
-            else Assert.Fail("Reports button is enabled by default!\n");
+            else Assert.Fail("Reports button is enabled by default!");
 
-            if (useHelp.HelpButton().Enabled) TestContext.WriteLine("Help button is enabled by default.\n");
-            else Assert.Fail("Help button is disabled by default!\n");
+            if (useHelp.HelpButton().Enabled) TestContext.WriteLine("Help button is enabled by default.");
+            else Assert.Fail("Help button is disabled by default!");
 
-            if (!ScanningResultsTab().Exists) TestContext.WriteLine("'Unknown files' list is not shown by default.\n");
-            else Assert.Fail("'Unknown files' list is shown by default!\n");
+            if (!ScanResultsTab().Exists) TestContext.WriteLine("'Scan results' list is not shown by default.");
+            else Assert.Fail("'Scan results' list is shown by default!");
 
             UIMapMain.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText = Settings.General.Default.NoScansTextBlockText;
             UIMapMain.AssertNoScansTextBlockText();
-            TestContext.WriteLine(String.Format("'{0}' message is shown.\n", Settings.General.Default.NoScansTextBlockText));
+            TestContext.WriteLine(String.Format("'{0}' message is shown.", Settings.General.Default.NoScansTextBlockText));
 
-            if (StartScanningNowButton().Enabled) TestContext.WriteLine("'Start Scanning Now' button is enabled by default.\n");
-            else Assert.Fail("'Start Scanning Now' button is disabled by default!\n");
+            if (ScanNowButton().Enabled) TestContext.WriteLine("'Scan Now' button is enabled by default.");
+            else Assert.Fail("'Scan Now' button is disabled by default!");
 
             UIMapMain.ClickCloseButton();
-            if (!MainWindow().Exists) TestContext.WriteLine("Main window was successfully closed using Close button.\n");
+            if (!MainWindow().Exists) TestContext.WriteLine("Main window was successfully closed using Close button.");
             else Assert.Fail("Main window was not closed after clicking Close button!");
         }
 
@@ -958,8 +958,8 @@ namespace CodedUITestAT
 
             StartEndpointScan(endpoint, ScanType.Full, TestContext);
 
-            UIHelper.WaitForControlIsEnabled(StopScanningButton());
-            UIHelper.WaitForControlIsClickable(StopScanningButton());
+            UIHelper.WaitForControlIsEnabled(StopScanButton());
+            UIHelper.WaitForControlIsClickable(StopScanButton());
             UIMapMain.ClickStopScanningButton();
 
             // Does not confirm the stop and checks the result
@@ -1164,7 +1164,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickCancelButton();
-            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIHelper.WaitForControlIsClickable(StartScanButton());
 
             // Opens a threat details via context menu
             UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
@@ -1227,7 +1227,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.\n", malware.Product));
 
             UIMapDetailsWindow.ClickCloseButton();
-            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIHelper.WaitForControlIsClickable(StartScanButton());
         }
 
         [TestMethod]
@@ -1308,7 +1308,7 @@ namespace CodedUITestAT
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();
             UIMapValkyrieDetailsWindow.ClickCloseButton();
-            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIHelper.WaitForControlIsClickable(StartScanButton());
         }
 
         [TestMethod]
@@ -1347,7 +1347,7 @@ namespace CodedUITestAT
 
             UIMapStartScanningWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
-            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickNetworkAddressButton();
@@ -1392,7 +1392,7 @@ namespace CodedUITestAT
 
             UIMapStartScanningWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
-            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickWorkgroupButton();
@@ -1437,7 +1437,7 @@ namespace CodedUITestAT
 
             UIMapStartScanningWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
-            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanningButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickActiveDirectoryButton();
@@ -1699,7 +1699,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Threat 'Malware Probability' parameter matches an expected pattern correctly: '{0}'.", unknownFile.Product));
             */
             UIMapValkyrieDetailsWindow.ClickCloseButton();
-            UIHelper.WaitForControlIsClickable(StartScanningButton());
+            UIHelper.WaitForControlIsClickable(StartScanButton());
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -1713,7 +1713,7 @@ namespace CodedUITestAT
             Computer offlineComputer = new Computer(offlineIp);
             
             StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);
-            UIHelper.WaitForControlIsEnabled(ScanningResultsTab(), waitTime);
+            UIHelper.WaitForControlIsEnabled(ScanResultsTab(), waitTime);
             RefreshResultsScreen();
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
             
@@ -1741,7 +1741,7 @@ namespace CodedUITestAT
             Computer offlineComputer = new Computer(offlineIp);
             
             StartEndpointScan(ScanType.Quick, DataHelper.Username, DataHelper.Password + error, TestContext, offlineComputer, endpoint);
-            UIHelper.WaitForControlIsEnabled(StartScanningButton(), waitTime);
+            UIHelper.WaitForControlIsEnabled(StartScanButton(), waitTime);
             UIHelper.WaitForControlIsEnabled(SearchBox(), waitTime);
             RefreshResultsScreen();
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
@@ -1761,7 +1761,7 @@ namespace CodedUITestAT
             
             // In Progress scan
             StartEndpointScan(ScanType.Quick, TestContext, endpoint, offlineComputer);
-            UIHelper.WaitForControlIsEnabled(StopScanningButton(), waitTime);
+            UIHelper.WaitForControlIsEnabled(StopScanButton(), waitTime);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext);
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
             
@@ -1783,7 +1783,7 @@ namespace CodedUITestAT
             
             // Canceled scan
             StartEndpointScan(ScanType.Full, TestContext, endpoint, offlineComputer);
-            UIHelper.WaitForControlIsEnabled(StopScanningButton(), waitTime);
+            UIHelper.WaitForControlIsEnabled(StopScanButton(), waitTime);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
             StopScanning(TestContext);

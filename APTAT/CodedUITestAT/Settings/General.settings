@@ -21,7 +21,7 @@
       <Value Profile="(Default)">91exestealth.exe</Value>
     </Setting>
     <Setting Name="NoScansTextBlockText" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">There are no scans have been performed yet.</Value>
+      <Value Profile="(Default)">No scans have been performed yet.</Value>
     </Setting>
     <Setting Name="ATApplicationName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Unknown File Hunter</Value>
