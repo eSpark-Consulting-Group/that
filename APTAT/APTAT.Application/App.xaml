@@ -11,7 +11,7 @@
                 xmlns:ui="clr-namespace:Telerik.Windows.Documents.UI;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
              xmlns:converters="clr-namespace:APTAT.Application.Converters"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-
+xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Telerik.Windows.Controls"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -1606,6 +1606,380 @@
                 <Setter Property="Foreground" Value="{StaticResource MarkerBrush}" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
             </Style>
+
+            <Style x:Key="BusyIndicatorProgressBarStyle" Style.TargetType="{x:Type telerik:RadProgressBar}" >
+                <Setter Setter.Property="FrameworkElement.Margin" Setter.Value="0" />
+                <Setter Setter.Property="RangeBase.Maximum" Setter.Value="100" />
+                <Setter Setter.Property="telerik:RadProgressBar.Orientation" Setter.Value="Horizontal" />
+                <Setter Setter.Property="Control.IsTabStop" Setter.Value="False" />
+                <Setter Setter.Property="Control.Background" Setter.Value="{telerik:Windows8Resource ResourceKey=AccentBrush}" />
+                <Setter Setter.Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate ControlTemplate.TargetType="{x:Type telerik:RadProgressBar}">
+                            <Grid FrameworkElement.HorizontalAlignment="Center" FrameworkElement.Width="180">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Determinate" />
+                                        <VisualState x:Name="Indeterminate">
+                                            <Storyboard Timeline.RepeatBehavior="Forever" Timeline.AutoReverse="True">
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ellipse1" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="0:0:0">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Visible
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ellipse2" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="0:0:0">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Visible
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ellipse3" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="0:0:0">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Visible
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ellipse4" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="0:0:0">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Visible
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ProgressBarTrack" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="0:0:0">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Collapsed
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.5" DoubleKeyFrame.Value="100" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1" DoubleKeyFrame.Value="102">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.6" DoubleKeyFrame.Value="174" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ellipse4">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.5" DoubleKeyFrame.Value="1" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1" DoubleKeyFrame.Value="1">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.6" DoubleKeyFrame.Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ellipse3">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0" DoubleKeyFrame.Value="0" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.2" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.7" DoubleKeyFrame.Value="1" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.2" DoubleKeyFrame.Value="1">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.8" DoubleKeyFrame.Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ellipse2">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0" DoubleKeyFrame.Value="0" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.4" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.9" DoubleKeyFrame.Value="1" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.4" DoubleKeyFrame.Value="1">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:2" DoubleKeyFrame.Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ellipse1">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0" DoubleKeyFrame.Value="0" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.6" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.1" DoubleKeyFrame.Value="1" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.6" DoubleKeyFrame.Value="1">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:2.2" DoubleKeyFrame.Value="0" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.2" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.7" DoubleKeyFrame.Value="90" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.2" DoubleKeyFrame.Value="92">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.8" DoubleKeyFrame.Value="174" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.4" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.9" DoubleKeyFrame.Value="80" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.4" DoubleKeyFrame.Value="82">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:2" DoubleKeyFrame.Value="174" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ellipse1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:0.6" DoubleKeyFrame.Value="0">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.1" DoubleKeyFrame.Value="70" />
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:1.6" DoubleKeyFrame.Value="72">
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <BackEase EasingFunctionBase.EasingMode="EaseIn" BackEase.Amplitude="2" />
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                    <EasingDoubleKeyFrame DoubleKeyFrame.KeyTime="0:0:2.2" DoubleKeyFrame.Value="174" />
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Ellipse Ellipse.Name="ellipse4" FrameworkElement.Width="6" FrameworkElement.Height="6" UIElement.RenderTransformOrigin="0.5,0.5" FrameworkElement.HorizontalAlignment="Left" UIElement.Visibility="Collapsed" Shape.Fill="{TemplateBinding Control.Background}">
+                                    <UIElement.RenderTransform>
+                                        <TransformGroup>
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </UIElement.RenderTransform>
+                                </Ellipse>
+                                <Ellipse Ellipse.Name="ellipse3" FrameworkElement.Width="6" FrameworkElement.Height="6" UIElement.RenderTransformOrigin="0.5,0.5" FrameworkElement.HorizontalAlignment="Left" UIElement.Visibility="Collapsed" Shape.Fill="{TemplateBinding Control.Background}">
+                                    <UIElement.RenderTransform>
+                                        <TransformGroup>
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </UIElement.RenderTransform>
+                                </Ellipse>
+                                <Ellipse Ellipse.Name="ellipse2" FrameworkElement.Width="6" FrameworkElement.Height="6" UIElement.RenderTransformOrigin="0.5,0.5" FrameworkElement.HorizontalAlignment="Left" UIElement.Visibility="Collapsed" Shape.Fill="{TemplateBinding Control.Background}">
+                                    <UIElement.RenderTransform>
+                                        <TransformGroup>
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </UIElement.RenderTransform>
+                                </Ellipse>
+                                <Ellipse Ellipse.Name="ellipse1" FrameworkElement.Width="6" FrameworkElement.Height="6" UIElement.RenderTransformOrigin="0.5,0.5" FrameworkElement.HorizontalAlignment="Left" UIElement.Visibility="Collapsed" Shape.Fill="{TemplateBinding Control.Background}">
+                                    <UIElement.RenderTransform>
+                                        <TransformGroup>
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                    </UIElement.RenderTransform>
+                                </Ellipse>
+                                <Grid Grid.Name="ProgressBarTrack" FrameworkElement.Height="10" UIElement.RenderTransformOrigin="0.5 0.5" Panel.Background="{telerik:Windows8Resource ResourceKey=BasicBrush}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition ColumnDefinition.Width="Auto" />
+                                        <ColumnDefinition ColumnDefinition.Width="Auto" />
+                                        <ColumnDefinition ColumnDefinition.Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Rectangle Rectangle.Name="SkipValueSpacer" />
+                                    <Rectangle Rectangle.Name="ProgressBarIndicator" Grid.Column="1" Shape.Fill="{TemplateBinding Control.Background}" />
+                                </Grid>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="RadBusyIndicatorStyle" Style.TargetType="{x:Type telerik:RadBusyIndicator}" >
+                <Setter Setter.Property="Control.IsTabStop" Setter.Value="False" />
+                <Setter Setter.Property="DisplayAfter" Setter.Value="00:00:00.1" />
+                <Setter Setter.Property="Control.Background" Setter.Value="{telerik:Windows8Resource ResourceKey=MainBrush}" />
+                <Setter Setter.Property="Control.Foreground" Setter.Value="{telerik:Windows8Resource ResourceKey=MarkerBrush}" />
+                <Setter Setter.Property="Control.FontSize" Setter.Value="{telerik:Windows8Resource ResourceKey=FontSize}" />
+                <Setter Setter.Property="Control.FontFamily" Setter.Value="{telerik:Windows8Resource ResourceKey=FontFamily}" />
+                <Setter Setter.Property="Control.BorderBrush" Setter.Value="{x:Null}" />
+                <Setter Setter.Property="Control.BorderThickness" Setter.Value="1" />
+                <Setter Setter.Property="Control.HorizontalContentAlignment" Setter.Value="Stretch" />
+                <Setter Setter.Property="Control.VerticalContentAlignment" Setter.Value="Stretch" />
+                <Setter Setter.Property="ProgressBarStyle" Setter.Value="{StaticResource BusyIndicatorProgressBarStyle}" />
+                <Setter Setter.Property="animation:AnimationManager.AnimationSelector">
+                    <Setter.Value>
+                        <animation:AnimationSelector >
+                            <animation:FadeAnimation AnimationName="Hide" Direction="Out" TargetElementName="Indicator" />
+                            <animation:FadeAnimation AnimationName="Show" Direction="In" TargetElementName="Indicator" />
+                        </animation:AnimationSelector>
+                    </Setter.Value>
+                </Setter>
+                <Setter Setter.Property="OverlayStyle">
+                    <Setter.Value>
+                        <Style Style.TargetType="{x:Type Rectangle}">
+                            <Setter Setter.Property="Shape.Fill" >
+                                <Setter.Value>
+                                    <LinearGradientBrush LinearGradientBrush.EndPoint="0.5,1" LinearGradientBrush.StartPoint="0.5,0">
+                                        <GradientStop GradientStop.Color="#CCFFFFFF" GradientStop.Offset="0.5" />
+                                        <GradientStop GradientStop.Color="#4CFFFFFF" GradientStop.Offset="1" />
+                                        <GradientStop GradientStop.Color="#4CFFFFFF" />
+                                    </LinearGradientBrush>
+
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Setter.Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate ControlTemplate.TargetType="{x:Type telerik:RadBusyIndicator}">
+                            <Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="VisibilityStates">
+                                        <VisualState x:Name="Hidden">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="00:00:00.001" Storyboard.TargetName="Indicator" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Collapsed
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="00:00:00.001" Storyboard.TargetName="Overlay" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Collapsed
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Visible">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="00:00:00.001" Storyboard.TargetName="Indicator" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Visible
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="00:00:00.001" Storyboard.TargetName="Overlay" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Visible
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="BusyStatusStates">
+                                        <VisualState x:Name="Idle">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="00:00:00.001" Storyboard.TargetName="Content" Storyboard.TargetProperty="(Control.IsEnabled)">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <sys:Boolean>
+                                                                True
+                                                            </sys:Boolean>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="00:00:00.001" Storyboard.TargetName="ProgressBar" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <Visibility>
+                                                                Collapsed
+                                                            </Visibility>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="0" Storyboard.TargetName="ProgressBar" Storyboard.TargetProperty="IsIndeterminate">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <sys:Boolean>
+                                                                False
+                                                            </sys:Boolean>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Busy">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Timeline.Duration="00:00:00.001" Storyboard.TargetName="Content" Storyboard.TargetProperty="(Control.IsEnabled)">
+                                                    <DiscreteObjectKeyFrame ObjectKeyFrame.KeyTime="00:00:00">
+                                                        <ObjectKeyFrame.Value>
+                                                            <sys:Boolean>
+                                                                False
+                                                            </sys:Boolean>
+                                                        </ObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentControl ContentControl.Name="Content" UIElement.IsEnabled="False" Control.IsTabStop="False" ContentControl.Content="{TemplateBinding Content}" ContentControl.ContentTemplate="{TemplateBinding ContentTemplate}" Control.HorizontalContentAlignment="{TemplateBinding Control.HorizontalContentAlignment}" Control.VerticalContentAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
+                                <Rectangle Rectangle.Name="Overlay" FrameworkElement.Style="{TemplateBinding OverlayStyle}" />
+                                <Grid Grid.Name="Indicator" FrameworkElement.HorizontalAlignment="Center" FrameworkElement.VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition RowDefinition.Height="Auto" />
+                                        <RowDefinition RowDefinition.Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <ContentPresenter Grid.Row="0" FrameworkElement.Margin="6" FrameworkElement.HorizontalAlignment="Center" ContentPresenter.Content="{TemplateBinding BusyContent}" ContentPresenter.ContentTemplate="{TemplateBinding BusyContentTemplate}" />
+                                    <telerik:RadProgressBar x:Name="ProgressBar" Grid.Row="1" IsIndeterminate="{TemplateBinding IsIndeterminate}" Value="{TemplateBinding ProgressValue}" Style="{TemplateBinding ProgressBarStyle}"  />
+                                </Grid>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="{x:Type telerik:RadBusyIndicator}" Style.TargetType="{x:Type telerik:RadBusyIndicator}" Style.BasedOn="{StaticResource RadBusyIndicatorStyle}"  />
+
+
 
         </ResourceDictionary>
     </Application.Resources>
