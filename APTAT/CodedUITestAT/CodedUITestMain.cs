@@ -488,7 +488,7 @@ namespace CodedUITestAT
         /// <param name="endpoints">Set endpoints.</param>
         private void StartEndpointScan(ScanType scanType, string username, string password, TestContext testContext, params Computer[] endpoints)
         {
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             testContext.WriteLine("Start Scanning wizard appeared...");
             UIMapStartScanningWizard.ClickNetworkAddressButton();
@@ -562,7 +562,7 @@ namespace CodedUITestAT
         private void StopScanning(TestContext testContext)
         {
             UIHelper.WaitForControlIsClickable(StopScanButton());
-            UIMapMain.ClickStopScanningButton();
+            UIMapMain.ClickStopScanButton();
             UIHelper.WaitForControl(YesDialogButton());
             UIMapStopScanWindow.ClickYesButton();
             testContext.WriteLine("The scanning has been canceled.");
@@ -804,8 +804,8 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
 
             if (ScanCompletedTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.ScanCompletedText))
-                TestContext.WriteLine(String.Format("Scan Completed window appeared with text containing: '{0}'.\n", Settings.ScanCompleted.Default.ScanCompletedText));
-            else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!\n", Settings.ScanCompleted.Default.ScanCompletedText));
+                TestContext.WriteLine(String.Format("Scan Completed window appeared with text containing: '{0}'.", Settings.ScanCompleted.Default.ScanCompletedText));
+            else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!", Settings.ScanCompleted.Default.ScanCompletedText));
 
             // Gets the number of Unknown files and Malwares found at Scan Completed window
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
@@ -826,26 +826,14 @@ namespace CodedUITestAT
                 WaitForValkyrieResults(TestContext);
                 UIHelper.GroupByFiles();
                 AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
+                UIHelper.GroupByComputers();
 
                 // Clicks Valkyrie link and checks the respective browser window URI
                 string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
                 UIHelper.WaitForControl(ValkyrieLink());
                 UIMapMain.ClickValkyrieLink();
-                TestContext.WriteLine("Valkyrie link clicked...\n");
-                BrowserWindow valkyrieWebPage = new BrowserWindow();
-                valkyrieWebPage.SearchProperties.Add(new PropertyExpression(BrowserWindow.PropertyNames.Name, Settings.General.Default.ValkyrieUri, PropertyExpressionOperator.Contains));
-                UIHelper.WaitForControl(valkyrieWebPage);
-                string actualValkyrieUri = valkyrieWebPage.Uri.ToString();
-                string error = null;
-                if (actualValkyrieUri.Contains(expectedValkyrieUri))
-                    TestContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.\n", actualValkyrieUri));
-                else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualValkyrieUri);
-                
-                // A cleanup
-                valkyrieWebPage.Close();
-                UIHelper.GroupByComputers();
-                
-                if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
+                TestContext.WriteLine("Valkyrie link clicked...");
+                UIHelper.AssertBrowserUri(expectedValkyrieUri, TestContext);
             }
         }
 
@@ -857,7 +845,7 @@ namespace CodedUITestAT
             Malware malware = SysHelper.InfectForScan(endpoint);
             SysHelper.AddUnknownFileForScan(endpoint);
             
-            UIMapMain.ClickStartScanningNowButton();
+            UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
 
             UIMapStartScanningWizard.ClickWorkgroupButton();
@@ -939,10 +927,17 @@ namespace CodedUITestAT
 
             UIMapMain.AssertNoScansTextBlockTextExpectedValues.UITherearenoscanshavebTextDisplayText = Settings.General.Default.NoScansTextBlockText;
             UIMapMain.AssertNoScansTextBlockText();
-            TestContext.WriteLine(String.Format("'{0}' message is shown.", Settings.General.Default.NoScansTextBlockText));
+            TestContext.WriteLine(String.Format("'{0}' text is shown.", Settings.General.Default.NoScansTextBlockText));
 
             if (ScanNowButton().Enabled) TestContext.WriteLine("'Scan Now' button is enabled by default.");
             else Assert.Fail("'Scan Now' button is disabled by default!");
+
+            UIMapMain.AssertComodoOneReferralTextBlockTextExpectedValues.UIThisproductisjustoneTextDisplayText = Settings.General.Default.ComodoOneReferralText;
+            UIMapMain.AssertComodoOneReferralTextBlockText();
+            TestContext.WriteLine(String.Format("'{0}' text is shown.", Settings.General.Default.ComodoOneReferralText));
+
+            UIMapMain.ClickComodoOneReferralLink();
+            UIHelper.AssertBrowserUri(Settings.General.Default.ComodoOneReferralUri, TestContext);
 
             UIMapMain.ClickCloseButton();
             if (!MainWindow().Exists) TestContext.WriteLine("Main window was successfully closed using Close button.");
@@ -960,7 +955,7 @@ namespace CodedUITestAT
 
             UIHelper.WaitForControlIsEnabled(StopScanButton());
             UIHelper.WaitForControlIsClickable(StopScanButton());
-            UIMapMain.ClickStopScanningButton();
+            UIMapMain.ClickStopScanButton();
 
             // Does not confirm the stop and checks the result
             UIHelper.WaitForControl(YesDialogButton());
@@ -1273,7 +1268,7 @@ namespace CodedUITestAT
             Malware malware = SysHelper.InfectForScan(endpoint);
             SysHelper.AddUnknownFileForScan(endpoint);
 
-            UIMapMain.ClickStartScanningNowButton();
+            UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
@@ -1318,7 +1313,7 @@ namespace CodedUITestAT
             string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
             string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
             
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -1348,7 +1343,7 @@ namespace CodedUITestAT
             UIMapStartScanningWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -1364,7 +1359,7 @@ namespace CodedUITestAT
             string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
             string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
 
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -1393,7 +1388,7 @@ namespace CodedUITestAT
             UIMapStartScanningWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -1409,7 +1404,7 @@ namespace CodedUITestAT
             string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
             string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
 
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
@@ -1438,7 +1433,7 @@ namespace CodedUITestAT
             UIMapStartScanningWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
@@ -1470,7 +1465,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
 
-            UIMapMain.ClickStartScanningNowButton();            
+            UIMapMain.ClickScanNowButton();            
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsClickable(QuickScanButton());
@@ -1516,7 +1511,7 @@ namespace CodedUITestAT
         {
             string workgroup = SysHelper.GetWorkgroupName();
 
-            UIMapMain.ClickStartScanningNowButton();
+            UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsClickable(QuickScanButton());
@@ -1569,7 +1564,7 @@ namespace CodedUITestAT
         {
             string domainName = SysHelper.GetDomainName();
 
-            UIMapMain.ClickStartScanningNowButton();
+            UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsClickable(NextButton());
@@ -1805,7 +1800,7 @@ namespace CodedUITestAT
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
             Malware malware = SysHelper.InfectForScan(endpoint);
 
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickNetworkAddressButton();
 
@@ -1847,7 +1842,7 @@ namespace CodedUITestAT
             UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
             Malware malware = SysHelper.InfectForScan(endpoint);
 
-            UIMapMain.ClickStartScanningButton();
+            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanningWizard.ClickNetworkAddressButton();
 

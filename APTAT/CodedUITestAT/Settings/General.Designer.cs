@@ -166,5 +166,24 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["KillProcToolExe"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("This product is just one part of Comodo ONE productivity and revenue generation e" +
+            "ngine. To get more AWESOME products for FREE, please visit one.comodo.com")]
+        public string ComodoOneReferralText {
+            get {
+                return ((string)(this["ComodoOneReferralText"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://one.comodo.com")]
+        public string ComodoOneReferralUri {
+            get {
+                return ((string)(this["ComodoOneReferralUri"]));
+            }
+        }
     }
 }

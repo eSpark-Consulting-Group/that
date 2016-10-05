@@ -173,22 +173,9 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// ClickStartScanningButton
+        /// ClickScanNowButton
         /// </summary>
-        public void ClickStartScanningButton()
-        {
-            #region Variable Declarations
-            WpfButton uIStartScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
-            #endregion
-
-            // Click 'StartScanningButton' button
-            Mouse.Click(uIStartScanningButtonButton, new Point(45, 35));
-        }
-        
-        /// <summary>
-        /// ClickStartScanningNowButton
-        /// </summary>
-        public void ClickStartScanningNowButton()
+        public void ClickScanNowButton()
         {
             #region Variable Declarations
             WpfButton uIStartScanningNowButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
@@ -199,9 +186,22 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// ClickStopScanningButton
+        /// ClickStartScanButton
         /// </summary>
-        public void ClickStopScanningButton()
+        public void ClickStartScanButton()
+        {
+            #region Variable Declarations
+            WpfButton uIStartScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStartScanningButtonButton;
+            #endregion
+
+            // Click 'StartScanningButton' button
+            Mouse.Click(uIStartScanningButtonButton, new Point(45, 35));
+        }
+        
+        /// <summary>
+        /// ClickStopScanButton
+        /// </summary>
+        public void ClickStopScanButton()
         {
             #region Variable Declarations
             WpfButton uIStopScanningButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
@@ -235,6 +235,32 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
 
             // Type '123' in 'SearchWatermarkTextBox' text box
             Keyboard.SendKeys(uISearchWatermarkTextBEdit, this.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys, ModifierKeys.None);
+        }
+        
+        /// <summary>
+        /// AssertComodoOneReferralTextBlockText - Use 'AssertComodoOneReferralTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertComodoOneReferralTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIThisproductisjustoneText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIThisproductisjustoneText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+            Assert.AreEqual(this.AssertComodoOneReferralTextBlockTextExpectedValues.UIThisproductisjustoneTextDisplayText, uIThisproductisjustoneText.DisplayText);
+        }
+        
+        /// <summary>
+        /// ClickComodoOneReferralLink
+        /// </summary>
+        public void ClickComodoOneReferralLink()
+        {
+            #region Variable Declarations
+            WpfHyperlink uIOnecomodocomHyperlink = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIThisproductisjustoneText.UIOnecomodocomHyperlink;
+            #endregion
+
+            // Click 'one.comodo.com' link
+            Mouse.Click(uIOnecomodocomHyperlink, new Point(31, 1));
         }
         
         #region Properties
@@ -310,6 +336,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             }
         }
         
+        public virtual AssertComodoOneReferralTextBlockTextExpectedValues AssertComodoOneReferralTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertComodoOneReferralTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertComodoOneReferralTextBlockTextExpectedValues = new AssertComodoOneReferralTextBlockTextExpectedValues();
+                }
+                return this.mAssertComodoOneReferralTextBlockTextExpectedValues;
+            }
+        }
+        
         public UICOMODOUnknownFileHunWindow UICOMODOUnknownFileHunWindow
         {
             get
@@ -359,6 +397,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private AssertUnknownFilesCounterTextBlockTextExpectedValues mAssertUnknownFilesCounterTextBlockTextExpectedValues;
         
         private InputTextToSearchBoxParams mInputTextToSearchBoxParams;
+        
+        private AssertComodoOneReferralTextBlockTextExpectedValues mAssertComodoOneReferralTextBlockTextExpectedValues;
         
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
@@ -455,6 +495,22 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Type '123' in 'SearchWatermarkTextBox' text box
         /// </summary>
         public string UISearchWatermarkTextBEditSendKeys = "123";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertComodoOneReferralTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertComodoOneReferralTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'This product is just one part of Comodo ONE produc...' label equals 'This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit one.comodo.com'
+        /// </summary>
+        public string UIThisproductisjustoneTextDisplayText = "This product is just one part of Comodo ONE productivity and revenue generation e" +
+            "ngine. To get more AWESOME products for FREE, please visit one.comodo.com";
         #endregion
     }
     
@@ -1087,6 +1143,30 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUISearchControlCustom;
             }
         }
+        
+        public UISendingFilesforAnalyProgressBar1 UISendingFilesforAnalyProgressBar
+        {
+            get
+            {
+                if ((this.mUISendingFilesforAnalyProgressBar == null))
+                {
+                    this.mUISendingFilesforAnalyProgressBar = new UISendingFilesforAnalyProgressBar1(this);
+                }
+                return this.mUISendingFilesforAnalyProgressBar;
+            }
+        }
+        
+        public UIThisproductisjustoneText UIThisproductisjustoneText
+        {
+            get
+            {
+                if ((this.mUIThisproductisjustoneText == null))
+                {
+                    this.mUIThisproductisjustoneText = new UIThisproductisjustoneText(this);
+                }
+                return this.mUIThisproductisjustoneText;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1095,6 +1175,10 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private WpfText mUIItem0Text1;
         
         private UISearchControlCustom mUISearchControlCustom;
+        
+        private UISendingFilesforAnalyProgressBar1 mUISendingFilesforAnalyProgressBar;
+        
+        private UIThisproductisjustoneText mUIThisproductisjustoneText;
         #endregion
     }
     
@@ -1132,6 +1216,78 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         #region Fields
         private WpfButton mUIClearSearchBoxButtonButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UISendingFilesforAnalyProgressBar1 : WpfProgressBar
+    {
+        
+        public UISendingFilesforAnalyProgressBar1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Sending Files for Analysis...";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfText UIThisproductisjustoneText
+        {
+            get
+            {
+                if ((this.mUIThisproductisjustoneText == null))
+                {
+                    this.mUIThisproductisjustoneText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIThisproductisjustoneText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ComodoOneReferralTextBlock";
+                    this.mUIThisproductisjustoneText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIThisproductisjustoneText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfText mUIThisproductisjustoneText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisproductisjustoneText : WpfText
+    {
+        
+        public UIThisproductisjustoneText(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfText.PropertyNames.AutomationId] = "ComodoOneReferralTextBlock";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfHyperlink UIOnecomodocomHyperlink
+        {
+            get
+            {
+                if ((this.mUIOnecomodocomHyperlink == null))
+                {
+                    this.mUIOnecomodocomHyperlink = new WpfHyperlink(this);
+                    #region Search Criteria
+                    this.mUIOnecomodocomHyperlink.SearchProperties[WpfHyperlink.PropertyNames.AutomationId] = "ComodoOneReferralLink";
+                    this.mUIOnecomodocomHyperlink.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIOnecomodocomHyperlink;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfHyperlink mUIOnecomodocomHyperlink;
         #endregion
     }
     

@@ -452,5 +452,22 @@ namespace CodedUITestAT
             useMain.UIMapResultsWindow.ClickGroupByComputersToggleButton();
             DataHelper.IsGroupedByFiles = false;
         }
+
+        /// <summary> Asserts whether a browser window is opened with a given URI and closes the respective window. </summary>
+        /// <param name="expectedUri">Set an expected URI.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        internal static void AssertBrowserUri(string expectedUri, TestContext testContext)
+        {
+            BrowserWindow webPage = new BrowserWindow();
+            string error = null;
+            webPage.SearchProperties.Add(new PropertyExpression(BrowserWindow.PropertyNames.Name, expectedUri, PropertyExpressionOperator.Contains));
+            WaitForControl(webPage);
+            string actualUri = webPage.Uri.ToString();
+            if (actualUri.Contains(expectedUri)) testContext.WriteLine(String.Format("Browser window opened with a correct address: '{0}'.", actualUri));
+            else error = String.Format("Browser window opened with an incorrect address: '{0}'!", actualUri);                        
+            webPage.Close();
+
+            if (!String.IsNullOrEmpty(error)) Assert.Fail(error);
+        }
     }
 }

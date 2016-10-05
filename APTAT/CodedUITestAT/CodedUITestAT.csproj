@@ -146,22 +146,22 @@
     <Compile Include="UIMaps\Details\UIMapValkyrieDetailsWindow.Designer.cs">
       <DependentUpon>UIMapValkyrieDetailsWindow.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapActiveDirectory.cs">
+    <Compile Include="UIMaps\StartScanWizard\UIMapActiveDirectory.cs">
       <DependentUpon>UIMapActiveDirectory.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapActiveDirectory.Designer.cs">
+    <Compile Include="UIMaps\StartScanWizard\UIMapActiveDirectory.Designer.cs">
       <DependentUpon>UIMapActiveDirectory.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.cs">
+    <Compile Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.cs">
       <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.Designer.cs">
+    <Compile Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.Designer.cs">
       <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapWorkgroup.cs">
+    <Compile Include="UIMaps\StartScanWizard\UIMapWorkgroup.cs">
       <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapWorkgroup.Designer.cs">
+    <Compile Include="UIMaps\StartScanWizard\UIMapWorkgroup.Designer.cs">
       <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapHelp.cs">
@@ -194,11 +194,11 @@
     <Compile Include="UIMaps\UIMapMain.Designer.cs">
       <DependentUpon>UIMapMain.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.cs">
-      <DependentUpon>UIMapStartScanningWizard.uitest</DependentUpon>
+    <Compile Include="UIMaps\StartScanWizard\UIMapStartScanWizard.cs">
+      <DependentUpon>UIMapStartScanWizard.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.Designer.cs">
-      <DependentUpon>UIMapStartScanningWizard.uitest</DependentUpon>
+    <Compile Include="UIMaps\StartScanWizard\UIMapStartScanWizard.Designer.cs">
+      <DependentUpon>UIMapStartScanWizard.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\UIMapReports.cs">
       <DependentUpon>UIMapReports.uitest</DependentUpon>
@@ -270,15 +270,15 @@
       <LastGenOutput>WaitingTime.Designer.cs</LastGenOutput>
     </None>
     <None Include="UIMaps\Details\UIMapValkyrieDetailsWindow.uitest" />
-    <None Include="UIMaps\StartScanningWizard\UIMapActiveDirectory.uitest" />
-    <None Include="UIMaps\StartScanningWizard\UIMapNetworkAddresses.uitest" />
-    <None Include="UIMaps\StartScanningWizard\UIMapWorkgroup.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapActiveDirectory.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapWorkgroup.uitest" />
     <None Include="UIMaps\UIMapHelp.uitest" />
     <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
     <None Include="UIMaps\Details\UIMapDetailsWindow.uitest" />
     <None Include="UIMaps\UIMapEula.uitest" />
     <None Include="UIMaps\UIMapMain.uitest" />
-    <None Include="UIMaps\StartScanningWizard\UIMapStartScanningWizard.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapStartScanWizard.uitest" />
     <None Include="UIMaps\UIMapReports.uitest" />
     <None Include="UIMaps\UIMapResultsWindow.uitest" />
     <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
