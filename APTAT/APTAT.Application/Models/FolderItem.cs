@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application.Models
 {
-    public class FolderItem : DomainObject, ISelectableItem
+    public class FolderItem : DomainObject, ISelectableTreeItem<FolderItem>
     {
         private ObservableCollection<FolderItem> _items;
         private readonly string _fullName;

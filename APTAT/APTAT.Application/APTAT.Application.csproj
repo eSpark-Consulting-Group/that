@@ -135,6 +135,7 @@
     <Compile Include="AgentWindow.xaml.cs">
       <DependentUpon>AgentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\ISelectableTreeItemExtensions.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />

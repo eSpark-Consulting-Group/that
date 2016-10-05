@@ -169,7 +169,9 @@
                 </telerik:RadWatermarkTextBox>
 
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="0 0 0 0" Grid.ColumnSpan="3">
-                    <local:LoginPasswordUserControl Margin="0" Login="{Binding ParentViewModel.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ParentViewModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding ParentViewModel.UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <local:LoginPasswordUserControl Margin="0" Login="{Binding ParentViewModel.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                    ShowCurrentDomain="{Binding ParentViewModel.UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Password="{Binding ParentViewModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding ParentViewModel.UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
 

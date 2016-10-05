@@ -129,7 +129,9 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="-90 -50 0 0" >
-                <local:LoginPasswordUserControl Margin="0" ShowDomainController="true"  Grid.ColumnSpan="3" Login="{Binding ActiveDirectoryLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ActiveDirectoryPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding UseCurrentDomainForActiveDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <local:LoginPasswordUserControl Margin="0" ShowDomainController="true"
+                                                ShowCurrentDomain="{Binding ParentViewModel.HasCurrentDomainName, UpdateSourceTrigger=PropertyChanged}" 
+                                                Grid.ColumnSpan="3" Login="{Binding ActiveDirectoryLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ActiveDirectoryPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding UseCurrentDomainForActiveDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
         </Grid>
@@ -203,7 +205,9 @@
                 </telerik:RadWatermarkTextBox>
 
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="0 0 0 0" Grid.ColumnSpan="3">
-                    <local:LoginPasswordUserControl Margin="0" Login="{Binding ParentViewModel.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ParentViewModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding ParentViewModel.UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <local:LoginPasswordUserControl Margin="0" 
+                                                    ShowCurrentDomain="{Binding ParentViewModel.UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Login="{Binding ParentViewModel.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ParentViewModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding ParentViewModel.UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
 

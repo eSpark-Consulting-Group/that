@@ -116,12 +116,22 @@ namespace APTAT.Application.Models
         private void InvokeCheckItem(Object arg)
         {
             _checkedItems.Add(arg);
+            var item = arg as ISelectableItem;
+            if (item != null)
+            {
+                item.IsSelected = true;
+            }
             Error = null;
         }
 
         private void InvokeUncheckItem(Object arg)
         {
             _checkedItems.Remove(arg);
+            var item = arg as ISelectableItem;
+            if (item != null)
+            {
+                item.IsSelected = false;
+            }
         }
 
 
@@ -199,8 +209,9 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    CheckIfCanUseCurrentCredentials();
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
+                    var selectedItems = Items.GetSelectedItemsWithItemsPriority().OfType<DirectoryItem>().ToArray();
+                    CheckIfCanUseCurrentCredentials(selectedItems);
+                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, selectedItems);
                    
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = WorkgroupName });
@@ -245,16 +256,17 @@ namespace APTAT.Application.Models
             Error = null;
         }
 
-        private void CheckIfCanUseCurrentCredentials()
+        private void CheckIfCanUseCurrentCredentials(DirectoryItem[] selectedItems)
         {
             var parentView = ((MainViewViewModel)base.ParentViewModel);
-            parentView.UseCurrentCredentials = IsOnlyLocalComputer();
+            parentView.UseCurrentCredentials = IsOnlyLocalComputer(selectedItems);
         }
 
-        private bool IsOnlyLocalComputer()
+        private bool IsOnlyLocalComputer(DirectoryItem[] selectedItems)
         {
             bool onlyLocal = true;
-            foreach (var address in _checkedItems)
+            if (selectedItems.Length > 1) return false;
+            foreach (var address in selectedItems)
             {
                 var depItem = (DirectoryItem)address;
                 if (depItem.Type == DirectoryItemType.Root) return false;

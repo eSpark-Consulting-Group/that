@@ -82,6 +82,20 @@ namespace APTAT.Application.Views
 
         #endregion
 
+        #region ShowCurrentDomain (DependencyProperty)
+
+        public bool ShowCurrentDomain
+        {
+            get { return (bool)GetValue(ShowCurrentDomainProperty); }
+            set { SetValue(ShowCurrentDomainProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowCurrentDomainProperty =
+            DependencyProperty.Register("ShowCurrentDomain", typeof(bool), typeof(LoginPasswordUserControl),
+            new PropertyMetadata(false));
+
+        #endregion
+
         #region ShowDomainController (DependencyProperty)
 
         public bool ShowDomainController

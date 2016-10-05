@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using APTAT.Application.Models.ModelBase;
 
 namespace APTAT.Application.Models
 {
@@ -32,7 +33,7 @@ namespace APTAT.Application.Models
         }
     }
 
-    public class DirectoryItem : DeploymentItem
+    public class DirectoryItem : DeploymentItem, ISelectableTreeItem<DirectoryItem>
     {
         private ObservableCollection<DirectoryItem> _items;
 
@@ -54,7 +55,7 @@ namespace APTAT.Application.Models
 
         public bool IsLoadOnDemand { get; internal set; }
         public bool IsWorkgroup { get; internal set; }
-        public bool IsSelected { get; internal set; }
+        public bool IsSelected { get; set; }
         public Action SelectionChangedAction { get; internal set; }
     }
 }

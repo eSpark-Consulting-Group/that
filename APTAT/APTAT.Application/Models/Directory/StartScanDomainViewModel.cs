@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using APTAT.Application.Extensions;
 using Telerik.Windows.Controls;
 using APTAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
@@ -125,12 +126,22 @@ namespace APTAT.Application.Models
         private void InvokeCheckItem(Object arg)
         {
             _checkedItems.Add(arg);
+            var item = arg as ISelectableItem;
+            if (item != null)
+            {
+                item.IsSelected = true;
+            }
             Error = null;
         }
 
         private void InvokeUncheckItem(Object arg)
         {
             _checkedItems.Remove(arg);
+            var item = arg as ISelectableItem;
+            if (item != null)
+            {
+                item.IsSelected = false;
+            }
         }
 
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
@@ -176,8 +187,9 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    CheckIfCanUseCurrentCredentials();
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, _checkedItems);
+                    var selectedItems = Items.GetSelectedItemsWithItemsPriority().OfType<DirectoryItem>().ToArray();
+                    var isOnlyLocal = CheckIfCanUseCurrentCredentials(selectedItems);
+                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, selectedItems);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
 
@@ -186,12 +198,13 @@ namespace APTAT.Application.Models
                     {
                         if (!UseCurrentDomainForActiveDirectory)
                         {
-                            parent.UseCurrentDomainForDeploy = false;
+                            if (!isOnlyLocal)
+                                parent.UseCurrentDomainForDeploy = false;
                             parent.Login = ActiveDirectoryLogin;
                             parent.Password = ActiveDirectoryPassword;
 
                         }
-                        else
+                        else if (!isOnlyLocal)
                             parent.UseCurrentDomainForDeploy = true;
 
                         _credentialsDetermined = true;
@@ -229,16 +242,17 @@ namespace APTAT.Application.Models
             }
         }
 
-        private void CheckIfCanUseCurrentCredentials()
+        private bool CheckIfCanUseCurrentCredentials(DirectoryItem[] selectedItems)
         {
             var parentView = ((MainViewViewModel)base.ParentViewModel);
-            parentView.UseCurrentCredentials = IsOnlyLocalComputer();
+            return parentView.UseCurrentCredentials = IsOnlyLocalComputer(selectedItems);
         }
 
-        private bool IsOnlyLocalComputer()
+        private bool IsOnlyLocalComputer(DirectoryItem[] selectedItems)
         {
             bool onlyLocal = true;
-            foreach (var address in _checkedItems)
+            if (selectedItems.Length > 1) return false;
+            foreach (var address in selectedItems)
             {
                 var depItem = (DirectoryItem)address;
                 if (depItem.Type != DirectoryItemType.Computer) return false;
