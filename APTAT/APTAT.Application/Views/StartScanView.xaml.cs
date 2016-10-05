@@ -151,6 +151,7 @@ namespace APTAT.Application
 
                 (_currentViewModel.ParentViewModel as IMainViewModel).RestorePorts();
             }
+            _tooltip.IsOpen = false;
         }
 
         private void OnWizardCancelled(Object sender, EventArgs e)
@@ -277,7 +278,7 @@ namespace APTAT.Application
             {
                 if (targetElement == null) return;
 
-                Task.Delay(500).ContinueWith(_ => targetElement.Dispatcher.BeginInvoke((Action)delegate
+                Task.Delay(300).ContinueWith(_ => targetElement.Dispatcher.BeginInvoke((Action)delegate
                 {
                     tooltip.PlacementTarget = targetElement;
                     tooltip.Content = targetElement.Content;

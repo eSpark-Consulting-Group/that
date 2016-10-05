@@ -13,14 +13,7 @@
 
     <Grid Background="White">
 
-        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
-            <telerik:RadBusyIndicator.Resources>
-                <ResourceDictionary>
-                    <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml"/>
-                    </ResourceDictionary.MergedDictionaries>
-                </ResourceDictionary>
-            </telerik:RadBusyIndicator.Resources>
+       
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -523,8 +516,18 @@
                     </Grid>
                 </Border>
 
-            </Grid>
-        </telerik:RadBusyIndicator>
+
+            <telerik:RadBusyIndicator Grid.RowSpan="3" Visibility="{Binding IsBusy, Converter={converters:BoolToVisibilityConverter2}}" IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
+                <telerik:RadBusyIndicator.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.xaml"/>
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </telerik:RadBusyIndicator.Resources>
+            </telerik:RadBusyIndicator>
+        </Grid>
+        
     </Grid>
 
 </Models:BaseView>
