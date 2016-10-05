@@ -44,7 +44,7 @@ namespace APTAT.Application.Services
                 Exception e = null;
                 try
                 {
-                    var foldersInternal = Directory.GetDirectories(folderItem.FullName);
+                    var foldersInternal = Directory.GetDirectories(folderItem.IsFolder ? folderItem.FullName : folderItem.Name);
                     folders = foldersInternal.Select(d => new FolderItem(d, true)).ToArray();
                 }
                 catch (Exception ex)

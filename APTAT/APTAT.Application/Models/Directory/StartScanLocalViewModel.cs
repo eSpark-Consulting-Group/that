@@ -110,20 +110,20 @@ namespace APTAT.Application.Models
                 var node = item;
                 while (true)
                 {
+                    var needCheckChildren = true;
                     if (node.IsSelected)
                     {
                         items.Add(node);
-                        break;
+                        needCheckChildren = false;
                     }
-                    if(node.Items == null)
-                        break;
-                    foreach (var nodeChild in node.Items)
-                    {
-                        if (nodeChild.IsSelected)
-                            items.Add(nodeChild);
-                        else
-                            stack.Push(nodeChild);
-                    }
+                    if (needCheckChildren)
+                        foreach (var nodeChild in node.Items?? Enumerable.Empty<FolderItem>())
+                        {
+                            if (nodeChild.IsSelected)
+                                items.Add(nodeChild);
+                            else
+                                stack.Push(nodeChild);
+                        }
                     if (stack.Any())
                     {
                         node = stack.Pop();
