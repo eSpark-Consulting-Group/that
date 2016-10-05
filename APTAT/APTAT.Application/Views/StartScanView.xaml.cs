@@ -151,7 +151,8 @@ namespace APTAT.Application
 
                 (_currentViewModel.ParentViewModel as IMainViewModel).RestorePorts();
             }
-            _tooltip.IsOpen = false;
+
+            Dispatcher.BeginInvoke((Action)delegate { _tooltip.IsOpen = false; });
         }
 
         private void OnWizardCancelled(Object sender, EventArgs e)
@@ -180,7 +181,7 @@ namespace APTAT.Application
 
             }
 
-            _tooltip.IsOpen = false;
+            Dispatcher.BeginInvoke((Action)delegate { _tooltip.IsOpen = false; });
         }
 
         private void UpdateViewVisibility()
@@ -278,7 +279,7 @@ namespace APTAT.Application
             {
                 if (targetElement == null) return;
 
-                Task.Delay(300).ContinueWith(_ => targetElement.Dispatcher.BeginInvoke((Action)delegate
+                Task.Delay(100).ContinueWith(_ => targetElement.Dispatcher.BeginInvoke((Action)delegate
                 {
                     tooltip.PlacementTarget = targetElement;
                     tooltip.Content = targetElement.Content;
