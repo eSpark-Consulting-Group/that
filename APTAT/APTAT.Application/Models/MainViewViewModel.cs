@@ -709,6 +709,9 @@ namespace APTAT.Application.Models
 
         private void InvokeStopScan(Object arg)
         {
+            if (!IsAnyScanInProgress)
+                return;
+
             CancelInProgress = true;
 
             _aptService.StopScan();

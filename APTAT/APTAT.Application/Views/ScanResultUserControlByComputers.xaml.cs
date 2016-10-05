@@ -130,5 +130,17 @@ namespace APTAT.Application
                 return;
             }
         }
+
+        private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
+        {
+            e.ItemsSource = new[]
+            {
+                new ScanStatus(ScanStatusEnum.InProgress),
+                new ScanStatus(ScanStatusEnum.Canceled),
+                new ScanStatus(ScanStatusEnum.Completed),
+                new ScanStatus(ScanStatusEnum.Failed),
+                new ScanStatus(ScanStatusEnum.Offline)
+            };
+        }
     }
 }

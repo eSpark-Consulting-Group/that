@@ -35,6 +35,7 @@
             <sys:String x:Key="CDMLink">https://one.comodo.com/signup/enterprise</sys:String>
             <sys:String x:Key="GETValkyrieLink">https://accounts.comodo.com/valkyrie/management/signup</sys:String>
 
+            <grid:DistinctValueConverter x:Key="DistinctValueConverter" />
             <Converters:StringToVisibiltyConverter x:Key="StringToVisibiltyConverter"/>
             <Converters:NullableConverter x:Key="NullableConverter"/>
             <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -1074,9 +1075,14 @@
                             </Path.RenderTransform>
                         </Path>
 
+                        
+                        
                         <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" IsTabStop="{TemplateBinding IsTabStop}" Style="{StaticResource ColumnHeaderGripperStyle}" Grid.ColumnSpan="2" />
                         <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" IsTabStop="{TemplateBinding IsTabStop}" Style="{StaticResource ColumnHeaderGripperStyle}" Grid.ColumnSpan="2" />
                     </Grid>
+                    <grid:FilteringDropDown Name="PART_DistinctFilterControl" HorizontalAlignment="Right" 
+									Visibility="{TemplateBinding FilteringUIVisibility}" Margin="0,2,2,0" />
+
                 </Grid>
             </ControlTemplate>
 
@@ -1494,7 +1500,113 @@
                     <Setter Property="IsExpandable" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=DataContext.ScanCompleted}" />
                 </Style.Setters>
             </Style>
-        </ResourceDictionary>
 
+            <ControlTemplate TargetType="grid:FilteringDropDown" x:Key="DistinctFilterControlTemplate">
+                <Grid>
+                    <Button x:Name="PART_DropDownButton">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Button.Template>
+
+                        <Border Cursor="Hand" Width="22" Height="22" Background="Transparent">
+                            <Grid Width="12" Height="13">
+                                <Path Data="M0.93340254,0 L4.934082,0 L6.934082,0 L10.93358,0 C11.996876,0 12.199773,0.75 11.668063,1.359375 L8.4335356,5.5 C8.100522,5.8975558 7.983531,6.062263 7.9429321,6.2736206 L7.934082,6.3298788 L7.934082,10.332101 C7.934082,10.332101 3.9340818,14.997499 3.9340818,14.997499 L3.9340818,6.3293748 L3.9286206,6.3012671 C3.8825667,6.1045012 3.751812,5.9296875 3.3865709,5.5 L0.24589038,1.40625 C-0.2067349,0.84375 -0.066181421,1.2241071E-16 0.93340254,0 z" Fill="#FFF1F1F1"  Stretch="Fill" Margin="2,1,2,2" Width="8" Height="11"/>
+                                <Path Data="M0.93340254,0 L4.934082,0 L6.934082,0 L10.93358,0 C11.996876,0 12.199773,0.75 11.668063,1.359375 L8.4335356,5.5 C8.100522,5.8975558 7.983531,6.062263 7.9429321,6.2736206 L7.934082,6.3298788 L7.934082,10.332101 C7.934082,10.332101 3.9340818,14.997499 3.9340818,14.997499 L3.9340818,6.3293748 L3.9286206,6.3012671 C3.8825667,6.1045012 3.751812,5.9296875 3.3865709,5.5 L0.24589038,1.40625 C-0.2067349,0.84375 -0.066181421,1.2241071E-16 0.93340254,0 z" Fill="White" Width="8" Height="11" Visibility="{TemplateBinding FunnelFillVisibility}"  Margin="2,1,2,2" Stretch="Fill"/>
+                            </Grid>
+                        </Border>
+                    </Button>
+
+                    <Popup x:Name="PART_DropDownPopup">
+                        <Popup.StaysOpen>True</Popup.StaysOpen>
+                        <Popup.AllowsTransparency>True</Popup.AllowsTransparency>
+                        <Popup.PopupAnimation>Slide</Popup.PopupAnimation>
+                    </Popup>
+                </Grid>
+            </ControlTemplate>
+
+            <Style  TargetType="grid:FilteringDropDown">
+                <Setter Property="Template" Value="{StaticResource DistinctFilterControlTemplate}"/>
+            </Style>
+
+            <Style x:Key="DistinctValueListBoxItemStyle" TargetType="ListBoxItem">
+                <Setter Property="Padding" Value="3" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <ControlTemplate x:Key="FilteringControlTemplate" TargetType="grid:FilteringControl">
+                <Border BorderThickness="{TemplateBinding BorderThickness}" Background="White"
+				Margin="{TemplateBinding Margin}" 
+				CornerRadius="0" 
+				BorderBrush="{TemplateBinding BorderBrush}">
+                    <Grid>
+                        <StackPanel MinWidth="180" MaxWidth="360" Margin="{TemplateBinding Padding}" 
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+                            <StackPanel x:Name="PART_DistinctFilter" Visibility="{TemplateBinding DistinctFiltersVisibility}">
+                                <ListBox x:Name="PART_DistinctValuesList"
+								 ItemsSource="{Binding DistinctValues}"
+								 
+								 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+							ItemContainerStyle="{StaticResource DistinctValueListBoxItemStyle}"
+								 SelectionMode="Multiple" BorderThickness="0" Background="Transparent">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel  MaxHeight="242"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0"
+											  Content="{Binding ConvertedValue, Converter={StaticResource DistinctValueConverter}}"
+											  
+											   VerticalContentAlignment="Top" Padding="6 -2 0 0" FontFamily="Segoe UI" FontSize="13"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                           
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                
+                                <Button x:Name="PART_ClearFilterButton" Grid.Column="1"
+								Margin="0 2 -5 5" 
+								telerik:LocalizationManager.ResourceKey="GridViewClearFilter"
+								Height="23" Width="75" />
+                            </Grid>
+                        </StackPanel>
+                       
+                    </Grid>
+                </Border>
+
+            </ControlTemplate>
+
+            <Style  TargetType="grid:FilteringControl">
+                <Setter Property="Template" Value="{StaticResource FilteringControlTemplate}" />
+                <Setter Property="Background" Value="{StaticResource MainBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Margin" Value="0,2,0,0" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Foreground" Value="{StaticResource MarkerBrush}" />
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+            </Style>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

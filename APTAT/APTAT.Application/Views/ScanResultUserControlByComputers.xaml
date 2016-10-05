@@ -25,7 +25,7 @@
                                  RowHeight="50"
                                  HierarchyIndent="14"
                                  Validation.ErrorTemplate="{x:Null}"
-                                 
+                                 DistinctValuesLoading="OnRadGridViewDistinctValuesLoading"
                                  EnableRowVirtualization="True" IsSynchronizedWithCurrentItem="False" ScrollMode="Deferred"
                                  MouseDoubleClick="OnTreeDoubleClick" FocusVisualStyle="{x:Null}">
 
@@ -116,9 +116,9 @@
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewColumn 
-                    IsFilterable="False"
+                    IsFilterable="True"
                     ShowFilterButton="False"
-                    
+                    FilterMemberPath="ScanStatus"
                     ShowFieldFilters="False"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
                     Header="Name"
