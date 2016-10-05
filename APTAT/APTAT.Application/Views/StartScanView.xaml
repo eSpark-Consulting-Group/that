@@ -37,7 +37,7 @@
                     </Grid.ColumnDefinitions>
 
 
-                    <Button Click="OnActiveDirectoryClick" ToolTip="Scan computers by selecting them from Active Directory" Margin="17 17 0 0">
+                    <Button Click="OnActiveDirectoryClick" Content="Scan computers by selecting them from Active Directory" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Margin="17 17 0 0">
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
                                 <FrameworkTemplate.Resources>
@@ -139,7 +139,7 @@
                         </Button.Triggers>
                     </Button>
 
-                    <Button Click="OnWorkgroupClick" ToolTip="Scan computers by selecting them from Workgroup" Grid.Row="1" Margin="17 17 0 0">
+                    <Button Click="OnWorkgroupClick" Content="Scan computers by selecting them from Workgroup" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Row="1" Margin="17 17 0 0">
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
                                 <FrameworkTemplate.Resources>
@@ -255,7 +255,7 @@
                         </Button.Triggers>
                     </Button>
 
-                    <Button ToolTip="Scan computers by specifying IP addresses or endpoint names" Grid.Column="1" Margin="17 17 17 0" Click="OnIpClick">
+                    <Button Content="Scan computers by specifying IP addresses or endpoint names" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Column="1" Margin="17 17 17 0" Click="OnIpClick">
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
                                 <FrameworkTemplate.Resources>
@@ -361,7 +361,7 @@
                         </Button.Triggers>
                     </Button>
 
-                    <Button ToolTip="Scan this computer" Grid.Column="1" Grid.Row="1"  Margin="17 17 17 0" Click="OnThisClick">
+                    <Button Content="Scan This Computer" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Column="1" Grid.Row="1"  Margin="17 17 17 0" Click="OnThisClick">
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
                                 <FrameworkTemplate.Resources>

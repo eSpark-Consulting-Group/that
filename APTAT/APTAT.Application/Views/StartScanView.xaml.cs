@@ -5,6 +5,9 @@ using APTAT.Application.Models;
 using APTAT.Application.Models.Directory;
 using APTAT.Common;
 using APTAT.Application.Models.ModelBase;
+using System.Windows.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace APTAT.Application
 {
@@ -220,6 +223,64 @@ namespace APTAT.Application
                 {
                 }
             });
+        }
+
+        private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button.GetValue(ToolTipHelper.ToolTipProperty) == null)
+                button.SetValue(ToolTipHelper.ToolTipProperty, new ToolTip());
+        }
+
+        private void Button_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as Button;
+
+            button.SetValue(ToolTipHelper.ToolTipProperty, null);
+        }
+
+        public class ToolTipHelper : DependencyObject
+        {
+            public static readonly DependencyProperty ToolTipProperty =
+                DependencyProperty.RegisterAttached("ToolTip", typeof(ToolTip),
+                typeof(ToolTipHelper),
+                new UIPropertyMetadata(null, OnToolTipChanged));
+
+            public static ToolTip GetToolTip(DependencyObject obj)
+            {
+                return (ToolTip)obj.GetValue(ToolTipProperty);
+            }
+
+            public static void SetToolTip(DependencyObject obj, ToolTip value)
+            {
+                obj.SetValue(ToolTipProperty, value);
+            }
+
+            private static void OnToolTipChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+            {
+                if (e.OldValue != null)
+                {
+                    (e.OldValue as ToolTip).Content = null;
+                    (e.OldValue as ToolTip).IsOpen = false;
+                }
+
+                if (e.NewValue != null && obj is ContentControl)
+                    ApplyToolTip(obj as ContentControl, e.NewValue as ToolTip);
+            }
+
+            private static void ApplyToolTip(ContentControl targetElement, ToolTip tooltip)
+            {
+                if (targetElement == null) return;
+
+                Task.Delay(500).ContinueWith(_ => targetElement.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    tooltip.PlacementTarget = targetElement;
+                    tooltip.Content = targetElement.Content;
+                    tooltip.Placement = PlacementMode.Mouse;
+                    tooltip.IsOpen = true;
+                }, DispatcherPriority.Normal));
+            }
         }
     }
 }
