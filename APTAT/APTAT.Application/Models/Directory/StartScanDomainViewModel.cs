@@ -330,6 +330,7 @@ namespace APTAT.Application.Models
             else
             {
                 Error = e.Exception.Message;
+                _domainCredentialsChanged = true;
             }
         }
 

@@ -187,13 +187,16 @@ namespace APTAT.Application.Models
                         IsBusy = false;
 
                         if (Items.Any())
+                        {
                             base.OnStepChanging(success, previousStep, context);
+                            _workgroupCredentialsChanged = false;
+                        }
                         else
                             Error = "No Workgroups Found";
                     }
                     else
                         _targetsDiscoveryService.GetWorkgroup(WorkgroupName, null, new OperationContext { Success = success, UserState = this });
-                    _workgroupCredentialsChanged = false;
+                    
                 }
                 else
                     success();
@@ -305,6 +308,7 @@ namespace APTAT.Application.Models
             {
                 //  Items = new ObservableCollection<DeploymentItem>();
                 Error = "No Workgroups Found";
+                _workgroupCredentialsChanged = false;
             }
 
 
