@@ -195,7 +195,10 @@ namespace APTAT.Application.Models
                             Error = "No Workgroups Found";
                     }
                     else
+                    {
                         _targetsDiscoveryService.GetWorkgroup(WorkgroupName, null, new OperationContext { Success = success, UserState = this });
+                        _workgroupCredentialsChanged = false;
+                    }
                     
                 }
                 else
@@ -301,14 +304,14 @@ namespace APTAT.Application.Models
 
                 // _storage.SetValue(KnownKeys.Workgroup, _workgroup);
 
-
-               context.Success();
+                Error = null;
+                context.Success();
             }
             else
             {
                 //  Items = new ObservableCollection<DeploymentItem>();
                 Error = "No Workgroups Found";
-                _workgroupCredentialsChanged = false;
+                _workgroupCredentialsChanged = true;
             }
 
 
