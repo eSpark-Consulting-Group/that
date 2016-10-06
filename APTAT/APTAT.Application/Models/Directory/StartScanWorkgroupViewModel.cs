@@ -109,7 +109,7 @@ namespace APTAT.Application.Models
             set
             {
                 _useCurrentDomainForDeploy = value;
-                ((IMainViewModel)ParentViewModel).UseCurrentDomainForDeploy = value;
+
 
                 RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
                 RaisePropertyChanged(nameof(Login));
@@ -124,7 +124,7 @@ namespace APTAT.Application.Models
             set
             {
                 _login = value;
-                ((IMainViewModel)ParentViewModel).Login = value;
+
 
                 RaisePropertyChanged(nameof(Login));
             }
@@ -137,7 +137,7 @@ namespace APTAT.Application.Models
             set
             {
                 _password = value;
-                ((IMainViewModel)ParentViewModel).Password = value;
+
 
                 RaisePropertyChanged(nameof(Password));
             }
@@ -297,6 +297,10 @@ namespace APTAT.Application.Models
                 if (parent != null)
                 {
                     string errorMessage;
+
+                    parent.UseCurrentDomainForDeploy = UseCurrentDomainForDeploy;
+                    parent.Login = Login;
+                    parent.Password = Password;
                     if (parent.ValidateCredentials(out errorMessage) && parent.ValidatePorts(out errorMessage))
                     {
                         success();
