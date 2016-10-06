@@ -59,6 +59,9 @@ namespace APTAT.Application.Models
             get { return UseCurrentDomainForActiveDirectory ? null : _activeDirectoryLogin; }
             set
             {
+                if (_activeDirectoryLogin != value)
+                    _domainCredentialsChanged = true;
+
                 _activeDirectoryLogin = value;
                 RaisePropertyChanged(nameof(ActiveDirectoryLogin));
 
@@ -71,6 +74,9 @@ namespace APTAT.Application.Models
             get { return UseCurrentDomainForActiveDirectory ? null : _activeDirectoryPassword; }
             set
             {
+                if (_activeDirectoryPassword != value)
+                    _domainCredentialsChanged = true;
+
                 _activeDirectoryPassword = value;
                 RaisePropertyChanged(nameof(ActiveDirectoryPassword));
 
