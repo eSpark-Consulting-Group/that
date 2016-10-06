@@ -311,7 +311,11 @@ namespace APTAT.Application.Models
 
         private bool CheckIfCanUseCurrentCredentials(DirectoryItem[] selectedItems)
         {
-            return (UseCurrentCredentials = IsOnlyLocalComputer(selectedItems));
+            var isOnlyLocal = IsOnlyLocalComputer(selectedItems);
+            UseCurrentCredentials = isOnlyLocal;
+            if (isOnlyLocal)
+                UseCurrentDomainForDeploy = true;
+            return isOnlyLocal;
         }
 
         private bool IsOnlyLocalComputer(DirectoryItem[] selectedItems)
