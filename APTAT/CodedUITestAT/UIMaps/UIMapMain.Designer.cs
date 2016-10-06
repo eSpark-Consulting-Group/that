@@ -43,19 +43,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         }
         
         /// <summary>
-        /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertMainWindowTitleTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIUnknownFileHunterText = this.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
-            Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
-        }
-        
-        /// <summary>
         /// AssertMalwaresCounterTextBlockText - Use 'AssertMalwaresCounterTextBlockTextExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertMalwaresCounterTextBlockText()
@@ -263,6 +250,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Mouse.Click(uIOnecomodocomHyperlink, new Point(31, 1));
         }
         
+        /// <summary>
+        /// AssertMainWindowTitleTextBlockText - Use 'AssertMainWindowTitleTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertMainWindowTitleTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIUnknownFileHunterText = this.UIUnknownFileHunterWindow1.UIUnknownFileHunterText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
+            Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
+        }
+        
         #region Properties
         public virtual AssertMainWindowExpectedValues AssertMainWindowExpectedValues
         {
@@ -273,18 +273,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                     this.mAssertMainWindowExpectedValues = new AssertMainWindowExpectedValues();
                 }
                 return this.mAssertMainWindowExpectedValues;
-            }
-        }
-        
-        public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertMainWindowTitleTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertMainWindowTitleTextBlockTextExpectedValues = new AssertMainWindowTitleTextBlockTextExpectedValues();
-                }
-                return this.mAssertMainWindowTitleTextBlockTextExpectedValues;
             }
         }
         
@@ -348,6 +336,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             }
         }
         
+        public virtual AssertMainWindowTitleTextBlockTextExpectedValues AssertMainWindowTitleTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertMainWindowTitleTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertMainWindowTitleTextBlockTextExpectedValues = new AssertMainWindowTitleTextBlockTextExpectedValues();
+                }
+                return this.mAssertMainWindowTitleTextBlockTextExpectedValues;
+            }
+        }
+        
         public UICOMODOUnknownFileHunWindow UICOMODOUnknownFileHunWindow
         {
             get
@@ -388,8 +388,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         #region Fields
         private AssertMainWindowExpectedValues mAssertMainWindowExpectedValues;
         
-        private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
-        
         private AssertMalwaresCounterTextBlockTextExpectedValues mAssertMalwaresCounterTextBlockTextExpectedValues;
         
         private AssertNoScansTextBlockTextExpectedValues mAssertNoScansTextBlockTextExpectedValues;
@@ -399,6 +397,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private InputTextToSearchBoxParams mInputTextToSearchBoxParams;
         
         private AssertComodoOneReferralTextBlockTextExpectedValues mAssertComodoOneReferralTextBlockTextExpectedValues;
+        
+        private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
         
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
@@ -420,21 +420,6 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Verify that the 'Exists' property of 'Unknown File Hunter' window equals 'True'
         /// </summary>
         public bool UIUnknownFileHunterWindowExists = true;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertMainWindowTitleTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertMainWindowTitleTextBlockTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
-        /// </summary>
-        public string UIUnknownFileHunterTextDisplayText = "Unknown File Hunter";
         #endregion
     }
     
@@ -511,6 +496,21 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// </summary>
         public string UIThisproductisjustoneTextDisplayText = "This product is just one part of Comodo ONE productivity and revenue generation e" +
             "ngine. To get more AWESOME products for FREE, please visit one.comodo.com";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertMainWindowTitleTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertMainWindowTitleTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
+        /// </summary>
+        public string UIUnknownFileHunterTextDisplayText = "Unknown File Hunter";
         #endregion
     }
     
@@ -1072,6 +1072,22 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIMinimizeButtonButton;
             }
         }
+        
+        public WpfText UIUnknownFileHunterText
+        {
+            get
+            {
+                if ((this.mUIUnknownFileHunterText == null))
+                {
+                    this.mUIUnknownFileHunterText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIUnknownFileHunterText.SearchProperties[WpfText.PropertyNames.AutomationId] = "TitleTextBlock";
+                    this.mUIUnknownFileHunterText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUnknownFileHunterText;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1082,6 +1098,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private WpfButton mUIResizeButtonButton;
         
         private WpfButton mUIMinimizeButtonButton;
+        
+        private WpfText mUIUnknownFileHunterText;
         #endregion
     }
     

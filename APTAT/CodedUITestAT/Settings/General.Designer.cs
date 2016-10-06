@@ -185,5 +185,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["ComodoOneReferralUri"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("System.Windows.Controls.TextBlock")]
+        public string EmptyWatermarkTextBoxText {
+            get {
+                return ((string)(this["EmptyWatermarkTextBoxText"]));
+            }
+        }
     }
 }

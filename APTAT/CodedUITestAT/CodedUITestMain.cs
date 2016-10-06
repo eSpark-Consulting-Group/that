@@ -8,8 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapMainClasses;
-using CodedUITestAT.UIMaps.StartScanningWizard.UIMapStartScanningWizardClasses;
-using CodedUITestAT.UIMaps.StartScanningWizard.UIMapNetworkAddressesClasses;
+using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
+using CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
 using CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
@@ -46,20 +46,20 @@ namespace CodedUITestAT
         }
         private UIMapMain mapMain;
         
-        /// <summary> UIMap for Start Scanning Wizard screen, UIMapStartScanningWizard.uitest. </summary>
-        public UIMapStartScanningWizard UIMapStartScanningWizard
+        /// <summary> UIMap for Start Scanning Wizard screen, UIMapStartScanWizard.uitest. </summary>
+        public UIMapStartScanWizard UIMapStartScanWizard
         {
             get
             {
-                if ((this.mapStartScanningWizard == null))
+                if ((this.mapStartScanWizard == null))
                 {
-                    this.mapStartScanningWizard = new UIMapStartScanningWizard();
+                    this.mapStartScanWizard = new UIMapStartScanWizard();
                 }
 
-                return this.mapStartScanningWizard;
+                return this.mapStartScanWizard;
             }
         }
-        private UIMapStartScanningWizard mapStartScanningWizard;
+        private UIMapStartScanWizard mapStartScanWizard;
 
         /// <summary> UIMap for Network Addresses Scanning Wizard screen branch, UIMapNetworkAddresses.uitest. </summary>
         public UIMapNetworkAddresses UIMapNetworkAddresses
@@ -259,7 +259,7 @@ namespace CodedUITestAT
 
         private WpfText MainWindowTitleTextBlock()
         {
-            return UIMapMain.UIUnknownFileHunterWindow.UIUnknownFileHunterText;
+            return UIMapMain.UIUnknownFileHunterWindow1.UIUnknownFileHunterText;
         }
 
         private WpfHyperlink ValkyrieLink()
@@ -278,17 +278,17 @@ namespace CodedUITestAT
 
         private WpfButton NetworkAddressButton()
         {
-            return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIScancomputersbyspeciButton;
+            return UIMapStartScanWizard.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyspeciButton;
         }
 
         private WpfButton QuickScanButton()
         {
-            return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
+            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
         }        
 
         private WpfButton NextButton()
         {
-            return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
+            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
         }
 
         #region Active Directory
@@ -309,7 +309,7 @@ namespace CodedUITestAT
 
         private WpfText ErrorTextBlock()
         {
-            return UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
+            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIPleaseSpecifyPassworText;
         }
 
         #endregion
@@ -411,7 +411,7 @@ namespace CodedUITestAT
             string match = Regex.Match(ScanStatisticsTextBlock().DisplayText, searchPattern).ToString().Replace(searchWord, String.Empty);
             int filesNumber;
             if (Int32.TryParse(match, out filesNumber))
-                testContext.WriteLine(String.Format("'{0}' files number {1} successfully found at Scan Completed window.\n", searchWord, filesNumber));
+                testContext.WriteLine(String.Format("'{0}' files number {1} successfully found at Scan Completed window.", searchWord, filesNumber));
             else Assert.Fail(String.Format("'{0}' files number is not found at Scan Completed window!", searchWord));
 
             return filesNumber;
@@ -490,10 +490,10 @@ namespace CodedUITestAT
         {
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            testContext.WriteLine("Start Scanning wizard appeared...");
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            testContext.WriteLine("Start Scan Wizard appeared...");
+            UIMapStartScanWizard.ClickNetworkAddressButton();
 
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIHelper.WaitForControlIsEnabled(NextButton());
             CleanNetworkAddressesList();
             foreach (var endpoint in endpoints)
             {
@@ -501,18 +501,17 @@ namespace CodedUITestAT
                 UIMapNetworkAddresses.InputNetworkAddress();
                 UIMapNetworkAddresses.ClickAddButton();
             }
-            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = username;
-            UIMapNetworkAddresses.InputLogin();
-            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(password);
-            UIMapNetworkAddresses.InputPassword();
+            UIMapStartScanWizard.ClickNextButton();
+            InputLogin(username);
+            InputPassword(password);
 
             switch (scanType)
             {
                 case ScanType.Quick:
-                    UIMapStartScanningWizard.ClickQuickScanButton();
+                    UIMapStartScanWizard.ClickQuickScanButton();
                     break;
                 case ScanType.Full:
-                    UIMapStartScanningWizard.ClickFullScanButton();
+                    UIMapStartScanWizard.ClickFullScanButton();
                     break;
                 default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType.ToString()));
             }
@@ -669,7 +668,7 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("FLS UDP Port '{0}' is stored in the respective text box.", udpPort));
             
             // Password
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             testContext.WriteLine("Quick button clicked...");
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
         }
@@ -701,7 +700,7 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
             
             // Password
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             testContext.WriteLine("Quick button clicked...");
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
         }
@@ -733,7 +732,7 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
 
             // Password
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             testContext.WriteLine("Next button clicked...");
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
         }
@@ -744,8 +743,8 @@ namespace CodedUITestAT
         private void AssertErrorText(string expectedErrorText, TestContext testContext)
         {
             UIHelper.WaitForControlIsClickable(ErrorTextBlock());
-            UIMapStartScanningWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = expectedErrorText;
-            UIMapStartScanningWizard.AssertErrorTextBlockText();
+            UIMapStartScanWizard.AssertErrorTextBlockTextExpectedValues.UIPleaseSpecifyPassworTextDisplayText = expectedErrorText;
+            UIMapStartScanWizard.AssertErrorTextBlockText();
             testContext.WriteLine(String.Format("Expected regular error message '{0}' appeared.", expectedErrorText));
         }
 
@@ -789,10 +788,35 @@ namespace CodedUITestAT
             testContext.WriteLine(String.Format("Scan status '{0}' checked at the results screen filter.", scanStatus));
         }
 
+        /// <summary> Inputs a password. </summary>
+        /// <param name="password">Set a password to input.</param>
+        private void InputPassword(string password)
+        {
+            WpfEdit passwordEdit = UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UIPasswordWatermarkTexEdit;
+            if (passwordEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText)
+            {
+                UIMapNetworkAddresses.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = password.Remove(1);
+                UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(password.Substring(1));
+                UIMapNetworkAddresses.InputPassword();
+            }
+        }
+
+        /// <summary> Inputs a login. </summary>
+        /// <param name="login">Set a login to input.</param>
+        private void InputLogin(string login)
+        {
+            WpfEdit loginEdit = UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit;            
+            if (loginEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText)
+            {
+                UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = login;
+                UIMapNetworkAddresses.InputLogin();
+            }
+        }
+
         #endregion
 
         #region Test methods
-
+        
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
@@ -801,16 +825,16 @@ namespace CodedUITestAT
             SysHelper.AddUnknownFileForScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+
             WaitForScanCompleted(ScanType.Quick);
 
             if (ScanCompletedTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.ScanCompletedText))
                 TestContext.WriteLine(String.Format("Scan Completed window appeared with text containing: '{0}'.", Settings.ScanCompleted.Default.ScanCompletedText));
             else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!", Settings.ScanCompleted.Default.ScanCompletedText));
 
-            // Gets the number of Unknown files and Malwares found at Scan Completed window
+            // Gets the number of Unknown and Malicious files found at Scan Completed window
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
 
             // In the case no unknown or malicious files found - the analysis is not available
             if (expectedFilesNumber == 0) 
@@ -848,7 +872,7 @@ namespace CodedUITestAT
             UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
 
-            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroupName;
@@ -858,12 +882,12 @@ namespace CodedUITestAT
             UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapWorkgroup.InputPassword();
             
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...\n", workgroupName));
 
             WaitForScanCompleted(ScanType.Quick);
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
             TestContext.WriteLine("CAM Credentials window appeared...\n");
@@ -1091,7 +1115,7 @@ namespace CodedUITestAT
             string error = "error";
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
 
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
@@ -1158,7 +1182,7 @@ namespace CodedUITestAT
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCancelButton();
+            UIMapScanCompletedWindow.ClickNoButton();
             UIHelper.WaitForControlIsClickable(StartScanButton());
 
             // Opens a threat details via context menu
@@ -1235,7 +1259,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             AssertPanelCountersData(0, 1, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
@@ -1243,20 +1267,20 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCancelButton();
+            UIMapScanCompletedWindow.ClickNoButton();
             AssertPanelCountersData(1, 0, TestContext);
                         
             malware = SysHelper.InfectForScan(endpoint);
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCancelButton();
+            UIMapScanCompletedWindow.ClickNoButton();
             AssertPanelCountersData(1, 1, TestContext);
             
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             AssertPanelCountersData(0, 0, TestContext);
         }
 
@@ -1270,7 +1294,7 @@ namespace CodedUITestAT
 
             UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
             
             UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
@@ -1279,17 +1303,17 @@ namespace CodedUITestAT
             UIMapActiveDirectory.InputAdministrator();
             UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapActiveDirectory.InputPassword();
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControl(AdTree());
 
             ExpandAdRow("Computers");
             CheckAdRow(endpoint.Name);
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}' from domain '{1}'...", endpoint.Name, domainName));
 
             WaitForScanCompleted(ScanType.Quick);
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.GroupByFiles();
@@ -1315,37 +1339,36 @@ namespace CodedUITestAT
             
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIMapStartScanWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(NextButton());
             
             // Inputs some non-default parameters
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapNetworkAddresses.ClickAddButton();
-            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
-            UIMapNetworkAddresses.InputLogin();
-            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapNetworkAddresses.InputPassword();
+            UIMapStartScanWizard.ClickNextButton();            
+            InputLogin(DataHelper.Username);
+            InputPassword(DataHelper.Password);
             UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = newTcpPort;
             UIMapNetworkAddresses.InputTcpPort();
             UIMapNetworkAddresses.InputUdpPortParams.UIUdpPortTextBoxEditText = newUdpPort;
             UIMapNetworkAddresses.InputUdpPort();
 
-            UIMapStartScanningWizard.ClickBackButton();
+            UIMapStartScanWizard.ClickBackButton();
             TestContext.WriteLine("Back button clicked...");
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIMapStartScanWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Checks whether the inputted parameters are stored after clicking Back button
             CheckStoredDataAtNetworkAddresses(endpoint, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
 
-            UIMapStartScanningWizard.ClickCancelButton();
+            UIMapStartScanWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIMapStartScanWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Checks whether the inputted parameters are stored after clicking Cancel button
@@ -1361,7 +1384,7 @@ namespace CodedUITestAT
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Inputs some non-default parameters
@@ -1376,21 +1399,21 @@ namespace CodedUITestAT
             UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = newUdpPort;
             UIMapWorkgroup.InputUdpPort();
 
-            UIMapStartScanningWizard.ClickBackButton();
+            UIMapStartScanWizard.ClickBackButton();
             TestContext.WriteLine("Back button clicked...");
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Checks whether the inputted parameters are stored after clicking Back button
             CheckStoredDataAtWorkgroup(workgroupName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
 
-            UIMapStartScanningWizard.ClickCancelButton();
+            UIMapStartScanWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Checks whether the inputted parameters are stored after clicking Cancel button
@@ -1406,7 +1429,7 @@ namespace CodedUITestAT
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Inputs some non-default parameters
@@ -1421,21 +1444,21 @@ namespace CodedUITestAT
             UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = newUdpPort;
             UIMapActiveDirectory.InputUdpPort();
 
-            UIMapStartScanningWizard.ClickBackButton();
+            UIMapStartScanWizard.ClickBackButton();
             TestContext.WriteLine("Back button clicked...");
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
 
             // Checks whether the inputted parameters are stored after clicking Back button
             CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
 
-            UIMapStartScanningWizard.ClickCancelButton();
+            UIMapStartScanWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
 
             // Checks whether the inputted parameters are stored after clicking Cancel button
@@ -1455,7 +1478,7 @@ namespace CodedUITestAT
             WaitForScanCompleted(scanType);
             TestContext.WriteLine(String.Format("Scan '{0}' completed.", scanType));
             
-            UIMapScanCompletedWindow.ClickCancelButton();
+            UIMapScanCompletedWindow.ClickNoButton();
             UIHelper.FindRow(malware, ResultsScreen.ScanningResults, TestContext);
             UIHelper.FindRow(unknownFile, ResultsScreen.ScanningResults, TestContext);
         }
@@ -1467,26 +1490,26 @@ namespace CodedUITestAT
 
             UIMapMain.ClickScanNowButton();            
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIMapStartScanWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsClickable(QuickScanButton());
 
             // Network Address
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
             UIMapNetworkAddresses.InputNetworkAddress();
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
             UIMapNetworkAddresses.ClickAddButton();
 
             // Login
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
-            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = DataHelper.Username;
             UIMapNetworkAddresses.InputLogin();
 
             // Password
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
             UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapNetworkAddresses.InputPassword();
@@ -1494,7 +1517,7 @@ namespace CodedUITestAT
             // TCP port
             UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = String.Empty;
             UIMapNetworkAddresses.InputTcpPort();
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
             UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
             UIMapNetworkAddresses.InputTcpPort();
@@ -1502,7 +1525,7 @@ namespace CodedUITestAT
             // UDP port
             UIMapNetworkAddresses.InputUdpPortParams.UIUdpPortTextBoxEditText = String.Empty;
             UIMapNetworkAddresses.InputUdpPort();
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
         }
 
@@ -1513,23 +1536,23 @@ namespace CodedUITestAT
 
             UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickWorkgroupButton();
+            UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsClickable(QuickScanButton());
 
             // Workgroup input
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext);
             UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup;
             UIMapWorkgroup.InputWorkgroup();
 
             // Login
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
             UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
             UIMapWorkgroup.InputLogin();
 
             // Password
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
             UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapWorkgroup.InputPassword();
@@ -1537,7 +1560,7 @@ namespace CodedUITestAT
             // TCP port
             UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = String.Empty;
             UIMapWorkgroup.InputTcpPort();
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
             UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
             UIMapWorkgroup.InputTcpPort();
@@ -1545,7 +1568,7 @@ namespace CodedUITestAT
             // UDP port
             UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = String.Empty;
             UIMapWorkgroup.InputUdpPort();
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
             UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Udp);
             UIMapWorkgroup.InputUdpPort();
@@ -1554,7 +1577,7 @@ namespace CodedUITestAT
             string error = "error";
             UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup.Remove(workgroup.Length - error.Length) + error;
             UIMapWorkgroup.InputWorkgroup();
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
             AssertErrorText(Settings.Errors.Default.WorkgroupNotFound, TestContext);
         }
@@ -1566,23 +1589,23 @@ namespace CodedUITestAT
 
             UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickActiveDirectoryButton();
+            UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsClickable(NextButton());
 
             // Domain Controller input
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyDomainController, TestContext);
             UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
             UIMapActiveDirectory.InputDomainController();
 
             // Administrator
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
             UIMapActiveDirectory.InputAdministratorParams.UIAdministratorTextBoxEditText = DataHelper.Username;
             UIMapActiveDirectory.InputAdministrator();
 
             // Password
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
             UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapActiveDirectory.InputPassword();
@@ -1590,7 +1613,7 @@ namespace CodedUITestAT
             // TCP port
             UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = String.Empty;
             UIMapActiveDirectory.InputTcpPort();
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
             UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
             UIMapActiveDirectory.InputTcpPort();
@@ -1598,7 +1621,7 @@ namespace CodedUITestAT
             // UDP port
             UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = String.Empty;
             UIMapActiveDirectory.InputUdpPort();
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
             UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Udp);
             UIMapActiveDirectory.InputUdpPort();
@@ -1607,7 +1630,7 @@ namespace CodedUITestAT
             string nonExistentDomainName = domainName + ".test";
             UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = nonExistentDomainName;
             UIMapActiveDirectory.InputDomainController();
-            UIMapStartScanningWizard.ClickNextButton();
+            UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
             AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
         }
@@ -1621,7 +1644,7 @@ namespace CodedUITestAT
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
 
@@ -1720,7 +1743,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
         }
 
@@ -1768,7 +1791,7 @@ namespace CodedUITestAT
             
             // Completed scan
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();            
+            UIMapScanCompletedWindow.ClickYesButton();            
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);            
             
             SetStatusFilter(ScanStatus.Completed, TestContext);
@@ -1802,7 +1825,7 @@ namespace CodedUITestAT
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIMapStartScanWizard.ClickNetworkAddressButton();
 
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
             CleanNetworkAddressesList();
@@ -1811,15 +1834,15 @@ namespace CodedUITestAT
             UIMapNetworkAddresses.ClickAddButton();
             TestContext.WriteLine(String.Format("IP range {0} added to the addresses list.", ipRange));
 
-            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = DataHelper.Username;
             UIMapNetworkAddresses.InputLogin();
             UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapNetworkAddresses.InputPassword();
 
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
-            UIMapScanCompletedWindow.ClickCancelButton();
+            UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scanning results
             UIHelper.ClickRow(ResultsScreen.ScanningResults, server);
@@ -1844,7 +1867,7 @@ namespace CodedUITestAT
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanningWizard.ClickNetworkAddressButton();
+            UIMapStartScanWizard.ClickNetworkAddressButton();
 
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
             CleanNetworkAddressesList();
@@ -1853,15 +1876,15 @@ namespace CodedUITestAT
             UIMapNetworkAddresses.ClickAddButton();
             TestContext.WriteLine(String.Format("Subnet {0} added to the addresses list.", subnet));
 
-            UIMapNetworkAddresses.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
+            UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = DataHelper.Username;
             UIMapNetworkAddresses.InputLogin();
             UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapNetworkAddresses.InputPassword();
 
-            UIMapStartScanningWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickQuickScanButton();
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
-            UIMapScanCompletedWindow.ClickCancelButton();
+            UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scanning results
             UIHelper.ClickRow(ResultsScreen.ScanningResults, server);
@@ -1884,7 +1907,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);            
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
@@ -1899,7 +1922,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);

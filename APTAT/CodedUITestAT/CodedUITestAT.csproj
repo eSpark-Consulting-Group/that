@@ -152,9 +152,6 @@
     <Compile Include="UIMaps\StartScanWizard\UIMapActiveDirectory.Designer.cs">
       <DependentUpon>UIMapActiveDirectory.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.cs">
-      <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
-    </Compile>
     <Compile Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.Designer.cs">
       <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
     </Compile>

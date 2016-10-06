@@ -30,19 +30,6 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
     {
         
         /// <summary>
-        /// AssertScanCompletedTextBlockText - Use 'AssertScanCompletedTextBlockTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertScanCompletedTextBlockText()
-        {
-            #region Variable Declarations
-            WpfText uIScanCompletedDoyouwaText = this.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText;
-            #endregion
-
-            // Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! '
-            Assert.AreEqual(this.AssertScanCompletedTextBlockTextExpectedValues.UIScanCompletedDoyouwaTextDisplayText, uIScanCompletedDoyouwaText.DisplayText);
-        }
-        
-        /// <summary>
         /// AssertStatisticsTextBlock - Use 'AssertStatisticsTextBlockExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertStatisticsTextBlock()
@@ -56,44 +43,45 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         }
         
         /// <summary>
-        /// ClickCancelButton
+        /// ClickYesButton
         /// </summary>
-        public void ClickCancelButton()
+        public void ClickYesButton()
         {
             #region Variable Declarations
-            WpfButton uICancelButton = this.UIUnknownFileHunterWindow.UICancelButton;
+            WpfButton uIYesButton = this.UIUnknownFileHunterWindow1.UIYesButton;
             #endregion
 
-            // Click 'Cancel' button
-            Mouse.Click(uICancelButton, new Point(63, 17));
+            // Click 'Yes' button
+            Mouse.Click(uIYesButton, new Point(94, 17));
         }
         
         /// <summary>
-        /// ClickOkButton
+        /// ClickNoButton
         /// </summary>
-        public void ClickOkButton()
+        public void ClickNoButton()
         {
             #region Variable Declarations
-            WpfButton uIOKButton = this.UIUnknownFileHunterWindow.UIOKButton;
+            WpfButton uINOButton = this.UIUnknownFileHunterWindow1.UINOButton;
             #endregion
 
-            // Click 'OK' button
-            Mouse.Click(uIOKButton, new Point(38, 14));
+            // Click 'No' button
+            Mouse.Click(uINOButton, new Point(66, 11));
+        }
+        
+        /// <summary>
+        /// AssertScanCompletedTextBlockText - Use 'AssertScanCompletedTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertScanCompletedTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIScancompletedText = this.UIUnknownFileHunterWindow1.UIScancompletedText;
+            #endregion
+
+            // Verify that the 'DisplayText' property of 'Scan completed!' label equals 'Scan completed!'
+            Assert.AreEqual(this.AssertScanCompletedTextBlockTextExpectedValues.UIScancompletedTextDisplayText, uIScancompletedText.DisplayText);
         }
         
         #region Properties
-        public virtual AssertScanCompletedTextBlockTextExpectedValues AssertScanCompletedTextBlockTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertScanCompletedTextBlockTextExpectedValues == null))
-                {
-                    this.mAssertScanCompletedTextBlockTextExpectedValues = new AssertScanCompletedTextBlockTextExpectedValues();
-                }
-                return this.mAssertScanCompletedTextBlockTextExpectedValues;
-            }
-        }
-        
         public virtual AssertStatisticsTextBlockExpectedValues AssertStatisticsTextBlockExpectedValues
         {
             get
@@ -103,6 +91,18 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                     this.mAssertStatisticsTextBlockExpectedValues = new AssertStatisticsTextBlockExpectedValues();
                 }
                 return this.mAssertStatisticsTextBlockExpectedValues;
+            }
+        }
+        
+        public virtual AssertScanCompletedTextBlockTextExpectedValues AssertScanCompletedTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertScanCompletedTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertScanCompletedTextBlockTextExpectedValues = new AssertScanCompletedTextBlockTextExpectedValues();
+                }
+                return this.mAssertScanCompletedTextBlockTextExpectedValues;
             }
         }
         
@@ -117,29 +117,28 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                 return this.mUIUnknownFileHunterWindow;
             }
         }
+        
+        public UIUnknownFileHunterWindow1 UIUnknownFileHunterWindow1
+        {
+            get
+            {
+                if ((this.mUIUnknownFileHunterWindow1 == null))
+                {
+                    this.mUIUnknownFileHunterWindow1 = new UIUnknownFileHunterWindow1();
+                }
+                return this.mUIUnknownFileHunterWindow1;
+            }
+        }
         #endregion
         
         #region Fields
-        private AssertScanCompletedTextBlockTextExpectedValues mAssertScanCompletedTextBlockTextExpectedValues;
-        
         private AssertStatisticsTextBlockExpectedValues mAssertStatisticsTextBlockExpectedValues;
         
-        private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertScanCompletedTextBlockText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertScanCompletedTextBlockTextExpectedValues
-    {
+        private AssertScanCompletedTextBlockTextExpectedValues mAssertScanCompletedTextBlockTextExpectedValues;
         
-        #region Fields
-        /// <summary>
-        /// Verify that the 'DisplayText' property of 'Scan Completed! Do you want to analyse files with ...' label equals 'Scan Completed! '
-        /// </summary>
-        public string UIScanCompletedDoyouwaTextDisplayText = "Scan Completed! ";
+        private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
+        
+        private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
         #endregion
     }
     
@@ -155,6 +154,21 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         /// Verify that the 'Exists' property of 'Computer Statistics: - 1 Total - 1 Successful Scan...' label equals 'True'
         /// </summary>
         public bool UIComputerStatistics1TTextExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertScanCompletedTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertScanCompletedTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of 'Scan completed!' label equals 'Scan completed!'
+        /// </summary>
+        public string UIScancompletedTextDisplayText = "Scan completed!";
         #endregion
     }
     
@@ -248,6 +262,78 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         private WpfText mUIComputerStatistics1TText;
         
         private WpfButton mUICancelButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIUnknownFileHunterWindow1 : WpfWindow
+    {
+        
+        public UIUnknownFileHunterWindow1()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Unknown File Hunter";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIYesButton
+        {
+            get
+            {
+                if ((this.mUIYesButton == null))
+                {
+                    this.mUIYesButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIYesButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "YesButton";
+                    this.mUIYesButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIYesButton;
+            }
+        }
+        
+        public WpfButton UINOButton
+        {
+            get
+            {
+                if ((this.mUINOButton == null))
+                {
+                    this.mUINOButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUINOButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "NoButton";
+                    this.mUINOButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUINOButton;
+            }
+        }
+        
+        public WpfText UIScancompletedText
+        {
+            get
+            {
+                if ((this.mUIScancompletedText == null))
+                {
+                    this.mUIScancompletedText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIScancompletedText.SearchProperties[WpfText.PropertyNames.AutomationId] = "ScanCompletedTextBlock";
+                    this.mUIScancompletedText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIScancompletedText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIYesButton;
+        
+        private WpfButton mUINOButton;
+        
+        private WpfText mUIScancompletedText;
         #endregion
     }
 }

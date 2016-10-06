@@ -43,7 +43,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Malware")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Malicious")]
         public string Malware {
             get {
                 return ((string)(this["Malware"]));
