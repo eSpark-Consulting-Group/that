@@ -157,7 +157,7 @@ namespace CodedUITestAT
             UIMapHelp.ClickCloseAgentRequirementsButton();
             UIHelper.WaitForControlIsEnabled(HelpButton());
             AssertAgentWindow(false);
-            TestContext.WriteLine("'Agent requirements' window is successfully closed using Close button.");
+            TestContext.WriteLine("'Agent Requirements' window is successfully closed using Close button.");
 
             // Close cross button
             UIMapHelp.ClickHelpButton();
@@ -165,12 +165,12 @@ namespace CodedUITestAT
             UIMapHelp.ClickCloseAgentRequirementsCrossButton();
             UIHelper.WaitForControlIsEnabled(HelpButton());
             AssertAgentWindow(false);
-            TestContext.WriteLine("'Agent requirements' window is successfully closed using Close cross button.");
+            TestContext.WriteLine("'Agent Requirements' window is successfully closed using Close cross button.");
 
             UIMapHelp.ClickHelpButton();
             UIMapHelp.SelectAgentRequirementsMenuItem();
             AssertAgentWindow(true);
-            TestContext.WriteLine("'Agent requirements' window can be opened again.");
+            TestContext.WriteLine("'Agent Requirements' window can be opened again.");
         }
 
         #endregion
