@@ -218,7 +218,11 @@
                     <ColumnDefinition Width="22" />
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="0 0 0 0" Grid.ColumnSpan="3">
+                    <local:LoginPasswordUserControl Margin="0" 
+                                                    ShowCurrentDomain="{Binding ParentViewModel.UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Login="{Binding ParentViewModel.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ParentViewModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding ParentViewModel.UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
 
                 <TextBlock Text="FLS TCP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="1"  Margin="0 24 0 0" HorizontalAlignment="Right" />
                 <telerik:RadWatermarkTextBox Grid.Column="2" Margin="0 17 0 17" HorizontalAlignment="Left" Grid.Row="1" Width="289" Text="{Binding  ParentViewModel.TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="NumberValidationTextBox">
@@ -234,11 +238,7 @@
                     </telerik:RadWatermarkTextBox.WatermarkContent>
                 </telerik:RadWatermarkTextBox>
 
-                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="0 0 0 0" Grid.ColumnSpan="3">
-                    <local:LoginPasswordUserControl Margin="0" 
-                                                    ShowCurrentDomain="{Binding ParentViewModel.UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}" 
-                                                    Login="{Binding ParentViewModel.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ParentViewModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding ParentViewModel.UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+                
 
 
 

@@ -2,6 +2,7 @@
 using System.Windows;
 using APTAT.Application.Extensions;
 using System.Windows.Input;
+using System;
 
 namespace APTAT.Application.Views
 {
@@ -158,10 +159,13 @@ namespace APTAT.Application.Views
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (ShowDomainController)
-                text.DelayedFocus();
-            else
-                text2.DelayedFocus();
+            Dispatcher.BeginInvoke((Action)delegate
+            {
+                if (ShowDomainController)
+                    text.DelayedFocus();
+                else
+                    text2.DelayedFocus();
+            });
         }
     }
 }

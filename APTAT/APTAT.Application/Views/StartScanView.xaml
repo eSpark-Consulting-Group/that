@@ -487,11 +487,7 @@
 
                 <Border Grid.Row="2" Height="60" >
                     <Grid>
-                            <Button AutomationProperties.AutomationId="BackButton"
-                            x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="17,0,0,0"
-                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
-                            Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
-                            Click="OnBackClick" Template="{StaticResource BackButton}" Foreground="Black"/>
+                            
 
                             <StackPanel AutomationProperties.AutomationId="ToolBarPanel" Orientation="Horizontal" HorizontalAlignment="Right" Height="50" Margin="0,0,17,0">
 
@@ -508,6 +504,12 @@
                                 <Button AutomationProperties.AutomationId="NextButton" x:Name="btnNext" Content="{Binding NextName}" 
                                     Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" Click="OnNextClick" />
                             </Grid>
+
+                            <Button AutomationProperties.AutomationId="BackButton"
+                            x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="17,0,0,0"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
+                            Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
+                            Click="OnBackClick" Template="{StaticResource BackButton}" Foreground="Black"/>
 
                         </StackPanel>
 
