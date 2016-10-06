@@ -461,10 +461,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="Disabled">
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Bd" Storyboard.TargetProperty="Opacity" To="0.4" Duration="0:0:0"/>
-                                                <DoubleAnimation Duration="0" To="0.4" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="WatermarkVisualElement" />
-                                            </Storyboard>
+                                            
                                         </VisualState>
                                     </VisualStateGroup>
                                     <VisualStateGroup x:Name="FocusStates">
