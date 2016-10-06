@@ -55,7 +55,7 @@
                                 </StackPanel>
 
                                 <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="0,10,0,0" Orientation="Horizontal">
-                                    <Button Content="OK"  Margin="5,5,5,15" Click="YesClick" ></Button>
+                                    <Button Content="OK"  Margin="5,5,5,15" Click="YesClick" Height="32"></Button>
                                 </StackPanel>
                             </Grid>
 

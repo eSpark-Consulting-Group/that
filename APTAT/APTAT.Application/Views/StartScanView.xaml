@@ -487,33 +487,34 @@
 
                 <Border Grid.Row="2" Height="60" >
                     <Grid>
-                            
+                        
 
-                            <StackPanel AutomationProperties.AutomationId="ToolBarPanel" Orientation="Horizontal" HorizontalAlignment="Right" Height="50" Margin="0,0,17,0">
+                        <StackPanel AutomationProperties.AutomationId="ToolBarPanel" Orientation="Horizontal" HorizontalAlignment="Right" Height="50" Margin="0,0,17,0">
 
-                            <Button AutomationProperties.AutomationId="QuickScanButton"
+                            <Button AutomationProperties.AutomationId="QuickScanButton" Height="32"
                                     x:Name="btnQuickScan" Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"                            
                                     IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
                                     Content="Quick Scan" Click="OnQuickScanClick" Margin="5" />
 
-                            <Button AutomationProperties.AutomationId="FullScanButton" 
+                            <Button AutomationProperties.AutomationId="FullScanButton" Height="32"
                             x:Name="btnFinish" Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"                            
                             IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Full Scan" Click="OnFinishClick" Margin="5 5 0 5" />
 
                             <Grid Margin="10 5 0 5" Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" >
-                                <Button AutomationProperties.AutomationId="NextButton" x:Name="btnNext" Content="{Binding NextName}" 
+                                <Button AutomationProperties.AutomationId="NextButton" x:Name="btnNext" Content="{Binding NextName}"  Height="32"
                                     Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" Click="OnNextClick" />
                             </Grid>
 
-                            <Button AutomationProperties.AutomationId="BackButton"
+                            
+
+                        </StackPanel>
+                        <Button AutomationProperties.AutomationId="BackButton" Height="32"
                             x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="17,0,0,0"
                             IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
                             Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
                             Click="OnBackClick" Template="{StaticResource BackButton}" Foreground="Black"/>
 
-                        </StackPanel>
-
-                        <Button AutomationProperties.AutomationId="CancelButton"
+                        <Button AutomationProperties.AutomationId="CancelButton" Height="32"
                                 x:Name="cancel" Content="Cancel" HorizontalAlignment="Right"  Margin="5 5 17 5" Click="OnCancelClick" />
                     </Grid>
                 </Border>

@@ -56,8 +56,8 @@
                                 </TextBlock>
 
                                 <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="0,10,0,0" Orientation="Horizontal">
-                                    <Button AutomationProperties.AutomationId="YesButton" Content="Yes"  Margin="5,5,5,15"  Click="YesClick"   ></Button>
-                                    <Button AutomationProperties.AutomationId="NoButton" Content="No" x:Name="no" Margin="5,5,5,15" Click="NoClick"   ></Button>
+                                    <Button AutomationProperties.AutomationId="YesButton" Content="Yes" Height="32"  Margin="5,5,5,15"  Click="YesClick"   ></Button>
+                                    <Button AutomationProperties.AutomationId="NoButton" Content="No" Height="32" x:Name="no" Margin="5,5,5,15" Click="NoClick"   ></Button>
                                 </StackPanel>
                             </Grid>
 

@@ -93,7 +93,7 @@
                 <Run Text="'LocalAccountTokenFilterPolicy' dword is 1." FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
                                 </TextBlock>
 
-                                <Button AutomationProperties.AutomationId="CloseAboutButton"
+                                <Button AutomationProperties.AutomationId="CloseAboutButton" Height="32"
                         Grid.Row="8" HorizontalAlignment="Right" Content="Close" Margin="0,0,15,5" 
                         Click="OnBackClick"  Grid.Column="2" Width="120"/>
 

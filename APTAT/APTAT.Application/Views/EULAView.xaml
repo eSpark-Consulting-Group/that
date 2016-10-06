@@ -36,7 +36,7 @@
                 </Border>
 
                 <Button AutomationProperties.AutomationId="IAcceptButton" Content="I Accept" Grid.Row="1" Margin="0 17 0 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                        Command="{Binding ChangeScreenCommand}" />
+                        Command="{Binding ChangeScreenCommand}" Height="32"/>
             </Grid>
         </Border>
         

@@ -83,7 +83,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                 <Setter Property="FontFamily" Value="Segoe UI" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -110,7 +110,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                                     </Storyboard>
                                 </ResourceDictionary>
                             </FrameworkTemplate.Resources>
-                            <Border Height="32" Width="{TemplateBinding MinWidth}">
+                            <Border Width="{TemplateBinding MinWidth}">
                                 <Grid>
                                     <Border Border.Name="Border" SnapsToDevicePixels="True" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}"/>
                                     <Border Border.Name="MouseOverElement"  Opacity="0" SnapsToDevicePixels="True" Background="{DynamicResource StrongBrush2}"/>
@@ -119,11 +119,8 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
-                                <Trigger Trigger.Property="UIElement.IsKeyboardFocused" Trigger.Value="True">
-                                    <TriggerBase.EnterActions>
-                                        <BeginStoryboard BeginStoryboard.Name="AnimaFocused_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
-                                    </TriggerBase.EnterActions>
-                                </Trigger>
+
+                                
                                 <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
                                     <TriggerBase.ExitActions>
                                         <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
@@ -160,7 +157,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                         </Storyboard>
                     </ResourceDictionary>
                 </FrameworkTemplate.Resources>
-                <Border Height="32" Width="{TemplateBinding MinWidth}">
+                <Border  Width="{TemplateBinding MinWidth}">
                     <Grid>
                         <Border Border.Name="Border" SnapsToDevicePixels="True" BorderThickness="2" BorderBrush="{DynamicResource AccentBrush}" Background="Transparent"/>
                         <Border Border.Name="MouseOverElement"  Opacity="0" SnapsToDevicePixels="True" Background="{DynamicResource BasicBrush}"/>
@@ -170,11 +167,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                 </Border>
 
                 <ControlTemplate.Triggers>
-                    <Trigger Trigger.Property="UIElement.IsKeyboardFocused" Trigger.Value="True">
-                        <TriggerBase.EnterActions>
-                            <BeginStoryboard BeginStoryboard.Name="AnimaFocused_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
-                        </TriggerBase.EnterActions>
-                    </Trigger>
+                   
                     <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
                         <TriggerBase.ExitActions>
                             <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
@@ -220,37 +213,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                 </ControlTemplate.Triggers>
             </ControlTemplate>
 
-            <Style TargetType="{x:Type ToggleButton}" >
-                <Setter Property="Control.FontFamily" Value="Segoe UI Light" />
-                <Setter Property="FontSize" Value="13" />
-                <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="Control.HorizontalContentAlignment" Value="Left" />
-                <Setter Property="Control.VerticalContentAlignment" Value="Center" />
-                <Setter Property="Control.Padding" Value="20 0 20 0" />
-                <Setter Property="Cursor" Value="Hand" />
-                <Setter Property="Control.Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ToggleButton}">
-                            <Grid>
-                                <Border x:Name="Border" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource StrongBrush}" SnapsToDevicePixels="True"/>
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" Margin="{TemplateBinding Control.Padding}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" UIElement.SnapsToDevicePixels="True" ContentPresenter.RecognizesAccessKey="True" />
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Trigger.Property="UIElement.IsKeyboardFocused" Trigger.Value="True">
-                                    <Setter Setter.TargetName="Border" Property="Background" Value="{DynamicResource StrongBrush2}"/>
-                                </Trigger>
-                                <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True" >
-                                    <Setter Setter.TargetName="Border" Property="Background" Value="{DynamicResource StrongBrush2}" />
-                                </Trigger>
-                                <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
-                                    <Setter Setter.TargetName="Border" Property="Background" Value="{DynamicResource StrongBrush}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+
 
             <Style TargetType="RadioButton">
                 <Setter Property="FontFamily" Value="Segoe UI" />

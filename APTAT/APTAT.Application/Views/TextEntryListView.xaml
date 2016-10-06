@@ -43,7 +43,7 @@
 
         <Button AutomationProperties.AutomationId="AddButton"
                 x:Name="AddButton" Grid.Row="0" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Center"
-                Content="Add"
+                Content="Add" Height="32"
                 IsEnabled="{Binding Text, ElementName=InputTextBox, Converter={StaticResource EmptyStringToBoolConverter}}" />
 
 
@@ -57,12 +57,12 @@
 
         <Button AutomationProperties.AutomationId="RemoveButton"
                 x:Name="RemoveButton" Grid.Row="1" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Top"
-                Content="Remove"
+                Content="Remove" Height="32"
                 IsEnabled="{Binding SelectedIndex, ElementName=ItemsList, Converter={StaticResource SelectedIndexToBoolConverter}}" />
 
         <Button AutomationProperties.AutomationId="RemoveAllButton"
                 x:Name="RemoveAllButton" Grid.Row="2" Grid.Column="1" Margin="10 5 0 0" Width="120" VerticalAlignment="Top"
-                Content="Remove All" IsEnabled="false"
+                Content="Remove All" IsEnabled="false" Height="32"
                  />
 
 

@@ -72,11 +72,11 @@
 
 
                                 <StackPanel AutomationProperties.AutomationId="ToolBarPanel" HorizontalAlignment="Center" Grid.Row="3" Margin="0,10,0,0" Orientation="Horizontal">
-                                    <Button AutomationProperties.AutomationId="OkButton" Content="Ok" x:Name="ok" Margin="5,5,5,15" Click="Button_Click"  
+                                    <Button AutomationProperties.AutomationId="OkButton" Content="Ok" x:Name="ok" Margin="5,5,5,15" Click="Button_Click"  Height="32"
                             Tag="{Binding IsUnknownFound, Mode=OneWay}" Visibility="{Binding IsUnknownFound, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!, Mode=OneWay}"/>
-                                    <Button AutomationProperties.AutomationId="YesButton" Content="Yes" x:Name="yes" Margin="5,5,5,15" Click="Button_Click"  
+                                    <Button AutomationProperties.AutomationId="YesButton" Content="Yes" x:Name="yes" Margin="5,5,5,15" Click="Button_Click"  Height="32"
                             Tag="{Binding IsUnknownFound, Mode=OneWay}" Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
-                                    <Button AutomationProperties.AutomationId="NoButton" Content="No"  Margin="5,5,5,15" Click="CancelButton_Click"  
+                                    <Button AutomationProperties.AutomationId="NoButton" Content="No"  Margin="5,5,5,15" Click="CancelButton_Click" Height="32" 
                             Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
                                 </StackPanel>
                             </Grid>
