@@ -30,8 +30,7 @@ namespace APTAT.Application.Models
         public event EventHandler ValkyrieAnalyzeStarted;
         public event EventHandler<AnalyzeCompletedEventArgs<FileResult>> ValkyrieAnalyzeCompleted;
 
-        private string _login;
-        private string _password;
+
         private string _loginInternal;
         private string _passwordInternal;
         private string _camLicenseId;
@@ -96,52 +95,21 @@ namespace APTAT.Application.Models
             get { return !string.IsNullOrEmpty(CurrentDomainName); }
         }
 
-        private bool _useCurrentCredentials;
-        public bool UseCurrentCredentials
-        {
-            get { return _useCurrentCredentials || HasCurrentDomainName; }
 
-            set
-            {
-                if (UseCurrentCredentials == value) return;
-                if (HasCurrentDomainName) return;
-                _useCurrentCredentials = value;
-                UseCurrentDomainForDeploy = UseCurrentCredentials;
-                RaisePropertyChanged(nameof(UseCurrentCredentials));
-            }
-        }
 
-        private bool _useCurrentDomainForDeploy;
         public bool UseCurrentDomainForDeploy
         {
-            get { return _useCurrentDomainForDeploy; }
-            set
-            {
-                _useCurrentDomainForDeploy = value;
-                RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
-                RaisePropertyChanged(nameof(Login));
-                RaisePropertyChanged(nameof(Password));
-            }
+            get;set;
         }
 
         public string Login
         {
-            get { return UseCurrentDomainForDeploy ? null : _login; }
-            set
-            {
-                _login = value;
-                RaisePropertyChanged(nameof(Login));
-            }
+            get;set;
         }
 
         public string Password
         {
-            get { return UseCurrentDomainForDeploy ? null : _password; }
-            set
-            {
-                _password = value;
-                RaisePropertyChanged(nameof(Password));
-            }
+            get;set;
         }
 
 
@@ -207,13 +175,6 @@ namespace APTAT.Application.Models
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
 
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
-
-            if (HasCurrentDomainName)
-            {
-                UseCurrentDomainForDeploy = true;
-                RaisePropertyChanged(nameof(UseCurrentCredentials));
-            }
-
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }

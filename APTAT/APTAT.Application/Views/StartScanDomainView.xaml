@@ -190,8 +190,8 @@
                 </Grid.ColumnDefinitions>
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="0 0 0 0" Grid.ColumnSpan="3">
                     <local:LoginPasswordUserControl Margin="0" 
-                                                    ShowCurrentDomain="{Binding ParentViewModel.UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}" 
-                                                    Login="{Binding ParentViewModel.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding ParentViewModel.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding ParentViewModel.UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    ShowCurrentDomain="{Binding UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Login="{Binding Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
                 <TextBlock Text="FLS TCP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="1"  Margin="0 24 0 0" HorizontalAlignment="Right" />

@@ -86,7 +86,62 @@ namespace APTAT.Application.Models
             }
         }
 
+        private bool _useCurrentCredentials;
+        public bool UseCurrentCredentials
+        {
+            get { return _useCurrentCredentials || ((IMainViewModel)ParentViewModel).HasCurrentDomainName; }
 
+            set
+            {
+                if (UseCurrentCredentials == value) return;
+                if (((IMainViewModel)ParentViewModel).HasCurrentDomainName) return;
+                _useCurrentCredentials = value;
+
+                UseCurrentDomainForDeploy = UseCurrentCredentials;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
+            }
+        }
+
+        private bool _useCurrentDomainForDeploy;
+        public bool UseCurrentDomainForDeploy
+        {
+            get { return _useCurrentDomainForDeploy; }
+            set
+            {
+                _useCurrentDomainForDeploy = value;
+                ((IMainViewModel)ParentViewModel).UseCurrentDomainForDeploy = value;
+
+                RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
+                RaisePropertyChanged(nameof(Login));
+                RaisePropertyChanged(nameof(Password));
+            }
+        }
+
+        private string _login;
+        public string Login
+        {
+            get { return UseCurrentDomainForDeploy ? null : _login; }
+            set
+            {
+                _login = value;
+                ((IMainViewModel)ParentViewModel).Login = value;
+
+                RaisePropertyChanged(nameof(Login));
+            }
+        }
+
+        private string _password;
+        public string Password
+        {
+            get { return UseCurrentDomainForDeploy ? null : _password; }
+            set
+            {
+                _password = value;
+                ((IMainViewModel)ParentViewModel).Password = value;
+
+                RaisePropertyChanged(nameof(Password));
+            }
+        }
 
         public StartScanWorkgroupViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
@@ -134,10 +189,22 @@ namespace APTAT.Application.Models
             }
         }
 
-
+        private bool _useCurrentNameDeterminied;
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
+
+            var model = ParentViewModel as MainViewViewModel;
+
+            if (!_useCurrentNameDeterminied)
+            {
+               
+                UseCurrentDomainForDeploy = model.HasCurrentDomainName;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
+                _useCurrentNameDeterminied = true;
+            }
+
+            Password = null;
 
             //_workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
             //RaisePropertyChanged("Workgroup");
@@ -264,8 +331,7 @@ namespace APTAT.Application.Models
 
         private void CheckIfCanUseCurrentCredentials(DirectoryItem[] selectedItems)
         {
-            var parentView = ((MainViewViewModel)base.ParentViewModel);
-            parentView.UseCurrentCredentials = IsOnlyLocalComputer(selectedItems);
+            UseCurrentCredentials = IsOnlyLocalComputer(selectedItems);
         }
 
         private bool IsOnlyLocalComputer(DirectoryItem[] selectedItems)

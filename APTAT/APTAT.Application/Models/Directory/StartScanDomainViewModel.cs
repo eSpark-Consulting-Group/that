@@ -101,6 +101,63 @@ namespace APTAT.Application.Models
             }
         }
 
+        private bool _useCurrentCredentials;
+        public bool UseCurrentCredentials
+        {
+            get { return _useCurrentCredentials || ((IMainViewModel)ParentViewModel).HasCurrentDomainName; }
+
+            set
+            {
+                if (UseCurrentCredentials == value) return;
+                if (((IMainViewModel)ParentViewModel).HasCurrentDomainName) return;
+                _useCurrentCredentials = value;
+
+                UseCurrentDomainForDeploy = UseCurrentCredentials;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
+            }
+        }
+
+        private bool _useCurrentDomainForDeploy;
+        public bool UseCurrentDomainForDeploy
+        {
+            get { return _useCurrentDomainForDeploy; }
+            set
+            {
+                _useCurrentDomainForDeploy = value;
+                ((IMainViewModel)ParentViewModel).UseCurrentDomainForDeploy = value;
+
+                RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
+                RaisePropertyChanged(nameof(Login));
+                RaisePropertyChanged(nameof(Password));
+            }
+        }
+
+        private string _login;
+        public string Login
+        {
+            get { return UseCurrentDomainForDeploy ? null : _login; }
+            set
+            {
+                _login = value;
+                ((IMainViewModel)ParentViewModel).Login = value;
+
+                RaisePropertyChanged(nameof(Login));
+            }
+        }
+
+        private string _password;
+        public string Password
+        {
+            get { return UseCurrentDomainForDeploy ? null : _password; }
+            set
+            {
+                _password = value;
+                ((IMainViewModel)ParentViewModel).Password = value;
+
+                RaisePropertyChanged(nameof(Password));
+            }
+        }
+
         public DelegateCommand ExpandCommand { get; private set; }
 
         public DelegateCommand CheckItemCommand { get; private set; }
@@ -199,19 +256,19 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
 
-                    var parent = ParentViewModel as IMainViewModel;
-                    if (parent != null && !_credentialsDetermined)
+                    
+                    if (!_credentialsDetermined)
                     {
                         if (!UseCurrentDomainForActiveDirectory)
                         {
                             if (!isOnlyLocal)
-                                parent.UseCurrentDomainForDeploy = false;
-                            parent.Login = ActiveDirectoryLogin;
-                            parent.Password = ActiveDirectoryPassword;
+                                UseCurrentDomainForDeploy = false;
+                            Login = ActiveDirectoryLogin;
+                            Password = ActiveDirectoryPassword;
 
                         }
                         else if (!isOnlyLocal)
-                            parent.UseCurrentDomainForDeploy = true;
+                            UseCurrentDomainForDeploy = true;
 
                         _credentialsDetermined = true;
                     }
@@ -250,10 +307,7 @@ namespace APTAT.Application.Models
 
         private bool CheckIfCanUseCurrentCredentials(DirectoryItem[] selectedItems)
         {
-            var parentView = ((MainViewViewModel)base.ParentViewModel);
-            var isOnlyLocal = IsOnlyLocalComputer(selectedItems);
-            parentView.UseCurrentCredentials = isOnlyLocal;
-            return isOnlyLocal;
+            return (UseCurrentCredentials = IsOnlyLocalComputer(selectedItems));
         }
 
         private bool IsOnlyLocalComputer(DirectoryItem[] selectedItems)
@@ -286,11 +340,13 @@ namespace APTAT.Application.Models
 
             if (!_useCurrentNameDeterminied)
             {
-                UseCurrentDomainForActiveDirectory = model.HasCurrentDomainName;
+                UseCurrentDomainForDeploy = UseCurrentDomainForActiveDirectory = model.HasCurrentDomainName;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
                 _useCurrentNameDeterminied = true;
             }
 
             ActiveDirectoryPassword = null;
+            Password = null;
 
             _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
