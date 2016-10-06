@@ -251,26 +251,25 @@ namespace APTAT.Application.Models
         private bool CheckIfCanUseCurrentCredentials(DirectoryItem[] selectedItems)
         {
             var parentView = ((MainViewViewModel)base.ParentViewModel);
-            return parentView.UseCurrentCredentials = IsOnlyLocalComputer(selectedItems);
+            var isOnlyLocal = IsOnlyLocalComputer(selectedItems);
+            parentView.UseCurrentCredentials = isOnlyLocal;
+            return isOnlyLocal;
         }
 
         private bool IsOnlyLocalComputer(DirectoryItem[] selectedItems)
         {
-            bool onlyLocal = true;
             if (selectedItems.Length > 1) return false;
             foreach (var address in selectedItems)
             {
                 var depItem = (DirectoryItem)address;
                 if (depItem.Type != DirectoryItemType.Computer) return false;
-
                 if (!_targetsDiscoveryService.IsLocalAddress(depItem.Name))
                 {
-                    onlyLocal = false;
-                    break;
+                    return false;
                 }
             }
 
-            return onlyLocal;
+            return true;
         }
 
         protected override void OnStepChanged()
@@ -327,7 +326,7 @@ namespace APTAT.Application.Models
 
                 Items = e.Items;
                 
-                    _targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, Items[0], new OperationContext { UserState = this, Arg = this });
+                    //_targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, Items[0], new OperationContext { UserState = this, Arg = this });
                 }
 
                 Error = null;
