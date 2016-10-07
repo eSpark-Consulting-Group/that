@@ -7,10 +7,10 @@ namespace APTAT.Application
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            CompositionHelper.Instance.RegisterSingleton<ITargetsDiscoveryService, TargetsDiscoveryService>();
-            CompositionHelper.Instance.RegisterSingleton<IAptService, AptService>();
-            CompositionHelper.Instance.RegisterSingleton<IStorageService, StorageService>();
-            CompositionHelper.Instance.RegisterSingleton<IFileBrowserService, FileBrowserService>();
+            resolver.RegisterSingleton<ITargetsDiscoveryService, TargetsDiscoveryService>();
+            resolver.RegisterSingleton<IAptService, AptService>();
+            resolver.RegisterSingleton<IStorageService, StorageService>();
+            resolver.RegisterSingleton<IFileBrowserService, FileBrowserService>();
 
         }
     }

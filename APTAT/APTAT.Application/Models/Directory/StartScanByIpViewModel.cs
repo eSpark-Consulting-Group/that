@@ -58,62 +58,7 @@ namespace APTAT.Application.Models.Directory
 
         
 
-        private bool _useCurrentCredentials;
-        public bool UseCurrentCredentials
-        {
-            get { return _useCurrentCredentials || ((IMainViewModel)ParentViewModel).HasCurrentDomainName; }
-
-            set
-            {
-                if (UseCurrentCredentials == value) return;
-                if (((IMainViewModel)ParentViewModel).HasCurrentDomainName) return;
-                _useCurrentCredentials = value;
-
-                UseCurrentDomainForDeploy = UseCurrentCredentials;
-                RaisePropertyChanged(nameof(UseCurrentCredentials));
-            }
-        }
-
-        private bool _useCurrentDomainForDeploy;
-        public bool UseCurrentDomainForDeploy
-        {
-            get { return _useCurrentDomainForDeploy; }
-            set
-            {
-                _useCurrentDomainForDeploy = value;
-                
-
-                RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
-                RaisePropertyChanged(nameof(Login));
-                RaisePropertyChanged(nameof(Password));
-            }
-        }
-
-        private string _login;
-        public string Login
-        {
-            get { return UseCurrentDomainForDeploy ? null : _login; }
-            set
-            {
-                _login = value;
-               
-
-                RaisePropertyChanged(nameof(Login));
-            }
-        }
-
-        private string _password;
-        public string Password
-        {
-            get { return UseCurrentDomainForDeploy ? null : _password; }
-            set
-            {
-                _password = value;
-                
-
-                RaisePropertyChanged(nameof(Password));
-            }
-        }
+        
 
 
         public DelegateCommand AddIpCommand
@@ -153,11 +98,9 @@ namespace APTAT.Application.Models.Directory
         {
             base.InvokeViewLoaded(arg);
 
-            var model = ParentViewModel as MainViewViewModel;
-
             if (!_useCurrentNameDeterminied)
             {
-                UseCurrentDomainForDeploy = model.HasCurrentDomainName;
+                UseCurrentDomainForDeploy = HasCurrentDomainName;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
                 _useCurrentNameDeterminied = true;
             }
@@ -165,7 +108,7 @@ namespace APTAT.Application.Models.Directory
             Password = null;
 
             // restore IP addresses list 
-            ObservableCollection<IpAddressWrapper> storedIpAddresses = _storage.GetValue<ObservableCollection<IpAddressWrapper>>(KnownKeys.IpAddresses, false);
+            /*ObservableCollection<IpAddressWrapper> storedIpAddresses = _storage.GetValue<ObservableCollection<IpAddressWrapper>>(KnownKeys.IpAddresses, false);
             if (storedIpAddresses != null)
             {
                 if (IpAddresses.Count != 0)
@@ -187,7 +130,7 @@ namespace APTAT.Application.Models.Directory
                 }
 
                 RaisePropertyChanged("IpAddresses");
-            }
+            }*/
 
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;

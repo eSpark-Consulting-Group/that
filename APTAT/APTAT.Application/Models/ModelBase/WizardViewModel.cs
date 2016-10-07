@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APTAT.Application.Models.ModelBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -201,6 +202,74 @@ namespace APTAT.Application.Models
                     commandContext.RaiseCompleted();
                 }
             }, CurrentStep, commandContext);
+        }
+
+        protected bool HasCurrentDomainName
+        {
+            get
+            {
+                var parent = ParentViewModel as IMainViewModel;
+                if (parent != null)
+                    return parent.HasCurrentDomainName;
+                return false;
+            }
+        }
+
+        private bool _useCurrentCredentials;
+        public bool UseCurrentCredentials
+        {
+            get { return _useCurrentCredentials || HasCurrentDomainName; }
+
+            set
+            {
+                if (UseCurrentCredentials == value) return;
+                if (HasCurrentDomainName) return;
+                _useCurrentCredentials = value;
+
+                UseCurrentDomainForDeploy = UseCurrentCredentials;
+                RaisePropertyChanged(nameof(UseCurrentCredentials));
+            }
+        }
+
+        private bool _useCurrentDomainForDeploy;
+        public bool UseCurrentDomainForDeploy
+        {
+            get { return _useCurrentDomainForDeploy; }
+            set
+            {
+                _useCurrentDomainForDeploy = value;
+
+
+                RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
+                RaisePropertyChanged(nameof(Login));
+                RaisePropertyChanged(nameof(Password));
+            }
+        }
+
+        private string _login;
+        public string Login
+        {
+            get { return UseCurrentDomainForDeploy ? null : _login; }
+            set
+            {
+                _login = value;
+
+
+                RaisePropertyChanged(nameof(Login));
+            }
+        }
+
+        private string _password;
+        public string Password
+        {
+            get { return UseCurrentDomainForDeploy ? null : _password; }
+            set
+            {
+                _password = value;
+
+
+                RaisePropertyChanged(nameof(Password));
+            }
         }
 
         protected virtual void UpdateState()
