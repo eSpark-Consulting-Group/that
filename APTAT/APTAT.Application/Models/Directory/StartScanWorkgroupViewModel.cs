@@ -134,17 +134,17 @@ namespace APTAT.Application.Models
             }
         }
 
-        private bool _useCurrentNameDeterminied;
+        private bool _useCurrentNameDetermined;
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
 
-            if (!_useCurrentNameDeterminied)
+            if (!_useCurrentNameDetermined)
             {
                
                 UseCurrentDomainForDeploy = HasCurrentDomainName;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
-                _useCurrentNameDeterminied = true;
+                _useCurrentNameDetermined = true;
             }
 
             Password = null;
@@ -241,10 +241,10 @@ namespace APTAT.Application.Models
                 {
                     string errorMessage;
 
-                    parent.UseCurrentDomainForDeploy = UseCurrentDomainForDeploy;
+                    
                     parent.Login = Login;
                     parent.Password = Password;
-                    if (parent.ValidateCredentials(out errorMessage) && parent.ValidatePorts(out errorMessage))
+                    if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)) && parent.ValidatePorts(out errorMessage))
                     {
                         success();
                     }

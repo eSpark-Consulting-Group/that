@@ -228,10 +228,10 @@ namespace APTAT.Application.Models
                 {
                     string errorMessage;
 
-                    parent.UseCurrentDomainForDeploy = UseCurrentDomainForDeploy;
                     parent.Login = Login;
                     parent.Password = Password;
-                    if (parent.ValidateCredentials(out errorMessage) && parent.ValidatePorts(out errorMessage))
+
+                    if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)) && parent.ValidatePorts(out errorMessage))
                     {
                         success();
                     }
@@ -284,16 +284,16 @@ namespace APTAT.Application.Models
 
         }
 
-        private bool _useCurrentNameDeterminied, _credentialsDetermined;
+        private bool _useCurrentNameDetermined, _credentialsDetermined;
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
 
-            if (!_useCurrentNameDeterminied)
+            if (!_useCurrentNameDetermined)
             {
                 UseCurrentDomainForDeploy = UseCurrentDomainForActiveDirectory = HasCurrentDomainName;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
-                _useCurrentNameDeterminied = true;
+                _useCurrentNameDetermined = true;
             }
 
             ActiveDirectoryPassword = null;
@@ -329,7 +329,7 @@ namespace APTAT.Application.Models
             {
                 if (e.Items != null && e.Items.Length > 0)
                 { 
-                    e.Items[0].Name = e.Items[0].Name.Replace("DC=","");
+                    e.Items[0].Name = e.Items[0].Name.Replace("DC=", "").Replace(",", ".");
 
                 Items = e.Items;
                 

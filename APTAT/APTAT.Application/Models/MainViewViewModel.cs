@@ -31,8 +31,7 @@ namespace APTAT.Application.Models
         public event EventHandler<AnalyzeCompletedEventArgs<FileResult>> ValkyrieAnalyzeCompleted;
 
 
-        private string _loginInternal;
-        private string _passwordInternal;
+
         private string _camLicenseId;
         private string _camUserLogin;
         private string _camUserPassword;
@@ -95,12 +94,6 @@ namespace APTAT.Application.Models
             get { return !string.IsNullOrEmpty(CurrentDomainName); }
         }
 
-
-
-        public bool UseCurrentDomainForDeploy
-        {
-            get;set;
-        }
 
         public string Login
         {
@@ -1034,9 +1027,8 @@ namespace APTAT.Application.Models
                 {
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind);
                 }
-                _loginInternal = Login;
-                _passwordInternal = Password;
-                _aptService.BeginScan(e.Items, _loginInternal, _passwordInternal, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+
+                _aptService.BeginScan(e.Items, Login, Password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
                 Password = null;
             }
             else
@@ -1104,7 +1096,7 @@ namespace APTAT.Application.Models
                 _camUserLogin = model.UserName;
                 _camUserPassword = model.Password;
 
-                _aptService.BeginValkyrieAnalysis(_loginInternal, _passwordInternal, _camLicenseId, _camUserLogin, _camUserPassword,
+                _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword,
                     networkCredential);
                 return true;
             }
@@ -1344,8 +1336,7 @@ namespace APTAT.Application.Models
         public bool ValidateCredentials(out string errorMessage)
         {
             errorMessage = null;
-            if (UseCurrentDomainForDeploy)
-                return true;
+
             if (String.IsNullOrEmpty(Password))
             {
                 errorMessage = "Please specify Password";

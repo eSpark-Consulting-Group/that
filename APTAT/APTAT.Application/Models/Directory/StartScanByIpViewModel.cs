@@ -93,16 +93,16 @@ namespace APTAT.Application.Models.Directory
             DeleteAllIpCommand = new DelegateCommand(InvokeDeleteIpCommand);
         }
 
-        private bool _useCurrentNameDeterminied;
+        private bool _useCurrentNameDetermined;
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
 
-            if (!_useCurrentNameDeterminied)
+            if (!_useCurrentNameDetermined)
             {
                 UseCurrentDomainForDeploy = HasCurrentDomainName;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
-                _useCurrentNameDeterminied = true;
+                _useCurrentNameDetermined = true;
             }
 
             Password = null;
@@ -212,7 +212,7 @@ namespace APTAT.Application.Models.Directory
 
 
                 IsBusy = true;
-                _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
+                //_storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
 
 
 
@@ -226,7 +226,7 @@ namespace APTAT.Application.Models.Directory
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
                 //_storage.SetValue(KnownKeys.TcpPort, _tcpPort);
                 //_storage.SetValue(KnownKeys.UdpPort, _udpPort);
-                _storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
+                //_storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
                 var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription()
@@ -239,11 +239,10 @@ namespace APTAT.Application.Models.Directory
                 {
                     string errorMessage;
 
-                    parent.UseCurrentDomainForDeploy = UseCurrentDomainForDeploy;
                     parent.Login = Login;
                     parent.Password = Password;
 
-                    if (parent.ValidateCredentials(out errorMessage) && parent.ValidatePorts(out errorMessage))
+                    if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)) && parent.ValidatePorts(out errorMessage))
                     {
                         success();
                     }
