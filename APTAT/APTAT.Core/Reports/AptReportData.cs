@@ -324,10 +324,10 @@ namespace APTAT.Core.Reports
 
             return new ItemRatingInfo[]
             {
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe Devices"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "Devices At Risk"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected Devices"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Failed/Canceled Devices"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Not Scanned"},
             };
         }
 
@@ -359,10 +359,10 @@ namespace APTAT.Core.Reports
 
             return new ItemRatingInfo[]
             {
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe Devices"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "Devices At Risk"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected Devices"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Failed/Canceled Devices"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Not Scanned"},
             };
         }
         public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()

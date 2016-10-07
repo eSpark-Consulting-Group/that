@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Malware Items (" + Parameters!Count.Value + "):"</Value>
+                <Value>="Malicious Items (" + Parameters!Count.Value + "):"</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>18pt</FontSize>

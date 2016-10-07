@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Unknown Programs (" + Parameters!Count.Value + "):"</Value>
+                <Value>="Unknown Files (" + Parameters!Count.Value + "):"</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>18pt</FontSize>
