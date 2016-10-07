@@ -1,5 +1,6 @@
 ﻿using APTAT.Application.Extensions;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,13 +15,9 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            Loaded += ConfirmationWindow_Loaded;
+
         }
 
-        private void ConfirmationWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            no.DelayedFocus();
-        }
 
         private void OnCloseClick(Object sender, RoutedEventArgs e)
         {

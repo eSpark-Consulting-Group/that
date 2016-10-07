@@ -1559,7 +1559,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                 <Setter Property="Background" Value="{StaticResource MainBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
                 <Setter Property="Padding" Value="5" />
-                <Setter Property="Margin" Value="0,1,0,0" />
+                <Setter Property="Margin" Value="0,2,0,0" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="VerticalContentAlignment" Value="Stretch" />
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
