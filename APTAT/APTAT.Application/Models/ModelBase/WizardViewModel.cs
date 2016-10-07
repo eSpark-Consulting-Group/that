@@ -238,7 +238,7 @@ namespace APTAT.Application.Models
             set
             {
                 _useCurrentDomainForDeploy = value;
-
+                OnCredentialsChanged();
 
                 RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
                 RaisePropertyChanged(nameof(Login));
@@ -253,7 +253,7 @@ namespace APTAT.Application.Models
             set
             {
                 _login = value;
-
+                OnCredentialsChanged();
 
                 RaisePropertyChanged(nameof(Login));
             }
@@ -266,11 +266,14 @@ namespace APTAT.Application.Models
             set
             {
                 _password = value;
-
+                OnCredentialsChanged();
 
                 RaisePropertyChanged(nameof(Password));
             }
         }
+
+        protected virtual void OnCredentialsChanged()
+        { }
 
         protected virtual void UpdateState()
         {

@@ -202,22 +202,20 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, selectedItems);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
-
                     
                     if (!_credentialsDetermined)
                     {
+                        _credentialsDeterminationLocked = true;
                         if (!UseCurrentDomainForActiveDirectory)
                         {
                             if (!isOnlyLocal)
                                 UseCurrentDomainForDeploy = false;
                             Login = ActiveDirectoryLogin;
                             Password = ActiveDirectoryPassword;
-
                         }
                         else if (!isOnlyLocal)
                             UseCurrentDomainForDeploy = true;
-
-                        _credentialsDetermined = true;
+                        _credentialsDeterminationLocked = false;   
                     }
 
                     success();
@@ -256,6 +254,12 @@ namespace APTAT.Application.Models
             }
         }
 
+        protected override void OnCredentialsChanged()
+        {
+            if (!_credentialsDeterminationLocked)
+                _credentialsDetermined = true;
+        }
+
         private bool CheckIfCanUseCurrentCredentials(DirectoryItem[] selectedItems)
         {
             var isOnlyLocal = IsOnlyLocalComputer(selectedItems);
@@ -286,11 +290,12 @@ namespace APTAT.Application.Models
 
         }
 
-        private bool _useCurrentNameDetermined, _credentialsDetermined;
+        private bool _useCurrentNameDetermined, _credentialsDetermined, _credentialsDeterminationLocked;
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
 
+            _credentialsDeterminationLocked = true;
             if (!_useCurrentNameDetermined)
             {
                 UseCurrentDomainForDeploy = UseCurrentDomainForActiveDirectory = HasCurrentDomainName;
@@ -300,6 +305,7 @@ namespace APTAT.Application.Models
 
             ActiveDirectoryPassword = null;
             Password = null;
+            _credentialsDeterminationLocked = false;
 
             _targetsDiscoveryService.GetDirectoryItemsCompleted += OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted += OnGetDirectoryRootCompleted;
