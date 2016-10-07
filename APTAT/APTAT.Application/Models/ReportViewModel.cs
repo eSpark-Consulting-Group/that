@@ -44,11 +44,11 @@ namespace APTAT.Application.Models
 
             if(kind == ReportKind.DetailedPerProgram || kind == ReportKind.DetailedPerProgramWithValkyrie)
             {
-                Header = "Detailed Report Per Program";
+                Header = "Detailed Per-Program Report";
             }
             else if(kind == ReportKind.DetailedPerDevice || kind == ReportKind.DetailedPerDeviceWithValkyrie)
             {
-                Header = "Detailed Report Per Device";
+                Header = "Detailed Per-Device Report";
             }
             else if(kind == ReportKind.Executive || kind == ReportKind.ExecutiveWithValkyrie)
             {

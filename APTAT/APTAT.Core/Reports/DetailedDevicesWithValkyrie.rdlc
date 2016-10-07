@@ -2636,7 +2636,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Detailed Report per Device</Value>
+                  <Value>Detailed Per-Device Report</Value>
                   <Style>
                     <FontFamily>Segoe UI Light</FontFamily>
                     <FontSize>11pt</FontSize>

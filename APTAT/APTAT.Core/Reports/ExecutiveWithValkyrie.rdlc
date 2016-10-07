@@ -75,7 +75,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Devices Source:</Value>
+                    <Value>Device Source:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
