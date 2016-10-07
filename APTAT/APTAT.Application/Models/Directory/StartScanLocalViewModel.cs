@@ -256,9 +256,13 @@ namespace APTAT.Application.Models
         protected override void InvokeViewUnloaded(Object arg)
         {
             base.InvokeViewUnloaded(arg);
+
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _fileBrowserService.GetAvailableDrivesCompleted -= OnGetAvailableDrivesCompleted;
             _fileBrowserService.GetFoldersCompleted -= OnGetAvailableDrivesCompleted;
+
+            if (arg != null)
+                _checkedItems.Clear();
 
         }
 
