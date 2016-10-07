@@ -1572,6 +1572,8 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
             <Style x:Key="BusyIndicatorProgressBarStyle" Style.TargetType="{x:Type telerik:RadProgressBar}" >
                 <Setter Setter.Property="FrameworkElement.Margin" Setter.Value="0" />
                 <Setter Setter.Property="RangeBase.Maximum" Setter.Value="100" />
+                <Setter Property="FocusVisualStyle" Setter.Value="{x:Null}" />
+                <Setter Setter.Property="Focusable" Setter.Value="False" />
                 <Setter Setter.Property="telerik:RadProgressBar.Orientation" Setter.Value="Horizontal" />
                 <Setter Setter.Property="Control.IsTabStop" Setter.Value="False" />
                 <Setter Setter.Property="Control.Background" Setter.Value="{telerik:Windows8Resource ResourceKey=AccentBrush}" />
@@ -1802,6 +1804,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                 <Setter Setter.Property="Control.BorderThickness" Setter.Value="1" />
                 <Setter Setter.Property="Control.HorizontalContentAlignment" Setter.Value="Stretch" />
                 <Setter Setter.Property="Control.VerticalContentAlignment" Setter.Value="Stretch" />
+                <Setter Property="FocusVisualStyle" Setter.Value="{x:Null}" />
                 <Setter Setter.Property="ProgressBarStyle" Setter.Value="{StaticResource BusyIndicatorProgressBarStyle}" />
                 <Setter Setter.Property="animation:AnimationManager.AnimationSelector">
                     <Setter.Value>

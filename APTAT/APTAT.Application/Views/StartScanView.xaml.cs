@@ -176,7 +176,13 @@ namespace APTAT.Application
         {
             if (_currentViewModel != null)
             {
-                _currentViewModel.ViewUnloadedCommand.Execute(null);
+                _currentViewModel.ViewUnloadedCommand.Execute(true);
+                _currentViewModel.ChangeStepCommand.Execute(new ChangeStepCommandContext
+                {
+                    Step = 0,
+
+                });
+                
 
 
             }

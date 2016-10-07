@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using APTAT.Application.Extensions;
+
 using Telerik.Windows.Controls;
 using APTAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
-using APTAT.Application.Messages;
+
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Models.ModelBase;
 
+using Composition = APTAT.Common.CompositionHelper;
+
 namespace APTAT.Application.Models
 {
+    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StartScanLocalViewModel : WizardViewModel
     {
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;

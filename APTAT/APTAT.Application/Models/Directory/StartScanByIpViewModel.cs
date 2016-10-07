@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using APTAT.Application.Extensions;
+
 using APTAT.Application.Models.ModelBase;
 using APTAT.Application.Services;
-using APTAT.Core.Descent;
+
 using APTAT.DeploymentCore.Directory;
 using Telerik.Windows.Controls;
 using APTAT.Application.Views;
-using APTAT.Application.Models;
+
+using Composition = APTAT.Common.CompositionHelper;
 
 namespace APTAT.Application.Models.Directory
 {
+
+    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StartScanByIpViewModel : WizardViewModel
     {
         public const String SelectIp = "SelectIp";

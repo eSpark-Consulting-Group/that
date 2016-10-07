@@ -6,11 +6,13 @@ using APTAT.Application.Extensions;
 using Telerik.Windows.Controls;
 using APTAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
-using APTAT.Application.Messages;
+
 using APTAT.Application.Models.ModelBase;
+using Composition = APTAT.Common.CompositionHelper;
 
 namespace APTAT.Application.Models
 {
+    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StartScanDomainViewModel : WizardViewModel
     {
         ITargetsDiscoveryService _targetsDiscoveryService;
@@ -310,7 +312,8 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService.GetDirectoryItemsCompleted -= OnGetDirectoryItemsCompleted;
             _targetsDiscoveryService.GetDirectoryRootCompleted -= OnGetDirectoryRootCompleted;
 
-
+            if (arg != null)
+                _checkedItems.Clear();
         }
 
 
