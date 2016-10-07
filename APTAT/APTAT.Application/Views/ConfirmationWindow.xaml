@@ -41,7 +41,7 @@
                                         <Path HorizontalAlignment="Left"  VerticalAlignment="Top"  Margin="0 5 0 0" Data="M7.9999999,8.0000027 L16,8.0000027 16,16.000003 7.9999999,16.000003 z M12,2 C6.4779997,2 1.9999995,6.4780002 1.9999995,12 1.9999995,17.522 6.4779997,22 12,22 17.521999,22 22,17.522 22,12 22,6.4780002 17.521999,2 12,2 z M12,0 C18.627,0 24,5.3730001 24,12 24,18.627 18.627,24 12,24 5.3729997,24 0,18.627 0,12 0,5.3730001 5.3729997,0 12,0 z" Fill="#FFD84332" Height="40" Stretch="Fill" Width="40" SnapsToDevicePixels="True"/>
 
 
-                                    <TextBlock Text="Scan not yet completed"  
+                                    <TextBlock Text="Scan not yet completed!"  
                            Style="{StaticResource HeaderTextBlock}"
                            FontSize="20" 
                            Foreground="#555" 
@@ -51,14 +51,17 @@
                                    
                                 </StackPanel>
 
-                                <TextBlock TextWrapping="Wrap" Grid.Row="1" VerticalAlignment="Center" Margin="78,0,0,20"  FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}">
+                                <TextBlock TextWrapping="Wrap" Grid.Row="1" VerticalAlignment="Center" Margin="78,0,0,30"  FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}">
                         <Run Text="Do you want to stop it?" />
                                 </TextBlock>
 
-                                <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="0,10,0,0" Orientation="Horizontal">
-                                    <Button AutomationProperties.AutomationId="YesButton" Content="Yes" Height="32"  Margin="5,5,5,15"  Click="YesClick"   ></Button>
-                                    <Button AutomationProperties.AutomationId="NoButton" Content="No" Height="32" x:Name="no" Margin="5,5,5,15" Click="NoClick"   ></Button>
-                                </StackPanel>
+                                <Border Background="White" Grid.Row="2" >
+                                    <StackPanel HorizontalAlignment="Center"  Margin="0,10,0,0" Orientation="Horizontal">
+                                        <Button AutomationProperties.AutomationId="YesButton" Content="Yes" Height="32"  Margin="5,5,5,15"  Click="YesClick"   ></Button>
+                                        <Button AutomationProperties.AutomationId="NoButton" Content="No" Height="32" x:Name="no" Margin="5,5,5,15" Click="NoClick"   ></Button>
+                                    </StackPanel>
+                                </Border>
+                                
                             </Grid>
 
                         </Grid>

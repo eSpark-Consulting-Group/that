@@ -50,6 +50,7 @@ namespace APTAT.Application
         private void OnItemPrepared(object sender, RadTreeViewItemPreparedEventArgs e)
         {
             var directoryItem = (FolderItem)e.PreparedItem.Item;
+            e.PreparedItem.Focusable = false;
             //e.PreparedItem.IsExpanded = true;
             //if (directoryItem.Type == DirectoryItemType.Computer)
             //{

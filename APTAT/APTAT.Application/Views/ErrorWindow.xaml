@@ -37,7 +37,7 @@
                                         <Path Data="M17.001,8.133L20.999,8.133L20.999,21.667L17.001,21.667z" Fill="White" Height="13.534" Canvas.Left="17.001" Stretch="Fill" Canvas.Top="8.133" Width="3.998"/>
                                         <Path Data="M19,24.661C20.438,24.661,21.603,25.826,21.603,27.264C21.603,28.702,20.438,29.867,19,29.867C17.562,29.867,16.397,28.702,16.397,27.264C16.397,25.826,17.562,24.661,19,24.661" Fill="White" Height="5.206" Canvas.Left="16.397" Stretch="Fill" Canvas.Top="24.661" Width="5.206"/>
                                     </Canvas>
-                                    <TextBlock Text="Scan Failure"  
+                                    <TextBlock Text="Scan Failure!"  
                            Style="{StaticResource HeaderTextBlock}"
                            FontSize="20" 
                            Foreground="#555" 
@@ -48,15 +48,17 @@
 
 
                                 <StackPanel Grid.Row="1">
-                                    <TextBlock TextWrapping="Wrap" Grid.Row="1"  x:Name="Text" VerticalAlignment="Center" Margin="78,0,0,20"  FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}">
+                                    <TextBlock TextWrapping="Wrap" Grid.Row="1"  x:Name="Text" VerticalAlignment="Center" Margin="78,0,0,30"  FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}">
                         <Run Text="Resolving computers failed." />
                                     </TextBlock>
 
                                 </StackPanel>
 
-                                <StackPanel HorizontalAlignment="Center" Grid.Row="2" Margin="0,10,0,0" Orientation="Horizontal">
-                                    <Button Content="OK"  Margin="5,5,5,15" Click="YesClick" Height="32"></Button>
-                                </StackPanel>
+                                <Border Background="White" Grid.Row="2" >
+                                    <StackPanel HorizontalAlignment="Center"  Margin="0,10,0,0" Orientation="Horizontal">
+                                        <Button Content="OK"  Margin="5,5,5,15" Click="YesClick" Height="32"></Button>
+                                    </StackPanel>
+                                </Border>
                             </Grid>
 
                         </Grid>

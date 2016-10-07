@@ -64,6 +64,7 @@ namespace APTAT.Application
         private void OnItemPrepared(object sender, RadTreeViewItemPreparedEventArgs e)
         {
             DirectoryItem directoryItem = (DirectoryItem)e.PreparedItem.Item;
+            e.PreparedItem.Focusable = false;
             if (directoryItem.Type == DirectoryItemType.Computer)
             {
                 e.PreparedItem.IsLoadOnDemandEnabled = false;

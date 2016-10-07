@@ -1559,13 +1559,15 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                 <Setter Property="Background" Value="{StaticResource MainBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource BasicBrush}" />
                 <Setter Property="Padding" Value="5" />
-                <Setter Property="Margin" Value="0,2,0,0" />
+                <Setter Property="Margin" Value="0,1,0,0" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="VerticalContentAlignment" Value="Stretch" />
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 <Setter Property="Foreground" Value="{StaticResource MarkerBrush}" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
             </Style>
+
+
 
             <Style x:Key="BusyIndicatorProgressBarStyle" Style.TargetType="{x:Type telerik:RadProgressBar}" >
                 <Setter Setter.Property="FrameworkElement.Margin" Setter.Value="0" />
@@ -1790,6 +1792,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
             </Style>
             <Style x:Key="RadBusyIndicatorStyle" Style.TargetType="{x:Type telerik:RadBusyIndicator}" >
                 <Setter Setter.Property="Control.IsTabStop" Setter.Value="False" />
+                <Setter Setter.Property="Focusable" Setter.Value="False" />
                 <Setter Setter.Property="DisplayAfter" Setter.Value="00:00:00.1" />
                 <Setter Setter.Property="Control.Background" Setter.Value="{telerik:Windows8Resource ResourceKey=MainBrush}" />
                 <Setter Setter.Property="Control.Foreground" Setter.Value="{telerik:Windows8Resource ResourceKey=MarkerBrush}" />
