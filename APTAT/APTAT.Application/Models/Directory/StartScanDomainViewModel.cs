@@ -265,7 +265,11 @@ namespace APTAT.Application.Models
             var isOnlyLocal = IsOnlyLocalComputer(selectedItems);
             UseCurrentCredentials = isOnlyLocal;
             if (isOnlyLocal)
+            {
+                _credentialsDeterminationLocked = true;
                 UseCurrentDomainForDeploy = true;
+                _credentialsDeterminationLocked = false;
+            }
             return isOnlyLocal;
         }
 

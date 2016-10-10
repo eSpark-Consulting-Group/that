@@ -58,14 +58,15 @@ namespace APTAT.Application
                         message.Action(details.IsQuickScan);
                     break;
                 case ChangeScreenTypes.StopScan:
-                    ConfirmationWindow confirmation = new ConfirmationWindow();
-                    confirmation.Owner = System.Windows.Application.Current.MainWindow;
-                    if (confirmation.ShowDialog() == true && message.Action != null)
+                    _confirmation = new ConfirmationWindow();
+                    _confirmation.Owner = System.Windows.Application.Current.MainWindow;
+                    if (_confirmation.ShowDialog() == true && message.Action != null)
                         message.Action(null);
                     break;
             }
         }
 
+        private ConfirmationWindow _confirmation;
 
         private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)
         {
@@ -82,6 +83,9 @@ namespace APTAT.Application
                 _onCompletedAction();
                 return;
             }
+
+            if (_confirmation != null && _confirmation.DialogResult == null)
+                _confirmation.DialogResult = false;
 
             ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
             scanCompletedWindow.Text.Text = String.Empty;
