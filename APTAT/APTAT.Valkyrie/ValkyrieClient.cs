@@ -18,7 +18,7 @@ namespace APTAT.Valkyrie
 {
     public sealed class ValkyrieClient : IValkyrieClient
     {
-        private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromSeconds(45).TotalMilliseconds;
+        private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
