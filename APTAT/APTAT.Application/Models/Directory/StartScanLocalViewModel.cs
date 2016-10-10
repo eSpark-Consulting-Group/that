@@ -214,12 +214,20 @@ namespace APTAT.Application.Models
 
         }
 
+        private bool _availableDrivesCollected;
         protected override void InvokeViewLoaded(object arg)
         {
             base.InvokeViewLoaded(arg);
-            _fileBrowserService.GetAvailableDrives(new OperationContext { UserState = this});
+
+            if (!_availableDrivesCollected)
+            {
+                _fileBrowserService.GetAvailableDrives(new OperationContext { UserState = this });
+                _availableDrivesCollected = true;
+            }
+
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
+
             _fileBrowserService.GetAvailableDrivesCompleted -= OnGetAvailableDrivesCompleted;
             _fileBrowserService.GetAvailableDrivesCompleted += OnGetAvailableDrivesCompleted;
             _fileBrowserService.GetFoldersCompleted -= OnGetAvailableDrivesCompleted;

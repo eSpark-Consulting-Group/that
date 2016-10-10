@@ -22,13 +22,13 @@ namespace APTAT.Application
 
         private void ScanCompletedWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)delegate
+            /*Dispatcher.BeginInvoke((Action)delegate
             {
                 if (ok.Visibility == Visibility.Visible)
                     ok.Focus();
                 else
                     yes.DelayedFocus();
-            });
+            });*/
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -170,6 +170,9 @@ Computer Name: HomeComputer";
             };
 
             Dispatcher.BeginInvoke(focus);
+
+            if (ItemsList.HasItems)
+                RemoveAllButton.IsEnabled = true;
         }
 
 
