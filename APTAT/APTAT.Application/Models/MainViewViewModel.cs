@@ -1029,7 +1029,7 @@ namespace APTAT.Application.Models
                 }
 
                 _aptService.BeginScan(e.Items, Login, Password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
-                Password = null;
+              
             }
             else
             {
