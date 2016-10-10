@@ -29,12 +29,8 @@ namespace Aptat.Valkyrie.ClientTest
                 var guid = Guid.NewGuid();
                 foreach (var hash in hashCodes)
                 {
-                    BasicInfoResponse result = ValkyrieWebApiProvider.GetBasicInfo(new InfoRequest()
-                    {
-                        ApiKey = apikey,
-                        EndpointId = guid,
-                        SHA1 = hash
-                    });
+                    var arg = new InfoRequest(hash, guid, String.Empty, String.Empty, String.Empty);
+                    BasicInfoResponse result = ValkyrieWebApiProvider.GetBasicInfo(arg);                         
 
                     results.Add(result);
                     textBox1.Text += result.Verdict.ToString();

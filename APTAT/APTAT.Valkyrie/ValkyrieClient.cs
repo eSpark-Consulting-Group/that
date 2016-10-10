@@ -146,11 +146,8 @@ namespace APTAT.Valkyrie
                 try
                 {
                     automaticAnalysisResponse =
-                        ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest()
-                        {
-                            ApiKey = _apiKey,
-                            AnalysisId = context.AnalysisId
-                        });
+                        ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: context.AnalysisId,
+                                        apiKey: _apiKey));
                 }
                 catch (Exception)
                 {
@@ -253,7 +250,7 @@ namespace APTAT.Valkyrie
 
        
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, 
-            CancellationToken cancellationToken, Action< ValkyrieAnalysisResult,ValkyrieFileInfo> addAction, bool parallels = true)
+            CancellationToken cancellationToken, Action< ValkyrieAnalysisResult,ValkyrieFileInfo> addAction,  bool parallels = true)
         {
 
             _filesCount = badFiles.Count;
@@ -362,7 +359,7 @@ namespace APTAT.Valkyrie
             else
                 Task.Factory.StartNew(t =>
                     { 
-                        ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount)); 
+                        ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId)); 
                     }, TaskCreationOptions.None);
 
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {1}",
@@ -451,7 +448,7 @@ namespace APTAT.Valkyrie
                     return result;
                 }
 
-                var infoRequeast = new InfoRequest { SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId };
+                var infoRequeast = new InfoRequest(sha1, endpointId, null, _aptScanId, _apiKey);
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
@@ -476,7 +473,8 @@ namespace APTAT.Valkyrie
                         ApiKey = _apiKey,
                         SubmitToken = basicInfo.SubmitToken,
                         FilePath = WebUtility.HtmlDecode(originalFilePath),
-                        EndpointId = endpointId
+                        EndpointId = endpointId,
+                        AptScanId = _aptScanId
                     };
 
                     //var data = ReadFile(fileInfo, login, password);
@@ -504,11 +502,7 @@ namespace APTAT.Valkyrie
                         Thread.Sleep(1000);
                         elapsed = (int)(DateTime.UtcNow - utcStarted).TotalMilliseconds;
                         automaticAnalysisResponse =
-                            ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest()
-                            {
-                                ApiKey = _apiKey,
-                                AnalysisId = response.AnalysisId,
-                            });
+                            ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: response.AnalysisId, apiKey: _apiKey));
                         analyzeNotFinished = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFinished;
 
                     }
@@ -547,11 +541,7 @@ namespace APTAT.Valkyrie
                     return CancelOperation(originalFilePath, sha1);
                 }
 
-                var infoRequeast = new InfoRequest
-                {
-                    SHA1 = sha1, ApiKey = _apiKey, EndpointId = endpointId,
-                    FilePath = WebUtility.HtmlDecode(fileInfo.Path)
-                };
+                var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId, aptScanId: _aptScanId, filePath: WebUtility.HtmlDecode(fileInfo.Path));
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
@@ -594,7 +584,8 @@ namespace APTAT.Valkyrie
                         ApiKey = _apiKey,
                         SubmitToken = basicInfo.SubmitToken,
                         FilePath = WebUtility.HtmlDecode(originalFilePath),
-                        EndpointId = endpointId
+                        EndpointId = endpointId,
+                        AptScanId = _aptScanId
                     };
                     SubmitToAutomaticResponse response;
                     using (fileInfo.IsLocalComputer || _login == null ? null: 
@@ -678,6 +669,7 @@ namespace APTAT.Valkyrie
             return String.Format(@"{0}signup_apikey/{1}", ValkyrieApiUrls.GetBaseUri(), _apiKey);
         }
 
+        private string _aptScanId;
 
         public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnaluyze,
             string login, string password, int machineCount, NetworkCredential proxyCredential = null)
@@ -706,6 +698,8 @@ namespace APTAT.Valkyrie
                 _automaticAnalyseInProgressByHash.Clear();
                 _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(regInfo.Key));
+                _aptScanId = startScanResult.AptScanId;
+
                 if (startScanResult.ReturnCode != 0)
                 {
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
