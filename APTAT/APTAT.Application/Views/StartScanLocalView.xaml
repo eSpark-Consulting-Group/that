@@ -115,6 +115,7 @@
                                  IsTriStateMode="True"
                                  Checked="OnChecked"
                                      IsVirtualizing="True"
+                                     PreviewChecked="OnPreviewChecked"
                                  FontSize="14"
                                  Unchecked="OnUnchecked"
                                  ItemPrepared="OnItemPrepared"

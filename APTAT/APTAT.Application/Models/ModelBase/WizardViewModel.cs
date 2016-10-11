@@ -222,12 +222,15 @@ namespace APTAT.Application.Models
 
             set
             {
-                if (UseCurrentCredentials == value) return;
-                if (HasCurrentDomainName) return;
-                _useCurrentCredentials = value;
+                if (UseCurrentCredentials == value || HasCurrentDomainName) return;
 
-                UseCurrentDomainForDeploy = UseCurrentCredentials;
+                _useCurrentCredentials = value;
+                _useCurrentDomainForDeploy = value;
+
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
+                RaisePropertyChanged(nameof(UseCurrentDomainForDeploy));
+                RaisePropertyChanged(nameof(Login));
+                RaisePropertyChanged(nameof(Password));
             }
         }
 

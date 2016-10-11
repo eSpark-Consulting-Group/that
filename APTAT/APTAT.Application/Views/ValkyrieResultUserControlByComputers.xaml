@@ -161,7 +161,7 @@
              IsFilterable="False"
              Header="Trusted Vendor"
              TextAlignment="Center"
-             Width="110*" MinWidth="80"/>
+             Width="110*" MinWidth="140"/>
 
             </telerik:RadTreeListView.Columns>
             
