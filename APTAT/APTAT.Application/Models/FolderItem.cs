@@ -17,7 +17,7 @@ namespace APTAT.Application.Models
             Name = isFolder ? Path.GetFileName(FullName) : _fullName;
         }
 
-        public Boolean IsSelected { get; set; }
+        public bool? IsSelected { get; set; }
 
         public string FullName
         {

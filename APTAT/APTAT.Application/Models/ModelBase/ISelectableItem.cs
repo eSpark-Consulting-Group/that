@@ -9,7 +9,7 @@ namespace APTAT.Application.Models.ModelBase
 {
     public interface ISelectableItem
     {
-        Boolean IsSelected { get; set; }
+        Boolean? IsSelected { get; set; }
     }
 
     public interface ISelectableTreeItem<T> : ISelectableItem where T : class, ISelectableTreeItem<T>

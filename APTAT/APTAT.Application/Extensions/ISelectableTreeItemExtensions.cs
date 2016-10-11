@@ -18,7 +18,7 @@ namespace APTAT.Application.Extensions
                 var node = item;
                 while (true)
                 {
-                    if (node.IsSelected)
+                    if (node.IsSelected.GetValueOrDefault())
                     {
                         items.Add(node);
                         break;
@@ -27,7 +27,7 @@ namespace APTAT.Application.Extensions
                         break;
                     foreach (var nodeChild in node.Items)
                     {
-                        if (nodeChild.IsSelected)
+                        if (nodeChild.IsSelected.GetValueOrDefault())
                             items.Add(nodeChild);
                         else
                             stack.Push(nodeChild);
@@ -52,7 +52,7 @@ namespace APTAT.Application.Extensions
                 var node = item;
                 while (true)
                 {
-                    if (node.IsSelected && !(node.Items??Enumerable.Empty<T>()).Any())
+                    if (node.IsSelected.GetValueOrDefault() && !(node.Items??Enumerable.Empty<T>()).Any())
                     {
                         items.Add(node);
                     }

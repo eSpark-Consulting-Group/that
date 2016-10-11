@@ -62,9 +62,14 @@ namespace APTAT.Application
             //}
         }
 
+
+
+
         private void OnChecked(Object sender, RadRoutedEventArgs e)
         {
             RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
+
+
             if (treeViewItem.CheckState == ToggleState.On)
             {
                 ViewModel.CheckItemCommand.Execute(treeViewItem.Item);

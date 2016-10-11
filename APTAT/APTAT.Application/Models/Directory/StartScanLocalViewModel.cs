@@ -113,7 +113,7 @@ namespace APTAT.Application.Models
                 while (true)
                 {
                     var needCheckChildren = true;
-                    if (node.IsSelected)
+                    if ( node.IsSelected.GetValueOrDefault())
                     {
                         items.Add(node);
                         needCheckChildren = false;
@@ -121,7 +121,7 @@ namespace APTAT.Application.Models
                     if (needCheckChildren)
                         foreach (var nodeChild in node.Items?? Enumerable.Empty<FolderItem>())
                         {
-                            if (nodeChild.IsSelected)
+                            if (nodeChild.IsSelected.GetValueOrDefault())
                                 items.Add(nodeChild);
                             else
                                 stack.Push(nodeChild);
@@ -347,6 +347,8 @@ namespace APTAT.Application.Models
                 //Items = new ObservableCollection<DeploymentItem>();
                 Error = e.Exception.Message;
             }
+
+            SetSteps(new[] { null, SelectPort, SelectTargets });
 
         }
     }
