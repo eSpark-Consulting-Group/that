@@ -187,10 +187,17 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-
+                    var items = GetCheckedFolderItems();
+                    if (items.Length == 0)
+                    {
+                        Error = "Select at least one folder to scan";
+                        _checkedItems.Clear();
+                        return;
+                    }
                     IsBusy = true;
                     _storage.SetValue(KnownKeys.CustomScanOptions, 
-                        new CustomScanOptions(GetCheckedFolderItems(), _scanCriticalAreas));
+                        new CustomScanOptions(items, _scanCriticalAreas));
+                    
                     _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
                     {
                         new IpAddressWrapper() {Text = "localhost", IsDnsName = true}

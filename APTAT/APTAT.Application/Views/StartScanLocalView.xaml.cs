@@ -87,8 +87,7 @@ namespace APTAT.Application
 
             VerifyParents(treeViewItem);
 
-            if (treeViewItem.CheckState != ToggleState.On)
-                ViewModel.UncheckItemCommand.Execute(treeViewItem.Item);
+            ViewModel.UncheckItemCommand.Execute(treeViewItem.Item);
         }
 
         private RadTreeViewItem VerifyParents(RadTreeViewItem item)
