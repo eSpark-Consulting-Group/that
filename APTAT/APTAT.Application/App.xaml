@@ -11,8 +11,7 @@
                 xmlns:ui="clr-namespace:Telerik.Windows.Documents.UI;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
              xmlns:converters="clr-namespace:APTAT.Application.Converters"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Telerik.Windows.Controls"
-             StartupUri="MainWindow.xaml">
+xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Telerik.Windows.Controls">
     <Application.Resources>
         <ResourceDictionary>
 

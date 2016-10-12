@@ -20,8 +20,6 @@ namespace APTAT.Application
             if (!createdNew)
             {
                 MessageBox.Show("Unknown File Hunter is already running.", "Unknown File Hunter");
-
-                _mutex = null;
                 Current.Shutdown();
             }
             else
@@ -29,6 +27,8 @@ namespace APTAT.Application
                 InitTraceListener();
                 Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+                StartupUri = new Uri("/UnknownFileHunter;component/MainWindow.xaml", UriKind.Relative);
 
                 CompositionHelper.Instance.RegisterModules(new[]
                 {
