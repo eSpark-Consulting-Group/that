@@ -1337,16 +1337,17 @@ namespace APTAT.Application.Models
         {
             errorMessage = null;
 
-            if (String.IsNullOrEmpty(Password))
-            {
-                errorMessage = "Please specify Password";
-                return false;
-            }
             if (String.IsNullOrEmpty(Login))
             {
                 errorMessage = "Please specify Login";
                 return false;
             }
+            if (String.IsNullOrEmpty(Password))
+            {
+                errorMessage = "Please specify Password";
+                return false;
+            }
+            
             return true;
         }
 

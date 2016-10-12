@@ -73,7 +73,6 @@ namespace APTAT.Application
                 if (((RadTreeViewCheckEventArgs)e).IsUserInitiated)
                     _checkLevel = -1;
 
-                ViewModel.UncheckItemCommand.Execute(treeViewItem.Item);
                 ViewModel.CheckItemCommand.Execute(treeViewItem.Item);
             }
         }
@@ -101,11 +100,12 @@ namespace APTAT.Application
                 ViewModel.UncheckItemCommand.Execute(item.Item);
 
             var parent = item.ParentItem;
-            if (parent != null && parent.CheckState == ToggleState.Indeterminate && 
-                parent.Items.SourceCollection.OfType<FolderItem>().All(_ => !_.IsSelected.GetValueOrDefault()))
+            if (parent != null && parent.CheckState == ToggleState.Indeterminate)
             {
-                parent.CheckState = ToggleState.Off;
-                return VerifyParents(parent.ParentItem);
+                if (parent.ChildrenOfType<RadTreeViewItem>().All(_ => _.CheckState == ToggleState.Off))
+                    parent.CheckState = ToggleState.Off;
+
+                return VerifyParents(parent);
             }
 
             return null;
