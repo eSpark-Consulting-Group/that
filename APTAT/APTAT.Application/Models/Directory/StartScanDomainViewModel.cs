@@ -197,9 +197,17 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    var selectedItems = Items.GetSelectedItemsWithItemsPriority().OfType<DirectoryItem>().ToArray();
-                    var isOnlyLocal = CheckIfCanUseCurrentCredentials(selectedItems);
-                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, selectedItems);
+                    var items = Items.GetSelectedItemsWithItemsPriority().OfType<DirectoryItem>().ToArray();
+                    if (items.Length == 0)
+                    {
+                        Error = "Please select at least one item";
+                        _checkedItems.Clear();
+                        return;
+                    }
+
+                    
+                    var isOnlyLocal = CheckIfCanUseCurrentCredentials(items);
+                    _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
                     
