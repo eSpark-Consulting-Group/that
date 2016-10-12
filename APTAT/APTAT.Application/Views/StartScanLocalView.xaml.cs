@@ -53,7 +53,12 @@ namespace APTAT.Application
             e.PreparedItem.Focusable = false;
         }
 
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            PortValidationExtensions.ValidateInput(sender, e);
+        }
 
+        #region Danger! COT-611 fix
         private void OnChecked(Object sender, RadRoutedEventArgs e)
         {
             RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
@@ -65,10 +70,11 @@ namespace APTAT.Application
             }
             else
             {
-                _checkLevel = -1;
+                if (((RadTreeViewCheckEventArgs)e).IsUserInitiated)
+                    _checkLevel = -1;
 
-                if (treeViewItem.CheckState == ToggleState.On)
-                    ViewModel.CheckItemCommand.Execute(treeViewItem.Item);
+                ViewModel.UncheckItemCommand.Execute(treeViewItem.Item);
+                ViewModel.CheckItemCommand.Execute(treeViewItem.Item);
             }
         }
 
@@ -77,27 +83,26 @@ namespace APTAT.Application
         {
             RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
 
-            if (_checkLevel == -1)
+            if (((RadTreeViewCheckEventArgs)e).IsUserInitiated && _checkLevel == -1)
                 _checkLevel = treeViewItem.Level;
         }
 
         private void OnUnchecked(Object sender, RadRoutedEventArgs e)
         {
             RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
-
             VerifyParents(treeViewItem);
-
-            ViewModel.UncheckItemCommand.Execute(treeViewItem.Item);
         }
 
         private RadTreeViewItem VerifyParents(RadTreeViewItem item)
         {
             if (item == null)
                 return null;
+            else
+                ViewModel.UncheckItemCommand.Execute(item.Item);
 
             var parent = item.ParentItem;
             if (parent != null && parent.CheckState == ToggleState.Indeterminate && 
-                parent.Items.SourceCollection.OfType<RadTreeViewItem>().All(_ => _.CheckState == ToggleState.Off))
+                parent.Items.SourceCollection.OfType<FolderItem>().All(_ => !_.IsSelected.GetValueOrDefault()))
             {
                 parent.CheckState = ToggleState.Off;
                 return VerifyParents(parent.ParentItem);
@@ -105,12 +110,6 @@ namespace APTAT.Application
 
             return null;
         }
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            PortValidationExtensions.ValidateInput(sender, e);
-        }
-
-
+        #endregion
     }
 }
