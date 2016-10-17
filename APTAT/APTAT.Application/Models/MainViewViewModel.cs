@@ -844,8 +844,8 @@ namespace APTAT.Application.Models
         {
             foreach (var result in results)
             {
-                if (result.Pending)
-                    continue;
+                //if (result.Pending)
+                //    continue;
 
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
