@@ -35,8 +35,8 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("Items");
             }
         }
-
-
+        private string _defaultDomainName;
+        public string CurrentDomainController {  get { return UseCurrentCredentials ? _defaultDomainName : _domainController; } }
 
 
         private bool _domainCredentialsChanged = true;
@@ -209,7 +209,7 @@ namespace APTAT.Application.Models
                     var isOnlyLocal = CheckIfCanUseCurrentCredentials(items);
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = _domainController });
+                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = CurrentDomainController });
                     
                     if (!_credentialsDetermined)
                     {
@@ -314,7 +314,14 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
                 _useCurrentNameDetermined = true;
             }
-
+            if (HasCurrentDomainName)
+            {
+                var parent = ParentViewModel as IMainViewModel;
+                if (parent != null)
+                {
+                    _defaultDomainName = parent.CurrentDomainName;
+                }
+            }
             ActiveDirectoryPassword = null;
             Password = null;
             _credentialsDeterminationLocked = false;
