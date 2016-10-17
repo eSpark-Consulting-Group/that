@@ -144,6 +144,8 @@ namespace APTAT.Application.Models
 
         public Int64 Size { get; set; }
 
+        public string SizeSorting { get; set; }
+
         public Guid ComputerGuid { get; set; }
 
         public string LdapPath { get; set; }
@@ -360,6 +362,7 @@ namespace APTAT.Application.Models
             IsMalware = badFile.IsMalware;
             Name = badFile.Name;
             Size = badFile.Size;
+            SizeSorting = badFile.SizeSorting;
             SizeString = badFile.FileSizeFormatted;
             IsRootItem = false;
             IsOnline = true;

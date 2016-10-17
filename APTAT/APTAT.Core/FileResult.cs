@@ -35,6 +35,7 @@ namespace APTAT.Core
             Path = badFile.Path;
             Cloud = badFile.Cloud;
             Size = badFile.Size;
+            SizeSorting = SizeToSorting(badFile.Size);
             Attributes = badFile.Attributes;
             Created = badFile.Created;
             Modified = badFile.Modified;
@@ -54,6 +55,7 @@ namespace APTAT.Core
             Path = result.Path;
             Cloud = result.Cloud;
             Size = result.Size;
+            SizeSorting = result.SizeSorting;
             Attributes = result.Attributes;
             Created = result.Created;
             Modified = result.Modified;
@@ -182,7 +184,17 @@ namespace APTAT.Core
         public string FileSizeFormatted
         {
             get { return SizeToString(Size); }
-        }      
+        }  
+        
+        public string SizeSorting
+        {
+            get;set;
+        }
+
+        private static string SizeToSorting(long len)
+        {
+            return string.Format("{0:0.00000}", len / 1073741824d);
+        }
 
         private static string SizeToString(long len)
         {

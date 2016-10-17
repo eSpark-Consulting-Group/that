@@ -258,13 +258,13 @@ namespace APTAT.Application.Models
                 else
                     e.Parent.Items = new ObservableCollection<FolderItem>(e.Items);
 
-                // _storage.SetValue(KnownKeys.Workgroup, _workgroup);
                 context.Success?.Invoke();
             }
             else
             {
-                //  Items = new ObservableCollection<DeploymentItem>();
+
                 Error = e.Exception.Message;
+                context.Success?.Invoke();
             }
         }
 

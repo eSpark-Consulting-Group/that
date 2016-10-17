@@ -38,8 +38,17 @@ namespace APTAT.Application.Models
             get { return SizeToString(Size); }
         }
 
+        public string SizeSorting
+        {
+            get { return SizeToSorting(Size); }
+        }
+
         public CloudVerdict Cloud { get; set; }
 
+        private static string SizeToSorting(long len)
+        {
+            return string.Format("{0:0.00000}", len / 1073741824d);
+        }
 
         private static string SizeToString(long len)
         {

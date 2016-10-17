@@ -123,7 +123,6 @@ namespace APTAT.Application
             }
         }
 
-        IEnumerable<ThreatInfoItem> _items;
         private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
         {
             if (ViewModel.IsAnyScanInProgress)
@@ -131,29 +130,7 @@ namespace APTAT.Application
                 e.Cancel = true;
                 return;
             }
-            if (e.DataControl.ItemsSource == null || e.Column.SortMemberPath != "Size")
-                return;
 
-            if (_items == null)
-                _items = e.DataControl.ItemsSource as IEnumerable<ThreatInfoItem>;
-
-            if (e.OldSortingState == SortingState.None)
-            {
-                e.NewSortingState = SortingState.Ascending;
-                e.DataControl.ItemsSource = _items.OrderBy(_ => _.Size);
-            }
-            else if (e.OldSortingState == SortingState.Ascending)
-            {
-                e.NewSortingState = SortingState.Descending;
-                e.DataControl.ItemsSource = _items.OrderByDescending(_ => _.Size);
-            }
-            else
-            {
-                e.NewSortingState = SortingState.None;
-                e.DataControl.ItemsSource = _items;
-            }
-
-            e.Cancel = true;
         }
     }
 }

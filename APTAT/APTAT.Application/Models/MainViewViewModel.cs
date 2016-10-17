@@ -754,6 +754,7 @@ namespace APTAT.Application.Models
                     fileResult.Path = computer.FilePath;
                     fileResult.Cloud = file.BadFile.Cloud;
                     fileResult.Size = file.Size;
+                    fileResult.SizeSorting = file.SizeSorting;
                     fileResult.Attributes = file.BadFile.Attributes;
                     fileResult.Created = file.BadFile.Created;
                     fileResult.Modified = file.BadFile.Modified;
