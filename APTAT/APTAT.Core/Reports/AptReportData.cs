@@ -327,7 +327,7 @@ namespace APTAT.Core.Reports
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Not Scanned"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = "Not Scanned"},
             };
         }
 
@@ -362,7 +362,7 @@ namespace APTAT.Core.Reports
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
                 new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Unknown, Count = unknown, Value = "Not Scanned"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = "Not Scanned"},
             };
         }
         public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()

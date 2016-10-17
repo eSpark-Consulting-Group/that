@@ -1816,7 +1816,7 @@
         Fields!TargetVerdict.Value = "3", "#ffc000",
 		Fields!TargetVerdict.Value = "2", "#b22222",        
         Fields!TargetVerdict.Value = "1", "#3c963c",
-		Fields!TargetVerdict.Value = "0", "Silver")</Color>
+		Fields!TargetVerdict.Value = "4", "Silver")</Color>
                       </Style>
                       <ChartMarker>
                         <Style />
