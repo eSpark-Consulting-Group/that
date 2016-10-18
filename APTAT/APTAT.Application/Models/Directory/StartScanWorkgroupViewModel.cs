@@ -151,7 +151,7 @@ namespace APTAT.Application.Models
 
             Password = null;
 
-            //_workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
+            //var _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
             //RaisePropertyChanged("Workgroup");
 
             _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
@@ -240,9 +240,12 @@ namespace APTAT.Application.Models
 
                     CheckIfCanUseCurrentCredentials(items);
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
-                   
-                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = WorkgroupName });
+                                        
+                    var workGroups = DevicesSourceDescription.GetNetworkDescription(
+                        items.GroupBy(i => i.LdapPath).Select(i => i.Key).Distinct().ToArray());
+                _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                       
+                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = workGroups } );
                     success();
                 }
             }

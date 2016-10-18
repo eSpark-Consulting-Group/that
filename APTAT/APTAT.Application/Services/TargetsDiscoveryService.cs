@@ -256,6 +256,7 @@ namespace APTAT.Application.Services
                         Name = targets[i],
                         Type = DirectoryItemType.Root,
                         IsSelected = false,
+                        LdapPath = targets[i],
                         Items = new ObservableCollection<DirectoryItem>()
                     };
                 }
@@ -289,7 +290,8 @@ namespace APTAT.Application.Services
                         IPAddress = target.IPAddress ?? "Unknown",
                         Status = target.IsOnline ? "Ready" : "Offline",
                         IsOnline = target.IsOnline,
-                        IsLocalComputer = target.IsLocalComputer
+                        IsLocalComputer = target.IsLocalComputer,
+                        LdapPath = tuple.Item1
                     });
                 }
 
@@ -305,7 +307,8 @@ namespace APTAT.Application.Services
                                 Items = result,
                                 Name = tuple.Item1,
                                 IsWorkgroup = true,
-                                IsLoadOnDemand = true
+                                IsLoadOnDemand = true,
+                                LdapPath = tuple.Item1
                                 
                             }
                         },
