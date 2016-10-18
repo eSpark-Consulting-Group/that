@@ -949,7 +949,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Files with No Verdict:</Value>
+                    <Value>Not Analyzed</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
