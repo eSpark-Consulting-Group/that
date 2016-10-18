@@ -274,7 +274,7 @@ namespace CodedUITestAT
 
         #endregion
 
-        #region Start Scan wizard
+        #region Start Scan Wizard
 
         private WpfButton NetworkAddressButton()
         {
@@ -354,6 +354,11 @@ namespace CodedUITestAT
         internal WpfTable ScanningResultsTable()
         {            
             return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable;
+        }
+
+        private WpfText SendingFilesTextBlock()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UISendingFilesforAnalyText;
         }
 
         #endregion
@@ -436,7 +441,7 @@ namespace CodedUITestAT
             int valkyrieResultsRowsNumber = ValkyrieAnalysisResultsTab().GetRows().Length;
             
             if (valkyrieResultsRowsNumber == expectedFilesNumber)
-                testContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.\n", expectedFilesNumber, valkyrieResultsRowsNumber));
+                testContext.WriteLine(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} coincide.", expectedFilesNumber, valkyrieResultsRowsNumber));
             else Assert.Fail(String.Format("The total number of files found {0} and the number of files at 'Valkyrie analysis results' screen {1} do not coincide!", expectedFilesNumber, valkyrieResultsRowsNumber));
         }
 
@@ -447,8 +452,9 @@ namespace CodedUITestAT
             int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
             UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
             UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
-            
+
             // Waits until the Valkyrie upload progress is completed
+            UIHelper.WaitForControlIsClickable(SendingFilesTextBlock(), waitTime, false);
             var timer = Stopwatch.StartNew();
             for (; ; )
             {
@@ -459,7 +465,7 @@ namespace CodedUITestAT
             timer.Stop();
 
             // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
-            UIMapResultsWindow.GoToScanningResultsTab();
+            UIMapResultsWindow.GoToScanResultsTab();
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
             // Waits until the results are actually available at UI
@@ -471,7 +477,7 @@ namespace CodedUITestAT
                 try
                 {
                     ValkyrieAnalysisResultsTab().GetRows();
-                    testContext.WriteLine("Valkyrie results now can be obtained from UI.\n");
+                    testContext.WriteLine("Valkyrie results now can be obtained from UI.");
                     break;
                 }
                 catch (Exception) { }
@@ -901,7 +907,7 @@ namespace CodedUITestAT
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
 
             // Verifies the scanning result at the Results screen
-            UIMapResultsWindow.GoToScanningResultsTab();
+            UIMapResultsWindow.GoToScanResultsTab();
             UIHelper.GroupByComputers();
             UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Scanning results' screen.\n", endpoint.Name));
@@ -1146,7 +1152,7 @@ namespace CodedUITestAT
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext); // The endpoint should appear again
 
             // Searches with a correct input
-            UIMapResultsWindow.GoToScanningResultsTab();
+            UIMapResultsWindow.GoToScanResultsTab();
             UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput;
             UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Scanning results' tab.");
@@ -1154,7 +1160,7 @@ namespace CodedUITestAT
             UIMapMain.ClickClearSearchTextButton();
 
             // Searches with an incorrect input
-            UIMapResultsWindow.GoToScanningResultsTab();
+            UIMapResultsWindow.GoToScanResultsTab();
             UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput + error;
             UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Scanning results' tab.");

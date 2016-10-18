@@ -30,6 +30,32 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     {
         
         /// <summary>
+        /// AssertScanningResultsTable - Use 'AssertScanningResultsTableExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertScanningResultsTable()
+        {
+            #region Variable Declarations
+            WpfTable uIRadTreeListViewTable = this.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable;
+            #endregion
+
+            // Verify that the 'Exists' property of 'RadTreeListView' table equals 'True'
+            Assert.AreEqual(this.AssertScanningResultsTableExpectedValues.UIRadTreeListViewTableExists, uIRadTreeListViewTable.Exists);
+        }
+        
+        /// <summary>
+        /// AssertSendingFilesTextBlock - Use 'AssertSendingFilesTextBlockExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertSendingFilesTextBlock()
+        {
+            #region Variable Declarations
+            WpfText uISendingFilesforAnalyText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UISendingFilesforAnalyText;
+            #endregion
+
+            // Verify that the 'Exists' property of 'Sending Files for Analysis...' label equals 'True'
+            Assert.AreEqual(this.AssertSendingFilesTextBlockExpectedValues.UISendingFilesforAnalyTextExists, uISendingFilesforAnalyText.Exists);
+        }
+        
+        /// <summary>
         /// AssertValkyrieResultsTree - Use 'AssertValkyrieResultsTreeExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertValkyrieResultsTree()
@@ -160,9 +186,9 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         }
         
         /// <summary>
-        /// GoToScanningResultsTab
+        /// GoToScanResultsTab
         /// </summary>
-        public void GoToScanningResultsTab()
+        public void GoToScanResultsTab()
         {
             #region Variable Declarations
             WpfTabPage uIUnknownfilesTabPage1 = this.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIUnknownfilesTabPage1;
@@ -198,20 +224,31 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uIDetailsMenuItem, new Point(48, 9));
         }
         
-        /// <summary>
-        /// AssertScanningResultsTable - Use 'AssertScanningResultsTableExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertScanningResultsTable()
+        #region Properties
+        public virtual AssertScanningResultsTableExpectedValues AssertScanningResultsTableExpectedValues
         {
-            #region Variable Declarations
-            WpfTable uIRadTreeListViewTable = this.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable;
-            #endregion
-
-            // Verify that the 'Exists' property of 'RadTreeListView' table equals 'True'
-            Assert.AreEqual(this.AssertScanningResultsTableExpectedValues.UIRadTreeListViewTableExists, uIRadTreeListViewTable.Exists);
+            get
+            {
+                if ((this.mAssertScanningResultsTableExpectedValues == null))
+                {
+                    this.mAssertScanningResultsTableExpectedValues = new AssertScanningResultsTableExpectedValues();
+                }
+                return this.mAssertScanningResultsTableExpectedValues;
+            }
         }
         
-        #region Properties
+        public virtual AssertSendingFilesTextBlockExpectedValues AssertSendingFilesTextBlockExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertSendingFilesTextBlockExpectedValues == null))
+                {
+                    this.mAssertSendingFilesTextBlockExpectedValues = new AssertSendingFilesTextBlockExpectedValues();
+                }
+                return this.mAssertSendingFilesTextBlockExpectedValues;
+            }
+        }
+        
         public virtual AssertValkyrieResultsTreeExpectedValues AssertValkyrieResultsTreeExpectedValues
         {
             get
@@ -308,18 +345,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             }
         }
         
-        public virtual AssertScanningResultsTableExpectedValues AssertScanningResultsTableExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertScanningResultsTableExpectedValues == null))
-                {
-                    this.mAssertScanningResultsTableExpectedValues = new AssertScanningResultsTableExpectedValues();
-                }
-                return this.mAssertScanningResultsTableExpectedValues;
-            }
-        }
-        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -346,6 +371,10 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
         
         #region Fields
+        private AssertScanningResultsTableExpectedValues mAssertScanningResultsTableExpectedValues;
+        
+        private AssertSendingFilesTextBlockExpectedValues mAssertSendingFilesTextBlockExpectedValues;
+        
         private AssertValkyrieResultsTreeExpectedValues mAssertValkyrieResultsTreeExpectedValues;
         
         private CheckCanceledFilterCheckBoxParams mCheckCanceledFilterCheckBoxParams;
@@ -362,11 +391,39 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         private ClickGroupByFilesToggleButtonParams mClickGroupByFilesToggleButtonParams;
         
-        private AssertScanningResultsTableExpectedValues mAssertScanningResultsTableExpectedValues;
-        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertScanningResultsTable'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertScanningResultsTableExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'RadTreeListView' table equals 'True'
+        /// </summary>
+        public bool UIRadTreeListViewTableExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertSendingFilesTextBlock'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertSendingFilesTextBlockExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'Sending Files for Analysis...' label equals 'True'
+        /// </summary>
+        public bool UISendingFilesforAnalyTextExists = true;
         #endregion
     }
     
@@ -487,21 +544,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         /// Set to 'Pressed' state 'Group by Files' toggle button
         /// </summary>
         public bool UIGroupbyFilesToggleButtonPressed = true;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertScanningResultsTable'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertScanningResultsTableExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Exists' property of 'RadTreeListView' table equals 'True'
-        /// </summary>
-        public bool UIRadTreeListViewTableExists = true;
         #endregion
     }
     
@@ -1534,6 +1576,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIClearSearchTextButtoButton;
             }
         }
+        
+        public UISendingFilesforAnalyProgressBar UISendingFilesforAnalyProgressBar
+        {
+            get
+            {
+                if ((this.mUISendingFilesforAnalyProgressBar == null))
+                {
+                    this.mUISendingFilesforAnalyProgressBar = new UISendingFilesforAnalyProgressBar(this);
+                }
+                return this.mUISendingFilesforAnalyProgressBar;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1544,6 +1598,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private WpfEdit mUISearchTextBoxEdit;
         
         private WpfButton mUIClearSearchTextButtoButton;
+        
+        private UISendingFilesforAnalyProgressBar mUISendingFilesforAnalyProgressBar;
         #endregion
     }
     
@@ -1581,6 +1637,42 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         private WpfToggleButton mUIGroupbyComputersToggleButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UISendingFilesforAnalyProgressBar : WpfProgressBar
+    {
+        
+        public UISendingFilesforAnalyProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.AutomationId] = "SendingFilesBusyIndicator";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfText UISendingFilesforAnalyText
+        {
+            get
+            {
+                if ((this.mUISendingFilesforAnalyText == null))
+                {
+                    this.mUISendingFilesforAnalyText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUISendingFilesforAnalyText.SearchProperties[WpfText.PropertyNames.Name] = "Sending Files for Analysis...";
+                    this.mUISendingFilesforAnalyText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUISendingFilesforAnalyText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfText mUISendingFilesforAnalyText;
         #endregion
     }
     

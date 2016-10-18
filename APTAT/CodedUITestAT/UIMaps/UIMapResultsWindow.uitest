@@ -40,6 +40,40 @@
   </Configuration>
   <InitializeActions />
   <ExecuteActions>
+    <AssertAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable">
+      <ParameterName />
+      <PropertyName>Exists</PropertyName>
+      <ExpectedValue>True</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertScanningResultsTable">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UISendingFilesforAnalyText">
+      <ParameterName />
+      <PropertyName>Exists</PropertyName>
+      <ExpectedValue>True</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertSendingFilesTextBlock">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
     <AssertAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIValkyrieResultsScreeCustom.UIRadTreeListViewTree2">
       <ParameterName />
       <PropertyName>Exists</PropertyName>
@@ -193,7 +227,7 @@
       <ActionType>Click</ActionType>
       <MouseButton>Left</MouseButton>
     </MouseAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="GoToScanningResultsTab">
+    <TestStepMarkerAction Comment="" MarkerInformation="GoToScanResultsTab">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -237,23 +271,6 @@
       <Disabled>false</Disabled>
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable">
-      <ParameterName />
-      <PropertyName>Exists</PropertyName>
-      <ExpectedValue>True</ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>String</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertScanningResultsTable">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
@@ -856,6 +873,33 @@
                   </AndCondition>
                   <SupportLevel>0</SupportLevel>
                   <Descendants />
+                </UIObject>
+                <UIObject ControlType="ProgressBar" Id="UISendingFilesforAnalyProgressBar" FriendlyName="Sending Files for Analysis..." SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Unknown File Hunter</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">ProgressBar</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">SendingFilesBusyIndicator</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="Text" Id="UISendingFilesforAnalyText" FriendlyName="Sending Files for Analysis..." SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Unknown File Hunter</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">Text</PropertyCondition>
+                        <PropertyCondition Name="Name">Sending Files for Analysis...</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                  </Descendants>
                 </UIObject>
               </Descendants>
             </UIObject>

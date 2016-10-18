@@ -30,18 +30,19 @@ namespace CodedUITestAT
             control.WaitForControlEnabled(waitForMilliseconds);
         }
 
-        /// <summary> Waits until a given UI control is clickable. </summary>
+        /// <summary> Waits until a given UI control is clickable or not clickable. </summary>
         /// <param name="control">Set a UI control to wait for.</param>
         /// <param name="waitForMilliseconds">Set a desired waiting time in milliseconds or keep default.</param>
-        internal static void WaitForControlIsClickable(UITestControl control, int waitForMilliseconds = DataHelper.DefaultWaitTime)
+        /// <param name="isClickable">Determine whether the expected property of the control is 'Clickable' or 'Not Clickable'.</param>
+        internal static void WaitForControlIsClickable(UITestControl control, int waitForMilliseconds = DataHelper.DefaultWaitTime, bool isClickable = true)
         {
             var timer = Stopwatch.StartNew();
             for (; ; )
             {
                 Playback.Wait(1000);
-                if (IsClickable(control)) break;
+                if (IsClickable(control) == isClickable) break;
                 if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
-                    throw new Exception(String.Format("The given control '{0}' is not clickable after {1} seconds!", control.FriendlyName, waitForMilliseconds / 1000));
+                    throw new Exception(String.Format("The given control '{0}' 'IsClickable' property is not '{1}' after {2} seconds!", control.FriendlyName, isClickable, waitForMilliseconds / 1000));
             }
             timer.Stop();
         }
@@ -373,7 +374,7 @@ namespace CodedUITestAT
                 case ResultsScreen.ScanningResults:
                     if (useMain.ScanResultsTab().Exists)
                     {
-                        useMain.UIMapResultsWindow.GoToScanningResultsTab();
+                        useMain.UIMapResultsWindow.GoToScanResultsTab();
                         rows = useMain.ScanResultsTab().GetRows();
                     }
                     else rows = useMain.ScanningResultsTable().GetRows();                    

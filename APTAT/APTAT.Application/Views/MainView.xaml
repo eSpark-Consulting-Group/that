@@ -97,7 +97,7 @@
 
         <telerik:RadBusyIndicator Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
             
-            <telerik:RadBusyIndicator IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
+            <telerik:RadBusyIndicator AutomationProperties.AutomationId="SendingFilesBusyIndicator" IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" IsTabStop="false" FocusVisualStyle="{x:Null}">
                 <Grid>
                     <ContentControl x:Name="mainContent" IsTabStop="false" FocusVisualStyle="{x:Null}"/>
 
