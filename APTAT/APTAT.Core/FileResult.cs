@@ -193,7 +193,18 @@ namespace APTAT.Core
 
         private static string SizeToSorting(long len)
         {
-            return string.Format("{0:0.00000}", len / 1073741824d);
+            string[] sizes = { "A", "B", "C", "D" };
+
+            int order = 0;
+            while (len >= 1024 && order + 1 < sizes.Length)
+            {
+                order++;
+                len = len / 1024;
+            }
+
+            string result = String.Format("{1}{0:0.000}", len / 1000d, sizes[order]);
+
+            return result;
         }
 
         private static string SizeToString(long len)
