@@ -1,18 +1,20 @@
 ﻿using APTAT.Application.Models;
 using System;
-using System.Windows;
+
 using System.Windows.Automation;
 using System.Windows.Controls;
-using System.Windows.Input;
+
 using Telerik.Windows;
 using Telerik.Windows.Controls;
-using APTAT.Application.Extensions;
+
 using System.Linq;
+using static APTAT.Application.StartScanView;
+using System.Windows;
 
 namespace APTAT.Application
 {
     /// <summary>
-    /// Interaction logic for StartScanDomainView.xaml
+    /// Interaction logic for StartScanLocalView.xaml
     /// </summary>
     public partial class StartScanLocalView : UserControl
     {
@@ -26,7 +28,9 @@ namespace APTAT.Application
             InitializeComponent();
         }
 
-
+        public RoutedEventHandler QuickScanAction { get; set; }
+        public RoutedEventHandler FullScanAction { get; set; }
+        public RoutedEventHandler CustomScanAction { get; set; }
 
         private void OnLoadOnDemand(Object sender, RadRoutedEventArgs e)
         {
@@ -53,12 +57,7 @@ namespace APTAT.Application
             e.PreparedItem.Focusable = false;
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            PortValidationExtensions.ValidateInput(sender, e);
-        }
 
-        #region Danger! COT-611 fix
         private void OnChecked(Object sender, RadRoutedEventArgs e)
         {
             RadTreeViewItem treeViewItem = (RadTreeViewItem)e.OriginalSource;
@@ -110,6 +109,37 @@ namespace APTAT.Application
 
             return null;
         }
-        #endregion
+
+        private ToolTip _tooltip = new ToolTip();
+        private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button.GetValue(ToolTipHelper.ToolTipProperty) == null)
+                button.SetValue(ToolTipHelper.ToolTipProperty, _tooltip);
+        }
+
+        private void Button_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var button = sender as Button;
+
+            button.SetValue(ToolTipHelper.ToolTipProperty, null);
+        }
+
+        private void OnFullClick(Object sender, RoutedEventArgs e)
+        {
+            FullScanAction?.Invoke(sender, e);
+        }
+
+        private void OnQuickClick(Object sender, RoutedEventArgs e)
+        {
+            QuickScanAction?.Invoke(sender, e);
+        }
+
+        private void OnCustomClick(Object sender, RoutedEventArgs e)
+        {
+            CustomScanAction?.Invoke(sender, e);
+        }
+
     }
 }

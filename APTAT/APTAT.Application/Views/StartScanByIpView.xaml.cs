@@ -15,9 +15,6 @@ namespace APTAT.Application
             InitializeComponent();
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            PortValidationExtensions.ValidateInput(sender, e);
-        }
+
     }
 }

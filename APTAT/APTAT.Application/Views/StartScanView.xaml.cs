@@ -49,6 +49,10 @@ namespace APTAT.Application
             viewScanWorkgroup.DataContext = _scanWorkgroupViewModel;
             viewScanLocal.DataContext = _scanLocalViewModel;
 
+            viewScanLocal.QuickScanAction = OnQuickScanClick;
+            viewScanLocal.FullScanAction = OnFinishClick;
+            viewScanLocal.CustomScanAction = OnNextClick;
+
             Unloaded += OnUnloaded;
         }
 
@@ -148,8 +152,6 @@ namespace APTAT.Application
                 _currentViewModel.ViewLoadedCommand.Execute(null);
                 _currentViewModel.Completed += OnWizardCompleted;
                 _currentViewModel.Cancelled += OnWizardCancelled;
-
-                (_currentViewModel.ParentViewModel as IMainViewModel).RestorePorts();
             }
 
             Dispatcher.BeginInvoke((Action)delegate { _tooltip.IsOpen = false; });

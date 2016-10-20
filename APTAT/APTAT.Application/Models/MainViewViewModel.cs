@@ -4,16 +4,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Windows;
-using APTAT.Application.Services;
+using System.Windows.Threading;
+
 using Telerik.Windows.Controls;
 using APTAT.Core;
 using APTAT.Valkyrie;
 using APTAT.Application.Messages;
 using APTAT.Application.Extensions;
-
-using System.Windows.Threading;
-
+using APTAT.Application.Services;
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
@@ -146,20 +144,6 @@ namespace APTAT.Application.Models
                 }
                 
             }
-        }
-
-        public void RestorePorts()
-        {
-            bool tcperror, udperror;
-
-            TcpPort.ValidateTCP(out tcperror);
-            UdpPort.ValidateUDP(out udperror);
-
-            if (tcperror)
-                TcpPort = "80";
-
-            if (udperror)
-                UdpPort = "53";
         }
 
         private async void OnLoaded()
@@ -690,14 +674,13 @@ namespace APTAT.Application.Models
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
             OnBeforeBeginValkyrieAnalysis();
-            var tmp = ValkyrieAnalyzeStarted;
-            if (tmp != null)
-            {
-                tmp(this, e);
-            }
+            ValkyrieAnalyzeStarted?.Invoke(this, e);
         }
 
-        void HandleWebException(WebException ex)
+        public string ProxyLogin { get; set; }
+        public string ProxyPassword { get; set; }
+
+        void HandleProxyException(WebException ex)
         {
             var httpWebResponse = ex.Response as HttpWebResponse;
             if (httpWebResponse != null)
@@ -705,26 +688,15 @@ namespace APTAT.Application.Models
                 HttpStatusCode code = httpWebResponse.StatusCode;
                 if (code == HttpStatusCode.ProxyAuthenticationRequired)
                 {
-                    Trace.WriteLine(code.ToString());
-
                     SettingsWindow window = new SettingsWindow();
                     window.Owner = System.Windows.Application.Current.MainWindow;
-                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    window.DataContext = this;
+                    window.ShowCredentials = true;
+                    window.Header = "Proxy Credentials";
 
-                    string proxy = String.Empty;
-                    var defaultProxy = WebProxy.GetDefaultProxy();
-                    if (defaultProxy != null)
+                    if (window.ShowDialog().GetValueOrDefault())
                     {
-                        proxy = defaultProxy.Address.AbsoluteUri;
-                    }
-
-                    string message = String.Format("The server {0} requires a username and password.", proxy);
-                    window.MessageText.Text = message;
-
-                    if (window.ShowDialog() == true)
-                    {
-                        NetworkCredential cred = new NetworkCredential(window.LoginTextBox.Text,
-                            window.PasswordBox.Password);
+                        NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword);
                         Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
 
                         BeginValkyrieAnalysis(cred);
@@ -784,7 +756,7 @@ namespace APTAT.Application.Models
             {
                 var webException = e.Error as WebException;
                 if (webException != null)
-                    HandleWebException(webException);
+                    HandleProxyException(webException);
             }
             else
             {
@@ -812,11 +784,7 @@ namespace APTAT.Application.Models
             RaisePropertyChanged("Header");
             RaisePropertyChanged("ValkyrieDetailsLink");
 
-            var tmp = ValkyrieAnalyzeCompleted;
-            if (tmp != null)
-            {
-                tmp(this, e);
-            }
+            ValkyrieAnalyzeCompleted?.Invoke(this, e);
         }
 
         private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
@@ -844,9 +812,6 @@ namespace APTAT.Application.Models
         {
             foreach (var result in results)
             {
-                //if (result.Pending)
-                //    continue;
-
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
                 {
@@ -953,12 +918,9 @@ namespace APTAT.Application.Models
             _aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
         }
 
-        private void OnScanCompleted(Object sender, APTAT.Application.Services.ScanCompletedEventArgs e)
+        private void OnScanCompleted(Object sender, Services.ScanCompletedEventArgs e)
         {
-            if (ScanProcessCompleted != null)
-            {
-                ScanProcessCompleted(this, e);
-            }
+            ScanProcessCompleted?.Invoke(this, e);
         }
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
@@ -969,10 +931,7 @@ namespace APTAT.Application.Models
 
             if (e.Exception != null)
             {
-                if (DomainTargetsResolveFailure != null)
-                {
-                    DomainTargetsResolveFailure(this, new DomainEventArgs { Exception = e.Exception });
-                }
+                DomainTargetsResolveFailure?.Invoke(this, new DomainEventArgs { Exception = e.Exception });
 
                 IsScanInProgress = false;
 

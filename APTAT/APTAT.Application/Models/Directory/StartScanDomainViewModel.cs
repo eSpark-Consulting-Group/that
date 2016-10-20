@@ -239,7 +239,7 @@ namespace APTAT.Application.Models
                     parent.Login = Login;
                     parent.Password = Password;
 
-                    if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)) && parent.ValidatePorts(out errorMessage))
+                    if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)))
                     {
                         success();
                     }
@@ -314,14 +314,10 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
                 _useCurrentNameDetermined = true;
             }
+
             if (HasCurrentDomainName)
-            {
-                var parent = ParentViewModel as IMainViewModel;
-                if (parent != null)
-                {
-                    _defaultDomainName = parent.CurrentDomainName;
-                }
-            }
+                _defaultDomainName = CurrentDomainName;
+
             ActiveDirectoryPassword = null;
             Password = null;
             _credentialsDeterminationLocked = false;

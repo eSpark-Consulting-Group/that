@@ -77,7 +77,7 @@
                             Tag="{Binding IsUnknownFound, Mode=OneWay}" Visibility="{Binding IsUnknownFound, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!, Mode=OneWay}"/>
                                         <Button AutomationProperties.AutomationId="YesButton" Content="Yes" x:Name="yes" Margin="5,5,5,15" Click="Button_Click"  Height="32"
                             Tag="{Binding IsUnknownFound, Mode=OneWay}" Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
-                                        <Button AutomationProperties.AutomationId="NoButton" Content="No"  Margin="5,5,5,15" Click="CancelButton_Click" Height="32" 
+                                        <Button AutomationProperties.AutomationId="NoButton" Content="No" Template="{StaticResource BackButton}" Foreground="Black"  Margin="5,5,5,15" Click="CancelButton_Click" Height="32" 
                             Visibility="{Binding IsUnknownFound, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
                                     </StackPanel>
                                 </Border>

@@ -259,7 +259,7 @@ namespace APTAT.Application.Models
                     
                     parent.Login = Login;
                     parent.Password = Password;
-                    if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)) && parent.ValidatePorts(out errorMessage))
+                    if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)))
                     {
                         success();
                     }

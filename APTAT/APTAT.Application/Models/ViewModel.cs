@@ -27,6 +27,8 @@ namespace APTAT.Application.Models
             {
                 String oldValue = _keyword;
                 _keyword = value;
+                if (string.IsNullOrEmpty(_keyword))
+                    _keyword = null;
                 RaisePropertyChanged("Keyword");
                 OnKeywordChanged(oldValue, _keyword);
             }

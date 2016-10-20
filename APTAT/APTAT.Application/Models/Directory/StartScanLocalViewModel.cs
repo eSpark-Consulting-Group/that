@@ -160,23 +160,8 @@ namespace APTAT.Application.Models
                     }
                 };
 
-                var parent = ParentViewModel as IMainViewModel;
-                if (parent != null)
-                {
-                    string errorMessage;
-                    if (parent.ValidatePorts(out errorMessage))
-                    {
-                        action();
-                    }
-                    else
-                    {
-                        Error = errorMessage;
-                    }
-                }
-                else
-                {
-                    action();
-                }
+                action();
+
 
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
@@ -304,8 +289,8 @@ namespace APTAT.Application.Models
             else
             {
                 IsBackEnabled = true;
-                IsNextEnabled = true;
-                IsFinishEnabled = true;
+                IsNextEnabled = false;
+                IsFinishEnabled = false;
             }
 
             RaisePropertyChanged(nameof(NextName));
@@ -319,7 +304,7 @@ namespace APTAT.Application.Models
 
         public string ComputerName
         {
-            get { return $"Local Scan ({Environment.MachineName})"; }
+            get { return Environment.MachineName; }
         }
 
         private void OnGetByIpAddressesCompleted(Object sender, GetByIpAddressEventArgs e)

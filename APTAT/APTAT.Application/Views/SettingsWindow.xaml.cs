@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using APTAT.Application.Extensions;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace APTAT.Application
 {
@@ -23,17 +16,76 @@ namespace APTAT.Application
             InitializeComponent();
         }
 
+
+        #region ShowCredentialsProperty (DependencyProperty)
+        public bool ShowCredentials
+        {
+            get { return (bool)GetValue(ShowCredentialsProperty); }
+            set { SetValue(ShowCredentialsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowCredentialsProperty =
+            DependencyProperty.Register("ShowCredentials", typeof(bool), typeof(SettingsWindow),
+            new PropertyMetadata(false));
+
+        #endregion
+
+        #region HeaderProperty (DependencyProperty)
+        public string Header
+        {
+            get { return (string)GetValue(HeaderProperty); }
+            set { SetValue(HeaderProperty, value); }
+        }
+
+        public static readonly DependencyProperty HeaderProperty =
+            DependencyProperty.Register("Header", typeof(string), typeof(SettingsWindow),
+            new PropertyMetadata("Options"));
+
+        #endregion
+
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(tcp.Text) || string.IsNullOrEmpty(udp.Text))
+                return;
+
             this.DialogResult = true;
-            var pwd = PasswordBox.Password;
-            var login = LoginTextBox.Text;
+
         }
 
         private void Button_CancelClick(object sender, RoutedEventArgs e)
         {
-
+            tcp.Text = _tcp;
+            udp.Text = _udp;
             this.DialogResult = false;
+        }
+
+        private void Window_MouseLeftButtonDown(Object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void OnCloseClick(object sender, RoutedEventArgs e)
+        {
+            tcp.Text = _tcp;
+            udp.Text = _udp;
+            DialogResult = false;
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            PortValidationExtensions.ValidateInput(sender, e);
+        }
+
+        private string _tcp, _udp;
+        private void this_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            Dispatcher.BeginInvoke((Action)delegate
+            {
+                _tcp = tcp.Text;
+                _udp = udp.Text;
+            });
         }
     }
 }

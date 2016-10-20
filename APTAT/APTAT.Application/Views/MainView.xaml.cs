@@ -184,7 +184,7 @@ namespace APTAT.Application
             });
         }
 
-        private void OnPropertiesClick(Object sender, RoutedEventArgs e)
+        private void ValkyrieClick(Object sender, RoutedEventArgs e)
         {
             ShowRegisterToValkyrieWindow();
 
@@ -253,6 +253,12 @@ namespace APTAT.Application
             _onCompletedAction = action;
             loading.BusyContent = "Closing...";
             _viewModel.OnAppClose();
+        }
+
+        private void OptionsClick(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow options = new SettingsWindow { Owner = System.Windows.Application.Current.MainWindow, DataContext = DataContext};
+            options.ShowDialog();
         }
 
         private void AboutClick(Object sender, RoutedEventArgs e)

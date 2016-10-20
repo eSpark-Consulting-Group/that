@@ -173,7 +173,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Canvas Grid.RowSpan="2" Margin="0 20 0 0">
+                                                    <Canvas Grid.RowSpan="2" Margin="2 20 0 0">
                                                         <Path Data="F1M307,118L279,118L279,116L307,116z" Fill="#FF54984F" Height="2" Stretch="Fill" Width="28" Canvas.Left="28" Canvas.Top="38"/>
                                                         <Path Data="F1M337,118L309,118L309,116L337,116z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="58" Canvas.Top="38" Width="28"/>
                                                         <Path Data="F1M337,122L279,122L279,120L337,120z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="28" Canvas.Top="42" Width="58"/>
@@ -399,7 +399,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Canvas  Grid.RowSpan="2" Margin="0 43 0 0">
+                                                    <Canvas  Grid.RowSpan="2" Margin="2 44 0 0">
                                                         <Path Data="F1M389,607C389,609.359,387.958,611,386.673,611L274.326,611C273.043,611,272,609.359,272,607C272,604.641,273.043,603,274.326,603L386.673,603C387.958,603,389,604.641,389,607" Fill="#FF457FAD" Height="8" Opacity="0.270004004240036" Stretch="Fill" Canvas.Left="21.029" Canvas.Top="73" Width="117"/>
                                                         <Path Data="F1M380,606L254,606C253,606,253,605,253,605L253,598L382,598L382,604C382,605.985,380,606,380,606 M251,598L251,605C251,605,250.369,608,255,608L380,608C380,608,384,607.971,384,604L384,597.621C384,597.621,384,596,382.677,596L252.985,596C252.985,596,251,596.016,251,598" Fill="#FF457FAD" Height="12" Stretch="Fill" Canvas.Top="66" Width="133.029"/>
                                                         <Path Data="F1M372,534L372,596L266,596L266,534C266,534,266,532,268,532L351,532L370,532C372,532,372,534,372,534 M329.741,599L307.244,599C305.92,599,305.92,598,305.955,598L331.03,598C331.064,598,331.064,599,329.741,599 M370,530L350.916,530L286.069,530L267.541,530C263.572,530,264,534.421,264,534.421L264,550.964L264,598L303.936,598C303.936,598,304,601,307.244,601L329.741,601C333.05,601,333.05,598,333.05,598L374,598L374,551L374,534C374,534,373.971,530,370,530" Fill="#FF457FAD" Height="71" Stretch="Fill" Canvas.Left="13.016" Width="110.013"/>

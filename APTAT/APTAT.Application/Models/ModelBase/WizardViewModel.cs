@@ -204,15 +204,20 @@ namespace APTAT.Application.Models
             }, CurrentStep, commandContext);
         }
 
-        protected bool HasCurrentDomainName
+        protected string CurrentDomainName
         {
             get
             {
                 var parent = ParentViewModel as IMainViewModel;
                 if (parent != null)
-                    return parent.HasCurrentDomainName;
-                return false;
+                    return parent.CurrentDomainName;
+                return null;
             }
+        }
+
+        public bool HasCurrentDomainName
+        {
+            get { return !string.IsNullOrEmpty(CurrentDomainName); }
         }
 
         private bool _useCurrentCredentials;
