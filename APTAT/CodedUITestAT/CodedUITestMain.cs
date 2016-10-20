@@ -1330,6 +1330,7 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
 
+            UIMapActiveDirectory.SelectUseCustomCredentialsRadioButton();
             InputDomainName(domainName);
             InputDomainAdministrator(DataHelper.Username);
             InputPassword(DataHelper.Password);
@@ -1466,8 +1467,7 @@ namespace CodedUITestAT
             // Inputs some non-default parameters
             InputDomainName(domainName);
             InputDomainAdministrator(DataHelper.Username);
-            UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapActiveDirectory.InputPassword();
+            InputPassword(DataHelper.Password);
             UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = newTcpPort;
             UIMapActiveDirectory.InputTcpPort();
             UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = newUdpPort;
@@ -1634,8 +1634,7 @@ namespace CodedUITestAT
             // Password
             UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapActiveDirectory.InputPassword();
+            InputPassword(DataHelper.Password);
 
             // TCP port
             UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = String.Empty;

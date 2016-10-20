@@ -147,19 +147,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         }
         
         /// <summary>
-        /// InputPassword - Use 'InputPasswordParams' to pass parameters into this method.
-        /// </summary>
-        public void InputPassword()
-        {
-            #region Variable Declarations
-            WpfEdit uIPasswordBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIPasswordBoxEdit;
-            #endregion
-
-            // Type '********' in 'PasswordBox' text box
-            Keyboard.SendKeys(uIPasswordBoxEdit, this.InputPasswordParams.UIPasswordBoxEditSendKeys, true);
-        }
-        
-        /// <summary>
         /// InputTcpPort - Use 'InputTcpPortParams' to pass parameters into this method.
         /// </summary>
         public void InputTcpPort()
@@ -183,6 +170,19 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
 
             // Type '123' in 'FlsUdpPortTextBox' text box
             uIFlsUdpPortTextBoxEdit.Text = this.InputUdpPortParams.UIFlsUdpPortTextBoxEditText;
+        }
+        
+        /// <summary>
+        /// SelectUseCustomCredentialsRadioButton - Use 'SelectUseCustomCredentialsRadioButtonParams' to pass parameters into this method.
+        /// </summary>
+        public void SelectUseCustomCredentialsRadioButton()
+        {
+            #region Variable Declarations
+            WpfRadioButton uIUseCustomCredentialsRadioButton = this.UIUnknownFileHunterWindow1.UIActiveDirectoryViewCustom.UIThisCustom.UIUseCustomCredentialsRadioButton;
+            #endregion
+
+            // Select 'Use Custom Credentials' radio button
+            uIUseCustomCredentialsRadioButton.Selected = this.SelectUseCustomCredentialsRadioButtonParams.UIUseCustomCredentialsRadioButtonSelected;
         }
         
         #region Properties
@@ -282,18 +282,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
             }
         }
         
-        public virtual InputPasswordParams InputPasswordParams
-        {
-            get
-            {
-                if ((this.mInputPasswordParams == null))
-                {
-                    this.mInputPasswordParams = new InputPasswordParams();
-                }
-                return this.mInputPasswordParams;
-            }
-        }
-        
         public virtual InputTcpPortParams InputTcpPortParams
         {
             get
@@ -315,6 +303,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                     this.mInputUdpPortParams = new InputUdpPortParams();
                 }
                 return this.mInputUdpPortParams;
+            }
+        }
+        
+        public virtual SelectUseCustomCredentialsRadioButtonParams SelectUseCustomCredentialsRadioButtonParams
+        {
+            get
+            {
+                if ((this.mSelectUseCustomCredentialsRadioButtonParams == null))
+                {
+                    this.mSelectUseCustomCredentialsRadioButtonParams = new SelectUseCustomCredentialsRadioButtonParams();
+                }
+                return this.mSelectUseCustomCredentialsRadioButtonParams;
             }
         }
         
@@ -360,11 +360,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         private InputDomainNameParams mInputDomainNameParams;
         
-        private InputPasswordParams mInputPasswordParams;
-        
         private InputTcpPortParams mInputTcpPortParams;
         
         private InputUdpPortParams mInputUdpPortParams;
+        
+        private SelectUseCustomCredentialsRadioButtonParams mSelectUseCustomCredentialsRadioButtonParams;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -493,21 +493,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'InputPassword'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class InputPasswordParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Type '********' in 'PasswordBox' text box
-        /// </summary>
-        public string UIPasswordBoxEditSendKeys = "QWwOodIXpSM441BCNCWNvH9k+8fhegdI";
-        #endregion
-    }
-    
-    /// <summary>
     /// Parameters to be passed into 'InputTcpPort'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
@@ -534,6 +519,21 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         /// Type '123' in 'FlsUdpPortTextBox' text box
         /// </summary>
         public string UIFlsUdpPortTextBoxEditText = "123";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'SelectUseCustomCredentialsRadioButton'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class SelectUseCustomCredentialsRadioButtonParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Select 'Use Custom Credentials' radio button
+        /// </summary>
+        public bool UIUseCustomCredentialsRadioButtonSelected = true;
         #endregion
     }
     
@@ -976,10 +976,24 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                 return this.mUIThisCustom;
             }
         }
+        
+        public UIActiveDirectoryViewCustom2 UIActiveDirectoryViewCustom
+        {
+            get
+            {
+                if ((this.mUIActiveDirectoryViewCustom == null))
+                {
+                    this.mUIActiveDirectoryViewCustom = new UIActiveDirectoryViewCustom2(this);
+                }
+                return this.mUIActiveDirectoryViewCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIThisCustom mUIThisCustom;
+        
+        private UIActiveDirectoryViewCustom2 mUIActiveDirectoryViewCustom;
         #endregion
     }
     
@@ -1035,6 +1049,76 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         private WpfEdit mUIDomainNameWatermarkTEdit;
         
         private WpfEdit mUIDomainAdministratorWEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIActiveDirectoryViewCustom2 : WpfCustom
+    {
+        
+        public UIActiveDirectoryViewCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanDomainView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ActiveDirectoryView";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIThisCustom1 UIThisCustom
+        {
+            get
+            {
+                if ((this.mUIThisCustom == null))
+                {
+                    this.mUIThisCustom = new UIThisCustom1(this);
+                }
+                return this.mUIThisCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIThisCustom1 mUIThisCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisCustom1 : WpfCustom
+    {
+        
+        public UIThisCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.LoginPasswordUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "this";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfRadioButton UIUseCustomCredentialsRadioButton
+        {
+            get
+            {
+                if ((this.mUIUseCustomCredentialsRadioButton == null))
+                {
+                    this.mUIUseCustomCredentialsRadioButton = new WpfRadioButton(this);
+                    #region Search Criteria
+                    this.mUIUseCustomCredentialsRadioButton.SearchProperties[WpfRadioButton.PropertyNames.AutomationId] = "UseCustomCredentialsRadioButton";
+                    this.mUIUseCustomCredentialsRadioButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIUseCustomCredentialsRadioButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfRadioButton mUIUseCustomCredentialsRadioButton;
         #endregion
     }
 }
