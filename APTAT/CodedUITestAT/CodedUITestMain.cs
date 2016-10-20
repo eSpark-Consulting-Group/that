@@ -1162,7 +1162,7 @@ namespace CodedUITestAT
             }
             catch (UITestControlNotFoundException)
             {
-                TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown at 'Valkyrie analysis results' tab after an incorrect search query.\n", endpoint.Name));
+                TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown at 'Valkyrie analysis results' tab after an incorrect search query.", endpoint.Name));
             }
             UIMapMain.ClickClearSearchTextButton();
             
@@ -1180,15 +1180,15 @@ namespace CodedUITestAT
             UIMapResultsWindow.GoToScanResultsTab();
             UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput + error;
             UIMapMain.InputTextToSearchBox();
-            TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Scanning results' tab.");
+            TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Scan results' tab.");
             try
             {
                 UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
-                Assert.Fail(String.Format("Endpoint '{0}' is shown on 'Scanning results' tab after an incorrect search query!", endpoint.Name));
+                Assert.Fail(String.Format("Endpoint '{0}' is shown on 'Scan results' tab after an incorrect search query!", endpoint.Name));
             }
             catch (UITestControlNotFoundException)
             {
-                TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown on 'Scanning results' tab after an incorrect search query.\n", endpoint.Name));
+                TestContext.WriteLine(String.Format("Endpoint '{0}' is not shown on 'Scan results' tab after an incorrect search query.", endpoint.Name));
             }
             UIMapMain.ClickClearSearchTextButton();
 
@@ -1218,55 +1218,55 @@ namespace CodedUITestAT
             // Checks all the threat details
             UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapDetailsWindow.AssertThreatNameTextBlockText();
-            TestContext.WriteLine(String.Format("Threat name is shown correctly: '{0}'.\n", malware.Name));
+            TestContext.WriteLine(String.Format("Threat name is shown correctly: '{0}'.", malware.Name));
 
             UIMapDetailsWindow.AssertFileNameValueTextBoxTextExpectedValues.UIFileNameValueTextBoxEditText = malware.Name;
             UIMapDetailsWindow.AssertFileNameValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'File Name' parameter is shown correctly: '{0}'.\n", malware.Name));
+            TestContext.WriteLine(String.Format("Threat 'File Name' parameter is shown correctly: '{0}'.", malware.Name));
 
             UIMapDetailsWindow.AssertVerdictValueTextBoxTextExpectedValues.UIVerdictValueTextBoxEditText = malware.FileVerdict.ToString();
             UIMapDetailsWindow.AssertVerdictValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Verdict' parameter is shown correctly: '{0}'.\n", malware.FileVerdict));
+            TestContext.WriteLine(String.Format("Threat 'Verdict' parameter is shown correctly: '{0}'.", malware.FileVerdict));
 
             UIMapDetailsWindow.AssertSizeValueTextBoxTextExpectedValues.UISizeValueTextBoxEditText = malware.DisplaySize;
             UIMapDetailsWindow.AssertSizeValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Size' parameter is shown correctly: '{0}'.\n", malware.DisplaySize));
+            TestContext.WriteLine(String.Format("Threat 'Size' parameter is shown correctly: '{0}'.", malware.DisplaySize));
 
             UIMapDetailsWindow.AssertCreatedValueTextBoxTextExpectedValues.UICreatedValueTextBoxEditText = malware.Created;
             UIMapDetailsWindow.AssertCreatedValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Created' parameter is shown correctly: '{0}'.\n", malware.Created));
+            TestContext.WriteLine(String.Format("Threat 'Created' parameter is shown correctly: '{0}'.", malware.Created));
              
             UIMapDetailsWindow.AssertModifiedValueTextBoxTextExpectedValues.UIModifiedValueTextBoxEditText = malware.Modified;
             UIMapDetailsWindow.AssertModifiedValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Modified' parameter is shown correctly: '{0}'.\n", malware.Modified));
+            TestContext.WriteLine(String.Format("Threat 'Modified' parameter is shown correctly: '{0}'.", malware.Modified));
 
             UIMapDetailsWindow.AssertAccessedValueTextBoxTextExpectedValues.UIAccessedValueTextBoxEditText = malware.Accessed;
             UIMapDetailsWindow.AssertAccessedValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Accessed' parameter is shown correctly: '{0}'.\n", malware.Accessed));
+            TestContext.WriteLine(String.Format("Threat 'Accessed' parameter is shown correctly: '{0}'.", malware.Accessed));
 
             UIMapDetailsWindow.AssertHashValueTextBoxTextExpectedValues.UIHashValueTextBoxEditText = malware.Sha1;
             UIMapDetailsWindow.AssertHashValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Hash' parameter is shown correctly: '{0}'.\n", malware.Sha1));
+            TestContext.WriteLine(String.Format("Threat 'Hash' parameter is shown correctly: '{0}'.", malware.Sha1));
 
             UIMapDetailsWindow.AssertSignerValueTextBoxTextExpectedValues.UISignerValueTextBoxEditText = malware.Signer;
             UIMapDetailsWindow.AssertSignerValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Signer' parameter is shown correctly: '{0}'.\n", malware.Signer));
+            TestContext.WriteLine(String.Format("Threat 'Signer' parameter is shown correctly: '{0}'.", malware.Signer));
 
             UIMapDetailsWindow.AssertDescriptionValueTextBoxTextExpectedValues.UIDescriptionValueTextEditText = malware.Description;
             UIMapDetailsWindow.AssertDescriptionValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Description' parameter is shown correctly: '{0}'.\n", malware.Description));
+            TestContext.WriteLine(String.Format("Threat 'Description' parameter is shown correctly: '{0}'.", malware.Description));
 
             UIMapDetailsWindow.AssertVersionValueTextBoxTextExpectedValues.UIVersionValueTextBoxEditText = malware.Version;
             UIMapDetailsWindow.AssertVersionValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Version' parameter is shown correctly: '{0}'.\n", malware.Version));
+            TestContext.WriteLine(String.Format("Threat 'Version' parameter is shown correctly: '{0}'.", malware.Version));
 
             UIMapDetailsWindow.AssertCopyrightValueTextBoxTextExpectedValues.UICopyrightValueTextBoEditText = malware.Copyright;
             UIMapDetailsWindow.AssertCopyrightValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Copyright' parameter is shown correctly: '{0}'.\n", malware.Copyright));
+            TestContext.WriteLine(String.Format("Threat 'Copyright' parameter is shown correctly: '{0}'.", malware.Copyright));
 
             UIMapDetailsWindow.AssertProductValueTextBoxTextExpectedValues.UIProductValueTextBoxEditText = malware.Product;
             UIMapDetailsWindow.AssertProductValueTextBoxText();
-            TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.\n", malware.Product));
+            TestContext.WriteLine(String.Format("Threat 'Product' parameter is shown correctly: '{0}'.", malware.Product));
 
             UIMapDetailsWindow.ClickCloseButton();
             UIHelper.WaitForControlIsClickable(StartScanButton());
@@ -1282,7 +1282,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickYesButton();
+            UIMapScanCompletedWindow.ClickOkButton();
             AssertPanelCountersData(0, 1, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
@@ -1303,7 +1303,7 @@ namespace CodedUITestAT
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickYesButton();
+            UIMapScanCompletedWindow.ClickOkButton();
             AssertPanelCountersData(0, 0, TestContext);
         }
 

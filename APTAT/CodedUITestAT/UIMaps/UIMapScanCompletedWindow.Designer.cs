@@ -81,6 +81,19 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
             Assert.AreEqual(this.AssertScanCompletedTextBlockTextExpectedValues.UIScancompletedTextDisplayText, uIScancompletedText.DisplayText);
         }
         
+        /// <summary>
+        /// ClickOkButton
+        /// </summary>
+        public void ClickOkButton()
+        {
+            #region Variable Declarations
+            WpfButton uIOKButton = this.UIUnknownFileHunterWindow1.UIOKButton;
+            #endregion
+
+            // Click 'Ok' button
+            Mouse.Click(uIOKButton, new Point(89, 15));
+        }
+        
         #region Properties
         public virtual AssertStatisticsTextBlockExpectedValues AssertStatisticsTextBlockExpectedValues
         {
@@ -326,6 +339,22 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                 return this.mUIScancompletedText;
             }
         }
+        
+        public WpfButton UIOKButton
+        {
+            get
+            {
+                if ((this.mUIOKButton == null))
+                {
+                    this.mUIOKButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIOKButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "OkButton";
+                    this.mUIOKButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIOKButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -334,6 +363,8 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         private WpfButton mUINOButton;
         
         private WpfText mUIScancompletedText;
+        
+        private WpfButton mUIOKButton;
         #endregion
     }
 }
