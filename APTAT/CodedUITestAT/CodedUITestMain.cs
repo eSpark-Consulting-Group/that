@@ -1329,8 +1329,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
-
-            UIMapActiveDirectory.SelectUseCustomCredentialsRadioButton();
+                        
             InputDomainName(domainName);
             InputDomainAdministrator(DataHelper.Username);
             InputPassword(DataHelper.Password);
