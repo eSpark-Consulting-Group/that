@@ -62,7 +62,7 @@ namespace CodedUITestAT
                 Playback.Wait(1000);                
                 switch (resultsScreen)
                 {
-                    case ResultsScreen.ScanningResults:
+                    case ResultsScreen.ScanResults:
                         {
                             row = useMain.ScanResultsTab().GetRow(rowName);
                             break;
@@ -110,7 +110,7 @@ namespace CodedUITestAT
                 Playback.Wait(1000);
                 switch (resultsScreen)
                 {
-                    case ResultsScreen.ScanningResults:
+                    case ResultsScreen.ScanResults:
                         {
                             expectedRow = useMain.ScanResultsTab().GetRow(row.RowName);
                             break;
@@ -224,7 +224,7 @@ namespace CodedUITestAT
 
             switch (resultsScreen)
             {
-                case ResultsScreen.ScanningResults:
+                case ResultsScreen.ScanResults:
                     rowControl = useMain.ScanResultsTab().GetRow(row.RowName);
                     break;
                 case ResultsScreen.ValkyrieAnalysis:
@@ -326,7 +326,7 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
                 if (endpoint.GetScanStatus() == expectedScanStatus)
                 {
-                    testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'.\n", expectedScanStatus, endpoint.Name));
+                    testContext.WriteLine(String.Format("The expected status '{0}' appeared for computer '{1}'.", expectedScanStatus, endpoint.Name));
                     break;
                 }
                 if ((int) timer.ElapsedMilliseconds > waitTime)
@@ -371,7 +371,7 @@ namespace CodedUITestAT
 
             switch (screen)
             {
-                case ResultsScreen.ScanningResults:
+                case ResultsScreen.ScanResults:
                     if (useMain.ScanResultsTab().Exists)
                     {
                         useMain.UIMapResultsWindow.GoToScanResultsTab();
