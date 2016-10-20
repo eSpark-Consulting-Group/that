@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
-using CodedUITestAT.UIMaps.StartScanningWizard.UIMapWorkgroupClasses;
+using CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
@@ -314,6 +314,17 @@ namespace CodedUITestAT
 
         #endregion
 
+        #region Workgroup
+
+        private WpfTreeItem WorkgroupTreeItem(string workgroupName)
+        {
+            UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name]
+                        = workgroupName;
+            return UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem;
+        }
+
+        #endregion
+
         #endregion
 
         #region Scan Completed window
@@ -589,9 +600,9 @@ namespace CodedUITestAT
         {
             WpfEdit camLoginTextBox = CamLoginTextBox();
             UIHelper.WaitForControlIsEnabled(camLoginTextBox);
-            testContext.WriteLine("CAM Credentials window appeared...");
+            testContext.WriteLine("'Submit to Valkyrie' window appeared...");
             UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
-            if (camLoginTextBox.Text == "Enter User Name") UIMapCamCredentialsWindow.InputLogin();
+            if (camLoginTextBox.Text.Contains(" ")) UIMapCamCredentialsWindow.InputLogin();
             UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = Settings.General.Default.CamPassword;
             UIMapCamCredentialsWindow.InputPassword();
             UIMapCamCredentialsWindow.ClickOkButton();
@@ -636,6 +647,15 @@ namespace CodedUITestAT
         private string GetAdRootRowName()
         {
             return "DC=" + SysHelper.GetDomainName(true);
+        }
+
+        /// <summary> Checks a given workgroup in the workgroups tree. </summary>
+        /// <param name="workgroupName">Set a workgroup name.</param>
+        private void CheckWorkgroup(string workgroupName)
+        {
+            UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] 
+                        = workgroupName;
+            UIMapWorkgroup.CheckWorkgroup();
         }
 
         /// <summary> Checks whether the given data are stored at Network Addresses wizard branch. </summary>
@@ -877,26 +897,27 @@ namespace CodedUITestAT
             
             UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-
             UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
-
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroupName;
+            UIHelper.WaitForControlIsEnabled(NextButton());
+            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroupName;
             UIMapWorkgroup.InputWorkgroup();
-            UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
-            UIMapWorkgroup.InputLogin();
-            UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapWorkgroup.InputPassword();
-            
+            UIMapStartScanWizard.ClickNextButton();
+            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
+            UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
+            CheckWorkgroup(workgroupName);
+            UIMapStartScanWizard.ClickNextButton();
+            InputLogin(DataHelper.Username);
+            InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickQuickScanButton();
-            TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...\n", workgroupName));
+            TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...", workgroupName));
 
             WaitForScanCompleted(ScanType.Quick);
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickYesButton();
             
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
-            TestContext.WriteLine("CAM Credentials window appeared...\n");
+            TestContext.WriteLine("'Submit to Valkyrie' window appeared...");
             UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = DataHelper.GetCamKey();
             UIMapCamCredentialsWindow.InputCamKey();
             UIMapCamCredentialsWindow.ClickOkButton();
@@ -910,9 +931,9 @@ namespace CodedUITestAT
             UIMapResultsWindow.GoToScanResultsTab();
             UIHelper.GroupByComputers();
             UIHelper.ClickRow(ResultsScreen.ScanningResults, endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Scanning results' screen.\n", endpoint.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Scan results' screen.", endpoint.Name));
             UIHelper.ClickRow(ResultsScreen.ScanningResults, malware, MouseClick.DoubleLeft);
-            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Location));
+            TestContext.WriteLine(String.Format("Malware '{0}' details opened.", malware.Location));
             UIHelper.WaitForControl(CloseDetailsButton());
             UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapDetailsWindow.AssertThreatNameTextBlockText();
@@ -1394,7 +1415,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Inputs some non-default parameters
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroupName;
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroupName;
             UIMapWorkgroup.InputWorkgroup();
             UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
             UIMapWorkgroup.InputLogin();
@@ -1548,7 +1569,7 @@ namespace CodedUITestAT
             // Workgroup input
             UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext);
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup;
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroup;
             UIMapWorkgroup.InputWorkgroup();
 
             // Login
@@ -1581,7 +1602,7 @@ namespace CodedUITestAT
 
             // Non-existent workgroup
             string error = "error";
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupTextBoxEditText = workgroup.Remove(workgroup.Length - error.Length) + error;
+            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroup.Remove(workgroup.Length - error.Length) + error;
             UIMapWorkgroup.InputWorkgroup();
             UIMapStartScanWizard.ClickQuickScanButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
