@@ -59,7 +59,7 @@
             <TextBlock Text="Active Directory Credentials" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
-        <Grid  x:Name="txtSelectComputers" Grid.Row="1" Margin="30,0,0,0" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
+        <Grid x:Name="txtSelectComputers" Grid.Row="1" Margin="30,0,0,0" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -166,8 +166,6 @@
 
         </Grid>
         <Grid x:Name="panelSelectPort" Grid.Row="2" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectPort, FallbackValue=Collapsed}">
-
-
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

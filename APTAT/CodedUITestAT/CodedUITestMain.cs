@@ -10,13 +10,13 @@ using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
+using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
-using CodedUITestAT.UIMaps.StartScanningWizard.UIMapActiveDirectoryClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 
 namespace CodedUITestAT
@@ -626,7 +626,7 @@ namespace CodedUITestAT
         private void ExpandAdRow(string rowName)
         {
             UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.
-                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = GetAdRootRowName();
+                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
             UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
                                                                                             SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
             UIMapActiveDirectory.ExpandAdRow();
@@ -637,16 +637,10 @@ namespace CodedUITestAT
         private void CheckAdRow(string rowName)
         {
             UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.
-                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = GetAdRootRowName();
+                                                                                            SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
             UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDCdevTreeItem.UIComputersTreeItem.
                                                                                             SearchProperties[WpfTreeItem.PropertyNames.Name] = rowName;
             UIMapActiveDirectory.CheckAdRow();
-        }
-
-        /// <summary> Gets root (domain controller) row name for Active Directory tree. </summary>
-        private string GetAdRootRowName()
-        {
-            return "DC=" + SysHelper.GetDomainName(true);
         }
 
         /// <summary> Checks a given workgroup in the workgroups tree. </summary>
@@ -740,8 +734,8 @@ namespace CodedUITestAT
         private void CheckStoredDataAtActiveDirectory(string domainName, string login, string tcpPort, string udpPort, TestContext testContext)
         {
             // Domain Controller
-            UIMapActiveDirectory.AssertDomainControllerTextBoxTextExpectedValues.UIDomainControllerTextEditText = domainName;
-            UIMapActiveDirectory.AssertDomainControllerTextBoxText();
+            UIMapActiveDirectory.AssertDomainNameTextBoxTextExpectedValues.UIDomainControllerTextEditText = domainName;
+            UIMapActiveDirectory.AssertDomainNameTextBoxText();
             testContext.WriteLine(String.Format("Domain Controller '{0}' is stored in the respective text box.", domainName));
 
             // Administrator
@@ -827,7 +821,7 @@ namespace CodedUITestAT
             }
         }
 
-        /// <summary> Inputs a login. </summary>
+        /// <summary> Inputs a login, if necessary. </summary>
         /// <param name="login">Set a login to input.</param>
         private void InputScanLogin(string login)
         {
@@ -835,10 +829,26 @@ namespace CodedUITestAT
             if (loginEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || loginEdit.Text != login) loginEdit.Text = login;
         }
 
+        /// <summary> Inputs Domain Name, if necessary. </summary>
+        /// <param name="domainName">Set a domain name to input.</param>
+        private void InputDomainName(string domainName)
+        {
+            WpfEdit domainNameEdit = UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainNameWatermarkTEdit;
+            if (domainNameEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || domainNameEdit.Text != domainName) domainNameEdit.Text = domainName;
+        }
+
+        /// <summary> Inputs Domain Administrator, if necessary. </summary>
+        /// <param name="domainAdministrator">Set a domain administrator to input.</param>
+        private void InputDomainAdministrator(string domainAdministrator)
+        {
+            WpfEdit domainAdministratorEdit = UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainAdministratorWEdit;
+            if (domainAdministratorEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || domainAdministratorEdit.Text != domainAdministrator) domainAdministratorEdit.Text = domainAdministrator;
+        }
+
         #endregion
 
         #region Test methods
-        
+
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
@@ -1319,18 +1329,16 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
-            
-            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
-            UIMapActiveDirectory.InputDomainController();
-            UIMapActiveDirectory.InputAdministratorParams.UIAdministratorTextBoxEditText = DataHelper.Username;
-            UIMapActiveDirectory.InputAdministrator();
-            UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapActiveDirectory.InputPassword();
+
+            InputDomainName(domainName);
+            InputDomainAdministrator(DataHelper.Username);
+            InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControl(AdTree());
-
             ExpandAdRow("Computers");
             CheckAdRow(endpoint.Name);
+            UIMapStartScanWizard.ClickNextButton();
+            UIHelper.WaitForControl(QuickScanButton());
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}' from domain '{1}'...", endpoint.Name, domainName));
 
@@ -1343,9 +1351,9 @@ namespace CodedUITestAT
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
             UIHelper.GroupByComputers();
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Valkyrie analysis results' screen.\n", endpoint.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Valkyrie analysis results' screen.", endpoint.Name));
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, malware, MouseClick.DoubleLeft);
-            TestContext.WriteLine(String.Format("Malware '{0}' details opened.\n", malware.Name));
+            TestContext.WriteLine(String.Format("Malware '{0}' details opened.", malware.Name));
             
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockText();
@@ -1456,10 +1464,8 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
             // Inputs some non-default parameters
-            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
-            UIMapActiveDirectory.InputDomainController();
-            UIMapActiveDirectory.InputAdministratorParams.UIAdministratorTextBoxEditText = DataHelper.Username;
-            UIMapActiveDirectory.InputAdministrator();
+            InputDomainName(domainName);
+            InputDomainAdministrator(DataHelper.Username);
             UIMapActiveDirectory.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapActiveDirectory.InputPassword();
             UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = newTcpPort;
@@ -1617,15 +1623,13 @@ namespace CodedUITestAT
 
             // Domain Controller input
             UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyDomainController, TestContext);
-            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = domainName;
-            UIMapActiveDirectory.InputDomainController();
+            AssertErrorText(Settings.Errors.Default.SpecifyDomainController, TestContext);            
+            InputDomainName(domainName);
 
             // Administrator
             UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
-            UIMapActiveDirectory.InputAdministratorParams.UIAdministratorTextBoxEditText = DataHelper.Username;
-            UIMapActiveDirectory.InputAdministrator();
+            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);            
+            InputDomainAdministrator(DataHelper.Username);
 
             // Password
             UIMapStartScanWizard.ClickNextButton();
@@ -1651,8 +1655,7 @@ namespace CodedUITestAT
 
             // Non-existent domain
             string nonExistentDomainName = domainName + ".test";
-            UIMapActiveDirectory.InputDomainControllerParams.UIDomainControllerTextEditText = nonExistentDomainName;
-            UIMapActiveDirectory.InputDomainController();
+            InputDomainName(nonExistentDomainName);
             UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);
             AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
