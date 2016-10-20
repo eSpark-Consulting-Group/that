@@ -477,6 +477,7 @@ namespace CodedUITestAT
 
             // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
             UIMapResultsWindow.GoToScanResultsTab();
+            Playback.Wait(1000);
             UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
             // Waits until the results are actually available at UI
