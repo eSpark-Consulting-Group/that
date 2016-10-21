@@ -30,16 +30,42 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
     {
         
         /// <summary>
-        /// InputWorkgroup - Use 'InputWorkgroupParams' to pass parameters into this method.
+        /// AssertWorkgroupTextBoxText - Use 'AssertWorkgroupTextBoxTextExpectedValues' to pass parameters into this method.
         /// </summary>
-        public void InputWorkgroup()
+        public void AssertWorkgroupTextBoxText()
         {
             #region Variable Declarations
             WpfEdit uIWorkgroupWatermarkTeEdit = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
             #endregion
 
-            // Type 'workgroup' in 'WorkgroupWatermarkTextBox' text box
-            Keyboard.SendKeys(uIWorkgroupWatermarkTeEdit, this.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys, ModifierKeys.None);
+            // Verify that the 'Text' property of 'WorkgroupWatermarkTextBox' text box equals 'workgroup'
+            Assert.AreEqual(this.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupWatermarkTeEditText, uIWorkgroupWatermarkTeEdit.Text);
+        }
+        
+        /// <summary>
+        /// AssertWorkgroupTree - Use 'AssertWorkgroupTreeExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertWorkgroupTree()
+        {
+            #region Variable Declarations
+            WpfTree uIWorkgroupTreeTree = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIWorkgroupTreeTree;
+            #endregion
+
+            // Verify that the 'Exists' property of 'WorkgroupTree' tree equals 'True'
+            Assert.AreEqual(this.AssertWorkgroupTreeExpectedValues.UIWorkgroupTreeTreeExists, uIWorkgroupTreeTree.Exists);
+        }
+        
+        /// <summary>
+        /// CheckWorkgroup - Use 'CheckWorkgroupParams' to pass parameters into this method.
+        /// </summary>
+        public void CheckWorkgroup()
+        {
+            #region Variable Declarations
+            WpfCheckBox uICheckBoxElementCheckBox = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.UICheckBoxElementCheckBox;
+            #endregion
+
+            // Select 'CheckBoxElement' check box
+            uICheckBoxElementCheckBox.Checked = this.CheckWorkgroupParams.UICheckBoxElementCheckBoxChecked;
         }
         
         /// <summary>
@@ -69,81 +95,16 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         }
         
         /// <summary>
-        /// InputTcpPort - Use 'InputTcpPortParams' to pass parameters into this method.
+        /// InputWorkgroup - Use 'InputWorkgroupParams' to pass parameters into this method.
         /// </summary>
-        public void InputTcpPort()
+        public void InputWorkgroup()
         {
             #region Variable Declarations
-            WpfEdit uITcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UITcpPortTextBoxEdit;
+            WpfEdit uIWorkgroupWatermarkTeEdit = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
             #endregion
 
-            // Type '123' in 'TcpPortTextBox' text box
-            uITcpPortTextBoxEdit.Text = this.InputTcpPortParams.UITcpPortTextBoxEditText;
-        }
-        
-        /// <summary>
-        /// InputUdpPort - Use 'InputUdpPortParams' to pass parameters into this method.
-        /// </summary>
-        public void InputUdpPort()
-        {
-            #region Variable Declarations
-            WpfEdit uIUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIUdpPortTextBoxEdit;
-            #endregion
-
-            // Type '123' in 'UdpPortTextBox' text box
-            uIUdpPortTextBoxEdit.Text = this.InputUdpPortParams.UIUdpPortTextBoxEditText;
-        }
-        
-        /// <summary>
-        /// AssertWorkgroupTextBoxText - Use 'AssertWorkgroupTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertWorkgroupTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIWorkgroupTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIWorkgroupTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'WorkgroupTextBox' text box equals 'ww'
-            Assert.AreEqual(this.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupTextBoxEditText, uIWorkgroupTextBoxEdit.Text);
-        }
-        
-        /// <summary>
-        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertLoginTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uILoginTextBoxEdit = this.UIUnknownFileHunterWindow.UIWorkgroupViewCustom.UILoginTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'LoginTextBox' text box equals 'ww'
-            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText, uILoginTextBoxEdit.Text);
-        }
-        
-        /// <summary>
-        /// AssertTcpPortTextBoxText - Use 'AssertTcpPortTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertTcpPortTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uITcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIWorkgroupViewCustom.UITcpPortTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'TcpPortTextBox' text box equals '123'
-            Assert.AreEqual(this.AssertTcpPortTextBoxTextExpectedValues.UITcpPortTextBoxEditText, uITcpPortTextBoxEdit.Text);
-        }
-        
-        /// <summary>
-        /// AssertUdpPortTextBoxText - Use 'AssertUdpPortTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertUdpPortTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIWorkgroupViewCustom.UIUdpPortTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'UdpPortTextBox' text box equals '123'
-            Assert.AreEqual(this.AssertUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText, uIUdpPortTextBoxEdit.Text);
+            // Type 'workgroup' in 'WorkgroupWatermarkTextBox' text box
+            Keyboard.SendKeys(uIWorkgroupWatermarkTeEdit, this.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys, ModifierKeys.None);
         }
         
         /// <summary>
@@ -160,41 +121,52 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         }
         
         /// <summary>
-        /// AssertWorkgroupTree - Use 'AssertWorkgroupTreeExpectedValues' to pass parameters into this method.
+        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
         /// </summary>
-        public void AssertWorkgroupTree()
+        public void AssertLoginTextBoxText()
         {
             #region Variable Declarations
-            WpfTree uIWorkgroupTreeTree = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIWorkgroupTreeTree;
+            WpfEdit uILoginWatermarkTextBoEdit = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIThisCustom.UILoginWatermarkTextBoEdit;
             #endregion
 
-            // Verify that the 'Exists' property of 'WorkgroupTree' tree equals 'True'
-            Assert.AreEqual(this.AssertWorkgroupTreeExpectedValues.UIWorkgroupTreeTreeExists, uIWorkgroupTreeTree.Exists);
-        }
-        
-        /// <summary>
-        /// CheckWorkgroup - Use 'CheckWorkgroupParams' to pass parameters into this method.
-        /// </summary>
-        public void CheckWorkgroup()
-        {
-            #region Variable Declarations
-            WpfCheckBox uICheckBoxElementCheckBox = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.UICheckBoxElementCheckBox;
-            #endregion
-
-            // Select 'CheckBoxElement' check box
-            uICheckBoxElementCheckBox.Checked = this.CheckWorkgroupParams.UICheckBoxElementCheckBoxChecked;
+            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'admin'
+            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
         }
         
         #region Properties
-        public virtual InputWorkgroupParams InputWorkgroupParams
+        public virtual AssertWorkgroupTextBoxTextExpectedValues AssertWorkgroupTextBoxTextExpectedValues
         {
             get
             {
-                if ((this.mInputWorkgroupParams == null))
+                if ((this.mAssertWorkgroupTextBoxTextExpectedValues == null))
                 {
-                    this.mInputWorkgroupParams = new InputWorkgroupParams();
+                    this.mAssertWorkgroupTextBoxTextExpectedValues = new AssertWorkgroupTextBoxTextExpectedValues();
                 }
-                return this.mInputWorkgroupParams;
+                return this.mAssertWorkgroupTextBoxTextExpectedValues;
+            }
+        }
+        
+        public virtual AssertWorkgroupTreeExpectedValues AssertWorkgroupTreeExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertWorkgroupTreeExpectedValues == null))
+                {
+                    this.mAssertWorkgroupTreeExpectedValues = new AssertWorkgroupTreeExpectedValues();
+                }
+                return this.mAssertWorkgroupTreeExpectedValues;
+            }
+        }
+        
+        public virtual CheckWorkgroupParams CheckWorkgroupParams
+        {
+            get
+            {
+                if ((this.mCheckWorkgroupParams == null))
+                {
+                    this.mCheckWorkgroupParams = new CheckWorkgroupParams();
+                }
+                return this.mCheckWorkgroupParams;
             }
         }
         
@@ -222,75 +194,15 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
             }
         }
         
-        public virtual InputTcpPortParams InputTcpPortParams
+        public virtual InputWorkgroupParams InputWorkgroupParams
         {
             get
             {
-                if ((this.mInputTcpPortParams == null))
+                if ((this.mInputWorkgroupParams == null))
                 {
-                    this.mInputTcpPortParams = new InputTcpPortParams();
+                    this.mInputWorkgroupParams = new InputWorkgroupParams();
                 }
-                return this.mInputTcpPortParams;
-            }
-        }
-        
-        public virtual InputUdpPortParams InputUdpPortParams
-        {
-            get
-            {
-                if ((this.mInputUdpPortParams == null))
-                {
-                    this.mInputUdpPortParams = new InputUdpPortParams();
-                }
-                return this.mInputUdpPortParams;
-            }
-        }
-        
-        public virtual AssertWorkgroupTextBoxTextExpectedValues AssertWorkgroupTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertWorkgroupTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertWorkgroupTextBoxTextExpectedValues = new AssertWorkgroupTextBoxTextExpectedValues();
-                }
-                return this.mAssertWorkgroupTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
-                }
-                return this.mAssertLoginTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertTcpPortTextBoxTextExpectedValues AssertTcpPortTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertTcpPortTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertTcpPortTextBoxTextExpectedValues = new AssertTcpPortTextBoxTextExpectedValues();
-                }
-                return this.mAssertTcpPortTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertUdpPortTextBoxTextExpectedValues AssertUdpPortTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertUdpPortTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertUdpPortTextBoxTextExpectedValues = new AssertUdpPortTextBoxTextExpectedValues();
-                }
-                return this.mAssertUdpPortTextBoxTextExpectedValues;
+                return this.mInputWorkgroupParams;
             }
         }
         
@@ -306,27 +218,15 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
             }
         }
         
-        public virtual AssertWorkgroupTreeExpectedValues AssertWorkgroupTreeExpectedValues
+        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
         {
             get
             {
-                if ((this.mAssertWorkgroupTreeExpectedValues == null))
+                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
                 {
-                    this.mAssertWorkgroupTreeExpectedValues = new AssertWorkgroupTreeExpectedValues();
+                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
                 }
-                return this.mAssertWorkgroupTreeExpectedValues;
-            }
-        }
-        
-        public virtual CheckWorkgroupParams CheckWorkgroupParams
-        {
-            get
-            {
-                if ((this.mCheckWorkgroupParams == null))
-                {
-                    this.mCheckWorkgroupParams = new CheckWorkgroupParams();
-                }
-                return this.mCheckWorkgroupParams;
+                return this.mAssertLoginTextBoxTextExpectedValues;
             }
         }
         
@@ -356,29 +256,21 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         #endregion
         
         #region Fields
-        private InputWorkgroupParams mInputWorkgroupParams;
+        private AssertWorkgroupTextBoxTextExpectedValues mAssertWorkgroupTextBoxTextExpectedValues;
+        
+        private AssertWorkgroupTreeExpectedValues mAssertWorkgroupTreeExpectedValues;
+        
+        private CheckWorkgroupParams mCheckWorkgroupParams;
         
         private InputLoginParams mInputLoginParams;
         
         private InputPasswordParams mInputPasswordParams;
         
-        private InputTcpPortParams mInputTcpPortParams;
-        
-        private InputUdpPortParams mInputUdpPortParams;
-        
-        private AssertWorkgroupTextBoxTextExpectedValues mAssertWorkgroupTextBoxTextExpectedValues;
-        
-        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
-        
-        private AssertTcpPortTextBoxTextExpectedValues mAssertTcpPortTextBoxTextExpectedValues;
-        
-        private AssertUdpPortTextBoxTextExpectedValues mAssertUdpPortTextBoxTextExpectedValues;
+        private InputWorkgroupParams mInputWorkgroupParams;
         
         private SelectUseKnownWorkgroupRadioButtonParams mSelectUseKnownWorkgroupRadioButtonParams;
         
-        private AssertWorkgroupTreeExpectedValues mAssertWorkgroupTreeExpectedValues;
-        
-        private CheckWorkgroupParams mCheckWorkgroupParams;
+        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -387,17 +279,47 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'InputWorkgroup'
+    /// Parameters to be passed into 'AssertWorkgroupTextBoxText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class InputWorkgroupParams
+    public class AssertWorkgroupTextBoxTextExpectedValues
     {
         
         #region Fields
         /// <summary>
-        /// Type 'workgroup' in 'WorkgroupWatermarkTextBox' text box
+        /// Verify that the 'Text' property of 'WorkgroupWatermarkTextBox' text box equals 'workgroup'
         /// </summary>
-        public string UIWorkgroupWatermarkTeEditSendKeys = "workgroup";
+        public string UIWorkgroupWatermarkTeEditText = "workgroup";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertWorkgroupTree'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertWorkgroupTreeExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'WorkgroupTree' tree equals 'True'
+        /// </summary>
+        public bool UIWorkgroupTreeTreeExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'CheckWorkgroup'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class CheckWorkgroupParams
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Select 'CheckBoxElement' check box
+        /// </summary>
+        public bool UICheckBoxElementCheckBoxChecked = true;
         #endregion
     }
     
@@ -432,92 +354,17 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'InputTcpPort'
+    /// Parameters to be passed into 'InputWorkgroup'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class InputTcpPortParams
+    public class InputWorkgroupParams
     {
         
         #region Fields
         /// <summary>
-        /// Type '123' in 'TcpPortTextBox' text box
+        /// Type 'workgroup' in 'WorkgroupWatermarkTextBox' text box
         /// </summary>
-        public string UITcpPortTextBoxEditText = "123";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'InputUdpPort'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class InputUdpPortParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Type '123' in 'UdpPortTextBox' text box
-        /// </summary>
-        public string UIUdpPortTextBoxEditText = "123";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertWorkgroupTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertWorkgroupTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'WorkgroupTextBox' text box equals 'ww'
-        /// </summary>
-        public string UIWorkgroupTextBoxEditText = "ww";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertLoginTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertLoginTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'LoginTextBox' text box equals 'ww'
-        /// </summary>
-        public string UILoginTextBoxEditText = "ww";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertTcpPortTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertTcpPortTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'TcpPortTextBox' text box equals '123'
-        /// </summary>
-        public string UITcpPortTextBoxEditText = "123";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertUdpPortTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertUdpPortTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'UdpPortTextBox' text box equals '123'
-        /// </summary>
-        public string UIUdpPortTextBoxEditText = "123";
+        public string UIWorkgroupWatermarkTeEditSendKeys = "workgroup";
         #endregion
     }
     
@@ -537,32 +384,17 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertWorkgroupTree'
+    /// Parameters to be passed into 'AssertLoginTextBoxText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertWorkgroupTreeExpectedValues
+    public class AssertLoginTextBoxTextExpectedValues
     {
         
         #region Fields
         /// <summary>
-        /// Verify that the 'Exists' property of 'WorkgroupTree' tree equals 'True'
+        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'admin'
         /// </summary>
-        public bool UIWorkgroupTreeTreeExists = true;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'CheckWorkgroup'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class CheckWorkgroupParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Select 'CheckBoxElement' check box
-        /// </summary>
-        public bool UICheckBoxElementCheckBoxChecked = true;
+        public string UILoginWatermarkTextBoEditText = "admin";
         #endregion
     }
     
@@ -1003,12 +835,26 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
                 return this.mUIWorkgroupTreeTree;
             }
         }
+        
+        public UIThisCustom UIThisCustom
+        {
+            get
+            {
+                if ((this.mUIThisCustom == null))
+                {
+                    this.mUIThisCustom = new UIThisCustom(this);
+                }
+                return this.mUIThisCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfEdit mUIWorkgroupWatermarkTeEdit;
         
         private UIWorkgroupTreeTree mUIWorkgroupTreeTree;
+        
+        private UIThisCustom mUIThisCustom;
         #endregion
     }
     
@@ -1078,6 +924,43 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         
         #region Fields
         private WpfCheckBox mUICheckBoxElementCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisCustom : WpfCustom
+    {
+        
+        public UIThisCustom(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.LoginPasswordUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "this";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfEdit UILoginWatermarkTextBoEdit
+        {
+            get
+            {
+                if ((this.mUILoginWatermarkTextBoEdit == null))
+                {
+                    this.mUILoginWatermarkTextBoEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUILoginWatermarkTextBoEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "LoginWatermarkTextBox";
+                    this.mUILoginWatermarkTextBoEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUILoginWatermarkTextBoEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfEdit mUILoginWatermarkTextBoEdit;
         #endregion
     }
 }

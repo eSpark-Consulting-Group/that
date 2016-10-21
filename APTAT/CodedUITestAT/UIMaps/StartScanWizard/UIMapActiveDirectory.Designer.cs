@@ -69,32 +69,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         }
         
         /// <summary>
-        /// AssertTcpPortTextBoxText - Use 'AssertTcpPortTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertTcpPortTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIFlsTcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIFlsTcpPortTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'FlsTcpPortTextBox' text box equals '123'
-            Assert.AreEqual(this.AssertTcpPortTextBoxTextExpectedValues.UIFlsTcpPortTextBoxEditText, uIFlsTcpPortTextBoxEdit.Text);
-        }
-        
-        /// <summary>
-        /// AssertUdpPortTextBoxText - Use 'AssertUdpPortTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertUdpPortTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIFlsUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIFlsUdpPortTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'FlsUdpPortTextBox' text box equals '123'
-            Assert.AreEqual(this.AssertUdpPortTextBoxTextExpectedValues.UIFlsUdpPortTextBoxEditText, uIFlsUdpPortTextBoxEdit.Text);
-        }
-        
-        /// <summary>
         /// CheckAdRow - Use 'CheckAdRowParams' to pass parameters into this method.
         /// </summary>
         public void CheckAdRow()
@@ -147,32 +121,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         }
         
         /// <summary>
-        /// InputTcpPort - Use 'InputTcpPortParams' to pass parameters into this method.
-        /// </summary>
-        public void InputTcpPort()
-        {
-            #region Variable Declarations
-            WpfEdit uIFlsTcpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIFlsTcpPortTextBoxEdit;
-            #endregion
-
-            // Type '123' in 'FlsTcpPortTextBox' text box
-            uIFlsTcpPortTextBoxEdit.Text = this.InputTcpPortParams.UIFlsTcpPortTextBoxEditText;
-        }
-        
-        /// <summary>
-        /// InputUdpPort - Use 'InputUdpPortParams' to pass parameters into this method.
-        /// </summary>
-        public void InputUdpPort()
-        {
-            #region Variable Declarations
-            WpfEdit uIFlsUdpPortTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIFlsUdpPortTextBoxEdit;
-            #endregion
-
-            // Type '123' in 'FlsUdpPortTextBox' text box
-            uIFlsUdpPortTextBoxEdit.Text = this.InputUdpPortParams.UIFlsUdpPortTextBoxEditText;
-        }
-        
-        /// <summary>
         /// SelectUseCustomCredentialsRadioButton - Use 'SelectUseCustomCredentialsRadioButtonParams' to pass parameters into this method.
         /// </summary>
         public void SelectUseCustomCredentialsRadioButton()
@@ -222,30 +170,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
             }
         }
         
-        public virtual AssertTcpPortTextBoxTextExpectedValues AssertTcpPortTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertTcpPortTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertTcpPortTextBoxTextExpectedValues = new AssertTcpPortTextBoxTextExpectedValues();
-                }
-                return this.mAssertTcpPortTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertUdpPortTextBoxTextExpectedValues AssertUdpPortTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertUdpPortTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertUdpPortTextBoxTextExpectedValues = new AssertUdpPortTextBoxTextExpectedValues();
-                }
-                return this.mAssertUdpPortTextBoxTextExpectedValues;
-            }
-        }
-        
         public virtual CheckAdRowParams CheckAdRowParams
         {
             get
@@ -279,30 +203,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                     this.mInputDomainNameParams = new InputDomainNameParams();
                 }
                 return this.mInputDomainNameParams;
-            }
-        }
-        
-        public virtual InputTcpPortParams InputTcpPortParams
-        {
-            get
-            {
-                if ((this.mInputTcpPortParams == null))
-                {
-                    this.mInputTcpPortParams = new InputTcpPortParams();
-                }
-                return this.mInputTcpPortParams;
-            }
-        }
-        
-        public virtual InputUdpPortParams InputUdpPortParams
-        {
-            get
-            {
-                if ((this.mInputUdpPortParams == null))
-                {
-                    this.mInputUdpPortParams = new InputUdpPortParams();
-                }
-                return this.mInputUdpPortParams;
             }
         }
         
@@ -350,19 +250,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         private AssertDomainNameTextBoxTextExpectedValues mAssertDomainNameTextBoxTextExpectedValues;
         
-        private AssertTcpPortTextBoxTextExpectedValues mAssertTcpPortTextBoxTextExpectedValues;
-        
-        private AssertUdpPortTextBoxTextExpectedValues mAssertUdpPortTextBoxTextExpectedValues;
-        
         private CheckAdRowParams mCheckAdRowParams;
         
         private InputDomainAdministratorParams mInputDomainAdministratorParams;
         
         private InputDomainNameParams mInputDomainNameParams;
-        
-        private InputTcpPortParams mInputTcpPortParams;
-        
-        private InputUdpPortParams mInputUdpPortParams;
         
         private SelectUseCustomCredentialsRadioButtonParams mSelectUseCustomCredentialsRadioButtonParams;
         
@@ -418,36 +310,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertTcpPortTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertTcpPortTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'FlsTcpPortTextBox' text box equals '123'
-        /// </summary>
-        public string UIFlsTcpPortTextBoxEditText = "123";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertUdpPortTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertUdpPortTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'FlsUdpPortTextBox' text box equals '123'
-        /// </summary>
-        public string UIFlsUdpPortTextBoxEditText = "123";
-        #endregion
-    }
-    
-    /// <summary>
     /// Parameters to be passed into 'CheckAdRow'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
@@ -489,36 +351,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         /// Type 'domain' in 'DomainNameWatermarkTextBox' text box
         /// </summary>
         public string UIDomainNameWatermarkTEditSendKeys = "domain";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'InputTcpPort'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class InputTcpPortParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Type '123' in 'FlsTcpPortTextBox' text box
-        /// </summary>
-        public string UIFlsTcpPortTextBoxEditText = "123";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'InputUdpPort'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class InputUdpPortParams
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Type '123' in 'FlsUdpPortTextBox' text box
-        /// </summary>
-        public string UIFlsUdpPortTextBoxEditText = "123";
         #endregion
     }
     

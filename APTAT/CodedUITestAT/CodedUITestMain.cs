@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
@@ -653,45 +654,11 @@ namespace CodedUITestAT
             UIMapWorkgroup.CheckWorkgroup();
         }
 
-        /// <summary> Checks whether the given data are stored at Workgroup wizard branch. </summary>
-        /// <param name="workgroupName">Set a workgroup name.</param>
-        /// <param name="login">Set a login.</param>
-        /// <param name="tcpPort">Set a TCP port.</param>
-        /// <param name="udpPort">Set a UDP port.</param>
-        /// <param name="testContext">Set a current TestContext.</param>
-        private void CheckStoredDataAtWorkgroup(string workgroupName, string login, string tcpPort, string udpPort, TestContext testContext)
-        {
-            // Workgroup
-            UIMapWorkgroup.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupTextBoxEditText = workgroupName;
-            UIMapWorkgroup.AssertWorkgroupTextBoxText();
-            testContext.WriteLine(String.Format("Workgroup name '{0}' is stored in the respective text box.", workgroupName));
-            
-            // Login
-            UIMapWorkgroup.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText = login;
-            UIMapWorkgroup.AssertLoginTextBoxText();
-            testContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", login));
-            
-            // FLS Ports
-            UIMapWorkgroup.AssertTcpPortTextBoxTextExpectedValues.UITcpPortTextBoxEditText = tcpPort;
-            UIMapWorkgroup.AssertTcpPortTextBoxText();
-            testContext.WriteLine(String.Format("TCP Port '{0}' is stored in the respective text box.", tcpPort));
-            UIMapWorkgroup.AssertUdpPortTextBoxTextExpectedValues.UIUdpPortTextBoxEditText = udpPort;
-            UIMapWorkgroup.AssertUdpPortTextBoxText();
-            testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
-            
-            // Password
-            UIMapStartScanWizard.ClickQuickScanButton();
-            testContext.WriteLine("Quick button clicked...");
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
-        }
-
         /// <summary> Checks whether the given data are stored at Active Directory wizard branch. </summary>
         /// <param name="domainName">Set a workgroup name.</param>
         /// <param name="login">Set a login.</param>
-        /// <param name="tcpPort">Set a TCP port.</param>
-        /// <param name="udpPort">Set a UDP port.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void CheckStoredDataAtActiveDirectory(string domainName, string login, string tcpPort, string udpPort, TestContext testContext)
+        private void CheckStoredDataAtActiveDirectory(string domainName, string login, TestContext testContext)
         {
             // Domain Controller
             UIMapActiveDirectory.AssertDomainNameTextBoxTextExpectedValues.UIDomainControllerTextEditText = domainName;
@@ -702,14 +669,6 @@ namespace CodedUITestAT
             UIMapActiveDirectory.AssertAdministratorTextBoxTextExpectedValues.UIAdministratorTextBoxEditText = login;
             UIMapActiveDirectory.AssertAdministratorTextBoxText();
             testContext.WriteLine(String.Format("Administrator '{0}' is stored in the respective text box.", login));
-
-            // FLS Ports
-            UIMapActiveDirectory.AssertTcpPortTextBoxTextExpectedValues.UIFlsTcpPortTextBoxEditText = tcpPort;
-            UIMapActiveDirectory.AssertTcpPortTextBoxText();
-            testContext.WriteLine(String.Format("TCP Port '{0}' is stored in the respective text box.", tcpPort));
-            UIMapActiveDirectory.AssertUdpPortTextBoxTextExpectedValues.UIFlsUdpPortTextBoxEditText = udpPort;
-            UIMapActiveDirectory.AssertUdpPortTextBoxText();
-            testContext.WriteLine(String.Format("UDP Port '{0}' is stored in the respective text box.", udpPort));
 
             // Password
             UIMapStartScanWizard.ClickNextButton();
@@ -1321,7 +1280,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(StartScanButton());
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void ScanningWizardNavigationNetworkAddressesTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -1332,16 +1291,14 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
             
-            // Inputs some non-default parameters
+            // Network Addresses step
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapNetworkAddresses.ClickAddButton();
             UIMapStartScanWizard.ClickBackButton();
             TestContext.WriteLine("Back to Start Scan Wizard...");
             UIMapStartScanWizard.ClickNetworkAddressButton();
-            TestContext.WriteLine("Returned to Network Addresses...");
-
-            // Verifies network address
+            TestContext.WriteLine("Returned to Network Addresses step...");
             var networkAddresses = NetworkAddressesList().Items;
             bool thereIsNoEndpointName = true;
             foreach (var networkAddress in networkAddresses)
@@ -1354,19 +1311,18 @@ namespace CodedUITestAT
                 }
             }
             if (thereIsNoEndpointName) Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpoint.Name));
-
             UIMapStartScanWizard.ClickNextButton();
+            
+            // Scan Credentials step
             UIHelper.WaitForControl(QuickScanButton());
             InputScanLogin(DataHelper.Username);
             InputPassword(DataHelper.Password);            
             UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back to Network Addresses...");
+            TestContext.WriteLine("Back to Network Addresses step...");
             UIHelper.WaitForControl(NextButton());
             UIMapStartScanWizard.ClickNextButton();
-            TestContext.WriteLine("Returned to Scan Credentials...");
+            TestContext.WriteLine("Returned to Scan Credentials step...");
             UIHelper.WaitForControl(QuickScanButton());
-
-            // Vefiries Login and Password
             UIMapNetworkAddresses.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
             UIMapNetworkAddresses.AssertLoginTextBoxText();
             TestContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", DataHelper.Username));
@@ -1378,9 +1334,9 @@ namespace CodedUITestAT
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
-            TestContext.WriteLine("Returned to Network Addresses after scan...");
 
-            // Verifies network address
+            // Network Addresses step after scan
+            TestContext.WriteLine("Returned to Network Addresses step after scan...");
             networkAddresses = NetworkAddressesList().Items;
             thereIsNoEndpointName = true;
             foreach (var networkAddress in networkAddresses)
@@ -1393,12 +1349,11 @@ namespace CodedUITestAT
                 }
             }
             if (thereIsNoEndpointName) Assert.Fail(String.Format("Endpoint name '{0}' is no longer present in Network Addresses list!", endpoint.Name));
-
             UIMapStartScanWizard.ClickNextButton();
-            TestContext.WriteLine("Returned to Scan Credentials after scan...");
-            UIHelper.WaitForControl(QuickScanButton());
 
-            // Vefiries Login and Password
+            // Scan Credentials step after scan
+            TestContext.WriteLine("Returned to Scan Credentials step after scan...");
+            UIHelper.WaitForControl(QuickScanButton());
             UIMapNetworkAddresses.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
             UIMapNetworkAddresses.AssertLoginTextBoxText();
             TestContext.WriteLine(String.Format("Login '{0}' is stored in the respective text box.", DataHelper.Username));
@@ -1407,57 +1362,100 @@ namespace CodedUITestAT
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void ScanningWizardNavigationWorkgroupTest()
         {
             string workgroupName = SysHelper.GetWorkgroupName();
-            string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
-            string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
+            
+            SysHelper.DisinfectForQuickScan(DataHelper.GetEndpoint(), TestContext);
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIHelper.WaitForControlIsEnabled(NextButton());
 
-            // Inputs some non-default parameters
+            // Specify Workgroup step
+            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();
             UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroupName;
             UIMapWorkgroup.InputWorkgroup();
-            UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
-            UIMapWorkgroup.InputLogin();
-            UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapWorkgroup.InputPassword();
-            UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = newTcpPort;
-            UIMapWorkgroup.InputTcpPort();
-            UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = newUdpPort;
-            UIMapWorkgroup.InputUdpPort();
-
             UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back button clicked...");
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            TestContext.WriteLine("Back to Start Scan Wizard...");
+            UIHelper.WaitForControl(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
+            UIHelper.WaitForControl(NextButton());
+            TestContext.WriteLine("Returned to Specify Workgroup step...");
+            UIMapWorkgroup.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupWatermarkTeEditText = workgroupName;
+            UIMapWorkgroup.AssertWorkgroupTextBoxText();
+            TestContext.WriteLine(String.Format("Workgroup name '{0}' is preserved at Specify Workgroup step.", workgroupName));
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Select Computers step
+            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
+            UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
+            CheckWorkgroup(workgroupName);
+            UIMapStartScanWizard.ClickBackButton();
+            TestContext.WriteLine("Back to Specify Workgroup step...");
+            UIMapStartScanWizard.ClickNextButton();
+            TestContext.WriteLine("Returned to Select Computers step...");
+            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName));            
+            WpfTreeItem workgroupItem = WorkgroupTreeItem(workgroupName);
+            WpfCheckBox workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the tree item checkbox
+            if (workgroupCheckBox.Checked) TestContext.WriteLine(String.Format("Workgroup '{0}' is still selected at Select Computers step.", workgroupName));
+            else Assert.Fail(String.Format("Workgroup '{0}' is not selected at Select Computers step!", workgroupName));
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Scan Credentials step
             UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            InputScanLogin(DataHelper.Username);
+            InputPassword(DataHelper.Password);
+            UIMapStartScanWizard.ClickBackButton();
+            TestContext.WriteLine("Back to Select Computers step...");
+            UIHelper.WaitForControl(NextButton());
+            UIMapStartScanWizard.ClickNextButton();
+            TestContext.WriteLine("Returned to Scan Credentials step...");
+            UIMapWorkgroup.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
+            UIMapWorkgroup.AssertLoginTextBoxText();
+            TestContext.WriteLine(String.Format("Login '{0}' is preserved.", DataHelper.Username));
+            UIMapStartScanWizard.ClickQuickScanButton();
+            TestContext.WriteLine("Quick Scan button clicked...");
 
-            // Checks whether the inputted parameters are stored after clicking Back button
-            CheckStoredDataAtWorkgroup(workgroupName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
-
-            UIMapStartScanWizard.ClickCancelButton();
-            TestContext.WriteLine("Cancel button clicked...");
-            UIHelper.WaitForControlIsClickable(StartScanButton());
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
 
-            // Checks whether the inputted parameters are stored after clicking Cancel button
-            CheckStoredDataAtWorkgroup(workgroupName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+            // Specify Workgroup step after scan
+            TestContext.WriteLine("Returned to Specify Workgroup step after scan...");
+            UIMapWorkgroup.AssertWorkgroupTextBoxTextExpectedValues.UIWorkgroupWatermarkTeEditText = workgroupName;
+            UIMapWorkgroup.AssertWorkgroupTextBoxText();
+            TestContext.WriteLine(String.Format("Workgroup name '{0}' is preserved at Specify Workgroup step.", workgroupName));
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Select Computers step after scan
+            TestContext.WriteLine("Returned to Select Computers step after scan...");
+            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
+            UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
+            workgroupItem = WorkgroupTreeItem(workgroupName);
+            workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the tree item checkbox
+            if (!workgroupCheckBox.Checked) TestContext.WriteLine(String.Format("Workgroup '{0}' is not selected at Select Computers step.", workgroupName));
+            else Assert.Fail(String.Format("Workgroup '{0}' is still selected at Select Computers step!", workgroupName));
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Scan Credentials step after scan
+            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            TestContext.WriteLine("Returned to Scan Credentials step after scan...");
+            UIMapWorkgroup.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
+            UIMapWorkgroup.AssertLoginTextBoxText();
+            TestContext.WriteLine(String.Format("Login '{0}' is preserved.", DataHelper.Username));
+            UIMapStartScanWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void ScanningWizardNavigationActiveDirectoryTest()
         {
             string domainName = SysHelper.GetDomainName();
-            string newTcpPort = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
-            string newUdpPort = TextHelper.GenerateNonDefaultPort(PortType.Udp);
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1467,11 +1465,7 @@ namespace CodedUITestAT
             // Inputs some non-default parameters
             InputDomainName(domainName);
             InputDomainAdministrator(DataHelper.Username);
-            InputPassword(DataHelper.Password);
-            UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = newTcpPort;
-            UIMapActiveDirectory.InputTcpPort();
-            UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = newUdpPort;
-            UIMapActiveDirectory.InputUdpPort();
+            InputPassword(DataHelper.Password);            
 
             UIMapStartScanWizard.ClickBackButton();
             TestContext.WriteLine("Back button clicked...");
@@ -1480,7 +1474,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsEnabled(NextButton());
 
             // Checks whether the inputted parameters are stored after clicking Back button
-            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, TestContext);
 
             UIMapStartScanWizard.ClickCancelButton();
             TestContext.WriteLine("Cancel button clicked...");
@@ -1491,7 +1485,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsEnabled(NextButton());
 
             // Checks whether the inputted parameters are stored after clicking Cancel button
-            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, newTcpPort, newUdpPort, TestContext);
+            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, TestContext);
         }
 
         [TestMethod, Timeout(DataHelper.LongestTestTimeout)]
@@ -1542,20 +1536,6 @@ namespace CodedUITestAT
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
             UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapNetworkAddresses.InputPassword();
-
-            // TCP port
-            UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = String.Empty;
-            UIMapNetworkAddresses.InputTcpPort();
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
-            UIMapNetworkAddresses.InputTcpPortParams.UITcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
-            UIMapNetworkAddresses.InputTcpPort();
-
-            // UDP port
-            UIMapNetworkAddresses.InputUdpPortParams.UIUdpPortTextBoxEditText = String.Empty;
-            UIMapNetworkAddresses.InputUdpPort();
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
         }
 
         [TestMethod]
@@ -1585,22 +1565,6 @@ namespace CodedUITestAT
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
             UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
             UIMapWorkgroup.InputPassword();
-
-            // TCP port
-            UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = String.Empty;
-            UIMapWorkgroup.InputTcpPort();
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
-            UIMapWorkgroup.InputTcpPortParams.UITcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
-            UIMapWorkgroup.InputTcpPort();
-
-            // UDP port
-            UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = String.Empty;
-            UIMapWorkgroup.InputUdpPort();
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
-            UIMapWorkgroup.InputUdpPortParams.UIUdpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Udp);
-            UIMapWorkgroup.InputUdpPort();
 
             // Non-existent workgroup
             string error = "error";
@@ -1635,22 +1599,6 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
             InputPassword(DataHelper.Password);
-
-            // TCP port
-            UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = String.Empty;
-            UIMapActiveDirectory.InputTcpPort();
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyTcpPort, TestContext);
-            UIMapActiveDirectory.InputTcpPortParams.UIFlsTcpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Tcp);
-            UIMapActiveDirectory.InputTcpPort();
-
-            // UDP port
-            UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = String.Empty;
-            UIMapActiveDirectory.InputUdpPort();
-            UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyUdpPort, TestContext);
-            UIMapActiveDirectory.InputUdpPortParams.UIFlsUdpPortTextBoxEditText = TextHelper.GenerateNonDefaultPort(PortType.Udp);
-            UIMapActiveDirectory.InputUdpPort();
 
             // Non-existent domain
             string nonExistentDomainName = domainName + ".test";

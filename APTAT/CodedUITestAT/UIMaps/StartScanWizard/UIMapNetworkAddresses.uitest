@@ -37,32 +37,15 @@
   </Configuration>
   <InitializeActions />
   <ExecuteActions>
-    <AssertAction UIObjectName="UIMapNetworkAddresses.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UITcpPortTextBoxEdit">
+    <AssertAction UIObjectName="UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit">
       <ParameterName />
       <PropertyName>Text</PropertyName>
-      <ExpectedValue>80</ExpectedValue>
+      <ExpectedValue>administrator</ExpectedValue>
       <MessageOnValidationFailure />
       <Type>String</Type>
       <PropertyCondition>AreEqual</PropertyCondition>
     </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertFlsTcpPortTextBoxText">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
-    </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UIUdpPortTextBoxEdit">
-      <ParameterName />
-      <PropertyName>Text</PropertyName>
-      <ExpectedValue>53</ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>String</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertFlsUdpPortTextBoxText">
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertLoginTextBoxText">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -173,51 +156,6 @@
       <Disabled>false</Disabled>
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <SetValueAction UIObjectName="UIMapNetworkAddresses.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UITcpPortTextBoxEdit">
-      <ParameterName />
-      <Value Encoded="false">100</Value>
-      <Type>String</Type>
-    </SetValueAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="InputTcpPort">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <SetValueAction UIObjectName="UIMapNetworkAddresses.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UIUdpPortTextBoxEdit">
-      <ParameterName />
-      <Value Encoded="false">200</Value>
-      <Type>String</Type>
-    </SetValueAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="InputUdpPort">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit">
-      <ParameterName />
-      <PropertyName>Text</PropertyName>
-      <ExpectedValue>administrator</ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>String</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertLoginTextBoxText">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
