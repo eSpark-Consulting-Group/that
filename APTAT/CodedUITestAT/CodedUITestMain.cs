@@ -1440,6 +1440,7 @@ namespace CodedUITestAT
             workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the tree item checkbox
             if (!workgroupCheckBox.Checked) TestContext.WriteLine(String.Format("Workgroup '{0}' is not selected at Select Computers step.", workgroupName));
             else Assert.Fail(String.Format("Workgroup '{0}' is still selected at Select Computers step!", workgroupName));
+            CheckWorkgroup(workgroupName);
             UIMapStartScanWizard.ClickNextButton();
 
             // Scan Credentials step after scan
