@@ -399,7 +399,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Scans all the files and folders in the computer."/>
+                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Scans individually selected folders."/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>
