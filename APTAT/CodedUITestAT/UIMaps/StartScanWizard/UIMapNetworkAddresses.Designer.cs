@@ -56,19 +56,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         }
         
         /// <summary>
-        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertLoginTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uILoginTextBoxEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINetworkAddressesViewCustom.UILoginTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'LoginTextBox' text box equals 'administrator'
-            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginTextBoxEditText, uILoginTextBoxEdit.Text);
-        }
-        
-        /// <summary>
         /// AssertNetworkAddressesListEnabled - Use 'AssertNetworkAddressesListEnabledExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertNetworkAddressesListEnabled()
@@ -176,6 +163,19 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
             uIUdpPortTextBoxEdit.Text = this.InputUdpPortParams.UIUdpPortTextBoxEditText;
         }
         
+        /// <summary>
+        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLoginTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uILoginWatermarkTextBoEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'administrator'
+            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
+        }
+        
         #region Properties
         public virtual AssertFlsTcpPortTextBoxTextExpectedValues AssertFlsTcpPortTextBoxTextExpectedValues
         {
@@ -198,18 +198,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
                     this.mAssertFlsUdpPortTextBoxTextExpectedValues = new AssertFlsUdpPortTextBoxTextExpectedValues();
                 }
                 return this.mAssertFlsUdpPortTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
-                }
-                return this.mAssertLoginTextBoxTextExpectedValues;
             }
         }
         
@@ -285,6 +273,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
             }
         }
         
+        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
+                }
+                return this.mAssertLoginTextBoxTextExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -315,8 +315,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         
         private AssertFlsUdpPortTextBoxTextExpectedValues mAssertFlsUdpPortTextBoxTextExpectedValues;
         
-        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
-        
         private AssertNetworkAddressesListEnabledExpectedValues mAssertNetworkAddressesListEnabledExpectedValues;
         
         private InputLoginParams mInputLoginParams;
@@ -328,6 +326,8 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         private InputTcpPortParams mInputTcpPortParams;
         
         private InputUdpPortParams mInputUdpPortParams;
+        
+        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -362,21 +362,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         /// Verify that the 'Text' property of 'UdpPortTextBox' text box equals '53'
         /// </summary>
         public string UIUdpPortTextBoxEditText = "53";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertLoginTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertLoginTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'LoginTextBox' text box equals 'administrator'
-        /// </summary>
-        public string UILoginTextBoxEditText = "administrator";
         #endregion
     }
     
@@ -436,7 +421,7 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         /// <summary>
         /// Type '' in 'PasswordWatermarkTextBox' text box
         /// </summary>
-        public string UIPasswordWatermarkTexEditSendKeys = "";
+        public string UIPasswordWatermarkTexEditSendKeys = null;
         
         /// <summary>
         /// Type '********' in 'PasswordBox' text box
@@ -472,6 +457,21 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         /// Type '200' in 'UdpPortTextBox' text box
         /// </summary>
         public string UIUdpPortTextBoxEditText = "200";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLoginTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertLoginTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'administrator'
+        /// </summary>
+        public string UILoginWatermarkTextBoEditText = "administrator";
         #endregion
     }
     

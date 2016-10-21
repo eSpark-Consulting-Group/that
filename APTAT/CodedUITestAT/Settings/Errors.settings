@@ -3,13 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="SpecifyPassword" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Please Specify Password</Value>
+      <Value Profile="(Default)">Please specify Password</Value>
     </Setting>
     <Setting Name="SpecifyNetworkAddress" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Enter at least one network address</Value>
     </Setting>
     <Setting Name="SpecifyLogin" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Please Specify Administrator Login</Value>
+      <Value Profile="(Default)">Please specify Login</Value>
     </Setting>
     <Setting Name="SpecifyTcpPort" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Please Specify TCP port</Value>
