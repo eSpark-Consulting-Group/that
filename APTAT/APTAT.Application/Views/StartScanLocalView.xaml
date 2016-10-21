@@ -157,7 +157,7 @@
 
                                                     <Grid.RowDefinitions>
                                                         
-                                                        <RowDefinition Height="120"/>
+                                                        <RowDefinition Height="130"/>
                                                         <RowDefinition Height="Auto"/>
                                                         <RowDefinition Height="*"/>
                                                     </Grid.RowDefinitions>
@@ -185,7 +185,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Full Scan"/>
+                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Scans all the files and folders in the computer."/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>
@@ -214,8 +214,8 @@
                                     <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate2" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate2" Storyboard.TargetProperty="X" BeginTime="0:0:0.1">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="0" >
                                                         <EasingDoubleKeyFrame.EasingFunction>
                                                             <CubicEase/>
                                                         </EasingDoubleKeyFrame.EasingFunction>
@@ -254,7 +254,7 @@
 
                                                     <Grid.RowDefinitions>
                                                         
-                                                        <RowDefinition Height="120"/>
+                                                        <RowDefinition Height="130"/>
                                                         <RowDefinition Height="Auto"/>
                                                         <RowDefinition Height="*"/>
                                                     </Grid.RowDefinitions>
@@ -288,7 +288,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Quick Scan"/>
+                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Scans commonly infected areas and memory."/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>
@@ -317,8 +317,8 @@
                                     <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate3" Storyboard.TargetProperty="X" BeginTime="0:0:0.1">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate3" Storyboard.TargetProperty="X" BeginTime="0:0:0.2">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="0" >
                                                         <EasingDoubleKeyFrame.EasingFunction>
                                                             <CubicEase/>
                                                         </EasingDoubleKeyFrame.EasingFunction>
@@ -357,7 +357,7 @@
 
                                                     <Grid.RowDefinitions>
                                                         
-                                                        <RowDefinition Height="120"/>
+                                                        <RowDefinition Height="130"/>
                                                         <RowDefinition Height="Auto"/>
                                                         <RowDefinition Height="*"/>
                                                     </Grid.RowDefinitions>
@@ -399,7 +399,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Custom Scan"/>
+                                                    <TextBlock Opacity="0.5" Grid.Row="2"  Style="{DynamicResource SubTitleTextStyle}" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Scans all the files and folders in the computer."/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>
@@ -428,8 +428,8 @@
                                     <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate4" Storyboard.TargetProperty="X" BeginTime="0:0:0.2">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0" >
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate4" Storyboard.TargetProperty="X" BeginTime="0:0:0.4">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0" >
                                                         <EasingDoubleKeyFrame.EasingFunction>
                                                             <CubicEase/>
                                                         </EasingDoubleKeyFrame.EasingFunction>

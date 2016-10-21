@@ -451,7 +451,7 @@
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate4" Storyboard.TargetProperty="X" BeginTime="0:0:0.3">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0" >
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0" >
                                                         <EasingDoubleKeyFrame.EasingFunction>
                                                             <CubicEase/>
                                                         </EasingDoubleKeyFrame.EasingFunction>

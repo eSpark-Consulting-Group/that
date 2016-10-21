@@ -1,4 +1,5 @@
 ﻿using APTAT.Application.Extensions;
+using APTAT.Application.Models;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -46,8 +47,13 @@ namespace APTAT.Application
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(tcp.Text) || string.IsNullOrEmpty(udp.Text))
+            MainViewViewModel model = DataContext as MainViewViewModel;
+            string message;
+            if (!model.ValidatePorts(out message))
+            {
+                model.Error = message;
                 return;
+            }
 
             this.DialogResult = true;
 

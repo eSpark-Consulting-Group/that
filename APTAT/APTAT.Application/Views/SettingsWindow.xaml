@@ -16,6 +16,7 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="50"/>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
@@ -30,7 +31,7 @@
                                 </Grid>
                             </Border>
 
-                            <Grid Grid.Row="1" Background="#FCFCFC" >
+                            <Grid Grid.Row="2" Background="#FCFCFC" >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
@@ -94,6 +95,15 @@
                                     </StackPanel>
                                 </Border>
                             </Grid>
+
+                            <Border Grid.Row="1" BorderThickness="0" Background="{DynamicResource ErrorBrush2}" BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" 
+                Visibility="{Binding HasErrors, Converter={converters:BoolToVisibilityConverter2}, FallbackValue=Collapsed}">
+                                <Grid>
+                                    <TextBlock AutomationProperties.AutomationId="ErrorTextBlock" Foreground="White" Text="{Binding Error}" Style="{DynamicResource SubTitleTextStyle}" Margin="20 10"   FontSize="13"/>
+                                    <Button Style="{StaticResource CloseButton}" Background="White" Command="{Binding ClearErrorMessageCommand}" Margin="0 0 20 0" Width="12" Height="12" HorizontalAlignment="Right"  ToolTip="Hide" />
+                                </Grid>
+
+                            </Border>
                         </Grid>
                     </Border>
                 </Border>
