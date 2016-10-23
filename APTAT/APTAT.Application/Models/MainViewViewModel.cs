@@ -620,7 +620,6 @@ namespace APTAT.Application.Models
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = false;
 
-            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.Scan);
             Set(() => SelectScan, true);
             Set(() => ValkyrieEnabled, false);
             GroupingEnabled = false;
@@ -1043,7 +1042,7 @@ namespace APTAT.Application.Models
 
             Keyword = string.Empty;
 
-            AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.ValkyrieScan);
+
             Set(() => ValkyrieEnabled, true);
             Set(() => SelectValkyrieScan, false);
             Set(() => SelectValkyrieScan, true);

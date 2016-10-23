@@ -12,6 +12,7 @@ using Process = System.Diagnostics.Process;
 using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
 using APTAT.Application.Messages;
+using System.Threading.Tasks;
 
 namespace APTAT.Application
 {
@@ -42,20 +43,19 @@ namespace APTAT.Application
         {
             switch (message.Message)
             {
-                case ChangeScreenTypes.Scan:
-                    mainContent.Content = new ResultTabsControl();
-                    empty.Visibility = Visibility.Collapsed;
-                    break;
-                case ChangeScreenTypes.ValkyrieScan:
-                    if (mainContent.Content != null && mainContent.Content is ResultTabsControl)
-                        return;
-                    mainContent.Content = new ResultTabsControl();
-                    break;
                 case ChangeScreenTypes.StartScan:
                     StartScanWindow details = new StartScanWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
                     if (details.ShowDialog() == true && message.Action != null)
-                        message.Action(details.IsQuickScan);
+                    {
+                        empty.Visibility = Visibility.Collapsed;
+
+                        if (mainContent.Content == null)
+                            mainContent.Content = new ResultTabsControl();
+                        
+                        Task.Delay(600).ContinueWith(_ => 
+                            Dispatcher.BeginInvoke((Action) delegate { message.Action(details.IsQuickScan); }));
+                    }
                     break;
                 case ChangeScreenTypes.StopScan:
                     _confirmation = new ConfirmationWindow();

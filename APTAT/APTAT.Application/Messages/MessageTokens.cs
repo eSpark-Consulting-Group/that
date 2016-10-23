@@ -5,8 +5,6 @@ namespace APTAT.Application.Messages
     public enum ChangeScreenTypes
     {
         StartScan,
-        Scan,
-        ValkyrieScan,
         StopScan
     }
 
