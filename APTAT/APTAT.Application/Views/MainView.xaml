@@ -8,6 +8,7 @@
                   xmlns:Models="clr-namespace:APTAT.Application.Models"
                   xmlns:TemplateSelectors="clr-namespace:APTAT.Application.TemplateSelectors"
                   xmlns:Application="clr-namespace:APTAT.Application"
+                 xmlns:converters="clr-namespace:APTAT.Application.Converters"
                   xmlns:Controls="clr-namespace:APTAT.Application.Views" 
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                   d:DesignHeight="760" d:DesignWidth="1200" Background="White">
@@ -256,6 +257,7 @@
                                   Margin="-2,-2,0,-2"  
                                   Padding="17,20,17,20"
                                   FontSize="16"
+                                   IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                   Click="OptionsClick">
                     <telerik:RadButton.Content>
                         <Grid>
@@ -312,6 +314,12 @@
                     <TextBlock AutomationProperties.AutomationId="MalwareFilesCounterTextBlock" 
                            Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
                     <TextBlock Foreground="White" Text=" Malicious files" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal" Visibility="{Binding IsPendingFound, Converter={converters:BoolToVisibilityConverter2}}">
+                    <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
+                    <TextBlock 
+                           Foreground="White" Text="{Binding PendingFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
+                    <TextBlock Foreground="White" Text=" files In Analysis" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 </StackPanel>
 
                 <TextBlock Foreground="White" Text=" (" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>

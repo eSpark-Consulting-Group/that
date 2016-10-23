@@ -54,6 +54,7 @@ namespace APTAT.Application.Models
         private Int32 _scannedItemsCount;
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
+        private Int32 _pendingFilesCount;
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
@@ -305,6 +306,17 @@ namespace APTAT.Application.Models
             }
         }
 
+        public Int32 PendingFilesCount
+        {
+            get { return _pendingFilesCount; }
+            set
+            {
+                _pendingFilesCount = value;
+                RaisePropertyChanged("PendingFilesCount");
+                RaisePropertyChanged("IsPendingFound");
+            }
+        }
+
         public Double Percentage { get; set; }
 
         public String Header
@@ -456,6 +468,11 @@ namespace APTAT.Application.Models
         public Boolean IsMalwaresFound
         {
             get { return MalwareFilesCount > 0; }
+        }
+
+        public Boolean IsPendingFound
+        {
+            get { return PendingFilesCount > 0; }
         }
 
         public bool IsUnknownFound
@@ -824,6 +841,9 @@ namespace APTAT.Application.Models
                     else if (file.IsMalware)
                         _malwareFilesCount += file.Computers.Count;
 
+                    if (!file.Pending)
+                        PendingFilesCount--;
+
                     RaisePropertyChanged("UnknownFilesCount");
                     RaisePropertyChanged("MalwareFilesCount");
 
@@ -870,6 +890,8 @@ namespace APTAT.Application.Models
                         _unknownFilesCount += result.Computers.Count;
                     else if (result.IsMalware)
                         _malwareFilesCount += result.Computers.Count;
+                    else if (result.Pending)
+                        PendingFilesCount++;
                 }
 
                 RaisePropertyChanged("UnknownFilesCount");
