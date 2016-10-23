@@ -629,6 +629,7 @@ namespace APTAT.Application.Models
             SelectedItem = null;
             UnknownFilesCount = 0;
             MalwareFilesCount = 0;
+            PendingFilesCount = 0;
             ScannedItemsCount = 0;
             FailedToAnalyzeFilesCount = 0;
             NoVerdictFilesCount = 0;
@@ -837,12 +838,16 @@ namespace APTAT.Application.Models
                     file.UpdateValkyrieResult(result);
 
                     if (file.IsUnknown)
+                    {
                         _unknownFilesCount += file.Computers.Count;
-                    else if (file.IsMalware)
-                        _malwareFilesCount += file.Computers.Count;
-
-                    if (!file.Pending)
                         PendingFilesCount--;
+                    }
+                    else if (file.IsMalware)
+                    {
+                        _malwareFilesCount += file.Computers.Count;
+                        PendingFilesCount--;
+                    }
+                        
 
                     RaisePropertyChanged("UnknownFilesCount");
                     RaisePropertyChanged("MalwareFilesCount");

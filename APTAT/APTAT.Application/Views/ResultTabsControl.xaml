@@ -142,7 +142,7 @@
 
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 2 23 0" Visibility="{Binding GroupingEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
             <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" 
-                      Content="Group by Computers   " IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}"/>
+                      Content="Group by Computers  " IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}"/>
             <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" 
                       Content="  Group by Files" IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}"/>
         </StackPanel>
