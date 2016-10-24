@@ -78,15 +78,21 @@ namespace APTAT.Application
             DialogResult = false;
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        private string _tcp, _udp;
+
+        private void PortKeyDown(object sender, KeyEventArgs e)
         {
-            PortValidationExtensions.ValidateInput(sender, e);
+           bool flag = ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)) || ((e.Key >= Key.D0) && (e.Key <= Key.D9));
+
+            if (e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Delete || e.Key == Key.Back)
+                flag = true;
+
+            if (!flag)
+                e.Handled = true;
         }
 
-        private string _tcp, _udp;
         private void this_Loaded(object sender, RoutedEventArgs e)
         {
-
             Dispatcher.BeginInvoke((Action)delegate
             {
                 _tcp = tcp.Text;
