@@ -184,9 +184,9 @@ namespace APTAT.Application.Models.Directory
 
             if (ValidateProperty(ipAddress, "Text", IpAddressWrapper.Validator))
             {
-                if (IpAddresses.Any(o => o.Text == ipAddress.Text))
+                if (IpAddresses.Any(o => o.FormattedText == ipAddress.FormattedText))
                 {
-                    Error = "The same network address was already added";
+                    Error = "The same network address or range was already added";
                     args.Cancel = true;
                 }
                 else
