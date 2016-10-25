@@ -68,7 +68,7 @@
 
                                     <TextBlock Text="FLS TCP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="3"  Margin="0 24 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
                                     <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsTcpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
-                                             Grid.Column="2" Margin="0 17 0 17" HorizontalAlignment="Left" Grid.Row="3" Width="275" x:Name="tcp"
+                                             Grid.Column="2" Margin="0 17 0 17" HorizontalAlignment="Left" Grid.Row="3" Width="275" x:Name="tcp" MaxLength="5"
                                              Text="{Binding  TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PortKeyDown">
                                         <telerik:RadWatermarkTextBox.WatermarkContent>
                                             <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
@@ -77,7 +77,7 @@
 
                                     <TextBlock Text="FLS UDP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="4"  Margin="0 7 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
                                     <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsUdpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
-                                             Grid.Column="2" Margin="0 0 0 17" HorizontalAlignment="Left" Grid.Row="4" Width="275" x:Name="udp"
+                                             Grid.Column="2" Margin="0 0 0 17" HorizontalAlignment="Left" Grid.Row="4" Width="275" x:Name="udp" MaxLength="5"
                                              Text="{Binding  UdpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PortKeyDown" Loaded="this_Loaded">
                                         <telerik:RadWatermarkTextBox.WatermarkContent>
                                             <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />

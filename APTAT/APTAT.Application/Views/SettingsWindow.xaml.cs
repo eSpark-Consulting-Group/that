@@ -2,8 +2,9 @@
 using APTAT.Application.Models;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-
+using Telerik.Windows.Controls;
 
 namespace APTAT.Application
 {
@@ -82,10 +83,13 @@ namespace APTAT.Application
 
         private void PortKeyDown(object sender, KeyEventArgs e)
         {
-           bool flag = ((e.Key >= Key.NumPad0) && (e.Key <= Key.NumPad9)) || ((e.Key >= Key.D0) && (e.Key <= Key.D9));
+            bool flag = (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || (e.Key >= Key.D0 && e.Key <= Key.D9);
 
             if (e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Delete || e.Key == Key.Back)
                 flag = true;
+
+            if ((e.Key == Key.NumPad0 || e.Key == Key.D0) && string.IsNullOrEmpty((sender as TextBox).Text))
+                flag = false;
 
             if (!flag)
                 e.Handled = true;
