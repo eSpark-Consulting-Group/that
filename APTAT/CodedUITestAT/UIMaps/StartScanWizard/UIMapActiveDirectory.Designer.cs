@@ -30,19 +30,6 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
     {
         
         /// <summary>
-        /// AssertAdministratorTextBoxText - Use 'AssertAdministratorTextBoxTextExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertAdministratorTextBoxText()
-        {
-            #region Variable Declarations
-            WpfEdit uIAdministratorTextBoxEdit = this.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdministratorTextBoxEdit;
-            #endregion
-
-            // Verify that the 'Text' property of 'AdministratorTextBox' text box equals 'ww'
-            Assert.AreEqual(this.AssertAdministratorTextBoxTextExpectedValues.UIAdministratorTextBoxEditText, uIAdministratorTextBoxEdit.Text);
-        }
-        
-        /// <summary>
         /// AssertAdTree - Use 'AssertAdTreeExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertAdTree()
@@ -56,16 +43,29 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         }
         
         /// <summary>
+        /// AssertDomainAdministratorTextBoxText - Use 'AssertDomainAdministratorTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertDomainAdministratorTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uIDomainAdministratorWEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainAdministratorWEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'DomainAdministratorWatermarkTextBox' text box equals 'as'
+            Assert.AreEqual(this.AssertDomainAdministratorTextBoxTextExpectedValues.UIDomainAdministratorWEditText, uIDomainAdministratorWEdit.Text);
+        }
+        
+        /// <summary>
         /// AssertDomainNameTextBoxText - Use 'AssertDomainNameTextBoxTextExpectedValues' to pass parameters into this method.
         /// </summary>
         public void AssertDomainNameTextBoxText()
         {
             #region Variable Declarations
-            WpfEdit uIDomainControllerTextEdit = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIDomainControllerTextEdit;
+            WpfEdit uIDomainNameWatermarkTEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainNameWatermarkTEdit;
             #endregion
 
-            // Verify that the 'Text' property of 'DomainControllerTextBox' text box equals 'test.local'
-            Assert.AreEqual(this.AssertDomainNameTextBoxTextExpectedValues.UIDomainControllerTextEditText, uIDomainControllerTextEdit.Text);
+            // Verify that the 'Text' property of 'DomainNameWatermarkTextBox' text box equals 'as'
+            Assert.AreEqual(this.AssertDomainNameTextBoxTextExpectedValues.UIDomainNameWatermarkTEditText, uIDomainNameWatermarkTEdit.Text);
         }
         
         /// <summary>
@@ -133,19 +133,33 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
             uIUseCustomCredentialsRadioButton.Selected = this.SelectUseCustomCredentialsRadioButtonParams.UIUseCustomCredentialsRadioButtonSelected;
         }
         
-        #region Properties
-        public virtual AssertAdministratorTextBoxTextExpectedValues AssertAdministratorTextBoxTextExpectedValues
+        /// <summary>
+        /// AssertAdTreeItem - Use 'AssertAdTreeItemExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertAdTreeItem()
         {
-            get
-            {
-                if ((this.mAssertAdministratorTextBoxTextExpectedValues == null))
-                {
-                    this.mAssertAdministratorTextBoxTextExpectedValues = new AssertAdministratorTextBoxTextExpectedValues();
-                }
-                return this.mAssertAdministratorTextBoxTextExpectedValues;
-            }
+            #region Variable Declarations
+            WpfTreeItem uIDevTreeItem = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;
+            #endregion
+
+            // Verify that the 'Name' property of 'dev' tree item equals 'dev'
+            Assert.AreEqual(this.AssertAdTreeItemExpectedValues.UIDevTreeItemName, uIDevTreeItem.Name);
         }
         
+        /// <summary>
+        /// AssertLoginTextBoxText - Use 'AssertLoginTextBoxTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLoginTextBoxText()
+        {
+            #region Variable Declarations
+            WpfEdit uILoginWatermarkTextBoEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit;
+            #endregion
+
+            // Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'dev\a.smyrnov'
+            Assert.AreEqual(this.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText, uILoginWatermarkTextBoEdit.Text);
+        }
+        
+        #region Properties
         public virtual AssertAdTreeExpectedValues AssertAdTreeExpectedValues
         {
             get
@@ -155,6 +169,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                     this.mAssertAdTreeExpectedValues = new AssertAdTreeExpectedValues();
                 }
                 return this.mAssertAdTreeExpectedValues;
+            }
+        }
+        
+        public virtual AssertDomainAdministratorTextBoxTextExpectedValues AssertDomainAdministratorTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertDomainAdministratorTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertDomainAdministratorTextBoxTextExpectedValues = new AssertDomainAdministratorTextBoxTextExpectedValues();
+                }
+                return this.mAssertDomainAdministratorTextBoxTextExpectedValues;
             }
         }
         
@@ -218,6 +244,30 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
             }
         }
         
+        public virtual AssertAdTreeItemExpectedValues AssertAdTreeItemExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertAdTreeItemExpectedValues == null))
+                {
+                    this.mAssertAdTreeItemExpectedValues = new AssertAdTreeItemExpectedValues();
+                }
+                return this.mAssertAdTreeItemExpectedValues;
+            }
+        }
+        
+        public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLoginTextBoxTextExpectedValues == null))
+                {
+                    this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
+                }
+                return this.mAssertLoginTextBoxTextExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -244,9 +294,9 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         #endregion
         
         #region Fields
-        private AssertAdministratorTextBoxTextExpectedValues mAssertAdministratorTextBoxTextExpectedValues;
-        
         private AssertAdTreeExpectedValues mAssertAdTreeExpectedValues;
+        
+        private AssertDomainAdministratorTextBoxTextExpectedValues mAssertDomainAdministratorTextBoxTextExpectedValues;
         
         private AssertDomainNameTextBoxTextExpectedValues mAssertDomainNameTextBoxTextExpectedValues;
         
@@ -258,24 +308,13 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         private SelectUseCustomCredentialsRadioButtonParams mSelectUseCustomCredentialsRadioButtonParams;
         
+        private AssertAdTreeItemExpectedValues mAssertAdTreeItemExpectedValues;
+        
+        private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
+        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertAdministratorTextBoxText'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertAdministratorTextBoxTextExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Text' property of 'AdministratorTextBox' text box equals 'ww'
-        /// </summary>
-        public string UIAdministratorTextBoxEditText = "ww";
         #endregion
     }
     
@@ -295,6 +334,21 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
     }
     
     /// <summary>
+    /// Parameters to be passed into 'AssertDomainAdministratorTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertDomainAdministratorTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'DomainAdministratorWatermarkTextBox' text box equals 'as'
+        /// </summary>
+        public string UIDomainAdministratorWEditText = "as";
+        #endregion
+    }
+    
+    /// <summary>
     /// Parameters to be passed into 'AssertDomainNameTextBoxText'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
@@ -303,9 +357,9 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         #region Fields
         /// <summary>
-        /// Verify that the 'Text' property of 'DomainControllerTextBox' text box equals 'test.local'
+        /// Verify that the 'Text' property of 'DomainNameWatermarkTextBox' text box equals 'as'
         /// </summary>
-        public string UIDomainControllerTextEditText = "test.local";
+        public string UIDomainNameWatermarkTEditText = "as";
         #endregion
     }
     
@@ -366,6 +420,36 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         /// Select 'Use Custom Credentials' radio button
         /// </summary>
         public bool UIUseCustomCredentialsRadioButtonSelected = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertAdTreeItem'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertAdTreeItemExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Name' property of 'dev' tree item equals 'dev'
+        /// </summary>
+        public string UIDevTreeItemName = "dev";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLoginTextBoxText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertLoginTextBoxTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'dev\a.smyrnov'
+        /// </summary>
+        public string UILoginWatermarkTextBoEditText = "dev\\a.smyrnov";
         #endregion
     }
     
@@ -820,12 +904,26 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                 return this.mUIActiveDirectoryViewCustom;
             }
         }
+        
+        public UIScanningWizardWindowCustom1 UIScanningWizardWindowCustom
+        {
+            get
+            {
+                if ((this.mUIScanningWizardWindowCustom == null))
+                {
+                    this.mUIScanningWizardWindowCustom = new UIScanningWizardWindowCustom1(this);
+                }
+                return this.mUIScanningWizardWindowCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIThisCustom mUIThisCustom;
         
         private UIActiveDirectoryViewCustom2 mUIActiveDirectoryViewCustom;
+        
+        private UIScanningWizardWindowCustom1 mUIScanningWizardWindowCustom;
         #endregion
     }
     
@@ -875,12 +973,30 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
                 return this.mUIDomainAdministratorWEdit;
             }
         }
+        
+        public WpfEdit UILoginWatermarkTextBoEdit
+        {
+            get
+            {
+                if ((this.mUILoginWatermarkTextBoEdit == null))
+                {
+                    this.mUILoginWatermarkTextBoEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUILoginWatermarkTextBoEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "LoginWatermarkTextBox";
+                    this.mUILoginWatermarkTextBoEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUILoginWatermarkTextBoEdit;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfEdit mUIDomainNameWatermarkTEdit;
         
         private WpfEdit mUIDomainAdministratorWEdit;
+        
+        private WpfEdit mUILoginWatermarkTextBoEdit;
         #endregion
     }
     
@@ -951,6 +1067,108 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses
         
         #region Fields
         private WpfRadioButton mUIUseCustomCredentialsRadioButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIScanningWizardWindowCustom1 : WpfCustom
+    {
+        
+        public UIScanningWizardWindowCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ScanningWizardWindow";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIActiveDirectoryViewCustom3 UIActiveDirectoryViewCustom
+        {
+            get
+            {
+                if ((this.mUIActiveDirectoryViewCustom == null))
+                {
+                    this.mUIActiveDirectoryViewCustom = new UIActiveDirectoryViewCustom3(this);
+                }
+                return this.mUIActiveDirectoryViewCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIActiveDirectoryViewCustom3 mUIActiveDirectoryViewCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIActiveDirectoryViewCustom3 : WpfCustom
+    {
+        
+        public UIActiveDirectoryViewCustom3(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanDomainView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ActiveDirectoryView";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIAdTreeTree1 UIAdTreeTree
+        {
+            get
+            {
+                if ((this.mUIAdTreeTree == null))
+                {
+                    this.mUIAdTreeTree = new UIAdTreeTree1(this);
+                }
+                return this.mUIAdTreeTree;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIAdTreeTree1 mUIAdTreeTree;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIAdTreeTree1 : WpfTree
+    {
+        
+        public UIAdTreeTree1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTree.PropertyNames.AutomationId] = "AdTree";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfTreeItem UIDevTreeItem
+        {
+            get
+            {
+                if ((this.mUIDevTreeItem == null))
+                {
+                    this.mUIDevTreeItem = new WpfTreeItem(this);
+                    #region Search Criteria
+                    this.mUIDevTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = "dev";
+                    this.mUIDevTreeItem.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIDevTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfTreeItem mUIDevTreeItem;
         #endregion
     }
 }

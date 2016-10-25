@@ -41,23 +41,6 @@
   </Configuration>
   <InitializeActions />
   <ExecuteActions>
-    <AssertAction UIObjectName="UIMapActiveDirectory.UIUnknownFileHunterWindow.UIActiveDirectoryViewCustom.UIAdministratorTextBoxEdit">
-      <ParameterName />
-      <PropertyName>Text</PropertyName>
-      <ExpectedValue>ww</ExpectedValue>
-      <MessageOnValidationFailure />
-      <Type>String</Type>
-      <PropertyCondition>AreEqual</PropertyCondition>
-    </AssertAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="AssertAdministratorTextBoxText">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Assertion</MarkerRegionType>
-    </TestStepMarkerAction>
     <AssertAction UIObjectName="UIMapActiveDirectory.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree">
       <ParameterName />
       <PropertyName>Exists</PropertyName>
@@ -75,10 +58,27 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
-    <AssertAction UIObjectName="UIMapActiveDirectory.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIDomainControllerTextEdit">
+    <AssertAction UIObjectName="UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainAdministratorWEdit">
       <ParameterName />
       <PropertyName>Text</PropertyName>
-      <ExpectedValue>test.local</ExpectedValue>
+      <ExpectedValue>as</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertDomainAdministratorTextBoxText">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainNameWatermarkTEdit">
+      <ParameterName />
+      <PropertyName>Text</PropertyName>
+      <ExpectedValue>as</ExpectedValue>
       <MessageOnValidationFailure />
       <Type>String</Type>
       <PropertyCondition>AreEqual</PropertyCondition>
@@ -165,6 +165,40 @@
       <Disabled>false</Disabled>
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem">
+      <ParameterName />
+      <PropertyName>Name</PropertyName>
+      <ExpectedValue>dev</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertAdTreeItem">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
+    </TestStepMarkerAction>
+    <AssertAction UIObjectName="UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit">
+      <ParameterName />
+      <PropertyName>Text</PropertyName>
+      <ExpectedValue>dev\a.smyrnov</ExpectedValue>
+      <MessageOnValidationFailure />
+      <Type>String</Type>
+      <PropertyCondition>AreEqual</PropertyCondition>
+    </AssertAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="AssertLoginTextBoxText">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Assertion</MarkerRegionType>
     </TestStepMarkerAction>
   </ExecuteActions>
   <CleanupActions />
@@ -457,6 +491,19 @@
                   <SupportLevel>0</SupportLevel>
                   <Descendants />
                 </UIObject>
+                <UIObject ControlType="Edit" Id="UILoginWatermarkTextBoEdit" FriendlyName="LoginWatermarkTextBox" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Unknown File Hunter</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">Edit</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">LoginWatermarkTextBox</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
+                </UIObject>
               </Descendants>
             </UIObject>
             <UIObject ControlType="Custom" Id="UIActiveDirectoryViewCustom" FriendlyName="ActiveDirectoryView" SpecialControlType="None">
@@ -497,6 +544,66 @@
                       </AndCondition>
                       <SupportLevel>0</SupportLevel>
                       <Descendants />
+                    </UIObject>
+                  </Descendants>
+                </UIObject>
+              </Descendants>
+            </UIObject>
+            <UIObject ControlType="Custom" Id="UIScanningWizardWindowCustom" FriendlyName="ScanningWizardWindow" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Unknown File Hunter</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Custom</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.StartScanView</PropertyCondition>
+                <PropertyCondition Name="AutomationId">ScanningWizardWindow</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="Custom" Id="UIActiveDirectoryViewCustom" FriendlyName="ActiveDirectoryView" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Unknown File Hunter</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">Custom</PropertyCondition>
+                    <PropertyCondition Name="ClassName">Uia.StartScanDomainView</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">ActiveDirectoryView</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="Tree" Id="UIAdTreeTree" FriendlyName="AdTree" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Unknown File Hunter</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">Tree</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">AdTree</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants>
+                        <UIObject ControlType="TreeItem" Id="UIDevTreeItem" FriendlyName="dev" SpecialControlType="None">
+                          <TechnologyName>UIA</TechnologyName>
+                          <WindowTitles>
+                            <WindowTitle>Unknown File Hunter</WindowTitle>
+                          </WindowTitles>
+                          <SearchConfigurations>
+                            <SearchConfiguration>Expand</SearchConfiguration>
+                          </SearchConfigurations>
+                          <AndCondition>
+                            <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                            <PropertyCondition Name="ControlType">TreeItem</PropertyCondition>
+                            <PropertyCondition Name="Name">dev</PropertyCondition>
+                          </AndCondition>
+                          <SupportLevel>0</SupportLevel>
+                          <Descendants />
+                        </UIObject>
+                      </Descendants>
                     </UIObject>
                   </Descendants>
                 </UIObject>

@@ -59,5 +59,8 @@
     <Setting Name="EmptyWatermarkTextBoxText" Type="System.String" Scope="Application">
       <Value Profile="(Default)">System.Windows.Controls.TextBlock</Value>
     </Setting>
+    <Setting Name="AdTreeComputersElement" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Computers</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

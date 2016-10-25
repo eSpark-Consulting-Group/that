@@ -14,13 +14,13 @@ namespace APTAT.Application.Extensions
             if (String.IsNullOrEmpty(value))
             {
                 hasError = true;
-                return "Please specify TCP port";
+                return "Please specify TCP Port";
             }
 
             if (i > 65535)
             {
                 hasError = true;
-                return "TCP port should be less or equal to 65535";
+                return "TCP Port should not be greater than 65535";
             }
 
             return string.Empty;
@@ -36,13 +36,13 @@ namespace APTAT.Application.Extensions
             if (String.IsNullOrEmpty(value))
             {
                 hasError = true;
-                return "Please specify UDP port";
+                return "Please specify UDP Port";
             }
 
             if (i > 65535)
             {
                 hasError = true;
-                return "UDP port should be less or equal to 65535";
+                return "UDP Port should not be greater than 65535";
             }
 
             return string.Empty;

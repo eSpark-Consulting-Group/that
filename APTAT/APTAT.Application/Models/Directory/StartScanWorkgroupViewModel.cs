@@ -187,7 +187,7 @@ namespace APTAT.Application.Models
             {
                 if (String.IsNullOrEmpty(WorkgroupName) && !EnumerateWorkgroups)
                 {
-                    Error = "Please Specify Workgroup";
+                    Error = "Please specify Workgroup";
                     return;
                 }
 
@@ -207,7 +207,7 @@ namespace APTAT.Application.Models
                             _workgroupCredentialsChanged = false;
                         }
                         else
-                            Error = "No Workgroups Found";
+                            Error = "No Workgroups found";
                     }
                     else
                     {

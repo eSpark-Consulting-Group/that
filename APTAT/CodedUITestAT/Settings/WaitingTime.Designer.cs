@@ -130,5 +130,14 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["NoThreatFoundVerdictWaitTime"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60000")]
+        public int DomainTreeItemExpansionWaitTime {
+            get {
+                return ((int)(this["DomainTreeItemExpansionWaitTime"]));
+            }
+        }
     }
 }

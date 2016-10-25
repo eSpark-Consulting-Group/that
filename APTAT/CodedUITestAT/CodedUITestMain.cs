@@ -299,6 +299,11 @@ namespace CodedUITestAT
            return UIMapActiveDirectory.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree;
         }
 
+        private WpfEdit DomainNameTextBox()
+        {
+            return UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIThisCustom.UIDomainNameWatermarkTEdit;
+        }
+
         #endregion
 
         #region Network Addresses
@@ -645,6 +650,41 @@ namespace CodedUITestAT
             UIMapActiveDirectory.CheckAdRow();
         }
 
+        private bool IsDomainComputerChecked(Computer endpoint)
+        {
+            WpfTreeItem domainTreeItem = UIMapActiveDirectory.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIActiveDirectoryViewCustom.UIAdTreeTree.UIDevTreeItem;
+            domainTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = SysHelper.GetDomainName(true);
+
+            WpfTreeItem computersTreeItem = domainTreeItem.GetChildren().FirstOrDefault(i => i is WpfTreeItem && i.Name == Settings.General.Default.AdTreeComputersElement) as WpfTreeItem;
+            if (computersTreeItem == null) throw new Exception(String.Format("Tree item '{0}' not found!", Settings.General.Default.AdTreeComputersElement));
+            WpfTreeItem endpointTreeItem = computersTreeItem.GetChildren().FirstOrDefault(i => i is WpfTreeItem && i.Name == endpoint.Name.ToUpper()) as WpfTreeItem;
+            if (endpointTreeItem == null) throw new Exception(String.Format("Tree item '{0}' not found!", endpoint.Name.ToUpper()));
+            WpfCheckBox endpointCheckBox = endpointTreeItem.GetChildren().FirstOrDefault(i => i is WpfCheckBox) as WpfCheckBox;
+
+            return endpointCheckBox.Checked;
+        }
+
+        /// <summary> Waits for a domain computer item in AD tree. </summary>
+        /// <param name="endpoint">Set a computer name.</param>
+        private void WaitForDomainComputer(Computer endpoint)
+        {
+            int waitTime = Settings.WaitingTime.Default.DomainTreeItemExpansionWaitTime;
+
+            var timer = Stopwatch.StartNew();
+            for (;;)
+            {
+                Playback.Wait(2000);
+                try
+                {
+                    IsDomainComputerChecked(endpoint);
+                    break;
+                } catch (Exception){ }
+                if ((int) timer.ElapsedMilliseconds > waitTime)
+                            throw new Exception(String.Format("Domain computer '{0}' is not available at AD tree after {1} seconds!", endpoint.Name, waitTime / 1000));
+            }
+            timer.Stop();
+        }
+
         /// <summary> Checks a given workgroup in the workgroups tree. </summary>
         /// <param name="workgroupName">Set a workgroup name.</param>
         private void CheckWorkgroup(string workgroupName)
@@ -654,26 +694,13 @@ namespace CodedUITestAT
             UIMapWorkgroup.CheckWorkgroup();
         }
 
-        /// <summary> Checks whether the given data are stored at Active Directory wizard branch. </summary>
-        /// <param name="domainName">Set a workgroup name.</param>
-        /// <param name="login">Set a login.</param>
-        /// <param name="testContext">Set a current TestContext.</param>
-        private void CheckStoredDataAtActiveDirectory(string domainName, string login, TestContext testContext)
+        /// <summary> Determines whether a given workgroup tree item is checked.  </summary>
+        /// <param name="workgroupName">Set a workgroup name.</param>
+        private bool IsWorkgroupChecked(string workgroupName)
         {
-            // Domain Controller
-            UIMapActiveDirectory.AssertDomainNameTextBoxTextExpectedValues.UIDomainControllerTextEditText = domainName;
-            UIMapActiveDirectory.AssertDomainNameTextBoxText();
-            testContext.WriteLine(String.Format("Domain Controller '{0}' is stored in the respective text box.", domainName));
-
-            // Administrator
-            UIMapActiveDirectory.AssertAdministratorTextBoxTextExpectedValues.UIAdministratorTextBoxEditText = login;
-            UIMapActiveDirectory.AssertAdministratorTextBoxText();
-            testContext.WriteLine(String.Format("Administrator '{0}' is stored in the respective text box.", login));
-
-            // Password
-            UIMapStartScanWizard.ClickNextButton();
-            testContext.WriteLine("Next button clicked...");
-            AssertErrorText(Settings.Errors.Default.SpecifyPassword, testContext);
+            WpfTreeItem workgroupItem = WorkgroupTreeItem(workgroupName);
+            WpfCheckBox workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the workgroup tree item checkbox
+            return workgroupCheckBox.Checked;
         }
 
         /// <summary> Asserts a text of regular error message. </summary>
@@ -1254,7 +1281,7 @@ namespace CodedUITestAT
             InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControl(AdTree());
-            ExpandAdRow("Computers");
+            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
             CheckAdRow(endpoint.Name);
             UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControl(QuickScanButton());
@@ -1397,10 +1424,8 @@ namespace CodedUITestAT
             TestContext.WriteLine("Back to Specify Workgroup step...");
             UIMapStartScanWizard.ClickNextButton();
             TestContext.WriteLine("Returned to Select Computers step...");
-            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName));            
-            WpfTreeItem workgroupItem = WorkgroupTreeItem(workgroupName);
-            WpfCheckBox workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the tree item checkbox
-            if (workgroupCheckBox.Checked) TestContext.WriteLine(String.Format("Workgroup '{0}' is still selected at Select Computers step.", workgroupName));
+            UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName));
+            if (IsWorkgroupChecked(workgroupName)) TestContext.WriteLine(String.Format("Workgroup '{0}' is still selected at Select Computers step.", workgroupName));
             else Assert.Fail(String.Format("Workgroup '{0}' is not selected at Select Computers step!", workgroupName));
             UIMapStartScanWizard.ClickNextButton();
 
@@ -1424,6 +1449,7 @@ namespace CodedUITestAT
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
+            UIHelper.WaitForControl(NextButton());
 
             // Specify Workgroup step after scan
             TestContext.WriteLine("Returned to Specify Workgroup step after scan...");
@@ -1436,9 +1462,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Returned to Select Computers step after scan...");
             UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
             UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
-            workgroupItem = WorkgroupTreeItem(workgroupName);
-            workgroupCheckBox = workgroupItem.GetChildren().FirstOrDefault(e => e is WpfCheckBox) as WpfCheckBox; // Gets the tree item checkbox
-            if (!workgroupCheckBox.Checked) TestContext.WriteLine(String.Format("Workgroup '{0}' is not selected at Select Computers step.", workgroupName));
+            if (!IsWorkgroupChecked(workgroupName)) TestContext.WriteLine(String.Format("Workgroup '{0}' is not selected at Select Computers step.", workgroupName));
             else Assert.Fail(String.Format("Workgroup '{0}' is still selected at Select Computers step!", workgroupName));
             CheckWorkgroup(workgroupName);
             UIMapStartScanWizard.ClickNextButton();
@@ -1450,6 +1474,7 @@ namespace CodedUITestAT
             UIMapWorkgroup.AssertLoginTextBoxText();
             TestContext.WriteLine(String.Format("Login '{0}' is preserved.", DataHelper.Username));
             UIMapStartScanWizard.ClickQuickScanButton();
+            TestContext.WriteLine("Quick Scan button clicked...");
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
         }
 
@@ -1457,36 +1482,110 @@ namespace CodedUITestAT
         public void ScanningWizardNavigationActiveDirectoryTest()
         {
             string domainName = SysHelper.GetDomainName();
+            Computer endpoint = DataHelper.GetEndpoint();
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
-
-            // Inputs some non-default parameters
-            InputDomainName(domainName);
-            InputDomainAdministrator(DataHelper.Username);
-            InputPassword(DataHelper.Password);            
-
-            UIMapStartScanWizard.ClickBackButton();
-            TestContext.WriteLine("Back button clicked...");
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
 
-            // Checks whether the inputted parameters are stored after clicking Back button
-            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, TestContext);
+            // Active Directory Credentials step
+            InputDomainName(domainName);
+            InputDomainAdministrator(DataHelper.Username);
+            InputPassword(DataHelper.Password);
+            UIMapStartScanWizard.ClickBackButton();
+            TestContext.WriteLine("Back to Start Scan Wizard...");
+            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
+            UIMapStartScanWizard.ClickActiveDirectoryButton();
+            TestContext.WriteLine("Returned to Active Directory Credentials step...");
+            UIHelper.WaitForControlIsEnabled(NextButton());
+            UIMapActiveDirectory.AssertDomainNameTextBoxTextExpectedValues.UIDomainNameWatermarkTEditText = domainName;
+            UIMapActiveDirectory.AssertDomainNameTextBoxText();
+            TestContext.WriteLine(String.Format("Domain Name '{0}' preserved.", domainName));
+            UIMapActiveDirectory.AssertDomainAdministratorTextBoxTextExpectedValues.UIDomainAdministratorWEditText = DataHelper.Username;
+            UIMapActiveDirectory.AssertDomainAdministratorTextBoxText();
+            TestContext.WriteLine(String.Format("Domain Administrator '{0}' preserved.", DataHelper.Username));
+            UIMapStartScanWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            InputPassword(DataHelper.Password);
+            UIMapStartScanWizard.ClickNextButton();
 
-            UIMapStartScanWizard.ClickCancelButton();
-            TestContext.WriteLine("Cancel button clicked...");
+            // Select Computers step
+            UIHelper.WaitForControl(AdTree());
+            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
+            WaitForDomainComputer(endpoint);
+            CheckAdRow(endpoint.Name);
+            UIMapStartScanWizard.ClickBackButton();
+            TestContext.WriteLine("Back to Active Directory Credentials step...");
+            UIHelper.WaitForControl(DomainNameTextBox());
+            UIMapStartScanWizard.ClickNextButton();
+            TestContext.WriteLine("Returned to Select Computers step...");
+            UIHelper.WaitForControl(AdTree());
+            WaitForDomainComputer(endpoint);
+            if (IsDomainComputerChecked(endpoint)) TestContext.WriteLine(String.Format("Endpoint '{0}' remains checked in AD tree.", endpoint.Name));
+            else Assert.Fail(String.Format("Endpoint '{0}' is no longer checked in AD tree!", endpoint.Name));
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Scan Credentials step
+            UIHelper.WaitForControl(QuickScanButton());
+            UIMapActiveDirectory.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
+            UIMapActiveDirectory.AssertLoginTextBoxText();
+            TestContext.WriteLine(String.Format("Login '{0}' is shown correctly.", DataHelper.Username));
+            UIMapStartScanWizard.ClickBackButton();
+            TestContext.WriteLine("Back to Select Computers step...");
+            UIHelper.WaitForControl(AdTree());
+            UIMapStartScanWizard.ClickNextButton();
+            TestContext.WriteLine("Returned to Scan Credentials step...");
+            UIMapActiveDirectory.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
+            UIMapActiveDirectory.AssertLoginTextBoxText();
+            TestContext.WriteLine(String.Format("Login '{0}' is shown correctly.", DataHelper.Username));
+            UIMapStartScanWizard.ClickQuickScanButton();
+            TestContext.WriteLine("Quick Scan button clicked...");
+
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();
+            TestContext.WriteLine("Scan completed...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
-            UIHelper.WaitForControlIsEnabled(NextButton());
+            UIHelper.WaitForControlIsClickable(NextButton());
 
-            // Checks whether the inputted parameters are stored after clicking Cancel button
-            CheckStoredDataAtActiveDirectory(domainName, DataHelper.Username, TestContext);
+            // Active Directory Credentials step after scan
+            TestContext.WriteLine("Returned to Active Directory Credentials step after scan...");
+            UIMapActiveDirectory.AssertDomainNameTextBoxTextExpectedValues.UIDomainNameWatermarkTEditText = domainName;
+            UIMapActiveDirectory.AssertDomainNameTextBoxText();
+            TestContext.WriteLine(String.Format("Domain Name '{0}' preserved.", domainName));
+            UIMapActiveDirectory.AssertDomainAdministratorTextBoxTextExpectedValues.UIDomainAdministratorWEditText = DataHelper.Username;
+            UIMapActiveDirectory.AssertDomainAdministratorTextBoxText();
+            TestContext.WriteLine(String.Format("Domain Administrator '{0}' preserved.", DataHelper.Username));
+            UIMapStartScanWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            InputPassword(DataHelper.Password);
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Select Computers step after scan
+            UIHelper.WaitForControl(AdTree());
+            TestContext.WriteLine("Returned to Select Computers step after scan...");
+            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
+            WaitForDomainComputer(endpoint);
+            if (!IsDomainComputerChecked(endpoint)) TestContext.WriteLine(String.Format("Endpoint '{0}' is not checked in AD tree.", endpoint.Name));
+            else Assert.Fail(String.Format("Endpoint '{0}' remains checked in AD tree!", endpoint.Name));
+            CheckAdRow(endpoint.Name);
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Scan Credentials step after scan
+            UIHelper.WaitForControl(QuickScanButton());
+            TestContext.WriteLine("Returned to Scan Credentials step after scan...");
+            UIMapActiveDirectory.AssertLoginTextBoxTextExpectedValues.UILoginWatermarkTextBoEditText = DataHelper.Username;
+            UIMapActiveDirectory.AssertLoginTextBoxText();
+            TestContext.WriteLine(String.Format("Login '{0}' is shown correctly.", DataHelper.Username));
+            UIMapStartScanWizard.ClickQuickScanButton();
+            TestContext.WriteLine("Quick Scan button clicked...");
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickOkButton();
+            TestContext.WriteLine("Scan completed...");
         }
 
         [TestMethod, Timeout(DataHelper.LongestTestTimeout)]

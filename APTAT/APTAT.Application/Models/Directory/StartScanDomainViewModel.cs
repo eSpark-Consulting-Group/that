@@ -160,19 +160,19 @@ namespace APTAT.Application.Models
             {          
                 if (String.IsNullOrEmpty(DomainController) && !UseCurrentDomainForActiveDirectory)
                 {
-                    Error = "Please Specify Domain Name";
+                    Error = "Please specify Domain Name";
                     return;
                 }
 
                 if (String.IsNullOrEmpty(ActiveDirectoryLogin) && !UseCurrentDomainForActiveDirectory)
                 {
-                    Error = "Please Specify Domain Administrator";
+                    Error = "Please specify Domain Administrator";
                     return;
                 }
 
                 if (String.IsNullOrEmpty(ActiveDirectoryPassword) && !UseCurrentDomainForActiveDirectory)
                 {
-                    Error = "Please Specify Password";
+                    Error = "Please specify Password";
                     return;
                 }
 

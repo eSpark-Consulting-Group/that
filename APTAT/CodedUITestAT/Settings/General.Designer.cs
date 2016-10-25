@@ -194,5 +194,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["EmptyWatermarkTextBoxText"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Computers")]
+        public string AdTreeComputersElement {
+            get {
+                return ((string)(this["AdTreeComputersElement"]));
+            }
+        }
     }
 }

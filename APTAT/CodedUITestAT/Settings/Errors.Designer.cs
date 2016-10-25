@@ -52,7 +52,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify TCP port")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please specify TCP Port")]
         public string SpecifyTcpPort {
             get {
                 return ((string)(this["SpecifyTcpPort"]));
@@ -61,7 +61,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify UDP port")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please specify UDP Port")]
         public string SpecifyUdpPort {
             get {
                 return ((string)(this["SpecifyUdpPort"]));
@@ -70,7 +70,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify Workgroup")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please specify Workgroup")]
         public string SpecifyWorkgroup {
             get {
                 return ((string)(this["SpecifyWorkgroup"]));
@@ -79,7 +79,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Please Specify Domain Controller")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please specify Domain Name")]
         public string SpecifyDomainController {
             get {
                 return ((string)(this["SpecifyDomainController"]));
@@ -88,7 +88,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Workgroup not found.")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Workgroup not found")]
         public string WorkgroupNotFound {
             get {
                 return ((string)(this["WorkgroupNotFound"]));
