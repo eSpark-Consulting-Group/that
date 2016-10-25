@@ -140,6 +140,22 @@ namespace APTAT.Application.Models
             }
         }
 
+        public string NameAndIpAddressSorting
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(IpAddress))
+                    return !char.IsDigit(Name[0]) ? "A" : "B" + Name;
+                else
+                {
+                    if (Name != IpAddress)
+                        return !char.IsDigit(Name[0]) ? "A" : "B" + Name;
+                    else
+                        return "C" + IpAddress;
+                }
+            }
+        }
+
         public String SizeString { get; set; }
 
         public Int64 Size { get; set; }

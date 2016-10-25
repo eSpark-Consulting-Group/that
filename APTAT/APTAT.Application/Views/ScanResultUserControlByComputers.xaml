@@ -124,7 +124,7 @@
                     Header="Name"
 MinWidth="300"
                     Width="700*" 
-                 SortMemberPath="NameAndIpAddress" />
+                 SortMemberPath="NameAndIpAddressSorting" />
                 <telerik:GridViewColumn 
                     CellTemplate="{StaticResource SizeColumn}"
                     
