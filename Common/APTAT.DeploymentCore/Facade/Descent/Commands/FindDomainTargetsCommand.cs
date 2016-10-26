@@ -40,7 +40,7 @@ namespace APTAT.DeploymentCore.Facade.Descent.Commands
                             //throw new FaultException<DirectoryDomainRootQueryFault>(
                             //    new DirectoryDomainRootQueryFault { Domain = ex.Path },
                             //    String.Format( "Domain '{0}' does not exist or could not be contacted under the specified credentials.", ex.Path ) );
-                            throw new InvalidOperationException(String.Format("Domain '{0}' does not exist or could not be contacted under the specified credentials.", ex.Path));
+                            throw new InvalidOperationException(String.Format("Domain '{0}' does not exist or could not be contacted under the specified credentials", ex.Path));
 						case DirectoryError.Unknown:
 						default:
                             //throw new FaultException<DirectoryDomainRootQueryFault>(

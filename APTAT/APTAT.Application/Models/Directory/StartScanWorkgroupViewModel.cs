@@ -185,6 +185,8 @@ namespace APTAT.Application.Models
         {
             if (previousStep == SelectWorkgroup && context.IsForward(CurrentStepIndex))
             {
+                Error = null;
+
                 if (String.IsNullOrEmpty(WorkgroupName) && !EnumerateWorkgroups)
                 {
                     Error = "Please specify Workgroup";
@@ -338,7 +340,7 @@ namespace APTAT.Application.Models
             else
             {
                 //  Items = new ObservableCollection<DeploymentItem>();
-                Error = "No Workgroups Found";
+                Error = "No Workgroups found";
                 _workgroupCredentialsChanged = true;
             }
 
