@@ -791,6 +791,14 @@ namespace CodedUITestAT
             if (domainAdministratorEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || domainAdministratorEdit.Text != domainAdministrator) domainAdministratorEdit.Text = domainAdministrator;
         }
 
+        /// <summary> Inputs Workgroup, if necessary. </summary>
+        /// <param name="workgroupName">Set a workgroup name to input.</param>
+        private void InputWorkgroup(string workgroupName)
+        {
+            WpfEdit workgroupEdit = UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
+            if (workgroupEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || workgroupEdit.Text != workgroupName) workgroupEdit.Text = workgroupName;
+        }
+
         #endregion
 
         #region Test methods
@@ -1614,16 +1622,17 @@ namespace CodedUITestAT
             UIMapMain.ClickScanNowButton();            
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
-            UIHelper.WaitForControlIsClickable(QuickScanButton());
+            UIHelper.WaitForControlIsClickable(NextButton());
 
-            // Network Address
-            UIMapStartScanWizard.ClickQuickScanButton();
+            // Network address
+            UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
             UIMapNetworkAddresses.InputNetworkAddress();
-            UIMapStartScanWizard.ClickQuickScanButton();
+            UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyNetworkAddress, TestContext);
             UIMapNetworkAddresses.ClickAddButton();
+            UIMapStartScanWizard.ClickNextButton();
 
             // Login
             UIMapStartScanWizard.ClickQuickScanButton();
@@ -1634,8 +1643,6 @@ namespace CodedUITestAT
             // Password
             UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapNetworkAddresses.InputPassword();
         }
 
         [TestMethod]
@@ -1646,31 +1653,39 @@ namespace CodedUITestAT
             UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
-            UIHelper.WaitForControlIsClickable(QuickScanButton());
+            UIHelper.WaitForControlIsClickable(NextButton());
 
-            // Workgroup input
-            UIMapStartScanWizard.ClickQuickScanButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext);
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroup;
-            UIMapWorkgroup.InputWorkgroup();
+            // Workgroup
+            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();
+            UIMapStartScanWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyWorkgroup, TestContext);            
+            InputWorkgroup(workgroup);
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Workgroup computer
+            UIHelper.WaitForControl(WorkgroupTreeItem(workgroup), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
+            UIMapStartScanWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyComputer, TestContext);
+            CheckWorkgroup(workgroup);
+            UIMapStartScanWizard.ClickNextButton();
 
             // Login
             UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
-            UIMapWorkgroup.InputLoginParams.UILoginTextBoxEditText = DataHelper.Username;
-            UIMapWorkgroup.InputLogin();
+            InputScanLogin(DataHelper.Username);
 
             // Password
             UIMapStartScanWizard.ClickQuickScanButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
-            UIMapWorkgroup.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapWorkgroup.InputPassword();
+            InputPassword(DataHelper.Password);
+            UIMapStartScanWizard.ClickBackButton();
+            UIHelper.WaitForControl(NextButton());
+            UIMapStartScanWizard.ClickBackButton();
 
             // Non-existent workgroup
             string error = "error";
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroup.Remove(workgroup.Length - error.Length) + error;
-            UIMapWorkgroup.InputWorkgroup();
-            UIMapStartScanWizard.ClickQuickScanButton();
+            InputWorkgroup(workgroup.Remove(workgroup.Length - error.Length) + error);
+            UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
             AssertErrorText(Settings.Errors.Default.WorkgroupNotFound, TestContext);
         }
@@ -1679,29 +1694,57 @@ namespace CodedUITestAT
         public void InvalidInputHandlingInActiveDirectoryTest()
         {
             string domainName = SysHelper.GetDomainName();
+            Computer endpoint = DataHelper.GetEndpoint();
 
             UIMapMain.ClickScanNowButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickActiveDirectoryButton();
             UIHelper.WaitForControlIsClickable(NextButton());
 
-            // Domain Controller input
+            // Domain Name
             UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyDomainController, TestContext);            
+            AssertErrorText(Settings.Errors.Default.SpecifyDomainName, TestContext);            
             InputDomainName(domainName);
 
-            // Administrator
+            // Domain Administrator
             UIMapStartScanWizard.ClickNextButton();
-            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);            
+            AssertErrorText(Settings.Errors.Default.SpecifyDomainAdministrator, TestContext);            
             InputDomainAdministrator(DataHelper.Username);
 
             // Password
             UIMapStartScanWizard.ClickNextButton();
             AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
             InputPassword(DataHelper.Password);
+            UIMapStartScanWizard.ClickNextButton();
+
+            // Domain computer
+            UIHelper.WaitForControl(AdTree());
+            UIMapStartScanWizard.ClickNextButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyComputer, TestContext);
+            ExpandAdRow(Settings.General.Default.AdTreeComputersElement);
+            CheckAdRow(endpoint.Name);
+            UIMapStartScanWizard.ClickNextButton();
+            UIHelper.WaitForControl(QuickScanButton());
+
+            /* 
+            // Credentials input does not function here
+            // Login
+            InputScanLogin(String.Empty);
+            UIMapStartScanWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyLogin, TestContext);
+
+            // Password
+            InputScanLogin(DataHelper.Username);
+            InputPassword(String.Empty);
+            UIMapStartScanWizard.ClickQuickScanButton();
+            AssertErrorText(Settings.Errors.Default.SpecifyPassword, TestContext);
+            */
+            UIMapStartScanWizard.ClickBackButton();
+            UIHelper.WaitForControl(NextButton());
+            UIMapStartScanWizard.ClickBackButton();
 
             // Non-existent domain
-            string nonExistentDomainName = domainName + ".test";
+            string nonExistentDomainName = domainName + ".error";
             InputDomainName(nonExistentDomainName);
             UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControlIsClickable(ErrorTextBlock(), Settings.WaitingTime.Default.DomainDiscoveryWaitTime);

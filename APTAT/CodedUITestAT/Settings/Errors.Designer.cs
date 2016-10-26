@@ -34,7 +34,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Enter at least one network address")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please enter at least one network address")]
         public string SpecifyNetworkAddress {
             get {
                 return ((string)(this["SpecifyNetworkAddress"]));
@@ -80,15 +80,15 @@ namespace CodedUITestAT.Settings {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Please specify Domain Name")]
-        public string SpecifyDomainController {
+        public string SpecifyDomainName {
             get {
-                return ((string)(this["SpecifyDomainController"]));
+                return ((string)(this["SpecifyDomainName"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Workgroup not found")]
+        [global::System.Configuration.DefaultSettingValueAttribute("No Workgroups found")]
         public string WorkgroupNotFound {
             get {
                 return ((string)(this["WorkgroupNotFound"]));
@@ -98,10 +98,28 @@ namespace CodedUITestAT.Settings {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Domain \'{0}\' does not exist or could not be contacted under the specified credent" +
-            "ials.")]
+            "ials")]
         public string DomainNotFound {
             get {
                 return ((string)(this["DomainNotFound"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please select at least one item")]
+        public string SpecifyComputer {
+            get {
+                return ((string)(this["SpecifyComputer"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Please specify Domain Administrator")]
+        public string SpecifyDomainAdministrator {
+            get {
+                return ((string)(this["SpecifyDomainAdministrator"]));
             }
         }
     }
