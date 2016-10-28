@@ -482,9 +482,9 @@ namespace CodedUITestAT
             timer.Stop();
 
             // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
-            UIMapResultsWindow.GoToScanResultsTab();
-            Playback.Wait(2000);
-            UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
+            //UIMapResultsWindow.GoToScanResultsTab();
+            //Playback.Wait(2000);
+            //UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
 
             // Waits until the results are actually available at UI
             int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
