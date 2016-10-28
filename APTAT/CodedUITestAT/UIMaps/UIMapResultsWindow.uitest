@@ -236,11 +236,11 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage1">
+    <MouseAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
       <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="67" Y="7" />
+      <Location X="94" Y="25" />
       <WheelDirection>0</WheelDirection>
       <ActionType>Click</ActionType>
       <MouseButton>Left</MouseButton>
@@ -928,6 +928,51 @@
                   </AndCondition>
                   <SupportLevel>0</SupportLevel>
                   <Descendants />
+                </UIObject>
+              </Descendants>
+            </UIObject>
+            <UIObject ControlType="Custom" Id="UIResultsScreenCustom" FriendlyName="ResultsScreen" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Unknown File Hunter</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Custom</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.ResultTabsControl</PropertyCondition>
+                <PropertyCondition Name="AutomationId">ResultsScreen</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="TabList" Id="UIResultsTabControlTabList" FriendlyName="ResultsTabControl" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Unknown File Hunter</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">TabList</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">ResultsTabControl</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="TabPage" Id="UIValkyrieanalysisresuTabPage" FriendlyName="Valkyrie analysis results" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Unknown File Hunter</WindowTitle>
+                      </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+                      </SearchConfigurations>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">TabPage</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">ValkyrieAnalysisResultsTab</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                  </Descendants>
                 </UIObject>
               </Descendants>
             </UIObject>

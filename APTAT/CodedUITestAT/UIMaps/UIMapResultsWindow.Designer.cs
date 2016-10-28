@@ -204,11 +204,11 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void GoToValkyrieAnalysisResultsTab()
         {
             #region Variable Declarations
-            WpfTabPage uIValkyrieanalysisresuTabPage1 = this.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage1;
+            WpfTabPage uIValkyrieanalysisresuTabPage = this.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
             #endregion
 
             // Click 'Valkyrie analysis results' tab
-            Mouse.Click(uIValkyrieanalysisresuTabPage1, new Point(67, 7));
+            Mouse.Click(uIValkyrieanalysisresuTabPage, new Point(94, 25));
         }
         
         /// <summary>
@@ -1493,12 +1493,26 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIScanResultsScreenByCCustom;
             }
         }
+        
+        public UIResultsScreenCustom3 UIResultsScreenCustom
+        {
+            get
+            {
+                if ((this.mUIResultsScreenCustom == null))
+                {
+                    this.mUIResultsScreenCustom = new UIResultsScreenCustom3(this);
+                }
+                return this.mUIResultsScreenCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIViewsMainViewxamlPane1 mUIViewsMainViewxamlPane;
         
         private UIScanResultsScreenByCCustom1 mUIScanResultsScreenByCCustom;
+        
+        private UIResultsScreenCustom3 mUIResultsScreenCustom;
         #endregion
     }
     
@@ -1710,6 +1724,76 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         private WpfTable mUIRadTreeListViewTable;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIResultsScreenCustom3 : WpfCustom
+    {
+        
+        public UIResultsScreenCustom3(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.ResultTabsControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ResultsScreen";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIResultsTabControlTabList1 UIResultsTabControlTabList
+        {
+            get
+            {
+                if ((this.mUIResultsTabControlTabList == null))
+                {
+                    this.mUIResultsTabControlTabList = new UIResultsTabControlTabList1(this);
+                }
+                return this.mUIResultsTabControlTabList;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIResultsTabControlTabList1 mUIResultsTabControlTabList;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIResultsTabControlTabList1 : WpfTabList
+    {
+        
+        public UIResultsTabControlTabList1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTabList.PropertyNames.AutomationId] = "ResultsTabControl";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfTabPage UIValkyrieanalysisresuTabPage
+        {
+            get
+            {
+                if ((this.mUIValkyrieanalysisresuTabPage == null))
+                {
+                    this.mUIValkyrieanalysisresuTabPage = new WpfTabPage(this);
+                    #region Search Criteria
+                    this.mUIValkyrieanalysisresuTabPage.SearchProperties[WpfTabPage.PropertyNames.AutomationId] = "ValkyrieAnalysisResultsTab";
+                    this.mUIValkyrieanalysisresuTabPage.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
+                    this.mUIValkyrieanalysisresuTabPage.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIValkyrieanalysisresuTabPage;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfTabPage mUIValkyrieanalysisresuTabPage;
         #endregion
     }
 }
