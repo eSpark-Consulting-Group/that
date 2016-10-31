@@ -70,7 +70,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("25200000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("14400000")]
         public int FullScanWaitTime {
             get {
                 return ((int)(this["FullScanWaitTime"]));

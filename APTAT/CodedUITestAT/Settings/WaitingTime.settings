@@ -18,7 +18,7 @@
       <Value Profile="(Default)">60000</Value>
     </Setting>
     <Setting Name="FullScanWaitTime" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">25200000</Value>
+      <Value Profile="(Default)">14400000</Value>
     </Setting>
     <Setting Name="ReportCreationWaitTime" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">120000</Value>
