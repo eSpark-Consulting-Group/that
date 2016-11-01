@@ -210,6 +210,8 @@ namespace CodedUITestAT
             useEula.UIMapEula.ClickIAcceptButton();
 
             UIHelper.WaitForControlIsEnabled(StartScanButton());
+
+            Playback.Wait(300000);
         }
         
         [TestCleanup]
