@@ -424,8 +424,8 @@ namespace CodedUITestAT
             valkyrieTab.Container = ResultsTabControl();
 
             testContext.WriteLine(String.Format("Tab Enabled '{0}', Container '{1}', WTitle '{2}'.", valkyrieTab.Enabled, valkyrieTab.Container, valkyrieTab.WindowTitles));
-            testContext.WriteLine(String.Format("Tab TopParent '{0}', State '{1}', SearchProp '{2}'.", valkyrieTab.TopParent, valkyrieTab.State, valkyrieTab.SearchProperties));
-            testContext.WriteLine(String.Format("Tab SearchConfig '{0}', Name '{1}', Header '{2}'.", valkyrieTab.SearchConfigurations, valkyrieTab.Name, valkyrieTab.Header));
+            testContext.WriteLine(String.Format("Tab TopParent '{0}', SearchProp '{1}'.", valkyrieTab.TopParent, valkyrieTab.SearchProperties));
+            testContext.WriteLine(String.Format("Tab SearchConfig '{0}', Name '{1}'.", valkyrieTab.SearchConfigurations, valkyrieTab.Name));
             testContext.WriteLine(String.Format("Tab HasFocus '{0}', FName '{1}', Exists '{2}'.", valkyrieTab.HasFocus, valkyrieTab.FriendlyName, valkyrieTab.Exists));
             testContext.WriteLine(String.Format("Tab FilterProp '{0}', ControlType '{1}', ClassName '{2}'.", valkyrieTab.FilterProperties, valkyrieTab.ControlType, valkyrieTab.ClassName));
             testContext.WriteLine(String.Format("Tab AutomationID '{0}'.", valkyrieTab.AutomationId));
