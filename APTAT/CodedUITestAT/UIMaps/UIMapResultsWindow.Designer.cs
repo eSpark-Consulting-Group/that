@@ -1769,6 +1769,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         {
             #region Search Criteria
             this.SearchProperties[WpfTabList.PropertyNames.AutomationId] = "ResultsTabControl";
+            this.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
             this.WindowTitles.Add("Unknown File Hunter");
             #endregion
         }

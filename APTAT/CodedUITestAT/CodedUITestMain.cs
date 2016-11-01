@@ -491,6 +491,7 @@ namespace CodedUITestAT
             int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
             UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
             UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
+            testContext.WriteLine("'Valkyrie analysis results' tab enabled...");
 
             // Waits until the Valkyrie upload progress is completed
             UIHelper.WaitForControlIsClickable(SendingFilesTextBlock(), waitTime, false);
@@ -498,7 +499,11 @@ namespace CodedUITestAT
             for (; ; )
             {
                 Playback.Wait(2000);
-                if (!MainWindowTitleTextBlock().DisplayText.Contains("%")) break;
+                if (!MainWindowTitleTextBlock().DisplayText.Contains("%"))
+                {
+                    testContext.WriteLine("Valkyrie upload progress is completed.");
+                    break;
+                }
                 if ((int) timer.ElapsedMilliseconds > waitTime) throw new Exception(String.Format("Valkyrie upload progress is not completed after {0} minutes!", waitTime / 60000));
             }
             timer.Stop();
@@ -506,7 +511,9 @@ namespace CodedUITestAT
             // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
             UIMapResultsWindow.GoToScanResultsTab();
             Playback.Wait(2000);
+            UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
             GoToValkyrieAnalysisResultsTab(testContext);
+            testContext.WriteLine("'Valkyrie analysis results' tab clicked...");
 
             // Waits until the results are actually available at UI
             int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;

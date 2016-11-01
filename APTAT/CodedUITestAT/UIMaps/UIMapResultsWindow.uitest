@@ -949,6 +949,9 @@
                   <WindowTitles>
                     <WindowTitle>Unknown File Hunter</WindowTitle>
                   </WindowTitles>
+                  <SearchConfigurations>
+                    <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+                  </SearchConfigurations>
                   <AndCondition>
                     <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
                     <PropertyCondition Name="ControlType">TabList</PropertyCondition>
