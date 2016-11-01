@@ -417,10 +417,18 @@ namespace CodedUITestAT
         #region Local helper methods
 
         /// <summary> Selects 'Valkyrie analysis results' tab. </summary>
-        private void GoToValkyrieAnalysisResultsTab()
+        /// <param name="testContext">Set current TestContext.</param>
+        private void GoToValkyrieAnalysisResultsTab(TestContext testContext)
         {
             WpfTabPage valkyrieTab = ValkyrieAnalysisResultsTab();
             valkyrieTab.Container = ResultsTabControl();
+
+            testContext.WriteLine(String.Format("Tab Enabled '{0}', Container '{1}', WTitle '{2}'.", valkyrieTab.Enabled, valkyrieTab.Container, valkyrieTab.WindowTitles));
+            testContext.WriteLine(String.Format("Tab TopParent '{0}', State '{1}', SearchProp '{2}'.", valkyrieTab.TopParent, valkyrieTab.State, valkyrieTab.SearchProperties));
+            testContext.WriteLine(String.Format("Tab SearchConfig '{0}', Name '{1}', Header '{2}'.", valkyrieTab.SearchConfigurations, valkyrieTab.Name, valkyrieTab.Header));
+            testContext.WriteLine(String.Format("Tab HasFocus '{0}', FName '{1}', Exists '{2}'.", valkyrieTab.HasFocus, valkyrieTab.FriendlyName, valkyrieTab.Exists));
+            testContext.WriteLine(String.Format("Tab FilterProp '{0}', ControlType '{1}', ClassName '{2}'.", valkyrieTab.FilterProperties, valkyrieTab.ControlType, valkyrieTab.ClassName));
+            testContext.WriteLine(String.Format("Tab AutomationID '{0}'.", valkyrieTab.AutomationId));
 
             Mouse.Click(valkyrieTab);
         }
@@ -498,7 +506,7 @@ namespace CodedUITestAT
             // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
             UIMapResultsWindow.GoToScanResultsTab();
             Playback.Wait(2000);
-            GoToValkyrieAnalysisResultsTab();
+            GoToValkyrieAnalysisResultsTab(testContext);
 
             // Waits until the results are actually available at UI
             int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
