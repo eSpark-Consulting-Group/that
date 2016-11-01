@@ -210,8 +210,6 @@ namespace CodedUITestAT
             useEula.UIMapEula.ClickIAcceptButton();
 
             UIHelper.WaitForControlIsEnabled(StartScanButton());
-
-            Playback.Wait(300000);
         }
         
         [TestCleanup]
@@ -367,7 +365,12 @@ namespace CodedUITestAT
 
         internal WpfTabPage ValkyrieAnalysisResultsTab()
         {
-            return UIMapResultsWindow.UIUnknownFileHunterWindow.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
+            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
+        }
+
+        private WpfTabList ResultsTabControl()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList;
         }
 
         internal WpfTable ScanningResultsTable()
@@ -412,6 +415,15 @@ namespace CodedUITestAT
         #endregion
 
         #region Local helper methods
+
+        /// <summary> Selects 'Valkyrie analysis results' tab. </summary>
+        private void GoToValkyrieAnalysisResultsTab()
+        {
+            WpfTabPage valkyrieTab = ValkyrieAnalysisResultsTab();
+            valkyrieTab.Container = ResultsTabControl();
+
+            Mouse.Click(valkyrieTab);
+        }
 
         /// <summary> Gets the number of files of a given type from Scan Completed window. Starts at Scan Completed window. </summary>
         /// <param name="fileType">Set a file type.</param>
@@ -483,13 +495,10 @@ namespace CodedUITestAT
             }
             timer.Stop();
 
-            // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs            
+            // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
             UIMapResultsWindow.GoToScanResultsTab();
-            for (int i = 0; i < 3; i++)
-            {               
-               Playback.Wait(2000);
-               UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
-            }
+            Playback.Wait(2000);
+            GoToValkyrieAnalysisResultsTab();
 
             // Waits until the results are actually available at UI
             int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
