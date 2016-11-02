@@ -1961,32 +1961,32 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
 
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIHelper.WaitForControlIsEnabled(NextButton());
             CleanNetworkAddressesList();
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = ipRange;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapNetworkAddresses.ClickAddButton();
             TestContext.WriteLine(String.Format("IP range {0} added to the addresses list.", ipRange));
+            UIMapStartScanWizard.ClickNextButton();
 
-            UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = DataHelper.Username;
-            UIMapNetworkAddresses.InputLogin();
-            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapNetworkAddresses.InputPassword();
-
+            UIHelper.WaitForControl(QuickScanButton(), Settings.WaitingTime.Default.EndpointResolvingWaitTime);
+            UIHelper.WaitForControlIsEnabled(QuickScanButton(), Settings.WaitingTime.Default.EndpointResolvingWaitTime);
+            InputScanLogin(DataHelper.Username);
+            InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickQuickScanButton();
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
             UIMapScanCompletedWindow.ClickNoButton();
 
-            // Verifies the scanning results
+            // Verifies the scan results
             UIHelper.ClickRow(ResultsScreen.ScanResults, server);
-            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", server.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", server.Name));
             UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", endpoint.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", endpoint.Name));
             UIHelper.ClickRow(ResultsScreen.ScanResults, malware);
-            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", malware.Location));
+            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scan results' screen.", malware.Location));
             UIHelper.ClickRow(ResultsScreen.ScanResults, unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+            TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scan results' screen.", unknownFile.Location));
         }
 
         [TestMethod]
@@ -2003,18 +2003,18 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
 
-            UIHelper.WaitForControlIsEnabled(QuickScanButton());
+            UIHelper.WaitForControlIsEnabled(NextButton());
             CleanNetworkAddressesList();
             UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = subnet;
             UIMapNetworkAddresses.InputNetworkAddress();
             UIMapNetworkAddresses.ClickAddButton();
             TestContext.WriteLine(String.Format("Subnet {0} added to the addresses list.", subnet));
+            UIMapStartScanWizard.ClickNextButton();
 
-            UIMapNetworkAddresses.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = DataHelper.Username;
-            UIMapNetworkAddresses.InputLogin();
-            UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = DataHelper.EncryptedPassword;
-            UIMapNetworkAddresses.InputPassword();
-
+            UIHelper.WaitForControl(QuickScanButton(), Settings.WaitingTime.Default.EndpointResolvingWaitTime);
+            UIHelper.WaitForControlIsEnabled(QuickScanButton(), Settings.WaitingTime.Default.EndpointResolvingWaitTime);
+            InputScanLogin(DataHelper.Username);
+            InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickQuickScanButton();
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
@@ -2022,13 +2022,13 @@ namespace CodedUITestAT
 
             // Verifies the scanning results
             UIHelper.ClickRow(ResultsScreen.ScanResults, server);
-            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", server.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", server.Name));
             UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
-            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scanning results' screen.", endpoint.Name));
+            TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", endpoint.Name));
             UIHelper.ClickRow(ResultsScreen.ScanResults, malware);
-            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scanning results' screen.", malware.Location));
+            TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scan results' screen.", malware.Location));
             UIHelper.ClickRow(ResultsScreen.ScanResults, unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scanning results' screen.", unknownFile.Location));
+            TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scan results' screen.", unknownFile.Location));
         }
 
         [TestMethod]
