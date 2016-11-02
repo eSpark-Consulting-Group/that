@@ -1462,7 +1462,8 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
 
             <ControlTemplate TargetType="grid:FilteringDropDown" x:Key="DistinctFilterControlTemplate">
                 <Grid>
-                    <Button x:Name="PART_DropDownButton">
+                    <Button AutomationProperties.AutomationId="FilterDropDownButton" 
+                            x:Name="PART_DropDownButton">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <ContentPresenter />
@@ -1512,27 +1513,30 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
 							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
                             <StackPanel x:Name="PART_DistinctFilter" Visibility="{TemplateBinding DistinctFiltersVisibility}">
-                                <ListBox x:Name="PART_DistinctValuesList"
-								 ItemsSource="{Binding DistinctValues}"
-								 
-								 ScrollViewer.HorizontalScrollBarVisibility="Auto"
-							ItemContainerStyle="{StaticResource DistinctValueListBoxItemStyle}"
-								 SelectionMode="Multiple" BorderThickness="0" Background="Transparent">
-                                    <ListBox.ItemsPanel>
+
+                                <ListBox AutomationProperties.AutomationId="StatusesListBox"
+                                         x:Name="PART_DistinctValuesList"
+								         ItemsSource="{Binding DistinctValues}"								 
+								         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+							             ItemContainerStyle="{StaticResource DistinctValueListBoxItemStyle}"
+								         SelectionMode="Multiple" BorderThickness="0" Background="Transparent">
+                                        <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <VirtualizingStackPanel  MaxHeight="242"/>
                                         </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
+                                        </ListBox.ItemsPanel>
 
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0"
-											  Content="{Binding ConvertedValue, Converter={StaticResource DistinctValueConverter}}"
-											  
-											   VerticalContentAlignment="Top" Padding="6 -2 0 0" FontFamily="Segoe UI" FontSize="13"/>
+                                            <CheckBox AutomationProperties.AutomationId="{Binding}" 
+                                                      IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0"
+											          Content="{Binding ConvertedValue, Converter={StaticResource DistinctValueConverter}}"											  
+											          VerticalContentAlignment="Top" Padding="6 -2 0 0" FontFamily="Segoe UI" FontSize="13"/>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
+                                    
                                 </ListBox>
+                                
                             </StackPanel>
                            
                             <Grid>
@@ -1540,8 +1544,8 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                                     <ColumnDefinition />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                
-                                <Button x:Name="PART_ClearFilterButton" Grid.Column="1"
+
+                                <Button AutomationProperties.AutomationId="ClearFilterButton" x:Name="PART_ClearFilterButton" Grid.Column="1"
 								Margin="0 2 -5 5" 
 								telerik:LocalizationManager.ResourceKey="GridViewClearFilter"
 								Height="23" Width="75" />

@@ -74,7 +74,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void CheckCanceledFilterCheckBox()
         {
             #region Variable Declarations
-            WpfCheckBox uICanceledCheckBox = this.UIUnknownFileHunterWindow.UIFilterListBoxList.UITelerikWindowsControListItem3.UICanceledCheckBox;
+            WpfCheckBox uICanceledCheckBox = this.UIUnknownFileHunterWindow1.UIStatusesListBoxList.UICanceledListItem.UICanceledCheckBox;
             #endregion
 
             // Select 'Canceled' check box
@@ -87,7 +87,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void CheckCompletedFilterCheckBox()
         {
             #region Variable Declarations
-            WpfCheckBox uICompletedCheckBox = this.UIUnknownFileHunterWindow.UIFilterListBoxList.UITelerikWindowsControListItem4.UICompletedCheckBox;
+            WpfCheckBox uICompletedCheckBox = this.UIUnknownFileHunterWindow1.UIStatusesListBoxList.UICompletedListItem.UICompletedCheckBox;
             #endregion
 
             // Select 'Completed' check box
@@ -100,7 +100,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void CheckFailedFilterCheckBox()
         {
             #region Variable Declarations
-            WpfCheckBox uIFailedCheckBox = this.UIUnknownFileHunterWindow.UIFilterListBoxList.UITelerikWindowsControListItem2.UIFailedCheckBox;
+            WpfCheckBox uIFailedCheckBox = this.UIUnknownFileHunterWindow1.UIStatusesListBoxList.UIFailedListItem.UIFailedCheckBox;
             #endregion
 
             // Select 'Failed' check box
@@ -113,7 +113,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void CheckInProgressFilterCheckBox()
         {
             #region Variable Declarations
-            WpfCheckBox uIInProgressCheckBox = this.UIUnknownFileHunterWindow.UIFilterListBoxList.UITelerikWindowsControListItem1.UIInProgressCheckBox;
+            WpfCheckBox uIInProgressCheckBox = this.UIUnknownFileHunterWindow1.UIStatusesListBoxList.UIInProgressListItem.UIInProgressCheckBox;
             #endregion
 
             // Select 'In Progress' check box
@@ -126,7 +126,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void CheckOfflineFilterCheckBox()
         {
             #region Variable Declarations
-            WpfCheckBox uIOfflineCheckBox = this.UIUnknownFileHunterWindow.UIFilterListBoxList.UITelerikWindowsControListItem.UIOfflineCheckBox;
+            WpfCheckBox uIOfflineCheckBox = this.UIUnknownFileHunterWindow1.UIStatusesListBoxList.UIOfflineListItem.UIOfflineCheckBox;
             #endregion
 
             // Select 'Offline' check box
@@ -139,11 +139,11 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void ClickClearFilterButton()
         {
             #region Variable Declarations
-            WpfButton uIClearFilterButton = this.UIUnknownFileHunterWindow.UIFilteringControlWindow.UIClearFilterButton;
+            WpfButton uIClearFilterButton = this.UIUnknownFileHunterWindow1.UIFilteringControlWindow.UIClearFilterButton;
             #endregion
 
             // Click 'Clear Filter' button
-            Mouse.Click(uIClearFilterButton, new Point(25, 2));
+            Mouse.Click(uIClearFilterButton, new Point(46, 11));
         }
         
         /// <summary>
@@ -1547,6 +1547,30 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIResultsScreenCustom;
             }
         }
+        
+        public UIStatusesListBoxList UIStatusesListBoxList
+        {
+            get
+            {
+                if ((this.mUIStatusesListBoxList == null))
+                {
+                    this.mUIStatusesListBoxList = new UIStatusesListBoxList(this);
+                }
+                return this.mUIStatusesListBoxList;
+            }
+        }
+        
+        public UIFilteringControlWindow1 UIFilteringControlWindow
+        {
+            get
+            {
+                if ((this.mUIFilteringControlWindow == null))
+                {
+                    this.mUIFilteringControlWindow = new UIFilteringControlWindow1(this);
+                }
+                return this.mUIFilteringControlWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1555,6 +1579,10 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private UIScanResultsScreenByCCustom1 mUIScanResultsScreenByCCustom;
         
         private UIResultsScreenCustom3 mUIResultsScreenCustom;
+        
+        private UIStatusesListBoxList mUIStatusesListBoxList;
+        
+        private UIFilteringControlWindow1 mUIFilteringControlWindow;
         #endregion
     }
     
@@ -1887,6 +1915,310 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         private WpfTabPage mUIValkyrieanalysisresuTabPage;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIStatusesListBoxList : WpfList
+    {
+        
+        public UIStatusesListBoxList(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfList.PropertyNames.AutomationId] = "StatusesListBox";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public UIOfflineListItem UIOfflineListItem
+        {
+            get
+            {
+                if ((this.mUIOfflineListItem == null))
+                {
+                    this.mUIOfflineListItem = new UIOfflineListItem(this);
+                }
+                return this.mUIOfflineListItem;
+            }
+        }
+        
+        public UIFailedListItem UIFailedListItem
+        {
+            get
+            {
+                if ((this.mUIFailedListItem == null))
+                {
+                    this.mUIFailedListItem = new UIFailedListItem(this);
+                }
+                return this.mUIFailedListItem;
+            }
+        }
+        
+        public UICompletedListItem UICompletedListItem
+        {
+            get
+            {
+                if ((this.mUICompletedListItem == null))
+                {
+                    this.mUICompletedListItem = new UICompletedListItem(this);
+                }
+                return this.mUICompletedListItem;
+            }
+        }
+        
+        public UICanceledListItem UICanceledListItem
+        {
+            get
+            {
+                if ((this.mUICanceledListItem == null))
+                {
+                    this.mUICanceledListItem = new UICanceledListItem(this);
+                }
+                return this.mUICanceledListItem;
+            }
+        }
+        
+        public UIInProgressListItem UIInProgressListItem
+        {
+            get
+            {
+                if ((this.mUIInProgressListItem == null))
+                {
+                    this.mUIInProgressListItem = new UIInProgressListItem(this);
+                }
+                return this.mUIInProgressListItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIOfflineListItem mUIOfflineListItem;
+        
+        private UIFailedListItem mUIFailedListItem;
+        
+        private UICompletedListItem mUICompletedListItem;
+        
+        private UICanceledListItem mUICanceledListItem;
+        
+        private UIInProgressListItem mUIInProgressListItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIOfflineListItem : WpfListItem
+    {
+        
+        public UIOfflineListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfListItem.PropertyNames.AutomationId] = "Offline";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UIOfflineCheckBox
+        {
+            get
+            {
+                if ((this.mUIOfflineCheckBox == null))
+                {
+                    this.mUIOfflineCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUIOfflineCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "Telerik.Windows.Controls.GridView.DistinctValueViewModel";
+                    this.mUIOfflineCheckBox.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIOfflineCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUIOfflineCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIFailedListItem : WpfListItem
+    {
+        
+        public UIFailedListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfListItem.PropertyNames.AutomationId] = "Failed";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UIFailedCheckBox
+        {
+            get
+            {
+                if ((this.mUIFailedCheckBox == null))
+                {
+                    this.mUIFailedCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUIFailedCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "Telerik.Windows.Controls.GridView.DistinctValueViewModel";
+                    this.mUIFailedCheckBox.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIFailedCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUIFailedCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UICompletedListItem : WpfListItem
+    {
+        
+        public UICompletedListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfListItem.PropertyNames.AutomationId] = "Completed";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UICompletedCheckBox
+        {
+            get
+            {
+                if ((this.mUICompletedCheckBox == null))
+                {
+                    this.mUICompletedCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUICompletedCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "Telerik.Windows.Controls.GridView.DistinctValueViewModel";
+                    this.mUICompletedCheckBox.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICompletedCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUICompletedCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UICanceledListItem : WpfListItem
+    {
+        
+        public UICanceledListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfListItem.PropertyNames.AutomationId] = "Canceled";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UICanceledCheckBox
+        {
+            get
+            {
+                if ((this.mUICanceledCheckBox == null))
+                {
+                    this.mUICanceledCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUICanceledCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "Telerik.Windows.Controls.GridView.DistinctValueViewModel";
+                    this.mUICanceledCheckBox.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICanceledCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUICanceledCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIInProgressListItem : WpfListItem
+    {
+        
+        public UIInProgressListItem(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfListItem.PropertyNames.AutomationId] = "In Progress";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UIInProgressCheckBox
+        {
+            get
+            {
+                if ((this.mUIInProgressCheckBox == null))
+                {
+                    this.mUIInProgressCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUIInProgressCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "Telerik.Windows.Controls.GridView.DistinctValueViewModel";
+                    this.mUIInProgressCheckBox.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIInProgressCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUIInProgressCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIFilteringControlWindow1 : WpfWindow
+    {
+        
+        public UIFilteringControlWindow1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "FilteringControl";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIClearFilterButton
+        {
+            get
+            {
+                if ((this.mUIClearFilterButton == null))
+                {
+                    this.mUIClearFilterButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIClearFilterButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ClearFilterButton";
+                    this.mUIClearFilterButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIClearFilterButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIClearFilterButton;
         #endregion
     }
 }

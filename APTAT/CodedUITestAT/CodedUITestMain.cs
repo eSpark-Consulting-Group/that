@@ -270,7 +270,7 @@ namespace CodedUITestAT
 
         private WpfEdit SearchBox()
         {
-          return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISearchTextBoxEdit;
+          return UIMapMain.UIUnknownFileHunterWindow1.UISearchControlCustom.UISearchWatermarkTextBEdit;
         }
 
         #endregion
@@ -1883,6 +1883,7 @@ namespace CodedUITestAT
         public void FilterDifferentScanResultsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             int waitTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
             string error = "error";
             
@@ -1890,7 +1891,8 @@ namespace CodedUITestAT
             IPAddress offlineIp = SysHelper.FindOfflineIp();
             Computer offlineComputer = new Computer(offlineIp);
             
-            StartEndpointScan(ScanType.Quick, DataHelper.Username, DataHelper.Password + error, TestContext, offlineComputer, endpoint);
+            StartEndpointScan(ScanType.Quick, DataHelper.Username, DataHelper.Password + error, TestContext, offlineComputer, endpoint);            
+            UIHelper.WaitForControlIsClickable(ResolvingComputersTextBlock(), waitTime, false);
             UIHelper.WaitForControlIsEnabled(StartScanButton(), waitTime);
             UIHelper.WaitForControlIsEnabled(SearchBox(), waitTime);
             RefreshResultsScreen();
@@ -1923,7 +1925,7 @@ namespace CodedUITestAT
             
             // Completed scan
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickYesButton();            
+            UIMapScanCompletedWindow.ClickOkButton();            
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);            
             
             SetStatusFilter(ScanStatus.Completed, TestContext);
