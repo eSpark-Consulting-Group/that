@@ -889,24 +889,7 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 }
                 return this.mUIUnknownfilesTabPage;
             }
-        }
-        
-        public WpfTabPage UIValkyrieanalysisresuTabPage
-        {
-            get
-            {
-                if ((this.mUIValkyrieanalysisresuTabPage == null))
-                {
-                    this.mUIValkyrieanalysisresuTabPage = new WpfTabPage(this);
-                    #region Search Criteria
-                    this.mUIValkyrieanalysisresuTabPage.SearchProperties[WpfTabPage.PropertyNames.AutomationId] = "ValkyrieAnalysisResultsTab";
-                    this.mUIValkyrieanalysisresuTabPage.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
-                    this.mUIValkyrieanalysisresuTabPage.WindowTitles.Add("Unknown File Hunter");
-                    #endregion
-                }
-                return this.mUIValkyrieanalysisresuTabPage;
-            }
-        }
+        }        
         
         public WpfTabPage UIUnknownfilesTabPage1
         {
