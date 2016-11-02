@@ -382,6 +382,10 @@ namespace CodedUITestAT
         {
             return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISendingFilesforAnalyProgressBar.UISendingFilesforAnalyText;
         }
+        private WpfText ResolvingComputersTextBlock()
+        {
+            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIResolvingComputersProgressBar.UIResolvingComputersText;
+        }
 
         #endregion
 
@@ -415,23 +419,6 @@ namespace CodedUITestAT
         #endregion
 
         #region Local helper methods
-
-        /// <summary> Selects 'Valkyrie analysis results' tab. </summary>
-        /// <param name="testContext">Set current TestContext.</param>
-        private void GoToValkyrieAnalysisResultsTab(TestContext testContext)
-        {
-            WpfTabPage valkyrieTab = ValkyrieAnalysisResultsTab();
-            valkyrieTab.Container = ResultsTabControl();
-
-            testContext.WriteLine(String.Format("Tab Enabled '{0}', Container '{1}', WTitle '{2}'.", valkyrieTab.Enabled, valkyrieTab.Container, valkyrieTab.WindowTitles));
-            testContext.WriteLine(String.Format("Tab TopParent '{0}', SearchProp '{1}'.", valkyrieTab.TopParent, valkyrieTab.SearchProperties));
-            testContext.WriteLine(String.Format("Tab SearchConfig '{0}', Name '{1}'.", valkyrieTab.SearchConfigurations, valkyrieTab.Name));
-            testContext.WriteLine(String.Format("Tab HasFocus '{0}', FName '{1}', Exists '{2}'.", valkyrieTab.HasFocus, valkyrieTab.FriendlyName, valkyrieTab.Exists));
-            testContext.WriteLine(String.Format("Tab FilterProp '{0}', ControlType '{1}', ClassName '{2}'.", valkyrieTab.FilterProperties, valkyrieTab.ControlType, valkyrieTab.ClassName));
-            testContext.WriteLine(String.Format("Tab AutomationID '{0}'.", valkyrieTab.AutomationId));
-
-            Mouse.Click(valkyrieTab);
-        }
 
         /// <summary> Gets the number of files of a given type from Scan Completed window. Starts at Scan Completed window. </summary>
         /// <param name="fileType">Set a file type.</param>
@@ -491,7 +478,7 @@ namespace CodedUITestAT
             int waitTime = Settings.WaitingTime.Default.ValkyrieAnalysisWaitTime;
             UIHelper.WaitForControl(ValkyrieAnalysisResultsTab(), waitTime);
             UIHelper.WaitForControlIsEnabled(ValkyrieAnalysisResultsTab(), waitTime);
-            testContext.WriteLine("'Valkyrie analysis results' tab enabled...");
+            testContext.WriteLine("'Valkyrie analysis results' tab is enabled...");
 
             // Waits until the Valkyrie upload progress is completed
             UIHelper.WaitForControlIsClickable(SendingFilesTextBlock(), waitTime, false);
@@ -501,7 +488,7 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
                 if (!MainWindowTitleTextBlock().DisplayText.Contains("%"))
                 {
-                    testContext.WriteLine("Valkyrie upload progress is completed.");
+                    testContext.WriteLine("Valkyrie upload progress is completed...");
                     break;
                 }
                 if ((int) timer.ElapsedMilliseconds > waitTime) throw new Exception(String.Format("Valkyrie upload progress is not completed after {0} minutes!", waitTime / 60000));
@@ -509,14 +496,10 @@ namespace CodedUITestAT
             timer.Stop();
 
             // CodedUI for some reasons does not detect a tab content without switching/refreshing the tabs
-            //UIMapResultsWindow.GoToScanResultsTab();
-            //Playback.Wait(2000);
-            //UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();            
-            //testContext.WriteLine("'Valkyrie analysis results' tab clicked...");
             UIHelper.GroupByFiles();
-            Playback.Wait(2000);
+            Playback.Wait(1000);
             UIHelper.GroupByComputers();
-
+            
             // Waits until the results are actually available at UI
             int treeWaitTime = Settings.WaitingTime.Default.WpfTreeWaitTime;
             timer.Restart();
@@ -1871,13 +1854,15 @@ namespace CodedUITestAT
         public void CheckAllScanResultsTest()
         { 
             Computer endpoint = DataHelper.GetEndpoint();
+            SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             int waitTime = Settings.WaitingTime.Default.EndpointResolvingWaitTime;
             
             // Offline endpoint
             IPAddress offlineIp = SysHelper.FindOfflineIp();
             Computer offlineComputer = new Computer(offlineIp);
             
-            StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);
+            StartEndpointScan(offlineComputer, ScanType.Quick, TestContext);            
+            UIHelper.WaitForControlIsClickable(ResolvingComputersTextBlock(), waitTime, false);
             UIHelper.WaitForControlIsEnabled(ScanResultsTab(), waitTime);
             RefreshResultsScreen();
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
@@ -1890,7 +1875,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickYesButton();
+            UIMapScanCompletedWindow.ClickOkButton();
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
         }
 

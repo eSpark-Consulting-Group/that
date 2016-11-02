@@ -224,6 +224,19 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uIDetailsMenuItem, new Point(48, 9));
         }
         
+        /// <summary>
+        /// AssertResolvingComputersTextBlock - Use 'AssertResolvingComputersTextBlockExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertResolvingComputersTextBlock()
+        {
+            #region Variable Declarations
+            WpfText uIResolvingComputersText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIResolvingComputersProgressBar.UIResolvingComputersText;
+            #endregion
+
+            // Verify that the 'Exists' property of 'Resolving Computers...' label equals 'True'
+            Assert.AreEqual(this.AssertResolvingComputersTextBlockExpectedValues.UIResolvingComputersTextExists, uIResolvingComputersText.Exists);
+        }
+        
         #region Properties
         public virtual AssertScanningResultsTableExpectedValues AssertScanningResultsTableExpectedValues
         {
@@ -345,6 +358,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             }
         }
         
+        public virtual AssertResolvingComputersTextBlockExpectedValues AssertResolvingComputersTextBlockExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertResolvingComputersTextBlockExpectedValues == null))
+                {
+                    this.mAssertResolvingComputersTextBlockExpectedValues = new AssertResolvingComputersTextBlockExpectedValues();
+                }
+                return this.mAssertResolvingComputersTextBlockExpectedValues;
+            }
+        }
+        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -390,6 +415,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private ClickGroupByComputersToggleButtonParams mClickGroupByComputersToggleButtonParams;
         
         private ClickGroupByFilesToggleButtonParams mClickGroupByFilesToggleButtonParams;
+        
+        private AssertResolvingComputersTextBlockExpectedValues mAssertResolvingComputersTextBlockExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -544,6 +571,21 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         /// Set to 'Pressed' state 'Group by Files' toggle button
         /// </summary>
         public bool UIGroupbyFilesToggleButtonPressed = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertResolvingComputersTextBlock'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertResolvingComputersTextBlockExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'Resolving Computers...' label equals 'True'
+        /// </summary>
+        public bool UIResolvingComputersTextExists = true;
         #endregion
     }
     
@@ -889,7 +931,24 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 }
                 return this.mUIUnknownfilesTabPage;
             }
-        }        
+        }
+        
+        public WpfTabPage UIValkyrieanalysisresuTabPage
+        {
+            get
+            {
+                if ((this.mUIValkyrieanalysisresuTabPage == null))
+                {
+                    this.mUIValkyrieanalysisresuTabPage = new WpfTabPage(this);
+                    #region Search Criteria
+                    this.mUIValkyrieanalysisresuTabPage.SearchProperties[WpfTabPage.PropertyNames.AutomationId] = "ValkyrieAnalysisResultsTab";
+                    this.mUIValkyrieanalysisresuTabPage.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
+                    this.mUIValkyrieanalysisresuTabPage.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIValkyrieanalysisresuTabPage;
+            }
+        }
         
         public WpfTabPage UIUnknownfilesTabPage1
         {
@@ -1585,6 +1644,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUISendingFilesforAnalyProgressBar;
             }
         }
+        
+        public UIResolvingComputersProgressBar UIResolvingComputersProgressBar
+        {
+            get
+            {
+                if ((this.mUIResolvingComputersProgressBar == null))
+                {
+                    this.mUIResolvingComputersProgressBar = new UIResolvingComputersProgressBar(this);
+                }
+                return this.mUIResolvingComputersProgressBar;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1597,6 +1668,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private WpfButton mUIClearSearchTextButtoButton;
         
         private UISendingFilesforAnalyProgressBar mUISendingFilesforAnalyProgressBar;
+        
+        private UIResolvingComputersProgressBar mUIResolvingComputersProgressBar;
         #endregion
     }
     
@@ -1670,6 +1743,42 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         private WpfText mUISendingFilesforAnalyText;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIResolvingComputersProgressBar : WpfProgressBar
+    {
+        
+        public UIResolvingComputersProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.AutomationId] = "ResolvingComputersBusyIndicator";
+            this.WindowTitles.Add("Unknown File Hunter");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfText UIResolvingComputersText
+        {
+            get
+            {
+                if ((this.mUIResolvingComputersText == null))
+                {
+                    this.mUIResolvingComputersText = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIResolvingComputersText.SearchProperties[WpfText.PropertyNames.Name] = "Resolving Computers...";
+                    this.mUIResolvingComputersText.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIResolvingComputersText;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfText mUIResolvingComputersText;
         #endregion
     }
     
