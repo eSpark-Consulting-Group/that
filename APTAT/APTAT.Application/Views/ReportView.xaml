@@ -51,10 +51,8 @@
                         <converters:FixedDocumentViewerModeConverter x:Key="ModeConverter" />-->
                     </telerik:RadToolBar.Resources>
 
-
-
                     <telerik:RadButton AutomationProperties.AutomationId="ShowInFolderButton" 
-                                       Click="OnShowInFolder" HorizontalAlignment="Left" VerticalAlignment="Stretch"  Padding="0" HorizontalContentAlignment="Center" 
+                                       Click="OnShowInFolder" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="0" HorizontalContentAlignment="Center" 
                                        VerticalContentAlignment="Center" IsBackgroundVisible="False" Margin="2" ToolTip="Show In Folder">
                    
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/open.png" Stretch="None" />
@@ -71,19 +69,13 @@
 
                     <telerik:RadButton AutomationProperties.AutomationId="PageUpButton"
                                        x:Name="btnPageUp" Command="{Binding PageUpCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2" 
-                                       Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False">
-                        <ToolTipService.ToolTip>
-                            <TextBlock Text="Previous page" />
-                        </ToolTipService.ToolTip>
+                                       Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False" ToolTip="Previous Page">
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/previous.png" Stretch="None"/>
                     </telerik:RadButton>
 
                     <telerik:RadButton AutomationProperties.AutomationId="PageDownButton"
                                        x:Name="btnPageDown" Command="{Binding PageDownCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="2" 
-                                       Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False">
-                        <ToolTipService.ToolTip>
-                            <TextBlock Text="Next page" />
-                        </ToolTipService.ToolTip>
+                                       Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsBackgroundVisible="False" ToolTip="Next Page">
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/next.png" Stretch="None"/>
                     </telerik:RadButton>
 

@@ -25,10 +25,13 @@
                             <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 15 20 0">
-                                        <Button Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
+                                        <Button AutomationProperties.AutomationId="CloseReportButton"
+                                                Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                                     </StackPanel>
 
-                                    <TextBlock Text="Report Preview" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock AutomationProperties.AutomationId="ReportTitleTextBlock"
+                                               Text="Report Preview" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" 
+                                               HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
                             <Application:ReportView Grid.Row="1" Grid.ColumnSpan="2"/>

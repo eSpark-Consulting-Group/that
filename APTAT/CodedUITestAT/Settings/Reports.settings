@@ -30,10 +30,10 @@
       <Value Profile="(Default)">Executive Report</Value>
     </Setting>
     <Setting Name="PerDeviceReportTitle" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Detailed Report per Device</Value>
+      <Value Profile="(Default)">Detailed Per-Device Report</Value>
     </Setting>
     <Setting Name="PerProgramReportTitle" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Detailed Report per Program</Value>
+      <Value Profile="(Default)">Detailed Per-Program Report</Value>
     </Setting>
     <Setting Name="ValkyrieOnlyVerdict" Type="System.String" Scope="Application">
       <Value Profile="(Default)">In Analysis</Value>
