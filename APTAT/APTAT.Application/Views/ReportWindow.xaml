@@ -5,7 +5,7 @@
         
         AllowsTransparency="True" Background="Transparent" 
         ResizeMode="CanResizeWithGrip" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False" x:Name="this">
 
     <Border x:Name="Shadow" CornerRadius="4" BorderBrush="#11000000" BorderThickness="1" Margin="0">
         <Border CornerRadius="3" BorderBrush="#22000000" BorderThickness="1">
@@ -30,7 +30,7 @@
                                     </StackPanel>
 
                                     <TextBlock AutomationProperties.AutomationId="ReportTitleTextBlock"
-                                               Text="Report Preview" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" 
+                                               Text="{Binding ElementName=this, Path=Header}" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" 
                                                HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>

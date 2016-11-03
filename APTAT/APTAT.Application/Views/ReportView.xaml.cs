@@ -50,8 +50,8 @@ namespace APTAT.Application
             //btnPrev.Command = null;
             //btnZoomIn.Command = null;
             //btnZoomOut.Command = null;
-            tbFind.Text = null;
-           tbPagesCount.Text = null;
+            //tbFind.Text = null;
+           //tbPagesCount.Text = null;
 
            BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
            // BindingOperations.ClearBinding(cbScale, RadComboBox.TextProperty);
@@ -83,15 +83,35 @@ namespace APTAT.Application
 
         private void TbFindKeyDown(Object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && (tbFind.Text ?? string.Empty).Length > 2)
+            
+            if (e.Key == Key.Enter && (search.Text ?? string.Empty).Length > 2)
             {
-                pdfViewer.CommandDescriptors.FindCommandDescriptor.Command.Execute(tbFind.Text);
+                pdfViewer.CommandDescriptors.FindCommandDescriptor.Command.Execute(search.Text);
                 //btnPrev.Visibility = Visibility.Visible;
                 //btnNext.Visibility = Visibility.Visible;
             }
         }
 
-        private void OnShowInFolder(Object sender, RoutedEventArgs e)
+        private void TbFindKeyUp(Object sender, KeyEventArgs e)
+        {
+            if (string.IsNullOrEmpty(search.Text))
+                clear.Visibility = Visibility.Collapsed;
+            else
+                clear.Visibility = Visibility.Visible;
+
+            
+        }
+
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        search.Text = null;
+        search.Dispatcher.BeginInvoke((Action)delegate { search.Focus(); });
+            clear.Visibility = Visibility.Collapsed;
+        }
+
+    private void OnShowInFolder(Object sender, RoutedEventArgs e)
         {
             Process.Start(@"Explorer.exe", @"/select," + _viewModel.FileName);
         }

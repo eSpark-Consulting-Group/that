@@ -13,6 +13,7 @@ using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs
 using System.ComponentModel;
 using APTAT.Application.Messages;
 using System.Threading.Tasks;
+using Telerik.Windows.Controls;
 
 namespace APTAT.Application
 {
@@ -190,9 +191,10 @@ namespace APTAT.Application
 
         }
 
-        private static void ShowReport()
+        private static void ShowReport(RadMenuItem menuItem)
         {
             ReportWindow details = new ReportWindow();
+            details.Header = menuItem.Header + " Report";
             details.Owner = System.Windows.Application.Current.MainWindow;
             details.ShowDialog();
         }
@@ -201,42 +203,42 @@ namespace APTAT.Application
         {
             _viewModel.SetReportKind(ReportKind.Executive);
             ReportButton.IsOpen = false;
-            ShowReport();
+            ShowReport(sender as RadMenuItem);
         }
 
         private void OnPerDeviceReportClick(Object sender, RadRoutedEventArgs e)
         {
             _viewModel.SetReportKind(ReportKind.DetailedPerDevice);
             ReportButton.IsOpen = false;
-            ShowReport();
+            ShowReport(sender as RadMenuItem);
         }
 
         private void OnPerProgramReportClick(Object sender, RadRoutedEventArgs e)
         {
             _viewModel.SetReportKind(ReportKind.DetailedPerProgram);
             ReportButton.IsOpen = false;
-            ShowReport();
+            ShowReport(sender as RadMenuItem);
         }
 
         private void OnExecutiveReportValkyrieClick(Object sender, RadRoutedEventArgs e)
         {
             _viewModel.SetReportKind(ReportKind.ExecutiveWithValkyrie);
             ReportButton.IsOpen = false;
-            ShowReport();
+            ShowReport(sender as RadMenuItem);
         }
 
         private void OnPerDeviceReportValkyrieClick(Object sender, RadRoutedEventArgs e)
         {
             _viewModel.SetReportKind(ReportKind.DetailedPerDeviceWithValkyrie);
             ReportButton.IsOpen = false;
-            ShowReport();
+            ShowReport(sender as RadMenuItem);
         }
 
         private void OnPerProgramReportValkyrieClick(Object sender, RadRoutedEventArgs e)
         {
             _viewModel.SetReportKind(ReportKind.DetailedPerProgramWithValkyrie);
             ReportButton.IsOpen = false;
-            ShowReport();
+            ShowReport(sender as RadMenuItem);
         }
 
         public bool IsScanInProgress
