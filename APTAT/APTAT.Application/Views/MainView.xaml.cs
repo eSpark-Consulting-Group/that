@@ -194,7 +194,7 @@ namespace APTAT.Application
         private static void ShowReport(RadMenuItem menuItem)
         {
             ReportWindow details = new ReportWindow();
-            details.Header = menuItem.Header + " Report";
+            details.Header = menuItem.Tag as string;
             details.Owner = System.Windows.Application.Current.MainWindow;
             details.ShowDialog();
         }
