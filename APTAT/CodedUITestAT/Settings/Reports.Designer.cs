@@ -130,5 +130,32 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["ValkyrieOnlyVerdict"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Executive Valkyrie Report")]
+        public string ExecutiveValkyrieReportTitle {
+            get {
+                return ((string)(this["ExecutiveValkyrieReportTitle"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Detailed Per-Device Valkyrie Report")]
+        public string PerDeviceValkyrieReportTitle {
+            get {
+                return ((string)(this["PerDeviceValkyrieReportTitle"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Detailed Per-Program Valkyrie Report")]
+        public string PerProgramValkyrieReportTitle {
+            get {
+                return ((string)(this["PerProgramValkyrieReportTitle"]));
+            }
+        }
     }
 }

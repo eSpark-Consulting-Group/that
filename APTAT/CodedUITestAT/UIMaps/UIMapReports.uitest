@@ -183,24 +183,6 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapReports.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIPerProgramMenuItem">
-      <ParameterName />
-      <ModifierKeys>None</ModifierKeys>
-      <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="51" Y="12" />
-      <WheelDirection>0</WheelDirection>
-      <ActionType>Click</ActionType>
-      <MouseButton>Left</MouseButton>
-    </MouseAction>
-    <TestStepMarkerAction Comment="" MarkerInformation="SelectPerProgramMenuItem">
-      <ParameterName />
-      <StepId>-1</StepId>
-      <Direction>Start</Direction>
-      <Outcome />
-      <Disabled>false</Disabled>
-      <WorkItemId>0</WorkItemId>
-      <MarkerRegionType>Action</MarkerRegionType>
-    </TestStepMarkerAction>
     <MouseAction UIObjectName="UIMapReports.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIPerDeviceValkyrieMenuItem">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
@@ -211,6 +193,24 @@
       <MouseButton>Left</MouseButton>
     </MouseAction>
     <TestStepMarkerAction Comment="" MarkerInformation="SelectPerDeviceValkyrieMenuItem">
+      <ParameterName />
+      <StepId>-1</StepId>
+      <Direction>Start</Direction>
+      <Outcome />
+      <Disabled>false</Disabled>
+      <WorkItemId>0</WorkItemId>
+      <MarkerRegionType>Action</MarkerRegionType>
+    </TestStepMarkerAction>
+    <MouseAction UIObjectName="UIMapReports.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadContextMenuMenu.UIPerProgramMenuItem">
+      <ParameterName />
+      <ModifierKeys>None</ModifierKeys>
+      <IsGlobalHotkey>false</IsGlobalHotkey>
+      <Location X="51" Y="12" />
+      <WheelDirection>0</WheelDirection>
+      <ActionType>Click</ActionType>
+      <MouseButton>Left</MouseButton>
+    </MouseAction>
+    <TestStepMarkerAction Comment="" MarkerInformation="SelectPerProgramMenuItem">
       <ParameterName />
       <StepId>-1</StepId>
       <Direction>Start</Direction>
@@ -453,6 +453,9 @@
                       <WindowTitles>
                         <WindowTitle>Unknown File Hunter</WindowTitle>
                       </WindowTitles>
+                      <SearchConfigurations>
+                        <SearchConfiguration>AlwaysSearch</SearchConfiguration>
+                      </SearchConfigurations>
                       <AndCondition>
                         <PropertyCondition Name="ControlType">Button</PropertyCondition>
                         <PropertyCondition Name="AutomationId">ShowInFolderButton</PropertyCondition>

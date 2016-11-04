@@ -54,17 +54,17 @@ namespace CodedUITestAT
                     break;
                 case ReportType.ExecutiveValkyrie:
                     _fileNamePattern = Settings.Reports.Default.ExecutiveValkyrieReportFileNameBeginning;
-                    _title = Settings.Reports.Default.ExecutiveReportTitle;
+                    _title = Settings.Reports.Default.ExecutiveValkyrieReportTitle;
                     _selectReportMenuItem = useReports.UIMapReports.SelectExecutiveValkyrieMenuItem;
                     break;
                 case ReportType.PerDeviceValkyrie:
                     _fileNamePattern = Settings.Reports.Default.PerDeviceValkyrieReportFileNameBeginning;
-                    _title = Settings.Reports.Default.PerDeviceReportTitle;
+                    _title = Settings.Reports.Default.PerDeviceValkyrieReportTitle;
                     _selectReportMenuItem = useReports.UIMapReports.SelectPerDeviceValkyrieMenuItem;
                     break;
                 case ReportType.PerProgramValkyrie:
                     _fileNamePattern = Settings.Reports.Default.PerProgramValkyrieReportFileNameBeginning;
-                    _title = Settings.Reports.Default.PerProgramReportTitle;
+                    _title = Settings.Reports.Default.PerProgramValkyrieReportTitle;
                     _selectReportMenuItem = useReports.UIMapReports.SelectPerProgramValkyrieMenuItem;
                     break;
                 default: throw new Exception(String.Format("Unexpected report type '{0}'!", reportType));

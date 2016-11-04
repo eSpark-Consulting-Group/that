@@ -147,8 +147,6 @@ namespace CodedUITestAT
             
             // The report viewer pdf text is no longer available for CodedUI Test after Telerik controls update
             /*
-               AssertReportPdfViewContains(report.Title, testContext);
-
             if (report.Type == ReportType.ExecutiveValkyrie || report.Type == ReportType.PerDeviceValkyrie || report.Type == ReportType.PerProgramValkyrie)
                 AssertReportPdfViewContains(Settings.Reports.Default.ValkyrieOnlyVerdict, testContext);
             */

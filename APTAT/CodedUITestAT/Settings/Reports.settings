@@ -38,5 +38,14 @@
     <Setting Name="ValkyrieOnlyVerdict" Type="System.String" Scope="Application">
       <Value Profile="(Default)">In Analysis</Value>
     </Setting>
+    <Setting Name="ExecutiveValkyrieReportTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Executive Valkyrie Report</Value>
+    </Setting>
+    <Setting Name="PerDeviceValkyrieReportTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Detailed Per-Device Valkyrie Report</Value>
+    </Setting>
+    <Setting Name="PerProgramValkyrieReportTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Detailed Per-Program Valkyrie Report</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
