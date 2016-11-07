@@ -151,7 +151,12 @@ namespace APTAT.Application.Models
                     if (Name != IpAddress)
                         return (!char.IsDigit(Name[0]) ? "A" : "B") + Name;
                     else
-                        return "C" + Version.Parse(IpAddress);
+                    {
+                        var ver = Version.Parse(IpAddress);
+                        var str = string.Format("C{0:000}.{1:000}.{2:000}.{3:000}", 
+                            ver.Major, ver.Minor, ver.Build, ver.Revision);
+                        return str;
+                    }
                 }
             }
         }

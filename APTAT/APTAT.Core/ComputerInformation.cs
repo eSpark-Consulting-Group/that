@@ -76,7 +76,12 @@ namespace APTAT.Core
                     if (Name != IP)
                         return (!char.IsDigit(Name[0]) ? "A" : "B") + Name;
                     else
-                        return "C" + Version.Parse(IP);
+                    {
+                        var ver = Version.Parse(IP);
+                        var str = string.Format("C{0:000}.{1:000}.{2:000}.{3:000}",
+                            ver.Major, ver.Minor, ver.Build, ver.Revision);
+                        return str;
+                    }
                 }
             }
         }
