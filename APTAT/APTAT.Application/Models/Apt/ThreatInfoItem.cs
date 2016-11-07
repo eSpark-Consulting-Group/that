@@ -145,13 +145,13 @@ namespace APTAT.Application.Models
             get
             {
                 if (string.IsNullOrEmpty(IpAddress))
-                    return !char.IsDigit(Name[0]) ? "A" : "B" + Name;
+                    return (!char.IsDigit(Name[0]) ? "A" : "B") + Name;
                 else
                 {
                     if (Name != IpAddress)
-                        return !char.IsDigit(Name[0]) ? "A" : "B" + Name;
+                        return (!char.IsDigit(Name[0]) ? "A" : "B") + Name;
                     else
-                        return "C" + IpAddress;
+                        return "C" + Version.Parse(IpAddress);
                 }
             }
         }

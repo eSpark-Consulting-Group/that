@@ -70,13 +70,13 @@ namespace APTAT.Core
             get
             {
                 if (string.IsNullOrEmpty(IP))
-                    return !char.IsDigit(Name[0]) ? "A" : "B" + Name;
+                    return (!char.IsDigit(Name[0]) ? "A" : "B") + Name;
                 else
                 {
                     if (Name != IP)
-                        return !char.IsDigit(Name[0]) ? "A" : "B" + Name;
+                        return (!char.IsDigit(Name[0]) ? "A" : "B") + Name;
                     else
-                        return "C" + IP;
+                        return "C" + Version.Parse(IP);
                 }
             }
         }
