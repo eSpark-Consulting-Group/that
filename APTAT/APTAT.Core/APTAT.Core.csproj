@@ -86,6 +86,13 @@
     </Compile>
     <Compile Include="FileResult.cs" />
     <Compile Include="FilesStatistics.cs" />
+    <Compile Include="FLS\Applications.cs" />
+    <Compile Include="FLS\CallerType.cs" />
+    <Compile Include="FLS\FlsManager.cs" />
+    <Compile Include="FLS\FlsApiProvider.cs" />
+    <Compile Include="FLS\FlsRequest.cs" />
+    <Compile Include="FLS\FlsResponse.cs" />
+    <Compile Include="FLS\FlsVerdict.cs" />
     <Compile Include="IAptScanner.cs" />
     <Compile Include="OsInfoHelper.cs" />
     <Compile Include="Reports\AptReportBuilder.cs" />
