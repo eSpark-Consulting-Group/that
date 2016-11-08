@@ -29,12 +29,14 @@ namespace APTAT.Application
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
                 StartupUri = new Uri("/UnknownFileHunter;component/MainWindow.xaml", UriKind.Relative);
-
+     
                 CompositionHelper.Instance.RegisterModules(new[]
                 {
                     typeof(Common.DependencyLocator),
                     typeof(DeploymentCore.DependencyLocator),
-                    typeof(DependencyLocator)
+                    typeof(DependencyLocator),
+                    typeof(Valkyrie.DependencyLocator.DependencyLocator),
+                    typeof(Core.DependencyLocator.DependencyLocator)
                 });
             }
 

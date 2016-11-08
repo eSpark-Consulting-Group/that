@@ -38,6 +38,7 @@ namespace APTAT.Valkyrie
         private readonly HashSet<ValkyrieFileInfo> _lookupContexts = new HashSet<ValkyrieFileInfo>();
 
         private readonly Object _lookupSync = new object();
+        private bool _checkingTimerIsStop = false;
 
         private Timer _progressNotifyTimer;
         private Timer _checkStatusesTimer;
@@ -107,24 +108,27 @@ namespace APTAT.Valkyrie
 
         private void ProgressNotifyTimerCallback(object state)
         {
-            if (_progressNotifyTimer != null)
-                _progressNotifyTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            _progressNotifyTimer?.Change(Timeout.Infinite, Timeout.Infinite);
             OnAnalyzeProgressChanged(_analysedItems);
-            if (_progressNotifyTimer != null)
-                _progressNotifyTimer.Change(1000, Timeout.Infinite);
+            _progressNotifyTimer?.Change(1000, Timeout.Infinite);
         }
 
         private void CheckStatusesTimerCallback(object state)
         {
-            if (_checkStatusesTimer != null)
-                _checkStatusesTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            var stopTimer = !CheckNewStatusesOnValkyrie();
+            _checkStatusesTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+            bool stopTimer = false;
+            CheckNewStatusesOnValkyrie();
+            lock (_lookupSync)
+            {
+                var pendingExists = _lookupContexts.Any() || _automaticAnalyseInProgressByHash.Any();
+                _checkingTimerIsStop = stopTimer = !pendingExists || _cancellationTokenSource.IsCancellationRequested;
+            }
             OnAnalyzeProgressChanged(_pendingItemsResolved, true, !stopTimer);
-            if (!stopTimer && _checkStatusesTimer != null)
-                _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
+            if (!stopTimer)
+                _checkStatusesTimer?.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
         }
 
-        private bool CheckNewStatusesOnValkyrie()
+        private void CheckNewStatusesOnValkyrie()
         {
             bool pendingExists = false;
             List<ValkyrieFileInfo> filesToAnalyze;
@@ -141,7 +145,7 @@ namespace APTAT.Valkyrie
             foreach (var context in filesToCheckAnalysisResult)
             {
                 if (_cancellationTokenSource.IsCancellationRequested)
-                    return false;
+                    return;
                 CheckAnalysisResultResponse automaticAnalysisResponse = null;
                 try
                 {
@@ -158,8 +162,7 @@ namespace APTAT.Valkyrie
                     || automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFound))
                     MergeAutomaticAnalysisResult(automaticAnalysisResponse, context);
             }
-            pendingExists = _lookupContexts.Any() || _automaticAnalyseInProgressByHash.Any();
-            return pendingExists;
+            return;
         }
 
         private void MergeResult(ValkyrieAnalysisResult result, ValkyrieFileInfo fileInfo)
@@ -315,10 +318,7 @@ namespace APTAT.Valkyrie
         {
             _pendingItemsResolved.Clear();
             _automaticAnalyseInProgressByHash.Clear();
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Cancel();
-            }
+            _cancellationTokenSource?.Cancel();
         }
 
 
@@ -416,11 +416,7 @@ namespace APTAT.Valkyrie
 
         private void OnAnalyzeStarted()
         {
-            var tmp = AnalyzeStarted;
-            if (tmp != null)
-            {
-                tmp(this, EventArgs.Empty);
-            }
+            AnalyzeStarted?.Invoke(this, EventArgs.Empty);
         }
               
 
@@ -677,11 +673,7 @@ namespace APTAT.Valkyrie
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;
             _fileScanned = 0;
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Dispose();
-                _cancellationTokenSource = null;
-            }
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
             cancellationToken.Register(OnAnalyzeCompleted);
@@ -720,21 +712,12 @@ namespace APTAT.Valkyrie
 
         public void Dispose()
         {
-            if (_progressNotifyTimer != null)
-            {
-                _progressNotifyTimer.Dispose();
-                _progressNotifyTimer = null;
-            }
-            if (_checkStatusesTimer != null)
-            {
-                _checkStatusesTimer.Dispose();
-                _checkStatusesTimer = null;
-            }
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Dispose();
-                _cancellationTokenSource = null;
-            }
+            _progressNotifyTimer?.Dispose();
+            _progressNotifyTimer = null;
+            _checkStatusesTimer?.Dispose();
+            _checkStatusesTimer = null;
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
         }
     }
 }

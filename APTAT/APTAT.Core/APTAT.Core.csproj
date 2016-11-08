@@ -67,6 +67,7 @@
     <Compile Include="Apt\AptScanner.cs" />
     <Compile Include="ComputerInformation.cs" />
     <Compile Include="DataNotReadyException.cs" />
+    <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Descent\Apt\AptDescentProgressItem.cs" />
     <Compile Include="Descent\Apt\AptReportData.cs" />
     <Compile Include="Descent\Apt\AptScanCompletedEventArgs.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="FLS\FlsRequest.cs" />
     <Compile Include="FLS\FlsResponse.cs" />
     <Compile Include="FLS\FlsVerdict.cs" />
+	<Compile Include="IAptAtManager.cs" />
     <Compile Include="IAptScanner.cs" />
     <Compile Include="OsInfoHelper.cs" />
     <Compile Include="Reports\AptReportBuilder.cs" />

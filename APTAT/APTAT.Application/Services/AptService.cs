@@ -36,7 +36,7 @@ namespace APTAT.Application.Services
 
 
 
-        private AptAtManager _manager;
+        private IAptAtManager _manager;
 
 
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
@@ -47,9 +47,9 @@ namespace APTAT.Application.Services
         }
 
 
-        public AptService()
+        public AptService(IAptAtManager aptAtManager)
         {
-            _manager = new AptAtManager();
+            _manager = aptAtManager;
 
         }
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)

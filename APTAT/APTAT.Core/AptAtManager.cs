@@ -3,12 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using APTAT.Common;
 using APTAT.Core.Apt;
-using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
-using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Descent.Exceptions;
 using APTAT.DeploymentCore.Directory;
@@ -17,10 +14,8 @@ using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using APTAT.Valkyrie;
 
 namespace APTAT.Core
-{
-
-
-    public class AptAtManager : IDisposable
+{ 
+    public class AptAtManager : IAptAtManager
     {
         private readonly IDescentSubSystem _descentSubSystem;
         private IAptScanner _scanner;
@@ -43,10 +38,10 @@ namespace APTAT.Core
         public Guid ValkyrieOperationUid { get; set; }
    
 
-        public AptAtManager()
+        public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient)
         {
-            _descentSubSystem = CompositionHelper.Instance.Resolve<IDescentSubSystem>();
-            _valkyrieClient = new ValkyrieClient();
+            _descentSubSystem = descentSubSystem;
+            _valkyrieClient = valkyrieClient;
         }
 
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)

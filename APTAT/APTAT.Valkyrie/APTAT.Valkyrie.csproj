@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloudVerdict.cs" />
+    <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnalyzeCompletedEventArgs.cs" />
     <Compile Include="AnalyzeCompletedEventHandler.cs" />

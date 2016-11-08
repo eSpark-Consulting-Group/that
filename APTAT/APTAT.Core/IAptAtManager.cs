@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using APTAT.Core.Descent.Apt;
+using APTAT.Core.Reports;
+using APTAT.DeploymentCore.Directory;
+using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+using APTAT.Valkyrie;
+
+namespace APTAT.Core
+{
+    public interface IAptAtManager : IDisposable
+    {
+        event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
+        event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+        event EventHandler ValkyrieAnalyzeStarted;
+        List<FileResult> ValkyrieAnalysisResult { get; set; }
+        Guid ValkyrieOperationUid { get; set; }
+
+        IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
+            IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+
+        IAptReportBuilder GetAptReportBuilder();
+        AptScanResult GetScanResultByTargetUid(Guid targetUid);
+        void StopScan();
+
+        void StartValkyrieAnalysis(string login, string password, 
+            string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential = null);
+
+        string GetValkyrieDetailsLink();
+        int GetDistinctFileCount();
+        void Dispose();
+    }
+}
