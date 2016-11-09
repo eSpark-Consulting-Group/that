@@ -284,7 +284,7 @@ namespace APTAT.Core
 
         public override string ToString()
         {
-            return Name;
+            return Path;
         }
 
         public bool Equals(FileResult other)

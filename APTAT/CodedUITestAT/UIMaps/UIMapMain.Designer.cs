@@ -263,6 +263,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Assert.AreEqual(this.AssertMainWindowTitleTextBlockTextExpectedValues.UIUnknownFileHunterTextDisplayText, uIUnknownFileHunterText.DisplayText);
         }
         
+        /// <summary>
+        /// AssertInAnalysisCounterTextBlockText - Use 'AssertInAnalysisCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertInAnalysisCounterTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem1Text = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem1Text;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '1' label equals '1'
+            Assert.AreEqual(this.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText, uIItem1Text.DisplayText);
+        }
+        
         #region Properties
         public virtual AssertMainWindowExpectedValues AssertMainWindowExpectedValues
         {
@@ -348,6 +361,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             }
         }
         
+        public virtual AssertInAnalysisCounterTextBlockTextExpectedValues AssertInAnalysisCounterTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertInAnalysisCounterTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertInAnalysisCounterTextBlockTextExpectedValues = new AssertInAnalysisCounterTextBlockTextExpectedValues();
+                }
+                return this.mAssertInAnalysisCounterTextBlockTextExpectedValues;
+            }
+        }
+        
         public UICOMODOUnknownFileHunWindow UICOMODOUnknownFileHunWindow
         {
             get
@@ -399,6 +424,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private AssertComodoOneReferralTextBlockTextExpectedValues mAssertComodoOneReferralTextBlockTextExpectedValues;
         
         private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
+        
+        private AssertInAnalysisCounterTextBlockTextExpectedValues mAssertInAnalysisCounterTextBlockTextExpectedValues;
         
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
@@ -511,6 +538,21 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Verify that the 'DisplayText' property of 'Unknown File Hunter' label equals 'Unknown File Hunter'
         /// </summary>
         public string UIUnknownFileHunterTextDisplayText = "Unknown File Hunter";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertInAnalysisCounterTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertInAnalysisCounterTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '1' label equals '1'
+        /// </summary>
+        public string UIItem1TextDisplayText = "1";
         #endregion
     }
     
@@ -1185,6 +1227,22 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIThisproductisjustoneText;
             }
         }
+        
+        public WpfText UIItem1Text
+        {
+            get
+            {
+                if ((this.mUIItem1Text == null))
+                {
+                    this.mUIItem1Text = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem1Text.SearchProperties[WpfText.PropertyNames.AutomationId] = "InAnalysisFilesCounterTextBlock";
+                    this.mUIItem1Text.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem1Text;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1197,6 +1255,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private UISendingFilesforAnalyProgressBar1 mUISendingFilesforAnalyProgressBar;
         
         private UIThisproductisjustoneText mUIThisproductisjustoneText;
+        
+        private WpfText mUIItem1Text;
         #endregion
     }
     

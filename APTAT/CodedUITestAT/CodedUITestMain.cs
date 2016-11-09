@@ -630,16 +630,27 @@ namespace CodedUITestAT
         }
 
         /// <summary> Asserts the counters values for the bottom panel. </summary>
-        /// <param name="expectedUnknownCount">Set an expected Unknown counter value.</param>
-        /// <param name="expectedMalwareCount">Set an expected Malware counter value.</param>
+        /// <param name="expectedUnknownCount">Set an expected Unknown files counter value.</param>
+        /// <param name="expectedMalwareCount">Set an expected Malicious file counter value.</param>
+        /// <param name="expectedInAnalysisCount">Set an expected In Analysis files counter value.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        private void AssertPanelCountersData(int expectedUnknownCount, int expectedMalwareCount, TestContext testContext)
+        private void AssertPanelCountersData(int expectedUnknownCount, int expectedMalwareCount, int expectedInAnalysisCount, TestContext testContext)
         {
             UIMapMain.AssertUnknownFilesCounterTextBlockTextExpectedValues.UIItem0TextDisplayText = expectedUnknownCount.ToString();
             UIMapMain.AssertUnknownFilesCounterTextBlockText();
             UIMapMain.AssertMalwaresCounterTextBlockTextExpectedValues.UIItem0Text1DisplayText = expectedMalwareCount.ToString();
             UIMapMain.AssertMalwaresCounterTextBlockText();
-            testContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
+
+            if (expectedInAnalysisCount == 0)
+            {                
+                testContext.WriteLine(String.Format("The bottom panel shows '{0}' unknown and '{1}' malicious files.", expectedUnknownCount, expectedMalwareCount));
+            }
+            else
+            {                
+                UIMapMain.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText = expectedInAnalysisCount.ToString();
+                UIMapMain.AssertInAnalysisCounterTextBlockText();
+                testContext.WriteLine(String.Format("The bottom panel shows '{0}' Unknown, '{1}' Malicious and '{2}' In Analysis files.", expectedUnknownCount, expectedMalwareCount, expectedInAnalysisCount));
+            }
         }
 
         /// <summary> Expands a given row in Active Directory tree. In accordance with DeploymentItem.cs. </summary>
@@ -1261,7 +1272,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickOkButton();
-            AssertPanelCountersData(0, 1, TestContext);
+            AssertPanelCountersData(0, 1, 0, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint);
@@ -1269,20 +1280,20 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickNoButton();
-            AssertPanelCountersData(1, 0, TestContext);
+            AssertPanelCountersData(1, 0, 0, TestContext);
                         
             malware = SysHelper.InfectForScan(endpoint);
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickNoButton();
-            AssertPanelCountersData(1, 1, TestContext);
+            AssertPanelCountersData(1, 1, 0, TestContext);
             
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickOkButton();
-            AssertPanelCountersData(0, 0, TestContext);
+            AssertPanelCountersData(0, 0, 0, TestContext);
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -2043,11 +2054,12 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);
-            WaitForValkyrieResults(TestContext);            
+            WaitForValkyrieResults(TestContext);
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            AssertPanelCountersData(0, 0, 1, TestContext);
             UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(), 
                                                                                                                 TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
-            AssertPanelCountersData(1, 0, TestContext);
+            AssertPanelCountersData(1, 0, 0, TestContext);
 
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             unknown = SysHelper.AddUnknownFileForScan(endpoint);
@@ -2060,9 +2072,10 @@ namespace CodedUITestAT
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            AssertPanelCountersData(0, 1, 1, TestContext);
             UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(),
                                                                                                                 TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
-            AssertPanelCountersData(1, 1, TestContext);
+            AssertPanelCountersData(1, 1, 0, TestContext);
         }
 
         #endregion

@@ -313,16 +313,16 @@
                 <TextBlock AutomationProperties.AutomationId="UnknownFilesCounterTextBlock" 
                            Foreground="White" Text="{Binding UnknownFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
                 <TextBlock Foreground="White" Text=" Unknown files" VerticalAlignment="Center" Margin="0,5" FontSize="14" />
-                <StackPanel  Orientation="Horizontal" >
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
                     <TextBlock AutomationProperties.AutomationId="MalwareFilesCounterTextBlock" 
-                           Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
+                               Foreground="White" Text="{Binding MalwareFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
                     <TextBlock Foreground="White" Text=" Malicious files" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 </StackPanel>
-                <StackPanel  Orientation="Horizontal" Visibility="{Binding IsPendingFound, Converter={converters:BoolToVisibilityConverter2}}">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding IsPendingFound, Converter={converters:BoolToVisibilityConverter2}}">
                     <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
-                    <TextBlock 
-                           Foreground="White" Text="{Binding PendingFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
+                    <TextBlock AutomationProperties.AutomationId="InAnalysisFilesCounterTextBlock"
+                               Foreground="White" Text="{Binding PendingFilesCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
                     <TextBlock Foreground="White" Text=" In Analysis files" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                 </StackPanel>
 
@@ -339,10 +339,7 @@
 
         <Border Grid.Row="2"  Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
 
-
-
-            <Border  Background="Transparent"  Height="30"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
-
+            <Border Background="Transparent"  Height="30"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
                 <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
                        x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFF7E78C" FontSize="16">
@@ -350,6 +347,7 @@
             </Hyperlink>
                 </TextBlock>
             </Border>
+            
         </Border>
 
     </Grid>

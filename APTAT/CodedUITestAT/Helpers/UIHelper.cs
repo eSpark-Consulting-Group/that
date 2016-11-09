@@ -170,12 +170,12 @@ namespace CodedUITestAT
             return rowsCollection.ToArray();
         }
         
-        /// <summary> Gets a given row name. In accordance with Application.Models.ThreatInfoItem or Core.FileResults. </summary>
+        /// <summary> Gets a given row name. In accordance with Application.Models.Apt.ThreatInfoItem or Core.FileResults. </summary>
         /// <param name="row">Set a row control.</param>
         internal static string GetRowName(this UITestControl row)
         {
             if (row == null) throw new Exception("The provided row is null!");
-            return row.GetChildren()[1].Name.ToLower();
+            return row.Name.ToLower();
         }
 
         /// <summary> Gets a given row status. </summary>
@@ -230,7 +230,7 @@ namespace CodedUITestAT
                 case ResultsScreen.ValkyrieAnalysis:
                     rowControl = useMain.ValkyrieAnalysisResultsTab().GetRow(row.RowName);
                     break;
-                default: throw new Exception(String.Format("Unxepected results screen '{0}'!", resultsScreen));
+                default: throw new Exception(String.Format("Unexpected results screen '{0}'!", resultsScreen));
             }
 
             return rowControl.GetCellContent(cellNumber);
