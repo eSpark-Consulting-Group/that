@@ -11,7 +11,8 @@ namespace APTAT.Core.FLS
         public Byte NumberOfHashes { get; set; } //Z         
         public Byte HashType { get; set; } //H – hash type, 0 for SHA1 (one byte)
         public Byte ProtocolVersion { get { return 3; } } //P 
-        public Applications ApplicationID { get; set; } //A
+        public Applications ApplicationID => Applications.UFH;
+//A
         public Guid Identifier { get; set; } //GUID
         public CallerType CallerType { get; set; } //C        
         public string ContentHash { get; set; } //CONTENT_HASH

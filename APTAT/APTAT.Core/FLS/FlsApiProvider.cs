@@ -46,7 +46,7 @@ namespace APTAT.Core.FLS
         {
             var request = new FlsRequest
             {
-                ApplicationID = Applications.CIS,
+                
                 CallerType = CallerType.OnAccess,
                 ClientIdNumber = ClientIdNumber,
                 ContentHash = sha,
