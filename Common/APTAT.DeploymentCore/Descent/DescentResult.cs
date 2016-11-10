@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Messages;
@@ -21,7 +22,8 @@ namespace APTAT.DeploymentCore.Descent
 		private readonly object _sync = new object();
 
 	    protected DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
-	        int totalComputersCount) : this(computers, devicesSourceDescription)
+	        int totalComputersCount, IComputerDescentResultFactory computerDescentResultFactory = null) 
+            : this(computers, devicesSourceDescription, computerDescentResultFactory)
 	    {
 	        TotalTargetsCount = totalComputersCount;
 	    }
@@ -188,11 +190,7 @@ namespace APTAT.DeploymentCore.Descent
 
 		protected virtual void OnDescentCompleted()
 		{
-			Action tmp = DescentCompleted;
-			if( tmp != null )
-			{
-				tmp();
-			}
+			DescentCompleted?.Invoke();
 		}
 
 		public event Action DescentCompleted;
@@ -209,7 +207,7 @@ namespace APTAT.DeploymentCore.Descent
                     if (progressItem.OperationUid == OperationUid && ResultsByUid.ContainsKey(progressItem.ComputerUid))
 					{
 						var originalResult = ResultsByUid[progressItem.ComputerUid];
-					    if (progressItem.ProgressPercentage != originalResult.Percentage || 
+					    if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 || 
                             originalResult.StatusMessage !=  progressItem.StatusMessage )
 					    {
 

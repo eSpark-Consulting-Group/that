@@ -1,6 +1,6 @@
 ﻿namespace APTAT.Core
 {
-    public class FilesStatistics
+    public class FilesStatistics : IFilesStatistics
     {
         public int TotalFilesCount { get; set; }
         public int SafeFilesCount { get; set; }

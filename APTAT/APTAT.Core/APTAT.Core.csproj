@@ -75,6 +75,7 @@
     <Compile Include="Descent\Apt\AptDescentHelper.cs" />
     <Compile Include="Descent\Apt\AptDescentMod.cs" />
     <Compile Include="Descent\Apt\IAptDescentProgressItem.cs" />
+    <Compile Include="Descent\Apt\IAptScanResult.cs" />
     <Compile Include="Descent\Apt\ScanKind.cs" />
     <Compile Include="Descent\Apt\ScanOption.cs" />
     <Compile Include="Descent\IDescentQueryResult.cs" />
@@ -94,8 +95,9 @@
     <Compile Include="FLS\FlsRequest.cs" />
     <Compile Include="FLS\FlsResponse.cs" />
     <Compile Include="FLS\FlsVerdict.cs" />
-	<Compile Include="IAptAtManager.cs" />
+    <Compile Include="IAptAtManager.cs" />
     <Compile Include="IAptScanner.cs" />
+    <Compile Include="IFilesStatistics.cs" />
     <Compile Include="OsInfoHelper.cs" />
     <Compile Include="Reports\AptReportBuilder.cs" />
     <Compile Include="Reports\IAptReportBuilder.cs" />

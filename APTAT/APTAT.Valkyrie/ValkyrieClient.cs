@@ -57,7 +57,22 @@ namespace APTAT.Valkyrie
             _checkStatusesTimer = new Timer(CheckStatusesTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+        public void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze)
+        {
+            bool needStartTimer = false;
+            lock (_lookupSync)
+            {
+                needStartTimer = !_checkingTimerIsStop;
+                foreach (var fileInfo in filesToAnalyze)
+                {
+                    _lookupContexts.Add(fileInfo);
+                    _checkingTimerIsStop = true;
+                }
+            }
+            if (needStartTimer)
+                _checkStatusesTimer?.Change(TimeSpan.FromSeconds(5).Milliseconds, Timeout.Infinite);
 
+        }
 
         private RegisterWithResponse Register(CamRegistration camRegistration,
             NetworkCredential networkCredential = null)
@@ -365,13 +380,9 @@ namespace APTAT.Valkyrie
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {1}",
                 DateTime.UtcNow, _apiKey));
             bool anyPending = _lookupContexts.Any() || _automaticAnalyseInProgressByHash.Any();
-            var tmp = AnalyzeCompleted;
-            if (tmp != null)
-            {
-                tmp(this,
-                    new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), exception,
-                        task.IsCanceled, anyPending, task.AsyncState));
-            }
+            AnalyzeCompleted?.Invoke(this,
+                new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), exception,
+                    task.IsCanceled, anyPending, task.AsyncState));
             if (anyPending)
             {
                 _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);

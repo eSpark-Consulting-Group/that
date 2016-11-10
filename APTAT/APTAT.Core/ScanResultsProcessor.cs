@@ -29,7 +29,7 @@ namespace APTAT.Core
             }
             catch (Exception ex)
             {
-                LogHelper.Trace(TraceEventType.Error, "Cannot parse the scan results file from '{0}({1})' endpoint: {2}", result.HostName, result.TargetUid, ex.Message);
+                LogHelper.Trace(TraceEventType.Error, "Cannot parse the scan results file from '{0}({1})' endpoint: {2}", result.Computer.Name, result.TargetUid, ex.Message);
                 return false;
             }
         }

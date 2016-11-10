@@ -4,6 +4,6 @@ namespace APTAT.Core.Descent.Apt
 {
     public class AptScanCompletedEventArgs : DescentEventArgs
     {
-        public AptScanOperationContext Context { get; set; }
+        public IAptScanOperationContext Context { get; set; }
     }
 }

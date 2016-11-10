@@ -954,29 +954,20 @@ namespace APTAT.Application.Models
             IsBusy = false;
             IsScanInProgress = true;
             ScannedItemsCount = 0;
-
             if (e.Exception != null)
             {
                 DomainTargetsResolveFailure?.Invoke(this, new DomainEventArgs { Exception = e.Exception });
-
                 IsScanInProgress = false;
-
                 return;
             }
-
             if (e.Items == null)
             {
                 return;
             }
-
             var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
-
             Set(() => TotalItemsCount, items.Count());
-
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
-
-
             _cacheComputers = new Collection<ThreatInfoItem>(items);
             Computers = new Collection<ThreatInfoItem>(_cacheComputers);
 

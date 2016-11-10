@@ -6,7 +6,6 @@ namespace APTAT.DeploymentCore.Descent
 {
     public class ComputerDescentResult : IComputerDescentResultInternal
     {
-
         public Guid TargetUid { get; }
         public IComputer Computer { get; }
     	public ComputerDescentResult( IComputer computer)			
@@ -82,5 +81,5 @@ namespace APTAT.DeploymentCore.Descent
 	    public string ErrorCode { get; private set; }
 	    public string SystemMessage { get; private set; }
 		public int SystemCode { get; private set; }
-	}
+    }
 }

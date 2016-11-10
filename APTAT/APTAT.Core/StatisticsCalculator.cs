@@ -5,7 +5,7 @@ namespace APTAT.Core
 {
     public static class StatisticsCalculator
     {
-        public static FilesStatistics Calculate(IEnumerable<AptScanResult> results)
+        public static IFilesStatistics Calculate(IEnumerable<IAptScanResult> results)
         {
             int totalFilesCount = 0;
             int safeFilesCount = 0;

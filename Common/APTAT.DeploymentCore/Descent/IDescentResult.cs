@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using APTAT.DeploymentCore.Directory;
 
 namespace APTAT.DeploymentCore.Descent
 {
@@ -12,6 +13,7 @@ namespace APTAT.DeploymentCore.Descent
         int InProgressCount { get; }
         bool Completed { get; }
         DateTime? CompletedTime { get; }
+        IDevicesSourceDescription DevicesSourceDescription { get; }
 
         event Action DescentCompleted;
 

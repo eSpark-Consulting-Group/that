@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
-using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
@@ -12,7 +11,7 @@ namespace APTAT.Core.Apt
 {
     internal class AptScanner : IAptScanner
     {
-        private AptScanOperationContext _scanOperationContext;
+        private IAptScanOperationContext _scanOperationContext;
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly IDevicesSourceDescription _devicesSourceDescription;
         private readonly string _password;
@@ -90,7 +89,7 @@ namespace APTAT.Core.Apt
                 args.OperationUid = _operationUid;
                 args.State = context.State;
 
-                _scanOperationContext = (AptScanOperationContext)_descentSubSystem.GetDescentResultsByOperationUid(args.OperationUid);
+                _scanOperationContext = (IAptScanOperationContext)_descentSubSystem.GetDescentResultsByOperationUid(args.OperationUid);
                 if (_scanOperationContext != null)
                 {
                     _scanOperationContext.OperationProgressChanged += scanOperationContext_OperationProgressChanged;
@@ -109,7 +108,7 @@ namespace APTAT.Core.Apt
             }
         }
 
-        void scanOperationContext_OperationProgressChanged(object sender, AptScanOperationContext.AptOperationProgressChangedEventArgs e)
+        void scanOperationContext_OperationProgressChanged(object sender, AptOperationProgressChangedEventArgs e)
         {
             OnScanInProgress(new AptScanInProgressEventArgs()
             {
@@ -121,23 +120,17 @@ namespace APTAT.Core.Apt
 
         protected virtual void OnScanStarted(ScanStartedEventArgs args)
         {
-            EventHandler<ScanStartedEventArgs> temp = ScanStarted;
-            if (temp != null)
-                temp(this, args);
+            ScanStarted?.Invoke(this, args);
         }
 
         protected virtual void OnScanCompleted(ScanCompletedEventArgs args)
         {
-            EventHandler<ScanCompletedEventArgs> temp = ScanCompleted;
-            if (temp != null)
-                temp(this, args);
+            ScanCompleted?.Invoke(this, args);
         }
 
         protected virtual void OnScanInProgress(AptScanInProgressEventArgs args)
         {
-            EventHandler<AptScanInProgressEventArgs> temp = ScanInProgress;
-            if (temp != null)
-                temp(this, args);
+            ScanInProgress?.Invoke(this, args);
         }
 
         internal class Context

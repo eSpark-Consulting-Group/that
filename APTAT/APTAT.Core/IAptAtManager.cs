@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
@@ -15,13 +16,12 @@ namespace APTAT.Core
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
         List<FileResult> ValkyrieAnalysisResult { get; set; }
-        Guid ValkyrieOperationUid { get; set; }
 
         IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         IAptReportBuilder GetAptReportBuilder();
-        AptScanResult GetScanResultByTargetUid(Guid targetUid);
+        IAptScanResult GetScanResultByTargetUid(Guid targetUid);
         void StopScan();
 
         void StartValkyrieAnalysis(string login, string password, 
@@ -30,5 +30,11 @@ namespace APTAT.Core
         string GetValkyrieDetailsLink();
         int GetDistinctFileCount();
         void Dispose();
+    }
+
+    internal interface IAptAtManagerInternal : IAptAtManager
+    {
+        Guid ValkyrieOperationUid { get; }
+        IAptScanOperationContext LastAptScanOperationContext { get; }
     }
 }

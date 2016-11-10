@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
+using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
@@ -209,13 +210,13 @@ namespace APTAT.Core.Reports
             get { return NetworkTrustLevel >= 0 ? String.Format("{0} %", NetworkTrustLevel) : "Unknown"; }
         }
 
-        public AptScanResult[] Targets { get; set; }
+        public IAptScanResult[] Targets { get; set; }
 
-        public AptScanResult[] SucceededTargets
+        public IAptScanResult[] SucceededTargets
         {
             get { return (from t in Targets where t.ResultType == Core.ScanResultType.Completed select t).ToArray(); }
         }
-        public AptScanResult[] SucceededTargetsWithValkyrie
+        public IAptScanResult[] SucceededTargetsWithValkyrie
         {
             get
             {
@@ -223,22 +224,18 @@ namespace APTAT.Core.Reports
                 IEnumerable<DetailedBadFile> files;
                 MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
 
-                List<AptScanResult> scanResults = new List<AptScanResult>();
+                List<IAptScanResult> scanResults = new List<IAptScanResult>();
                 foreach (var t in targets)
                 {
-                    var scanResult = new AptScanResult()
+                    var scanResult = new AptScanResult(t.Computer)
                     {
                         MalwareFilesCount = t.MalwareFilesCount,
                         UnknownFilesCount = t.UnknownFilesCount,
                         SafeFilesCount = t.SafeFilesCount,
                         AutorunsCount = t.AutorunsCount,
                         RunningProgramsCount = t.RunningProgramsCount,
-                        HostName = t.HostName,
-                        IpAddress = t.IpAddress,
-                        OrganizationUnit = t.OrganizationUnit,
                         ResultType = t.ResultType,
                         ResultErrorText = t.ResultErrorText,
-                        TargetUid = t.TargetUid,
                         TotalFilesCount = t.TotalFilesCount,
                         FailedToAnalyzeFilesCount = t.FailedToAnalyzeFilesCount,
                         NoVerdictFilesCount = t.NoVerdictFilesCount,
@@ -260,7 +257,7 @@ namespace APTAT.Core.Reports
             ReplaceStatistics(statistics);
         }
 
-        private void ReplaceStatistics(FilesStatistics statistics)
+        private void ReplaceStatistics(IFilesStatistics statistics)
         {
             _safeFilesCount = statistics.SafeFilesCount;
             _unknownFilesCount = statistics.UnknownFilesCount;
@@ -452,7 +449,7 @@ namespace APTAT.Core.Reports
             public IEnumerable<DetailedBadFile> MergeNonUniqueResults { get; set; }
         }
 
-        private void MergeResults(IEnumerable<AptScanResult> flsResults, IEnumerable<FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+        private void MergeResults(IEnumerable<IAptScanResult> flsResults, IEnumerable<FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
             out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
             if (_mergedScanResultsCache != null)
@@ -755,30 +752,30 @@ namespace APTAT.Core.Reports
         {
         }
 
-        public ScannedTarget(AptScanResult aptScanResult)
+        public ScannedTarget(IAptScanResult aptScanResult)
         {
-            if (aptScanResult != null)
-            {
-                TargetUid = aptScanResult.TargetUid;
-                HostName = aptScanResult.HostName;
-                IpAddress = aptScanResult.IpAddress;
-                OsName = aptScanResult.OsName;
-                OrganizationUnit = aptScanResult.OrganizationUnit;
-                TotalFilesCount = aptScanResult.TotalFilesCount;
-                UnknownFilesCount = aptScanResult.UnknownFilesCount;
-                FailedToAnalyzeFilesCount = aptScanResult.FailedToAnalyzeFilesCount;
-                NoVerdictFilesCount = aptScanResult.NoVerdictFilesCount;
-                PendingAnalysisFilesCount = aptScanResult.PendingAnalysisFilesCount;
-                SafeFilesCount = aptScanResult.SafeFilesCount;
-                MalwareFilesCount = aptScanResult.MalwareFilesCount;
-                RunningProgramsCount = aptScanResult.RunningProgramsCount;
-                AutorunsCount = aptScanResult.AutorunsCount;
-                TargetVerdictString = aptScanResult.TargetVerdictString;
-                AptReport = aptScanResult.AptReport;
-                ResultErrorText = aptScanResult.ResultErrorText;
-                ResultType = aptScanResult.ResultType;
-            }
+            if (aptScanResult == null) throw new ArgumentNullException(nameof(aptScanResult));
+            Computer = aptScanResult.Computer;
+            TargetUid = aptScanResult.TargetUid;
+            HostName = aptScanResult.Computer.Name;
+            IpAddress = aptScanResult.Computer.IPAddress;
+            OsName = aptScanResult.OsName;
+            OrganizationUnit = aptScanResult.Computer.OrganizationUnit;
+            TotalFilesCount = aptScanResult.TotalFilesCount;
+            UnknownFilesCount = aptScanResult.UnknownFilesCount;
+            FailedToAnalyzeFilesCount = aptScanResult.FailedToAnalyzeFilesCount;
+            NoVerdictFilesCount = aptScanResult.NoVerdictFilesCount;
+            PendingAnalysisFilesCount = aptScanResult.PendingAnalysisFilesCount;
+            SafeFilesCount = aptScanResult.SafeFilesCount;
+            MalwareFilesCount = aptScanResult.MalwareFilesCount;
+            RunningProgramsCount = aptScanResult.RunningProgramsCount;
+            AutorunsCount = aptScanResult.AutorunsCount;
+            TargetVerdictString = aptScanResult.TargetVerdictString;
+            AptReport = aptScanResult.AptReport;
+            ResultErrorText = aptScanResult.ResultErrorText;
+            ResultType = aptScanResult.ResultType;
         }
+        public IComputer Computer { get; }
 
         public AptReport AptReport { get; set; }
 

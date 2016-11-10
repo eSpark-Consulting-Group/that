@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using APTAT.Core.Reports;
+using APTAT.DeploymentCore;
+using APTAT.DeploymentCore.Descent;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptScanResult 
+    public class AptScanResult : ComputerDescentResult, IAptScanResult
     {
-        public Guid TargetUid { get; set; }
-        public string HostName { get; set; }
-        public string IpAddress { get; set; }
-        public bool IsLocalComputer { get; set; }
+        public AptScanResult(IComputer computer) : base(computer)
+        {
+            ResultType = ScanResultType.InProgress;
+        }
         public string OsName
         {
             get
@@ -20,7 +21,6 @@ namespace APTAT.Core.Descent.Apt
                 return null;
             }
         }
-        public string OrganizationUnit { get; set; }
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
@@ -102,8 +102,6 @@ namespace APTAT.Core.Descent.Apt
             }
         }
 
-        public double ProgressPercenage { get; set; }
-
         public Module[] Files
         {
             get
@@ -183,7 +181,7 @@ namespace APTAT.Core.Descent.Apt
         }
 
         private AptReport _aptReport;
-
+        
         public AptReport AptReport
         {
             get { return _aptReport; }

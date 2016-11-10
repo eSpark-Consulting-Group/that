@@ -142,12 +142,13 @@ namespace APTAT.DeploymentCore
 
                 dnsNames = dnsNames.Where(name => !IsLoopbackAddress(name));
 
-                if (dnsNames.Count() == 0)
+                var dnsNamesList = dnsNames as IList<string> ?? dnsNames.ToList();
+                if (!dnsNamesList.Any())
                 {
                     throw new InvalidOperationException(String.Format("The setting 'SupportedDnsNames' in the application configuration file should contain at least one external (not loopback) address."));
                 }
 
-                return dnsNames.ToArray();
+                return dnsNamesList.ToArray();
             }
 
 

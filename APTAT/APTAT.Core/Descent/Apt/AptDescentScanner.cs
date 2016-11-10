@@ -31,7 +31,7 @@ namespace APTAT.Core.Descent.Apt
         {
             var aptResult = (AptScanOperationContext)result;
             int failed, notPerformed, succeeded, total, canceled;
-            CalculateOperationStatistics(aptResult.ScanResults.Values, out failed, out notPerformed, out succeeded, out total, out canceled);
+            CalculateOperationStatistics(aptResult.ScanResults, out failed, out notPerformed, out succeeded, out total, out canceled);
             aptResult.SucceededTargetsCount = succeeded;
             aptResult.FailedTargetsCount = failed;
             aptResult.NotPerformedTargetsCount = aptResult.TotalTargetsCount - total;
@@ -54,17 +54,16 @@ namespace APTAT.Core.Descent.Apt
             _descentMod = new AptDescentMod(TaskFactory, changeTrackingSubSystem);
             foreach (var computer in OnlineTargets)
             {
-                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid,
+                var ri = new RemoteHostInfo(computer.Uid,
                     (computer.IPAddress != null) ? computer.IPAddress.ToString() : computer.DnsName,
                     Login, Password, computer.IsLocalComputer);
-                AptScanResult scanResult;
-                scanResults.ScanResults.TryGetValue(computer.Uid, out scanResult);
-
+                var scanResult = (AptScanResult)scanResults.GetComputerDescentResultByTargetUid(computer.Uid);
                 var job = new RemoteInstallerJob(result, changeTrackingSubSystem, this, computer);
                 _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, result.OperationUid, _scanOptions);
             }
         }
-        private static void CalculateOperationStatistics(IEnumerable<AptScanResult> results, out int failed, out int notPerformed, out int succeeded, out int total, out int canceled)
+        private static void CalculateOperationStatistics(IEnumerable<IAptScanResult> results, out int failed, 
+            out int notPerformed, out int succeeded, out int total, out int canceled)
         {
             notPerformed = 0;
             succeeded = 0;

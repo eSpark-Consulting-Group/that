@@ -19,80 +19,51 @@ namespace APTAT.Application.Services
     public class AptService : IAptService
     {
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
-
         public event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
-
         public event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
-
         public event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
-
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
-
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
-
-
-
         private IAptAtManager _manager;
-
-
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
-
         public Guid SessionId
         {
             get { return _sessionGuid; }
         }
-
-
         public AptService(IAptAtManager aptAtManager)
         {
             _manager = aptAtManager;
+            _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
+            _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
+            _manager.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
 
         }
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
             Action action = () =>
             {
-                var handler = ValkyrieAnalyzeStarted;
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ValkyrieAnalyzeStarted?.Invoke(this, e);
             };
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
         void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
         {
-            if (e.IsUpdate && !e.IsPendingExist)
-                _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             Action action = () =>
             {
-                var handler = ValkyrieAnalyzeProgressChanged;
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ValkyrieAnalyzeProgressChanged?.Invoke(this,e);
             };
             App.Current.Dispatcher.Invoke(action);
         }
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
-            _manager.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
-            if (!e.IsPendingExist)
-                _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
-            _manager.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
             Action action = () =>
             {
-                var handler = ValkyrieAnalyzeCompleted;
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                ValkyrieAnalyzeCompleted?.Invoke(this,e);
             };
             App.Current.Dispatcher.BeginInvoke(action);
         }
@@ -103,20 +74,20 @@ namespace APTAT.Application.Services
         {
             IAptReportBuilder reportBuilder = _manager.GetAptReportBuilder();
             reportBuilder.ReportCompleted += OnReportCompleted;
-
-            reportBuilder.BeginBuildReport(operationGuid, ToReportType(reportKind), userState);
+            reportBuilder.BeginLastBuildReport(ToReportType(reportKind), userState);
         }
 
         private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
         {
             BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.Error, e.State);
-
+            if (sender is IAptReportBuilder)
+            {
+                var builder = (IAptReportBuilder) sender;
+                builder.ReportCompleted -= OnReportCompleted;
+            }
             Action action = () =>
             {
-                if (BuildReportCompleted != null)
-                {
-                    BuildReportCompleted(this, args);
-                }
+                BuildReportCompleted?.Invoke(this,args);                   
             };
             App.Current.Dispatcher.BeginInvoke(action);
 
@@ -126,9 +97,6 @@ namespace APTAT.Application.Services
         public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            //Logger.Clear();
-            //Logger.WriteLog("================= Begin Scan");
-            
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, 
                 devicesSourceDescription, options);
             scanner.ScanStarted += OnScanStarted;
@@ -172,31 +140,16 @@ namespace APTAT.Application.Services
 
             Action action = () =>
             {
-
-                if (ScanStatusChanged != null)
-                {
-                    ScanStatusChanged(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
-                }
-                if (ScanProgressChanged != null)
-                {
-                    ScanProgressChanged(this, args);
-                }
+                ScanStatusChanged?.Invoke(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
+                ScanProgressChanged?.Invoke(this, args);
             };
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-            //Logger.WriteLog("Scan Started");
-
             BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
-
-            if (BeginScanCompleted != null)
-            {
-                BeginScanCompleted(this, args);
-
-            }
-
+            BeginScanCompleted?.Invoke(this, args);
         }
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
@@ -224,10 +177,7 @@ namespace APTAT.Application.Services
 
             Action action = () =>
             {
-                if (ScanCompleted != null)
-                {
-                    ScanCompleted(this, args);
-                }
+                ScanCompleted?.Invoke(this, args);
             };
             App.Current.Dispatcher.BeginInvoke(action);
 
@@ -235,16 +185,13 @@ namespace APTAT.Application.Services
 
         public void GetScanResult(Guid targetUid, Object userState)
         {
-            AptScanResult aptScanResult = _manager.GetScanResultByTargetUid(targetUid);
-
+            IAptScanResult aptScanResult = _manager.GetScanResultByTargetUid(targetUid);
             ScanResultItem resultItem = new ScanResultItem
             {
                 TargetUid = aptScanResult.TargetUid,
                 TotalFilesCount = aptScanResult.TotalFilesCount,
                 UnknownFilesCount = aptScanResult.UnknownFilesCount               
             };
-
-
             var badFileItems = aptScanResult.BadFiles
                 .Select(m => new BadFileItem
                 {
@@ -261,19 +208,11 @@ namespace APTAT.Application.Services
                     Attributes = m.Attributes,
                     Sha1 = m.Sha1,
                     Cloud = m.Cloud,
-                    IsMalware = m.Cloud == Core.Descent.Apt.CloudVerdict.Malware,
+                    IsMalware = m.Cloud == CloudVerdict.Malware,
                     IsUnknown = m.Cloud == CloudVerdict.Unknown || m.Cloud == CloudVerdict.FirstSeen
-                }
-                ).ToArray();
-
-
+                }).ToArray();
             resultItem.BadFiles = badFileItems;
-
-
-            if (GetScanResultCompleted != null)
-            {
-                GetScanResultCompleted(this, new GetScanResultCompletedEventArgs(resultItem, userState));
-            }
+            GetScanResultCompleted?.Invoke(this, new GetScanResultCompletedEventArgs(resultItem, userState));
         }
 
         public void StopScan()
@@ -287,10 +226,6 @@ namespace APTAT.Application.Services
             , string camLicenseId, string camUserName, string camPassword,
             NetworkCredential networkCredential = null)
         {
-            _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
-            _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
-            _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
-            _manager.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
                 camPassword, networkCredential);
         }
@@ -392,6 +327,9 @@ namespace APTAT.Application.Services
         {
             if (_manager != null)
             {
+                _manager.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
+                _manager.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
+                _manager.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
                 _manager.Dispose();
                 _manager = null;
             }

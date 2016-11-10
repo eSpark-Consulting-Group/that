@@ -1,40 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using APTAT.Core.Descent;
-using APTAT.Core.Descent.Apt;
 using APTAT.Common;
-using APTAT.DeploymentCore.Descent;
 
 namespace APTAT.Core.Reports
 {
     internal class AptReportBuilder : IAptReportBuilder
     {
-        private readonly IDescentSubSystem _descentSubSystem;
         private readonly ReportBuilder _reportBuilder = new ReportBuilder();
-        private readonly AptAtManager _valkyrieSubSystem;
+        private readonly IAptAtManagerInternal _aptAtManager;
 
-        public AptReportBuilder(IDescentSubSystem descentSubSystem, AptAtManager valkyrie)
+        public AptReportBuilder(IAptAtManagerInternal aptAtManager)
         {
-            _descentSubSystem = descentSubSystem;
-            _valkyrieSubSystem = valkyrie;
+            _aptAtManager = aptAtManager;
         }
 
-        
-        public void BeginBuildReport(Guid operationUid, ReportType reportType, object state = null)
+        public void BeginLastBuildReport(ReportType reportType, object state = null)
         {
-
-            var results = (AptScanOperationContext)_descentSubSystem.GetDescentResultsByOperationUid(operationUid);
-            if (!results.CompletedTime.HasValue || results.CompletedTime.Value == DateTime.MinValue)
-                throw new DataNotReadyException();
-
-            BeginBuildReport(results, reportType, state);
-        }
-
-        public void BeginBuildReport(AptScanOperationContext operationContext, ReportType reportType, object state = null)
-        {
+            var operationContext = _aptAtManager.LastAptScanOperationContext;
             if (operationContext != null)
             {
+                if (!operationContext.CompletedTime.HasValue || operationContext.CompletedTime.Value == DateTime.MinValue)
+                    throw new DataNotReadyException();
                 AptReportData data = new AptReportData
                 {
                     OperationUid = operationContext.OperationUid,
@@ -45,9 +32,9 @@ namespace APTAT.Core.Reports
                     TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
                     TotalTargetsCount = operationContext.TotalTargetsCount,
                     TargetsSucceeded = operationContext.SucceededTargetsCount,
-                    Targets = operationContext.ScanResults.Values.ToArray(),
-                    ValkyrieAnalysisResult = _valkyrieSubSystem.ValkyrieAnalysisResult,
-                    ValkyrieOperationUid = _valkyrieSubSystem.ValkyrieOperationUid,
+                    Targets = operationContext.ScanResults.ToArray(),
+                    ValkyrieAnalysisResult = _aptAtManager.ValkyrieAnalysisResult,
+                    ValkyrieOperationUid = _aptAtManager.ValkyrieOperationUid,
                     DevicesSourceDescription = operationContext.DevicesSourceDescription
                 };
 
@@ -92,9 +79,7 @@ namespace APTAT.Core.Reports
 
         protected virtual void OnReportCompleted(ReportCompletedEventArgs args)
         {
-            EventHandler<ReportCompletedEventArgs> temp = ReportCompleted;
-            if (temp != null)
-                temp(this, args);
+            ReportCompleted?.Invoke(this, args);
         }
 
         internal class Context
