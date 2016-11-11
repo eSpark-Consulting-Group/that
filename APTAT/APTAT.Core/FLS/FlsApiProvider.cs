@@ -1,21 +1,31 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace APTAT.Core.FLS
+namespace APTAT.Core
 {
-    public class FlsApiProvider
+    public class FlsApiProvider: IFlsApiProvider
     {
         private const int ClientIdNumber = 27102016;
-        private readonly IPAddress _server;
-        private readonly short _port;
+        private IPAddress _server;
+        
+        private readonly short _port = 4448;
+        private readonly string _hostName = "fls.security.comodo.com";
 
-        public FlsApiProvider(IPAddress server, short port)
+        public void Init()
         {
-            _port = port;
-            _server = server;
+
+            IPHostEntry hostEntry = Dns.GetHostEntry(_hostName);
+            if (!hostEntry.AddressList.Any()) throw new InvalidOperationException("Could not resolve host " + _hostName);
+            _server = hostEntry.AddressList[0];
         }
-        public FlsResponse RequestType0(string hash)
+        public FlsApiProvider()
+        {
+            
+        }
+
+        public FlsResponse RequestType0(string[] hashes)
         {
             var client = new TcpClient
             {
@@ -26,31 +36,30 @@ namespace APTAT.Core.FLS
                 }
             };
             client.Connect(_server, _port);
-            var data = BuildRequestType0(hash);
+            var data = BuildRequestType0(hashes);
 
             NetworkStream stream = client.GetStream();
             stream.Write(data, 0, data.Length);
-            data = new byte[7];
+            var resultLength = 5 + hashes.Length * 2;
+            var result = new byte[resultLength];
 
-            stream.Read(data, 0, data.Length);
-            var response = new FlsResponse(data, hash);
+            stream.Read(result, 0, result.Length);
+            var response = new FlsResponse(result, hashes);
 
             stream.Close();
             client.Close();
-
             return response;
-
         }
 
-        private static byte[] BuildRequestType0(string sha)
+        private static byte[] BuildRequestType0(string[] sha)
         {
             var request = new FlsRequest
             {
-                
+                ApplicationID = Applications.UFH,
                 CallerType = CallerType.OnAccess,
                 ClientIdNumber = ClientIdNumber,
                 ContentHash = sha,
-                NumberOfHashes = 1,
+                NumberOfHashes = (Byte) sha.Length,
                 Identifier = Guid.NewGuid()
             };
 

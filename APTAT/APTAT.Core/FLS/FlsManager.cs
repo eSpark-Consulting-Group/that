@@ -1,71 +1,67 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace APTAT.Core.FLS
+namespace APTAT.Core
 {
-
-    public class FlsManager : IDisposable
+    
+    public sealed class FlsManager : IDisposable, IFlsManager
     {
-        private readonly Action<double, FlsResponse> _progressReport;
-        private readonly Action _notifyCompleted;
-        private readonly Action<Exception> _handleError;
+        
         private readonly CancellationToken _cancellationToken;
-        private readonly FlsApiProvider _client = null;
+        private readonly FlsApiProvider _apiProvider = null;
         private Action _cancelWork = null;
-        private ConcurrentBag<FlsResponse> _results = new ConcurrentBag<FlsResponse>();
+        private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
-
-        private void DoWorkItem(string[] hashes, int item, CancellationToken token,
-            Action<Double, FlsResponse> progressReport, ParallelLoopState loopState)
+        public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
+        private void DoWorkItem(string[] hashes )
         {
-            if (token.IsCancellationRequested)
+
+            try
             {
-                loopState.Stop();
-                return;
+                FlsResponse response = _apiProvider.RequestType0(hashes);
+                var results = response.GetAnalyzed();
+                OnFlsAnalyzed(results, null);
+                
+                foreach (var r in results){_allResults.Add(r);}
+                Enqueue(response.GetFailedToAnalyzeHashes());
+            }
+            catch (Exception)
+            {
+                
+                throw;
             }
 
-            var result = _client.RequestType0(hashes[item]);
-            _results.Add(result);
-            var progress = _results.Count / (double) hashes.Length;
-            progressReport(progress, result);
+            //Thread.Sleep(1000); //TODO: Remove after test
         }
 
-        public FlsManager(IPAddress flsIp, short flsPort,
-            Action<double, FlsResponse> progressReport,
-            Action notifyCompleted,
-            Action<Exception> handleError,
-            CancellationToken cancellationToken)
+        public FlsManager()
         {
-            _progressReport = progressReport;
-            _notifyCompleted = notifyCompleted;
-            _handleError = handleError;
-            _cancellationToken = cancellationToken;
-            _client = new FlsApiProvider(flsIp, flsPort);
+            var cancellationTokenSource = new CancellationTokenSource();
+            _cancellationToken = cancellationTokenSource.Token;
+            _apiProvider = new FlsApiProvider();
+            _apiProvider.Init();
         }
-        
 
-        public void Add(IEnumerable<string> hashes)
+        public async Task Enqueue(IEnumerable<string> hashes)
         {
-            Task.Factory.StartNew(() =>
+            if (!_isWorking) Task.Run(Start, _cancellationToken);
+            await Task.Factory.StartNew(() =>
             {
                 foreach (var h in hashes)
                 {
                     _inputQueue.Add(h, _cancellationToken);
                 }
-                // _inputQueue.CompleteAdding();
+                //          _inputQueue.CompleteAdding();
             }, _cancellationToken);
 
         }
 
         private bool _isWorking = false;
-
-
-        public async Task Start()
+        private async Task Start()
         {
             try
             {
@@ -90,7 +86,7 @@ namespace APTAT.Core.FLS
                         await AnalyzeAsync(buffer.ToArray());
                         buffer.Clear();
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(5), _cancellationToken);
+                    await Task.Delay(TimeSpan.FromSeconds(1), _cancellationToken);
                 }
             }
             catch (Exception)
@@ -103,46 +99,35 @@ namespace APTAT.Core.FLS
                 _isWorking = false;
             }
 
-
         }
-
-        public async Task AnalyzeAsync(string[] hashes)
+        
+        private async Task AnalyzeAsync(string[] hashes)
         {
-            string[][] hashParts = Split(hashes, 20).ToArray();
-            foreach (var h in hashParts)
-            {
-                await AnalyzeWithFlsAsync(h);
-                await Task.Delay(TimeSpan.FromSeconds(5), _cancellationToken);
-            }
-        }
-
-        private async Task AnalyzeWithFlsAsync(string[] hashs)
-        {
-            _results = new ConcurrentBag<FlsResponse>();
+            _allResults = new ConcurrentBag<FlsResult>();
             try
             {
                 // prepare to handle cancellation
                 var cts = new CancellationTokenSource();
-
-
+                
                 _cancelWork = () =>
                 {
                     cts.Cancel();
                 };
-
-                int total = hashs.Length;
-
+                
                 // offload Parallel.For from the UI thread 
                 // as a long-running operation
-                Task task = Task.Factory.StartNew(() =>
+                Task task = Task.Factory.StartNew(async () =>
                 {
-                    Parallel.For(0, total, (item, loopState) =>
-                        DoWorkItem(hashs, item, _cancellationToken, _progressReport, loopState));
-                    // observe cancellation
+
+                    string[][] hashGroups = Split(hashes, 20).ToArray();
+                    foreach (var h in hashGroups)
+                    {
+                        DoWorkItem(h);
+                    }
+                    await Task.Delay(3000);
                     _cancellationToken.ThrowIfCancellationRequested();
                 }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-
+                
                 await task.ContinueWith(_ =>
                 {
                     try
@@ -153,19 +138,19 @@ namespace APTAT.Core.FLS
                     {
                         while (ex is AggregateException && ex.InnerException != null)
                             ex = ex.InnerException;
-                        _handleError(ex);
+                        OnFlsAnalyzed(new FlsResult[] {}, ex);
                     }
-                    _notifyCompleted();
+
                 }, TaskScheduler.Default);
                 await task;
             }
             catch (Exception ex)
             {
-                _handleError(ex);
-                _notifyCompleted();
+                OnFlsAnalyzed(new FlsResult[] { }, ex);
             }
         }
-        public static IEnumerable<T[]> Split<T>(T[] array, int size)
+
+        private static IEnumerable<T[]> Split<T>(T[] array, int size)
         {
             for (var i = 0; i < (float) array.Length / size; i++)
             {
@@ -178,7 +163,11 @@ namespace APTAT.Core.FLS
             _inputQueue.CompleteAdding();
             _inputQueue.Dispose();
         }
+
+        private void OnFlsAnalyzed(FlsResult[] results, Exception exception)
+        {
+            var e = new FlsRequestEventArgs(results, exception);
+            FlsAnalyzed?.Invoke(this, e);
+        }
     }
 }
-
-

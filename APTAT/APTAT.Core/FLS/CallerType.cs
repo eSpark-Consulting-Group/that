@@ -1,4 +1,4 @@
-﻿namespace APTAT.Core.FLS
+namespace APTAT.Core
 {
     public enum CallerType
     {

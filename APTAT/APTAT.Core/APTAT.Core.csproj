@@ -93,8 +93,12 @@
     <Compile Include="FLS\FlsManager.cs" />
     <Compile Include="FLS\FlsApiProvider.cs" />
     <Compile Include="FLS\FlsRequest.cs" />
+    <Compile Include="FLS\FlsRequestEventArgs.cs" />
     <Compile Include="FLS\FlsResponse.cs" />
+    <Compile Include="FLS\FlsResult.cs" />
     <Compile Include="FLS\FlsVerdict.cs" />
+    <Compile Include="FLS\IFlsApiProvider.cs" />
+    <Compile Include="FLS\IFlsManager.cs" />
     <Compile Include="IAptAtManager.cs" />
     <Compile Include="IAptScanner.cs" />
     <Compile Include="IFilesStatistics.cs" />

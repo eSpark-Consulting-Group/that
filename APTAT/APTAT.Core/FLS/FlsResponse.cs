@@ -1,26 +1,44 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace APTAT.Core.FLS
+namespace APTAT.Core
 {
     public class FlsResponse
     {
-        public string Sha1 { get; private set; }
         public Int32 ClientIdNumber { get; private set; }
         public Byte NumberOfAnswers { get; private set; }
 
-        public FlsVerdict FlsVerdict { get; private set; }
-        public byte CamasVerdict { get; private set; }
-
-        public FlsResponse(byte[] bytes, string hash)
+        public string[] GetFailedToAnalyzeHashes()
         {
-            if (bytes.Length < 7) throw new InvalidOperationException("Response size should be equal or more  7 bytes");
-            var numBytes = bytes.Take(count: 4).ToArray();
-            ClientIdNumber = BitConverter.ToInt32(numBytes, 0);
+            return Results.Where(r => r.FlsVerdict == FlsVerdict.Error).Select(r=>r.Sha1).ToArray();
+        }
+        public FlsResult[] GetAnalyzed()
+        {
+            return Results.Where(r => r.FlsVerdict != FlsVerdict.Error).ToArray();
+        }
+
+        public List<FlsResult> Results = new List<FlsResult>();
+        public FlsResponse(byte[] bytes, string[] hashes)
+        {
+            //if (bytes.Length < 7) throw new InvalidOperationException("Response size should be equal or more  7 bytes");
+            byte[] numBytes = bytes.Take(4).ToArray();
+            ClientIdNumber = BitConverter.ToInt32(numBytes, startIndex: 0);
+
             NumberOfAnswers = bytes[4];
-            FlsVerdict = (FlsVerdict) bytes[5];
-            CamasVerdict = bytes[6];
-            Sha1 = hash;
+
+            int byteIndex = 5;
+            for (int i = 0; i < hashes.Length; i++)
+            {
+                FlsResult result = new FlsResult
+                {
+                    FlsVerdict = (FlsVerdict) bytes[byteIndex],
+                    CamasVerdict = bytes[byteIndex + 1],
+                    Sha1 = hashes[i]
+                };
+                Results.Add(result);
+                byteIndex += 2;
+            }
         }
     }
 }
