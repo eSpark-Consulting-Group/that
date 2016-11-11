@@ -17,6 +17,7 @@ namespace APTAT.Core
         private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
+        private CancellationTokenSource _cancellationTokenSource;
         private void DoWorkItem(string[] hashes )
         {
 
@@ -40,8 +41,8 @@ namespace APTAT.Core
 
         public FlsManager()
         {
-            var cancellationTokenSource = new CancellationTokenSource();
-            _cancellationToken = cancellationTokenSource.Token;
+            _cancellationTokenSource = new CancellationTokenSource();
+            _cancellationToken = _cancellationTokenSource.Token;
             _apiProvider = new FlsApiProvider();
             _apiProvider.Init();
         }
@@ -58,6 +59,11 @@ namespace APTAT.Core
                 //          _inputQueue.CompleteAdding();
             }, _cancellationToken);
 
+        }
+
+        public void Cancel()
+        {
+            _cancellationTokenSource.Cancel();
         }
 
         private bool _isWorking = false;
