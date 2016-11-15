@@ -1,5 +1,36 @@
+using System;
+using System.Runtime.CompilerServices;
+using APTAT.Core.Descent.Apt;
+
 namespace APTAT.Core
 {
+    public static class CloudVerdictMap
+    {
+        public static Core.Descent.Apt.CloudVerdict MapToCloudVerdict(this FlsVerdict verdict)
+        {
+            switch (verdict)
+            {
+                case FlsVerdict.DoesntExist:
+                    return CloudVerdict.FirstSeen;
+                    
+                case FlsVerdict.Safe:
+                    return CloudVerdict.Safe;
+
+                case FlsVerdict.Malicious:
+                    return CloudVerdict.Malware;
+                    
+                case FlsVerdict.Unknown:
+                    return CloudVerdict.Unknown;
+                    
+                case FlsVerdict.Error:
+                    return CloudVerdict.FailedToAnalyze;
+                    
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(verdict), verdict, null);
+            }
+        }
+    }
+
     public enum FlsVerdict
     {
         DoesntExist = 0,

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Application.Models
@@ -75,21 +76,54 @@ namespace APTAT.Application.Models
         private ObservableCollection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _noVerdictFilesCount;
+        private bool _isUnknown;
+        private bool _isMalware;
+        private bool _safe;
 
         public Boolean HasBadFiles
         {
             get { return UnknownFilesCount > 0 || MalwareFilesCount > 0 || NoVerdictFilesCount > 0 || FailedToAnalyzeCount > 0; }
         }
-        
-        public Boolean IsUnknown { get; set; }
 
-        public Boolean IsMalware { get; set; }
+        public void UpdateFileVerdict(CloudVerdict verdict)
+        {
+            BadFile.Cloud = verdict;
+            IsUnknown = BadFile.IsUnknown;
+            IsMalware = BadFile.IsMalware;
+            Clean = BadFile.Cloud == CloudVerdict.Safe;
+        }
+
+        public Boolean IsUnknown
+        {
+            get { return _isUnknown; }
+            set { _isUnknown = value;
+                RaisePropertyChanged(nameof(IsUnknown));
+            }
+        }
+
+        public Boolean IsMalware
+        {
+            get { return _isMalware; }
+            set { _isMalware = value;
+                RaisePropertyChanged(nameof(IsMalware));
+            }
+        }
+
+        public Boolean Clean
+        {
+            get { return _safe; }
+            set
+            {
+                _safe = value;
+                RaisePropertyChanged(nameof(Clean));
+            }
+        }
 
         public Boolean Failed
         {
             get 
             {
-                return !IsUnknown && !IsMalware;
+                return !IsUnknown && !IsMalware && !Clean;
             }
         }
 
@@ -358,7 +392,7 @@ namespace APTAT.Application.Models
 
         public Collection<ThreatInfoItem> Computers { get; set; }
 
-        public BadFileItem BadFile { get; set; }
+        public BadFileItem BadFile { get; private set; }
 
         public ThreatInfoItem()
         {
@@ -381,6 +415,7 @@ namespace APTAT.Application.Models
         {
             IsUnknown = badFile.IsUnknown;
             IsMalware = badFile.IsMalware;
+            Clean = badFile.Cloud == CloudVerdict.Safe;
             Name = badFile.Name;
             Size = badFile.Size;
             SizeSorting = badFile.SizeSorting;

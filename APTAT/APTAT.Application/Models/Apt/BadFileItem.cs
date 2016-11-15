@@ -5,9 +5,9 @@ namespace APTAT.Application.Models
 {
     public class BadFileItem
     {
-        public Boolean IsUnknown { get; set; }
+        public Boolean IsUnknown { get { return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen; } }
 
-        public Boolean IsMalware { get; set; }
+        public Boolean IsMalware { get { return Cloud == CloudVerdict.Malware; } }
 
         public String Name { get; set; }
 

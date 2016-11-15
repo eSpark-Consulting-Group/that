@@ -670,6 +670,7 @@ namespace APTAT.Application.Models
             CancelInProgress = true;
 
             _aptService.StopScan();
+            
         }
 
         protected override void InvokeViewLoaded(Object arg)
@@ -686,7 +687,40 @@ namespace APTAT.Application.Models
             _aptService.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
             _aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             _aptService.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
+            _aptService.FlsAnalyzeProgressChanged += OnFlsAnalyzeProgressChanged;
         }
+
+        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs e)
+        {
+            if (e.Exception != null) return;
+
+            foreach (var result in e.Results)
+            {
+                var resultVerdict = result.FlsVerdict.MapToCloudVerdict();
+                foreach (var threatInfoItem in Items.Where(i => i.BadFile.Sha1 == result.Sha1))
+                {
+                    
+                    
+                    
+                        threatInfoItem.UpdateFileVerdict(resultVerdict);
+                    
+                    
+                    RaisePropertyChanged(nameof(Items));
+                }
+                
+                foreach (ThreatInfoItem computer in Computers)
+                {
+                    var files = computer.Items.Where(i => i.BadFile.Sha1 == result.Sha1);
+                    foreach (var f in files)
+                    {
+                        f.UpdateFileVerdict(resultVerdict);
+                        RaisePropertyChanged(nameof(Computers));
+                        
+                    }
+                }
+            }
+        }
+
 
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {

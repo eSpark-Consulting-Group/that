@@ -156,7 +156,7 @@ namespace APTAT.Application.Services
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
-
+        event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         void GetScanResult(Guid targetUid, Object userState);

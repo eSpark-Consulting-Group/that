@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using APTAT.Core.Properties;
+using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.Core
 {
@@ -10,12 +13,14 @@ namespace APTAT.Core
         private const int ClientIdNumber = 27102016;
         private IPAddress _server;
         
-        private readonly short _port = 4448;
-        private readonly string _hostName = "fls.security.comodo.com";
-
+        private short _port = 4448;
+        private string _hostName = "fls.security.comodo.com";
+        
         public void Init()
         {
-
+            _hostName = Settings.Default.FlsHost;
+            _port = short.Parse(Settings.Default.FlsPort);
+            
             IPHostEntry hostEntry = Dns.GetHostEntry(_hostName);
             if (!hostEntry.AddressList.Any()) throw new InvalidOperationException("Could not resolve host " + _hostName);
             _server = hostEntry.AddressList[0];

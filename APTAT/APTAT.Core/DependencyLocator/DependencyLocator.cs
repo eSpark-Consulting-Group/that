@@ -7,6 +7,7 @@ namespace APTAT.Core.DependencyLocator
         public void RegisterDependencies(ICompositionHelper resolver)
         {
             resolver.RegisterSingleton<IAptAtManager, AptAtManager>();
+            resolver.Register<IFlsManager, FlsManager>();
         }
     }
 }

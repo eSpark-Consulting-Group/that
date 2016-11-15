@@ -13,20 +13,29 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using APTAT.Valkyrie;
+using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Core
-{ 
+{
     public class AptAtManager : IAptAtManagerInternal
     {
         private readonly IDescentSubSystem _descentSubSystem;
         private IAptScanner _scanner;
+        private readonly IFlsManager _flsManager;
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
+        public event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         private IValkyrieClient _valkyrieClient;
         private List<FileResult> _valkyrieAnalyzezResults;
         private IAptScanOperationContext _lastAptResults;
-        public IAptScanOperationContext LastAptScanOperationContext { get { return _lastAptResults; } }
+//        private Dictionary<> _dictionary = new Dictionary<>();
+
+        public IAptScanOperationContext LastAptScanOperationContext
+        {
+            get { return _lastAptResults; }
+        }
+
         public List<FileResult> ValkyrieAnalysisResult
         {
             get { return _valkyrieAnalyzezResults; }
@@ -36,16 +45,20 @@ namespace APTAT.Core
                 ValkyrieOperationUid = Guid.NewGuid();
             }
         }
+
         public Guid ValkyrieOperationUid { get; set; }
 
-        public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient)
+        public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager)
         {
             _descentSubSystem = descentSubSystem;
             _valkyrieClient = valkyrieClient;
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
             _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
             _valkyrieClient.AnalyzeStarted += OnValkyrieAnalyzeStarted;
+            _flsManager = manager;
+            _flsManager.FlsAnalyzed += FlsManagerFlsAnalyzed;
         }
+
 
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
@@ -57,22 +70,23 @@ namespace APTAT.Core
             var valkyrieAnalysisResult = GetFullResult(e.Result, _lastAptResults.ScanResults);
             ValkyrieAnalysisResult = valkyrieAnalysisResult;
             var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
-                    , e.IsPendingExist, e.UserState);
+                , e.IsPendingExist, e.UserState);
             ValkyrieAnalyzeCompleted?.Invoke(this, arg);
         }
 
-        void OnValkyrieClientProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
+        void OnValkyrieClientProgressChanged(object sender,
+            ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
         {
             var handler = ValkyrieAnalyzeProgressChanged;
             if (handler != null)
             {
                 ProgressInfo<ValkyrieAnalysisResult> info = e.ProgressInfo;
-                
+
                 var valkyrieAnalysisResult = GetFullResult(info.Results, _lastAptResults.ScanResults);
                 var malwareFilesCount =
-                        valkyrieAnalysisResult.Where(i => i.ValkyrieAnalysisResult != null)
-                            .Count(i => i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware ||
-                                i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
+                    valkyrieAnalysisResult.Where(i => i.ValkyrieAnalysisResult != null)
+                        .Count(i => i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware ||
+                                    i.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
 
                 var valkyrieAnalysisResultInternal = ValkyrieAnalysisResult;
                 if (e.IsUpdate && valkyrieAnalysisResultInternal != null)
@@ -88,12 +102,16 @@ namespace APTAT.Core
 
                 var unknownFilesCount = valkyrieAnalysisResult.Count - malwareFilesCount;
 
-                ProgressInfo<FileResult> progressInfo = new ProgressInfo<FileResult>(info.TotalFileCount, info.ProcessedFileCount, malwareFilesCount, unknownFilesCount, valkyrieAnalysisResult.ToArray());
-                handler(this, new ValkyrieAnalyzeProgressChangedEventArgs<FileResult>(e.Percent, progressInfo, e.IsUpdate, e.IsPendingExist));
+                ProgressInfo<FileResult> progressInfo = new ProgressInfo<FileResult>(info.TotalFileCount,
+                    info.ProcessedFileCount, malwareFilesCount, unknownFilesCount, valkyrieAnalysisResult.ToArray());
+                handler(this,
+                    new ValkyrieAnalyzeProgressChangedEventArgs<FileResult>(e.Percent, progressInfo, e.IsUpdate,
+                        e.IsPendingExist));
             }
         }
 
-        private static List<FileResult> GetFullResult(IEnumerable<ValkyrieAnalysisResult> valkyrieResult, IEnumerable<IAptScanResult> scanResults)
+        private static List<FileResult> GetFullResult(IEnumerable<ValkyrieAnalysisResult> valkyrieResult,
+            IEnumerable<IAptScanResult> scanResults)
         {
             List<FileResult> fileResults = new List<FileResult>();
 
@@ -107,7 +125,9 @@ namespace APTAT.Core
                     if (found == null)
                     {
                         found = new FileResult(badFile);
-                        var vResult = valkyrieAnalysisResults.FirstOrDefault(v => v.SHA1 != null && v.SHA1.ToUpper() == badFile.Sha1.ToUpper());
+                        var vResult =
+                            valkyrieAnalysisResults.FirstOrDefault(
+                                v => v.SHA1 != null && v.SHA1.ToUpper() == badFile.Sha1.ToUpper());
 
                         if (vResult != null)
                         {
@@ -115,13 +135,13 @@ namespace APTAT.Core
                             fileResults.Add(found);
                         }
                     }
-                  
+
                     if (scanResult.AptReport != null && scanResult.AptReport.Computer != null)
                     {
                         var computer = scanResult.AptReport.Computer;
                         var comp = new ComputerInformation(computer, scanResult.TargetUid);
                         if (!found.Computers.Any(c => c.IP == comp.IP))
-                        {                        
+                        {
                             comp.FilePath = badFile.Path;
                             found.Computers.Add(comp);
                         }
@@ -142,21 +162,29 @@ namespace APTAT.Core
                 {
                     if (files.All(f => f.Sha1 != badFile.Sha1))
                     {
-                        files.Add(new ValkyrieFileInfo() { Ip = scanResult.Value.Computer.IPAddress, Path = badFile.Path, Sha1 = badFile.Sha1, Size = badFile.Size });
+                        files.Add(new ValkyrieFileInfo()
+                        {
+                            Ip = scanResult.Value.Computer.IPAddress,
+                            Path = badFile.Path,
+                            Sha1 = badFile.Sha1,
+                            Size = badFile.Size
+                        });
                     }
                 }
             }
             return files;
         }
+
         public static List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IEnumerable<IAptScanResult> results)
         {
-            Dictionary<string, IAptScanResult> scanResults = results.OrderByDescending(r=>r.Computer.IsLocalComputer).ToDictionary(t => t.TargetUid.ToString());
+            Dictionary<string, IAptScanResult> scanResults =
+                results.OrderByDescending(r => r.Computer.IsLocalComputer).ToDictionary(t => t.TargetUid.ToString());
 
             List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
             foreach (var scanResult in scanResults)
             {
                 var modules = scanResult.Value.GetUnknownFiles();
-                
+
                 foreach (var badFile in modules)
                 {
                     if (files.All(f => f.Sha1 != badFile.Sha1))
@@ -181,35 +209,75 @@ namespace APTAT.Core
             switch (cloud)
             {
                 case Descent.Apt.CloudVerdict.Safe:
-                    return Valkyrie.CloudVerdict.Safe;                    
+                    return Valkyrie.CloudVerdict.Safe;
                 case Descent.Apt.CloudVerdict.Unknown:
                     return Valkyrie.CloudVerdict.Unknown;
-                    
+
                 case Descent.Apt.CloudVerdict.Malware:
                     return Valkyrie.CloudVerdict.Malware;
-                    
+
                 case Descent.Apt.CloudVerdict.FirstSeen:
                     return Valkyrie.CloudVerdict.FirstSeen;
-                    
+
                 case Descent.Apt.CloudVerdict.FailedToAnalyze:
                     return Valkyrie.CloudVerdict.FailedToAnalyze;
-                    
+
                 case Descent.Apt.CloudVerdict.NoVerdict:
                     return Valkyrie.CloudVerdict.NoVerdict;
-                    
+
                 default:
-                    throw new NotSupportedException("Can not convert to Valkyrie.CloudVerdict from Apt.CloudVerdict " + cloud);
+                    throw new NotSupportedException("Can not convert to Valkyrie.CloudVerdict from Apt.CloudVerdict " +
+                                                    cloud);
             }
         }
 
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
+        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
-        {          
+        {
             if (_scanner != null) throw new AnotherScanIsInProgressException();
             _scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
+            _scanner.ScanInProgress += OnScannerOnScanInProgress;
             _scanner.ScanCompleted += OnScanCompleted;
             return _scanner;
+        }
+
+        private readonly ConcurrentBag<Guid> _progressOperatinGuids = new ConcurrentBag<Guid>();
+        private bool _isValkyrieStarted;
+
+        private void OnScannerOnScanInProgress(object sender, AptScanInProgressEventArgs args)
+        {
+            var item = (AptDescentProgressItem) args.ProgressItems.First();
+            if (item.ScanStage == AptScanStage.OperationCompleted && !_progressOperatinGuids.Contains(item.ComputerUid))
+            {
+                _progressOperatinGuids.Add(item.OperationUid);
+                OnEndpointCompleted(item);
+            }
+
+        }
+
+        private void OnEndpointCompleted(AptDescentProgressItem item)
+        {
+            var aptResult =
+                (IAptScanOperationContext) _descentSubSystem.GetDescentResultsByOperationUid(item.OperationUid);
+            IAptScanResult results = aptResult.ScanResults.FirstOrDefault(r => r.Computer.Uid == item.ComputerUid);
+            if (results == null)
+                throw new InvalidOperationException("Can't get result for computer " + item.ComputerUid);
+            Module[] files =
+                results.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict)
+                    .ToArray();
+            if (files.Any())
+            {
+                _flsManager.Enqueue(files.Select(f => f.Sha1));
+            }
+
+        }
+
+        private void FlsManagerFlsAnalyzed(object sender, FlsRequestEventArgs e)
+        {
+            var results = e.Results;
+            OnFlsAnalyzeProgressChanged(e);
+            // throw new NotImplementedException();
         }
 
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
@@ -226,7 +294,8 @@ namespace APTAT.Core
             {
                 scanner.ScanStarted -= OnScanStarted;
                 scanner.ScanCompleted -= OnScanCompleted;
-                var aptResult = (IAptScanOperationContext)_descentSubSystem.GetDescentResultsByOperationUid(e.OperationUid);
+                var aptResult =
+                    (IAptScanOperationContext) _descentSubSystem.GetDescentResultsByOperationUid(e.OperationUid);
                 _lastAptResults = aptResult;
                 _scanner = null;
             }
@@ -247,6 +316,9 @@ namespace APTAT.Core
         {
             _descentSubSystem.StopAllScans(0);
             _valkyrieClient.AnalyzeAsyncCancel();
+            _flsManager.Cancel();
+           
+            
         }
         
 
@@ -257,7 +329,9 @@ namespace APTAT.Core
             var results = _lastAptResults.ScanResults;
             var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
             var distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
-            _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length, proxyCredential);           
+            _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length, proxyCredential);
+            _isValkyrieStarted = true;
+            //       _valkyrieClient.AddFilesToAnalyze();
         }
 
         public string GetValkyrieDetailsLink()
@@ -281,6 +355,11 @@ namespace APTAT.Core
                 _valkyrieClient.Dispose();
                 _valkyrieClient = null;
             }
+        }
+
+        protected virtual void OnFlsAnalyzeProgressChanged(FlsRequestEventArgs e)
+        {
+            FlsAnalyzeProgressChanged?.Invoke(this, e);
         }
     }
 

@@ -14,6 +14,7 @@ namespace APTAT.Core
     {
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+        event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
         List<FileResult> ValkyrieAnalysisResult { get; set; }
 

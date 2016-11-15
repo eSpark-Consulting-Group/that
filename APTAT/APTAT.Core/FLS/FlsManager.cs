@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using APTAT.Core.Properties;
+
 
 namespace APTAT.Core
 {
@@ -17,10 +19,13 @@ namespace APTAT.Core
         private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
-        private CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource _cancellationTokenSource;
+        private bool _isWorking = false;
+        private readonly int _uploadInterval;
+        private readonly int _uploadAtOnce;
+
         private void DoWorkItem(string[] hashes )
         {
-
             try
             {
                 FlsResponse response = _apiProvider.RequestType0(hashes);
@@ -28,12 +33,17 @@ namespace APTAT.Core
                 OnFlsAnalyzed(results, null);
                 
                 foreach (var r in results){_allResults.Add(r);}
-                Enqueue(response.GetFailedToAnalyzeHashes());
+
+                var failed = response.GetFailedToAnalyzeHashes();
+                if (failed.Any())
+                {
+                    Enqueue(failed.ToArray());
+                }
             }
             catch (Exception)
             {
-                
-                throw;
+                Enqueue(hashes);
+                //throw;
             }
 
             //Thread.Sleep(1000); //TODO: Remove after test
@@ -45,14 +55,20 @@ namespace APTAT.Core
             _cancellationToken = _cancellationTokenSource.Token;
             _apiProvider = new FlsApiProvider();
             _apiProvider.Init();
+            _uploadInterval = int.Parse(Settings.Default.FlsUploadInterval);
+            _uploadAtOnce = int.Parse(Settings.Default.FlsUploadHashesAtOnce);
+
         }
 
         public async Task Enqueue(IEnumerable<string> hashes)
         {
+            var analyzed = _allResults.Select(r => r.Sha1).ToList();
+            var result = hashes.Where(p => !analyzed.Any(p2 => p2 == p));
+
             if (!_isWorking) Task.Run(Start, _cancellationToken);
             await Task.Factory.StartNew(() =>
             {
-                foreach (var h in hashes)
+                foreach (var h in result)
                 {
                     _inputQueue.Add(h, _cancellationToken);
                 }
@@ -66,7 +82,7 @@ namespace APTAT.Core
             _cancellationTokenSource.Cancel();
         }
 
-        private bool _isWorking = false;
+
         private async Task Start()
         {
             try
@@ -92,7 +108,7 @@ namespace APTAT.Core
                         await AnalyzeAsync(buffer.ToArray());
                         buffer.Clear();
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(1), _cancellationToken);
+                    await Task.Delay(TimeSpan.FromSeconds(_uploadInterval), _cancellationToken);
                 }
             }
             catch (Exception)
@@ -125,7 +141,7 @@ namespace APTAT.Core
                 Task task = Task.Factory.StartNew(async () =>
                 {
 
-                    string[][] hashGroups = Split(hashes, 20).ToArray();
+                    string[][] hashGroups = Split(hashes, _uploadAtOnce).ToArray();
                     foreach (var h in hashGroups)
                     {
                         DoWorkItem(h);

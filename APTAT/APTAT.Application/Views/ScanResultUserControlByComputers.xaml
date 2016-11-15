@@ -71,7 +71,7 @@
                         <Path Data="M9.1710043,7.7580009 L12.000004,10.586 14.828004,7.7580009 16.242004,9.1720009 13.414004,12 16.242004,14.828 14.828004,16.242001 12.000004,13.414001 9.1710043,16.242001 7.7570043,14.828 10.586004,12 7.7570043,9.1720009 z M12,1.9999999 C6.4779968,2 2,6.4779968 1.9999999,12 2,17.522003 6.4779968,22 12,22 17.522003,22 22,17.522003 22,12 22,6.4779968 17.522003,2 12,1.9999999 z M12,0 C18.626999,0 24,5.3730011 24,12 24,18.626999 18.626999,24 12,24 5.3730011,24 0,18.626999 0,12 0,5.3730011 5.3730011,0 12,0 z" Fill="#FF7F848C"
                                   Margin="5,0,0,0" Grid.RowSpan="2" Height="24"  Opacity="{Binding ScanStatus, Converter={StaticResource ScanStageToOpacityConverter}, ConverterParameter='Offline'}" Stretch="Fill" VerticalAlignment="Center" Width="24"/>
 
-
+     
 
                         <TextBlock Margin="8,8,0,0" Text="{Binding NameAndIpAddress}" Grid.Column="1"/>
                         <TextBlock  Grid.Column="2" Margin="0,8,0,0" Text="" Opacity="{Binding IsOnline, Converter={StaticResource InverseBoolToOpacityConverter}}"/>
@@ -100,8 +100,10 @@
                       <Path HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2,7,0" Grid.RowSpan="2"
                             Opacity="{Binding Failed, Converter={StaticResource BoolToOpacityConverter}}" Width="16" Height="16" Data="M14.829994,7.7570062 L12.000999,10.586001 9.1729965,7.757998 7.7589951,9.1719995 10.586998,12.000002 7.7589951,14.828005 9.1729965,16.242007 12.000999,13.414004 14.829994,16.242007 16.243996,14.828005 13.415001,12.000002 16.243996,9.1710076 z M12.000999,4.0000023 C16.418999,4.0000024 20.000999,7.580996 20.000999,12.000002 20.000999,16.418002 16.418999,20.000002 12.000999,20.000002 7.5820007,20.000002 4.0009995,16.418002 4.0009994,12.000002 4.0009995,7.580996 7.5820007,4.0000024 12.000999,4.0000023 z M11.999998,2 C6.477999,2 1.9999995,6.4780002 1.9999995,12 1.9999995,17.522 6.477999,22 11.999998,22 17.521997,22 21.999996,17.522 21.999996,12 21.999996,6.4780002 17.521997,2 11.999998,2 z M11.999998,0 C18.626997,0 23.999996,5.3720001 23.999996,12 23.999996,18.627 18.626997,24 11.999998,24 5.3729991,24 0,18.627 0,12 0,5.3720001 5.3729991,0 11.999998,0 z" Fill="#FFFCAF17" Stretch="Fill" />
 
+                        <Path Data="M11.999996,7.0000024 L11.999996,10.000002 11.999996,14.000002 11.999996,17.000002 C15.999996,15.000002 15.999996,11.000002 15.999996,11.000002 L15.999996,8.0000026 C15.999996,8.0000024 12.999996,8.0000024 11.999996,7.0000024 z M11.999996,5.0000025 C14.999996,6.0000024 17.999996,6.0000024 17.999996,6.0000023 L17.999996,11.000002 C17.999996,11.000002 17.999996,17.000002 11.999996,19.000002 5.9999957,17.000002 5.9999957,11.000002 5.9999957,11.000002 L5.9999957,6.0000023 C5.9999957,6.0000024 8.9999957,6.0000024 11.999996,5.0000025 z M12,2 C6.478,2 2,6.478 2.0000002,12 2,17.522 6.478,22 12,22 17.522,22 22,17.522 22,12 22,6.478 17.522,2 12,2 z M12,0 C18.627,0 24,5.3720001 24,12 24,18.627 18.627,24 12,24 5.373,24 0,18.627 0,12 0,5.3720001 5.373,0 12,0 z" Fill="#FF2C8841"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2,7,0" Grid.RowSpan="2" Height="16"  Opacity="{Binding Clean, Converter={StaticResource BoolToOpacityConverter}}" Stretch="Fill"   Width="16"/>
 
-                      <TextBlock Text="{Binding Name}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                        <TextBlock Text="{Binding Name}" FontSize="13" FontFamily="Segoe UI Light" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="SizeColumn">

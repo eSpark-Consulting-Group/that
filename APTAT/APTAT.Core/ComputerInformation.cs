@@ -176,7 +176,7 @@ namespace APTAT.Core
             }
         }
 
-        private void UpdateStatus()
+        public void UpdateStatus()
         {
             int malwareCount = 0, 
                 unknownCount = 0, 

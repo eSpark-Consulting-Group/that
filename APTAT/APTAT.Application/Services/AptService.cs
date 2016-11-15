@@ -27,6 +27,7 @@ namespace APTAT.Application.Services
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
+        public event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         private IAptAtManager _manager;
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
         public Guid SessionId
@@ -39,8 +40,20 @@ namespace APTAT.Application.Services
             _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
             _manager.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
+            _manager.FlsAnalyzeProgressChanged += OnFlsAnalyzeProgressChanged;
 
         }
+
+        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs e)
+        {
+            Action action = () =>
+            {
+                FlsAnalyzeProgressChanged?.Invoke(this, e);
+            };
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(action);
+        }
+
+        
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
             Action action = () =>
@@ -118,7 +131,7 @@ namespace APTAT.Application.Services
                 if (aptScantProgress != null)
                 {
                     progressItem.ComputerGuid = aptScantProgress.ComputerUid;
-                    progressItem.StatusMessage = aptScantProgress.StatusMessage.ToString();
+                    progressItem.StatusMessageSystem = aptScantProgress.StatusMessage.ToString();
 
                     progressItem.TotalFilesCount = aptScantProgress.TotalFilesCount;
                     progressItem.UnknownFilesCount = aptScantProgress.UnknownFilesCount;
@@ -126,12 +139,13 @@ namespace APTAT.Application.Services
                     progressItem.FailedToAnalyzeFilesCount = aptScantProgress.ErrorFilesCount;
                     progressItem.NoVerdictFilesCount = aptScantProgress.FailedAtNodeCount;
                     progressItem.OperationUid = aptScantProgress.OperationUid;
+                    progressItem.ProgressPercentage = aptScantProgress.ProgressPercentage;
                     progressItem.ScanStage = FromAptScanStage(aptScantProgress.ScanStage);
                 }
                 else
                 {
                     progressItem.ComputerGuid = descentProgressItem.ComputerUid;
-                    progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
+                    progressItem.StatusMessageSystem = descentProgressItem.StatusMessage.ToString();
                     progressItem.OperationUid = descentProgressItem.OperationUid;
                     progressItem.ScanStage = descentProgressItem.IsCanceled ? 
                         ScanStage.OperationCanceled : ScanStage.OperationFailed;
@@ -208,8 +222,6 @@ namespace APTAT.Application.Services
                     Attributes = m.Attributes,
                     Sha1 = m.Sha1,
                     Cloud = m.Cloud,
-                    IsMalware = m.Cloud == CloudVerdict.Malware,
-                    IsUnknown = m.Cloud == CloudVerdict.Unknown || m.Cloud == CloudVerdict.FirstSeen
                 }).ToArray();
             resultItem.BadFiles = badFileItems;
             GetScanResultCompleted?.Invoke(this, new GetScanResultCompletedEventArgs(resultItem, userState));

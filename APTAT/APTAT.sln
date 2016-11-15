@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.DeploymentCore", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Common", "..\Common\APTAT.Common\APTAT.Common.csproj", "{49BA3C32-1495-4EA5-8D32-3997788ADE2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLSClientWPF", "FLSClientWPF\FLSClientWPF.csproj", "{626AE5DC-D82E-489A-8C48-D73AB14013B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,12 +177,28 @@ Global
 		{49BA3C32-1495-4EA5-8D32-3997788ADE2F}.Release|Win32.Build.0 = Release|Any CPU
 		{49BA3C32-1495-4EA5-8D32-3997788ADE2F}.Release|x86.ActiveCfg = Release|Any CPU
 		{49BA3C32-1495-4EA5-8D32-3997788ADE2F}.Release|x86.Build.0 = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|Win32.Build.0 = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Debug|x86.Build.0 = Debug|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|Win32.ActiveCfg = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|Win32.Build.0 = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|x86.ActiveCfg = Release|Any CPU
+		{626AE5DC-D82E-489A-8C48-D73AB14013B2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -211,5 +229,8 @@ Global
 		SccProjectUniqueName9 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
 		SccProjectName9 = ../Common/APTAT.Common
 		SccLocalPath9 = ..\\Common\\APTAT.Common
+		SccProjectUniqueName10 = FLSClientWPF\\FLSClientWPF.csproj
+		SccProjectName10 = FLSClientWPF
+		SccLocalPath10 = FLSClientWPF
 	EndGlobalSection
 EndGlobal
