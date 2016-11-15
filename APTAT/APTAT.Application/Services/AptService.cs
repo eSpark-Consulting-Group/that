@@ -131,7 +131,7 @@ namespace APTAT.Application.Services
                 if (aptScantProgress != null)
                 {
                     progressItem.ComputerGuid = aptScantProgress.ComputerUid;
-                    progressItem.StatusMessageSystem = aptScantProgress.StatusMessage.ToString();
+                    progressItem.StatusMessage = aptScantProgress.StatusMessage.ToString();
 
                     progressItem.TotalFilesCount = aptScantProgress.TotalFilesCount;
                     progressItem.UnknownFilesCount = aptScantProgress.UnknownFilesCount;
@@ -145,7 +145,7 @@ namespace APTAT.Application.Services
                 else
                 {
                     progressItem.ComputerGuid = descentProgressItem.ComputerUid;
-                    progressItem.StatusMessageSystem = descentProgressItem.StatusMessage.ToString();
+                    progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
                     progressItem.OperationUid = descentProgressItem.OperationUid;
                     progressItem.ScanStage = descentProgressItem.IsCanceled ? 
                         ScanStage.OperationCanceled : ScanStage.OperationFailed;

@@ -29,7 +29,7 @@ namespace APTAT.Application.Models
 
         public override string ToString()
         {
-            if(_value == ScanStatusEnum.InProgress)
+            if (_value == ScanStatusEnum.InProgress)
             {
                 return "In Progress";
             }
@@ -45,11 +45,11 @@ namespace APTAT.Application.Models
 
         public override Boolean Equals(Object obj)
         {
-            if(obj is ScanStatus)
+            if (obj is ScanStatus)
             {
                 ScanStatus status = (ScanStatus) obj;
 
-                if(status._value == _value)
+                if (status._value == _value)
                 {
                     return true;
                 }
@@ -93,10 +93,55 @@ namespace APTAT.Application.Models
             Clean = BadFile.Cloud == CloudVerdict.Safe;
         }
 
+        public void UpdateStatus()
+        {
+            int malwareCount = 0;
+            int failedToAnalyzeCount = 0;
+            int noVerdictFilesCount = 0;
+            int safeCount = 0;
+            int unknownFilesCount = 0;
+            if (this.Items != null && Items.Any())
+            {
+                foreach (var item in Items)
+                {
+                    if (item.BadFile.Cloud == CloudVerdict.Malware) malwareCount++;
+                    else if (item.BadFile.Cloud == CloudVerdict.FailedToAnalyze) failedToAnalyzeCount++;
+                    else if (item.BadFile.Cloud == CloudVerdict.NoVerdict) noVerdictFilesCount++;
+                    else if (item.BadFile.Cloud == CloudVerdict.Safe) safeCount++;
+                    else if (item.BadFile.Cloud == CloudVerdict.Unknown) unknownFilesCount++;
+                }
+
+                FailedToAnalyzeCount = failedToAnalyzeCount;
+                NoVerdictFilesCount = noVerdictFilesCount;
+                MalwareFilesCount = malwareCount;
+                UnknownFilesCount = unknownFilesCount;
+                CleanFilesCount = safeCount;
+                IsMalware = malwareCount > 0;
+                IsUnknown = malwareCount == 0 && unknownFilesCount > 0;
+            }
+            RaisePropertyChanged(nameof(StatusMessage));
+        }
+
+        private int _cleanFilesCount;
+        public int CleanFilesCount {
+            get
+            {
+                return _cleanFilesCount;
+            }
+            set
+            {
+                _cleanFilesCount = value; 
+                RaisePropertyChanged(nameof(CleanFilesCount));
+                
+            } 
+        }
+
         public Boolean IsUnknown
         {
             get { return _isUnknown; }
-            set { _isUnknown = value;
+            set
+            {
+                _isUnknown = value;
                 RaisePropertyChanged(nameof(IsUnknown));
             }
         }
@@ -104,7 +149,9 @@ namespace APTAT.Application.Models
         public Boolean IsMalware
         {
             get { return _isMalware; }
-            set { _isMalware = value;
+            set
+            {
+                _isMalware = value;
                 RaisePropertyChanged(nameof(IsMalware));
             }
         }
@@ -121,7 +168,7 @@ namespace APTAT.Application.Models
 
         public Boolean Failed
         {
-            get 
+            get
             {
                 return !IsUnknown && !IsMalware && !Clean;
             }
@@ -129,7 +176,7 @@ namespace APTAT.Application.Models
 
         public Boolean HasMalwares
         {
-            get 
+            get
             {
                 return MalwareFilesCount > 0;
             }
@@ -167,7 +214,7 @@ namespace APTAT.Application.Models
             {
                 if (!string.IsNullOrEmpty(IpAddress))
                 {
-                    return String.Format("{0} ({1})", Name, IpAddress);    
+                    return String.Format("{0} ({1})", Name, IpAddress);
                 }
 
                 return Name;
@@ -187,7 +234,7 @@ namespace APTAT.Application.Models
                     else
                     {
                         var ver = Version.Parse(IpAddress);
-                        var str = string.Format("C{0:000}.{1:000}.{2:000}.{3:000}", 
+                        var str = string.Format("C{0:000}.{1:000}.{2:000}.{3:000}",
                             ver.Major, ver.Minor, ver.Build, ver.Revision);
                         return str;
                     }
@@ -209,22 +256,22 @@ namespace APTAT.Application.Models
         {
             get
             {
-                if(!IsOnline)
+                if (!IsOnline)
                 {
                     return new ScanStatus(ScanStatusEnum.Offline);
                 }
 
-                if(ScanStage == ScanStage.OperationCompleted)
+                if (ScanStage == ScanStage.OperationCompleted)
                 {
                     return new ScanStatus(ScanStatusEnum.Completed);
                 }
 
-                if(ScanStage == ScanStage.OperationFailed)
+                if (ScanStage == ScanStage.OperationFailed)
                 {
                     return new ScanStatus(ScanStatusEnum.Failed);
                 }
 
-                if(ScanStage == ScanStage.OperationCanceled)
+                if (ScanStage == ScanStage.OperationCanceled)
                 {
                     return new ScanStatus(ScanStatusEnum.Canceled);
                 }
@@ -250,12 +297,12 @@ namespace APTAT.Application.Models
             get { return (ScanStage == ScanStage.OperationCompleted && Items != null && Items.Count > 0) || Computers != null; }
         }
 
-        public String StatusMessage
+        public String StatusMessageSystem
         {
             get { return _statusMessage; }
             set
             {
-                if(_statusMessage == value)
+                if (_statusMessage == value)
                 {
                     return;
                 }
@@ -265,20 +312,74 @@ namespace APTAT.Application.Models
             }
         }
 
+
+        public String StatusMessage
+        {
+            get
+            {
+                switch (ScanStage)
+                {
+                    case ScanStage.Unknown:
+                    case ScanStage.Pending:
+                    case ScanStage.Connecting:
+                    case ScanStage.CopyingScanner:
+                    case ScanStage.ConfiguringScanner:
+                    case ScanStage.StartingScanner:
+                    case ScanStage.ScanFailed:
+                    case ScanStage.OperationFailed:
+                    case ScanStage.OperationCanceled:
+                        return StatusMessageSystem;
+
+
+                    case ScanStage.ScanCompleted:
+                    case ScanStage.ScanInProgress:
+                    case ScanStage.ScanResultsObtaning:
+                    case ScanStage.ScanResultsObtaned:
+                    case ScanStage.ScanResultsProcessing:
+                    case ScanStage.OperationCompleted:
+
+                        return GetStatusMessage();
+
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+            }
+
+        }
+
+        public Int32 LookupInProgress => FailedToAnalyzeCount + NoVerdictFilesCount;
+        private string GetStatusMessage()
+        {
+
+            string errorCounterText = LookupInProgress > 0 ?
+                    $"Lookup in progress {LookupInProgress}."
+                    : String.Empty;
+
+            string serverErrorCounterText = NoVerdictFilesCount > 0 ? $"No Verdict: {NoVerdictFilesCount}."
+                : String.Empty;
+
+            var text = string.Format("{0} files scanned ({3}%). Unknown files: {1}. Malicious files: {2}. {4} {5}", TotalFilesCount, UnknownFilesCount, MalwareFilesCount, string.Format("{0:0.00}", ProgressPercentage).Replace(".00", string.Empty), errorCounterText, serverErrorCounterText);
+
+            return text;
+        }
+
+
         public Int32 UnknownFilesCount
         {
             get { return _unknownFilesCount; }
             set
             {
-                if(_unknownFilesCount == value)
+                if (_unknownFilesCount == value)
                 {
                     return;
                 }
                 _unknownFilesCount = value;
-                RaisePropertyChanged("UnknownFilesCount");
-                RaisePropertyChanged("HasBadFiles");
-                RaisePropertyChanged("HasUnknowns");
-                RaisePropertyChanged("HasFailed");
+                RaisePropertyChanged(nameof(UnknownFilesCount));
+                RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasUnknowns));
+                RaisePropertyChanged(nameof(HasFailed));
             }
         }
 
@@ -287,17 +388,17 @@ namespace APTAT.Application.Models
             get { return _malwareFilesCount; }
             set
             {
-                if(_malwareFilesCount == value)
+                if (_malwareFilesCount == value)
                 {
                     return;
                 }
 
                 _malwareFilesCount = value;
-                RaisePropertyChanged("MalwareFilesCount");
-                RaisePropertyChanged("HasBadFiles");
-                RaisePropertyChanged("HasMalwares");
-                RaisePropertyChanged("HasUnknowns");
-                RaisePropertyChanged("HasFailed");
+                RaisePropertyChanged(nameof(MalwareFilesCount));
+                RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasMalwares));
+                RaisePropertyChanged(nameof(HasUnknowns));
+                RaisePropertyChanged(nameof(HasFailed));
             }
         }
 
@@ -312,9 +413,10 @@ namespace APTAT.Application.Models
                 }
 
                 _errorFilesCount = value;
-                RaisePropertyChanged("FailedToAnalyzeCount");
-                RaisePropertyChanged("HasBadFiles");
-                RaisePropertyChanged("HasFailed");
+                RaisePropertyChanged(nameof(FailedToAnalyzeCount));
+                RaisePropertyChanged(nameof(LookupInProgress));
+                RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasFailed));
             }
         }
 
@@ -329,9 +431,10 @@ namespace APTAT.Application.Models
                 }
 
                 _noVerdictFilesCount = value;
-                RaisePropertyChanged("NoVerdictFilesCount");
-                RaisePropertyChanged("HasBadFiles");
-                RaisePropertyChanged("HasFailed");
+                RaisePropertyChanged(nameof(NoVerdictFilesCount));
+                RaisePropertyChanged(nameof(LookupInProgress));
+                RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasFailed));
             }
         }
 
@@ -342,7 +445,7 @@ namespace APTAT.Application.Models
             get { return _totalFilesCount; }
             set
             {
-                if(_totalFilesCount == value)
+                if (_totalFilesCount == value)
                 {
                     return;
                 }
@@ -367,7 +470,7 @@ namespace APTAT.Application.Models
             {
                 if (Items == null)
                     return 0;
-                
+
                 var items = Items.Where(_ => _.IsUnknown).GroupBy(_ => _.BadFile.Sha1).Select(_ => _.Key);
                 return items.Count();
             }
@@ -393,10 +496,11 @@ namespace APTAT.Application.Models
         public Collection<ThreatInfoItem> Computers { get; set; }
 
         public BadFileItem BadFile { get; private set; }
+        public double ProgressPercentage { get; set; }
 
         public ThreatInfoItem()
         {
-            StatusMessage = "Initializing...";
+            StatusMessageSystem = "Initializing...";
 
             _items = new ObservableCollection<ThreatInfoItem>();
         }

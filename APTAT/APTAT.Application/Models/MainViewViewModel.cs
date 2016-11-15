@@ -96,12 +96,12 @@ namespace APTAT.Application.Models
 
         public string Login
         {
-            get;set;
+            get; set;
         }
 
         public string Password
         {
-            get;set;
+            get; set;
         }
 
 
@@ -143,7 +143,7 @@ namespace APTAT.Application.Models
                     ClearError("UdpPort");
                     RaisePropertyChanged(nameof(UdpPort));
                 }
-                
+
             }
         }
 
@@ -187,10 +187,10 @@ namespace APTAT.Application.Models
 
                 RaisePropertyChanged("Header");
 
-                App.Current.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    StopScanCommand.InvalidateCanExecute();
-                });
+                App.Current.Dispatcher.BeginInvoke((Action) delegate
+                 {
+                     StopScanCommand.InvalidateCanExecute();
+                 });
             }
         }
 
@@ -203,11 +203,11 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
 
-                App.Current.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    StartScanCommand.InvalidateCanExecute();
-                    StopScanCommand.InvalidateCanExecute();
-                });
+                App.Current.Dispatcher.BeginInvoke((Action) delegate
+                 {
+                     StartScanCommand.InvalidateCanExecute();
+                     StopScanCommand.InvalidateCanExecute();
+                 });
             }
         }
 
@@ -238,11 +238,11 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsValkyrieScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
 
-                App.Current.Dispatcher.BeginInvoke((Action)delegate
-               {
-                   StartScanCommand.InvalidateCanExecute();
-                   StopScanCommand.InvalidateCanExecute();
-               });
+                App.Current.Dispatcher.BeginInvoke((Action) delegate
+                {
+                    StartScanCommand.InvalidateCanExecute();
+                    StopScanCommand.InvalidateCanExecute();
+                });
 
             }
         }
@@ -291,8 +291,8 @@ namespace APTAT.Application.Models
             set
             {
                 _malwareFilesCount = value;
-                RaisePropertyChanged("MalwareFilesCount");
-                RaisePropertyChanged("IsMalwaresFound");
+                RaisePropertyChanged(nameof(MalwareFilesCount));
+                RaisePropertyChanged(nameof(IsMalwaresFound));
             }
         }
 
@@ -449,7 +449,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, (FileResult)_selectedValkyrieItem));
+                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, (FileResult) _selectedValkyrieItem));
                 }
 
             }
@@ -612,7 +612,7 @@ namespace APTAT.Application.Models
 
         private void InvokeStartScan(Object arg)
         {
-            IsQuickScan = (bool)arg;
+            IsQuickScan = (bool) arg;
 
             Items = new Collection<ThreatInfoItem>();
             Computers = new Collection<ThreatInfoItem>();
@@ -670,7 +670,7 @@ namespace APTAT.Application.Models
             CancelInProgress = true;
 
             _aptService.StopScan();
-            
+
         }
 
         protected override void InvokeViewLoaded(Object arg)
@@ -699,26 +699,33 @@ namespace APTAT.Application.Models
                 var resultVerdict = result.FlsVerdict.MapToCloudVerdict();
                 foreach (var threatInfoItem in Items.Where(i => i.BadFile.Sha1 == result.Sha1))
                 {
-                    
-                    
-                    
-                        threatInfoItem.UpdateFileVerdict(resultVerdict);
-                    
-                    
+                    threatInfoItem.UpdateFileVerdict(resultVerdict);
                     RaisePropertyChanged(nameof(Items));
                 }
-                
+
+                Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
+
                 foreach (ThreatInfoItem computer in Computers)
                 {
-                    var files = computer.Items.Where(i => i.BadFile.Sha1 == result.Sha1);
+                    var files = computer.Items.Where(i => i.BadFile.Sha1 == result.Sha1).ToArray();
+                    if (files.Any() && !computersToUpdate.ContainsKey(computer.ComputerGuid))
+                    {
+                        computersToUpdate.Add(computer.ComputerGuid, computer);
+                    }
                     foreach (var f in files)
                     {
                         f.UpdateFileVerdict(resultVerdict);
                         RaisePropertyChanged(nameof(Computers));
-                        
+
                     }
                 }
+                foreach (var computer in computersToUpdate.Values)
+                {
+                    computer.UpdateStatus();
+                }
+                UpdateStatus();
             }
+
         }
 
 
@@ -881,7 +888,7 @@ namespace APTAT.Application.Models
                         _malwareFilesCount += file.Computers.Count;
                         PendingFilesCount--;
                     }
-                        
+
 
                     RaisePropertyChanged("UnknownFilesCount");
                     RaisePropertyChanged("MalwareFilesCount");
@@ -1010,7 +1017,7 @@ namespace APTAT.Application.Models
             {
                 if (!item.IsOnline)
                 {
-                    item.StatusMessage = "This computer is not accessible.";
+                    item.StatusMessageSystem = "This computer is not accessible.";
                 }
             }
 
@@ -1043,7 +1050,7 @@ namespace APTAT.Application.Models
                 }
 
                 _aptService.BeginScan(e.Items, Login, Password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
-              
+
             }
             else
             {
@@ -1171,7 +1178,8 @@ namespace APTAT.Application.Models
                     infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
                     infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
                     infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                    infoItem.StatusMessage = scanProgress.StatusMessage;
+                    infoItem.StatusMessageSystem = scanProgress.StatusMessage;
+                    infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
 
                     if (infoItem.ScanStage != ScanStage.OperationCompleted &&
                         scanProgress.ScanStage == ScanStage.OperationCompleted)
@@ -1224,6 +1232,37 @@ namespace APTAT.Application.Models
                 _scanIteratorTimer.Start();
 
             RaisePropertyChanged("Header");
+        }
+
+        private void UpdateStatus()
+        {
+
+            Int32 completed = 0;
+            Int32 scanned = 0;
+            Int32 unknownFiles = 0;
+            Int32 malwareFiles = 0;
+            Int32 failedToAnalyzeFiles = 0;
+            Int32 noVerdictFiles = 0;
+
+            foreach (var infoItem in _onlineItems)
+            {
+                unknownFiles += infoItem.UnknownFilesCount;
+                malwareFiles += infoItem.MalwareFilesCount;
+                failedToAnalyzeFiles += infoItem.FailedToAnalyzeCount;
+                noVerdictFiles += infoItem.NoVerdictFilesCount;
+            }
+
+
+            UnknownFilesCount = unknownFiles;
+            MalwareFilesCount = malwareFiles;
+            FailedToAnalyzeFilesCount = failedToAnalyzeFiles;
+            NoVerdictFilesCount = noVerdictFiles;
+            ScannedItemsCount = scanned;
+
+            //if (completed == OnlineItemsCount)
+            //    ScanCompleted(scanned > 0);
+
+            RaisePropertyChanged(nameof(Header));
         }
 
         private void OnGetScanResultCompleted(Object sender, GetScanResultCompletedEventArgs e)
@@ -1361,7 +1400,7 @@ namespace APTAT.Application.Models
                 errorMessage = "Please specify Password";
                 return false;
             }
-            
+
             return true;
         }
 
