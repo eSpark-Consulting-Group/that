@@ -84,7 +84,10 @@ namespace APTAT.Core
 
         public void Cancel()
         {
-            _cancellationTokenSource.Cancel();
+            if (_cancellationTokenSource != null && _cancellationTokenSource.Token.CanBeCanceled)
+            {
+                _cancellationTokenSource.Cancel();
+            }
             _isWorking = false;
 
             FlsResult someItem;
