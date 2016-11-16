@@ -6,7 +6,8 @@ namespace APTAT.Core
 {
     public static class CloudVerdictMap
     {
-        public static Core.Descent.Apt.CloudVerdict MapToCloudVerdict(this FlsVerdict verdict)
+       
+        internal static Core.Descent.Apt.CloudVerdict ToCloudVerdict(this FlsVerdict verdict)
         {
             switch (verdict)
             {
@@ -31,7 +32,7 @@ namespace APTAT.Core
         }
     }
 
-    public enum FlsVerdict
+    internal enum FlsVerdict
     {
         DoesntExist = 0,
         Safe = 1,

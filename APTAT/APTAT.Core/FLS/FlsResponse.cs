@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
 {
@@ -11,11 +12,11 @@ namespace APTAT.Core
 
         public string[] GetFailedToAnalyzeHashes()
         {
-            return Results.Where(r => r.FlsVerdict == FlsVerdict.Error).Select(r=>r.Sha1).ToArray();
+            return Results.Where(r => r.IsNotAnalyzed).Select(r=>r.Sha1).ToArray();
         }
         public FlsResult[] GetAnalyzed()
         {
-            return Results.Where(r => r.FlsVerdict != FlsVerdict.Error).ToArray();
+            return Results.Where(r => r.IsNotAnalyzed == false).ToArray();
         }
 
         public List<FlsResult> Results = new List<FlsResult>();
@@ -32,8 +33,8 @@ namespace APTAT.Core
             {
                 FlsResult result = new FlsResult
                 {
-                    FlsVerdict = (FlsVerdict) bytes[byteIndex],
-                    CamasVerdict = bytes[byteIndex + 1],
+                    Cloud = ((FlsVerdict) bytes[byteIndex]).ToCloudVerdict(),
+                 //   CamasVerdict = bytes[byteIndex + 1],
                     Sha1 = hashes[i]
                 };
                 Results.Add(result);

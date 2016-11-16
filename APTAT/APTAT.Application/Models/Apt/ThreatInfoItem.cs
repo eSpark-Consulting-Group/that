@@ -360,11 +360,21 @@ namespace APTAT.Application.Models
             string serverErrorCounterText = NoVerdictFilesCount > 0 ? $"No Verdict: {NoVerdictFilesCount}."
                 : String.Empty;
 
-            var text = string.Format("{0} files scanned ({3}%). Unknown files: {1}. Malicious files: {2}. {4} {5}", TotalFilesCount, UnknownFilesCount, MalwareFilesCount, string.Format("{0:0.00}", ProgressPercentage).Replace(".00", string.Empty), errorCounterText, serverErrorCounterText);
+            if (ScanStage == ScanStage.ScanCompleted || ProgressPercentage  == 100)
+            {
+               return $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}.";
+            }
+            else
+            {
+                return
+                    $"{TotalFilesCount} files scanned ({$"{ProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. {errorCounterText} {serverErrorCounterText}";
+            }
+            
 
-            return text;
+            
         }
 
+        
 
         public Int32 UnknownFilesCount
         {

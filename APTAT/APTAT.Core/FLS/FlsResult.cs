@@ -1,35 +1,41 @@
 ﻿using System;
+using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
 {
     public class FlsResult
     {
-        public FlsVerdict FlsVerdict { get; set; }
-        public string FlsVerdictString
-        {
-            get
-            {
-                switch (FlsVerdict)
-                {
-                    case FlsVerdict.DoesntExist:
-                        return "Does not exist";
+        //public FlsVerdict FlsVerdict { get; private set; }
 
-                    case FlsVerdict.Safe:
-                        return "Safe";
+        public CloudVerdict Cloud { get; set; }
 
-                    case FlsVerdict.Malicious:
-                        return "Malicious";
+        public bool IsNotAnalyzed => Cloud == CloudVerdict.FailedToAnalyze || Cloud == CloudVerdict.NoVerdict;
 
-                    case FlsVerdict.Unknown:
-                        return "Unknown";
+        //public string FlsVerdictString
+        //{
+        //    get
+        //    {
+        //        switch (Cloud)
+        //        {
+        //            case CloudVerdict.FirstSeen:
+        //                return "Does not exist";
 
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
+        //            case CloudVerdict.Safe:
+        //                return "Safe";
 
-        public byte CamasVerdict { get; set; }
+        //            case CloudVerdict.Malware:
+        //                return "Malicious";
+
+        //            case CloudVerdict.Unknown:
+        //                return "Unknown";
+
+        //            default:
+        //                throw new ArgumentOutOfRangeException();
+        //        }
+        //    }
+        //}
+
+     //   public byte CamasVerdict { get; set; }
         public string Sha1 { get; set; }
     }
 }

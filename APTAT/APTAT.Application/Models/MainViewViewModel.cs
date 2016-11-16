@@ -696,10 +696,10 @@ namespace APTAT.Application.Models
 
             foreach (var result in e.Results)
             {
-                var resultVerdict = result.FlsVerdict.MapToCloudVerdict();
+                
                 foreach (var threatInfoItem in Items.Where(i => i.BadFile.Sha1 == result.Sha1))
                 {
-                    threatInfoItem.UpdateFileVerdict(resultVerdict);
+                    threatInfoItem.UpdateFileVerdict(result.Cloud);
                     RaisePropertyChanged(nameof(Items));
                 }
 
@@ -714,7 +714,7 @@ namespace APTAT.Application.Models
                     }
                     foreach (var f in files)
                     {
-                        f.UpdateFileVerdict(resultVerdict);
+                        f.UpdateFileVerdict(result.Cloud);
                         RaisePropertyChanged(nameof(Computers));
 
                     }

@@ -26,10 +26,7 @@ namespace APTAT.Application.Models
         public Guid ComputerGuid { get; set; }
 
         public ScanStage ScanStage { get; set; }
-
-      
-     
-
+        
         public String StatusMessage { get; set; }
 
         public Int32 TotalFilesCount { get; set; }

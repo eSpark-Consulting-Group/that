@@ -56,7 +56,7 @@ namespace APTAT.Core
             _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
             _valkyrieClient.AnalyzeStarted += OnValkyrieAnalyzeStarted;
             _flsManager = manager;
-            _flsManager.FlsAnalyzed += FlsManagerFlsAnalyzed;
+            _flsManager.FlsAnalyzed += FlsManagerOnAnalyzed;
         }
 
 
@@ -263,21 +263,85 @@ namespace APTAT.Core
             IAptScanResult results = aptResult.ScanResults.FirstOrDefault(r => r.Computer.Uid == item.ComputerUid);
             if (results == null)
                 throw new InvalidOperationException("Can't get result for computer " + item.ComputerUid);
-            Module[] files =
+
+
+            FlsResult[] allFilesVerdicts = results.Files.Select(m => new FlsResult() { Sha1 = m.Sha1, Cloud = m.Cloud }).ToArray();
+            AddResultsToDictionary(allFilesVerdicts);
+
+
+            Module[] filesWithError =
                 results.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict)
                     .ToArray();
-            if (files.Any())
+
+            Module[] filesWithoutResult;
+            var flsResult = GetResultsFromDictionary(filesWithError, out filesWithoutResult);
+            if (flsResult.Any())
             {
-                _flsManager.Enqueue(files.Select(f => f.Sha1));
+                OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(flsResult, null));
+            }
+
+            if (filesWithoutResult.Any())
+            {
+                _flsManager.Enqueue(filesWithoutResult.Select(f => f.Sha1));
             }
 
         }
 
-        private void FlsManagerFlsAnalyzed(object sender, FlsRequestEventArgs e)
+        private FlsResult[] GetResultsFromDictionary(Module[] files, out Module[] skipped)
         {
-            var results = e.Results;
-            OnFlsAnalyzeProgressChanged(e);
-            // throw new NotImplementedException();
+            var results = new List<FlsResult>();
+            var skippedList = new List<Module>();
+
+            foreach (var f in files)
+            {
+
+                if (_flsHashResults.ContainsKey(f.Sha1) 
+                    && _flsHashResults[f.Sha1] != CloudVerdict.FailedToAnalyze 
+                    && _flsHashResults[f.Sha1] != CloudVerdict.NoVerdict)
+                {
+
+                    results.Add(new FlsResult() {Sha1 = f.Sha1, Cloud= _flsHashResults[f.Sha1]});
+                }
+                else
+                {
+                    skippedList.Add(f);
+                }
+            }
+            skipped = skippedList.ToArray();
+            return results.ToArray();
+        }
+
+
+        private void AddResultsToDictionary(FlsResult[] resultsFiles)
+        {
+            var temp = new List<FlsResult>();
+            foreach (var r in resultsFiles)
+            {
+
+                if (!_flsHashResults.ContainsKey(r.Sha1))
+                    _flsHashResults.Add(r.Sha1, r.Cloud);
+                else
+                {
+                    if (_flsHashResults[r.Sha1] == CloudVerdict.FailedToAnalyze ||
+                        _flsHashResults[r.Sha1] == CloudVerdict.NoVerdict)
+                    {
+                        _flsHashResults[r.Sha1] = r.Cloud;
+                        temp.Add(r);
+                    }
+                }
+            }
+            if (temp.Any()) OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(temp.ToArray(), null));
+          //  temp.Select(t)
+            //if (_isValkyrieStarted) _valkyrieClient.AddFilesToAnalyze();
+
+        }
+
+        private readonly  Dictionary<string, CloudVerdict> _flsHashResults = new Dictionary<string, CloudVerdict>();
+
+        private void FlsManagerOnAnalyzed(object sender, FlsRequestEventArgs e)
+        {
+            AddResultsToDictionary(e.Results);
+            //OnFlsAnalyzeProgressChanged(e);
         }
 
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
