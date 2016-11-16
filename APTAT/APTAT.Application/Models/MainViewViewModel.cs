@@ -1178,8 +1178,8 @@ namespace APTAT.Application.Models
                     infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
                     infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
                     infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                    infoItem.StatusMessageSystem = scanProgress.StatusMessage;
                     infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
+                    infoItem.StatusMessageSystem = scanProgress.StatusMessage;
 
                     if (infoItem.ScanStage != ScanStage.OperationCompleted &&
                         scanProgress.ScanStage == ScanStage.OperationCompleted)

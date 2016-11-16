@@ -95,9 +95,8 @@ namespace FLSClientWPF
 
         public void Cancel()
         {
-            if (_cancellationTokenSource != null && _cancellationTokenSource.Token.CanBeCanceled)
-                _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
+            _manager.Cancel();
+            
             
         }
 

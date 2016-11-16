@@ -13,13 +13,13 @@ namespace APTAT.Core
     public sealed class FlsManager : IDisposable, IFlsManager
     {
         
-        private readonly CancellationToken _cancellationToken;
+        private CancellationToken _cancellationToken;
         private readonly FlsApiProvider _apiProvider = null;
         private Action _cancelWork = null;
         private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private  CancellationTokenSource _cancellationTokenSource;
         private bool _isWorking = false;
         private readonly int _uploadInterval;
         private readonly int _uploadAtOnce;
@@ -51,8 +51,8 @@ namespace APTAT.Core
 
         public FlsManager()
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-            _cancellationToken = _cancellationTokenSource.Token;
+            //_cancellationTokenSource = new CancellationTokenSource();
+            //_cancellationToken = _cancellationTokenSource.Token;
             _apiProvider = new FlsApiProvider();
             _apiProvider.Init();
             _uploadInterval = int.Parse(Settings.Default.FlsUploadInterval);
@@ -65,7 +65,12 @@ namespace APTAT.Core
             var analyzed = _allResults.Select(r => r.Sha1).ToList();
             var result = hashes.Where(p => !analyzed.Any(p2 => p2 == p));
 
-            if (!_isWorking) Task.Run(Start, _cancellationToken);
+            if (!_isWorking)
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+                _cancellationToken = _cancellationTokenSource.Token;
+                Task.Run(Start, _cancellationToken);
+            }
             await Task.Factory.StartNew(() =>
             {
                 foreach (var h in result)
@@ -80,6 +85,13 @@ namespace APTAT.Core
         public void Cancel()
         {
             _cancellationTokenSource.Cancel();
+            _isWorking = false;
+
+            FlsResult someItem;
+            while (!_allResults.IsEmpty)
+            {
+                _allResults.TryTake(out someItem);
+            }
         }
 
 
@@ -89,6 +101,7 @@ namespace APTAT.Core
             {
                 if (_isWorking) throw new InvalidOperationException("FLSManager is working");
                 _isWorking = true;
+                
                 var buffer = new List<String>();
 
                 while (true)
