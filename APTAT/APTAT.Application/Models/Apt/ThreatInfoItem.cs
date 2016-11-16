@@ -362,7 +362,16 @@ namespace APTAT.Application.Models
 
             if (ScanStage == ScanStage.ScanCompleted || ProgressPercentage  == 100)
             {
-               return $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}.";
+                string message;
+                if (LookupInProgress > 0)
+                {
+                    message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. Lookup in progress: {LookupInProgress}";
+                }
+                else
+                {
+                     message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}.";
+                }
+                return message;
             }
             else
             {

@@ -272,6 +272,8 @@ namespace APTAT.Application.Models
             set
             {
                 _failedToAnalyzeFilesCount = value;
+                RaisePropertyChanged(nameof(LookupInProgressCount));
+                RaisePropertyChanged(nameof(IsErrorsFound));
             }
         }
 
@@ -282,6 +284,8 @@ namespace APTAT.Application.Models
             set
             {
                 _noVerdictFilesCount = value;
+                RaisePropertyChanged(nameof(LookupInProgressCount));
+                RaisePropertyChanged(nameof(IsErrorsFound));
             }
         }
 
@@ -484,6 +488,8 @@ namespace APTAT.Application.Models
         {
             get { return FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0; }
         }
+
+        public int LookupInProgressCount => FailedToAnalyzeFilesCount  + NoVerdictFilesCount;
 
         public bool IsProtected
         {
