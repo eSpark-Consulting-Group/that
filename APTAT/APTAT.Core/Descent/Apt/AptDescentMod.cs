@@ -169,7 +169,7 @@ namespace APTAT.Core.Descent.Apt
             if (result != null)
             {
                 var text = new ResourceText("null",
-                    $"Scan results received. Total files scannedUUU: {result.TotalFilesCount}. " +
+                    $"Scan results received. Total files scanned: {result.TotalFilesCount}. " +
                     $"Unknown files: {result.UnknownFilesCount}. Malicious files: {result.MalwareFilesCount}.");
                 NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text,
                     AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount,
