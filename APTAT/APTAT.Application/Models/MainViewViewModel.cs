@@ -1276,13 +1276,17 @@ namespace APTAT.Application.Models
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-
+                Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
                 if (e.ScanResult.BadFiles != null)
                 {
                     foreach (var badFile in e.ScanResult.BadFiles)
                     {
                         var item = new ThreatInfoItem(badFile);
                         parentItem.Items.Add(item);
+                        if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
+                        {
+                            computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
+                        }
                         item = new ThreatInfoItem(badFile);
 
                         var exist = _cache.FirstOrDefault(_ =>
@@ -1305,6 +1309,11 @@ namespace APTAT.Application.Models
                             _cache.Add(item);
                             Items.Add(item);
                         }
+                        foreach (var computer in computersToUpdate.Values)
+                        {
+                            computer.UpdateStatus();
+                        }
+                        UpdateStatus();
                     }
                 }
 
