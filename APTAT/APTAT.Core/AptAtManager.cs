@@ -369,6 +369,7 @@ namespace APTAT.Core
             IAptScanResult[] aptScanResults = results as IAptScanResult[] ?? results.ToArray();
             List<ValkyrieFileInfo> distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
             List<ValkyrieFileInfo> fileInfoList = distinctFileList.Where(x => dict.ContainsKey(x.Sha1)).ToList();
+
             return fileInfoList;
         }
 

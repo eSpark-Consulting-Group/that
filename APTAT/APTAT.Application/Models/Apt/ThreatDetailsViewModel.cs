@@ -230,9 +230,10 @@ namespace APTAT.Application.Models
             {
                 switch (badFile.Cloud)
                 {
+                    case CloudVerdict.NoVerdict:
                     case CloudVerdict.FailedToAnalyze:
                         Failed = true;
-                        Verdict = "Failed to analyze";
+                        Verdict = "Lookup in progress";
                         break;
                     case CloudVerdict.FirstSeen:
                     case CloudVerdict.Unknown:
@@ -243,10 +244,9 @@ namespace APTAT.Application.Models
                         Verdict = "Malware";
                         IsMalware = true;
                         break;
-                    case CloudVerdict.NoVerdict:
-                        Failed = true;
-                        Verdict = "No verdict";
-                        break;
+                    
+                        
+                        
                 }
             }
             else

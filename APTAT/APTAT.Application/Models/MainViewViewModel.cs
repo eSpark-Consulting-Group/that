@@ -775,7 +775,7 @@ namespace APTAT.Application.Models
             var col = new Collection<FileResult>();
             foreach (var file in Items)
             {
-                if (!file.IsMalware)
+                if (!file.IsMalware && !file.Failed )
                     continue;
 
                 foreach (var comp in file.Computers)
