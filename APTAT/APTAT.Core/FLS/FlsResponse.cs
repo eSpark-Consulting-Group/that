@@ -12,14 +12,14 @@ namespace APTAT.Core
 
         public string[] GetFailedToAnalyzeHashes()
         {
-            return Results.Where(r => r.IsNotAnalyzed).Select(r=>r.Sha1).ToArray();
+            return Results.Where(r => r.IsNotAnalyzed()).Select(r=>r.Sha1).ToArray();
         }
-        public FlsResult[] GetAnalyzed()
+        public IFlsResult[] GetAnalyzed()
         {
-            return Results.Where(r => r.IsNotAnalyzed == false).ToArray();
+            return Results.Where(r => r.IsNotAnalyzed() == false).ToArray();
         }
 
-        public List<FlsResult> Results = new List<FlsResult>();
+        public List<IFlsResult> Results = new List<IFlsResult>();
         public FlsResponse(byte[] bytes, string[] hashes)
         {
             //if (bytes.Length < 7) throw new InvalidOperationException("Response size should be equal or more  7 bytes");

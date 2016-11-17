@@ -4,10 +4,10 @@ namespace APTAT.Core
 {
     public class FlsRequestEventArgs : EventArgs
     {
-        public FlsResult[] Results { get; private set; }
+        public IFlsResult[] Results { get; private set; }
 
         public Exception Exception { get; private set; }
-        public FlsRequestEventArgs(FlsResult[] results, Exception exception)
+        public FlsRequestEventArgs(IFlsResult[] results, Exception exception)
         {
             Results = results;
             Exception = exception;

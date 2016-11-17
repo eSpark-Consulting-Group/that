@@ -3,7 +3,7 @@ using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
 {
-    public class FlsResult
+    public class FlsResult:IFlsResult
     {
         //public FlsVerdict FlsVerdict { get; private set; }
 

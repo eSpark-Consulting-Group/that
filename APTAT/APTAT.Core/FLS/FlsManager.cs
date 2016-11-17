@@ -16,7 +16,7 @@ namespace APTAT.Core
         private CancellationToken _cancellationToken;
         private readonly FlsApiProvider _apiProvider = null;
         private Action _cancelWork = null;
-        private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
+      //  private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
         private  CancellationTokenSource _cancellationTokenSource;
@@ -32,7 +32,7 @@ namespace APTAT.Core
                 var results = response.GetAnalyzed();
                 OnFlsAnalyzed(results, null);
                 
-                foreach (var r in results){_allResults.Add(r);}
+           //     foreach (var r in results){_allResults.Add(r);}
 
                 var failed = response.GetFailedToAnalyzeHashes();
                 if (failed.Any())
@@ -51,8 +51,7 @@ namespace APTAT.Core
 
         public FlsManager()
         {
-            //_cancellationTokenSource = new CancellationTokenSource();
-            //_cancellationToken = _cancellationTokenSource.Token;
+       
             _apiProvider = new FlsApiProvider();
             _apiProvider.Init();
             _uploadInterval = int.Parse(Settings.Default.FlsUploadInterval);
@@ -62,18 +61,19 @@ namespace APTAT.Core
 
         public async Task Enqueue(IEnumerable<string> hashes)
         {
-            var analyzed = _allResults.Select(r => r.Sha1).ToList();
-            var result = hashes.Where(p => !analyzed.Any(p2 => p2 == p));
+            //var analyzed = _allResults.Select(r => r.Sha1).ToList();
+            //var result = hashes.Where(p => !analyzed.Any(p2 => p2 == p));
 
             if (!_isWorking)
             {
+        //        _allResults = new ConcurrentBag<FlsResult>();
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
                 Task.Run(Start, _cancellationToken);
             }
             await Task.Factory.StartNew(() =>
             {
-                foreach (var h in result)
+                foreach (var h in hashes)
                 {
                     _inputQueue.Add(h, _cancellationToken);
                 }
@@ -90,11 +90,11 @@ namespace APTAT.Core
             }
             _isWorking = false;
 
-            FlsResult someItem;
-            while (!_allResults.IsEmpty)
-            {
-                _allResults.TryTake(out someItem);
-            }
+            //FlsResult someItem;
+            //while (!_allResults.IsEmpty)
+            //{
+            //    _allResults.TryTake(out someItem);
+            //}
         }
 
 
@@ -141,7 +141,7 @@ namespace APTAT.Core
         
         private async Task AnalyzeAsync(string[] hashes)
         {
-            _allResults = new ConcurrentBag<FlsResult>();
+         
             try
             {
                 // prepare to handle cancellation
@@ -176,7 +176,7 @@ namespace APTAT.Core
                     {
                         while (ex is AggregateException && ex.InnerException != null)
                             ex = ex.InnerException;
-                        OnFlsAnalyzed(new FlsResult[] {}, ex);
+                        OnFlsAnalyzed(new IFlsResult[] {}, ex);
                     }
 
                 }, TaskScheduler.Default);
@@ -184,7 +184,7 @@ namespace APTAT.Core
             }
             catch (Exception ex)
             {
-                OnFlsAnalyzed(new FlsResult[] { }, ex);
+                OnFlsAnalyzed(new IFlsResult[] { }, ex);
             }
         }
 
@@ -202,7 +202,7 @@ namespace APTAT.Core
             _inputQueue.Dispose();
         }
 
-        private void OnFlsAnalyzed(FlsResult[] results, Exception exception)
+        private void OnFlsAnalyzed(IFlsResult[] results, Exception exception)
         {
             var e = new FlsRequestEventArgs(results, exception);
             FlsAnalyzed?.Invoke(this, e);

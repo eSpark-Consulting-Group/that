@@ -103,6 +103,7 @@
     <Compile Include="IAptAtManager.cs" />
     <Compile Include="IAptScanner.cs" />
     <Compile Include="IFilesStatistics.cs" />
+    <Compile Include="IFlsResult.cs" />
     <Compile Include="OsInfoHelper.cs" />
     <Compile Include="Reports\AptReportBuilder.cs" />
     <Compile Include="Reports\IAptReportBuilder.cs" />

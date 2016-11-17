@@ -47,10 +47,11 @@ namespace APTAT.Core
 
         public void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors)
         {
+           
             foreach (var scan in _lastAptResults.ScanResults)
             {
                 var files =
-                    scan.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict);
+                    scan.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict).ToArray();
 
                 foreach (var file in files)
                 {
@@ -282,85 +283,62 @@ namespace APTAT.Core
                 throw new InvalidOperationException("Can't get result for computer " + item.ComputerUid);
 
 
-            FlsResult[] allFilesVerdicts = results.Files.Select(m => new FlsResult() { Sha1 = m.Sha1, Cloud = m.Cloud }).ToArray();
+            IFlsResult[] allFilesVerdicts = results.Files.ToArray();
             AddResultsToDictionary(allFilesVerdicts);
-
-
-            Module[] filesWithError =
-                results.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict)
-                    .ToArray();
-
-            Module[] filesWithoutResult;
-            var flsResult = GetResultsFromDictionary(filesWithError, out filesWithoutResult);
-            if (flsResult.Any())
-            {
-                OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(flsResult, null));
-            }
-
-            if (filesWithoutResult.Any())
-            {
-                _flsManager.Enqueue(filesWithoutResult.Select(f => f.Sha1));
-            }
-
         }
 
-        private FlsResult[] GetResultsFromDictionary(Module[] files, out Module[] skipped)
+        private void AddResultsToDictionary(IFlsResult[] resultsFiles)
         {
-            var results = new List<FlsResult>();
-            var skippedList = new List<Module>();
-
-            foreach (var f in files)
+            var addToAnalyze = new List<IFlsResult>();
+            var verdictUpdated = new List<IFlsResult>();
+            lock (_flsHashResults)
             {
-
-                if (_flsHashResults.ContainsKey(f.Sha1) 
-                    && _flsHashResults[f.Sha1] != CloudVerdict.FailedToAnalyze 
-                    && _flsHashResults[f.Sha1] != CloudVerdict.NoVerdict)
+                foreach (var r in resultsFiles)
                 {
 
-                    results.Add(new FlsResult() {Sha1 = f.Sha1, Cloud= _flsHashResults[f.Sha1]});
-                }
-                else
-                {
-                    skippedList.Add(f);
-                }
-            }
-            skipped = skippedList.ToArray();
-            return results.ToArray();
-        }
-
-
-        private void AddResultsToDictionary(FlsResult[] resultsFiles)
-        {
-            var temp = new List<FlsResult>();
-            foreach (var r in resultsFiles)
-            {
-
-                if (!_flsHashResults.ContainsKey(r.Sha1))
-                    _flsHashResults.Add(r.Sha1, r.Cloud);
-                else
-                {
-                    if (_flsHashResults[r.Sha1] == CloudVerdict.FailedToAnalyze ||
-                        _flsHashResults[r.Sha1] == CloudVerdict.NoVerdict)
+                    if (!_flsHashResults.ContainsKey(r.Sha1))
                     {
                         _flsHashResults[r.Sha1] = r.Cloud;
-                        temp.Add(r);
+                        if(r.IsNotAnalyzed())
+                            addToAnalyze.Add(r);
+                    }
+                    else
+                    {
+                        var item = _flsHashResults[r.Sha1];
+                        if (r.IsNotAnalyzed())
+                        {
+                            if (item != CloudVerdict.FailedToAnalyze &&
+                                item != CloudVerdict.NoVerdict)
+                            {
+                                r.Cloud = item;
+                            }
+                        }
+                        else if (item == CloudVerdict.FailedToAnalyze ||
+                            item == CloudVerdict.NoVerdict)
+                        {
+                            _flsHashResults[r.Sha1] = r.Cloud;
+                            verdictUpdated.Add(r);
+                        }
                     }
                 }
             }
-
-            if (temp.Any())
+            if (verdictUpdated.Any())
             {
-                Dictionary<string, CloudVerdict> dict = temp.ToDictionary((t) => t.Sha1, v => v.Cloud);
+                Dictionary<string, CloudVerdict> dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
                 if (_isValkyrieStarted)
                 {
                     List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
                     _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
                 }
                 UpdateLastResult(dict);
-                OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(temp.ToArray(), null));
+                OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
             }
-          //  temp.Select(t)
-         
+            if (addToAnalyze.Any())
+            {
+                _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1));
+            }
+            //  temp.Select(t)
+
         }
 
         private List<ValkyrieFileInfo> GetFilesToAnalyzeForValkyrie(Dictionary<string, CloudVerdict> dict)

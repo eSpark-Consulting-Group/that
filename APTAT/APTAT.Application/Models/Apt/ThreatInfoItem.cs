@@ -104,11 +104,11 @@ namespace APTAT.Application.Models
             {
                 foreach (var item in Items)
                 {
-                    if (item.BadFile.Cloud == CloudVerdict.Malware) malwareCount++;
+                    if (item.BadFile.IsMalware) malwareCount++;
                     else if (item.BadFile.Cloud == CloudVerdict.FailedToAnalyze) failedToAnalyzeCount++;
                     else if (item.BadFile.Cloud == CloudVerdict.NoVerdict) noVerdictFilesCount++;
                     else if (item.BadFile.Cloud == CloudVerdict.Safe) safeCount++;
-                    else if (item.BadFile.Cloud == CloudVerdict.Unknown) unknownFilesCount++;
+                    else if (item.BadFile.IsUnknown) unknownFilesCount++;
                 }
 
                 FailedToAnalyzeCount = failedToAnalyzeCount;
