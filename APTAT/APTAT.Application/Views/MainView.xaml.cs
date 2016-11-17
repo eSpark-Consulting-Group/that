@@ -108,8 +108,7 @@ namespace APTAT.Application
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown Files", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
 
             if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malicious Files", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
-            if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed to Analyze", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount);
-            if (e.FilesStatistics.NoVerdictFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} No Verdict", Environment.NewLine, e.FilesStatistics.NoVerdictFilesCount);
+            if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Lookup in progress", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount+e.FilesStatistics.NoVerdictFilesCount);
 
             scanCompletedWindow.Text.Text += String.Format("{0}{1}* {2} files have unique hash values", Environment.NewLine, Environment.NewLine, e.DistinctFileFound);
 
@@ -124,7 +123,7 @@ namespace APTAT.Application
                 scanCompletedWindow.DataContext = DataContext;
                 if (scanCompletedWindow.ShowDialog() == true)
                     ShowRegisterToValkyrieWindow();
-                else if (e.FilesStatistics.UnknownFilesCount > 0)
+                else if (e.FilesStatistics.UnknownFilesCount > 0 || e.FilesStatistics.FailedToAnalyzeFilesCount > 0 || e.FilesStatistics.NoVerdictFilesCount > 0)
                     _viewModel.IsAnalyseWithValkyrieEnabled = true;
 
                 if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
