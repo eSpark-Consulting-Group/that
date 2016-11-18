@@ -274,11 +274,14 @@ namespace APTAT.Core
 
         private void OnScannerOnScanCompleted(object sender, ComputerScanCompletedEventArgs args)
         {
-            AddResultsToDictionary(args.CompletedResult.Files.ToArray());
+            var resultsUpdated = AddResultsToDictionary(args.CompletedResult.Files.ToArray());
+            if (resultsUpdated)
+                args.CompletedResult.RecalculateStatistics();
         }
 
-        private void AddResultsToDictionary(IFlsResult[] resultsFiles)
+        private bool AddResultsToDictionary(IFlsResult[] resultsFiles)
         {
+            bool resultsUpdated = false;
             var addToAnalyze = new List<IFlsResult>();
             var verdictUpdated = new List<IFlsResult>();
             lock (_flsHashResults)
@@ -301,6 +304,7 @@ namespace APTAT.Core
                                 item != CloudVerdict.NoVerdict)
                             {
                                 r.Cloud = item;
+                                resultsUpdated = true;
                             }
                         }
                         else if (item == CloudVerdict.FailedToAnalyze ||
@@ -328,7 +332,7 @@ namespace APTAT.Core
                 _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1));
             }
             //  temp.Select(t)
-
+            return resultsUpdated;
         }
 
         private List<ValkyrieFileInfo> GetFilesToAnalyzeForValkyrie(Dictionary<string, CloudVerdict> dict)
