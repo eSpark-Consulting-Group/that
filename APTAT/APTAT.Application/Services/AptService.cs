@@ -226,6 +226,12 @@ namespace APTAT.Application.Services
 
         }
 
+        public void UpdateFlsPorts(short udpPort, short tcpPort)
+        {
+            _manager.UpdateFlsPorts(udpPort, tcpPort);
+
+        }
+
         public void StopScan()
         {
             _manager.StopScan();

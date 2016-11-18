@@ -15,12 +15,23 @@ namespace APTAT.Core
         
         private short _port = 4448;
         private string _hostName = "fls.security.comodo.com";
-        
+
+        public void UpdateFlsPorts(short udpPort, short tcpPort)
+        {
+            if (tcpPort == 0)
+            {
+                _port = short.Parse(Settings.Default.FlsPort);
+            }
+            else
+            {
+                _port = tcpPort;
+            }
+        }
+
         public void Init()
         {
             _hostName = Settings.Default.FlsHost;
-            _port = short.Parse(Settings.Default.FlsPort);
-            
+
             IPHostEntry hostEntry = Dns.GetHostEntry(_hostName);
             if (!hostEntry.AddressList.Any()) throw new InvalidOperationException("Could not resolve host " + _hostName);
             _server = hostEntry.AddressList[0];
@@ -29,6 +40,8 @@ namespace APTAT.Core
         {
             
         }
+
+      
 
         public FlsResponse RequestType0(string[] hashes)
         {

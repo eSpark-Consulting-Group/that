@@ -157,7 +157,7 @@ namespace APTAT.Application.Services
         event EventHandler ValkyrieAnalyzeStarted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
-        
+        void UpdateFlsPorts(short udpPort, short tcpPort);
         void StopScan();
 
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);

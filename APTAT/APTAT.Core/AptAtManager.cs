@@ -260,6 +260,7 @@ namespace APTAT.Core
         public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
+            
             if (_scanner != null) throw new AnotherScanIsInProgressException();
             _scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
@@ -432,6 +433,11 @@ namespace APTAT.Core
                 _valkyrieClient.Dispose();
                 _valkyrieClient = null;
             }
+        }
+
+        public void UpdateFlsPorts(short udpPort, short tcpPort)
+        {
+            _flsManager.UpdateFlsPorts(udpPort, tcpPort);
         }
 
         protected virtual void OnFlsAnalyzeProgressChanged(FlsRequestEventArgs e)

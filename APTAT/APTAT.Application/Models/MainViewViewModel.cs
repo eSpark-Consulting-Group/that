@@ -744,6 +744,11 @@ namespace APTAT.Application.Models
         public string ProxyLogin { get; set; }
         public string ProxyPassword { get; set; }
 
+        public void OnPortChanged(short udpPort, short tcpPort)
+        {
+            _aptService.UpdateFlsPorts(udpPort, tcpPort);
+        }
+
         void HandleProxyException(WebException ex)
         {
             var httpWebResponse = ex.Response as HttpWebResponse;

@@ -31,6 +31,8 @@ namespace APTAT.Core
         string GetValkyrieDetailsLink();
         int GetDistinctFileCount();
         void Dispose();
+        
+        void UpdateFlsPorts(short udpPort, short tcpPort);
     }
 
     internal interface IAptAtManagerInternal : IAptAtManager

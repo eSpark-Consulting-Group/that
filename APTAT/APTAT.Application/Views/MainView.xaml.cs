@@ -258,8 +258,22 @@ namespace APTAT.Application
 
         private void OptionsClick(object sender, RoutedEventArgs e)
         {
+            short tcpShort, udpShort;
+            short.TryParse(this._viewModel.TcpPort, out tcpShort);
+            short.TryParse(this._viewModel.UdpPort, out udpShort);
+
             SettingsWindow options = new SettingsWindow { Owner = System.Windows.Application.Current.MainWindow, DataContext = DataContext};
-            options.ShowDialog();
+            if (options.ShowDialog() == true)
+            {
+                short tcpShortNew;
+                short.TryParse(this._viewModel.TcpPort, out tcpShortNew);
+                short udpShortNew;
+                short.TryParse(this._viewModel.UdpPort, out udpShortNew);
+                if (tcpShortNew != tcpShort || udpShortNew != udpShort)
+                {
+                    _viewModel.OnPortChanged(tcpShortNew, udpShortNew);
+                }
+            }
         }
 
         private void AboutClick(Object sender, RoutedEventArgs e)

@@ -55,7 +55,7 @@ namespace APTAT.Application
                 model.Error = message;
                 return;
             }
-
+            
             this.DialogResult = true;
 
         }

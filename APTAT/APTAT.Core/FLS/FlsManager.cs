@@ -15,7 +15,7 @@ namespace APTAT.Core
     {
         
         private CancellationToken _cancellationToken;
-        private readonly FlsApiProvider _apiProvider = null;
+        private  FlsApiProvider _apiProvider = null;
         private Action _cancelWork = null;
       //  private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
@@ -67,12 +67,17 @@ namespace APTAT.Core
 
         public FlsManager()
         {
-       
             _apiProvider = new FlsApiProvider();
             _apiProvider.Init();
             _uploadInterval = int.Parse(Settings.Default.FlsUploadInterval);
             _uploadAtOnce = int.Parse(Settings.Default.FlsUploadHashesAtOnce);
+        }
 
+        
+
+        public void UpdateFlsPorts(short udpPort, short tcpPort)
+        {
+           this._apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
         }
 
         public async Task Enqueue(IEnumerable<string> hashes)
