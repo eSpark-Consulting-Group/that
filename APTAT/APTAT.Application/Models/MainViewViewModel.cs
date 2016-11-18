@@ -804,7 +804,8 @@ namespace APTAT.Application.Models
                     fileResult.ValkyrieAnalysisResult = new ValkyrieAnalysisResult
                     {
                         SHA1 = file.BadFile.Sha1,
-                        Verdict = ValkyrieVerdict.Malware
+                        Verdict = file.IsMalware ? ValkyrieVerdict.Malware 
+                            : ValkyrieVerdict.PendingFls
                     };
                     fileResult.Computers.Add(computer);
                     col.Add(fileResult);

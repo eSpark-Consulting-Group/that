@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Windows.Forms;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
@@ -232,25 +230,25 @@ namespace APTAT.Core
             return files;
         }
 
-        private static Valkyrie.CloudVerdict MapCloud(Descent.Apt.CloudVerdict cloud)
+        private static Valkyrie.CloudVerdict MapCloud(CloudVerdict cloud)
         {
             switch (cloud)
             {
-                case Descent.Apt.CloudVerdict.Safe:
+                case CloudVerdict.Safe:
                     return Valkyrie.CloudVerdict.Safe;
-                case Descent.Apt.CloudVerdict.Unknown:
+                case CloudVerdict.Unknown:
                     return Valkyrie.CloudVerdict.Unknown;
 
-                case Descent.Apt.CloudVerdict.Malware:
+                case CloudVerdict.Malware:
                     return Valkyrie.CloudVerdict.Malware;
 
-                case Descent.Apt.CloudVerdict.FirstSeen:
+                case CloudVerdict.FirstSeen:
                     return Valkyrie.CloudVerdict.FirstSeen;
 
-                case Descent.Apt.CloudVerdict.FailedToAnalyze:
+                case CloudVerdict.FailedToAnalyze:
                     return Valkyrie.CloudVerdict.FailedToAnalyze;
 
-                case Descent.Apt.CloudVerdict.NoVerdict:
+                case CloudVerdict.NoVerdict:
                     return Valkyrie.CloudVerdict.NoVerdict;
 
                 default:
@@ -356,7 +354,12 @@ namespace APTAT.Core
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
             ValkyrieAnalysisResult = null;
+            _flsManager.Cancel();
             _valkyrieClient.AnalyzeAsyncCancel();
+            lock (_flsHashResults)
+            {
+                _flsHashResults.Clear();
+            }
             
             _lastAptResults = _scanner.ScanOperationContext;
         }
@@ -389,8 +392,12 @@ namespace APTAT.Core
         public void StopScan()
         {
             _descentSubSystem.StopAllScans(0);
-            //_valkyrieClient.AnalyzeAsyncCancel();
-            //_flsManager.Cancel();
+            _flsManager.Cancel();
+            _valkyrieClient.AnalyzeAsyncCancel();
+            lock (_flsHashResults)
+            {
+                _flsHashResults.Clear();
+            }
         }
 
 
