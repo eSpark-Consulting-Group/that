@@ -185,7 +185,11 @@ namespace APTAT.Core.Descent.Apt
             return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
         }
 
-       
+
+        public Module[] GetLookupInProgressFiles()
+        {
+            return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
+        }
         public Module[] GetFailedToAnalyzeFiles()
         {            
             return (from file in Files where  file.Cloud == CloudVerdict.FailedToAnalyze select file).ToArray();

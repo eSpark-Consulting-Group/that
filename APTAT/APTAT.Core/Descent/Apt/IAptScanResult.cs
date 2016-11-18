@@ -39,6 +39,8 @@ namespace APTAT.Core.Descent.Apt
         Module[] GetNoVerdictFiles();
         Module[] GetBadFiles();
         Module[] GetUknownFiles();
+        Module[] GetLookupInProgressFiles();
         void RecalculateStatistics();
+        
     }
 }

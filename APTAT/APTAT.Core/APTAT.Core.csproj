@@ -158,7 +158,7 @@
     <EmbeddedResource Include="Reports\FailedToAnalyzeWithValkyrie.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\FailedToAnalyzeFiles.rdlc">
+    <EmbeddedResource Include="Reports\LookupInProgressFiles.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\DetailedDevicesWithValkyrie.rdlc">

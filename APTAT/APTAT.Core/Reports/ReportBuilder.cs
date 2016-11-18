@@ -113,15 +113,14 @@ namespace APTAT.Core.Reports
 
         private static void BuildDetailedPerDeviceReport(string fileName, AptReportData data)
         {
-            ReportDataSource allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargets);
-            ReportDataSource vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevices());
-            SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.UnknownFiles.rdlc", ReportName = "UnknownFiles" };
-            SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.MaliciousFiles.rdlc", ReportName = "MaliciousFiles" };
-            SubReportContext failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeFiles.rdlc", ReportName = "FailedToAnalyzeFiles" };
-            //SubReportContext pendingAnalyzeFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.PendingAnalysisFiles.rdlc", ReportName = "PendingAnalysisFiles" };
-            SubReportContext noVerdictFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.NoVerdictFiles.rdlc", ReportName = "NoVerdictFiles" };
+            var allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargets);
+            var vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevices());
+            var unknownFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.UnknownFiles.rdlc", ReportName = "UnknownFiles" };
+            var maliciousFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.MaliciousFiles.rdlc", ReportName = "MaliciousFiles" };
+            var lookupInProgressFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.LookupInProgressFiles.rdlc", ReportName = "LookupInProgressFiles" };
+            
 
-            GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext, noVerdictFilesSubReportContext });
+            GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, lookupInProgressFilesSubReportContext });
         }
 
         private static void BuildDetailedPerDeviceWithValkyrieReport(string fileName, AptReportData data)
@@ -200,10 +199,10 @@ namespace APTAT.Core.Reports
                     var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
                     if (context != null)
                     {
-                        IEnumerable<AptScanResult> targets = context.Data as IEnumerable<AptScanResult>;
+                        IEnumerable<IAptScanResult> targets = context.Data as IEnumerable<IAptScanResult>;
                         if (targets != null)
                         {
-                            AptScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
+                            IAptScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
                             if (item != null)
                             {
                                 APTAT.Core.Descent.Apt.Module[] items = new APTAT.Core.Descent.Apt.Module[]{};
@@ -215,18 +214,15 @@ namespace APTAT.Core.Reports
                                 {
                                     items = item.GetFilesByStatus(CloudVerdict.Malware);                                    
                                 }
-                                else if (e.ReportPath == "FailedToAnalyzeFiles")
+                                else if (e.ReportPath == "LookupInProgressFiles")
                                 {
-                                    items = item.GetFailedToAnalyzeFiles();
+                                    items = item.GetLookupInProgressFiles();
                                 }
                                 else if (e.ReportPath == "NoVerdictFiles")
                                 {
                                     items = item.GetNoVerdictFiles();
                                 }
-                                else if (e.ReportPath == "PendingAnalysisFiles")
-                                {                                    
-                                    items = item.GetPendingAnalysisFiles();
-                                }
+                             
                                 
                                 e.DataSources.Add(new ReportDataSource(context.DataSourceName, items));
                             }
