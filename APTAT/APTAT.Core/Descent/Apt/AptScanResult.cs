@@ -238,6 +238,11 @@ namespace APTAT.Core.Descent.Apt
         public override void UpdateStatus(IDescentProgressItem progress)
         {
             base.UpdateStatus(progress);
+            var item = progress as IAptDescentProgressItem;
+            if (item != null)
+            {
+                ScanStage = item.ScanStage;
+            }
             if (progress.IsCanceled)
                 ScanStage = AptScanStage.OperationCanceled;
         }
@@ -245,10 +250,14 @@ namespace APTAT.Core.Descent.Apt
         public override void UpdateStatus(IOperationDescentResult result)
         {
             base.UpdateStatus(result);
-            if (Completed && !Succeeded)
-            {
+            if (result.IsCanceled)
+                ScanStage = AptScanStage.OperationCanceled;
+            if (Completed && !Succeeded && !IsCanceled)
                 ScanStage = AptScanStage.OperationFailed;
-            }
+            if (Completed && Succeeded && !IsCanceled)
+                ScanStage = AptScanStage.OperationCompleted;
+            if (Completed && !Succeeded && !IsCanceled)
+                ScanStage = AptScanStage.OperationFailed;
         }
     }
 

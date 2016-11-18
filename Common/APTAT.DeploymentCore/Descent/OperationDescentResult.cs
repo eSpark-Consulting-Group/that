@@ -6,7 +6,8 @@ namespace APTAT.DeploymentCore.Descent
     {
 		public OperationDescentResult( bool succeeded,
 			FormattedText statusMessage, FormattedText shortStatusMessage,
-			string errorCode, string systemMessage, int systemCode )
+			string errorCode, string systemMessage, int systemCode,
+            bool isCanceled)
         {
             Succeeded = succeeded;
             StatusMessage = statusMessage;
@@ -14,9 +15,10 @@ namespace APTAT.DeploymentCore.Descent
             ErrorCode = errorCode;
             SystemMessage = systemMessage;
             SystemCode = systemCode;
+            IsCanceled = isCanceled;
         }
-        
-        
+
+        public bool IsCanceled { get; }
 		public bool Succeeded { get;  }
 		public FormattedText StatusMessage { get;  }
 		public FormattedText ShortStatusMessage { get;  }

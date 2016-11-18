@@ -95,7 +95,8 @@ namespace APTAT.DeploymentCore.Descent
 		public DateTime? CompletedTime { get; private set; }
         public DateTime StartTime { get; }
 
-		public virtual void OnDescendOperationEvent( bool ok, Guid computerUid, FormattedText errorMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage )
+		public virtual void OnDescendOperationEvent( bool ok, Guid computerUid, FormattedText errorMessage, 
+            FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage, bool isCanceled = false)
 		{
 			IOperationDescentResult operationResult;
 			IComputerDescentResultInternal computerDescentResult;
@@ -106,11 +107,13 @@ namespace APTAT.DeploymentCore.Descent
             
 			if( !ok)
 			{
-				operationResult = new OperationDescentResult(false, errorMessage, shortStatusMessage, errorCode, systemMessage, systemCode );
+				operationResult = new OperationDescentResult(false, errorMessage, shortStatusMessage, 
+                    errorCode, systemMessage, systemCode, isCanceled);
 			}
 			else
 			{
-				operationResult = new OperationDescentResult(true, FormattedText.Empty, shortStatusMessage, String.Empty, String.Empty, 0 );
+				operationResult = new OperationDescentResult(true, FormattedText.Empty, shortStatusMessage, 
+                    String.Empty, String.Empty, 0, isCanceled);
 			}
 
 			var inprogressCount = ProcessResult(computerUid, operationResult);

@@ -8,6 +8,7 @@ namespace APTAT.DeploymentCore.Descent
         FormattedText ShortStatusMessage { get; }
         FormattedText StatusMessage { get; }
         bool Succeeded { get; }
+        bool IsCanceled { get; }
         int SystemCode { get; }
         string SystemMessage { get; }
     }

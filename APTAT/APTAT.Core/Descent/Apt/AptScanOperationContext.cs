@@ -27,32 +27,12 @@ namespace APTAT.Core.Descent.Apt
         {
             base.Changed(items);
             if (items == null) return;
-            var item = items.Select(c => c.ChangedItem).OfType<IAptDescentProgressItem>().FirstOrDefault();
-            if (item != null)
-            {
-                if (item.OperationUid == OperationUid && ResultsByUid.ContainsKey(item.ComputerUid))
-                {
-                    IComputerDescentResultInternal originalResult = ResultsByUid[item.ComputerUid];
-                    if (originalResult is IAptScanResult)
-                    {
-                        ((IAptScanResult) originalResult).ScanStage = item.ScanStage;
-                    }
-                }
-            }
             OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
             {
                 Percentage = CalculateTotalPercentage(),
                 ProgressItems = items.Select(c => c.ChangedItem).OfType<IDescentProgressItem>().ToArray(),
                 OperationUid = OperationUid
             });
-        }
-
-        protected override void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)
-        {
-            var apt = (IAptScanResult)computerDescentResult;
-            if (apt.ScanStage == AptScanStage.DescentOperationCompleted)
-                apt.ScanStage = AptScanStage.OperationCompleted;
-            base.OnComputerDescentCompleted(computerDescentResult);
         }
 
         public override Guid SessionId

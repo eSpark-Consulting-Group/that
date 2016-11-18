@@ -114,7 +114,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                         _computer.Name, QueryResult.OperationUid, shortMessage, 100, false, true)
                     { IsCanceled = true }), false);
 
-                    QueryResult.OnDescendOperationEvent(true, _computer.Uid, description, shortMessage, status.ToString(), win32Error, response);
+                    QueryResult.OnDescendOperationEvent(true, _computer.Uid, description, shortMessage, status.ToString(), win32Error, response, true);
                 }
             }
             else

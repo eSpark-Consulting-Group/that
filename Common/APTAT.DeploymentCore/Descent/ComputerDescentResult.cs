@@ -8,7 +8,7 @@ namespace APTAT.DeploymentCore.Descent
     {
         public Guid TargetUid { get; }
         public IComputer Computer { get; }
-    	public ComputerDescentResult( IComputer computer)			
+        public ComputerDescentResult( IComputer computer)			
 		{
             Computer = computer;
             StatusMessage = FormattedText.Empty;
@@ -29,6 +29,7 @@ namespace APTAT.DeploymentCore.Descent
 			SystemMessage = result.SystemMessage;
 			SystemCode = result.SystemCode;
             Succeeded = result.Succeeded;
+		    IsCanceled = result.IsCanceled;
             Percentage = 100;
             Completed = true;
         }
@@ -37,6 +38,7 @@ namespace APTAT.DeploymentCore.Descent
         {
             var percentage = progress.ProgressPercentage;
             var statusMessage = progress.StatusMessage;
+            IsCanceled = progress.IsCanceled;
             var update = false;
             if (Math.Abs(percentage - Percentage) > 0.1)
             {
@@ -54,6 +56,7 @@ namespace APTAT.DeploymentCore.Descent
             if (update)
                 Modified = DateTime.UtcNow;
 		}
+
 
 
         public void Invalidate(DescentStatus errorCode, string shortMessage, string detailedMessage)
@@ -81,7 +84,8 @@ namespace APTAT.DeploymentCore.Descent
 		public FormattedText StatusMessage { get; private set; }
 		public FormattedText ShortStatusMessage { get; private set; }
 	    public string ErrorCode { get; private set; }
-	    public string SystemMessage { get; private set; }
+        public bool IsCanceled { get; private set; }
+        public string SystemMessage { get; private set; }
 		public int SystemCode { get; private set; }
     }
 }

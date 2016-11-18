@@ -24,6 +24,7 @@ namespace APTAT.DeploymentCore.Descent
         string SystemMessage { get; }
         int SystemCode { get; }
         double Percentage { get; }
+        bool IsCanceled { get; }
         DateTime Modified { get; }
     }
 }

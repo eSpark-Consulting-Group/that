@@ -213,9 +213,7 @@ namespace APTAT.Application.Services
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
             args.FilesStatistics = e.FilesStatistics;
-            
             args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
-
             int distCount = _manager.GetDistinctFileCount();
             args.DistinctFileFound = distCount;
             //AptAtManager.GetDistinctFileInfo();
@@ -288,7 +286,7 @@ namespace APTAT.Application.Services
                     return ScanStage.DescentOperationCompleted;
 
                 case AptScanStage.OperationCompleted:
-                    return ScanStage.DescentOperationCompleted;
+                    return ScanStage.OperationCompleted;
 
                 case AptScanStage.OperationFailed:
                     return ScanStage.OperationFailed;

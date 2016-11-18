@@ -69,7 +69,7 @@ namespace APTAT.Core.Descent.Wmi
         }
 
         public override void OnDescendOperationEvent(bool ok, Guid computerUid, FormattedText errorMessage, FormattedText shortStatusMessage,
-            string errorCode, int systemCode, string systemMessage)
+            string errorCode, int systemCode, string systemMessage, bool isCanceled = false)
         {
             if (!ok)
             {
@@ -90,7 +90,8 @@ namespace APTAT.Core.Descent.Wmi
                 }
             }
             
-            base.OnDescendOperationEvent(ok, computerUid, errorMessage, shortStatusMessage, errorCode, systemCode, systemMessage);
+            base.OnDescendOperationEvent(ok, computerUid, errorMessage, shortStatusMessage, 
+                errorCode, systemCode, systemMessage, isCanceled);
         }
 
         public override Guid SessionId

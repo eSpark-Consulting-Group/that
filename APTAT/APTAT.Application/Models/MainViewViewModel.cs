@@ -1145,12 +1145,14 @@ namespace APTAT.Application.Models
 
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
-            foreach (var scan in e.ScanProgress)
+            lock (_scanIterator)
             {
-                if (scan.OperationUid != _operationGuid)
-                    continue;
-
-                _scanIterator[scan.ComputerGuid] = scan;
+                foreach (var scan in e.ScanProgress)
+                {
+                    if (scan.OperationUid != _operationGuid)
+                        continue;
+                    _scanIterator[scan.ComputerGuid] = scan;
+                }
             }
         }
 
@@ -1170,36 +1172,43 @@ namespace APTAT.Application.Models
 
             foreach (var infoItem in _onlineItems)
             {
-                ScanProgressItem scanProgress = null;
-                if (infoItem.ScanStage != ScanStage.OperationFailed &&
-                    infoItem.ScanStage != ScanStage.OperationCompleted &&
-                    infoItem.ScanStage != ScanStage.OperationCanceled)
-                    _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
-
-                if (scanProgress != null)
+                lock (infoItem)
                 {
-                    infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                    infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
-                    infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                    infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
-                    infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                    infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
-                    infoItem.StatusMessageSystem = scanProgress.StatusMessage;
-                    infoItem.ScanStage = scanProgress.ScanStage;
+                    ScanProgressItem scanProgress = null;
+                    if (infoItem.ScanStage != ScanStage.OperationFailed &&
+                        infoItem.ScanStage != ScanStage.OperationCompleted &&
+                        infoItem.ScanStage != ScanStage.OperationCanceled)
+                        lock (_scanIterator)
+                        {
+                            _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
+                            _scanIterator.Remove(infoItem.ComputerGuid);
+                        }
+
+                    if (scanProgress != null)
+                    {
+                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                        infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                        infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
+                        infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
+                        infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
+                        infoItem.StatusMessageSystem = scanProgress.StatusMessage;
+                        infoItem.ScanStage = scanProgress.ScanStage;
+                    }
+
+                    if (infoItem.ScanStage == ScanStage.OperationFailed ||
+                        infoItem.ScanStage == ScanStage.OperationCompleted ||
+                        infoItem.ScanStage == ScanStage.OperationCanceled)
+                        completed++;
+
+                    if (infoItem.ScanStage == ScanStage.OperationCompleted)
+                        scanned++;
+
+                    unknownFiles += infoItem.UnknownFilesCount;
+                    malwareFiles += infoItem.MalwareFilesCount;
+                    failedToAnalyzeFiles += infoItem.FailedToAnalyzeCount;
+                    noVerdictFiles += infoItem.NoVerdictFilesCount;
                 }
-
-                if (infoItem.ScanStage == ScanStage.OperationFailed ||
-                    infoItem.ScanStage == ScanStage.OperationCompleted ||
-                    infoItem.ScanStage == ScanStage.OperationCanceled)
-                    completed++;
-
-                if (infoItem.ScanStage == ScanStage.OperationCompleted)
-                    scanned++;
-
-                unknownFiles += infoItem.UnknownFilesCount;
-                malwareFiles += infoItem.MalwareFilesCount;
-                failedToAnalyzeFiles += infoItem.FailedToAnalyzeCount;
-                noVerdictFiles += infoItem.NoVerdictFilesCount;
             }
 
             if (unknownFiles > UnknownFilesCount)
@@ -1268,51 +1277,55 @@ namespace APTAT.Application.Models
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
-                Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
-                parentItem.ScanStage = e.ScanResult.ScanStage;
-                parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
-                if (e.ScanResult.BadFiles != null)
+                lock (parentItem)
                 {
-                    foreach (var badFile in e.ScanResult.BadFiles)
+                    Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
+                    parentItem.ScanStage = e.ScanResult.ScanStage;
+                    parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
+                    if (e.ScanResult.BadFiles != null)
                     {
-                        var item = new ThreatInfoItem(badFile);
-                        parentItem.Items.Add(item);
-                        if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
+                        foreach (var badFile in e.ScanResult.BadFiles)
                         {
-                            computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
-                        }
-                        item = new ThreatInfoItem(badFile);
+                            var item = new ThreatInfoItem(badFile);
+                            parentItem.Items.Add(item);
+                            if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
+                            {
+                                computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
+                            }
+                            item = new ThreatInfoItem(badFile);
 
-                        var exist = _cache.FirstOrDefault(_ =>
-                            _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown && _.IsMalware == item.IsMalware);
-                        var comp = new ThreatInfoItem
-                        {
-                            IpAddress = parentItem.IpAddress,
-                            ComputerGuid = e.ScanResult.TargetUid,
-                            Name = parentItem.Name,
-                            ShortName = item.Name,
-                            IsRootItem = true
-                        };
+                            var exist = _cache.FirstOrDefault(_ =>
+                                _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
+                                _.IsMalware == item.IsMalware);
+                            var comp = new ThreatInfoItem
+                            {
+                                IpAddress = parentItem.IpAddress,
+                                ComputerGuid = e.ScanResult.TargetUid,
+                                Name = parentItem.Name,
+                                ShortName = item.Name,
+                                IsRootItem = true
+                            };
 
-                        if (exist != null)
-                            exist.Computers.Add(comp);
-                        else
-                        {
-                            item.Computers = new Collection<ThreatInfoItem>();
-                            item.Computers.Add(comp);
-                            _cache.Add(item);
-                            Items.Add(item);
+                            if (exist != null)
+                                exist.Computers.Add(comp);
+                            else
+                            {
+                                item.Computers = new Collection<ThreatInfoItem>();
+                                item.Computers.Add(comp);
+                                _cache.Add(item);
+                                Items.Add(item);
+                            }
+                            foreach (var computer in computersToUpdate.Values)
+                            {
+                                computer.UpdateStatus();
+                            }
+                            UpdateStatus();
                         }
-                        foreach (var computer in computersToUpdate.Values)
-                        {
-                            computer.UpdateStatus();
-                        }
-                        UpdateStatus();
                     }
+
+
+                    parentItem.ScanStage = parentItem.ScanStage;
                 }
-
-
-                parentItem.ScanStage = parentItem.ScanStage;
             }
         }
 

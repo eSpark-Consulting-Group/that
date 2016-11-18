@@ -10,7 +10,8 @@ namespace APTAT.DeploymentCore.Descent
     {
         IComputerDescentResult GetComputerDescentResultByTargetUid(Guid targetUid);
         
-        void OnDescendOperationEvent( bool ok, Guid computerUid, FormattedText statusMessage, FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage );
+        void OnDescendOperationEvent( bool ok, Guid computerUid, FormattedText statusMessage, FormattedText shortStatusMessage, 
+            string errorCode, int systemCode, string systemMessage, bool isCanceled = false);
 		
 		void RegisterTimeoutCallback(Guid agentIdentity, Action<TimeSpan> callback);
 
