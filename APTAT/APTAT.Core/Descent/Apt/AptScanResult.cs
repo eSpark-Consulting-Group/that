@@ -39,12 +39,8 @@ namespace APTAT.Core.Descent.Apt
         }
         public int EmptyFilesCount { get; set; }
 
-        public int NotAnalyzedFilesCount
-        {
-            get { return FailedToAnalyzeFilesCount + NoVerdictFilesCount; }
-        }
-
-
+        public int LookupInProgressFilesCount => FailedToAnalyzeFilesCount + NoVerdictFilesCount;
+        
         public void RecalculateStatistics()
         {
             Int32 unknownFiles = 0;
