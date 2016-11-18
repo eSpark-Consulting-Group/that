@@ -23,24 +23,25 @@ namespace APTAT.Core.Reports
         private string _fileName;
 
         public delegate string BuildReportDelegate(AptReportData data, ReportType reportType);
-        ReportNamesCache cache = ReportNamesCache.Instance;
+
+        private readonly ReportNamesCache _cache = ReportNamesCache.Instance;
         public string Build(AptReportData data, ReportType reportType)
         {
             if (data == null)
                 return null;                      
             
             var existentName = String.Empty;
-            var flsReportKey = data.OperationUid + "-" + reportType.ToString();
+            var flsReportKey = data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType.ToString();
             var valkyrieReportKey = data.ValkyrieOperationUid  + "-" + reportType.ToString();
             var reportKey = String.Empty;
-            if (cache.Reports.Keys.Contains(flsReportKey))
+            if (_cache.Reports.Keys.Contains(flsReportKey))
             {
-                existentName = cache.Reports[flsReportKey];
+                existentName = _cache.Reports[flsReportKey];
                 reportKey = flsReportKey;
             }
-            else if (cache.Reports.Keys.Contains(valkyrieReportKey))
+            else if (_cache.Reports.Keys.Contains(valkyrieReportKey))
             {
-                existentName = cache.Reports[valkyrieReportKey];
+                existentName = _cache.Reports[valkyrieReportKey];
                 reportKey = valkyrieReportKey;
             }
             if (!String.IsNullOrWhiteSpace(existentName))
@@ -52,36 +53,37 @@ namespace APTAT.Core.Reports
                 }
                 else
                 {
-                    cache.Reports.Remove(reportKey);
+                    _cache.Reports.Remove(reportKey);
                 }
             }
             
             
             _fileName = GetFileName(reportType);
+        //    var operationKey = data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
             switch (reportType)
             {
                 case ReportType.Executive:
-                    cache.Reports.Add(data.OperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(flsReportKey, _fileName);
                     BuildExecutiveReport(_fileName, data);
                     break;
                 case ReportType.ExecutiveWithValkyrie:
-                    cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
                     BuildExecutiveWithValkyrieReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerDevice:
-                    cache.Reports.Add(data.OperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(flsReportKey, _fileName);
                     BuildDetailedPerDeviceReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
                     BuildDetailedPerDeviceWithValkyrieReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerProgram:
-                    cache.Reports.Add(data.OperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(flsReportKey, _fileName);
                     BuildDetailedPerProgramReport(_fileName, data, "APTAT.Core.Reports.DetailedPrograms.rdlc");
                     break;
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
                     BuildDetailedPerProgramReport(_fileName, data, "APTAT.Core.Reports.DetailedProgramsWithValkyrie.rdlc");
                     break;
                 default:

@@ -26,8 +26,7 @@ namespace APTAT.Core.Reports
                 {
                     OperationUid = operationContext.OperationUid,
                     ScanStarted = operationContext.Started.ToLocalTime(),
-                    ScanFinished = operationContext.CompletedTime == null? DateTime.MinValue : 
-                        operationContext.CompletedTime.Value.ToLocalTime(),
+                    ScanFinished = (DateTime) operationContext.CompletedTime?.ToLocalTime(),
                     TargetsFailed = operationContext.FailedTargetsCount,
                     TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
                     TotalTargetsCount = operationContext.TotalTargetsCount,
@@ -35,6 +34,7 @@ namespace APTAT.Core.Reports
                     Targets = operationContext.ScanResults.ToArray(),
                     ValkyrieAnalysisResult = _aptAtManager.ValkyrieAnalysisResult,
                     ValkyrieOperationUid = _aptAtManager.ValkyrieOperationUid,
+                    FlsLookupOperationUid = _aptAtManager.FlsLookupOperationUid,
                     DevicesSourceDescription = operationContext.DevicesSourceDescription
                 };
 

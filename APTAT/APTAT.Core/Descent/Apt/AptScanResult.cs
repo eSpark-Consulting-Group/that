@@ -44,6 +44,48 @@ namespace APTAT.Core.Descent.Apt
             get { return FailedToAnalyzeFilesCount + NoVerdictFilesCount; }
         }
 
+
+        public void RecalculateStatistics()
+        {
+            Int32 unknownFiles = 0;
+            int safeFileCount = 0;
+            Int32 malwareFiles = 0;
+            Int32 failedToAnalyzeFiles = 0;
+            Int32 noVerdictFiles = 0;
+
+            foreach (var file in Files)
+            {
+                switch (file.Cloud)
+                {
+                    case CloudVerdict.Safe:
+                        safeFileCount++;
+                        break;
+                    case CloudVerdict.Unknown:
+                    case CloudVerdict.FirstSeen:
+                        unknownFiles++;
+                        break;
+                    case CloudVerdict.Malware:
+                        malwareFiles++;
+                        break;
+                    case CloudVerdict.FailedToAnalyze:
+                        failedToAnalyzeFiles++;
+                        break;
+                    case CloudVerdict.NoVerdict:
+                        noVerdictFiles++;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            UnknownFilesCount = unknownFiles;
+            NoVerdictFilesCount = noVerdictFiles;
+            FailedToAnalyzeFilesCount = failedToAnalyzeFiles;
+            MalwareFilesCount = malwareFiles;
+            SafeFilesCount = safeFileCount;
+
+        }
+
         public int FailedToAnalyzeFilesCount { get; set; }       
         public int NoVerdictFilesCount { get; set; }
         public int PendingAnalysisFilesCount { get; set; }

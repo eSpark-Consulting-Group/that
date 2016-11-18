@@ -36,6 +36,7 @@ namespace APTAT.Core
     internal interface IAptAtManagerInternal : IAptAtManager
     {
         Guid ValkyrieOperationUid { get; }
+        Guid FlsLookupOperationUid { get; }
         IAptScanOperationContext LastAptScanOperationContext { get; }
     }
 }

@@ -349,7 +349,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.73615cm</Top>
+            <Top>7.10115cm</Top>
             <Left>1.16247cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -663,7 +663,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>7.73615cm</Top>
+            <Top>7.10115cm</Top>
             <Left>7.08524cm</Left>
             <Height>0.62031cm</Height>
             <Width>9.48254cm</Width>
@@ -696,7 +696,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>8.35999cm</Top>
+            <Top>7.72499cm</Top>
             <Left>1.16247cm</Left>
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
@@ -731,7 +731,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>8.32824cm</Top>
+            <Top>7.69324cm</Top>
             <Left>7.08524cm</Left>
             <Height>0.58856cm</Height>
             <Width>9.48254cm</Width>
@@ -976,7 +976,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Files with No Verdict:</Value>
+                    <Value>Lookup in progress</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1009,7 +1009,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!NoVerdictFilesCount.Value, "AptReportDataSet")</Value>
+                    <Value>=First(Fields!LookupInProgressFilesCount.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -1027,74 +1027,6 @@
             <Height>0.55681cm</Height>
             <Width>9.48254cm</Width>
             <ZIndex>28</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox37">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Failed to Analyze:</Value>
-                    <Style>
-                      <FontFamily>Segoe UI Light</FontFamily>
-                      <Color>Gray</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.95218cm</Top>
-            <Left>1.16247cm</Left>
-            <Height>0.55681cm</Height>
-            <Width>4.74979cm</Width>
-            <ZIndex>29</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox61">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!FailedToAnalyzeFilesCount.Value, "AptReportDataSet")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <Color>DimGray</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>6.98745cm</Top>
-            <Left>7.08524cm</Left>
-            <Height>0.55681cm</Height>
-            <Width>9.48254cm</Width>
-            <ZIndex>30</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2001,6 +1933,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
@@ -2182,6 +2115,10 @@
         </Field>
         <Field Name="FailedToAnalyzeFilesCount">
           <DataField>FailedToAnalyzeFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="LookupInProgressFilesCount">
+          <DataField>LookupInProgressFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="NoVerdictFilesCount">

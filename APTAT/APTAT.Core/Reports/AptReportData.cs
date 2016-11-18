@@ -119,6 +119,8 @@ namespace APTAT.Core.Reports
             }
         }
 
+        public int LookupInProgressFilesCount => FailedToAnalyzeFilesCount + NoVerdictFilesCount;
+
         public int NotAnalyzedFilesCount
         {
             get
@@ -278,8 +280,8 @@ namespace APTAT.Core.Reports
                 new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = "Unknown"},
                 //**
                 new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malicious" },
-                new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = FailedToAnalyzeFilesCount, Value = "Failed to Analyze" },
-                new FileRatingInfo() { CloudVerdict = CloudVerdict.NoVerdict, Count = NoVerdictFilesCount, Value = "No Verdict " }
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = LookupInProgressFilesCount, Value = "Lookup In Progress" },
+                //new FileRatingInfo() { CloudVerdict = CloudVerdict.NoVerdict, Count = NoVerdictFilesCount, Value = "No Verdict " }
 
             };
 
@@ -712,6 +714,7 @@ namespace APTAT.Core.Reports
         }
 
         public List<FileResult> ValkyrieAnalysisResult { get; set; }
+        public Guid FlsLookupOperationUid { get; set; }
     }
 
     public class VulnerableDeviceInfo

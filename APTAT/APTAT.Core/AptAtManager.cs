@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Windows.Forms;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
@@ -47,9 +48,11 @@ namespace APTAT.Core
 
         public void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors)
         {
-           
+            
+            bool isUpdated = false;
             foreach (var scan in _lastAptResults.ScanResults)
             {
+                
                 var files =
                     scan.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict).ToArray();
 
@@ -58,12 +61,19 @@ namespace APTAT.Core
                     if (resultsWithoutErrors.ContainsKey(file.Sha1))
                     {
                         file.Cloud = resultsWithoutErrors[file.Sha1];
+                        isUpdated = true;
                     }
                 }
+                scan.RecalculateStatistics();
+            }
+            if (isUpdated)
+            {
+                FlsLookupOperationUid = Guid.NewGuid();
             }
         }
 
         public Guid ValkyrieOperationUid { get; set; }
+        public Guid FlsLookupOperationUid { get; set; }
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager)
         {

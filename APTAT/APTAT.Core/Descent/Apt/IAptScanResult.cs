@@ -39,5 +39,6 @@ namespace APTAT.Core.Descent.Apt
         Module[] GetNoVerdictFiles();
         Module[] GetBadFiles();
         Module[] GetUknownFiles();
+        void RecalculateStatistics();
     }
 }
