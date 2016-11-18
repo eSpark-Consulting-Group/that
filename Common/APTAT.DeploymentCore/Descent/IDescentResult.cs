@@ -16,6 +16,7 @@ namespace APTAT.DeploymentCore.Descent
         IDevicesSourceDescription DevicesSourceDescription { get; }
 
         event Action DescentCompleted;
+        event EventHandler<IComputerDescentResult> ComputerDescentCompleted;
 
         List<IComputerDescentResult> ComputerDescentResults { get; }
     }

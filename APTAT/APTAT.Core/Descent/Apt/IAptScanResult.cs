@@ -25,6 +25,7 @@ namespace APTAT.Core.Descent.Apt
         int RunningProgramsCount { get; set; }
         int AutorunsCount { get; set; }
         string ResultErrorText { get; set; }
+        AptScanStage ScanStage { get; set; }
         ScanResultType ResultType { get; set; }
         int BadFilesCount { get; }
         TargetVerdict TargetVerdict { get; }

@@ -16,9 +16,10 @@ namespace APTAT.Application.Models
         ScanResultsObtaning,
         ScanResultsObtaned,
         ScanResultsProcessing,
-        OperationCompleted,
+        DescentOperationCompleted,
         OperationFailed,
-        OperationCanceled
+        OperationCanceled,
+        OperationCompleted
     }
 
     public class ScanProgressItem : DomainObject

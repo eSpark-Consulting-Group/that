@@ -25,6 +25,7 @@ namespace APTAT.Core.Apt
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
+        public event EventHandler<ComputerScanCompletedEventArgs> ComputerScanCompleted; 
         public IAptScanOperationContext ScanOperationContext { get { return _scanOperationContext; } }
         internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<DeploymentTarget> targets, string login,
             string password, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
@@ -44,6 +45,7 @@ namespace APTAT.Core.Apt
             if (_scanOperationContext != null)
             {
                 _scanOperationContext.OperationProgressChanged -= scanOperationContext_OperationProgressChanged;
+                _scanOperationContext.ComputerDescentCompleted -= ScanOperationContextOnComputerDescentCompleted;
             }
             var aptScanCompletedEventArgs = e as AptScanCompletedEventArgs;
             if (aptScanCompletedEventArgs == null) return;
@@ -93,6 +95,7 @@ namespace APTAT.Core.Apt
                 if (_scanOperationContext != null)
                 {
                     _scanOperationContext.OperationProgressChanged += scanOperationContext_OperationProgressChanged;
+                    _scanOperationContext.ComputerDescentCompleted += ScanOperationContextOnComputerDescentCompleted; 
                 }
             }
             catch (Exception ex)
@@ -105,6 +108,16 @@ namespace APTAT.Core.Apt
             finally
             {
                 OnScanStarted(args);
+            }
+        }
+
+        private void ScanOperationContextOnComputerDescentCompleted(object sender, IComputerDescentResult computerDescentResult)
+        {
+            var result = computerDescentResult as IAptScanResult;
+            if (result != null)
+            {
+                OnComputerScanCompleted(new ComputerScanCompletedEventArgs(_scanOperationContext.OperationUid, 
+                    result));
             }
         }
 
@@ -121,6 +134,11 @@ namespace APTAT.Core.Apt
         protected virtual void OnScanStarted(ScanStartedEventArgs args)
         {
             ScanStarted?.Invoke(this, args);
+        }
+
+        protected virtual void OnComputerScanCompleted(ComputerScanCompletedEventArgs args)
+        {
+            ComputerScanCompleted?.Invoke(this, args);
         }
 
         protected virtual void OnScanCompleted(ScanCompletedEventArgs args)

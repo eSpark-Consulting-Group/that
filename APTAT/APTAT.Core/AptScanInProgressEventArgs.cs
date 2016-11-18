@@ -5,6 +5,6 @@ namespace APTAT.Core
 {
     public class AptScanInProgressEventArgs : ScanInProgressEventArgs
     {
-        public DescentProgressItem[] ProgressItems { get; set; }
+        public IDescentProgressItem[] ProgressItems { get; set; }
     }
 }

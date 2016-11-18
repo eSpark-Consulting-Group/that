@@ -9,7 +9,7 @@ namespace APTAT.DeploymentCore.Descent
         void Invalidate(DescentStatus errorCode, string shortMessage, string detailedMessage);
         void SetSystemKind(SystemKind systemKind);
         void UpdateStatus(IOperationDescentResult result);
-        void UpdateStatus(FormattedText statusMessage, double percentage);
+        void UpdateStatus(IDescentProgressItem progress);
     }
 
     public interface IComputerDescentResult

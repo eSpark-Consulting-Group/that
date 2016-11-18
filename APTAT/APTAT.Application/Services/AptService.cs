@@ -21,7 +21,7 @@ namespace APTAT.Application.Services
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
         public event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
         public event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
-        public event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
+        public event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
@@ -103,8 +103,6 @@ namespace APTAT.Application.Services
                 BuildReportCompleted?.Invoke(this,args);                   
             };
             App.Current.Dispatcher.BeginInvoke(action);
-
-
         }
 
         public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
@@ -113,9 +111,41 @@ namespace APTAT.Application.Services
             IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, 
                 devicesSourceDescription, options);
             scanner.ScanStarted += OnScanStarted;
-            scanner.ScanCompleted += OnScanCompleted;
+            scanner.ComputerScanCompleted += OnComputerScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;
+            scanner.ScanCompleted += OnScanCompleted;
             scanner.BeginScan(userState);
+        }
+
+        private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
+        {
+            ScanResultItem resultItem = new ScanResultItem
+            {
+                TargetUid = e.CompletedResult.TargetUid,
+                TotalFilesCount = e.CompletedResult.TotalFilesCount,
+                UnknownFilesCount = e.CompletedResult.UnknownFilesCount,
+                ScanStage = FromAptScanStage(e.CompletedResult.ScanStage),
+                StatusMessage = e.CompletedResult.ShortStatusMessage.ToString()
+            };
+            var badFileItems = e.CompletedResult.BadFiles
+                .Select(m => new BadFileItem
+                {
+                    Name = m.Path,
+                    Size = m.Size,
+                    Accessed = m.Accessed,
+                    Created = m.Created,
+                    Modified = m.Modified,
+                    Product = m.Product,
+                    Copyright = m.Copyright,
+                    Version = m.Version,
+                    Description = m.Description,
+                    Signer = m.Signer,
+                    Attributes = m.Attributes,
+                    Sha1 = m.Sha1,
+                    Cloud = m.Cloud,
+                }).ToArray();
+            resultItem.BadFiles = badFileItems;
+            ComputerScanCompleted?.Invoke(this, new GetScanResultCompletedEventArgs(resultItem));
         }
 
         private void OnScanInProgress(Object sender, AptScanInProgressEventArgs e)
@@ -124,8 +154,8 @@ namespace APTAT.Application.Services
             ScanProgressItem[] scanProgressItems = new ScanProgressItem[e.ProgressItems.Length];
             for (var i = 0; i < e.ProgressItems.Length; ++i)
             {
-                DescentProgressItem descentProgressItem = e.ProgressItems[i];
-                var aptScantProgress = descentProgressItem as AptDescentProgressItem;
+                IDescentProgressItem descentProgressItem = e.ProgressItems[i];
+                var aptScantProgress = descentProgressItem as IAptDescentProgressItem;
                 ScanProgressItem progressItem = new ScanProgressItem();
                 scanProgressItems[i] = progressItem;
                 if (aptScantProgress != null)
@@ -174,6 +204,7 @@ namespace APTAT.Application.Services
                 scanner.ScanStarted -= OnScanStarted;
                 scanner.ScanCompleted -= OnScanCompleted;
                 scanner.ScanInProgress -= OnScanInProgress;
+                scanner.ComputerScanCompleted -= OnComputerScanCompleted;
             }
             //Logger.WriteLog("Scan Completed");
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
@@ -195,36 +226,6 @@ namespace APTAT.Application.Services
             };
             App.Current.Dispatcher.BeginInvoke(action);
 
-        }
-
-        public void GetScanResult(Guid targetUid, Object userState)
-        {
-            IAptScanResult aptScanResult = _manager.GetScanResultByTargetUid(targetUid);
-            ScanResultItem resultItem = new ScanResultItem
-            {
-                TargetUid = aptScanResult.TargetUid,
-                TotalFilesCount = aptScanResult.TotalFilesCount,
-                UnknownFilesCount = aptScanResult.UnknownFilesCount               
-            };
-            var badFileItems = aptScanResult.BadFiles
-                .Select(m => new BadFileItem
-                {
-                    Name = m.Path,
-                    Size = m.Size,
-                    Accessed = m.Accessed,
-                    Created = m.Created,
-                    Modified = m.Modified,
-                    Product = m.Product,
-                    Copyright = m.Copyright,
-                    Version = m.Version,
-                    Description = m.Description,
-                    Signer = m.Signer,
-                    Attributes = m.Attributes,
-                    Sha1 = m.Sha1,
-                    Cloud = m.Cloud,
-                }).ToArray();
-            resultItem.BadFiles = badFileItems;
-            GetScanResultCompleted?.Invoke(this, new GetScanResultCompletedEventArgs(resultItem, userState));
         }
 
         public void StopScan()
@@ -283,8 +284,11 @@ namespace APTAT.Application.Services
                 case AptScanStage.ScanResultsProcessing:
                     return ScanStage.ScanResultsProcessing;
 
+                case AptScanStage.DescentOperationCompleted:
+                    return ScanStage.DescentOperationCompleted;
+
                 case AptScanStage.OperationCompleted:
-                    return ScanStage.OperationCompleted;
+                    return ScanStage.DescentOperationCompleted;
 
                 case AptScanStage.OperationFailed:
                     return ScanStage.OperationFailed;

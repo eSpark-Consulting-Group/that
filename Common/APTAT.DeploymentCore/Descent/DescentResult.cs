@@ -128,6 +128,9 @@ namespace APTAT.DeploymentCore.Descent
             result.UpdateStatus(operationResult);
 			ResultsByUid[uid] = result;
 
+		    if (result.Completed)
+		        OnComputerDescentCompleted(result);
+
 			lock (_sync)
 			{
 				if (result.Completed && !_reportedByUid[uid])
@@ -193,7 +196,13 @@ namespace APTAT.DeploymentCore.Descent
 			DescentCompleted?.Invoke();
 		}
 
+	    protected virtual void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)
+	    {
+            ComputerDescentCompleted?.Invoke(this, computerDescentResult);
+	    }
+
 		public event Action DescentCompleted;
+	    public event EventHandler<IComputerDescentResult> ComputerDescentCompleted;
 
 		#region IChangeTrackingListener Members
 
@@ -211,8 +220,7 @@ namespace APTAT.DeploymentCore.Descent
                             originalResult.StatusMessage !=  progressItem.StatusMessage )
 					    {
 
-                            originalResult.UpdateStatus(progressItem.StatusMessage
-                                , progressItem.ProgressPercentage);
+                            originalResult.UpdateStatus(progressItem);
                         }
                         _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                     }
@@ -228,6 +236,7 @@ namespace APTAT.DeploymentCore.Descent
                 return this.ResultsByUid.Values.OfType<IComputerDescentResult>().ToList();
             }
         }
+
         public IComputerDescentResult GetComputerDescentResultByTargetUid(Guid targetUid)
         {
             return ResultsByUid[targetUid];

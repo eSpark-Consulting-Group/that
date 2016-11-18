@@ -10,5 +10,6 @@ namespace APTAT.DeploymentCore.Descent
 		Guid OperationUid { get; }
 		double ProgressPercentage { get; }
 		FormattedText StatusMessage { get; }
-	}
+        bool IsCanceled { get; }
+    }
 }

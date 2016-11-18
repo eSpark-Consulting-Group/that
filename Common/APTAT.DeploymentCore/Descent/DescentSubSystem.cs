@@ -55,9 +55,7 @@ namespace APTAT.DeploymentCore.Descent
 
         private void OnDescentCompleted(DescentEventArgs args)
         {
-            EventHandler<DescentEventArgs> temp = DescentCompleted;
-            if (temp != null)
-                temp(this, args);
+            DescentCompleted?.Invoke(this, args);
         }
 
         #region IDescentSubSystem Members

@@ -687,7 +687,7 @@ namespace APTAT.Application.Models
 
             _aptService.BeginScanCompleted += OnBeginScanCompleted;
             _aptService.ScanStatusChanged += OnScanStatusChanged;
-            _aptService.GetScanResultCompleted += OnGetScanResultCompleted;
+            _aptService.ComputerScanCompleted += OnComputerScanCompleted;
             _aptService.ScanCompleted += OnScanCompleted;
             _aptService.ScanProgressChanged += OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
@@ -983,7 +983,7 @@ namespace APTAT.Application.Models
             _targetsDiscoveryService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
             _aptService.BeginScanCompleted -= OnBeginScanCompleted;
             _aptService.ScanStatusChanged -= OnScanStatusChanged;
-            _aptService.GetScanResultCompleted -= OnGetScanResultCompleted;
+            _aptService.ComputerScanCompleted -= OnComputerScanCompleted;
             _aptService.ScanCompleted -= OnScanCompleted;
             _aptService.ScanProgressChanged -= OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
@@ -995,7 +995,6 @@ namespace APTAT.Application.Models
         {
             ScanProcessCompleted?.Invoke(this, e);
         }
-
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
             IsBusy = false;
@@ -1186,13 +1185,6 @@ namespace APTAT.Application.Models
                     infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
                     infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
                     infoItem.StatusMessageSystem = scanProgress.StatusMessage;
-
-                    if (infoItem.ScanStage != ScanStage.OperationCompleted &&
-                        scanProgress.ScanStage == ScanStage.OperationCompleted)
-                    {
-                        _aptService.GetScanResult(infoItem.ComputerGuid, this);
-                    }
-
                     infoItem.ScanStage = scanProgress.ScanStage;
                 }
 
@@ -1271,12 +1263,14 @@ namespace APTAT.Application.Models
             RaisePropertyChanged(nameof(Header));
         }
 
-        private void OnGetScanResultCompleted(Object sender, GetScanResultCompletedEventArgs e)
+        private void OnComputerScanCompleted(Object sender, GetScanResultCompletedEventArgs e)
         {
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem != null)
             {
                 Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
+                parentItem.ScanStage = e.ScanResult.ScanStage;
+                parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
                 if (e.ScanResult.BadFiles != null)
                 {
                     foreach (var badFile in e.ScanResult.BadFiles)

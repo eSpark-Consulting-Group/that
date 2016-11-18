@@ -85,10 +85,9 @@ namespace APTAT.Application.Services
     {
         public ScanResultItem ScanResult { get; private set; }
 
-        public GetScanResultCompletedEventArgs(ScanResultItem scanResult, Object userState, Exception error = null)
+        public GetScanResultCompletedEventArgs(ScanResultItem scanResult, Exception error = null)
         {
             ScanResult = scanResult;
-            UserState = userState;
             Exception = error;
         }
     }
@@ -150,7 +149,7 @@ namespace APTAT.Application.Services
         event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
         event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
-        event EventHandler<GetScanResultCompletedEventArgs> GetScanResultCompleted;
+        event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;   
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
@@ -158,9 +157,7 @@ namespace APTAT.Application.Services
         event EventHandler ValkyrieAnalyzeStarted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
-
-        void GetScanResult(Guid targetUid, Object userState);
-
+        
         void StopScan();
 
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);

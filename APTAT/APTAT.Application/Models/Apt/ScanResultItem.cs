@@ -11,5 +11,8 @@ namespace APTAT.Application.Models
         public Int32 UnknownFilesCount { get; set; }
 
         public BadFileItem[] BadFiles { get; set; }
+
+        public ScanStage ScanStage { get; set; }
+        public string StatusMessage { get; set; }
     }
 }

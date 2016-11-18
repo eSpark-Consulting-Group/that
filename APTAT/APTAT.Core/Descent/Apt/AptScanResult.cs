@@ -25,6 +25,7 @@ namespace APTAT.Core.Descent.Apt
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
+        public AptScanStage ScanStage { get; set; }
         private int _malwareCount;
         public int MalwareFilesCount {
             get            
@@ -190,6 +191,22 @@ namespace APTAT.Core.Descent.Apt
         internal Module[] GetPendingAnalysisFiles()
         {
             return new Module[] { };
+        }
+
+        public override void UpdateStatus(IDescentProgressItem progress)
+        {
+            base.UpdateStatus(progress);
+            if (progress.IsCanceled)
+                ScanStage = AptScanStage.OperationCanceled;
+        }
+
+        public override void UpdateStatus(IOperationDescentResult result)
+        {
+            base.UpdateStatus(result);
+            if (Completed && !Succeeded)
+            {
+                ScanStage = AptScanStage.OperationFailed;
+            }
         }
     }
 

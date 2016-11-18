@@ -10,5 +10,6 @@ namespace APTAT.Core
         event EventHandler<ScanStartedEventArgs> ScanStarted;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
+        event EventHandler<ComputerScanCompletedEventArgs> ComputerScanCompleted;
     }
 }

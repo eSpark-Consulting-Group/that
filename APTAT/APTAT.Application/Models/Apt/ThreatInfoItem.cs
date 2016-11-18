@@ -336,6 +336,7 @@ namespace APTAT.Application.Models
                     case ScanStage.ScanResultsObtaning:
                     case ScanStage.ScanResultsObtaned:
                     case ScanStage.ScanResultsProcessing:
+                    case ScanStage.DescentOperationCompleted:
                     case ScanStage.OperationCompleted:
 
                         return GetStatusMessage();
@@ -360,7 +361,7 @@ namespace APTAT.Application.Models
             string serverErrorCounterText = NoVerdictFilesCount > 0 ? $"No Verdict: {NoVerdictFilesCount}."
                 : String.Empty;
 
-            if (ScanStage == ScanStage.ScanCompleted || ProgressPercentage  == 100)
+            if (ScanStage == ScanStage.OperationCompleted)
             {
                 string message;
                 if (LookupInProgress > 0)

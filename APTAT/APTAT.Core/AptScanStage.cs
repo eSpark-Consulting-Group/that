@@ -16,9 +16,10 @@
         ScanFailed,
         ScanResultsObtaning,
         ScanResultsProcessing,
-        OperationCompleted,
+        DescentOperationCompleted,
         OperationFailed,
-        OperationCanceled
+        OperationCanceled,
+        OperationCompleted
     }
 
     public enum ScanResultType

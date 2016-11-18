@@ -255,36 +255,16 @@ namespace APTAT.Core
             if (_scanner != null) throw new AnotherScanIsInProgressException();
             _scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
-            _scanner.ScanInProgress += OnScannerOnScanInProgress;
+            _scanner.ComputerScanCompleted += OnScannerOnScanCompleted;
             _scanner.ScanCompleted += OnScanCompleted;
             return _scanner;
         }
-
-        private readonly ConcurrentBag<Guid> _progressOperatinGuids = new ConcurrentBag<Guid>();
+        
         private bool _isValkyrieStarted;
 
-        private void OnScannerOnScanInProgress(object sender, AptScanInProgressEventArgs args)
+        private void OnScannerOnScanCompleted(object sender, ComputerScanCompletedEventArgs args)
         {
-            var item = (AptDescentProgressItem) args.ProgressItems.First();
-            if (item.ScanStage == AptScanStage.OperationCompleted && !_progressOperatinGuids.Contains(item.ComputerUid))
-            {
-                _progressOperatinGuids.Add(item.OperationUid);
-                OnEndpointCompleted(item);
-            }
-
-        }
-
-        private void OnEndpointCompleted(AptDescentProgressItem item)
-        {
-            var aptResult =
-                (IAptScanOperationContext) _descentSubSystem.GetDescentResultsByOperationUid(item.OperationUid);
-            IAptScanResult results = aptResult.ScanResults.FirstOrDefault(r => r.Computer.Uid == item.ComputerUid);
-            if (results == null)
-                throw new InvalidOperationException("Can't get result for computer " + item.ComputerUid);
-
-
-            IFlsResult[] allFilesVerdicts = results.Files.ToArray();
-            AddResultsToDictionary(allFilesVerdicts);
+            AddResultsToDictionary(args.CompletedResult.Files.ToArray());
         }
 
         private void AddResultsToDictionary(IFlsResult[] resultsFiles)
@@ -363,6 +343,7 @@ namespace APTAT.Core
         {
             ValkyrieAnalysisResult = null;
             _valkyrieClient.AnalyzeAsyncCancel();
+            
             _lastAptResults = _scanner.ScanOperationContext;
         }
 
@@ -394,12 +375,10 @@ namespace APTAT.Core
         public void StopScan()
         {
             _descentSubSystem.StopAllScans(0);
-            _valkyrieClient.AnalyzeAsyncCancel();
-            _flsManager.Cancel();
-           
-            
+            //_valkyrieClient.AnalyzeAsyncCancel();
+            //_flsManager.Cancel();
         }
-        
+
 
         public void StartValkyrieAnalysis(string login, string password, 
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential = null)
@@ -409,8 +388,6 @@ namespace APTAT.Core
             var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
             var distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
             _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length, proxyCredential);
-            _isValkyrieStarted = true;
-            //       _valkyrieClient.AddFilesToAnalyze();
         }
 
         public string GetValkyrieDetailsLink()

@@ -20,7 +20,7 @@ namespace APTAT.DeploymentCore.Descent
             TargetUid = computer.Uid;
 		}
 
-		public void UpdateStatus(IOperationDescentResult result)			
+		public virtual void UpdateStatus(IOperationDescentResult result)			
 		{
             Modified = DateTime.UtcNow;
 			StatusMessage = result.StatusMessage;
@@ -33,8 +33,10 @@ namespace APTAT.DeploymentCore.Descent
             Completed = true;
         }
 
-        public void UpdateStatus(FormattedText statusMessage, double percentage)
+        public virtual void UpdateStatus(IDescentProgressItem progress)
         {
+            var percentage = progress.ProgressPercentage;
+            var statusMessage = progress.StatusMessage;
             var update = false;
             if (Math.Abs(percentage - Percentage) > 0.1)
             {
