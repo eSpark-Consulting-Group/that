@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using APTAT.Core.Properties;
 
 
 namespace APTAT.Core
 {
-    
+
     public sealed class FlsManager : IDisposable, IFlsManager
     {
         
@@ -23,6 +24,20 @@ namespace APTAT.Core
         private bool _isWorking = false;
         private readonly int _uploadInterval;
         private readonly int _uploadAtOnce;
+        
+        public static void ClearCollection<T>( BlockingCollection<T> blockingCollection)
+        {
+            if (blockingCollection == null)
+            {
+                throw new ArgumentNullException(nameof(blockingCollection));
+            }
+
+            while (blockingCollection.Count > 0)
+            {
+                T item;
+                blockingCollection.TryTake(out item);
+            }
+        }
 
         private void DoWorkItem(string[] hashes )
         {
@@ -45,8 +60,9 @@ namespace APTAT.Core
                 Enqueue(hashes);
                 //throw;
             }
+     //       Task.Delay(TimeSpan.FromMinutes(1));
 
-            //Thread.Sleep(1000); //TODO: Remove after test
+         //   Thread.Sleep(30000); //TODO: Remove after test
         }
 
         public FlsManager()
@@ -90,6 +106,7 @@ namespace APTAT.Core
             }
             _isWorking = false;
 
+            ClearCollection(_inputQueue);
             //FlsResult someItem;
             //while (!_allResults.IsEmpty)
             //{
