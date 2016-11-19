@@ -244,9 +244,10 @@ namespace APTAT.Application.Models
                         Verdict = "Malware";
                         IsMalware = true;
                         break;
-                    
-                        
-                        
+                    case CloudVerdict.Safe:
+                        Verdict = "Clean";
+                        Clean = true;
+                        break;
                 }
             }
             else

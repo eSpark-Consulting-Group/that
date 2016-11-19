@@ -1377,12 +1377,21 @@ namespace APTAT.Application.Models
                                 _cache.Add(item);
                                 Items.Add(item);
                             }
-                            foreach (var computer in computersToUpdate.Values)
-                            {
-                                computer.UpdateStatus();
-                            }
-                            UpdateStatus();
                         }
+                        if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
+                        {
+                            parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
+                            if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
+                            {
+                                computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
+                            }
+                        }
+                        foreach (var computer in computersToUpdate.Values)
+                        {
+                            computer.UpdateStatus();
+                        }
+                        if (computersToUpdate.Any())
+                            UpdateStatus();
                     }
 
 

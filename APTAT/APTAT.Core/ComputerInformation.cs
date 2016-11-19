@@ -233,22 +233,22 @@ namespace APTAT.Core
             if (failedCount > 0)
                 StatusText += string.Format(" Not analyzed: {0}.", failedCount);
 
-            HasBadFiles = malwareCount > 0 || unknownCount > 0 || failedCount > 0 || pendingCount > 0;
             HasMalwares = malwareCount > 0;
             HasUnknowns = malwareCount == 0 && unknownCount > 0;
             HasFailed = malwareCount == 0 && unknownCount == 0 && failedCount > 0;
             HasPending = malwareCount == 0 && unknownCount == 0 && 
                 failedCount == 0 && (pendingCount > 0 || pendingFls > 0);
+            HasBadFiles = HasMalwares || HasUnknowns || HasFailed || HasPending;
 
-            RaisePropertyChanged("HasBadFiles");
-            RaisePropertyChanged("HasMalwares");
-            RaisePropertyChanged("HasUnknowns");
-            RaisePropertyChanged("HasPending");
-            RaisePropertyChanged("HasFailed");
+            RaisePropertyChanged(nameof(HasBadFiles));
+            RaisePropertyChanged(nameof(HasMalwares));
+            RaisePropertyChanged(nameof(HasUnknowns));
+            RaisePropertyChanged(nameof(HasPending));
+            RaisePropertyChanged(nameof(HasFailed));
 
-            RaisePropertyChanged("StatusText");
-            RaisePropertyChanged("InProgress");
-            RaisePropertyChanged("Completed");
+            RaisePropertyChanged(nameof(StatusText));
+            RaisePropertyChanged(nameof(InProgress));
+            RaisePropertyChanged(nameof(Completed));
         }
 
         public bool Equals(ComputerInformation other)

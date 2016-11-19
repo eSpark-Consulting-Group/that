@@ -96,7 +96,7 @@ namespace APTAT.Core
             var valkyrieAnalysisResult = GetFullResult(e.Result, _lastAptResults.ScanResults);
             ValkyrieAnalysisResult = valkyrieAnalysisResult;
             var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
-                , e.IsPendingExist, e.UserState);
+                , e.UserState);
             ValkyrieAnalyzeCompleted?.Invoke(this, arg);
         }
 
@@ -307,8 +307,8 @@ namespace APTAT.Core
                                 resultsUpdated = true;
                             }
                         }
-                        else if (item == CloudVerdict.FailedToAnalyze ||
-                            item == CloudVerdict.NoVerdict)
+                        else if (_flsHashResults[r.Sha1] != r.Cloud &&
+                            (item == CloudVerdict.FailedToAnalyze || item == CloudVerdict.NoVerdict))
                         {
                             _flsHashResults[r.Sha1] = r.Cloud;
                             verdictUpdated.Add(r);
@@ -318,13 +318,13 @@ namespace APTAT.Core
                 if (verdictUpdated.Any())
                 {
                     Dictionary<string, CloudVerdict> dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
+                    UpdateLastResult(dict);
                     if (_isValkyrieStarted)
                     {
                         List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
                         if(filesToAnalyze.Any())
                             _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
                     }
-                    UpdateLastResult(dict);
                     OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
                 }
             }

@@ -258,6 +258,7 @@ namespace APTAT.Core
             RaisePropertyChanged(nameof(Clean));
             RaisePropertyChanged(nameof(Failed));
             RaisePropertyChanged(nameof(Pending));
+            RaisePropertyChanged(nameof(PendingFls));
         }
 
         public void UpdateValkyrieResult(FileResult result)
@@ -271,6 +272,7 @@ namespace APTAT.Core
             RaisePropertyChanged(nameof(Clean));
             RaisePropertyChanged(nameof(Failed));
             RaisePropertyChanged(nameof(Pending));
+            RaisePropertyChanged(nameof(PendingFls));
         }
 
         public ObservableCollection<ComputerInformation> Computers { get; set; }

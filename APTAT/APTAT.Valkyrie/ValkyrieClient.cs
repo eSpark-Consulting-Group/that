@@ -60,14 +60,15 @@ namespace APTAT.Valkyrie
 
         public void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze)
         {
+            if (!filesToAnalyze.Any()) return;
             bool needStartTimer = false;
             lock (_lookupSync)
             {
                 needStartTimer = _checkingTimerIsStop;
+                _checkingTimerIsStop = false;
                 foreach (var fileInfo in filesToAnalyze)
                 {
                     _lookupContexts.Add(fileInfo);
-                    _checkingTimerIsStop = true;
                 }
             }
             if (needStartTimer)
@@ -376,7 +377,7 @@ namespace APTAT.Valkyrie
             {
                 Task.Factory.StartNew(() =>
                 {
-                    tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), null, true,
+                    tmp(this, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), null,
                             true,null));
                 }, CancellationToken.None);
             }
@@ -410,15 +411,21 @@ namespace APTAT.Valkyrie
 
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {1}",
                 DateTime.UtcNow, _apiKey));
-            bool anyPending = _lookupContexts.Any() || _automaticAnalyseInProgressByHash.Any();
             AnalyzeCompleted?.Invoke(this,
                 new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), exception,
-                    task.IsCanceled, anyPending, task.AsyncState));
-            if (anyPending)
+                    task.IsCanceled, task.AsyncState));
+            bool needStartChecking = false;
+            lock (_lookupSync)
             {
-                _checkingTimerIsStop = false;
-                _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
+                bool anyPending = _lookupContexts.Any() || _automaticAnalyseInProgressByHash.Any();
+                if (_checkingTimerIsStop && anyPending)
+                {
+                    _checkingTimerIsStop = false;
+                    needStartChecking = true;
+                }
             }
+            if (needStartChecking)
+                _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
         }
 
         private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items, bool isUpdate = false, bool pendingItemsExists = false)
