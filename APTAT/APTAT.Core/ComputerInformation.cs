@@ -195,6 +195,7 @@ namespace APTAT.Core
                 failedCount = 0, 
                 pendingCount = 0, 
                 distinctCount = 0,
+                pendingFls = 0,
                 cleanCount = 0;
 
             for (int i = 0; i < Files.Count; i++)
@@ -208,6 +209,8 @@ namespace APTAT.Core
                     failedCount++;
                 else if (file.Pending)
                     pendingCount++;
+                else if (file.PendingFls)
+                    pendingFls++;
                 else
                     cleanCount++;
             }
@@ -234,7 +237,8 @@ namespace APTAT.Core
             HasMalwares = malwareCount > 0;
             HasUnknowns = malwareCount == 0 && unknownCount > 0;
             HasFailed = malwareCount == 0 && unknownCount == 0 && failedCount > 0;
-            HasPending = malwareCount == 0 && unknownCount == 0 && failedCount == 0 && pendingCount > 0;
+            HasPending = malwareCount == 0 && pendingFls == 0
+                && unknownCount == 0 && failedCount == 0 && pendingCount > 0;
 
             RaisePropertyChanged("HasBadFiles");
             RaisePropertyChanged("HasMalwares");

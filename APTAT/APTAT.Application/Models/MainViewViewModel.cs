@@ -740,7 +740,8 @@ namespace APTAT.Application.Models
                 {
                     foreach (var r in e.Results)
                     {
-                        var file = ItemsValkyrie.FirstOrDefault(_ => _.Sha1 == r.Sha1);
+                        var file = ItemsValkyrie.FirstOrDefault(_ => 
+                            _.Sha1.Equals(r.Sha1, StringComparison.OrdinalIgnoreCase));
                         if (file != null)
                         {
                             if (!file.PendingFls)

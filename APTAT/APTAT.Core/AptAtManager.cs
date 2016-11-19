@@ -87,6 +87,7 @@ namespace APTAT.Core
 
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
+            _isValkyrieStarted = true;
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
         }
 
@@ -408,7 +409,6 @@ namespace APTAT.Core
         {
             lock (_flsHashResults)
             {
-                _isValkyrieStarted = false;
                 var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
                 var results = _lastAptResults.ScanResults;
                 var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
