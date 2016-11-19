@@ -4,6 +4,6 @@
     {
         void Init();
         FlsResponse RequestType0(string[] hash);
-        void UpdateFlsPorts(short udpPort, short tcpPort);
+        void UpdateFlsPorts(int udpPort, int tcpPort);
     }
 }

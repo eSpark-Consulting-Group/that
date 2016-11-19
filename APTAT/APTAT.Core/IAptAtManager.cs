@@ -32,7 +32,7 @@ namespace APTAT.Core
         int GetDistinctFileCount();
         void Dispose();
         
-        void UpdateFlsPorts(short udpPort, short tcpPort);
+        void UpdateFlsPorts(int udpPort, int tcpPort);
     }
 
     internal interface IAptAtManagerInternal : IAptAtManager

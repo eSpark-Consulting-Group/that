@@ -744,7 +744,7 @@ namespace APTAT.Application.Models
         public string ProxyLogin { get; set; }
         public string ProxyPassword { get; set; }
 
-        public void OnPortChanged(short udpPort, short tcpPort)
+        public void OnPortChanged(int udpPort, int tcpPort)
         {
             _aptService.UpdateFlsPorts(udpPort, tcpPort);
         }

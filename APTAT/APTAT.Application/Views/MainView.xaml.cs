@@ -258,9 +258,9 @@ namespace APTAT.Application
 
         private void OptionsClick(object sender, RoutedEventArgs e)
         {
-            short tcpShort, udpShort;
-            short.TryParse(this._viewModel.TcpPort, out tcpShort);
-            short.TryParse(this._viewModel.UdpPort, out udpShort);
+            int tcpShort, udpShort;
+            int.TryParse(this._viewModel.TcpPort, out tcpShort);
+            int.TryParse(this._viewModel.UdpPort, out udpShort);
 
             SettingsWindow options = new SettingsWindow { Owner = System.Windows.Application.Current.MainWindow, DataContext = DataContext};
             if (options.ShowDialog() == true)
@@ -271,7 +271,7 @@ namespace APTAT.Application
                 short.TryParse(this._viewModel.UdpPort, out udpShortNew);
                 if (tcpShortNew != tcpShort || udpShortNew != udpShort)
                 {
-                    _viewModel.OnPortChanged(tcpShortNew, udpShortNew);
+                    _viewModel.OnPortChanged(udpShortNew, tcpPort:tcpShortNew);
                 }
             }
         }

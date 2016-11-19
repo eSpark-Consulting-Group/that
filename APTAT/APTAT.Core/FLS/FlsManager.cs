@@ -75,7 +75,7 @@ namespace APTAT.Core
 
         
 
-        public void UpdateFlsPorts(short udpPort, short tcpPort)
+        public void UpdateFlsPorts(int udpPort, int tcpPort)
         {
            this._apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
         }

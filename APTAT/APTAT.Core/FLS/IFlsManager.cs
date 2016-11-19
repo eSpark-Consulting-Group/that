@@ -11,8 +11,7 @@ namespace APTAT.Core
         Task Enqueue(IEnumerable<string> hashes);
 
         void Cancel();
-
         
-        void UpdateFlsPorts(short udpPort, short tcpPort);
+        void UpdateFlsPorts(int udpPort, int tcpPort);
     }
 }

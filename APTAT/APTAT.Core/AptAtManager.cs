@@ -262,6 +262,7 @@ namespace APTAT.Core
         {
             
             if (_scanner != null) throw new AnotherScanIsInProgressException();
+            _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
             _scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
             _scanner.ComputerScanCompleted += OnScannerOnScanCompleted;
@@ -435,7 +436,7 @@ namespace APTAT.Core
             }
         }
 
-        public void UpdateFlsPorts(short udpPort, short tcpPort)
+        public void UpdateFlsPorts(int udpPort, int tcpPort)
         {
             _flsManager.UpdateFlsPorts(udpPort, tcpPort);
         }

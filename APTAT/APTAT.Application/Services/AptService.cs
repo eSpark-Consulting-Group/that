@@ -226,7 +226,7 @@ namespace APTAT.Application.Services
 
         }
 
-        public void UpdateFlsPorts(short udpPort, short tcpPort)
+        public void UpdateFlsPorts(int udpPort, int tcpPort)
         {
             _manager.UpdateFlsPorts(udpPort, tcpPort);
 
