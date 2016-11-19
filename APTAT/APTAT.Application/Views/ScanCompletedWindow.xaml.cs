@@ -1,7 +1,4 @@
-﻿using APTAT.Application.Extensions;
-using APTAT.Application.Models;
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;

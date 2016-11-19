@@ -18,6 +18,7 @@ using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Models.ModelBase;
+using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Application.Models
 {
@@ -481,7 +482,12 @@ namespace APTAT.Application.Models
 
         public bool IsUnknownFound
         {
-            get { return UnknownFilesCount > 0; }
+            get
+            {
+                return UnknownFilesCount > 0 
+                    || FailedToAnalyzeFilesCount > 0 
+                    || NoVerdictFilesCount > 0;
+            }
         }
 
         public bool IsErrorsFound
@@ -730,6 +736,53 @@ namespace APTAT.Application.Models
                     computer.UpdateStatus();
                 }
                 UpdateStatus();
+                if (ItemsValkyrie.Any())
+                {
+                    foreach (var r in e.Results)
+                    {
+                        var file = ItemsValkyrie.FirstOrDefault(_ => _.Sha1 == r.Sha1);
+                        if (file != null)
+                        {
+                            if (!file.PendingFls)
+                                continue;
+                            ValkyrieVerdict newVerdict = ValkyrieVerdict.Pending;
+                            if (r.Cloud == CloudVerdict.FirstSeen || r.Cloud == CloudVerdict.Unknown)
+                                newVerdict = ValkyrieVerdict.Pending;
+                            if (r.Cloud == CloudVerdict.Malware)
+                                newVerdict = ValkyrieVerdict.Malware;
+                            if (r.Cloud == CloudVerdict.Safe)
+                                newVerdict = ValkyrieVerdict.Clean;
+                            file.UpdateValkyrieResult(newVerdict);
+
+                            if (file.IsUnknown)
+                            {
+                                _unknownFilesCount += file.Computers.Count;
+                                //PendingFilesCount--;
+                            }
+                            else if (file.IsMalware)
+                            {
+                                _malwareFilesCount += file.Computers.Count;
+                                //PendingFilesCount--;
+                            }
+                            else if (file.Pending)
+                            {
+                                PendingFilesCount++;
+                                //PendingFilesCount--;
+                            }
+
+
+                            RaisePropertyChanged("UnknownFilesCount");
+                            RaisePropertyChanged("MalwareFilesCount");
+
+                            foreach (var computerUid in computersToUpdate.Keys)
+                            {
+                                var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computerUid);
+                                if (comp != null)
+                                    comp.UpdateFile(r.Sha1, newVerdict);
+                            }
+                        }
+                    }
+                }
             }
 
         }
@@ -782,42 +835,51 @@ namespace APTAT.Application.Models
             {
                 if (!file.IsMalware && !file.Failed )
                     continue;
-
-                foreach (var comp in file.Computers)
-                {
-                    var computer = new ComputerInformation();
-                    computer.Name = comp.Name;
-                    computer.IP = comp.IpAddress;
-                    computer.FilePath = comp.ShortName;
-                    computer.TargetUid = comp.ComputerGuid;
-
-                    var fileResult = new FileResult();
-                    fileResult.Path = computer.FilePath;
-                    fileResult.Cloud = file.BadFile.Cloud;
-                    fileResult.Size = file.Size;
-                    fileResult.SizeSorting = file.SizeSorting;
-                    fileResult.Attributes = file.BadFile.Attributes;
-                    fileResult.Created = file.BadFile.Created;
-                    fileResult.Modified = file.BadFile.Modified;
-                    fileResult.Accessed = file.BadFile.Accessed;
-                    fileResult.Sha1 = file.BadFile.Sha1.Trim().ToLower();
-                    fileResult.Signer = file.BadFile.Signer;
-                    fileResult.Description = file.BadFile.Description;
-                    fileResult.Version = file.BadFile.Version;
-                    fileResult.Copyright = file.BadFile.Copyright;
-                    fileResult.Product = file.BadFile.Product;
-                    fileResult.ValkyrieAnalysisResult = new ValkyrieAnalysisResult
-                    {
-                        SHA1 = file.BadFile.Sha1,
-                        Verdict = file.IsMalware ? ValkyrieVerdict.Malware 
-                            : ValkyrieVerdict.PendingFls
-                    };
-                    fileResult.Computers.Add(computer);
-                    col.Add(fileResult);
-                }
+                var fileResult = MapToFileResult(file);
+                col.Add(fileResult);
             }
 
             MergeResults(col);
+        }
+
+        private static FileResult MapToFileResult(ThreatInfoItem file)
+        {
+            var fileResult = new FileResult
+            {
+                Cloud = file.BadFile.Cloud,
+                Size = file.Size,
+                SizeSorting = file.SizeSorting,
+                Attributes = file.BadFile.Attributes,
+                Created = file.BadFile.Created,
+                Modified = file.BadFile.Modified,
+                Accessed = file.BadFile.Accessed,
+                Sha1 = file.BadFile.Sha1.Trim().ToLower(),
+                Signer = file.BadFile.Signer,
+                Description = file.BadFile.Description,
+                Version = file.BadFile.Version,
+                Copyright = file.BadFile.Copyright,
+                Product = file.BadFile.Product,
+                ValkyrieAnalysisResult = new ValkyrieAnalysisResult
+                {
+                    SHA1 = file.BadFile.Sha1,
+                    Verdict = file.IsMalware
+                        ? ValkyrieVerdict.Malware
+                        : ValkyrieVerdict.PendingFls
+                }
+            };
+            foreach (var comp in file.Computers)
+            {
+                var computer = new ComputerInformation
+                {
+                    Name = comp.Name,
+                    IP = comp.IpAddress,
+                    FilePath = comp.ShortName,
+                    TargetUid = comp.ComputerGuid
+                };
+                fileResult.Path = computer.FilePath;
+                fileResult.Computers.Add(computer);
+            }
+            return fileResult;
         }
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
@@ -959,13 +1021,6 @@ namespace APTAT.Application.Models
                 {
                     ThreatInfoItem c;
                     if (!computersDict.TryGetValue(computer.TargetUid, out c)) continue;
-
-                    if (c.HasFailed)
-                    {
-                        var exist = c.Items.FirstOrDefault(_ => _.Name == result.Path);
-                        if (exist != null && exist.Failed)
-                            continue;
-                    }
 
                     var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
                     if (comp != null)

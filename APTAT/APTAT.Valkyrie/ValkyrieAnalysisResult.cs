@@ -64,7 +64,6 @@ namespace APTAT.Valkyrie
 
         public string VerdictString
         {
-
             get
             {
                 if (Verdict == ValkyrieVerdict.NotAnalyzed) return string.Format("Not Analyzed ({0})", OperationStatus.Replace(Environment.NewLine, ""));
@@ -72,7 +71,7 @@ namespace APTAT.Valkyrie
                 if (Verdict == ValkyrieVerdict.Pending || Verdict == ValkyrieVerdict.FirstSeen)
                     return "In Analysis";
                 if (Verdict == ValkyrieVerdict.Undetected) return "No Threat Found";
-
+                if (Verdict == ValkyrieVerdict.PendingFls) return "Lookup in Progress";
                 return Verdict.ToString();
             }
         }

@@ -106,7 +106,7 @@
                     <TextBlock Text="{Binding ValkyrieAnalysisResult.IsWhiteListed,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1"  TextAlignment="Center"/>
                 </DataTemplate>
                 <DataTemplate x:Key="VerdictColumn">
-                    <TextBlock  Text="{Binding ValkyrieAnalysisResult.VerdictString}" FontSize="13" FontFamily="Segoe UI" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
+                    <TextBlock  Text="{Binding VerdictString}" FontSize="13" FontFamily="Segoe UI" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
                 </DataTemplate>
 
          <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="NameTemplateSelector"

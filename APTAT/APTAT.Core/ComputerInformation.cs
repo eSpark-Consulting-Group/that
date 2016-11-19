@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using APTAT.Core.Descent.Apt;
+using APTAT.Valkyrie;
 using OperatingSystem = APTAT.Core.Descent.Apt.OperatingSystem;
 
 namespace APTAT.Core
@@ -172,8 +173,19 @@ namespace APTAT.Core
                     continue;
 
                 result.UpdateValkyrieResult(file);
-                UpdateStatus();
             }
+            UpdateStatus();
+        }
+
+        public void UpdateFile(string sha1, ValkyrieVerdict verdict)
+        {
+            foreach (var result in Files)
+            {
+                if (result.Sha1 != sha1)
+                    continue;
+                result.UpdateValkyrieResult(verdict);
+            }
+            UpdateStatus();
         }
 
         public void UpdateStatus()

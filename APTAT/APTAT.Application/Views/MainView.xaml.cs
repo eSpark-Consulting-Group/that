@@ -123,7 +123,9 @@ namespace APTAT.Application
                 scanCompletedWindow.DataContext = DataContext;
                 if (scanCompletedWindow.ShowDialog() == true)
                     ShowRegisterToValkyrieWindow();
-                else if (e.FilesStatistics.UnknownFilesCount > 0 || e.FilesStatistics.FailedToAnalyzeFilesCount > 0 || e.FilesStatistics.NoVerdictFilesCount > 0)
+                else if (e.FilesStatistics.UnknownFilesCount > 0 
+                    || e.FilesStatistics.FailedToAnalyzeFilesCount > 0 
+                    || e.FilesStatistics.NoVerdictFilesCount > 0)
                     _viewModel.IsAnalyseWithValkyrieEnabled = true;
 
                 if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)

@@ -256,7 +256,7 @@ namespace APTAT.Application.Models
                 Clean = valkyrieFile.Clean;
                 Failed = valkyrieFile.Failed;
                 Pending = valkyrieFile.Pending;
-                Verdict = valkyrieFile.ValkyrieAnalysisResult.VerdictString;
+                Verdict = valkyrieFile.VerdictString;
             }
             FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
             Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;

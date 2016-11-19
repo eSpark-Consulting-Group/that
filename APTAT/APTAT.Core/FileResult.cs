@@ -157,6 +157,14 @@ namespace APTAT.Core
             }
         }
 
+        public bool PendingFls
+        {
+            get
+            {
+                return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PendingFls;
+            }
+        }
+
         public string Name
         {
             get
@@ -237,16 +245,32 @@ namespace APTAT.Core
 
         public ValkyrieAnalysisResult ValkyrieAnalysisResult { get; set; }
 
+        public string VerdictString { get { return ValkyrieAnalysisResult.VerdictString; } }
+
+        public void UpdateValkyrieResult(ValkyrieVerdict verdict)
+        {
+            ValkyrieAnalysisResult.Verdict = verdict;
+
+            RaisePropertyChanged(nameof(VerdictString));
+            RaisePropertyChanged(nameof(ValkyrieAnalysisResult));
+            RaisePropertyChanged(nameof(IsMalware));
+            RaisePropertyChanged(nameof(IsUnknown));
+            RaisePropertyChanged(nameof(Clean));
+            RaisePropertyChanged(nameof(Failed));
+            RaisePropertyChanged(nameof(Pending));
+        }
+
         public void UpdateValkyrieResult(FileResult result)
         {
             ValkyrieAnalysisResult = result.ValkyrieAnalysisResult;
 
-            RaisePropertyChanged("ValkyrieAnalysisResult");
-            RaisePropertyChanged("IsMalware");
-            RaisePropertyChanged("IsUnknown");
-            RaisePropertyChanged("Clean");
-            RaisePropertyChanged("Failed");
-            RaisePropertyChanged("Pending");
+            RaisePropertyChanged(nameof(VerdictString));
+            RaisePropertyChanged(nameof(ValkyrieAnalysisResult));
+            RaisePropertyChanged(nameof(IsMalware));
+            RaisePropertyChanged(nameof(IsUnknown));
+            RaisePropertyChanged(nameof(Clean));
+            RaisePropertyChanged(nameof(Failed));
+            RaisePropertyChanged(nameof(Pending));
         }
 
         public ObservableCollection<ComputerInformation> Computers { get; set; }

@@ -97,7 +97,6 @@ namespace APTAT.Core
             var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
                 , e.IsPendingExist, e.UserState);
             ValkyrieAnalyzeCompleted?.Invoke(this, arg);
-            _isValkyrieStarted = false;
         }
 
         void OnValkyrieClientProgressChanged(object sender,
@@ -292,7 +291,7 @@ namespace APTAT.Core
                     if (!_flsHashResults.ContainsKey(r.Sha1))
                     {
                         _flsHashResults[r.Sha1] = r.Cloud;
-                        if(r.IsNotAnalyzed())
+                        if (r.IsNotAnalyzed())
                             addToAnalyze.Add(r);
                     }
                     else
@@ -315,17 +314,17 @@ namespace APTAT.Core
                         }
                     }
                 }
-            }
-            if (verdictUpdated.Any())
-            {
-                Dictionary<string, CloudVerdict> dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
-                if (_isValkyrieStarted)
+                if (verdictUpdated.Any())
                 {
-                    List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
-                    _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
+                    Dictionary<string, CloudVerdict> dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
+                    if (_isValkyrieStarted)
+                    {
+                        List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
+                        _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
+                    }
+                    UpdateLastResult(dict);
+                    OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
                 }
-                UpdateLastResult(dict);
-                OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
             }
             if (addToAnalyze.Any())
             {
@@ -356,6 +355,7 @@ namespace APTAT.Core
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
             ValkyrieAnalysisResult = null;
+            _isValkyrieStarted = false;
             _flsManager.Cancel();
             _valkyrieClient.AnalyzeAsyncCancel();
             lock (_flsHashResults)
@@ -403,14 +403,19 @@ namespace APTAT.Core
         }
 
 
-        public void StartValkyrieAnalysis(string login, string password, 
+        public void StartValkyrieAnalysis(string login, string password,
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential = null)
         {
-            var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
-            var results = _lastAptResults.ScanResults;
-            var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
-            var distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
-            _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length, proxyCredential);
+            lock (_flsHashResults)
+            {
+                _isValkyrieStarted = false;
+                var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
+                var results = _lastAptResults.ScanResults;
+                var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
+                var distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
+                _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length,
+                    proxyCredential);
+            }
         }
 
         public string GetValkyrieDetailsLink()
