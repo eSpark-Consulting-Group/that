@@ -321,7 +321,8 @@ namespace APTAT.Core
                     if (_isValkyrieStarted)
                     {
                         List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
-                        _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
+                        if(filesToAnalyze.Any())
+                            _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
                     }
                     UpdateLastResult(dict);
                     OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
