@@ -39,7 +39,7 @@ namespace APTAT.Valkyrie
         private readonly HashSet<ValkyrieFileInfo> _lookupContexts = new HashSet<ValkyrieFileInfo>();
 
         private readonly Object _lookupSync = new object();
-        private bool _checkingTimerIsStop = false;
+        private bool _checkingTimerIsStop = true;
 
         private Timer _progressNotifyTimer;
         private Timer _checkStatusesTimer;
@@ -416,6 +416,7 @@ namespace APTAT.Valkyrie
                     task.IsCanceled, anyPending, task.AsyncState));
             if (anyPending)
             {
+                _checkingTimerIsStop = false;
                 _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
             }
         }

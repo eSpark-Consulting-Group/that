@@ -237,8 +237,8 @@ namespace APTAT.Core
             HasMalwares = malwareCount > 0;
             HasUnknowns = malwareCount == 0 && unknownCount > 0;
             HasFailed = malwareCount == 0 && unknownCount == 0 && failedCount > 0;
-            HasPending = malwareCount == 0 && pendingFls == 0
-                && unknownCount == 0 && failedCount == 0 && pendingCount > 0;
+            HasPending = malwareCount == 0 && unknownCount == 0 && 
+                failedCount == 0 && (pendingCount > 0 || pendingFls > 0);
 
             RaisePropertyChanged("HasBadFiles");
             RaisePropertyChanged("HasMalwares");
