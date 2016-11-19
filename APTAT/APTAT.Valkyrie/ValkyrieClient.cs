@@ -678,7 +678,7 @@ namespace APTAT.Valkyrie
 
         private string _aptScanId;
 
-        public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnaluyze,
+        public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
             string login, string password, int machineCount, NetworkCredential proxyCredential = null)
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
@@ -691,12 +691,15 @@ namespace APTAT.Valkyrie
 
             Task.Factory.StartNew(t =>
             {
+                
                 var regInfo = Register(camRegistration, proxyCredential);
                 if (regInfo.ReturnCode != 0)
                 {
                     var ex = new ValkyrieRegistrationFailedException(regInfo);
                     throw ex;
                 }
+                if (!filesToAnalyze.Any()) return;
+                
                 _pendingItemsResolved.Clear();
                 _automaticAnalyseInProgressByHash.Clear();
                 _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
@@ -713,7 +716,7 @@ namespace APTAT.Valkyrie
                 OnAnalyzeStarted();
                 Thread.Sleep(2000);
                 _progressNotifyTimer.Change(1000, Timeout.Infinite);
-                SubmitToAutomaticAnalysis(filesToAnaluyze, _cancellationTokenSource.Token, AddResult);
+                SubmitToAutomaticAnalysis(filesToAnalyze, _cancellationTokenSource.Token, AddResult);
                 
                 
                 
