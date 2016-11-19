@@ -702,8 +702,8 @@ namespace APTAT.Application.Models
 
             foreach (var result in e.Results)
             {
-                
-                foreach (var threatInfoItem in Items.Where(i => i.BadFile.Sha1 == result.Sha1))
+                var items = Items.Where(i => i.BadFile.Sha1 == result.Sha1).ToArray();
+                foreach (var threatInfoItem in items)
                 {
                     threatInfoItem.UpdateFileVerdict(result.Cloud);
                     RaisePropertyChanged(nameof(Items));
