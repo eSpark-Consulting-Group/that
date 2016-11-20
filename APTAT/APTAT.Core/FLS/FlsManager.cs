@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using APTAT.Core.Properties;
 
 
@@ -15,7 +14,7 @@ namespace APTAT.Core
     {
         
         private CancellationToken _cancellationToken;
-        private  FlsApiProvider _apiProvider = null;
+        private readonly FlsApiProvider _apiProvider = null;
         private Action _cancelWork = null;
       //  private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
@@ -77,7 +76,7 @@ namespace APTAT.Core
 
         public void UpdateFlsPorts(int udpPort, int tcpPort)
         {
-           this._apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
+           _apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
         }
 
         public async Task Enqueue(IEnumerable<string> hashes)

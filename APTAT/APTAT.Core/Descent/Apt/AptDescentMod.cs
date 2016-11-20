@@ -73,7 +73,7 @@ namespace APTAT.Core.Descent.Apt
 
             if (notify)
             {
-                var text = new ResourceText("null", String.Format("Enumerating {0}: {1}", fileTypes, args.EnumeratedFilesCount));
+                var text = new ResourceText("null", $"Enumerating {fileTypes}: {args.EnumeratedFilesCount}");
                 var tp = _paramsPerTargetUid[args.TargetUid];
                 NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, scanStage, 0);
             }
@@ -82,14 +82,12 @@ namespace APTAT.Core.Descent.Apt
         protected virtual void OnScanCompleted(object sender, AptDescentHelper.ScanCompletedEventArgs args)
         {
             var tp = _paramsPerTargetUid[args.TargetUid];
-            string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ?
-                $"Failed to analyze: {args.FailedToAnalyzeFilesCount}."
+            string errorCounterText = (args.FailedToAnalyzeFilesCount+args.NoVerdictFilesCount) > 0 ?
+                $"Lookup in progress: {args.FailedToAnalyzeFilesCount}."
                 : String.Empty;
 
-            string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? $"No Verdict: {args.NoVerdictFilesCount}."
-                : String.Empty;
-
-            ResourceText text = new ResourceText("null", String.Format("{0} files scanned ({3}%). Unknown files: {1}. Malicious files: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, string.Format("{0:0.00}", args.Percentage).Replace(".00", string.Empty), errorCounterText, serverErrorCounterText));
+            ResourceText text = new ResourceText("null", string.Format(format: "{0} files scanned ({3}%). Unknown files: {1}. Malicious files: {2}. {4} {5}", args: new object[] { args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound,
+                $"{args.Percentage:0.00}".Replace(".00", string.Empty), errorCounterText, "" }));
 
             NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanCompleted, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, 100, args.FailedToAnalyzeFilesCount, args.NoVerdictFilesCount);
 
@@ -164,13 +162,13 @@ namespace APTAT.Core.Descent.Apt
         {
             base.ProcessResults(agentTp, dh);
             var tp = (AptInstallAgentThreadParams)agentTp;
-            ScanResultsProcessor resultsProcessor = new ScanResultsProcessor();
+            var resultsProcessor = new ScanResultsProcessor();
             AptScanResult result = tp.Result;
             if (result != null)
             {
                 var text = new ResourceText("null",
                     $"Scan results received. Total files scanned: {result.TotalFilesCount}. " +
-                    $"Unknown files: {result.UnknownFilesCount}. Malicious files: {result.MalwareFilesCount}.");
+                    $"Unknown files: {result.UnknownFilesCount}. Malicious files: {result.MalwareFilesCount}. Lookup in progress: {result.LookupInProgressFilesCount}");
                 NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text,
                     AptScanStage.ScanResultsProcessing, result.TotalFilesCount, result.UnknownFilesCount,
                     result.MalwareFilesCount, result.SafeFilesCount, 100, result.FailedToAnalyzeFilesCount,
@@ -185,8 +183,7 @@ namespace APTAT.Core.Descent.Apt
                         String.Format(
                             "Completed: Total files scanned: {0}. Unknown files: {1}. Malicious files: {2}.",
                             result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount) +
-                            (result.FailedToAnalyzeFilesCount > 0 ? String.Format(" Failed to analyze: {0}.", result.FailedToAnalyzeFilesCount) : String.Empty) +
-                            (result.NoVerdictFilesCount > 0 ? String.Format(" No Verdict: {0}.", result.NoVerdictFilesCount) : String.Empty)),
+                            (result.LookupInProgressFilesCount > 0 ? String.Format(" Lookup in progress: {0}.", result.LookupInProgressFilesCount) : String.Empty)),
                     AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount,
                     result.MalwareFilesCount, result.SafeFilesCount, 100, result.FailedToAnalyzeFilesCount,
                     result.NoVerdictFilesCount);

@@ -117,6 +117,7 @@ namespace APTAT.Valkyrie
 
         public string OperationStatus { get; set; }
     }
+
     public enum ValkyrieVerdict
     {
         Clean,

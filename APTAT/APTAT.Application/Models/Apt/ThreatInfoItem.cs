@@ -354,13 +354,9 @@ namespace APTAT.Application.Models
         private string GetStatusMessage()
         {
 
-            string errorCounterText = LookupInProgress > 0 ?
-                    $"Lookup in progress {LookupInProgress}."
-                    : String.Empty;
+            string errorCounterText = LookupInProgress > 0 ?$"Lookup in progress {LookupInProgress}.": string.Empty;
 
-            string serverErrorCounterText = NoVerdictFilesCount > 0 ? $"No Verdict: {NoVerdictFilesCount}."
-                : String.Empty;
-
+        
             if (ScanStage == ScanStage.OperationCompleted)
             {
                 string message;
@@ -377,7 +373,7 @@ namespace APTAT.Application.Models
             else
             {
                 return
-                    $"{TotalFilesCount} files scanned ({$"{ProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. {errorCounterText} {serverErrorCounterText}";
+                    $"{TotalFilesCount} files scanned ({$"{ProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. {errorCounterText}";
             }
             
 

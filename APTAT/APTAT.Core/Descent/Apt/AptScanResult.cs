@@ -259,6 +259,8 @@ namespace APTAT.Core.Descent.Apt
             if (Completed && !Succeeded && !IsCanceled)
                 ScanStage = AptScanStage.OperationFailed;
         }
+
+       
     }
 
     

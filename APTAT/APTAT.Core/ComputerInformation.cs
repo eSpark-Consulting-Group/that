@@ -219,6 +219,7 @@ namespace APTAT.Core
             {
                 StatusText = string.Format("Completed: Total files scanned: {0}. Unknown files: {1}. Malicious files: {2}.",
                     Files.Count, unknownCount, malwareCount);
+                
             }
             else if (TotalDistinctCount > 0)
             {
@@ -232,6 +233,8 @@ namespace APTAT.Core
                 StatusText += string.Format(" Trusted/Clean files: {0}.", cleanCount);
             if (failedCount > 0)
                 StatusText += string.Format(" Not analyzed: {0}.", failedCount);
+            if (pendingFls > 0)
+                StatusText += string.Format(" Lookup in progress: {0}.", pendingFls);
 
             HasMalwares = malwareCount > 0;
             HasUnknowns = malwareCount == 0 && unknownCount > 0;

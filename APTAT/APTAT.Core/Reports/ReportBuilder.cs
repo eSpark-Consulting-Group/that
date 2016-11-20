@@ -32,7 +32,7 @@ namespace APTAT.Core.Reports
             
             var existentName = String.Empty;
             var flsReportKey = data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType.ToString();
-            var valkyrieReportKey = data.ValkyrieOperationUid  + "-" + reportType.ToString();
+            var valkyrieReportKey = data.ValkyrieOperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType.ToString();
             var reportKey = String.Empty;
             if (_cache.Reports.Keys.Contains(flsReportKey))
             {
@@ -59,7 +59,7 @@ namespace APTAT.Core.Reports
             
             
             _fileName = GetFileName(reportType);
-        //    var operationKey = data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
+        
             switch (reportType)
             {
                 case ReportType.Executive:
@@ -67,7 +67,7 @@ namespace APTAT.Core.Reports
                     BuildExecutiveReport(_fileName, data);
                     break;
                 case ReportType.ExecutiveWithValkyrie:
-                    _cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(valkyrieReportKey, _fileName);
                     BuildExecutiveWithValkyrieReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerDevice:
@@ -75,7 +75,7 @@ namespace APTAT.Core.Reports
                     BuildDetailedPerDeviceReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    _cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
+                    _cache.Reports.Add(valkyrieReportKey, _fileName);
                     BuildDetailedPerDeviceWithValkyrieReport(_fileName, data);
                     break;
                 case ReportType.DetailedPerProgram:
@@ -83,8 +83,8 @@ namespace APTAT.Core.Reports
                     BuildDetailedPerProgramReport(_fileName, data, "APTAT.Core.Reports.DetailedPrograms.rdlc");
                     break;
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    _cache.Reports.Add(data.ValkyrieOperationUid + "-" + reportType.ToString(), _fileName);
-                    BuildDetailedPerProgramReport(_fileName, data, "APTAT.Core.Reports.DetailedProgramsWithValkyrie.rdlc");
+                    _cache.Reports.Add(valkyrieReportKey, _fileName);
+                    BuildDetailedPerProgramReport(_fileName, data, reportName: "APTAT.Core.Reports.DetailedProgramsWithValkyrie.rdlc");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("reportType");

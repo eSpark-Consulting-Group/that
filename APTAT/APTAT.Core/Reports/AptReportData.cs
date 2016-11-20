@@ -290,17 +290,19 @@ namespace APTAT.Core.Reports
 
         public ItemRatingInfo[] GetFileRatingCollectionValkyrie()
         {
-            var itemRatingInfoList = new List<ItemRatingInfo>()
+            var itemRatingInfoList = new List<ItemRatingInfo>
             {
-                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = "Trusted"},
-                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = "Unknown"},
-                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malicious" },
-                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" },
-                new FileRatingValkyrieInfo () { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Not Analyzed" }
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = "Trusted"},
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = "Unknown"},
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malicious" },
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" },
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Not Analyzed" },    
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.PendingFls, Count = LookupInProgressFilesCount, Value = "Lookup In Progress" }
             };
 
             return itemRatingInfoList.ToArray();
         }
+
         public ItemRatingInfo[] GetDevicesRatingCollection()
         {
             int safe = 0;
