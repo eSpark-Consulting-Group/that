@@ -242,6 +242,7 @@ namespace APTAT.Core.Reports
                         FailedToAnalyzeFilesCount = t.FailedToAnalyzeFilesCount,
                         NoVerdictFilesCount = t.NoVerdictFilesCount,
                         PendingAnalysisFilesCount = t.PendingAnalysisFilesCount
+                     
                     };
 
                     scanResult.SetAptReportInstance(t.AptReport);
@@ -296,8 +297,8 @@ namespace APTAT.Core.Reports
                 new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = "Unknown"},
                 new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malicious" },
                 new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" },
-                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Not Analyzed" },    
-                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.PendingFls, Count = LookupInProgressFilesCount, Value = "Lookup In Progress" }
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Lookup In Progress" },    
+                
             };
 
             return itemRatingInfoList.ToArray();
@@ -794,19 +795,9 @@ namespace APTAT.Core.Reports
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
-        private int _malwareFilesCount;
-        public int MalwareFilesCount
-        {
-            get
-            {
-                return _malwareFilesCount;
-            }
-            set
-            {
-                _malwareFilesCount = value;
-            }
-        }
-        public int NotAnalyzedFilesCount { get { return FailedToAnalyzeFilesCount + NoVerdictFilesCount; } }
+        public int MalwareFilesCount { get; set; }
+
+        public int NotAnalyzedFilesCount => FailedToAnalyzeFilesCount + NoVerdictFilesCount;
         public int FailedToAnalyzeFilesCount { get; set; }
         public int NoVerdictFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }

@@ -943,7 +943,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Not Analyzed:</Value>
+                    <Value>Lookup in progress:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -976,7 +976,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!NotAnalyzedFilesCount.Value, "AptReportDataSet")</Value>
+                    <Value>=First(Fields!LookupInProgressFilesCount.Value, "AptReportDataSet")</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
                       <Color>DimGray</Color>
@@ -1304,7 +1304,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Number of Unknown Files/Malicious Files/Not Analyzed Files /In Analysis Fiiles 
+                      <Caption>Number of Unknown Files/Malicious Files/Lookup in progress /In Analysis Fiiles 
 </Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
@@ -2304,7 +2304,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Not Analyzed:</Value>
+                                      <Value>Lookup in progress:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>
@@ -2337,7 +2337,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!NotAnalyzedFilesCount.Value</Value>
+                                      <Value>=Fields!LookupInProgressFilesCount.Value</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -2902,6 +2902,10 @@
           <DataField>NotAnalyzedFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="LookupInProgressFilesCount">
+          <DataField>LookupInProgressFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="PendingAnalysisFilesCount">
           <DataField>PendingAnalysisFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -3058,6 +3062,10 @@
         </Field>
         <Field Name="PendingAnalysisFilesCount">
           <DataField>PendingAnalysisFilesCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="LookupInProgressFilesCount">
+          <DataField>LookupInProgressFilesCount</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="OrganizationUnit">

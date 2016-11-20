@@ -949,7 +949,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Not Analyzed</Value>
+                    <Value>Lookup in progress:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1295,7 +1295,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Number of Unknown/Malicious/In Analysis/Not Analyzed Files</Caption>
+                      <Caption>Number of Unknown/Malicious/In Analysis/Lookup in progress</Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
