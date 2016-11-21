@@ -1122,8 +1122,8 @@
                       Fields!CloudVerdict.Value = "2", "#b22222",
                       Fields!CloudVerdict.Value = "1", "#ffc000",
                       Fields!CloudVerdict.Value = "0", "#3c963c",
-					  Fields!CloudVerdict.Value = "4", "#ff3300",
-					  Fields!CloudVerdict.Value = "5", "Silver"
+					  Fields!CloudVerdict.Value = "5", "#ff3300",
+					  Fields!CloudVerdict.Value = "4", "Silver"
 					  )</Color>
                       </Style>
                       <ChartMarker>
