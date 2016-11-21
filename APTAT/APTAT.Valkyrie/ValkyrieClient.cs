@@ -246,7 +246,7 @@ namespace APTAT.Valkyrie
             }
             else if (result.ReturnCode == ErrorCodesEnum.Success)
             {
-                if (result.Verdict == global::Valkyrie.WebApiProvider.Enums.ValkyrieVerdict.Undetected)
+                if (result.Verdict.ToBusiness() == ValkyrieVerdict.Undetected)
                     lock (_lookupSync)
                     {
                         fileInfo.ValkyrieFileInfo.PreviousValkyrieVerdict = result.Verdict.ToBusiness();

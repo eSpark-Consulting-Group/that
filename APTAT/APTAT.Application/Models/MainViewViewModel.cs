@@ -265,26 +265,14 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsUnknownFound");
             }
         }
-
-        private Int32 _failedToAnalyzeFilesCount;
-        public Int32 FailedToAnalyzeFilesCount
+        
+        private Int32 _lookupInProgressCount;
+        public Int32 LookupInProgressCount
         {
-            get { return _failedToAnalyzeFilesCount; }
+            get { return _lookupInProgressCount; }
             set
             {
-                _failedToAnalyzeFilesCount = value;
-                RaisePropertyChanged(nameof(LookupInProgressCount));
-                RaisePropertyChanged(nameof(IsErrorsFound));
-            }
-        }
-
-        private Int32 _noVerdictFilesCount;
-        public Int32 NoVerdictFilesCount
-        {
-            get { return _noVerdictFilesCount; }
-            set
-            {
-                _noVerdictFilesCount = value;
+                _lookupInProgressCount = value;
                 RaisePropertyChanged(nameof(LookupInProgressCount));
                 RaisePropertyChanged(nameof(IsErrorsFound));
             }
@@ -485,17 +473,15 @@ namespace APTAT.Application.Models
             get
             {
                 return UnknownFilesCount > 0 
-                    || FailedToAnalyzeFilesCount > 0 
-                    || NoVerdictFilesCount > 0;
+                    || LookupInProgressCount > 0;
             }
         }
 
         public bool IsErrorsFound
         {
-            get { return FailedToAnalyzeFilesCount > 0 || NoVerdictFilesCount > 0; }
+            get { return LookupInProgressCount > 0; }
         }
 
-        public int LookupInProgressCount => FailedToAnalyzeFilesCount  + NoVerdictFilesCount;
 
         public bool IsProtected
         {
@@ -643,8 +629,7 @@ namespace APTAT.Application.Models
             MalwareFilesCount = 0;
             PendingFilesCount = 0;
             ScannedItemsCount = 0;
-            FailedToAnalyzeFilesCount = 0;
-            NoVerdictFilesCount = 0;
+            LookupInProgressCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
             IsAnalyseWithValkyrieEnabled = false;
@@ -735,7 +720,6 @@ namespace APTAT.Application.Models
                 {
                     computer.UpdateStatus();
                 }
-                UpdateStatus();
                 if (ItemsValkyrie.Any())
                 {
                     foreach (var r in e.Results)
@@ -754,7 +738,7 @@ namespace APTAT.Application.Models
                             if (r.Cloud == CloudVerdict.Safe)
                                 newVerdict = ValkyrieVerdict.Clean;
                             file.UpdateValkyrieResult(newVerdict);
-
+                            LookupInProgressCount -= file.Computers.Count;
                             if (file.IsUnknown)
                             {
                                 _unknownFilesCount += file.Computers.Count;
@@ -772,8 +756,8 @@ namespace APTAT.Application.Models
                             }
 
 
-                            RaisePropertyChanged("UnknownFilesCount");
-                            RaisePropertyChanged("MalwareFilesCount");
+                            RaisePropertyChanged(nameof(UnknownFilesCount));
+                            RaisePropertyChanged(nameof(MalwareFilesCount));
 
                             foreach (var computerUid in computersToUpdate.Keys)
                             {
@@ -784,6 +768,8 @@ namespace APTAT.Application.Models
                         }
                     }
                 }
+                else
+                    UpdateStatus();
             }
 
         }
@@ -1234,8 +1220,7 @@ namespace APTAT.Application.Models
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
             Int32 malwareFiles = 0;
-            Int32 failedToAnalyzeFiles = 0;
-            Int32 noVerdictFiles = 0;
+            Int32 lookupInProgressCount = 0;
 
             foreach (var infoItem in _onlineItems)
             {
@@ -1273,8 +1258,8 @@ namespace APTAT.Application.Models
 
                     unknownFiles += infoItem.UnknownFilesCount;
                     malwareFiles += infoItem.MalwareFilesCount;
-                    failedToAnalyzeFiles += infoItem.FailedToAnalyzeCount;
-                    noVerdictFiles += infoItem.NoVerdictFilesCount;
+                    lookupInProgressCount += infoItem.FailedToAnalyzeCount;
+                    lookupInProgressCount += infoItem.NoVerdictFilesCount;
                 }
             }
 
@@ -1288,14 +1273,9 @@ namespace APTAT.Application.Models
                 MalwareFilesCount = malwareFiles;
             }
 
-            if (failedToAnalyzeFiles > FailedToAnalyzeFilesCount)
+            if (lookupInProgressCount > LookupInProgressCount)
             {
-                FailedToAnalyzeFilesCount = failedToAnalyzeFiles;
-            }
-
-            if (noVerdictFiles > NoVerdictFilesCount)
-            {
-                NoVerdictFilesCount = noVerdictFiles;
+                LookupInProgressCount = lookupInProgressCount;
             }
 
             ScannedItemsCount = scanned;
@@ -1315,22 +1295,20 @@ namespace APTAT.Application.Models
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
             Int32 malwareFiles = 0;
-            Int32 failedToAnalyzeFiles = 0;
-            Int32 noVerdictFiles = 0;
+            Int32 lookupInProgressCount = 0;
 
             foreach (var infoItem in _onlineItems)
             {
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
-                failedToAnalyzeFiles += infoItem.FailedToAnalyzeCount;
-                noVerdictFiles += infoItem.NoVerdictFilesCount;
+                lookupInProgressCount += infoItem.FailedToAnalyzeCount;
+                lookupInProgressCount += infoItem.NoVerdictFilesCount;
             }
 
 
             UnknownFilesCount = unknownFiles;
             MalwareFilesCount = malwareFiles;
-            FailedToAnalyzeFilesCount = failedToAnalyzeFiles;
-            NoVerdictFilesCount = noVerdictFiles;
+            LookupInProgressCount = lookupInProgressCount;
             ScannedItemsCount = scanned;
 
             //if (completed == OnlineItemsCount)
