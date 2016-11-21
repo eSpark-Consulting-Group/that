@@ -7,6 +7,7 @@ namespace APTAT.Application.Models.ModelBase
         string Login { get; set; }
         string Password { get; set; }
         string CurrentDomainName { get; set; }
+        bool ActiveDirectoryStep { get; set; }
         bool ValidateCredentials(out string errorMessage);
     }
 }

@@ -608,6 +608,8 @@ namespace APTAT.Application.Models
             ValkyrieProgressInfo = ProgressInfo<FileResult>.Empty;
         }
 
+        public bool ActiveDirectoryStep { get; set; }
+
         private void InvokeStartScan(Object arg)
         {
             IsQuickScan = (bool) arg;
@@ -640,7 +642,7 @@ namespace APTAT.Application.Models
             GroupingEnabled = false;
             GroupByComputers = true;
 
-            ICollection<Object> value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
+            var value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
             {
                 _selectedTargets = value.OfType<DeploymentItem>().ToArray();
@@ -649,11 +651,11 @@ namespace APTAT.Application.Models
                     IsBusy = true;
                     IsScanInProgress = null;
 
+                    var model = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
 
-
-                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets,
-                        _storage.ContainsKey(KnownKeys.CustomScanOptions) ? null : Login,
-                        _storage.ContainsKey(KnownKeys.CustomScanOptions) ? null : Password, this);
+                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, 
+                        ActiveDirectoryStep ? model.ActiveDirectoryLogin : null, 
+                        ActiveDirectoryStep ? model.ActiveDirectoryPassword : null, this);
 
                 }
             }
