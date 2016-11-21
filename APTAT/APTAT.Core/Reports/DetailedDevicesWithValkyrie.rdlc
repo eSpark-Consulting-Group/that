@@ -1603,7 +1603,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!IpAddress.Value</Value>
+                                      <Value>=Fields!IPAddress.Value</Value>
                                       <Style>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <Color>DimGray</Color>
@@ -3044,8 +3044,8 @@
           <DataField>HostName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="IpAddress">
-          <DataField>IpAddress</DataField>
+        <Field Name="IPAddress">
+          <DataField>IPAddress</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="MalwareFilesCount">

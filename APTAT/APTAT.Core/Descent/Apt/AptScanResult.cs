@@ -19,8 +19,13 @@ namespace APTAT.Core.Descent.Apt
                 if (_aptReport != null && _aptReport.Computer != null && _aptReport.Computer.Os != null)
                     return _aptReport.Computer.Os.ToString();
                 return null;
+                
             }
         }
+
+        public string HostName => Computer?.Name;
+
+        public string IPAddress => Computer?.IPAddress;
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }

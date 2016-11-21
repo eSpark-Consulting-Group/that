@@ -10,6 +10,8 @@ namespace APTAT.Core.Descent.Apt
     public interface IAptScanResult : IComputerDescentResult
     {
         string OsName { get; }
+        string HostName { get; }
+        string IPAddress { get; }
         string FileName { get; set; }
         int TotalFilesCount { get; set; }
         int UnknownFilesCount { get; set; }

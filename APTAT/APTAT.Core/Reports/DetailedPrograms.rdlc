@@ -1881,7 +1881,7 @@
                                   <Style>None</Style>
                                 </Border>
                                 <BackgroundColor>=Switch(Fields!Cloud.Value = "5", "Silver",
-		Fields!Cloud.Value = "4", "Orange",
+		Fields!Cloud.Value = "4", "Silver",
 		Fields!Cloud.Value = "3", "#f9cc08",
         Fields!Cloud.Value = "2", "#c03a3a",
         Fields!Cloud.Value = "1", "#f9cc08",

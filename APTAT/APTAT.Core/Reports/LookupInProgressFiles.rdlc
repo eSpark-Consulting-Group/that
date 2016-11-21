@@ -103,7 +103,7 @@
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <BackgroundColor>#ff4d00</BackgroundColor>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
