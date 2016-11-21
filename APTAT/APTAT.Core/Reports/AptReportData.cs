@@ -916,14 +916,6 @@ namespace APTAT.Core.Reports
             }
         }
 
-        public bool IsNotAnalyzed
-        {
-            get
-            {
-                return (Verdict == ValkyrieVerdict.NotAnalyzed && (Cloud == CloudVerdict.NoVerdict || Cloud == CloudVerdict.FailedToAnalyze));
-            }
-        }
-
         public void SetValkyrieAnalysis(ValkyrieAnalysisResult analysisResult)
         {
             if (analysisResult == null)

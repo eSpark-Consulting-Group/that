@@ -354,9 +354,11 @@ namespace APTAT.Application.Models
         private string GetStatusMessage()
         {
 
-            string errorCounterText = LookupInProgress > 0 ?$"Lookup in progress {LookupInProgress}.": string.Empty;
+            string errorCounterText = LookupInProgress > 0 ?
+                    $"Lookup in progress {LookupInProgress}."
+                    : String.Empty;
+            
 
-        
             if (ScanStage == ScanStage.OperationCompleted)
             {
                 string message;

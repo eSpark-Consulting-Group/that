@@ -948,25 +948,30 @@ namespace APTAT.Application.Models
                 var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
                 {
+                    bool wasPending = false;
                     if (file.IsUnknown)
                         _unknownFilesCount -= file.Computers.Count;
+                    if (file.Pending)
+                        wasPending = true;
 
                     file.UpdateValkyrieResult(result);
 
                     if (file.IsUnknown)
                     {
                         _unknownFilesCount += file.Computers.Count;
-                        PendingFilesCount--;
+                        if (wasPending)
+                            PendingFilesCount--;
                     }
                     else if (file.IsMalware)
                     {
                         _malwareFilesCount += file.Computers.Count;
-                        PendingFilesCount--;
+                        if (wasPending)
+                            PendingFilesCount--;
                     }
 
 
-                    RaisePropertyChanged("UnknownFilesCount");
-                    RaisePropertyChanged("MalwareFilesCount");
+                    RaisePropertyChanged(nameof(UnknownFilesCount));
+                    RaisePropertyChanged(nameof(MalwareFilesCount));
 
                     foreach (var computer in file.Computers)
                     {
