@@ -990,7 +990,7 @@
             <KeepTogether>true</KeepTogether>
             <Top>0.14769cm</Top>
             <Left>0.81174cm</Left>
-            <Height>9.14353cm</Height>
+            <Height>8.87895cm</Height>
             <Width>0.09784cm</Width>
             <ZIndex>28</ZIndex>
             <Style>
@@ -2599,7 +2599,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0cm</Top>
           <Left>0.0635cm</Left>
           <Height>0.02646cm</Height>
           <Width>16.9365cm</Width>

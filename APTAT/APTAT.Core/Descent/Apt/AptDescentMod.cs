@@ -236,11 +236,15 @@ namespace APTAT.Core.Descent.Apt
 
         protected virtual void OnScanProgressChanged(object sender, AptDescentHelper.ScanProgressChangedEventArgs args)
         {
-            string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
+            var lookupInProgressCount = (args.FailedToAnalyzeFilesCount + args.NoVerdictFilesCount);
+            string errorCounterText = lookupInProgressCount > 0 ? $"Lookup in progress: {lookupInProgressCount}."
+                : String.Empty;
+            //string errorCounterText = args.FailedToAnalyzeFilesCount > 0 ? String.Format("Failed to analyze: {0}.", args.FailedToAnalyzeFilesCount) : String.Empty;
 
-            string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount) : String.Empty;
+            //string serverErrorCounterText = args.NoVerdictFilesCount > 0 ? String.Format("No Verdict: {0}.", args.NoVerdictFilesCount) : String.Empty;
 
-            ResourceText text = new ResourceText("null", String.Format("{0} files scanned ({3}%). Unknown files: {1}. Malicious files: {2}. {4} {5}", args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, string.Format("{0:0.00}", args.Percentage).Replace(".00", string.Empty), errorCounterText, serverErrorCounterText));
+            ResourceText text = new ResourceText("null",
+                $"{args.TotalFilesScanned} files scanned ({$"{args.Percentage:0.00}".Replace(".00", string.Empty)}%). Unknown files: {args.UnknownFilesFound}. Malicious files: {args.MalwaresFound}. {errorCounterText} ");
 
             var tp = _paramsPerTargetUid[args.TargetUid];
             NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, text, AptScanStage.ScanInProgress, args.TotalFilesScanned, args.UnknownFilesFound, args.MalwaresFound, args.SafeFilesFound, args.Percentage, args.FailedToAnalyzeFilesCount, args.NoVerdictFilesCount);
