@@ -288,9 +288,6 @@
             <Height>0.55681cm</Height>
             <Width>4.74979cm</Width>
             <ZIndex>7</ZIndex>
-            <Visibility>
-              <Hidden>=iif(First(Fields!MalwareFilesFound.Value, "AptReportDataSet")&gt;0,false,true)</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
