@@ -15,7 +15,7 @@ namespace APTAT.Application.Models
         private IAptService _aptService;
         private String _header = String.Empty;
 
-        public Stream ReportStream { get; set; }
+        //public Stream ReportStream { get; set; }
 
         public String FileName { get; set; }
 
@@ -66,10 +66,10 @@ namespace APTAT.Application.Models
 
             _aptService.BuildReportCompleted -= OnBuildReportCompleted;
 
-            if(ReportStream != null)
-            {
-                ReportStream.Close();
-            }
+            //if(ReportStream != null)
+            //{
+            //    ReportStream.Close();
+            //}
         }
 
         private void OnBuildReportCompleted(Object sender, BuildReportCompletedEventArgs e)
@@ -90,23 +90,20 @@ namespace APTAT.Application.Models
            // MessageBox.Show(e.FileName);
 
 
-            try
-            {
+            //try
+            //{
                 FileName = e.FileName;
-                ReportStream = File.Open(e.FileName, FileMode.Open);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());    
-                throw;
-            }
-            
+            //ReportStream = File.Open(e.FileName, FileMode.Open);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.ToString());    
+            //    throw;
+            //}
 
 
-            if(ReportOpened != null)
-            {
-                ReportOpened(this, EventArgs.Empty);
-            }
+
+            ReportOpened?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -14,6 +14,8 @@ using APTAT.Common;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Documents.Fixed;
 using Telerik.Windows.Documents.Fixed.FormatProviders;
+using Microsoft.Win32;
+using System.IO;
 
 namespace APTAT.Application
 {
@@ -65,8 +67,12 @@ namespace APTAT.Application
 
         private void OnReportOpened(Object sender, EventArgs e)
         {
-            pdfViewer.DocumentSource = new PdfDocumentSource(_viewModel.ReportStream);
-            
+            Dispatcher.BeginInvoke((Action)delegate
+            {
+                using (var stream = File.OpenRead(_viewModel.FileName))
+                    pdfViewer.DocumentSource = new PdfDocumentSource(stream);
+            });
+
         }
 
         private void TbCurrentPageKeyDown(Object sender, KeyEventArgs e)
@@ -109,6 +115,24 @@ namespace APTAT.Application
         search.Text = null;
         search.Dispatcher.BeginInvoke((Action)delegate { search.Focus(); });
             clear.Visibility = Visibility.Collapsed;
+        }
+
+        private void OnSave(object sender, RoutedEventArgs e)
+        {
+            var saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "PDF File|*.pdf";
+
+            bool? dialogResult = saveDialog.ShowDialog();
+            if (dialogResult == true && File.Exists(_viewModel.FileName))
+            {
+                using (var output = File.Create(saveDialog.FileName))
+                using (var input = File.OpenRead(_viewModel.FileName))
+                {
+                    input.Seek(0, SeekOrigin.Begin);
+                    input.CopyTo(output);
+                    output.Flush();
+                }
+            }
         }
 
     private void OnShowInFolder(Object sender, RoutedEventArgs e)

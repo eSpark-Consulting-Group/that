@@ -748,6 +748,7 @@ xmlns:animation="clr-namespace:Telerik.Windows.Controls.Animation;assembly=Teler
                                 <Grid>
                                     <Border Border.Name="Border" SnapsToDevicePixels="True" BorderThickness="2" BorderBrush="{DynamicResource StrongBrush}" Background="{DynamicResource StrongBrush}"/>
                                     <Border Border.Name="MouseOverElement"  Opacity="0" SnapsToDevicePixels="True" Background="{DynamicResource StrongBrush2}"/>
+                                    <Border Width="1" HorizontalAlignment="Left"  Background="White" SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
 

@@ -58,6 +58,13 @@
                         <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/open.png" Stretch="None" />
                     </telerik:RadButton>
 
+                    <telerik:RadButton AutomationProperties.AutomationId="SaveButton" 
+                                       Click="OnSave" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="0" HorizontalContentAlignment="Center" 
+                                       VerticalContentAlignment="Center" IsBackgroundVisible="False" Margin="2 2 2 2" ToolTip="Save As">
+
+                        <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/save.png" Stretch="None" />
+                    </telerik:RadButton>
+
                     <telerik:RadButton AutomationProperties.AutomationId="PrintButton"
                                        x:Name="btnPrintPdfDocument" Command="{Binding PrintPdfDocumentCommand}" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
                                        Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Print" IsBackgroundVisible="False" Margin="2,2,2,2">

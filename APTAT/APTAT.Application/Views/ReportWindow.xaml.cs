@@ -1,6 +1,6 @@
 ﻿
 using System.Windows;
-
+using System.Windows.Controls;
 using System.Windows.Input;
 
 
@@ -32,6 +32,33 @@ namespace APTAT.Application
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void OnResizeClick(object sender, RoutedEventArgs e) => SwitchState(sender as Button);
+
+        private void OnMinimizeClick(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
+        private void SwitchState(Button sender)
+        {
+            switch (WindowState)
+            {
+                case WindowState.Normal:
+                    {
+                        WindowState = WindowState.Maximized;
+                        var restoreStyle = FindResource("RestoreWindowButton") as Style;
+                        sender.Style = restoreStyle;
+                        sender.ToolTip = "Restore";
+                        break;
+                    }
+                case WindowState.Maximized:
+                    {
+                        WindowState = WindowState.Normal;
+                        var maxStyle = FindResource("MaximizeButton") as Style;
+                        sender.Style = maxStyle;
+                        sender.ToolTip = "Maximize";
+                        break;
+                    }
+            }
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

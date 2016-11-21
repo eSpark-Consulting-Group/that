@@ -25,6 +25,10 @@
                             <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 15 20 0">
+                                        <Button AutomationProperties.AutomationId="MinimizeButton" 
+                                                Style="{StaticResource MinimizeButton}" Click="OnMinimizeClick" Width="18" Height="18" ToolTip="Minimize"/>
+                                        <Button AutomationProperties.AutomationId="ResizeButton" 
+                                                Style="{StaticResource MaximizeButton}" Click="OnResizeClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Maximize"/>
                                         <Button AutomationProperties.AutomationId="CloseReportButton"
                                                 Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                                     </StackPanel>
