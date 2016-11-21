@@ -791,31 +791,6 @@ namespace APTAT.Application.Models
             _aptService.UpdateFlsPorts(udpPort, tcpPort);
         }
 
-        void HandleProxyException(WebException ex)
-        {
-            var httpWebResponse = ex.Response as HttpWebResponse;
-            if (httpWebResponse != null)
-            {
-                HttpStatusCode code = httpWebResponse.StatusCode;
-                if (code == HttpStatusCode.ProxyAuthenticationRequired)
-                {
-                    SettingsWindow window = new SettingsWindow();
-                    window.Owner = System.Windows.Application.Current.MainWindow;
-                    window.DataContext = this;
-                    window.ShowCredentials = true;
-                    window.Header = "Proxy Credentials";
-
-                    if (window.ShowDialog().GetValueOrDefault())
-                    {
-                        NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword);
-                        Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
-
-                        BeginValkyrieAnalysis(cred);
-                        return;
-                    }
-                }
-            }
-        }
 
         void CopyMalwaresFromScanResults()
         {
@@ -877,7 +852,30 @@ namespace APTAT.Application.Models
             {
                 var webException = e.Error as WebException;
                 if (webException != null)
-                    HandleProxyException(webException);
+                {
+                    var httpWebResponse = webException.Response as HttpWebResponse;
+                    if (httpWebResponse != null)
+                    {
+                        HttpStatusCode code = httpWebResponse.StatusCode;
+                        if (code == HttpStatusCode.ProxyAuthenticationRequired)
+                        {
+                            SettingsWindow window = new SettingsWindow();
+                            window.Owner = System.Windows.Application.Current.MainWindow;
+                            window.DataContext = this;
+                            window.ShowCredentials = true;
+                            window.Header = "Proxy Credentials";
+
+                            if (window.ShowDialog().GetValueOrDefault())
+                            {
+                                NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword);
+                                Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+
+                                BeginValkyrieAnalysis(cred);
+                                return;
+                            }
+                        }
+                    }
+                }
             }
             else
             {
