@@ -7,6 +7,7 @@ using APTAT.Valkyrie;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 
 namespace APTAT.Core
@@ -247,8 +248,9 @@ namespace APTAT.Core
 
         public string VerdictString { get { return ValkyrieAnalysisResult.VerdictString; } }
 
-        public void UpdateValkyrieResult(ValkyrieVerdict verdict)
+        public bool UpdateValkyrieResult(ValkyrieVerdict verdict)
         {
+            if (ValkyrieAnalysisResult.Verdict == verdict) return false;
             ValkyrieAnalysisResult.Verdict = verdict;
 
             RaisePropertyChanged(nameof(VerdictString));
@@ -259,10 +261,12 @@ namespace APTAT.Core
             RaisePropertyChanged(nameof(Failed));
             RaisePropertyChanged(nameof(Pending));
             RaisePropertyChanged(nameof(PendingFls));
+            return true;
         }
 
-        public void UpdateValkyrieResult(FileResult result)
+        public bool UpdateValkyrieResult(FileResult result)
         {
+            bool returnValue = ValkyrieAnalysisResult.Verdict != result.ValkyrieAnalysisResult.Verdict;
             ValkyrieAnalysisResult = result.ValkyrieAnalysisResult;
 
             RaisePropertyChanged(nameof(VerdictString));
@@ -273,6 +277,7 @@ namespace APTAT.Core
             RaisePropertyChanged(nameof(Failed));
             RaisePropertyChanged(nameof(Pending));
             RaisePropertyChanged(nameof(PendingFls));
+            return returnValue;
         }
 
         public ObservableCollection<ComputerInformation> Computers { get; set; }
@@ -301,7 +306,7 @@ namespace APTAT.Core
                 if (!Computers.Any(_ => _.Equals(computer)))
                 {
                     Computers.Add(computer);
-                    count++;
+                    Interlocked.Increment(ref count);
                 }
             }
 

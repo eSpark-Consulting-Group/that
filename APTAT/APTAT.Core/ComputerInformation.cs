@@ -156,13 +156,13 @@ namespace APTAT.Core
 
         public bool HasFailed { get; set; }
 
-        public void MergeFile(FileResult file)
+        public void MergeFile(FileResult file, string filePath)
         {
-            if (!Files.Any(_ => _.Equals(file) && _.Path == file.Path))
+            if (!Files.Any(_ => _.Equals(file) && _.Path == filePath))
             {
-                Files.Add(new FileResult(file));
-                UpdateStatus();
+                Files.Add(new FileResult(file) {Path =  filePath});
             }
+            UpdateStatus();
         }
 
         public void UpdateFile(FileResult file)

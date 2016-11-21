@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Windows.Threading;
 
 using Telerik.Windows.Controls;
@@ -65,6 +66,7 @@ namespace APTAT.Application.Models
         private Collection<ThreatInfoItem> _computers;
         private ObservableCollection<FileResult> _itemsValkyrie;
         private ObservableCollection<ComputerInformation> _computersValkyrie;
+        private Object _countersLock = new Object();
 
         private Collection<ThreatInfoItem> _cache;
         private Collection<ThreatInfoItem> _cacheComputers;
@@ -285,7 +287,6 @@ namespace APTAT.Application.Models
             {
                 _malwareFilesCount = value;
                 RaisePropertyChanged(nameof(MalwareFilesCount));
-                RaisePropertyChanged(nameof(IsMalwaresFound));
             }
         }
 
@@ -458,11 +459,6 @@ namespace APTAT.Application.Models
             get { return _aptService.GetValkyrieDetailsLink(); }
         }
 
-        public Boolean IsMalwaresFound
-        {
-            get { return MalwareFilesCount > 0; }
-        }
-
         public Boolean IsPendingFound
         {
             get { return PendingFilesCount > 0; }
@@ -480,15 +476,6 @@ namespace APTAT.Application.Models
         public bool IsErrorsFound
         {
             get { return LookupInProgressCount > 0; }
-        }
-
-
-        public bool IsProtected
-        {
-            get
-            {
-                return !IsUnknownFound && !IsMalwaresFound;
-            }
         }
 
         public ObservableCollection<FileResult> ItemsValkyrie
@@ -740,26 +727,30 @@ namespace APTAT.Application.Models
                             if (r.Cloud == CloudVerdict.Safe)
                                 newVerdict = ValkyrieVerdict.Clean;
                             file.UpdateValkyrieResult(newVerdict);
-                            LookupInProgressCount -= file.Computers.Count;
+                            Interlocked.Add(ref _lookupInProgressCount, -file.Computers.Count);
+                            RaisePropertyChanged(nameof(LookupInProgressCount));
+                            RaisePropertyChanged(nameof(IsErrorsFound));
                             if (file.IsUnknown)
                             {
-                                _unknownFilesCount += file.Computers.Count;
+                                Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
+                                RaisePropertyChanged(nameof(UnknownFilesCount));
                                 //PendingFilesCount--;
                             }
                             else if (file.IsMalware)
                             {
-                                _malwareFilesCount += file.Computers.Count;
+                                Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
+                                RaisePropertyChanged(nameof(MalwareFilesCount));
                                 //PendingFilesCount--;
                             }
                             else if (file.Pending)
                             {
-                                PendingFilesCount++;
+                                Interlocked.Increment(ref _pendingFilesCount);
+                                RaisePropertyChanged(nameof(PendingFilesCount));
+                                RaisePropertyChanged(nameof(IsPendingFound));
                                 //PendingFilesCount--;
                             }
 
 
-                            RaisePropertyChanged(nameof(UnknownFilesCount));
-                            RaisePropertyChanged(nameof(MalwareFilesCount));
 
                             foreach (var computerUid in computersToUpdate.Keys)
                             {
@@ -935,27 +926,28 @@ namespace APTAT.Application.Models
                 if (file != null)
                 {
                     bool wasPending = false;
-                    if (file.IsUnknown)
-                        _unknownFilesCount -= file.Computers.Count;
+                    bool wasUnknown = false;
                     if (file.Pending)
                         wasPending = true;
-
-                    file.UpdateValkyrieResult(result);
+                    if (file.IsUnknown)
+                        wasUnknown = true;
+                    var verdictChanged = file.UpdateValkyrieResult(result);
+                    if (verdictChanged && wasUnknown)
+                        Interlocked.Add(ref _unknownFilesCount, -file.Computers.Count);
+                    if (verdictChanged && wasPending && !file.Pending)
+                        Interlocked.Decrement(ref _pendingFilesCount);
 
                     if (file.IsUnknown)
                     {
-                        _unknownFilesCount += file.Computers.Count;
-                        if (wasPending)
-                            PendingFilesCount--;
+                        Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
                     }
                     else if (file.IsMalware)
                     {
-                        _malwareFilesCount += file.Computers.Count;
-                        if (wasPending)
-                            PendingFilesCount--;
+                        Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
                     }
 
-
+                    RaisePropertyChanged(nameof(PendingFilesCount)); 
+                    RaisePropertyChanged(nameof(IsPendingFound));
                     RaisePropertyChanged(nameof(UnknownFilesCount));
                     RaisePropertyChanged(nameof(MalwareFilesCount));
 
@@ -994,20 +986,23 @@ namespace APTAT.Application.Models
                         file.MergeComputers(result.Computers, ref _malwareFilesCount);
                     else
                         file.MergeComputers(result.Computers, ref dummy);
+
                 }
                 else
                 {
                     ItemsValkyrie.Add(result);
                     if (result.IsUnknown)
-                        _unknownFilesCount += result.Computers.Count;
+                        Interlocked.Add(ref _unknownFilesCount, result.Computers.Count);
                     else if (result.IsMalware)
-                        _malwareFilesCount += result.Computers.Count;
+                        Interlocked.Add(ref _malwareFilesCount, result.Computers.Count);
                     else if (result.Pending)
-                        PendingFilesCount++;
+                        Interlocked.Increment(ref _pendingFilesCount);
                 }
 
-                RaisePropertyChanged("UnknownFilesCount");
-                RaisePropertyChanged("MalwareFilesCount");
+                RaisePropertyChanged(nameof(PendingFilesCount));
+                RaisePropertyChanged(nameof(IsPendingFound));
+                RaisePropertyChanged(nameof(UnknownFilesCount));
+                RaisePropertyChanged(nameof(MalwareFilesCount));
 
                 foreach (var computer in result.Computers)
                 {
@@ -1016,13 +1011,13 @@ namespace APTAT.Application.Models
 
                     var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
                     if (comp != null)
-                        comp.MergeFile(result);
+                        comp.MergeFile(result, computer.FilePath);
                     else
                     {
                         comp = new ComputerInformation(computer);
                         comp.TotalDistinctCount = c.DistinctUnknownFilesCount;
                         comp.TotalCount = c.UnknownFilesCount;
-                        comp.MergeFile(result);
+                        comp.MergeFile(result, computer.FilePath);
                         ComputersValkyrie.Add(comp);
                     }
                 }
@@ -1224,30 +1219,30 @@ namespace APTAT.Application.Models
 
             foreach (var infoItem in _onlineItems)
             {
+                ScanProgressItem scanProgress = null;
+                lock (_scanIterator)
+                {
+                    _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
+                    _scanIterator.Remove(infoItem.ComputerGuid);
+                }
                 lock (infoItem)
                 {
-                    ScanProgressItem scanProgress = null;
                     if (infoItem.ScanStage != ScanStage.OperationFailed &&
                         infoItem.ScanStage != ScanStage.OperationCompleted &&
                         infoItem.ScanStage != ScanStage.OperationCanceled)
-                        lock (_scanIterator)
-                        {
-                            _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
-                            _scanIterator.Remove(infoItem.ComputerGuid);
-                        }
-
-                    if (scanProgress != null)
                     {
-                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
-                        infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                        infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
-                        infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                        infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
-                        infoItem.StatusMessageSystem = scanProgress.StatusMessage;
-                        infoItem.ScanStage = scanProgress.ScanStage;
+                        if (scanProgress != null)
+                        {
+                            infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                            infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                            infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                            infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
+                            infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
+                            infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
+                            infoItem.StatusMessageSystem = scanProgress.StatusMessage;
+                            infoItem.ScanStage = scanProgress.ScanStage;
+                        }
                     }
-
                     if (infoItem.ScanStage == ScanStage.OperationFailed ||
                         infoItem.ScanStage == ScanStage.OperationCompleted ||
                         infoItem.ScanStage == ScanStage.OperationCanceled)

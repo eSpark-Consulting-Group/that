@@ -66,12 +66,20 @@ namespace APTAT.Valkyrie
         {
             get
             {
-                if (Verdict == ValkyrieVerdict.NotAnalyzed) return string.Format("Not Analyzed ({0})", OperationStatus.Replace(Environment.NewLine, ""));
-                if (Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication) return "Potentially Unwanted";
-                if (Verdict == ValkyrieVerdict.Pending || Verdict == ValkyrieVerdict.FirstSeen)
-                    return "In Analysis";
-                if (Verdict == ValkyrieVerdict.Undetected) return "No Threat Found";
-                if (Verdict == ValkyrieVerdict.PendingFls) return "Lookup in Progress";
+                switch (Verdict)
+                {
+                    case ValkyrieVerdict.NotAnalyzed:
+                        return $"Not Analyzed ({OperationStatus.Replace(Environment.NewLine, "")})";
+                    case ValkyrieVerdict.PotentiallyUnwantedApplication:
+                        return "Potentially Unwanted";
+                    case ValkyrieVerdict.Pending:
+                    case ValkyrieVerdict.FirstSeen:
+                        return "In Analysis";
+                    case ValkyrieVerdict.Undetected:
+                        return "No Threat Found";
+                    case ValkyrieVerdict.PendingFls:
+                        return "Lookup in Progress";
+                }
                 return Verdict.ToString();
             }
         }
