@@ -14,7 +14,7 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-            Loaded += ScanCompletedWindow_Loaded;
+            //Loaded += ScanCompletedWindow_Loaded;
         }
 
         private void ScanCompletedWindow_Loaded(object sender, RoutedEventArgs e)

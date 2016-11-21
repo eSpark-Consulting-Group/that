@@ -112,7 +112,7 @@ namespace APTAT.Application
 
             scanCompletedWindow.Text.Text += String.Format("{0}{1}* {2} files have unique hash values", Environment.NewLine, Environment.NewLine, e.DistinctFileFound);
 
-            if (e.FilesStatistics.MalwareFilesCount > 0 || e.FilesStatistics.UnknownFilesCount > 0)
+            if (e.FilesStatistics.MalwareFilesCount > 0 || e.FilesStatistics.UnknownFilesCount > 0 || e.FilesStatistics.FailedToAnalyzeFilesCount > 0)
                 scanCompletedWindow.path2.Visibility = Visibility.Visible;
             else
                 scanCompletedWindow.path1.Visibility = Visibility.Visible;
