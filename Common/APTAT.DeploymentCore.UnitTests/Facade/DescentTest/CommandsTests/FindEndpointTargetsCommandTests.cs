@@ -74,7 +74,7 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
             Assert.Null(target.OrganizationUnit);
             Assert.Equal(DeploymentTargetSource.Ip,target.Source);
             Assert.False(target.IsOnline);
-            Assert.False(target.IsAptHost);
+            Assert.False(target.IsLocalComputer);
         }
 
         [Fact]
@@ -115,7 +115,7 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
                 Assert.Null(target.OrganizationUnit);
                 Assert.Equal(DeploymentTargetSource.Ip, target.Source);
                 Assert.False(target.IsOnline);
-                Assert.False(target.IsAptHost);
+                Assert.False(target.IsLocalComputer);
             }
         }
     }

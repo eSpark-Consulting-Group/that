@@ -357,8 +357,8 @@ namespace APTAT.Core
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
             ValkyrieAnalysisResult = null;
-            _isValkyrieStarted = false;
             _flsManager.Cancel();
+            _isValkyrieStarted = false;
             _valkyrieClient.AnalyzeAsyncCancel();
             lock (_flsHashResults)
             {

@@ -119,10 +119,15 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             var target = new ComputerDescentResult(_computer);
             var time = target.Modified;
             var statusMessageFormatted = new FormattedText(new ResourceText(statusMessage, statusMessage));
-            
-            target.UpdateStatus(statusMessageFormatted, percentage);
-            
 
+            var progressItem = Mock.Create<IDescentProgressItem>(Behavior.Strict);
+            Mock.Arrange(() => progressItem.ProgressPercentage).Returns(percentage);
+            Mock.Arrange(() => progressItem.StatusMessage).Returns(statusMessageFormatted);
+            Mock.Arrange(() => progressItem.IsCanceled).Returns(false);
+
+            target.UpdateStatus(progressItem);
+            
+            Assert.False(target.IsCanceled);
             Assert.Equal(_computer, target.Computer);
             Assert.Equal(_computerUid, target.TargetUid);
             Assert.Equal(statusMessageFormatted, target.StatusMessage);

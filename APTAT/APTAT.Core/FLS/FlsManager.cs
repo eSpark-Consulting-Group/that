@@ -44,7 +44,8 @@ namespace APTAT.Core
             {
                 FlsResponse response = _apiProvider.RequestType0(hashes);
                 var results = response.GetAnalyzed();
-                OnFlsAnalyzed(results, null);
+                if(results.Any())
+                    OnFlsAnalyzed(results, null);
                 
            //     foreach (var r in results){_allResults.Add(r);}
 
@@ -197,7 +198,7 @@ namespace APTAT.Core
                     {
                         while (ex is AggregateException && ex.InnerException != null)
                             ex = ex.InnerException;
-                        OnFlsAnalyzed(new IFlsResult[] {}, ex);
+                        OnFlsAnalyzed(new IFlsResult[0], ex);
                     }
 
                 }, TaskScheduler.Default);
@@ -205,7 +206,7 @@ namespace APTAT.Core
             }
             catch (Exception ex)
             {
-                OnFlsAnalyzed(new IFlsResult[] { }, ex);
+                OnFlsAnalyzed(new IFlsResult[0], ex);
             }
         }
 
