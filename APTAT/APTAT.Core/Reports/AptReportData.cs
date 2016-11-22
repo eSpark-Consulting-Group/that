@@ -296,8 +296,8 @@ namespace APTAT.Core.Reports
                 new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = "Trusted"},
                 new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = "Unknown"},
                 new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malicious" },
-                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" },
-                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Lookup In Progress" },    
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Lookup In Progress" },
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" }
                 
             };
 
