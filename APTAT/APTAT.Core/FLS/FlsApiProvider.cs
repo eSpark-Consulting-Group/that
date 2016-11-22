@@ -11,8 +11,9 @@ namespace APTAT.Core
     public class FlsApiProvider : IFlsApiProvider
     {
         private const int ClientIdNumber = 27102016;
-        private IPAddress _server;
-
+        private const int TcpConnectionTimeOut = 5; //sec
+        private IPAddress[] _servers;
+        private int _serverIndex = 0;
         private int _port = 4448;
         private string _hostName = "fls.security.comodo.com";
         private int _udpPort;
@@ -37,7 +38,8 @@ namespace APTAT.Core
             IPHostEntry hostEntry = Dns.GetHostEntry(_hostName);
             if (!hostEntry.AddressList.Any())
                 throw new InvalidOperationException("Could not resolve host " + _hostName);
-            _server = hostEntry.AddressList[0];
+
+            _servers = hostEntry.AddressList;
         }
 
         public FlsApiProvider()
@@ -48,26 +50,39 @@ namespace APTAT.Core
 
         public FlsResponse RequestType0(string[] hashes)
         {
-            FlsResponse result;
             try
             {
-                result = RequestType0Udp(hashes);
+
+                FlsResponse result;
+                try
+                {
+                    result = RequestType0Udp(hashes);
+                }
+                catch (Exception ex)
+                {
+                    result = RequestType0Tcp(hashes);
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
-                result = RequestType0Tcp(hashes);
-            }
+                
+                    if (_servers.Length > _serverIndex) _serverIndex++;
+                    else _serverIndex = 0;
+                
+                throw ex;
 
-            return result;
+            }
         }
 
         public FlsResponse RequestType0Udp(string[] hashes)
         {
-            IPEndPoint ipep = new IPEndPoint(_server, _udpPort);
+            IPEndPoint ipep = new IPEndPoint(_servers[_serverIndex], _udpPort);
             UdpClient newsock = new UdpClient();
             newsock.Client.ReceiveTimeout = 10000;
             newsock.Client.SendTimeout = 10000;
-            IPEndPoint sender = new IPEndPoint(_server, port: 0);
+            IPEndPoint sender = new IPEndPoint(_servers[_serverIndex], port: 0);
             newsock.Connect(ipep);
             var requestBytes = BuildRequestType0(hashes);
             newsock.Send(requestBytes, requestBytes.Length);
@@ -88,9 +103,14 @@ namespace APTAT.Core
                     ReceiveTimeout = 10000
                 }
             };
-            client.Connect(_server, _port);
-            var data = BuildRequestType0(hashes);
 
+            //client.Connect(_servers,_port);
+            var conn = client.BeginConnect(_servers[_serverIndex], _port, null, null);
+            var success = conn.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(TcpConnectionTimeOut));
+            if(!success) throw new Exception("TCP connect timeout");
+            client.EndConnect(conn);
+
+            var data = BuildRequestType0(hashes);
             NetworkStream stream = client.GetStream();
             stream.Write(data, 0, data.Length);
             var resultLength = 5 + hashes.Length * 2;
@@ -98,7 +118,7 @@ namespace APTAT.Core
 
             stream.Read(result, 0, result.Length);
             var response = new FlsResponse(result, hashes);
-
+            
             stream.Close();
             client.Close();
             return response;
