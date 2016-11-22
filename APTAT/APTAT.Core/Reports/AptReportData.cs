@@ -867,7 +867,7 @@ namespace APTAT.Core.Reports
                 Size = module.Size;
                 Signer = module.Signer.TrimTo();
                 Version = module.Version;
-                Copyright = module.Copyright.TrimTo();
+                Copyright = module.Copyright;
                 Product = module.Product.TrimTo();
                 Cloud = module.Cloud;
                 FileSizeFormatted = module.FileSizeFormatted;
