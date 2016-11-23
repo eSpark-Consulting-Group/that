@@ -6,7 +6,7 @@
       <Value Profile="(Default)">Completed:</Value>
     </Setting>
     <Setting Name="ScanStatusIndicatorFailed" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Failed:</Value>
+      <Value Profile="(Default)">problem:</Value>
     </Setting>
     <Setting Name="ScanStatusIndicatorNotAccessible" Type="System.String" Scope="Application">
       <Value Profile="(Default)">This computer is not accessible</Value>

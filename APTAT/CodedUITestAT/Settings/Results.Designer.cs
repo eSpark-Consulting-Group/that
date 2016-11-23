@@ -34,7 +34,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Failed:")]
+        [global::System.Configuration.DefaultSettingValueAttribute("problem:")]
         public string ScanStatusIndicatorFailed {
             get {
                 return ((string)(this["ScanStatusIndicatorFailed"]));
