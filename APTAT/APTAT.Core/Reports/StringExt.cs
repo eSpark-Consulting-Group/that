@@ -5,7 +5,7 @@ namespace APTAT.Core
 {
     public static class StringExt
     {
-        public static string TrimTo(this string str, int maxLength = 80)
+        public static string TrimTo(this string str, int maxLength = 60)
         {
             if (String.IsNullOrWhiteSpace(str))
             {
