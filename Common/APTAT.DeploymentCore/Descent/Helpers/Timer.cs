@@ -13,6 +13,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
     public sealed class Timer : ITimer
     {
         private readonly System.Threading.Timer _timer;
+        private TimeSpan _period;
 
         public event EventHandler TimeoutCallback;
 
@@ -23,6 +24,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
         public void Start(TimeSpan dueTime, TimeSpan period)
         {
+            _period = period;
             _timer?.Change(dueTime,period);
         }
 
@@ -40,7 +42,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
         {
             _timer?.Change(Timeout.Infinite, Timeout.Infinite);
             OnTimeoutCallback();
-            _timer?.Change(TimeSpan.Zero, TimeSpan.Zero);
+            _timer?.Change(TimeSpan.Zero, _period);
         }
 
         private void OnTimeoutCallback()

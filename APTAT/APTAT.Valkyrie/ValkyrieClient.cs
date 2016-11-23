@@ -166,7 +166,7 @@ namespace APTAT.Valkyrie
                     _checkingTimerIsStop =
                         stopTimer = !pendingExists || _cancellationTokenSource.IsCancellationRequested;
                 }
-                OnAnalyzeProgressChanged(_pendingItemsResolved, true, !stopTimer);
+                OnAnalyzeProgressChanged(_pendingItemsResolved, true);
                 if (needEndScan)
                     Task.Factory.StartNew(t =>
                     {
@@ -428,18 +428,13 @@ namespace APTAT.Valkyrie
                 _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
         }
 
-        private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items, bool isUpdate = false, bool pendingItemsExists = false)
+        private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items, bool isUpdate = false)
         {
             if (items.Count == 0) return;
 
             var tmp = AnalyzeProgressChanged;
             if (tmp != null)
             {
-                var malwareCount =
-                    _analysisResults.Count(
-                        f =>
-                            f.Verdict == ValkyrieVerdict.Malware ||
-                            f.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
                 double progress = 0;
 
                 if (_filesCount > 0)
@@ -459,7 +454,7 @@ namespace APTAT.Valkyrie
 
                 tmp(this,
                     new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(progressInt,
-                        new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, malwareCount, 0, newResults), isUpdate, pendingItemsExists));
+                        new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, newResults), isUpdate));
 
             }
         }

@@ -454,7 +454,7 @@ namespace APTAT.Core.Reports
             public IEnumerable<DetailedBadFile> MergeNonUniqueResults { get; set; }
         }
 
-        private void MergeResults(IEnumerable<IAptScanResult> flsResults, IEnumerable<FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
+        private void MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
             out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
             if (_mergedScanResultsCache != null)
@@ -477,7 +477,6 @@ namespace APTAT.Core.Reports
             var targets = new List<ScannedTarget>();
 
             List<DetailedBadFile> nonUniqueBadFilesInternal = new List<DetailedBadFile>();
-            var fileResults = (valkyrieResults ?? new FileResult[0]) as FileResult[] ?? valkyrieResults.ToArray();
             Dictionary<string, DetailedBadFile> globalUniqueFiles = new Dictionary<string, DetailedBadFile>();
             foreach (var flsResult in flsResults)
             {
@@ -497,8 +496,9 @@ namespace APTAT.Core.Reports
                 {
                     FileResult fileResult = null;
                     if (module.IsBad)
-                        fileResult = fileResults.FirstOrDefault(v => v.ValkyrieAnalysisResult != null &&
-                           v.ValkyrieAnalysisResult.SHA1 != null && v.ValkyrieAnalysisResult.SHA1.ToUpper() == module.Sha1.ToUpper());
+                    {
+                        valkyrieResults.TryGetValue(module.Sha1, out fileResult);
+                    }
                     if (fileResult != null)
                     {
                         DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
@@ -716,7 +716,7 @@ namespace APTAT.Core.Reports
                 .OrderByDescending(file => file.InstancesTotalCount).ThenBy(file => file.Name).ToArray();
         }
 
-        public List<FileResult> ValkyrieAnalysisResult { get; set; }
+        public Dictionary<string, FileResult> ValkyrieAnalysisResult { get; set; }
         public Guid FlsLookupOperationUid { get; set; }
     }
 

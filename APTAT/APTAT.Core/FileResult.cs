@@ -18,10 +18,7 @@ namespace APTAT.Core
 
         protected virtual void RaisePropertyChanged(String name)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         public FileResult()
@@ -91,25 +88,16 @@ namespace APTAT.Core
         {
             get
             {
-                if(string.IsNullOrEmpty(this.Product))
-                {
-                    return this.Name;
-                }
-
-                return String.Format("{0} ({1})", this.Name, this.Product);
+                return string.IsNullOrEmpty(this.Product) ? this.Name : $"{this.Name} ({this.Product})";
             }
         }        
 
         public bool IsMalware
         {
-            get
-            {
-                if (this.ValkyrieAnalysisResult != null)
-                {
-
-                    return ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware || ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
-                }
-                return false;
+            get {
+                return ValkyrieAnalysisResult != null &&
+                       (ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.Malware ||
+                        ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication);
             }
         }
 

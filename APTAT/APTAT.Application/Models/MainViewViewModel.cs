@@ -1185,7 +1185,6 @@ namespace APTAT.Application.Models
                 if (!CancelInProgress)
                 {
                     Percentage = e.Percentage;
-
                     RaisePropertyChanged("Header");
                 }
             }
@@ -1285,7 +1284,6 @@ namespace APTAT.Application.Models
 
         private void UpdateStatus()
         {
-
             Int32 completed = 0;
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
@@ -1305,10 +1303,7 @@ namespace APTAT.Application.Models
             MalwareFilesCount = malwareFiles;
             LookupInProgressCount = lookupInProgressCount;
             ScannedItemsCount = scanned;
-
-            //if (completed == OnlineItemsCount)
-            //    ScanCompleted(scanned > 0);
-
+            
             RaisePropertyChanged(nameof(Header));
         }
 

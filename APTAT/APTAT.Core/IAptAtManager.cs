@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using APTAT.Core.Descent;
@@ -16,7 +17,7 @@ namespace APTAT.Core
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
-        List<FileResult> ValkyrieAnalysisResult { get; set; }
+        ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
 
         IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options);

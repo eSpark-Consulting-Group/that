@@ -32,7 +32,8 @@ namespace APTAT.Core.Reports
                     TotalTargetsCount = operationContext.TotalTargetsCount,
                     TargetsSucceeded = operationContext.SucceededTargetsCount,
                     Targets = operationContext.ScanResults.ToArray(),
-                    ValkyrieAnalysisResult = _aptAtManager.ValkyrieAnalysisResult,
+                    ValkyrieAnalysisResult = _aptAtManager.ValkyrieAnalysisResult
+                        .ToDictionary(k => k.Key, k => k.Value, StringComparer.OrdinalIgnoreCase),
                     ValkyrieOperationUid = _aptAtManager.ValkyrieOperationUid,
                     FlsLookupOperationUid = _aptAtManager.FlsLookupOperationUid,
                     DevicesSourceDescription = operationContext.DevicesSourceDescription
