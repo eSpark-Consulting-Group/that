@@ -233,7 +233,7 @@ namespace APTAT.Application.Models
                     case CloudVerdict.NoVerdict:
                     case CloudVerdict.FailedToAnalyze:
                         Failed = true;
-                        Verdict = "Lookup in progress";
+                        Verdict = "Lookup in Progress";
                         break;
                     case CloudVerdict.FirstSeen:
                     case CloudVerdict.Unknown:

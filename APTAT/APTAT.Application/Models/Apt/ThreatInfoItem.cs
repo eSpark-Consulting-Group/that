@@ -356,7 +356,7 @@ namespace APTAT.Application.Models
         {
 
             string errorCounterText = LookupInProgress > 0 ?
-                    $"Lookup in progress {LookupInProgress}."
+                    $"Lookup in Progress {LookupInProgress}."
                     : String.Empty;
             
 
@@ -365,7 +365,7 @@ namespace APTAT.Application.Models
                 string message;
                 if (LookupInProgress > 0)
                 {
-                    message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. Lookup in progress: {LookupInProgress}";
+                    message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. Lookup in Progress: {LookupInProgress}";
                 }
                 else
                 {

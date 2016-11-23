@@ -322,7 +322,7 @@
                     <StackPanel Orientation="Horizontal" Visibility="{Binding IsErrorsFound, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Foreground="White" Text=", " VerticalAlignment="Center" Margin="0,5" FontSize="14" />
                         <TextBlock AutomationProperties.AutomationId="LookupInProgressFilesCounterTextBlock" Foreground="White" Text="{Binding LookupInProgressCount}" VerticalAlignment="Center" Margin="0,5,0,5" FontSize="14"/>
-                        <TextBlock Foreground="White" Text=" Lookup in progress" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
+                        <TextBlock Foreground="White" Text=" Lookup in Progress" VerticalAlignment="Center" Margin="0,5" FontSize="14"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsPendingFound, Converter={converters:BoolToVisibilityConverter2}}">

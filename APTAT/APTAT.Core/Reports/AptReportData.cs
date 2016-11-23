@@ -386,7 +386,7 @@ namespace APTAT.Core.Reports
                 if (scanResult.MalwareFilesCount > 0)
                     devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 if (scanResult.NotAnalyzedFilesCount > 0)
-                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Lookup in progress", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Lookup in Progress", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 //if (scanResult.NoVerdictFilesCount > 0)
                 //    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NoVerdictFilesCount, BadFileType = "No Verdict", Name = scanResult.HostName, Uid = scanResult.TargetUid });
             }
@@ -954,7 +954,7 @@ namespace APTAT.Core.Reports
                         return "Unknown (FirstSeen)";
                     case CloudVerdict.FailedToAnalyze:
                     case CloudVerdict.NoVerdict:
-                        return "Lookup in progress";
+                        return "Lookup in Progress";
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

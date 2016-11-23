@@ -108,7 +108,7 @@ namespace APTAT.Application
             scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown Files", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
 
             if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malicious Files", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
-            if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Lookup in progress", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount+e.FilesStatistics.NoVerdictFilesCount);
+            if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Lookup in Progress", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount+e.FilesStatistics.NoVerdictFilesCount);
 
             scanCompletedWindow.Text.Text += String.Format("{0}{1}* {2} files have unique hash values", Environment.NewLine, Environment.NewLine, e.DistinctFileFound);
 

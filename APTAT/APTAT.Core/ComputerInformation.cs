@@ -154,6 +154,8 @@ namespace APTAT.Core
 
         public bool HasPending { get; set; }
 
+        public bool HasPendingFls { get; set; }
+
         public bool HasFailed { get; set; }
 
         public void MergeFile(FileResult file, string filePath)
@@ -242,14 +244,16 @@ namespace APTAT.Core
             if (pendingCount > 0)
                 StatusText += $" In Analysis files: {pendingCount}.";
             if (pendingFls > 0)
-                StatusText += $" Lookup in progress: {pendingFls}.";
+                StatusText += $" Lookup in Progress: {pendingFls}.";
 
             HasMalwares = malwareCount > 0;
             HasUnknowns = malwareCount == 0 && unknownCount > 0;
             HasFailed = malwareCount == 0 && unknownCount == 0 && failedCount > 0;
+            HasPendingFls = malwareCount == 0 && unknownCount == 0 &&
+                failedCount == 0 && pendingFls > 0;
             HasPending = malwareCount == 0 && unknownCount == 0 && 
-                failedCount == 0 && (pendingCount > 0 || pendingFls > 0);
-            HasBadFiles = HasMalwares || HasUnknowns || HasFailed || HasPending;
+                failedCount == 0 && pendingFls == 0 && pendingCount > 0;
+            HasBadFiles = HasMalwares || HasUnknowns || HasFailed || HasPending || HasPendingFls;
 
             RaisePropertyChanged(nameof(HasBadFiles));
             RaisePropertyChanged(nameof(HasMalwares));
