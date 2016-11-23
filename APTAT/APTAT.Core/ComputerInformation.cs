@@ -259,6 +259,7 @@ namespace APTAT.Core
             RaisePropertyChanged(nameof(HasMalwares));
             RaisePropertyChanged(nameof(HasUnknowns));
             RaisePropertyChanged(nameof(HasPending));
+            RaisePropertyChanged(nameof(HasPendingFls));
             RaisePropertyChanged(nameof(HasFailed));
 
             RaisePropertyChanged(nameof(StatusText));

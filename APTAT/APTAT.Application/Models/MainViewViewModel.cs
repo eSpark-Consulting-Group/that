@@ -1278,7 +1278,6 @@ namespace APTAT.Application.Models
 
         private void UpdateStatus()
         {
-            Int32 completed = 0;
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
             Int32 malwareFiles = 0;

@@ -31,7 +31,7 @@ namespace APTAT.Core
 
         string GetValkyrieDetailsLink();
         int GetDistinctFileCount();
-        void Dispose();
+
         
         void UpdateFlsPorts(int udpPort, int tcpPort);
     }

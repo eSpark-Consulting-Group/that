@@ -14,10 +14,8 @@ namespace APTAT.Application
         {
             InitializeComponent();
 
-
             txtProductName.Text = "Unknown File Hunter";
             txtProductVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
-
 }
