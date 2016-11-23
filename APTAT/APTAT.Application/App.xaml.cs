@@ -80,7 +80,7 @@ namespace APTAT.Application
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             _window.Loaded -= WindowLoaded;
-
+            _window.Activate();
             _operation.Dispatcher.Invoke(_splash.Close);
         }
 

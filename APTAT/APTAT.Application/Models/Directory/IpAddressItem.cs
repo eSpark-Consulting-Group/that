@@ -1,5 +1,4 @@
 ﻿
-using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,75 +9,71 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointA
 
 namespace APTAT.Application.Models
 {
-    public class IpAddressValidator : AbstractValidator<IpAddressWrapper>
+    public class IpAddressValidator 
     {
-        // Must be in sync with the Esm.Server.Facade.Descent.Commands.GetTargetsSummaryCommand.MaxDeploymentTargets constant!
+
         private const int MaxTargetsNetworkBits = 10;
         private const int MaxTargetsCount = 1024;
 
-        public IpAddressValidator()
+        public bool Validate1(IpAddressWrapper o, out string s)
         {
-            RuleFor(o => o.Text)
-                .Must((o, v) =>
-                {
-                    o.IsMask = IsValidMask(o.Text);
-                    o.IsRange = IsValidRange(o.Text);
-                    o.IsDnsName = false;
+            s = "Please enter valid IPv4 address subnet or range";
+            o.IsMask = IsValidMask(o.Text);
+            o.IsRange = IsValidRange(o.Text);
+            o.IsDnsName = false;
 
-                    if (o.IsMask)
-                    {
-                        int maskLength;
-                        IPAddress network, mask;
-                        o.SplitMask(out network, out mask, out maskLength);
-                        o.FormattedText = network + "/" + mask;
-                        return true;
-                    }
-                    if (o.IsRange)
-                    {
-                        IPAddress begin, end;
-                        o.SplitRange(out begin, out end);
-                        var beginBits = IpAddressWrapper.GetUInt32FromIP(begin);
-                        var endBits = IpAddressWrapper.GetUInt32FromIP(end);
-                        if (beginBits <= endBits)
-                        {
-                            o.FormattedText = begin + "-" + end;
-                            return true;
-                        }
-                        else
-                            return false;
-                    }
-                    IPAddress value;
-                    if (IsValidIp(o.Text, out value))
-                    {
-                        o.FormattedText = value.ToString();
-                        return true;
-                    }
-                    else
-                        return o.IsDnsName = IsValidDnsName(o.Text);
-                })
-                .WithMessage("Please enter valid IPv4 address subnet or range");
-
-            RuleFor(o => o.Text)
-                .Must((o, v) =>
+            if (o.IsMask)
+            {
+                int maskLength;
+                IPAddress network, mask;
+                o.SplitMask(out network, out mask, out maskLength);
+                o.FormattedText = network + "/" + mask;
+                return true;
+            }
+            if (o.IsRange)
+            {
+                IPAddress begin, end;
+                o.SplitRange(out begin, out end);
+                var beginBits = IpAddressWrapper.GetUInt32FromIP(begin);
+                var endBits = IpAddressWrapper.GetUInt32FromIP(end);
+                if (beginBits <= endBits)
                 {
-                    if (o.IsMask)
-                    {
-                        int maskLength;
-                        IPAddress network, mask;
-                        o.SplitMask(out network, out mask, out maskLength);
-                        return maskLength > MaxTargetsNetworkBits;
-                    }
-                    if (o.IsRange)
-                    {
-                        IPAddress begin, end;
-                        o.SplitRange(out begin, out end);
-                        uint beginBits = IpAddressWrapper.GetUInt32FromIP(begin);
-                        uint endBits = IpAddressWrapper.GetUInt32FromIP(end);
-                        return endBits - beginBits < MaxTargetsCount;
-                    }
+                    o.FormattedText = begin + "-" + end;
                     return true;
-                })
-                .WithMessage("Address range is too large");
+                }
+                else
+                    return false;
+            }
+            IPAddress value;
+            if (IsValidIp(o.Text, out value))
+            {
+                o.FormattedText = value.ToString();
+                return true;
+            }
+            else
+                return o.IsDnsName = IsValidDnsName(o.Text);
+        }
+
+        public bool Validate2(IpAddressWrapper o, out string s)
+        {
+            s = "Network Address range is too large";
+            if (o.IsMask)
+            {
+                int maskLength;
+                IPAddress network, mask;
+                o.SplitMask(out network, out mask, out maskLength);
+                return maskLength > MaxTargetsNetworkBits;
+            }
+            if (o.IsRange)
+            {
+                IPAddress begin, end;
+                o.SplitRange(out begin, out end);
+                uint beginBits = IpAddressWrapper.GetUInt32FromIP(begin);
+                uint endBits = IpAddressWrapper.GetUInt32FromIP(end);
+                return endBits - beginBits < MaxTargetsCount;
+            }
+            return true;
+
         }
 
         private static readonly Regex IpV4Pattern = new Regex(@"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
@@ -242,7 +237,7 @@ namespace APTAT.Application.Models
 
     public class IpAddressWrapper : DomainObject, IComparable<IpAddressWrapper>, IComparable
     {
-        public static readonly IValidator Validator = new IpAddressValidator();
+        public static readonly IpAddressValidator Validator = new IpAddressValidator();
 
         public bool IsMask { get; set; }
 
@@ -262,10 +257,11 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("Text");
                 RaisePropertyChanged("FormattedText");
 
-         
-                ValidatePropertyThrow("Text", Validator);
+
             }
         }
+
+
 
         public string FormattedText
         {

@@ -89,6 +89,8 @@ namespace APTAT.Application.Models.Directory
             _targetsDiscoveryService = targetsDiscoveryService;
             _storage = storage;
 
+            _validator = new IpAddressValidator();
+
             SetSteps(new[] { null, SelectIp, SelectPort });
             IpAddresses = new ObservableCollection<IpAddressWrapper>();
             AddIpCommand = new DelegateCommand(InvokeAddIpCommand);
@@ -164,7 +166,7 @@ namespace APTAT.Application.Models.Directory
             }
         }
 
-
+        private IpAddressValidator _validator;
 
         private void InvokeAddIpCommand(Object e)
         {
@@ -182,7 +184,9 @@ namespace APTAT.Application.Models.Directory
                 return;
             }
 
-            if (ValidateProperty(ipAddress, "Text", IpAddressWrapper.Validator))
+            string validationMessage;
+            if (_validator.Validate1(ipAddress, out validationMessage) &&
+               _validator.Validate2(ipAddress, out validationMessage))
             {
                 if (IpAddresses.Any(o => o.FormattedText == ipAddress.FormattedText))
                 {
@@ -197,6 +201,7 @@ namespace APTAT.Application.Models.Directory
             }
             else
             {
+                Error = validationMessage;
                 args.Cancel = true;
             }
         }
