@@ -545,6 +545,7 @@ namespace APTAT.Application.Models
             SizeString = badFile.FileSizeFormatted;
             IsRootItem = false;
             IsOnline = true;
+            ScanStage = ScanStage.OperationCompleted;
             BadFile = badFile;
             if (!string.IsNullOrEmpty(badFile.Product))
                 ShortName = string.Format("{0} ({1})", Path.GetFileName(badFile.Name), badFile.Product);
