@@ -863,11 +863,12 @@ namespace APTAT.Application.Models
             }
             else
             {
-                IsValkyrieReportEnabled = true;
-
-                MergeResults(e.Result);
-
-                CopyMalwaresFromScanResults();
+                if (_isScanInProgress == false)
+                {
+                    IsValkyrieReportEnabled = true;
+                    MergeResults(e.Result);
+                    CopyMalwaresFromScanResults();
+                }
             }
 
             _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
