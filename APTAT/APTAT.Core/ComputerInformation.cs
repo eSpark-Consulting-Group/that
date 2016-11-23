@@ -177,15 +177,21 @@ namespace APTAT.Core
             UpdateStatus();
         }
 
-        public void UpdateFile(string sha1, ValkyrieVerdict verdict)
+        public void UpdateFileIfPredicate(string sha1, ValkyrieVerdict verdict, Predicate<ValkyrieVerdict> predicate)
         {
+            var needUpdate = false;
             foreach (var result in Files)
             {
                 if (result.Sha1 != sha1)
                     continue;
-                result.UpdateValkyrieResult(verdict);
+                if (predicate(result.ValkyrieAnalysisResult.Verdict))
+                {
+                    result.UpdateValkyrieResult(verdict);
+                    needUpdate = true;
+                }
             }
-            UpdateStatus();
+            if (needUpdate)
+                UpdateStatus();
         }
 
         public void UpdateStatus()

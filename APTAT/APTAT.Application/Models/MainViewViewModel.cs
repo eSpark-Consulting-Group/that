@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading;
 using System.Windows.Threading;
@@ -190,10 +191,10 @@ namespace APTAT.Application.Models
 
                 RaisePropertyChanged("Header");
 
-                App.Current.Dispatcher.BeginInvoke((Action) delegate
-                 {
-                     StopScanCommand.InvalidateCanExecute();
-                 });
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    StopScanCommand.InvalidateCanExecute();
+                });
             }
         }
 
@@ -206,11 +207,11 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
 
-                App.Current.Dispatcher.BeginInvoke((Action) delegate
-                 {
-                     StartScanCommand.InvalidateCanExecute();
-                     StopScanCommand.InvalidateCanExecute();
-                 });
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    StartScanCommand.InvalidateCanExecute();
+                    StopScanCommand.InvalidateCanExecute();
+                });
             }
         }
 
@@ -241,11 +242,11 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsValkyrieScanInProgress");
                 RaisePropertyChanged("IsAnyScanInProgress");
 
-                App.Current.Dispatcher.BeginInvoke((Action) delegate
-                {
-                    StartScanCommand.InvalidateCanExecute();
-                    StopScanCommand.InvalidateCanExecute();
-                });
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+               {
+                   StartScanCommand.InvalidateCanExecute();
+                   StopScanCommand.InvalidateCanExecute();
+               });
 
             }
         }
@@ -267,7 +268,7 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("IsUnknownFound");
             }
         }
-        
+
         private Int32 _lookupInProgressCount;
         public Int32 LookupInProgressCount
         {
@@ -443,7 +444,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, (FileResult) _selectedValkyrieItem));
+                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, (FileResult)_selectedValkyrieItem));
                 }
 
             }
@@ -468,7 +469,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                return UnknownFilesCount > 0 
+                return UnknownFilesCount > 0
                     || LookupInProgressCount > 0;
             }
         }
@@ -599,7 +600,7 @@ namespace APTAT.Application.Models
 
         private void InvokeStartScan(Object arg)
         {
-            IsQuickScan = (bool) arg;
+            IsQuickScan = (bool)arg;
 
             Items = new Collection<ThreatInfoItem>();
             Computers = new Collection<ThreatInfoItem>();
@@ -640,8 +641,8 @@ namespace APTAT.Application.Models
 
                     var model = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
 
-                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets, 
-                        ActiveDirectoryStep ? model.ActiveDirectoryLogin : null, 
+                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets,
+                        ActiveDirectoryStep ? model.ActiveDirectoryLogin : null,
                         ActiveDirectoryStep ? model.ActiveDirectoryPassword : null, this);
 
                 }
@@ -680,8 +681,18 @@ namespace APTAT.Application.Models
         {
             if (e.Exception != null) return;
 
+            var computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
+            var needUpdateStatus = false;
             foreach (var result in e.Results)
             {
+                ValkyrieVerdict newVerdict = ValkyrieVerdict.Pending;
+                if (result.Cloud == CloudVerdict.FirstSeen || result.Cloud == CloudVerdict.Unknown)
+                    newVerdict = ValkyrieVerdict.Pending;
+                if (result.Cloud == CloudVerdict.Malware)
+                    newVerdict = ValkyrieVerdict.Malware;
+                if (result.Cloud == CloudVerdict.Safe)
+                    newVerdict = ValkyrieVerdict.Clean;
+
                 var items = Items.Where(i => i.BadFile.Sha1 == result.Sha1).ToArray();
                 foreach (var threatInfoItem in items)
                 {
@@ -689,85 +700,67 @@ namespace APTAT.Application.Models
                     RaisePropertyChanged(nameof(Items));
                 }
 
-                Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
 
                 foreach (ThreatInfoItem computer in Computers)
                 {
                     var files = computer.Items.Where(i => i.BadFile.Sha1 == result.Sha1).ToArray();
-                    if (files.Any() && !computersToUpdate.ContainsKey(computer.ComputerGuid))
+                    if (files.Any())
                     {
-                        computersToUpdate.Add(computer.ComputerGuid, computer);
+                        if (!computersToUpdate.ContainsKey(computer.ComputerGuid))
+                            computersToUpdate.Add(computer.ComputerGuid, computer);
+                        var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.ComputerGuid);
+                        comp?.UpdateFileIfPredicate(result.Sha1, newVerdict, verdict => verdict == ValkyrieVerdict.PendingFls);
+                        foreach (var f in files)
+                            f.UpdateFileVerdict(result.Cloud);
                     }
-                    foreach (var f in files)
-                    {
-                        f.UpdateFileVerdict(result.Cloud);
-                        RaisePropertyChanged(nameof(Computers));
-
-                    }
-                }
-                foreach (var computer in computersToUpdate.Values)
-                {
-                    computer.UpdateStatus();
                 }
                 if (ItemsValkyrie.Any())
                 {
-                    foreach (var r in e.Results)
+                    var file = ItemsValkyrie.FirstOrDefault(_ =>
+                    _.Sha1.Equals(result.Sha1, StringComparison.OrdinalIgnoreCase));
+                    if (file != null)
                     {
-                        var file = ItemsValkyrie.FirstOrDefault(_ => 
-                            _.Sha1.Equals(r.Sha1, StringComparison.OrdinalIgnoreCase));
-                        if (file != null)
+                        if (!file.PendingFls)
+                            continue;
+                        
+                        file.UpdateValkyrieResult(newVerdict);
+                        Interlocked.Add(ref _lookupInProgressCount, -file.Computers.Count);
+                        RaisePropertyChanged(nameof(LookupInProgressCount));
+                        RaisePropertyChanged(nameof(IsErrorsFound));
+                        if (file.IsUnknown)
                         {
-                            if (!file.PendingFls)
-                                continue;
-                            ValkyrieVerdict newVerdict = ValkyrieVerdict.Pending;
-                            if (r.Cloud == CloudVerdict.FirstSeen || r.Cloud == CloudVerdict.Unknown)
-                                newVerdict = ValkyrieVerdict.Pending;
-                            if (r.Cloud == CloudVerdict.Malware)
-                                newVerdict = ValkyrieVerdict.Malware;
-                            if (r.Cloud == CloudVerdict.Safe)
-                                newVerdict = ValkyrieVerdict.Clean;
-                            file.UpdateValkyrieResult(newVerdict);
-                            Interlocked.Add(ref _lookupInProgressCount, -file.Computers.Count);
-                            RaisePropertyChanged(nameof(LookupInProgressCount));
-                            RaisePropertyChanged(nameof(IsErrorsFound));
-                            if (file.IsUnknown)
-                            {
-                                Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
-                                RaisePropertyChanged(nameof(UnknownFilesCount));
-                                //PendingFilesCount--;
-                            }
-                            else if (file.IsMalware)
-                            {
-                                Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
-                                RaisePropertyChanged(nameof(MalwareFilesCount));
-                                //PendingFilesCount--;
-                            }
-                            else if (file.Pending)
-                            {
-                                Interlocked.Increment(ref _pendingFilesCount);
-                                RaisePropertyChanged(nameof(PendingFilesCount));
-                                RaisePropertyChanged(nameof(IsPendingFound));
-                                //PendingFilesCount--;
-                            }
-
-
-
-                            foreach (var computerUid in computersToUpdate.Keys)
-                            {
-                                var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computerUid);
-                                if (comp != null)
-                                    comp.UpdateFile(r.Sha1, newVerdict);
-                            }
+                            Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
+                            RaisePropertyChanged(nameof(UnknownFilesCount));
+                            //PendingFilesCount--;
+                        }
+                        else if (file.IsMalware)
+                        {
+                            Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
+                            RaisePropertyChanged(nameof(MalwareFilesCount));
+                            //PendingFilesCount--;
+                        }
+                        else if (file.Pending)
+                        {
+                            Interlocked.Increment(ref _pendingFilesCount);
+                            RaisePropertyChanged(nameof(PendingFilesCount));
+                            RaisePropertyChanged(nameof(IsPendingFound));
+                            //PendingFilesCount--;
                         }
                     }
+
+                    
                 }
                 else
-                    UpdateStatus();
+                   needUpdateStatus = true;
             }
-
+            if (needUpdateStatus)
+                UpdateStatus();
+            foreach (var computer in computersToUpdate.Values)
+            {
+                computer.UpdateStatus();
+            }
         }
-
-
+        
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
             OnBeforeBeginValkyrieAnalysis();
@@ -788,7 +781,7 @@ namespace APTAT.Application.Models
             var col = new Collection<FileResult>();
             foreach (var file in Items)
             {
-                if (!file.IsMalware && !file.Failed )
+                if (!file.IsMalware && !file.Failed)
                     continue;
                 var fileResult = MapToFileResult(file);
                 col.Add(fileResult);
@@ -946,7 +939,7 @@ namespace APTAT.Application.Models
                         Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
                     }
 
-                    RaisePropertyChanged(nameof(PendingFilesCount)); 
+                    RaisePropertyChanged(nameof(PendingFilesCount));
                     RaisePropertyChanged(nameof(IsPendingFound));
                     RaisePropertyChanged(nameof(UnknownFilesCount));
                     RaisePropertyChanged(nameof(MalwareFilesCount));
@@ -1303,7 +1296,7 @@ namespace APTAT.Application.Models
             MalwareFilesCount = malwareFiles;
             LookupInProgressCount = lookupInProgressCount;
             ScannedItemsCount = scanned;
-            
+
             RaisePropertyChanged(nameof(Header));
         }
 
