@@ -1289,7 +1289,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Number of Unknown/Malicious/In Analysis/Lookup in progress</Caption>
+                      <Caption />
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -1390,8 +1390,8 @@
             <DataSetName>MostWantedBadFileDataSet</DataSetName>
             <Top>2.20028cm</Top>
             <Left>0.00001cm</Left>
-            <Height>10.00945cm</Height>
-            <Width>14.31546cm</Width>
+            <Height>9.16278cm</Height>
+            <Width>16.52524cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -1436,11 +1436,45 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox36">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Number of Unknown/Malicious/In Analysis/Lookup in progress</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox36</rd:DefaultName>
+            <Top>11.31606cm</Top>
+            <Left>0.00001cm</Left>
+            <Height>0.6cm</Height>
+            <Width>16.52524cm</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>9.89506cm</Top>
         <Left>0.0635cm</Left>
-        <Height>12.20973cm</Height>
+        <Height>12.26531cm</Height>
         <Width>16.873cm</Width>
         <ZIndex>2</ZIndex>
         <Visibility>
@@ -2490,6 +2524,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0cm</Top>
           <Left>0.06351cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
