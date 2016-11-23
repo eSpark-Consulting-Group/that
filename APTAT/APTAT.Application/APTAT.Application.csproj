@@ -128,6 +128,9 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="SplashWindow.xaml.cs">
+      <DependentUpon>SplashWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,7 @@
     <Compile Include="Extensions\ISelectableTreeItemExtensions.cs" />
     <Compile Include="Extensions\UserControlExtensions.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
+    <Compile Include="Helpers\ThreadHelper.cs" />
     <Compile Include="MarkupExtensions\ConverterMarkupExtension.cs" />
     <Compile Include="Models\Apt\CustomScanOptions.cs" />
     <Compile Include="Models\Directory\StartScanLocalViewModel.cs" />
@@ -266,6 +270,14 @@
     <Compile Include="Views\ValkyrieResultUserControl.xaml.cs">
       <DependentUpon>ValkyrieResultUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="AppResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SplashWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -414,6 +426,7 @@
     </Compile>
     <Resource Include="EULA.pdf" />
     <Resource Include="Assets\checkmark.png" />
+    <Resource Include="Assets\splash.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

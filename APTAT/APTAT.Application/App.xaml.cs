@@ -5,12 +5,18 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using APTAT.Common;
+using APTAT.Application.Helpers;
 
 namespace APTAT.Application
 {
     public partial class App : System.Windows.Application
     {
         private Mutex _mutex;
+        private SplashWindow _splash;
+        private MainWindow _window;
+        private DispatcherTimer _timer;
+        private DispatcherOperation _operation;
+        private bool _initialized;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -24,23 +30,66 @@ namespace APTAT.Application
             }
             else
             {
-                InitTraceListener();
                 Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-                StartupUri = new Uri("/UnknownFileHunter;component/MainWindow.xaml", UriKind.Relative);
-     
-                CompositionHelper.Instance.RegisterModules(new[]
+                _operation = ThreadHelper.Instance.RunOnThread(delegate { (_splash = new SplashWindow()).Show(); });
+                var op = ThreadHelper.Instance.RunOnThreadDelayed(delegate 
                 {
-                    typeof(Common.DependencyLocator),
-                    typeof(DeploymentCore.DependencyLocator),
-                    typeof(DependencyLocator),
-                    typeof(Valkyrie.DependencyLocator.DependencyLocator),
-                    typeof(Core.DependencyLocator.DependencyLocator)
+                    Current.Resources.MergedDictionaries.Add(new ResourceDictionary()
+                    {
+                        Source = new Uri("/UnknownFileHunter;component/AppResources.xaml", UriKind.RelativeOrAbsolute)
+                    });
+                    CompositionHelper.Instance.RegisterModules(new[]
+                    {
+                        typeof(Common.DependencyLocator),
+                        typeof(DeploymentCore.DependencyLocator),
+                        typeof(DependencyLocator),
+                        typeof(Valkyrie.DependencyLocator.DependencyLocator),
+                        typeof(Core.DependencyLocator.DependencyLocator)
+                    });
                 });
+                op.Completed += DispatcherOperationCompleted;
+
+                _timer = new DispatcherTimer(DispatcherPriority.Normal, Current.Dispatcher);
+                _timer.Interval = TimeSpan.FromMilliseconds(2000);
+                _timer.Tick += TimerTick;
+                _timer.Start();
+
+                op.Priority = DispatcherPriority.Normal;
+
+                InitTraceListener();
             }
 
             base.OnStartup(e);
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            if (_initialized)
+            {
+                _timer.Tick -= TimerTick;
+                _timer.Stop();
+                
+                _window = new MainWindow();
+                _window.Loaded += WindowLoaded;
+                _window.Show(); 
+            }
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            _window.Loaded -= WindowLoaded;
+
+            _operation.Dispatcher.Invoke(_splash.Close);
+        }
+
+        private void DispatcherOperationCompleted(object sender, EventArgs e)
+        {
+            var op = sender as DispatcherOperation;
+            op.Completed -= DispatcherOperationCompleted;
+
+            _initialized = true;
         }
 
         protected override void OnExit(ExitEventArgs e)

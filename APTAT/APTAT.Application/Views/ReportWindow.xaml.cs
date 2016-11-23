@@ -36,7 +36,7 @@ namespace APTAT.Application
 
         private void OnResizeClick(object sender, RoutedEventArgs e) => SwitchState(sender as Button);
 
-        private void OnMinimizeClick(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
 
         private void SwitchState(Button sender)
         {
