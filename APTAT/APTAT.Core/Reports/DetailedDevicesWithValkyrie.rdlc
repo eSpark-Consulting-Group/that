@@ -1304,7 +1304,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Number of Unknown Files/Malicious Files/Lookup in Progress /In Analysis Fiiles 
+                      <Caption>Number of Unknown Files/Malicious Files/Lookup in Progress /In Analysis Files 
 </Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
