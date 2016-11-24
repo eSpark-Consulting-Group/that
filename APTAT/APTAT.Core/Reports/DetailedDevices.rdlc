@@ -925,7 +925,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Lookup in progress:</Value>
+                    <Value>Lookup in Progress:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1229,7 +1229,7 @@
                       <Color>DimGray</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Number of Unknown Files/Malicious Files/Lookup in progress</Caption>
+                      <Caption>Number of Unknown Files/Malicious Files/Lookup in Progress</Caption>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -2211,7 +2211,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>Lookup in progress:</Value>
+                                      <Value>Lookup in Progress:</Value>
                                       <Style>
                                         <FontFamily>Segoe UI Light</FontFamily>
                                         <Color>Gray</Color>

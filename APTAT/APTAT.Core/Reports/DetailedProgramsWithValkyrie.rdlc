@@ -943,7 +943,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Lookup in progress:</Value>
+                    <Value>Lookup in Progress:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <Color>Gray</Color>
@@ -1443,7 +1443,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Number of Unknown/Malicious/In Analysis/Lookup in progress</Value>
+                    <Value>Number of Unknown/Malicious/In Analysis/Lookup in Progress</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                     </Style>
@@ -2524,7 +2524,6 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0cm</Top>
           <Left>0.06351cm</Left>
           <Height>0.07083cm</Height>
           <Width>16.9365cm</Width>
