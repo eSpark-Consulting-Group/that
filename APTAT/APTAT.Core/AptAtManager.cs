@@ -131,7 +131,7 @@ namespace APTAT.Core
         private static Dictionary<string, FileResult> GetFullResult(IEnumerable<ValkyrieAnalysisResult> valkyrieResult,
             IEnumerable<IAptScanResult> scanResults)
         {
-            Dictionary<string, FileResult> fileResults = new Dictionary<string, FileResult>();
+            Dictionary<string, FileResult> fileResults = new Dictionary<string, FileResult>(StringComparer.OrdinalIgnoreCase);
             var valkyrieAnalysisResults = valkyrieResult as ValkyrieAnalysisResult[] ?? valkyrieResult.ToArray();
             foreach (var scanResult in scanResults)
             {
