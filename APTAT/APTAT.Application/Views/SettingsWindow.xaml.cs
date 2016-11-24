@@ -50,7 +50,7 @@ namespace APTAT.Application
         {
             MainViewViewModel model = DataContext as MainViewViewModel;
             string message;
-            if (!model.ValidatePorts(out message))
+            if (!ShowCredentials && !model.ValidatePorts(out message))
             {
                 model.Error = message;
                 return;

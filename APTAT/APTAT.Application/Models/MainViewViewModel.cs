@@ -849,11 +849,14 @@ namespace APTAT.Application.Models
                             window.ShowCredentials = true;
                             window.Header = "Proxy Credentials";
 
+                            bool retry = false;
                             if (window.ShowDialog().GetValueOrDefault())
+                                retry = true;
+
+                            if (retry)
                             {
                                 NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword);
                                 Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
-
                                 BeginValkyrieAnalysis(cred);
                                 return;
                             }
