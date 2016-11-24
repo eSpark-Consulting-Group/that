@@ -1100,9 +1100,9 @@
                         <Style />
                       </ChartDataLabel>
                       <Style>
-                        <Color>=Switch(Fields!BadFileType.Value = "Infected", "Maroon", Fields!BadFileType.Value = "Unknown", "#ffc000", Fields!BadFileType.Value = "Failed To Analyze", "#ff4d00", Fields!BadFileType.Value = "Lookup in progress", "#c0c0c0")</Color>
+                        <Color>=Switch(Fields!BadFileType.Value = "Infected", "Maroon", Fields!BadFileType.Value = "Unknown", "#ffc000", Fields!BadFileType.Value = "Failed To Analyze", "#ff4d00", Fields!BadFileType.Value = "Lookup in Progress", "#c0c0c0")</Color>
                         <BackgroundGradientType>LeftRight</BackgroundGradientType>
-                        <BackgroundGradientEndColor>=Switch(Fields!BadFileType.Value = "Infected", "#993232", Fields!BadFileType.Value = "Unknown", "#ffe599", Fields!BadFileType.Value = "Failed To Analyze", "#ffc9b2", Fields!BadFileType.Value = "Lookup in progress", "#f2f2f2")</BackgroundGradientEndColor>
+                        <BackgroundGradientEndColor>=Switch(Fields!BadFileType.Value = "Infected", "#993232", Fields!BadFileType.Value = "Unknown", "#ffe599", Fields!BadFileType.Value = "Failed To Analyze", "#ffc9b2", Fields!BadFileType.Value = "Lookup in Progress", "#f2f2f2")</BackgroundGradientEndColor>
                       </Style>
                       <ChartMarker>
                         <Style />

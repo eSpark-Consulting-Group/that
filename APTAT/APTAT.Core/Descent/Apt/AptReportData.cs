@@ -210,9 +210,9 @@ namespace APTAT.Core.Descent.Apt
         private static string SizeToString(long size)
         {
             if (size < 1024)
-                return String.Format("{0} KB ({1} bytes)", 1, size);
+                return $"{1} KB ({size} B)";
             else //if (size < 1024 * 1024)
-                return String.Format("{0} KB ({1} bytes)", (int)(size / (double)1024), size);
+                return $"{(int) (size/(double) 1024)} KB ({size} B)";
             //else if(size < 1024 * 1024 * 1024)
             //    return String.Format("{0} MB", (int)(size / (double)(1024 * 1024)));
             //else
