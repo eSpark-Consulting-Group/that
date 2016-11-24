@@ -11,17 +11,14 @@ namespace APTAT.Application
 {
     public partial class App : System.Windows.Application
     {
-        private Mutex _mutex;
+        private EventWaitHandle _event;
         private SplashWindow _splash;
-        private MainWindow _window;
-        private DispatcherTimer _timer;
-        private DispatcherOperation _operation;
         private bool _initialized;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             bool createdNew;
-            _mutex = new Mutex(true, "Global\\8F24B2C3-13A4-490A-ACD5-0D68C7BAEA81", out createdNew);
+            _event = new EventWaitHandle(false, EventResetMode.ManualReset, "Global\\8F24B2C3-13A4-490A-ACD5-0D68C7BAEA81", out createdNew);
 
             if (!createdNew)
             {
@@ -30,10 +27,8 @@ namespace APTAT.Application
             }
             else
             {
-                Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
-                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                ThreadHelper.Instance.RunOnThread(delegate { (_splash = new SplashWindow()).Show(); });
 
-                _operation = ThreadHelper.Instance.RunOnThread(delegate { (_splash = new SplashWindow()).Show(); });
                 var op = ThreadHelper.Instance.RunOnThreadDelayed(delegate 
                 {
                     Current.Resources.MergedDictionaries.Add(new ResourceDictionary()
@@ -51,13 +46,15 @@ namespace APTAT.Application
                 });
                 op.Completed += DispatcherOperationCompleted;
 
-                _timer = new DispatcherTimer(DispatcherPriority.Normal, Current.Dispatcher);
-                _timer.Interval = TimeSpan.FromMilliseconds(2000);
-                _timer.Tick += TimerTick;
-                _timer.Start();
+                var timer = new DispatcherTimer(DispatcherPriority.Normal, Current.Dispatcher);
+                timer.Interval = TimeSpan.FromMilliseconds(2000);
+                timer.Tick += TimerTick;
+                timer.Start();
 
                 op.Priority = DispatcherPriority.Normal;
 
+                Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 InitTraceListener();
             }
 
@@ -68,20 +65,15 @@ namespace APTAT.Application
         {
             if (_initialized)
             {
-                _timer.Tick -= TimerTick;
-                _timer.Stop();
+                var timer = sender as DispatcherTimer;
+                timer.Tick -= TimerTick;
+                timer.Stop();
                 
-                _window = new MainWindow();
-                _window.Loaded += WindowLoaded;
-                _window.Show(); 
+                var window = new MainWindow();
+                window.Loaded += (s, a) => _splash.Dispatcher.Invoke(_splash.Close);
+                window.Show();
+                window.Activate();
             }
-        }
-
-        private void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            _window.Loaded -= WindowLoaded;
-            _window.Activate();
-            _operation.Dispatcher.Invoke(_splash.Close);
         }
 
         private void DispatcherOperationCompleted(object sender, EventArgs e)
@@ -94,7 +86,7 @@ namespace APTAT.Application
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _mutex?.Close();
+            _event?.Dispose();
 
             base.OnExit(e);
         }

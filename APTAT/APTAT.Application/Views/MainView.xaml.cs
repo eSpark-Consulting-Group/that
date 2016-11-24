@@ -12,7 +12,6 @@ using Process = System.Diagnostics.Process;
 using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
 using APTAT.Application.Messages;
-using System.Threading.Tasks;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application
@@ -54,8 +53,7 @@ namespace APTAT.Application
                         if (mainContent.Content == null)
                             mainContent.Content = new ResultTabsControl();
                         
-                        Task.Delay(600).ContinueWith(_ => 
-                            Dispatcher.BeginInvoke((Action) delegate { message.Action(details.IsQuickScan); }));
+                        message.Action(details.IsQuickScan);
                     }
                     break;
                 case ChangeScreenTypes.StopScan:
@@ -273,7 +271,7 @@ namespace APTAT.Application
                 short.TryParse(this._viewModel.UdpPort, out udpShortNew);
                 if (tcpShortNew != tcpShort || udpShortNew != udpShort)
                 {
-                    _viewModel.OnPortChanged(udpShortNew, tcpPort:tcpShortNew);
+                    _viewModel.OnPortChanged(udpShortNew, tcpShortNew);
                 }
             }
         }
