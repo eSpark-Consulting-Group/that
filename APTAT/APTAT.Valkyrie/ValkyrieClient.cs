@@ -300,8 +300,6 @@ namespace APTAT.Valkyrie
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, 
             CancellationToken cancellationToken, Action< ValkyrieAnalysisResult,ValkyrieFileInfo> addAction,  bool parallels = true)
         {
-
-            _filesCount = badFiles.Count;
             Guid endpointId = GetEndpointId();
 
             ParallelOptions opt = new ParallelOptions
@@ -742,6 +740,7 @@ namespace APTAT.Valkyrie
                 }
                 Thread.Sleep(2000);
                 _progressNotifyTimer.Change(1000, Timeout.Infinite);
+                _filesCount = filesToAnalyze.Count;
                 SubmitToAutomaticAnalysis(filesToAnalyze, _cancellationTokenSource.Token, AddResult);
                 
                 

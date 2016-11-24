@@ -34,6 +34,7 @@ namespace APTAT.Application.Models.Valkyrie
             Sid = computer.Sid;
             Os = computer.Os;
             TargetUid = computer.TargetUid;
+            FilePath = computer.FilePath;
             IP = computer.IP;
         }
 
