@@ -20,6 +20,7 @@ using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Models.ModelBase;
+using APTAT.Application.Models.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Application.Models
@@ -29,7 +30,7 @@ namespace APTAT.Application.Models
         public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
         public event EventHandler ValkyrieAnalyzeStarted;
-        public event EventHandler<AnalyzeCompletedEventArgs<FileResult>> ValkyrieAnalyzeCompleted;
+        public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieFile>> ValkyrieAnalyzeCompleted;
 
 
 
@@ -65,14 +66,14 @@ namespace APTAT.Application.Models
 
         private Collection<ThreatInfoItem> _items;
         private Collection<ThreatInfoItem> _computers;
-        private ObservableCollection<FileResult> _itemsValkyrie;
-        private ObservableCollection<ComputerInformation> _computersValkyrie;
+        private ObservableCollection<ValkyrieFile> _itemsValkyrie;
+        private ObservableCollection<ValkyrieComputer> _computersValkyrie;
         private Object _countersLock = new Object();
 
         private Collection<ThreatInfoItem> _cache;
         private Collection<ThreatInfoItem> _cacheComputers;
-        private Collection<FileResult> _cacheValkyrie;
-        private Collection<ComputerInformation> _cacheValkyrieComputers;
+        private Collection<ValkyrieFile> _cacheValkyrie;
+        private Collection<ValkyrieComputer> _cacheValkyrieComputers;
 
         private DispatcherTimer _scanIteratorTimer;
         private Dictionary<Guid, ScanProgressItem> _scanIterator;
@@ -256,7 +257,7 @@ namespace APTAT.Application.Models
             get { return ValkyrieProgressInfo.TotalFileCount; }
         }
 
-        public ProgressInfo<FileResult> ValkyrieProgressInfo { get; set; }
+        public ProgressInfo<ValkyrieFile> ValkyrieProgressInfo { get; set; }
 
         public Int32 UnknownFilesCount
         {
@@ -366,7 +367,7 @@ namespace APTAT.Application.Models
 
         public Boolean IsValkyrieDetailsEnabled
         {
-            get { return SelectedValkyrieItem != null && SelectedValkyrieItem is FileResult; }
+            get { return SelectedValkyrieItem != null && SelectedValkyrieItem is ValkyrieFile; }
         }
 
         public Boolean IsReportEnabled
@@ -423,7 +424,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(_selectedItem.BadFile, null));
+                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, ValkyrieFile>(_selectedItem.BadFile, null));
                 }
 
             }
@@ -434,7 +435,7 @@ namespace APTAT.Application.Models
             get { return _selectedValkyrieItem; }
             set
             {
-                _selectedValkyrieItem = value == null ? null : (value is FileResult ? value : null);
+                _selectedValkyrieItem = value == null ? null : (value is ValkyrieFile ? value : null);
                 RaisePropertyChanged("SelectedValkyrieItem");
                 SelectValkyrieCommand.InvalidateCanExecute();
 
@@ -444,7 +445,7 @@ namespace APTAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, FileResult>(null, (FileResult)_selectedValkyrieItem));
+                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, ValkyrieFile>(null, (ValkyrieFile)_selectedValkyrieItem));
                 }
 
             }
@@ -479,7 +480,7 @@ namespace APTAT.Application.Models
             get { return LookupInProgressCount > 0; }
         }
 
-        public ObservableCollection<FileResult> ItemsValkyrie
+        public ObservableCollection<ValkyrieFile> ItemsValkyrie
         {
             get { return _itemsValkyrie; }
             set
@@ -489,7 +490,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public ObservableCollection<ComputerInformation> ComputersValkyrie
+        public ObservableCollection<ValkyrieComputer> ComputersValkyrie
         {
             get { return _computersValkyrie; }
             set
@@ -593,7 +594,7 @@ namespace APTAT.Application.Models
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
 
-            ValkyrieProgressInfo = ProgressInfo<FileResult>.Empty;
+            ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.Empty;
         }
 
         public bool ActiveDirectoryStep { get; set; }
@@ -604,13 +605,13 @@ namespace APTAT.Application.Models
 
             Items = new Collection<ThreatInfoItem>();
             Computers = new Collection<ThreatInfoItem>();
-            ItemsValkyrie = new ObservableCollection<FileResult>();
-            ComputersValkyrie = new ObservableCollection<ComputerInformation>();
+            ItemsValkyrie = new ObservableCollection<ValkyrieFile>();
+            ComputersValkyrie = new ObservableCollection<ValkyrieComputer>();
 
             _cache = new Collection<ThreatInfoItem>();
             _cacheComputers = new Collection<ThreatInfoItem>();
-            _cacheValkyrie = new Collection<FileResult>();
-            _cacheValkyrieComputers = new Collection<ComputerInformation>();
+            _cacheValkyrie = new Collection<ValkyrieFile>();
+            _cacheValkyrieComputers = new Collection<ValkyrieComputer>();
 
             _onlineItems = new ThreatInfoItem[0];
 
@@ -693,7 +694,8 @@ namespace APTAT.Application.Models
                 if (result.Cloud == CloudVerdict.Safe)
                     newVerdict = ValkyrieVerdict.Clean;
 
-                var items = Items.Where(i => i.BadFile.Sha1 == result.Sha1).ToArray();
+                var items = Items.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1
+                    , StringComparison.OrdinalIgnoreCase)).ToArray();
                 foreach (var threatInfoItem in items)
                 {
                     threatInfoItem.UpdateFileVerdict(result.Cloud);
@@ -703,13 +705,15 @@ namespace APTAT.Application.Models
 
                 foreach (ThreatInfoItem computer in Computers)
                 {
-                    var files = computer.Items.Where(i => i.BadFile.Sha1 == result.Sha1).ToArray();
+                    var files = computer.Items.Where(i =>
+                            String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.Ordinal)).ToArray();
                     if (files.Any())
                     {
                         if (!computersToUpdate.ContainsKey(computer.ComputerGuid))
                             computersToUpdate.Add(computer.ComputerGuid, computer);
                         var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.ComputerGuid);
-                        comp?.UpdateFileIfPredicate(result.Sha1, newVerdict, verdict => verdict == ValkyrieVerdict.PendingFls);
+                        comp?.UpdateFileIfPredicate(result.Sha1, new ValkyrieAnalysisResult(result.Sha1, newVerdict), 
+                            verdict => verdict == ValkyrieVerdict.PendingFls);
                         foreach (var f in files)
                             f.UpdateFileVerdict(result.Cloud);
                     }
@@ -723,7 +727,7 @@ namespace APTAT.Application.Models
                         if (!file.PendingFls)
                             continue;
                         
-                        file.UpdateValkyrieResult(newVerdict);
+                        file.UpdateValkyrieResult(new ValkyrieAnalysisResult(result.Sha1, newVerdict));
                         Interlocked.Add(ref _lookupInProgressCount, -file.Computers.Count);
                         RaisePropertyChanged(nameof(LookupInProgressCount));
                         RaisePropertyChanged(nameof(IsErrorsFound));
@@ -747,8 +751,6 @@ namespace APTAT.Application.Models
                             //PendingFilesCount--;
                         }
                     }
-
-                    
                 }
                 else
                    needUpdateStatus = true;
@@ -778,23 +780,23 @@ namespace APTAT.Application.Models
 
         void CopyMalwaresFromScanResults()
         {
-            var col = new Collection<FileResult>();
+            var col = new Collection<ValkyrieFile>();
             foreach (var file in Items)
             {
                 if (!file.IsMalware && !file.Failed)
                     continue;
-                var fileResult = MapToFileResult(file);
-                col.Add(fileResult);
+                var valkyrieFile = MapToValkyrieFile(file);
+                col.Add(valkyrieFile);
             }
 
             MergeResults(col);
         }
 
-        private static FileResult MapToFileResult(ThreatInfoItem file)
+        private static ValkyrieFile MapToValkyrieFile(ThreatInfoItem file)
         {
-            var fileResult = new FileResult
+            var valkyrieFile = new ValkyrieFile
             {
-                Cloud = file.BadFile.Cloud,
+                FlsVerdict = file.BadFile.Cloud,
                 Size = file.Size,
                 SizeSorting = file.SizeSorting,
                 Attributes = file.BadFile.Attributes,
@@ -806,60 +808,54 @@ namespace APTAT.Application.Models
                 Description = file.BadFile.Description,
                 Version = file.BadFile.Version,
                 Copyright = file.BadFile.Copyright,
-                Product = file.BadFile.Product,
-                ValkyrieAnalysisResult = new ValkyrieAnalysisResult
-                {
-                    SHA1 = file.BadFile.Sha1,
-                    Verdict = file.IsMalware
-                        ? ValkyrieVerdict.Malware
-                        : ValkyrieVerdict.PendingFls
-                }
+                Product = file.BadFile.Product
             };
+            valkyrieFile.UpdateValkyrieResult(
+                new ValkyrieAnalysisResult(file.BadFile.Sha1, file.IsMalware
+                        ? ValkyrieVerdict.Malware
+                        : ValkyrieVerdict.PendingFls));
             foreach (var comp in file.Computers)
             {
-                var computer = new ComputerInformation
+                var computer = new ValkyrieComputer
                 {
                     Name = comp.Name,
                     IP = comp.IpAddress,
                     FilePath = comp.ShortName,
                     TargetUid = comp.ComputerGuid
                 };
-                fileResult.Path = computer.FilePath;
-                fileResult.Computers.Add(computer);
+                valkyrieFile.Path = computer.FilePath;
+                valkyrieFile.Computers.Add(computer);
             }
-            return fileResult;
+            return valkyrieFile;
         }
 
-        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
         {
             if (e.Error != null)
             {
                 var webException = e.Error as WebException;
-                if (webException != null)
+                var httpWebResponse = webException?.Response as HttpWebResponse;
+                if (httpWebResponse != null)
                 {
-                    var httpWebResponse = webException.Response as HttpWebResponse;
-                    if (httpWebResponse != null)
+                    HttpStatusCode code = httpWebResponse.StatusCode;
+                    if (code == HttpStatusCode.ProxyAuthenticationRequired)
                     {
-                        HttpStatusCode code = httpWebResponse.StatusCode;
-                        if (code == HttpStatusCode.ProxyAuthenticationRequired)
+                        SettingsWindow window = new SettingsWindow();
+                        window.Owner = System.Windows.Application.Current.MainWindow;
+                        window.DataContext = this;
+                        window.ShowCredentials = true;
+                        window.Header = "Proxy Credentials";
+
+                        bool retry = false;
+                        if (window.ShowDialog().GetValueOrDefault())
+                            retry = true;
+
+                        if (retry)
                         {
-                            SettingsWindow window = new SettingsWindow();
-                            window.Owner = System.Windows.Application.Current.MainWindow;
-                            window.DataContext = this;
-                            window.ShowCredentials = true;
-                            window.Header = "Proxy Credentials";
-
-                            bool retry = false;
-                            if (window.ShowDialog().GetValueOrDefault())
-                                retry = true;
-
-                            if (retry)
-                            {
-                                NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword);
-                                Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
-                                BeginValkyrieAnalysis(cred);
-                                return;
-                            }
+                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword);
+                            Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+                            BeginValkyrieAnalysis(cred);
+                            return;
                         }
                     }
                 }
@@ -874,8 +870,8 @@ namespace APTAT.Application.Models
                 }
             }
 
-            _cacheValkyrie = new Collection<FileResult>(ItemsValkyrie);
-            _cacheValkyrieComputers = new Collection<ComputerInformation>(ComputersValkyrie);
+            _cacheValkyrie = new Collection<ValkyrieFile>(ItemsValkyrie);
+            _cacheValkyrieComputers = new Collection<ValkyrieComputer>(ComputersValkyrie);
 
             if (e.Cancelled)
                 foreach (var comp in ComputersValkyrie)
@@ -894,7 +890,7 @@ namespace APTAT.Application.Models
             ValkyrieAnalyzeCompleted?.Invoke(this, e);
         }
 
-        private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<FileResult> e)
+        private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile> e)
         {
             var info = e.ProgressInfo;
 
@@ -915,7 +911,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        private void UpdateResults(FileResult[] results)
+        private void UpdateResults(ValkyrieFile[] results)
         {
             foreach (var result in results)
             {
@@ -958,7 +954,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        private void MergeResults(IEnumerable<FileResult> results)
+        private void MergeResults(IEnumerable<ValkyrieFile> results)
         {
             if (results == null)
                 return;
@@ -1011,9 +1007,11 @@ namespace APTAT.Application.Models
                         comp.MergeFile(result, computer.FilePath);
                     else
                     {
-                        comp = new ComputerInformation(computer);
-                        comp.TotalDistinctCount = c.DistinctUnknownFilesCount;
-                        comp.TotalCount = c.UnknownFilesCount;
+                        comp = new ValkyrieComputer(computer)
+                        {
+                            TotalDistinctCount = c.DistinctUnknownFilesCount,
+                            TotalCount = c.UnknownFilesCount
+                        };
                         comp.MergeFile(result, computer.FilePath);
                         ComputersValkyrie.Add(comp);
                     }
@@ -1138,16 +1136,16 @@ namespace APTAT.Application.Models
 
         public void OnBeforeBeginValkyrieAnalysis()
         {
-            ValkyrieProgressInfo = ProgressInfo<FileResult>.CreateFromTotal(DistinctFilesCount);
+            ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.CreateFromTotal(DistinctFilesCount);
 
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
 
-            ItemsValkyrie = new ObservableCollection<FileResult>();
-            ComputersValkyrie = new ObservableCollection<ComputerInformation>();
-            _cacheValkyrie = new Collection<FileResult>();
-            _cacheValkyrieComputers = new Collection<ComputerInformation>();
+            ItemsValkyrie = new ObservableCollection<ValkyrieFile>();
+            ComputersValkyrie = new ObservableCollection<ValkyrieComputer>();
+            _cacheValkyrie = new Collection<ValkyrieFile>();
+            _cacheValkyrieComputers = new Collection<ValkyrieComputer>();
 
             Keyword = string.Empty;
 
@@ -1392,14 +1390,14 @@ namespace APTAT.Application.Models
 
             if (_cacheValkyrie != null && _cacheValkyrie.Any())
             {
-                ItemsValkyrie = new ObservableCollection<FileResult>(
-                       _cacheValkyrie.Where(item => item.ValkyrieAnalysisResult != null && item.Name.ContainsString(Keyword)));
+                ItemsValkyrie = new ObservableCollection<ValkyrieFile>(
+                       _cacheValkyrie.Where(item => item.Name.ContainsString(Keyword)));
                 SelectedValkyrieItem = null;
             }
 
             if (_cacheValkyrieComputers != null && _cacheValkyrieComputers.Any())
             {
-                ComputersValkyrie = new ObservableCollection<ComputerInformation>(
+                ComputersValkyrie = new ObservableCollection<ValkyrieComputer>(
                        _cacheValkyrieComputers.Where(item => item.FullName.ContainsString(Keyword)));
             }
         }

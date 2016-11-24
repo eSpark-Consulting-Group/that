@@ -116,6 +116,9 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Models\Valkyrie\ValkyrieComputer.cs" />
+    <Compile Include="Models\Valkyrie\ValkyrieFile.cs" />
+    <Compile Include="Services\MapperHelper.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
@@ -491,6 +494,7 @@
       <Name>APTAT.Valkyrie</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>del "$(TargetDir)ValkyrieHunter.exe"

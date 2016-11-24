@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using APTAT.Application.Models;
+using APTAT.Application.Models.Valkyrie;
 using APTAT.Core;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
@@ -12,7 +13,6 @@ namespace APTAT.Application.Services
     public class DomainEventArgs : EventArgs
     {
         public Object UserState { get; protected set; }
-
         public Exception Exception { get; set; }
     }
 
@@ -46,7 +46,6 @@ namespace APTAT.Application.Services
     public class DirectoryItemsResolvedEventArgs : DomainEventArgs
     {
         public DeploymentTarget[] Items { get; private set; }
-
         public DirectoryItemsResolvedEventArgs(DeploymentTarget[] items, Object userState, Exception error = null)
         {
             Items = items;
@@ -58,7 +57,6 @@ namespace APTAT.Application.Services
     public class BeginScanCompletedEventArgs : DomainEventArgs
     {
         public Guid OperationGuid { get; private set; }
-
         public BeginScanCompletedEventArgs(Guid operationGuid, Object userState, Exception error = null)
         {
             OperationGuid = operationGuid;
@@ -70,9 +68,6 @@ namespace APTAT.Application.Services
     public class ScanStatusChangedEventArgs : DomainEventArgs
     {
         public ScanProgressItem[] ScanProgress { get; private set; }
-
-        public Guid OperationGuid { get; private set; }
-
         public ScanStatusChangedEventArgs(ScanProgressItem[] scanProgress,Object userState, Exception error = null)
         {
             ScanProgress = scanProgress;
@@ -95,17 +90,11 @@ namespace APTAT.Application.Services
     public class ScanCompletedEventArgs : DomainEventArgs
     {
         public Int32 SuccededCount { get; set; }
-
         public Int32 FailedCount { get; set; }
-
         public Int32 CanceledCount { get; set; }
-
-        public Int32 NotPerformedCount { get; set; }
-        
+        public Int32 NotPerformedCount { get; set; }  
         public Int32 MalwaresFound { get; set; }
-
         public IFilesStatistics FilesStatistics { get; set; }
-
         public int DistinctFileFound { get; set; }
     }
 
@@ -124,7 +113,6 @@ namespace APTAT.Application.Services
     public class ScanProgressChangedEventArgs : DomainEventArgs
     {
         public double Percentage { get; private set; }
-
         public Guid OperationGuid { get; private set; }
 
         public ScanProgressChangedEventArgs(double percentage, Guid operationGuid)
@@ -152,20 +140,17 @@ namespace APTAT.Application.Services
         event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
         event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;   
-        event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
-        event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+        event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
+        event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
-        void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+        void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem
+            , IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan();
-
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
-
-        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, string camPassword,
-            NetworkCredential networkCredential = null);
-        
-        
+        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, 
+            string camPassword, NetworkCredential networkCredential = null);
         string GetValkyrieDetailsLink();
     }
 }

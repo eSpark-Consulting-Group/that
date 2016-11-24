@@ -66,6 +66,8 @@
     <Compile Include="AptScanInProgressEventArgs.cs" />
     <Compile Include="AptScanStage.cs" />
     <Compile Include="Apt\AptScanner.cs" />
+    <Compile Include="Apt\AptScannerFactory.cs" />
+    <Compile Include="Apt\IAptScannerFactory.cs" />
     <Compile Include="ComputerInformation.cs" />
     <Compile Include="ComputerScanCompletedEventArgs.cs" />
     <Compile Include="DataNotReadyException.cs" />

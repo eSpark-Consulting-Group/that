@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using APTAT.Application.Models.Valkyrie;
 using APTAT.Core;
 
 namespace APTAT.Application.TemplateSelectors
@@ -15,12 +13,12 @@ namespace APTAT.Application.TemplateSelectors
 
         public override DataTemplate SelectTemplate(Object item, DependencyObject container)
         {
-            if (item is FileResult)
+            if (item is ValkyrieFile)
             {                
                 return FileTemplate;
             }
             
-            if(item is ComputerInformation)
+            if(item is ValkyrieComputer)
             {
                 return ComputerTemplate;
             }

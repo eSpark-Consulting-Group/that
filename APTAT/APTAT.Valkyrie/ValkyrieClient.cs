@@ -67,13 +67,10 @@ namespace APTAT.Valkyrie
                 needStartTimer = _checkingTimerIsStop;
                 _checkingTimerIsStop = false;
                 foreach (var fileInfo in filesToAnalyze)
-                {
                     _lookupContexts.Add(fileInfo);
-                }
             }
             if (needStartTimer)
                 _checkStatusesTimer?.Change(TimeSpan.FromSeconds(5).Milliseconds, Timeout.Infinite);
-
         }
 
         private RegisterWithResponse Register(CamRegistration camRegistration,
@@ -355,9 +352,8 @@ namespace APTAT.Valkyrie
                 addAction(result, f);
 
                 Trace.WriteLine(
-                    string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {1} Reason : {2} {3}",
-                        DateTime.UtcNow, f.Sha1, e.Message,
-                        e.InnerException != null ? e.InnerException.Message : string.Empty));
+                    $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Submit Failed SHA1 = {f.Sha1} Reason : {e.Message}" +
+                    $" {e.InnerException?.Message ?? string.Empty}");
             }
         }
 
@@ -393,13 +389,13 @@ namespace APTAT.Valkyrie
                 if (aggregateException.InnerExceptions.Count == 1)
                 {
                     exception = aggregateException.InnerExceptions.First();
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exception.Message));
+                    Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : {exception.Message}");
                 }
                 else
                 {
                     var messages = aggregateException.InnerExceptions.Select(e => e.Message).ToArray();
                     var exMessage = String.Join(Environment.NewLine, messages);
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : {1}", DateTime.UtcNow, exMessage));
+                    Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : {exMessage}");
                     exception = aggregateException;
                 }
             }
@@ -409,8 +405,7 @@ namespace APTAT.Valkyrie
                         ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId)); 
                     }, TaskCreationOptions.None);
 
-            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {1}",
-                DateTime.UtcNow, _apiKey));
+            Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {_apiKey}");
             AnalyzeCompleted?.Invoke(this,
                 new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), exception,
                     task.IsCanceled, task.AsyncState));
@@ -482,9 +477,8 @@ namespace APTAT.Valkyrie
                 {
                     result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.",
                         SkippReasonEnum.Skipped);
-                    Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} greater than 25 Mb",
-                        DateTime.UtcNow,
-                        originalFilePath));
+                    Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : File {originalFilePath} " +
+                                    $"greater than 25 Mb");
                     Trace.Flush();
                     return result;
                 }
@@ -494,8 +488,8 @@ namespace APTAT.Valkyrie
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
 
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}",
-                    DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1 {sha1} FilePath " +
+                                $"{originalFilePath} Presence = {basicInfo.Presence}");
                 Trace.Flush();
 
                 if (basicInfo.Presence)
@@ -505,9 +499,8 @@ namespace APTAT.Valkyrie
                 else
                 {
                     Trace.WriteLine(
-                        string.Format(
-                            "{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} Presence = {3}, [File Uploaded]",
-                            DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                        $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1 {sha1} FilePath {originalFilePath} Presence " +
+                        $"= {basicInfo.Presence}, [File Uploaded]");
                 
                     var request = new SubmitToAutomaticRequest
                     {
@@ -543,7 +536,8 @@ namespace APTAT.Valkyrie
                         Thread.Sleep(1000);
                         elapsed = (int)(DateTime.UtcNow - utcStarted).TotalMilliseconds;
                         automaticAnalysisResponse =
-                            ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: response.AnalysisId, apiKey: _apiKey));
+                            ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: response.AnalysisId, 
+                            apiKey: _apiKey));
                         analyzeNotFinished = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFinished;
 
                     }
@@ -582,14 +576,14 @@ namespace APTAT.Valkyrie
                     return CancelOperation(originalFilePath, sha1);
                 }
 
-                var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId, aptScanId: _aptScanId, filePath: WebUtility.HtmlDecode(fileInfo.Path));
+                var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId, aptScanId: _aptScanId, 
+                    filePath: WebUtility.HtmlDecode(fileInfo.Path));
                 BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
                 Trace.WriteLine(
-                    string.Format(
-                        "{0:MM/dd/yy H:mm:ss.ffff}: SHA1 {1} FilePath {2} FlsVerdict {3} Upload {4} Presence = {5}",
-                        DateTime.UtcNow, sha1, originalFilePath, fileInfo.FlsCloud, basicInfo.Upload, basicInfo.Presence));
+                    $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1 {sha1} FilePath {originalFilePath} " +
+                    $"FlsVerdict {fileInfo.FlsCloud} Upload {basicInfo.Upload} Presence = {basicInfo.Presence}");
                 Trace.Flush();
                 if (basicInfo.Upload)
                 {
@@ -597,9 +591,7 @@ namespace APTAT.Valkyrie
                     {
                         result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.",
                             SkippReasonEnum.Skipped);
-                        Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} greater than 25 Mb",
-                            DateTime.UtcNow,
-                            originalFilePath));
+                        Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : File {originalFilePath} greater than 25 Mb");
                         Trace.Flush();
                         return result;
                     }
@@ -637,17 +629,15 @@ namespace APTAT.Valkyrie
                         Trace.WriteLine( $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: reading remote file {remoteFilePath}");
                         using (var fStream = File.OpenRead(remoteFilePath))
                         {
-                            response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream,
-                                _cancellationTokenSource.Token);
+                            response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
                         }
                     }
                     if (response.ReturnCode != ErrorCodesEnum.Success)
                         throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
 
                     Trace.WriteLine(
-                        string.Format(
-                            "{0:MM/dd/yy H:mm:ss.ffff}: SHA1: {1} FilePath: {2} Presence = {3}, [File Uploaded]",
-                            DateTime.UtcNow, sha1, originalFilePath, basicInfo.Presence));
+                        $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1: {sha1} FilePath: {originalFilePath} " +
+                        $"Presence = {basicInfo.Presence}, [File Uploaded]");
                     lock (_automaticAnalyseSync)
                     {
                         _automaticAnalyseInProgressByHash[fileInfo.Sha1] = new ValkyrieAnalyseOperationContext
@@ -679,7 +669,7 @@ namespace APTAT.Valkyrie
         private static ValkyrieAnalysisResult CancelOperation(string originalFilePath,  string sha1)
         {
             var result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Cancelled by user.", SkippReasonEnum.Cancelled);
-            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : File {1} cancelled by user", DateTime.UtcNow, originalFilePath));            
+            Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : File {originalFilePath} cancelled by user");            
             Trace.Flush();
             return result;
         }
@@ -707,7 +697,7 @@ namespace APTAT.Valkyrie
 
         public string GetValkyrieDetailsLink()
         {
-            return String.Format(@"{0}signup_apikey/{1}", ValkyrieApiUrls.GetBaseUri(), _apiKey);
+            return $@"{ValkyrieApiUrls.GetBaseUri()}signup_apikey/{_apiKey}";
         }
 
         public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,

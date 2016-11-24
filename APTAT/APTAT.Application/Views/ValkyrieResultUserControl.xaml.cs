@@ -8,6 +8,7 @@ using Telerik.Windows.Controls.GridView;
 using APTAT.Application.Extensions;
 using System.Collections.Generic;
 using System.Linq;
+using APTAT.Application.Models.Valkyrie;
 
 namespace APTAT.Application
 {
@@ -46,7 +47,7 @@ namespace APTAT.Application
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
 
-                treeList2.SelectedItem = cell.DataContext is FileResult ? cell.DataContext : null;
+                treeList2.SelectedItem = cell.DataContext is ValkyrieFile ? cell.DataContext : null;
             }
         }
 
@@ -54,7 +55,7 @@ namespace APTAT.Application
         {
             if (treeList2.SelectedItem != null)
             {
-                var item = treeList2.SelectedItem as FileResult;
+                var item = treeList2.SelectedItem as ValkyrieFile;
                 if (item != null && ViewModel.SelectedValkyrieItem == item)
                 {
                     ValkyrieDetailsWindow details = new ValkyrieDetailsWindow();
@@ -79,7 +80,7 @@ namespace APTAT.Application
                     return;
                 }
 
-                var item = element.DataContext as FileResult;
+                var item = element.DataContext as ValkyrieFile;
                 if (item != null && ViewModel.SelectedValkyrieItem == item)
                 {
                     ViewModel.SelectedValkyrieItem = item;

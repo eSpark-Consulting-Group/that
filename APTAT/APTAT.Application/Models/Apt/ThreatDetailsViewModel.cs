@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.IO;
+using APTAT.Application.Models.Valkyrie;
 using APTAT.Application.Services;
 using APTAT.Core;
 using APTAT.Core.Descent.Apt;
@@ -219,7 +220,7 @@ namespace APTAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            var file = _storage.GetValue<Tuple<BadFileItem, FileResult>>(KnownKeys.UnknownFile, false);
+            var file = _storage.GetValue<Tuple<BadFileItem, ValkyrieFile>>(KnownKeys.UnknownFile, false);
             var badFile = file.Item1;
             var valkyrieFile = file.Item2;
 
@@ -270,8 +271,9 @@ namespace APTAT.Application.Models
             Version = NAIfEmpty(badFile != null ? badFile.Version : valkyrieFile.Version);
             Copyright = NAIfEmpty(badFile != null ? badFile.Copyright : valkyrieFile.Copyright);
             Product = NAIfEmpty(badFile != null ? badFile.Product : valkyrieFile.Product);
-            IsWhitelisted = valkyrieFile != null && valkyrieFile.ValkyrieAnalysisResult.IsWhiteListed ? "yes" : "no";
-            MalwareProbability = (valkyrieFile != null && valkyrieFile.ValkyrieAnalysisResult.MalwareProbability.HasValue) ? (valkyrieFile.ValkyrieAnalysisResult.MalwareProbability.Value / 100).ToString("P") : "";
+            IsWhitelisted = valkyrieFile != null && valkyrieFile.IsWhiteListed ? "yes" : "no";
+            MalwareProbability = (valkyrieFile != null && valkyrieFile.MalwareProbabilityValue.HasValue) ? 
+                (valkyrieFile.MalwareProbabilityValue.Value / 100).ToString("P") : "";
         }
 
         private String NAIfEmpty(String str)

@@ -3,6 +3,7 @@ using APTAT.Core;
 using System;
 using System.Linq;
 using System.Net;
+using APTAT.Application.Models.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
 using APTAT.Core.Reports;
@@ -24,8 +25,8 @@ namespace APTAT.Application.Services
         public event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
-        public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
+        public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
+        public event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         private IAptAtManager _manager;
@@ -67,7 +68,7 @@ namespace APTAT.Application.Services
         {
             Action action = () =>
             {
-                ValkyrieAnalyzeProgressChanged?.Invoke(this,e);
+                ValkyrieAnalyzeProgressChanged?.Invoke(this,e.ToClient());
             };
             App.Current.Dispatcher.Invoke(action);
         }
@@ -76,7 +77,7 @@ namespace APTAT.Application.Services
         {
             Action action = () =>
             {
-                ValkyrieAnalyzeCompleted?.Invoke(this,e);
+                ValkyrieAnalyzeCompleted?.Invoke(this,e.ToClient());
             };
             App.Current.Dispatcher.BeginInvoke(action);
         }

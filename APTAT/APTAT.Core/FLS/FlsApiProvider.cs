@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using APTAT.Core.Descent.Apt;
 using APTAT.Core.Properties;
 using APTAT.DeploymentCore.Properties;
 
@@ -62,15 +63,15 @@ namespace APTAT.Core
                 {
                     result = RequestType0Tcp(hashes);
                 }
-
+                if (result.Results.All(r => r.IsNotAnalyzed()))
+                    throw new Exception();
                 return result;
             }
             catch (Exception ex)
             {
-                
-                    if (_servers.Length > _serverIndex) _serverIndex++;
-                    else _serverIndex = 0;
-                
+                if (_servers.Length <= ++_serverIndex) 
+                    _serverIndex = 0;
+            
                 throw ex;
 
             }

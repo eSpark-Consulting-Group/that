@@ -12,6 +12,8 @@ using Process = System.Diagnostics.Process;
 using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
 using APTAT.Application.Messages;
+using System.Threading.Tasks;
+using APTAT.Application.Models.Valkyrie;
 using Telerik.Windows.Controls;
 
 namespace APTAT.Application
@@ -164,7 +166,7 @@ namespace APTAT.Application
             });
         }
 
-        private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
         {
             if (_onCompletedAction != null)
             {

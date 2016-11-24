@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Directory;
@@ -369,7 +368,7 @@ namespace APTAT.Core.Reports
         }
         public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()
         {
-            IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
+            IEnumerable<ScannedTarget> targets;
             IEnumerable<DetailedBadFile> files;
             MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
 

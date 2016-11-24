@@ -17,7 +17,6 @@ namespace APTAT.Core
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
-        ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
 
         IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
@@ -25,6 +24,7 @@ namespace APTAT.Core
         IAptReportBuilder GetAptReportBuilder();
         IAptScanResult GetScanResultByTargetUid(Guid targetUid);
         void StopScan();
+        void UpdateFlsPorts(int udpPort, int tcpPort);
 
         void StartValkyrieAnalysis(string login, string password, 
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential = null);
@@ -33,7 +33,6 @@ namespace APTAT.Core
         int GetDistinctFileCount();
 
         
-        void UpdateFlsPorts(int udpPort, int tcpPort);
     }
 
     internal interface IAptAtManagerInternal : IAptAtManager
@@ -41,5 +40,6 @@ namespace APTAT.Core
         Guid ValkyrieOperationUid { get; }
         Guid FlsLookupOperationUid { get; }
         IAptScanOperationContext LastAptScanOperationContext { get; }
+        ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
     }
 }

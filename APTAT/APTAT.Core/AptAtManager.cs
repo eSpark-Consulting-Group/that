@@ -20,6 +20,7 @@ namespace APTAT.Core
     public class AptAtManager : IAptAtManagerInternal
     {
         private readonly IDescentSubSystem _descentSubSystem;
+        private readonly IAptScannerFactory _aptScannerFactory;
         private IAptScanner _scanner;
         private readonly IFlsManager _flsManager;
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
@@ -65,9 +66,11 @@ namespace APTAT.Core
         public Guid ValkyrieOperationUid { get; set; }
         public Guid FlsLookupOperationUid { get; set; }
 
-        public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager)
+        public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager,
+            IAptScannerFactory aptScannerFactory)
         {
             _descentSubSystem = descentSubSystem;
+            _aptScannerFactory = aptScannerFactory;
             ValkyrieAnalysisResult = new ConcurrentDictionary<string, FileResult>(StringComparer.OrdinalIgnoreCase);
             _valkyrieClient = valkyrieClient;
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
@@ -91,7 +94,7 @@ namespace APTAT.Core
             {
                 ValkyrieAnalysisResult.AddOrUpdate(fileResult.Sha1, fileResult, (s, result) => fileResult);
             }
-            ValkyrieOperationUid = new Guid();
+            ValkyrieOperationUid = Guid.NewGuid();
             var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
                 , e.UserState);
             ValkyrieAnalyzeCompleted?.Invoke(this, arg);
@@ -144,7 +147,7 @@ namespace APTAT.Core
 
                         if (vResult != null)
                         {
-                            found.ValkyrieAnalysisResult = vResult;
+                            found.SetValkyrieResult(vResult);
                             fileResults.Add(found.Sha1, found);
                         }
                     }
@@ -247,10 +250,10 @@ namespace APTAT.Core
         public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            
             if (_scanner != null) throw new AnotherScanIsInProgressException();
             _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
-            _scanner = new AptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
+            _scanner = _aptScannerFactory
+                .CreateAptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
             _scanner.ComputerScanCompleted += OnScannerOnScanCompleted;
             _scanner.ScanCompleted += OnScanCompleted;
@@ -268,14 +271,13 @@ namespace APTAT.Core
 
         private bool AddResultsToDictionary(IFlsResult[] resultsFiles)
         {
-            bool resultsUpdated = false;
+          bool resultsUpdated = false;
             var addToAnalyze = new List<IFlsResult>();
             var verdictUpdated = new List<IFlsResult>();
             lock (_flsHashResults)
             {
                 foreach (var r in resultsFiles)
                 {
-
                     if (!_flsHashResults.ContainsKey(r.Sha1))
                     {
                         _flsHashResults[r.Sha1] = r.Cloud;
@@ -294,7 +296,7 @@ namespace APTAT.Core
                                 resultsUpdated = true;
                             }
                         }
-                        else if (_flsHashResults[r.Sha1] != r.Cloud &&
+                        else if (item != r.Cloud &&
                             (item == CloudVerdict.FailedToAnalyze || item == CloudVerdict.NoVerdict))
                         {
                             _flsHashResults[r.Sha1] = r.Cloud;
@@ -314,15 +316,11 @@ namespace APTAT.Core
                         if (filesToAnalyze.Any())
                         {
                             var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v => 
-                            new ValkyrieAnalysisResult
-                            {
-                                SHA1 = v.Sha1,
-                                Verdict =  ValkyrieVerdict.Pending
-                            }), _lastAptResults.ScanResults).Values;
+                            new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.Pending)), _lastAptResults.ScanResults).Values;
                             _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
                             foreach (var fileInfo in valkyrieAnalysisResults)
                                 ValkyrieAnalysisResult.TryAdd(fileInfo.Sha1, fileInfo);
-                            ValkyrieOperationUid = new Guid();
+                            ValkyrieOperationUid = Guid.NewGuid();
                         }
                     }
                     OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));

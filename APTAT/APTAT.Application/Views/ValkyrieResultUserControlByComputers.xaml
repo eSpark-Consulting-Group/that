@@ -108,10 +108,10 @@
                     <TextBlock Text="{Binding FileSizeFormatted}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding FileSizeFormatted}" TextAlignment="Right" Margin="0 0 5 0"/>
                 </DataTemplate>
                 <DataTemplate x:Key="WhiteListedColumn">
-                    <TextBlock Text="{Binding ValkyrieAnalysisResult.IsWhiteListed,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1"  TextAlignment="Center"/>
+                    <TextBlock Text="{Binding IsWhiteListed,  Converter={StaticResource BoolToYesNoConverter}}" FontSize="13" FontFamily="Segoe UI" VerticalAlignment="Center" Grid.Column="1"  TextAlignment="Center"/>
                 </DataTemplate>
                 <DataTemplate x:Key="VerdictColumn">
-                    <TextBlock  Text="{Binding VerdictString}" FontSize="13" FontFamily="Segoe UI" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding ValkyrieAnalysisResult.SkipReason}"/>
+                    <TextBlock  Text="{Binding VerdictString}" FontSize="13" FontFamily="Segoe UI" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="1" TextTrimming="CharacterEllipsis" ToolTip="{Binding SkipReason}"/>
                 </DataTemplate>
 
          <TemplateSelectors:ValkyrieNameTemplateSelector x:Key="NameTemplateSelector"
