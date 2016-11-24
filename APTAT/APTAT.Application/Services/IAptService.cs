@@ -150,7 +150,7 @@ namespace APTAT.Application.Services
         void StopScan();
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
         void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, 
-            string camPassword, NetworkCredential networkCredential = null);
+            string camPassword, NetworkCredential networkCredential);
         string GetValkyrieDetailsLink();
     }
 }

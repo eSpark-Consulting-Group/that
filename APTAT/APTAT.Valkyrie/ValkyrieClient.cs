@@ -80,7 +80,7 @@ namespace APTAT.Valkyrie
                 throw new InvalidOperationException("CAM license or CAM credentials are required");
 
             if (networkCredential != null)
-                ProxySettings.Proxy = TryGetProxy(networkCredential);
+                ProxySettings.Proxy = GetProxy(networkCredential);
             //var machineId = NetAddressHelper.GetMacWithIPAddress();
             RegisterWithResponse regInfo;
 
@@ -110,11 +110,12 @@ namespace APTAT.Valkyrie
             return regInfo;
         }
 
-        private IWebProxy TryGetProxy(NetworkCredential networkCredential)
+        private IWebProxy GetProxy(NetworkCredential networkCredential)
         {
             var proxy = WebRequest.GetSystemWebProxy();
             if (networkCredential != null)
             {
+                proxy = new WebProxy();
                 proxy.Credentials = networkCredential;
             }
             return proxy;
@@ -701,7 +702,7 @@ namespace APTAT.Valkyrie
         }
 
         public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
-            string login, string password, int machineCount, NetworkCredential proxyCredential = null)
+            string login, string password, int machineCount, NetworkCredential proxyCredential)
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;

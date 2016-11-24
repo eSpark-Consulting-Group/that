@@ -406,7 +406,7 @@ namespace APTAT.Core
 
 
         public void StartValkyrieAnalysis(string login, string password,
-            string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential = null)
+            string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential)
         {
             lock (_flsHashResults)
             {

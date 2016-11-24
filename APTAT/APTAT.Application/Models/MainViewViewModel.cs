@@ -846,14 +846,11 @@ namespace APTAT.Application.Models
                         window.ShowCredentials = true;
                         window.Header = "Proxy Credentials";
 
-                        bool retry = false;
-                        if (window.ShowDialog().GetValueOrDefault())
-                            retry = true;
+                        bool retry = window.ShowDialog().GetValueOrDefault();
 
                         if (retry)
                         {
-                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword);
-                            Trace.WriteLine("Proxy used: " + WebRequest.GetSystemWebProxy());
+                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword, null); //no domain?
                             BeginValkyrieAnalysis(cred);
                             return;
                         }
