@@ -755,12 +755,12 @@ namespace APTAT.Application.Models
                 else
                    needUpdateStatus = true;
             }
-            if (needUpdateStatus)
-                UpdateStatus();
             foreach (var computer in computersToUpdate.Values)
             {
                 computer.UpdateStatus();
             }
+            if (needUpdateStatus)
+                UpdateStatus();
         }
         
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
