@@ -156,7 +156,7 @@ namespace APTAT.Core
                     {
                         var computer = scanResult.AptReport.Computer;
                         var comp = new ComputerInformation(computer, scanResult.TargetUid);
-                        if (!found.Computers.Any(c => c.IP == comp.IP))
+                        if (!found.Computers.Any(c => c.IP == comp.IP && c.FilePath == comp.FilePath))
                         {
                             comp.FilePath = badFile.Path;
                             found.Computers.Add(comp);
