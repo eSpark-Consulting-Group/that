@@ -1124,15 +1124,16 @@ namespace APTAT.Application.Models
                 _scanIteratorTimer.Stop();
             CancelInProgress = false;
             IsScanInProgress = false;
+            ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
             IsReportEnabled = ScannedItemsCount > 0;
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
+            UpdateStatus();
             RaisePropertyChanged(nameof(Header));
         }
 
         public void OnBeforeBeginValkyrieAnalysis()
         {
             ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.CreateFromTotal(DistinctFilesCount);
-
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieScanInProgress = true;
             IsValkyrieAnalysCompleted = false;
