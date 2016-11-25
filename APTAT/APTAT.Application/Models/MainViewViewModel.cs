@@ -1033,6 +1033,7 @@ namespace APTAT.Application.Models
 
         private void OnScanCompleted(Object sender, Services.ScanCompletedEventArgs e)
         {
+            ScanCompleted();
             ScanProcessCompleted?.Invoke(this, e);
         }
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
@@ -1116,19 +1117,15 @@ namespace APTAT.Application.Models
             IsValkyrieAnalysCompleted = false;
         }
 
-        private void ScanCompleted(Boolean enableReports)
+        private void ScanCompleted()
         {
             if (_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Stop();
-
             CancelInProgress = false;
-
             IsScanInProgress = false;
-            IsReportEnabled = enableReports;
-
-
-
+            IsReportEnabled = ScannedItemsCount > 0;
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
+            RaisePropertyChanged(nameof(Header));
         }
 
         public void OnBeforeBeginValkyrieAnalysis()
@@ -1266,12 +1263,10 @@ namespace APTAT.Application.Models
 
             ScannedItemsCount = scanned;
 
-            if (completed == OnlineItemsCount)
-                ScanCompleted(scanned > 0);
-            else
+            if (completed != OnlineItemsCount)
                 _scanIteratorTimer.Start();
 
-            RaisePropertyChanged("Header");
+            RaisePropertyChanged(nameof(Header));
         }
 
         private void UpdateStatus()

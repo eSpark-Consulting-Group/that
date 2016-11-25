@@ -8,7 +8,7 @@ namespace APTAT.Core
     {
         event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
 
-        Task Enqueue(IEnumerable<string> hashes);
+        Task Enqueue(IEnumerable<string> hashes, bool startIfCancelled = false);
 
         void Cancel();
         

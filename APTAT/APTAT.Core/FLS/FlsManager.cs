@@ -43,6 +43,9 @@ namespace APTAT.Core
             try
             {
                 FlsResponse response = _apiProvider.RequestType0(hashes);
+
+                if (_cancellationToken.IsCancellationRequested)
+                    return;
                 var results = response.GetAnalyzed();
                 if(results.Any())
                     OnFlsAnalyzed(results, null);
@@ -52,12 +55,16 @@ namespace APTAT.Core
                 var failed = response.GetFailedToAnalyzeHashes();
                 if (failed.Any())
                 {
-                    Enqueue(failed.ToArray());
+                    if (_cancellationToken.IsCancellationRequested)
+                        return;
+                    Enqueue(failed.ToArray(), false);
                 }
             }
             catch (Exception)
             {
-                Enqueue(hashes);
+                if (_cancellationToken.IsCancellationRequested)
+                    return;
+                Enqueue(hashes, false);
                 //throw;
             }
      //       Task.Delay(TimeSpan.FromMinutes(1));
@@ -80,13 +87,17 @@ namespace APTAT.Core
            _apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
         }
 
-        public async Task Enqueue(IEnumerable<string> hashes)
+        public async Task Enqueue(IEnumerable<string> hashes, bool startIfCanceled = true)
         {
             //var analyzed = _allResults.Select(r => r.Sha1).ToList();
             //var result = hashes.Where(p => !analyzed.Any(p2 => p2 == p));
 
             if (!_isWorking)
             {
+                if (!startIfCanceled && _cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
         //        _allResults = new ConcurrentBag<FlsResult>();
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
@@ -166,14 +177,6 @@ namespace APTAT.Core
          
             try
             {
-                // prepare to handle cancellation
-                var cts = new CancellationTokenSource();
-                
-                _cancelWork = () =>
-                {
-                    cts.Cancel();
-                };
-                
                 // offload Parallel.For from the UI thread 
                 // as a long-running operation
                 Task task = Task.Factory.StartNew(async () =>
@@ -182,6 +185,8 @@ namespace APTAT.Core
                     string[][] hashGroups = Split(hashes, _uploadAtOnce).ToArray();
                     foreach (var h in hashGroups)
                     {
+                        if (_cancellationToken.IsCancellationRequested)
+                            return;
                         DoWorkItem(h);
                     }
                     await Task.Delay(3000);
@@ -226,6 +231,8 @@ namespace APTAT.Core
 
         private void OnFlsAnalyzed(IFlsResult[] results, Exception exception)
         {
+            if (_cancellationToken.IsCancellationRequested)
+                return;
             var e = new FlsRequestEventArgs(results, exception);
             FlsAnalyzed?.Invoke(this, e);
         }
