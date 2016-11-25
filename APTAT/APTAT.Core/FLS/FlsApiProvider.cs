@@ -59,7 +59,7 @@ namespace APTAT.Core
                 {
                     result = RequestType0Udp(hashes);
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
                     result = RequestType0Tcp(hashes);
                 }

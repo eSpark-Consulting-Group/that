@@ -15,7 +15,7 @@ namespace APTAT.Core
         
         private CancellationToken _cancellationToken;
         private readonly FlsApiProvider _apiProvider = null;
-        private Action _cancelWork = null;
+       // private Action _cancelWork = null;
       //  private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;

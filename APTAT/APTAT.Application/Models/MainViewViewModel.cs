@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Threading;
 using System.Windows.Threading;
-
 using Telerik.Windows.Controls;
 using APTAT.Core;
 using APTAT.Valkyrie;
@@ -694,8 +692,7 @@ namespace APTAT.Application.Models
                 if (result.Cloud == CloudVerdict.Safe)
                     newVerdict = ValkyrieVerdict.Clean;
 
-                var items = Items.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1
-                    , StringComparison.OrdinalIgnoreCase)).ToArray();
+                var items = Items.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
                 foreach (var threatInfoItem in items)
                 {
                     threatInfoItem.UpdateFileVerdict(result.Cloud);
@@ -720,8 +717,7 @@ namespace APTAT.Application.Models
                 }
                 if (ItemsValkyrie.Any())
                 {
-                    var file = ItemsValkyrie.FirstOrDefault(_ =>
-                    _.Sha1.Equals(result.Sha1, StringComparison.OrdinalIgnoreCase));
+                    var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
                     if (file != null)
                     {
                         if (!file.PendingFls)
@@ -731,24 +727,22 @@ namespace APTAT.Application.Models
                         Interlocked.Add(ref _lookupInProgressCount, -file.Computers.Count);
                         RaisePropertyChanged(nameof(LookupInProgressCount));
                         RaisePropertyChanged(nameof(IsErrorsFound));
+
                         if (file.IsUnknown)
                         {
                             Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
                             RaisePropertyChanged(nameof(UnknownFilesCount));
-                            //PendingFilesCount--;
                         }
                         else if (file.IsMalware)
                         {
                             Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
                             RaisePropertyChanged(nameof(MalwareFilesCount));
-                            //PendingFilesCount--;
                         }
                         else if (file.Pending)
                         {
-                            Interlocked.Increment(ref _pendingFilesCount);
+                            Interlocked.Add(ref _pendingFilesCount, file.Computers.Count);
                             RaisePropertyChanged(nameof(PendingFilesCount));
                             RaisePropertyChanged(nameof(IsPendingFound));
-                            //PendingFilesCount--;
                         }
                     }
                 }
@@ -923,19 +917,18 @@ namespace APTAT.Application.Models
                     if (file.IsUnknown)
                         wasUnknown = true;
                     var verdictChanged = file.UpdateValkyrieResult(result);
+
                     if (verdictChanged && wasUnknown)
                         Interlocked.Add(ref _unknownFilesCount, -file.Computers.Count);
+
                     if (verdictChanged && wasPending && !file.Pending)
-                        Interlocked.Decrement(ref _pendingFilesCount);
+                        Interlocked.Add(ref _pendingFilesCount, -file.Computers.Count);
 
                     if (file.IsUnknown)
-                    {
                         Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
-                    }
-                    else if (file.IsMalware)
-                    {
+
+                    if (file.IsMalware)
                         Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
-                    }
 
                     RaisePropertyChanged(nameof(PendingFilesCount));
                     RaisePropertyChanged(nameof(IsPendingFound));
@@ -987,7 +980,7 @@ namespace APTAT.Application.Models
                     else if (result.IsMalware)
                         Interlocked.Add(ref _malwareFilesCount, result.Computers.Count);
                     else if (result.Pending)
-                        Interlocked.Increment(ref _pendingFilesCount);
+                        Interlocked.Add(ref _pendingFilesCount, result.Computers.Count);
                 }
 
                 RaisePropertyChanged(nameof(PendingFilesCount));
