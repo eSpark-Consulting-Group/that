@@ -49,7 +49,7 @@
                 </DataTemplate>
            
                 <DataTemplate x:Key="FileInfoTemplate">
-                    <Grid Height="50" Margin="-5 -2 0 0">
+                    <Grid Height="50" Margin="-5 1 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
