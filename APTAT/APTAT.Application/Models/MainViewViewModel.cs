@@ -1120,8 +1120,6 @@ namespace APTAT.Application.Models
 
         private void ScanCompleted()
         {
-            if (_scanIteratorTimer.IsEnabled)
-                _scanIteratorTimer.Stop();
             CancelInProgress = false;
             IsScanInProgress = false;
             ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
@@ -1267,6 +1265,11 @@ namespace APTAT.Application.Models
 
             if (completed != OnlineItemsCount)
                 _scanIteratorTimer.Start();
+            else
+            {
+                if (_scanIteratorTimer.IsEnabled)
+                    _scanIteratorTimer.Stop();
+            }
 
             RaisePropertyChanged(nameof(Header));
         }
