@@ -831,6 +831,7 @@ namespace APTAT.Application.Models
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
         {
+            if (_isScanInProgress != false) return;
             if (e.Error != null)
             {
                 var webException = e.Error as WebException;

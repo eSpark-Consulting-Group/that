@@ -176,7 +176,7 @@ namespace APTAT.Core
             {
                 foreach (var badFile in scanResult.Value.BadFiles)
                 {
-                    if (files.All(f => f.Sha1 != badFile.Sha1))
+                    if (files.All(f => !String.Equals(f.Sha1, badFile.Sha1, StringComparison.OrdinalIgnoreCase)))
                     {
                         files.Add(new ValkyrieFileInfo()
                         {
