@@ -71,7 +71,7 @@
                       
                         <TextBlock Margin="8,8,0,0" Text="{Binding FullName}" Grid.Column="1"/>
                         <TextBlock  Grid.Column="2" Margin="0,8,0,0" Text="" />
-                        <TextBlock Margin="8,0,0,8" Text="{Binding StatusText}" TextTrimming="CharacterEllipsis" ToolTip="{Binding StatusText}"  VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                        <TextBlock Margin="8,0,0,8" Text="{Binding StatusText}" TextTrimming="CharacterEllipsis" ToolTip="{Binding StatusText}"  VerticalAlignment="Center" Grid.Row="1" FontSize="12" Grid.Column="1" Grid.ColumnSpan="2"/>
                     </Grid>
                 </DataTemplate>
            
