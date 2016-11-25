@@ -220,6 +220,8 @@ namespace APTAT.Valkyrie
                     {
                         _lookupContexts.Remove(fileInfo);
                     }
+                if (_cancellationTokenSource.IsCancellationRequested)
+                    return;
                 if (result.Verdict != fileInfo.PreviousValkyrieVerdict)
                 {
                     fileInfo.PreviousValkyrieVerdict = result.Verdict;
@@ -254,7 +256,8 @@ namespace APTAT.Valkyrie
                 {
                     _automaticAnalyseInProgressByHash.Remove(fileInfo.HashSha1);
                 }
-                _pendingItemsResolved.TryAdd(result.SHA1, ValkyrieAnalysisResult.Create(result));
+                if (!_cancellationTokenSource.IsCancellationRequested)
+                    _pendingItemsResolved.TryAdd(result.SHA1, ValkyrieAnalysisResult.Create(result));
             }
         }
 
@@ -358,6 +361,7 @@ namespace APTAT.Valkyrie
 
         public void AnalyzeAsyncCancel()
         {
+            _cancellationTokenSource?.Cancel();
             _pendingItemsResolved.Clear();
             _automaticAnalyseInProgressByHash.Clear();
             _cancellationTokenSource?.Cancel();
@@ -445,7 +449,8 @@ namespace APTAT.Valkyrie
                     ValkyrieAnalysisResult result;
                     items.TryRemove(item.SHA1, out result);
                 }
-
+                if (_cancellationTokenSource.IsCancellationRequested)
+                    return;
                 tmp(this,
                     new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(progressInt,
                         new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, newResults), isUpdate));
@@ -675,6 +680,8 @@ namespace APTAT.Valkyrie
 
         private void AddResult(ValkyrieAnalysisResult result, ValkyrieFileInfo info)
         {
+            if (_cancellationTokenSource.IsCancellationRequested)
+                return;
             _analysisResults.Add(result);
 
             Interlocked.Increment(ref _fileScanned);

@@ -706,7 +706,7 @@ namespace APTAT.Application.Models
                 foreach (ThreatInfoItem computer in Computers)
                 {
                     var files = computer.Items.Where(i =>
-                            String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.Ordinal)).ToArray();
+                            String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
                     if (files.Any())
                     {
                         if (!computersToUpdate.ContainsKey(computer.ComputerGuid))

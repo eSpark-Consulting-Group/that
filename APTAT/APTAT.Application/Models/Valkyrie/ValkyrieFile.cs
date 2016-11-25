@@ -206,6 +206,7 @@ namespace APTAT.Application.Models.Valkyrie
             Version = result.Version;
             Copyright = result.Copyright;
             Product = result.Product;
+            ValkyrieVerdict = result.ValkyrieAnalysisResult.Verdict;
             OperationStatus = result.ValkyrieAnalysisResult.OperationStatus;
             SkipReason = result.ValkyrieAnalysisResult.SkipReason;
             MalwareProbabilityValue = result.ValkyrieAnalysisResult.MalwareProbability;
