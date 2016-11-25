@@ -16,7 +16,8 @@
         
         <telerik:RadTreeListView AutomationProperties.AutomationId="ValkyrieResultsTree"
                                  SelectedItem="{Binding SelectedValkyrieItem}" 
-                                 CanUserFreezeColumns="False"                                
+                                 CanUserFreezeColumns="False"        
+                                 CanUserReorderColumns="False"
                                  x:Name="treeList2" 
                                  AutoGenerateColumns="False" 
                                  IsReadOnly="True" 

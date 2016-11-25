@@ -14,7 +14,8 @@
     <Grid>
         <telerik:RadTreeListView AutomationProperties.AutomationId="UnknownFilesTree"
                                  SelectedItem="{Binding SelectedItem}" 
-                                 CanUserFreezeColumns="False"                                
+                                 CanUserFreezeColumns="False"                  
+                                 CanUserReorderColumns="False"
                                  x:Name="treeList" 
                                  AutoGenerateColumns="False" 
                                  IsReadOnly="True" ItemsSource="{Binding Items}"   
