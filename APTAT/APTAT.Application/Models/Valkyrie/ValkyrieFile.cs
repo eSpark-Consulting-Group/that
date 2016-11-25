@@ -286,10 +286,10 @@ namespace APTAT.Application.Models.Valkyrie
             bool returnValue = ValkyrieVerdict != valkyrieAnalysisResult.Verdict;
 
             MalwareProbabilityValue = valkyrieAnalysisResult.MalwareProbability;
-            ValkyrieVerdict = valkyrieAnalysisResult.Verdict;
             SkipReason = valkyrieAnalysisResult.SkipReason;
             OperationStatus = valkyrieAnalysisResult.OperationStatus;
-            
+            ValkyrieVerdict = valkyrieAnalysisResult.Verdict;
+
             return returnValue;
         }
         public bool UpdateValkyrieResult(ValkyrieFile result)
@@ -297,9 +297,9 @@ namespace APTAT.Application.Models.Valkyrie
             bool returnValue = ValkyrieVerdict != result.ValkyrieVerdict;
 
             MalwareProbabilityValue = result.MalwareProbabilityValue;
-            ValkyrieVerdict = result.ValkyrieVerdict;
             SkipReason = result.SkipReason;
             OperationStatus = result.OperationStatus;
+            ValkyrieVerdict = result.ValkyrieVerdict;
             return returnValue;
         }
 
