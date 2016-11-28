@@ -146,7 +146,11 @@ namespace APTAT.Application.Services
                     Cloud = m.Cloud,
                 }).ToArray();
             resultItem.BadFiles = badFileItems;
-            ComputerScanCompleted?.Invoke(this, new GetScanResultCompletedEventArgs(resultItem));
+            Action action = () =>
+            {
+                ComputerScanCompleted?.Invoke(this, new GetScanResultCompletedEventArgs(resultItem));
+            };
+            App.Current.Dispatcher.BeginInvoke(action);
         }
 
         private void OnScanInProgress(Object sender, AptScanInProgressEventArgs e)
@@ -193,8 +197,12 @@ namespace APTAT.Application.Services
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-            BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
-            BeginScanCompleted?.Invoke(this, args);
+            Action action = () =>
+            {
+                BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
+                BeginScanCompleted?.Invoke(this, args);
+            };
+            App.Current.Dispatcher.BeginInvoke(action);
         }
 
         private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
