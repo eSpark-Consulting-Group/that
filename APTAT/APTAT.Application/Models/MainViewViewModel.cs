@@ -717,7 +717,7 @@ namespace APTAT.Application.Models
                 }
                 if (ItemsValkyrie.Any())
                 {
-                    var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
+                    var file = ItemsValkyrie.FirstOrDefault(_ => String.Equals(_.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase));
                     if (file != null)
                     {
                         if (!file.PendingFls)
