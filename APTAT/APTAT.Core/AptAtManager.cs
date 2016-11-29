@@ -328,7 +328,7 @@ namespace APTAT.Core
             }
             if (addToAnalyze.Any())
             {
-                _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1));
+                _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1), true);
             }
             //  temp.Select(t)
             return resultsUpdated;

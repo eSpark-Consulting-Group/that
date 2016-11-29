@@ -99,6 +99,7 @@ namespace APTAT.Core
                     return;
                 }
         //        _allResults = new ConcurrentBag<FlsResult>();
+                _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
                 Task.Run(Start, _cancellationToken);
