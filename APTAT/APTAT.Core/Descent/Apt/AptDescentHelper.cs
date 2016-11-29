@@ -105,7 +105,8 @@ namespace APTAT.Core.Descent.Apt
                 {
                     get
                     {
-                        return (double)TotalFilesScanned / EnumeratedFilesCount * 100d;
+                        return EnumeratedFilesCount == 0? 100d: 
+                            (double)TotalFilesScanned / EnumeratedFilesCount * 100d;
                     }
                 }
             }
