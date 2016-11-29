@@ -31,7 +31,6 @@ AceBIT GmbH
 Acelogix Software
 Acoustica, Inc
 Acresso Software Inc.
-Acro Software Inc.
 Acronis, Inc
 Add-in Express
 Adobe Systems Incorporated
@@ -135,7 +134,6 @@ Comodo CP, Inc
 Comodo Security Solutions, Inc.
 ConeXware, Inc.
 Corel Corporation
-Crawler, LLC
 Creative Technology Ltd
 CrossTec Corporation
 CV. TweakNow Indonesia
@@ -213,7 +211,6 @@ Illustrate Limited
 Daniel Bigham
 IMVU
 IN MEDIA KG
-IncrediMail Ltd.
 Indigo Rose Software Design Corporation
 Infacta
 Infotecs
@@ -247,7 +244,6 @@ Symbiotic Technologies Pty Ltd
 Synaptics Incorporated
 Sysinternals
 Tall Emu
-Tarma Software Research Pty Ltd
 TauConsult Ltd
 Giampaolo Rossi
 TeamSpeak Systems GmbH
@@ -287,7 +283,6 @@ NewSoftwares.net Inc. SDN. BHD.
 Nitro PDF
 Nitro PDF Software
 Igor Serpik
-Nuance Communications, Inc.
 Numedia Soft, Inc.
 NVIDIA Corporation
 O and O Software GmbH
@@ -478,7 +473,6 @@ Framtidsforum I&M AB
 NOLO
 BeCubed Software, Inc.
 INTUIT, INC.
-Data Protection Solutions
 Creo Co., LTD.
 Acoustic Labs Software LLC
 Engineering Adventures Ltd
@@ -613,7 +607,6 @@ NCS Pearson
 soft Xpansion GmbH & Co.KG
 AKVIS Lab
 WebTrends, Inc.
-Portable-Marc\Marc
 INTER CHINA NETWORK SOFTWARE (BEIJING) CO., LTD.
 FabulaTech
 Astonsoft OU - 1116377
@@ -812,7 +805,6 @@ schellhorn media-productions e.K.
 CoSoSys Ltd.
 Digital Atlantic Corporation
 GdP Software
-MumboJumbo
 Iceni Technology Ltd.
 Philips Consumer Electronics BV
 Daum Communications Corp.
@@ -1004,7 +996,6 @@ DigiDNA Sarl
 Virtools
 AV Bros.
 nanjing wangya computer co.，ltd.
-Xacti
 Cloudmark
 Aculearn Pte Ltd
 3B Software
@@ -1148,9 +1139,7 @@ Imagitech LTD
 Phantombility Inc
 Jungle Disk, LLC
 Turbine, Inc.
- Intel(R) Software Development Products
 AquaSoft GmbH
-UpdateStar GmbH
 King Stairs Software
 Comcast
 Utilant, LLC
@@ -1282,7 +1271,6 @@ UGS PLM Software
 AutoZone, Inc.
 Nintendo Co., Ltd.
 1 und 1 Internet AG
-Sanshun Technology - 829221
 Toshiba Europe GmbH
 Digital Millenium Inc.
 Alexandr Shirokov
@@ -1584,7 +1572,6 @@ TECHSOFT
 UNITED DEVICES INC
 Quite Healthy Technologies
 beijing qianxianghulian kejifazhan youxiangongsi
-AWS Convergence Technologies, Inc.
 Alver Valley Software Limited
 WildTangent Inc
 Grin AB
@@ -1670,7 +1657,6 @@ IBM United Kingdom Ltd
 Delfyn Software
 AxBx
 WIBU-SYSTEMS AG
-ZZZ-PC\zzz
 Parallels Inc
 Florian Heidenreich
 Rob Latour
@@ -1796,7 +1782,6 @@ SAP AG
 Copernic Technologies Inc.
 INNOVA-engineering GmbH
 Pictocolor Corporation
-Tiange Network Technology Ltd.
 Blueberry Software Ltd
 EGOSYSTEM, Inc.
 INCA Internet. Co., Ltd.
@@ -1971,7 +1956,6 @@ SMART Technologies ULC
 DTLink, LLC
 Screaming Bee LLC
 Adaptive Planning Tools
-Shunra Software Ltd.
 Castle Computer Technologies
 THQ, Inc.
 StepWare, Inc.
@@ -2022,7 +2006,6 @@ Blizzard Entertainment, Inc.
 Barad-Dur
 SafePatrol Solutions Inc.
 TurnTool ApS
-Mail.com Media Corporation
 VeriSign Time Stamping Service CA SW1
 Cyber-Robotics, Inc.
 Software995 Inc.
@@ -2094,7 +2077,6 @@ Snowmint Creative Solutions LLC
 NetIQ Corporation
 Maxim Emelyashin (pw-soft.com)
 Network Automation, Inc
-VisionWorks Solutions Inc
 Akamai NetSession Client, Akamai Technologies, Inc.
 Seagate Technology, LLC
 Mark of the Unicorn
@@ -2111,7 +2093,6 @@ IPVE
 Comodo Time Stamping Signer
 Verizon Wireless
 Guy Software
-DATA TRANSFER OF NEVADA, LLC
 VeeCan Software Ltd.
 O2Micro Inc.
 Xeric Design, Ltd.
@@ -2145,7 +2126,6 @@ UPEK Inc.
 Citrix Online
 Code-it Software, Inc.
 CIMADEVILLA ELECTRONICA SL
-Rational Services Ltd.
 AVM Computersysteme Vertriebs GmbH
 EDrawSoft.com
 Autodesk Asia PTE Ltd.
@@ -2263,7 +2243,6 @@ Netron Bilgi Iletisim Teknolojileri San. Ve Tic. A.S:
 Serotek Corporation
 Blitware Technology Inc.
 ArtistScope Pty Ltd
-福建网龙计算机网络信息技术有限公司
 RH Software
 InfoSecSolution Ltd
 Corner Bowl Software Corporation
@@ -2464,9 +2443,7 @@ dtSearch Corp.
 HRB Tax & Technology Software, LLC.
 Borland Software Corporation
 Pando Networks, Inc.
-AB-Tools.com
 NewTech Infosystems, Inc
-OpenCandy Inc.
 YouSendIt, Inc.
 Visiv Ltd
 Volker Voecking Software Engineering
@@ -2527,7 +2504,6 @@ XMLMVP
 Intuit, Inc
 GFI Software Development Ltd.
 Comvigo, Inc.
-IntelliAdmin, LLC
 Data Apples Corporation
 Beijing Arswp Information and Technology Co.,Ltd.
 SonicWALL, Inc.
@@ -2983,7 +2959,6 @@ Tometa Software, Inc.
 IKARUS Security Software GmbH
 Intel(R) Extreme Tuning Utility
 WISCO Computing
-VE Networks (Canada) Inc.
 ECLIPSIT, INC.
 Pyromation, Inc.
 Aranda Software Corporation
@@ -3022,7 +2997,6 @@ Link Y''all Technology Co.,Ltd.
 Datakonsult Mats Hindhede
 R-tools Technology Inc.
 DameWare Development
-NetSupport Ltd
 eurowin Inc.
 Ciansoft
 Oracle USA Inc.
@@ -3239,7 +3213,6 @@ PROVISIO GmbH
 High-point Software Ltd.
 SmartSound Software, Inc.
 Iconix, Inc.
-MGShareware
 SSG SOFTWARE SYSTEMS PVT LTD
 TomTom International B.V.
 CASIO SOFT CO. LTD.
@@ -3351,7 +3324,6 @@ Sunbelt Software, Inc.
 Crytek GmbH
 ATConsulting LLC
 Jeffery Link
-Hipgnosis Vision
 Leigh Business Enterprises Ltd.
 Broadcom Corporation
 Haihaisoft Corporation
@@ -3443,7 +3415,6 @@ SpaceTime3D
 All-Pro Software
 Cimmetry Systems Inc.
 ING BANK N.V.
-CBS Interactive
 Vivox Inc.
 墨者在线网络技术（北京）有限公司
 France Telecom
@@ -7465,7 +7436,6 @@ The Art Of Planning AB
 The Asian Development Bank
 The Automated Office, Inc dba EMCsoft
 The Avivus Group, LLC
-The Better Advertising Project
 The Burbank Group
 SunCTI Technology Innovation Co.,Ltd.
 Sunbaked Software Inc.
@@ -8481,7 +8451,6 @@ Kona Ltd
 Local Government Data Processing Corp
 MRA Medical ltd
 Marmitek
-MediaArea.net
 Merseyside Fire & Rescue Service
 NWWI
 Schoolsims Ltd
@@ -8503,7 +8472,6 @@ Steve Wehrmann
 UNUM
 Wed. H.J. van Buuren B.V.
 Wondernet LTD
-Xarios Ltd
 ZSCAN SOFTWARE
 afelio GmbH
 Ansca, Inc.
@@ -8658,7 +8626,6 @@ Axon Development Corp.
 Balanced-Plus
 BoraSystems
 Brownfield & Mayerhofer, Inc.
-CACAOWEB PTY LTD
 CSSI
 Cadena Sistemas Ltda
 Centre for Learning and Innovation
@@ -8710,7 +8677,6 @@ mental images Pty. Ltd.
 Cryptic Studios Inc.
 Martijn de Visser Software
 Syncsort Incorporated
-Rational Services Ltd
 Abelssoft - Ascora GmbH
 Chris Addington
 Corecon Technologies, Inc.
@@ -9030,9 +8996,7 @@ iCasework Ltd.
 Bezeq International LTD
 iWatchLife
 netiva GmbH
-Shenzhen QVOD Technology Co.,Ltd
 Joel Low Open Source Developer
-JINHUA 9158 NETWORK SCIENCE AND TECHNOLOGY CO.,LTD.
 CHINA MOBILE GROUP SICHUAN CO.,LTD.
 Saybot Inc.
 Keniu Network Technology (Beijing) Co., Ltd.
@@ -9163,7 +9127,6 @@ Scott McDonald Personal Computer Services
 SoftPerks Inc
 Sungard Public Sector
 Synergration, Inc.
-Tucows Inc.
 Ubitek Ltd
 Vefra Holding BV
 Verant Identification Systems, Inc.
@@ -9259,7 +9222,6 @@ LD DIDACTIC GmbH
 Skysoft Co., Ltd.
 SHANGHAI QIFAN DIGITAL TECHNOLOGY CO.,LTD.
 Gist
-AD ON Multimedia Advertising GmbH
 Acorah Software Products Limited
 Altami Ltd
 Becker Nose and Sinus Center, LLC
@@ -9393,7 +9355,6 @@ Secure Bill Pay
 Silurian Software Limited
 Spyridon Rentoulas
 Stephen M. Madigan
-Syncopate LLC
 Tao Computing Solutions
 TechChart, LLC
 Time Inc
@@ -9448,7 +9409,6 @@ Trezur Limited
 Vidicor Ltd.
 abc Digital Doc Ltda
 eyeClaxton Software, Incorporated
-Ellora Assets Corp.
 SolarWinds, Inc
 WildPackets, Inc.
 Autologis s.r.o.
@@ -9529,7 +9489,6 @@ Thunderhead Technologies
 devDept Software
 Steganos Software GmbH
 Andrey Borodin
-EZHLD
 Victor Company of Japan,Limited
 SafeCopy Backup
 PIXELA CORPORATION
@@ -9563,7 +9522,6 @@ SDL International
 SmartDraw, LLC
 Incesoft Technology Co., Ltd.
 X.M.Y. International LLC
-Tencent Technology(Shenzhen) Company Limited
 BLURB, INC.
 Lindo Systems Inc
 Oki Data Corporation
@@ -9639,7 +9597,6 @@ Bricsys NV
 Tricerat inc.
 Buzz Tools, Inc.
 Actinic Software
-Morpheus Software
 Yaletown Software Design Inc.
 Realistic Computing Solutions Ltd
 FUJI SOFT INCORPORATED
@@ -9860,7 +9817,6 @@ Haude electronica Verlags-GmbH
 Sistemi S.p.A.
 GrECo International Holding AG
 ACE CAD ENTERPRISE CO. LTD.
-Imagination Technologies
 Passlogix, Inc.
 Lauterbach GmbH
 PLX Technology, Inc.
@@ -9884,7 +9840,6 @@ Costar Electronics Inc.
 Auerswald GmbH & Co. KG
 Justrams
 Medien-Team 66 Verlags GmbH
-Python Software Foundation 
 Kvaser AB
 Motion Computing
 Cambridge Silicon Radio Ltd.
@@ -10009,9 +9964,7 @@ Friedrich Datentechnik GmbH
 Cristian Adam - Open Source Developer
 Auslogics Software Pty Ltd
 SlimWare Utilities Inc.
-ObviousIdea
 CCH INCORPORATED
-NCS Pearson, Inc
 Insight Direct Inc
 AutoRealty, LLC
 NICE Systems Ltd.
@@ -10042,7 +9995,6 @@ Dalton Maag Limited
 360.cn
 G.D.G. Software SARL
 ux-spiral corporation
-Sangfor Technologies Co.,Ltd
 GlobalMojo Inc.
 Postbox, Inc.
 BUDDYBACKUP LTD
@@ -10271,7 +10223,6 @@ Kingsoft Security Co.,Ltd
 Alibaba (China) Co. Ltd.
 CITRIX SYSTEMS
 NEVOSOFT
-Cheng Du VTools Information Technology
 Autodesk Asia Pte Ltd
 Broadcom Corp
 Konami Digital Entertainment Co., Ltd.
@@ -10427,7 +10378,6 @@ Technical Soft Inc.
 DIR. GERAL INFORMATICA E APOIO SERVICOS TRIBUTARIOS E ADUANEIROS
 Futime Manufacturing Ltd
 Splashtop Inc.
-NOSIBAY
 ZyXEL Russia
 Programer Sp. z o.o.
 VisionWorks Solutions Inc 
@@ -10528,7 +10478,6 @@ VERITAS Software Corp.
 William O'Neil and Co.
 SPRUT Technology
 Qilu Securities Co., Ltd.
-AKApplications Inh. Andreas Kapust  
 Sage Portugal - SOFTWARE, S.A.
 Commtouch, Inc.
 TrigoldCrystal
@@ -10728,7 +10677,6 @@ Magic Control Technology Corp.
 mb AEC Software GmbH
 Mindjet LLC
 Peachtree Software, Inc.
-The Nielsen Company
 Daniel Schmitt
 Walmart.com
 Citadel5 Ltd
@@ -10838,7 +10786,6 @@ Document Systems, Inc.
 Domin-8 Enterprise Solutions, Inc.
 Dot Hill Systems
 FedICT
-G-NET INTEGRATED SERVICES CO., LTD.
 Centrify Corporation
 gotomaxx software gmbh
 Winamp
@@ -10967,7 +10914,6 @@ Aspera, Inc.
 Bit4id
 THQ Inc.
 Parallelgraphics LTD
-Matrix 42 AG
 ThinPrint AG
 Internet Security Systems
 Barracuda Networks, Inc.
@@ -11064,7 +11010,6 @@ The American Institute of Architects
 Salience Corporation
 KINGSEDCO SOFTWARE ENGINEERING DEVELOPMENT CO
 Amnis Technology Ltd
-Greentree Applications SRL
 Iocomp Software Inc.
 ComMusic GbR
 MPC Computers
@@ -11108,8 +11053,6 @@ Intrepid Systems, Inc.
 OfficeDrop
 Naxter, Inc.
 TrustTone Communications
-Noriyuki Miyazaki 
-Frostwire, LLC 
 Frostwire, LLC
 Noriyuki Miyazaki
 Solid State Networks I, LLC
@@ -11225,7 +11168,6 @@ NetSarang Computer, Inc.
 BetterPhoto.com, Inc.
 Printrex, Inc.
 Brooks Internet Software, Inc.
-CBS Interactive, Inc.
 TC Electronic
 Yubico AB
 Arrow Research Corporation Pty Ltd
@@ -11309,7 +11251,6 @@ FRx Software Corporation
 Microsoft Mobile Device VSD Publisher
 Corel TW Corp.
 Information Factory AG
-CZ Solution Co., Ltd. 
 M&R Technologies, Inc.
 Salesforce.com, Inc
 Arktos Entertainment Group LLC
@@ -11628,7 +11569,6 @@ CenterTools Software GmbH
 Knowledge Networks Inc
 BEIJING DIANJI TECHNOLOGY LTD.
 Netease(Hangzhou) Network Co.Ltd.
-Beijing AmazGame Age Internet Technology Co., Ltd.
 金华比奇网络技术有限公司
 恒生电子股份有限公司
 SHANGHAI 51 NETWORK DEVELOPMENT CO., LTD
@@ -11679,7 +11619,6 @@ Greatis Software LLC
 Beijing Capital Online Network Technology Co.,Ltd
 Beijing Sigmachip Co.,Ltd.
 Beijing Sohu New Era Information Technology Co.Ltd
-China Financial Certification Authority Co.Ltd
 上海臻游网络科技有限公司
 北京简单科技有限公司
 Beijing Force Innovation Technology Ltd
@@ -11851,7 +11790,6 @@ Shanghai Videospeedy Information Technology Co.,Ltd
 BEIJING KUNLUN ONLINE NETWORK TECH CO.,LTD
 Wuhan City, ice-box Network Technology Co., Ltd
 上海云蟾网络科技有限公司
-北京一路创科网络技术有限公司
 Beijing SOHU New Era Information Technology Co.,Ltd.
 Shanghai Qifan Digital Technology Co.,Ltd.
 北京来安科技有限公司
@@ -12166,7 +12104,6 @@ Hangzhou Hikvision Digital Technology Co., Ltd.
 HangZhou LieYan NetWork Technology Co,.Ltd.
 Hongkong Shenzhou Software Co.,Limited
 KOREACENTER.COM
-sina.com Technology(China)Co.,ltd
 Sinan Technology Co.,ltd
 上海普天邮通科技股份有限公司
 上海翱宏网络科技有限公司杭州分公司
@@ -12281,7 +12218,6 @@ VideACE Technology Co.
 Modern Investment Technologies Ltd
 Ixia
 Cogitek Inc.
-Magic Desktop S&T Development Co., Ltd.
 Epiforge Software
 Drag & Air S.n.c. di Luis Dragotto
 OSIsoft, Inc.
@@ -12607,7 +12543,6 @@ BankTree Software Limited
 Concealium IT Security LTD
 Deluxe Digital Studios
 Information Technologies Ltd.
-JooSoft.com GmbH
 BackUp Solutions, Inc.
 Pocket Watch Software
 Point Grey Research Inc.
@@ -12791,7 +12726,6 @@ Jang Media Interactive Co Ltd
 JAPAN BUSINESS COMPUTER Co.,LTD.
 Japan Research Institute for New Systems of Society
 JIAJING Electronics(Shenzhen)Co,Ltd
-jiangxi you ma chuang da software technology Co., LTD
 JiranJikyosoft co., ltd.
 jjujjimoa
 Korea Employment Information Service
@@ -12820,7 +12754,6 @@ GLS Software & Systeme
 Brunel University
 Makslane Rodrigues
 Asoni Communications Co. Ltd.
-ADLSoft
 SelectLine Software GmbH
 Maciej Zagozda
 Attache Software Australia Pty Ltd
@@ -12836,7 +12769,6 @@ CERTIVOX LIMITED
 SDC Software Ltd
 Dom Maklerski TMS Brokers S.A.
 NADEO
-Sysprint AG
 Arvento Bilisim Mobil Otomasyon Sistemleri Limited Sirketi
 BRy Tecnologia SA
 thomson financial ltd
@@ -13110,7 +13042,6 @@ Ranked Gaming
 American Independent Marketing
 Oticon A/S
 Creative HQ
-Superfish Inc.
 Nu-Ware
 ICL-KME CS
 Chubchenko Sergei Georgievich IP
@@ -13590,7 +13521,6 @@ Fly Elise-ng
 Gadwin, Ltd.
 Idea Software Srl
 Integrated Solutions Group, Inc.
-Perion Network Ltd.
 Finanzportal24 GmbH
 EPiServer AB
 BigHand Ltd
@@ -13628,7 +13558,6 @@ MadCap Software, Inc
 Fractal Audio Systems
 Stonestreet One
 The Buster Group
-Ideakee Inc
 matrix 42 AG
 UTS innovative Softwaresysteme GmbH
 RICOH Co. Ltd.
@@ -13724,7 +13653,6 @@ Adad Development
 CyberScrub, LLC
 Fookes Holding
 CANAL+ DISTRIBUTION
-3B Software, Inc.
 The Connection
 New Technology Wave Inc.
 Autodesk Inc.
@@ -14083,7 +14011,6 @@ DRAGONSOFT SECURITY ASSOCIATES INC.
 Omnicognic, LLC
 Widening Horizons, Inc.
 Live Global Bid 
-Ymir Entertainment Co., Ltd
 GreenScreen Wizard LLC
 UPS Manufacturing SRL
 Dreamload Trading LLC
@@ -14697,7 +14624,6 @@ EyePartner
 T-ONLINE FRANCE
 Stollfuß Verlag GmbH & Co. KG
 GlobalView Software, Inc.
-SpeedyPC Software (ParetoLogic Inc.)
 Tiller Software Limited
 Merenito Pty Ltd
 Meridium
@@ -15110,7 +15036,6 @@ Southeast Missouri State University
 Northwestern University
 Manipal K-12 Education Pvt Ltd.
 SearchHelp, Inc.
-MICRO DIGITAL INC.
 TECHLAND SP Z O O
 Interpark Communications Korea
 STEMMER IMAGING GmbH
@@ -15434,7 +15359,6 @@ Digiprove Ltd.
 DevHost Ltd
 ORGADATA AG
 maxcrc GmbH
-xlgames
 Global Advanced Business Solutions
 Presence Technology
 One.com A/S
@@ -17462,7 +17386,6 @@ NepalGPSMap
 ADSL Club Co Ltd
 SwiftTec
 LearningGuide Solutions b.v.
-Freemium GmbH
 FPT TELECOM JOINT STOCK COMAPNY
 Atlasconsulting spol. s r. o.
 Smart Hotel Software
@@ -17635,7 +17558,6 @@ TDS Todos Data System AB
 TAROX Systems und Services GmbH
 Targus Group International
 Rebex CR s.r.o.
-Via Advertising Group Limited
 VKernel
 talkyoo telecom UG (haftungsbeschraenkt)
 Standard Chartered First Bank Korea
@@ -17732,7 +17654,6 @@ Neteller PLC
 Netgear Inc.
 netsmartz, LLC
 Neue Landbuch Gmbh Ges. fuer moderne Datenverarbeitung & Co. KG
-LionSea Software co., ltd
 National Software Incorporated
 ADIS Advanced Digital Information Systems Ltd.
 Vidiator Technology (US) Inc.
@@ -17813,12 +17734,10 @@ Closetmaid Corporation
 SigmaZone.com
 Károly Pados
 JSC NPK Katren
-Sevas-S LLC
 Virtual World Computing
 Iorga Group
 Computer Games Distribution, s.r.o.
 VIVIDESK Global
-NaraSoft
 nanocosmos
 Trayport Limited
 travel-IT GmbH & Co. KG
@@ -17929,7 +17848,6 @@ Microsoft BV
 University of California Davis
 NewBay Software Ltd.
 Notcina Corporation
-CNT Bilisim Teknolojisi pazrek tur lt lh Tic. Ltd. Sti
 Contour, Inc.
 UNIVERSITY OF TEXAS M.D. ANDERSON CANCER CENTER
 ELCOM, spolocnost s rucenim obmedzenym, Presov
@@ -18124,8 +18042,6 @@ GameXN AS
 Ipsos Interactive Services SRL
 Physio-Control
 Plantronics, Inc.
-AVG Technologies CZ, s.r.o.
-Shetef Solutions & Consulting (1998) Ltd.
 MAGNISOFTWARE - SISTEMAS DE INFOaRMAÇÃO, LDA.
 ADP Employer Services GmbH
 Outercurve Foundation
@@ -18637,7 +18553,6 @@ Keeper Security, Inc.
 HDRsoft Ltd
 MiniTool Solution Ltd
 HulkShare LIMITED
-AsiaSoft Online Pte Ltd
 MyTechHelp,LLC
 Eclipse Digital Imaging, Inc.
 Intel Wireless Display
@@ -18705,7 +18620,6 @@ CircleDoc
 Chrysanth Software Sdn Bhd
 Chronicle Graphics Inc
 Carestream Health
-Torch Media Inc.
 Carbon Black, Inc.
 Donald Lessau
 Real Time Logic
@@ -18773,7 +18687,6 @@ Seedonk Inc.
 Panasonic Electric Works SUNX Co.,Ltd.
 MIAXIS BIOMETRICS CO., LTD
 Logic Software
-123 Unlock
 TRAVELPORT INTERNATIONAL LIMITED
 GE Energy Services
 Eclo - Desenvolvimento de Sistemas Integrados, Lda
@@ -19004,7 +18917,6 @@ Giant Matrix Limited
 NGSoftware Pty Ltd
 centeractive ag
 Alexander Semenko
-ShenZhen Thunder Networking Technologies Ltd.
 Wireshark Foundation
 Infoland
 Bleank
@@ -19295,7 +19207,6 @@ Equiom Inc
 ZeroVulnerabilityLabs, Inc.
 Dr. Matthias Klein
 Andriy Karimov
-SIEN S.A.
 Runtime Software, LLC
 Winsome Technologies
 Axis Controls Ltd.
@@ -19454,7 +19365,6 @@ Basis Science, Inc.
 Lone Wolf Development, Inc
 Deltix Inc.
 Trace Software International
-Bitberry Software ApS
 Lextek International, Inc.
 inmediaONE GmbH
 Genestia Group Oy
@@ -19507,7 +19417,6 @@ Automotive Data Solutions
 Aurelon
 Filseclab Corporation
 Zeta Software GmbH
-Arul Venthan
 DNASTAR Inc.
 University of Victoria
 Telsat GP Grzegorz Piotrowski
@@ -19648,7 +19557,6 @@ Netatmo LLC
 Jrim Software
 ErgVideo Inc.
 MC2 Ltd.
-Baisvik
 Editora Memphis
 Swann Communications Pty Ltd
 OKI SEMICONDUCTOR CO.,LTD
@@ -19751,7 +19659,6 @@ KPN Corporate Market B.V.
 INSTAR Deutschland GmbH
 Global Technology Associates, Inc.
 Emcee App Software
-Deutsche Kreditbank Aktiengesellschaft
 Clonix Co.,Ltd
 Cadence Design Systems, Inc
 bluMartin GmbH
@@ -19774,7 +19681,6 @@ Orbita LLC
 Xcalibur Systems, LLC.
 SEAL IT Services, s.r.o.
 Oxemis
-Optimal Software s.r.o.
 Egor Chernyshev
 Kea Sigma Delta Limited
 Grant William George Martin
@@ -19917,7 +19823,6 @@ SportSoft, spol. s r.o.
 Open Labs
 BolehVPN Sdn Bhd
 AD-Teknik i Alingsås AB
-DeltaBahn LLC
 EXIS TECHNOLOGIES LTD
 Dome9 Security Ltd.
 www.fqs.pl
@@ -19969,7 +19874,6 @@ Yogev Tuval
 XDimensional Technologies, Inc
 Wise Soft Limited Company
 Nuclear Medicine Information Systems, LLC
-GamesPub Ltd
 Kevin Moore & Associates Software Development Corp
 JOUTEK ELECTRONICS INC
 Instant Housecall Inc.
@@ -20079,7 +19983,6 @@ Colasoft LLC
 Zoho Corporation Pvt. Ltd.,
 VRmagic GmbH
 Technosoft B.V.
-TechEvolve GMBH
 TeamShare, Inc.
 Lytro, Inc.
 Cirrus Logic
@@ -20283,7 +20186,6 @@ Open Source Developer, Johannes-Martin GOEBEL
 NTT Communications
 Mobile Dev Group LLC
 Micro-Pension Systems
-Covus Freemium GmbH
 Jarno Noordermeer
 Fantasy Light LLC
 LmhSoft
@@ -20297,7 +20199,6 @@ MARKO ZDOUC
 SharpNight Co., Ltd
 DVRHOST, LLC
 Interactive Brands Malta Limited
-DSNR Media Group
 Alfred Wegener Institute for Polar and Marine Research
 Andriy Gerasika
 Abbingdon Global Limited
@@ -20668,7 +20569,6 @@ Europlex Technologies Ltd
 Civiltech SA
 LCS Computer Service GmbH
 AOC International (Europe) BV
-Wemade Entertainment co.,Ltd
 Thinkscape Limited
 Atmel Taiwan limited
 DPR Technology
@@ -20698,7 +20598,6 @@ REDDOXX
 NOVERIX ENTERPRISE LTD.
 Noverix Enterpriprise Ltd.
 Binotti srl
-Taiwan Shui Mu Chih Ching Technology Limited
 Sawtooth Software, Inc.
 Sartorius AG
 ZZ, Inc.
@@ -20939,7 +20838,6 @@ Panaton Inc.
 michel Gavanier
 LogicInMind
 LifeWay Christian Resources
-成都海宇通电气自动化工程有限公司
 成都泥巴科技有限公司
 成都杰图软件有限公司
 成都新云软件有限公司
@@ -21147,7 +21045,6 @@ Hypercom Corporation
 HYMATOM SA
 Hornbill Systems Ltd
 hopTo Inc.
-HON HAI PRECISION INDUSTRY CO. LTD.
 Homedia SA
 Holte as
 Hilti Corporation
@@ -21162,7 +21059,6 @@ Guia International Corporation
 Gugila, d.o.o.
 Relic Entertainment, Inc
 Seagull AS
-everyzone
 Entrust, Inc.
 TrackMan A/S
 phiLight
@@ -21365,7 +21261,6 @@ EAST-TEC SRL
 Vertex Inc.
 Joint Technology Engineering Inc.
 Vicon Industries Inc.
-SweetIM Technologies Ltd
 Energoholding-Consult LLC
 AVgo International Inc.
 SEP AG
@@ -21867,7 +21762,6 @@ RDPSoft
 任子行网络技术股份有限公司
 五车信息技术(北京)有限公司
 九合天下（北京）科技有限公司
-临桂零与壹软件有限公司
 中标软件有限公司
 中信建投证券有限责任公司
 东莞农村商业银行股份有限公司
@@ -21890,7 +21784,6 @@ RDPSoft
 上海创多软件有限公司
 上海创图网络科技发展有限公司
 上海冰动信息技术有限公司
-上海兴采网络科技有限公司
 上海光华冠群软件有限公司
 上海健游信息技术有限公司
 上海伊淘信息科技有限公司
@@ -21943,7 +21836,6 @@ Globalone Technologies Pvt Ltd
 YOKO TECHNOLOGY CORP.
 YOKO Technology Corp.
 Yinyuechangxiang Network Technology (Beijing) Co Ltd
-Yantai ZhengHao Network Technology Co.,Ltd.
 Yangzhou Anda Xinyuan Network Technology Co., Ltd.
 Yang Cai
 Yan GuangBin
@@ -22189,7 +22081,6 @@ Shenzhen TianMeiYi Technology Co., Ltd.
 Shenzhen Thinksky Technology Co.,Ltd
 Shenzhen Taole Network Technology Co.,Ltd
 ShenZhen TaiHe Capital co. ltd
-Shenzhen Sunlike Technology Co,.LTD
 Deloitte and Touche LLP
 Solutions Softimum inc.
 Sagem Monetel GmbH
@@ -22255,7 +22146,6 @@ Lectrosonics, Inc.
 Terra Informatica Software, Inc
 SPLUNK INC
 Softron Computers Inc.
-R-Systems CZ, s.r.o.
 Proxmea
 Open Source Developer, Vladimir Panteleev
 Open Source Developer, Pascal HUBERT
@@ -22427,7 +22317,6 @@ Continua Sistemas de Informacion, S.L.
 Greenheart Games Pty. Ltd.
 Pharmatechnik GmbH & Co. KG
 OOO MDO
-Reimage Limited
 VERITAS Verlags- und Handelsges.m.b.H. u. Co. OG
 SAF
 Piffle LLC
@@ -22647,7 +22536,6 @@ Orange Polska
 Retriever Technology Limited
 Photo Mambo Inc.
 Xavier Roche
-VOT TEKNOLOJI ILTS. AR-GE HIZ. TIC. LTD. STI.
 Scopevisio AG
 ICQ LTD
 Eyeo GmbH
@@ -22716,7 +22604,6 @@ NoMachine S.a.r.l.
 Nether Productions LLC
 MyARM GmbH
 Ministerio da Justica
-Fortuna Games Co., Ltd.
 Escape Media Group
 Drillingsoftware LLC
 Electronic Theatre Controls
@@ -22838,7 +22725,6 @@ Adem Interactive Media
 epicraft AB
 Adroit Technologies
 UGS Corp
-Tuguu S.L
 Suzhou Keda Technology Co.,Ltd
 Ryan Clouser
 3DIS GmbH
@@ -22849,3 +22735,5729 @@ Luxion, Inc.
 Libor Tinka
 Videotec Spa
 TV Bank Corporation
+Primate Labs Inc.
+Andromeda IT
+Openlink Software Inc
+innoventif Ltd.
+Salt International Corp
+CodeTwo sp. z o.o. sp. k.
+Michael Maltsev
+Anhui Green Xin Information Technology Co. Ltd
+Notation Software Germany
+Nanosystems S.r.l.
+SK planet
+PIONEER CORPORATION
+Henri Gourvest
+RADStor, Inc.
+Connectis SPRL
+Exostar LLC
+Nilsen Labs
+Optical Recognition Objectives LLC
+Plein & Baus GmbH
+Wargaming Public Company Ltd
+QuoteRush.com, LLC
+Meizhou WeCom Network Technology Co., Ltd.
+WysuForms
+Trigem Computer Inc.
+ProFit Strasser Andreas
+ProFit (Andreas Strasser)
+Titan Products Corp
+Stimulsoft
+Xi'an Matrix Electronic Technology Co., Ltd.
+Havinga Software
+SciencePark Corporation
+Agencia Estatal de Administracion Tributaria
+NHN PlayArt Corporation
+ipConfigure, Inc
+Degoo Backup AB
+Open Joint Stock Company Moscow Exchange MICEX-RTS
+Helix Business Soft AG
+SDM Software, Inc.
+Nival Inc.
+ForexWare LLC
+WysuForms SARL
+NEXTUP TECHNOLOGIES, LLC
+Level 3 Communications, Inc
+KPN B.V.
+Moonlit Software Ltd
+Sawhney Systems, Inc.
+Willener IT-Solutions GmbH
+FX Trading Systems co.,Ltd.
+Zehentmayer Software GmbH
+Working Solutions (Creative IT) Ltd
+Wisdom Software Inc.
+BOS Business Organization Software GmbH
+TRI-ÓZON Kft.
+Trillium Technology, Inc
+The Analytical Group, Inc.
+TechExcel, Inc.
+Xing Wang
+YEALINK NETWORK TECHNOLOGY CO., LTD.
+Reloaded Games, Inc.
+Vedivi Limited
+TV5MONDE
+Tristel New Zealand Limited
+StyleGuard Inc
+SpiceLogic Consulting & Technologies INC.
+SparkLabs Pty Ltd
+Softkinetic International
+SmartDraw Software, LLC
+Henxi Technology Co., Ltd.
+SkyRaster Marek Kupaj
+Sighthound Inc.
+Semantria, LLC
+Rochester General Health System
+Remo Software Private Limited
+Realdream(Zhuhai)Electronics Co.,Ltd
+PT Comunicações S.A.
+Pragmatic Works Software Inc
+PivX Solutions LLC
+Cypher Labs LLC
+American Institute of Architects
+TECH ATLANTIS, INC
+Pasco-Hernando Workforce Board Inc.
+Otto Bock Healthcare Products GmbH
+Openvue Ltd
+Open Source Developer, Tim HOFFMANN
+Open Source Developer, Aleksandr Vishnyakov
+OfiPro Soluciones, s.l.
+ODYSSEY MESSAGING
+Novox Capital Ltd. 
+NETSOLACE, INC
+NetMR Ltd
+Aescripts, Inc
+MOSEK ApS
+Medix Informatik GmbH
+Masonite Corporation
+Marmoset LLC
+MakeMusic,Inc.
+Lumenera Corporation
+Logical Information Machines Inc
+LitexMedia Ltd.
+Legat S.C.
+La Cantoche production
+KROHNE Messtechnik GmbH
+KONSEC GmbH
+Kevvox Pte Ltd
+Intel Corporation-Mobile Wireless Group
+Mega Limited
+CodeValue
+Open Source Developer, Krzysztof Bartczak
+John Tiller Software Inc
+Joakim Schramm
+Ivan Møller Johansen
+Isolta Oy
+IPE Tecnologia em Sistemas Ltda
+inoage GmbH
+Spokane Computer Inc.
+PRACPLAY LLC
+infoMantis GmbH
+InfoCaption AB
+Hybrid Solutions
+Hi Sharp Electronics Co.,Ltd.
+Higher Ground Software Solutions BV
+HEKA Elektronik Dr. Schulze GmbH
+Gryphon Audio Designs
+Technosoftware GmbH
+ROTH + WEBER GmbH
+inray Industriesoftware GmbH
+Health Data Services, Inc.
+GAMEON Studio Co.Ltd.
+AddGadgets IT
+GameArt Studio GmbH
+Funky Android Ltd.
+Fudje Software
+Friends Provident Management Services Ltd
+Fretless Consulting
+4D Technologies LLC
+French Fry
+Foxit Korea Inc
+FIVE BROTHERS MORTGAGE COMPANY SERVICES AND SECURING INC.
+FitinIT Education B.V.
+FAUTOR S.Jankausko PĮ
+Expert Assistant Legal Software
+ExpandIT Development Aps
+Excel.Net, Inc.
+EnjoyStation (Enjoy Radio)
+eNett International
+Elsys AG
+EDpaX International
+EBM Technologies Incorporated
+Dracal technologies inc.
+Domino Data Lab, Inc
+Digium, Inc.
+assyst GmbH
+Elementar Analysensysteme GmbH
+TECHKON GmbH
+Digital Frameworks Limited
+Friedrich Air Conditioning Co. Ltd.
+Diamante S.p.A.
+ABBYY PRODUCTION LLC
+Akelius AS
+Air Computing, Inc.
+Shanghai Kui Zhi Internet Technology Co., Ltd.
+Ableton AG
+Affinegy, Inc.
+Al-Zain Education Schools
+3S-Smart Software Solutions GmbH
+Alexander Burlakov
+ALL WINNER (HONG KONG) LIMITED
+ALF AG
+Alfa System Programming
+Alexander Salnicoff
+Zhengzhou longling technology Co.,Ltd.
+深圳企业云科技有限公司
+SNAP Diagnostics LLC
+Secure Download
+PROMOSOFT CORPORATION
+ONLINEGAMES.COM
+Oesterreichische Lotterien Gesellschaft m.b.H.
+Northern Software Inc
+Nineworks Entertainment
+Małgorzata LESIK
+Learnetic S.A.
+Hengyida Information Technology CO.,LTD.
+Certit PTY LTD
+Tweaking LLC
+Borislav Surbat
+Angular Tech, Inc.
+Anipark Co,. Ltd
+Det Norske Veritas As
+4sync Inc.
+Daniel Sumak
+Daisuke Kamiyama
+CTERA Networks inc
+Corrigo Incorporated
+Core Computing Solutions, Inc
+Appsforlife Ltd
+Apricorn, Inc.
+Ark Information Systems inc.
+Markus Straver
+Nils Maier
+Easeware Technology Limited
+Peakwork GmbH
+Array Networks, Inc.
+Ashisoft
+ASTAK Technology Co.,Ltd
+TELERIK AD
+Unlimited Technology Systems, LLC
+Naviter d.o.o.
+Multiple Access Communications Ltd
+Abas UK Limited
+Convey Compliance Systems
+CONNX Solutions, Inc.
+Astrospark Technologies, LLC
+Balanced Worlds (Beijing) Software Co., Ltd.
+Banco de Venezuela SA Banco Universal
+Beijing baidu Netcom science and technology co.ltd
+Beijing Baofeng Technology Co., Ltd.
+Beijing Netroute Era Technology Developing Co.,Ltd
+Beijing Stone Age Network Technology Limited Company
+Beijing Wen Ming Tian Xia Technologies Co., Ltd
+Belkasoft OOO
+Bergarius Limited
+Big Nerd Software, LLC
+Bit9, Inc
+Blackboard Collaborate Inc.
+Avery Products Corporation
+MMS Modulare Microcomputersysteme & Software GmbH
+easy innovative software, Inh. Michael Haasl e. K.
+Jose Pascoa
+Recrypt LLC
+Bling Software LTD
+Blueteck co, ltd.
+RAIDCALL LIMITED.
+neo42 GmbH
+ELECTRONIC ARTS KOREA LLC
+XL GAMES Inc.
+Virtucyc Limited
+SystemK Corporation
+Schnapper-Software e.Kfm.
+Radka Vokurková
+PV LOGICIELS
+Newpark Resources, Inc.
+KeyPress Software S.L.
+Intel Explore and Learn
+Infinite Concepts Inc.
+GWT-TUD GmbH
+Borland Entwicklung GmbH
+Amoy Tong'an District Multi Star Wars Software Studio
+Open Source Developer, Fotis Zafiropoulos
+Akademische Arbeitsgemeinschaft Verlag
+uptime ITechnologies GmbH
+Tangible Software Solutions Inc.
+Real5D Inc
+Open Source Developer, John STEVENSON
+Lanonyx Ltd
+Kingston Technology Corporation
+KELOC CS, s.r.o.
+GAIN CAPITAL GROUP, LLC
+InnoTechtion Sp. z o.o.
+HLP TECHNOLOGIES
+Brenhills Consulting
+Arc2Earth LLC
+American Microsystems, Ltd.
+Zhuogu Yu
+Zello Inc
+SystemsLink 2000 Ltd
+NavigatorMD, Inc.
+ACI Services, Inc.
+Firefly Global
+Emprog, Inc.
+Dr.-Ing. Ekkehart v. Renesse
+Brian Jones
+Bruce McArthur
+BSD Concept
+MechCAD Software, LLC
+Imperva Inc
+Dell
+Channel Innovations and Solutions Division
+GameScale Europe Ltd
+OneRoof, Inc. 
+WatchMeDad, LLC
+ArcaBit Sp. z o.o
+MooD Enterprises Limited
+MIT-SOFT UAB
+BUNKSPEED, INC.
+WalkMe Ltd
+Vortex Innovation Labs LLC
+Viabizzuno s.r.l.
+Vertex Standard LMR, Inc.
+Vayosoft Ltd
+Valassis Communications, Inc.
+UNIMAKE SOLUCOES CORPORATIVAS LTDA - EPP
+SKOV A/S, Glyngøre
+Sitecore Corporation A/S
+Sennheiser electronic GmbH & Co. KG
+SecureStream B.V.
+Rus-Telecom, LLC
+Ramp Information Technology Inc
+ZAO JeTMS
+Hot-World GmbH & Co. KG
+Belledonne Communications
+Lee Qintguo
+Modern University for the Humanities
+SPEEDQUIZZING LTD
+Skyplayer
+ShipNet AS
+Rorohiko Ltd.
+Reinhold Gerard
+RECOVERY LABS
+Ready-to-Run Software, Inc.
+Plaut Slovensko, s.r.o.
+Cyvera Ltd.
+Pickering Interfaces Ltd
+O-RID Co. Ltd.
+IDERI GmbH
+Ideri GmbH
+Vipshop（China）Co.,Ltd.
+Internet Force 5
+IP Bank B.V.
+CryptoMill Technologies Ltd
+TTP LabTech Ltd
+TLK-Thermo GmbH
+Stand By Soft SRL
+Sophist Solutions Inc.
+Soft-Studio
+Simaudio Ltd
+NuSpectra Multimedia, Inc.
+Bureau van Dijk Editions Electroniques
+Cakinberk Telekom Ltd Sti
+Carlos Casals Pamies
+DEVELOPER TRIBE (PRIVATE) LIMITED
+Steve beckett
+Ericsson
+GEDICON Ges. fuer Dateninformations- und Controllingsysteme mbH
+Asetek A/S
+Edimax Technology co., Ltd
+Qualys, Inc
+Start Meeting, LLC
+Ideri Gmbh
+Cezar Popescu
+Charles Schwab & Co., Inc.
+Chengdu Xi Hui Tech. Co., Ltd.
+China Mobile Group Guangdong Co., Ltd. Mobile Internet Branch
+Indigos LLC
+ASM Assembly Systems GmbH & Co. KG
+Breakfree Audio
+On Time Informatik GmbH
+AFT Atlas Fahrzeugtechnik GmbH
+Anton Paar GmbH
+Bruker AXS GmbH
+RVi Group
+DicoLab Holding B.V.
+YAMICSOFT TECHNOLOGY LLC
+STULZ GmbH
+eyevis GmbH
+acontis technologies GmbH
+ВЛАДИМИР ПЕРМИНОВ
+inPuncto GmbH
+Servant PC Resources Inc.
+iba AG
+BUROTICA
+Intelemage, LLC.
+Active Templates AS
+Intel® WiDi Remote
+Nimble Storage, Inc
+IntraPace, Inc.
+Bluegiga Technologies Oy
+YOTA LLC
+The Conferencing Center
+Open Source Developer, Mehdi Hasan Khan
+Navigraph
+Geosphere S&T
+WideUnion Technology Co.,Ltd.
+Agenzia delle Entrate - Sogei Application
+Synchronoss Technologies, Inc.
+Open Labs, LLC
+MOSSE Damien
+JOXI LLC
+Related Designs Software GmbH
+Advanced Chemistry Development, Inc
+Intel(R) Smart Connect software
+code4ward.net e.U.
+telegate Media AG
+Laika42 UG (haftungsbeschränkt)
+Telefonica O2 Germany GmbH & Co. OHG
+ConstEdit Software
+Cometdocs.com Inc.
+MINH THONG CARD SOLUTIONS CO LTD
+Active Network Inc.
+Lorenz Messtechnik GmbH
+Link Instruments
+CRYPTEX OOO
+北京武神世纪网络技术股份有限公司
+Bâloise Assurances Luxembourg S.A.
+Cooler Master Technology Inc.
+GarageGames.com, Inc
+RS2 Technologies, LLC
+FalCon-Falkner Consulting fuer Messtechnologie GmbH
+Arx One
+Exact Software Nederland B.V.
+Jonas Zimmermann
+Contenta Software
+1-abc.net
+simplitec GmbH
+Tenki Technology Co., Ltd.
+OMT-LIDER, TOV
+Dmytro Goncharenko
+Suba Games
+OnAir Player Inc.
+Friedrich Linder Software
+Paul Rewston
+EAZ Solution, Inc.
+Intellirad Solutions Pty Ltd
+OptionVue Systems International, Inc.
+SCHV Ltd
+Daniel Herken
+HANGZHOU HUATU SOFTWARE CO., LTD
+Tandem Diabetes Care
+Gordano Ltd
+Open Source Developer, Oliver VALENCIA
+Open Source Developer, Maxim Tereshin
+Saal Digital Fotoservice GmbH
+Pervoice Spa
+GING Corporation
+CENSORINO S.L
+PC Micro Systems, Inc.
+RME GmbH
+The Crosby Group LLC
+Yamaha
+Dolphin Bytes e.K.
+VIDAL France
+iCreate to Educate, Inc.
+Tridentify AB
+Maik Ammon
+REV23 Development, Inc.
+Yurii Palkovskii
+MARIAN GmbH
+D+H Mechatronic AG
+Hengwei Network Technology Co., LTD.
+Hemisphere GNSS, Inc.
+OSBASE LLC
+ANMO Electronics Corporation
+NAVIONICS S.P.A.
+ITIM TECHNOLOGIES COMPANY LIMITED
+tocario GmbH
+Confer Technologies, Inc.
+Shenzhen FUTU Network Technology Co.,Ltd.
+BEMATECH S.A
+swizzlebiz
+Center of Engineering Physics, MSU Lomonosov LLC
+Intel CASE
+Minq Software AB
+acam-messelectronic gmbh
+R2 Studios
+Daoyu Liu
+Data Solutions
+france telecom
+Chengdu Everimaging Science and Technology Co., Ltd
+Meida Exhibition Co.,Ltd.
+Zentrum Publishing
+DIACOM TECHNOLOGY INC s.r.o.
+WEINTEK LABS, INC.
+TFR Technology s.r.o.
+Carrot Neurotechnology, Inc.
+Eduard Steinmiller
+Allianz Informatyka Sp. z o.o.
+ComponentArt Holdings Inc
+Advanced Media, Inc.
+Belkin International
+Belectronics Holding B.V.
+Three Corners General Trading & Contracting Co. Wll
+JCS
+Genesis Mobile
+iZone Telecom, Inc.
+Universität Kassel
+Dadam Game co.,ltd.
+Iron Will Innovations Inc
+BANCO DO ESTADO DE SERGIPE S/A
+Cuminas Corporation
+David Rudie
+Jumpshare
+STOCHASTICS FINANCIAL SOFTWARE SA
+Voyetra Turtle Beach, Inc
+eGalax_eMPIA Technology Inc.
+VoIP Integration Inc
+Audion Laboratories Inc.
+SevenCs GmbH
+Specops Software
+National Life Insurance Company
+Lukas Prettenthaler
+CanvasMapple Corporation,Ltd.
+Calculated Industries, Inc
+Free Software Group
+DBSophic Ltd.
+Acommit AG
+Eriez Technologies, Inc.
+Silver Bullet Technology Inc
+Atos IT Solutions and Services GmbH
+Vista Imaging, Inc.
+DECATHLON SA
+KUNSHAN MOYEA SOFTWARE CO.,LTD
+Data Techniques Inc
+InstaForex LLC
+INSEVIS GmbH
+Bosch Automotive Service Solutions SARL
+OakTree Software, Inc.
+Edwin Lau
+Titus International Inc
+Information Resource Technology, Inc.
+Multiplex Modellsport GmbH & Co. KG
+AIM GmbH
+Steine, LLC
+AG-TECH CORP.
+Ab Facile
+Advantech Corporation
+Wilocity
+Raytrix GmbH
+Migix Inc,
+Fishman Transducers, Inc.
+Intel Corp-HAXM Project
+SEGA Publishing Korea Co.,Ltd
+uPrism Co., Ltd.
+MDX Software, inc
+MBF Bioscience
+Västgöta-Data AB
+Shaul Eizikovich
+Abila, Inc.
+FilmImpact.net (Boerhof Media)
+PRICE INDUSTRIES LIMITED
+Imagination Technologies Limited
+Actsoft, Inc.
+Zenph Sound Innovations, Inc.
+DelftRed Simulation Technology
+DenkiHonpo CO.,LTD
+Derivative Inc.
+Deskover Soft
+DESKSWARE INC
+Dialcom Networks SL
+Division-M Pty Ltd
+HexRay Ltd
+Telekinesys Research Ltd
+Playswell, Inc.
+Symplex Small Business
+Dsntech Inc.
+Diego Uscanga
+MULTICERT - SERVIÇOS DE CERTIFICAÇÃO ELECTRÓNICA S.A.
+Asiana Abacus Inc.
+STEWART SOFTWARE LLC
+XiMinds GmbH
+X Financial Solutions Limited
+Divya Thakur
+Dlubal Software GmbH
+Douban Inc.
+xdot GmbH
+Wolfgang Hennig
+netSkope Inc
+PLEXSCAPE MON. E.P.E.
+Mail.Ru Games, LLC
+Pie Digital Inc.
+Pangolin Laser Systems Inc.
+Toon Boom Animation Inc
+WireOver Co.
+Windham Capital Management LLC
+WindBox Technology Co., Limited
+William Mensah
+Wendia AG
+Weidmueller Interface GmbH & Co. KG
+Web Lite Solutions Corp.
+WatchmeSports, LLC
+Valeriy Bashtovoy
+Vacon Oyj
+UTC Fire & Security Australia Pty Ltd
+Universal Audio, Inc.
+UAB NEVDA
+TRONISOFT LIMITED
+Touch Pilot LLC
+Metiix, LLC.
+Veeam Software AG
+Open Source Developer, Stanislav KALIYEV
+Total Recall Inc.
+Tomas Zahalka
+Titronics Research and Development
+Thurlby Thandar Instruments Limited
+Tetrad Computer Applications, Inc.
+Teknic, Inc.
+TCS 27 Limited
+TA Triumph-Adler GmbH
+SysCommConsult Gesellschaft fur EDV-Systeme und Communication
+SynApp GmbH
+Symbols Worldwide Ltd.
+STIDIA S.A.
+Doubledot Media Ltd
+DoubleDub Inc
+Dr. Kaiser Systemhaus GmbH
+Open Source Developer, Mark Sturgill
+StoAmigo, LLC
+Conitec Datensysteme GmbH
+Grupo Microsistemas Jovichsa S.A.
+Audio Research Corporation
+BENSTAR LIMITED
+Carbine, LLC
+World of Horsecraft AB
+Star2Star Communications, LLC
+SRSsoft
+SPYRUS INC.
+Softing Industrial Networks GmbH
+EARTH SOFT, Inc.
+EAST Co., Ltd.
+EasyAntiCheat Solutions
+ECLIPSE PRODUCCIONES SL
+EdgeRunner, LLC
+Eighty Percent Solutions Corporation
+ABBYY Production LLC
+Haiyan Li
+GEOTAB Inc.
+MAGIX Software GmbH
+VÁCLAV SLAVÍK
+Promate
+Neo Technology, Inc
+Li Yongfa
+Shenzhen Ushida electronic limited company
+Denis Zolotov
+Elsinore Technologies, Inc.
+eMailSignature
+Empty Loop
+Schneider Electric Danmark A/S
+Enterasys Networks
+Evgeny Suslikov
+EVGENY KISLOV
+ONLINE BACKUP SOLUTION
+FRANCE TELECOM ESPANA, S.A.
+CodeMetro Inc
+Axact Private Limited
+Exchange Technologies Ltd.
+eSim Games, LLC
+E-Health Partners, Inc.
+Workday, Inc
+Walz Postal Solutions Inc
+Audatex (Schweiz) GmbH
+Wall Street Prep, Inc.
+VirtualHere Pty. Ltd.
+Videodesk SA
+Telenor Digital AS
+Stork Prints Austria GmbH
+Softube AB
+SkyKick, Inc.
+STEC, Inc.
+Simon Tschuor (Qualified Signature)
+Antonioli Flavio
+EXTENUA Inc
+Shanda Games International Europe GmbH
+Fabrizio Farenga
+MMS COMERCIO E SERVICOS PARA INFORMATICA LTDA - ME
+LENOVO
+STRATASYS, INC.
+Silect Software, Inc.
+sfApex LLC
+Facepunch Studios Ltd
+faceshift AG
+Famatech Corp.
+Whatlink Software Limited
+Federico Sasso
+FEI XIAO
+INDEX CONSULTING S.L.
+Fitbug Limited
+WhiteHat Security, Inc.
+ABBYY INFOPOISK LLC
+Sanders Data Systems
+Joycity Corp.
+WiMP Music
+Sigma Estimates A/S
+CodeGroup A/S
+Triviso AG
+Trendy Entertainment Inc
+Neue Landbuch GmbH, Ges. für moderne Datenverarbeitung & Co. KG
+ITI
+OL2, Inc.
+fusionOne
+Scilligence
+Science Object Oriented Products & Systems SOOPS B.V.
+Open Source Developer, Roger Zander
+Anton Diesel
+Open Source Developer, Gord Caswell
+Vargus Ltd.
+Vadim Malyarchuk
+Ulrike Braun
+Thermo Fisher Scientific Australia Pty Ltd
+Strategy Companion Corporation
+SOFT S.A.
+Shenzhen Huion Animation Technology Co.,TLD
+School Scheduling Software (USA SCHEDULER LLC)
+Schako Iberia S.L.
+Open Source Developer, Joakim Eriksson
+Voice Tech Group, Inc.
+TEgraf
+Geny mobile
+SCAPS
+Scalable Software Ltd
+SAP
+Santa Barbara Instrument GP Inc.
+Sage South Africa (PTY) Ltd.
+Rotunda Software LLC
+ASSA ABLOY, Inc.
+Open Source Developer, Usmanov Ildar Rafailevich
+Bundesministerium für Wirtschaft und Energie
+Vivicom International GmbH
+Snap One, Inc
+RoadByte
+RICOH IMAGING COMPANY, LTD
+Reemers Publishing Services GmbH
+Reality Engineering Inc.
+Howsimple, LLC.
+Kok Bilisim Ltd Sti
+H.M.L SOFTWARE LTD
+Flare Design and Consultancy Ltd
+Allen & Heath Limited
+BIT4ID
+Ron's Place Apps
+New Audio Technology GmbH
+QuoteBurst
+QuickLabel Systems
+InfraWare, Inc.
+Softland Argentina S.A.
+Zoller + Froehlich GmbH
+Thales Communication And Security S.A.
+PRODVD, CO.
+Proactive Inc.
+Privato Security LLC
+PrimeXM Prime Exchange Markets GmbH
+Power Integrations Inc.
+polpress.pl
+point electronic GmbH
+PLUTO-OLT, spol. s r.o.
+Plasq LLC
+Petr Zahradnik Computer Laboratory (Petr Zahradnik)
+PELCO
+Parks Computers, LLC
+Panorama9
+Palex Ltd.
+Sophos
+Kihon Inc.
+Catarina Cancemi
+OCZ Storage Solutions
+ORGANISATION SYSTEME PRODUCTIVITE
+Optibase
+Open Source Developer, Sergey Potapov
+Open Source Developer, Ebben Feagan
+Open Source Developer, Bernhard Reiter
+Open Source Developer, Adam Kropelin
+Omar Waly
+OfficeRecovery LLP
+Primatech Inc.
+Stay Designers Inc.
+Right Brain Interface
+Powel AS
+Open Source Developer, Xavier Roche
+NUUO Inc.
+NoahSystem.Co.ltd
+NitroSphere Corporation
+Nistune Developments Pty Ltd
+Nistech GmbH
+Nexetic Oy
+Newport Electronics, Inc.
+Newmarket International, Inc.
+New Boundary Technologies, Inc.
+InfraDog Inc
+Audio Partnership PLC
+foto fabriek
+Zephyr Technology Corp
+TOPPAN PRINTING CO.,LTD.
+Respawn Entertainment, LLC
+Orad Hi-Tec Systems Poland sp. z o.o.
+NeTLIMS NJ LLC
+NEC Nederland
+NearSpace, Inc.
+Nautilus LifeLine Ltd
+nautavis GmbH
+Multi Touch Surface Inc
+Motorola Solutions, Inc.
+Money.Net Incorporated
+Modevity, LLC
+M-Mies Oy
+MLM Innovations Limited
+MICROPI ELETTRONICA SRL
+Mercadotecnia Ideas y Tecnologia S.A de C.V.
+Mensch und Maschine Zuberbuehler AG
+MEN Mikro Elektronik GmbH
+MEMSOFT
+xCore LLC
+Club Prophet Systems
+Brotsoft technology co., limited
+Digital Juice, Inc.
+FOTOPAK s.r.o.
+BlueAnt Wireless Pty Ltd
+Open Source Developer, Ivan Johansen
+Race Technology Ltd.
+A&H Software House Inc
+Informa Investment Solutions, Inc
+HEX Microsystems (Pty) Ltd
+Versatile Software Systems, Inc.
+Unify Square, Inc.
+Shanghai Ubisoft Entertainment Co. , Ltd.
+Revo America Corporation
+PROGRAMACION INTEGRAL, S.A.
+OVH SAS
+NATIONAL FANTASY SPORTS LEAGUES, INC
+mediola - connected living AG
+Medialooks Soft OOO
+Fotogoed
+BMC Software Inc.
+VTI Instruments Corporation
+POSBANK Co., Ltd
+Matthies & Klock GmbH
+Matthias Meierhöfer
+MarketDelta LLC
+MARCIVE, Inc.
+MagikINFO s.r.o.
+Live Cloud Depositions LLC
+Galaxy Far East Corp.
+Lindemann audiotechnik GmbH
+FrameFlow Software
+FreeCast, Inc.
+Frank Dunkel
+Daniel White
+Fresh Software LLC
+FromSoftware,Inc.
+Funandwiz co., Ltd.
+FUJIAN RUIJIE NETWORKS CO.,LTD.
+Fujian NetDragon Computer Network Information Technology Co.,Ltd
+Electronic Transaction Systems Corporation
+ASTARICKS Pty Ltd
+Power Software Limited
+Keithley Instruments, Inc.
+Microsoft Open Technologies Inc
+Lifetime Memori Inc.
+HAMSTERSOFT LLC
+Fuzhou BoYuan Wireless Websoft Technology Ltd.
+RHKOREA Co,. Ltd.
+BaarBaar Softwares
+Centrafuse Inc.
+HDFC BANK LTD
+RealPage Inc
+LES LOGICIELS MARICHÊNES INC.
+Fun Factory LLC - ООО ”Фабрика Развлечений”
+Fuzhou kaopu Network Co.,Ltd
+geekuninstaller.com
+Gaijin Entertainment Corporation
+Gamania Digital Entertainment CO., LTD.
+GAME FLIER INTERNATIONAL CORPORATION
+IMAGE HOTEL SYSTEMS, LTD.
+Wildix s.r.l.
+blueside Inc
+British Broadcasting Corporation
+Allied Way International Holdings Limited
+Swisscom AG, Bern
+Ynteractive Ltd.
+www.serasaexperian.com.br
+Woodman Labs, Inc.
+Virgin Digital
+Ubiquitous Computing Nano Technologies Inc.
+Tokyo Dawn Records UG
+SoftPro S.r.l.
+Plan Presto S.L.
+NEXON GT Co., Ltd.
+NetWin LTD
+NETSUITE INC.
+Netbox Blue Pty Ltd
+Makrosystems Tecnologia da Informação Limitada - ME
+Latvian Business bank, JSC
+Kylebank Software Ltd
+Kryptotel fz llc
+Kovai Ltd
+Kloudian Systems Inc.
+kingdom communication associated LTD
+kb-SoftCon GmbH
+Kaspersky Lab UK Ltd
+Kasamba, Inc.
+Jonathan Hardison
+Johnson Controls, Inc.
+Japan Medical Association
+IriTech, Inc.
+i.O. interaktive Objekte Gesellschaft f. Informationssysteme mbH
+Intersections Inc
+Intel(R) Setup and Configuration Software
+Intelecom Group AS
+Intel Corp - Chipset INF
+intek hard- u. softwaretechnik (Christoph Kuehnel Ing.buero)
+Institut fuer das Entgeltsystem im Krankenhaus GmbH (InEK)
+I-Neva
+Ideaworks3D Ltd
+idappcom ltd
+HynesITe, Inc
+HOUR spol. s r.o.
+digitalonnet
+Federal Election Commission
+SHTRIH-M
+AEB IT-SYSTEME GmbH
+Rosenthal Collins Group
+Netwrix Corporation
+Messerli Informatik AG
+Inzake - BE0839023472
+Intel Anti-Theft Service
+Impact Gamer Pty Ltd
+Hongkong Post
+HomeAway, Inc. 
+Wowsoft
+The Virtual World Web Inc.
+TeleTrader Software GmbH
+Tecnobit S.r.l.
+Swar Systems, M Etchepareborda
+Spinware Solutions B.V.
+SI Engineering Srl
+Servoy B.V.
+Sensitech Inc
+Rian Hunter
+RedPoint Global, Inc.
+ProfitStars - Alogent Products
+POPFAX
+POLL EVERYWHERE, INC.
+Hochu-Eto LLC
+HIKARISOFT LLP
+Prey SpA
+A.M. Best Company
+Mirae technology Co., Ltd.
+BandHub, Inc.
+Access Eforms, LP
+Betica Ltd
+oneAssist UG
+Nok Nok Labs, Inc.
+MedicineOne, Life Sciences Computing SA
+Maxim Zaikin
+Linoma Software
+Impinj
+Haylem Technologies Inc.
+Harilaos Kakoulidis
+Hamilton Bonaduz AG
+Hallmark Cards, Inc.
+gemalto
+DATOS Computer GmbH
+Vieux & Associates, Inc.
+Teradyne
+SAVE.TV Limited, Zweigniederlassung Leipzig
+RWD Technologies
+Prestwood Software Ltd
+POLYCODE
+Halcom software publishing ERP
+GrabCAD, Inc.
+gm.com
+Global Mobile Network Pte Ltd
+Global Crossing Telecommunications Inc
+GJ Games Corp.
+SafeBytes Software Inc.
+ASCO Systemy Informatyczne sp. z o.o. sp.k.
+ARZ Allgemeines Rechenzentrum Gesellschaft m.b.H.
+DataCard Corporation
+Anritsu Company
+City State Entertainment, LLC
+BOSCH Sicherheitssysteme GmbH
+Contour Design, inc.
+Amazon Web Services, Inc
+GHL Advanced Technology GmbH & Co. KG
+GFI Group
+XRSolutions
+Sysacom R&D Plus inc.
+EasyAntiCheat Ltd
+AhnLab,Inc.
+Open Source Developer, Michał Męciński
+Open Source Developer, Dimitry POLIVAEV
+NXP Semiconductors USA. Inc.
+Nomadesk NV
+my FLYERALARM GmbH
+Kruse-IT GmbH
+Getac Technology Corp.
+Gemalto M2M GmbH
+GbR Klaus Alfons Hoffmann,Michael Hans Spiess und Torsten Kiehns
+gameplay.com plc
+FURUKAWA ELECTRIC CO., LTD.
+Klavis Technologies s.a.
+Angelbird Technologies GmbH
+Techzilla Technical Services, LLC
+Studio Gurus, LLC
+Soundminer, Inc.
+PRIVACYDATASYSTEMS, LLC
+Photo Dose GmbH
+Pentagon 2000 Software
+Partstrader LLC
+FRENT IT BV
+SG automatisering B.V.
+NEDSENSE SRL
+Fluendo S.A.
+FLIR SYSTEMS TRADING BELGIUM BVBA
+FixThisBox LLC
+Firma StroySoft, Ltd
+Firestone Audio Co., Ltd
+Filmova databaze s.r.o.
+FGS-Software fgs-ltd.com
+Fédération Internationale de Basketball (FIBA)
+GameVox LLC
+Garry McKay
+Data Conversion Systems Limited
+Cavium Inc
+Euro Print, spol. s r.o.
+Pandora TV Co., Ltd.
+AAT Holding  SP Z O.O.
+PROCAM - Software, Systems and Services
+Plagiarism Checker X, LLC
+Stanislav Vishnevskiy
+SAS SYDEV
+Open Source Developer, Matthew Petroff
+Future School Education Pty Ltd
+FastEST, Inc.
+EXNP Inc.
+Exante Ltd
+eShop Technologies
+ERRAPART,ANDREI,37803145227
+ePanic Button, LLC
+Envision IT
+Enternet Oy
+EMS Technology Solutions LLC
+taskfabric LTD
+Evogh, Inc
+EVOGH Inc.
+EMD International A/S
+3DVista ESPAÑA
+Softpen Technology Group
+Qing Sheng
+ELSIF - INFORMÁTICA E SERVIÇOS LDA
+Eloma GmbH
+EFG HERMES HOLDING SAE
+Federation des caisses Desjardins du Quebec
+EES Data Ltd
+Ecocerved S.C.A.R.L
+e-center
+eBay Inc
+Durametric Software
+Duplo Seiko Corporation
+Dr. Ruff Software GmbH
+Dr. JOHANNES HEIDENHAIN GmbH
+DOS  GmbH
+Dorsoft Srl
+DoReMIR Music Research AB
+D.N.R. IMAGING SYSTEMS LTD.
+FYN B.V.
+Dimensional Insight Incorporated
+digital performance Ingenieure Scholz und Partner
+Digital Check Corp
+Digieffects LLC
+Diener automation GmbH & Co. KG
+Dialogik AG
+Deluxe Media Management Inc.
+Deltek, Inc.
+Dell | Licensing Technologies Group
+DAVID Software GmbH
+David Rector
+Darin Fong Audio LLC
+Daniel Seichter
+cyber TECHNOLOGIES GmbH
+Craftsman Book Co. of America Inc.
+Cosential, Inc.
+Cornstalk Software
+CoreTech System Co., Ltd.
+Contivio.com Corporation
+congatec AG
+Computer Systems International Inc
+Compex Medical SA
+Codesim LLC
+Codan Radio Communications
+CnW Recovery Developments Limited
+ClubReady Inc.
+SCANLAB AG
+Prudential Corporation Asia
+ChemoMetec A/S
+Chax, Inc
+C.A.T. Consulting Kft.
+Carallon Ltd
+Capcom U.S.A., Inc.
+Candid Commodities, LLC
+C3 SoftWorks, Inc.
+Business Technologies, LLC
+B Squared
+Brilliant Blue, LLC
+Bridge Systems BV
+Bosch Security Systems B.V.
+Boris Maisuradze
+Phorus, Inc.
+Broadcast Equipment Limited
+CloudFuze,LLC
+Clinicient, Inc
+CiiNOW, Inc.
+CAMBRIDGE HITACHISOFT EDUCATIONAL SOLUTIONS
+Boole Server Srl
+Bluepex Controle e Segurança em TI Ltda.
+Błażej ŻAK
+OMRON Corporation
+Dropbox, Inc
+Tabon Books Inc,
+Politerm OOO
+phorus, llc
+Logiciels Modulex inc
+IXP Data ApS
+Fabian Jungwirth
+24 ORE Software S.p.A
+Andrew Hoyle
+Space Monkey, Inc
+Immortal Dimensions Pty Ltd.
+DEV47 APPS
+CSM Computer-Systeme-Messtechnik GmbH
+BiZZdesign
+BioMedical Computing Ltd
+BioEx Systems, Inc.
+Sagem Defense Securite
+TRAYDENT SOFTVER TOV
+PicoQuanT GmbH
+3235106 Nova Scotia Limited
+Cloud Imperium Games Corporation
+Bissantz & Company GmbH
+beyerdynamic GmbH & Co. KG
+BEDIN Shop Systems srl
+BeanOX UG
+BCT B.V.
+Open Source Developer, Stefan KUENG
+LabJack Corporation
+Bakonyi Technologies GmbH
+Baker Heath Associates Ltd
+Backbone Security.com, Inc.
+AXIGEN Messaging SRL
+AVTOR LLC
+Avilance Ltd.
+AUMA Riester GmbH u.Co. KG
+Auslogics Labs Pty Ltd
+FileMedic Sp. z o.o.
+Wolfgang Weinmann Softwareentwicklung
+Alexander Salnikov
+AYU Technology Solutions LLC
+VOXEET, INC
+String Bean Software, Inc.
+Statfactory Limited
+Mr.pic Co.,Ltd
+Audio Video Digital Systems, LLC
+Audio Damage, Inc.
+ATTENTION SYSTEM DEVELOP CO., LTD.
+ATLANSYS SOFTWARE
+ATGC Labs, LLC
+Atalasoft Inc.
+江苏极光网络技术有限公司
+Suzhou Gstarsoft Co.,Ltd.
+ASPire Digital Technologies (Shenzhen) Co., Ltd.
+Askia SAS
+ARC Document Solutions, Inc.
+Arcadia srl
+AnimaxBroadcastingKorea Co., Ltd.
+Andreas Schibilla
+Analog Way
+American Thermal Instruments
+Alteryx, Inc
+Altair Technologies Ltd.
+Zenith Technology Limited
+United Starex Limited
+Topgame Technology Corp
+Chengdu Xishanju Interactive Entertainment Co. Ltd
+Cherwell Software, LLC
+MacroWell Technology Co., Ltd.
+Macheen Inc.
+LavaTurtle Software, Inc
+Laplink Software Inc.
+LAGER NETWORK TECHNOLOGIES INC.
+PokerStrategy.com Ltd.
+Edurite Technologies Pvt Ltd
+Marcio Rodrigues da Silva
+Market Technologies, LLC
+MagneticOne PP
+Magnus Johansson
+MAIET Entertainment
+MailEnable Pty. Ltd.
+MakerBot Industries
+Daegilsoft, Inc.
+Dai Nippon Printing Co., Ltd.
+Dandong KEHUA Economic and Trade Co.,Ltd
+Dassault Systèmes GEOVIA Inc.
+Dassault Systemes Simulia Corp.
+Data Storage Group, Inc.
+Data Transfer, LLC
+Datacastle Corporation
+Datalode, Inc.
+DATAWIND NET ACCESS CORPORATION
+DB-Pros, Inc.
+Dirk Hagen
+Disconnect, Inc.
+EASY DIGITAL CONCEPT
+EATON POWER QUALITY SAS
+Edline, LLC
+Eduard Danilov
+Ekitan&Co.,Ltd.
+Element-IT Ltd
+Elo Touch Solutions, Inc
+Elsten Software Limited
+ELYSIUM Co.,Ltd.
+philandro Software GmbH
+Adlice
+Promeric Technologies Inc.
+Shenzhen Ankki Technologies Co.,Ltd
+Viber Media S.a.r.l
+GAME ON CO.,LTD.
+Websecure Ltd
+mkrautz.dk
+ICEpower a/s
+Spacial Audio Solutions, LL.C.
+E-Mig Technology, Inc.
+Elektrosfera Ltd.
+Armen Computing Ltd.
+Backup Software Limited
+Rimex Supply Ltd.
+Zeevee, Inc
+ThinkGeo LLC
+Tomar Technologies Pvt Ltd
+Gabia inc.
+Simetar, Inc.
+Sandia National Laboratories
+REITEC GmbH
+BEETALK PRIVATE LIMITED
+iScope Corp.
+CUMMINS INC.
+Delta R&D s.r.l.
+ActiveWord Systems, Inc.
+Maxidix s.r.o.
+AUGIAS-Data (Karl-Theo Heil)
+ACCEO Solutions
+Infracom
+ICANotes, LLC
+Open Source Developer, Emmanuel Puybaret
+Audiokit SRL
+Proland Software Private Limited
+NEWTON Technologies, a.s.
+Parabon Computation, Inc
+CatchBEST Optoelectronic Equipment Co., Ltd.
+Open Source Developer, Jon WILSON
+Legali Online di cuccia gianvito
+Quarri Technologies, Inc.
+Xtreme Consulting Group Inc.
+TETRA INFORMATICA, S.L.
+SpringAhead Inc.
+Silkwood Software Pty Ltd
+Sefaira Inc.
+RGP Development LLC
+PLAYWITH Inc
+PAVEL HOLEC
+Optronic Technologies, Inc.
+Open Source Developer, Haridas Pachuveetil
+Nok Nok Labs, Inc
+Niu Yunfei
+National Refrigeration and Air Conditioning Canada Corp
+moveIT Software GmbH
+Magyar Bírósági Végrehajtói Kamara
+li shuo
+LCDInfo Oy
+KT&C Co., Ltd.
+Signatrol Ltd
+Limited Liability Company AIGRIND
+Installer Technology Co.
+Houdyshell Holding Limited
+GUANGZHOU YIN YI ZHI FENG DIGITAL TECHNOLOGY CO., LTD.
+Golden Emperor International Ltd.
+PC Backup Software Limited
+DS NET CORP SA DE CV
+Stepok Image Lab Limited
+Efficiency Software B.V.
+Able Tech Srl
+Softdeluxe Ltd.
+DevXSoftware
+PF SKB Kontur ZAO
+SKB Kontur
+GfK SE
+Devart
+Latitude Communications
+Progeo srl
+Intel Corporation - Embedded Subsystems and IP Blocks Group
+Applied Performance Technologies, Inc.
+NovaPlex Business Solutions Limited
+D&X Limited
+Tianyibo Co., Ltd.
+Otodynamics Ltd.
+Caneberra Technologies, Inc.
+Recovery Toolbox Inc
+PraKom Software GmbH
+Batitel
+Proventive Systems ApS
+Activu
+CoNetworx, LLC
+Irinel Matei
+d-basics b.v.
+Aetna Life Insurance Company
+NSP Network Security Proliferation UG (haftungsbeschränkt)
+Alcatel-Lucent USA INC.
+AUTÓ-M3 Kereskedelmi és Szolgáltató kft
+XenoBot
+Di Wu
+Wuhan Hujing Technology Co., Ltd.
+Amfit, Inc
+SuiNing Yilong Software Store
+Lean Software Ltd
+Turtle Beach
+LowCarbonComfort.com Ltd
+BADOO SOFTWARE LTD
+The Hiroshima Bank, Ltd
+Artech Consultores S.R.L.
+Innov Security Limited
+Nolan Business Solutions PLC
+Extreme Reality Ltd
+Golden Frog, GmbH
+Projan AB
+Sven Walther
+EasyAssist Software Pty Ltd ATF EasyAssist Software Trust
+Softext ltd
+Smartlogic Semaphore Limited
+NL Systems LLC
+Sunny Systems Computerhandels- und Internet-Dienstleistungs
+Hunted Cow Studios Ltd
+STUEBER SYSTEMS GmbH
+Videology, Inc.
+Pinwheel Software, Inc.
+Sperian Protection Instrumentation LLC
+Agricultural Bank of Taiwan
+C-Informationssysteme GmbH
+ADUX SOFTWARE, C.A.
+Machining Cloud GmbH
+Activecrypt Software Co.,Ltd.
+APPCELERATOR, INC.
+Cyanogen Inc
+Open Source Developer, Giacomo Drago
+Omnicare System Limited
+Valve Corp.
+SoGehts GmbH
+YourKit, LLC
+Waterfox Ltd
+VE Science Technologies LLC
+TRENZ AG
+Transfer technology limited
+Telecom Italia S.p.a.
+TARA TELECOM LIMITED
+Tangentix Ltd
+Sony Mobile Communications AB
+Sony Europe Limited
+Software.com, LLC
+SOFTGRAM Co., Ltd.
+Silent Circle LLC
+shared Services Canada
+Selman & Associates, Ltd.
+SDBiosensor, Inc.
+SBE network solutions GmbH
+RSP Software GmbH
+RealVision
+Qword Infomation Technology (ShangHai) Co.Ltd.
+Pheox AB
+Parlam Software S.L.
+Paradigm B.V.
+Panasonic Cloud Management Service Europe B.V.
+ORZILIA LTD
+Olga Kobets
+Numato Systems Pvt. Ltd.
+NServiceBus Ltd.
+NovaVision Inc.
+NELIX TRANSAX LLC
+MYUNISOFT (SAS SAMINFO)
+MTI Ltd.
+Moaxis Technologies Inc.
+MINISTERIO DA JUSTICA:MJ
+A.E.T. Europe B.V.
+Avaya Ireland Ltd
+Oliver Lux
+Mekentosj BV
+Markus Rechberger
+MangoApps, Inc.
+Lanyon Inc.
+Wellness Unmasked, Inc.
+Terrapocket Pty Ltd
+Qtrax
+Jaroslaw Wasowski
+intocns Co., Ltd
+Integrity Software, Inc.
+incorep
+iBase.ru
+Horst Rothe
+HAPPY - FOTO GmbH
+Gamelabs LLC
+Full Spectrum Laser LLC
+Fujian LANDI Commercial Equipment Co.,Ltd
+froglogic GmbH
+Ellora Assets Corporation
+ene't GmbH
+Ecole Polytechnique Federale de Lausanne
+System-inn-Kokusai, Inc.
+DIY ACCOUNTING LIMITED
+DFH Service GmbH
+Detlef Stralau
+Dejaset, Inc.
+Defender Security Limited
+CounterTack, Inc.
+co.Tec GmbH
+Corte Certo (Dimensions Software LTDA)
+Accountek Solutions, Inc
+Copermatica SL
+CEG Conseil SARL
+Blucup Ltd
+bizmodeller ltd
+BioTekna s.r.l.
+BARONSMEDIA.COM, INC
+Awato Software GmbH
+AvePoint
+AudioCodes USA, Inc
+Atlansys Software LLC
+Artifact Interactive
+Apago Incorporated
+Acculog Inc
+bit media e-solutions Gmbh.
+Andrea Bittau
+ALPES INGENIERIE INFORMATIQUE
+AlefSystems,YK
+alcatel-lucent.com
+Aimereon, Inc.
+AGENCE NATIONALE DES SYSTEMES D INFORMATION PARTAGES DE SANTE
+Advent Instruments Inc.
+Advanced Relay Corp.
+Advanced Merchant Solutions, Inc.
+Advanced Financial Software, Ltd. Co.
+ADEO Imaging OÜ
+Add-On Technologies Inc.
+ADC CORPORATION
+Actual Experience Ltd
+Z.T.T SERVICE LTD PARTNERSHIP
+Wolfgang Böcherer
+Automaton Software Ltd
+GlassWire
+Open Source Developer, ConEmu-Maximus5
+MedIcal Information Technology Inc.
+SODATSW spol. s r.o
+Open Source Developer, José Valim
+Oleksii Kovalov
+Cubus AG
+APOLLONIAN PUBLICATIONS LLC
+Zepetto Co. Ltd.
+Yesware Inc.
+Appwork GmbH
+AAF-McQuay Inc.
+macros Reply GmbH
+Silicon Designs, Inc.
+RingCentral Inc.
+Methods & Solutions, Inc.
+Iurii Sydorov
+FrozenFrog Software SL
+D+H USA Corporation
+Urios
+Panda Security S.L.
+Disig a.s.
+Atomix Productions Inc.
+Sirrix AG
+LI-COR, INC.
+HIKVISION DIGITAL TECHNOLOGY CO.,LTD.
+Habit DX Inc.
+GE Intelligent Platforms, Inc.
+eFS Technology Bt.
+D.Tools, Inc.
+DiDiT High-End B.V.
+C-mach Technologies Inc.
+Telecable de Asturias, S.A.
+Sommer Informatik GmbH
+CREOSO Corporation
+Digital Extremes Ltd.
+Abeem Live Technologies
+ABS Computer Technologies
+KYROL Security Labs Sdn. Bhd.
+Accept Software Corporation
+ACCESOS Y COMUNICACIONES DEL SUR S.L. L
+AccSys GmbH
+ACD Systems International
+ACE Scientific Production  Enterprise Limited.
+Acksen Ltd
+North American Solutions
+Darkium Group OÜ
+ABCDIGIT
+Coveo Solution Inc
+GROUP Business Software AG
+Prosig Ltd
+Oculus VR, Inc.
+SOFTHARD Technology Ltd
+LiveHive Inc.
+HSC Hard- und Software-Consulting GmbH
+Digital Geek SRL
+bpmToolbox Pty Ltd
+MEDIATEK INC.
+Websense Systems Inc.
+Sputnik Software
+BlackBerry Ltd.
+University of Connecticut
+Pralana Consulting LLC
+NTT NEOMEIT CORPORATION
+MadCap Software, Inc.
+Macaw, LLC
+IdentityMine Inc.
+Fredrik Edström Teknik
+VistaraIT Inc
+DayZero Systems Inc.
+G4S Technology Limited
+eVenture Limited
+EOS GmbH Electro Optical Systems
+E-WAY
+BeeThink Software Research and Development Center
+Autocom Diagnostic Partner AB
+Anthony Eugene Clegg
+SGE Information & Investment Services AG
+EnableSoft, Inc.
+SpringCM
+Daikonaka
+SyncEvolution SARL
+Silicon Frameworks, LLC
+OF Software Ltd.
+Developians corp
+ActForex, Inc.
+ActiveVideo Networks
+Comsign LTD
+Delphi Lockheed Automotive Ltd
+Plenom A/S
+CIMON CO., LTD.
+Moneris Solutions
+WUHAN VISIONTEK CO.,LTD.
+Vobile Inc.
+Versis
+Digify Pte Ltd
+Cyber Computronics Private Limited
+qiong liu
+Alexander Sedov, Open Source Developer
+Pix4D SA
+North China Electric Power University
+ARX Solutions GmbH
+RIIGI INFOSUSTEEMI AMET
+LiveBlock Auctions International
+Buddy Automotive Innovations LLC
+L Card Ltd
+FUNAI ELECTRIC CO., LTD.
+E-kierowca sp. z o.o. Spółka komandytowa.
+Digital Data Technologies, inc
+Sneleten.nl
+Boundary, Inc.
+Screaming Frog Ltd
+Open Source Developer, Janusz SZPILEWSKI
+NEODECK HOLDINGS CORP.
+Magic CPR, LLC
+IDAutomation.com, Inc
+Wolters Kluwer Technology BV
+Rice Lake Weighing Systems
+Professional Global Marketing, Inc.
+Secret Headquarters, Inc
+FPT Telecom
+Beijing Microview Science & Technology Co.,Ltd.
+ActMask Group Co., Ltd
+ADAO Global, LLC
+ADLINK TECHNOLOGY INC.
+Adminsoft Ltd.
+Open Source Developer, Dimitry Polivaev
+RayShare Co.,Ltd
+南京神易网络科技有限公司
+Adrian Kaempfen
+Advanced Quonset Technology, Inc.
+EISST Ltd
+AFAS Software B.V.
+Rejhon Technologies Inc.
+Raman Karpuk
+Agile Sports Technologies
+Vestel Dijital Uretim A.S.
+Cathay United Bank
+AI Devs
+RonyaSoft
+KV331 Yazilim Ltd Sti
+AIMMS B.V.
+Foxit Software Incorporated
+Complan Valens B.V.
+eXmind s.r.o.
+Teknopars Bilisim Teknolojileri San. ve Tic. Ltd. Sti.
+andromeda IT
+Telegram Messenger LLP
+TshwaneDJe Human Language Technology
+CloudApp Inc
+ATOMI SYSTEMS, INC.
+Murray Hurps Software Pty Ltd
+AirPOS Ltd.
+Pete Batard - Open Source Developer
+Akrocard 2000 s.l.
+Back To The Beach Software, LLC
+Badosoft
+Bagrify Solutions
+IT Governance Ltd
+Intel(R) Wireless Display
+SuZhou ZWO CO., LTD.
+Dongguan CJtouch Electronic CO., Ltd
+Toylogic Inc.
+iMobie Inc.
+Università della Svizzera italiana
+PRO-CAD Software Ltd.
+Kryptotel FZ LLC
+Axis Bank Limited
+MICROCOMPUTER APPLICATIONS INC
+Spiceworks, Inc
+SYLVAIN BRUYERE
+GAF Media
+Federal Express
+Enplug, Inc.
+Dingmedia Ltd
+CAPELLO DAVID ALFREDO
+Zoom Video Communications, Inc.
+Julien MANICI
+AVAST Software s.r.o.
+WEBZEN Inc.
+X-Legend Entertainment CO., LTD.
+Wireover
+VCNC Co., Ltd.
+U-Tools Software LLC (Algin Technology LLC)
+Suntech S.A.
+NSecsoft(Jinan) Co., Ltd.
+Sorenson Communications, Inc.
+softtruck
+Smart Mood Reflection SRL
+SAPIENCE ANALYTICS PRIVATE LIMITED
+Raberles Investments Ltd
+ZeroTier Networks LLC
+DeskShare GmbH
+Waei International Digital Entertainment Co., Ltd.
+Anvsoft Inc.
+N.C.S. Trade Hungary Kereskedelmi Korlatolt Felelossegu Tars
+Nautische Veröffentlichung Verlagsgesellschaft mbH
+National Data Parsing Canada Corporation
+Napatech Inc
+NANUM Technologies CO., LTD.
+Najdi, informacijske storitve, d. o. o.
+National Data Parsing Corporation
+Navaltik Management - Organização da Manutenção, Lda
+Napatech A/S
+Kasherlab Technology Inc.
+KAD Korvigellou An Drouizig
+kabu.com Securities Co.,Ltd.
+K & P Softwaretechnik
+ManageSoft Corporation
+Mapbox Inc.
+BEEZIK ENTERTAINMENT
+Megajogos Entretenimentos Ltda
+BeiJing WangMa Chuang Xin Wang Luo technology Co.,ltd
+Innovation Management Group, Inc
+Andy OS, inc.
+Xi'an Sumit Software Co.,Ltd
+Saltire Software, Inc.
+Starke Software GmbH
+Mirillis
+Broadview Networks, Inc
+VideoLAN
+SOFTconsult spol. s r.o.
+Arvato Digital Services LLC
+Index Consulting, s.l.
+innotec Systemtechnik GmbH
+Carluis Soft SL
+Epion Technologies
+Whisqu Graphic AB
+The Back Office LLC
+Tarma Software Research Ltd
+SpreadCloud, LLC
+Speekle s.r.o.
+Sophos Ltd
+Saleslogix, N.A., LLC
+Infomind GmbH
+infomind gmbh
+iterate GmbH
+Appareo Systems, LLC
+Rewards4Racing Ltd
+Zumasys, Inc.
+Paramount Defenses Inc
+Stanislav Zinukhov
+Hangzhou Imperial Pool Network Co., LTD
+Click Studios (SA) Pty Ltd
+INFINIT.IO
+SIMCORD LLC
+Firetrust Ltd
+ZIPMAGIC SOFTWARE INC.
+SkySQL Corporation Ab
+Quadric Software, Inc.
+11 bit studios S.A.
+Koofr d.o.o.
+Health Financial Systems
+Intel(R) Software Development Products
+Open Source Developer, Tim Kosse
+Channel Vision Technology
+Cedric Le Bozec
+Transcend Information Inc.
+Charter Communications, Inc.
+Entertainment Experience LLC
+Hippo Studios Limited
+Easybits AS
+Symmetry Software
+Unity Technologies SF
+Oxford Nanopore Technologies Ltd
+Intel(R) Identity Protection Technology Software
+Bad Juju Games, Inc.
+KOEI TECMO GAMES CO., LTD.
+NETGEAR TAIWAN CO., LTD
+BitRaider LLC
+Ubisoft Divertissement Inc
+Joygame Interactive Services Ltd.
+Lenovo.Ltd
+Intel(R) Driver Update Utility
+Andriy Tkachuk
+Comarch S.A.
+Sage Alchemex (Pty) Ltd
+Daum Kakao Corp.
+Intel Corporation-Wireless Connectivity Solutions
+BeamNG UG (haftungsbeschränkt)
+Excubits UG (haftungsbeschränkt)
+N3V Games Pty Ltd
+Kuralsoft
+Keysight Technologies, Inc.
+PORTRAIT DISPLAYS, INC.
+Intel® Rapid Storage Technology
+Kodak Alaris Inc.
+THOMSON REUTERS (TAX & ACCOUNTING) INC.
+Intel® Xeon Phi™ coprocessor
+Intel(R) XDK
+Intel(R) Technology Access
+Intel(R) CoFluent(TM) Studio
+Intel(R) SBA
+TALKTALK COMMUNICATIONS LIMITED
+Frontier Developments Plc
+Payam    Technologies, LLC
+RailSimulator T/A Dovetail
+Deadbreed AB
+SC SETRIO SOFT SRL
+PaperCut Software International Pty Ltd
+ETRADE FINANCIAL CORPORATION
+Netsparker Ltd
+Genie9 LTD
+Gameforge 4D GmbH
+Przedsiębiorstwo Adalex
+ROCCAT GmbH
+Incendo Technology Ltd
+The Plugin Site (Harald Heim)
+Blogmusik
+SuperWare, LLC
+TaxACT Inc.
+fischerwerke GmbH & Co. KG
+Cadis Software Limited
+IMSA ( INSTITUTE OF MATHEMATICS AND SYSTEMS ANALYSIS LLC )
+CloudBacko Limited
+HOMESOFT PTY. LTD.
+Wolters Kluwer Software und Service GmbH
+Monitor Business Machines Limited
+Frank Friemel
+SonicWall L.L.C.
+LOGICNOW HOLDINGS LIMITED
+Pharmini Handelsgesellschaft m.b.H.
+Paltalk Software, Inc.
+AVG Technologies USA, Inc.
+Lavish Software, LLC
+Edilclima Srl
+Sugar Bytes GmbH
+KNIME GmbH
+Autoridade Tributaria e Aduaneira
+Performance Products Limited
+Dirk Jansen
+Evidence Network SIA
+RLB-60 Bt.
+ALAUX Michel
+Syndicate LLC
+HGST, Inc.
+Radiant Worlds Ltd.
+Agenda Informationssysteme GmbH & Co. KG
+JSC R-Style Softlab
+User Testing, Inc
+Harman Music Group Inc.
+Bernhard Rath
+Ruiware, LLC.
+CompuGroup Medical AG
+Tim Sullivan
+KMSYS Worldwide, Inc.
+BANDAI NAMCO Games America Inc
+VidOn.me Inc.
+Fugoo Corp
+Starfield Technologies, LLC
+Game Show Crew
+Open Source Developer, Felix CHANDRAKUMAR
+RebusFarm GmbH
+Cakewalk, Inc.
+Ghostery, Inc.
+Sentinel Labs, Inc.
+ООО ”ИДЕАЛЬНЫЙ СОФТ” - Ideal Soft LLC
+Slitherine Ltd.
+Tomas Papousek
+Fresche Solutions Inc.
+Genesis Financial Technologies, Inc.
+SONiVOX, LP
+FonePaw Technology Limited
+Magic Software Enterprises Ltd
+Shade3D Co., Ltd.
+SKOWSAND SERVICOS DE PROVEDORES E INTERNET LTDA
+Intelerad Medical Systems Incorporated
+On-Line Taxes Inc.
+Sokaris Oprogramowanie
+Open Source Developer, Jakub KOŚCIELAK
+Line2
+Vitaly Radchik
+Wolters Kluwer S.A.
+NSSTUDIO INC.
+Bleken Data AS
+Vivaldi Technologies AS
+Aunión Software SL
+Maya Software Technologies Private Limited
+A+W Software GmbH
+The Foundry Visionmongers Ltd.
+Synaptics Inc.
+Intel Corporation - Rapid Storage Technology
+SONNET SOFTWARE, INC.
+ABVENT
+Dmitri Karshakevich
+eFolder, Inc.
+Agroplus Software S.A.
+Synopsys Inc.
+Zhejiang Uniview Technologies Co.,Ltd.
+Mercer Road Corp
+Noah Global Co., Ltd
+Bentel Security S.r.l.
+iSheriff Inc
+Nimbus Web Inc
+IT Company
+NPO Computer
+Back Paddock Company
+BeagleBoard.org Foundation
+Open Source Developer, Eric Frias
+Rentafont Inc.
+Open Source Developer, Michael Hilzendegen
+SOFT ZIZI Volf, TOV.
+DB Software Laboratory Limited
+Mediasparx Ltd
+Ivan Chupin
+Bit4id srl
+MARPOSS S.p.A.
+Open Source Developer, Gavin Camp
+Bankia S.A.
+OpenOffice Software
+Electronz Limited
+KA-RA
+metaspinner net GmbH
+Open Source Developer, Rajko Stojadinovic
+Soft Creation
+AVANQUEST NORTH AMERICA INC.
+Autoquotes (Florida), Inc.
+AutoQuotes, Inc.
+Mikhail Morozov
+Life Racing Ltd
+Xactware
+OptiShot Golf
+Petr Zajíc
+Javelin
+SOMNIUM Technologies Limited
+CraftUnique Ltd
+Ascendo Inc.
+Prodys
+Game Cafe Services, INC
+Studio Online In English And Spanish Corporation S.A.C.
+AmazingCharts.com, Inc
+ManyCam
+Open Source Developer, HexChat
+Dmitry Kotelnikov
+Redux! Games, LLC
+ARTURIA SA
+Kenubi Ltd.
+Equimine, Inc.
+Red Giant   LLC
+Andrzej Huzar Huzar Software
+Micro Focus Limited
+Oodrive
+Daniel K. Scott
+Telekom Slovenije, d.d.
+Cypress Semiconductor Corporation
+Allfaktura Softwareverlag
+ALFATEST IND E COM DE PRODUTOS ELETRONICOS S/A
+CodeSigning for The Apache Software Foundation
+RemoteMyApp sp. z o.o.
+CESYAM
+Techmark Software Pty Ltd
+Alexey Pikurov
+Youth Digital Studio, LLC
+LogicNow Limited
+Etablissement Darty et Fils sas
+MiTek USA, Inc.
+Expansive worlds ab
+Z-Co Media
+Kooperativa pojišťovna, a.s., Vienna Insurrance Group
+AdRem Software sp. z o.o.
+WAN CAI INFORMATION LIMITED
+STRATO AG
+Open Source Developer, Fotis ZAFIROPOULOS
+reaConverter
+Bastian Suter
+NEC Platforms, Ltd.
+Convivea Inc.
+Trichilia Consultants Limited
+XIM Technologies, Inc.
+CUMeeting Inc
+Fountain Computer
+3D Systems, Inc.
+3Dflow SRL
+Kassim Obaideen
+LakeSide IT Pty Ltd
+Labtech Software, LLC
+WSCAD electronic GmbH
+Ebode electronics B.V.
+EASY SOLUTIONS, INC.
+Johannes Schmitt
+JM CONCEPT
+Universal Remote Control, Inc.
+RedSwimmer Inc.
+Eazy Paper Inc.
+Q-See  International LTD
+NAVIgard
+itas - Informations Technologie für Abrechnungs Systeme GmbH
+SMART CODE INTERNET SOLUTIONS
+Volvo Car Corporation
+Dragoș Ioniță
+Draeger MSI GmbH
+SkyDNS
+Gupta Technologies
+Open Source Developer, XMouse Button Control
+AVG Technologies Canada, Inc.
+Thalmic Labs Inc.
+Pacific Technology Solutions Limited
+Buss Data GmbH
+Prowess Consulting, LLC
+INISOFT s.r.o.
+Tigervpns Ltd
+Papyrus Software Ltd
+NetConnections GmbH
+NETWORK INSTRUMENTS, LLC
+Radicalplay.com Games, Ltd
+WANdisco Inc
+KWorld Computer Co., Ltd.
+KROB software s.r.o.
+VectorSoft LLC
+David Johnson (Literature and Latte Ltd)
+Ingenieurbuero Mewes und Partner GmbH
+Umar Yaqoob Batoo
+Mind-QM GmbH
+Kuvacode Oy
+DewMobile USA , Inc.
+Mimio LLC
+LE COUSIN FRANCK
+TradersOnly.com, LLC
+Maico Srl
+Daniel Sörlöv
+id3 Semiconductors
+Cyberarms Limited
+Macro-Video Electronic Technology Co.,Ltd.
+IBILITIES, INC.
+Timo Schwarzer
+SHD Kreative Planungs-Systeme GmbH & Co. KG
+PRO-CAD Software LTD.
+LawMaster Pty Ltd
+LAN Consult, spol. s r.o.
+Guillaume Stordeur
+Lambrakis Press S.A.
+Codice Software SL
+AlcorMicro, Corp.
+GLASER -isb cad- Programmsysteme GmbH
+Glare Technologies UK Limited
+KleverSayt
+MORPHO S.A.
+Jungo Connectivity Ltd.
+Paula Solutions UG (haftungsbeschränkt)
+Gamefactory Inc.
+Judiciary Courts of the State of New Jersey
+Galileo Press GmbH
+Chandney Software Sp. z o.o.
+Certigo, Inc.
+Centrabit AG
+Gaijin Arts
+Mixamo, Inc
+MISUMI Corporation
+Franz Habegger І One Step To Web
+Casio computer co.,Ltd
+Srinath Sadda
+Canon Europa N.V.
+Gridinsoft, LLC
+Soft-Micro
+LLC 'Hamstersoft'
+progeSOFT SA
+Michael Kaufmann
+Transoft Solutions Inc.
+Synthesoft Corp
+SEUME Publishing Services GmbH
+Buffered Kft.
+WORLD PROGRAMMING 
+Fabrika Online, LLC
+INTEGRIT S.A.
+Legrand Software Inc
+Open Source Developer, httrack.com
+3am Digital Studios LLC
+authorGEN Technologies Private Limited
+Roy Lewallen
+www.pmlp.gov.lv
+EasyAntiCheat Oy
+KENIX PLIROFORIKI
+COC COC COMPANY LIMITED
+AirWatch LLC.
+Materialise n.v.
+EWA TECHNOLOGIES, INC.
+Peter Wimmer
+RPOWER Point of Sale
+et medical devices S.p.A.
+Wolf Pack Development, LLC
+Helbling Languages
+Heinz Bernd Manfred Gressmann
+senseFly SA
+bintec elmeg GmbH
+PRIMELEAF CONSULTING PRIVATE LIMITED
+Benjamin Klum
+Smart Luck
+Middlesurf Inc.
+Kamsoft S.A.
+DUO SECURITY, INC.
+PMC - SIERRA US, Inc
+M3D LLC.
+Integra Telecom Inc.
+Knuddels GmbH & Co. KG
+Daruma Telecomunicacoes e Informatica SA
+Comodo Security Solutions Inc
+Cryptomathic A/S
+Screencheck North America, LLC
+Open Source Developer, Shaul Eizikovich
+Thomson Reuters (Scientific) LLC
+Nexon Europe S.à r.l
+FM Software Studio Ltd.
+ToolsCode
+Abaxis
+Typing Innovation Group Ltd
+SigBOP, LLC.
+MaraSoft B.V.
+Piotr Pawłowski
+UtilStudio, s.r.o.
+Lanzhou Itanium Software Technology Co., Ltd.
+Cypress Semiconductor Technology India Pvt Ltd.
+Given Imaging Ltd .
+ABITEL-DATA
+SRWare
+Insyde Software, Inc.
+Open Source Developer, Dominik Reichl
+The Within Network LLC
+Acceleratio Ltd.
+BlueAnt Wireless
+Lucid8 LLC
+SysAid Technologies Ltd.
+D-Vasive Inc.
+Allscripts Healthcare Solutions Inc
+V-SOFT s.r.o.
+Plugin Alliance LLC
+Lock n Load Publishing, LLC
+Rohde & Schwarz DVS GmbH
+TRUE DIGITAL PLUS COMPANY LIMITED
+BYROBOT CO.,LTD.
+CIMCO A/S
+General Motors TIS2Web
+Simfy Africa (Pty) Ltd
+Skootle Corporation
+Open Source Developer, Sergey Svistunov
+Intel(R) Intel Network Drivers
+Reborn Games Co., Ltd.
+Motion Apps
+Brainasoft
+Alexander Tsodikov
+Tata Sky Ltd
+Financial Tools, Inc.
+Archaeopteryx Software, Inc.
+Adailton Rodrigues De Souza
+Lincoln Electric Holdings, Inc.
+Miroslav Štolc
+Pingman Tools
+Open Source Developer, Dennis Daume
+PCFerret
+Dmitry Budnikov
+Sure-Fire Taxes LLC
+SellerDeck Ltd
+L-S-B Broadcast Technologies GmbH
+Open Source Developer, Marijn Kampf
+Acronym Software Inc.
+EDENA S.R.L.
+DIAGONAL
+JUMO GmbH & Co. KG
+Continuum Analytics, Inc.
+BOOMBYTE LTD
+Lite-On Technology Corporation
+AnyLogic North America, LLC
+Portima s.c. c.v.
+Cloud Labs Kft.
+Vijua
+Polycom Inc.
+Palo Alto Networks (Netherlands) B.V.
+Safeit Security Sweden AB
+H M Systems Software Inc
+ООО ”Смарт”
+Synergy Si Ltd
+ICC Solutions Ltd.
+Gaijin Entertainment LLP
+TUMER ALTAS EGITIM BILISIM YAYINCILIK VE DANISMANLIK A S
+Devart s.r.o.
+TERASENS GmbH
+Robot Entertainment Inc.
+SOFT, OOO
+Sheshadrivasu Chandrasekharan
+Dino Nuhagic
+Ivideon LLC
+Rong Liying
+EasyObd Tools Ltd.
+Insperity Business Services, L.P.
+EMCO Maier Ges.m.b.H.
+Zwift, LLC
+Restaurant Magic Software
+Ermaksan Makine Sanayi ve Ticaret A.Ş.
+Nordic Semiconductor ASA
+Last.fm Limited
+Philips Medical Systems Cleveland, Inc.
+Plays.tv, LLC
+Sprengnetter Verlag und Software GmbH
+Laserform International Ltd
+Silicondust USA Inc.
+Kovács Gergely Zoltán
+Oliver Weyhmüller
+Logi Analytics, Inc.
+AC & E Hellas S.A.
+Nitro Software, Inc.
+Livit Hong Kong Limited
+Energiebau Solarstromsysteme GmbH
+Adaptive Insights, Inc.
+Ulrich Decker
+Ulrich Kunath
+Altix sp. z o.o.
+StoAmigo International LLC
+DAS,Inc.
+Imprivata, Inc
+TC Group International A/S
+MediaLas Electronics GmbH
+Carlos Williams
+Smilegate Megaport Inc.
+Hetman Software
+Tecolote Research, Inc.
+Emsisoft Ltd
+Macecraft Software (Macecraft Oy)
+Aqua Computer GmbH & Co.KG
+Procad Softwares S. A.
+IS3, INC.
+Nosis Laboratorio de Investigacion y Desarrollo S.A.
+DocuWare GmbH
+Noonan Media Ltd
+Pluto, Inc.
+Nikolaus Gebhardt
+STARK INTERACTIVE TECHNOLOGY LIMITED
+Macgo International Limited
+VTC ONLINE JOINT STOCK COMPANY
+TeamSystem Spa
+Finsoftek Inc
+Phase Five Systems LLC
+Finch Innovation Enterprise
+Sysgem AG
+MARWER
+Patrick Kolla-ten Venne
+Frostburn Studios
+Goblinworks, Inc
+508 Software, LLC
+Enveloc, Inc.
+Lyve Minds, Inc.
+Motus Software Ltd
+Scand Ltd.
+Eclipse Foundation, Inc.
+Heimdal Security A/S
+Golden Software, LLC
+CentralGest - Produção de Software, SA
+ZEON CORPORATION
+Intellect Software Solutions Pvt. Ltd.
+Open Source Developer, Pascal Hubert
+Brosix Inc
+Public Creativity Union(Beijing) Internet Technology Co. Ltd.
+The Lake Companies, Inc.
+John Mulcahy
+Pavshukov Yuriy Alexandrovich IP
+Infrascale, Inc.
+Midsoft IT Group SRL
+NEC Corporation of America
+Svyatoslav Yudin
+ExKode Co.Ltd.
+ACUITY BRANDS LIGHTING, INC
+Concept/Design, Information, Bild und Datenverarbeitung GmbH
+Lorenzo Monti
+GrindEQ.com
+Servizi Telematici - Agenzia delle Entrate
+SAP SE
+PC Range Pty Ltd
+So.Se.Pe srl
+PT. Qeon Interactive
+KingsIsle Entertainment Inc.
+Hirschmann Automation and Control GmbH
+KeepSolid Inc.
+SADAQA 4 LIFE LTD
+Position Fixed UG
+ABB Technology Ltd.
+MICRORISC s.r.o.
+Bang & Olufsen A/S
+Hyperion Ventures Ltd
+Anywhere Software Ltd
+ThinScale Technology Limited
+Loop' in
+PFSOFT UK LTD
+eWON sa
+LiquidSonics Ltd
+Esumsoft
+PAS-Products (Frank Dunkel)
+Weather Display
+Pageflex, Inc.
+Blumatica S.r.l.
+IP Lyashenko Genadiy Georgievich
+Alumni Computer Group
+QIAGEN Aarhus
+CADSTA Pty Ltd
+WFSW, S.A.
+Thelis
+Raketu Communications Inc.
+Severin Petru PERSOANĂ FIZICĂ AUTORIZATĂ
+ATMEL CORPORATION
+Century Longmai Technology Co.,Ltd.
+Astra MS Software s.r.o.
+Sparkol Limited
+Market Traders Institute, Inc.
+BANDAI NAMCO Online Inc.
+Bling Software Ltd
+BitTitan, Inc.
+Vembu Technologies Inc.
+Vitec Software Group AB (publ)
+KaplanSoft - Kaplan Bilisim Teknolojileri Yazilim ve Ticaret Ltd
+SVI eSolutions
+CiVinTec Global Co.,Limited
+Adrian MORAWIEC
+Marcus Sundberg
+ADATA Technology Co., Ltd
+Active Graphics O.E.
+VSO Software SARL
+Parallels International GmbH
+easy Sports-Software GbR
+Infacta Limited
+Project Reality
+Guerrilla Programming
+Cranking Pixels
+Acclaim Software Limited
+CTAdventure Sp. z o.o.
+Sunimage Studios, Inc.
+ECi Software Solutions, Inc.
+DesktopPaints OU
+Southern Software, Inc.
+Kairos Technologies, Inc.
+Jack Henry & Associates
+Magisto Ltd.
+Imagination Technologies Inc.
+Digital Juice
+TrueFire, Inc.
+Vertical Marketing Technologies
+Resto Software
+Trans Sped S.R.L.
+OLYMPUS CORPORATION
+Athenahealth, Inc.
+Intel Corporation – Non-Volatile Memory Solutions Group
+Vladimir Sergeevich Sukhov IP
+Render Legion s.r.o.
+Konstantin Evgenievich Polyakov IP
+MegaBackup Corp.
+LENOVO (UNITED STATES) INC.
+CryptoTech
+seca GmbH und Co.KG
+YAESU MUSEN CO., LTD.
+TECHNODIGIT
+UL TS B.V.
+Legacy Interactive, Inc
+CubeCoders Limited
+Docker Inc
+Sierra Wireless, Inc.
+COMODO YAZILIM SANAYI VE TICARET ANONIM SIRKETI
+PRESTON TOWER LP
+X Open Hub
+DiP Online LLC
+Sergei Vladimirovich Tkachenko IP
+Smartbear Sweden AB
+BTL Group Ltd
+Trask solutions a.s.
+Wolters Kluwer Kft.
+Pushbullet Inc
+North American Company for Life & Health Insurance
+0833266 B.C. LTD
+MEIKE OG
+CARAT Systementwicklungs- und Marketing GmbH & Co.KG
+PrintFleet Inc.
+Joyent, Inc
+AutoIt Consulting Ltd
+Siemens Switzerland Ltd
+Václav Slavík
+Sergey Pak
+The Technology Partnership plc
+TFDi Corp
+Thomas Holz
+VistaPrint BV
+Tino Marx
+Luigi Stilo
+The Tor Project, Inc.
+Guild Software, Inc.
+Pixar Animation Studios
+Rustemsoft LLC
+AWIN-Software
+Mudfish Networks Inc.
+Speedy HLDGS Limited
+DEKARON PROJECT CO. Ltd.,
+GameSalad, Inc.
+TIDAL Music AS
+MPDV Mikrolab GmbH Mikroprozessordatenverarb. Mikroprozessorlab.
+Node Source, LLC
+GoPro, Inc.
+AdFreedom Ltd
+EFI Analytics, Inc
+Lima Technology Inc
+SplitmediaLabs Limited
+Works Mobile Corporation
+IP Kuzmitski DV
+Unimake Solucoes Corporativas Ltda
+Pen CS Pty Ltd
+Sertum Sp. z o.o.
+Aagon GmbH
+Security Software Ltd
+FIDELTUS ILERI TEKNOLOJI URUNLERI SAN. TIC. A.S.
+Sorentio Systems Ltd
+Softorino Limited
+ICCTV
+LiquidSky Software, Inc
+MEDIBANG INC.
+Motiga Inc.
+DVO Enterprises Inc.
+Premiere Global Services, Inc.
+Microsoft Windows Hardware Abstraction Layer Publisher
+Techprog
+Metalogix International GmbH
+Axceler
+Byte Technologies LLC
+Soft Integrator Europe Spółka z o.o
+Lovesummertrue Software
+Jthink Ltd
+Open Source Developer, Martijn Laan
+CDK Global, LLC
+Dell Software Inc.
+Amcrest Technologies LLC
+DEVSENSE s.r.o.
+De Vocht Christoph
+ASTRA IMAGE COMPANY
+Think Future Technologies Pvt Ltd
+Grundfos Holding A/S
+ZYONCORE SISTEMAS LTDA - ME
+Arduino srl
+Orphic Software
+Bluegiga Technologies
+lenovo (Beijing) Limited
+Wild Wolf Std
+CadLine Kft.
+INFOR PL S.A.
+InspectionXpert Corporation
+Webinar, LLC
+ASSA ABLOY Hospitality
+Dataline GmbH u. Co. KG
+Pixate, Inc.
+Matriks Bilgi Dagitim Hizmetleri A.S.
+Prink Srl
+Sivantos GmbH
+NEC Solution Innovators, Ltd.
+Virtru Corporation
+SENOR Tech Co., Ltd.
+Awesomium Technologies LLC
+Safer-Networking Ltd.
+Mobatek
+Ashdar Games Inc.
+Arcserve (USA) LLC
+Pharmatechnik GmbH & Co.KG
+AmsterCHEM (Jasper van Baten)
+Karpuk Raman Nickolaevich
+IT-Finance Société à responsabilité limitée
+LogicNow Ltd
+SOCIETE FRANCAISE DU RADIOTELEPHONE - SFR
+Phillip A. Crews
+Open Source Developer, Adam Driscoll
+Oleksii Salo
+S3ENG TECNOLOGIA APLICADA A ENGENHARIA S/A
+Zeacom Limited
+Futurespiral Lda
+HRIS Consultants Ltd
+Threattrack Security, Inc.
+Stefan Siegert
+aSwIt s.r.l.
+Dataram Corporation
+Intel(R) CISD Software
+Moscii Corporation Co.,Ltd
+LUSO INTERNATIONAL BANKING LTD.
+First American Data Co., LLC
+Webgility INC
+Marius Cristea
+DAMPSOFT GmbH
+Infinity Wireless, Ltd
+IT.NORCOM Sp. z o.o. Sp. k.
+Pioneer DJ Corporation
+Katsuragawa Electric CO.,LTD
+McCormick Systems, Inc
+GAD eG
+Koona, LLC
+Datappraise, LLC
+Singular Sound
+Analist Group s.r.l
+Blazing Orb LLC
+WinSoft SAS
+Ten Square Games Sp. z o.o.
+BANDAI KOREA CO., LTD.
+Stefan Werner
+Tiny Speck, Inc.
+FinalWire Kft.
+Friday Systems, Inc.
+Internet Chess Club
+Optima Healthcare Solutions
+Open Source Developer, Alexander BISSET
+PSafe Tecnologia SA
+Kionix Inc
+Martin Professional ApS
+U.I. Info-System sp.j.
+Intel(R) Software Asset Manager
+EYEDENTITY MOBILE Co., LTD.
+Infiplay LLC
+ELAN MICROELECTRONICS CORPORATION
+ROBINSON TECHNOLOGIES CORPORATION
+Enghouse Interactive Inc
+Iniciativas Informaticas y de Comunicacion SL
+Quality First Software GmbH
+DeskSite
+Sandbox Interactive GmbH
+Agics V.O.F.
+DramaQueen GmbH
+Intel(R) iCDG WINS WSS CCF
+Smaller Animals Software, Inc.
+Marvell Semiconductor, Inc.
+CivilGEO Engineering Software
+Peter Skarin
+JKI
+netfabb GmbH
+Utomik B.V.
+Wizcomtech Ltd
+M. S. CARVALHO ENGENHARIA DE SOFTWARE - ME
+freenet.de GmbH
+Fleep Technologies OÜ
+SBARCO TECHNOLOGY CO., LTD.
+Salon Hand Software Pty Ltd
+Waterfox Ltd.
+Intel(R) Integrated Native Developer Experience
+Intel WIDI Media Share
+Intel(R) Education Software
+Intel(R) Code Signing External
+Intel(R) Anti-Theft
+Intel IT Information Security
+Intel IPT
+Intel Developer Zone
+Intel AVID
+IBM Canada Ltd.
+Hyundai Motor America
+Lenovo (Beijing) Co., Ltd
+Nintendo European Research and Development
+NovAtel Inc.
+Andy OS Inc
+Qinjie Xu
+Open Source Developer, Bastian Eicher
+ООО ”ВАКС” - VAKS LLC
+BlueStack Systems, Inc.
+101XP LIMITED
+Nest Loft, LLC
+Acrolinx GmbH
+Addin Technology Inc.
+AURORA NETWORK COMPANY LIMITED
+Data Design System AS
+Tama Software Ltd.
+LEXIS NEXIS
+CD PROJEKT S.A.
+Underberry lp
+GN ReSound
+Phrozen S.A.S.U
+Toshiba Europe Gmbh
+Geselschaft fuer Softwareentwicklung und Analytik GmbH
+Intel(R) Pre-Release Software
+NBT, Inc.
+Adlegend Limited
+Hammer & Chisel Inc.
+Splinterware Software Solutions
+Northstone Consulting Ltd.
+Christopher Homer
+Open Source Developer, Adrian Kalla
+Daybreak Game Company LLC
+Hippani Ltd
+AltspaceVR, Inc
+CaptureBites BVBA
+S.M.R Hosting
+Radiant Entertainment, Inc.
+Micro-Star International CO., LTD.
+CADzation LLC
+Techware Solutions, Inc.
+Mojang AB
+Mixlr Ltd.
+Maciej Ignatowski
+Vivint, Inc.
+UNICOM Systems, Inc.
+Mproof
+3D SYSTEMS, INC.
+Open Source Developer, Rune Laenen
+PasswordBoss, LLC
+ActTrader Technologies, Inc.
+Authasas BV
+ClearOne, Inc.
+Soft Gold OOO
+Thomas LaJoie
+Archetype Entertainment Pvt Ltd
+Smartface, Inc.
+Altaro Ltd.
+Texthelp Ltd.
+Performix LLC
+Nicholas Forystek
+Associated Newspapers Limited
+Jagex ltd
+Blue Llamas, Inc
+D.I. MANAGEMENT SERVICES PTY LIMITED
+ISLOG
+Lepide Software Private Limited
+Nisca Corporation.
+Fundy Software
+Marcin Kozak
+MAVinci GmbH
+softor.pl
+Datpol
+ACRONIS INTERNATIONAL GMBH
+Arcabit Sp. z o.o.
+Intel(R) Baytrail Wintablet
+Getin Noble Bank S.A.
+Wuhan JinDu Technology Ltd.
+KYE SYSTEMS CORP.
+Attorneys Title Fund Services, LLC
+Xiaomi Technology Inc
+Intel(R) Update Manager
+Azul Systems, Inc.
+WTS Paradigm
+stashimi Inc.
+Acronis International GMBH
+Slack Technologies Inc.
+Native Instruments GmbH
+Capita Business Services Ltd.
+AB ASSET MANAGEMENT SRL
+Intel(R) Biometric and Context Agent
+Positive Grid LLC
+PGN Inc.
+BearWare.dk
+Disk Doctors (Disk Doctors Lab, Inc)
+Domit LTD
+Sector3 Studios AB
+Dva pilota d.o.o.
+Easy Brothers Software
+ZenGuard GmbH
+Elektron Music Machines MAV AB
+Asian Business Software Solutions Sdn. Bhd.
+Zeus Software di Montanari Mauro
+My Expat Network
+Priyo Hutomo
+Kolor SAS
+Anil Kumar
+Dibomedia GmbH
+Marek  Szkop
+Vonage Business Solutions
+Raynet GmbH
+SecondReality Software s.a.r.l
+Planet Enterprises Ltd
+DigitalDownload, LLC
+Sinew Software Systems
+Heg Bilgisayar Yazilim Reklamcilik Bil Hiz San Ve Tic Ltd Sti
+OldProp Solutions Inc.
+Data Developments (UK) Ltd
+Abstrium SAS
+José Manuel González
+SIMATIC IT SIEMENS
+BayHub Technology Inc.
+Banco Santander Brasil SA
+Paradigm Electronics Inc.
+Entreda, Inc.
+Avago Technologies U.S. Inc.
+xaar
+PRIMAVERA - BUSINESS SOFTWARE SOLUTIONS, S.A.
+David Carpenter
+Yahoo Inc.
+Rakuten Kobo Inc.
+TempoTec Corp
+Open Source Developer, Zenju (Florian BAUER)
+Terawe Corporation
+Numera
+Frozendo SARL
+Barbary Software S.L.
+Iriver Ltd.
+ADORIASOFT LLC
+LastPass (Marvasol Inc)
+Intel MCG PIV Tablet Validation
+Intel Technology Sdn. Bhd.
+Intel(R) Client Connectivity Division SW
+Intel(R) CherryTrail Windows
+InvenSense, Inc.
+NeuroSky, Inc.
+NXP Semiconductors
+PSE Technology Corporation
+Semtech Corporation
+SUNIX CO., LTD.
+Initio Corporation
+ITE Tech. Inc.
+Sunrich Technology (H.K.) Ltd.
+Mad Catz Inc
+Elitegroup Computer Systems Co Ltd
+HongFuTai Precision Electrons (YanTai) Co. Ltd
+Telit Communications S.p.A.
+Nuvoton Technology Corporation
+SUPERD CO., LTD.
+VS Vision Systems GmbH
+KANELLOPOULOS EMMANOUIL KONSTANTINOS
+AO Alfa-Bank
+ReportAssist Ltd
+DTS, Inc.
+Fortemedia Inc.
+sound research corporation
+Allied Telesis Inc.
+EMULEX
+Rivet Networks LLC
+DEVGURU CO LTD
+Integrated Biometrics, LLC
+GENESYS LOGIC, INC.
+Capella Microsystems Inc.
+Cybergenic Corporation
+SolidCAM Inc.
+Bogdan Chudzikiewicz
+Tech Matrix Infosolutions Inc
+Spidla Data Processing, s.r.o.
+KORG INC.
+Holotech Studios SRL
+Can O' Baked Beans Creations
+Kraisoft Com Co., Ltd.
+Readygo Soft
+Tegraf
+A FUTURE CORPORATION PTY LTD
+XDPEOPLE, LDA
+NXP Semiconductors India Pvt Ltd.
+Polaris Office, Inc.
+SKOWSAND SERVICOS DE PROVEDORES E INTERNET LTDA - ME
+Positive Technologies, CJSC
+DELIVERY TECH CORP
+Marco Cervoni
+Symcon GmbH
+Macnica Networks Corp.
+Cyberlogic Technologies, Inc
+ZeroDesktop, Inc.
+Pawan Kumar
+PEARL.GmbH
+Wrike Inc.
+Pegasus Software
+Advanced PC Media LLC
+PhotobookShop
+Piano Marvel
+Advanced Provider Solutions LLC
+POSTAJET SRL
+PRIVREDNI SAVETNIK D.O.O. 100009509
+ProgramTECH Kft.
+Brad Radaker
+DeskSoft
+Maciej Drobinski
+MATROX ELECTRONIC SYSTEMS
+Softnyx Co., Ltd.
+AutoForm Engineering GmbH
+WEBGATE ITALIA  SRL
+ScreenLeap, Inc.
+Corum Group Ltd
+Liveware Publishing Inc
+Esselte Leitz GmbH & Co. KG
+LiveNote, Inc.
+EZVIZ Inc.
+T-Max Dialer & Communications
+Fiserv, Inc.
+Shanghai Ubi Computer Software Co Ltd
+NETOP BUSINESS SOLUTIONS A/S
+Shenzhen iMyfone Technology Co., Ltd.
+J. Gordon Rankin
+MUSILAND Electronic Technology Co.,Ltd
+June Fabrics Technology Inc.
+REACH Tech (Xiamen) Co., Ltd.
+General Touch Technology Co.,Ltd
+Qing YuanGadmei Electronics Technology Co., Ltd
+Siano Mobile Silicon
+SmarDTV
+Syntek Semiconductor Co., Ltd.
+Datalogic ADC, Inc.
+Datalogic Scanning Inc.
+EJB Digital Pty Ltd
+HON HAI PRECISION INDUSTRY CO. LTD.
+PEGATRON CORPORATION
+Pantech Inc.
+Action Star Technology Co., Ltd.
+Alpha Imaging Technology Corporation
+Ark Pioneer Microelectronics (Shenzhen) Co., Ltd.
+Code Laboratories, Inc.
+Sunplus Innovation Technology Inc.
+Quanta Computer Inc.
+Shenzhen Huion Animation Technology Co.,LTD
+wepa, inc.
+Elgato Systems LLC
+DataNitro Inc.
+THEGREENBOW (SISTECH)
+Holley PerformanceSystem Inc
+NetArt Sp. z o.o.
+Terradatum
+COÖPERATIE ISPIRE HOLDING U.A
+3T Software Labs GmbH
+Open Source Developer, Johannes Schindelin
+Track Systems Technologies, LLC
+SIMP Light LLC
+Goverlan, Inc.
+Bechlem GmbH
+Dmitri Aleksandrovich Rassadin IP
+No Magic, Inc.
+Jalasoft
+Chris Formeister
+Microsoft Update
+Microsoft Developer Platform Side-by-Side Assembly Publisher
+Intel(R) NVMe Windows Driver
+LLC "TARKOS SOFT"
+Altova GmbH
+The Office Maven
+Omnibus Solutions Ltd
+N.C.S. Trade Hungary Kft.
+Ivan Gorchakov
+John Steed (Brother's Keeper)
+Defendemus sp. z o.o.
+Microsoft Windows Kits Publisher
+E-Business Made Simple
+Vizhlfarm, OOO
+Vivifit ApS
+ASPEED Technology Inc.
+AzureWave Technologies, Inc.
+City Com Gesellschaft f. Kabel Kommunikations Systeme mbH
+Banco Bradesco S.A.
+Blackfish Software
+Citrix Online LLC
+CPS Color Equipment S.p.A.
+Credant Technologies
+CSC Holdings, Inc
+Digital Wave Ltd
+Intercall, Inc.
+Idera
+MarkAny Inc.
+Nuance Communications, Inc.
+Penpower Technology Ltd.
+Sakar International, Inc.
+SentryBay Limited
+SHENZHEN QIXINGSHI TECHNOLOGY CO.,LTD
+Sodexo, Inc
+UUMART LIMITED
+WindSolutions SA
+Winshuttle, LLC
+Wondershare software CO., LIMITED
+Konstantin Chigakov
+IPass Inc.
+Cheetah Advanced Technologies Ltd
+United Parcel Service
+Intel(R) Play-To-TV
+Glynlyon, Inc.
+AZ-INVEST AGNIESZKA ZAS
+Kleissner & Associates s.r.o.
+Titanis sp. z o. o.
+StudioPlus Software LLC
+Advanced Card Systems Ltd.
+C-Media Electronics Incorporation
+Intel(R) Corporation - Client Computing Group
+Intel(R) INTELNPG1
+Lumidigm, Inc.
+Microsoft WHQL OEM Publisher
+DAVICOM Semiconductor, Inc.
+Andreas Brauneis
+OTE a.s.
+SC Technologies
+Certisign Certificadora Digital S.A.
+Eleven
+AVG Technologies Norway AS
+COUNTERPLAY GAMES INC.
+RECOVEO
+Techvedic Inc
+CoralTree, Inc
+Leszek KUBRAK
+Bosch Sensortec GmbH
+AVAGO TECHNOLOGIES U.S. INC
+AVAGO TECHNOLOGIES U.S. INC.
+Fingerprint Cards AB
+SKYRASTER Software Engineering
+Automattic, Inc.
+AutoManager Inc.
+TeachUcomp, Inc.
+Rekoop Limited
+Quickflix Limited
+DURU BILISIM TEK.IL.YAY.EG.INS.EM.EL.IT.IH.I VEDI.T.LT.STI
+Intel(R) Intel Software Licensing
+CompuGroup Medical Nederland B.V.
+Dr. Baum Research e.K.
+Tantalus Media Pty Ltd
+InFocus Corp
+Auctane LLC
+Intel(R) Intel_ICG
+PCM TECHNOLOGIES INC.
+JTB World
+Open Source Developer, Simon Felix
+Aterdux Entertainment
+The University of Texas Health Science Center at San Antonio
+Carlos Castilla Ingenieros, S.A
+CAPTURINO SOFTWARE (Bellenger Jean Paul)
+ASBYTE GmbH
+Josh Mayfield
+New Net Technologies Ltd
+Artipic AB
+articy Software GmbH & Co. KG
+Galil Motion Control Inc.
+Compuprint srl
+VORLAN Group, Inc.
+ApusOne Technology Inc.
+CAB Group AB
+E Ethics Technologies
+Tinker Pte. Ltd.
+Open Source Developer, Matias Nahuel Carballo
+Ilex
+Silicon Studio Corporation
+ifak system GmbH
+Quantum Leaps, LLC
+Ediogames
+SETCCE d.o.o.
+Moneyble Software
+Karel Elektronik Sanayi ve Ticaret A.S.
+UNITED RECYCLERS GROUP, L.L.C.
+SnelStart Software B.V.
+SMOKEBALL PTY LTD
+IST Danmark
+Climax Studios Ltd
+GE Energy Power Conversion UK Ltd
+Heimdal Security
+ANAAFA
+AMCON Distributing Company
+Mozenda, Inc.
+SMART DISK Co., Ltd.
+Open Source Developer, Andrew Whewell
+Klokan Technologies GmbH
+DuoDecad IT Services Luxembourg S.a r.l.
+Mixoflydian, LLC
+Husqvarna AB
+Roon Labs LLC
+Dipl.-Ing. Th. Muemken Sales GmbH
+Gatan Inc
+DSwiss AG
+ALDEBARAN ROBOTICS
+Jackalope Technologies, Inc.
+Knald Technologies, LLC
+Parlay Labs, Inc.
+AIRC - Associacao Informatica da Regiao Centro
+Construction Industry Solutions Limited
+Formtec Korea Ltd.
+Lucidlogix Technologies Ltd.
+RPS Planungssysteme GmbH
+GLS Italy S.P.A. (General Logistics Systems Italy S.P.A.)
+Fast Lane Institute for Knowledge Transfer GmbH
+MysticCoder Pty Ltd
+Environmental Systems Research Institute, Inc.
+Big Red Consulting
+Stremio
+Ursa Software
+Icode Systems ltd
+VASCO Data Security International GmbH
+Pablo Martin Leon
+OCZ Storage Solutions, Inc.
+Ozeki Systems Kft.
+Biba Systems, Inc
+Icar Vision Systems S.L.
+Brainboxes Limited
+TRON INFORMATICA LTDA - EPP:06006848000104
+Eldar Gerfanov
+Maarten MOSTERT
+CTS Games Ltd - ООО ”КТС Геймс”
+OOO Ecocenter
+WaveDNA Ltd.
+SGS SA
+McGraw-Hill Global Education Holdings, LLC
+SixBit Software LLC
+4DSP
+Metric Halo Distribution, Inc.
+Syandus Inc
+Broadcast Equipment Ltd
+Sandvik Coromant
+Musashi System Inc.
+1099Express.com, Inc.
+SIQUANDO GmbH & Co. KG
+CATALOGcreator GmbH
+Zhejiang Flashforge 3D Technology Co., Ltd.
+Intel(R) Rapid Storage Technology
+spreadsheetsoftware
+WIX-FILTRON Sp. z o.o.
+Fadil Kotaji
+Wisedat Unipessoal Lda
+TRANQUIL IT SYSTEMS
+Lumi Technologies Ltd
+Lumension Security Inc.
+Lukasz Rutkowski OHNOO STUDIO
+Wickr Inc.
+Turk Telekomunikasyon A.S.
+3am Labs Ltd
+Apach Network
+AP Oplossingen
+AGENDA Co., Ltd.
+ADrive LLC
+Abbott and Shapiro, Inc.
+4medica, Inc.
+787 Networks Inc
+7Safe Limited
+A Better Conference Inc.
+ACCPAC INTERNATIONAL, INCORPORATED
+3fs, racunalniski studio, d.o.o.
+3rd Eye Solutions Ltd
+ANKAMA GAMES
+Abbott and Shapiro, L.L.C.
+ABC 71 SOLUCOES EM INFORMATICA LTDA
+Abilis GmbH
+inContact, Inc.
+ACCEO Solutions inc.
+Megaify Software Co.,Ltd.
+Mooii Tech co.,ltd.
+ACCPAC International, Inc.
+ShenZhen Thunder Networking Technologies Ltd.
+ACD Groupe
+ACTi Corporation
+Net Transmit & Receive SL
+ADIASYS LTD.
+Anywinsoft
+ADLON Datenverarbeitung Software GmbH
+Psiphon Inc.
+AFS-Software GmbH & Co. KG
+AFS Software GmbH & Co. KG
+AF Technology LLC
+The Fun Pimps Entertainment LLC
+Digi.Me Limited
+Analytics Edge
+01 Communique Laboratory Inc.
+Aptean
+2mpower Health Management Services Pvt Ltd
+101 Apps, Inc.
+A. R. Hungary, Inc
+A-T Solutions Inc.
+1E Limited
+24print, s.r.o.
+AAT Holding  S.A.
+4 IT SOFT SRL
+ABB Automation Products GmbH
+IHS Global Inc.
+ABAS Labs Pty Ltd
+Abine Inc.
+ABB GLOBAL INDUSTRIES AND SERVICES LIMITED
+Brady Corporation
+ABT CO., LTD.
+ABB Schweiz AG
+AB Sandvik Coromant
+ACE Design, s.r.o.
+ACAPELA GROUP BABEL TECHNOLOGIES
+QDOS, Inc.
+Systems and Electronics Development FZCO
+ADVENT, spol. s r. o.
+A.I.SOFT,INC.
+AGILIS
+Bayer HealthCare LLC
+AMIGO TECHNOLOGY INC.
+A-MTK
+AP Instruments Inc
+A&R Cambridge Ltd
+AR RF/Microwave Instrumentation
+DIRECTV, LLC.
+360 Dot Net ltd
+Aon Corporation
+Apiary Investment Fund, LLC
+1C-SOFTCLUB LLC
+3G Studios, Inc.
+3DChat LLC
+3d Immersive Collaboration Consulting, LLC
+GoldWave Inc.
+EAM Experience Area Münsingen GmbH
+Hyland Software, Inc.
+TITAN ARC CORP. TAIWAN BRANCH (SAMOA)
+Logic Key S.L.
+Tinkerforge GmbH
+Fastlite - SARL
+fastERA Srl
+Simpson Strong-Tie Company Inc.
+LMS INTERNATIONAL
+Simpliphi Inc
+SIMOPRO TECHNOLOGY, INC.
+SimonsVoss Technologies GmbH
+Listen, Inc.
+Ievgen Tarabanovskyi
+.NET Foundation
+Haiyu Dongxiang Co.,Ltd.
+Nektra S.A.
+Nurgo Software
+NEMETSCHEK Allplan Systems GmbH
+DATAKENT YAZILIM BILISIM OZEL EGITIM DAN.SER.HIZ.TIC.LTD.STI.
+Karmasis Bilisim Cozumleri Ticaret Ltd. Sti.
+Olgu Bilgisayar Sistemleri  San. Tic. Ltd. Sti.
+Nanosoft Yazilim Sanayi ve Ticaret Ltd. Sti.
+Yusuf Öztürk
+PAN YAZILIM BILISIM TEKNOLOJILERI TICARET LTD. STI.
+OVPN Integritet AB
+Open Source Developer, Martin Herkt
+SAGE BRASIL SOFTWARE S.A.
+needIT Services Kft.
+Duodian Online Technology Co. Ltd.
+NCSOFT Corporation
+Elgas Ltd
+Digital Delivery Networks, Inc.
+Netcellent System Inc
+SBZ systems (ZENETZIS SOLON OF BASIL)
+Persistant Studios SARL
+Thunderhead Engineering Consultants, Inc.
+Zimbra Software, LLC
+Sher.ly
+LIONGAMES Co.,Ltd.
+Estimate Software Limited
+PEÑALARA SOFTWARE
+Legitmix Inc.
+Legali Online Sas di Cuccia Gianvito & Co
+Leetro Automation Co.,Ltd
+Lealea Technology Co., Ltd.
+Telexis
+Lari Taskula
+IZENPE S.A.
+LANTIK
+Sekershell Internet Bilisim Hizmetleri
+LaMotte CHemical Products Company
+L-ACOUSTICS S.A.S
+Ericsoft SRL
+Telefonica Germany GmbH und Co. OHG
+ORIGINLAB CORP.
+Origin Instruments Corporation
+Seiko Instruments Inc
+Organisys Software Ltda
+Entropia Universe
+ORBIT MERRET, spol. s r.o.
+TeddyPardo LTD
+Krämer IT Solutions GmbH
+Kramer Electronics, LTD.
+Yoursoft Tecnologia da Informação Ltda
+KOYO ELECTRONICS INDUSTRIES CO., LTD.
+Scoutsystems Software e.K.
+Best Buy Co, Inc.
+JULIE SOFTWARE
+OffiSys
+Elfring Fonts Inc.
+Studio Quipo inc.
+JS Technologies, Inc.
+ElderCounsel, LLC
+ekey biometric systems GmbH
+Eiosis
+Rogue Amoeba Software, Inc.
+JRI Solutions Ltd.
+Roger Zander
+RMI Laser LLC.
+eFileCabinet, Inc.
+Oberthur Technologies
+Johnson Controls, Inc
+NYK Systems Inc.
+Liebherr Machines Bulle SA
+Jens Werschmöller
+NOVATRON S.A.
+Reliable Controls Corporation
+Novasoft S A S
+Zorloo (HK) Limited
+STARFACE GmbH
+Jaywil Software Development Inc.
+ECCE TERRAM Internet Services GmbH
+ITW Building Components Group, Inc.
+EasySIGN BV
+RCA
+NETIS SYSTEMS CO., LIMITED
+QUALICA Inc.
+Dualmon LLC
+上海迈微软件科技有限公司
+THINK SERVIÇOS DE INFORMÁTICA LTDA
+MyPocket7 LLC
+InTeCo
+Intech Software Corporation
+Dooblo LTD
+DOMUS Software AG
+Keen Software House a.s.
+Windows Phone
+Joyent Inc
+捷而思股份有限公司
+Gerhard Robl
+Neagen Oy
+Intellisense Software Corp
+Intelligent Hearing Systems Corp.
+intelligentgraphics GmbH
+Dolsin Business Solutions (Pty) Ltd
+Dolphin Software AS
+DOG Productions Ltd
+QSC Audio Products, LLC
+DOCSCORP GROUP PTY LIMITED
+DocNet Systems GmbH
+Philipp Maihart
+SmartLabs,Inc.
+Dmitry Kalmikov
+DISCUS Software Company
+DIRE Studio Szolgaltato Kft
+Thomas Mielke
+MYFXBOOK LTD
+Think Productivity
+Proseon Technologies Pvt Ltd
+VideoStitch
+Inner Harbour Software Corp
+ImageTrend, Inc.
+Uniface B.V.
+Iluroinfor, SLL
+Illumina Inc.
+MicroStrategy, Inc.
+SEWORKS, Inc.
+UNC Charlotte Bioinformatics
+ID TECH
+IDQEI SA de CV
+Denuvo GmbH
+Ultima d.o.o.
+Identity Finder, LLC
+Michael Roth Software
+Michael Haller
+DCatalog Inc
+ООО ТрансЛогистик
+Antiy Labs
+Beijing WoZhi Technology Co.,Ltd.
+BeiJing Wozhi Technology Co. Ltd
+ieungSoft
+IntelliCAD Technology Consortium
+Hawkes Learning Systems
+Katran Soft
+LumenSoft
+Chengdu QILING Tech Co., Ltd
+ISL Online
+Motorola Inc
+NVELO, Inc.
+Parental Control Solutions Ltd.
+Thinkware
+TrustPort, a.s.
+Youngzsoft Co., Ltd.
+Zoom Corporation
+Biuro Inżynierskie SPECBUD s.c.
+ZeoSpace Limited
+ELISOFT Jarosław Leszczyński
+Esignal Div
+Interactive Data Corporation
+成都吉胜科技有限责任公司
+Soft Byte Ltd
+DAZ PRODUCTIONS, INC.
+The Qt Company Oy
+Comodo Security Solutions, Inc
+Kvisoft Co., Ltd.
+LOGIC ERP Solutions Pvt ltd
+Changing Information Technology Inc.
+Tech Titan Limited
+Reagency Systems Corp.
+OUTWIT TECHNOLOGIES
+Estmob Inc.
+B Squared SEN Publishing Ltd
+Scientific Data Systems, Inc.
+NFC21 GmbH
+Joerg Hunecke
+Ziggedy Inc
+APREL Tehnologija d.o.o.
+ESET, LLC.
+Georgia SoftWorks
+Tox Foundation
+Hangzhou ToupTek Photonics Co., Ltd
+David Hardisty
+Datavara Produktion Göteborg AB
+Hoyos Labs LLC
+PACSGEAR
+Honeywell International Inc
+Stonesoft Oy
+Data4U
+HiTRUST Inc
+Stone Blade Entertainment Corp.
+SaferPass s.r.o.
+cyberpromote GmbH
+MATHEMA SOFTWARE SAS DI URBANO TOMMASO & CO
+KOBEC Corporation
+PamConsult GmbH
+Power Challenge AB
+Kyobo Securities Inc
+Sciyard Sci-Tech Co.,Ltd.
+Spotflux
+Stoneware, Inc.
+Info Technology Supply Ltd
+Atek, Inc.
+KÖK BİLİŞİM LİMİTED ŞİRKETİ
+Best Consignment Shop Software
+Cometa Informatica S.r.l.
+Highway Information System Co., Ltd
+Shanghai Huace Navigation Technology LTD
+CyanCor GmbH
+Virus Eraser, Inc.
+Cryptomathic
+Sogei S.p.A.
+CRESSI ELETTRONICA SRL
+Dan Deng
+XCLOUD GAME CO., LIMITED
+Creosys Ltd
+hanbitsoft, inc
+Open Source Developer, Nikolai Ivanov
+CR8 Software Solutions Limited
+Open Source Developer, László Balázs-Csíki
+Open Source Developer, James Lonie
+BattlEye Innovations e.K.
+Open Source Developer, Goran Rakic
+Hans-Werner Hennes
+AXEL Professional Softwares Kft.
+BasWare Corporation
+Xincoz Labs LLP
+Venux LLC
+CrystalGraphics, Inc.
+Ventana Systems, Inc.
+Open Source Developer, Alexander Sedov
+Open Source Developer, Aleksey Volkov
+Openphone Inc.
+Open Network Video Interface Forum
+GUBSE AG
+LLC "Gdezapchast"
+Autarky Computer Systems
+Bay Metrics Corporation
+Chili Security ApS
+CompuSoft NV
+Dacuda
+Sunset Solutions
+Easy Rent Pro
+Crystal Squid Limited
+Greg Hudson Software
+Book Systems, Inc.
+Multiplicar Negocios - Actividades de Marketing Inovadoras Lda
+Dream Reactor Ltd
+Espresso ID, Inc.
+GladWev Software Private Limited
+Innotium,Inc
+Infocast Limited
+Iocomp Software, Inc.
+Iocomp Software Incorporated
+Chengdu GoldArmor Technology., Inc.
+Limersoft
+Andreas Schultz
+Logisuite Corporation
+Imtron GmbH
+Measurement Computing Corporation
+Merging Technologies
+Nulana LTD
+AuditSquare.com
+Orbweb Taiwan Inc.
+Q For Search Ltd.
+Sharpened Productions
+Sharpened Productions, Inc.
+Silurian Software
+Snap Communications Ltd.
+SNAPCOMMS LIMITED
+Svantek Sp. z o.o.
+Taric S.A.
+The Infinite Kind Limited
+Windward Studios Inc.
+Winnov L.P.
+www.decadry.com
+Softwareparadies GmbH & Co. Systemlösungen KG
+Standard Networks, Inc.
+Benarit Ltd.
+Fast Reports
+Fast Reports Inc.
+Meteor Development Group, Inc.
+AKApplications e.K.
+IVPN LIMITED
+Softwareparadies GmbH & Co. Systemloesungen KG
+Open Source Developer, Paweł Jastrzębski
+VITAREX STÚDIÓ Szolgáltató Kft.
+WalkMe LTD
+Truecut Security, Inc.
+Streamline Software Solutions
+Software Protection Labs
+Slickscreen LLC
+Glarysoft LTD
+MATROX GRAPHICS INC.
+IPTS Alisa, OOO
+Zhengzhou Longling Technology Co.,Ltd.
+Rafal Powierski
+valofe Co.,Ltd.
+COSMOTE MOBILE TELECOMMUNICATIONS S.A.
+Great Computer Corp.
+Cooper Power Systems
+Blue Shoe Software LLC
+Bobolink Software
+Book Systems Inc
+GOM, Gesellschaft fuer Optische Messtechnik mbH
+Silverlake Software LLC
+GMP Software Limited
+GLS IT Services GmbH
+ContactMonkey Inc.
+Number Eight Innovation Limited
+Woogable LTD
+Silhouette Research & Technology Ltd
+Computer Square, Inc.
+Wolters Kluwer Limited
+CCH Canadian Limited
+CompuGroup Medical France
+NovaVision Software A/S
+Combitech AB
+Mediabar sp. z o.o.
+Acrosync LLC
+Adtollo AB
+E-Paper Ltd.
+HANDYTEQ, LLC
+IMVENTA INGENIEROS SLL
+Balmain Management Ltd
+InMon Corporation
+Keil IT e.K.
+Keil IT
+LEXPRO Software Development
+Secure Hunter LLC
+Telestream LLC
+CyberTracker Conservation
+Wireshark Foundation, Inc.
+Monotype Imaging Inc.
+EAST-TEC S.R.L.
+Codoxware Pte Ltd
+Fujian LANDI Commercial Equipment Co., Ltd
+Brave Software, Inc.
+GRAHL software design (Oliver Grahl)
+Revolution Design, Inc.
+BitRock Inc
+CoderGears
+Code-Crafters Software Limited
+Library Concepts
+Spencer Learning
+Valutilities LLC
+FlexSim Software Products, Inc.
+Edgerunner LLC
+e:mendata GmbH
+Journeyman Games
+Trading Technologies
+RZA Rechenzentrum Amaliendorf GmbH
+Matthews Software Incorporated
+StarxSoft Technology Pvt. Ltd.
+Computer Aided Technologies, Inc.
+The Support Group (UK) Limited
+Omegawave Oy
+Yandex LLC
+FtSoft Company
+SSP Europe GmbH
+FSD Fahrzeugsystemdaten GmbH
+MulticoreWare, Inc
+Four Lights LLC.
+SPIKA inc
+Mouvement Desjardins(Fédération des caisses Desjardins du QC)
+ClearCanvas Inc.
+Mourad Ait Said
+Intel(R) pGFX
+Algorithmic Implementations
+MCS Grupa d.o.o.
+CIS Group Ltd.
+Ciphrex Corp.
+McQuillen Interactive Pty. Ltd.
+Open Source Developer, Felix Immanuel
+Christian Knufinke
+toolhouse DV-Systeme GmbH & Co. KG
+Chong Fang
+Internet Design & EDV Entwicklung Hertlein (Michael Hertlein)
+Open Source Developer, Colin Duquesnoy
+Notepad++
+BullGuard Ltd
+IN FOCUS IT (UK) LTD
+Nubisa, Inc.
+Check Into Cash
+Way Beyond Computing Ltd
+Sandel Avionics, Inc.
+Spectral Core
+Independent Purchasing Cooperative, Inc.
+SAMSUNG ELECTRONICS Co.,Ltd.
+I+ME ACTIA Informatik und Mikro-Elektronik GmbH
+IMC Games Co., LTD
+NoSQL Manager Group
+Epiphany Software Corporation
+Fineco Software
+Open Source Developer, Birunthan Mohanathas
+Autosoft Inc.
+Vanamco AG
+Weinmann Geraete fuer Medizin GmbH+Co.KG
+Cellica Software Pvt Ltd
+Realify Systems limited
+CBC Computer Systems Inc.
+CATEYE Co.,Ltd.
+Kontek Lon AB
+Sun MicroSystems
+Moser Informatica Ltda EPP
+Tom weber
+MEGA HAFIZA EGITIM HIZMETLERI VE GIDA URUNLERI LTD
+e-Contract.be BVBA
+MEDICAL PRIORITY CONSULTANTS, INC.
+Gradoservice
+Olawale Fatunla
+GOYOURLIFE, INC.
+Cambridge Audio Limited
+Systems of Information Security 2012
+Tomasz CIESIELSKI
+System Konsult AS
+WAREHaus GmbH
+globesystems Business Software GmbH
+Planet Technologies, Inc
+B.W.Soft spol. s r.o.
+Dualo
+PIXEON MEDICAL SYSTEMS S.A. COM. E DESENVOLVIMENTO DE SOFTWARE
+T Mancey
+Matriculation Examination Board
+MASUDA ECONOMIC RESEARCH INSTITUTE LTD.
+Pitax.pl Łatwe podatki sp. z o.o.
+Marmalade Technologies Ltd
+Bruker Corporation
+BROTHER INDUSTRIES, LTD.
+InstallSmart
+saveNtrust GmbH
+BRIGHT PATTERN, INC
+National Ilan University
+National Aerospace Laboratory
+BreezeTree Software
+BrainKeys Co.,Ltd
+Boz Digital Labs
+DigiDNA SARL
+Variadic Systems, LLC.
+Bosch Rexroth AG
+Przemysław Szkarłat
+Bluefire Productions, LLC
+LINEAR TECHNOLOGY CORPORATION
+Tanguy Touzard
+B-LOGICA
+Parametric Technology Corporation
+Restaurant Magic Software (ACCSYS, INC)
+Tim Kosse
+Kök Bilişim Ltd. Şti.
+Kofax, Inc.
+ICONESEG TI LTDA - ME
+BioPDF ApS
+FinSoft, LLC
+FinGrad - Finance Management System
+BIO-key International
+iBroadcast Media Services Corporation
+IBM ISRAEL-SCIENCE AND TECHNOLOGY LTD
+BESTSOFT
+Rends Co.,Ltd.
+klicktel AG
+Beijing Really-Sun Technology Co.,Ltd.
+iTech Laux + Schmidt GmbH
+Trend Control Systems Ltd
+StreamVia Ltd
+Open Source Developer, Spiderip.com
+ZUUS Media, Inc.
+LLC 'CRYPTEX'
+Preton Ltd
+Open Source Developer, Richard Stanway
+Cognitum Company
+Colectica
+UCC Works B.V.
+Groupe GSoft
+Com2uS Corporation
+Ueberschall Sample Service GmbH
+Comarch
+Ulrich Esser, Maximilian Kaiser GbR
+RealNex, LLC
+Umemura Taka Software Design, Inc.
+Combyte EOOD
+Melany Team doo
+Guardian Life Insurance Company Of America
+comcigan
+Memjet Home and Office
+Memsource a.s.
+Unexus
+COMMAX Co., Ltd.
+Unilogic B.V.
+mesics GmbH
+Recosoft Corporation
+UNIPOST.CORP.
+COMMERCIAL WIRELESS SYSTEMS INTERNATIONAL, LLC
+Common Ledger Limited
+CompEd Software Design
+Complete Inspection Systems, Inc.
+Unitest
+COMPONENTE DE FIRMA DE SOFTWARE DE FNMT-RCM
+METHIS Dialogmarketing GmbH
+Comprehensive Software Systems, LLC
+RED ZION d.o.o.
+Universidad Politécnica de Cataluña
+Methsof Pty Ltd
+Universitetet i Agder
+University of California, Los Angeles
+University of Cape Town
+University of Rochester
+University of Vermont
+Metrohm Autolab B.V.
+MFE MicroFlechs Electronic GmbH
+Uplinx Software Pty Ltd
+US-Reports, Inc.
+USERTRIBE ApS
+ComRep GmbH
+Condrey Corporation
+mForex
+V-cube, Inc.
+Confide, Inc.
+Connectcode Pte Ltd
+Relic Entertainment, Inc.
+Valor Economico S.A.
+Vasyl Bobrovskii
+MG Digital Solutions
+VEEDog Inc
+Veloxum Corp.
+Verathon Inc.
+MHN Consulting ApS
+Verified Software Products, Co.
+MicroForensics, Inc.
+Microgrphics (Hardman And V D Westhuizen C C)
+Micronet Co., Ltd.
+MicroVision Development
+Mid Point Geo Limited
+Midmark Corporation
+Connectyx Technologies, Corp
+CONSEJO GENERAL DE COLEGIOS OFICIALES DE FARMACEUTICOS
+Consultores en Tecnología Educativa SC
+Conversion Sound, Inc.
+Coordination Group Publications Ltd
+Hammer Software
+Viber Media S.à r.l.
+CORE CORPORATION
+HANGZHOU HIKVISION SYSTEM TECHNOLOGY CO.,LTD.
+CORELinQ Innovations, LLC
+Video Insight, Inc
+VIDEOPARK TECHNOLOGY CO.,LTD.
+Videxio AS
+Coresystems AG
+VineFine.de (Rita Stammhammer)
+Costume Inventory Resources
+CoverPage s.r.o.
+CPL
+Vinumeris GmbH
+CQAdmin, Inc.
+Virgin Pulse, Inc.
+Crane Payment Innovations, Inc.
+Creditinfo International GmbH
+Creeder, Inc.
+Crolox B.V.
+RepairTech, Inc.
+ReQuest Serious Play LLC
+Resource Information Associates, Inc.
+Rev.com, Inc.
+REVITALVISION, LLC
+Rheinwerk Verlag GmbH
+Mikro Yazilimevi Yazilim Hiz.Bil.San.Ve Tic.A.S.
+Mimeo.com, Inc.
+Mimio, LLC
+Vision-IT.org
+Visionplanner B.V.
+VisualGest Software, s.l.
+Minisoft, Inc.
+ViveDrive LLC
+Mir srl - Medical International Research
+Mirics Ltd
+MKF SOLUTIONS, INC.
+Mobile Devices Ingénierie
+VLADIMIR PIMENOV
+Voormedia B.V.
+Mobilize.Net Corp
+VOXEL, s.r.o.
+VQ OrthoCare
+MOGOplus Pty Limited
+Molenkamp Software EZ
+VTU Energy GmbH
+Vyapin Software Systems Private Limited 
+Walkingspree USA Ltd.
+WALTER MASAŘ
+Walter Mostosi
+Wanao
+Wargaming PCL
+WBid, LLC
+We Provide Lda
+RICOH IMAGING COMPANY, LTD.
+RICS Software, Inc.
+RISO KAGAKU CORPORATION
+Rock Hippo Games Inc.
+Roman Kuznetsov
+Roman Valerievich Yankovsky IP
+Open Source Developer, Jernej Simončič
+Zemana Bilişim Teknolojileri Sanayi Ticaret Limited Şirketi
+MONCASOFT S.L.U.
+Intel(R) Embedded Subsystems and IP Blocks Group
+Monitis US LLC
+Monitor Enterprise Resource Planning System AB
+Morten Nielsen
+weabow
+Webasto Thermo & Comfort SE
+WebRotate 360 LLC
+Murasu Systems Sdn Bhd
+Music Vision International LLC
+MUTANT DESIGN LTD
+my moments Fotobuch Verlag GmbH u. Co. KG
+wenglor sensoric GmbH
+mySCADA Technologies
+WhereScape Software Limited
+National Soft de Mexico S de RL de CV
+WinPure Ltd
+NAVER Business Platform Corporation
+NCP No Common People AB
+Winscribe Inc Limited
+WNB ApS
+WOLTERS KLUWER LIMITED
+www.mesonic.com
+Wydawnictwo  Ars boni Sp. z o.o.
+X3M Consulting Ltd
+NEEDLES, INC.
+XiVero GmbH
+XL Consulting GmbH
+XL Meeting, LLC
+NEMO Capital Partners
+Xperience Consulting S.L.
+Rosenbauer International AG
+1C-RARUS MSK OOO
+NeoLogica s.r.l.
+Netsmart Technologies, Inc.
+Actual Experience plc
+NETxAutomation Software GmbH
+NEUTRON GUVENLIK TEKNOLOJILERI A.S.
+Adam Kropelin
+New Hope Software, Inc
+New Horizon Media Private Limited
+NEW-TECH COMPUTER SYSTEMS, INC.
+NEWFIELD INFORMATION TECHNOLOGY LTD
+Nextis s.r.o.
+Nextivity Inc.
+Y2 Corporation
+Yicsystem Co., Ltd
+Yuan Iee Hwang
+Ningbo Sense Electronics Technology Co.,Ltd.
+AgileBio
+Agilysys
+AirTight Networks, Inc.
+AI MAXTools, Inc (Aspiration Innovation, Inc)
+ALFA Network Inc.
+Yutaka Shoji Co.,Ltd.
+AMN Systems
+Anvia Oyj
+CAD fx, Inc.
+twoRabiz
+Alpha Computer GmbH
+Alpha Technologies Services, LLC.
+NAVER Corp.
+CDSPACE
+Alstom Grid UK Ltd
+Alterity Inc.
+Altia Systems, Inc
+North Dakota State University
+Altigen Communications, Inc.
+NostraData Pty Ltd
+NovaTech LLC
+novoPLAN Software GmbH
+AmazingCharts.com, LLC
+ cs@amedtec.de
+AMEDTEC Medizintechnik Aue GmbH
+NTE Electronics, Inc.
+Nuix Pty Ltd.
+Ross Smith
+Rowan Maclachlan
+Rowisoft GmbH
+nWise
+NXP Semiconductors Netherlands B.V.
+Objectif Lune
+Oce Technologies B.V.
+OCRex
+Octopus-ITSM.com Inc.
+Oculus VR, LLC
+Olympus Games, Inc.
+Omnivex Corporation
+Onkyo Corporation
+ASTONSOFT OU
+Amrev Software LLP
+Análisis y Desarrollo de Software, S.L.
+Open Source Developer, Alex Warren
+Analog Devices Inc.
+Open Source Developer, Duncan Ogilvie
+ywesee GmbH
+ZamTalk Communications
+Zao Aei Prime
+Andy Dunkel und Daniel Iwer
+ZAO AKTIV-SOFT
+Zelenov Oleg Evgenyevich, Sole Proprietorship
+Annecy Electronique
+ANONYMOUS VPN CONNECTIONS LTD
+ZETEC INC.
+Anritsu Corporation
+Zhuhai Pantum Electronics Co., Ltd
+ZiNET Data Solutions Limited
+ZKAI Co., Ltd.
+Apple Butter Software, LLC
+Applied Materials, Inc
+Applied Voice and Speech Technologies, Inc.
+ZocDoc Inc
+Applix, Inc.
+Zojoi LLC
+Zoo Logic
+Zortrax S.A.
+zplane.development GmbH & Co KG
+Arkadiusz ŚLIŻ
+Азбука Рус, ООО
+ARTSCO
+aSc Applied Software Consultants s.r.o
+ASNA, Inc.
+Astro Gaming
+Atera Networks LTD.
+AtHoc, Inc
+Optika srl
+Atlasware, LLC
+Atmel Corporation
+ATMOS International Limited
+Cirta iT
+Optitex LTD
+Opus Systemer AS
+Orange Espagne SAU
+Organisation Européenne pour la Recherche Nucléaire "CERN"
+Origin Storage Limited
+ORNA INNOVATIONS, S.L
+Orthomatique
+OTOY, Inc.
+OXFORD UNIVERSITY PRESS S.A.
+Cybozu, Inc.
+Pacific Tech
+Pacific University
+Packagesoft Ltd
+Panstoria, LLC
+PC Weather Products, Inc.
+PELSTAR, LLC
+Peninsula Software of Virginia, Inc.
+Performance Athlytics LLC
+Wolters Kluwer Sverige AB
+Philosys Co.,Ltd.
+Phoenix Contact GmbH & Co. KG
+PhonePilot
+VTC MOBILE JSC.,
+PHROZEN SOFTWARE (PHROZEN SAS)
+Physik Instrumente (PI) GmbH u. Co KG
+Pipelinersales Corporation
+Atum 3d B.v.
+Audatex Deutschland GmbH
+Audio Engineering Ltd.
+Audiomatica Srl
+AudioProbe Inc.
+PITax.pl Łatwe podatki sp. z o.o.
+PJSC Rostelecom
+AUDYX SYSTEMS LTD
+AURAPORTAL
+Authentify Inc.
+Plan Software Beratung und Entwicklung GmbH
+Avalara
+AVEVA SOLUTIONS LTD
+Aviom, Inc.
+Axiom d.o.o.
+Planview, Inc
+Plate-forme eHealth - BE809394427
+AXTEL SAB DE CV
+Axure Software Solutions, Inc.
+Playdat Ltd
+AYOY AB
+AYTELSIB
+Playster Corporation
+B&W Tek, Inc
+Badara  Thiam
+Pluck Corp.
+Stellate
+Point and Click Solutions, Inc.
+Bank Polska Kasa Opieki S.A.
+Bank Zachodni WBK S.A.
+Embla Systems
+Bankernes EDB Central
+Bare Mettle Entertainment Ltd.
+Barr Systems, LLC
+Barron's Educational Series, Inc.
+BDT Media Automation GmbH
+be.lux GmbH & Co. KG
+PricewaterhouseCoopers Applications B.V.
+BEEVC - Electronic Systems, Lda
+Pro-Ject Audio Systems
+Procreare Ltda
+Progeny Genealogy
+PROMICRA, s.r.o.
+Prosig Ltd.
+ООО ”Ведисофт” - Vedisoft Ltd.
+BionX International Corporation
+Blue Earth Internet
+Bluebird IT PTY LTD
+Bluebird Technology Limited
+ООО "NUR-DRAYV"
+Bond International Software Plc
+ООО "Ay Ti Servis"
+BPI Consulting, LLC
+Br.im (TarheelVentures.com, Inc.)
+Bricsys Services NV
+Brit Systems, Inc.
+BROADWAY SEMICONDUCTOR INC
+BSOFT INTERNETWORKS (BRUNO DE ANTONI & CIA LTDA - ME)
+Hauppauge Computer Works Inc.
+J.M. Driver, LLC
+Proteome Software Inc
+PROXYSERVER.COM LLC
+PTW-Freiburg Physikal.-Technische Werkstaetten Dr. Pychlau GmbH
+Quadcept Inc.
+QuantifiCare S.A.
+Softland SRL
+QUODD Financial Information Services
+Apowersoft Ltd
+R. STAHL HMI Systems GmbH
+M.R.S. Srl
+RADCOM SRL
+RAPIDFIRE TOOLS INC.
+Rausoft GmbH
+Podatnik.info
+Razvan Chisu
+Kakao corp.
+BestPage Co., Ltd.
+IMESD ELECTRONICA, S.L.
+Simon Tatham
+Taxcom Ltd.
+CRYPTO-PRO
+Pulse Secure, LLC
+Wildcard Properties LLC
+Cliqz GmbH
+Roxtec International Aktiebolag
+NimoniX Corporation
+Dipl.-Ing. Willms Gesell. für Software. und techn.wiss. Pro. mbH
+Stephan Schreiber
+CDATA SOFTWARE INC.
+LunarG, Inc.
+2BrightSparks Pte. Ltd.
+SharpNight Co., Limited
+BuildIT Software & Solutions Ltd.
+Bullseye Camera Systems, LLC.
+C&C Digital Inc
+MedRx, Inc.
+cab technologies
+Cadac Group
+Cambridge Pixel Ltd
+CANDooPro LLC
+3Planesoft (Panichev Igor Valentinovich IP)
+Castle Creations, Inc.
+cebas Visual Technology Inc
+Clinical Architecture LLC
+Anand Software and Training Pvt. Ltd.
+Synchronoss Software Ireland Ltd.
+IQOPTION EUROPE LTD
+MyHeritage (USA) Inc.
+Hanwha Techwin Co., Ltd.
+ESTgames Corp.
+ChrisPC Software SRL
+Hema B.V.
+Traxon Technologies Europe GmbH
+STEUERSOFT GmbH & Co. KG
+VIA Technologies, Inc
+NextPVR Technologies (PINSTRIPE LIMITED)
+YouWowMe Limited
+LLC 'Igrovye Resheniya'
+Musical Fidelity Ltd
+YAMICSOFT TECHNOLOGY LIMITED
+THOMSON REUTERS DT TAX AND ACCOUNTING INC.
+CELESTIAL SOFTWARE (PENCE, BRIAN)
+Centaur Software Development
+CertiSur SA
+CFturbo Software & Engineering GmbH
+Chaney Instrument Co
+COVERT PRAGUE s.r.o.
+Chaos Software Ltd.
+Ciegus Ltd
+Citrix Systems Inc.
+CIXTEC
+Clemens Uhlenhut
+Clinical & Biomedical Computing Ltd.
+Cloudbase Solutions Srl
+Cloudhouse Technologies Ltd
+Codan Limited
+CoFiTe
+Cognitier
+AIRTAME ApS
+Astro Machine Corporation
+Sync.com Inc.
+SAITO-KIKAKU CORPORATION
+tetraface Inc.
+3DVIA SAS
+Intel(R) Intel Hardware Accelerated Execution Manager
+Veritas Technologies LLC
+Anuko International Ltd.
+Infonetax Sp. z o.o.
+Beijing VSK Soft Development Co.,Ltd
+xeam UG (haftungsbeschränkt)
+Demoteller Systems Inc.
+Wemade IO Co.,Ltd.
+Mirko Boeer
+Daum Games Europe B.V.
+Michell Instruments Ltd
+Datasec Holding Ltd.
+ON1, Inc.
+Strong Technology, LLC
+Zarafa BV
+Neuberger & Hughes Industrieberatung GmbH & Co. KG
+FinalCode, Inc.
+ORGANAIZER LIDERTASK, LLC
+LULU Software
+Screencast-O-Matic (Big Nerd Software, LLC)
+Sergey Akimov
+Sling Media, Inc.
+INELO Spolka z ograniczona odpowiedzialnoscia Sp.k.
+Axissoft. Inc
+Fundacja Tęczowy Parasol
+Taishin International Bank
+The Descartes Systems Group Inc.
+OOO "Center For Information Technology"
+Federal'naya sluzhba po regulirovaniyu alkogol'nogo rynka
+KADOKAWA CORPORATION
+The Broadleaf Group, LLC
+TaxAct, Inc.
+VISUAL CHART GROUP SL
+Prey, Inc.
+Haystack Software LLC
+Solarwinds Worldwide, LLC
+Fotis Zafiropoulos
+Symless Ltd.
+Electronics Extreme Limited
+Silicon Laboratories Inc.
+Kim Jensen
+Polygon Games Co., Ltd
+Mizage, LLC
+EFI Software (Electronics for Imaging, Inc.)
+L'Informatica di Gemma Stefano
+Konstantin Dondoshanskii
+Bem Na Cabine
+Talking Communities LLC
+Transactor Systems Ltd
+Salesforce.com Inc
+Spruce Computer Systems, Inc
+AccessData Group Inc.
+Thorsten Hodes
+Przedsiębiorstwo Informatyczne SABA SERVICE Sp. z o.o.
+Muvee Technologies Pte Ltd
+Igloo systems Inc.
+Hellatron spa
+Serato Management Limited
+Smartflix Limited
+Marg (UK) Ltd
+SHAREit Technologies Co.Ltd
+BALARAD, s.r.o.
+Descendent Studios, Inc.
+Self Empowerment Technology
+OOO Intelsoft
+Ingram Content Group Inc.
+Chongqing Aibeibei Technology Co., Ltd.
+Teletech Holdings Inc
+TOPTEN SOFTWARE
+Turtle Entertainment Online, Inc.
+Open Source Developer, Ansgar Becker
+CST - COMPUTER SIMULATION TECHNOLOGY AG
+RushFiles A/S
+Dirk Boettcher
+Intel(R) Smart Sound Technology
+KONICA MINOLTA, Inc.
+AVerMedia TECHNOLOGIES, Inc.
+SPRUT Technology, Ltd.
+Voxengo (Aleksey Valerievich Vaneev IP)
+HANATOUR SERVICE INC.
+Beamr Imaging Ltd
+IVECO SpA
+Web CEO Limited
+Adventure's Planet S.r.l.
+Matthew McConnell
+PSEUDiO Ltd
+DPS Diversified Productivity Solutions Ltd.
+HANBIRO INC
+BOLID ZAO NVP
+CEVO
+Kompaniya AvtoDiler
+Open Source Developer, Phillip Gibbons
+Oxygen Forensics, Inc
+KMSOFT OOO
+Dunes MultiMedia
+Pixelab
+Hexagon Metrology Inc
+LIFI LABS INC.
+Intel(R) Software and Firmware Products
+Ataccama Corp US
+Blockless Inc
+Carbide 3D LLC
+Celeris Inc
+Digilabs, Inc
+Mobilize.Net Corporation
+Open Source Developer, Hugh Bailey
+Cambium Learning, Inc.
+ProperSoft Inc.
+SASU STAKE POINT
+DevEnterprise Software
+JTB World Inc.
+Razer USA Ltd.
+Validy
+Payment Processing Partners, Inc.
+Atlantic SoftWorks, Inc.
+Matthias Ludwig
+ToolsLib
+Open Source Developer, Józef Starosczyk
+Auditdata A/S
+UiPath
+T & T-TELEMÁTICA E TECNOLOGIAS DE INFORMAÇÃO, UNIPESSOAL, LDA
+ULUDAG BILISIM BILGISAYAR MEDYA ILETISIM ELEKT INSAAT SANAYI VE
+Tarasov Dmitri Yurievich IP
+Ivacy Ltd
+iToosoft S.L.
+Node.js Foundation
+Sinerji Yazilim A.S.
+I-SENS, Inc.
+TRADING TECHNOLOGIES
+24 Grad Media GmbH
+Delta Phi s.r.l.
+XP Solutions
+IIKO
+F5 Networks Inc
+Superbase Software Limited
+OOO Kors-Soft
+PageBites, Inc
+Rohecom Automatisering B.V.
+ABACOM (Feldmann/Pruessel GbR)
+CÍGLER SOFTWARE, a.s.
+Camp Mobile Corp.
+iConnectivity
+Soneta Sp. z o.o.
+Aeria Games GmbH
+Getriebebau NORD GmbH & Co. KG
+Economic Security Planning, Inc.
+Inbit Inc.
+Happa Media LLC
+LogiSoft Gmbh & Co. KG
+ORKA BİLGİSAYAR TİC. VE SAN. LTD. ŞTİ.
+Beiley Software, Inc.
+Ecosoft BV
+Ivan Polyacov
+SoundSpectrum, Inc
+Kuassa Teknika, PT.
+NETsec GmbH & Co. KG
+Swiftec, LDA
+Louis Nel
+Anti Explorator ApS (Downloadcentral ApS)
+O Informador Fiscal
+Cloud IT-All Ltd.
+ООО "Иновика" - "Inovika" LLC
+Cakewalk Inc
+pit-cup GmbH
+BLACK SPOT ENTERTAINMENT CO.,LTD.
+GPlay Online SRL
+Romualdas Cukuras
+Riftcat sp. z o. o.
+White Town s.r.o.
+Divinsa LLC
+Incredible Charts Pty ltd
+Bertrand Le Quellec
+SIX Networks GmbH
+CWTuning Software
+Jedox AG
+Techporch Incorporated
+Delcam Ltd
+1&1 Internet SE
+Digital Media Products GmbH
+BugSplat
+Virus Eraser Inc.
+Netmarble Games Corporation
+Trilogy Software Inc.
+SERVICO FEDERAL DE PROCESSAMENTO DE DADOS SERPRO:DESDR
+Moneysoft Ltd.
+ScreenConnect Software
+LSIS Co., Ltd
+On-Line Taxes, Inc.
+Stockstotrade.com, Inc
+"Multimedia" EDV-Software u. Verlag GmbH
+Smartbox Assistive Technology Limited
+Dassault Systemes SE
+SecureW2
+Iustec GmbH
+ATIR ENGINEERING SOFTWARE DEVELOPMENT LTD
+SecurityCoverage, Inc
+IPS Przedsiębiorstwo Informatyczne - Marcin Konopka
+Marcin KONOPKA
+Tecnomotor Eletrônica do Brasil S/A
+Iustec Lukas Berger
+Christian Knüll
+VBB Software Ltda. - EPP
+POLARIS OFFICE Corp
+VEBGRUPPA
+Telefision Corporation AG
+International Test Instruments Corporation
+Nitro Logic Inc.
+TEXTBROKER SRL
+Hubgets, Inc
+Tibia Ltda Me
+CopyCopy Ltd.
+Connectify (Connectify, Inc.)
+SAMSUNG ELECTRONICS CO,.LTD.
+Baidu Online Network Technology (Beijing) Co.,Ltd.
+ Baidu Online Network Technology (Beijing) Co.,Ltd.
+Kuhnle Computer-Software GmbH
+InfoNotary PLC
+Federal Contractor Services Network
+Ingo Neumann
+Black Eye Games
+Batishchev Pavel Sergeevich
+Microsystems
+FileMaker, Inc.
+Azureus Software Inc
+EaseFilter Inc.
+Emby LLC
+OOO STOIK-SOFT
+OOO RiliSoft
+Exact Software Poland Sp. z o.o.
+Tangible Software Solutions, Inc.
+Avisoft Bioacoustics e.K.
+Uniticker FZC
+Stefan Ries
+Fiducia & GAD IT AG
+Nanjing Nagasoft Co., Ltd.
+ABPro Entwicklungs-, Vertriebs- und Wartungs GmbH
+Thinspace Technology Ltd
+Moneyspire Inc.
+Softproject AG
+GÉANT Association
+RIBA Enterprises Ltd.
+MEYSA BILISIM YAZILIM VE DONANIM HIZMETLERI TICARET
+Datex Software
+Lantek Sheet Metal Solutions, S.L.
+Mark Bloomfield
+Nanjing Anyue Technology Co., Ltd.
+Jongbel Media Solutions Ltd.
+Hichem Kedjour
+Sixa, Inc.
+DATAVARE SOFTWARE AND SERVICES LLP
+Spotware Systems Ltd.
+Litera Corp
+Dataprius SL
+Jérôme Saynes
+JItbit LP
+Rillsoft GmbH
+Natural User Interface Technologies AB
+Netmarble Games Coporation
+Vodafone Group Plc
+Intel(R) Software Licensing
+Intel(R) RealSense(TM) SDK
+Intel(R) RealSense
+Intel(R) DTC
+SAGE
+Sage South Africa
+Point Grey Research
+Efficiency Software
+Safe Data Storage Ltd
+XL Development
+Simplitec GmbH
+Thesycon Software Solutions GmbH & Co. KG
+Customer Driven Solutions Limited
+IRESS LIMITED
+Aryson Consultancy Services
+Dashing Strike, LLC
+Enterra Holdings Inc
+The Wizetrade Group [WGAL, LLC]
+Insighlis GmbH
+Quadrant  Software B.V.
+Gotzon Astondoa Loiti
+AuE Soluções
+Stary3D Interactive
+Visma Passeli Oy
+EZ5 Systems Ltd.
+Kewill Inc.
+GlexSoft LLC
+bcscctv
+TIP Group S.A.
+Pulsar Technologies
+David Capello
+Artem Dolgov
+Empatica S.r.l.
+EI ELECTRONICS LLC
+Tekl STUDIO s.r.o.
+CodeLine
+Moritz Bunkus
+JIJI TECHNOLOGIES PRIVATE LIMITED
+Alexandr Andreevich Shirokov IP
+Darim Vision Corporation
+AMS Software
+Bits&Coffee
+BMT Micro
+BoYuan(Hong Kong) Wireless Websoft Technology Limited
+Brilliant Labs, Inc.
+Bytelayer AB
+Christian Deforeit
+Data Fabrication Inc
+EvolutionCode Pty Ltd
+GEMAX Software ltd.
+Hangzhou Taishi Technology Co., Ltd.
+Interactive Frontiers Inc.
+LAZYSOFT TECHNIQUE LTD
+Metamill Software
+N.R.S. OBRT ZA RACUNALNE USLUGE
+NuonSoft
+Piceasoft Ltd
+SAFCo Software
+TangySoft Ltd.
+Voyetra Turtle Beach, Inc.
+Ye Yizhou
+Zinio llc
+KUNNSKAPSFORLAGET ANS
+Upwork, Inc.
+Sonic Ladder Ltd
+Aldelo, LP
+High Fidelity, Inc
+KLT Associates
+ProcessText Group
+MKF Solutions
+Grammarly, Inc.
+Analytical Graphics Inc
+OOO Firma "Blek-Pljus"
+Elecard Devices
+Digital Care Solutions
+东莞市中控电子技术有限公司
+FORMAT Software Service GmbH
+Intel(R) Identity Protection Technology with PKI
+Intel(R) USB eXtensible Host Controller Drivers
+PRODWARE SA
+MPP-Engineering Pettelkau Puhlmann GbR
+Xevin Consulting
+OCAD AG
+XL  Development
+Brenexa Corp
+Ammara Internet Limited
+AtomPark Software Inc
+GENIE9 LTD
+GoToTags
+Kellerman Softwarecom
+EasyTag Inc.
+regify GmbH
+RingStor, Inc.
+Beijing Changyou Raidcall Internet Tech Co.,Ltd Guangzhou branch
+Beijing Changyou Creation Information Technology Co.,Ltd
+Signalsec bilgi Guvenlik Danismanlik Yazilim Ve Tek Hiz Tic Ltd.
+Wacom Technology Corporation
+NullReferenceException AB
+Gennady Goncharov
+SMS-Soft
+ACTIVE D&C Co.,Ltd.
+RescueTime, Inc.
+Voyager.com Sp. z o.o.
+Intel(R) Unite(tm) Signing Certificate
+Interfathom, LLC
+OOO Test
+MB Oyun Yazilim ve Pazarlama A.S
+Criasoft Ltda - Epp
+Vzljot JSC
+CompuGroup Medical Česká republika s.r.o.
+PEOPLECERT INTERNATIONAL LTD
+Microvirt Software Technology Co., Ltd.
+Entricks Softwares, Inc
+Aviva Inc
+mySCADA Technologies s.r.o.
+devDept Software S.a.s.
+WinSoftMagic Inc.
+ADL Software
+ScadaGuard, LLC
+ClaimMaster Software LLC
+Kiply, Knowledge is Power S.L.
+Digital Softworks
+Tosslab, Inc
+WinYou Law Inc.
+Ashlar Inc.
+AxCrypt AB
+on Software
+Hyper Drive Information Technologies Pvt Ltd
+RIW Software Technology AB
+Silicon Circus Ltd.
+ReceiverInstaller
+Realtime Music Solutions
+MANAGEMENT-WARE LOGICIELS INC.
+CANARA BANK
+ANDREA VACONDIO
+ThinkTime Creations LLC
+Nityaa Labs Inc
+FunctionBay
+Carlson Software, Inc.
+Leadingtouch Technology Co., Ltd
+Alchemy Software Development Limited
+Hidden Reflex Inc
+Fusetools AS
+HappyMetrix bvba
+John McKernon
+ByteShift Ltd
+Mango Man Consumer Electronics Pvt Ltd
+Wydawnictwo Pedagogiczne Operon Sp. z o.o.
+Edelino Commerce Inc.
+BHGames Inc.
+Pixellu LLC
+JustSystems Canada Inc.
+ArenaNet LLC
+Technische Universität Wien
+Wayne Quigley
+Trimble Switzerland GmbH
+TEXYON GAMES
+intarsys consulting GmbH
+Digigram
+Spaceclaim Corporation
+SpeedCat, LLC
+Sysdev, LDA
+Open Source Developer,Tomasz Szczepański
+BluPointe DRS LLC
+Guy Godin
+Lima Technology Inc.
+UNIFORM-Agri B.V.
+Fortrade Ltd
+Precision Biometric India Private Limited
+Bolt On Technology
+John Loper II
+MCG Consulting Inc
+Mariusz Guć
+Lightmap LTD
+Quip, Inc.
+Krzysztof Dziemborowicz
+PilzSoft, A.Pilz e.K.
+Madrigal Soft Tools Incorporated
+KEYENCE CORPORATION
+Syrinscape Pty Ltd
+KEYENCE Corporation
+TimePunch KG
+Skype Communications S.A.R.L
+Spira Data Corp.
+Zhangkong Internet Technology Co., Ltd.
+SolverMedia
+OOO Alsion
+Open Source Developer, Christophe GRENIER
+TechnoResearch, Inc
+Datazen Holdings Inc.
+Public Procurement Service Republic of Korea
+Taggtool Ltd
+Eshbel Technologies LTD.
+ShareInvestor Pte Ltd
+Piotr Ułaszewski
+Extegrity, Incorporated
+Sparkosoft Inc
+ColorGATE Digital Output Solutions GmbH
+Restream, Inc.
+Wevr, Inc.
+Kernow Software Ltd
+SysTools Software Private Limited
+Alexander Chulpanov
+FrameworkTeam Softwares
+AMBIR TECHNOLOGY
+Eztalks Technology Company Limited
+Ubi Interactive, Inc.
+Mpower Trading Systems
+BETICA LTD
+Galaxkey Limited
+Gira Giersiepen GmbH & Co.KG
+WhatsApp, Inc.
+MIITS LLC
+NeedToMeet, LLC
+Glass Bead Software
+Origin Software, Inc.
+Hazelnut Software Ltd
+WordBells
+Stop Motion Pro
+Open Source Developer, Oleg Shparber
+FalCon - Falkner Consulting fuer Messtechnologie GmbH
+Seorim Technology Co., Ltd.
+JumpStart Games, Inc.
+The TOVA Company
+Dyalog Limited
+PC Speedup Tools
+TNTSOFT
+China UnionPay Co.,Ltd.
+FORMULA INVESTMENT HOUSE LTD
+Ubi Interactive Inc.
+PCAutotune, Inc.
+Photo Booth Solutions
+Silvercreations Software AG
+Hillside Software Inc
+Milk Round Software
+Suomen Maatalouden Laskentakeskus Oy
+Pruftechnik Dieter Busch AG
+SliQTools Ltd
+inPocket Software
+Owtware (Shanghai) Technology Co Ltd
+Kalosoft Systems Technologies Pvt. Ltd.
+Populus Inc.
+Wheatstone Corporation
+SyncUI OÜ
+OOO Kub SK
+Net Freedom Pioneers
+Active Database Software LLC
+Zebra Computer Solutions Ltd
+The Scrambled Card Company Limited
+Ahau Software
+Shanghai EISOO Information Technology Corp.
+Sergey Krivosheyev
+Blackmagic Design Pty Ltd
+AVerMedia TECHNOLOGIES, INC.
+HCS VoicePacks Ltd
+Fresh Minder-Vertrieb GbR
+hs2n Informationstechnologie GmbH
+Beijing Chukong Aipu Technology Co., Ltd
+Smart Technology LLC
+Excessively Productive LLC
+LINDO Systems Inc
+Embedthis Software
+Institute of Acoustics, Chinese Academy of Sciences
+Heise Medien GmbH & Co. KG
+Scarlet City LP
+Barnabas Bücher
+Freshdesk Inc
+UniPrint.net
+Uxeria.com sp. z o.o.
+Beijing LeWo Technology Co. Ltd.
+Alterdata Tecnologia em Informática LTDA
+FONTRIX
+GAMEFOOLS LLC
+FXCM Global Services
+Softweak Infotech
+CloudBacko Corporation
+COPA-DATA France
+North Star Design srl
+Konftel AB
+Newstart Software Technology Co. Ltd
+DRS Data Services Limited
+Biling Network Technology Co.,Ltd.
+Milen Peev
+Srimax Software System Private Limited
+Datalogic Automation s.r.l
+ART PLUS D.O.O.
+Acano (UK) Ltd
+Hewlett Packard Enterprise Company
+abenecel Inc.
+深圳银澎云计算股份有限公司
+SOFTWARE DE GESTION XGEST S.L.
+HUK-COBURG
+OOO "Program Verification Systems"
+NewSoftwares.net, Inc SDN. BHD.
+Digital Advertising Technologies SDN. BHD.
+Rackspace US, Inc.
+TOMÁŠ TICHÝ
+Sergey Karmanov
+上海够快网络科技股份有限公司
+Lighthouse Holland Sales BV
+IPCamSoft.com
+JSE Imaging Solutions Limited
+Zakład Usługowo-Produkcyjny "EMITER" Sp. J. S.Bieda, P.Lis
+Amazon.com, Inc.
+MÉTRICA EDUCATIVA A.C.
+DECO PROTESTE, EDITORES, LDA
+Exselo AS
+Premedia Systems, Inc.
+Weyerhaeuser Company
+SEGES P/S
+erpos s.r.l.
+Xink ApS
+ifap Service-Institut für Ärzte und Apotheker GmbH
+Syncdocs Pty Ltd
+DataLocker Inc.
+TSS spa
+BUKHSOFT SERVIS, OOO
+RedHelper LLC
+SOFT-ENOT
+Mersive Technologies, Inc.
+Texyz
+Chengzhu Li
+Memir Games Ltd
+A-MTK Co., Ltd.
+FutureSoft, Inc.
+David Esperalta Calderon
+Patrick Dörn
+Digital Waybill
+Soft-FX Holdings Ltd.
+IKARA SOFTWARE LIMITED
+pCloud AG
+Numera, Inc.
+Flowserve India Controls Private Limited
+Cospec Innolab Co., Ltd.
+Xunji Network Technology Co., Ltd.
+Dygder AS
+DISTRIBUTED CREATION INC.
+DRD-Software - Dobrocsi Zsolt (*)
+EasyPower LLC
+QuadraMed Corporation
+BEIJING LOONGSTORE TECHNOLOGY CO.,LTD
+Daniel Büttner
+Open Source Developer, Samuel Attard
+Open Source Developer, Runar Buvik
+Synopsys, Inc.
+Funai Electric Co., Ltd.
+Discovery Educational Software
+Justapps
+Just Apps Pvt Ltd
+PCPinpoint Technologies, Inc.
+SINOVO GmbH & Co. KG
+Invantive Software B.V.
+T&S Consulting, LLC
+V & P Technology
+Ciiva GmbH
+Elo Touch Solutions, Inc.
+STEP Tools, Inc.
+Swiftpoint Limited
+callas software GmbH
+C D Ward and Assoicates Limited
+Red Axe Pty Ltd
+papaTsoftware
+idcloak Technologies Inc
+Raikosoft GmbH
+Kishonti Informatikai Szolgáltató Kft.
+Ascendis Software LLC
+JAPISOFT
+Qples, Inc
+Honeywell International Inc.
+ARGUS Software, Inc.
+DocuSign, Inc.
+Nevron Software LLC
+Fuzebox Software Corporation
+DNAML Pty. Ltd.
+xi an Realor Information & Technology Co., LTD.
+Intel(R) Security Unifier
+6E08453F-9BA7-4311-999C-D22FBA2FB1B8
+Cove Bay Software Limited
+CELOT Wireless
+Biomark, Inc.
+Commest Multimedia S.A.S
+Compulink, Ltd.
+大势至(北京)软件工程有限公司
+VIPole International LP
+GSI GROUP INDUSTRIES LTD
+EverMap Company LLC
+Plum Systems Inc.
+Brookfield Engineering Laboratories, Inc.
+RVi Group LLC
+Dassault Systemes Biovia Corp.
+Konstantin Polyakov IP
+Axence Inc.
+CommonTime Ltd
+Trimble Solutions Corporation
+Agência para a Modernização Administrativa, I.P.
+Free Time Co., Ltd.
+Altium LLC
+Datalogic Automation S.r.l.
+Express Vpn LLC
+Murawska Anna SOFTOR.PL
+PING AN INSURANCE(GROUP) COMPANY OF CHINA,LTD
+OOO KleverSajt
+Schneider Electric Software, LLC
+Zenju (Florian BAUER)
+Addinsoft sarl
+Wobastic Software Inc.
+Alsoft Publishing Co.
+CubeSoft, Inc.
+Twixl media bvba
+Bryan Research and Engineering Inc
+SCRYPT, INC.
+Zainuddin Nafarin
+Dyuner
+Uloz.to cloud a.s.
+ERI Economic Research Institute, Inc.
+Bic Amazonia S/A
+eBridge Inc.
+LIGA ZAKON LLC
+Intel(R) OWR
+Zed Technologies Pty Ltd
+Asteris, Inc.
+Bada Technology Co.,Ltd
+Forge, Inc.
+Shenzhen Huion Animation Technology Co., Ltd.
+Mindstar Aviation LLC
+Open Source Developer, Phillip Tull
+ALCPU
+Wietze Beukema
+FiiStudio software(Suzhou) Ltd.
+Applied Computer Music Technologies Ltd
+Bitwig GmbH
+inalogic inc.
+TriSun Software Limited
+Vostok Games. Survarium Inc.
+Groupmail Limited
+Argotronic UG (haftungsbeschränkt)
+深圳市哈奇世界科技有限公司
+Digital Rails Corporation
+SEGA Games Co., Ltd.
+Feross Aboukhadijeh
+Uniform Software Ltd
+Ergosoft Softwareentwicklung GmbH
+He Dong
+TSI, Incorporated
+ARQA Technologies LLC
+IP Petrosyan Khachatur Aramaisovich
+Exoton Inc.
+Fusion-io, Inc.
+Fuzhou Returnstar Technology Co.,Ltd
+GitHub, Inc.
+海南掘金网络科技有限公司
+北京行云网科技有限公司
+Filosoft
+WAVIATECH LIMITED
+Data Project S.r.l.
+FaceTime Communications
+KnowWare International Inc.
+Intra2net AG
+RST INSTRUMENTS LTD
+Shanghai RS Technology Co., Ltd
+Hansoft AB
+Cirrus Research plc
+Marex Spectron Group Limited
+MP3.com, Incorporated
+CCH Australia Limited
+graphicregion.com
+Hex Entertainment, LLC
+Hangzhou Touptek Photonics Co., Ltd
+Game Modding
+ActivePath Ltd.
+TianJin LYgame Co.,Ltd
+CADLock, Inc.
+Phoenix Contact GmbH & Co
+Alcatel-Lucent USA
+MATERNA GmbH Information and Communications
+Hanmaro, Co. Ltd
+Rogers Communications Partnership
+Seneye Ltd
+Huawei Technologies Co.,Ltd.
+Soft Grup Construct SRL
+Advanced Data Analytics, Inc.
+P&E Microcomputer Systems, Inc.
+CallComm Technologies, Inc
+The University of Waterloo
+BBC Worldwide Limited
+Organizer LeaderTask, LLC
+ZP Engineering srl
+Yu Xiang Huang
+Universiteit Twente
+Keep I.T. Easy LLC
+KnowledgeWare Communications Corp.
+Fredrik Lonn
+NotaPlan Aps
+Hillstone Networks, Inc.
+Energizer Softech
+Thycotic Software Ltd
+Invensys Systems Canada Inc.
+Logitec INA Solutions Co.,Ltd.
+GMO Media, Inc.
+Schletter GmbH
+Pecunia Systems
+U-MARQ Ltd.
+My PC Backup
+Uniform Industrial Corp
+iviSoft di Ivano Valerio
+Rabobank Nederland
+XEROX CORP.
+MoreSteam.com, LLC
+ILS Management LLC
+Somkiat Rungruangsri
+Winco Tecnologia e Sistemas LTDA
+MSDSonline
+Hondata, Inc.
+ChemAxon Kft
+J M Smith Corporation
+RedTitan Ltd
+PLATO Learning, Inc.
+EZLinks Golf, Inc.
+Performance Technology Associates, Inc.
+Bytemobile Inc.,
+Bryan Sylvester Gill
+IOtech
+Sage UK Ltd 
+Visual Mining, Inc.
+Shenzhen EasyN Technology Co., Ltd
+Frontrange Solutions
+YOONDISK.INC
+West Corporation
+RF IDeas Inc.
+Hostway Corporation
+Zaag Technology Co.,Ltd
+TIMECRUISER COMPUTING CORPORATION
+INTELLIGENT SYSTEMS CO.,LTD.
+Deutsche Post AG
+Fuhu, Inc.
+Frederik Jacobs
+AxiomCoders
+FMS, INC
+Ensurebit
+Hangzhou Zhiquan Industrial Control Technology Co.,Ltd.
+Sweex Europe BV
+Dugi Guides LTD
+Microsoft Visual Studio Signing Authority
+Ingres Corporation
+Marc Hoersken
+PrintEco Inc
+Camtek GmbH
+Zaklad Uslug Informatycznych Mieszczanin
+Intel(R) software (pre-release)
+Eurofield Information Solutions Pty Ltd.
+Duoserve
+i2 Limited
+FNet Co., Ltd.
+SKORUPSKA TROCEWICZ MARLENA BESTSOFT
+CS Odessa
+Performance Trends Inc
+MaximumSoft Corp.
+Elis IT ST
+MAGNISOFTWARE - SISTEMAS DE INFORMAÇÃO, LDA.
+PowerView Associates LLC.
+Credenza Software Inc.
+jcentertainment corporation
+ALTEC S.A. SYSTIMATON PLIROFORIKIS
+上海景腾信息科技有限公司
+ZAO Nauchno-proizvodstvennoe predpriyatie SCATT 
+Activeworlds, Inc.
+Facebook Inc.
+HENGBAO CO., LTD.
+NETSCALER, INC
+aerosoft gmbH Luftfahrt-Datentechnik
+Genuitec, LLC
+Veno Technology (Beijing) Ltd.
+AVIOSYS International Inc.
+Sandlot Games Corporation
+Business Professional Group
+AfterLogic Corporation
+Hua Nan Commercial Bank Ltd
+tianjin zhongge technology Co.,Ltd.
+Aliaksei Shchurko
+Kineteks Corporation
+Pro Gamma Srl
+wuhanoyokejiyouxiangongsi
+TOMST s.r.o.
+ScriptPower OHG
+ASIX Electronics Corp. 
+Computer Aided Elearning, S.A.
+MoonSols SARL
+Unified Intents AB
+Systemsoftware Mathias Rauen
+Lab-NC Pty Ltd
+Wuhan Tianyu Software Co., Ltd.
+Real Enterprise Solutions Development B.V.
+Nortek International (China) Limited
+Prenap
+Rustem Sabitov
+R&D Computer System
+Fermin Fernandez
+CloudWare Pty Ltd
+Minicom Advanced Systems
+William Brobst
+Boxee,  Inc.
+INTERCHANGEABLE VIRTUAL INSTRUMENTS FOUNDATION INC.
+shenzhen bingchuan network  technology Co.,Ltd
+Trusteer Ltd.
+Giosis LLC
+Variograma Investigacao Desenvolvimento de Projectos e Servicos
+HEALTH NEWS International, Inc.
+U.S. Digital Corporation
+Tresor Software GmbH
+BEIJING KUWO TECHNOLOGY CO.,LTD. 
+Etron Technology, Inc.
+MITSUBISHI ELECTRIC INFORMATION SYSTEMS CORPORATION
+Kulcs-Soft Szamitastechnika Nyilvanosan Mukodo Reszvenytarsasag
+FİDELTUS İLERİ TEKNOLOJİ A.Ş.
+Fadonics
+Vidicode Datacommunicatie BV
+Perfect World Entertainment
+GarageGames.com, Inc.
+Dynamsoft Corporation
+Sedao Ltd
+Active Research Ltd
+JINHUA 9158 NETWORK SCIENCE AND TECHNOLOGY CO.,LTD.
+SODATSW spol. s r.o.
+CharacTell Ltd.
+Aspire Technologies, Inc.
+SSTSIM Ltd
+PrimaDesk Inc
+BluePoint Security, Inc.
+abas Software AG
+Hang Zhou H3C Technologies Co., Ltd.
+Atera Networks LTD
+Touchstar Software Corp.
+Pinecliffe International
+Solutions AG
+qliqSoft, Inc
+shanghai emoney software technology company ltd.
+Aiming Inc.
+Ashbury Media LLC
+Imagine That Inc.
+ContentWatch Inc
+ShenZhen Foscam Intelligent Technology Co.,Ltd
+Level 7 Systems Ltd.
+IT Energy Systems & Consulting Ltd
+Top Systems Ltd.
+J2534 LLC
+Visio Corporation
+The Sage Group PLC
+K-Sun Corporation
+Partner Communications Ltd.
+Nvelo Inc.
+FastViewer GmbH und Co KG
+Multimedia EDV-Software u. Verlag GmbH
+Piotr Stróżyna
+DooGA Co., Ltd
+LawyerDoneDeal Corp.
+Union Asset Management Holding AG
+NextInteractiveMedia
+Velocio Networks, Inc.
+IPR-Insights Informatikai Tanacsado Kft.
+SCHUHFRIED GmbH
+Guangzhou Yi Bo Information Technology Co., Ltd.
+Wanova Technologies Ltd
+Kestral Computing Pty ltd
+Yuanta Securities Co., Ltd.
+imc Meßsysteme GmbH
+Icuiti Corporation
+Anyware Group Inc.
+The New York Times Company
+Swift SCRL
+Dwyco, Inc.
+Zix Corporation
+Radiant Systems
+Intelligent Recording Limited
+Codice Srl
+NCS Pearson, Inc 
+Manhattan Associates
+SafeLogic
+Denis Vatutin
+Allegorithmic
+HIMSA A/S
+Rock Hippo Productions Ltd.
+alea technologies gmbh
+T3 Information Systems LLC
+search core systems
+CSH spol. s r.o.
+Optimal Payments PLC
+Samsung Electronics Co. Ltd
+Invision Marketing Services Pty Ltd
+UNIMTEC CO., LTD.
+Eagle Investment Systems Corp
+Hanmaro Co.,Ltd.
+Zipwhip, Inc.
+Datawatch Corporation
+Inter-est UK LTD
+Yugma inc
+CyberTAN Technology Inc.
+SkillJam Technologies Corporation
+MELAG Medizintechnik oHG
+Kontron AG
+MEKmedia GmbH
+FUJITSU BROAD SOLUTION & CONSULTING Inc.
+CyberSoft, Inc.
+ISNET Corp.
+北京佳鸣高科信息技术有限公司
+Amherst Systems Associates, Inc.
+POSTDATA S.A.
+The Palmer Team, Inc.
+Nival Network
+itsperfect software europe AB
+Nylas, Inc.
+Fabricated Software Inc.
+Meltytech, LLC
+Vasco Data Security NV
+Vasco Data Security International GmbH
+Digirama Music & Entertainment
+Knowledge Concepts bv
+Instant Technologies
+SK BROADBAND
+Triton Interactive
+VisuLand - WebLords Ltd.
+Turner Broadcasting Systems, Inc.
+CSR plc
+3DA Systems Inc.
+Flexera Software, Inc. 
+Dualog AS
+CAXA Technology CO.,LTD.
+Meinberg Funkuhren
+PlaceWare Inc.
+上海承大网络科技服务有限公司
+Moody's KMV
+Panopsys
+Microsoft Windows 2000 Beta
+Genevalogic
+Michaelsoft DDS Sdn Bhd
+Schott Systeme GmbH
+SecuWiz
+High Tech Computer Corp.
+FillAnyPdf.com
+EXTRA Computer GmbH
+Altec Software S.A.
+Wyse Technology Inc.
+SeaApple
+Zhejiang Yuanwang Electronics Co.,Ltd
+Actel Corporation
+SIZ.-Informatik-Zentrum der Sparkassenorganisation
+General Electric Company
+PROGIS Software GmbH
+Secomea A/S
+Huawei Technologies Co., Ltd
+ChartNexus Software Pte Ltd
+Neatlab
+Shanghai Eff-Soft Information Technology Co., Ltd.
+Iowa State University of Science and Technology
+SAMSUNG ELECTRONICS Co., Ltd.
+University of Stirling
+Schema GmbH - Electronic Documentation Solutions
+Unicorn Systemz
+aerosoft gmbH
+TEKLYNX NEWCO
+ZEMI INTERACTIVE
+eWay Publishing Pte Ltd
+Intel (R) PCTheft Defense
+Arecon Data LTD Co
+Patryk Woloszyn
+Stop Motion Pro Pty Ltd
+Anand Systems Inc
+ionCube Ltd.
+Windscribe Limited
+WILLARD LOCKLER
+Zhejiang Tinghood Technology Inc.
+Phidgets Inc.
+Whale Communications Inc.
+CHINA MOVIE CHANNEL (CCTV6)
+Unify Corporation
+TOTAL SA
+Ethalone Solutions, Inc.
+PTP Security
+WSOFT.HU - Fehér Attila
+BIOPROFE
+MIXER di Michele Bincoletto & C. s.n.c.
+JASC Incorporated
+Parasoft Corporation
+Cyren Inc.
+Geek Squad
+Plixer International, Inc.
+Yergazy Kutzhanov
+Antamedia Beograd MDOO
+Esperient Corporation
+BORAGK DESARROLLO DE SISTEMAS LIMITADA
+HanseNet Telekommunikation GmbH
+AID Corporation
+MERIT LI-LIN ENT. CO. LTD.
+Alkit Communication AB
+Alexey Nazemnov
+Ügyvitel.NET Kft.
+A-T Solutions, Inc.
+e-academy
+Hangzhou Infogo Tech Co., Ltd.
+Intronis, LLC
+北京联拓天际电子商务有限公司
+Picaboo Corporation
+SHENZHEN HUAQIANG E-COMMERCE CO.,LTD.
+Holmez Softsolutions Pte. Ltd.
+DevXSoftware Inc
+Amyuni Technologies, Inc.
+Syncplify, Inc.
+Vuzix Corporation
+Indigo Byte Systems  LLC
+K SEGURIDAD E INNOVACION TECNOLOGIA DIGITAL, S.L.
+Vladimir Kraus
+Zhuhai RaySharp Technology Co., Ltd.
+Maius Games Co., Ltd
+6PEO
+Winfatt Societa'  Cooperativa
+Hobbyist Software Limited
+Didsoft Company Limited
+MotiveWave Software
+Juris Concept inc
+Alfredo Anibal Santos Silva
+GazillaByte LLC
+Registry Tool, Inc.
+WANdisco International Ltd
+Witte Software
+Extradream Ventures Limited
+GAS INFORMATICA LTDA
+Anton Anatolievich Novitski IP
+J.W. Hance
+JEPPESEN SANDERSON, INC.
+INTERNET
+Orange Home UK Plc
+Building Data, LLC
+Iteris Inc.
+MEGA-TECH Krzysztof Hibner
+Stamps.com
+Heilmann Software
+Shanghai QinHe Internet Tech Software Development Co., Ltd.
+Primeworks - Solucoes de Software, Lda.
+Triquestra International Limited
+exocad GmbH
+COCONE S.A
+Team Lost Limited
+Miniframe Ltd.
+HRIS Consultants Ltd.
+ITooLabs
+RockMelt, Inc.
+Quomation Insurance Services, Inc.
+SHENZHEN ASL ELECTRONICS CO. LTD
+netgear
+TippingPoint Technologies
+Huawei Software Technologies Co., LTD.
+Millisecond Software, LLC
+NAVMAN NZ LIMITED
+IntraCom Systems LLC
+Shenyang GeneralSoft Co., Ltd
+MedCalc Software bvba
+VideoMost ZAO
+Open Source Developer, Alexander Groß
+Sergey Vasilevskiy
+GRAYLINT ENTERPRISES INC
+PentaWare, Inc.
+VOT TEKNOLOJI ILTS. AR-GE HIZ. TIC. LTD. STI.
+UIPS - SVS Michalovce
+Calendly
+CK-Spiele GmbH
+Finson.com S.r.l.
+Active Mind Technology, Inc.
+Starleaf Ltd
+Advanced Micro Devices Inc.
+Elgato Systems GmbH
+GEARMAGE, LLC
+Octopus Deploy Pty. Ltd.
+Visa Europe Limited
+AdaptiveBee
+DP-COMP SISTEMAS EIRELI - EPP
+Aisino Corporation
+LLC 1C-Soft
+Henry Schein Medical Systems, Inc.
+Josef Lindinger
+CCTV International Networks Co., Ltd.
+Warhorse Studios s.r.o.
+Infonautics GmbH
+Landr Audio Inc.
+Maxim Integrated Products Inc
+Revolution Software Limited
+Upwork Inc.
+Nova Metrix Ground Monitoring (Canada) Ltd.
+NeuLion, Inc.
+WESTERN DIGITAL TECHNOLOGIES
+Continuum Managed Solutions Pvt. Ltd.
+Shenzhen Rayvision Technology Co., Ltd
+COMODO YAZILIM SANAYi VE TiCARET ANONIM SIRKETI
+Mobile Productivity, LLC
+Toshiba Client Solutions Co.,Ltd.
+Sebastian Brands und Patrick Dubbert (Dexpot GbR)
+Terra Verde
+HP Inc.
+Focusrite Audio Engineering Ltd.
+Apex Titan Technology Corp.
+OmegaSoft Ltd.
+Parallels IP Holdings GmbH
+Open Source Developer, zhen yangyuan
+IVI Technologies, Inc.
+Nextech Systems, LLC
+合一网络技术（北京）有限公司
+SUNPLUS INNOVATION TECHNOLOGY INC.
+Mailbird, Inc.
+X-Ways Software Technology AG
+Ulrich Strauß
+APPLIAN TECHNOLOGIES INC
+ASUS GIFTBOX
+L1 Technologies, Inc.
+HOUSOFT SOFTWARE EIRELI - ME
+Open Source Developer, Mike Gelfand
+Gladen Europe GmbH
+Datamatics Management Services, Inc.
+Wizards of the Coast, LLC
+PHOTO-TOOLBOX.COM
+OPEN Dot Com Spa
+Fujitsu Component Limited
+Micro Focus (US), Inc.
+Progeo S.r.l.
+RISA TECHNOLOGIES, INC.
+Axoft Argentina S.A.
+InfoCert SpA
+Pulseway (MMSOFT Design Ltd.)
+Qualisystems
+Playnet, Inc.
+Isoprime Limited
+有限会社アースソフト
+National Electronic Attachment, Inc.
+Beijing CloudStory Inc.
+Longrun Software Private Limited
+Actalis Secure Software Development
+PCS Software, Inc.
+Berg Familyware
+VoiceAttack.com
+RapidFire Tools Inc.
+Aloaha Limited
+Shanghai Hudun Information Technology Co., Ltd.
+Novarm Ltd
+Varian Medical Systems
+IQMS
+Lihoutech Ltd.
+IDS&UNITELM srl
+Omer Atay
+Intelligent Imaging Solutions GmbH
+PreSonus Audio Electronics Inc
+Zi Jian Network Technology Co., Ltd.
+Josip Medved
+Takashi Sawanaka
+Adam Driscoll
+Unknown Worlds Entertainment
+Schäuffelhut Berger GmbH
+HARRIS RF COMMUNICATION
+Titania Ltd
+Codra Ingenierie Informatique
+Drafix Software, Inc.
+DVTEL INC
+Roman Chervanov
+Data Deposit Box, INC
+HearthSim, LLC
+Intel(R) Rapid Storage Technology enterprise
+Intel(R) Rapid Storage Technology Enterprise
+DME Forensics Incorporated
+Astrill Systems Corp.
+BelaDaddy Software
+IP Nedzvetskiy Anton Aleksandrovich
+GSA Geselschaft fuer Softwareentwicklung und Analytik GmbH
+SF-Software e.K.
+E Z Logic Data Systems Inc
+Zeplin, Inc.
+KCD Software (Unified Global Technologies Inc.)
+Christian Hackbart
+Network2Share Pty Ltd
+Asseco SEE
+ASUSTeK COMPUTER INC.
+M.R.S. Company Limited
+TenAsys Corporation
+Toshiba America Electronic Components Inc
+Malwarebytes Inc
+IBM Israel Science & Technology Ltd.
+Amazon Web Services, Inc.
+Surfstats Software cc.
+ProCirrus Technologies, Inc
+Halogen Software Inc
+LDAPSoft Corporation
+ICE TECHNOLOGY CORPORATION
+RosIgra
+Tritech Software Systems
+Netpeak LTD
+Kyriacos Michael
+PC-EFTPOS PTY LTD
+Sniper Corporation
+OSS Nokalva, Inc.
+SunTrust Bank
+Boomzap Pte Ltd
+VIRTUALI Sagl
+ip.labs GmbH
+NADDIC GAMES
+PAOLO CICCONE
+INMUSIC BRANDS INC
+Ruiware, LLC
+IP blue, LLC
+Concept Searching Limited
+Sakysoft srl
+Juntu Software Co., Ltd.
+Anton Ulyanov
+Hollander, LLC
+eMedia Corporation
+SecuWiz Inc.
+CompuGroup Medical Italia spa
+PRODUCTIVITY QUALITY SYSTEMS, INC.
+Autosoft Multimedia srl
+Satel sp. z o. o.
+SONDA PROCWORK INFORMATICA LTDA
+Cathexis Technologies Pty Ltd
+HMS Technology Center Ravensburg GmbH
+The Apache Software Foundation
+Open Source Developer, Oleg Savchenko
+Image Line BVBA
+www.easy2000.net
+Keybase, Inc.
+Gamanet a.s.
+MDSOFT AG
+Nordic ID Oy
+Smile, Inc.
+Open Source Developer, Thomas Markham
+Stephen Wika
+LiveQoS Incorporated
+Harpo Sp. z o.o.
+Compusoft AS
+LennarDigital B.V.
+APPOTA CORPORATION .
+Menne Kamminga
+Druva Technologies Pte. Ltd.
+FROGWARES IRELAND LIMITED
+Open Source Developer, Maksim Moisiuk
+Osprey by Variosystems, LLC
+ALPS ELECTRIC CO., LTD.
+WEBYOG, INC.
+Lugert Verlag GmbH & Co. KG
+IBF - Automatisierungs- und Sicherheitstechnik GmbH
+Focus Inc. Ltd
+Pierre-Marie Baty
+Ministerstwo Finansów
+Infiniscene, Inc.
+BMC Software France SAS
+Gamers Club (Gamers Club Ltda)
+AdaptiveBee SASU
+Dusan Rodina
+SECURA Insurance Holdings, Inc.
+Niagara (Tridium, Inc.)
+Melodics Ltd
+ProSistemas Produtos e Sistemas de Informatica Limitada - ME
+Interactive Voting System bv
+Xarios Limited
+Lectra S.A.
+CodeAndWeb GmbH
+BRITISH TELECOMMUNICATIONS PLC
+ASW Systems a.s.
+Bottomline Technologies (de), Inc.
+Revolution Education Ltd
+TA Instruments-Waters, LLC
+Visual Reality BV
+Tradelink Electronic Commerce Ltd.
+International SPC srl
+Computer and Design Services Ltd
+Xopero Software
+Lagerkvist Teknisk Rådgivning i Borås HB
+Alexander Lomachevsky
+Eastern Times Technology Co.,Ltd
+Corvisa LLC
+Modkit LLC
+MOGO, Inc.
+EVGA Corp.
+ITS ImmobilienTreuhand Software
+Wilcom International Pty Limited
+Patronato Acli
+TENADO GmbH
+WebFire LLC
+VAIO Corporation
+NNG Software Developing and Commercial LLC
+CHONGQING XIASOFT TECH CO.,LTD.
+Open Source Developer, Alexandru Rosianu
+Colasoft Co., Ltd
+PDF Complete Inc.
+ZHUHAI PANTUM ELECTRONICS CO.,LTD
+Microsoft Windows Mobile Firmware Installation Publisher
+Mitsuhiro Hibara
+OpenText Corporation
+Open Source Developer, Pierre Bourdon
+HarperCollins Christian Publishing
+Open Source Developer, Benjamin Höglinger-Stelzer
+SQL Sentry, LLC
+MEYSA BILISIM YAZILIM TIC. LTD. STI
+DIMAS DE MELO PIMENTA SISTEMAS DE PONTO E ACESSO LTDA
+blue:solution software GmbH
+http://www.allot.com/
+Lavasoft Software Canada
+DWAB Technology, LLC
+New World Interactive LLC
+Solarschmiede Software GmbH
+Veritas Technologies Corporation
+Texthelp Ltd
+Open Source Developer, Robin Krom
+Scanshare B.V.
+Alternativa Game Ltd
+ACS Technologies Group, Inc.
+Reporting Estandar SL
+Manda
+IPOX
+Lydians Sistemas de Informacao Ltda
+Neumetrix Limited
+Terra Software Service GmbH
+Envelop VR Inc
+joyimpact inc
+CDE SOFTWARE (PAT-CO, INC)
+Cole Williams Software Limited
+Quicken, Inc.
+ninjaRMM
+Minelab Electronics Pty Ltd
+Gammill, Inc
+Công ty TNHH Gi?i trí Long Ð?nh
+MV-Nordic A/S
+Kuassa Teknika, PT
+Xiamen ZKTeco Biometric Identification Technology Co.,ltd
+Faithlife
+I C Q Ltd
+Barkly Protects, Inc.
+Varsta Software Ltd
+OSHI LIMITED
+Diligent Corporation
+PC Synergy Inc.
+SoftWriters, Inc.
+Webatix, Inc.
+Telia Company AB
+Perfect.Delivery LLC
+Freshout Media
+TerraGo Technologies, Inc.
+Reporting Estandar S.L.
+FilmImpact.net
+Saburi Global Services Pvt. Ltd.
+MaaSoftware OOO
+Kaba AG
+ILUO Sp. z o.o.
+Absolute Software Corporation
+Atera Networks Ltd
+Exact Holding B.V.
+"TKS SOFT" Ltd.
+NetSetMan GmbH
+OOO Lightshot
+Sony Electronics Inc.
+Sportsguys, LLC
+INFOLEARN (LAMPROPOULOS S KAI SIA OE || INFOLEARN)
+Datalink Industrial Corporation
+Happytuk Co.,Ltd.
+Shenzhen VStarcam Technology Co., Ltd.
+MegaDev GmbH
+Copia Interactive, LLC.
+Mykola Kovalchuk
+Jean Lalonde
+Granta Design Ltd
+ENGEGRAPH ENGENHARIA DE SISTEMAS LTDA - ME
+Công ty cổ phần truyền thông Việt Nam
+ООО FM
+3Shape a/s
+1С-SoftClub LLC
+Damjan Irgolič
+TIBCO Software Inc.
+GSL Biotech LLC
+Biuro Rozwiązań Informatycznych Bogdan Andrzej Miechowicz
+ООО ”ПРО ВИЗИОН” - Pro Vision Ltd
+VÁCLAV JEDLIČKA
+juspertor UG (haftungsbeschrӓnkt)
+Dire Wolf Digital, LLC
+XOREAX LTD
+天翼宽带
+Ahsay Systems Corporation Limited
+Benco Dental Supply Co.
+Sony Interactive Entertainment Inc.
+ShangHai ZhangZheng Network Technology Co., Ltd.
+Eticadata Software
+Federation Francaise Scrabble
+COBUS ConCept International GmbH
+GIRA Giersiepen GmbH & Co. KG
+Hands On Technology, Inc
+UNITY-BARS LLC
+Incomedia S.r.l.
+Resilio, Inc
+에스디엔터넷(주)
+Altair Engineering, Inc.
+WOLTERS KLUWER GLOBAL BUSINESS SERVICES B.V.
+PROSPERWAVE CO., LTD.
+Allplan GmbH
+Uždaroji akcinė bendrovė "IT4YOU"
+LESTER, INC
+Haopei Wu
+ABB S.p.A.
+Cloud Technology Solutions
+HFN INC
+PlikCenter Michal Galac
+DTT SURVEILLANCE HOLDINGS, INC.
+Nicolas Reuter
+Axeze Pty Ltd
+Webcamsoft LLC
+Global IP Telecommunications Limited
+ERYAZ BILGI TEKNOLOJILERI LIMITED SIRKETI
+Epiance Software Pvt. Ltd
+QUANT IX SOFTWARE, Inc.
+GC SOFT DI CARABINO GREGORIO
+S3ENG TECNOLOGIA APLICADA A ENGENHARIA LTDA
+Postdot Technologies, Inc
+IDIS
+Panopto Inc.
+Allgeier IT Solutions GmbH
+Sabre Travel Network (Hong Kong) Ltd.
+Lindsey Software Systems, INC.
+Infolab Narloch Spolka Jawna
+Sage Payment Solutions, Inc.
+墨迹风云（北京）软件科技发展有限公司
+Acuant Inc
+BCC SOFTWARE, INC
+Adarsh Kini
+Adaptive Protocols, Inc.
+COTENG
+Intugame OOD
+Joachim Strömer
+Norma Hamkor OOO
+Denis Lazarau
+Open Source Developer, Jaakko Keränen
+Global Solutions
+Outdoormaps.com e.U.
+TechnoKad LLC
+CipSoft GmbH
+fournova Software GmbH
+Cisco Video Technologies Israel Ltd.
+TriangleMicroWorks
+ALE sarl
+Minemax Pty Ltd
+appsolute GmbH
+Cave Capital Ltd
+TELUS
+Shenzhen Kaimusiji Technologies Ltd
+FIZIBIL MUHENDISLIK YAZ BIL INS DAN ITH IHR SAN VE TIC LTD STI
+Creative Quality S.L.
+SHENZHEN ZD SOFT CO., LTD.
+Imperative Software Pty Ltd
+DARREN S LENO (Encryptomatic LLC)
+N C P e GmbH Network Communications Products engineering
+LLC "Stakhanovets"
+Wargaming Group Limited
+Garage Data Systems Ltd
+PearlMountain Limited
+VADE SECURE
+Atlassian, Inc.
+Gateway Provider Network, LLC
+Imadio LLC
+Eagle Investment Systems LLC
+Microsys
+Sanqi Interactive Entertainment (Shanghai)Technology Co., Ltd
+Spatial Eye B.V.
+Araks Grupp Ltd.
+2C YAZILIM VE DANISMANLIK PAZARLAMA TIC. LTD.STI
+System for Electronic Payments Bulgaria / SEP Bulgaria A D
+ESI Group
+MENDELEY LIMITED
+Belgosstrakh BRUSP
+Kenubi SRL
+Kaltura INC.
+Mathias Gerlach
+Webzen OnNet Co., Ltd.
+MetLife Europe Limited, pobocka pro Ceskou republiku
+Binary Valley, Inc.
+Human Solutions GmbH
+MOZAIK Education Ltd.
+OCE SOFTWARE SRL
+Stichting ZorgTTP
+Leverate Technological Trading Ltd
+Leverate Technological Trading Ltd.
+První certifikační autorita, a.s.
+JiranSoft Co., Ltd.
+ShenZhen JIHO Software Co.,Ltd.
+Morrow Technologies Corporation
+Softone Technologies S.A.
+ClickView
+Beijing Jiupu Technology Co., Ltd.
+Intis Telecom LLP
+OB SOKRAT
+The IMC Group
+Luoyang Xiabing Software Technologies Ltd
+Open Source Developer, Derick Payne
+DoneEx LLC
+FireEye, Inc.
+RICOH COMPANY,LTD.
+CCH AUSTRALIA LIMITED
+Thomas Wolf
+Evorim GmbH
+PELock, LLC
+NEOPLE INC.
+Samepage Labs Inc.
+MobileFrame
+MakeMusic, Inc.
+KAMU IHALE KURUMU
+Ciaran Fisher
+Miranda Technologies Inc.
+SAFENGSERVICES & TECHNOLOGIES LTEE
+Paul Sanders
+Lansweeper
+Ultwin Ltd
+Simultaneous Solutions Inc
+DirectRestore LLC
+Trojan Professional Services, Inc.
+JumpCloud, Inc.
+Exacq Technologies, Inc
+KEEP IT EASY LLC
+Remote Systems Management, LLC
+ShoreTel Inc.
+Forcepoint LLC
+Vector 35 LLC
+Andy OS, Inc.
+GTC Games Ltd. - ООО ”КТС Геймс”
+ManuSoft
+Cadmatic OY
+MeldaProduction s.r.o.
+Relyon Softech Ltd
+Smartisan Digital Co., Ltd.
+Numeriek Centrum Groningen B.V.
+Open Source Developer, Marc Hörsken
+Roblox Corporation
+Datalog Italia Srl
+JSC IIKO
+Onesoft Tecnologia S.A.
+InTime Solutions Inc.
+Liberconnect Inc.
+SONY INTERACTIVE ENTERTAINMENT NETWORK AMERICA LLC
+Phillip Katete
+Bayerische Motoren Werke AG
+monAlbumPhoto SAS
+Lenovo (Beijing) Ltd.
+Intel Corporation - Intel Learning Series
+Intel(r) Business Client Group
+Intel(R) Intel (R) Technology Access
+Intel(R) Metrics Framework
+Intel Education
+Intel Power Thermal Utility
+Intel(R) Corporation - NAND Flash Memory
+Intel(R) MA-USB driver
+Intel(R) MBIM Toolkit
+Intel(R) Network Platform Group
+Intel(R) CN
+Intel(R) Windows LPSS IO Drivers
+Intel Education Solutions Software
+Intel(R) Intel(R) Processor Identification
+Intel(R) Wireless Connectivity Solutions
+Uniwebsal SRL
+Wanwire B.V.
+FuturePOS, Inc
+Sandoll Communications Inc.
+Dimsport Srl
+CISCO SYSTEMS, INC.
+Hola Networks Ltd
+iStream Financial Services, Inc.
+Altair Astro Limited
+ООО Adept
+Light Speed Vision (Beijing) Co.,Ltd.
+Salvador Díaz Fau
+Teledyne Controls
+Kakao Games Corp.
+Volfiks.ru, OOO
+OneStepRemoved.com, Inc
+Kirk G Hodges
+Dynatrace LLC
+Forever, Inc.
+Winamax SAS
+UBIFUN STUDIO Co., Ltd.
+FPT USA Corp.
+Twitch Interactive, Inc.
+PremiumAV
+Shemesh Health Solutions PTY Ltd
+Consignor Group AS
+VidiStar, LLC
+SS Protect Limited
+PURE CIRCLE SOFTWARE CO., LTD.
+Verificient Technologies, Inc.
+Outlier Security, Inc.
+Shenzhen Sensing Brovision Technology Co.,Ltd
+FSIST SISTEMAS ONLINE EIRELI ME
+Longse Electronics Limited
+CygNet Software, Inc.
+Transics International BVBA
+MireeneDotCom co. ltd.
+Portfoler sp. z o. o.
+Tracktion Software Corporation
+Columbus Soft
+iElement B.V
+Softsolutions - Comercialização E Desenvolvimento De Soluções
+Huldt & Lillevik AS
+midassoft
+My Computer Solutions Nordic KB
+MATHEMA SOFTWARE S.A.S. DI URBANO TOMMASO E C.
+M2Dev T.Jankowski, P.Nowak Spółka Jawna
+O Imaging Corporation
+HebRech GmbH & Co. KG
+Promresurs LLC
+The Gate Technologies, Inc.
+Griffeye Technologies AB
+DBBalance LTD
+MK-soft, s.r.o.
+Clarobet AB
+MachiningCloud, Inc.
+OOO LAIT SOFT
+MEVIS Informatica Medica LTDA
+NAVITEL s.r.o.
+WingArc1st Inc.
+Beijing Tiertime Technology Co., Ltd.
+LAUDUS S.A.
+Anton Yurievich Verbenkin IP
+INFORMATION BUILDERS INC.
+Access Systems (UK) Ltd
+Euro-Server s.r.o.
+Burggraaf it
+Forte Holdings, Inc.
+HIGHFIVE TECHNOLOGIES, INC.
+Zoot Software, LLC
+SupportBuddy INC.
+LIFESCAN PRODUCTS, LLC
+VS Media Inc.
+Andrew Sampson
+Ceramic 3D
+DigitalVolcano Software Ltd
+Literature and Latte Ltd
+Lucas-Nuelle GmbH
+123Unlock
+Ventuz Technology AG
+LogicNow Inc.
+Plex, Inc
+Leica Microsystems CMS GmbH
+Pylonos.com LLC
+Neople Inc.
+Marc-Andre Lemburg
+Litto
+Guang Dong Certificate Authority CO.,LTD.
+Globe Holdings Limited
+Aternity Information Systems Ltd
+Markus Bruhn
+ZYTO Corp
+Pavshukov Yuri Alexandrovich IP
+Ströer Digital Publishing GmbH
+CompuGROUP Medical Česká republika s.r.o.
+SPORTSYS LLP
+Nicholas Wilson
+Lishchuk Viacheslav Volodymyrovych Private Entrepreneur
+SAFE AND POWER CO., LTD.
+DeepBot
+RM PLC
+SZ DJI Technology Co., Ltd
+Easysale Sweden AB
+Baukosteninformationszentrum Deutscher Architektenkammern GmbH
+Onco, Inc.
+PalmAgent INC
+Latitude Geographics Group Ltd.
+UBM-Drecker Unternehmensberatung Microcomputer GmbH
+American Institutes for Research in the Behavioral Sciences
+Simulation Lab Software
+LogRhythm, Inc.
+CommFort software Ltd.
+Reve Systems
+MAC N PC Software
+Exodus Movement Inc
+DR. JOHANNES HEIDENHAIN GmbH
+Zamasoft
+Don Johnston Inc
+Domo, Inc.
+Softros Systems, Inc. OY
+Primo Software
+MEDENT (Community Computer Service Inc.)
+Digit Image SA
+DOCUMENT CAPTURE TECHNOLOGIES INC.
+xactware
+Cesar Coronado
+Kidimedia BVBA
+Schnapper-Software e. K.
+BASE Company
+Veterinary Data Services, Inc.
+horatec GmbH
+COGNIVIEW LLC.
+MIMS Australia Pty Ltd
+TONGBU TECHNOLOGY (HK) LIMITED
+Quick Heal Technologies Private Limited
+Open Source Developer, Brett Hewitson
+Spin Master Inc.
+E-gov.il
+Archil Tskhondiya
+Les Solutions e-Z-max inc.
+Ingram Micro Holding GmbH
+Luth Research LLC
+IBM Australia Ltd
+IBM Canada LTD
+IBM Deutschland GmbH
+IBM India Private Limited
+Thomson Reuters Corporation
+Intel(R) Intel(R) Software Development Products
+Intel(R) Modem Authenticator
+Microsoft 3rd Party Application Component
+Microsoft Corporation Third-Party App Distribution
+MIGG srl
+ADERANT Holdings Inc
+T Software Solutions LLC
+MIKROELEKTRONIKA DOO BEOGRAD (ZEMUN)
+LLC Confident
+Tino Kasubke
+Ryver, Inc.
+KeyTalk BV
+Haraldseth Software
+MORION LLC
+Mekorma Enterprises Colorado, Inc.
+Föreningen för datorhjälp i släktforskningen
+The Knox Company
+ADLINK TECHNOLOGY INC
+ACTOLL
+PALIT MICROSYSTEMS LTD. TAIWAN BRANCH (BELIZE)
+Netradioplayer
+Syrasoft, LLC
+SCATT Electronics, LLC
+Fronema Srl
+Kanguru Solutions
+Capensys Limited
+Ahmad Software Technologies
+Ingo Foerster
+International Trade Solutions, Inc
+ISKN SAS
+1ncrivel Sistemas LTDA- ME
+Calxa Pty Ltd
+Comda Ltd
+2020 Software Solutions, Inc.
+Appholly Technology Co., Ltd.
+TimeTec Computing Sdn. Bhd.
+e-Paper Ltd.
+Baldur Karlsson
+Kionix, Inc.
+Intel(R) RMT
+Freescale Semiconductor Inc
+TAB Networks, Inc.
+Intel(R) Intel(R) Processor Identification Utility 2
+Yojna Inc
+System Data Software s.r.l.
+Entwell Co,.Ltd.
+Xerox Government Systems, LLC
+Aktiv-Soft Closed Joint Stock Company
+PL-SOFT
+SLIGHTLY MAD STUDIOS LIMITED
+Devry Education Group Inc
+Intel(R) INTELND1617
+Intel(R) INTELND1617S2
+Toshiba America Electronic Components, Inc.
+深圳市资江电子有限公司
+Mad Catz Europe Ltd
+CyberTAN Technology,Inc.
+emsys Embedded Systems GmbH
+Intel(R) Deutschland GmbH
+Management Company ATOL
+MLK Technologies Limited
+Soldak Entertainment, Inc.
