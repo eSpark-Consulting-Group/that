@@ -66,7 +66,7 @@ xcopy "%BuildLocation%\PsSysinternalsTools\ps*.exe" "%TargetDir%\" /e /y
 
 REM Copies files necessary for testing to the endpoint VM
 
-net use x: "\\%EndpointName%\%EndpointRoot%$" /user:%EndpointLogin% %EndpointPassword%
+net use x: "\\%EndpointName%\%EndpointRoot%$" /user:%EndpointName%\%EndpointLogin% %EndpointPassword%
 
 net use s: "\\esmbuildstorage\%DataSource%"
 
