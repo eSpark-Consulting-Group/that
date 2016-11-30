@@ -14,7 +14,7 @@ using Composition = APTAT.Common.CompositionHelper;
 
 namespace APTAT.Application.Models
 {
-    [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
+    //[Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StartScanLocalViewModel : WizardViewModel
     {
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
