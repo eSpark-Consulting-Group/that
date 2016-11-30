@@ -204,7 +204,8 @@ namespace APTAT.Application.Models
             {
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
-                RaisePropertyChanged("IsAnyScanInProgress");
+                RaisePropertyChanged(nameof(IsAnyScanInProgress));
+                RaisePropertyChanged(nameof(SearchAvailable));
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -239,7 +240,8 @@ namespace APTAT.Application.Models
             {
                 _isValkyrieScanInProgress = value;
                 RaisePropertyChanged("IsValkyrieScanInProgress");
-                RaisePropertyChanged("IsAnyScanInProgress");
+                RaisePropertyChanged(nameof(IsAnyScanInProgress));
+                RaisePropertyChanged(nameof(SearchAvailable));
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                {
@@ -454,6 +456,12 @@ namespace APTAT.Application.Models
             get { return _cacheComputers == null || _cacheComputers.Count == 0; }
         }
 
+        public bool SearchAvailable
+        {
+            get { return !IsItemsEmpty && !IsAnyScanInProgress; }
+        }
+
+
         public string ValkyrieDetailsLink
         {
             get { return _aptService.GetValkyrieDetailsLink(); }
@@ -515,7 +523,8 @@ namespace APTAT.Application.Models
             {
                 _computers = value;
                 RaisePropertyChanged("Computers");
-                RaisePropertyChanged("IsItemsEmpty");
+                RaisePropertyChanged(nameof(IsItemsEmpty));
+                RaisePropertyChanged(nameof(SearchAvailable));
             }
         }
 

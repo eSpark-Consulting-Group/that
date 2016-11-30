@@ -116,6 +116,7 @@
                     Margin="0,10,0,0"  HorizontalAlignment="Center"
                     Style="{StaticResource LinkButton}" 
                     Command="{Binding StartScanCommand}">
+                                <Border Background="White">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
@@ -128,7 +129,9 @@
                               Margin="0,0,10,-1"/>
                                     <TextBlock Text="Scan Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
                                 </Grid>
+                                </Border>
                             </Button>
+                                
 
                         </StackPanel>
 
