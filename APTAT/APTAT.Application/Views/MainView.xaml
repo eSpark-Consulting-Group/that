@@ -305,7 +305,7 @@
                                         AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         x:Name="SearchTextBox" Grid.Column="1" VerticalAlignment="Top"   TabIndex="0"                 
                                         Margin="0 3 17 0" Width="145" HorizontalAlignment="Right"  
-                                        IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
+                                        IsEnabled="{Binding SearchAvailable}">
             </Controls:SearchUserControl>
 
         </Grid>

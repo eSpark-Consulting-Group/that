@@ -102,7 +102,7 @@ namespace APTAT.Application.Models
                         break;
                     case "LicenseId":
                         if (!ValidateLicenseId())
-                            errorMessage = "License is required or incorrect format.";
+                            errorMessage = "Given license id is invalid.";
                         break;
                 }
 
