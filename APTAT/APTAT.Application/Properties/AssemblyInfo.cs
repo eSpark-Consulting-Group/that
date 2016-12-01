@@ -8,10 +8,10 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Uknown File Hunter")]
-[assembly: AssemblyDescription("Valkyrie Uknown File Hunter")]
+[assembly: AssemblyDescription("Unknown File Hunter")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Comodo")]
-[assembly: AssemblyProduct("Valkyrie Uknown File Hunter")]
+[assembly: AssemblyProduct("Unknown File Hunter")]
 [assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
