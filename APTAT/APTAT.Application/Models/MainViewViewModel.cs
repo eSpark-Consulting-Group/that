@@ -62,8 +62,8 @@ namespace APTAT.Application.Models
         private ThreatInfoItem _selectedItem;
         private object _selectedValkyrieItem;
 
-        private Collection<ThreatInfoItem> _items;
-        private Collection<ThreatInfoItem> _computers;
+        private ObservableCollection<ThreatInfoItem> _items;
+        private ObservableCollection<ThreatInfoItem> _computers;
         private ObservableCollection<ValkyrieFile> _itemsValkyrie;
         private ObservableCollection<ValkyrieComputer> _computersValkyrie;
         private Object _countersLock = new Object();
@@ -506,7 +506,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public Collection<ThreatInfoItem> Items
+        public ObservableCollection<ThreatInfoItem> Items
         {
             get { return _items; }
             set
@@ -516,7 +516,7 @@ namespace APTAT.Application.Models
             }
         }
 
-        public Collection<ThreatInfoItem> Computers
+        public ObservableCollection<ThreatInfoItem> Computers
         {
             get { return _computers; }
             set
@@ -610,8 +610,8 @@ namespace APTAT.Application.Models
         {
             IsQuickScan = (bool)arg;
 
-            Items = new Collection<ThreatInfoItem>();
-            Computers = new Collection<ThreatInfoItem>();
+            Items = new ObservableCollection<ThreatInfoItem>();
+            Computers = new ObservableCollection<ThreatInfoItem>();
             ItemsValkyrie = new ObservableCollection<ValkyrieFile>();
             ComputersValkyrie = new ObservableCollection<ValkyrieComputer>();
 
@@ -705,7 +705,6 @@ namespace APTAT.Application.Models
                 foreach (var threatInfoItem in items)
                 {
                     threatInfoItem.UpdateFileVerdict(result.Cloud);
-                    RaisePropertyChanged(nameof(Items));
                 }
 
 
@@ -1058,8 +1057,8 @@ namespace APTAT.Application.Models
             Set(() => TotalItemsCount, items.Count());
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
-            _cacheComputers = new Collection<ThreatInfoItem>(items);
-            Computers = new Collection<ThreatInfoItem>(_cacheComputers);
+            _cacheComputers = new ObservableCollection<ThreatInfoItem>(items);
+            Computers = new ObservableCollection<ThreatInfoItem>(_cacheComputers);
 
 
             foreach (var item in _cacheComputers)
@@ -1263,7 +1262,10 @@ namespace APTAT.Application.Models
                 LookupInProgressCount = lookupInProgressCount;
             }
 
-            ScannedItemsCount = scanned;
+            if (scanned > ScannedItemsCount)
+            {
+                ScannedItemsCount = scanned;
+            }
 
             if (completed != OnlineItemsCount)
                 _scanIteratorTimer.Start();
@@ -1375,7 +1377,7 @@ namespace APTAT.Application.Models
 
             if (_cacheComputers != null && _cacheComputers.Any())
             {
-                Computers = new Collection<ThreatInfoItem>(
+                Computers = new ObservableCollection<ThreatInfoItem>(
                        _cacheComputers.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
 
                 SelectedItem = null;
@@ -1383,7 +1385,7 @@ namespace APTAT.Application.Models
 
             if (_cache != null && _cache.Any())
             {
-                Items = new Collection<ThreatInfoItem>(
+                Items = new ObservableCollection<ThreatInfoItem>(
                        _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
             }
 
