@@ -26,6 +26,7 @@ namespace APTAT.Core.Descent.Apt
         public string HostName => Computer?.Name;
 
         public string IPAddress => Computer?.IPAddress;
+        public string OrganizationUnit => Computer?.OrganizationUnit;
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }

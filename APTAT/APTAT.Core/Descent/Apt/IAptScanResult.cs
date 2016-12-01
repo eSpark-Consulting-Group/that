@@ -12,6 +12,7 @@ namespace APTAT.Core.Descent.Apt
         string OsName { get; }
         string HostName { get; }
         string IPAddress { get; }
+        string OrganizationUnit { get; }
         string FileName { get; set; }
         int TotalFilesCount { get; set; }
         int UnknownFilesCount { get; set; }
