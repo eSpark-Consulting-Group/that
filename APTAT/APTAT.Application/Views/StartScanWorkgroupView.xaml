@@ -155,7 +155,7 @@
                 <RadioButton AutomationProperties.AutomationId="SearchAvailableWorkgroupsRadioButton"
                              HorizontalAlignment="Left" Grid.Row="0" Margin="-245 -2 0 0" Grid.Column="2" Content="Search Available Workgroups (may take some time)" 
                              IsChecked="{Binding EnumerateWorkgroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <RadioButton AutomationProperties.AutomationId="UseKnownWorkgroupRadioButton"
+                <RadioButton AutomationProperties.AutomationId="UseKnownWorkgroupRadioButton" x:Name="known"
                              HorizontalAlignment="Right" Grid.Row="1" Margin="40 17 0 6" Content="Use Known Workgroup Name" 
                              IsChecked="{Binding EnumerateWorkgroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={converters:BoolInvertConverter}}" 
                              Checked="RadioButton_Checked"/>

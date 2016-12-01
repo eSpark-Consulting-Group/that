@@ -42,13 +42,8 @@ namespace APTAT.Application
                 Completed = OnExpandCompleted
             };
 
-            if (item.IsLoadOnDemand || !item.IsWorkgroup)
-                ViewModel.ExpandCommand.Execute(context);
-            else
-            {
-                item.IsLoadOnDemand = true;
-                clickedItem.IsLoadingOnDemand = false;
-            }
+            ViewModel.ExpandCommand.Execute(context);
+
 
         }
 
@@ -69,7 +64,7 @@ namespace APTAT.Application
             {
                 e.PreparedItem.IsLoadOnDemandEnabled = false;
             }
-            else if (directoryItem.Type == DirectoryItemType.Root)
+            else if (directoryItem.Type == DirectoryItemType.Root && known.IsChecked.GetValueOrDefault())
             {
                 e.PreparedItem.IsExpanded = true;
             }
