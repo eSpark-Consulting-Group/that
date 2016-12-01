@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using APTAT.Core;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
@@ -196,6 +197,7 @@ namespace APTAT.Application.Models.Valkyrie
             Path = result.Path;
             FlsVerdict = result.Cloud;
             Size = result.Size;
+            SizeSorting = SizeToSorting(result.Size);
             Attributes = result.Attributes;
             Created = result.Created;
             Modified = result.Modified;
