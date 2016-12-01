@@ -1280,7 +1280,6 @@ namespace APTAT.Application.Models
 
         private void UpdateStatus()
         {
-            Int32 scanned = 0;
             Int32 unknownFiles = 0;
             Int32 malwareFiles = 0;
             Int32 lookupInProgressCount = 0;
@@ -1297,7 +1296,6 @@ namespace APTAT.Application.Models
             UnknownFilesCount = unknownFiles;
             MalwareFilesCount = malwareFiles;
             LookupInProgressCount = lookupInProgressCount;
-            ScannedItemsCount = scanned;
 
             RaisePropertyChanged(nameof(Header));
         }
