@@ -288,5 +288,10 @@ namespace APTAT.Application.Models.Valkyrie
         {
             return TargetUid == other.TargetUid && FilePath == other.FilePath;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
