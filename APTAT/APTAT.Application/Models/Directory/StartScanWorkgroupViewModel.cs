@@ -150,9 +150,7 @@ namespace APTAT.Application.Models
             }
 
             Password = null;
-
-            //var _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
-            //RaisePropertyChanged("Workgroup");
+            _workgroupCredentialsChanged = true;
 
             _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
             _targetsDiscoveryService.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
