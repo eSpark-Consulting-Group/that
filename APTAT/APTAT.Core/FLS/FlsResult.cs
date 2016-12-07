@@ -3,7 +3,7 @@ using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
 {
-    public class FlsResult:IFlsResult
+    public class FlsResult : IFlsResult
     {
         //public FlsVerdict FlsVerdict { get; private set; }
 
@@ -35,7 +35,7 @@ namespace APTAT.Core
         //    }
         //}
 
-     //   public byte CamasVerdict { get; set; }
+        //   public byte CamasVerdict { get; set; }
         public string Sha1 { get; set; }
     }
 }

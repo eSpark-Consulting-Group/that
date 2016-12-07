@@ -10,7 +10,7 @@ namespace APTAT.Core
 {
     public class FileResult : IEquatable<FileResult>
     { 
-        public FileResult(Module badFile)
+        public FileResult(IModule badFile)
         {
             Computers = new List<ComputerInformation>();
             Id = badFile.Id;

@@ -33,16 +33,16 @@ namespace APTAT.Core.Descent.Apt
         int BadFilesCount { get; }
         TargetVerdict TargetVerdict { get; }
         string TargetVerdictString { get; }
-        Module[] Files { get; }
-        Module[] BadFiles { get; }
+        IModule[] Files { get; }
+        IModule[] BadFiles { get; }
         AptReport AptReport { get; }
-        Module[] GetFilesByStatus(CloudVerdict cloudVerdict);
-        Module[] GetUnknownFiles();
-        Module[] GetFailedToAnalyzeFiles();
-        Module[] GetNoVerdictFiles();
-        Module[] GetBadFiles();
-        Module[] GetUknownFiles();
-        Module[] GetLookupInProgressFiles();
+        IModule[] GetFilesByStatus(CloudVerdict cloudVerdict);
+        IModule[] GetUnknownFiles();
+        IModule[] GetFailedToAnalyzeFiles();
+        IModule[] GetNoVerdictFiles();
+        IModule[] GetBadFiles();
+        IModule[] GetUknownFiles();
+        IModule[] GetLookupInProgressFiles();
         void RecalculateStatistics();
         
 

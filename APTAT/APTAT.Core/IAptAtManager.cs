@@ -22,7 +22,7 @@ namespace APTAT.Core
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         IAptReportBuilder GetAptReportBuilder();
-        IAptScanResult GetScanResultByTargetUid(Guid targetUid);
+      //  IAptScanResult GetScanResultByTargetUid(Guid targetUid);
         void StopScan();
         void UpdateFlsPorts(int udpPort, int tcpPort);
 

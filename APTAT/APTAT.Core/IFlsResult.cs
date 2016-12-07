@@ -17,7 +17,7 @@ namespace APTAT.Core
   public  interface IFlsResult
     {
      
-        string Sha1 { get; set; }
+        string Sha1 { get;  }
         CloudVerdict Cloud { get; set; }
     }
 

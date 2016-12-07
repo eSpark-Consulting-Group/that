@@ -147,7 +147,7 @@ namespace APTAT.Core.Descent.Apt
             }
         }
 
-        public Module[] Files
+        public IModule[] Files
         {
             get
             {
@@ -163,12 +163,12 @@ namespace APTAT.Core.Descent.Apt
                         return notEmptyFiles.ToArray();
                     }
                 }
-                return new Module[0];
+                return new IModule[0];
             }
         }
         
 
-        public Module[] BadFiles
+        public IModule[] BadFiles
         {
             get
             {
@@ -177,44 +177,44 @@ namespace APTAT.Core.Descent.Apt
         }
 
 
-        public Module[] GetFilesByStatus(CloudVerdict cloudVerdict)
+        public IModule[] GetFilesByStatus(CloudVerdict cloudVerdict)
         {
             return (from file in Files where file.Cloud == cloudVerdict select file).ToArray();
         }
 
-        public Module[] GetUnknownFiles()
+        public IModule[] GetUnknownFiles()
         {
             return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
         }
 
 
-        public Module[] GetLookupInProgressFiles()
+        public IModule[] GetLookupInProgressFiles()
         {
             return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
         }
-        public Module[] GetFailedToAnalyzeFiles()
+        public IModule[] GetFailedToAnalyzeFiles()
         {            
             return (from file in Files where  file.Cloud == CloudVerdict.FailedToAnalyze select file).ToArray();
         }
 
-        public Module[] GetNoVerdictFiles()
+        public IModule[] GetNoVerdictFiles()
         {            
             return (from file in Files where file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
         }
 
-        public Module[] GetBadFiles()
+        public IModule[] GetBadFiles()
         {
             var files = Files;
             if (files == null)
-                return new Module[0];
+                return new IModule[0];
             return (from file in files where file.IsBad select file).ToArray();
         }
 
-        public Module[] GetUknownFiles()
+        public IModule[] GetUknownFiles()
         {
             var files = Files;
             if (files == null)
-                return new Module[0];
+                return new IModule[0];
             return (from file in files where file.IsUnknownOrFailed select file).ToArray();
         }
 
@@ -236,9 +236,9 @@ namespace APTAT.Core.Descent.Apt
             get { return _aptReport; }
         }
 
-        internal Module[] GetPendingAnalysisFiles()
+        internal IModule[] GetPendingAnalysisFiles()
         {
-            return new Module[] { };
+            return new IModule[] { };
         }
 
         public override void UpdateStatus(IDescentProgressItem progress)

@@ -325,10 +325,10 @@ namespace APTAT.Core.Reports
 
             return new ItemRatingInfo[]
             {
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
-                new TargetRatingInfo(){TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = "Not Scanned"},
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = "Not Scanned"},
             };
         }
 
@@ -691,7 +691,7 @@ namespace APTAT.Core.Reports
             return "Safe";
         }
 
-        private static void AddBadFile(Dictionary<string, DetailedBadFile> uniqueFiles, DetailedBadFile badFile, Module module)
+        private static void AddBadFile(Dictionary<string, DetailedBadFile> uniqueFiles, DetailedBadFile badFile, IModule module)
         {
             if (uniqueFiles.ContainsKey(badFile.Sha1))
             {
@@ -855,7 +855,7 @@ namespace APTAT.Core.Reports
         {
         }
 
-        public DetailedBadFile(Module module, ScannedTarget target)
+        public DetailedBadFile(IModule module, ScannedTarget target)
         {
             Verdict = ValkyrieVerdict.NotAnalyzed;
             if (module != null)
@@ -979,7 +979,7 @@ namespace APTAT.Core.Reports
             {
             }
 
-            public BadFileInstanceInfo(Module module)
+            public BadFileInstanceInfo(IModule module)
             {
                 if (module != null)
                 {

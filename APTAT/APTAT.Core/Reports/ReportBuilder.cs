@@ -205,7 +205,7 @@ namespace APTAT.Core.Reports
                             IAptScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
                             if (item != null)
                             {
-                                APTAT.Core.Descent.Apt.Module[] items = new APTAT.Core.Descent.Apt.Module[]{};
+                                APTAT.Core.Descent.Apt.IModule[] items = new APTAT.Core.Descent.Apt.IModule[]{};
                                 if (e.ReportPath == "UnknownFiles")
                                 {
                                     items = item.GetUnknownFiles();

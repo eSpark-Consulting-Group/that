@@ -127,7 +127,7 @@ namespace APTAT.Core.Descent.Apt
     }
 
     [XmlType("Module")]
-    public class Module: IFlsResult
+    public class Module: IModule
     {
         [XmlAttribute("Id")]
         public string Id { get; set; }
