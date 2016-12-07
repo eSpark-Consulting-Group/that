@@ -60,13 +60,10 @@ namespace APTAT.Core.UnitTests
             dts2.Add(dt);
             Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, dts2, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner);
             var target = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
-            
-            IModule[] modules = ModuleCollectionFactory.GetMockModules(CloudVerdict.Unknown);
+                        
             var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
-            Mock.Arrange(() => scanResult.Files).Returns(() => modules);
-            target.GetAptScanner(dts2, "", "", description, scanOptions);
-
-
+            Mock.Arrange(() => scanResult.Files).Returns(() => ModuleCollectionFactory.GetMockModules(CloudVerdict.Unknown));
+            target.GetAptScanner(dts2, "", "", description, scanOptions);            
             bool flsAnalyzeProgressChangedEventCalled = false;
 
             EventHandler<FlsRequestEventArgs> handler = (sender, args) =>
@@ -75,7 +72,6 @@ namespace APTAT.Core.UnitTests
             };
 
             target.FlsAnalyzeProgressChanged += handler;
-
 
             Guid guid = new Guid("C2630D90-9CCE-4C94-A452-4EAE4DE78863");
 
@@ -130,6 +126,7 @@ namespace APTAT.Core.UnitTests
             Mock.Assert(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(s => s.Except(failedToAnalyzeHashes).Any() == false), Arg.AnyBool), "Should contain failed hashes only");
             Mock.Assert(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(s => s.Count() == modules.Where(m => m.Cloud == CloudVerdict.FailedToAnalyze).Count()), Arg.AnyBool), "Should be equal to count of failed");
             Mock.Raise(() => aptScanner.ScanCompleted += null, new ScanCompletedEventArgs() { OperationUid = guid }, null);
+
         }
 
     
@@ -141,8 +138,8 @@ namespace APTAT.Core.UnitTests
 
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
-            Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).Occurs(1, "FLS Ports Updated");
-            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()), Arg.AnyBool)).Returns(new Task(() => { })).OccursNever("Enqueue method must NOT be called");
+            Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce("FLS Ports Updated");
+            Mock.Arrange(() => fls.Enqueue(Arg.IsAny<IEnumerable<string>>(), Arg.AnyBool)).Returns(new Task(() => { })).OccursNever("Enqueue method must NOT be called");
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
@@ -167,9 +164,60 @@ namespace APTAT.Core.UnitTests
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(guid, scanResult) });            
             Mock.Raise(() => aptScanner.ScanCompleted += null, new ScanCompletedEventArgs() { OperationUid = guid }, null);
 
-            Mock.AssertAll(fls);
+            Mock.AssertAll(fls);            
+        }
+
+        
+
+        [Fact]
+        public void UpdateFlsPortsTest()
+        {
+            var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
+            var fls = Mock.Create<IFlsManager>(Behavior.Strict);
+            Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(32), Arg.Is(15)));
             
-        }        
+            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
+
+            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick);
+            var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            var description = new DevicesSourceDescription { Description = "Test Device" };
+            var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
+            var dts2 = new DeploymentTargetsCollection(1);
+            dts2.Add(dt);
+
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, dts2, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner);
+            var target = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
+            var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
+            Mock.Arrange(() => scanResult.Files).Returns(() => null);                                  
+            target.UpdateFlsPorts(32, 15);           
+        }
+
+
+        [Fact]
+        public void SetFlsPortsToDefaultsOnGetScannerTest()
+        {
+            var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
+            var fls = Mock.Create<IFlsManager>(Behavior.Strict);
+            Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(53), Arg.Is(80)));
+
+            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
+
+            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick);
+            var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            var description = new DevicesSourceDescription { Description = "Test Device" };
+            var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
+            var dts2 = new DeploymentTargetsCollection(1);
+            dts2.Add(dt);
+
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, dts2, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner);
+            var target = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
+            var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
+            Mock.Arrange(() => scanResult.Files).Returns(() => null);
+            target.GetAptScanner(dts2, "", "", description, scanOptions);
+
+        }
 
     }
 
