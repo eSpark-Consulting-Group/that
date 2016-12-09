@@ -41,6 +41,8 @@ namespace APTAT.Core.UnitTests
             Assert.Null(target.LastAptScanOperationContext);
         }
 
+
+
         /// <summary>
         /// If first frist computer scan returns Failed To Analyze for all files, and second computer scan returns Safe 
         /// 1. UpdateFlsPort should be called once with tcp 80 udp 53 values for ports
@@ -53,31 +55,40 @@ namespace APTAT.Core.UnitTests
         {
             Guid operationGuid = new Guid("C2630D90-9CCE-4C94-A452-4EAE4DE78863");
             var failedToAnalyzeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze);
+
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             Mock.Arrange(() => descent.GetDescentResultsByOperationUid(operationGuid)).Returns(() => new AptScanOperationContext(new List<IComputer>(), 1, new DevicesSourceDescription()));
+            
+            //FLS Manager Arange
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(53), Arg.Is(80))).OccursOnce();
+            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count() == failedToAnalyzeModules.Count()), Arg.AnyBool)).Returns(new Task(() => { })).OccursOnce();
+            
+            //Valkyrie Client Arange 
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
-            var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
-            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count()==failedToAnalyzeModules.Count()), Arg.AnyBool)).Returns(new Task(() => { })).OccursOnce();
+
+            var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);            
             var scanOptions = new ScanOptions("80", "53", ScanKind.Quick);
-            var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            var deploymentTargets = GetDeploymentTargets();
+
             var description = new DevicesSourceDescription { Description = "Test Device" };
 
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
-            var dts2 = new DeploymentTargetsCollection(1);
-            dts2.Add(dt);
-            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, dts2, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner).OccursOnce();
+            
+
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner).OccursOnce();
             var aptAtManagerUnderTest = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
 
+            //Arange ScanResult  (FailedToAnalyze)
             var scanResultFailedToAnalyze = Mock.Create<IAptScanResult>(Behavior.Strict);
             Mock.Arrange(() => scanResultFailedToAnalyze.Files).Returns(() => failedToAnalyzeModules);
             Mock.Arrange(() => scanResultFailedToAnalyze.RecalculateStatistics()).OccursNever();
 
+            //Arange ScanResult  (Safe)
             var scanResultSafe = Mock.Create<IAptScanResult>(Behavior.Strict);
             Mock.Arrange(() => scanResultSafe.Files).Returns(() => ModuleCollectionFactory.GetMockModules(CloudVerdict.Safe)).Occurs(2);
 
-            aptAtManagerUnderTest.GetAptScanner(dts2, "", "", description, scanOptions);
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, "", "", description, scanOptions);
             bool flsAnalyzeProgressChangedEventCalled = false;
 
             EventHandler<FlsRequestEventArgs> handler = (sender, args) =>
@@ -105,9 +116,20 @@ namespace APTAT.Core.UnitTests
             {
                 Mock.AssertAll(item);
             }
-
+            Assert.Empty(aptAtManagerUnderTest.ValkyrieAnalysisResult);
+            Assert.Equal(Guid.Empty, aptAtManagerUnderTest.ValkyrieOperationUid);            
             aptAtManagerUnderTest.FlsAnalyzeProgressChanged -= handler;
     
+        }
+
+        private DeploymentTargetsCollection GetDeploymentTargets()
+        {
+            var deploymentTarget1 = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.1", IsLocalComputer = false, Name = "testComp1", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            var deploymentTarget2 = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.2", IsLocalComputer = false, Name = "testComp2", IsOnline = true, SystemKind = SystemKind.Windows7 };
+            var deploymentTargets = new DeploymentTargetsCollection();
+            deploymentTargets.Add(deploymentTarget1);
+            deploymentTargets.Add(deploymentTarget2);
+            return deploymentTargets;
         }
 
         [Fact]
@@ -161,9 +183,7 @@ namespace APTAT.Core.UnitTests
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(operationGuid, scanResult) });                       
             
         }
-
-
-
+        
         [Fact]
         public void ShouldNotRaiseFlsAnalyzeProgressChangedIfAllUnkonwn()
         {         
@@ -173,19 +193,16 @@ namespace APTAT.Core.UnitTests
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
-            ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick);
-            var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick);            
             var description = new DevicesSourceDescription { Description = "Test Device" };
-
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
-            var dts2 = new DeploymentTargetsCollection(1);
-            dts2.Add(dt);
-            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, dts2, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner);
+            var deploymentTargets = GetDeploymentTargets();
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner);
             var aptAtManagerUnderTest = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
                         
             var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
             Mock.Arrange(() => scanResult.Files).Returns(() => ModuleCollectionFactory.GetMockModules(CloudVerdict.Unknown));
-            aptAtManagerUnderTest.GetAptScanner(dts2, "", "", description, scanOptions);            
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, "", "", description, scanOptions);            
             bool flsAnalyzeProgressChangedEventCalled = false;
 
             EventHandler<FlsRequestEventArgs> handler = (sender, args) =>

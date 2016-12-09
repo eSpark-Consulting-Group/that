@@ -76,6 +76,14 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => module3.Sha1).Returns("659b6279cacd43f0311bc2e7bfda91bf3ddcaf3b");
             Mock.Arrange(() => module3.Cloud).Returns(verdict);
 
+            var module4 = Mock.Create<IModule>(Behavior.Strict);
+            Mock.Arrange(() => module4.Sha1).Returns("113799e6123a2377bb330ed20bda108f60e95f93");
+            Mock.Arrange(() => module4.Cloud).Returns(verdict);
+
+            var module5 = Mock.Create<IModule>(Behavior.Strict);
+            Mock.Arrange(() => module5.Sha1).Returns("0e3d32035931f027173227ee57da531fd5354cf9");
+            Mock.Arrange(() => module5.Cloud).Returns(verdict);
+
             var modules = new[] { module1, module2, module3 };
             return modules;
         }

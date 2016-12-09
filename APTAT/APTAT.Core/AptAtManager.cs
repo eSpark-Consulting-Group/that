@@ -37,7 +37,7 @@ namespace APTAT.Core
 
         public ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; } 
 
-        public void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors)
+        private void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors)
         {
             
             bool isUpdated = false;
@@ -81,13 +81,13 @@ namespace APTAT.Core
         }
 
 
-        void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
+        private void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
             _isValkyrieStarted = true;
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
         }
 
-        void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
+        private void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
         {
             var valkyrieAnalysisResult = GetFullResult(e.Result, _lastAptResults.ScanResults).Values;
             foreach (var fileResult in valkyrieAnalysisResult)
@@ -99,9 +99,8 @@ namespace APTAT.Core
                 , e.UserState);
             ValkyrieAnalyzeCompleted?.Invoke(this, arg);
         }
-
-        void OnValkyrieClientProgressChanged(object sender,
-            ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
+        
+        private void OnValkyrieClientProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
         {
             var handler = ValkyrieAnalyzeProgressChanged;
             if (handler != null)
@@ -370,7 +369,7 @@ namespace APTAT.Core
 
         private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
         {
-            AptScanner scanner = sender as AptScanner;
+            IAptScanner scanner = sender as IAptScanner;
             if (scanner != null)
             {
                 scanner.ScanStarted -= OnScanStarted;
