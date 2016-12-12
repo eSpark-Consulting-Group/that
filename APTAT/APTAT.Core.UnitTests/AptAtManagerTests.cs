@@ -41,7 +41,36 @@ namespace APTAT.Core.UnitTests
             Assert.True(target.ValkyrieAnalysisResult.IsEmpty);
             Assert.Null(target.LastAptScanOperationContext);
         }
+
+
+        [Fact]
+        public void GetAptReportBuilderTest()
+        {
+            var failedToAnalyzeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze);
+            var scanOptions = new ScanOptions("111", "444", ScanKind.Quick);
+            var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
+            var fls = Mock.Create<IFlsManager>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
+            var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);            
+            Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(Int32.Parse(scanOptions.UdpPort)), Arg.Is(Int32.Parse(scanOptions.TcpPort)))).OccursOnce();
+            var deploymentTargets = GetDeploymentTargets();
+            var description = new DevicesSourceDescription();
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner).OccursOnce();
+            var aptAtManagerUnderTest = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, "", "", description, scanOptions);
+            var reportBuilder = aptAtManagerUnderTest.GetAptReportBuilder();
+            
+            Assert.NotNull(reportBuilder);
+            Mock.AssertAll(fls);
+            Mock.AssertAll(valkyrie);
+            Mock.AssertAll(descent);
+            Mock.AssertAll(aptScanner);
+            Mock.AssertAll(aptScannerFactory);
+        }
+
         
+
 
         [Fact]
         public void DisposeTest()
@@ -71,7 +100,7 @@ namespace APTAT.Core.UnitTests
             Mock.AssertAll(descent);
             Mock.AssertAll(aptScanner);
             Mock.AssertAll(aptScannerFactory);
-        }
+        }                
 
         [Fact]
         public void GetValkyrieDetailsLinkTest()
@@ -100,6 +129,51 @@ namespace APTAT.Core.UnitTests
             Mock.AssertAll(descent);
             Mock.AssertAll(aptScanner);
             Mock.AssertAll(aptScannerFactory);
+        }
+
+
+        [Fact]
+        public void GetScanResultByTargetUid()
+        {
+            Guid operationGuid = new Guid("C2630D90-9CCE-4C94-A452-4EAE4DE78863");
+            var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
+
+            var fls = Mock.Create<IFlsManager>(Behavior.Strict);
+            Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce();
+            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
+            
+            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick);
+            var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            var description = new DevicesSourceDescription { Description = "Test Device" };
+
+            var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
+            var deploymentTargets = new DeploymentTargetsCollection(1);
+            deploymentTargets.Add(dt);
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner);
+            var aptAtManagerUnderTest = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
+            var safeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.Safe);
+                        
+            var operationContext = Mock.Create<IAptScanOperationContext>();
+            var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
+            Mock.Arrange(() => scanResult.Files).Returns(() => safeModules.ToArray());
+            
+            Mock.Arrange(() => operationContext.ScanResults).Returns(() => new[] { scanResult });
+
+            Mock.Arrange(() => descent.GetDescentResultsByOperationUid(operationGuid)).Returns(() => operationContext).OccursOnce();
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, "", "", description, scanOptions);
+
+            Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(operationGuid, scanResult) });
+            Mock.Raise(() => aptScanner.ScanCompleted += null, aptScanner, new ScanCompletedEventArgs() { OperationUid = operationGuid });
+
+            var result = aptAtManagerUnderTest.GetScanResultByTargetUid(operationGuid);
+            Assert.NotNull(result);
+            Mock.AssertAll(fls);
+            Mock.AssertAll(valkyrie);
+            Mock.AssertAll(descent);
+            Mock.AssertAll(aptScanner);
+            Mock.AssertAll(aptScannerFactory);
+
         }
 
 
@@ -342,12 +416,12 @@ namespace APTAT.Core.UnitTests
 
             aptAtManagerUnderTest.GetAptScanner(deploymentTargets, "", "", description, scanOptions);
             bool flsAnalyzeProgressChangedEventCalled = false;
-
+            Assert.Equal(Guid.Empty, aptAtManagerUnderTest.FlsLookupOperationUid);
             EventHandler<FlsRequestEventArgs> handler = (sender, args) =>
             {
                 Assert.Null(args.Exception);
                 Assert.True(args.Results.Count() == scanResultSafe.Files.Count());
-                Assert.All(args.Results, (r) => Assert.Equal(CloudVerdict.Safe, r.Cloud));
+                Assert.All(args.Results, (r) => Assert.Equal(CloudVerdict.Safe, r.Cloud));            
                 flsAnalyzeProgressChangedEventCalled = true;
             };
 
@@ -429,7 +503,7 @@ namespace APTAT.Core.UnitTests
             };
 
             aptAtManagerUnderTest.FlsAnalyzeProgressChanged += handler;
-                  
+            Assert.Equal(Guid.Empty, aptAtManagerUnderTest.FlsLookupOperationUid);
             
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(operationGuid, scanResult2) });
             
