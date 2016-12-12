@@ -14,6 +14,7 @@ using APTAT.Valkyrie;
 using Telerik.JustMock;
 using Xunit;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
+using APTAT.Core.Descent;
 
 namespace APTAT.Core.UnitTests
 {
@@ -102,6 +103,55 @@ namespace APTAT.Core.UnitTests
         }
 
 
+        [Fact]
+        public void GetDistinctFileResultsTest()
+        {
+            Guid operationGuid = new Guid("C2630D90-9CCE-4C94-A452-4EAE4DE78863");
+            var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
+            
+            var fls = Mock.Create<IFlsManager>(Behavior.Strict);
+            Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce();
+            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
+            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()), Arg.AnyBool)).Returns(new Task(() => { })).MustBeCalled();
+            ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick);
+            var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            var description = new DevicesSourceDescription { Description = "Test Device" };
+
+            var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
+            var deploymentTargets = new DeploymentTargetsCollection(1);
+            deploymentTargets.Add(dt);
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, Arg.AnyString, Arg.AnyString, description, scanOptions)).Returns(() => aptScanner);
+            var aptAtManagerUnderTest = new AptAtManager(descent, valkyrie, fls, aptScannerFactory);
+            var safeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.Safe);
+            var nonDistinctModules = new List<IModule>();
+            nonDistinctModules.AddRange(safeModules);
+            nonDistinctModules.AddRange(safeModules.Take(3));
+
+            var operationContext = Mock.Create<IAptScanOperationContext>();                        
+            var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
+            Mock.Arrange(() => scanResult.Files).Returns(() => nonDistinctModules.ToArray());
+            Mock.Arrange(() => scanResult.Computer).Returns(() => dt);
+            Mock.Arrange(() => scanResult.BadFiles).Returns(() => nonDistinctModules.ToArray());
+            Mock.Arrange(() => operationContext.ScanResults).Returns(() => new[] { scanResult });            
+            
+            Mock.Arrange(() => descent.GetDescentResultsByOperationUid(operationGuid)).Returns(() => operationContext).OccursOnce();
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, "", "", description, scanOptions);
+
+            Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(operationGuid, scanResult) });            
+            Mock.Raise(() => aptScanner.ScanCompleted += null, aptScanner, new ScanCompletedEventArgs() { OperationUid = operationGuid });
+
+            var hs = new HashSet<string>();
+            foreach (var file in scanResult.Files)
+            {
+                hs.Add(file.Sha1);
+            }
+
+            Assert.Equal(8, scanResult.Files.Count()); //10 not distinct files 2 same collection                       
+            Assert.Equal(hs.Count(), aptAtManagerUnderTest.GetDistinctFileCount()); // distinct             
+            
+        }
+
         /// <summary>
         /// AptAtManager Stop should stop related subsistems FLS, Valkyrie and DescentSubStystem by calling corresponding  methods
         /// </summary>
@@ -151,7 +201,7 @@ namespace APTAT.Core.UnitTests
 
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             Mock.Arrange(() => descent.GetDescentResultsByOperationUid(operationGuid)).Returns(() => new AptScanOperationContext(new List<IComputer>(), 1, new DevicesSourceDescription()));
-
+            
             //FLS Manager Arange
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(53), Arg.Is(80))).OccursOnce();
@@ -334,6 +384,8 @@ namespace APTAT.Core.UnitTests
             deploymentTargets.Add(deploymentTarget2);
             return deploymentTargets;
         }
+
+
 
         [Fact]
         public void OnFirstComputerHasResultAndSecondHasFailed_ShouldBeCalledRecalculateStatisticsAndUpdatedVerdict()
