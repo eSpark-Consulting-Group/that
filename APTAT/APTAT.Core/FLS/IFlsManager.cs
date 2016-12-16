@@ -8,10 +8,10 @@ namespace APTAT.Core
     {
         event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
 
-        Task Enqueue(IEnumerable<string> hashes, bool startIfCancelled = false);
+        void Enqueue(IEnumerable<string> hashes, bool startIfCancelled = false);
 
         void Cancel();
-        
+
         void UpdateFlsPorts(int udpPort, int tcpPort);
     }
 }

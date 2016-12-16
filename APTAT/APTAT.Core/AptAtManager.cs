@@ -190,7 +190,7 @@ namespace APTAT.Core
             return files;
         }
 
-        public static List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IAptScanResult[] results)
+        private static List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IAptScanResult[] results)
         {
             IAptScanResult[] scanResults = results.OrderByDescending(r => r.Computer.IsLocalComputer)
                 .ToArray();

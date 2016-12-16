@@ -12,19 +12,16 @@ namespace APTAT.Core
 
     public sealed class FlsManager : IDisposable, IFlsManager
     {
-        
         private CancellationToken _cancellationToken;
         private readonly FlsApiProvider _apiProvider = null;
-       // private Action _cancelWork = null;
-      //  private ConcurrentBag<FlsResult> _allResults = new ConcurrentBag<FlsResult>();
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
-        private  CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
         private bool _isWorking = false;
         private readonly int _uploadInterval;
         private readonly int _uploadAtOnce;
-        
-        public static void ClearCollection<T>( BlockingCollection<T> blockingCollection)
+
+        private static void ClearCollection<T>(BlockingCollection<T> blockingCollection)
         {
             if (blockingCollection == null)
             {
@@ -38,7 +35,7 @@ namespace APTAT.Core
             }
         }
 
-        private void DoWorkItem(string[] hashes )
+        private void DoWorkItem(string[] hashes)
         {
             try
             {
@@ -47,10 +44,10 @@ namespace APTAT.Core
                 if (_cancellationToken.IsCancellationRequested)
                     return;
                 var results = response.GetAnalyzed();
-                if(results.Any())
+                if (results.Any())
                     OnFlsAnalyzed(results, null);
-                
-           //     foreach (var r in results){_allResults.Add(r);}
+
+
 
                 var failed = response.GetFailedToAnalyzeHashes();
                 if (failed.Any())
@@ -67,9 +64,9 @@ namespace APTAT.Core
                 Enqueue(hashes, false);
                 //throw;
             }
-     //       Task.Delay(TimeSpan.FromMinutes(1));
+            //       Task.Delay(TimeSpan.FromMinutes(1));
 
-         //   Thread.Sleep(30000); //TODO: Remove after test
+            //   Thread.Sleep(30000); //TODO: Remove after test
         }
 
         public FlsManager()
@@ -80,65 +77,60 @@ namespace APTAT.Core
             _uploadAtOnce = int.Parse(Settings.Default.FlsUploadHashesAtOnce);
         }
 
-        
-
         public void UpdateFlsPorts(int udpPort, int tcpPort)
         {
-           _apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
+            _apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
         }
 
-        public async Task Enqueue(IEnumerable<string> hashes, bool startIfCanceled = true)
+        public void Enqueue(IEnumerable<string> hashes, bool startIfCanceled = true)
         {
-            //var analyzed = _allResults.Select(r => r.Sha1).ToList();
-            //var result = hashes.Where(p => !analyzed.Any(p2 => p2 == p));
-
             if (!_isWorking)
             {
                 if (!startIfCanceled && _cancellationToken.IsCancellationRequested)
-                {
                     return;
-                }
-        //        _allResults = new ConcurrentBag<FlsResult>();
+
                 _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
-                Task.Run(Start, _cancellationToken);
+               
+                Task.Run(() => { Start(); }, _cancellationToken);
             }
-            await Task.Factory.StartNew(() =>
-            {
-                foreach (var h in hashes)
-                {
-                    _inputQueue.Add(h, _cancellationToken);
-                }
-                //          _inputQueue.CompleteAdding();
-            }, _cancellationToken);
 
+            foreach (var h in hashes)
+            {
+                _inputQueue.Add(h, _cancellationToken);
+            }
         }
 
         public void Cancel()
         {
+            
             if (_cancellationTokenSource != null && _cancellationTokenSource.Token.CanBeCanceled)
             {
                 _cancellationTokenSource.Cancel();
             }
-            _isWorking = false;
+            else
+            {
+                return;
+            }
 
-            ClearCollection(_inputQueue);
-            //FlsResult someItem;
-            //while (!_allResults.IsEmpty)
-            //{
-            //    _allResults.TryTake(out someItem);
-            //}
+            _isWorking = false;
+            if (_inputQueue != null)
+            {
+                ClearCollection(_inputQueue);
+            }
+            
         }
 
 
-        private async Task Start()
-        {
+        private void Start()
+        {            
             try
             {
+
                 if (_isWorking) throw new InvalidOperationException("FLSManager is working");
                 _isWorking = true;
-                
+
                 var buffer = new List<String>();
 
                 while (true)
@@ -155,10 +147,13 @@ namespace APTAT.Core
                     }
                     if (buffer.Any())
                     {
-                        await AnalyzeAsync(buffer.ToArray());
+                        AnalyzeAsync(buffer.ToArray());
                         buffer.Clear();
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(_uploadInterval), _cancellationToken);
+
+                    _cancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(_uploadInterval));
+                    //Thread.Sleep(TimeSpan.FromSeconds(_uploadInterval));
+                    //Task.Delay(TimeSpan.FromSeconds(_uploadInterval), _cancellationToken).Wait();
                 }
             }
             catch (Exception)
@@ -172,29 +167,29 @@ namespace APTAT.Core
             }
 
         }
-        
-        private async Task AnalyzeAsync(string[] hashes)
+
+        private Task AnalyzeAsync(string[] hashes)
         {
-         
+
             try
             {
                 // offload Parallel.For from the UI thread 
                 // as a long-running operation
-                Task task = Task.Factory.StartNew(async () =>
-                {
+                Task task = Task.Factory.StartNew(() =>
+               {
 
-                    string[][] hashGroups = Split(hashes, _uploadAtOnce).ToArray();
-                    foreach (var h in hashGroups)
-                    {
-                        if (_cancellationToken.IsCancellationRequested)
-                            return;
-                        DoWorkItem(h);
-                    }
-                    await Task.Delay(3000);
-                    _cancellationToken.ThrowIfCancellationRequested();
-                }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-                
-                await task.ContinueWith(_ =>
+                   string[][] hashGroups = Split(hashes, _uploadAtOnce).ToArray();
+                   foreach (var h in hashGroups)
+                   {
+                       if (_cancellationToken.IsCancellationRequested)
+                           return;
+                       DoWorkItem(h);
+                   }                   
+                   _cancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(3));
+                   _cancellationToken.ThrowIfCancellationRequested();
+               }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                task.ContinueWith(_ =>
                 {
                     try
                     {
@@ -208,11 +203,12 @@ namespace APTAT.Core
                     }
 
                 }, TaskScheduler.Default);
-                await task;
+                return task;
             }
             catch (Exception ex)
             {
                 OnFlsAnalyzed(new IFlsResult[0], ex);
+                return Task.FromException(ex);
             }
         }
 
