@@ -67,10 +67,12 @@ namespace APTAT.Core
         public Guid FlsLookupOperationUid { get; set; }
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager,
-            IAptScannerFactory aptScannerFactory)
+            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper)
         {
             _descentSubSystem = descentSubSystem;
             _aptScannerFactory = aptScannerFactory;
+            _distinctHelper = distinctHelper;
+
             ValkyrieAnalysisResult = new ConcurrentDictionary<string, FileResult>(StringComparer.OrdinalIgnoreCase);
             _valkyrieClient = valkyrieClient;
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
@@ -190,61 +192,10 @@ namespace APTAT.Core
             return files;
         }
 
-        private static List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IAptScanResult[] results)
+        private List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IAptScanResult[] results)
         {
-            IAptScanResult[] scanResults = results.OrderByDescending(r => r.Computer.IsLocalComputer)
-                .ToArray();
-
-            Dictionary<string, ValkyrieFileInfo> files = new Dictionary<string, ValkyrieFileInfo>(StringComparer.OrdinalIgnoreCase);
-            foreach (var scanResult in scanResults)
-            {
-                var modules = scanResult.GetUnknownFiles();
-
-                foreach (var badFile in modules)
-                {
-                    if (!files.ContainsKey(badFile.Sha1))
-                    {
-                        files.Add(badFile.Sha1, new ValkyrieFileInfo
-                        {
-                            Ip = scanResult.Computer.IPAddress,
-                            Path = badFile.Path,
-                            Sha1 = badFile.Sha1,
-                            Size = badFile.Size,
-                            FlsCloud = MapCloud(badFile.Cloud),
-                            IsLocalComputer = scanResult.Computer.IsLocalComputer
-                        });
-                    }
-                }
-            }
-            return files.Values.ToList();
-        }
-
-        private static Valkyrie.CloudVerdict MapCloud(CloudVerdict cloud)
-        {
-            switch (cloud)
-            {
-                case CloudVerdict.Safe:
-                    return Valkyrie.CloudVerdict.Safe;
-                case CloudVerdict.Unknown:
-                    return Valkyrie.CloudVerdict.Unknown;
-
-                case CloudVerdict.Malware:
-                    return Valkyrie.CloudVerdict.Malware;
-
-                case CloudVerdict.FirstSeen:
-                    return Valkyrie.CloudVerdict.FirstSeen;
-
-                case CloudVerdict.FailedToAnalyze:
-                    return Valkyrie.CloudVerdict.FailedToAnalyze;
-
-                case CloudVerdict.NoVerdict:
-                    return Valkyrie.CloudVerdict.NoVerdict;
-
-                default:
-                    throw new NotSupportedException("Can not convert to Valkyrie.CloudVerdict from Apt.CloudVerdict " +
-                                                    cloud);
-            }
-        }
+            return _distinctHelper.GetDistinctUknownFileInfo(results);
+        }      
 
         public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
@@ -344,6 +295,7 @@ namespace APTAT.Core
         }
 
         private readonly  Dictionary<string, CloudVerdict> _flsHashResults = new Dictionary<string, CloudVerdict>();
+        private readonly IDistinctFileHelper _distinctHelper;
 
         private void FlsManagerOnAnalyzed(object sender, FlsRequestEventArgs e)
         {
@@ -412,7 +364,7 @@ namespace APTAT.Core
                 var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
                 var results = _lastAptResults.ScanResults;
                 var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
-                var distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
+                List<ValkyrieFileInfo> distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
                 _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length,
                     proxyCredential);
             }

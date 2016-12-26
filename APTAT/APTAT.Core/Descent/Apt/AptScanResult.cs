@@ -210,14 +210,7 @@ namespace APTAT.Core.Descent.Apt
             return (from file in files where file.IsBad select file).ToArray();
         }
 
-        public IModule[] GetUknownFiles()
-        {
-            var files = Files;
-            if (files == null)
-                return new IModule[0];
-            return (from file in files where file.IsUnknownOrFailed select file).ToArray();
-        }
-
+        
         public void SetAptReportInstance(AptReport report)
         {
             _aptReport = report;

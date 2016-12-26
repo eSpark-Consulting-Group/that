@@ -78,7 +78,7 @@ namespace APTAT.Core.UnitTests
             var module = Mock.Create<IModule>(Behavior.Strict);
             Mock.Arrange(() => module.Sha1).Returns(sha1);
             Mock.Arrange(() => module.Cloud).Returns(verdict);
-            Mock.Arrange(() => module.Path).Returns("").OccursAtLeast(0);
+            Mock.Arrange(() => module.Path).Returns("C:\\Temp\\"+Guid.NewGuid().ToString()).OccursAtLeast(0);
             Mock.Arrange(() => module.Size).Returns(256).OccursAtLeast(0);
             Mock.Arrange(() => module.Signer).Returns(String.Empty).OccursAtLeast(0);
             Mock.Arrange(() => module.Version).Returns("1.0.0.1").OccursAtLeast(0);

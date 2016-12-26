@@ -40,8 +40,7 @@ namespace APTAT.Core.Descent.Apt
         IModule[] GetUnknownFiles();
         IModule[] GetFailedToAnalyzeFiles();
         IModule[] GetNoVerdictFiles();
-        IModule[] GetBadFiles();
-        IModule[] GetUknownFiles();
+        IModule[] GetBadFiles();      
         IModule[] GetLookupInProgressFiles();
         void RecalculateStatistics();
         

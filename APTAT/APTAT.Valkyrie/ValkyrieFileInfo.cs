@@ -2,7 +2,8 @@
 using System.Diagnostics;
 using System.Net;
 using APTAT.Common;
-
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace APTAT.Valkyrie
 {
@@ -11,8 +12,12 @@ namespace APTAT.Valkyrie
         public ValkyrieFileInfo()
         {
             PreviousValkyrieVerdict = ValkyrieVerdict.Pending;
+            Paths = new ReadOnlyCollection<string>(_pathList);
         }
         public string Path { get; set; }
+        private readonly List<string> _pathList = new List<string>();
+        public ReadOnlyCollection<string> Paths { get; }
+
         public string Sha1 { get; set; }
         public string Ip { get; set; }     
         public CloudVerdict FlsCloud { get; set; }
@@ -24,6 +29,13 @@ namespace APTAT.Valkyrie
                 return Path;
             return $"\\\\{Ip}\\{Path}";
         }
+
+        public void AddFullPath(string ip, string path)
+        {
+            if (Path.StartsWith("\\\\"))
+                _pathList.Add(path);
+            _pathList.Add( $"\\\\{ip}\\{path}");
+        }                
 
         public long Size { get; set; }
         public bool IsLocalComputer { get; set; }

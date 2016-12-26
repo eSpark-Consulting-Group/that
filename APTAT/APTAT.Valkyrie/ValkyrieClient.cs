@@ -464,108 +464,108 @@ namespace APTAT.Valkyrie
         }
               
 
-        private ValkyrieAnalysisResult UploadFileOldStyle(ValkyrieFileInfo fileInfo, Guid endpointId)
-        {
-            ValkyrieAnalysisResult result = null;
+        //private ValkyrieAnalysisResult UploadFileOldStyle(ValkyrieFileInfo fileInfo, Guid endpointId)
+        //{
+        //    ValkyrieAnalysisResult result = null;
 
-            try
-            {
-                var sha1 = fileInfo.Sha1;
-                var originalFilePath = fileInfo.GetFullPath();
-                if (_cancellationTokenSource.IsCancellationRequested)
-                {
-                    return CancelOperation(originalFilePath, sha1);
-                }
+        //    try
+        //    {
+        //        var sha1 = fileInfo.Sha1;
+        //        var originalFilePath = fileInfo.GetFullPath();
+        //        if (_cancellationTokenSource.IsCancellationRequested)
+        //        {
+        //            return CancelOperation(originalFilePath, sha1);
+        //        }
 
-                if (fileInfo.Size > MaxFileLenght)
-                {
-                    result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.",
-                        SkippReasonEnum.Skipped);
-                    Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : File {originalFilePath} " +
-                                    $"greater than 25 Mb");
-                    Trace.Flush();
-                    return result;
-                }
+        //        if (fileInfo.Size > MaxFileLenght)
+        //        {
+        //            result = ValkyrieAnalysisResult.CreateSkipInfo(sha1, "Maximum file size per upload to 25 MB.",
+        //                SkippReasonEnum.Skipped);
+        //            Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : File {originalFilePath} " +
+        //                            $"greater than 25 Mb");
+        //            Trace.Flush();
+        //            return result;
+        //        }
 
-                var infoRequeast = new InfoRequest(sha1, endpointId, null, _aptScanId, _apiKey);
-                BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
-                if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
-                    throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
+        //        var infoRequeast = new InfoRequest(sha1, endpointId, null,  _aptScanId, _apiKey, fileInfo.Paths.ToArray());
+        //        BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
+        //        if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
+        //            throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
 
-                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1 {sha1} FilePath " +
-                                $"{originalFilePath} Presence = {basicInfo.Presence}");
-                Trace.Flush();
+        //        Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1 {sha1} FilePath " +
+        //                        $"{originalFilePath} Presence = {basicInfo.Presence}");
+        //        Trace.Flush();
 
-                if (basicInfo.Presence)
-                {
-                    result = ValkyrieAnalysisResult.Create(basicInfo);
-                }
-                else
-                {
-                    Trace.WriteLine(
-                        $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1 {sha1} FilePath {originalFilePath} Presence " +
-                        $"= {basicInfo.Presence}, [File Uploaded]");
+        //        if (basicInfo.Presence)
+        //        {
+        //            result = ValkyrieAnalysisResult.Create(basicInfo);
+        //        }
+        //        else
+        //        {
+        //            Trace.WriteLine(
+        //                $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1 {sha1} FilePath {originalFilePath} Presence " +
+        //                $"= {basicInfo.Presence}, [File Uploaded]");
                 
-                    var request = new SubmitToAutomaticRequest
-                    {
-                        ApiKey = _apiKey,
-                        SubmitToken = basicInfo.SubmitToken,
-                        FilePath = WebUtility.HtmlDecode(originalFilePath),
-                        EndpointId = endpointId,
-                        AptScanId = _aptScanId
-                    };
+        //            var request = new SubmitToAutomaticRequest
+        //            {
+        //                ApiKey = _apiKey,
+        //                SubmitToken = basicInfo.SubmitToken,
+        //                FilePath = WebUtility.HtmlDecode(originalFilePath),
+        //                EndpointId = endpointId,
+        //                AptScanId = _aptScanId
+        //            };
 
-                    //var data = ReadFile(fileInfo, login, password);
-                    var fStream = File.OpenRead(fileInfo.GetNetworkPath());
-                    var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
+        //            //var data = ReadFile(fileInfo, login, password);
+        //            var fStream = File.OpenRead(fileInfo.GetNetworkPath());
+        //            var response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
                     
-                    CheckAnalysisResultResponse automaticAnalysisResponse = new CheckAnalysisResultResponse()
-                    {
-                        ReturnCode = ErrorCodesEnum.None
-                    };
+        //            CheckAnalysisResultResponse automaticAnalysisResponse = new CheckAnalysisResultResponse()
+        //            {
+        //                ReturnCode = ErrorCodesEnum.None
+        //            };
 
-                    var timeOutInMinutes = 5;
-                    var timeOut = (int)TimeSpan.FromMinutes(timeOutInMinutes).TotalMilliseconds;
-                    bool success = false;
-                    bool analyzeNotFinished = true;
-                    double elapsed = 0;
-                    DateTime utcStarted = DateTime.UtcNow;
-                    while (analyzeNotFinished && (elapsed < timeOut))
-                    {
-                        if (_cancellationTokenSource.IsCancellationRequested)
-                        {
-                            return CancelOperation(originalFilePath, sha1);
-                        }
+        //            var timeOutInMinutes = 5;
+        //            var timeOut = (int)TimeSpan.FromMinutes(timeOutInMinutes).TotalMilliseconds;
+        //            bool success = false;
+        //            bool analyzeNotFinished = true;
+        //            double elapsed = 0;
+        //            DateTime utcStarted = DateTime.UtcNow;
+        //            while (analyzeNotFinished && (elapsed < timeOut))
+        //            {
+        //                if (_cancellationTokenSource.IsCancellationRequested)
+        //                {
+        //                    return CancelOperation(originalFilePath, sha1);
+        //                }
 
-                        Thread.Sleep(1000);
-                        elapsed = (int)(DateTime.UtcNow - utcStarted).TotalMilliseconds;
-                        automaticAnalysisResponse =
-                            ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: response.AnalysisId, 
-                            apiKey: _apiKey));
-                        analyzeNotFinished = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFinished;
+        //                Thread.Sleep(1000);
+        //                elapsed = (int)(DateTime.UtcNow - utcStarted).TotalMilliseconds;
+        //                automaticAnalysisResponse =
+        //                    ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: response.AnalysisId, 
+        //                    apiKey: _apiKey));
+        //                analyzeNotFinished = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.AnalysisNotFinished;
 
-                    }
-                    success = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.Success;
-                    if (analyzeNotFinished)
-                    {
-                        throw new TimeoutException("Automatic analysis has not been completed after " +
-                                                   timeOutInMinutes + " minutes");
-                    }
-                    if (!success)
-                    {
-                        throw new InvalidOperationException(automaticAnalysisResponse.ReturnCode.GetEnumDescription());
-                    }
-                    result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);
+        //            }
+        //            success = automaticAnalysisResponse.ReturnCode == ErrorCodesEnum.Success;
+        //            if (analyzeNotFinished)
+        //            {
+        //                throw new TimeoutException("Automatic analysis has not been completed after " +
+        //                                           timeOutInMinutes + " minutes");
+        //            }
+        //            if (!success)
+        //            {
+        //                throw new InvalidOperationException(automaticAnalysisResponse.ReturnCode.GetEnumDescription());
+        //            }
+        //            result = ValkyrieAnalysisResult.Create(automaticAnalysisResponse);
 
-                }
-            }
-            finally 
-            { 
+        //        }
+        //    }
+        //    finally 
+        //    { 
 
-            }
+        //    }
             
-            return result;
-        }
+        //    return result;
+        //}
 
         private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, Guid endpointId)
         {
@@ -580,9 +580,9 @@ namespace APTAT.Valkyrie
                     return CancelOperation(originalFilePath, sha1);
                 }
 
-                var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId, aptScanId: _aptScanId, 
-                    filePath: WebUtility.HtmlDecode(fileInfo.Path));
-                BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
+                
+                var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId, aptScanId: _aptScanId, allPaths: fileInfo.Paths.ToArray());
+              BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
                 Trace.WriteLine(
@@ -616,14 +616,17 @@ namespace APTAT.Valkyrie
                         }
                     }
 
+                    var orgFilePath = WebUtility.HtmlDecode(originalFilePath); //???
+
                     var request = new SubmitToAutomaticRequest
                     {
                         ApiKey = _apiKey,
-                        SubmitToken = basicInfo.SubmitToken,
-                        FilePath = WebUtility.HtmlDecode(originalFilePath),
+                        SubmitToken = basicInfo.SubmitToken,                        
                         EndpointId = endpointId,
-                        AptScanId = _aptScanId
+                        AptScanId = _aptScanId,
+                        FilePath = fileInfo.Paths.ToArray()
                     };
+
                     SubmitToAutomaticResponse response;
                     using (fileInfo.IsLocalComputer || _login == null ? null: 
                         new ImpersonationHelper(_login, "", _password, ImpersonationHelper.Logon32LogonType.NewCredentials))
@@ -631,9 +634,10 @@ namespace APTAT.Valkyrie
                         //var data = ReadFile(fileInfo, login, password);
                         var remoteFilePath = fileInfo.GetNetworkPath();
                         Trace.WriteLine( $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: reading remote file {remoteFilePath}");
+                        var fileName = Path.GetFileName(orgFilePath);
                         using (var fStream = File.OpenRead(remoteFilePath))
                         {
-                            response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token);
+                            response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token, fileName);
                         }
                     }
                     if (response.ReturnCode != ErrorCodesEnum.Success)

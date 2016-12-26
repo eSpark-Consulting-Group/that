@@ -131,16 +131,15 @@ namespace Valkyrie.WebApiProvider
         //    return response;
         //}
 
-        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, FileStream fileStream, CancellationToken token)
+        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, FileStream fileStream, CancellationToken token, String originalFilePath)
         {
             if (token == null)
             {
                 token = CancellationToken.None;
             }
-
-            string originalFileName = Path.GetFileName(request.FilePath);
+            
             var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(fileStream, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var uploadResult = MultipartPostHelper.Post(fileStream, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFilePath, token);
             var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
             if (response.ReturnCode != ErrorCodesEnum.Success)
             {

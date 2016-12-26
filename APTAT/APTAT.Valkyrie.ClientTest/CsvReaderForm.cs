@@ -29,7 +29,7 @@ namespace Aptat.Valkyrie.ClientTest
                 var guid = Guid.NewGuid();
                 foreach (var hash in hashCodes)
                 {
-                    var arg = new InfoRequest(hash, guid, String.Empty, String.Empty, String.Empty);
+                    var arg = new InfoRequest(hash, guid, string.Empty, String.Empty, new string[]{ });
                     BasicInfoResponse result = ValkyrieWebApiProvider.GetBasicInfo(arg);                         
 
                     results.Add(result);

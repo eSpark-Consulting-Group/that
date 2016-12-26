@@ -90,6 +90,7 @@
     <Compile Include="ExtendedResourceManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DistinctFileHelper.cs" />
     <Compile Include="FileResult.cs" />
     <Compile Include="FilesStatistics.cs" />
     <Compile Include="FLS\Applications.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="IAptAtManager.cs" />
     <Compile Include="IAptScanner.cs" />
     <Compile Include="IAptScanOperationContext.cs" />
+    <Compile Include="IDistinctFileHelper.cs" />
     <Compile Include="IFilesStatistics.cs" />
     <Compile Include="IFlsResult.cs" />
     <Compile Include="OsInfoHelper.cs" />

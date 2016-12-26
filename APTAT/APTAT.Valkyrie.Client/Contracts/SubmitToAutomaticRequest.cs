@@ -7,16 +7,17 @@ namespace Valkyrie.WebApiProvider.Contracts
     {
         [JsonProperty("submit_token")]
         public string SubmitToken { get; set; }
-              
+
 
         [JsonProperty("file_path")]
-        public string FilePath { get; set; }
+        public string[] FilePath { get; set; }
 
 
         [JsonProperty("endpoint_id")]
         public Guid EndpointId { get; set; }
 
         [JsonProperty("apt_scan_id")]
-        public string AptScanId { get; set; }
+        public string AptScanId { get; set; }        
+        
     }
 }
