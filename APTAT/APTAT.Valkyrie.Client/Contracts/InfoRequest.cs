@@ -5,14 +5,13 @@ namespace Valkyrie.WebApiProvider.Contracts
 {
     public class InfoRequest : RequestBase
     {
-        public InfoRequest(string sha1, Guid endpointId,  string aptScanId, string apiKey, string[] allPaths)            
+        public InfoRequest(string sha1, Guid endpointId,  string aptScanId, string apiKey, string path)            
         {
             SHA1 = sha1;
             EndpointId = endpointId;
-            FilePath = allPaths;
+            FilePath = path;
             AptScanId = aptScanId;
-            ApiKey = apiKey;
-                    
+            ApiKey = apiKey;                    
         }
 
         [JsonProperty("sha1")]
@@ -25,7 +24,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         /// Path of File on Origin, Optional
         /// </summary>
         [JsonProperty("file_path")]
-        public string[] FilePath { get; }
+        public string FilePath { get; }
 
         [JsonProperty("apt_scan_id")]
         public string AptScanId { get; }
