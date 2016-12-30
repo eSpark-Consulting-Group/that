@@ -37,5 +37,10 @@ namespace APTAT.Application.Models
             get { return _items; }
             set { _items = value; RaisePropertyChanged("Items"); }
         }
+
+        public override string ToString()
+        {
+            return FullName;
+        }
     }
 }

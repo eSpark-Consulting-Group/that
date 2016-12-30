@@ -86,10 +86,12 @@
     <Compile Include="BusinessObjects\ResultsScreen.cs" />
     <Compile Include="BusinessObjects\Computers\ScanType.cs" />
     <Compile Include="BusinessObjects\UIAction.cs" />
+    <Compile Include="CodedUITestCommon.cs" />
     <Compile Include="CodedUITestHelp.cs" />
     <Compile Include="CodedUITestEula.cs" />
     <Compile Include="CodedUITestMain.cs" />
     <Compile Include="CodedUITestReports.cs" />
+    <Compile Include="CodedUITestThisComputer.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\SysHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
@@ -154,6 +156,12 @@
     </Compile>
     <Compile Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.Designer.cs">
       <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapThisComputer.cs">
+      <DependentUpon>UIMapThisComputer.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapThisComputer.Designer.cs">
+      <DependentUpon>UIMapThisComputer.uitest</DependentUpon>
     </Compile>
     <Compile Include="UIMaps\StartScanWizard\UIMapWorkgroup.cs">
       <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
@@ -280,6 +288,7 @@
     <None Include="UIMaps\UIMapResultsWindow.uitest" />
     <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
     <None Include="UIMaps\UIMapStopScanWindow.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapThisComputer.uitest" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PsSysinternalsTools\PsExec.exe">

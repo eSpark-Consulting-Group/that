@@ -59,7 +59,11 @@ namespace CodedUITestAT
         {
             string networkPath;
             var culture = CultureInfo.GetCultureInfo("en-Us");
-            
+
+            if (String.IsNullOrEmpty(fileLocation)) throw new Exception("The provided file location is either null or empty!");
+            else if (!Path.IsPathRooted(fileLocation)) throw new Exception("The provided file location is not rooted!");
+            else _location = fileLocation.ToLower();
+
             // Formates the path to the threat
             if (machine == null) networkPath = fileLocation;
             else
@@ -67,11 +71,7 @@ namespace CodedUITestAT
               string root = Path.GetPathRoot(fileLocation);
               string noRootLocation = fileLocation.Replace(root, String.Empty);
               networkPath = String.Format(@"\\{0}\{1}\{2}", machine.Name, DataHelper.GetEndpointRoot(true), noRootLocation);
-            }
-            
-            if (String.IsNullOrEmpty(fileLocation)) throw new Exception("The provided file location is either null or empty!");
-            else if (!Path.IsPathRooted(fileLocation)) throw new Exception("The provided file location is not rooted!");
-            else _location = fileLocation.ToLower();
+            }            
             
             _name = Path.GetFileName(fileLocation);
 

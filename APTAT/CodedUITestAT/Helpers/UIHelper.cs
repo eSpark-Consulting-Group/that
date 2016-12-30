@@ -412,29 +412,28 @@ namespace CodedUITestAT
             ClickRow(screen, row.RowName, click);
         }
 
-        /// <summary> Looks for a given row at a provided results screen. The indicated screen should be opened. </summary>
-        /// <param name="row">Set a row.</param>
+        /// <summary> Looks for a given threat at a provided results screen. The indicated screen should be opened. </summary>
+        /// <param name="row">Set a threat.</param>
         /// <param name="resultsScreen">Set a results screen.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        internal static void FindRow(IRow row, ResultsScreen resultsScreen, TestContext testContext)
+        internal static void FindThreat(Threat threat, ResultsScreen resultsScreen, TestContext testContext)
         {
             CodedUITestMain useMain = new CodedUITestMain();
 
             GroupByFiles();
-            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = Path.GetFileName(row.RowName);
+            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
             useMain.UIMapMain.InputTextToSearchBox();
 
             try
             {
-                WaitForResultsRow(row, resultsScreen, testContext);
+                WaitForResultsRow(threat, resultsScreen, testContext);
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
-            }
-            catch(UITestControlNotFoundException)
+            } catch(UITestControlNotFoundException)
             {
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
-                Assert.Fail(String.Format("Row '{0}' not found at screen '{1}'!", row.RowName, resultsScreen));
+                Assert.Fail(String.Format("Row '{0}' not found at screen '{1}'!", threat.RowName, resultsScreen));
             }
         }
 

@@ -16,8 +16,8 @@ using CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
-using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
+using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 
 namespace CodedUITestAT
@@ -1635,8 +1635,8 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Scan '{0}' completed.", scanType));
             
             UIMapScanCompletedWindow.ClickNoButton();
-            UIHelper.FindRow(malware, ResultsScreen.ScanResults, TestContext);
-            UIHelper.FindRow(unknownFile, ResultsScreen.ScanResults, TestContext);
+            UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
+            UIHelper.FindThreat(unknownFile, ResultsScreen.ScanResults, TestContext);
         }
 
         [TestMethod]
