@@ -10,7 +10,6 @@ using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Descent.Exceptions;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using APTAT.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
@@ -197,16 +196,21 @@ namespace APTAT.Core
             return _distinctHelper.GetDistinctUknownFileInfo(results);
         }      
 
-        public IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password,
-            IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+        public IAptScanner GetAptScanner(IDevicesSourceDescription devicesSourceDescription, ScanOptions options, out bool rescanAttempt)
         {
-            if (_scanner != null) throw new AnotherScanIsInProgressException();
+            if (_scanner != null)
+            {
+                rescanAttempt = true;
+                return _scanner;
+            }
+
+            rescanAttempt = false;
             _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
-            _scanner = _aptScannerFactory
-                .CreateAptScanner(_descentSubSystem, targets, login, password, devicesSourceDescription, options);
+            _scanner = _aptScannerFactory.CreateAptScanner(_descentSubSystem, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
             _scanner.ComputerScanCompleted += OnScannerOnScanCompleted;
             _scanner.ScanCompleted += OnScanCompleted;
+
             return _scanner;
         }
         
@@ -339,10 +343,10 @@ namespace APTAT.Core
             return aptReportBuilder;
         }
 
-        public IAptScanResult GetScanResultByTargetUid(Guid targetUid)
+        /*public IAptScanResult GetScanResultByTargetUid(Guid targetUid)
         {
             return _lastAptResults?.GetAptResultByTargetUid(targetUid);
-        }
+        }*/
 
         public void StopScan()
         {

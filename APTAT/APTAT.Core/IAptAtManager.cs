@@ -6,7 +6,7 @@ using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+
 using APTAT.Valkyrie;
 
 namespace APTAT.Core
@@ -18,11 +18,10 @@ namespace APTAT.Core
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
 
-        IAptScanner GetAptScanner(DeploymentTargetsCollection targets, string login, string password, 
-            IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+        IAptScanner GetAptScanner(IDevicesSourceDescription devicesSourceDescription, ScanOptions options, out bool rescanAttempt);
 
         IAptReportBuilder GetAptReportBuilder();
-      //  IAptScanResult GetScanResultByTargetUid(Guid targetUid);
+
         void StopScan();
         void UpdateFlsPorts(int udpPort, int tcpPort);
 

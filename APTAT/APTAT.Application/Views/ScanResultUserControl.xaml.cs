@@ -33,7 +33,7 @@ namespace APTAT.Application
                 AutomationProperties.SetAutomationId(menu, "ScanResultsContextMenu");
 
                 var item = new RadMenuItem();
-                item.CreateHeaderDataTemplate("Details");
+                item.CreateDetailsHeader();
                 item.Command = ViewModel.SelectCommand;
                 item.Click += item_Click;
                 AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
@@ -52,7 +52,7 @@ namespace APTAT.Application
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
 
-                treeList.SelectedItem = cell.DataContext is ThreatInfoItem && !((ThreatInfoItem)cell.DataContext).IsRootItem ? cell.DataContext : null;
+                treeList.SelectedItem = cell.DataContext;
             }
         }
 

@@ -48,7 +48,10 @@ namespace APTAT.Application.Models
             }
         }
 
-
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.Workgroup; }
+        }
 
         public DelegateCommand ExpandCommand { get; private set; }
 

@@ -10,11 +10,10 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Models.ModelBase;
 
-using Composition = APTAT.Common.CompositionHelper;
 
 namespace APTAT.Application.Models
 {
-    //[Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
+
     public class StartScanLocalViewModel : WizardViewModel
     {
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
@@ -37,6 +36,11 @@ namespace APTAT.Application.Models
                 _scanCriticalAreas = value;
                 RaisePropertyChanged("ScanCriticalAreas");
             }
+        }
+
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.Local; }
         }
 
         public DelegateCommand ExpandCommand { get; private set; }
@@ -320,19 +324,21 @@ namespace APTAT.Application.Models
             {
                 var items = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
-                //_storage.SetValue(KnownKeys.Login, null);
-                //_storage.SetValue(KnownKeys.Password, null);
-                var main = (IMainViewModel) ParentViewModel;
-                main.Login = null;
-                main.Password = null;
-                _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                new DevicesSourceDescription()
+
+                var parent = ParentViewModel;
+                if (parent != null)
                 {
-                    Type = ETargetsDiscovererType.NetworkAddresses,
-                    Description = DevicesSourceDescription.GetNetworkDescription(new[] { "localhost" })
-                });
-                
-                context.Success();
+                    parent.Login = null;
+                    parent.Password = null;
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription()
+                    {
+                        Type = ETargetsDiscovererType.NetworkAddresses,
+                        Description = DevicesSourceDescription.GetNetworkDescription(new[] { "localhost" })
+                    });
+                }
+                    context.Success();
+
             }
             else
             {

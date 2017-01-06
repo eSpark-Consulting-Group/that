@@ -18,12 +18,12 @@ namespace APTAT.DeploymentCore.Descent
         IComputer Computer { get; }
         bool Completed { get; }
         bool Succeeded { get; }
-        FormattedText StatusMessage { get; }
+        FormattedText StatusMessage { get;}
         FormattedText ShortStatusMessage { get; }
         string ErrorCode { get; }
         string SystemMessage { get; }
         int SystemCode { get; }
-        double Percentage { get; }
+        double Percentage { get;}
         bool IsCanceled { get; }
         DateTime Modified { get; }
     }

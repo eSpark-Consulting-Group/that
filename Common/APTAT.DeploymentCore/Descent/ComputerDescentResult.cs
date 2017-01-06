@@ -54,7 +54,11 @@ namespace APTAT.DeploymentCore.Descent
                 update = true;
             }
             if (update)
+            {
                 Modified = DateTime.UtcNow;
+                Completed = false;
+                
+            }
 		}
 
 

@@ -27,15 +27,33 @@ namespace APTAT.Application
 
                 var menu = new RadContextMenu();
                 menu.IconColumnWidth = 0;
-                menu.Width = 160;
+                menu.Width = 250;
                 menu.Opened += menu_Opened;
                 AutomationProperties.SetAutomationId(menu, "ScanResultsByComputersContextMenu");
 
                 var item = new RadMenuItem();
-                item.CreateHeaderDataTemplate("Details");
+                item.CreateDetailsHeader();
                 item.Command = ViewModel.SelectCommand;
                 item.Click += item_Click;
                 AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
+                menu.Items.Add(item);
+
+                item = new RadMenuItem();
+                item.CreateRestartScanHeader();
+                item.Command = ViewModel.RestartComputerScanCommand;
+                item.SetVisibilityBinding();
+                menu.Items.Add(item);
+
+                item = new RadMenuItem();
+                item.CreateRestartScanWithCredentialsHeader();
+                item.Command = ViewModel.RestartComputerScanWithCredentialsCommand;
+                item.SetVisibilityBinding();
+                menu.Items.Add(item);
+
+                item = new RadMenuItem();
+                item.CreateStopScanHeader();
+                item.Command = ViewModel.StopComputerScanCommand;
+                item.SetVisibilityBinding();
                 menu.Items.Add(item);
 
                 RadContextMenu.SetContextMenu(treeList, menu);
@@ -51,7 +69,7 @@ namespace APTAT.Application
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
 
-                treeList.SelectedItem = cell.DataContext is ThreatInfoItem && !((ThreatInfoItem)cell.DataContext).IsRootItem ? cell.DataContext : null;
+                treeList.SelectedItem = cell.DataContext;
             }
         }
 

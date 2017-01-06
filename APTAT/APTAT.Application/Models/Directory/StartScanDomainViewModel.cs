@@ -103,7 +103,10 @@ namespace APTAT.Application.Models
             }
         }
 
-        
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.Domain; }
+        }
 
         public DelegateCommand ExpandCommand { get; private set; }
 
@@ -231,7 +234,7 @@ namespace APTAT.Application.Models
             }
             else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
             {
-                var parent = ParentViewModel as IMainViewModel;
+                var parent = ParentViewModel;
                 if (parent != null)
                 {
                     string errorMessage;

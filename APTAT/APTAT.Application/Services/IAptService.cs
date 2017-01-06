@@ -57,9 +57,13 @@ namespace APTAT.Application.Services
     public class BeginScanCompletedEventArgs : DomainEventArgs
     {
         public Guid OperationGuid { get; private set; }
-        public BeginScanCompletedEventArgs(Guid operationGuid, Object userState, Exception error = null)
+
+        public bool RescanAttempt { get; private set; }
+
+        public BeginScanCompletedEventArgs(Guid operationGuid, bool rescanAttempt, Object userState, Exception error = null)
         {
             OperationGuid = operationGuid;
+            RescanAttempt = rescanAttempt;
             UserState = userState;
             Exception = error;
         }
@@ -68,6 +72,7 @@ namespace APTAT.Application.Services
     public class ScanStatusChangedEventArgs : DomainEventArgs
     {
         public ScanProgressItem[] ScanProgress { get; private set; }
+
         public ScanStatusChangedEventArgs(ScanProgressItem[] scanProgress,Object userState, Exception error = null)
         {
             ScanProgress = scanProgress;
@@ -144,10 +149,10 @@ namespace APTAT.Application.Services
         event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
-        void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem
-            , IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+        void BeginScan(DeploymentTarget[] items, String login, String password, Object userState,
+            IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
         void UpdateFlsPorts(int udpPort, int tcpPort);
-        void StopScan();
+        void StopScan(DeploymentTarget[] items);
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
         void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, 
             string camPassword, NetworkCredential networkCredential);

@@ -8,7 +8,7 @@ namespace APTAT.Core.Apt
 {
     public interface IAptScannerFactory
     {
-        IAptScanner CreateAptScanner(IDescentSubSystem descentSubSystem, IEnumerable<DeploymentTarget> targets,
-            string login, string password, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+        IAptScanner CreateAptScanner(IDescentSubSystem descentSubSystem, 
+            IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
     }
 }

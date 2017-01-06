@@ -109,13 +109,22 @@ namespace APTAT.Application.Services
         public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password, 
-                devicesSourceDescription, options);
+            bool rescanAttempt;
+            IAptScanner scanner = _manager.GetAptScanner(devicesSourceDescription, options, out rescanAttempt);
+
+            scanner.ScanStarted -= OnScanStarted;
             scanner.ScanStarted += OnScanStarted;
+
+            scanner.ComputerScanCompleted -= OnComputerScanCompleted;
             scanner.ComputerScanCompleted += OnComputerScanCompleted;
+
+            scanner.ScanInProgress -= OnScanInProgress;
             scanner.ScanInProgress += OnScanInProgress;
+
+            scanner.ScanCompleted -= OnScanCompleted;
             scanner.ScanCompleted += OnScanCompleted;
-            scanner.BeginScan(userState);
+
+            scanner.BeginScan(targets, login, password, rescanAttempt, userState);
         }
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
@@ -199,7 +208,7 @@ namespace APTAT.Application.Services
         {
             Action action = () =>
             {
-                BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.State, e.Error);
+                BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.RescanAttempt, e.State, e.Error);
                 BeginScanCompleted?.Invoke(this, args);
             };
             App.Current.Dispatcher.BeginInvoke(action);
@@ -241,7 +250,7 @@ namespace APTAT.Application.Services
 
         }
 
-        public void StopScan()
+        public void StopScan(DeploymentTarget[] targets)
         {
             _manager.StopScan();
         }

@@ -20,6 +20,8 @@ using APTAT.Application.Models.Apt;
 using APTAT.Application.Models.ModelBase;
 using APTAT.Application.Models.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
+using System.Collections.Concurrent;
+using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Application.Models
 {
@@ -30,7 +32,10 @@ namespace APTAT.Application.Models
         public event EventHandler ValkyrieAnalyzeStarted;
         public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieFile>> ValkyrieAnalyzeCompleted;
 
-
+        public IMainViewModel ParentViewModel
+        {
+            get { return this; }
+        }
 
         private string _camLicenseId;
         private string _camUserLogin;
@@ -66,7 +71,7 @@ namespace APTAT.Application.Models
         private ObservableCollection<ThreatInfoItem> _computers;
         private ObservableCollection<ValkyrieFile> _itemsValkyrie;
         private ObservableCollection<ValkyrieComputer> _computersValkyrie;
-        private Object _countersLock = new Object();
+
 
         private Collection<ThreatInfoItem> _cache;
         private Collection<ThreatInfoItem> _cacheComputers;
@@ -74,7 +79,7 @@ namespace APTAT.Application.Models
         private Collection<ValkyrieComputer> _cacheValkyrieComputers;
 
         private DispatcherTimer _scanIteratorTimer;
-        private Dictionary<Guid, ScanProgressItem> _scanIterator;
+        private ConcurrentDictionary<Guid, ScanProgressItem> _scanIterator;
 
         public string Uri { get; set; } = "/Views/EULAView.xaml";
 
@@ -370,6 +375,20 @@ namespace APTAT.Application.Models
             get { return SelectedValkyrieItem != null && SelectedValkyrieItem is ValkyrieFile; }
         }
 
+        public Boolean IsRestartEnabled
+        {
+            get { return SelectedItem != null && SelectedItem.IsRootItem && 
+                    (SelectedItem.ScanStage == ScanStage.ScanFailed || 
+                    SelectedItem.ScanStage == ScanStage.OperationFailed ||
+                    SelectedItem.ScanStage == ScanStage.OperationCanceled); }
+        }
+
+        public Boolean IsStopEnabled
+        {
+            get { return SelectedItem != null && SelectedItem.IsRootItem && 
+                    (SelectedItem.ScanStage == ScanStage.ScanInProgress); }
+        }
+
         public Boolean IsReportEnabled
         {
             get { return _isReportEnabled; }
@@ -413,10 +432,7 @@ namespace APTAT.Application.Models
             set
             {
                 _selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
-                RaisePropertyChanged("IsDetailsEnabled");
-
-                SelectCommand.InvalidateCanExecute();
+                
 
                 if (_selectedItem == null)
                 {
@@ -427,6 +443,15 @@ namespace APTAT.Application.Models
                     _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, ValkyrieFile>(_selectedItem.BadFile, null));
                 }
 
+                RaisePropertyChanged(nameof(SelectedItem));
+                RaisePropertyChanged(nameof(IsDetailsEnabled));
+                RaisePropertyChanged(nameof(IsRestartEnabled));
+                RaisePropertyChanged(nameof(IsStopEnabled));
+
+                SelectCommand.InvalidateCanExecute();
+                RestartComputerScanCommand.InvalidateCanExecute();
+                RestartComputerScanWithCredentialsCommand.InvalidateCanExecute();
+                StopComputerScanCommand.InvalidateCanExecute();
             }
         }
 
@@ -570,6 +595,9 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged("GroupByComputers");
             }
         }
+
+        public WizardStepEnum CurrentStep { get; set; }
+
         public DelegateCommand ChangeScreenCommand { get; private set; }
         public DelegateCommand StartScanCommand { get; private set; }
         public DelegateCommand StopScanCommand { get; private set; }
@@ -577,6 +605,9 @@ namespace APTAT.Application.Models
         public DelegateCommand SelectCommand { get; private set; }
         public DelegateCommand SelectValkyrieCommand { get; private set; }
 
+        public DelegateCommand RestartComputerScanCommand { get; private set; }
+        public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
+        public DelegateCommand StopComputerScanCommand { get; private set; } 
 
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
             IAptService aptService, IStorageService storage)
@@ -598,13 +629,85 @@ namespace APTAT.Application.Models
             StopScanCommand = new DelegateCommand(o =>
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
                 o => StopScanPredicate);
+
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
+
+            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
+            RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o => 
+                IsRestartEnabled && !SelectedItem.IsLocal);
+            StopComputerScanCommand = new DelegateCommand(o => InvokeStopComputerScan(o), o => IsStopEnabled);
 
             ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.Empty;
         }
 
-        public bool ActiveDirectoryStep { get; set; }
+        private void InvokeRestartComputerScan(Object arg, bool showDialog = false)
+        {
+            if (showDialog)
+            {
+                SettingsWindow window = new SettingsWindow();
+                window.Owner = System.Windows.Application.Current.MainWindow;
+                window.DataContext = this;
+                window.ShowCredentials = true;
+                window.Header = "Scan Credentials";
+
+                bool retry = window.ShowDialog().GetValueOrDefault();
+
+                if (retry)
+                {
+                    RestartComputerScan(true);
+                    return;
+                }
+            }
+            else
+                RestartComputerScan();
+        }
+
+        private void RestartComputerScan(bool useNewCredentials = false)
+        {
+            ScanKind scanKind = ScanKind.Quick;
+            if (IsQuickScan)
+            {
+                scanKind = ScanKind.Quick;
+            }
+            else
+            {
+                scanKind = ScanKind.Full;
+            }
+
+            ScanOptions options;
+            CustomScanOptions customScanOptions = null;
+            if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+            {
+                customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                scanKind = ScanKind.Custom;
+                options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
+                    customScanOptions.ScanCriticalAreas);
+            }
+            else
+            {
+                options = new ScanOptions(_tcpPort, _udpPort, scanKind);
+            }
+
+            var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
+            var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
+            
+            SelectedItem.RestoreConnectingState();
+
+            _aptService.BeginScan(new[] { SelectedItem.DeploymentTarget }, login, password,
+                this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+
+            if (!IsScanInProgress.GetValueOrDefault())
+            {
+                IsScanInProgress = true;
+                Percentage = 0;
+            }
+        }
+
+        private void InvokeStopComputerScan(Object arg)
+        {
+            InvokeStopScan(new[] { SelectedItem.DeploymentTarget });
+        }
 
         private void InvokeStartScan(Object arg)
         {
@@ -650,8 +753,8 @@ namespace APTAT.Application.Models
                     var model = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
 
                     _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets,
-                        ActiveDirectoryStep ? model.ActiveDirectoryLogin : null,
-                        ActiveDirectoryStep ? model.ActiveDirectoryPassword : null, this);
+                        CurrentStep == WizardStepEnum.Domain ? model.ActiveDirectoryLogin : null,
+                        CurrentStep == WizardStepEnum.Domain ? model.ActiveDirectoryPassword : null, this);
 
                 }
             }
@@ -664,7 +767,7 @@ namespace APTAT.Application.Models
 
             CancelInProgress = true;
 
-            _aptService.StopScan();
+            _aptService.StopScan(arg as DeploymentTarget[]);
 
         }
 
@@ -774,6 +877,11 @@ namespace APTAT.Application.Models
         public string ProxyLogin { get; set; }
         public string ProxyPassword { get; set; }
 
+        public string RescanLogin { get; set; }
+        public string RescanPassword { get; set; }
+
+        public bool UseCurrentDomainForRescan { get; set; }
+
         public void OnPortChanged(int udpPort, int tcpPort)
         {
             _aptService.UpdateFlsPorts(udpPort, tcpPort);
@@ -846,14 +954,14 @@ namespace APTAT.Application.Models
                         SettingsWindow window = new SettingsWindow();
                         window.Owner = System.Windows.Application.Current.MainWindow;
                         window.DataContext = this;
-                        window.ShowCredentials = true;
+                        window.ShowProxyCredentials = true;
                         window.Header = "Proxy Credentials";
 
                         bool retry = window.ShowDialog().GetValueOrDefault();
 
                         if (retry)
                         {
-                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword, null); //no domain?
+                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword, null);
                             BeginValkyrieAnalysis(cred);
                             return;
                         }
@@ -1057,6 +1165,7 @@ namespace APTAT.Application.Models
             Set(() => TotalItemsCount, items.Count());
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
+
             _cacheComputers = new ObservableCollection<ThreatInfoItem>(items);
             Computers = new ObservableCollection<ThreatInfoItem>(_cacheComputers);
 
@@ -1097,7 +1206,8 @@ namespace APTAT.Application.Models
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind);
                 }
 
-                _aptService.BeginScan(e.Items, Login, Password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _aptService.BeginScan(e.Items, Login, Password, this, 
+                    _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             }
             else
@@ -1108,9 +1218,12 @@ namespace APTAT.Application.Models
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
         {
+            if (e.RescanAttempt)
+                return;
+
             _operationGuid = e.OperationGuid;
 
-            _scanIterator = new Dictionary<Guid, ScanProgressItem>();
+            _scanIterator = new ConcurrentDictionary<Guid, ScanProgressItem>();
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
             _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
             _scanIteratorTimer.Tick += IterateThroughScan;
@@ -1182,15 +1295,10 @@ namespace APTAT.Application.Models
 
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
-            lock (_scanIterator)
-            {
-                foreach (var scan in e.ScanProgress)
-                {
-                    if (scan.OperationUid != _operationGuid)
-                        continue;
-                    _scanIterator[scan.ComputerGuid] = scan;
-                }
-            }
+
+            foreach (var scan in e.ScanProgress)
+                _scanIterator[scan.ComputerGuid] = scan;
+            
         }
 
         private void IterateThroughScan(object sender, EventArgs e)
@@ -1209,13 +1317,9 @@ namespace APTAT.Application.Models
             foreach (var infoItem in _onlineItems)
             {
                 ScanProgressItem scanProgress = null;
-                lock (_scanIterator)
-                {
-                    _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
-                    _scanIterator.Remove(infoItem.ComputerGuid);
-                }
-                lock (infoItem)
-                {
+                _scanIterator.TryRemove(infoItem.ComputerGuid, out scanProgress);
+                
+                
                     if (infoItem.ScanStage != ScanStage.OperationFailed &&
                         infoItem.ScanStage != ScanStage.OperationCompleted &&
                         infoItem.ScanStage != ScanStage.OperationCanceled)
@@ -1244,7 +1348,7 @@ namespace APTAT.Application.Models
                     malwareFiles += infoItem.MalwareFilesCount;
                     lookupInProgressCount += infoItem.FailedToAnalyzeCount;
                     lookupInProgressCount += infoItem.NoVerdictFilesCount;
-                }
+                
             }
 
             if (unknownFiles > UnknownFilesCount)
@@ -1303,67 +1407,56 @@ namespace APTAT.Application.Models
         private void OnComputerScanCompleted(Object sender, GetScanResultCompletedEventArgs e)
         {
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
-            if (parentItem != null)
+            if (parentItem == null)
+                return;
+
+
+            parentItem.ScanStage = e.ScanResult.ScanStage;
+            parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
+
+            if (e.ScanResult.BadFiles != null)
             {
-                lock (parentItem)
+                foreach (var badFile in e.ScanResult.BadFiles)
                 {
-                    Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
-                    parentItem.ScanStage = e.ScanResult.ScanStage;
-                    parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
-                    if (e.ScanResult.BadFiles != null)
+                    var item = new ThreatInfoItem(badFile);
+                    parentItem.Items.Add(item);
+                    item = new ThreatInfoItem(badFile);
+
+                    var exist = _cache.FirstOrDefault(_ =>
+                        _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
+                        _.IsMalware == item.IsMalware);
+                    var comp = new ThreatInfoItem
                     {
-                        foreach (var badFile in e.ScanResult.BadFiles)
-                        {
-                            var item = new ThreatInfoItem(badFile);
-                            parentItem.Items.Add(item);
-                            if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
-                            {
-                                computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
-                            }
-                            item = new ThreatInfoItem(badFile);
+                        IpAddress = parentItem.IpAddress,
+                        ComputerGuid = e.ScanResult.TargetUid,
+                        Name = parentItem.Name,
+                        ShortName = item.Name,
+                        IsRootItem = true
+                    };
 
-                            var exist = _cache.FirstOrDefault(_ =>
-                                _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
-                                _.IsMalware == item.IsMalware);
-                            var comp = new ThreatInfoItem
-                            {
-                                IpAddress = parentItem.IpAddress,
-                                ComputerGuid = e.ScanResult.TargetUid,
-                                Name = parentItem.Name,
-                                ShortName = item.Name,
-                                IsRootItem = true
-                            };
-
-                            if (exist != null)
-                                exist.Computers.Add(comp);
-                            else
-                            {
-                                item.Computers = new Collection<ThreatInfoItem>();
-                                item.Computers.Add(comp);
-                                _cache.Add(item);
-                                Items.Add(item);
-                            }
-                        }
-                        if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
-                        {
-                            parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
-                            if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
-                            {
-                                computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
-                            }
-                        }
-                        foreach (var computer in computersToUpdate.Values)
-                        {
-                            computer.UpdateStatus();
-                        }
-                        if (computersToUpdate.Any())
-                            UpdateStatus();
+                    if (exist != null)
+                        exist.Computers.Add(comp);
+                    else
+                    {
+                        item.Computers = new Collection<ThreatInfoItem>();
+                        item.Computers.Add(comp);
+                        _cache.Add(item);
+                        Items.Add(item);
                     }
-
-
-                    parentItem.ScanStage = parentItem.ScanStage;
                 }
+
+                if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
+                    parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
+
+
+                parentItem.UpdateStatus();
+                UpdateStatus();
             }
+
+            parentItem.Items = parentItem.Items;
+            parentItem.ScanStage = parentItem.ScanStage;
+
+
         }
 
         protected override void OnKeywordChanged(string oldValue, string newValue)

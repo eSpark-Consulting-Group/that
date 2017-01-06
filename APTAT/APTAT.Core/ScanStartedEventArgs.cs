@@ -6,6 +6,7 @@ namespace APTAT.Core
     {
         public Exception Error { get; set; }
         public Guid OperationUid { get; set; }
+        public bool RescanAttempt { get; set; }
         public object State { get; set; }
     }
 }

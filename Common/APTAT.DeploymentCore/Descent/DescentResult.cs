@@ -85,6 +85,7 @@ namespace APTAT.DeploymentCore.Descent
         protected ConcurrentDictionary<Guid, IComputerDescentResultInternal> ResultsByUid { get; }
             = new ConcurrentDictionary<Guid, IComputerDescentResultInternal>();
 
+
         public IDevicesSourceDescription DevicesSourceDescription { get; }
         public int InProgressCount { get; private set; }
         public int SucceededCount { get; private set; }
@@ -209,7 +210,7 @@ namespace APTAT.DeploymentCore.Descent
 
 		#region IChangeTrackingListener Members
 
-		public virtual void Changed( params ChangesTrackingItem[] items )
+		public virtual bool Changed( params ChangesTrackingItem[] items )
 		{
 			foreach( var item in items )
 			{
@@ -217,18 +218,21 @@ namespace APTAT.DeploymentCore.Descent
 				{
 					var progressItem = ( IDescentProgressItem )item.ChangedItem;
                     if (progressItem.OperationUid == OperationUid && ResultsByUid.ContainsKey(progressItem.ComputerUid))
-					{
-						var originalResult = ResultsByUid[progressItem.ComputerUid];
-					    if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 || 
-                            originalResult.StatusMessage !=  progressItem.StatusMessage )
-					    {
+                    {
+                        var originalResult = ResultsByUid[progressItem.ComputerUid];
+                        if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 ||
+                            originalResult.StatusMessage != progressItem.StatusMessage)
+                        {
 
                             originalResult.UpdateStatus(progressItem);
                         }
                         _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                     }
+                    else return false;
                 }
 			}
+
+            return true;
 		}
 
 

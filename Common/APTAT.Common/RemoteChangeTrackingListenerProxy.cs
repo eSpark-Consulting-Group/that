@@ -16,9 +16,9 @@ namespace DDT.Core.ChangeTracking
 
         #region IChangeTrackingListener Members
 
-        public void Changed(params ChangesTrackingItem[] items)
+        public bool Changed(params ChangesTrackingItem[] items)
         {
-            _realListener.Changed(items);
+            return _realListener.Changed(items);
         }
 
         public Guid SessionId

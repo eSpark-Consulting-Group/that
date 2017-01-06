@@ -59,9 +59,12 @@ namespace APTAT.Application.Models.Directory
             }
         }
 
-        
 
-        
+
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.NetworkAddresses; }
+        }
 
 
         public DelegateCommand AddIpCommand
@@ -242,7 +245,7 @@ namespace APTAT.Application.Models.Directory
                         Type = ETargetsDiscovererType.NetworkAddresses,
                         Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
                     });
-                var parent = ParentViewModel as IMainViewModel;
+                var parent = ParentViewModel;
                 if (parent != null)
                 {
                     string errorMessage;

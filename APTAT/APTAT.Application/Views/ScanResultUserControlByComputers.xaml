@@ -21,6 +21,7 @@
                                  IsReadOnly="True" ItemsSource="{Binding Computers}"   
                                  RowStyle="{StaticResource rowStyleCompleted}"
                                  TabIndex="1"
+                                 SelectionMode="Single"
                                  Sorting="treeList_Sorting"
                                  AutoExpandItems="False"
                                  RowHeight="50"

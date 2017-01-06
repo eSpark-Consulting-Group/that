@@ -29,7 +29,7 @@ namespace APTAT.Application
                 menu.Opened += menu_Opened;
 
                 var item = new RadMenuItem();
-                item.CreateHeaderDataTemplate("Details");
+                item.CreateDetailsHeader();
                 item.Command = ViewModel.SelectValkyrieCommand;
                 item.Click += item_Click;
                 menu.Items.Add(item);
@@ -47,7 +47,7 @@ namespace APTAT.Application
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
 
-                treeList2.SelectedItem = cell.DataContext is ValkyrieFile ? cell.DataContext : null;
+                treeList2.SelectedItem = cell.DataContext;
             }
         }
 

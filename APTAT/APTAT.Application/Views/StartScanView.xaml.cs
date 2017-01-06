@@ -153,7 +153,7 @@ namespace APTAT.Application
                 _currentViewModel.Completed += OnWizardCompleted;
                 _currentViewModel.Cancelled += OnWizardCancelled;
 
-                (_currentViewModel.ParentViewModel as IMainViewModel).ActiveDirectoryStep = _currentViewModel is StartScanDomainViewModel;
+                _currentViewModel.ParentViewModel.CurrentStep = _currentViewModel.Step;
             }
 
             Dispatcher.BeginInvoke((Action)delegate { _tooltip.IsOpen = false; });

@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using APTAT.Common;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptScanOperationContext : DescentResult, IAptScanOperationContext
+    public class AptScanOperationContext : DescentResult, IAptScanMergeableOperationContext
     {
         private readonly Guid _sessionId = Guid.NewGuid();
 
@@ -21,18 +19,26 @@ namespace APTAT.Core.Descent.Apt
         }
         public DateTime Started { get { return StartTime; } }
 
-        private readonly object _sync = new object();
 
-        public override void Changed(params ChangesTrackingItem[] items)
+        public override bool Changed(params ChangesTrackingItem[] items)
         {
-            base.Changed(items);
-            if (items == null) return;
+            if (items == null || !base.Changed(items))
+                return false;
+
+            var percentage = CalculateTotalPercentage();
+            var progressItems = items.Select(c => c.ChangedItem).OfType<IDescentProgressItem>().ToArray();
+
+            if (MergeOperationProgressAction != null)
+                percentage = MergeOperationProgressAction(progressItems);
+
             OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
             {
-                Percentage = CalculateTotalPercentage(),
-                ProgressItems = items.Select(c => c.ChangedItem).OfType<IDescentProgressItem>().ToArray(),
+                Percentage = percentage,
+                ProgressItems = progressItems,
                 OperationUid = OperationUid
             });
+
+            return true;
         }
 
         public override Guid SessionId
@@ -50,7 +56,7 @@ namespace APTAT.Core.Descent.Apt
             get { return ResultsByUid.Values.OfType<IAptScanResult>(); }
         }
 
-        public IAptScanResult GetAptResultByTargetUid(Guid targetUid)
+        /*public IAptScanResult GetAptResultByTargetUid(Guid targetUid)
         {
             var result = GetComputerDescentResultByTargetUid(targetUid);
             if (result is IAptScanResult)
@@ -58,8 +64,19 @@ namespace APTAT.Core.Descent.Apt
                 return (IAptScanResult) result;
             }
             return null;
-        }
+        }*/
 
+
+        public Func<IEnumerable<IDescentProgressItem>, double> MergeOperationProgressAction { get; set; }
+
+        public double MergeAndCalculateTotalPercentage(IEnumerable<IDescentProgressItem> items, Func<Guid, IComputerDescentResult> func)
+        {
+            foreach (var item in items)
+                ResultsByUid.GetOrAdd(item.ComputerUid, 
+                    _ => (IComputerDescentResultInternal)func(_)).UpdateStatus(item);
+
+            return CalculateTotalPercentage();
+        }
 
         private double CalculateTotalPercentage()
         {
@@ -70,7 +87,7 @@ namespace APTAT.Core.Descent.Apt
             var total = onlineScanResults.Count() * 100;
             var current = onlineScanResults.Sum(scanResult => scanResult.Percentage);
 
-            return (double)current / total * 100d;
+            return current / total * 100d;
         }
 
         public event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;

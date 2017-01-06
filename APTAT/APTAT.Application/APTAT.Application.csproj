@@ -119,6 +119,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Models\IWizardStepViewModel.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieComputer.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieFile.cs" />
     <Compile Include="Services\MapperHelper.cs" />

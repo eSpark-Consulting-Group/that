@@ -16,7 +16,7 @@ namespace APTAT.Core.Descent.Apt
 
         public AptDescentScanner(IEnumerable<DeploymentTarget> targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions scanOptions) 
-            : base(targets, login, password,devicesSourceDescription)
+            : base(targets, login, password, devicesSourceDescription)
         {
             _scanOptions = scanOptions;
         }

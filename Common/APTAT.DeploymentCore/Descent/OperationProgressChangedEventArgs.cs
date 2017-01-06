@@ -6,5 +6,6 @@ namespace APTAT.DeploymentCore.Descent
     {
         public double Percentage { get; set; }
         public Guid OperationUid { get; set; }
+
     }
 }
