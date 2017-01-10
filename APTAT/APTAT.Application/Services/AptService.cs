@@ -10,8 +10,7 @@ using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-using Composition = APTAT.Common.CompositionHelper;
-using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
+
 
 
 namespace APTAT.Application.Services
@@ -109,22 +108,17 @@ namespace APTAT.Application.Services
         public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            bool rescanAttempt;
-            IAptScanner scanner = _manager.GetAptScanner(devicesSourceDescription, options, out rescanAttempt);
+            IAptScanner scanner = _manager.GetAptScanner(devicesSourceDescription, options);
 
-            scanner.ScanStarted -= OnScanStarted;
-            scanner.ScanStarted += OnScanStarted;
+            if (scanner.ScanOperationContext == null)
+            {
+                scanner.ScanStarted += OnScanStarted;
+                scanner.ComputerScanCompleted += OnComputerScanCompleted;
+                scanner.ScanInProgress += OnScanInProgress;
+                scanner.ScanCompleted += OnScanCompleted;
+            }
 
-            scanner.ComputerScanCompleted -= OnComputerScanCompleted;
-            scanner.ComputerScanCompleted += OnComputerScanCompleted;
-
-            scanner.ScanInProgress -= OnScanInProgress;
-            scanner.ScanInProgress += OnScanInProgress;
-
-            scanner.ScanCompleted -= OnScanCompleted;
-            scanner.ScanCompleted += OnScanCompleted;
-
-            scanner.BeginScan(targets, login, password, rescanAttempt, userState);
+            scanner.BeginScan(targets, login, password, scanner.ScanOperationContext != null, userState);
         }
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
@@ -182,7 +176,7 @@ namespace APTAT.Application.Services
                     progressItem.MalwareFilesCount = aptScantProgress.MalwaresCount;
                     progressItem.FailedToAnalyzeFilesCount = aptScantProgress.ErrorFilesCount;
                     progressItem.NoVerdictFilesCount = aptScantProgress.FailedAtNodeCount;
-                    progressItem.OperationUid = aptScantProgress.OperationUid;
+                    progressItem.OperationUid = e.OperationUid;
                     progressItem.ProgressPercentage = aptScantProgress.ProgressPercentage;
                     progressItem.ScanStage = FromAptScanStage(aptScantProgress.ScanStage);
                 }
@@ -190,7 +184,7 @@ namespace APTAT.Application.Services
                 {
                     progressItem.ComputerGuid = descentProgressItem.ComputerUid;
                     progressItem.StatusMessage = descentProgressItem.StatusMessage.ToString();
-                    progressItem.OperationUid = descentProgressItem.OperationUid;
+                    progressItem.OperationUid = e.OperationUid;
                     progressItem.ScanStage = descentProgressItem.IsCanceled ? 
                         ScanStage.OperationCanceled : ScanStage.OperationFailed;
                 }
@@ -224,17 +218,17 @@ namespace APTAT.Application.Services
                 scanner.ScanInProgress -= OnScanInProgress;
                 scanner.ComputerScanCompleted -= OnComputerScanCompleted;
             }
-            //Logger.WriteLog("Scan Completed");
+
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
-            args.CanceledCount = e.CalceledCount;
+            args.CanceledCount = e.CanceledCount;
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
             args.FilesStatistics = e.FilesStatistics;
             args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
             int distCount = _manager.GetDistinctFileCount();
             args.DistinctFileFound = distCount;
-            //AptAtManager.GetDistinctFileInfo();
+
 
             Action action = () =>
             {
@@ -250,9 +244,9 @@ namespace APTAT.Application.Services
 
         }
 
-        public void StopScan(DeploymentTarget[] targets)
+        public void StopScan(Guid[] targets)
         {
-            _manager.StopScan();
+            _manager.StopScan(targets);
         }
 
         

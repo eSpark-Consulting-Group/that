@@ -18,11 +18,11 @@ namespace APTAT.Core
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
 
-        IAptScanner GetAptScanner(IDevicesSourceDescription devicesSourceDescription, ScanOptions options, out bool rescanAttempt);
+        IAptScanner GetAptScanner(IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         IAptReportBuilder GetAptReportBuilder();
 
-        void StopScan();
+        void StopScan(Guid[] targets);
         void UpdateFlsPorts(int udpPort, int tcpPort);
 
         void StartValkyrieAnalysis(string login, string password, 

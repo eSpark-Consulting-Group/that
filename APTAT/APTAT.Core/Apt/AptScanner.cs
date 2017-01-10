@@ -17,6 +17,7 @@ namespace APTAT.Core.Apt
 
         private ConcurrentDictionary<Guid, object> _rescanOperations;
         private bool _mainOperationCompleted;
+        private int _succeededOperations;
         
         private readonly ScanOptions _options;
 
@@ -37,9 +38,14 @@ namespace APTAT.Core.Apt
 
         private void OnDescentCompleted(object sender, DescentEventArgs e)
         {
-            
+            var aptScanCompletedEventArgs = e as AptScanCompletedEventArgs;
+            if (aptScanCompletedEventArgs == null) return;
+
             if (_rescanOperations.ContainsKey(e.OperationUid))
             {
+                if (aptScanCompletedEventArgs.Context.FailedCount == 0)
+                    _succeededOperations++;
+
                 object val;
                 if (_rescanOperations.TryRemove(e.OperationUid, out val) && !_mainOperationCompleted)
                     return;
@@ -56,18 +62,16 @@ namespace APTAT.Core.Apt
                 _mainScanOperationContext.OperationProgressChanged -= scanOperationContext_OperationProgressChanged;
                 _mainScanOperationContext.ComputerDescentCompleted -= ScanOperationContextOnComputerDescentCompleted;
             }
-            var aptScanCompletedEventArgs = e as AptScanCompletedEventArgs;
-            if (aptScanCompletedEventArgs == null) return;
 
             OnScanCompleted(new ScanCompletedEventArgs()
             {
-                OperationUid = e.OperationUid,
-                CalceledCount = aptScanCompletedEventArgs.Context.CanceledTargetsCount,
-                FailedCount = aptScanCompletedEventArgs.Context.FailedTargetsCount,
-                NotPerformedCount = aptScanCompletedEventArgs.Context.NotPerformedTargetsCount,
-                SucceededCount = aptScanCompletedEventArgs.Context.SucceededTargetsCount,
-                TotalCount = aptScanCompletedEventArgs.Context.TotalTargetsCount,
-                FilesStatistics = aptScanCompletedEventArgs.Context.CalculateFilesStatistics()
+                OperationUid = _mainScanOperationContext.OperationUid,
+                CanceledCount = _mainScanOperationContext.CanceledTargetsCount,
+                FailedCount = _mainScanOperationContext.FailedTargetsCount - _succeededOperations,
+                NotPerformedCount = _mainScanOperationContext.NotPerformedTargetsCount,
+                SucceededCount = _mainScanOperationContext.SucceededTargetsCount + _succeededOperations,
+                TotalCount = _mainScanOperationContext.TotalTargetsCount,
+                FilesStatistics = _mainScanOperationContext.CalculateFilesStatistics()
             });
         }
 
@@ -121,8 +125,13 @@ namespace APTAT.Core.Apt
                     else
                     {
                         scanOperationContext.MergeOperationProgressAction = _ => 
-                            _mainScanOperationContext.MergeAndCalculateTotalPercentage(_, 
+                            _mainScanOperationContext.MergeOperationProgress(_, 
                                 scanOperationContext.GetComputerDescentResultByTargetUid);
+
+                        scanOperationContext.MergeOperationResultAction = (_, guid) =>
+                            _mainScanOperationContext.MergeOperationResult(_,
+                                scanOperationContext.GetComputerDescentResultByTargetUid, guid);
+
                         _rescanOperations.TryAdd(args.OperationUid, null);
                     }
                 }

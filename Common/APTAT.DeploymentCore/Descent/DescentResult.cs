@@ -129,7 +129,7 @@ namespace APTAT.DeploymentCore.Descent
 		{
 			int count;
 			var result = ResultsByUid[uid];
-            result.UpdateStatus(operationResult);
+            UpdateStatus(result, operationResult);
 			ResultsByUid[uid] = result;
 
 		    if (result.Completed)
@@ -208,9 +208,19 @@ namespace APTAT.DeploymentCore.Descent
 		public event Action DescentCompleted;
 	    public event EventHandler<IComputerDescentResult> ComputerDescentCompleted;
 
-		#region IChangeTrackingListener Members
+        protected virtual void UpdateStatus(IComputerDescentResultInternal result, IDescentProgressItem item)
+        {
+            result.UpdateStatus(item);
+        }
 
-		public virtual bool Changed( params ChangesTrackingItem[] items )
+        protected virtual void UpdateStatus(IComputerDescentResultInternal result, IOperationDescentResult item)
+        {
+            result.UpdateStatus(item);
+        }
+
+        #region IChangeTrackingListener Members
+
+        public virtual bool Changed( params ChangesTrackingItem[] items )
 		{
 			foreach( var item in items )
 			{
@@ -224,7 +234,7 @@ namespace APTAT.DeploymentCore.Descent
                             originalResult.StatusMessage != progressItem.StatusMessage)
                         {
 
-                            originalResult.UpdateStatus(progressItem);
+                            UpdateStatus(originalResult, progressItem);
                         }
                         _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                     }

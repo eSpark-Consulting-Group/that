@@ -21,7 +21,7 @@ using APTAT.Application.Models.ModelBase;
 using APTAT.Application.Models.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using System.Collections.Concurrent;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+
 
 namespace APTAT.Application.Models
 {
@@ -706,7 +706,7 @@ namespace APTAT.Application.Models
 
         private void InvokeStopComputerScan(Object arg)
         {
-            InvokeStopScan(new[] { SelectedItem.DeploymentTarget });
+            InvokeStopScan(new[] { SelectedItem.DeploymentTarget.Uid });
         }
 
         private void InvokeStartScan(Object arg)
@@ -767,7 +767,11 @@ namespace APTAT.Application.Models
 
             CancelInProgress = true;
 
-            _aptService.StopScan(arg as DeploymentTarget[]);
+            var targets = new Guid[0];
+            if (arg != null && arg is Guid[])
+                targets = (Guid[])arg;
+
+            _aptService.StopScan(targets);
 
         }
 
@@ -1297,7 +1301,8 @@ namespace APTAT.Application.Models
         {
 
             foreach (var scan in e.ScanProgress)
-                _scanIterator[scan.ComputerGuid] = scan;
+                if (_operationGuid == scan.OperationUid)
+                    _scanIterator[scan.ComputerGuid] = scan;
             
         }
 
@@ -1318,37 +1323,37 @@ namespace APTAT.Application.Models
             {
                 ScanProgressItem scanProgress = null;
                 _scanIterator.TryRemove(infoItem.ComputerGuid, out scanProgress);
-                
-                
-                    if (infoItem.ScanStage != ScanStage.OperationFailed &&
-                        infoItem.ScanStage != ScanStage.OperationCompleted &&
-                        infoItem.ScanStage != ScanStage.OperationCanceled)
+
+
+                if (infoItem.ScanStage != ScanStage.OperationFailed &&
+                    infoItem.ScanStage != ScanStage.OperationCompleted &&
+                    infoItem.ScanStage != ScanStage.OperationCanceled)
+                {
+                    if (scanProgress != null)
                     {
-                        if (scanProgress != null)
-                        {
-                            infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                            infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
-                            infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                            infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
-                            infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                            infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
-                            infoItem.StatusMessageSystem = scanProgress.StatusMessage;
-                            infoItem.ScanStage = scanProgress.ScanStage;
-                        }
+                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                        infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                        infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
+                        infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
+                        infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
+                        infoItem.StatusMessageSystem = scanProgress.StatusMessage;
+                        infoItem.ScanStage = scanProgress.ScanStage;
                     }
-                    if (infoItem.ScanStage == ScanStage.OperationFailed ||
-                        infoItem.ScanStage == ScanStage.OperationCompleted ||
-                        infoItem.ScanStage == ScanStage.OperationCanceled)
-                        completed++;
+                }
+                if (infoItem.ScanStage == ScanStage.OperationFailed ||
+                    infoItem.ScanStage == ScanStage.OperationCompleted ||
+                    infoItem.ScanStage == ScanStage.OperationCanceled)
+                    completed++;
 
-                    if (infoItem.ScanStage == ScanStage.OperationCompleted)
-                        scanned++;
+                if (infoItem.ScanStage == ScanStage.OperationCompleted)
+                    scanned++;
 
-                    unknownFiles += infoItem.UnknownFilesCount;
-                    malwareFiles += infoItem.MalwareFilesCount;
-                    lookupInProgressCount += infoItem.FailedToAnalyzeCount;
-                    lookupInProgressCount += infoItem.NoVerdictFilesCount;
-                
+                unknownFiles += infoItem.UnknownFilesCount;
+                malwareFiles += infoItem.MalwareFilesCount;
+                lookupInProgressCount += infoItem.FailedToAnalyzeCount;
+                lookupInProgressCount += infoItem.NoVerdictFilesCount;
+
             }
 
             if (unknownFiles > UnknownFilesCount)
@@ -1448,15 +1453,10 @@ namespace APTAT.Application.Models
                 if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
                     parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
 
-
+                parentItem.Items = parentItem.Items;
                 parentItem.UpdateStatus();
                 UpdateStatus();
             }
-
-            parentItem.Items = parentItem.Items;
-            parentItem.ScanStage = parentItem.ScanStage;
-
-
         }
 
         protected override void OnKeywordChanged(string oldValue, string newValue)

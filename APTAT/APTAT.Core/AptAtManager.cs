@@ -196,15 +196,11 @@ namespace APTAT.Core
             return _distinctHelper.GetDistinctUknownFileInfo(results);
         }      
 
-        public IAptScanner GetAptScanner(IDevicesSourceDescription devicesSourceDescription, ScanOptions options, out bool rescanAttempt)
+        public IAptScanner GetAptScanner(IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
             if (_scanner != null)
-            {
-                rescanAttempt = true;
                 return _scanner;
-            }
 
-            rescanAttempt = false;
             _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
             _scanner = _aptScannerFactory.CreateAptScanner(_descentSubSystem, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
@@ -228,9 +224,10 @@ namespace APTAT.Core
           bool resultsUpdated = false;
             var addToAnalyze = new List<IFlsResult>();
             var verdictUpdated = new List<IFlsResult>();
-            lock (_flsHashResults)
+
+            foreach (var r in resultsFiles)
             {
-                foreach (var r in resultsFiles)
+                lock (_flsHashResults)
                 {
                     if (!_flsHashResults.ContainsKey(r.Sha1))
                     {
@@ -258,6 +255,7 @@ namespace APTAT.Core
                         }
                     }
                 }
+            }
                 if (verdictUpdated.Any())
                 {
                     Dictionary<string, CloudVerdict> dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
@@ -279,12 +277,12 @@ namespace APTAT.Core
                     }
                     OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
                 }
-            }
+            
             if (addToAnalyze.Any())
             {
                 _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1), true);
             }
-            //  temp.Select(t)
+
             return resultsUpdated;
         }
 
@@ -312,6 +310,9 @@ namespace APTAT.Core
 
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
+            if (e.RescanAttempt)
+                return;
+
             _flsManager.Cancel();
             _isValkyrieStarted = false;
             _valkyrieClient.AnalyzeAsyncCancel();
@@ -319,8 +320,9 @@ namespace APTAT.Core
             {
                 _flsHashResults.Clear();
             }
-            _lastAptResults = _scanner.ScanOperationContext;
-            ValkyrieAnalysisResult.Clear();
+            
+            //_lastAptResults = _scanner.ScanOperationContext;
+            //ValkyrieAnalysisResult.Clear();
         }
 
         private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
@@ -348,7 +350,7 @@ namespace APTAT.Core
             return _lastAptResults?.GetAptResultByTargetUid(targetUid);
         }*/
 
-        public void StopScan()
+        public void StopScan(Guid[] targets)
         {
             _descentSubSystem.StopAllScans(0);
             _flsManager.Cancel();

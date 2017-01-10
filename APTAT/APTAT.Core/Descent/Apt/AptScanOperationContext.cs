@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using APTAT.Common;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
@@ -18,28 +17,6 @@ namespace APTAT.Core.Descent.Apt
         {
         }
         public DateTime Started { get { return StartTime; } }
-
-
-        public override bool Changed(params ChangesTrackingItem[] items)
-        {
-            if (items == null || !base.Changed(items))
-                return false;
-
-            var percentage = CalculateTotalPercentage();
-            var progressItems = items.Select(c => c.ChangedItem).OfType<IDescentProgressItem>().ToArray();
-
-            if (MergeOperationProgressAction != null)
-                percentage = MergeOperationProgressAction(progressItems);
-
-            OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
-            {
-                Percentage = percentage,
-                ProgressItems = progressItems,
-                OperationUid = OperationUid
-            });
-
-            return true;
-        }
 
         public override Guid SessionId
         {
@@ -66,16 +43,44 @@ namespace APTAT.Core.Descent.Apt
             return null;
         }*/
 
-
-        public Func<IEnumerable<IDescentProgressItem>, double> MergeOperationProgressAction { get; set; }
-
-        public double MergeAndCalculateTotalPercentage(IEnumerable<IDescentProgressItem> items, Func<Guid, IComputerDescentResult> func)
+        protected override void UpdateStatus(IComputerDescentResultInternal result, IDescentProgressItem item)
         {
-            foreach (var item in items)
-                ResultsByUid.GetOrAdd(item.ComputerUid, 
-                    _ => (IComputerDescentResultInternal)func(_)).UpdateStatus(item);
+            base.UpdateStatus(result, item);
 
-            return CalculateTotalPercentage();
+            if (MergeOperationProgressAction != null)
+                MergeOperationProgressAction(item);
+            else
+                OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
+                {
+                    Percentage = CalculateTotalPercentage(),
+                    ProgressItems = new[] { item },
+                    OperationUid = OperationUid
+                });
+        }
+
+        protected override void UpdateStatus(IComputerDescentResultInternal result, IOperationDescentResult item)
+        {
+            base.UpdateStatus(result, item);
+
+            MergeOperationResultAction?.Invoke(item, result.TargetUid);
+        }
+
+        public Action<IDescentProgressItem> MergeOperationProgressAction { get; set; }
+
+        public Action<IOperationDescentResult, Guid> MergeOperationResultAction { get; set; }
+
+        public void MergeOperationProgress(IDescentProgressItem progress, Func<Guid, IComputerDescentResult> func)
+        {
+            var item = ResultsByUid.GetOrAdd(progress.ComputerUid,
+                _ => (IComputerDescentResultInternal)func(_));
+
+            if (item != null)
+                UpdateStatus(item, progress);
+        }
+
+        public void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func, Guid guid)
+        {
+            ResultsByUid[guid] = (IComputerDescentResultInternal)func(guid);
         }
 
         private double CalculateTotalPercentage()

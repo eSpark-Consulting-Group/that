@@ -9,7 +9,7 @@ namespace APTAT.Core
         public int NotPerformedCount { get; set; }
         public int SucceededCount { get; set; }
         public int FailedCount { get; set; }
-        public int CalceledCount { get; set; }
+        public int CanceledCount { get; set; }
         public IFilesStatistics FilesStatistics { get; set; }
     }
 }
