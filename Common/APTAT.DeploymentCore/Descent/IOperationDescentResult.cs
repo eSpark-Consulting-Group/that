@@ -1,4 +1,5 @@
 ﻿using APTAT.DeploymentCore.Messages;
+using System;
 
 namespace APTAT.DeploymentCore.Descent
 {
@@ -11,5 +12,7 @@ namespace APTAT.DeploymentCore.Descent
         bool IsCanceled { get; }
         int SystemCode { get; }
         string SystemMessage { get; }
+
+        Guid ComputerUid { get; }
     }
 }

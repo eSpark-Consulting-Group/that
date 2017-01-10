@@ -33,16 +33,6 @@ namespace APTAT.Core.Descent.Apt
             get { return ResultsByUid.Values.OfType<IAptScanResult>(); }
         }
 
-        /*public IAptScanResult GetAptResultByTargetUid(Guid targetUid)
-        {
-            var result = GetComputerDescentResultByTargetUid(targetUid);
-            if (result is IAptScanResult)
-            {
-                return (IAptScanResult) result;
-            }
-            return null;
-        }*/
-
         protected override void UpdateStatus(IComputerDescentResultInternal result, IDescentProgressItem item)
         {
             base.UpdateStatus(result, item);
@@ -62,12 +52,12 @@ namespace APTAT.Core.Descent.Apt
         {
             base.UpdateStatus(result, item);
 
-            MergeOperationResultAction?.Invoke(item, result.TargetUid);
+            MergeOperationResultAction?.Invoke(item);
         }
 
         public Action<IDescentProgressItem> MergeOperationProgressAction { get; set; }
 
-        public Action<IOperationDescentResult, Guid> MergeOperationResultAction { get; set; }
+        public Action<IOperationDescentResult> MergeOperationResultAction { get; set; }
 
         public void MergeOperationProgress(IDescentProgressItem progress, Func<Guid, IComputerDescentResult> func)
         {
@@ -78,9 +68,15 @@ namespace APTAT.Core.Descent.Apt
                 UpdateStatus(item, progress);
         }
 
-        public void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func, Guid guid)
+        public void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func)
         {
-            ResultsByUid[guid] = (IComputerDescentResultInternal)func(guid);
+            ResultsByUid[result.ComputerUid] = (IComputerDescentResultInternal)func(result.ComputerUid);
+
+            if (result.Succeeded)
+            {
+                SucceededTargetsCount++;
+                FailedTargetsCount--;
+            }
         }
 
         private double CalculateTotalPercentage()

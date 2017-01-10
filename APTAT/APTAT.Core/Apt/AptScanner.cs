@@ -17,7 +17,6 @@ namespace APTAT.Core.Apt
 
         private ConcurrentDictionary<Guid, object> _rescanOperations;
         private bool _mainOperationCompleted;
-        private int _succeededOperations;
         
         private readonly ScanOptions _options;
 
@@ -43,9 +42,6 @@ namespace APTAT.Core.Apt
 
             if (_rescanOperations.ContainsKey(e.OperationUid))
             {
-                if (aptScanCompletedEventArgs.Context.FailedCount == 0)
-                    _succeededOperations++;
-
                 object val;
                 if (_rescanOperations.TryRemove(e.OperationUid, out val) && !_mainOperationCompleted)
                     return;
@@ -67,9 +63,9 @@ namespace APTAT.Core.Apt
             {
                 OperationUid = _mainScanOperationContext.OperationUid,
                 CanceledCount = _mainScanOperationContext.CanceledTargetsCount,
-                FailedCount = _mainScanOperationContext.FailedTargetsCount - _succeededOperations,
+                FailedCount = _mainScanOperationContext.FailedTargetsCount,
                 NotPerformedCount = _mainScanOperationContext.NotPerformedTargetsCount,
-                SucceededCount = _mainScanOperationContext.SucceededTargetsCount + _succeededOperations,
+                SucceededCount = _mainScanOperationContext.SucceededTargetsCount,
                 TotalCount = _mainScanOperationContext.TotalTargetsCount,
                 FilesStatistics = _mainScanOperationContext.CalculateFilesStatistics()
             });
@@ -128,9 +124,9 @@ namespace APTAT.Core.Apt
                             _mainScanOperationContext.MergeOperationProgress(_, 
                                 scanOperationContext.GetComputerDescentResultByTargetUid);
 
-                        scanOperationContext.MergeOperationResultAction = (_, guid) =>
+                        scanOperationContext.MergeOperationResultAction = _ =>
                             _mainScanOperationContext.MergeOperationResult(_,
-                                scanOperationContext.GetComputerDescentResultByTargetUid, guid);
+                                scanOperationContext.GetComputerDescentResultByTargetUid);
 
                         _rescanOperations.TryAdd(args.OperationUid, null);
                     }

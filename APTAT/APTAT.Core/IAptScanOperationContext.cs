@@ -26,11 +26,11 @@ namespace APTAT.Core.Descent
     public interface IAptScanMergeableOperationContext : IAptScanOperationContext
     {
         Action<IDescentProgressItem> MergeOperationProgressAction { get; set; }
-        Action<IOperationDescentResult, Guid> MergeOperationResultAction { get; set; }
+        Action<IOperationDescentResult> MergeOperationResultAction { get; set; }
 
         void MergeOperationProgress(IDescentProgressItem progress, Func<Guid, IComputerDescentResult> func);
 
-        void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func, Guid guid);
+        void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func);
     }
 
     public class AptOperationProgressChangedEventArgs : OperationProgressChangedEventArgs

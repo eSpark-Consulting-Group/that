@@ -1,14 +1,16 @@
 ﻿using APTAT.DeploymentCore.Messages;
+using System;
 
 namespace APTAT.DeploymentCore.Descent
 {
 	public struct OperationDescentResult : IOperationDescentResult
     {
-		public OperationDescentResult( bool succeeded,
+		public OperationDescentResult(Guid computerUid, bool succeeded,
 			FormattedText statusMessage, FormattedText shortStatusMessage,
 			string errorCode, string systemMessage, int systemCode,
             bool isCanceled)
         {
+            ComputerUid = computerUid;
             Succeeded = succeeded;
             StatusMessage = statusMessage;
             ShortStatusMessage = shortStatusMessage;
@@ -16,6 +18,7 @@ namespace APTAT.DeploymentCore.Descent
             SystemMessage = systemMessage;
             SystemCode = systemCode;
             IsCanceled = isCanceled;
+
         }
 
         public bool IsCanceled { get; }
@@ -25,5 +28,6 @@ namespace APTAT.DeploymentCore.Descent
 		public string ErrorCode { get;  }
 		public string SystemMessage { get;  }
 		public int SystemCode { get;  }
-	}
+        public Guid ComputerUid { get; }
+    }
 }

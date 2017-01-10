@@ -108,12 +108,12 @@ namespace APTAT.DeploymentCore.Descent
             
 			if( !ok)
 			{
-				operationResult = new OperationDescentResult(false, errorMessage, shortStatusMessage, 
+				operationResult = new OperationDescentResult(computerUid, false, errorMessage, shortStatusMessage, 
                     errorCode, systemMessage, systemCode, isCanceled);
 			}
 			else
 			{
-				operationResult = new OperationDescentResult(true, FormattedText.Empty, shortStatusMessage, 
+				operationResult = new OperationDescentResult(computerUid, true, FormattedText.Empty, shortStatusMessage, 
                     String.Empty, String.Empty, 0, isCanceled);
 			}
 
