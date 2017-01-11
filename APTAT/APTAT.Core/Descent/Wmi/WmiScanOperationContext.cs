@@ -43,7 +43,7 @@ namespace APTAT.Core.Descent.Wmi
             get { return _scanResults; }
         }
 
-        public override bool Changed(params ChangesTrackingItem[] items)
+        public override void Changed(params ChangesTrackingItem[] items)
         {
             base.Changed(items);
             foreach (var item in items)
@@ -66,7 +66,6 @@ namespace APTAT.Core.Descent.Wmi
             }
 
             OnOperationProgressChanged(new OperationProgressChangedEventArgs() { Percentage = CalculateTotalPercentage(), OperationUid = OperationUid });
-            return true;
         }
 
         public override void OnDescendOperationEvent(bool ok, Guid computerUid, FormattedText errorMessage, FormattedText shortStatusMessage,

@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography;
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Messages;
@@ -220,7 +219,7 @@ namespace APTAT.DeploymentCore.Descent
 
         #region IChangeTrackingListener Members
 
-        public virtual bool Changed( params ChangesTrackingItem[] items )
+        public virtual void Changed( params ChangesTrackingItem[] items )
 		{
 			foreach( var item in items )
 			{
@@ -232,17 +231,11 @@ namespace APTAT.DeploymentCore.Descent
                         var originalResult = ResultsByUid[progressItem.ComputerUid];
                         if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 ||
                             originalResult.StatusMessage != progressItem.StatusMessage)
-                        {
-
                             UpdateStatus(originalResult, progressItem);
-                        }
                         _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                     }
-                    else return false;
                 }
 			}
-
-            return true;
 		}
 
 

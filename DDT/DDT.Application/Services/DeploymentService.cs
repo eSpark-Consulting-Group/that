@@ -1,27 +1,20 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using DDT.Core.Descent;
-using DDT.Core;
 using DDT.Application.Models;
-using DDT.Core.Helper;
 using System.Threading.Tasks;
-using APTAT.Common;
-using APTAT.DeploymentCore;
 
 namespace DDT.Application.Services
 {
     public class DeploymentService : IDeploymentService
     {
         private readonly IDescentSubSystem _descent;
-        private ICheckNmapInstallation _nmapHelper;
 
-        public DeploymentService(IDescentSubSystem descent, ICheckNmapInstallation nmapHelper)
+        public DeploymentService(IDescentSubSystem descent)
         {
             _descent = descent;
-            _nmapHelper = nmapHelper;
         }
 
         public async Task<DeploymentStartedEventArgs> BeginDeployment(DeploymentItem[] items, String login, 
@@ -31,9 +24,9 @@ namespace DDT.Application.Services
             var scanner = new DescentScanner(targets, login, password, 
                 null, deploymentTimeOut, packageX86, packageX64);
             Guid operationUid = Guid.Empty;
-
-            await Task.Run(() => { _descent.StartScan(scanner, out operationUid); });
-            return new DeploymentStartedEventArgs(operationUid);            
+            DeploymentStartedEventArgs args = null;
+            await Task.Run(() => { _descent.StartScan(scanner, _ => args = new DeploymentStartedEventArgs(_)); });
+            return args;            
         }
 
         public GetModifiedComputerResultsForOperationEventArgs GetModifiedComputerResultsForOperation(Guid operationUid, DateTime? lastUtcTime)
@@ -71,14 +64,6 @@ namespace DDT.Application.Services
             IDescentQueryResult result = _descent.GetDescentResultsByOperationUid(operationUid);
             DescentResultModel mappedResult = ResultMapper.MapFromDescentResult(result);
             GetResultForOperationCompleted?.Invoke(this, new GetResultForOperationEventArgs(mappedResult));
-        }
-
-        [Obsolete]
-        public bool IsNmapInstalled(out string errorMesage)
-        {
-            
-            return  _nmapHelper.Check(out errorMesage);
-            
         }
     }
 }

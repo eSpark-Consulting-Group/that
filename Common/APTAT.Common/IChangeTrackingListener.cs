@@ -28,7 +28,7 @@ namespace APTAT.Common
     }
     public interface IChangeTrackingListener
     {
-        bool Changed(params ChangesTrackingItem[] items);
+        void Changed(params ChangesTrackingItem[] items);
         Guid SessionId { get; }
     }
     public enum ChangeType

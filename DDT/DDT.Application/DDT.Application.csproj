@@ -110,6 +110,7 @@
     <Compile Include="Helpers\DialogHelper.cs" />
     <Compile Include="Extensions\SystemKindExtensions.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
+    <Compile Include="Helpers\ThreadHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -151,6 +152,9 @@
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="..\CommonAssemlyInfo.cs">
       <Link>Properties\CommonAssemlyInfo.cs</Link>
+    </Compile>
+    <Compile Include="SplashWindow.xaml.cs">
+      <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplateSelectors\DirectoryItemsTemplateSelector.cs" />
     <Compile Include="TemplateSelectors\ResultsTemplateSelector.cs" />
@@ -283,9 +287,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AppResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SplashWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\DarkCyan.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -14,7 +14,6 @@ namespace DDT.Core
             resolver.Register<IRegistryHelper, RegistryHelper>();
             resolver.Register<IProcessHelper, ProcessHelper>();
             resolver.Register<IEnvironmentHelper, EnvironmentHelper>();
-            resolver.Register<ICheckNmapInstallation, CheckNmapInstallation>();
         }
     }
 }
