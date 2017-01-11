@@ -5,20 +5,11 @@ namespace APTAT.DeploymentCore.Descent
 {
     public interface IDescentSubSystem : ISubSystem
 	{
-
-        //void StartAptScan(IEnumerable<DeploymentTarget> computers, string login, string password,
-        //    DevicesSourceDescription devicesSourceDescription,out Guid operationUid, string scanScope,
-        //    string tcpPort, string udpPort);
-	    void StartScan(IScanner scanner, Action<Guid> guidAcquired);
-        //void StartWmiScan(IEnumerable<DeploymentTarget> computers, string login, string password,
-        //    DevicesSourceDescription devicesSourceDescription, out Guid operationUid);
+        void StartScan(IScanner scanner, Action<Guid> guidAcquired);
         IDescentQueryResult GetDescentResultsByOperationUid(Guid operationUid);
-        //AptScanOperationContext GetAptScanResultsByOperationUid(Guid operationUid);
-        //WmiScanOperationContext GetWmiScanResultsByOperationUid(Guid operationUid);
-        //AptScanOperationContext GetFirstScanResults();
 
         void StopAllScans(int code = 0);
-	    void StopOperationForTargetUid(Guid operationUid, Guid targetUid);
+	    void StopOperationForTargetUid(Guid operationUid, Guid[] targetUids);
 
         event EventHandler<DescentEventArgs> DescentCompleted;
     }

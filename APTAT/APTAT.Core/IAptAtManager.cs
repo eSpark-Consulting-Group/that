@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Net;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
-
 using APTAT.Valkyrie;
+using System.Collections.ObjectModel;
 
 namespace APTAT.Core
 {
@@ -22,23 +21,24 @@ namespace APTAT.Core
 
         IAptReportBuilder GetAptReportBuilder();
 
-        void StopScan(Guid[] targets);
+        void StopScan(Guid operation, Guid[] targets);
         void UpdateFlsPorts(int udpPort, int tcpPort);
 
         void StartValkyrieAnalysis(string login, string password, 
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential);
 
         string GetValkyrieDetailsLink();
-        int GetDistinctFileCount();
+        int GetDistinctFilesCount();
 
-        
+
+
     }
 
     internal interface IAptAtManagerInternal : IAptAtManager
     {
         Guid ValkyrieOperationUid { get; }
         Guid FlsLookupOperationUid { get; }
-        IAptScanOperationContext LastAptScanOperationContext { get; }
+        Collection<IAptScanOperationContext> AptScanOperationContexts { get; }
         ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
     }
 }

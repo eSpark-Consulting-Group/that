@@ -40,7 +40,6 @@ namespace APTAT.Core.UnitTests
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var target = new AptAtManager(descent, valkyrie, fls, aptScannerFactory, new DistinctFileHelper());
             Assert.True(target.ValkyrieAnalysisResult.IsEmpty);
-            Assert.Null(target.LastAptScanOperationContext);
         }
 
         [Fact]
@@ -259,7 +258,7 @@ namespace APTAT.Core.UnitTests
             }
 
             Assert.Equal(8, scanResult.Files.Count()); //10 not distinct files 2 same collection                       
-            Assert.Equal(hs.Count(), aptAtManagerUnderTest.GetDistinctFileCount()); // distinct             
+            Assert.Equal(hs.Count(), aptAtManagerUnderTest.GetDistinctFilesCount()); // distinct             
             
         }
 
@@ -295,7 +294,7 @@ namespace APTAT.Core.UnitTests
 
             aptAtManagerUnderTest.GetAptScanner(description, scanOptions);
 
-            aptAtManagerUnderTest.StopScan(new Guid[0]);
+            aptAtManagerUnderTest.StopScan(operationGuid, new Guid[0]);
             Mock.AssertAll(fls);
             Mock.AssertAll(descent);
             Mock.AssertAll(aptScanner);

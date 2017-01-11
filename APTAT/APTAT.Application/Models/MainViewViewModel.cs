@@ -249,10 +249,12 @@ namespace APTAT.Application.Models
                 RaisePropertyChanged(nameof(SearchAvailable));
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
-               {
+                {
                    StartScanCommand.InvalidateCanExecute();
                    StopScanCommand.InvalidateCanExecute();
-               });
+                   RestartComputerScanCommand.InvalidateCanExecute();
+                   RestartComputerScanWithCredentialsCommand.InvalidateCanExecute();
+                });
 
             }
         }
@@ -633,9 +635,9 @@ namespace APTAT.Application.Models
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
 
-            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
+            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled && !IsValkyrieScanInProgress.GetValueOrDefault());
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o => 
-                IsRestartEnabled && !SelectedItem.IsLocal);
+                IsRestartEnabled && !SelectedItem.IsLocal && !IsValkyrieScanInProgress.GetValueOrDefault());
             StopComputerScanCommand = new DelegateCommand(o => InvokeStopComputerScan(o), o => IsStopEnabled);
 
             ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.Empty;
@@ -701,6 +703,9 @@ namespace APTAT.Application.Models
             {
                 IsScanInProgress = true;
                 Percentage = 0;
+                IsReportEnabled = false;
+                IsAnalyseWithValkyrieEnabled = false;
+                IsValkyrieReportEnabled = false;
             }
         }
 
@@ -771,7 +776,7 @@ namespace APTAT.Application.Models
             if (arg != null && arg is Guid[])
                 targets = (Guid[])arg;
 
-            _aptService.StopScan(targets);
+            _aptService.StopScan(_operationGuid, targets);
 
         }
 

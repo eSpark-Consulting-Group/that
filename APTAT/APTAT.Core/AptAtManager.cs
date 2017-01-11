@@ -8,11 +8,11 @@ using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Descent;
-using APTAT.DeploymentCore.Descent.Exceptions;
 using APTAT.DeploymentCore.Directory;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using APTAT.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
+using System.Collections.ObjectModel;
 
 namespace APTAT.Core
 {
@@ -27,24 +27,30 @@ namespace APTAT.Core
         public event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
         private IValkyrieClient _valkyrieClient;
-        private IAptScanOperationContext _lastAptResults;
+        private Collection<IAptScanOperationContext> _lastAptResults = new Collection<IAptScanOperationContext>();
 
-        public IAptScanOperationContext LastAptScanOperationContext
+        public Collection<IAptScanOperationContext> AptScanOperationContexts
         {
             get { return _lastAptResults; }
         }
 
-        public ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; } 
+        public ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
+
+        private IEnumerable<IAptScanResult> GetResultsEnumerator()
+        {
+            foreach (var result in _lastAptResults)
+                foreach (var scan in result.ScanResults)
+                    yield return scan;
+        }
+
 
         private void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors)
         {
             
             bool isUpdated = false;
-            foreach (var scan in _lastAptResults.ScanResults)
+            foreach (var result in GetResultsEnumerator().ToArray())
             {
-                
-                var files =
-                    scan.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict).ToArray();
+                var files = result.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict).ToArray();
 
                 foreach (var file in files)
                 {
@@ -54,7 +60,8 @@ namespace APTAT.Core
                         isUpdated = true;
                     }
                 }
-                scan.RecalculateStatistics();
+                result.RecalculateStatistics();
+
             }
             if (isUpdated)
             {
@@ -90,7 +97,7 @@ namespace APTAT.Core
 
         private void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
         {
-            var valkyrieAnalysisResult = GetFullResult(e.Result, _lastAptResults.ScanResults).Values;
+            var valkyrieAnalysisResult = GetFullResult(e.Result, GetResultsEnumerator().ToArray()).Values;
             foreach (var fileResult in valkyrieAnalysisResult)
             {
                 ValkyrieAnalysisResult.AddOrUpdate(fileResult.Sha1, fileResult, (s, result) => fileResult);
@@ -98,7 +105,12 @@ namespace APTAT.Core
             ValkyrieOperationUid = Guid.NewGuid();
             var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
                 , e.UserState);
+
+            lock(_lastAptResults)
+                _lastAptResults.Clear();
+
             ValkyrieAnalyzeCompleted?.Invoke(this, arg);
+            
         }
         
         private void OnValkyrieClientProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
@@ -108,7 +120,7 @@ namespace APTAT.Core
             {
                 ProgressInfo<ValkyrieAnalysisResult> info = e.ProgressInfo;
 
-                var valkyrieAnalysisResult = GetFullResult(info.Results, _lastAptResults.ScanResults).Values;
+                var valkyrieAnalysisResult = GetFullResult(info.Results, GetResultsEnumerator().ToArray()).Values;
                 var valkyrieAnalysisResultInternal = ValkyrieAnalysisResult;
                 if (e.IsUpdate && valkyrieAnalysisResultInternal != null)
                 {
@@ -167,28 +179,23 @@ namespace APTAT.Core
             return fileResults;
         }
 
-        public static List<ValkyrieFileInfo> GetDistinctFileInfo(IEnumerable<IAptScanResult> results)
+        private int GetDistinctFilesCount(IEnumerable<IAptScanResult> results)
         {
-            Dictionary<string, IAptScanResult> scanResults = results.ToDictionary(t => t.Computer.Uid.ToString());
-
-            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>();
-            foreach (var scanResult in scanResults)
+            var files = new List<ValkyrieFileInfo>();
+            foreach (var scanResult in results)
             {
-                foreach (var badFile in scanResult.Value.BadFiles)
+                foreach (var badFile in scanResult.BadFiles)
                 {
                     if (files.All(f => !String.Equals(f.Sha1, badFile.Sha1, StringComparison.OrdinalIgnoreCase)))
                     {
                         files.Add(new ValkyrieFileInfo()
                         {
-                            Ip = scanResult.Value.Computer.IPAddress,
-                            Path = badFile.Path,
-                            Sha1 = badFile.Sha1,
-                            Size = badFile.Size
+                            Sha1 = badFile.Sha1
                         });
                     }
                 }
             }
-            return files;
+            return files.Count;
         }
 
         private List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IAptScanResult[] results)
@@ -256,27 +263,28 @@ namespace APTAT.Core
                     }
                 }
             }
-                if (verdictUpdated.Any())
+
+            if (verdictUpdated.Any())
+            {
+                Dictionary<string, CloudVerdict> dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
+                UpdateLastResult(dict);
+                if (_isValkyrieStarted)
                 {
-                    Dictionary<string, CloudVerdict> dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
-                    UpdateLastResult(dict);
-                    if (_isValkyrieStarted)
+                    dict = verdictUpdated.Where(v => v.Cloud == CloudVerdict.FirstSeen || v.Cloud == CloudVerdict.Unknown)
+                        .ToDictionary(t => t.Sha1, v => v.Cloud);
+                    List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
+                    if (filesToAnalyze.Any())
                     {
-                        dict = verdictUpdated.Where(v => v.Cloud == CloudVerdict.FirstSeen || v.Cloud == CloudVerdict.Unknown)
-                            .ToDictionary(t => t.Sha1, v => v.Cloud);
-                        List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
-                        if (filesToAnalyze.Any())
-                        {
-                            var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v => 
-                            new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.Pending)), _lastAptResults.ScanResults).Values;
-                            _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
-                            foreach (var fileInfo in valkyrieAnalysisResults)
-                                ValkyrieAnalysisResult.TryAdd(fileInfo.Sha1, fileInfo);
-                            ValkyrieOperationUid = Guid.NewGuid();
-                        }
+                        var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v =>
+                        new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.Pending)), GetResultsEnumerator().ToArray()).Values;
+                        _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
+                        foreach (var fileInfo in valkyrieAnalysisResults)
+                            ValkyrieAnalysisResult.TryAdd(fileInfo.Sha1, fileInfo);
+                        ValkyrieOperationUid = Guid.NewGuid();
                     }
-                    OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
                 }
+                OnFlsAnalyzeProgressChanged(new FlsRequestEventArgs(verdictUpdated.ToArray(), null));
+            }
             
             if (addToAnalyze.Any())
             {
@@ -288,8 +296,7 @@ namespace APTAT.Core
 
         private List<ValkyrieFileInfo> GetFilesToAnalyzeForValkyrie(Dictionary<string, CloudVerdict> dict)
         {
-            IEnumerable<IAptScanResult> results = _lastAptResults.ScanResults;
-            IAptScanResult[] aptScanResults = results as IAptScanResult[] ?? results.ToArray();
+            IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
             List<ValkyrieFileInfo> distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
             List<ValkyrieFileInfo> fileInfoList = distinctFileList.Where(x => dict.ContainsKey(x.Sha1)).ToList();
 
@@ -304,7 +311,6 @@ namespace APTAT.Core
             if (e.Results.Any())
             {
                 AddResultsToDictionary(e.Results);
-                //OnFlsAnalyzeProgressChanged(e);
             }
         }
 
@@ -320,9 +326,6 @@ namespace APTAT.Core
             {
                 _flsHashResults.Clear();
             }
-            
-            //_lastAptResults = _scanner.ScanOperationContext;
-            //ValkyrieAnalysisResult.Clear();
         }
 
         private void OnScanCompleted(object sender, ScanCompletedEventArgs e)
@@ -332,10 +335,13 @@ namespace APTAT.Core
             {
                 scanner.ScanStarted -= OnScanStarted;
                 scanner.ScanCompleted -= OnScanCompleted;
+                _scanner = null;
+
                 var aptResult =
                     (IAptScanOperationContext) _descentSubSystem.GetDescentResultsByOperationUid(e.OperationUid);
-                _lastAptResults = aptResult;
-                _scanner = null;
+
+                lock(_lastAptResults)
+                    _lastAptResults.Add(aptResult);
             }
         }
 
@@ -345,15 +351,14 @@ namespace APTAT.Core
             return aptReportBuilder;
         }
 
-        /*public IAptScanResult GetScanResultByTargetUid(Guid targetUid)
+        public void StopScan(Guid operation, Guid[] targets)
         {
-            return _lastAptResults?.GetAptResultByTargetUid(targetUid);
-        }*/
-
-        public void StopScan(Guid[] targets)
-        {
+            if (targets.Any())
+                _descentSubSystem.StopOperationForTargetUid(operation, targets);
             _descentSubSystem.StopAllScans(0);
+
             _flsManager.Cancel();
+            _isValkyrieStarted = false;
             _valkyrieClient.AnalyzeAsyncCancel();
             lock (_flsHashResults)
             {
@@ -368,9 +373,8 @@ namespace APTAT.Core
             lock (_flsHashResults)
             {
                 var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
-                var results = _lastAptResults.ScanResults;
-                var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
-                List<ValkyrieFileInfo> distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
+                var aptScanResults = GetResultsEnumerator().ToArray();
+                var distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
                 _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length,
                     proxyCredential);
             }
@@ -381,10 +385,9 @@ namespace APTAT.Core
             return _valkyrieClient.GetValkyrieDetailsLink();
         }
 
-        public int GetDistinctFileCount()
+        public int GetDistinctFilesCount()
         {
-            var files = GetDistinctFileInfo(_lastAptResults.ScanResults);
-            return files.Count;
+            return GetDistinctFilesCount(GetResultsEnumerator().ToArray());
         }
 
         public void Dispose()

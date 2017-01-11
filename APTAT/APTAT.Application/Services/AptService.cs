@@ -226,8 +226,7 @@ namespace APTAT.Application.Services
             args.NotPerformedCount = e.NotPerformedCount;
             args.FilesStatistics = e.FilesStatistics;
             args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
-            int distCount = _manager.GetDistinctFileCount();
-            args.DistinctFileFound = distCount;
+            args.DistinctFileFound = _manager.GetDistinctFilesCount();
 
 
             Action action = () =>
@@ -244,9 +243,9 @@ namespace APTAT.Application.Services
 
         }
 
-        public void StopScan(Guid[] targets)
+        public void StopScan(Guid operation, Guid[] targets)
         {
-            _manager.StopScan(targets);
+            _manager.StopScan(operation, targets);
         }
 
         

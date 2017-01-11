@@ -204,8 +204,5 @@ namespace APTAT.Core.Apt
 
             public Action<Guid> GuidAcquired { get; set; }
         }
-
     }
-
-
 }
