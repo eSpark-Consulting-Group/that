@@ -21,7 +21,7 @@ namespace APTAT.Core
 
         IAptReportBuilder GetAptReportBuilder();
 
-        void StopScan(Guid operation, Guid[] targets);
+        void StopScan(Guid[] targets);
         void UpdateFlsPorts(int udpPort, int tcpPort);
 
         void StartValkyrieAnalysis(string login, string password, 

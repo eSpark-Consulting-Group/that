@@ -294,7 +294,7 @@ namespace APTAT.Core.UnitTests
 
             aptAtManagerUnderTest.GetAptScanner(description, scanOptions);
 
-            aptAtManagerUnderTest.StopScan(operationGuid, new Guid[0]);
+            aptAtManagerUnderTest.StopScan(new Guid[0]);
             Mock.AssertAll(fls);
             Mock.AssertAll(descent);
             Mock.AssertAll(aptScanner);

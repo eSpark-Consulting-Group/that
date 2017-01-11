@@ -108,13 +108,12 @@ namespace APTAT.DeploymentCore.Descent
             }
         }
 
-        public void StopOperationForTargetUid(Guid operationUid, Guid[] targetUids)
+        public void StopOperationForTargetUid(Guid[] targetUids)
         {
-            IScanner scanner;
-            if(_scanners.TryGetValue(operationUid, out scanner))
+            foreach (var scanner in _scanners)
             {
-                foreach(var target in targetUids)
-                    scanner.StopScan(target);
+                foreach (var target in targetUids)
+                    scanner.Value.StopScan(target);
             }
         }
 

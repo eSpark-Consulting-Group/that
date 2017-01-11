@@ -351,18 +351,21 @@ namespace APTAT.Core
             return aptReportBuilder;
         }
 
-        public void StopScan(Guid operation, Guid[] targets)
+        public void StopScan(Guid[] targets)
         {
             if (targets.Any())
-                _descentSubSystem.StopOperationForTargetUid(operation, targets);
-            _descentSubSystem.StopAllScans(0);
-
-            _flsManager.Cancel();
-            _isValkyrieStarted = false;
-            _valkyrieClient.AnalyzeAsyncCancel();
-            lock (_flsHashResults)
+                _descentSubSystem.StopOperationForTargetUid(targets);
+            else
             {
-                _flsHashResults.Clear();
+                _descentSubSystem.StopAllScans(0);
+
+                _flsManager.Cancel();
+                _isValkyrieStarted = false;
+                _valkyrieClient.AnalyzeAsyncCancel();
+                lock (_flsHashResults)
+                {
+                    _flsHashResults.Clear();
+                }
             }
         }
 

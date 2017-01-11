@@ -77,6 +77,11 @@ namespace APTAT.Core.Descent.Apt
                 SucceededTargetsCount++;
                 FailedTargetsCount--;
             }
+            else if (result.IsCanceled)
+            {
+                SucceededTargetsCount--;
+                CanceledTargetsCount++;
+            }
         }
 
         private double CalculateTotalPercentage()

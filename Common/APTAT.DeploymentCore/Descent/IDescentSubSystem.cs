@@ -9,7 +9,7 @@ namespace APTAT.DeploymentCore.Descent
         IDescentQueryResult GetDescentResultsByOperationUid(Guid operationUid);
 
         void StopAllScans(int code = 0);
-	    void StopOperationForTargetUid(Guid operationUid, Guid[] targetUids);
+	    void StopOperationForTargetUid(Guid[] targetUids);
 
         event EventHandler<DescentEventArgs> DescentCompleted;
     }

@@ -243,9 +243,9 @@ namespace APTAT.Application.Services
 
         }
 
-        public void StopScan(Guid operation, Guid[] targets)
+        public void StopScan(Guid[] targets)
         {
-            _manager.StopScan(operation, targets);
+            _manager.StopScan(targets);
         }
 
         

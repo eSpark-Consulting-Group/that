@@ -693,7 +693,7 @@ namespace APTAT.Application.Models
 
             var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
             var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
-            
+
             SelectedItem.RestoreConnectingState();
 
             _aptService.BeginScan(new[] { SelectedItem.DeploymentTarget }, login, password,
@@ -768,15 +768,15 @@ namespace APTAT.Application.Models
         private void InvokeStopScan(Object arg)
         {
             if (!IsAnyScanInProgress)
-                return;
-
-            CancelInProgress = true;
+                return; 
 
             var targets = new Guid[0];
             if (arg != null && arg is Guid[])
                 targets = (Guid[])arg;
+            else
+                CancelInProgress = true;
 
-            _aptService.StopScan(_operationGuid, targets);
+            _aptService.StopScan(targets);
 
         }
 
@@ -1292,13 +1292,10 @@ namespace APTAT.Application.Models
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
         {
-            if (_operationGuid == e.OperationGuid)
+            if (_operationGuid == e.OperationGuid && !CancelInProgress)
             {
-                if (!CancelInProgress)
-                {
-                    Percentage = e.Percentage;
-                    RaisePropertyChanged("Header");
-                }
+                Percentage = e.Percentage;
+                RaisePropertyChanged("Header");
             }
         }
 
@@ -1353,6 +1350,11 @@ namespace APTAT.Application.Models
 
                 if (infoItem.ScanStage == ScanStage.OperationCompleted)
                     scanned++;
+
+                if (infoItem.ScanStage == ScanStage.OperationCanceled && !CancelInProgress)
+                {
+
+                }
 
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
