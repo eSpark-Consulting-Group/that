@@ -70,7 +70,6 @@
     <Compile Include="Descent\DescentScannerTests.cs" />
     <Compile Include="Descent\InstallPackageInfoTests.cs" />
     <Compile Include="Descent\PackageDescentModTests.cs" />
-    <Compile Include="Helper\CheckNmapInstallationTests.cs" />
     <Compile Include="Helper\CSVHelperTests.cs" />
     <Compile Include="PackageComputerDescentResultTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
