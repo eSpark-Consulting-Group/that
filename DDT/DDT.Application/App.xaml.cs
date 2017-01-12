@@ -37,12 +37,12 @@ namespace DDT.Application
                         Source = new Uri("/DDT.Application;component/AppResources.xaml", UriKind.RelativeOrAbsolute)
                     });
                     CompositionHelper.Instance.RegisterModules(new[]
-                {
-                    typeof(APTAT.Common.DependencyLocator),
-                    typeof(APTAT.DeploymentCore.DependencyLocator),
-                    typeof(Core.DependencyLocator),
-                    typeof(DependencyLocator)
-                });
+                    {
+                        typeof(APTAT.Common.DependencyLocator),
+                        typeof(APTAT.DeploymentCore.DependencyLocator),
+                        typeof(Core.DependencyLocator),
+                        typeof(DependencyLocator)
+                    });
                 });
                 op.Completed += DispatcherOperationCompleted;
 

@@ -89,10 +89,11 @@ namespace DDT.Core.Descent
 
         protected override void DeploymentThread(object obj)
         {
-            base.DeploymentThread(obj);
+            
             var tp = (InstallAgentThreadParams)obj;
             NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity,
                         ServerSideMessagesResources.DescentProgressAgentInstallConnectingToTarget, 0);
+            base.DeploymentThread(obj);
 
         }
 

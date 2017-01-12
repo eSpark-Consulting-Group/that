@@ -95,10 +95,10 @@ namespace DDT.Application.ViewModels
                     ActiveDirectoryPassword));
             }
 
-            await OnAggregatedDeploymentItemsResolved(resolved);
+            OnAggregatedDeploymentItemsResolved(resolved);
         }
 
-        private async Task OnAggregatedDeploymentItemsResolved(AggregatedDeploymentItemsResolvedEventArgs e)
+        private void OnAggregatedDeploymentItemsResolved(AggregatedDeploymentItemsResolvedEventArgs e)
         {
             if (e.Exception != null)
             {
@@ -175,8 +175,8 @@ namespace DDT.Application.ViewModels
 
             if (deployCollection.Any(_ => _.IsOnline))
             {
-                var result = await TryAction(_deploymentService.BeginDeployment(deployCollection.ToArray(), 
-                    Login, Password, TimeSpan.FromMinutes(DeployTimeout), package, package64));
+                var result = _deploymentService.BeginDeployment(deployCollection.ToArray(), 
+                    Login, Password, TimeSpan.FromMinutes(DeployTimeout), package, package64);
                 OnDeploymentStarted(result);
             }
             else

@@ -4,7 +4,6 @@ using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using DDT.Core.Descent;
 using DDT.Application.Models;
-using System.Threading.Tasks;
 
 namespace DDT.Application.Services
 {
@@ -17,7 +16,7 @@ namespace DDT.Application.Services
             _descent = descent;
         }
 
-        public async Task<DeploymentStartedEventArgs> BeginDeployment(DeploymentItem[] items, String login, 
+        public DeploymentStartedEventArgs BeginDeployment(DeploymentItem[] items, String login, 
             String password, TimeSpan deploymentTimeOut,InstallPackageInfo packageX86, InstallPackageInfo packageX64)
         {
             DeploymentTarget[] targets = items.ToBusiness();
@@ -25,7 +24,7 @@ namespace DDT.Application.Services
                 null, deploymentTimeOut, packageX86, packageX64);
             Guid operationUid = Guid.Empty;
             DeploymentStartedEventArgs args = null;
-            await Task.Run(() => { _descent.StartScan(scanner, _ => args = new DeploymentStartedEventArgs(_)); });
+            _descent.StartScan(scanner, _ => args = new DeploymentStartedEventArgs(_));
             return args;            
         }
 

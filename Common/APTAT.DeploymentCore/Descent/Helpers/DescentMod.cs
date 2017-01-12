@@ -76,8 +76,9 @@ namespace APTAT.DeploymentCore.Descent.Helpers
         protected virtual void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, int percentage,
             bool checkCancellation = true)
         {
-            var tp = ParamsByUid[computerUid];
-            if (checkCancellation && (TaskFactory.CancellationToken.IsCancellationRequested || tp.IsCancelled))
+            InstallAgentThreadParams tp;
+            ParamsByUid.TryGetValue(computerUid, out tp);
+            if (checkCancellation && (TaskFactory.CancellationToken.IsCancellationRequested || (tp != null && tp.IsCancelled)))
                 throw new OperationCanceledException();
             FormattedText formattedText = new FormattedText(resourceMessage);
             Tracker?.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed,
