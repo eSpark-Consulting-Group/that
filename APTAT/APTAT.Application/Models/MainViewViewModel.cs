@@ -1251,7 +1251,6 @@ namespace APTAT.Application.Models
             IsReportEnabled = ScannedItemsCount > 0;
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             UpdateStatus();
-            RaisePropertyChanged(nameof(Header));
         }
 
         public void OnBeforeBeginValkyrieAnalysis()
@@ -1402,6 +1401,9 @@ namespace APTAT.Application.Models
 
             foreach (var infoItem in _onlineItems)
             {
+                if (infoItem.ScanStage == ScanStage.OperationCanceled)
+                    continue;
+
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
                 lookupInProgressCount += infoItem.FailedToAnalyzeCount;
