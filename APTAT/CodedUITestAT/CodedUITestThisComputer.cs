@@ -183,7 +183,6 @@ namespace CodedUITestAT
             {
                 additinalPaths[i] = String.Format(@"{0}1.5.{1}\", fullPath1, i+1);
                 if (!Directory.Exists(additinalPaths[i])) Directory.CreateDirectory(additinalPaths[i]);
-                //File.Copy(unknown.Location, String.Format(@"{0}\{1}", additinalPaths[i], unknown.Name), true);
             }
             if (!Directory.Exists(fullPath2)) Directory.CreateDirectory(fullPath2);
 
@@ -227,7 +226,7 @@ namespace CodedUITestAT
                 else Assert.Fail(String.Format(@"Tree item '{0}' is not checked, not expected!", path));
             }
 
-            UIMapThisComputer.CheckScanCriticalAreasCheckBox();
+            //UIMapThisComputer.CheckScanCriticalAreasCheckBox();
             UIMapStartScanWizard.ClickNextButton();
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickNoButton();
@@ -236,18 +235,17 @@ namespace CodedUITestAT
             foreach (var path in checkedItems)
             {
                 var expectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
-                UIHelper.FindThreat(expectedFile, ResultsScreen.ScanResults, TestContext);
-            }            
+                if (UIHelper.IsThereThreatInstance(expectedFile, ResultsScreen.ScanResults))
+                    TestContext.WriteLine(String.Format("Instance '{0}' found at {1} screen.", expectedFile.Location, ResultsScreen.ScanResults));
+                else Assert.Fail(String.Format("Instance '{0}' not found at {1} screen!", expectedFile.Location, ResultsScreen.ScanResults));
+            }
+
             foreach (var path in uncheckedItems)
             {
                 var unexpectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
-                try
-                {
-                   UIHelper.FindThreat(unexpectedFile, ResultsScreen.ScanResults, TestContext);
-                } catch (AssertFailedException)
-                {
-                  TestContext.WriteLine(String.Format(@"Row {0} not found at results screen as expected.", unexpectedFile.RowName));
-                }
+                if (!UIHelper.IsThereThreatInstance(unexpectedFile, ResultsScreen.ScanResults))
+                    TestContext.WriteLine(String.Format("Instance '{0}' not found at {1} screen.", unexpectedFile.Location, ResultsScreen.ScanResults));
+                else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at {1} screen!", unexpectedFile.Location, ResultsScreen.ScanResults));
             }
         }
                 

@@ -182,9 +182,12 @@ namespace CodedUITestAT
         /// <param name="row">Set a row.</param>
         internal static string GetRowStatus(this UITestControl row)
         {
+            int statusShift = 1;
+            if (!DataHelper.IsGroupedByFiles) statusShift++;
+
             var cell = row.GetChildren()[1];
             var cellElement = cell.GetChildren()[0];
-            var text = cellElement.GetChildren()[2];
+            var text = cellElement.GetChildren()[statusShift];
 
             return text.Name;
         }
@@ -387,6 +390,8 @@ namespace CodedUITestAT
                 default: throw new Exception(String.Format("Unexpected results screen '{0}'!", screen));
             }
 
+            if (DataHelper.IsGroupedByFiles) rowName = Path.GetFileName(rowName);
+
             foreach (var row in rows)
             {
                 if (row.GetRowName().Contains(rowName))
@@ -435,6 +440,49 @@ namespace CodedUITestAT
                 GroupByComputers();
                 Assert.Fail(String.Format("Row '{0}' not found at screen '{1}'!", threat.RowName, resultsScreen));
             }
+        }
+
+        /// <summary> Determines whether there is a given threat instance at a defined results screen. </summary>
+        /// <param name="threat">Set a threat.</param>
+        /// <param name="resultsScreen">Set a results screen.</param>
+        internal static bool IsThereThreatInstance(Threat threat, ResultsScreen resultsScreen)
+        {
+            CodedUITestMain useMain = new CodedUITestMain();
+            UITestControl[] rows = null;
+
+            GroupByFiles();
+            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
+            useMain.UIMapMain.InputTextToSearchBox();
+            ClickRow(resultsScreen, threat);
+
+            switch (resultsScreen)
+            {
+                case ResultsScreen.ScanResults:
+                    {
+                        rows = useMain.ScanResultsTab().GetRows();
+                        break;
+                    }
+                case ResultsScreen.ValkyrieAnalysis:
+                    {
+                        rows = useMain.ValkyrieAnalysisResultsTab().GetRows();
+                        break;
+                    }
+            }
+            
+            foreach (var row in rows)
+            {
+                string instanceName = row.GetRowStatus().ToLower();
+                if (instanceName.Contains(threat.Location))
+                {
+                    useMain.UIMapMain.ClickClearSearchTextButton();
+                    GroupByComputers();
+                    return true;
+                }
+            }
+
+            useMain.UIMapMain.ClickClearSearchTextButton();
+            GroupByComputers();
+            return false;            
         }
 
         /// <summary> Switches the results screens to 'Group by Files' view. Starts at Main screen. </summary>

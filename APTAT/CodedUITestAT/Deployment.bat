@@ -20,7 +20,7 @@ set EndpointRoot=%ServerRoot%
 
 set TargetDir=%ServerRoot%:\CNAT
 
-set ProductExeName=ValkyrieHunter.exe
+set ProductExeName=UnknownFileHunter.exe
 
 set DataSource=AutotestsData\AT
 

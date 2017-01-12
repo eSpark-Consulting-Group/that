@@ -62,7 +62,7 @@ namespace CodedUITestAT
         /// <returns> Returns the product version or null in the case the product file is not found. </returns>
         internal static string GetProductVersion()
         {
-            string filePath = Path.Combine(DataHelper.GetWorkingFolder(), Settings.General.Default.ProductExeName);
+            string filePath = Path.Combine(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName);
             try
             {
                 var versionInfo = FileVersionInfo.GetVersionInfo(filePath);
