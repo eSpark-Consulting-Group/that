@@ -1354,9 +1354,7 @@ namespace APTAT.Application.Models
                     scanned++;
 
                 if (infoItem.ScanStage == ScanStage.OperationCanceled && !CancelInProgress)
-                {
-
-                }
+                    continue;
 
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
@@ -1365,22 +1363,22 @@ namespace APTAT.Application.Models
 
             }
 
-            if (unknownFiles > UnknownFilesCount)
+            //if (unknownFiles > UnknownFilesCount)
             {
                 UnknownFilesCount = unknownFiles;
             }
 
-            if (malwareFiles > MalwareFilesCount)
+            //if (malwareFiles > MalwareFilesCount)
             {
                 MalwareFilesCount = malwareFiles;
             }
 
-            if (lookupInProgressCount > LookupInProgressCount)
+            //if (lookupInProgressCount > LookupInProgressCount)
             {
                 LookupInProgressCount = lookupInProgressCount;
             }
 
-            if (scanned > ScannedItemsCount)
+            //if (scanned > ScannedItemsCount)
             {
                 ScannedItemsCount = scanned;
             }

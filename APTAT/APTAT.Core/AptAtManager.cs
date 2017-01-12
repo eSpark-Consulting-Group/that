@@ -184,6 +184,9 @@ namespace APTAT.Core
             var files = new List<ValkyrieFileInfo>();
             foreach (var scanResult in results)
             {
+                if (scanResult.IsCanceled)
+                    continue;
+
                 foreach (var badFile in scanResult.BadFiles)
                 {
                     if (files.All(f => !String.Equals(f.Sha1, badFile.Sha1, StringComparison.OrdinalIgnoreCase)))
