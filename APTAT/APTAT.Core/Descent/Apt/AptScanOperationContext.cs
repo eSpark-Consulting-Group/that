@@ -71,17 +71,17 @@ namespace APTAT.Core.Descent.Apt
         public void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func)
         {
             ResultsByUid[result.ComputerUid] = (IComputerDescentResultInternal)func(result.ComputerUid);
+            CalculateOperationStatistics();
+        }
 
-            if (result.Succeeded)
-            {
-                SucceededTargetsCount++;
-                FailedTargetsCount--;
-            }
-            else if (result.IsCanceled)
-            {
-                SucceededTargetsCount--;
-                CanceledTargetsCount++;
-            }
+        public void CalculateOperationStatistics()
+        {
+            int failed, notPerformed, succeeded, total, canceled;
+            StatisticsCalculator.CalculateOperationStatistics(ScanResults, out failed, out notPerformed, out succeeded, out total, out canceled);
+            SucceededTargetsCount = succeeded;
+            FailedTargetsCount = failed;
+            NotPerformedTargetsCount = TotalTargetsCount - total;
+            CanceledTargetsCount = canceled;
         }
 
         private double CalculateTotalPercentage()
@@ -104,7 +104,7 @@ namespace APTAT.Core.Descent.Apt
 
         public IFilesStatistics CalculateFilesStatistics()
         {
-            return StatisticsCalculator.Calculate(ScanResults);
+            return StatisticsCalculator.CalculateFilesStatistics(ScanResults);
         }
 
         private sealed class AptComputerDescentResultFactory : IComputerDescentResultFactory

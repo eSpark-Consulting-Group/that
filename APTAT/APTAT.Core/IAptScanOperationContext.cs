@@ -20,6 +20,7 @@ namespace APTAT.Core.Descent
 
         event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;
         IFilesStatistics CalculateFilesStatistics();
+        void CalculateOperationStatistics();
 
     }
 

@@ -254,7 +254,7 @@ namespace APTAT.Core.Reports
 
         private void CalculateTotal()
         {
-            var statistics = StatisticsCalculator.Calculate(Targets);
+            var statistics = StatisticsCalculator.CalculateFilesStatistics(Targets);
 
             ReplaceStatistics(statistics);
         }

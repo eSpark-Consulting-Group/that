@@ -740,6 +740,8 @@ namespace APTAT.Application.Models
             IsReportEnabled = false;
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = false;
+            RescanLogin = null;
+            RescanPassword = null;
 
             Set(() => SelectScan, true);
             Set(() => ValkyrieEnabled, false);

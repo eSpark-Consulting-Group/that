@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using APTAT.Core.Descent.Apt;
+using System.Linq;
 
 namespace APTAT.Core
 {
     public static class StatisticsCalculator
     {
-        public static IFilesStatistics Calculate(IEnumerable<IAptScanResult> results)
+        public static IFilesStatistics CalculateFilesStatistics(IEnumerable<IAptScanResult> results)
         {
             int totalFilesCount = 0;
             int safeFilesCount = 0;
@@ -43,6 +44,30 @@ namespace APTAT.Core
                 NoVerdictFilesCount = serverErrorFilesCount,
                 PendingAnalysisFilesCount = pendingFilesCount
             };
+        }
+
+        public static void CalculateOperationStatistics(IEnumerable<IAptScanResult> results, out int failed,
+            out int notPerformed, out int succeeded, out int total, out int canceled)
+        {
+            notPerformed = 0;
+            succeeded = 0;
+            failed = 0;
+            canceled = 0;
+
+            var scanResults = results as AptScanResult[] ?? results.ToArray();
+            total = scanResults.Count();
+            var groupped = from result in scanResults group result by result.ResultType into temp select temp;
+            foreach (var item in groupped)
+            {
+                if (item.Key == ScanResultType.NotPerformed)
+                    notPerformed = item.Count();
+                else if (item.Key == ScanResultType.Failed)
+                    failed = item.Count();
+                else if (item.Key == ScanResultType.Completed)
+                    succeeded = item.Count();
+                else if (item.Key == ScanResultType.Canceled)
+                    canceled = item.Count();
+            }
         }
     }
 }
