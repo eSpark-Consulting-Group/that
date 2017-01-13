@@ -83,7 +83,7 @@ namespace CodedUITestAT
 
         #endregion
 
-        #region Control methods       
+        #region Control methods
 
         private WpfButton ThisComputerButton()
         {
@@ -226,10 +226,12 @@ namespace CodedUITestAT
                 else Assert.Fail(String.Format(@"Tree item '{0}' is not checked, not expected!", path));
             }
 
-            //UIMapThisComputer.CheckScanCriticalAreasCheckBox();
+            UIMapThisComputer.CheckScanCriticalAreasCheckBox();
             UIMapStartScanWizard.ClickNextButton();
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickNoButton();
+
+            checkedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
 
             // Verifies the expected and unexpected files at 'Scan results' screen            
             foreach (var path in checkedItems)
@@ -248,7 +250,7 @@ namespace CodedUITestAT
                 else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at {1} screen!", unexpectedFile.Location, ResultsScreen.ScanResults));
             }
         }
-                
+        
         #endregion
 
         #region Test Context property
