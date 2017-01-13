@@ -211,7 +211,10 @@ namespace APTAT.Core
             if (_scanner != null)
                 return _scanner;
 
+            if (options.ScanInit)
+                _lastAptResults.Clear();
             _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
+
             _scanner = _aptScannerFactory.CreateAptScanner(_descentSubSystem, devicesSourceDescription, options);
             _scanner.ScanStarted += OnScanStarted;
             _scanner.ComputerScanCompleted += OnScannerOnScanCompleted;
@@ -319,7 +322,7 @@ namespace APTAT.Core
 
         private void OnScanStarted(object sender, ScanStartedEventArgs e)
         {
-            if (e.RescanAttempt)
+            if (e.RescanAttempt || _lastAptResults.Any())
                 return;
 
             _flsManager.Cancel();

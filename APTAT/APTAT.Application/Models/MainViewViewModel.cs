@@ -372,6 +372,11 @@ namespace APTAT.Application.Models
             get { return SelectedItem != null && !SelectedItem.IsRootItem; }
         }
 
+        public Boolean IsMultipleDetailsEnabled
+        {
+            get { return SelectedItems != null && SelectedItems.Count == 1 && !SelectedItems[0].IsRootItem; }
+        }
+
         public Boolean IsValkyrieDetailsEnabled
         {
             get { return SelectedValkyrieItem != null && SelectedValkyrieItem is ValkyrieFile; }
@@ -379,16 +384,16 @@ namespace APTAT.Application.Models
 
         public Boolean IsRestartEnabled
         {
-            get { return SelectedItem != null && SelectedItem.IsRootItem && 
-                    (SelectedItem.ScanStage == ScanStage.ScanFailed || 
-                    SelectedItem.ScanStage == ScanStage.OperationFailed ||
-                    SelectedItem.ScanStage == ScanStage.OperationCanceled); }
+            get { return !IsValkyrieScanInProgress.GetValueOrDefault() && SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsRootItem && 
+                    (_.ScanStage == ScanStage.ScanFailed || 
+                    _.ScanStage == ScanStage.OperationFailed ||
+                    _.ScanStage == ScanStage.OperationCanceled)); }
         }
 
         public Boolean IsStopEnabled
         {
-            get { return SelectedItem != null && SelectedItem.IsRootItem && 
-                    (SelectedItem.ScanStage == ScanStage.ScanInProgress); }
+            get { return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsRootItem && 
+                    (_.ScanStage == ScanStage.ScanInProgress)); }
         }
 
         public Boolean IsReportEnabled
@@ -435,7 +440,6 @@ namespace APTAT.Application.Models
             {
                 _selectedItem = value;
                 
-
                 if (_selectedItem == null)
                 {
                     _storage.SetValue(KnownKeys.UnknownFile, null);
@@ -447,10 +451,28 @@ namespace APTAT.Application.Models
 
                 RaisePropertyChanged(nameof(SelectedItem));
                 RaisePropertyChanged(nameof(IsDetailsEnabled));
+
+                SelectCommand.InvalidateCanExecute();
+            }
+        }
+
+        private List<ThreatInfoItem> _selectedItems = new List<ThreatInfoItem>();
+        public List<ThreatInfoItem> SelectedItems
+        {
+            get { return _selectedItems; }
+            set
+            {
+                _selectedItems = value;
+
+                if (_selectedItems.Count == 1)
+                    SelectedItem = _selectedItems[0];
+
+                RaisePropertyChanged(nameof(SelectedItems));
+                RaisePropertyChanged(nameof(IsMultipleDetailsEnabled));
                 RaisePropertyChanged(nameof(IsRestartEnabled));
                 RaisePropertyChanged(nameof(IsStopEnabled));
 
-                SelectCommand.InvalidateCanExecute();
+                SelectMultipleCommand.InvalidateCanExecute();
                 RestartComputerScanCommand.InvalidateCanExecute();
                 RestartComputerScanWithCredentialsCommand.InvalidateCanExecute();
                 StopComputerScanCommand.InvalidateCanExecute();
@@ -605,6 +627,8 @@ namespace APTAT.Application.Models
         public DelegateCommand StopScanCommand { get; private set; }
 
         public DelegateCommand SelectCommand { get; private set; }
+
+        public DelegateCommand SelectMultipleCommand { get; private set; }
         public DelegateCommand SelectValkyrieCommand { get; private set; }
 
         public DelegateCommand RestartComputerScanCommand { get; private set; }
@@ -633,11 +657,12 @@ namespace APTAT.Application.Models
                 o => StopScanPredicate);
 
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
+            SelectMultipleCommand = new DelegateCommand(o => { }, o => IsMultipleDetailsEnabled);
             SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
 
-            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled && !IsValkyrieScanInProgress.GetValueOrDefault());
+            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o => 
-                IsRestartEnabled && !SelectedItem.IsLocal && !IsValkyrieScanInProgress.GetValueOrDefault());
+                IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
             StopComputerScanCommand = new DelegateCommand(o => InvokeStopComputerScan(o), o => IsStopEnabled);
 
             ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.Empty;
@@ -694,9 +719,20 @@ namespace APTAT.Application.Models
             var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
             var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
 
-            SelectedItem.RestoreConnectingState();
+            var items = new List<ThreatInfoItem>();
+            foreach (var item in SelectedItems)
+            {
+                if (item.IsRootItem &&
+                    (item.ScanStage == ScanStage.ScanFailed ||
+                    item.ScanStage == ScanStage.OperationFailed ||
+                    item.ScanStage == ScanStage.OperationCanceled))
+                {
+                    item.RestoreConnectingState();
+                    items.Add(item);
+                }
+            }
 
-            _aptService.BeginScan(new[] { SelectedItem.DeploymentTarget }, login, password,
+            _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(), login, password,
                 this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             if (!IsScanInProgress.GetValueOrDefault())
@@ -711,7 +747,17 @@ namespace APTAT.Application.Models
 
         private void InvokeStopComputerScan(Object arg)
         {
-            InvokeStopScan(new[] { SelectedItem.DeploymentTarget.Uid });
+            var items = new List<ThreatInfoItem>();
+            foreach (var item in SelectedItems)
+            {
+                if (item.IsRootItem &&
+                    (item.ScanStage == ScanStage.ScanInProgress))
+                {
+                    items.Add(item);
+                }
+            }
+
+            InvokeStopScan(items.Select(_ => _.DeploymentTarget.Uid).ToArray());
         }
 
         private void InvokeStartScan(Object arg)
@@ -1216,6 +1262,7 @@ namespace APTAT.Application.Models
                 {
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind);
                 }
+                options.ScanInit = true;
 
                 _aptService.BeginScan(e.Items, Login, Password, this, 
                     _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);

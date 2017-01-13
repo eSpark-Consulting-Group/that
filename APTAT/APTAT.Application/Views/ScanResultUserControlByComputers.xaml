@@ -13,7 +13,7 @@
              d:DesignHeight="400" d:DesignWidth="600">
     <Grid>
         <telerik:RadTreeListView AutomationProperties.AutomationId="UnknownFilesTree"
-                                 SelectedItem="{Binding SelectedItem}" 
+                                 SelectionChanged="treeList_SelectionChanged"
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList" 
                                  CanUserReorderColumns="False"
@@ -21,7 +21,7 @@
                                  IsReadOnly="True" ItemsSource="{Binding Computers}"   
                                  RowStyle="{StaticResource rowStyleCompleted}"
                                  TabIndex="1"
-                                 SelectionMode="Single"
+                                 SelectionMode="Extended"
                                  Sorting="treeList_Sorting"
                                  AutoExpandItems="False"
                                  RowHeight="50"

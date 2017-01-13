@@ -40,5 +40,7 @@
         //return @"processes|drivers|autoruns"; 
 
         public ScanKind ScanKind { get; private set; }
+
+        public bool ScanInit { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace APTAT.Application
 
                 var item = new RadMenuItem();
                 item.CreateDetailsHeader();
-                item.Command = ViewModel.SelectCommand;
+                item.Command = ViewModel.SelectMultipleCommand;
                 item.Click += item_Click;
                 AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
                 menu.Items.Add(item);
@@ -64,7 +64,7 @@ namespace APTAT.Application
         {
             RadContextMenu menu = (RadContextMenu)sender;
             var cell = menu.GetClickedElement<GridViewCell>();
-            if (cell != null)
+            if (cell != null && !cell.IsSelected)
             {
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
@@ -78,7 +78,8 @@ namespace APTAT.Application
             if (treeList.SelectedItem != null)
             {
                 var item = treeList.SelectedItem as ThreatInfoItem;
-                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsRootItem && ViewModel.SelectedItem == item)
+                if (ViewModel.SelectedItems != null && ViewModel.SelectedItems.Count == 1 && 
+                    !ViewModel.SelectedItems[0].IsRootItem && ViewModel.SelectedItems[0] == item)
                 {
                     ThreatDetailsWindow details = new ThreatDetailsWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
@@ -130,7 +131,8 @@ namespace APTAT.Application
                 }
 
                 ThreatInfoItem item = GetDataBoundItem(element);
-                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsRootItem && ViewModel.SelectedItem == item)
+                if (ViewModel.SelectedItems != null && ViewModel.SelectedItems.Count == 1 &&
+                    !ViewModel.SelectedItems[0].IsRootItem && ViewModel.SelectedItems[0] == item)
                 {
                     ViewModel.SelectedItem = item;
                     ThreatDetailsWindow details = new ThreatDetailsWindow();
@@ -159,6 +161,15 @@ namespace APTAT.Application
                 new ScanStatus(ScanStatusEnum.Failed),
                 new ScanStatus(ScanStatusEnum.Offline)
             };
+        }
+
+        private void treeList_SelectionChanged(object sender, SelectionChangeEventArgs e)
+        {
+            foreach (ThreatInfoItem item in e.AddedItems)
+                ViewModel.SelectedItems.Add(item);
+            foreach (ThreatInfoItem item in e.RemovedItems)
+                ViewModel.SelectedItems.Remove(item);
+            ViewModel.SelectedItems = ViewModel.SelectedItems;
         }
     }
 }
