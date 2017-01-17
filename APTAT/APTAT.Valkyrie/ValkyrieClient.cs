@@ -76,8 +76,14 @@ namespace APTAT.Valkyrie
         private RegisterWithResponse Register(CamRegistration camRegistration,
             NetworkCredential networkCredential = null)
         {
+            
             if (camRegistration == null || camRegistration.IsEmpty)
-                throw new InvalidOperationException("CAM license or CAM credentials are required");
+            {
+                CamLicenseProvider provider = new CamLicenseProvider();
+                var license = provider.TryGetFreeLicense();
+                if (license == null) throw new InvalidOperationException("Could not get license from server");
+                camRegistration = new CamRegistration(license, null, null);
+            }
 
             if (networkCredential != null)
                 ProxySettings.Proxy = GetProxy(networkCredential);
@@ -91,7 +97,7 @@ namespace APTAT.Valkyrie
                 regInfo = ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest()
                 {
                     LicenseId = camRegistration.LicenseId,
-                    ProductName = "CDM",
+                    ProductName = "FAT",
                     ProductVersion = asm.Version.ToString()
                 });
 

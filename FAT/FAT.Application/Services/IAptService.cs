@@ -149,8 +149,7 @@ namespace APTAT.Application.Services
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
-        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, 
-            string camPassword, NetworkCredential networkCredential);
+        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, string camPassword, NetworkCredential networkCredential);        
         string GetValkyrieDetailsLink();
     }
 }
