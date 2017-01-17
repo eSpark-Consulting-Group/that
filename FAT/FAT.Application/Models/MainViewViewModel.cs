@@ -1154,18 +1154,23 @@ namespace FAT.Application.Models
         public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
             var model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
-            if (model.ValidateModel())
+            //if (model.ValidateModel())
             {
                 _camLicenseId = model.LicenseId;
                 _camUserLogin = model.UserName;
                 _camUserPassword = model.Password;
+
+                Set(() => ValkyrieEnabled, true);
+                Set(() => SelectValkyrieScan, false);
+                Set(() => SelectValkyrieScan, true);
+                Set(() => ValkyrieSendingFiles, true);
 
                 _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword,
                     networkCredential);
                 return true;
             }
 
-            return false;
+            //return false;
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)

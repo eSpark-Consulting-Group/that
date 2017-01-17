@@ -130,7 +130,11 @@ namespace FAT.Application
              || e.FilesStatistics.NoVerdictFilesCount > 0)
                 {
                     _viewModel.IsAnalyseWithValkyrieEnabled = true;
-                    _viewModel.BeginValkyrieAnalysis();
+
+                    Dispatcher.Invoke((Action)delegate
+                    {
+                        _viewModel.BeginValkyrieAnalysis();
+                    });
                 }
                 else
                     scanCompletedWindow.ShowDialog();

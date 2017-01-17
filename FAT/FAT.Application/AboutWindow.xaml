@@ -80,7 +80,7 @@
 
                                 <TextBlock AutomationProperties.AutomationId="CopyrightTextBlock"
                            Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Left"
-                           Text="© 2016 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
+                           Text="© 2017 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
                            Margin="24,20,0,0" Foreground="#878787" FontSize="13" ></TextBlock>
                             </Grid>
 
