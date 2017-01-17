@@ -33,7 +33,7 @@ namespace APTAT.Application
                 {
                     Current.Resources.MergedDictionaries.Add(new ResourceDictionary()
                     {
-                        Source = new Uri("/UnknownFileHunter;component/AppResources.xaml", UriKind.RelativeOrAbsolute)
+                        Source = new Uri("/ForensicAnalysisTool;component/AppResources.xaml", UriKind.RelativeOrAbsolute)
                     });
                     CompositionHelper.Instance.RegisterModules(new[]
                     {

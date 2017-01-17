@@ -1,0 +1,11 @@
+﻿;!@Install@!UTF-8!
+
+Title="Comodo Unknown File Hunter Setup"
+ErrorTitle="Comodo Unknown File Hunter Setup"
+WarningTitle="Comodo Unknown File Hunter Setup"
+RunProgram="FAT.Bootstrapper.exe"
+GUIFlags="2"
+ExtractTitle="Comodo Uknown File Hunter"
+ExtractDialogText="Starting..."
+
+;!@InstallEnd@!
