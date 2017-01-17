@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
@@ -14,13 +10,10 @@ namespace APTAT.Core
             return result.Cloud == CloudVerdict.FailedToAnalyze || result.Cloud == CloudVerdict.NoVerdict;
         }
     }
-  public  interface IFlsResult
+
+    public interface IFlsResult
     {
-     
         string Sha1 { get;  }
         CloudVerdict Cloud { get; set; }
     }
-
-    
-    
 }

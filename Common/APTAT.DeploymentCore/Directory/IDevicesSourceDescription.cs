@@ -2,7 +2,7 @@
 {
     public interface IDevicesSourceDescription
     {
-        object Description { get; set; }
+        string Description { get; set; }
         ETargetsDiscovererType Type { get; set; }
     }
 }

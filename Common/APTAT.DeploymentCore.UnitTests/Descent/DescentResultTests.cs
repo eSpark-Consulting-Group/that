@@ -4,9 +4,7 @@ using System.Linq;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Messages;
-using FluentAssertions;
 using Telerik.JustMock;
-using Telerik.JustMock.Helpers;
 using Xunit;
 
 namespace APTAT.DeploymentCore.UnitTests.Descent
@@ -28,7 +26,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
         private readonly IDevicesSourceDescription _deviceSourceDescription;
 
         private static readonly DescentResult.IComputerDescentResultFactory _computerDescentResultFactory;
-        
+
 
         static DescentResultTests()
         {

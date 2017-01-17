@@ -4,7 +4,6 @@ using APTAT.Common;
 using APTAT.DeploymentCore.Facade.Descent.Commands;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.DeploymentCore.Transport;
-using DDT.Core;
 using Telerik.JustMock;
 using Xunit;
 

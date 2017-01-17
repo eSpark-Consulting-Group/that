@@ -43,7 +43,16 @@ namespace APTAT.Valkyrie
         public string GetNetworkPath()
         {
             if (Path.StartsWith("\\\\"))
+            {
+                if (IsLocalComputer)
+                {
+                    var p = Path.TrimStart(new[] {'\\'});
+                    return p.Substring(p.IndexOf('\\') + 1).Replace("$", ":");
+                }
                 return Path.Replace(":", "$");
+            }
+            if (IsLocalComputer)
+                return Path;
             return $"\\\\{GetMachineName()}\\{Path.Replace(":", "$")}";
         }
         public override int GetHashCode()

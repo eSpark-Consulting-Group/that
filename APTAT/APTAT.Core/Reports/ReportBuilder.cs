@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using APTAT.Core.Descent.Apt;
 using Microsoft.Reporting.WinForms;
-using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Core.Reports
 {
@@ -98,7 +97,7 @@ namespace APTAT.Core.Reports
             ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollection());
             ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
 
-            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.Executive.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
+            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.Executive.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
         }
 
         private static void BuildExecutiveWithValkyrieReport(string fileName, AptReportData data)
@@ -108,7 +107,7 @@ namespace APTAT.Core.Reports
             ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollectionValkyrie());
             ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollectionValkyrie());
 
-            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.ExecutiveWithValkyrie.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
+            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.ExecutiveWithValkyrie.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
         }
 
         private static void BuildDetailedPerDeviceReport(string fileName, AptReportData data)
@@ -120,39 +119,39 @@ namespace APTAT.Core.Reports
             var lookupInProgressFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.LookupInProgressFiles.rdlc", ReportName = "LookupInProgressFiles" };
             
 
-            GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, lookupInProgressFilesSubReportContext });
+            GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new [] { allDevicesDataSource, vulnerableDevicesExDataSource }, new [] { unknownFilesSubReportContext, maliciousFilesSubReportContext, lookupInProgressFilesSubReportContext });
         }
 
         private static void BuildDetailedPerDeviceWithValkyrieReport(string fileName, AptReportData data)
         {
             var allBadFilesData = data.GetAllBadFilesSorted(false);
-            ReportDataSource allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargetsWithValkyrie);
-            ReportDataSource vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevicesValkyrie());
+            var allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargetsWithValkyrie);
+            var vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevicesValkyrie());
             //ReportDataSource valkyrieVerdictDataSource = new ReportDataSource("ValkyrieDataSet", allBadFilesData);
-            SubReportContext unknownFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.UnknownFilesWithValkyrie.rdlc", ReportName = "UnknownFiles" };
-            SubReportContext maliciousFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.MaliciousFilesWithValkyrie.rdlc", ReportName = "MaliciousFiles" };
-            SubReportContext failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeWithValkyrie.rdlc", ReportName = "FailedToAnalyzeFiles" };
-            SubReportContext pendingToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.PendingAnalysisFiles.rdlc", ReportName = "PendingAnalysisFiles" };                        
+            var unknownFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.UnknownFilesWithValkyrie.rdlc", ReportName = "UnknownFiles" };
+            var maliciousFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.MaliciousFilesWithValkyrie.rdlc", ReportName = "MaliciousFiles" };
+            var failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeWithValkyrie.rdlc", ReportName = "FailedToAnalyzeFiles" };
+            var pendingToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.PendingAnalysisFiles.rdlc", ReportName = "PendingAnalysisFiles" };                        
             //SubReportContext valkyrieVerdictSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.ValkyrieResult.rdlc", ReportName = "ValkyrieVerdict" };
 
-            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new AptReportData[] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new ReportDataSource[] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new SubReportContext[] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext, pendingToAnalyzeFilesSubReportContext /*, valkyrieVerdictSubReportContext*/ });
+            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new [] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new [] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext, pendingToAnalyzeFilesSubReportContext /*, valkyrieVerdictSubReportContext*/ });
         }
 
         private static void BuildDetailedPerProgramReport(string fileName, AptReportData data, string reportName)
         {
             var allBadFilesData = data.GetAllBadFilesSorted();
-            ReportDataSource allBadFilesDataSource = new ReportDataSource("DetailedBadFileDataSet", allBadFilesData);
-            ReportDataSource mostWantedProgramsExDataSource = new ReportDataSource("MostWantedBadFileDataSet", data.GetTop10PopularBadFiles());
-            SubReportContext devicesSubReportDataSource = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ScannedTargetDataSet", FileName = "APTAT.Core.Reports.Devices.rdlc", ReportName = "Devices" };
+            var allBadFilesDataSource = new ReportDataSource("DetailedBadFileDataSet", allBadFilesData);
+            var mostWantedProgramsExDataSource = new ReportDataSource("MostWantedBadFileDataSet", data.GetTop10PopularBadFiles());
+            var devicesSubReportDataSource = new SubReportContext { Data = allBadFilesData, DataSourceName = "ScannedTargetDataSet", FileName = "APTAT.Core.Reports.Devices.rdlc", ReportName = "Devices" };
 
             GenerateDetailedPerProgramReportFile(fileName, "AptReportDataSet",
-                new AptReportData[] { data }, reportName,
+                new [] { data }, reportName,
                 null,
-                new ReportDataSource[] { allBadFilesDataSource, mostWantedProgramsExDataSource },
-                new SubReportContext[] { devicesSubReportDataSource });
+                new [] { allBadFilesDataSource, mostWantedProgramsExDataSource },
+                new [] { devicesSubReportDataSource });
         }
 
-        private static void GenerateExecutiveReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters, params ReportDataSource[] additionDataSource)
+        private static void GenerateExecutiveReportFile(string path, string dataSourceName, object data, string reportSourceFile, ReportParameter[] parameters, params ReportDataSource[] additionDataSource)
         {
             using (LocalReport localReport = new LocalReport())
             {
@@ -162,10 +161,10 @@ namespace APTAT.Core.Reports
 
                 //ReportParameter languageParam = new Microsoft.Reporting.WinForms.ReportParameter("Language", cultureInfo.Name);
                 //ReportParameter dateCreated = new Microsoft.Reporting.WinForms.ReportParameter("DateCreated", TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZone).ToString());
-                ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString(CultureInfo.InvariantCulture));
                 localReport.SetParameters(new[] { reportDateParam });
 
-                if (parameters != null && parameters.Count() > 0)
+                if (parameters != null && parameters.Any())
                     localReport.SetParameters(parameters);
 
                 localReport.DataSources.Add(new ReportDataSource(dataSourceName, data));
@@ -183,13 +182,13 @@ namespace APTAT.Core.Reports
         }
 
         private static void GenerateDetailedPerDevicesReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters,
-            IEnumerable<ReportDataSource> additionDataSource, IEnumerable<SubReportContext> subReports)
+            ReportDataSource[] additionDataSource, SubReportContext[] subReports)
         {
             using (LocalReport localReport = new LocalReport())
             {
 
                 //===========================================================================
-                SubreportProcessingEventHandler subReportProcessingDelegate = null;
+                SubreportProcessingEventHandler subReportProcessingDelegate;
                 subReportProcessingDelegate = delegate(object sender, SubreportProcessingEventArgs e)
                 {
                     string computerKey = e.Parameters[0].Values[0];
@@ -205,7 +204,7 @@ namespace APTAT.Core.Reports
                             IAptScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
                             if (item != null)
                             {
-                                APTAT.Core.Descent.Apt.IModule[] items = new APTAT.Core.Descent.Apt.IModule[]{};
+                                IModule[] items = {};
                                 if (e.ReportPath == "UnknownFiles")
                                 {
                                     items = item.GetUnknownFiles();
@@ -376,7 +375,7 @@ namespace APTAT.Core.Reports
             }
         }
 
-        private static void GenerateDetailedPerProgramReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters, IEnumerable<ReportDataSource> additionDataSource, IEnumerable<SubReportContext> subReports)
+        private static void GenerateDetailedPerProgramReportFile(string path, string dataSourceName, object data, string reportSourceFile, ReportParameter[] parameters, ReportDataSource[] additionDataSource, SubReportContext[] subReports)
         {
             using (LocalReport localReport = new LocalReport())
             {
@@ -405,21 +404,21 @@ namespace APTAT.Core.Reports
                 //===========================================================================
 
 
-                Stream reportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
+                var reportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
                 localReport.LoadReportDefinition(reportContentStream);
 
                 foreach (var subReport in subReports)
                 {
-                    Stream subreportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(subReport.FileName);
+                    var subreportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(subReport.FileName);
                     localReport.LoadSubreportDefinition(subReport.ReportName, subreportContentStream);
                 }
 
 
-                ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
-                ReportParameter reportDirectotyParam = new ReportParameter("IsActiveDirectorySource", ((AptReportData[])data)[0].IsActiveDirectoryDevicesSource.ToString());
+                var reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                var reportDirectotyParam = new ReportParameter("IsActiveDirectorySource", ((AptReportData[])data)[0].IsActiveDirectoryDevicesSource.ToString());
                 localReport.SetParameters(new[] { reportDateParam, reportDirectotyParam });
 
-                if (parameters != null && parameters.Count() > 0)
+                if (parameters != null && parameters.Any())
                     localReport.SetParameters(parameters);
 
                 localReport.DataSources.Add(new ReportDataSource(dataSourceName, data));
@@ -495,14 +494,10 @@ namespace APTAT.Core.Reports
     
     public sealed class ReportNamesCache
     {
-        private static readonly ReportNamesCache instance = new ReportNamesCache();
         static ReportNamesCache() { }
         private ReportNamesCache() { }
         public Dictionary<string, string> Reports = new Dictionary<string, string>();
-        public static ReportNamesCache Instance
-        {
-            get { return instance; }
-        }
+        public static ReportNamesCache Instance { get; } = new ReportNamesCache();
     }
     public class SubReportContext
     {

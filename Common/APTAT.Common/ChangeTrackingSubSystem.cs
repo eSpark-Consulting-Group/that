@@ -1,11 +1,9 @@
-﻿using APTAT.Common;
-using DDT.Core.ChangeTracking;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Authentication;
 
-namespace DDT.Core
+namespace APTAT.Common
 {
     public class ChangeTrackingSubSystem : IChangeTrackingSubSystem
     {

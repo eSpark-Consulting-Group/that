@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using APTAT.Common;
 using APTAT.DeploymentCore.Facade.Descent.Commands;
-using DDT.Core;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 using Xunit;

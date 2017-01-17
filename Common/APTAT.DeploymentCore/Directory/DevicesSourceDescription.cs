@@ -6,7 +6,7 @@ namespace APTAT.DeploymentCore.Directory
     public class DevicesSourceDescription : IDevicesSourceDescription
     {
         public ETargetsDiscovererType Type { get; set; }
-        public object Description { get; set; }
+        public string Description { get; set; }
 
         public static string GetNetworkDescription(string[] ipAddressesStringArray)
         {

@@ -79,6 +79,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Mock.Arrange(() => operationResult.ShortStatusMessage).Returns(shortErrorFormatted);
             Mock.Arrange(() => operationResult.SystemMessage).Returns(systemMessage);
             Mock.Arrange(() => operationResult.SystemCode).Returns(systemCode);
+            Mock.Arrange(() => operationResult.IsCanceled).Returns(false);
 
             target.UpdateStatus(operationResult);
             
@@ -92,7 +93,8 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Assert.True(target.Completed);
             Assert.Equal(succeeded,target.Succeeded);
             Assert.Equal(100, target.Percentage);
-           //Assert.True(target.Modified > time);
+            Assert.False(target.IsCanceled);
+            //Assert.True(target.Modified > time);
         }
 
         [Theory]
@@ -108,6 +110,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
 
             Mock.ArrangeSet(() => _computer.SystemKind = systemKind).OccursOnce();
             target.SetSystemKind(systemKind);
+            Mock.AssertAll(_computer);
             //Assert.True(target.Modified > time);
         }
 

@@ -10,7 +10,6 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 using APTAT.DeploymentCore.Facade.Descent.MessageContracts;
 using APTAT.DeploymentCore.Transport;
-using DDT.Core;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 using Xunit;

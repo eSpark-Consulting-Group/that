@@ -84,6 +84,7 @@
     <Compile Include="Enums\VerdictEnum.cs" />
     <Compile Include="Extensions\NameValueCollectionExt.cs" />
     <Compile Include="Contracts\RegisterWithResponse.cs" />
+    <Compile Include="IValkyrieWebApiProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxySettings.cs" />
     <Compile Include="Contracts\StartScanRequest.cs" />

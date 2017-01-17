@@ -1,7 +1,6 @@
-﻿using APTAT.Common;
-using System;
+﻿using System;
 
-namespace DDT.Core.ChangeTracking
+namespace APTAT.Common
 {
     internal class RemoteChangeTrackingListenerProxy : IChangeTrackingListener
     {

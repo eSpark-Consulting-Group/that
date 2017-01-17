@@ -39,7 +39,7 @@ namespace APTAT.Core.Reports
                     DevicesSourceDescription = operationContext.DevicesSourceDescription
                 };
 
-                ReportBuilder.BuildReportDelegate action = new ReportBuilder.BuildReportDelegate(_reportBuilder.Build);
+                ReportBuilder.BuildReportDelegate action = _reportBuilder.Build;
                 Context context = new Context() { Action = action, State = state };
                 action.BeginInvoke(data, reportType, BuildReportCallback, context);
             }

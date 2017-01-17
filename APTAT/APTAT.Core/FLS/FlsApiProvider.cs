@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using APTAT.Core.Descent.Apt;
 using APTAT.Core.Properties;
-using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.Core
 {

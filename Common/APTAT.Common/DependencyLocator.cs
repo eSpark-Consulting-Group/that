@@ -1,5 +1,4 @@
 ﻿using System;
-using DDT.Core;
 
 namespace APTAT.Common
 {

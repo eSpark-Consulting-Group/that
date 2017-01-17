@@ -1,4 +1,5 @@
 ﻿using APTAT.Common;
+using Valkyrie.WebApiProvider;
 
 namespace APTAT.Valkyrie.DependencyLocator
 {
@@ -6,6 +7,7 @@ namespace APTAT.Valkyrie.DependencyLocator
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
+            //resolver.RegisterSingleton<IValkyrieWebApiProvider, ValkyrieWebApiProvider>();
             resolver.RegisterSingleton<IValkyrieClient, ValkyrieClient>();
         }
     }

@@ -3,7 +3,7 @@ using System;
 
 namespace APTAT.DeploymentCore.Descent
 {
-	public struct OperationDescentResult : IOperationDescentResult
+	public class OperationDescentResult : IOperationDescentResult
     {
 		public OperationDescentResult(Guid computerUid, bool succeeded,
 			FormattedText statusMessage, FormattedText shortStatusMessage,
