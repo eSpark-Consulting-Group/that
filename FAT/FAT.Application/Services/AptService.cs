@@ -109,13 +109,12 @@ namespace FAT.Application.Services
         public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password,
-                devicesSourceDescription, options);
+            IAptScanner scanner = _manager.GetAptScanner(devicesSourceDescription, options);
             scanner.ScanStarted += OnScanStarted;
             scanner.ComputerScanCompleted += OnComputerScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;
             scanner.ScanCompleted += OnScanCompleted;
-            scanner.BeginScan(userState);
+            scanner.BeginScan(targets, login, password, scanner.ScanOperationContext != null, userState);
         }
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
@@ -218,14 +217,12 @@ namespace FAT.Application.Services
             //Logger.WriteLog("Scan Completed");
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
-            args.CanceledCount = e.CalceledCount;
+            args.CanceledCount = e.CanceledCount;
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
             args.FilesStatistics = e.FilesStatistics;
             args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
-            int distCount = _manager.GetDistinctFileCount();
-            args.DistinctFileFound = distCount;
-            //AptAtManager.GetDistinctFileInfo();
+            args.DistinctFileFound = _manager.GetDistinctFilesCount();
 
             Action action = () =>
             {
@@ -241,9 +238,9 @@ namespace FAT.Application.Services
 
         }
 
-        public void StopScan()
+        public void StopScan(Guid[] targets)
         {
-            _manager.StopScan();
+            _manager.StopScan(targets);
         }
 
 

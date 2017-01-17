@@ -664,7 +664,7 @@ namespace FAT.Application.Models
 
             CancelInProgress = true;
 
-            _aptService.StopScan();
+            _aptService.StopScan(new Guid[0]);
 
         }
 
