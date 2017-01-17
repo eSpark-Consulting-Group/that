@@ -46,11 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CamLicense\CamLicenseProvider.cs" />
-    <Compile Include="CamLicense\CamResponseData.cs" />
-    <Compile Include="CamLicense\MachineKey.cs" />
-    <Compile Include="CamLicense\SerializerHelper.cs" />
-    <Compile Include="CamLicense\XmlDataClasses.cs" />
     <Compile Include="CloudVerdict.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

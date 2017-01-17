@@ -71,6 +71,11 @@
     <Compile Include="Apt\AptScanner.cs" />
     <Compile Include="Apt\AptScannerFactory.cs" />
     <Compile Include="Apt\IAptScannerFactory.cs" />
+    <Compile Include="CamLicense\CamLicenseProvider.cs" />
+    <Compile Include="CamLicense\CamResponseData.cs" />
+    <Compile Include="CamLicense\MachineKey.cs" />
+    <Compile Include="CamLicense\SerializerHelper.cs" />
+    <Compile Include="CamLicense\XmlDataClasses.cs" />
     <Compile Include="ComputerInformation.cs" />
     <Compile Include="ComputerScanCompletedEventArgs.cs" />
     <Compile Include="DataNotReadyException.cs" />
