@@ -1,11 +1,11 @@
-﻿using APTAT.Application.Models.ModelBase;
+﻿using FAT.Application.Models.ModelBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Telerik.Windows.Controls;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class ExpandCommandContext
     {

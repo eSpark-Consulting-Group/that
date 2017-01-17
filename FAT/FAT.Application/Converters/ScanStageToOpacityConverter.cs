@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using APTAT.Application.Models;
+using FAT.Application.Models;
 
-namespace APTAT.Application.Converters
+namespace FAT.Application.Converters
 {
     public class ScanStageToOpacityConverter : IValueConverter
     {

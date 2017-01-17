@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 
-namespace APTAT.Application.Converters
+namespace FAT.Application.Converters
 {
     public class StringToVisibiltyConverter : IValueConverter
     {

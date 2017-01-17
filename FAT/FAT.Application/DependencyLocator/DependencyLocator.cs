@@ -1,7 +1,7 @@
-﻿using APTAT.Application.Services;
+﻿using FAT.Application.Services;
 using APTAT.Common;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     public class DependencyLocator : IDependencyLocatorModule
     {

@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace APTAT.Application.MarkupExtensions
+namespace FAT.Application.MarkupExtensions
 {
     public abstract class ConverterMarkupExtension<T> : MarkupExtension, IValueConverter where T : class, new()
     {

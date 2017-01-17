@@ -1,5 +1,5 @@
 ﻿<Window AutomationProperties.AutomationId="StopScanWindow"
-        x:Class="APTAT.Application.ConfirmationWindow"
+        x:Class="FAT.Application.ConfirmationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Stop Scan" Width="410"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"

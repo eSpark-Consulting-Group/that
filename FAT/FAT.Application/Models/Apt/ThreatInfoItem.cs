@@ -5,7 +5,7 @@ using System.Linq;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public enum ScanStatusEnum
     {

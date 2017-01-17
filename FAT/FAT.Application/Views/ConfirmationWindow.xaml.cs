@@ -1,10 +1,10 @@
-﻿using APTAT.Application.Extensions;
+﻿using FAT.Application.Extensions;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for ConfirmationWindow.xaml

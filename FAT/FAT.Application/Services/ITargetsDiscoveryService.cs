@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using System.Threading.Tasks;
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
     public interface ITargetsDiscoveryService
     {

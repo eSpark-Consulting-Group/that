@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows;
 
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using APTAT.Common;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     public partial class ThreatDetailsView
     {

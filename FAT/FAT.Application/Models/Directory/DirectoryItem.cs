@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using APTAT.Application.Models.ModelBase;
+using FAT.Application.Models.ModelBase;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public enum DirectoryItemType
     {

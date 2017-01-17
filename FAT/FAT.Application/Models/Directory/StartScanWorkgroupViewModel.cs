@@ -1,20 +1,20 @@
-﻿using APTAT.Application.Services;
+﻿using FAT.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Telerik.Windows.Controls;
-using APTAT.Application.Extensions;
+using FAT.Application.Extensions;
 
 using APTAT.DeploymentCore.Directory;
 using System.Threading.Tasks;
 using APTAT.Common;
 using System.Diagnostics;
-using APTAT.Application.Models.ModelBase;
+using FAT.Application.Models.ModelBase;
 
 using Composition = APTAT.Common.CompositionHelper;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StartScanWorkgroupViewModel : WizardViewModel

@@ -5,9 +5,9 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using APTAT.Common;
-using APTAT.Application.Helpers;
+using FAT.Application.Helpers;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     public partial class App : System.Windows.Application
     {
@@ -22,7 +22,7 @@ namespace APTAT.Application
 
             if (!createdNew)
             {
-                MessageBox.Show("Unknown File Hunter is already running.", "Unknown File Hunter");
+                MessageBox.Show("Forensic Analysis Tool is already running.", "Forensic Analysis Tool");
                 Current.Shutdown();
             }
             else
@@ -37,11 +37,11 @@ namespace APTAT.Application
                     });
                     CompositionHelper.Instance.RegisterModules(new[]
                     {
-                        typeof(Common.DependencyLocator),
-                        typeof(DeploymentCore.DependencyLocator),
+                        typeof(APTAT.Common.DependencyLocator),
+                        typeof(APTAT.DeploymentCore.DependencyLocator),
                         typeof(DependencyLocator),
-                        typeof(Valkyrie.DependencyLocator.DependencyLocator),
-                        typeof(Core.DependencyLocator.DependencyLocator)
+                        typeof(APTAT.Valkyrie.DependencyLocator.DependencyLocator),
+                        typeof(APTAT.Core.DependencyLocator.DependencyLocator)
                     });
                 });
                 op.Completed += DispatcherOperationCompleted;
@@ -99,7 +99,7 @@ namespace APTAT.Application
                 Directory.CreateDirectory(path);
             }
 
-            path = Path.Combine(path, "APTAT");
+            path = Path.Combine(path, "FAT");
 
             if (!Directory.Exists(path))
             {
@@ -107,7 +107,7 @@ namespace APTAT.Application
             }
 
             path = Path.Combine(path, "trace.log");
-            Trace.Listeners.Add(new TextWriterTraceListener(path, "APTATListener"));
+            Trace.Listeners.Add(new TextWriterTraceListener(path, "FATListener"));
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

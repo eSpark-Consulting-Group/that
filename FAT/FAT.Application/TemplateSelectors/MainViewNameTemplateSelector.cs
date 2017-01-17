@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using APTAT.Application.Models;
+using FAT.Application.Models;
 
-namespace APTAT.Application.TemplateSelectors
+namespace FAT.Application.TemplateSelectors
 {
     public class MainViewNameTemplateSelector : DataTemplateSelector
     {

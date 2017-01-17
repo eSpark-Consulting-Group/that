@@ -11,7 +11,7 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
-namespace APTAT.Application.Models.Valkyrie
+namespace FAT.Application.Models.Valkyrie
 {
     public class ValkyrieFile : DomainObject, IEquatable<ValkyrieFile>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using APTAT.Core.Descent.Apt;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class BadFileItem
     {

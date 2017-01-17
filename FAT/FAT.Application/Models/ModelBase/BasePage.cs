@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class BaseView : UserControl
     {

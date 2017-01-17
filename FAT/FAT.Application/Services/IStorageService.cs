@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
     public class KnownKeys
     {

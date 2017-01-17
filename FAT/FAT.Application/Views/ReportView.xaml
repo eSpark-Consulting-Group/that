@@ -6,8 +6,8 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                  xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
                  xmlns:converters="clr-namespace:Telerik.Windows.Documents.Converters;assembly=Telerik.Windows.Controls.FixedDocumentViewers"
-                 xmlns:Models="clr-namespace:APTAT.Application.Models" xmlns:Application="clr-namespace:APTAT.Application"
-                 x:Class="APTAT.Application.ReportView" 
+                 xmlns:Models="clr-namespace:FAT.Application.Models" xmlns:Application="clr-namespace:FAT.Application"
+                 x:Class="FAT.Application.ReportView" 
                  mc:Ignorable="d" 
                  d:DesignHeight="600" d:DesignWidth="800">
     

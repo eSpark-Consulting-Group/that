@@ -1,15 +1,15 @@
 ﻿
 using System.Windows.Controls;
 using System.Windows.Input;
-using APTAT.Application.Extensions;
+using FAT.Application.Extensions;
 using Telerik.Windows;
 using System;
 using Telerik.Windows.Controls;
 using System.Windows.Automation;
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using System.Windows;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for StartScanWorkgroupView.xaml

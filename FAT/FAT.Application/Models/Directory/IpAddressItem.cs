@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.SearchCriteria.EndpointAddress;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class IpAddressValidator 
     {

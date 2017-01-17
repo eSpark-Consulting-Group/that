@@ -3,13 +3,13 @@ using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
-using APTAT.Application.Extensions;
+using FAT.Application.Extensions;
 
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for ScanResultUserControlByComputers.xaml

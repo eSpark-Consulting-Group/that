@@ -1,4 +1,4 @@
-﻿using APTAT.Application.Models;
+﻿using FAT.Application.Models;
 using System;
 using System.Windows;
 using System.Windows.Automation;
@@ -6,9 +6,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Telerik.Windows;
 using Telerik.Windows.Controls;
-using APTAT.Application.Extensions;
+using FAT.Application.Extensions;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for StartScanDomainView.xaml

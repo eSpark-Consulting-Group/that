@@ -1,6 +1,6 @@
 ﻿
 
-namespace APTAT.Application.Models.ModelBase
+namespace FAT.Application.Models.ModelBase
 {
     public interface IMainViewModel
     {

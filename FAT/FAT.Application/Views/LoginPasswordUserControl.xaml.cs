@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 using System.Windows;
-using APTAT.Application.Extensions;
+using FAT.Application.Extensions;
 using System.Windows.Input;
 using System;
 
-namespace APTAT.Application.Views
+namespace FAT.Application.Views
 {
     public partial class LoginPasswordUserControl
     {

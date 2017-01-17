@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using APTAT.Application.Extensions;
+using FAT.Application.Extensions;
 using Telerik.Windows.Controls;
-using APTAT.Application.Services;
+using FAT.Application.Services;
 using APTAT.DeploymentCore.Directory;
 
-using APTAT.Application.Models.ModelBase;
+using FAT.Application.Models.ModelBase;
 using Composition = APTAT.Common.CompositionHelper;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StartScanDomainViewModel : WizardViewModel

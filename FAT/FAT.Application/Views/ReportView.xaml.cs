@@ -9,7 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using APTAT.Common;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Documents.Fixed;
@@ -17,7 +17,7 @@ using Telerik.Windows.Documents.Fixed.FormatProviders;
 using Microsoft.Win32;
 using System.IO;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for ReportView.xaml

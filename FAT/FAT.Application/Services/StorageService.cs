@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Composition = APTAT.Common.CompositionHelper;
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
 
     public class StorageService : IStorageService

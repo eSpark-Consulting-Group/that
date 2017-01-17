@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APTAT.Application.Messages
+namespace FAT.Application.Messages
 {
     public enum ChangeScreenTypes
     {

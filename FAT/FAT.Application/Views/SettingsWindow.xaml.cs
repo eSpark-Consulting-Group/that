@@ -1,12 +1,12 @@
-﻿using APTAT.Application.Extensions;
-using APTAT.Application.Models;
+﻿using FAT.Application.Extensions;
+using FAT.Application.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml

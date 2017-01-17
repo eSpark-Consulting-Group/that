@@ -2,7 +2,7 @@
 
 using Composition = APTAT.Common.CompositionHelper;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class ValkyrieRegistrationModel : ViewModel

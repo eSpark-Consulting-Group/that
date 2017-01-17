@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APTAT.Application.Extensions
+namespace FAT.Application.Extensions
 {
     public static class SearchExtensions
     {

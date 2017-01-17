@@ -1,11 +1,11 @@
 ﻿
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using APTAT.Common;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

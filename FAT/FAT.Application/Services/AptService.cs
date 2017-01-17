@@ -1,9 +1,9 @@
-﻿using APTAT.Application.Models;
+﻿using FAT.Application.Models;
 using APTAT.Core;
 using System;
 using System.Linq;
 using System.Net;
-using APTAT.Application.Models.Valkyrie;
+using FAT.Application.Models.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
 using APTAT.Core.Reports;
@@ -14,7 +14,7 @@ using Composition = APTAT.Common.CompositionHelper;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
 
     public class AptService : IAptService
@@ -109,12 +109,13 @@ namespace APTAT.Application.Services
         public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            IAptScanner scanner = _manager.GetAptScanner(devicesSourceDescription, options);
+            IAptScanner scanner = _manager.GetAptScanner(new DeploymentTargetsCollection(targets), login, password,
+                devicesSourceDescription, options);
             scanner.ScanStarted += OnScanStarted;
             scanner.ComputerScanCompleted += OnComputerScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;
             scanner.ScanCompleted += OnScanCompleted;
-            scanner.BeginScan(targets, login, password, scanner.ScanOperationContext != null, userState);
+            scanner.BeginScan(userState);
         }
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
@@ -204,7 +205,7 @@ namespace APTAT.Application.Services
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
-        private void OnScanCompleted(Object sender, Core.ScanCompletedEventArgs e)
+        private void OnScanCompleted(Object sender, APTAT.Core.ScanCompletedEventArgs e)
         {
             var scanner = sender as IAptScanner;
             if (scanner != null)
@@ -217,12 +218,13 @@ namespace APTAT.Application.Services
             //Logger.WriteLog("Scan Completed");
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
             args.SuccededCount = e.SucceededCount;
-            args.CanceledCount = e.CanceledCount;
+            args.CanceledCount = e.CalceledCount;
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
             args.FilesStatistics = e.FilesStatistics;
             args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
-            args.DistinctFileFound = _manager.GetDistinctFilesCount();
+            int distCount = _manager.GetDistinctFileCount();
+            args.DistinctFileFound = distCount;
             //AptAtManager.GetDistinctFileInfo();
 
             Action action = () =>
@@ -239,9 +241,9 @@ namespace APTAT.Application.Services
 
         }
 
-        public void StopScan(Guid[] targets)
+        public void StopScan()
         {
-            _manager.StopScan(targets);
+            _manager.StopScan();
         }
 
 

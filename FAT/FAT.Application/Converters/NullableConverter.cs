@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace APTAT.Application.Converters
+namespace FAT.Application.Converters
 {
     public class NullableConverter : IValueConverter
     {

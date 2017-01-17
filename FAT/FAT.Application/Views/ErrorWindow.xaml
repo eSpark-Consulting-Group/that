@@ -1,4 +1,4 @@
-﻿<Window x:Class="APTAT.Application.ErrorWindow"
+﻿<Window x:Class="FAT.Application.ErrorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Scan Failed" Width="400" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"

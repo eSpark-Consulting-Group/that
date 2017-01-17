@@ -1,11 +1,11 @@
-﻿<UserControl x:Class=" APTAT.Application.Views.TextEntryListView"
+﻿<UserControl x:Class=" FAT.Application.Views.TextEntryListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-             xmlns:converters="clr-namespace:APTAT.Application.Converters"
+             xmlns:converters="clr-namespace:FAT.Application.Converters"
              mc:Ignorable="d" Loaded="ListLoaded"
              
      

@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Telerik.Windows.Controls;
 
-namespace APTAT.Application.Extensions
+namespace FAT.Application.Extensions
 {
     public static class UserControlExtensions
     {

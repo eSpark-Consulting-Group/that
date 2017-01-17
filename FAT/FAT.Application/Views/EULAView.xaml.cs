@@ -3,7 +3,7 @@ using System;
 using System.Windows;
 using Telerik.Windows.Documents.Fixed;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     public partial class EULAView
     {

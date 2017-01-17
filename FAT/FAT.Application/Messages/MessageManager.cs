@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 
-namespace APTAT.Application.Messages
+namespace FAT.Application.Messages
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class MessageReceiverAttribute : Attribute

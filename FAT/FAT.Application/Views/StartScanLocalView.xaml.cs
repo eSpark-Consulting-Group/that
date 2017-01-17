@@ -1,4 +1,4 @@
-﻿using APTAT.Application.Models;
+﻿using FAT.Application.Models;
 using System;
 
 using System.Windows.Automation;
@@ -8,10 +8,10 @@ using Telerik.Windows;
 using Telerik.Windows.Controls;
 
 using System.Linq;
-using static APTAT.Application.StartScanView;
+using static FAT.Application.StartScanView;
 using System.Windows;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for StartScanLocalView.xaml

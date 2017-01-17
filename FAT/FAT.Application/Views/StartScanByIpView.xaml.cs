@@ -1,9 +1,9 @@
 ﻿
 using System.Windows.Controls;
 using System.Windows.Input;
-using APTAT.Application.Extensions;
+using FAT.Application.Extensions;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for StartScanByIpView.xaml

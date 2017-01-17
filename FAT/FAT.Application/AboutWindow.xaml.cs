@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for AboutWindow.xaml
@@ -15,7 +15,7 @@ namespace APTAT.Application
             InitializeComponent();
 
 
-            txtProductName.Text = "Unknown File Hunter";
+            txtProductName.Text = "Forensic Analysis Tool";
             txtProductVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 

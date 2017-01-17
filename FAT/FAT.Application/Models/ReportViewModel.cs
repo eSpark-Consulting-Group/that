@@ -2,9 +2,9 @@
 using System;
 using System.IO;
 using System.Windows;
-using APTAT.Application.Services;
+using FAT.Application.Services;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class ReportViewModel : ViewModel
     {

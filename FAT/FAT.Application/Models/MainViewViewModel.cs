@@ -9,19 +9,19 @@ using System.Windows.Threading;
 using Telerik.Windows.Controls;
 using APTAT.Core;
 using APTAT.Valkyrie;
-using APTAT.Application.Messages;
-using APTAT.Application.Extensions;
-using APTAT.Application.Services;
+using FAT.Application.Messages;
+using FAT.Application.Extensions;
+using FAT.Application.Services;
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
-using APTAT.Application.Models.Apt;
-using APTAT.Application.Models.ModelBase;
-using APTAT.Application.Models.Valkyrie;
+using FAT.Application.Models.Apt;
+using FAT.Application.Models.ModelBase;
+using FAT.Application.Models.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public sealed class MainViewViewModel : ViewModel, IMainViewModel
     {
@@ -319,7 +319,7 @@ namespace APTAT.Application.Models
         {
             get
             {
-                var commonHeaderName = "Unknown File Hunter";
+                var commonHeaderName = "Forensic Analysis Tool";
 
                 string header = "Canceling...";
                 if (CancelInProgress)
@@ -664,7 +664,7 @@ namespace APTAT.Application.Models
 
             CancelInProgress = true;
 
-            _aptService.StopScan(new Guid[0]);
+            _aptService.StopScan();
 
         }
 

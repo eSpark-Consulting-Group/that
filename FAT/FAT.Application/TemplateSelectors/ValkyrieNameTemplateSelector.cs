@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using APTAT.Application.Models.Valkyrie;
+using FAT.Application.Models.Valkyrie;
 using APTAT.Core;
 
-namespace APTAT.Application.TemplateSelectors
+namespace FAT.Application.TemplateSelectors
 {
     class ValkyrieNameTemplateSelector : DataTemplateSelector
     {

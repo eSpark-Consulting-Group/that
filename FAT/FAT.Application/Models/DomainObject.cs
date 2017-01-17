@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Telerik.Windows.Controls;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class Error
     {

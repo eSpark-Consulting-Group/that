@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Telerik.Windows.Controls;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class ViewModel : DomainObject
     {

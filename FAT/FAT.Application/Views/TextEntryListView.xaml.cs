@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 using System.Collections.Specialized;
 
-namespace APTAT.Application.Views
+namespace FAT.Application.Views
 {
     public class CancelItemArgs
     {

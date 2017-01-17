@@ -4,16 +4,16 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-using APTAT.Application.Models.ModelBase;
-using APTAT.Application.Services;
+using FAT.Application.Models.ModelBase;
+using FAT.Application.Services;
 
 using APTAT.DeploymentCore.Directory;
 using Telerik.Windows.Controls;
-using APTAT.Application.Views;
+using FAT.Application.Views;
 
 using Composition = APTAT.Common.CompositionHelper;
 
-namespace APTAT.Application.Models.Directory
+namespace FAT.Application.Models.Directory
 {
 
     [Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]

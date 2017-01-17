@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 
-namespace APTAT.Application.Views
+namespace FAT.Application.Views
 {
     public partial class SearchUserControl
     {

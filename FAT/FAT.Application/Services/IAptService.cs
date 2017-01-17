@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Net;
-using APTAT.Application.Models;
-using APTAT.Application.Models.Valkyrie;
+using FAT.Application.Models;
+using FAT.Application.Models.Valkyrie;
 using APTAT.Core;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
 using APTAT.Core.Descent.Apt;
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
     public class DomainEventArgs : EventArgs
     {

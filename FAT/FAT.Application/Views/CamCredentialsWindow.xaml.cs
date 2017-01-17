@@ -4,10 +4,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using APTAT.Common;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for CamCredentialsWindow.xaml

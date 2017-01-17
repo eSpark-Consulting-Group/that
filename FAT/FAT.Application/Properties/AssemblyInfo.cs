@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Uknown File Hunter")]
-[assembly: AssemblyDescription("Unknown File Hunter")]
+[assembly: AssemblyTitle("Forensic Analysis Tool")]
+[assembly: AssemblyDescription("Forensic Analysis Tool")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Comodo")]
-[assembly: AssemblyProduct("Unknown File Hunter")]
-[assembly: AssemblyCopyright("Copyright © 2016")]
+[assembly: AssemblyProduct("Forensic Analysis Tool")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

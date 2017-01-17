@@ -1,14 +1,14 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using APTAT.Application.Models;
-using APTAT.Core;
+using FAT.Application.Models;
+
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
-using APTAT.Application.Extensions;
-using APTAT.Application.Models.Valkyrie;
+using FAT.Application.Extensions;
+using FAT.Application.Models.Valkyrie;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     public partial class ValkyrieResultUserControlByComputers : UserControl
     {

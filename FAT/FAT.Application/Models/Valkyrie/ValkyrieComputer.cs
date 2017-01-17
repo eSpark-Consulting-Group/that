@@ -5,7 +5,7 @@ using APTAT.Core;
 using APTAT.Valkyrie;
 using OperatingSystem = APTAT.Core.Descent.Apt.OperatingSystem;
 
-namespace APTAT.Application.Models.Valkyrie
+namespace FAT.Application.Models.Valkyrie
 {
     public class ValkyrieComputer : DomainObject, IEquatable<ValkyrieComputer>
     {

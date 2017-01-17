@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using APTAT.Application.Models;
+using FAT.Application.Models;
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
     public class FileBrowserService : IFileBrowserService
     {

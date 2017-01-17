@@ -1,12 +1,12 @@
 ﻿
 using System;
 using System.IO;
-using APTAT.Application.Models.Valkyrie;
-using APTAT.Application.Services;
+using FAT.Application.Models.Valkyrie;
+using FAT.Application.Services;
 using APTAT.Core;
 using APTAT.Core.Descent.Apt;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class ThreatDetailsViewModel : ViewModel
     {

@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Navigation;
-using APTAT.Application.Models;
-using APTAT.Application.Services;
+using FAT.Application.Models;
+using FAT.Application.Services;
 using Telerik.Windows;
 using System.Diagnostics;
 using System.Linq;
 using APTAT.Core;
 using APTAT.Valkyrie;
 using Process = System.Diagnostics.Process;
-using ScanCompletedEventArgs = APTAT.Application.Services.ScanCompletedEventArgs;
+using ScanCompletedEventArgs = FAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
-using APTAT.Application.Messages;
+using FAT.Application.Messages;
 using System.Threading.Tasks;
-using APTAT.Application.Models.Valkyrie;
+using FAT.Application.Models.Valkyrie;
 using Telerik.Windows.Controls;
+using System.Windows.Controls;
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     public partial class MainView
     {
@@ -121,12 +122,18 @@ namespace APTAT.Application
             if (e.SuccededCount > 0)
             {
                 scanCompletedWindow.DataContext = DataContext;
-                if (scanCompletedWindow.ShowDialog() == true)
+                /*if (scanCompletedWindow.ShowDialog() == true)
                     ShowRegisterToValkyrieWindow();
-                else if (e.FilesStatistics.UnknownFilesCount > 0 
-                    || e.FilesStatistics.FailedToAnalyzeFilesCount > 0 
-                    || e.FilesStatistics.NoVerdictFilesCount > 0)
+                else*/
+                if (e.FilesStatistics.UnknownFilesCount > 0
+             || e.FilesStatistics.FailedToAnalyzeFilesCount > 0
+             || e.FilesStatistics.NoVerdictFilesCount > 0)
+                {
                     _viewModel.IsAnalyseWithValkyrieEnabled = true;
+                    _viewModel.BeginValkyrieAnalysis();
+                }
+                else
+                    scanCompletedWindow.ShowDialog();
 
                 if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
                     _viewModel.GroupingEnabled = true;
@@ -296,6 +303,11 @@ namespace APTAT.Application
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void Button_Loaded(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).Command.Execute(null);
         }
     }
 }

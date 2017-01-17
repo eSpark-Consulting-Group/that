@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APTAT.Application.Models.Apt
+namespace FAT.Application.Models.Apt
 {
     public class CustomScanOptions
     {

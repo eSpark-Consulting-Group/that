@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public enum ScanStage
     {

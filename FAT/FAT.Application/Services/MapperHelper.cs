@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using APTAT.Application.Models.Valkyrie;
+using FAT.Application.Models.Valkyrie;
 using APTAT.Core;
 using APTAT.Valkyrie;
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
     public static class MapperHelper
     {

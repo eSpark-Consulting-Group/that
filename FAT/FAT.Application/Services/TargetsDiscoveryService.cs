@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using APTAT.Application.Models;
+using FAT.Application.Models;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Directory.Discoverers;
 using APTAT.DeploymentCore.Directory.Resolvers;
@@ -16,7 +16,7 @@ using APTAT.DeploymentCore;
 using System.Collections.ObjectModel;
 using System.Net.Sockets;
 
-namespace APTAT.Application.Services
+namespace FAT.Application.Services
 {
 
 

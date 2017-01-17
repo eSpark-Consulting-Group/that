@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using APTAT.Application.Models.ModelBase;
+using FAT.Application.Models.ModelBase;
 
-namespace APTAT.Application.Models
+namespace FAT.Application.Models
 {
     public class FolderItem : DomainObject, ISelectableTreeItem<FolderItem>
     {

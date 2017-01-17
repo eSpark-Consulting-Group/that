@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
-using APTAT.Application.MarkupExtensions;
+using FAT.Application.MarkupExtensions;
 
-namespace APTAT.Application.Converters
+namespace FAT.Application.Converters
 {
     public class BoolToVisibilityConverter2 : ConverterMarkupExtension<BoolToVisibilityConverter2>
     {

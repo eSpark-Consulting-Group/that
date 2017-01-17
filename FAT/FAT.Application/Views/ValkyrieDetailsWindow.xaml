@@ -1,6 +1,6 @@
-﻿<Window x:Class="APTAT.Application.ValkyrieDetailsWindow"
+﻿<Window x:Class="FAT.Application.ValkyrieDetailsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:FAT.Application"
         Title="DETAILS"
         MaxWidth="850" 
        MaxHeight="440"

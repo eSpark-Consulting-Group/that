@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 
-namespace APTAT.Application
+namespace FAT.Application
 {
     /// <summary>
     /// Interaction logic for ReportWindow.xaml

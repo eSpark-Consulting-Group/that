@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using APTAT.Application.Models.ModelBase;
+using FAT.Application.Models.ModelBase;
 
-namespace APTAT.Application.Extensions
+namespace FAT.Application.Extensions
 {
     public static class SelectableTreeItemExtensions
     {

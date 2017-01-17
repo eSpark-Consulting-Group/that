@@ -1,6 +1,6 @@
-﻿<Window x:Class="APTAT.Application.ThreatDetailsWindow"
+﻿<Window x:Class="FAT.Application.ThreatDetailsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:APTAT.Application"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Application="clr-namespace:FAT.Application"
         Title="DETAILS"
         MaxWidth="850" 
        MaxHeight="420"
