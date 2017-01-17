@@ -250,6 +250,9 @@ namespace APTAT.Application.Services
             , string camLicenseId, string camUserName, string camPassword,
             NetworkCredential networkCredential)
         {
+            CamLicenseProvider provider = new CamLicenseProvider();
+            camLicenseId = provider.TryGetFreeLicense();
+
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
                 camPassword, networkCredential);
         }
