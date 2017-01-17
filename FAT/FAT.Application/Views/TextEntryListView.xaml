@@ -1,0 +1,72 @@
+﻿<UserControl x:Class=" APTAT.Application.Views.TextEntryListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:converters="clr-namespace:APTAT.Application.Converters"
+             mc:Ignorable="d" Loaded="ListLoaded"
+             
+     
+     
+             d:DesignHeight="300" d:DesignWidth="400" x:Name="this">
+
+    <Grid x:Name="LayoutRoot" Margin="0,0,10,0">
+        <Grid.Resources>
+            <converters:EmptyStringToBoolConverter x:Key="EmptyStringToBoolConverter"/>
+            <converters:SelectedIndexToBoolConverter x:Key="SelectedIndexToBoolConverter"/>
+            <CollectionViewSource x:Key="CollectionViewSource">
+            </CollectionViewSource>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+
+        <TextBox AutomationProperties.AutomationId="NetworkAddressTextBox"  Padding="10 6 30 0"
+                     Grid.Row="0" Margin="0 5" HorizontalAlignment="Stretch" x:Name="InputTextBox" BorderThickness="0">
+
+        </TextBox>
+
+        <Path SnapsToDevicePixels="True" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 11 6 0" Data="F1M324,154.1104L322,154.1104L317,154.1104L317,156.1104L313,153.1104L317,150.1104L317,152.1104L322,152.1104L322,145.1104L324,145.1104z M316,138.1104L316,148.1104L310,148.1104L310,158.1104L316,158.1104L323,158.1104L329,158.1104L329,138.1104z" Fill="{DynamicResource TextBrush2}" Height="20" Stretch="Fill" Width="19"/>
+
+
+        <Button AutomationProperties.AutomationId="AddButton"
+                x:Name="AddButton" Grid.Row="0" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Center"
+                Content="Add" Height="32"
+                IsEnabled="{Binding Text, ElementName=InputTextBox, Converter={StaticResource EmptyStringToBoolConverter}}" />
+
+
+
+        <telerik:RadListBox AutomationProperties.AutomationId="NetworkAddressItemsList"
+                            x:Name="ItemsList" Grid.Row="1" Grid.RowSpan="3" Margin="0 5 0 5"  BorderThickness="0" 
+                                ItemsSource="{Binding Source={StaticResource CollectionViewSource}}">
+        </telerik:RadListBox>
+
+        
+
+        <Button AutomationProperties.AutomationId="RemoveButton"
+                x:Name="RemoveButton" Grid.Row="1" Grid.Column="1" Margin="10 5 0 5" Width="120" VerticalAlignment="Top"
+                Content="Remove" Height="32"
+                IsEnabled="{Binding SelectedIndex, ElementName=ItemsList, Converter={StaticResource SelectedIndexToBoolConverter}}" />
+
+        <Button AutomationProperties.AutomationId="RemoveAllButton"
+                x:Name="RemoveAllButton" Grid.Row="2" Grid.Column="1" Margin="10 5 0 0" Width="120" VerticalAlignment="Top"
+                Content="Remove All" IsEnabled="false" Height="32"
+                 />
+
+
+
+
+    </Grid>
+</UserControl>

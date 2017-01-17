@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using APTAT.Application.Models.ModelBase;
+
+namespace APTAT.Application.Models
+{
+    public enum DirectoryItemType
+    {
+        Root,
+        OrgUnit,
+        Computer
+    }
+
+    public class DeploymentItem : DomainObject
+    {
+        public String Name { get; set; }
+
+        public Guid TargetUid { get; set; }
+
+        public String IPAddress { get; set; }
+
+        public String Status { get; set; }
+
+        public Boolean IsOnline { get; set; }
+
+        public Boolean IsLocalComputer { get;set;}
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
+    public class DirectoryItem : DeploymentItem, ISelectableTreeItem<DirectoryItem>
+    {
+        private ObservableCollection<DirectoryItem> _items;
+
+        public String LdapPath { get; set; }
+
+        public String DnsName { get; set; }
+
+        public DirectoryItemType Type { get; set; }
+
+        public ObservableCollection<DirectoryItem> Items
+        {
+            get { return _items; }
+            set
+            {
+                _items = value;
+                RaisePropertyChanged("Items");
+            }
+        }
+
+        public bool IsLoadOnDemand { get; internal set; }
+        public bool IsWorkgroup { get; internal set; }
+        public bool? IsSelected { get; set; }
+        public Action SelectionChangedAction { get; internal set; }
+    }
+}

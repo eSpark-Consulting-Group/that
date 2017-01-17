@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT.Application", "FAT.Application\FAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Common", "..\Common\APTAT.Common\APTAT.Common.csproj", "{49BA3C32-1495-4EA5-8D32-3997788ADE2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.DeploymentCore", "..\Common\APTAT.DeploymentCore\APTAT.DeploymentCore.csproj", "{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core", "..\APTAT\APTAT.Core\APTAT.Core.csproj", "{9E80A126-241C-4079-8975-E16204D03E8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie", "..\APTAT\APTAT.Valkyrie\APTAT.Valkyrie.csproj", "{46F67D2C-9368-456A-875A-F96628C18F90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Valkyrie.WebApiProvider", "..\APTAT\APTAT.Valkyrie.Client\Valkyrie.WebApiProvider.csproj", "{851E6095-DD19-4C19-8F9C-20E134FB6F5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55545872-3A52-4C6E-A779-8687C6624F77}"
+	ProjectSection(SolutionItems) = preProject
+		FATCommonAssemblyInfo.cs = FATCommonAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89CDF93E-B252-47A9-BB69-4E11D89DA35F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89CDF93E-B252-47A9-BB69-4E11D89DA35F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89CDF93E-B252-47A9-BB69-4E11D89DA35F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89CDF93E-B252-47A9-BB69-4E11D89DA35F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49BA3C32-1495-4EA5-8D32-3997788ADE2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49BA3C32-1495-4EA5-8D32-3997788ADE2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49BA3C32-1495-4EA5-8D32-3997788ADE2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49BA3C32-1495-4EA5-8D32-3997788ADE2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E80A126-241C-4079-8975-E16204D03E8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E80A126-241C-4079-8975-E16204D03E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E80A126-241C-4079-8975-E16204D03E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E80A126-241C-4079-8975-E16204D03E8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F67D2C-9368-456A-875A-F96628C18F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F67D2C-9368-456A-875A-F96628C18F90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{851E6095-DD19-4C19-8F9C-20E134FB6F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
+		SccProjectUniqueName0 = ..\\Common\\APTAT.Common\\APTAT.Common.csproj
+		SccProjectName0 = ../Common/APTAT.Common
+		SccLocalPath0 = ..\\Common\\APTAT.Common
+		SccProjectUniqueName1 = ..\\Common\\APTAT.DeploymentCore\\APTAT.DeploymentCore.csproj
+		SccProjectName1 = ../Common/APTAT.DeploymentCore
+		SccLocalPath1 = ..\\Common\\APTAT.DeploymentCore
+		SccProjectUniqueName2 = ..\\APTAT\\APTAT.Valkyrie.Client\\Valkyrie.WebApiProvider.csproj
+		SccProjectName2 = ../APTAT/APTAT.Valkyrie.Client
+		SccLocalPath2 = ..\\APTAT\\APTAT.Valkyrie.Client
+		SccProjectUniqueName3 = ..\\APTAT\\APTAT.Valkyrie\\APTAT.Valkyrie.csproj
+		SccProjectName3 = ../APTAT/APTAT.Valkyrie
+		SccLocalPath3 = ..\\APTAT\\APTAT.Valkyrie
+		SccProjectUniqueName4 = ..\\APTAT\\APTAT.Core\\APTAT.Core.csproj
+		SccProjectName4 = ../APTAT/APTAT.Core
+		SccLocalPath4 = ..\\APTAT\\APTAT.Core
+		SccLocalPath5 = .
+	EndGlobalSection
+EndGlobal

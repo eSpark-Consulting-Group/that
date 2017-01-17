@@ -1,0 +1,168 @@
+﻿<UserControl x:Class="APTAT.Application.StartScanByIpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+              xmlns:local="clr-namespace:APTAT.Application.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Background="#FFFAF9F9">
+        <Grid.RenderTransform>
+            <TranslateTransform x:Name="translate1" X="1100" />
+        </Grid.RenderTransform>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition  Height="80"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid  Grid.Row="1" Margin="30,0,0,0" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectIp, FallbackValue=Collapsed}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Canvas Height="67" Margin="2,20,0,0" VerticalAlignment="Top" Width="100">
+                <Path Data="F1M635,352.5C635,353.975,633.958,355,632.673,355L560.999,355C559.716,355,558.673,353.975,558.673,352.5C558.673,351.025,559.716,350,560.999,350L632.673,350C633.958,350,635,351.025,635,352.5" Fill="#FF457FAD" Height="5" Opacity="0.270004004240036" Stretch="Fill" Width="76.327" Canvas.Left="18.673" Canvas.Top="62"/>
+                <Path Data="F1M631,351L549,351C547,351,547,349,547,349L547,348L633,348L633,349C633,351,631,351,631,351 M545,347L545,350C545,350,545,353,549,353L631,353C631,353,635,353,635,349L635,347C635,347,635,346,634,346L546,346C546,346,545,346,545,347" Fill="#FF457FAD" Height="7" Stretch="Fill" Width="90" Canvas.Left="5" Canvas.Top="58"/>
+                <Path Data="F1M577,311L561,311L561,310L577,310z" Fill="#FF54984F" Height="1" Stretch="Fill" Width="16" Canvas.Left="21" Canvas.Top="22"/>
+                <Path Data="F1M595,311L579,311L579,310L595,310z" Fill="#FF54984F" Height="1" Stretch="Fill" Width="16" Canvas.Left="39" Canvas.Top="22"/>
+                <Path Data="F1M595,313L561,313L561,312L595,312z" Fill="#FF54984F" Height="1" Stretch="Fill" Width="34" Canvas.Left="21" Canvas.Top="24"/>
+                <Path Data="F1M595,315L561,315L561,314L595,314z" Fill="#FF54984F" Height="1" Stretch="Fill" Width="34" Canvas.Left="21" Canvas.Top="26"/>
+                <Path Data="F1M577,317L561,317L561,316L577,316z" Fill="#FF54984F" Height="1" Stretch="Fill" Width="16" Canvas.Left="21" Canvas.Top="28"/>
+                <Path Data="F1M624.167,298L623,298L623,300L624.167,300C624.627,300,625,299.46,625,299C625,298.54,624.627,298,624.167,298" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="83" Canvas.Top="10"/>
+                <Path Data="F1M624.167,301L623,301L623,303L622,303L622,301.333L622,300.083L622,298.417L622,297L622.918,297L624.167,297C625.317,297,626.25,297.85,626.25,299C626.25,300.151,625.317,301,624.167,301 M621,303L620,303L620,297L621,297z M622.501,293C618.358,293,615,296.358,615,300.5C615,304.643,618.358,308,622.501,308C626.644,308,630,304.643,630,300.5C630,296.358,626.644,293,622.501,293" Fill="#FF457FAD" Height="15" Stretch="Fill" Width="15" Canvas.Left="75" Canvas.Top="5"/>
+                <Path Data="F1M632,305L622,320L613,305L613.012,304.976C612.37,303.616,612,302.103,612,300.5C612,294.701,616.701,290,622.5,290C628.299,290,633,294.701,633,300.5C633,302.103,632.642,303.641,632,305 M622.5,288C615.752,288,610.268,293.351,610.023,300.039L610,300L610.021,300.075C610.017,300.217,610,300.356,610,300.5C610,302.945,610.786,305.073,612,307L622,323L633,307C634.214,305.073,635,302.945,635,300.5C635,293.597,629.403,288,622.5,288" Fill="#FF457FAD" Height="35" Stretch="Fill" Width="25" Canvas.Left="70"/>
+                <Path Data="F1M597,349L582,349C581.104,349,581.165,348,581.189,348L598.148,348C598.171,348,597.895,349,597,349 M626,320L626,346L554.165,346L554,304C554,304,554,303,555,303L608,303L607,301L568,301L555,301C552,301,552,304,552,304L552,348L579.823,347.614C579.823,347.614,579.806,350,582,350L597,350C599.237,350,599.514,347.614,599.514,347.614L628,348L628,317z" Fill="#FF457FAD" Height="49" Stretch="Fill" Width="76" Canvas.Left="12" Canvas.Top="13"/>
+                <Path Data="F1M623,324L623,342C623,343,622,343,622,343L558,343C558,343,557,343,557,342L557,323L557,307C557,306,558,306,558,306L610,306L609,305L558,305C555.972,305,556,307,556,307L556,323L556,342C556,344,558,344,558,344L622,344C622,344,624,344.029,624,342L624,323z" Fill="#FF457FAD" Height="39" Opacity="0.5" Stretch="Fill" Width="68" Canvas.Left="16" Canvas.Top="17"/>
+                <Path Data="F1M551,323C551,323.552,550.553,324,550,324C549.447,324,549,323.552,549,323C549,322.448,549.447,322,550,322C550.553,322,551,322.448,551,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="9" Canvas.Top="34"/>
+                <Path Data="F1M548,323C548,323.552,547.553,324,547,324C546.447,324,546,323.552,546,323C546,322.448,546.447,322,547,322C547.553,322,548,322.448,548,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="6" Canvas.Top="34"/>
+                <Path Data="F1M545,323C545,323.552,544.553,324,544,324C543.447,324,543,323.552,543,323C543,322.448,543.447,322,544,322C544.553,322,545,322.448,545,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="3" Canvas.Top="34"/>
+                <Path Data="F1M542,323C542,323.552,541.553,324,541,324C540.447,324,540,323.552,540,323C540,322.448,540.447,322,541,322C541.553,322,542,322.448,542,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Top="34"/>
+                <Path Data="F1M640,323C640,323.552,639.553,324,639,324C638.447,324,638,323.552,638,323C638,322.448,638.447,322,639,322C639.553,322,640,322.448,640,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="98" Canvas.Top="34"/>
+                <Path Data="F1M637,323C637,323.552,636.553,324,636,324C635.447,324,635,323.552,635,323C635,322.448,635.447,322,636,322C636.553,322,637,322.448,637,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="95" Canvas.Top="34"/>
+                <Path Data="F1M634,323C634,323.552,633.553,324,633,324C632.447,324,632,323.552,632,323C632,322.448,632.447,322,633,322C633.553,322,634,322.448,634,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="92" Canvas.Top="34"/>
+                <Path Data="F1M631,323C631,323.552,630.553,324,630,324C629.447,324,629,323.552,629,323C629,322.448,629.447,322,630,322C630.553,322,631,322.448,631,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="89" Canvas.Top="34"/>
+            </Canvas>
+            <TextBlock Text="Network Addresses" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+        </Grid>
+
+        <Grid  Grid.Row="1" Margin="30,0,0,0" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectPort, FallbackValue=Collapsed}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Canvas Height="68" Margin="2,20,0,0" VerticalAlignment="Top" Width="93">
+                <Path Data="F1M636,715.5C636,716.975,634.958,718,633.673,718L561.999,718C560.716,718,559.673,716.975,559.673,715.5C559.673,714.025,560.716,713,561.999,713L633.673,713C634.958,713,636,714.025,636,715.5" Fill="#FF457FAD" Height="5" Opacity="0.270004004240036" Stretch="Fill" Width="76.327" Canvas.Left="13.673" Canvas.Top="63"/>
+                <Path Data="F1M632,714L550,714C548,714,548,712,548,712L548,711L634,711L634,712C634,714,632,714,632,714 M546,710L546,713C546,713,546,716,550,716L632,716C632,716,636,716,636,712L636,710C636,710,636,709,635,709L547,709C547,709,546,709,546,710" Fill="#FF457FAD" Height="7" Stretch="Fill" Width="90" Canvas.Top="59"/>
+                <Path Data="F1M583.0312,684C583.2952,684,583.5102,684.214,583.5102,684.479L583.5102,687.668C583.5102,687.934,583.2952,688.147,583.0312,688.147C582.7662,688.147,582.5522,687.934,582.5522,687.668L582.5522,684.479C582.5522,684.214,582.7662,684,583.0312,684" Fill="#FF54984F" Height="4.147" Stretch="Fill" Width="0.958" Canvas.Left="36.552" Canvas.Top="34"/>
+                <Path Data="F1M584.0459,684.3809L583.0309,685.3979L582.0159,684.3809C581.8289,684.1939,581.5249,684.1939,581.3389,684.3809C581.1519,684.5679,581.1519,684.8709,581.3389,685.0589L582.3539,686.0729L581.3389,687.0889C581.1519,687.2759,581.1519,687.5779,581.3389,687.7659C581.5249,687.9519,581.8289,687.9519,582.0159,687.7659L583.0309,686.7499L584.0459,687.7659C584.2329,687.9519,584.5369,687.9519,584.7229,687.7659C584.9099,687.5779,584.9099,687.2759,584.7229,687.0889L583.7079,686.0729L584.7229,685.0589C584.9099,684.8709,584.9099,684.5679,584.7229,684.3809C584.5369,684.1939,584.2329,684.1939,584.0459,684.3809" Fill="#FF54984F" Height="3.665" Stretch="Fill" Width="3.664" Canvas.Left="35.199" Canvas.Top="34.241"/>
+                <Path Data="F1M590.0498,684C590.3148,684,590.5288,684.214,590.5288,684.479L590.5288,687.668C590.5288,687.934,590.3148,688.147,590.0498,688.147C589.7848,688.147,589.5708,687.934,589.5708,687.668L589.5708,684.479C589.5708,684.214,589.7848,684,590.0498,684" Fill="#FF54984F" Height="4.147" Stretch="Fill" Width="0.958" Canvas.Left="43.571" Canvas.Top="34"/>
+                <Path Data="F1M591.0654,684.3809L590.0494,685.3979L589.0354,684.3809C588.8474,684.1939,588.5444,684.1939,588.3574,684.3809C588.1704,684.5679,588.1704,684.8709,588.3574,685.0589L589.3734,686.0729L588.3574,687.0889C588.1704,687.2759,588.1704,687.5779,588.3574,687.7659C588.5444,687.9519,588.8474,687.9519,589.0354,687.7659L590.0494,686.7499L591.0654,687.7659C591.2524,687.9519,591.5554,687.9519,591.7424,687.7659C591.9284,687.5779,591.9284,687.2759,591.7424,687.0889L590.7264,686.0729L591.7424,685.0589C591.9284,684.8709,591.9284,684.5679,591.7424,684.3809C591.5554,684.1939,591.2524,684.1939,591.0654,684.3809" Fill="#FF54984F" Height="3.665" Stretch="Fill" Width="3.665" Canvas.Left="42.217" Canvas.Top="34.241"/>
+                <Path Data="F1M597.0684,684C597.3334,684,597.5474,684.214,597.5474,684.479L597.5474,687.668C597.5474,687.934,597.3334,688.147,597.0684,688.147C596.8044,688.147,596.5904,687.934,596.5904,687.668L596.5904,684.479C596.5904,684.214,596.8044,684,597.0684,684" Fill="#FF54984F" Height="4.147" Stretch="Fill" Width="0.957" Canvas.Left="50.59" Canvas.Top="34"/>
+                <Path Data="F1M598.084,684.3809L597.068,685.3979L596.054,684.3809C595.867,684.1939,595.564,684.1939,595.377,684.3809C595.189,684.5679,595.189,684.8709,595.377,685.0589L596.393,686.0729L595.377,687.0889C595.189,687.2759,595.189,687.5779,595.377,687.7659C595.564,687.9519,595.867,687.9519,596.054,687.7659L597.068,686.7499L598.084,687.7659C598.271,687.9519,598.574,687.9519,598.762,687.7659C598.947,687.5779,598.947,687.2759,598.762,687.0889L597.746,686.0729L598.762,685.0589C598.947,684.8709,598.947,684.5679,598.762,684.3809C598.574,684.1939,598.271,684.1939,598.084,684.3809" Fill="#FF54984F" Height="3.665" Stretch="Fill" Width="3.665" Canvas.Left="49.236" Canvas.Top="34.241"/>
+                <Path Data="F1M586,689.5C586,689.776,585.776,690,585.5,690L580.5,690C580.224,690,580,689.776,580,689.5C580,689.224,580.224,689,580.5,689L585.5,689C585.776,689,586,689.224,586,689.5" Fill="#FF54984F" Height="1" Stretch="Fill" Width="6" Canvas.Left="34" Canvas.Top="39"/>
+                <Path Data="F1M593,689.5C593,689.776,592.776,690,592.5,690L587.5,690C587.224,690,587,689.776,587,689.5C587,689.224,587.224,689,587.5,689L592.5,689C592.776,689,593,689.224,593,689.5" Fill="#FF54984F" Height="1" Stretch="Fill" Width="6" Canvas.Left="41" Canvas.Top="39"/>
+                <Path Data="F1M600,689.5C600,689.776,599.776,690,599.5,690L594.5,690C594.224,690,594,689.776,594,689.5C594,689.224,594.224,689,594.5,689L599.5,689C599.776,689,600,689.224,600,689.5" Fill="#FF54984F" Height="1" Stretch="Fill" Width="6" Canvas.Left="48" Canvas.Top="39"/>
+                <Path Data="F1M621,662L621,657C621,654.238,623.238,652,626,652C628.762,652,631,654.238,631,657L631,662z M628.005,673L624.005,673L625.005,669.723C624.409,669.376,624.005,668.738,624.005,668C624.005,666.896,624.9,666,626.005,666C627.109,666,628.005,666.896,628.005,668C628.005,668.738,627.601,669.376,627.005,669.723z M634.101,662L633,662L633,657C633,653.134,629.866,650,626,650C622.134,650,619,653.134,619,657L619,662L617.909,662C615.807,662,616,664,616,664L616,674C616,674,616.005,676,617.909,676L634.101,676C636.005,676,636,674,636,674L636,664C636,664,636.005,662,634.101,662" Fill="#FF457FAD" Height="26" Stretch="Fill" Width="20.005" Canvas.Left="69.995"/>
+                <Path Data="F1M598,712L583,712C582.104,712,582.165,711,582.189,711L599.148,711C599.171,711,598.895,712,598,712 M627,678L627,709L555.165,709L555,667.869C555,667.869,555,665.947,557,665.947L612.654,666L614,666L614,664L569,664L555,664C553,664,553,666,553,666L553,711L580.823,710.614C580.823,710.614,580.806,713,583,713L598,713C600.237,713,600.514,710.614,600.514,710.614L629,711L629,678z" Fill="#FF457FAD" Height="49" Stretch="Fill" Width="76" Canvas.Left="7" Canvas.Top="14"/>
+                <Path Data="F1M624,678L624,705C624,706,623,706,623,706L559,706C559,706,558,706,558,705L558,686L558,670C558,669,559,669,559,669L614,669L614,668L559,668C556.972,668,557,670,557,670L557,686L557,705C557,707,559,707,559,707L623,707C623,707,625,707.029,625,705L625,678z" Fill="#FF457FAD" Height="39" Opacity="0.5" Stretch="Fill" Width="68" Canvas.Left="11" Canvas.Top="18"/>
+                <Path Data="F1M636,665.1416L636,674.9996L618.142,674.9996C618.588,676.7216,620.139,677.9996,622,677.9996L635,677.9996C637.209,677.9996,639,676.2086,639,673.9996L639,668.9996C639,667.1386,637.723,665.5876,636,665.1416" Fill="#FF457FAD" Height="12.858" Opacity="0.19999699294567108" Stretch="Fill" Width="20.858" Canvas.Left="72.142" Canvas.Top="15.142"/>
+            </Canvas>
+
+            <TextBlock Text="Scan Credentials" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+        </Grid>
+
+
+        <Grid x:Name="panelSelectIp" Grid.Row="2" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectIp, FallbackValue=Collapsed}">
+            <Grid.Resources>
+                <DataTemplate x:Key="ItemTemplate">
+                    <TextBlock Text="{Binding FormattedText}" Style="{DynamicResource SubTitleTextStyle}" Margin="10 4"   FontSize="13"/>
+                </DataTemplate>
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20,20,7,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="144"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="135"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <local:TextEntryListView Margin="5,0,0,0" BorderThickness="0" x:Name="TextEntryListView"
+                        Grid.Column="1" Grid.ColumnSpan="2"
+                        AddCommand="{Binding AddIpCommand}"
+                        RemoveCommand="{Binding DeleteIpCommand}"
+                                         RemoveAllCommand="{Binding DeleteAllIpCommand}"
+                        ItemTemplate="{StaticResource ItemTemplate}"
+                        ItemsSource="{Binding IpAddresses}"/>
+            </Grid>
+
+        </Grid>
+
+        <Grid x:Name="panelSelectPort" Grid.Row="2" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectPort, FallbackValue=Collapsed}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="-80,60,7,20">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="22" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Margin="0 0 0 0" Grid.ColumnSpan="3">
+                    <local:LoginPasswordUserControl Margin="0" Login="{Binding Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                    ShowCurrentDomain="{Binding UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" UseCurrentDomain="{Binding UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+
+
+                
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,526 @@
+﻿<Models:BaseView  AutomationProperties.AutomationId="ScanningWizardWindow"
+                  x:Class="APTAT.Application.StartScanView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+                  xmlns:Models="clr-namespace:APTAT.Application.Models" mc:Ignorable="d" 
+                  xmlns:converters="clr-namespace:APTAT.Application.Converters"
+                  xmlns:App="clr-namespace:APTAT.Application"
+                  d:DesignHeight="480" d:DesignWidth="640"
+                  SnapsToDevicePixels="True">
+
+    <Grid Background="White">
+
+        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
+                   FontFamily="Segoe UI" VerticalAlignment="Top" Margin="23,37,0,0">
+                Select Scan Targets
+                    </TextBlock>
+                    <Border x:Name="pathSelector" Margin="0 42 0 0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button AutomationProperties.AutomationId="ActiveDirectoryButton"
+                                    Click="OnActiveDirectoryClick" Content="Scan computers by selecting them from Active Directory" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Margin="17 17 0 0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" >
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="20">
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="160"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Canvas Grid.RowSpan="2" Margin="0 25 0 0">
+                                                        <Path Data="F1M388,466C388,468.359,386.958,470,385.673,470L286.971,470C285.687,470,284.645,468.359,284.645,466C284.645,463.641,285.687,462,286.971,462L385.673,462C386.958,462,388,463.641,388,466" Fill="#FF457FAD" Height="8" Opacity="0.270004004240036" Stretch="Fill" Canvas.Left="36.645" Canvas.Top="98" Width="103.355"/>
+                                                        <Path Data="F1M380.0293,466L254.0293,466C253.0293,466,253.0293,465,253.0293,465L253.0293,458L382.0293,458L382.0293,464C382.0293,465.985,380.0293,466,380.0293,466 M251.0293,458L251.0293,465C251.0293,465,250.3983,468,255.0293,468L380.0293,468C380.0293,468,384.0293,467.971,384.0293,464L384.0293,457.621C384.0293,457.621,384.0293,456,382.7063,456L253.0143,456C253.0143,456,251.0293,456.016,251.0293,458" Fill="#FF457FAD" Height="12" Stretch="Fill" Canvas.Left="3" Canvas.Top="92" Width="133.029"/>
+                                                        <Path Data="F1M372.0293,394L372.0293,456L266.0293,456L266.0293,394C266.0293,394,266.0293,392,268.0293,392L351.0293,392L370.0293,392C372.0293,392,372.0293,394,372.0293,394 M329.7703,459L307.2733,459C305.9493,459,305.9493,458,305.9843,458L331.0593,458C331.0933,458,331.0933,459,329.7703,459 M370.0293,390L350.9453,390L286.0983,390L267.5703,390C263.6013,390,264.0293,394.421,264.0293,394.421L264.0293,410.964L264.0293,458L303.9653,458C303.9653,458,304.0293,461,307.2733,461L329.7703,461C333.0793,461,333.0793,458,333.0793,458L374.0293,458L374.0293,411L374.0293,394C374.0293,394,374.0003,390,370.0293,390" Fill="#FF457FAD" Height="71" Stretch="Fill" Canvas.Left="16.016" Canvas.Top="26" Width="110.013"/>
+                                                        <Path Data="F1M367.0293,449C367.0293,451,365.0213,451,365.0213,451L273.0293,451C273.0293,451,271.0293,451,271.0293,449L271.0293,421L271.0293,399C271.0293,397,273.0293,397,273.0293,397L365.0213,397C365.0213,397,367.0293,397,367.0293,399z M365.0213,396L273.0293,396C270.0293,396,270.0293,399,270.0293,399L270.0293,420.565C270.0293,420.565,270.0203,448.901,270.0293,449C270.0293,452,273.0293,452,273.0293,452L365.0213,452C365.0213,452,368.0293,452,368.0293,449L368.0293,399C368.0293,399,368.3303,396,365.0213,396" Fill="#FF457FAD" Height="56" Opacity="0.5" Stretch="Fill" Canvas.Left="22.025" Canvas.Top="32" Width="98.011"/>
+                                                        <Path Data="F1M380.2695,413.4775C379.2185,414.5295,377.5135,414.5295,376.4625,413.4775L355.5215,392.5375C354.4705,391.4855,354.4705,389.7815,355.5225,388.7295L376.4625,367.7895C377.5155,366.7365,379.2205,366.7375,380.2695,367.7895L401.2105,388.7295C402.2625,389.7795,402.2635,391.4845,401.2105,392.5375z" Fill="#FF457FAD" Height="47.266" Opacity="0.19999699294567108" Stretch="Fill" Width="47.267" Canvas.Left="106.733" Canvas.Top="3"/>
+                                                        <Path Data="F1M375.4033,413.3442C374.3523,414.3962,372.6473,414.3962,371.5963,413.3442L350.6553,392.4042C349.6043,391.3522,349.6043,389.6482,350.6563,388.5962L371.5963,367.6562C372.6493,366.6032,374.3543,366.6042,375.4033,367.6562L396.3443,388.5962C397.3963,389.6462,397.3973,391.3512,396.3443,392.4042z" Fill="#FF457FAD" Height="47.266" Stretch="Fill" Width="47.266" Canvas.Left="101.867" Canvas.Top="2.867"/>
+                                                        <Path Data="F1M374.207,375.7725L372.293,377.6865L371.379,376.7725L359.98,388.1715L362.101,390.2935L373.293,379.1005L384.096,389.9035L386.217,387.7825z" Fill="White" Height="14.521" Opacity="0.5" Stretch="Fill" Width="26.237" Canvas.Left="111.98" Canvas.Top="11.772"/>
+                                                        <Path Data="F1M387.9951,388.0254C386.6281,386.6584,384.4131,386.6584,383.0461,388.0254C381.8641,389.2064,381.7091,391.0204,382.5701,392.3744L375.0001,399.9434L375.0001,381.6474C375.3501,381.4804,375.6841,381.2644,375.9741,380.9744C377.3421,379.6084,377.3421,377.3914,375.9741,376.0244C374.6071,374.6574,372.3911,374.6584,371.0251,376.0244C369.6571,377.3904,369.6581,379.6074,371.0241,380.9744C371.3141,381.2644,371.6481,381.4804,372.0001,381.6474L372.0001,400.0914C371.9821,400.1004,371.9651,400.1104,371.9471,400.1194L364.3491,392.5214C364.7561,391.9494,365.0001,391.2544,365.0001,390.5004C365.0001,388.5674,363.4331,387.0004,361.5001,387.0004C359.5681,387.0004,358.0001,388.5674,358.0001,390.5004C358.0001,392.4324,359.5681,394.0004,361.5001,394.0004C361.9491,394.0004,362.3741,393.9074,362.7681,393.7544L370.4801,401.4654C369.6791,402.8084,369.8461,404.5694,371.0021,405.7254C372.3701,407.0934,374.5871,407.0934,375.9521,405.7254C377.1421,404.5364,377.2951,402.7014,376.4111,401.3444L384.0781,393.6774C385.3671,394.2624,386.9351,394.0354,387.9951,392.9744C389.3611,391.6074,389.3601,389.3904,387.9951,388.0254" Fill="White" Height="31.752" Stretch="Fill" Width="31.019" Canvas.Left="110" Canvas.Top="11"/>
+                                                        <Path Data="F1M375.2832,380.252C374.3082,381.224,372.7342,381.224,371.7622,380.252C370.7912,379.281,370.7902,377.705,371.7622,376.731C372.7342,375.761,374.3102,375.761,375.2822,376.733C376.2542,377.704,376.2532,379.28,375.2832,380.252" Fill="#FF54984F" Height="4.977" Stretch="Fill" Width="4.977" Canvas.Left="123.034" Canvas.Top="12.004"/>
+                                                        <Path Data="F1M387.2725,392.2485C386.2985,393.2205,384.7225,393.2195,383.7515,392.2485C382.7805,391.2765,382.7795,389.7015,383.7515,388.7275C384.7235,387.7575,386.2995,387.7575,387.2715,388.7295C388.2425,389.7005,388.2425,391.2765,387.2725,392.2485" Fill="#FF54984F" Height="4.977" Stretch="Fill" Width="4.977" Canvas.Left="135.023" Canvas.Top="24"/>
+                                                        <Path Data="F1M363.2725,392.2715C362.2985,393.2435,360.7225,393.2425,359.7515,392.2715C358.7805,391.2995,358.7795,389.7245,359.7515,388.7505C360.7235,387.7805,362.2995,387.7805,363.2715,388.7525C364.2425,389.7235,364.2425,391.2995,363.2725,392.2715" Fill="#FF54984F" Height="4.977" Stretch="Fill" Width="4.977" Canvas.Left="111.023" Canvas.Top="24.023"/>
+                                                        <Path Data="F1M375.2607,405.0034C374.2857,405.9754,372.7117,405.9754,371.7397,405.0034C370.7687,404.0324,370.7677,402.4564,371.7397,401.4824C372.7117,400.5124,374.2877,400.5124,375.2597,401.4844C376.2317,402.4554,376.2307,404.0314,375.2607,405.0034" Fill="#FF54984F" Height="4.977" Stretch="Fill" Width="4.977" Canvas.Left="123.011" Canvas.Top="36.755"/>
+                                                        <Path Data="F1M306,406L278,406L278,404L306,404z" Fill="#FF54984F" Height="2" Stretch="Fill" Width="28" Canvas.Left="30" Canvas.Top="40"/>
+                                                        <Path Data="F1M336,406L308,406L308,404L336,404z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="60" Canvas.Top="40" Width="28"/>
+                                                        <Path Data="F1M336,410L278,410L278,408L336,408z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="30" Canvas.Top="44" Width="58"/>
+                                                        <Path Data="F1M336,414L278,414L278,412L336,412z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="30" Canvas.Top="48" Width="58"/>
+                                                        <Path Data="F1M306,418L278,418L278,416L306,416z" Fill="#FF54984F" Height="2" Stretch="Fill" Width="28" Canvas.Left="30" Canvas.Top="52"/>
+                                                        <Path Data="F1M258,382L254,382L254,378L252,378L252,382L248,382L248,384L252,384L252,388L254,388L254,384L258,384z" Fill="#FF457FAD" Height="10" Opacity="0.39999398589134216" Stretch="Fill" Width="10" Canvas.Top="14"/>
+                                                        <Path Data="F1M344,368L340,368L340,364L338,364L338,368L334,368L334,370L338,370L338,374L340,374L340,370L344,370z" Fill="#FF457FAD" Height="10" Opacity="0.39999398589134216" Stretch="Fill" Width="10" Canvas.Left="86"/>
+                                                    </Canvas>
+
+                                                    <TextBlock HorizontalAlignment="Center" Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource StrongBrush}" Grid.Column="1" Margin="0 50 0 0">
+                                                        <TextBlock.Text>
+                                                            Active Directory
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+
+                                                    <TextBlock HorizontalAlignment="Center" Opacity="0.5" Grid.Column="1" Grid.Row="1" Style="{DynamicResource SubTitleTextStyle}" TextAlignment="Center" FontSize="13" Width="140" TextWrapping="Wrap"  Text="Scan computers by selecting them from Active Directory"/>
+                                                </Grid>
+                                                <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
+                                            </Grid>
+
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.RenderTransform>
+                                    <TranslateTransform x:Name="translate1" X="800" />
+                                </Button.RenderTransform>
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+                            </Button>
+
+                            <Button AutomationProperties.AutomationId="WorkgroupButton"
+                                    Click="OnWorkgroupClick" Content="Scan computers by selecting them from Workgroup" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Row="1" Margin="17 17 0 0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" >
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="20">
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="160"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Canvas Grid.RowSpan="2" Margin="2 20 0 0">
+                                                        <Path Data="F1M307,118L279,118L279,116L307,116z" Fill="#FF54984F" Height="2" Stretch="Fill" Width="28" Canvas.Left="28" Canvas.Top="38"/>
+                                                        <Path Data="F1M337,118L309,118L309,116L337,116z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="58" Canvas.Top="38" Width="28"/>
+                                                        <Path Data="F1M337,122L279,122L279,120L337,120z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="28" Canvas.Top="42" Width="58"/>
+                                                        <Path Data="F1M337,126L279,126L279,124L337,124z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="28" Canvas.Top="46" Width="58"/>
+                                                        <Path Data="F1M307,130L279,130L279,128L307,128z" Fill="#FF54984F" Height="2" Stretch="Fill" Width="28" Canvas.Left="28" Canvas.Top="50"/>
+                                                        <Path Data="F1M336,88L320,88L320,87L336,87z" Fill="#FF54984F" Height="1" Stretch="Fill" Canvas.Left="69" Canvas.Top="9" Width="16"/>
+                                                        <Path Data="F1M354,88L338,88L338,87L354,87z" Fill="#FF54984F" Height="1" Stretch="Fill" Width="16" Canvas.Left="87" Canvas.Top="9"/>
+                                                        <Path Data="F1M354,90L320,90L320,89L354,89z" Fill="#FF54984F" Height="1" Stretch="Fill" Canvas.Left="69" Canvas.Top="11" Width="34"/>
+                                                        <Path Data="F1M354,92L320,92L320,91L354,91z" Fill="#FF54984F" Height="1" Stretch="Fill" Canvas.Left="69" Canvas.Top="13" Width="34"/>
+                                                        <Path Data="F1M336,94L320,94L320,93L336,93z" Fill="#FF54984F" Height="1" Stretch="Fill" Canvas.Left="69" Canvas.Top="15" Width="16"/>
+                                                        <Path Data="F1M308,88C308,88.552,307.553,89,307,89C306.447,89,306,88.552,306,88C306,87.448,306.447,87,307,87C307.553,87,308,87.448,308,88" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="55" Canvas.Top="9"/>
+                                                        <Path Data="F1M304,88C304,88.552,303.553,89,303,89C302.447,89,302,88.552,302,88C302,87.448,302.447,87,303,87C303.553,87,304,87.448,304,88" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="51" Canvas.Top="9"/>
+                                                        <Path Data="F1M300,88C300,88.552,299.553,89,299,89C298.447,89,298,88.552,298,88C298,87.448,298.447,87,299,87C299.553,87,300,87.448,300,88" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="47" Canvas.Top="9"/>
+                                                        <Path Data="F1M296,88C296,88.552,295.553,89,295,89C294.447,89,294,88.552,294,88C294,87.448,294.447,87,295,87C295.553,87,296,87.448,296,88" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="43" Canvas.Top="9"/>
+                                                        <Path Data="F1M292,92C292,92.552,291.553,93,291,93C290.447,93,290,92.552,290,92C290,91.448,290.447,91,291,91C291.553,91,292,91.448,292,92" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="39" Canvas.Top="13"/>
+                                                        <Path Data="F1M292,96C292,96.552,291.553,97,291,97C290.447,97,290,96.552,290,96C290,95.448,290.447,95,291,95C291.553,95,292,95.448,292,96" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="39" Canvas.Top="17"/>
+                                                        <Path Data="F1M292,100C292,100.552,291.553,101,291,101C290.447,101,290,100.552,290,100C290,99.448,290.447,99,291,99C291.553,99,292,99.448,292,100" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="39" Canvas.Top="21"/>
+                                                        <Path Data="F1M292,88C292,88.552,291.553,89,291,89C290.447,89,290,88.552,290,88C290,87.448,290.447,87,291,87C291.553,87,292,87.448,292,88" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="39" Canvas.Top="9"/>
+                                                        <Path Data="F1M386,150C386,150.552,385.553,151,385,151C384.447,151,384,150.552,384,150C384,149.448,384.447,149,385,149C385.553,149,386,149.448,386,150" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="133" Canvas.Top="71"/>
+                                                        <Path Data="F1M382,150C382,150.552,381.553,151,381,151C380.447,151,380,150.552,380,150C380,149.448,380.447,149,381,149C381.553,149,382,149.448,382,150" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="129" Canvas.Top="71"/>
+                                                        <Path Data="F1M378,150C378,150.552,377.553,151,377,151C376.447,151,376,150.552,376,150C376,149.448,376.447,149,377,149C377.553,149,378,149.448,378,150" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="125" Canvas.Top="71"/>
+                                                        <Path Data="F1M390,142C390,142.552,389.553,143,389,143C388.447,143,388,142.552,388,142C388,141.448,388.447,141,389,141C389.553,141,390,141.448,390,142" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="137" Canvas.Top="63"/>
+                                                        <Path Data="F1M390,146C390,146.552,389.553,147,389,147C388.447,147,388,146.552,388,146C388,145.448,388.447,145,389,145C389.553,145,390,145.448,390,146" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="137" Canvas.Top="67"/>
+                                                        <Path Data="F1M390,150C390,150.552,389.553,151,389,151C388.447,151,388,150.552,388,150C388,149.448,388.447,149,389,149C389.553,149,390,149.448,390,150" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="137" Canvas.Top="71"/>
+                                                        <Path Data="F1M390,138C390,138.552,389.553,139,389,139C388.447,139,388,138.552,388,138C388,137.448,388.447,137,389,137C389.553,137,390,137.448,390,138" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="137" Canvas.Top="59"/>
+                                                        <Path Data="F1M388,178C388,180.359,386.958,182,385.673,182L286.971,182C285.687,182,284.645,180.359,284.645,178C284.645,175.641,285.687,174,286.971,174L385.673,174C386.958,174,388,175.641,388,178" Fill="#FF457FAD" Opacity="0.270004004240036" Stretch="Fill" Height="8" Canvas.Left="33.645" Canvas.Top="96" Width="103.355"/>
+                                                        <Path Data="F1M380.0293,178L254.0293,178C253.0293,178,253.0293,177,253.0293,177L253.0293,170L382.0293,170L382.0293,176C382.0293,177.985,380.0293,178,380.0293,178 M251.0293,170L251.0293,177C251.0293,177,250.3983,180,255.0293,180L380.0293,180C380.0293,180,384.0293,179.971,384.0293,176L384.0293,169.621C384.0293,169.621,384.0293,168,382.7063,168L253.0143,168C253.0143,168,251.0293,168.016,251.0293,170" Fill="#FF457FAD" Height="12" Stretch="Fill" Canvas.Top="90" Width="133.029"/>
+                                                        <Path Data="F1M372.0293,106L372.0293,168L266.0293,168L266.0293,106C266.0293,106,266.0293,104,268.0293,104L351.0293,104L370.0293,104C372.0293,104,372.0293,106,372.0293,106 M329.7703,171L307.2733,171C305.9493,171,305.9493,170,305.9843,170L331.0593,170C331.0933,170,331.0933,171,329.7703,171 M370.0293,102L348.9453,102L284.0983,102L267.5703,102C263.6013,102,264.0293,106.421,264.0293,106.421L264.0293,122.964L264.0293,170L303.9653,170C303.9653,170,304.0293,173,307.2733,173L329.7703,173C333.0793,173,333.0793,170,333.0793,170L374.0293,170L374.0293,125L374.0293,106C374.0293,106,374.0003,102,370.0293,102" Fill="#FF457FAD" Height="71" Stretch="Fill" Canvas.Left="13.016" Canvas.Top="24" Width="110.013"/>
+                                                        <Path Data="F1M367.0293,161C367.0293,163,365.0213,163,365.0213,163L273.0293,163C273.0293,163,271.0293,163,271.0293,161L271.0293,133L271.0293,111C271.0293,109,273.0293,109,273.0293,109L365.0213,109C365.0213,109,367.0293,109,367.0293,111z M365.0213,108L273.0293,108C270.0293,108,270.0293,111,270.0293,111L270.0293,132.565C270.0293,132.565,270.0203,160.901,270.0293,161C270.0293,164,273.0293,164,273.0293,164L365.0213,164C365.0213,164,368.0293,164,368.0293,161L368.0293,111C368.0293,111,368.3303,108,365.0213,108" Fill="#FF457FAD" Height="56" Opacity="0.5" Stretch="Fill" Canvas.Left="19.025" Canvas.Top="30" Width="98.011"/>
+                                                        <Path Data="F1M261,92L257,92L257,88L255,88L255,92L251,92L251,94L255,94L255,98L257,98L257,94L261,94z" Fill="#FF457FAD" Height="10" Opacity="0.39999398589134216" Stretch="Fill" Width="10" Canvas.Top="10"/>
+                                                        <Path Data="F1M399.3555,136.1035C399.3555,137.3445,399.0895,138.2075,398.7615,138.2075L373.5935,138.2075C373.2655,138.2075,373.0005,137.3445,373.0005,136.1035C373.0005,134.8625,373.2655,133.9995,373.5935,133.9995L398.7615,133.9995C399.0895,133.9995,399.3555,134.8625,399.3555,136.1035" Fill="#FF457FAD" Height="4.208" Opacity="0.270004004240036" Stretch="Fill" Width="26.355" Canvas.Left="122" Canvas.Top="55.999"/>
+                                                        <Path Data="F1M397.7607,126L388.9997,126L388.9997,99L388.9997,82C388.9997,82,389.0547,78,385.0837,78L365.9997,78L319.0987,78L312.5707,78C308.6017,78,308.9997,82.421,308.9997,82.421L308.9997,98.964L308.9997,102L310.9997,102L310.9997,82C310.9997,82,311.0297,80,313.0297,80L366.0837,80L385.0837,80C387.0837,80,386.9997,82,386.9997,82L386.9997,126L373.9997,126L373.9997,128L389.0837,128L396.9997,128L396.9997,132C396.9997,133.985,395.0837,134,395.0837,134L373.9997,134L373.9997,136L395.0837,136C395.0837,136,398.9997,135.971,398.9997,132L398.9997,127.621C398.9997,127.621,399.0837,126,397.7607,126" Fill="#FF457FAD" Height="58" Stretch="Fill" Canvas.Left="57.989" Width="90.012"/>
+                                                        <Path Data="F1M382.0762,82L316.0292,82C313.0292,82,313.0002,85,313.0002,85L313.0002,102L314.0002,102L314.0002,85C314.0002,83,316.0292,83,316.0292,83L382.0762,83C382.0762,83,384.0002,83,384.0002,85L384.0002,121C384.0002,123,382.0762,123,382.0762,123L374.0002,123L374.0002,124L382.0762,124C382.0762,124,385.0002,124,385.0002,121L385.0002,85C385.0002,85,385.3852,82,382.0762,82" Fill="#FF457FAD" Height="42" Opacity="0.5" Stretch="Fill" Canvas.Left="62" Canvas.Top="4" Width="72.014"/>
+                                                    </Canvas>
+
+                                                    <TextBlock HorizontalAlignment="Center" Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource StrongBrush}" Grid.Column="1" Margin="0 50 0 0">
+                                                        <TextBlock.Text>
+                                                            Workgroup
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+
+                                                    <TextBlock Opacity="0.5" Grid.Column="1" Grid.Row="1" FontSize="13" Style="{DynamicResource SubTitleTextStyle}" TextAlignment="Center" HorizontalAlignment="Center" Width="140" TextWrapping="Wrap"  Text="Scan computers by selecting them from Workgroup"/>
+                                                </Grid>
+                                                <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
+                                            </Grid>
+
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.RenderTransform>
+                                    <TranslateTransform x:Name="translate2" X="900" />
+                                </Button.RenderTransform>
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate2" Storyboard.TargetProperty="X" BeginTime="0:0:0.1">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+                            </Button>
+
+                            <Button AutomationProperties.AutomationId="NetworkAddressesButton"
+                                    Content="Scan computers by specifying IP addresses or endpoint names" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" 
+                                    Grid.Column="1" Margin="17 17 17 0" Click="OnIpClick">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" >
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="20">
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="160"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Canvas  Grid.RowSpan="2" Margin="0 27 0 0">
+                                                        <Path Data="F1M387,316C387,318.359,385.958,320,384.673,320L285.971,320C284.687,320,283.645,318.359,283.645,316C283.645,313.641,284.687,312,285.971,312L384.673,312C385.958,312,387,313.641,387,316" Fill="#FF457FAD" Height="8" Opacity="0.270004004240036" Stretch="Fill" Canvas.Left="35.645" Canvas.Top="96" Width="103.355"/>
+                                                        <Path Data="F1M380.0293,316L254.0293,316C253.0293,316,253.0293,315,253.0293,315L253.0293,308L382.0293,308L382.0293,314C382.0293,315.985,380.0293,316,380.0293,316 M251.0293,308L251.0293,315C251.0293,315,250.3983,318,255.0293,318L380.0293,318C380.0293,318,384.0293,317.971,384.0293,314L384.0293,307.621C384.0293,307.621,384.0293,306,382.7063,306L253.0143,306C253.0143,306,251.0293,306.016,251.0293,308" Fill="#FF457FAD" Height="12" Stretch="Fill" Canvas.Left="3" Canvas.Top="90" Width="133.029"/>
+                                                        <Path Data="F1M306,256L278,256L278,254L306,254z" Fill="#FF54984F" Height="2" Stretch="Fill" Width="28" Canvas.Left="30" Canvas.Top="38"/>
+                                                        <Path Data="F1M336,256L308,256L308,254L336,254z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="60" Canvas.Top="38" Width="28"/>
+                                                        <Path Data="F1M336,260L278,260L278,258L336,258z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="30" Canvas.Top="42" Width="58"/>
+                                                        <Path Data="F1M336,264L278,264L278,262L336,262z" Fill="#FF54984F" Height="2" Stretch="Fill" Canvas.Left="30" Canvas.Top="46" Width="58"/>
+                                                        <Path Data="F1M306,268L278,268L278,266L306,266z" Fill="#FF54984F" Height="2" Stretch="Fill" Width="28" Canvas.Left="30" Canvas.Top="50"/>
+                                                        <Path Data="F1M375.4453,229.9448L373.6113,229.9448L373.6113,232.3888L375.4453,232.3888C376.1183,232.3888,376.6663,231.8418,376.6663,231.1668C376.6663,230.4918,376.1183,229.9448,375.4453,229.9448" Fill="#FF457FAD" Height="2.444" Stretch="Fill" Width="3.055" Canvas.Left="125.611" Canvas.Top="13.945"/>
+                                                        <Path Data="F1M375.4453,234.2222L373.6113,234.2222L373.6113,236.6662L371.7783,236.6662L371.7783,234.2222L371.7783,232.3892L371.7783,229.9452L371.7783,228.1112L373.6113,228.1112L375.4453,228.1112C377.1323,228.1112,378.5003,229.4792,378.5003,231.1662C378.5003,232.8542,377.1323,234.2222,375.4453,234.2222 M370.5543,236.6662L368.7213,236.6662L368.7213,228.1112L370.5543,228.1112z M373.0003,222.0002C366.9243,222.0002,362.0003,226.9252,362.0003,233.0002C362.0003,239.0762,366.9243,244.0002,373.0003,244.0002C379.0763,244.0002,384.0003,239.0762,384.0003,233.0002C384.0003,226.9252,379.0763,222.0002,373.0003,222.0002" Fill="#FF457FAD" Height="22" Stretch="Fill" Width="22" Canvas.Left="114" Canvas.Top="6"/>
+                                                        <Path Data="F1M373,262L379.27,258.238L388.048,240.683z" Fill="#FF457FAD" Height="21.317" Opacity="0.10000599920749664" Stretch="Fill" Width="15.048" Canvas.Left="125" Canvas.Top="24.683"/>
+                                                        <Path Data="F1M373,259L361,242L361.027,242.009C359.135,239.499,358,236.386,358,233C358,224.716,364.716,218,373,218C381.284,218,388,224.716,388,233C388,236.384,386.865,239.497,384.975,242.006L385,242z M390,233C390,223.611,382.389,216,373,216C363.611,216,356,223.611,356,233C356,235.894,356.728,239,358.002,241L358,241L373,262L388,241L387.998,241C389.272,238.615,390,235.894,390,233" Fill="#FF457FAD" Height="46" Stretch="Fill" Width="34" Canvas.Left="108"/>
+                                                        <Path Data="F1M329.7705,309L307.2735,309C305.9495,309,305.9495,308,305.9845,308L331.0595,308C331.0935,308,331.0935,309,329.7705,309 M371.9995,264L371.9995,306L265.9995,306L265.9995,244C265.9995,244,266.0295,242,268.0295,242L351.0295,242L355.9995,242L354.9995,240L350.9455,240L286.0985,240L267.5705,240C263.6015,240,263.9995,244.421,263.9995,244.421L263.9995,260.964L263.9995,308L303.9645,308C303.9645,308,304.0295,311,307.2735,311L329.7705,311C333.0795,311,333.0795,308,333.0795,308L373.9995,308L373.9995,264z" Fill="#FF457FAD" Height="71" Stretch="Fill" Canvas.Left="15.988" Canvas.Top="24" Width="110.011"/>
+                                                        <Path Data="F1M367,258L367,299C367,301,365.021,301,365.021,301L273.029,301C273.029,301,271,301,271,299L271,271L271,249C271,247,273.029,247,273.029,247L356,247L356,246L273.029,246C270.029,246,270,249,270,249L270,270.565C270,270.565,270.006,298.901,270.015,299C270.015,302,273.029,302,273.029,302L365.021,302C365.021,302,368,302,368,299L368,259z" Fill="#FF457FAD" Height="56" Opacity="0.5" Stretch="Fill" Canvas.Left="22" Canvas.Top="30" Width="98"/>
+                                                        <Path Data="F1M262,275C262,275.552,261.553,276,261,276C260.447,276,260,275.552,260,275C260,274.448,260.447,274,261,274C261.553,274,262,274.448,262,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="12" Canvas.Top="58"/>
+                                                        <Path Data="F1M259,275C259,275.552,258.553,276,258,276C257.447,276,257,275.552,257,275C257,274.448,257.447,274,258,274C258.553,274,259,274.448,259,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="9" Canvas.Top="58"/>
+                                                        <Path Data="F1M256,275C256,275.552,255.553,276,255,276C254.447,276,254,275.552,254,275C254,274.448,254.447,274,255,274C255.553,274,256,274.448,256,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="6" Canvas.Top="58"/>
+                                                        <Path Data="F1M253,275C253,275.552,252.553,276,252,276C251.447,276,251,275.552,251,275C251,274.448,251.447,274,252,274C252.553,274,253,274.448,253,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="3" Canvas.Top="58"/>
+                                                        <Path Data="F1M250,275C250,275.552,249.553,276,249,276C248.447,276,248,275.552,248,275C248,274.448,248.447,274,249,274C249.553,274,250,274.448,250,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Top="58"/>
+                                                        <Path Data="F1M389,275C389,275.552,388.553,276,388,276C387.447,276,387,275.552,387,275C387,274.448,387.447,274,388,274C388.553,274,389,274.448,389,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="139" Canvas.Top="58"/>
+                                                        <Path Data="F1M386,275C386,275.552,385.553,276,385,276C384.447,276,384,275.552,384,275C384,274.448,384.447,274,385,274C385.553,274,386,274.448,386,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="136" Canvas.Top="58"/>
+                                                        <Path Data="F1M383,275C383,275.552,382.553,276,382,276C381.447,276,381,275.552,381,275C381,274.448,381.447,274,382,274C382.553,274,383,274.448,383,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="133" Canvas.Top="58"/>
+                                                        <Path Data="F1M380,275C380,275.552,379.553,276,379,276C378.447,276,378,275.552,378,275C378,274.448,378.447,274,379,274C379.553,274,380,274.448,380,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="130" Canvas.Top="58"/>
+                                                        <Path Data="F1M377,275C377,275.552,376.553,276,376,276C375.447,276,375,275.552,375,275C375,274.448,375.447,274,376,274C376.553,274,377,274.448,377,275" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="127" Canvas.Top="58"/>
+                                                    </Canvas>
+
+                                                    <TextBlock HorizontalAlignment="Center" Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource StrongBrush}" Grid.Column="1" Margin="0 50 0 0">
+                                                        <TextBlock.Text>
+                                                            Network Addresses
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+
+                                                    <TextBlock Opacity="0.5" Grid.Row="1" Grid.Column="1" Style="{DynamicResource SubTitleTextStyle}" HorizontalAlignment="Center" FontSize="13" TextAlignment="Center" MaxWidth="140" TextWrapping="Wrap" Text="Scan computers by specifying IP addresses or endpoint names"/>
+                                                </Grid>
+                                                <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
+                                            </Grid>
+
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.RenderTransform>
+                                    <TranslateTransform x:Name="translate3" X="500" />
+                                </Button.RenderTransform>
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate3" Storyboard.TargetProperty="X" BeginTime="0:0:0.2">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+                            </Button>
+
+                            <Button AutomationProperties.AutomationId="ThisComputerButton"
+                                    Content="Scan This Computer" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Column="1" Grid.Row="1" 
+                                    Margin="17 17 17 0" Click="OnThisClick">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <FrameworkTemplate.Resources>
+                                            <ResourceDictionary>
+                                                <Storyboard x:Key="AnimaFocused"  />
+                                                <Storyboard x:Key="AnimaMouseEnter" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="1" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                                <Storyboard x:Key="AnimaMouseLeave" >
+                                                    <DoubleAnimationUsingKeyFrames Timeline.BeginTime="00:00:00" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="Opacity">
+                                                        <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </ResourceDictionary>
+                                        </FrameworkTemplate.Resources>
+                                        <Grid>
+                                            <Grid Background="{DynamicResource AccentBrush}" >
+                                                <Border Opacity="0" Background="{DynamicResource BasicBrush}" x:Name="MouseOverElement" SnapsToDevicePixels="True" />
+                                                <Grid Margin="20">
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="160"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Canvas  Grid.RowSpan="2" Margin="2 44 0 0">
+                                                        <Path Data="F1M389,607C389,609.359,387.958,611,386.673,611L274.326,611C273.043,611,272,609.359,272,607C272,604.641,273.043,603,274.326,603L386.673,603C387.958,603,389,604.641,389,607" Fill="#FF457FAD" Height="8" Opacity="0.270004004240036" Stretch="Fill" Canvas.Left="21.029" Canvas.Top="73" Width="117"/>
+                                                        <Path Data="F1M380,606L254,606C253,606,253,605,253,605L253,598L382,598L382,604C382,605.985,380,606,380,606 M251,598L251,605C251,605,250.369,608,255,608L380,608C380,608,384,607.971,384,604L384,597.621C384,597.621,384,596,382.677,596L252.985,596C252.985,596,251,596.016,251,598" Fill="#FF457FAD" Height="12" Stretch="Fill" Canvas.Top="66" Width="133.029"/>
+                                                        <Path Data="F1M372,534L372,596L266,596L266,534C266,534,266,532,268,532L351,532L370,532C372,532,372,534,372,534 M329.741,599L307.244,599C305.92,599,305.92,598,305.955,598L331.03,598C331.064,598,331.064,599,329.741,599 M370,530L350.916,530L286.069,530L267.541,530C263.572,530,264,534.421,264,534.421L264,550.964L264,598L303.936,598C303.936,598,304,601,307.244,601L329.741,601C333.05,601,333.05,598,333.05,598L374,598L374,551L374,534C374,534,373.971,530,370,530" Fill="#FF457FAD" Height="71" Stretch="Fill" Canvas.Left="13.016" Width="110.013"/>
+                                                        <Path Data="F1M367,589C367,591,364.992,591,364.992,591L273,591C273,591,271,591,271,589L271,561L271,539C271,537,273,537,273,537L364.992,537C364.992,537,367,537,367,539z M364.992,536L273,536C270,536,270,539,270,539L270,560.565C270,560.565,269.991,588.901,270,589C270,592,273,592,273,592L364.992,592C364.992,592,368,592,368,589L368,539C368,539,368.301,536,364.992,536" Fill="#FF457FAD" Height="56" Opacity="0.5" Stretch="Fill" Canvas.Left="19.025" Canvas.Top="6" Width="98.011"/>
+                                                        <Path Data="F1M343.3281,568.1758C343.3281,577.1288,336.0701,584.3858,327.1161,584.3858C318.1631,584.3858,310.9061,577.1288,310.9061,568.1758C310.9061,559.2208,318.1631,551.9638,327.1161,551.9638C336.0701,551.9638,343.3281,559.2208,343.3281,568.1758" Fill="#FF53974F" Height="32.422" Opacity="0.19999699294567108" Stretch="Fill" Canvas.Left="59.935" Canvas.Top="21.964" Width="32.422"/>
+                                                        <Path Data="F1M319.5059,569.21C316.5609,569.21,314.1729,566.82,314.1729,563.874C314.1729,560.928,316.5609,558.539,319.5059,558.539C322.4539,558.539,324.8419,560.928,324.8419,563.874C324.8419,566.82,322.4539,569.21,319.5059,569.21 M319.5059,557.258C315.8539,557.258,312.8899,560.22,312.8899,563.874C312.8899,567.529,315.8539,570.49,319.5059,570.49C323.1619,570.49,326.1249,567.529,326.1249,563.874C326.1249,560.22,323.1619,557.258,319.5059,557.258" Fill="#FF53974F" Height="13.232" Stretch="Fill" Width="13.235" Canvas.Left="61.919" Canvas.Top="27.258"/>
+                                                        <Path Data="F1M318.8457,546.0078C318.1157,546.0078,317.5237,545.4158,317.5237,544.6858C317.5237,543.9538,318.1157,543.3618,318.8457,543.3618C319.5757,543.3618,320.1687,543.9538,320.1687,544.6858C320.1687,545.4158,319.5757,546.0078,318.8457,546.0078 M318.8457,542.0388C317.3837,542.0388,316.1997,543.2238,316.1997,544.6858C316.1997,546.1468,317.3837,547.3318,318.8457,547.3318C320.3077,547.3318,321.4917,546.1468,321.4917,544.6858C321.4917,543.2238,320.3077,542.0388,318.8457,542.0388" Fill="#FF53974F" Height="5.293" Stretch="Fill" Width="5.292" Canvas.Left="65.229" Canvas.Top="12.039"/>
+                                                        <Path Data="F1M310.2441,556.5947C309.5121,556.5947,308.9201,556.0027,308.9201,555.2727C308.9201,554.5407,309.5121,553.9487,310.2441,553.9487C310.9731,553.9487,311.5661,554.5407,311.5661,555.2727C311.5661,556.0027,310.9731,556.5947,310.2441,556.5947 M310.2441,552.6237C308.7821,552.6237,307.5961,553.8107,307.5961,555.2727C307.5961,556.7347,308.7821,557.9177,310.2441,557.9177C311.7061,557.9177,312.8901,556.7347,312.8901,555.2727C312.8901,553.8107,311.7061,552.6237,310.2441,552.6237" Fill="#FF53974F" Height="5.294" Stretch="Fill" Width="5.294" Canvas.Left="56.625" Canvas.Top="22.624"/>
+                                                        <Path Data="F1M319.9922,544.0361C320.1012,544.2281,320.1692,544.4471,320.1692,544.6851C320.1692,544.9311,320.0962,545.1601,319.9782,545.3581C329.9922,545.6091,338.0352,553.8001,338.0352,563.8741C338.0352,574.1061,329.7402,582.4001,319.5062,582.4001C309.2752,582.4001,300.9792,574.1061,300.9792,563.8741C300.9792,554.2331,308.3442,546.3151,317.7522,545.4321C317.6082,545.2191,317.5232,544.9621,317.5232,544.6851C317.5232,544.4781,317.5732,544.2851,317.6582,544.1131C307.5622,545.0461,299.6562,553.5341,299.6562,563.8741C299.6562,574.8371,308.5442,583.7251,319.5062,583.7251C330.4712,583.7251,339.3572,574.8371,339.3572,563.8741C339.3572,553.0741,330.7302,544.2941,319.9922,544.0361" Fill="#FF53974F" Height="39.689" Stretch="Fill" Canvas.Left="48.685" Canvas.Top="14.036" Width="39.701"/>
+                                                        <Path Data="F1M330.0664,572.7432C329.9444,573.3462,329.4124,573.7992,328.7704,573.7992C328.0404,573.7992,327.4474,573.2082,327.4474,572.4752C327.4474,571.7462,328.0404,571.1532,328.7704,571.1532C329.4124,571.1532,329.9444,571.6062,330.0664,572.2092C330.0864,572.2962,330.0934,572.3852,330.0934,572.4752C330.0934,572.5672,330.0864,572.6582,330.0664,572.7432 M328.7704,569.8302C327.3084,569.8302,326.1254,571.0142,326.1254,572.4752C326.1254,573.9372,327.3084,575.1242,328.7704,575.1242C330.2324,575.1242,331.4184,573.9372,331.4184,572.4752C331.4184,571.0142,330.2324,569.8302,328.7704,569.8302" Fill="#FF53974F" Height="5.294" Stretch="Fill" Width="5.293" Canvas.Left="75.154" Canvas.Top="39.83"/>
+                                                        <Path Data="F1M311.543,555.0352C313.654,553.1322,316.44,551.9642,319.506,551.9642C326.086,551.9642,331.418,557.2972,331.418,563.8742C331.418,566.6242,330.477,569.1502,328.91,571.1662C329.39,571.2182,329.794,571.5192,329.98,571.9432C331.705,569.7072,332.741,566.9142,332.741,563.8742C332.741,556.5652,326.816,550.6412,319.506,550.6412C316.113,550.6412,313.027,551.9292,310.685,554.0302C311.127,554.1852,311.459,554.5662,311.543,555.0352" Fill="#FF53974F" Height="21.302" Stretch="Fill" Width="22.056" Canvas.Left="59.714" Canvas.Top="20.641"/>
+                                                        <Path Data="F1M327.4707,572.7129C325.3597,574.6159,322.5747,575.7839,319.5057,575.7839C312.9287,575.7839,307.5957,570.4509,307.5957,563.8739C307.5957,561.1239,308.5367,558.5979,310.1047,556.5819C309.6247,556.5299,309.2207,556.2289,309.0337,555.8069C307.3097,558.0409,306.2737,560.8339,306.2737,563.8739C306.2737,571.1839,312.1997,577.1089,319.5057,577.1089C322.9027,577.1089,325.9877,575.8189,328.3297,573.7189C327.8887,573.5629,327.5567,573.1819,327.4707,572.7129" Fill="#FF53974F" Height="21.302" Stretch="Fill" Width="22.056" Canvas.Left="55.303" Canvas.Top="25.807"/>
+                                                        <Path Data="F1M319.8066,564.1797C319.5486,564.4387,319.1296,564.4387,318.8706,564.1797C318.6136,563.9217,318.6136,563.5017,318.8706,563.2427L332.4396,549.6747C332.6986,549.4157,333.1176,549.4157,333.3766,549.6747C333.6346,549.9327,333.6346,550.3527,333.3766,550.6117z" Fill="#FF53974F" Height="14.893" Stretch="Fill" Canvas.Left="67.707" Canvas.Top="19.48" Width="14.892"/>
+                                                    </Canvas>
+
+                                                    <TextBlock HorizontalAlignment="Center" Style="{DynamicResource SubTitleTextStyle}" Foreground="{DynamicResource StrongBrush}" Grid.Column="1" Margin="0 50 0 0">
+                                                        <TextBlock.Text>
+                                                            This Computer
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+
+                                                    <TextBlock Opacity="0.5" Grid.Row="1" Grid.Column="1" Style="{DynamicResource SubTitleTextStyle}" FontSize="13" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Scan this computer"/>
+                                                </Grid>
+                                                <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
+                                            </Grid>
+
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True">
+                                                <TriggerBase.ExitActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseLeave_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseLeave}" />
+                                                </TriggerBase.ExitActions>
+                                                <TriggerBase.EnterActions>
+                                                    <BeginStoryboard BeginStoryboard.Name="AnimaMouseEnter_BeginStoryboard" BeginStoryboard.Storyboard="{StaticResource AnimaMouseEnter}" />
+                                                </TriggerBase.EnterActions>
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="MouseOverElement" Property="Border.Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.RenderTransform>
+                                    <TranslateTransform x:Name="translate4" X="600" />
+                                </Button.RenderTransform>
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate4" Storyboard.TargetProperty="X" BeginTime="0:0:0.3">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0" >
+                                                        <EasingDoubleKeyFrame.EasingFunction>
+                                                            <CubicEase/>
+                                                        </EasingDoubleKeyFrame.EasingFunction>
+                                                    </EasingDoubleKeyFrame>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+                            </Button>
+
+                        </Grid>
+                    </Border>
+
+                    <Border x:Name="wizardBorder" Visibility="Collapsed" >
+                        <Grid>
+                            <App:StartScanDomainView AutomationProperties.AutomationId="ActiveDirectoryView" x:Name="viewScanDomain" Visibility="Collapsed"  />
+                            <App:StartScanWorkgroupView AutomationProperties.AutomationId="WorkgroupView" x:Name="viewScanWorkgroup" Visibility="Collapsed"   />
+                            <App:StartScanByIpView AutomationProperties.AutomationId="NetworkAddressesView" x:Name="viewScanByIp" Visibility="Collapsed"  />
+                            <App:StartScanLocalView x:Name="viewScanLocal" Visibility="Collapsed"  />
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Border Grid.Row="0" BorderThickness="0" Background="{DynamicResource ErrorBrush2}" BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" 
+                Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}">
+                    <Grid>
+                        <TextBlock AutomationProperties.AutomationId="ErrorTextBlock" Foreground="White" Text="{Binding Error}" Style="{DynamicResource SubTitleTextStyle}" Margin="20 10"   FontSize="13"/>
+                        <Button Style="{StaticResource CloseButton}" Background="White" Command="{Binding ClearErrorMessageCommand}" Margin="0 0 20 0" Width="12" Height="12" HorizontalAlignment="Right"  ToolTip="Hide" />
+                    </Grid>
+
+                </Border>
+
+                <Border Grid.Row="2" Height="60" >
+                    <Grid>
+                        
+
+                        <StackPanel AutomationProperties.AutomationId="ToolBarPanel" Orientation="Horizontal" HorizontalAlignment="Right" Height="50" Margin="0,0,17,0">
+
+                            <Button AutomationProperties.AutomationId="QuickScanButton" Height="32"
+                                    x:Name="btnQuickScan" Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"                            
+                                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                                    Content="Quick Scan" Click="OnQuickScanClick" Margin="5" />
+
+                            <Button AutomationProperties.AutomationId="FullScanButton" Height="32"
+                            x:Name="btnFinish" Visibility="{Binding IsFinishEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"                            
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" Content="Full Scan" Click="OnFinishClick" Margin="5 5 0 5" />
+
+                            <Grid Margin="10 5 0 5" Visibility="{Binding IsNextEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" >
+                                <Button AutomationProperties.AutomationId="NextButton" x:Name="btnNext" Content="{Binding NextName}"  Height="32"
+                                    Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" Click="OnNextClick" />
+                            </Grid>
+
+                            
+
+                        </StackPanel>
+                        <Button AutomationProperties.AutomationId="BackButton" Height="32"
+                            x:Name="btnBack" Content="Back" HorizontalAlignment="Left" Margin="17,0,0,0"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" 
+                            Visibility="{Binding IsBackEnabled, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}" 
+                            Click="OnBackClick" Template="{StaticResource BackButton}" Foreground="Black"/>
+
+                        <Button AutomationProperties.AutomationId="CancelButton" Height="32"
+                                x:Name="cancel" Content="Cancel" HorizontalAlignment="Right"  Margin="5 5 17 5" Click="OnCancelClick" />
+                    </Grid>
+                </Border>
+
+        </Grid>
+        </telerik:RadBusyIndicator>
+    </Grid>
+
+</Models:BaseView>

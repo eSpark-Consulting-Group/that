@@ -1,0 +1,114 @@
+﻿<Window AutomationProperties.AutomationId="AgentRequirementsWindow" AutomationProperties.Name="AgentRequirementsWindow"
+        x:Class="APTAT.Application.AgentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Stop Scan"   Width="600" Height="240"  WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent" WindowStyle="None"
+        SizeToContent="Height"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Border x:Name="Shadow" CornerRadius="4" BorderBrush="#11000000" BorderThickness="1" Margin="0">
+        <Border CornerRadius="3" BorderBrush="#22000000" BorderThickness="1">
+            <Border CornerRadius="2" BorderBrush="#33000000" BorderThickness="1">
+                <Border CornerRadius="1" BorderBrush="#44000000" BorderThickness="1">
+                    <Border x:Name="Border" BorderThickness="0" BorderBrush="{DynamicResource StrongBrush}" Background="#FFFAF9F9">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 15 20 0">
+                                        <Button AutomationProperties.AutomationId="CloseAgentRequirementsCrossButton"
+                                                Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Agent Requirements" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                </Grid>
+                            </Border>
+
+                            <Grid Grid.Row="1" Background="#FCFCFC" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="Auto" MinHeight="35"/>
+                                    <RowDefinition Height="Auto" MinHeight="35"/>
+                                    <RowDefinition Height="Auto" MinHeight="35"/>
+                                    <RowDefinition Height="Auto" MinHeight="35"/>
+                                    <RowDefinition Height="Auto" MinHeight="35"/>
+                                    <RowDefinition Height="Auto" MinHeight="35"/>
+                                    <RowDefinition Height="Auto" MinHeight="35"/>
+                                    <RowDefinition Height="Auto" MinHeight="60"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="138*"/>
+                                    <ColumnDefinition Width="155*"/>
+                                    <ColumnDefinition Width="228*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="Assets/checkmark.png" Stretch="None" HorizontalAlignment="Right"
+                            Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="1" />
+                                <Image Source="Assets/checkmark.png" Stretch="None" HorizontalAlignment="Right"
+                            Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="2" />
+                                <Image Source="Assets/checkmark.png" Stretch="None" HorizontalAlignment="Right"
+                            Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="3" />
+                                <Image Source="Assets/checkmark.png" Stretch="None" HorizontalAlignment="Right"
+                            Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="4" />
+                                <Image Source="Assets/checkmark.png" Stretch="None" HorizontalAlignment="Right"
+                            Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="5" />
+                                <Image Source="Assets/checkmark.png" Stretch="None" HorizontalAlignment="Right"
+                            Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="6" />
+                                <Image Source="Assets/checkmark.png" Stretch="None" HorizontalAlignment="Right"
+                            Margin="0,0,108,0" SnapsToDevicePixels="True" Grid.Row="7" />
+
+                                <TextBlock AutomationProperties.AutomationId="TurnedOnTextBlock" 
+                                           Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
+                                           <Run Text="Check whether a target computer is turned on and connected to the network." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                </TextBlock>
+
+                                <TextBlock AutomationProperties.AutomationId="FirewallOffTextBlock" 
+                                           Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
+                                           <Run Text="Check whether firewall on a target computer is turned Off." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                </TextBlock>
+
+                                <TextBlock AutomationProperties.AutomationId="IpAddressTextBlock"
+                                           Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
+                                           <Run Text="Check whether IP address of a target computer is correct." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                </TextBlock>
+
+                                <TextBlock AutomationProperties.AutomationId="EnableSharingTextBlock"
+                                           Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
+                                           <Run Text="In the Network Neighbourhood run Network Wizard, enable file sharing." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                </TextBlock>
+
+                                <TextBlock AutomationProperties.AutomationId="PasswordNotBlankTextBlock"
+                                           Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
+                                           <Run Text="Make sure Administrator password is not blank and correct." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                </TextBlock>
+
+                                <TextBlock AutomationProperties.AutomationId="ForceguestTextBlock"
+                                           Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
+                                           <Run Text="Check whether 'Forceguest' option on target computer is disabled:" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                           <Run Text="HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa" FontFamily="Segoe UI" Foreground="#FF3A7FBF" FontSize="13"/>
+                                           <Run Text="'forceguest' dword is 0." FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
+                                </TextBlock>
+
+                                <TextBlock AutomationProperties.AutomationId="LocalAccountTokenTextBlock"
+                                           Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
+                                           <Run Text="If the account is not a built-in Administrator, check whether:" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                           <Run Text="HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System" FontFamily="Segoe UI" Foreground="#FF3A7FBF" FontSize="13"/>
+                                           <Run Text="'LocalAccountTokenFilterPolicy' dword is 1." FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
+                                </TextBlock>
+
+                                <Button AutomationProperties.AutomationId="CloseAgentRequirementsButton" Height="32"
+                        Grid.Row="8" HorizontalAlignment="Right" Content="Close" Margin="0,0,15,5" 
+                        Click="OnBackClick"  Grid.Column="2" Width="120"/>
+
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Border>
+            </Border>
+        </Border>
+    </Border>
+</Window>

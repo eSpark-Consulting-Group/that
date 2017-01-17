@@ -1,0 +1,123 @@
+﻿
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using Telerik.Windows.Controls;
+
+namespace APTAT.Application.Models
+{
+    public class Error
+    {
+        public String Message { get; set; }
+
+        public String Property { get; set; }
+    }
+
+    public class DomainObject : INotifyPropertyChanged
+    {
+        public DomainObject()
+        {
+            ClearErrorMessageCommand = new DelegateCommand(o => Error = null);
+        }
+
+        public DelegateCommand ClearErrorMessageCommand { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Boolean _hasErrors;
+        private List<Error> _errors;
+
+        private String _error;
+
+        public Boolean HasErrors
+        {
+            get { return _hasErrors; }
+            set
+            {
+                _hasErrors = value;
+                RaisePropertyChanged("HasErrors");
+            }
+        }
+
+        public String Error
+        {
+            get { return _error; }
+            set
+            {
+                _error = value;
+                RaisePropertyChanged("Error");
+               if(String.IsNullOrWhiteSpace(_error) == false)
+               {
+                   HasErrors = true;
+               }
+               else
+               {
+                   HasErrors = false;
+               }
+            }
+        }
+
+        protected virtual void RaisePropertyChanged(String name)
+        {
+            if(PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+
+        protected void RaiseValidationError(String propertyName, String errorMessage)
+        {
+            if (_errors == null)
+            {
+                _errors = new List<Error>();
+            }
+
+            _errors.Add(new Error { Message = errorMessage, Property = propertyName });
+
+            if(Error == null)
+            {
+                Error = _errors.First().Message;
+            }
+
+            //throw new ValidationException(errorMessage);
+        }
+
+        protected void ClearError(String propertyName)
+        {
+
+            if(_errors != null)
+            {
+                for (Int32 i = _errors.Count - 1; i >= 0; --i)
+                {
+                    Error e = _errors[i];
+                    if (e.Property == propertyName)
+                    {
+                        _errors.Remove(e);
+                    }
+                }
+
+                Error err = _errors.FirstOrDefault();
+                if (err != null)
+                {
+                    Error = err.Message;
+                }
+                else
+                {
+                    Error = null;
+                } 
+            }
+            else
+            {
+                Error = null;
+            }
+            
+        }
+
+
+  
+    }
+}
