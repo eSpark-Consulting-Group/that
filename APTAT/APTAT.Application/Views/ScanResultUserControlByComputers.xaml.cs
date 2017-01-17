@@ -71,6 +71,7 @@ namespace APTAT.Application
 
                 treeList.SelectedItem = cell.DataContext;
             }
+            ViewModel.SelectedItems = ViewModel.SelectedItems;
         }
 
         void item_Click(object sender, RoutedEventArgs e)
@@ -169,7 +170,7 @@ namespace APTAT.Application
                 ViewModel.SelectedItems.Add(item);
             foreach (ThreatInfoItem item in e.RemovedItems)
                 ViewModel.SelectedItems.Remove(item);
-            ViewModel.SelectedItems = ViewModel.SelectedItems;
+
         }
     }
 }

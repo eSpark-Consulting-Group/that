@@ -212,7 +212,11 @@ namespace APTAT.Core
                 return _scanner;
 
             if (options.ScanInit)
+            {
                 _lastAptResults.Clear();
+                ValkyrieAnalysisResult.Clear();
+            }
+
             _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
 
             _scanner = _aptScannerFactory.CreateAptScanner(_descentSubSystem, devicesSourceDescription, options);
@@ -227,6 +231,9 @@ namespace APTAT.Core
 
         private void OnScannerOnScanCompleted(object sender, ComputerScanCompletedEventArgs args)
         {
+            if (args.CompletedResult.IsCanceled)
+                return;
+
             var resultsUpdated = AddResultsToDictionary(args.CompletedResult.Files.ToArray());
             if (resultsUpdated)
                 args.CompletedResult.RecalculateStatistics();
@@ -234,7 +241,7 @@ namespace APTAT.Core
 
         private bool AddResultsToDictionary(IFlsResult[] resultsFiles)
         {
-          bool resultsUpdated = false;
+            bool resultsUpdated = false;
             var addToAnalyze = new List<IFlsResult>();
             var verdictUpdated = new List<IFlsResult>();
 

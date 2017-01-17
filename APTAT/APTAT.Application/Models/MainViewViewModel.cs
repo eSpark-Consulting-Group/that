@@ -467,7 +467,6 @@ namespace APTAT.Application.Models
                 if (_selectedItems.Count == 1)
                     SelectedItem = _selectedItems[0];
 
-                RaisePropertyChanged(nameof(SelectedItems));
                 RaisePropertyChanged(nameof(IsMultipleDetailsEnabled));
                 RaisePropertyChanged(nameof(IsRestartEnabled));
                 RaisePropertyChanged(nameof(IsStopEnabled));
@@ -1188,6 +1187,7 @@ namespace APTAT.Application.Models
             base.InvokeViewUnloaded(arg);
 
             _targetsDiscoveryService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
+
             _aptService.BeginScanCompleted -= OnBeginScanCompleted;
             _aptService.ScanStatusChanged -= OnScanStatusChanged;
             _aptService.ComputerScanCompleted -= OnComputerScanCompleted;
@@ -1196,6 +1196,7 @@ namespace APTAT.Application.Models
             _aptService.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             _aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
             _aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
+            _aptService.FlsAnalyzeProgressChanged -= OnFlsAnalyzeProgressChanged;
         }
 
         private void OnScanCompleted(Object sender, Services.ScanCompletedEventArgs e)
