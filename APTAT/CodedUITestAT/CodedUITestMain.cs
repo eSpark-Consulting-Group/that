@@ -8,12 +8,9 @@ using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.UIMapMainClasses;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
-using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
@@ -24,43 +21,13 @@ namespace CodedUITestAT
 {
     /// <summary> Tests for the Main screen. </summary>
     [CodedUITest]
-    public sealed class CodedUITestMain
+    public sealed class CodedUITestMain : CodedUITestCommon
     {
         public CodedUITestMain()
         {
         }
 
         #region UIMap properties
-
-        /// <summary> UIMap for Main screen, UIMapMain.uitest. </summary>
-        public UIMapMain UIMapMain
-        {
-            get
-            {
-                if ((this.mapMain == null))
-                {
-                    this.mapMain = new UIMapMain();
-                }
-
-                return this.mapMain;
-            }
-        }
-        private UIMapMain mapMain;
-        
-        /// <summary> UIMap for Start Scanning Wizard screen, UIMapStartScanWizard.uitest. </summary>
-        public UIMapStartScanWizard UIMapStartScanWizard
-        {
-            get
-            {
-                if ((this.mapStartScanWizard == null))
-                {
-                    this.mapStartScanWizard = new UIMapStartScanWizard();
-                }
-
-                return this.mapStartScanWizard;
-            }
-        }
-        private UIMapStartScanWizard mapStartScanWizard;
 
         /// <summary> UIMap for Network Addresses Scanning Wizard screen branch, UIMapNetworkAddresses.uitest. </summary>
         public UIMapNetworkAddresses UIMapNetworkAddresses
@@ -106,22 +73,7 @@ namespace CodedUITestAT
             }
         }
         private UIMapActiveDirectory mapActiveDirectory;
-
-        /// <summary> UIMap for Scan Completed window, UIMapScanCompletedWindow.uitest. </summary>
-        public UIMapScanCompletedWindow UIMapScanCompletedWindow
-        {
-            get
-            {
-                if ((this.mapScanCompletedWindow == null))
-                {
-                    this.mapScanCompletedWindow = new UIMapScanCompletedWindow();
-                }
-
-                return this.mapScanCompletedWindow;
-            }
-        }
-        private UIMapScanCompletedWindow mapScanCompletedWindow;
-
+        
         /// <summary> UIMap for CAM Credentials window, UIMapCamCredentialsWindow.uitest. </summary>
         public UIMapCamCredentialsWindow UIMapCamCredentialsWindow
         {
@@ -334,12 +286,7 @@ namespace CodedUITestAT
         #endregion
 
         #region Scan Completed window
-
-        private WpfText ScanCompletedTextBlock()
-        {
-            return UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText;
-        }
-
+                
         private WpfText ScanStatisticsTextBlock()
         {
             return UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIComputerStatistics1TText;
@@ -420,7 +367,34 @@ namespace CodedUITestAT
 
         #region Local helper methods
 
-        /// <summary> Gets the number of files of a given type from Scan Completed window. Starts at Scan Completed window. </summary>
+        /// <summary> Gets the number of files of a given type from results panel. </summary>
+        /// <param name="fileType">Set a file type.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private int GetFoundFilesNumber(Verdict fileType, TestContext testContext)
+        {
+            string filesNumberStr;
+            int filesNumber;
+
+            switch (fileType)
+            {
+                case Verdict.Unknown:
+                    filesNumberStr = UnknownFilesCounterTextBlock().DisplayText;
+                    break;
+                case Verdict.Malware:
+                    filesNumberStr = MaliciousFilesCounterTextBlock().DisplayText;
+                    break;
+                default: throw new Exception(String.Format("Unexpected file type '{0}'!", fileType));
+            }
+
+            if (Int32.TryParse(filesNumberStr, out filesNumber))
+                testContext.WriteLine(String.Format("'{0}' files number {1} successfully found at results panel.", fileType, filesNumber));
+            else Assert.Fail(String.Format("'{0}' files number is not found at scan results panel!", fileType));
+
+            return filesNumber;
+        }
+
+        /*
+        /// <summary> Gets the number of files of a given type from Scan Results window. </summary>
         /// <param name="fileType">Set a file type.</param>
         /// <param name="testContext">Set a current TestContext.</param>
         private int GetFoundFilesNumber(Verdict fileType, TestContext testContext)
@@ -447,18 +421,20 @@ namespace CodedUITestAT
 
             return filesNumber;
         }
-
-        /// <summary> Gets the total number of files found from Scan Completed window. Starts at Scan Completed window. </summary>
+        */
+        /// <summary> Gets the total number of threats found from results panel. </summary>
         /// <param name="testContext">Set a current TestContext.</param>
         private int GetFoundFilesNumber(TestContext testContext)
         {
             int unknownFilesNumber = GetFoundFilesNumber(Verdict.Unknown, testContext);
-            int malwaresNumber = 0;
+            int malwaresNumber = GetFoundFilesNumber(Verdict.Malware, testContext);
+            /*
             if (ScanStatisticsTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.Malware))
                 malwaresNumber = GetFoundFilesNumber(Verdict.Malware, testContext);
+            */
             return unknownFilesNumber + malwaresNumber;
         }
-
+        
         /// <summary> Asserts the number of analyzed files at 'Valkyrie analysis results' screen. Starts at the mentioned screen. </summary>
         /// <param name="expectedFilesNumber">Set an expected files number.</param>
         /// <param name="testContext">Set a current test context.</param>
@@ -575,26 +551,6 @@ namespace CodedUITestAT
             StartEndpointScan(scanType, DataHelper.Username, DataHelper.Password, testContext, endpoints);
         }
         
-        /// <summary> Waits for Scan Completed window. </summary>
-        /// <param name="scanType">Set a scan type.</param>
-        internal void WaitForScanCompleted(ScanType scanType)
-        {
-            int waitTime;
-
-            switch (scanType)
-            {
-                case ScanType.Quick:
-                    waitTime = Settings.WaitingTime.Default.QuickScanWaitTime;
-                    break;
-                case ScanType.Full:
-                    waitTime = Settings.WaitingTime.Default.FullScanWaitTime;
-                    break;
-                default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType));
-            }
-
-            UIHelper.WaitForControl(ScanCompletedTextBlock(), waitTime);
-        }
-
         /// <summary> Stops a scan. </summary>
         private void StopScanning(TestContext testContext)
         {
@@ -844,6 +800,7 @@ namespace CodedUITestAT
             else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!", Settings.ScanCompleted.Default.ScanCompletedText));
 
             // Gets the number of Unknown and Malicious files found at Scan Completed window
+            WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickYesButton();
 
@@ -898,6 +855,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...", workgroupName));
 
             WaitForScanCompleted(ScanType.Quick);
+            WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickYesButton();
             
@@ -1322,6 +1280,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}' from domain '{1}'...", endpoint.Name, domainName));
 
             WaitForScanCompleted(ScanType.Quick);
+            WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);

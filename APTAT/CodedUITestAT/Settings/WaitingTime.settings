@@ -41,5 +41,8 @@
     <Setting Name="DomainTreeItemExpansionWaitTime" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">60000</Value>
     </Setting>
+    <Setting Name="LookupInProgressWaitTime" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">120000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

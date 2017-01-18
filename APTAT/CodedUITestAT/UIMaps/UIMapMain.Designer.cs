@@ -276,6 +276,19 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             Assert.AreEqual(this.AssertInAnalysisCounterTextBlockTextExpectedValues.UIItem1TextDisplayText, uIItem1Text.DisplayText);
         }
         
+        /// <summary>
+        /// AssertLookupInProgressCounterTextBlockText - Use 'AssertLookupInProgressCounterTextBlockTextExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertLookupInProgressCounterTextBlockText()
+        {
+            #region Variable Declarations
+            WpfText uIItem0Text2 = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem0Text2;
+            #endregion
+
+            // Verify that the 'DisplayText' property of '0' label equals '0'
+            Assert.AreEqual(this.AssertLookupInProgressCounterTextBlockTextExpectedValues.UIItem0Text2DisplayText, uIItem0Text2.DisplayText);
+        }
+        
         #region Properties
         public virtual AssertMainWindowExpectedValues AssertMainWindowExpectedValues
         {
@@ -373,6 +386,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             }
         }
         
+        public virtual AssertLookupInProgressCounterTextBlockTextExpectedValues AssertLookupInProgressCounterTextBlockTextExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertLookupInProgressCounterTextBlockTextExpectedValues == null))
+                {
+                    this.mAssertLookupInProgressCounterTextBlockTextExpectedValues = new AssertLookupInProgressCounterTextBlockTextExpectedValues();
+                }
+                return this.mAssertLookupInProgressCounterTextBlockTextExpectedValues;
+            }
+        }
+        
         public UICOMODOUnknownFileHunWindow UICOMODOUnknownFileHunWindow
         {
             get
@@ -426,6 +451,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private AssertMainWindowTitleTextBlockTextExpectedValues mAssertMainWindowTitleTextBlockTextExpectedValues;
         
         private AssertInAnalysisCounterTextBlockTextExpectedValues mAssertInAnalysisCounterTextBlockTextExpectedValues;
+        
+        private AssertLookupInProgressCounterTextBlockTextExpectedValues mAssertLookupInProgressCounterTextBlockTextExpectedValues;
         
         private UICOMODOUnknownFileHunWindow mUICOMODOUnknownFileHunWindow;
         
@@ -553,6 +580,21 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         /// Verify that the 'DisplayText' property of '1' label equals '1'
         /// </summary>
         public string UIItem1TextDisplayText = "1";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertLookupInProgressCounterTextBlockText'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertLookupInProgressCounterTextBlockTextExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'DisplayText' property of '0' label equals '0'
+        /// </summary>
+        public string UIItem0Text2DisplayText = "0";
         #endregion
     }
     
@@ -1243,6 +1285,22 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIItem1Text;
             }
         }
+        
+        public WpfText UIItem0Text2
+        {
+            get
+            {
+                if ((this.mUIItem0Text2 == null))
+                {
+                    this.mUIItem0Text2 = new WpfText(this);
+                    #region Search Criteria
+                    this.mUIItem0Text2.SearchProperties[WpfText.PropertyNames.AutomationId] = "LookupInProgressFilesCounterTextBlock";
+                    this.mUIItem0Text2.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIItem0Text2;
+            }
+        }
         #endregion
         
         #region Fields
@@ -1257,6 +1315,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private UIThisproductisjustoneText mUIThisproductisjustoneText;
         
         private WpfText mUIItem1Text;
+        
+        private WpfText mUIItem0Text2;
         #endregion
     }
     

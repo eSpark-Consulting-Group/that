@@ -139,5 +139,14 @@ namespace CodedUITestAT.Settings {
                 return ((int)(this["DomainTreeItemExpansionWaitTime"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
+        public int LookupInProgressWaitTime {
+            get {
+                return ((int)(this["LookupInProgressWaitTime"]));
+            }
+        }
     }
 }

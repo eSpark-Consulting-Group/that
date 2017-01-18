@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
+using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 
@@ -14,7 +16,22 @@ namespace CodedUITestAT
         {
         }
 
-        #region UIMap properties       
+        #region UIMap properties
+
+        /// <summary> UIMap for Main screen, UIMapMain.uitest. </summary>
+        public UIMapMain UIMapMain
+        {
+            get
+            {
+                if ((this.mapMain == null))
+                {
+                    this.mapMain = new UIMapMain();
+                }
+
+                return this.mapMain;
+            }
+        }
+        private UIMapMain mapMain;
 
         /// <summary> UIMap for Scan Completed window, UIMapScanCompletedWindow.uitest. </summary>
         public UIMapScanCompletedWindow UIMapScanCompletedWindow
@@ -52,9 +69,28 @@ namespace CodedUITestAT
 
         #region Scan Completed window
 
-        private WpfText ScanCompletedTextBlock()
+        internal WpfText ScanCompletedTextBlock()
         {
             return UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText;
+        }
+
+        #endregion
+
+        #region Results panel
+
+        internal WpfText LookupInProgressCounterTextBlock()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIItem0Text2;
+        }
+
+        internal WpfText UnknownFilesCounterTextBlock()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text;
+        }
+
+        internal WpfText MaliciousFilesCounterTextBlock()
+        {
+            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text1;
         }
 
         #endregion
@@ -81,6 +117,22 @@ namespace CodedUITestAT
             }
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), waitTime);
+        }
+
+        /// <summary> Waits for no 'Lookup in Progress' files. </summary>
+        internal void WaitForNoLookupInProgress()
+        {
+            int waitTime = Settings.WaitingTime.Default.LookupInProgressWaitTime;
+
+            var timer = Stopwatch.StartNew();
+            for (;;)
+            {
+                Playback.Wait(1000);
+                if (LookupInProgressCounterTextBlock().DisplayText == "0") break;
+                if ((int) timer.ElapsedMilliseconds > waitTime)
+                            throw new Exception(String.Format("Results panel shows 'Lookup in Progress' {0} after {1} seconds!", LookupInProgressCounterTextBlock().DisplayText, waitTime));
+            }
+            timer.Stop();
         }
 
         #endregion

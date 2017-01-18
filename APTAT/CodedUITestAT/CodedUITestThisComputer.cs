@@ -20,21 +20,6 @@ namespace CodedUITestAT
         }
 
         #region UIMap properties
-
-        /// <summary> UIMap for Main screen, UIMapMain.uitest. </summary>
-        public UIMapMain UIMapMain
-        {
-            get
-            {
-                if ((this.mapMain == null))
-                {
-                    this.mapMain = new UIMapMain();
-                }
-
-                return this.mapMain;
-            }
-        }
-        private UIMapMain mapMain;
         
         /// <summary> UIMap for This Computer branch, UIMapThisComputer.uitest. </summary>
         public UIMapThisComputer UIMapThisComputer

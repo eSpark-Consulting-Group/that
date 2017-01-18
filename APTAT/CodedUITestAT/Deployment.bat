@@ -18,7 +18,7 @@ set ServerRoot=C
 
 set EndpointRoot=%ServerRoot%
 
-set TargetDir=%ServerRoot%:\CNAT
+set TargetDir=%ServerRoot%:\UFH
 
 set ProductExeName=UnknownFileHunter.exe
 
