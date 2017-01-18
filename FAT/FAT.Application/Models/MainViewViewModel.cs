@@ -882,6 +882,9 @@ namespace FAT.Application.Models
             Set(() => ValkyrieSendingFiles, false);
             IsValkyrieScanInProgress = false;
             IsAnalyseWithValkyrieEnabled = false;
+            
+            IsReportEnabled = true;
+
             IsValkyrieAnalysCompleted = true;
 
             RaisePropertyChanged("Header");
@@ -1124,7 +1127,7 @@ namespace FAT.Application.Models
             CancelInProgress = false;
             IsScanInProgress = false;
             ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
-            IsReportEnabled = ScannedItemsCount > 0;
+            //IsReportEnabled = ScannedItemsCount > 0;
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             UpdateStatus();
             RaisePropertyChanged(nameof(Header));

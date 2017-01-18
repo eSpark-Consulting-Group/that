@@ -137,7 +137,10 @@ namespace FAT.Application
                     });
                 }
                 else
+                {
                     scanCompletedWindow.ShowDialog();
+                    _viewModel.IsReportEnabled = true;
+                }
 
                 if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
                     _viewModel.GroupingEnabled = true;
