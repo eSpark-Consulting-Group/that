@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{97393518-6EF0-4509-B553-BF418F4A0936}"
 	ProjectSection(SolutionItems) = preProject
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
+		CommonVersionInfo.h = CommonVersionInfo.h
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject

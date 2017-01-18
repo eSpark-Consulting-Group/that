@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+	<Compile Include="$(SolutionDir)CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs" />
     <Compile Include="Descent\ComputerDescentResult.cs" />

@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+  	<Compile Include="$(SolutionDir)CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CloudVerdict.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,8 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Valkyrie.WebApiProvider", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55545872-3A52-4C6E-A779-8687C6624F77}"
 	ProjectSection(SolutionItems) = preProject
+		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		CommonVersionInfo.h = CommonVersionInfo.h
-		FATCommonAssemblyInfo.cs = FATCommonAssemblyInfo.cs
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FAT.Bootstrapper", "FAT.Bootstrapper\FAT.Bootstrapper.vcxproj", "{544313F0-D8AC-4440-8A49-83C8DC3B6433}"
