@@ -10,9 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Uknown File Hunter")]
 [assembly: AssemblyDescription("Unknown File Hunter")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Comodo")]
 [assembly: AssemblyProduct("Unknown File Hunter")]
-[assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

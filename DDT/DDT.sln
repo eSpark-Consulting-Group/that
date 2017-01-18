@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DDT.Bootstrapper", "DDT.Boo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{99771A9B-1F15-485F-8D54-3C321FB9060C}"
 	ProjectSection(SolutionItems) = preProject
-		CommonAssemlyInfo.cs = CommonAssemlyInfo.cs
+		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		CommonVersionInfo.h = CommonVersionInfo.h
 		nuget.config = nuget.config
 	EndProjectSection

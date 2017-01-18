@@ -10,9 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Forensic Analysis Tool")]
 [assembly: AssemblyDescription("Forensic Analysis Tool")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Comodo")]
 [assembly: AssemblyProduct("Forensic Analysis Tool")]
-[assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

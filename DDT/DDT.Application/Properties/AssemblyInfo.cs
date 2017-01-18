@@ -7,9 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Auto Discovery And Deployment Tool")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Comodo")]
 [assembly: AssemblyProduct("Auto Discovery And Deployment Tool")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

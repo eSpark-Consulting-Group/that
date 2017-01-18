@@ -9,6 +9,7 @@ using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.DeploymentCore.Descent;
 using Telerik.JustMock;
+using APTAT.Common;
 
 namespace DDT.Core.Descent.Tests
 {

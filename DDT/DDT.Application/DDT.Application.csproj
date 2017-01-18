@@ -150,8 +150,8 @@
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
-    <Compile Include="..\CommonAssemlyInfo.cs">
-      <Link>Properties\CommonAssemlyInfo.cs</Link>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
