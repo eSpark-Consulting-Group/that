@@ -139,5 +139,23 @@ namespace APTAT.Core.Properties {
                 return ((string)(this["FlsUploadHashesAtOnce"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("accounts.comodo.od.ua")]
+        public string CamUrl {
+            get {
+                return ((string)(this["CamUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("rogoyhpjtpqbwbqk")]
+        public string CamPhrase {
+            get {
+                return ((string)(this["CamPhrase"]));
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+using APTAT.Core.Properties;
 using System;
 using System.IO;
 using System.Net;
@@ -11,14 +12,17 @@ namespace APTAT.Core
 {
     public class CamLicenseProvider
     {
-        private const string secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";
+        private string secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";
         //private const string secretPhrase = "dmiuchwodjvedpsh";
-        private const string camUrl = @"https://accounts.comodo.od.ua/signup_service/get_free_license";
+        private string camUrl = @"https://accounts.comodo.od.ua/signup_service/get_free_license";
         //private const string camUrl = @"https://accounts.comodo.com/signup_service/get_free_license";
 
         public string TryGetFreeLicense()
         {
-       //     throw new InvalidOperationException("Test ...");
+            secretPhrase = Settings.Default.CamPhrase;
+            camUrl = @"https://" + Settings.Default.CamUrl + @"/signup_service/get_free_license";
+
+            //     throw new InvalidOperationException("Test ...");
             int retry = 0;
             GetFreeLicenseResponse response = new GetFreeLicenseResponse();
             response.Data = new GetFreeLicenseResponseData();
@@ -33,7 +37,8 @@ namespace APTAT.Core
                 {
                     response = GetFreeLicense();
                     success = response.Data.Message == "Success";
-                    if (success) return response.Data.PackageAdditionalParams.PackageItem.LicenseKey;
+                    //if (success) return response.Data.PackageAdditionalParams.PackageItem.LicenseKey;
+                    if (success) return response.Data.LicenseKey;
                 }
                 catch (Exception e)
                 {
@@ -44,7 +49,7 @@ namespace APTAT.Core
             return null;
         }
 
-        public GetFreeLicenseResponse GetFreeLicense()
+        private GetFreeLicenseResponse GetFreeLicense()
         {
             var bytes = GenerateRequestBytes();
 
