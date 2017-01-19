@@ -67,7 +67,7 @@ namespace CodedUITestAT
 
         #region Control methods
 
-        #region Scan Completed window
+        #region Scan Results window
 
         internal WpfText ScanCompletedTextBlock()
         {
@@ -119,7 +119,7 @@ namespace CodedUITestAT
             UIHelper.WaitForControl(ScanCompletedTextBlock(), waitTime);
         }
 
-        /// <summary> Waits for no 'Lookup in Progress' files. </summary>
+        /// <summary> Waits for no 'Lookup in Progress' files count. </summary>
         internal void WaitForNoLookupInProgress()
         {
             int waitTime = Settings.WaitingTime.Default.LookupInProgressWaitTime;

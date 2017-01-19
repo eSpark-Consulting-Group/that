@@ -94,6 +94,19 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
             Mouse.Click(uIOKButton, new Point(89, 15));
         }
         
+        /// <summary>
+        /// ClickCloseCrossButton
+        /// </summary>
+        public void ClickCloseCrossButton()
+        {
+            #region Variable Declarations
+            WpfButton uICloseCrossButtonButton = this.UIUnknownFileHunterWindow1.UICloseCrossButtonButton;
+            #endregion
+
+            // Click 'CloseCrossButton' button
+            Mouse.Click(uICloseCrossButtonButton, new Point(14, 7));
+        }
+        
         #region Properties
         public virtual AssertStatisticsTextBlockExpectedValues AssertStatisticsTextBlockExpectedValues
         {
@@ -355,6 +368,22 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
                 return this.mUIOKButton;
             }
         }
+        
+        public WpfButton UICloseCrossButtonButton
+        {
+            get
+            {
+                if ((this.mUICloseCrossButtonButton == null))
+                {
+                    this.mUICloseCrossButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICloseCrossButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CloseCrossButton";
+                    this.mUICloseCrossButtonButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUICloseCrossButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -365,6 +394,8 @@ namespace CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses
         private WpfText mUIScancompletedText;
         
         private WpfButton mUIOKButton;
+        
+        private WpfButton mUICloseCrossButtonButton;
         #endregion
     }
 }

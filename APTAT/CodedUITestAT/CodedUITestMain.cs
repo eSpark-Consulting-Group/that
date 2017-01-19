@@ -285,7 +285,7 @@ namespace CodedUITestAT
 
         #endregion
 
-        #region Scan Completed window
+        #region Scan Results window
                 
         private WpfText ScanStatisticsTextBlock()
         {
@@ -803,30 +803,21 @@ namespace CodedUITestAT
             WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickYesButton();
-
-            // In the case no unknown or malicious files found - the analysis is not available
-            if (expectedFilesNumber == 0) 
-            {
-                if (!AnalyzeWithValkyrieButton().Enabled) TestContext.WriteLine("No unknown or malicious files found and Valkyrie analysis is not available.");
-                else Assert.Fail("No unknown or malicious files found but Valkyrie analysis is available!");
-            }
-            else
-            {
-                InputCamCredentials(TestContext);
+                        
+            InputCamCredentials(TestContext);
                 
-                // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
-                WaitForValkyrieResults(TestContext);
-                UIHelper.GroupByFiles();
-                AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
-                UIHelper.GroupByComputers();
+            // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
+            WaitForValkyrieResults(TestContext);
+            UIHelper.GroupByFiles();
+            AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
+            UIHelper.GroupByComputers();
 
-                // Clicks Valkyrie link and checks the respective browser window URI
-                string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
-                UIHelper.WaitForControl(ValkyrieLink());
-                UIMapMain.ClickValkyrieLink();
-                TestContext.WriteLine("Valkyrie link clicked...");
-                UIHelper.AssertBrowserUri(expectedValkyrieUri, TestContext);
-            }
+            // Clicks Valkyrie link and checks the respective browser window URI
+            string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
+            UIHelper.WaitForControl(ValkyrieLink());
+            UIMapMain.ClickValkyrieLink();
+            TestContext.WriteLine("Valkyrie link clicked...");
+            UIHelper.AssertBrowserUri(expectedValkyrieUri, TestContext);
         }
 
         [TestMethod, Timeout(DataHelper.LongTestTimeout)]
@@ -1229,7 +1220,8 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            WaitForNoLookupInProgress();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(0, 1, 0, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
@@ -1237,20 +1229,23 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickNoButton();
+            WaitForNoLookupInProgress();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(1, 0, 0, TestContext);
                         
             malware = SysHelper.InfectForScan(endpoint);
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickNoButton();
+            WaitForNoLookupInProgress();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(1, 1, 0, TestContext);
             
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            WaitForNoLookupInProgress();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(0, 0, 0, TestContext);
         }
 
