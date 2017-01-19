@@ -1,11 +1,11 @@
 ﻿;!@Install@!UTF-8!
 
-Title="Comodo Unknown File Hunter Setup"
-ErrorTitle="Comodo Unknown File Hunter Setup"
-WarningTitle="Comodo Unknown File Hunter Setup"
+Title="Comodo Forensic Analysis Tool Setup"
+ErrorTitle="Comodo Forensic Analysis Tool Setup"
+WarningTitle="Comodo Forensic Analysis Tool Setup"
 RunProgram="FAT.Bootstrapper.exe"
 GUIFlags="2"
-ExtractTitle="Comodo Uknown File Hunter"
+ExtractTitle="Comodo Forensic Analysis Tool"
 ExtractDialogText="Starting..."
 
 ;!@InstallEnd@!
