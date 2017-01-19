@@ -46,7 +46,7 @@
                                 <StackPanel Grid.RowSpan="3" 
                             Margin="10"
                             Orientation="Horizontal">
-                                    <Image Source="APT.ico" Height="100"
+                                    <Image Source="FAT.ico" Height="100"
                 		Margin="15,16,20,-6"/>
                                 </StackPanel>
 
