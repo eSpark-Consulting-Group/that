@@ -142,19 +142,10 @@ namespace APTAT.Core.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("accounts.comodo.od.ua")]
-        public string CamUrl {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseDevCam {
             get {
-                return ((string)(this["CamUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("rogoyhpjtpqbwbqk")]
-        public string CamPhrase {
-            get {
-                return ((string)(this["CamPhrase"]));
+                return ((bool)(this["UseDevCam"]));
             }
         }
     }

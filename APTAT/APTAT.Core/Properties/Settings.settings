@@ -41,11 +41,8 @@
     <Setting Name="FlsUploadHashesAtOnce" Type="System.String" Scope="Application">
       <Value Profile="(Default)">20</Value>
     </Setting>
-    <Setting Name="CamUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">accounts.comodo.od.ua</Value>
-    </Setting>
-    <Setting Name="CamPhrase" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">rogoyhpjtpqbwbqk</Value>
+    <Setting Name="UseDevCam" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

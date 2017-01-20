@@ -13,17 +13,18 @@ namespace APTAT.Core
 {
     public class CamLicenseProvider
     {
-        private string secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";
-        //private const string secretPhrase = "dmiuchwodjvedpsh";
-        private string camUrl = @"https://accounts.comodo.od.ua/signup_service/get_free_license";
-        //private const string camUrl = @"https://accounts.comodo.com/signup_service/get_free_license";
-
-        public string TryGetFreeLicense()
+        private string _secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";              
+        private string _camUrl = @"https://accounts.comodo.com/signup_service/get_free_license";
+        public CamLicenseProvider()
         {
-            secretPhrase = Settings.Default.CamPhrase;
-            camUrl = @"https://" + Settings.Default.CamUrl + @"/signup_service/get_free_license";
-
-            //     throw new InvalidOperationException("Test ...");
+            if (Settings.Default.UseDevCam)
+            {
+                _camUrl = @"https://accounts.comodo.od.ua/signup_service/get_free_license";
+                _secretPhrase = "rogoyhpjtpqbwbqk";
+            }
+        }
+        public string TryGetFreeLicense()
+        {                        
             int retry = 0;
             GetFreeLicenseResponse response = new GetFreeLicenseResponse();
             response.Data = new GetFreeLicenseResponseData();
@@ -54,7 +55,7 @@ namespace APTAT.Core
         {
             var bytes = GenerateRequestBytes();
 
-            var result = PostData(camUrl, bytes);
+            var result = PostData(_camUrl, bytes);
             File.WriteAllBytes(Path.GetFileName(Path.GetTempFileName() + ".xml"), bytes);
             File.WriteAllBytes(Path.GetFileName(Path.GetTempFileName() + ".res.xml"), result);
 
@@ -139,7 +140,7 @@ namespace APTAT.Core
         {
             string computedHash = ComputeHash(normalizedData, false);
             //var secretPhrase = "rogoyhpjtpqbwbqk";//"dmiuchwodjvedpsh";
-            return ComputeHash(String.Concat(secretPhrase, "-", computedHash), true);
+            return ComputeHash(String.Concat(_secretPhrase, "-", computedHash), true);
         }
         private string ComputeHash(string normalizedData, bool toUpper)
         {
