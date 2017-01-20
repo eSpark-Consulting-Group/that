@@ -124,7 +124,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("600000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("900000")]
         public int NoThreatFoundVerdictWaitTime {
             get {
                 return ((int)(this["NoThreatFoundVerdictWaitTime"]));
