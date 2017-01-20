@@ -142,7 +142,7 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
         public int LookupInProgressWaitTime {
             get {
                 return ((int)(this["LookupInProgressWaitTime"]));

@@ -130,7 +130,7 @@ namespace CodedUITestAT
                 Playback.Wait(1000);
                 if (LookupInProgressCounterTextBlock().DisplayText == "0") break;
                 if ((int) timer.ElapsedMilliseconds > waitTime)
-                            throw new Exception(String.Format("Results panel shows 'Lookup in Progress' {0} after {1} seconds!", LookupInProgressCounterTextBlock().DisplayText, waitTime));
+                            throw new Exception(String.Format("Results panel shows 'Lookup in Progress' {0} after {1} seconds!", LookupInProgressCounterTextBlock().DisplayText, waitTime / 1000));
             }
             timer.Stop();
         }
