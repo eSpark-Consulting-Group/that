@@ -1343,7 +1343,7 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1432,7 +1432,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Quick Scan button clicked...");
 
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
@@ -1531,7 +1531,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Quick Scan button clicked...");
 
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             TestContext.WriteLine("Scan completed...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanButton();
@@ -1571,7 +1571,7 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             TestContext.WriteLine("Scan completed...");
         }
 
@@ -1840,7 +1840,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();
+            UIMapScanCompletedWindow.ClickCloseCrossButton();
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
         }
 
@@ -1890,7 +1890,7 @@ namespace CodedUITestAT
             
             // Completed scan
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickOkButton();            
+            UIMapScanCompletedWindow.ClickCloseCrossButton();            
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);            
             
             SetStatusFilter(ScanStatus.Completed, TestContext);
@@ -1941,6 +1941,7 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickQuickScanButton();
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+            WaitForNoLookupInProgress();
             UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scan results
@@ -1983,6 +1984,7 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickQuickScanButton();
 
             UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+            WaitForNoLookupInProgress();
             UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scanning results
@@ -2006,6 +2008,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
+            WaitForNoLookupInProgress();
             UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
@@ -2022,6 +2025,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
+            WaitForNoLookupInProgress();
             UIMapScanCompletedWindow.ClickYesButton();
             InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
