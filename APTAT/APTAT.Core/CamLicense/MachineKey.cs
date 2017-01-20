@@ -1,74 +1,132 @@
+using APTAT.Core.Descent.Wmi;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Management;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 
-namespace APTAT.Core
+namespace APTAT.Core.CamLicense
 {
     public static class MachineKey
     {
+        static string REG_KEY_COMODO = @"SOFTWARE\COMODO";
+        static string REG_VALUE_GLOBAL_MACHINE_ID = "GlobalMachineId";
         static MachineKey()
         {
-            GetSerials();
+            GlobalMachineKey = GenerateGlobalMachineId();
+        }
 
-            using (var md5 = MD5.Create())
+        static string GenerateGlobalMachineId()
+        {
+            string machineIdStr = GetHddDataForHashingViaWMI();
+            if (String.IsNullOrEmpty(machineIdStr))
             {
-                byte[] data = Encoding.UTF8.GetBytes(String.Join(" ## ", new[] { _softwareId, _hardwareId }));
-                _cryptedMachineKey = md5.ComputeHash(data);
+                machineIdStr = MachineKeyHelper.GetSerialNumberUsingStorageQuery(0);
+            }
+            if (!String.IsNullOrEmpty(machineIdStr))
+            {
+                SHA1 sha = new SHA1CryptoServiceProvider();
+                // This is one implementation of the abstract class SHA1.
+                byte[] bytes = Encoding.UTF8.GetBytes(machineIdStr);
+                var result = sha.ComputeHash(bytes);
+                return BitConverter.ToString(result).Replace("-", string.Empty);
+            }
+            else
+            {
+                return GetGeneratedFromGuid();
+            }
+        }
+        static string GetGeneratedFromGuid()
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(REG_KEY_COMODO, true))
+            {
+                if (key == null)
+                {
+                    using (var newKey = Registry.CurrentUser.CreateSubKey(REG_KEY_COMODO))
+                    {
+                        return CreateNewGlobalMachineId(newKey);
+                    }
+                }
+                else
+                {
+                    var id = key.GetValue(REG_VALUE_GLOBAL_MACHINE_ID);
+                    if (id == null)
+                    {
+                        return CreateNewGlobalMachineId(key);
+                    }
+                    else
+                    {
+                        return id.ToString();
+                    }
+                }
+
             }
         }
 
-        private static string _softwareId;
-        private static string _hardwareId;
-        private static readonly byte[] _cryptedMachineKey;
-
-        public static string SoftwareId
+        static string CreateNewGlobalMachineId(RegistryKey key)
         {
-            get { return _softwareId; }
-        }
-
-        public static string HardwareId
-        {
-            get { return _hardwareId; }
-        }
-
-        public static void GetSerials()
-        {
-            using (var query = new ManagementObjectSearcher("Select * From Win32_OperatingSystem"))
-            using (var queryCollection = query.Get())
+            var guid = Guid.NewGuid();
+            SHA1 sha = new SHA1CryptoServiceProvider();
+            // This is one implementation of the abstract class SHA1.
+            byte[] bytes = Encoding.UTF8.GetBytes(guid.ToString().ToUpper());
+            var result = sha.ComputeHash(bytes);
+            var generatedValue = BitConverter.ToString(result).Replace("-", string.Empty);
+            if (key != null)
             {
-                var serial = queryCollection
-                    .OfType<ManagementObject>()
-                    .Select(mo => mo["SerialNumber"])
-                    .FirstOrDefault(sn => sn != null);
-                _softwareId = "" + serial;
+                key.SetValue(REG_VALUE_GLOBAL_MACHINE_ID, generatedValue, RegistryValueKind.String);
             }
-            using (var query = new ManagementObjectSearcher("SELECT * From Win32_BaseBoard"))
-            using (var queryCollection = query.Get())
+            return generatedValue;
+        }
+
+        static string GetHddDataForHashingViaWMI()
+        {
+            try
             {
-                var serial = queryCollection
-                    .OfType<ManagementObject>()
-                    .Select(mo => mo["SerialNumber"])
-                    .FirstOrDefault(pi => pi != null);
-                _hardwareId = "" + serial;
+                var path = "\\\\127.0.0.1\\root\\CIMV2";
+                List<HddInfo> hdds = new List<HddInfo>();
+                ConnectionOptions co;
+                ManagementScope ms = null;
+                ObjectQuery objectQuery = new SelectQuery("Win32_DiskDrive");
+                co = WmiHelper.GetConnectionOptionsForWmi(null, null);
+                ms = new ManagementScope(path, co);
+                ms.Connect();
+                ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(ms, objectQuery);
+                managementObjectSearcher.Options.Timeout = TimeSpan.FromMinutes(2);
+                foreach (var mo in managementObjectSearcher.Get())
+                {
+                    var deviceId = WmiHelper.GetProperty(mo, "DeviceId", "");
+                    var model = WmiHelper.GetProperty(mo, "Model", "");
+                    var signature = WmiHelper.GetProperty(mo, "Signature", "");
+                    var totalTracks = WmiHelper.GetProperty(mo, "TotalTracks", "");
+                    var serialNumber = WmiHelper.GetProperty(mo, "SerialNumber", "");
+                    hdds.Add(new HddInfo(model, deviceId, serialNumber, signature, totalTracks));
+                }
+                var strForHashing = String.Empty;
+                foreach (var hdd in hdds.OrderBy(h => h.DeviceId))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(hdd.Model);
+                    sb.Append(hdd.Signature);
+                    sb.Append(hdd.TotalTracks);
+                    sb.Append(hdd.SerialNumber);
+                    sb.Replace(" ", "");
+                    strForHashing = sb.ToString();
+                    break;
+                }
+                return strForHashing;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
             }
         }
 
-        public static string CryptedMachineKey
+        public static string GlobalMachineKey
         {
-            get { return _cryptedMachineKey.Aggregate(new StringBuilder(), (sb, b) => sb.Append(b.ToString("X2")), sb => sb.ToString()); }
-        }
-
-        public static new string ToString()
-        {
-            return String.Format("SoftwareID: {0}, HardwareID: {1}", _softwareId, _hardwareId);
+            get;
         }
     }
 }

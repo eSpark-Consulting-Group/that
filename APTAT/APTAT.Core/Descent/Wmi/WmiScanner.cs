@@ -53,7 +53,7 @@ namespace APTAT.Core.Descent.Wmi
                 var path = String.Format("\\\\{0}\\root\\CIMV2", tp.RemoteHostInfo.HostName);
                 try
                 {
-                    co = GetConnectionOptionsForWmi(tp.RemoteHostInfo.Login, tp.RemoteHostInfo.Password);
+                    co = WmiHelper.GetConnectionOptionsForWmi(tp.RemoteHostInfo.Login, tp.RemoteHostInfo.Password);
                     ms = new ManagementScope(path, co);
                     ms.Connect();
                 }
@@ -66,7 +66,7 @@ namespace APTAT.Core.Descent.Wmi
                 }
                 if (tryWithoutCred)
                 {
-                    co = GetConnectionOptionsForWmi(null, null);
+                    co = WmiHelper.GetConnectionOptionsForWmi(null, null);
                     ms = new ManagementScope(path, co);
                     ms.Connect();
                     
@@ -77,9 +77,9 @@ namespace APTAT.Core.Descent.Wmi
                 {
                     var mainboardInfo = new MainboardInfo
                     {
-                        Manufacturer = GetProperty(mo, "Manufacturer", ""),
-                        ReleaseDate = GetProperty(mo, "ReleaseDate", ""),
-                        SMBIOSBIOSVersion = GetProperty(mo, "SMBIOSBIOSVersion", "")
+                        Manufacturer = WmiHelper.GetProperty(mo, "Manufacturer", ""),
+                        ReleaseDate = WmiHelper.GetProperty(mo, "ReleaseDate", ""),
+                        SMBIOSBIOSVersion = WmiHelper.GetProperty(mo, "SMBIOSBIOSVersion", "")
                     };
                     tp.Result.MainboardInfo = mainboardInfo;
                 }
@@ -124,43 +124,7 @@ namespace APTAT.Core.Descent.Wmi
             if (tp.DescentCallback != null)
                 tp.DescentCallback.OnDescentCallback(descentStatus, 1, errorMessage);
         }
-        private static ConnectionOptions GetConnectionOptionsForWmi(string login, string password)
-        {
-            ConnectionOptions connectionOptions = new ConnectionOptions();
-            connectionOptions.Impersonation = ImpersonationLevel.Impersonate;
-            connectionOptions.EnablePrivileges = true;
-            connectionOptions.Authentication = AuthenticationLevel.PacketPrivacy;
-            if (login != "" && password != "")
-            {
-                connectionOptions.Username = login;
-                connectionOptions.Password = password;
-            }
-            return connectionOptions;
-        }
-        private static string GetProperty(ManagementBaseObject mo, string propertyName, string defaultVal)
-        {
-            string str = "";
-            try
-            {
-                if (mo[propertyName] is ushort[])
-                {
-                    ushort[] numArray = mo[propertyName] as ushort[];
-                    if (numArray.Length > 0)
-                    {
-                        str = string.Concat(numArray[0]);
-                        for (int index = 1; index < numArray.Length; ++index)
-                            str = str + (object)", " + (string)(object)numArray[index];
-                    }
-                }
-                else
-                    str = !(mo[propertyName] is string[]) ? mo[propertyName].ToString() : string.Join(", ", mo[propertyName] as string[]);
-            }
-            catch
-            {
-                str = defaultVal;
-            }
-            return str.Trim();
-        }
+        
 
         private struct WmiScannerThreadParams
         {

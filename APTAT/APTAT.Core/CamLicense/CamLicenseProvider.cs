@@ -1,3 +1,4 @@
+using APTAT.Core.CamLicense;
 using APTAT.Core.Properties;
 using System;
 using System.IO;
@@ -100,7 +101,7 @@ namespace APTAT.Core
             var data = new GetFreeLicenseRequestData();
             data.AffiliateID = 33220001;
             data.WebApiLogin = "cis_webapi_account";
-            data.MachineCode = MachineKey.CryptedMachineKey;
+            data.MachineCode = MachineKey.GlobalMachineKey;
             data.PricingTermIdentifier = "misc.forensic.analysis.tool.free";
             data.LicenseKeyInfo = new GetFreeLicenseRequestDataLicenseKeyInfo();
             data.LicenseKeyInfo.Version = "1.0.0.0";
