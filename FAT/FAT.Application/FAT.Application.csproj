@@ -421,7 +421,7 @@
     </Compile>
     <Resource Include="EULA.pdf" />
     <Resource Include="Assets\checkmark.png" />
-    <Resource Include="Assets\splash.png" />
+    <Resource Include="Assets\splash2.png" />
     <Content Include="cmdapt64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
