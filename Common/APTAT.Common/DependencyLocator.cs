@@ -1,4 +1,4 @@
-﻿using System;
+﻿using APTAT.Common.MachineKey;
 
 namespace APTAT.Common
 {
@@ -7,6 +7,7 @@ namespace APTAT.Common
         public void RegisterDependencies(ICompositionHelper resolver)
         {
             resolver.RegisterSingleton<IChangeTrackingSubSystem, ChangeTrackingSubSystem>();
+            resolver.RegisterSingleton<IMachineKeyProvider, MachineKeyProvider>();
         }
     }
 }

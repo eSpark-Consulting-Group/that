@@ -5,7 +5,7 @@ using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APTAT.Core.Descent.Wmi
+namespace APTAT.Common.MachineKey
 {
     public static class WmiHelper
     {

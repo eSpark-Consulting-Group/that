@@ -1,3 +1,4 @@
+using APTAT.Common;
 using APTAT.Core.CamLicense;
 using APTAT.Core.Properties;
 using System;
@@ -11,12 +12,15 @@ using System.Xml.Serialization;
 
 namespace APTAT.Core
 {
-    public class CamLicenseProvider
+    public class CamLicenseProvider : ICamLicenseProvider
     {
-        private string _secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";              
-        private string _camUrl = @"https://accounts.comodo.com/signup_service/get_free_license";
-        public CamLicenseProvider()
+        private readonly IMachineKeyProvider _machineKeyProvider;
+        private readonly string _secretPhrase = "rogoyhpjtpqbwbqk"; //"dmiuchwodjvedpsh";              
+        private readonly string _camUrl = @"https://accounts.comodo.com/signup_service/get_free_license";
+
+        public CamLicenseProvider(IMachineKeyProvider machineKeyProvider)
         {
+            _machineKeyProvider = machineKeyProvider;
             if (Settings.Default.UseDevCam)
             {
                 _camUrl = @"https://accounts.comodo.od.ua/signup_service/get_free_license";
@@ -102,7 +106,7 @@ namespace APTAT.Core
             var data = new GetFreeLicenseRequestData();
             data.AffiliateID = 33220001;
             data.WebApiLogin = "cis_webapi_account";
-            data.MachineCode = MachineKey.GlobalMachineKey;
+            data.MachineCode = _machineKeyProvider.GlobalMachineKey;
             data.PricingTermIdentifier = "misc.forensic.analysis.tool.free";
             data.LicenseKeyInfo = new GetFreeLicenseRequestDataLicenseKeyInfo();
             data.LicenseKeyInfo.Version = "1.0.0.0";

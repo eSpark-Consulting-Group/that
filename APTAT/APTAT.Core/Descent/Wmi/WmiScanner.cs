@@ -11,6 +11,7 @@ using APTAT.DeploymentCore.Descent.Exceptions.Transport;
 using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+using APTAT.Common.MachineKey;
 
 namespace APTAT.Core.Descent.Wmi
 {

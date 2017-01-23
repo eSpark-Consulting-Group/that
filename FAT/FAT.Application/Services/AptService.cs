@@ -12,7 +12,7 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using Composition = APTAT.Common.CompositionHelper;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
-
+using APTAT.Core.CamLicense;
 
 namespace FAT.Application.Services
 {
@@ -30,13 +30,16 @@ namespace FAT.Application.Services
         public event EventHandler ValkyrieAnalyzeStarted;
         public event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         private IAptAtManager _manager;
+        private readonly ICamLicenseProvider _camLicenseProvider;
+        private string _camLicense = null;
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
         public Guid SessionId
         {
             get { return _sessionGuid; }
         }
-        public AptService(IAptAtManager aptAtManager)
+        public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider)
         {
+            _camLicenseProvider = camLicenseProvider;
             _manager = aptAtManager;
             _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             _manager.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
@@ -249,8 +252,9 @@ namespace FAT.Application.Services
             , string camLicenseId, string camUserName, string camPassword,
             NetworkCredential networkCredential)
         {
-            CamLicenseProvider provider = new CamLicenseProvider();
-            camLicenseId = provider.TryGetFreeLicense();
+            if (String.IsNullOrEmpty(camLicenseId) && String.IsNullOrEmpty(camUserName) && String.IsNullOrEmpty(camPassword))
+                
+            camLicenseId = _camLicense ?? (_camLicense = _camLicenseProvider.TryGetFreeLicense());
 
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
                 camPassword, networkCredential);

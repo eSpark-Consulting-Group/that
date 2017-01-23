@@ -4,12 +4,12 @@ using Microsoft.Win32.SafeHandles;
 using System.ComponentModel;
 using System.IO;
 
-namespace APTAT.Core.CamLicense
+namespace APTAT.Common.MachineKey
 {
     public static class MachineKeyHelper
     {
         #region DLL_IMPORTS
-        public enum STORAGE_QUERY_TYPE
+        enum STORAGE_QUERY_TYPE
         {
             /// <summary>Instructs the driver to return an appropriate descriptor.</summary>
             PropertyStandardQuery = 0,
@@ -22,7 +22,7 @@ namespace APTAT.Core.CamLicense
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct STORAGE_PROPERTY_QUERY
+        struct STORAGE_PROPERTY_QUERY
         {
             public STORAGE_PROPERTY_ID PropertyId;
             public STORAGE_QUERY_TYPE QueryType;
@@ -70,7 +70,7 @@ namespace APTAT.Core.CamLicense
             BusTypeMax = 0x10,
             BusTypeMaxReserved = 0x7F
         }
-        public enum STORAGE_PROPERTY_ID
+        enum STORAGE_PROPERTY_ID
         {
             StorageDeviceProperty = 0,
             StorageAdapterProperty = 1,
@@ -93,7 +93,7 @@ namespace APTAT.Core.CamLicense
         private static extern SafeFileHandle CreateFile(string lpFileName, Int32 dwDesiredAccess, Int32 dwShareMode, IntPtr lpSecurityAttributes, Int32 dwCreationDisposition, Int32 dwFlagsAndAttributes, IntPtr hTemplateFile);
 
         [Flags]
-        public enum IOMethod : uint
+        enum IOMethod : uint
         {
             Buffered = 0,
             InDirect = 1,
@@ -102,7 +102,7 @@ namespace APTAT.Core.CamLicense
         }
 
         [Flags]
-        public enum IOFileDevice : uint
+        enum IOFileDevice : uint
         {
             Beep = 0x00000001,
             CDRom = 0x00000002,
@@ -176,7 +176,7 @@ namespace APTAT.Core.CamLicense
         }
 
         [Flags]
-        public enum IOControlCode : uint
+        enum IOControlCode : uint
         {
             // STORAGE
             StorageCheckVerify = (IOFileDevice.MassStorage << 16) | (0x0200 << 2) | IOMethod.Buffered | (FileAccess.Read << 14),
@@ -414,24 +414,31 @@ namespace APTAT.Core.CamLicense
 
         public static string GetSerialNumberUsingStorageQuery(int diskNumber)
         {
-            var serial = String.Empty;
-            var productId = String.Empty;
-            var productRevision = String.Empty;
-            using (SafeFileHandle hDisk = OpenDisk(diskNumber))
+            try
             {
-                STORAGE_PROPERTY_QUERY query = new STORAGE_PROPERTY_QUERY();
-                query.QueryType = STORAGE_QUERY_TYPE.PropertyStandardQuery;
-                query.PropertyId = STORAGE_PROPERTY_ID.StorageDeviceProperty;
-                byte[] result = InvokeIoControlUnknownSize(hDisk, IOControlCode.StorageQueryProperty, query);
-                IntPtr handle = Marshal.AllocHGlobal(result.Length);
-                Marshal.Copy(result, 0, handle, result.Length);
-                var desc = Marshal.PtrToStructure<STORAGE_DEVICE_DESCRIPTOR>(handle);
-                serial = Marshal.PtrToStringAnsi(handle + (int)desc.SerialNumberOffset);
-                productId = Marshal.PtrToStringAnsi(handle + (int)desc.ProductIdOffset);
-                productRevision = Marshal.PtrToStringAnsi(handle + (int)desc.ProductRevisionOffset);
-                Marshal.FreeHGlobal(handle);
+                var serial = String.Empty;
+                var productId = String.Empty;
+                var productRevision = String.Empty;
+                using (SafeFileHandle hDisk = OpenDisk(diskNumber))
+                {
+                    STORAGE_PROPERTY_QUERY query = new STORAGE_PROPERTY_QUERY();
+                    query.QueryType = STORAGE_QUERY_TYPE.PropertyStandardQuery;
+                    query.PropertyId = STORAGE_PROPERTY_ID.StorageDeviceProperty;
+                    byte[] result = InvokeIoControlUnknownSize(hDisk, IOControlCode.StorageQueryProperty, query);
+                    IntPtr handle = Marshal.AllocHGlobal(result.Length);
+                    Marshal.Copy(result, 0, handle, result.Length);
+                    var desc = Marshal.PtrToStructure<STORAGE_DEVICE_DESCRIPTOR>(handle);
+                    serial = Marshal.PtrToStringAnsi(handle + (int)desc.SerialNumberOffset);
+                    productId = Marshal.PtrToStringAnsi(handle + (int)desc.ProductIdOffset);
+                    productRevision = Marshal.PtrToStringAnsi(handle + (int)desc.ProductRevisionOffset);
+                    Marshal.FreeHGlobal(handle);
+                }
+                return productId + productRevision + serial;
             }
-            return productId + productRevision + serial;
+            catch(Exception e)
+            {
+                return null;
+            }
         }
         static Win32Exception CreateWin32Exception(Int32 errorCode, string context)
         {

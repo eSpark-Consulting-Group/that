@@ -1,5 +1,6 @@
 ﻿using APTAT.Common;
 using APTAT.Core.Apt;
+using APTAT.Core.CamLicense;
 
 namespace APTAT.Core.DependencyLocator
 {
@@ -7,6 +8,7 @@ namespace APTAT.Core.DependencyLocator
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
+            resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProvider>();
             resolver.RegisterSingleton<IAptScannerFactory, AptScannerFactory>();
             resolver.RegisterSingleton<IAptAtManager, AptAtManager>();
             resolver.Register<IFlsManager, FlsManager>();

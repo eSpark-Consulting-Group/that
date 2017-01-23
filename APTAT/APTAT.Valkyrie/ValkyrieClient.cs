@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
-using Microsoft.Win32;
 using APTAT.Common;
 
 namespace APTAT.Valkyrie
@@ -19,11 +18,13 @@ namespace APTAT.Valkyrie
     public sealed class ValkyrieClient : IValkyrieClient
     {
         private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
+        private readonly IMachineKeyProvider _machineKeyProvider;
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
         private int _filesCount;
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly string _endpointId;
         private ConcurrentBag<ValkyrieAnalysisResult> _analysisResults;
         private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems
             = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
@@ -51,8 +52,10 @@ namespace APTAT.Valkyrie
         public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
         public event EventHandler AnalyzeStarted;
 
-        public ValkyrieClient()
+        public ValkyrieClient(IMachineKeyProvider machineKeyProvider)
         {
+            _machineKeyProvider = machineKeyProvider;
+            _endpointId = _machineKeyProvider.GlobalMachineKey;
             _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
             _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
             _checkStatusesTimer = new Timer(CheckStatusesTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
@@ -83,7 +86,6 @@ namespace APTAT.Valkyrie
 
             if (networkCredential != null)
                 ProxySettings.Proxy = GetProxy(networkCredential);
-            //var machineId = NetAddressHelper.GetMacWithIPAddress();
             RegisterWithResponse regInfo;
 
             var asm = Assembly.GetExecutingAssembly().GetName();
@@ -263,50 +265,49 @@ namespace APTAT.Valkyrie
             }
         }
 
-        private Guid GetEndpointId()
-        {
-            string subKeyName = @"SOFTWARE\COMODO\APTAT";
-            const string keyValueName = "EndpointID";
+        //private Guid GetEndpointId()
+        //{
+        //    string subKeyName = @"SOFTWARE\COMODO\APTAT";
+        //    const string keyValueName = "EndpointID";
 
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(subKeyName, true);
+        //    RegistryKey key = Registry.CurrentUser.OpenSubKey(subKeyName, true);
 
-            if (key == null)
-            {
-                key = Registry.CurrentUser.CreateSubKey(subKeyName);
-                var guid = Guid.NewGuid();
-                if (key != null)
-                {
-                    key.SetValue(keyValueName, guid, RegistryValueKind.String);
-                    key.Dispose();
-                }
-                return guid;
-            }
-            else
-            {
-                var id = key.GetValue(keyValueName);
-                if (id == null)
-                {
-                    var guid = Guid.NewGuid();
-                    key.SetValue(keyValueName, guid, RegistryValueKind.String);
-                    key.Dispose();
-                    return guid;
-                }
-                else
-                {
-                    key.Dispose();
-                    Guid result;
-                    Guid.TryParse(id.ToString(), out result);
-                    return result;
-                }
-            }
-        }
+        //    if (key == null)
+        //    {
+        //        key = Registry.CurrentUser.CreateSubKey(subKeyName);
+        //        var guid = Guid.NewGuid();
+        //        if (key != null)
+        //        {
+        //            key.SetValue(keyValueName, guid, RegistryValueKind.String);
+        //            key.Dispose();
+        //        }
+        //        return guid;
+        //    }
+        //    else
+        //    {
+        //        var id = key.GetValue(keyValueName);
+        //        if (id == null)
+        //        {
+        //            var guid = Guid.NewGuid();
+        //            key.SetValue(keyValueName, guid, RegistryValueKind.String);
+        //            key.Dispose();
+        //            return guid;
+        //        }
+        //        else
+        //        {
+        //            key.Dispose();
+        //            Guid result;
+        //            Guid.TryParse(id.ToString(), out result);
+        //            return result;
+        //        }
+        //    }
+        //}
 
        
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, 
             CancellationToken cancellationToken, Action< ValkyrieAnalysisResult,ValkyrieFileInfo> addAction,  bool parallels = true)
         {
-            Guid endpointId = GetEndpointId();
-
+            var endpointId = _endpointId;
             ParallelOptions opt = new ParallelOptions
             {
                 CancellationToken = cancellationToken,
@@ -324,7 +325,7 @@ namespace APTAT.Valkyrie
                 }
         }
 
-        private void GetValkyrieVerdictForOneFile(ValkyrieFileInfo f, Guid endpointId, Action<ValkyrieAnalysisResult, ValkyrieFileInfo> addAction)
+        private void GetValkyrieVerdictForOneFile(ValkyrieFileInfo f, string endpointId, Action<ValkyrieAnalysisResult, ValkyrieFileInfo> addAction)
         {
             try
             {
@@ -569,7 +570,7 @@ namespace APTAT.Valkyrie
         //    return result;
         //}
 
-        private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, Guid endpointId)
+        private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, string endpointId)
         {
             ValkyrieAnalysisResult result = null;
 

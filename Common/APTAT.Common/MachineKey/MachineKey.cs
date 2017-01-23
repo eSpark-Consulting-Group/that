@@ -1,4 +1,4 @@
-using APTAT.Core.Descent.Wmi;
+using APTAT.Common;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -7,15 +7,15 @@ using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace APTAT.Core.CamLicense
+namespace APTAT.Common.MachineKey
 {
-    public static class MachineKey
+    public class MachineKeyProvider : IMachineKeyProvider
     {
         static string REG_KEY_COMODO = @"SOFTWARE\COMODO";
         static string REG_VALUE_GLOBAL_MACHINE_ID = "GlobalMachineId";
-        static MachineKey()
+        private string _globalMachineKey;
+        public MachineKeyProvider()
         {
-            GlobalMachineKey = GenerateGlobalMachineId();
         }
 
         static string GenerateGlobalMachineId()
@@ -92,16 +92,18 @@ namespace APTAT.Core.CamLicense
                 co = WmiHelper.GetConnectionOptionsForWmi(null, null);
                 ms = new ManagementScope(path, co);
                 ms.Connect();
-                ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(ms, objectQuery);
-                managementObjectSearcher.Options.Timeout = TimeSpan.FromMinutes(2);
-                foreach (var mo in managementObjectSearcher.Get())
+                using (ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(ms, objectQuery))
                 {
-                    var deviceId = WmiHelper.GetProperty(mo, "DeviceId", "");
-                    var model = WmiHelper.GetProperty(mo, "Model", "");
-                    var signature = WmiHelper.GetProperty(mo, "Signature", "");
-                    var totalTracks = WmiHelper.GetProperty(mo, "TotalTracks", "");
-                    var serialNumber = WmiHelper.GetProperty(mo, "SerialNumber", "");
-                    hdds.Add(new HddInfo(model, deviceId, serialNumber, signature, totalTracks));
+                    managementObjectSearcher.Options.Timeout = TimeSpan.FromMinutes(2);                
+                    foreach (var mo in managementObjectSearcher.Get())
+                    {
+                        var deviceId = WmiHelper.GetProperty(mo, "DeviceId", "");
+                        var model = WmiHelper.GetProperty(mo, "Model", "");
+                        var signature = WmiHelper.GetProperty(mo, "Signature", "");
+                        var totalTracks = WmiHelper.GetProperty(mo, "TotalTracks", "");
+                        var serialNumber = WmiHelper.GetProperty(mo, "SerialNumber", "");
+                        hdds.Add(new HddInfo(model, deviceId, serialNumber, signature, totalTracks));
+                    }
                 }
                 var strForHashing = String.Empty;
                 foreach (var hdd in hdds.OrderBy(h => h.DeviceId))
@@ -124,9 +126,12 @@ namespace APTAT.Core.CamLicense
             }
         }
 
-        public static string GlobalMachineKey
+        public string GlobalMachineKey
         {
-            get;
+            get
+            {
+                return _globalMachineKey ?? (_globalMachineKey = GenerateGlobalMachineId());
+            }
         }
     }
 }

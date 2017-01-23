@@ -73,8 +73,7 @@
     <Compile Include="Apt\IAptScannerFactory.cs" />
     <Compile Include="CamLicense\CamLicenseProvider.cs" />
     <Compile Include="CamLicense\CamResponseData.cs" />
-    <Compile Include="CamLicense\MachineKey.cs" />
-    <Compile Include="CamLicense\MachineKeyHelper.cs" />
+    <Compile Include="CamLicense\ICamLicenseProvider.cs" />
     <Compile Include="CamLicense\SerializerHelper.cs" />
     <Compile Include="CamLicense\XmlDataClasses.cs" />
     <Compile Include="ComputerInformation.cs" />
@@ -92,7 +91,6 @@
     <Compile Include="Descent\Apt\IModule.cs" />
     <Compile Include="Descent\Apt\ScanKind.cs" />
     <Compile Include="Descent\Apt\ScanOption.cs" />
-    <Compile Include="Descent\Wmi\WmiHelper.cs" />
     <Compile Include="Descent\Wmi\WmiScanner.cs" />
     <Compile Include="Descent\Wmi\WmiScanOperationContext.cs" />
     <Compile Include="Descent\Apt\AptScanOperationContext.cs" />

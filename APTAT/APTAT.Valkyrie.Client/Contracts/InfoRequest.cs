@@ -5,7 +5,7 @@ namespace Valkyrie.WebApiProvider.Contracts
 {
     public class InfoRequest : RequestBase
     {
-        public InfoRequest(string sha1, Guid endpointId,  string aptScanId, string apiKey, string path)            
+        public InfoRequest(string sha1, string endpointId,  string aptScanId, string apiKey, string path)            
         {
             SHA1 = sha1;
             EndpointId = endpointId;
@@ -18,7 +18,7 @@ namespace Valkyrie.WebApiProvider.Contracts
         public string SHA1 { get; }
 
         [JsonProperty("endpoint_id")]
-        public Guid EndpointId { get; }
+        public string EndpointId { get; }
 
         /// <summary>
         /// Path of File on Origin, Optional

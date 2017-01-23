@@ -14,7 +14,7 @@ namespace Valkyrie.WebApiProvider.Contracts
 
 
         [JsonProperty("endpoint_id")]
-        public Guid EndpointId { get; set; }
+        public string EndpointId { get; set; }
 
         [JsonProperty("apt_scan_id")]
         public string AptScanId { get; set; }        
