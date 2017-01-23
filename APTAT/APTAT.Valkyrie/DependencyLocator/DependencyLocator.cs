@@ -7,7 +7,7 @@ namespace APTAT.Valkyrie.DependencyLocator
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            //resolver.RegisterSingleton<IValkyrieWebApiProvider, ValkyrieWebApiProvider>();
+            resolver.RegisterSingleton<IValkyrieWebApiProvider, ValkyrieWebApiProvider>();
             resolver.RegisterSingleton<IValkyrieClient, ValkyrieClient>();
         }
     }

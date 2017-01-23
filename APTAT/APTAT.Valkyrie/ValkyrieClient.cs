@@ -17,6 +17,7 @@ namespace APTAT.Valkyrie
 {
     public sealed class ValkyrieClient : IValkyrieClient
     {
+        
         private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
         private readonly IMachineKeyProvider _machineKeyProvider;
         private const Int32 MaxFileLenght = 26214400;
@@ -52,9 +53,12 @@ namespace APTAT.Valkyrie
         public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
         public event EventHandler AnalyzeStarted;
 
-        public ValkyrieClient(IMachineKeyProvider machineKeyProvider)
+        private readonly  IValkyrieWebApiProvider _provider;
+        
+        public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider)
         {
             _machineKeyProvider = machineKeyProvider;
+            _provider = provider;
             _endpointId = _machineKeyProvider.GlobalMachineKey;
             _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
             _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
@@ -92,7 +96,7 @@ namespace APTAT.Valkyrie
 
             if (string.IsNullOrWhiteSpace(camRegistration.LicenseId) == false)
             {
-                regInfo = ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest()
+                regInfo = _provider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest()
                 {
                     LicenseId = camRegistration.LicenseId,
                     ProductName = "CDM",
@@ -102,7 +106,7 @@ namespace APTAT.Valkyrie
             }
             else
             {
-                regInfo = ValkyrieWebApiProvider.RegisterWithCamCredentials(new RegisterWithCamCredentials
+                regInfo = _provider.RegisterWithCamCredentials(new RegisterWithCamCredentials
                 {
                     UserName = camRegistration.UserName,
                     Password = camRegistration.Password,
@@ -148,7 +152,7 @@ namespace APTAT.Valkyrie
                             break;
                         if (_apiKey == null)
                             waitNextInterval = true;
-                        var startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(_apiKey));
+                        var startScanResult = _provider.StartScan(new StartScanRequest(_apiKey));
                         if (startScanResult.ReturnCode == ErrorCodesEnum.Success)
                         {
                             _aptScanId = startScanResult.AptScanId;
@@ -172,7 +176,7 @@ namespace APTAT.Valkyrie
                 if (needEndScan)
                     Task.Factory.StartNew(t =>
                     {
-                        ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId));
+                        _provider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId));
                     }, TaskCreationOptions.None);
             }
             if (!stopTimer)
@@ -200,7 +204,7 @@ namespace APTAT.Valkyrie
                 try
                 {
                     automaticAnalysisResponse =
-                        ValkyrieWebApiProvider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: context.AnalysisId,
+                        _provider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: context.AnalysisId,
                                         apiKey: _apiKey));
                 }
                 catch (Exception)
@@ -408,7 +412,7 @@ namespace APTAT.Valkyrie
             else if (_aptScanId != null)
                 Task.Factory.StartNew(t =>
                     { 
-                        ValkyrieWebApiProvider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId)); 
+                        _provider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId)); 
                     }, TaskCreationOptions.None);
 
             Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {_apiKey}");
@@ -584,7 +588,7 @@ namespace APTAT.Valkyrie
                 }
                                 
                 var infoRequeast = new InfoRequest(sha1: sha1, apiKey: _apiKey, endpointId: endpointId, aptScanId: _aptScanId, path: fileInfo.Path);
-              BasicInfoResponse basicInfo = ValkyrieWebApiProvider.GetBasicInfo(infoRequeast);
+              BasicInfoResponse basicInfo = _provider.GetBasicInfo(infoRequeast);
                 if (basicInfo.ReturnCode != ErrorCodesEnum.Success)
                     throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
                 Trace.WriteLine(
@@ -639,7 +643,7 @@ namespace APTAT.Valkyrie
                         var fileName = Path.GetFileName(orgFilePath);
                         using (var fStream = File.OpenRead(remoteFilePath))
                         {
-                            response = ValkyrieWebApiProvider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token, fileName);
+                            response = _provider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token, fileName);
                         }
                     }
                     if (response.ReturnCode != ErrorCodesEnum.Success)
@@ -709,7 +713,7 @@ namespace APTAT.Valkyrie
 
         public string GetValkyrieDetailsLink()
         {
-            return $@"{ValkyrieApiUrls.GetBaseUri()}signup_apikey/{_apiKey}";
+            return $@"{_provider.GetBaseUri()}signup_apikey/{_apiKey}";
         }
 
         public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
@@ -742,7 +746,7 @@ namespace APTAT.Valkyrie
                 StartAndFinalizeScanResponse startScanResult;
                 lock (_aptScanIdLock)
                 {
-                    startScanResult = ValkyrieWebApiProvider.StartScan(new StartScanRequest(regInfo.Key));
+                    startScanResult = _provider.StartScan(new StartScanRequest(regInfo.Key));
                     _aptScanId = startScanResult.AptScanId;
                 }
 
@@ -770,6 +774,11 @@ namespace APTAT.Valkyrie
             _checkStatusesTimer = null;
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
+        }
+
+        public void SetBaseUri(Uri uri)
+        {
+            _provider.SetBaseUri(uri);
         }
     }
 }

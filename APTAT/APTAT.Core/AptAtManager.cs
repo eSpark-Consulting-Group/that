@@ -13,6 +13,7 @@ using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using APTAT.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using System.Collections.ObjectModel;
+using APTAT.Core.Properties;
 
 namespace APTAT.Core
 {
@@ -81,6 +82,7 @@ namespace APTAT.Core
 
             ValkyrieAnalysisResult = new ConcurrentDictionary<string, FileResult>(StringComparer.OrdinalIgnoreCase);
             _valkyrieClient = valkyrieClient;
+            _valkyrieClient.SetBaseUri(new Uri(Settings.Default.valkyrieBaseUrl));
             _valkyrieClient.AnalyzeProgressChanged += OnValkyrieClientProgressChanged;
             _valkyrieClient.AnalyzeCompleted += OnValkyrieManagerAnalyzeCompleted;
             _valkyrieClient.AnalyzeStarted += OnValkyrieAnalyzeStarted;

@@ -14,5 +14,6 @@ namespace APTAT.Valkyrie
         void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
             string login, string password, int machineCount, NetworkCredential proxyCredential);
         string GetValkyrieDetailsLink();
+        void SetBaseUri(Uri uri);
     }
 }

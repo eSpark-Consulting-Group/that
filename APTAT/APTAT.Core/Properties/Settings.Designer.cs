@@ -148,5 +148,14 @@ namespace APTAT.Core.Properties {
                 return ((bool)(this["UseDevCam"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://valkyrie.comodo.com/")]
+        public string valkyrieBaseUrl {
+            get {
+                return ((string)(this["valkyrieBaseUrl"]));
+            }
+        }
     }
 }

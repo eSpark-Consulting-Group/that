@@ -44,5 +44,8 @@
     <Setting Name="UseDevCam" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="valkyrieBaseUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://valkyrie.comodo.com/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

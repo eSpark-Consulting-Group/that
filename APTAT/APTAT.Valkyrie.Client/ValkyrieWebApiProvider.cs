@@ -12,44 +12,63 @@ using Valkyrie.WebApiProvider.Helpers;
 namespace Valkyrie.WebApiProvider
 {
 
-    public static class ValkyrieWebApiProvider
+    public class ValkyrieWebApiProvider : IValkyrieWebApiProvider
     {
+        #region Urls
+        private Uri BasicInfoUri => new Uri(_valkyrieBaseUri, "fvs_basic_info");
+        private Uri FullInfoUri => new Uri(_valkyrieBaseUri, "fvs_full_info");
+        private Uri SubmitToManualAnalysisUri => new Uri(_valkyrieBaseUri, "fvs_submit_manual");
+        private Uri SubmitToManualAnalysisWithoutFileUploadUri => new Uri(_valkyrieBaseUri, "fvs_submit_manual_sha1");
+        private Uri SubmitToAutomaticAnalysisUri => new Uri(_valkyrieBaseUri, "fvs_submit_auto");
+        private Uri ManualStatusUri => new Uri(_valkyrieBaseUri, "fvs_manual_status");
+        private Uri RegisterWithMachineIdUri => new Uri(_valkyrieBaseUri, "fvs_register_with_machine_id");
+        private Uri FinalizeScanUri => new Uri(_valkyrieBaseUri, "apt_finalize_scan");
+        private Uri StartScanUri => new Uri(_valkyrieBaseUri, "apt_start_scan");
+        private Uri EndScanUri => new Uri(_valkyrieBaseUri, "apt_end_scan");
+        private Uri RegisterWithCamLicenseUri => new Uri(_valkyrieBaseUri, "fvs_register_with_cam_license");
+        private Uri RegisterWithCamCredentialsUri => new Uri(_valkyrieBaseUri, "fvs_register_with_cam_credentials");
+        private Uri CheckAnalysisResultUri => new Uri(_valkyrieBaseUri, "fvs_check_analysis_result");
+        private bool IsProduction => _valkyrieBaseUri.ToString().ToUpper().Contains("staging") == false;
+        #endregion
+        
+        private Uri _valkyrieBaseUri;
 
+        
         /// <summary>
         /// This request will be used to get Basic Info of a file that FVS have already analyzed before. 
         /// </summary>             
-        public static BasicInfoResponse GetBasicInfo(InfoRequest request)
+        public BasicInfoResponse GetBasicInfo(InfoRequest request)
         {
-            var response = CallValkyrie<BasicInfoResponse>(ValkyrieApiUrls.BasicInfo, request);
+            var response = CallValkyrie<BasicInfoResponse>(BasicInfoUri, request);
             return response;
         }
 
         // ReSharper disable once InconsistentNaming
-        public static RegisterWithResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
+        public RegisterWithResponse RegisterWithMachineId(RegisterWithMachineIdRequest request)
         {
-            var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithMachineId, request);
+            var response = CallValkyrie<RegisterWithResponse>(RegisterWithMachineIdUri, request);
             return response;
         }
 
-        public static RegisterWithResponse RegisterWithCamLicense(RegisterWithCamLicenseRequest request)
+        public RegisterWithResponse RegisterWithCamLicense(RegisterWithCamLicenseRequest request)
         {
-            var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithCamLicense, request);
+            var response = CallValkyrie<RegisterWithResponse>(RegisterWithCamLicenseUri, request);
             return response;
         }
 
-        public static RegisterWithResponse RegisterWithCamCredentials(RegisterWithCamCredentials request)
+        public RegisterWithResponse RegisterWithCamCredentials(RegisterWithCamCredentials request)
         {
-            var response = CallValkyrie<RegisterWithResponse>(ValkyrieApiUrls.RegisterWithCamCredentials, request);
+            var response = CallValkyrie<RegisterWithResponse>(RegisterWithCamCredentialsUri, request);
             return response;
         }
 
-        public static StartAndFinalizeScanResponse StartScan(StartScanRequest request)
+        public StartAndFinalizeScanResponse StartScan(StartScanRequest request)
         {
-            var response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.StartScan, request);
+            var response = CallValkyrie<StartAndFinalizeScanResponse>(StartScanUri, request);
             return response;
         }
 
-        public static StartAndFinalizeScanResponse EndScan(EndScanRequest request)
+        public StartAndFinalizeScanResponse EndScan(EndScanRequest request)
         {
             bool success = false;
             int retry = 0;
@@ -62,7 +81,7 @@ namespace Valkyrie.WebApiProvider
             {
                 try
                 {
-                    response = CallValkyrie<StartAndFinalizeScanResponse>(ValkyrieApiUrls.EndScan, request);
+                    response = CallValkyrie<StartAndFinalizeScanResponse>(EndScanUri, request);
                     success = response.ReturnCode == ErrorCodesEnum.Success;
 
                 }
@@ -77,9 +96,9 @@ namespace Valkyrie.WebApiProvider
         }
 
 
-        public static FullInfoResponse GetFullInfo(InfoRequest request)
+        public FullInfoResponse GetFullInfo(InfoRequest request)
         {
-            var result = CallValkyrie<FullInfoResponse>(ValkyrieApiUrls.FullInfo, request);
+            var result = CallValkyrie<FullInfoResponse>(FullInfoUri, request);
             return result;
         }
 
@@ -91,14 +110,14 @@ namespace Valkyrie.WebApiProvider
         /// <param name="token"></param>
         /// <returns></returns>
 
-        public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, string filePath, CancellationToken token)
+        public SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, string filePath, CancellationToken token)
         {
             if (token == null)
                 token = CancellationToken.None;
 
             string originalFileName = Path.GetFileName(request.FilePath);
             var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(filePath, ValkyrieApiUrls.SubmitToManualAnalysis.AbsoluteUri, payload, originalFileName, token);
+            var uploadResult = MultipartPostHelper.Post(filePath, SubmitToManualAnalysisUri.AbsoluteUri, payload, originalFileName, token);
             var response = JsonConvert.DeserializeObject<SubmitToManualResponse>(uploadResult);
             if (response.ReturnCode != ErrorCodesEnum.Success)
             {
@@ -108,12 +127,12 @@ namespace Valkyrie.WebApiProvider
             return response;
         }
 
-        public static SubmitToManualResponse SubmitToManualAnalysisWithoutUpload(SubmitToManualRequestSHA1 request)
+        public SubmitToManualResponse SubmitToManualAnalysisWithoutUpload(SubmitToManualRequestSHA1 request)
         {
-            var result = CallValkyrie<SubmitToManualResponse>(ValkyrieApiUrls.SubmitToManualAnalysisWithoutFileUpload, request);
-            return result;            
+            var result = CallValkyrie<SubmitToManualResponse>(SubmitToManualAnalysisWithoutFileUploadUri, request);
+            return result;
         }
-        
+
         //public static SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, byte[] fileData, CancellationToken token)
         //{
         //    if (token == null)
@@ -131,15 +150,15 @@ namespace Valkyrie.WebApiProvider
         //    return response;
         //}
 
-        public static SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, FileStream fileStream, CancellationToken token, String originalFilePath)
+        public SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, FileStream fileStream, CancellationToken token, String originalFilePath)
         {
             if (token == null)
             {
                 token = CancellationToken.None;
             }
-            
+
             var payload = request.ToNameValueCollection();
-            var uploadResult = MultipartPostHelper.Post(fileStream, ValkyrieApiUrls.SubmitToAutomaticAnalysis.AbsoluteUri, payload, originalFilePath, token);
+            var uploadResult = MultipartPostHelper.Post(fileStream, SubmitToAutomaticAnalysisUri.AbsoluteUri, payload, originalFilePath, token);
             var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
             if (response.ReturnCode != ErrorCodesEnum.Success)
             {
@@ -167,25 +186,25 @@ namespace Valkyrie.WebApiProvider
         //    return response;
         //}
 
-        public static ManualStatusResponse ManualStatus(ManualStatusRequest request)
+        public ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {
-            var result = CallValkyrie<ManualStatusResponse>(ValkyrieApiUrls.ManualStatus, request);
+            var result = CallValkyrie<ManualStatusResponse>(ManualStatusUri, request);
             return result;
         }
 
-        public static CheckAnalysisResultResponse CheckAnalysisResult(CheckAnalysisResultRequest request)
+        public CheckAnalysisResultResponse CheckAnalysisResult(CheckAnalysisResultRequest request)
         {
-            var result = CallValkyrie<CheckAnalysisResultResponse>(ValkyrieApiUrls.CheckAnalysisResult, request);
+            var result = CallValkyrie<CheckAnalysisResultResponse>(CheckAnalysisResultUri, request);
             return result;
         }
 
-        private static T CallValkyrie<T>(Uri apiUri, object request)
+        private T CallValkyrie<T>(Uri apiUri, object request)
         {
             Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Call {1}", DateTime.UtcNow, apiUri.ToString()));
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
             {
-                if (!ValkyrieApiUrls.IsProduction)
+                if (!IsProduction)
                 {
                     ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 }
@@ -195,11 +214,21 @@ namespace Valkyrie.WebApiProvider
                 }
                 byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Response for {1}", DateTime.UtcNow, apiUri.ToString() 
+                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Response for {1}", DateTime.UtcNow, apiUri.ToString()
                     + " " + Environment.NewLine + responseEncoded));
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;
             }
-        }       
+        }
+
+        public Uri GetBaseUri()
+        {
+            return _valkyrieBaseUri;
+        }
+
+        public void SetBaseUri(Uri uri)
+        {
+            _valkyrieBaseUri = uri;
+        }
     }
 }
