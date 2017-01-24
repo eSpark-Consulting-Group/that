@@ -17,7 +17,7 @@ namespace APTAT.Core.Reports
 
         public void BeginLastBuildReport(ReportType reportType, object state = null)
         {
-            var operationContext = _aptAtManager.AptScanOperationContexts.Last();
+            var operationContext = _aptAtManager.LastAptScanOperationContext;
             if (operationContext != null)
             {
                 if (!operationContext.CompletedTime.HasValue || operationContext.CompletedTime.Value == DateTime.MinValue)

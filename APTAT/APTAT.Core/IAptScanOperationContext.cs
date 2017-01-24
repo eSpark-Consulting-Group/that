@@ -17,7 +17,6 @@ namespace APTAT.Core.Descent
         int CanceledTargetsCount { get; }
         DateTime Started { get; }
         IEnumerable<IAptScanResult> ScanResults { get; }
-
         event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;
         IFilesStatistics CalculateFilesStatistics();
         void CalculateOperationStatistics();

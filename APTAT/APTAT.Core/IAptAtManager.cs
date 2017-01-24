@@ -38,7 +38,7 @@ namespace APTAT.Core
     {
         Guid ValkyrieOperationUid { get; }
         Guid FlsLookupOperationUid { get; }
-        Collection<IAptScanOperationContext> AptScanOperationContexts { get; }
+        IAptScanOperationContext LastAptScanOperationContext { get; }
         ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
     }
 }

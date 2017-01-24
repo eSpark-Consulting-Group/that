@@ -30,9 +30,9 @@ namespace APTAT.Core
         private IValkyrieClient _valkyrieClient;
         private Collection<IAptScanOperationContext> _lastAptResults = new Collection<IAptScanOperationContext>();
 
-        public Collection<IAptScanOperationContext> AptScanOperationContexts
+        public IAptScanOperationContext LastAptScanOperationContext
         {
-            get { return _lastAptResults; }
+            get; private set;
         }
 
         public ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
@@ -108,11 +108,13 @@ namespace APTAT.Core
             var arg = new AnalyzeCompletedEventArgs<FileResult>(valkyrieAnalysisResult.ToArray(), e.Error, e.Cancelled
                 , e.UserState);
 
-            lock(_lastAptResults)
+            lock (_lastAptResults)
+            {
+                LastAptScanOperationContext = _lastAptResults.LastOrDefault();
                 _lastAptResults.Clear();
+            }
 
-            ValkyrieAnalyzeCompleted?.Invoke(this, arg);
-            
+            ValkyrieAnalyzeCompleted?.Invoke(this, arg);     
         }
         
         private void OnValkyrieClientProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
