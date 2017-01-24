@@ -119,7 +119,7 @@ namespace FAT.Application
                 scanCompletedWindow.path1.Visibility = Visibility.Visible;
 
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
-            if (e.SuccededCount > 0)
+            if (e.SuccededCount > 0 && e.CanceledCount == 0)
             {
                 scanCompletedWindow.DataContext = DataContext;
                 /*if (scanCompletedWindow.ShowDialog() == true)
