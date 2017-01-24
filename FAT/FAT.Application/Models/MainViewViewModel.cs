@@ -492,7 +492,7 @@ namespace FAT.Application.Models
             set
             {
                 _itemsValkyrie = value;
-                RaisePropertyChanged("ItemsValkyrie");
+                RaisePropertyChanged(nameof(ItemsValkyrie));
             }
         }
 
@@ -502,7 +502,7 @@ namespace FAT.Application.Models
             set
             {
                 _computersValkyrie = value;
-                RaisePropertyChanged("ComputersValkyrie");
+                RaisePropertyChanged(nameof(ComputersValkyrie));
             }
         }
 
@@ -512,7 +512,7 @@ namespace FAT.Application.Models
             set
             {
                 _items = value;
-                RaisePropertyChanged("Items");
+                RaisePropertyChanged(nameof(Items));
             }
         }
 
@@ -522,7 +522,7 @@ namespace FAT.Application.Models
             set
             {
                 _computers = value;
-                RaisePropertyChanged("Computers");
+                RaisePropertyChanged(nameof(Computers));
                 RaisePropertyChanged(nameof(IsItemsEmpty));
                 RaisePropertyChanged(nameof(SearchAvailable));
             }
@@ -701,14 +701,14 @@ namespace FAT.Application.Models
                 if (result.Cloud == CloudVerdict.Safe)
                     newVerdict = ValkyrieVerdict.Clean;
 
-                var items = Items.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
+                var items = _cache.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
                 foreach (var threatInfoItem in items)
                 {
                     threatInfoItem.UpdateFileVerdict(result.Cloud);
                 }
 
 
-                foreach (ThreatInfoItem computer in Computers)
+                foreach (ThreatInfoItem computer in _cacheComputers)
                 {
                     var files = computer.Items.Where(i =>
                             String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
@@ -716,16 +716,16 @@ namespace FAT.Application.Models
                     {
                         if (!computersToUpdate.ContainsKey(computer.ComputerGuid))
                             computersToUpdate.Add(computer.ComputerGuid, computer);
-                        var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.ComputerGuid);
+                        var comp = _cacheValkyrieComputers.FirstOrDefault(_ => _.TargetUid == computer.ComputerGuid);
                         comp?.UpdateFileIfPredicate(result.Sha1, new ValkyrieAnalysisResult(result.Sha1, newVerdict), 
                             verdict => verdict == ValkyrieVerdict.PendingFls);
                         foreach (var f in files)
                             f.UpdateFileVerdict(result.Cloud);
                     }
                 }
-                if (ItemsValkyrie.Any())
+                if (_cacheValkyrie.Any())
                 {
-                    var file = ItemsValkyrie.FirstOrDefault(_ => String.Equals(_.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase));
+                    var file = _cacheValkyrie.FirstOrDefault(_ => String.Equals(_.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase));
                     if (file != null)
                     {
                         if (!file.PendingFls)
@@ -783,7 +783,7 @@ namespace FAT.Application.Models
         void CopyMalwaresFromScanResults()
         {
             var col = new Collection<ValkyrieFile>();
-            foreach (var file in Items)
+            foreach (var file in _cache)
             {
                 if (!file.IsMalware && !file.Failed)
                     continue;
@@ -869,12 +869,10 @@ namespace FAT.Application.Models
                     CopyMalwaresFromScanResults();
                 }
             }
-
-            _cacheValkyrie = new Collection<ValkyrieFile>(ItemsValkyrie);
-            _cacheValkyrieComputers = new Collection<ValkyrieComputer>(ComputersValkyrie);
+            
 
             if (e.Cancelled)
-                foreach (var comp in ComputersValkyrie)
+                foreach (var comp in _cacheValkyrieComputers)
                     comp.Canceling = true;
 
             CancelInProgress = false;
@@ -918,7 +916,7 @@ namespace FAT.Application.Models
         {
             foreach (var result in results)
             {
-                var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
+                var file = _cacheValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
                 {
                     bool wasPending = false;
@@ -948,7 +946,7 @@ namespace FAT.Application.Models
 
                     foreach (var computer in file.Computers)
                     {
-                        var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
+                        var comp = _cacheValkyrieComputers.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
                         if (comp != null)
                             comp.UpdateFile(result);
                     }
@@ -961,17 +959,17 @@ namespace FAT.Application.Models
             if (results == null)
                 return;
 
-            if (!ItemsValkyrie.Any())
+            if (!_cacheValkyrie.Any())
             {
                 UnknownFilesCount = 0;
                 MalwareFilesCount = 0;
             }
 
-            var computersDict = Computers.ToDictionary(_ => _.ComputerGuid);
+            var computersDict = _cacheComputers.ToDictionary(_ => _.ComputerGuid);
 
             foreach (var result in results)
             {
-                var file = ItemsValkyrie.FirstOrDefault(_ => _.Equals(result));
+                var file = _cacheValkyrie.FirstOrDefault(_ => _.Equals(result));
                 if (file != null)
                 {
                     int dummy = 0;
@@ -986,6 +984,7 @@ namespace FAT.Application.Models
                 else
                 {
                     ItemsValkyrie.Add(result);
+                    _cacheValkyrie.Add(result);
                     if (result.IsUnknown)
                         Interlocked.Add(ref _unknownFilesCount, result.Computers.Count);
                     else if (result.IsMalware)
@@ -1004,7 +1003,7 @@ namespace FAT.Application.Models
                     ThreatInfoItem c;
                     if (!computersDict.TryGetValue(computer.TargetUid, out c)) continue;
 
-                    var comp = ComputersValkyrie.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
+                    var comp = _cacheValkyrieComputers.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
                     if (comp != null)
                         comp.MergeFile(result, computer.FilePath);
                     else
@@ -1016,6 +1015,7 @@ namespace FAT.Application.Models
                         };
                         comp.MergeFile(result, computer.FilePath);
                         ComputersValkyrie.Add(comp);
+                        _cacheValkyrieComputers.Add(comp);
                     }
                 }
             }
