@@ -104,6 +104,11 @@ namespace FAT.Application.Services
             return new GetDomainNameResponse(null, e.Error);
         }
 
+        public IPAddress[] GetHostIpAddresses()
+        {
+            return _networkHelper.GetHostIpAddresses();
+        }
+
         public string GetLoggedInUser()
         {
             if (!String.IsNullOrEmpty(Environment.UserDomainName))

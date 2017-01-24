@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using FAT.Application.Models;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace FAT.Application.Services
         Task<GetDomainNameResponse> GetCurrentDomainName();
         bool IsLocalAddress(string name);
 
-
+        IPAddress[] GetHostIpAddresses();
 
 
         string GetLoggedInUser();

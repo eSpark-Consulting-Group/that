@@ -97,6 +97,14 @@ namespace APTAT.DeploymentCore
             return NetHelp.IsLoopbackAddress(nameOrAddress);
         }
 
+        public IPAddress[] GetHostIpAddresses()
+        {
+            string hostName = Dns.GetHostName();
+            IPHostEntry iphostentry = Dns.GetHostEntry(hostName);
+            var ips = iphostentry.AddressList.Where(i => i.IsIPv6LinkLocal == false).ToArray();
+            return ips;
+        }
+
         #endregion
 
         #region NetHelper
@@ -491,5 +499,6 @@ namespace APTAT.DeploymentCore
         IPStatus SendPing(string toString);
         IPHostEntry GetHostEntry();
         bool IsLoopbackAddress(string nameOrAddress);
+        IPAddress[] GetHostIpAddresses();
     }
 }
