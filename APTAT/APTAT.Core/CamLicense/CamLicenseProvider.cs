@@ -2,6 +2,7 @@ using APTAT.Common;
 using APTAT.Core.CamLicense;
 using APTAT.Core.Properties;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
+using Valkyrie.WebApiProvider;
 
 namespace APTAT.Core
 {
@@ -27,8 +29,11 @@ namespace APTAT.Core
                 _secretPhrase = "rogoyhpjtpqbwbqk";
             }
         }
-        public string TryGetFreeLicense()
-        {                        
+        public string TryGetFreeLicense(NetworkCredential credential)
+        {
+            
+            SetProxy(credential);
+            
             int retry = 0;
             GetFreeLicenseResponse response = new GetFreeLicenseResponse();
             response.Data = new GetFreeLicenseResponseData();
@@ -46,13 +51,29 @@ namespace APTAT.Core
                     //if (success) return response.Data.PackageAdditionalParams.PackageItem.LicenseKey;
                     if (success) return response.Data.LicenseKey;
                 }
+                catch (WebException webException)
+                {
+                    if (webException.Message.Contains("407")) throw;
+                }
                 catch (Exception e)
                 {
-                    retry++;
+                 
+                        retry++;
                 }
                 Thread.Sleep(Interval);
             }
             return null;
+        }
+
+        private void SetProxy(NetworkCredential networkCredential)
+        {
+            var proxy = WebRequest.GetSystemWebProxy();
+            if (networkCredential != null)
+            {
+                proxy = new WebProxy();
+                proxy.Credentials = networkCredential;
+            }
+            ProxySettings.Proxy = proxy;
         }
 
         private GetFreeLicenseResponse GetFreeLicense()
@@ -60,13 +81,9 @@ namespace APTAT.Core
             var bytes = GenerateRequestBytes();
 
             var result = PostData(_camUrl, bytes);
-            File.WriteAllBytes(Path.GetFileName(Path.GetTempFileName() + ".xml"), bytes);
-            File.WriteAllBytes(Path.GetFileName(Path.GetTempFileName() + ".res.xml"), result);
-
-            string resultStr = System.Text.Encoding.UTF8.GetString(result);
             var serializer = new XmlSerializer(typeof(GetFreeLicenseResponse));
             var serializerErrResponse = new XmlSerializer(typeof(ErrorResponse));
-            var reader = new StreamReader(new MemoryStream(result), System.Text.Encoding.UTF8);
+            var reader = new StreamReader(new MemoryStream(result), Encoding.UTF8);
         
             try
             {                
@@ -77,6 +94,7 @@ namespace APTAT.Core
             {
                 var readerErr = new StreamReader(new MemoryStream(result), System.Text.Encoding.UTF8);
                 ErrorResponse responseError = (ErrorResponse) serializerErrResponse.Deserialize(readerErr);
+                LogHelper.Trace(TraceEventType.Error, TraceCategory.General, _camUrl + " Result Message: " + responseError.Data.Message);
                 throw new InvalidOperationException("Could not get CAM license");
             }
             
@@ -123,6 +141,10 @@ namespace APTAT.Core
             request.ContentType = "text/xml; encoding='utf-8'";
             request.ContentLength = bytes.Length;
             request.Method = "POST";
+            if (ProxySettings.Proxy != null)
+            {
+                request.Proxy = ProxySettings.Proxy;
+            }
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(bytes, 0, bytes.Length);
             requestStream.Close();

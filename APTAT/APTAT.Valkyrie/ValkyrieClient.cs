@@ -87,8 +87,7 @@ namespace APTAT.Valkyrie
             if (camRegistration == null || camRegistration.IsEmpty)
                 throw new InvalidOperationException("CAM license or CAM credentials are required");
 
-
-            if (networkCredential != null)
+            if (networkCredential != null && ProxySettings.Proxy == null)
                 ProxySettings.Proxy = GetProxy(networkCredential);
             RegisterWithResponse regInfo;
 

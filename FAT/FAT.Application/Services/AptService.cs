@@ -252,9 +252,19 @@ namespace FAT.Application.Services
             , string camLicenseId, string camUserName, string camPassword,
             NetworkCredential networkCredential)
         {
+            
             if (String.IsNullOrEmpty(camLicenseId) && String.IsNullOrEmpty(camUserName) && String.IsNullOrEmpty(camPassword))
-                
-            camLicenseId = _camLicense ?? (_camLicense = _camLicenseProvider.TryGetFreeLicense());
+
+                try
+                {
+                    camLicenseId = _camLicense ?? (_camLicense = _camLicenseProvider.TryGetFreeLicense(networkCredential));
+                }
+                catch (Exception e)
+                {
+                    OnValkyrieAnalyzeCompleted(this,new AnalyzeCompletedEventArgs<FileResult>(new FileResult[]{},e,false, null));
+                    return;
+                }
+            
 
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
                 camPassword, networkCredential);
