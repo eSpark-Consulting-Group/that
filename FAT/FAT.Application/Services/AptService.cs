@@ -3,6 +3,7 @@ using APTAT.Core;
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using FAT.Application.Models.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
@@ -246,28 +247,42 @@ namespace FAT.Application.Services
             _manager.StopScan(targets);
         }
 
-
+        
 
         public void BeginValkyrieAnalysis(string systemLogin, string systemPassword
             , string camLicenseId, string camUserName, string camPassword,
             NetworkCredential networkCredential)
         {
-            
-            if (String.IsNullOrEmpty(camLicenseId) && String.IsNullOrEmpty(camUserName) && String.IsNullOrEmpty(camPassword))
 
-                try
-                {
-                    camLicenseId = _camLicense ?? (_camLicense = _camLicenseProvider.TryGetFreeLicense(networkCredential));
-                }
-                catch (Exception e)
-                {
-                    OnValkyrieAnalyzeCompleted(this,new AnalyzeCompletedEventArgs<FileResult>(new FileResult[]{},e,false, null));
-                    return;
-                }
-            
+            Action action = () =>
+            {
+                if (string.IsNullOrEmpty(camLicenseId) && string.IsNullOrEmpty(camUserName) && string.IsNullOrEmpty(camPassword))
 
-            _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
-                camPassword, networkCredential);
+                    try
+                    {
+                        camLicenseId = _camLicense ??
+                                       (_camLicense = _camLicenseProvider.TryGetFreeLicense(networkCredential));
+                    }
+                    catch (Exception e)
+                    {
+                        
+                        Action a = () =>
+                        {
+                            OnValkyrieAnalyzeCompleted(this,
+                                new AnalyzeCompletedEventArgs<FileResult>(new FileResult[] { }, e, false, null));
+                        };
+                        App.Current.Dispatcher.BeginInvoke(a);
+                        return;
+                    }
+
+
+                _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
+                    camPassword, networkCredential);
+            };
+
+            Task.Factory.StartNew(action, TaskCreationOptions.None);
+            
+            
         }
 
         public string GetValkyrieDetailsLink()

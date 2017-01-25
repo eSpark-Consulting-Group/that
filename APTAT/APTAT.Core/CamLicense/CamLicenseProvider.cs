@@ -8,6 +8,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using Valkyrie.WebApiProvider;
@@ -33,35 +34,40 @@ namespace APTAT.Core
         {
             
             SetProxy(credential);
-            
             int retry = 0;
             GetFreeLicenseResponse response = new GetFreeLicenseResponse();
             response.Data = new GetFreeLicenseResponseData();
             bool success = false;
-            const int Interval = 10000;
-            const int Timeout = 180000;
-            int attempts = Timeout / Interval;
-
+            const int interval = 500;
+            const int timeout = interval*3;
+            int attempts = timeout / interval;
+            Exception lastException = null;
             while (!success && retry < attempts)
             {
                 try
                 {
                     response = GetFreeLicense();
                     success = response.Data.Message == "Success";
-                    //if (success) return response.Data.PackageAdditionalParams.PackageItem.LicenseKey;
                     if (success) return response.Data.LicenseKey;
+                    else throw new CamException(response.Data.Message);
                 }
                 catch (WebException webException)
                 {
                     if (webException.Message.Contains("407")) throw;
+                    lastException = webException;
                 }
                 catch (Exception e)
                 {
-                 
-                        retry++;
+                    lastException = e;
                 }
-                Thread.Sleep(Interval);
+                finally
+                {
+                    retry++;
+                }
+                Thread.Sleep(interval);
             }
+            if (!success && lastException != null) throw lastException;
+
             return null;
         }
 
@@ -84,22 +90,22 @@ namespace APTAT.Core
             var serializer = new XmlSerializer(typeof(GetFreeLicenseResponse));
             var serializerErrResponse = new XmlSerializer(typeof(ErrorResponse));
             var reader = new StreamReader(new MemoryStream(result), Encoding.UTF8);
-        
+
             try
-            {                
+            {
                 GetFreeLicenseResponse response = (GetFreeLicenseResponse) serializer.Deserialize(reader);
-                return response;                
+                return response;
             }
-            catch 
+            catch
             {
                 var readerErr = new StreamReader(new MemoryStream(result), System.Text.Encoding.UTF8);
                 ErrorResponse responseError = (ErrorResponse) serializerErrResponse.Deserialize(readerErr);
                 LogHelper.Trace(TraceEventType.Error, TraceCategory.General, _camUrl + " Result Message: " + responseError.Data.Message);
                 throw new InvalidOperationException("Could not get CAM license");
             }
-            
-            
-            
+
+
+
         }
         private byte[] GenerateRequestBytes()
         {
@@ -187,6 +193,14 @@ namespace APTAT.Core
             doc.Normalize();
             var normalizedData = doc.OuterXml.Replace("GetFreeLicenseRequestData", "Data");
             return normalizedData;
+        }
+    }
+
+    public class CamException : Exception
+    {
+        public CamException(string message):base(message)
+        {
+            
         }
     }
 }
