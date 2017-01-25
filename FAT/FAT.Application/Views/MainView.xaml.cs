@@ -119,31 +119,33 @@ namespace FAT.Application
                 scanCompletedWindow.path1.Visibility = Visibility.Visible;
 
             scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
-            if (e.SuccededCount > 0 && e.CanceledCount == 0)
+            if (e.SuccededCount > 0)
             {
-                scanCompletedWindow.DataContext = DataContext;
-                /*if (scanCompletedWindow.ShowDialog() == true)
-                    ShowRegisterToValkyrieWindow();
-                else*/
-                if (e.FilesStatistics.UnknownFilesCount > 0
-             || e.FilesStatistics.FailedToAnalyzeFilesCount > 0
-             || e.FilesStatistics.NoVerdictFilesCount > 0)
-                {
-                    _viewModel.IsAnalyseWithValkyrieEnabled = true;
-
-                    Dispatcher.Invoke((Action)delegate
-                    {
-                        _viewModel.BeginValkyrieAnalysis();
-                    });
-                }
+                if (e.CanceledCount > 0)
+                    _viewModel.IsReportEnabled = true;
                 else
                 {
-                    scanCompletedWindow.ShowDialog();
-                    _viewModel.IsReportEnabled = true;
-                }
+                    if (e.FilesStatistics.UnknownFilesCount > 0
+                        || e.FilesStatistics.FailedToAnalyzeFilesCount > 0
+                        || e.FilesStatistics.NoVerdictFilesCount > 0)
+                    {
+                        _viewModel.IsAnalyseWithValkyrieEnabled = true;
 
-                if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
-                    _viewModel.GroupingEnabled = true;
+                        Dispatcher.Invoke(delegate
+                        {
+                            _viewModel.BeginValkyrieAnalysis();
+                        });
+                    }
+                    else
+                    {
+                        scanCompletedWindow.DataContext = DataContext;
+                        scanCompletedWindow.ShowDialog();
+                        _viewModel.IsReportEnabled = true;
+                    }
+
+                    if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
+                        _viewModel.GroupingEnabled = true;
+                }
             }
 
         }
@@ -187,17 +189,23 @@ namespace FAT.Application
                 _onCompletedAction();
                 return;
             }
-            if (_dialog == null) return;
+            //if (_dialog == null) return;
             if (e.Error == null) return;
             var error = e.Error as AggregateException;
             var exception = error != null ? error.InnerExceptions.First() : e.Error;
             if (exception is InvalidOperationException || exception is ValkyrieRegistrationFailedException)
-                _dialog.SetErrorMessage(e.Error.Message);
+            {
+                var err = new ErrorWindow();
+                err.Text.Text = e.Error.Message;
+                err.Owner = System.Windows.Application.Current.MainWindow;
+                err.ShowDialog();
+            }
+                /*_dialog.SetErrorMessage(e.Error.Message);
             Dispatcher.Invoke((Action)delegate
             {
                 _dialog.ok.Visibility = Visibility.Visible;
                 _dialog.loading.IsBusy = false;
-            });
+            });*/
         }
 
         private void ValkyrieClick(Object sender, RoutedEventArgs e)

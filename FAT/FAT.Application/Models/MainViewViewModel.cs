@@ -857,6 +857,12 @@ namespace FAT.Application.Models
                             BeginValkyrieAnalysis(cred);
                             return;
                         }
+                        else
+                        {
+                            Set(() => ValkyrieEnabled, false);
+                            Set(() => SelectScan, false);
+                            Set(() => SelectScan, true);
+                        }
                     }
                 }
             }

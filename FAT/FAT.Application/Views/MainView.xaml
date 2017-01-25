@@ -347,16 +347,17 @@
         </Border>
 
         <Border Grid.Row="2"  Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-
-            <Border Background="Transparent"  Height="27"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
-                <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Background="Transparent"  Visibility="{Binding ValkyrieEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Border Background="Transparent"  Height="27"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
                        x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFF7E78C" FontSize="16">
                        Please click here to see the detailed results
             </Hyperlink>
-                </TextBlock>
+                    </TextBlock>
+                </Border>
             </Border>
-            
+
         </Border>
 
     </Grid>
