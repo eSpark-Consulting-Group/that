@@ -82,17 +82,19 @@ namespace Valkyrie.WebApiProvider
                 try
                 {
                     response = CallValkyrie<StartAndFinalizeScanResponse>(EndScanUri, request);
-                    success = response.ReturnCode == ErrorCodesEnum.Success;
-
+                    success = response.ReturnCode == ErrorCodesEnum.Success
+                        || response.ReturnCode == ErrorCodesEnum.AptNoStartedScanFound;
                 }
                 catch (Exception)
+                {
+                }
+                finally
                 {
                     retry++;
                 }
                 Thread.Sleep(interval);
             }
             return response;
-
         }
 
 
