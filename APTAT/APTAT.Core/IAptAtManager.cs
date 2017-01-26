@@ -25,7 +25,7 @@ namespace APTAT.Core
         void UpdateFlsPorts(int udpPort, int tcpPort);
 
         void StartValkyrieAnalysis(string login, string password, 
-            string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential);
+            string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential, string productName);
 
         string GetValkyrieDetailsLink();
         int GetDistinctFilesCount();

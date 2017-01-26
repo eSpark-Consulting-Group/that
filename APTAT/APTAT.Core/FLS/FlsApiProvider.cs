@@ -13,11 +13,12 @@ namespace APTAT.Core
         private IPAddress[] _servers;
         private int _serverIndex = 0;
         private int _port = 4448;
-        private string _hostName = "fls.security.comodo.com";
+        private string _hostName = "";
         private int _udpPort;
 
         public void UpdateFlsPorts(int udpPort, int tcpPort)
         {
+            Init();
             if (tcpPort == 0)
             {
                 _port = int.Parse(Settings.Default.FlsPort);
@@ -29,8 +30,9 @@ namespace APTAT.Core
             }
         }
 
-        public void Init()
+        private void Init()
         {
+            if (_servers.Any()) return;
             _hostName = Settings.Default.FlsHost;
 
             IPHostEntry hostEntry = Dns.GetHostEntry(_hostName);
@@ -42,12 +44,13 @@ namespace APTAT.Core
 
         public FlsApiProvider()
         {
-
+            _servers = new IPAddress[] {};
         }
 
 
         public FlsResponse RequestType0(string[] hashes)
         {
+            Init();
             try
             {
 

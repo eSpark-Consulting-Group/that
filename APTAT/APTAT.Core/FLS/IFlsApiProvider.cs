@@ -2,7 +2,7 @@
 {
     public interface IFlsApiProvider
     {
-        void Init();
+        //void Init();
         FlsResponse RequestType0(string[] hash);
         void UpdateFlsPorts(int udpPort, int tcpPort);
     }

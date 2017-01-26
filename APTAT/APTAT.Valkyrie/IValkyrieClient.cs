@@ -12,7 +12,7 @@ namespace APTAT.Valkyrie
         void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze);
         void AnalyzeAsyncCancel();
         void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
-            string login, string password, int machineCount, NetworkCredential proxyCredential);
+            string login, string password, int machineCount, NetworkCredential proxyCredential, string productName);
         string GetValkyrieDetailsLink();
         void SetBaseUri(Uri uri);
     }

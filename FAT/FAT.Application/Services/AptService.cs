@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using APTAT.Application.Properties;
 using FAT.Application.Models.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
@@ -275,9 +276,9 @@ namespace FAT.Application.Services
                         return;
                     }
 
-
+                
                 _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
-                    camPassword, networkCredential);
+                    camPassword, networkCredential, Settings.Default.applicationName);
             };
 
             Task.Factory.StartNew(action, TaskCreationOptions.None);

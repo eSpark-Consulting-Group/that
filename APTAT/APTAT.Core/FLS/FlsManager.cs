@@ -72,7 +72,6 @@ namespace APTAT.Core
         public FlsManager()
         {
             _apiProvider = new FlsApiProvider();
-            _apiProvider.Init();
             _uploadInterval = int.Parse(Settings.Default.FlsUploadInterval);
             _uploadAtOnce = int.Parse(Settings.Default.FlsUploadHashesAtOnce);
         }

@@ -388,7 +388,7 @@ namespace APTAT.Core
 
 
         public void StartValkyrieAnalysis(string login, string password,
-            string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential)
+            string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential, string productName)
         {
             lock (_flsHashResults)
             {
@@ -396,7 +396,7 @@ namespace APTAT.Core
                 var aptScanResults = GetResultsEnumerator().ToArray();
                 var distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
                 _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length,
-                    proxyCredential);
+                    proxyCredential, productName);
             }
         }
 

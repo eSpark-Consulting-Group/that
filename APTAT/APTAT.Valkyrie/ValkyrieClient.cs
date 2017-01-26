@@ -80,8 +80,8 @@ namespace APTAT.Valkyrie
                 _checkStatusesTimer?.Change(TimeSpan.FromSeconds(5).Milliseconds, Timeout.Infinite);
         }
 
-        private RegisterWithResponse Register(CamRegistration camRegistration,
-            NetworkCredential networkCredential = null)
+        private RegisterWithResponse Register(CamRegistration camRegistration, string productName, 
+            NetworkCredential networkCredential = null )
         {
 
             if (camRegistration == null || camRegistration.IsEmpty)
@@ -93,12 +93,13 @@ namespace APTAT.Valkyrie
 
             var asm = Assembly.GetExecutingAssembly().GetName();
 
+            
             if (string.IsNullOrWhiteSpace(camRegistration.LicenseId) == false)
             {
                 regInfo = _provider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest()
                 {
                     LicenseId = camRegistration.LicenseId,
-                    ProductName = "CDM",
+                    ProductName = productName,
                     ProductVersion = asm.Version.ToString()
                 });
 
@@ -109,7 +110,7 @@ namespace APTAT.Valkyrie
                 {
                     UserName = camRegistration.UserName,
                     Password = camRegistration.Password,
-                    ProductName = "CDM",
+                    ProductName = productName,
                     ProductVersion = asm.Version.ToString()
                 });
             }
@@ -716,7 +717,7 @@ namespace APTAT.Valkyrie
         }
 
         public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
-            string login, string password, int machineCount, NetworkCredential proxyCredential)
+            string login, string password, int machineCount, NetworkCredential proxyCredential, string productName)
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;
@@ -728,7 +729,7 @@ namespace APTAT.Valkyrie
 
             Task.Factory.StartNew(t =>
             {
-                var regInfo = Register(camRegistration, proxyCredential);
+                var regInfo = Register(camRegistration, productName, proxyCredential);
                 if (regInfo.ReturnCode != 0)
                 {
                     var ex = new ValkyrieRegistrationFailedException(regInfo);

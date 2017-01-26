@@ -216,8 +216,7 @@ namespace Valkyrie.WebApiProvider
                 }
                 byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
-                Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Response for {1}", DateTime.UtcNow, apiUri.ToString()
-                    + " " + Environment.NewLine + responseEncoded));
+                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {$"{apiUri} {Environment.NewLine}{responseEncoded}"}");
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;
             }
