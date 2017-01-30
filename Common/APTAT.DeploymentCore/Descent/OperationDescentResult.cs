@@ -5,12 +5,11 @@ namespace APTAT.DeploymentCore.Descent
 {
 	public class OperationDescentResult : IOperationDescentResult
     {
-		public OperationDescentResult(Guid computerUid, bool succeeded,
+		public OperationDescentResult(bool succeeded,
 			FormattedText statusMessage, FormattedText shortStatusMessage,
 			string errorCode, string systemMessage, int systemCode,
             bool isCanceled)
         {
-            ComputerUid = computerUid;
             Succeeded = succeeded;
             StatusMessage = statusMessage;
             ShortStatusMessage = shortStatusMessage;
@@ -28,6 +27,5 @@ namespace APTAT.DeploymentCore.Descent
 		public string ErrorCode { get;  }
 		public string SystemMessage { get;  }
 		public int SystemCode { get;  }
-        public Guid ComputerUid { get; }
     }
 }

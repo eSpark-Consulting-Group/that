@@ -15,6 +15,7 @@ namespace APTAT.DeploymentCore.Descent
     public interface IComputerDescentResult
     {
         Guid TargetUid { get; }
+        Guid OperationUid { get; }
         IComputer Computer { get; }
         bool Completed { get; }
         bool Succeeded { get; }

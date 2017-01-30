@@ -7,6 +7,7 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
 using APTAT.Core.Descent.Apt;
+using System.Collections.Generic;
 
 namespace APTAT.Application.Services
 {
@@ -94,11 +95,15 @@ namespace APTAT.Application.Services
 
     public class ScanCompletedEventArgs : DomainEventArgs
     {
+        public Guid OperationUid { get; set; }
         public Int32 SuccededCount { get; set; }
         public Int32 FailedCount { get; set; }
         public Int32 CanceledCount { get; set; }
         public Int32 NotPerformedCount { get; set; }  
-        public Int32 MalwaresFound { get; set; }
+    }
+
+    public class GetFileStatisticsEventArgs : ScanCompletedEventArgs
+    { 
         public IFilesStatistics FilesStatistics { get; set; }
         public int DistinctFileFound { get; set; }
     }
@@ -114,19 +119,7 @@ namespace APTAT.Application.Services
             UserState = userState;
         }
     }
-
-    public class ScanProgressChangedEventArgs : DomainEventArgs
-    {
-        public double Percentage { get; private set; }
-        public Guid OperationGuid { get; private set; }
-
-        public ScanProgressChangedEventArgs(double percentage, Guid operationGuid)
-        {
-            Percentage = percentage;
-            OperationGuid = operationGuid;
-        }
-    }
-
+    
     public enum ReportKind
     {
         Executive,
@@ -143,19 +136,21 @@ namespace APTAT.Application.Services
         event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
-        event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-        event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;   
+        event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted; 
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
-        void BeginScan(DeploymentTarget[] items, String login, String password, Object userState,
+        void BeginScan(DeploymentTarget[] items, Object userState,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
-        void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
+        void BuildReport(ReportKind reportKind, Object userState);
         void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, 
             string camPassword, NetworkCredential networkCredential);
+        double GetProgressOfOperations(HashSet<Guid> operationUids);
+        GetFileStatisticsEventArgs GetCurrentStatistics();
+
         string GetValkyrieDetailsLink();
     }
 }

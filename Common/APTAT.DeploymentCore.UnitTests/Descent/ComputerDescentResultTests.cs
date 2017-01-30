@@ -11,8 +11,10 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
     {
         private readonly IComputer _computer;
         private readonly Guid _computerUid;
+        private readonly Guid _operationUid;
         public ComputerDescentResultTests()
         {
+            _operationUid = Guid.NewGuid();
             _computer = Mock.Create<IComputer>(Behavior.Strict);
             _computerUid = Guid.NewGuid();
             Mock.Arrange(() => _computer.Uid).Returns(_computerUid);
@@ -21,7 +23,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
         public void ConstructorInitTest()
         {
             var time = DateTime.UtcNow;
-            var target = new ComputerDescentResult(_computer);
+            var target = new ComputerDescentResult(_computer, _operationUid);
             Assert.Equal(_computer, target.Computer);
             Assert.Equal(_computerUid, target.TargetUid);
             Assert.Equal(FormattedText.Empty, target.StatusMessage);
@@ -32,13 +34,14 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Assert.False(target.Completed);
             Assert.False(target.Succeeded);
             Assert.Equal(0, target.Percentage);
+            Assert.Equal(_operationUid, target.OperationUid);
             //Assert.True(target.Modified > time);
         }
 
         [Fact]
         public void InvalidTest()
         {
-            var target = new ComputerDescentResult(_computer);
+            var target = new ComputerDescentResult(_computer, _operationUid);
             //var time = target.Modified;
             DescentStatus status = DescentStatus.status_agent_timeout;
             string shortErrorText = "short error message";
@@ -62,7 +65,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
         [Fact]
         public void UpdateStatusWithOpeationResultTest()
         {
-            var target = new ComputerDescentResult(_computer);
+            var target = new ComputerDescentResult(_computer, _operationUid);
             //var time = target.Modified;
             var errorCode = DescentStatus.status_agent_timeout.ToString();
             var succeeded = true;
@@ -105,7 +108,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
         [InlineData(SystemKind.Windows7 | SystemKind.IsIntelX64Edition)]
         public void SetSystemKindTest(SystemKind systemKind)
         {
-            var target = new ComputerDescentResult(_computer);
+            var target = new ComputerDescentResult(_computer, _operationUid);
             var time = target.Modified;
 
             Mock.ArrangeSet(() => _computer.SystemKind = systemKind).OccursOnce();
@@ -119,7 +122,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
         [InlineData("Finishing...", 60)]
         public void UpdateStatusWithProgress(string statusMessage, int percentage)
         {
-            var target = new ComputerDescentResult(_computer);
+            var target = new ComputerDescentResult(_computer, _operationUid);
             var time = target.Modified;
             var statusMessageFormatted = new FormattedText(new ResourceText(statusMessage, statusMessage));
 

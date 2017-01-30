@@ -38,8 +38,7 @@ namespace APTAT.Application.Models
         protected override void InvokeViewLoaded(Object arg)
         {
             base.InvokeViewLoaded(arg);
-
-            Guid operationGuid = _storage.GetValue<Guid>(KnownKeys.OperationGuid, false);
+            
             ReportKind kind = _storage.GetValue<ReportKind>(KnownKeys.ReportKind, false);
 
             if(kind == ReportKind.DetailedPerProgram || kind == ReportKind.DetailedPerProgramWithValkyrie)
@@ -57,7 +56,7 @@ namespace APTAT.Application.Models
 
             _aptService.BuildReportCompleted += OnBuildReportCompleted;
             IsBusy = true;
-            _aptService.BuildReport(operationGuid, kind, this);
+            _aptService.BuildReport(kind, this);
         }
 
         protected override void InvokeViewUnloaded(Object arg)

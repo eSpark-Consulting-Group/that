@@ -4,10 +4,11 @@ using System.Linq;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
+using APTAT.Common;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptScanOperationContext : DescentResult, IAptScanMergeableOperationContext
+    public class AptScanOperationContext : DescentResult, IAptScanOperationContext
     {
         private readonly Guid _sessionId = Guid.NewGuid();
 
@@ -17,6 +18,20 @@ namespace APTAT.Core.Descent.Apt
         {
         }
         public DateTime Started { get { return StartTime; } }
+
+        private readonly object _sync = new object();
+
+        public override void Changed(params ChangesTrackingItem[] items)
+        {
+            base.Changed(items);
+            if (items == null) return;
+            OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
+            {
+                Percentage = CalculateTotalPercentage(),
+                ProgressItems = items.Select(c => c.ChangedItem).OfType<IDescentProgressItem>().ToArray(),
+                OperationUid = OperationUid
+            });
+        }
 
         public override Guid SessionId
         {
@@ -33,56 +48,16 @@ namespace APTAT.Core.Descent.Apt
             get { return ResultsByUid.Values.OfType<IAptScanResult>(); }
         }
 
-        protected override void UpdateStatus(IComputerDescentResultInternal result, IDescentProgressItem item)
+        public IAptScanResult GetAptResultByTargetUid(Guid targetUid)
         {
-            base.UpdateStatus(result, item);
-
-            if (MergeOperationProgressAction != null)
-                MergeOperationProgressAction(item);
-            else
-                OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
-                {
-                    Percentage = CalculateTotalPercentage(),
-                    ProgressItems = new[] { item },
-                    OperationUid = OperationUid
-                });
+            var result = GetComputerDescentResultByTargetUid(targetUid);
+            if (result is IAptScanResult)
+            {
+                return (IAptScanResult) result;
+            }
+            return null;
         }
 
-        protected override void UpdateStatus(IComputerDescentResultInternal result, IOperationDescentResult item)
-        {
-            base.UpdateStatus(result, item);
-
-            MergeOperationResultAction?.Invoke(item);
-        }
-
-        public Action<IDescentProgressItem> MergeOperationProgressAction { get; set; }
-
-        public Action<IOperationDescentResult> MergeOperationResultAction { get; set; }
-
-        public void MergeOperationProgress(IDescentProgressItem progress, Func<Guid, IComputerDescentResult> func)
-        {
-            var item = ResultsByUid.GetOrAdd(progress.ComputerUid,
-                _ => (IComputerDescentResultInternal)func(_));
-
-            if (item != null)
-                UpdateStatus(item, progress);
-        }
-
-        public void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func)
-        {
-            ResultsByUid[result.ComputerUid] = (IComputerDescentResultInternal)func(result.ComputerUid);
-            CalculateOperationStatistics();
-        }
-
-        public void CalculateOperationStatistics()
-        {
-            int failed, notPerformed, succeeded, total, canceled;
-            StatisticsCalculator.CalculateOperationStatistics(ScanResults, out failed, out notPerformed, out succeeded, out total, out canceled);
-            SucceededTargetsCount = succeeded;
-            FailedTargetsCount = failed;
-            NotPerformedTargetsCount = TotalTargetsCount - total;
-            CanceledTargetsCount = canceled;
-        }
 
         private double CalculateTotalPercentage()
         {
@@ -93,25 +68,20 @@ namespace APTAT.Core.Descent.Apt
             var total = onlineScanResults.Count() * 100;
             var current = onlineScanResults.Sum(scanResult => scanResult.Percentage);
 
-            return current / total * 100d;
+            return (double)current / total * 100d;
         }
 
         public event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;
         private void OnOperationProgressChanged(AptOperationProgressChangedEventArgs args)
         {
             OperationProgressChanged?.Invoke(this,args);
-        }
-
-        public IFilesStatistics CalculateFilesStatistics()
-        {
-            return StatisticsCalculator.CalculateFilesStatistics(ScanResults);
-        }
+        }       
 
         private sealed class AptComputerDescentResultFactory : IComputerDescentResultFactory
         {
-            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer)
+            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid)
             {
-                return new AptScanResult(computer);
+                return new AptScanResult(computer, operationUid);
             }
         }
     }

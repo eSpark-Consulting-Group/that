@@ -27,7 +27,7 @@ namespace APTAT.Application.Models
 {
     public sealed class MainViewViewModel : ViewModel, IMainViewModel
     {
-        public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
+        public event EventHandler<Services.GetFileStatisticsEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
         public event EventHandler ValkyrieAnalyzeStarted;
         public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieFile>> ValkyrieAnalyzeCompleted;
@@ -48,7 +48,8 @@ namespace APTAT.Application.Models
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
-        private Guid _operationGuid;
+        private HashSet<Guid> _operationGuids;
+        private HashSet<Guid> _runningOperationGuids;
         private DeploymentItem[] _selectedTargets;
 
         private Boolean _isReportEnabled;
@@ -79,7 +80,7 @@ namespace APTAT.Application.Models
         private Collection<ValkyrieComputer> _cacheValkyrieComputers;
 
         private DispatcherTimer _scanIteratorTimer;
-        private ConcurrentDictionary<Guid, ScanProgressItem> _scanIterator;
+        private ConcurrentDictionary<Guid, ScanProgressItem> _scanIterator = new ConcurrentDictionary<Guid, ScanProgressItem>();
 
         public string Uri { get; set; } = "/Views/EULAView.xaml";
 
@@ -601,8 +602,10 @@ namespace APTAT.Application.Models
             {
                 _groupByFiles = value;
                 _groupByComputers = !value;
-                RaisePropertyChanged("GroupByFiles");
-                RaisePropertyChanged("GroupByComputers");
+                SelectedItems = new List<ThreatInfoItem>();
+                SelectedItem = null;
+                RaisePropertyChanged(nameof(GroupByFiles));
+                RaisePropertyChanged(nameof(GroupByComputers));
             }
         }
 
@@ -614,8 +617,8 @@ namespace APTAT.Application.Models
             {
                 _groupByFiles = !value;
                 _groupByComputers = value;
-                RaisePropertyChanged("GroupByFiles");
-                RaisePropertyChanged("GroupByComputers");
+                RaisePropertyChanged(nameof(GroupByFiles));
+                RaisePropertyChanged(nameof(GroupByComputers));
             }
         }
 
@@ -637,6 +640,8 @@ namespace APTAT.Application.Models
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
             IAptService aptService, IStorageService storage)
         {
+            _operationGuids = new HashSet<Guid>();
+            _runningOperationGuids = new HashSet<Guid>();
             _aptService = aptService;
             _targetsDiscoveryService = targetsDiscoveryService;
 
@@ -647,6 +652,9 @@ namespace APTAT.Application.Models
                 Set(() => Uri, "/Views/MainView.xaml");
                 OnLoaded();
             });
+            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
+            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
+            _scanIteratorTimer.Tick += IterateThroughScan;
 
             StartScanCommand = new DelegateCommand(o =>
                 AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
@@ -703,17 +711,7 @@ namespace APTAT.Application.Models
 
             ScanOptions options;
             CustomScanOptions customScanOptions = null;
-            if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
-            {
-                customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
-                scanKind = ScanKind.Custom;
-                options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
-                    customScanOptions.ScanCriticalAreas);
-            }
-            else
-            {
-                options = new ScanOptions(_tcpPort, _udpPort, scanKind);
-            }
+
 
             var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
             var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
@@ -730,10 +728,20 @@ namespace APTAT.Application.Models
                     items.Add(item);
                 }
             }
-
-            _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(), login, password,
+            if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+            {
+                customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                scanKind = ScanKind.Custom;
+                options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
+                    customScanOptions.ScanCriticalAreas, login, password, true);
+            }
+            else
+            {
+                options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+            }
+            _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
                 this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
-
+            UpdateStatus();
             if (!IsScanInProgress.GetValueOrDefault())
             {
                 IsScanInProgress = true;
@@ -837,7 +845,6 @@ namespace APTAT.Application.Models
             _aptService.ScanStatusChanged += OnScanStatusChanged;
             _aptService.ComputerScanCompleted += OnComputerScanCompleted;
             _aptService.ScanCompleted += OnScanCompleted;
-            _aptService.ScanProgressChanged += OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
             _aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             _aptService.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
@@ -861,7 +868,8 @@ namespace APTAT.Application.Models
                     newVerdict = ValkyrieVerdict.Clean;
 
                 var items = _cache.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
-                foreach (var threatInfoItem in _cache)
+                
+                foreach (var threatInfoItem in items)
                 {
                     threatInfoItem.UpdateFileVerdict(result.Cloud);
                 }
@@ -1191,7 +1199,6 @@ namespace APTAT.Application.Models
             _aptService.ScanStatusChanged -= OnScanStatusChanged;
             _aptService.ComputerScanCompleted -= OnComputerScanCompleted;
             _aptService.ScanCompleted -= OnScanCompleted;
-            _aptService.ScanProgressChanged -= OnScanProgressChanged;
             _aptService.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             _aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
             _aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
@@ -1200,8 +1207,13 @@ namespace APTAT.Application.Models
 
         private void OnScanCompleted(Object sender, Services.ScanCompletedEventArgs e)
         {
+            _runningOperationGuids.Remove(e.OperationUid);
+            if (_runningOperationGuids.Any())
+                return;
+            var statistics = _aptService.GetCurrentStatistics();
             ScanCompleted();
-            ScanProcessCompleted?.Invoke(this, e);
+            if(!IsValkyrieAnalysCompleted)
+                ScanProcessCompleted?.Invoke(this, statistics);
         }
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
@@ -1256,15 +1268,15 @@ namespace APTAT.Application.Models
                     customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
                     scanKind = ScanKind.Custom;
                     options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
-                        customScanOptions.ScanCriticalAreas);
+                        customScanOptions.ScanCriticalAreas, Login, Password);
                 }
                 else
                 {
-                    options = new ScanOptions(_tcpPort, _udpPort, scanKind);
+                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password);
                 }
                 options.ScanInit = true;
 
-                _aptService.BeginScan(e.Items, Login, Password, this, 
+                _aptService.BeginScan(e.Items, this, 
                     _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             }
@@ -1276,18 +1288,20 @@ namespace APTAT.Application.Models
 
         private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
         {
-            if (e.RescanAttempt)
-                return;
+            if (!e.RescanAttempt)
+            {
+                _runningOperationGuids.Clear();
+                _operationGuids.Clear();
+                _scanIterator.Clear();
+                IsValkyrieAnalysCompleted = false;
+            }
+            if (!_runningOperationGuids.Any())
+                _operationGuids.Clear();
+            _runningOperationGuids.Add(e.OperationGuid);
+            _operationGuids.Add(e.OperationGuid);
 
-            _operationGuid = e.OperationGuid;
-
-            _scanIterator = new ConcurrentDictionary<Guid, ScanProgressItem>();
-            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
-            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
-            _scanIteratorTimer.Tick += IterateThroughScan;
             _scanIteratorTimer.Start();
 
-            IsValkyrieAnalysCompleted = false;
         }
 
         private void ScanCompleted()
@@ -1296,7 +1310,6 @@ namespace APTAT.Application.Models
             IsScanInProgress = false;
             ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
             IsReportEnabled = ScannedItemsCount > 0;
-            _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             UpdateStatus();
         }
 
@@ -1334,26 +1347,16 @@ namespace APTAT.Application.Models
                     networkCredential);
                 return true;
             }
-
             return false;
-        }
-
-        private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
-        {
-            if (_operationGuid == e.OperationGuid && !CancelInProgress)
-            {
-                Percentage = e.Percentage;
-                RaisePropertyChanged("Header");
-            }
         }
 
         private void OnScanStatusChanged(Object sender, ScanStatusChangedEventArgs e)
         {
-
             foreach (var scan in e.ScanProgress)
-                if (_operationGuid == scan.OperationUid)
+                if (_operationGuids.Contains(scan.OperationUid))
                     _scanIterator[scan.ComputerGuid] = scan;
-            
+            Percentage = _aptService.GetProgressOfOperations(_operationGuids);
+            RaisePropertyChanged(nameof(Header));
         }
 
         private void IterateThroughScan(object sender, EventArgs e)
@@ -1373,60 +1376,65 @@ namespace APTAT.Application.Models
             {
                 ScanProgressItem scanProgress = null;
                 _scanIterator.TryRemove(infoItem.ComputerGuid, out scanProgress);
-
-
-                if (infoItem.ScanStage != ScanStage.OperationFailed &&
-                    infoItem.ScanStage != ScanStage.OperationCompleted &&
-                    infoItem.ScanStage != ScanStage.OperationCanceled)
+                lock (infoItem)
                 {
-                    if (scanProgress != null)
+
+                    if (infoItem.ScanStage != ScanStage.OperationFailed &&
+                        infoItem.ScanStage != ScanStage.OperationCompleted &&
+                        infoItem.ScanStage != ScanStage.OperationCanceled)
                     {
-                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
-                        infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                        infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
-                        infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                        infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
-                        infoItem.StatusMessageSystem = scanProgress.StatusMessage;
-                        infoItem.ScanStage = scanProgress.ScanStage;
+                        if (scanProgress != null)
+                        {
+                            infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                            infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                            infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                            infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
+                            infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
+                            infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
+                            infoItem.StatusMessageSystem = scanProgress.StatusMessage;
+                            infoItem.ScanStage = scanProgress.ScanStage;
+                        }
                     }
+                    if (infoItem.ScanStage == ScanStage.OperationFailed ||
+                        infoItem.ScanStage == ScanStage.OperationCompleted ||
+                        infoItem.ScanStage == ScanStage.OperationCanceled)
+                        completed++;
+
+                    if (infoItem.ScanStage == ScanStage.OperationCompleted)
+                        scanned++;
+
+                    if (infoItem.ScanStage == ScanStage.OperationCanceled && !CancelInProgress)
+                        continue;
+
+                    unknownFiles += infoItem.UnknownFilesCount;
+                    malwareFiles += infoItem.MalwareFilesCount;
+                    lookupInProgressCount += infoItem.FailedToAnalyzeCount;
+                    lookupInProgressCount += infoItem.NoVerdictFilesCount;
                 }
-                if (infoItem.ScanStage == ScanStage.OperationFailed ||
-                    infoItem.ScanStage == ScanStage.OperationCompleted ||
-                    infoItem.ScanStage == ScanStage.OperationCanceled)
-                    completed++;
-
-                if (infoItem.ScanStage == ScanStage.OperationCompleted)
-                    scanned++;
-
-                if (infoItem.ScanStage == ScanStage.OperationCanceled && !CancelInProgress)
-                    continue;
-
-                unknownFiles += infoItem.UnknownFilesCount;
-                malwareFiles += infoItem.MalwareFilesCount;
-                lookupInProgressCount += infoItem.FailedToAnalyzeCount;
-                lookupInProgressCount += infoItem.NoVerdictFilesCount;
 
             }
-
-            //if (unknownFiles > UnknownFilesCount)
+            if (!IsValkyrieAnalysCompleted)
             {
                 UnknownFilesCount = unknownFiles;
+                MalwareFilesCount = malwareFiles;
+
+            }
+            ScannedItemsCount = scanned;
+            LookupInProgressCount = lookupInProgressCount;
+            //if (unknownFiles > UnknownFilesCount)
+            {
             }
 
             //if (malwareFiles > MalwareFilesCount)
             {
-                MalwareFilesCount = malwareFiles;
             }
 
             //if (lookupInProgressCount > LookupInProgressCount)
             {
-                LookupInProgressCount = lookupInProgressCount;
             }
 
             //if (scanned > ScannedItemsCount)
             {
-                ScannedItemsCount = scanned;
             }
 
             if (completed != OnlineItemsCount)
@@ -1456,11 +1464,13 @@ namespace APTAT.Application.Models
                 lookupInProgressCount += infoItem.FailedToAnalyzeCount;
                 lookupInProgressCount += infoItem.NoVerdictFilesCount;
             }
-
-
-            UnknownFilesCount = unknownFiles;
-            MalwareFilesCount = malwareFiles;
             LookupInProgressCount = lookupInProgressCount;
+
+            if (!IsValkyrieAnalysCompleted)
+            {
+                UnknownFilesCount = unknownFiles;
+                MalwareFilesCount = malwareFiles;
+            }
 
             RaisePropertyChanged(nameof(Header));
         }
@@ -1470,48 +1480,50 @@ namespace APTAT.Application.Models
             var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
             if (parentItem == null)
                 return;
-
-
-            parentItem.ScanStage = e.ScanResult.ScanStage;
-            parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
-
-            if (e.ScanResult.BadFiles != null)
+            lock (parentItem)
             {
-                foreach (var badFile in e.ScanResult.BadFiles)
+
+                parentItem.ScanStage = e.ScanResult.ScanStage;
+                parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
+
+                if (e.ScanResult.BadFiles != null)
                 {
-                    var item = new ThreatInfoItem(badFile);
-                    parentItem.Items.Add(item);
-                    item = new ThreatInfoItem(badFile);
-
-                    var exist = _cache.FirstOrDefault(_ =>
-                        _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
-                        _.IsMalware == item.IsMalware);
-                    var comp = new ThreatInfoItem
+                    foreach (var badFile in e.ScanResult.BadFiles)
                     {
-                        IpAddress = parentItem.IpAddress,
-                        ComputerGuid = e.ScanResult.TargetUid,
-                        Name = parentItem.Name,
-                        ShortName = item.Name,
-                        IsRootItem = true
-                    };
+                        var item = new ThreatInfoItem(badFile);
+                        parentItem.Items.Add(item);
+                        item = new ThreatInfoItem(badFile);
 
-                    if (exist != null)
-                        exist.Computers.Add(comp);
-                    else
-                    {
-                        item.Computers = new Collection<ThreatInfoItem>();
-                        item.Computers.Add(comp);
-                        _cache.Add(item);
-                        Items.Add(item);
+                        var exist = _cache.FirstOrDefault(_ =>
+                            _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
+                            _.IsMalware == item.IsMalware);
+                        var comp = new ThreatInfoItem
+                        {
+                            IpAddress = parentItem.IpAddress,
+                            ComputerGuid = e.ScanResult.TargetUid,
+                            Name = parentItem.Name,
+                            ShortName = item.Name,
+                            IsRootItem = true
+                        };
+
+                        if (exist != null)
+                            exist.Computers.Add(comp);
+                        else
+                        {
+                            item.Computers = new Collection<ThreatInfoItem>();
+                            item.Computers.Add(comp);
+                            _cache.Add(item);
+                            Items.Add(item);
+                        }
                     }
+
+                    if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
+                        parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
+
+                    parentItem.Items = parentItem.Items;
+                    parentItem.UpdateStatus();
+                    UpdateStatus();
                 }
-
-                if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
-                    parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
-
-                parentItem.Items = parentItem.Items;
-                parentItem.UpdateStatus();
-                UpdateStatus();
             }
         }
 

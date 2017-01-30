@@ -77,7 +77,7 @@ namespace APTAT.Application
             error.ShowDialog();
         }
 
-        private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
+        private void OnScanCompleted(Object sender, GetFileStatisticsEventArgs e)
         {
             if (_onCompletedAction != null)
             {

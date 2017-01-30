@@ -247,7 +247,28 @@ namespace APTAT.Core.Descent.Apt
 
         //[XmlIgnore]
         //public Valkyrie.Client.AnalysisResult ValkyrieAnalysisResult { get; set; }
+        public override bool Equals(object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
 
+            // If parameter cannot be cast to Point return false.
+            var other = obj as Module;
+            if ((object)other == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return Sha1.Equals(other.Sha1, StringComparison.OrdinalIgnoreCase);
+        }
+        public override int GetHashCode()
+        {
+            return Sha1.GetHashCode();
+        }
 
     }
 

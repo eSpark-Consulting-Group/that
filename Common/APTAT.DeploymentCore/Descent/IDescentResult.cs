@@ -15,7 +15,7 @@ namespace APTAT.DeploymentCore.Descent
         DateTime? CompletedTime { get; }
         IDevicesSourceDescription DevicesSourceDescription { get; }
 
-        event Action DescentCompleted;
+        event EventHandler<IDescentResult> DescentCompleted;
         event EventHandler<IComputerDescentResult> ComputerDescentCompleted;
 
         List<IComputerDescentResult> ComputerDescentResults { get; }

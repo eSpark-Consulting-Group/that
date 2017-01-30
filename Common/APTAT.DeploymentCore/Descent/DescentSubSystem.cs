@@ -70,18 +70,18 @@ namespace APTAT.DeploymentCore.Descent
 	        }
 	    }
 
-	    public void StartScan(IScanner scanner, Action<Guid> guidAcquired)
+	    public void StartScan(IScanner scanner, out Guid operationUid)
 	    {
             var result = scanner.ValidateAndGetResult();
             if (result.TotalTargetsCount == 0)
                 throw new NoAvailableTargetsException();
-            var operationUid = result.OperationUid;
+            var operationUidInternal = operationUid = result.OperationUid;
             lock (_descentResults)
             {
                 _descentResults[result.OperationUid] = result;
             }
-            Action wholeDescentCompletedDelegate = null;
-            wholeDescentCompletedDelegate = () =>
+            EventHandler<IDescentResult> wholeDescentCompletedDelegate = null;
+            wholeDescentCompletedDelegate = (s,e) =>
             {
                 LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
                     "ScanCompleted event raised. Operation UID: {0}", result.OperationUid);
@@ -89,14 +89,12 @@ namespace APTAT.DeploymentCore.Descent
                 result.DescentCompleted -= wholeDescentCompletedDelegate;
                 OnDescentCompleted(scanner.GetDescentCompletedEventArgs(result));
                 IScanner sc;
-                _scanners.TryRemove(operationUid, out sc);
+                _scanners.TryRemove(operationUidInternal, out sc);
                 sc.Dispose();
-
             };
             _tracker.RegisterListener(result);
             result.DescentCompleted += wholeDescentCompletedDelegate;
             _scanners.TryAdd(operationUid, scanner);
-            guidAcquired?.Invoke(operationUid);
             scanner.StartScan(_tracker,result);
         }
 

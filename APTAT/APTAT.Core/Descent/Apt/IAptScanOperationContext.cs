@@ -18,19 +18,6 @@ namespace APTAT.Core.Descent
         DateTime Started { get; }
         IEnumerable<IAptScanResult> ScanResults { get; }
         event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;
-        IFilesStatistics CalculateFilesStatistics();
-        void CalculateOperationStatistics();
-
-    }
-
-    public interface IAptScanMergeableOperationContext : IAptScanOperationContext
-    {
-        Action<IDescentProgressItem> MergeOperationProgressAction { get; set; }
-        Action<IOperationDescentResult> MergeOperationResultAction { get; set; }
-
-        void MergeOperationProgress(IDescentProgressItem progress, Func<Guid, IComputerDescentResult> func);
-
-        void MergeOperationResult(IOperationDescentResult result, Func<Guid, IComputerDescentResult> func);
     }
 
     public class AptOperationProgressChangedEventArgs : OperationProgressChangedEventArgs

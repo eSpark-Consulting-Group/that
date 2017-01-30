@@ -91,6 +91,7 @@ namespace APTAT.Application.Models
             BadFile.Cloud = verdict;
             IsUnknown = BadFile.IsUnknown;
             IsMalware = BadFile.IsMalware;
+            
             Clean = BadFile.Cloud == CloudVerdict.Safe;
             RaisePropertyChanged(nameof(Failed));
         }

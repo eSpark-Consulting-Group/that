@@ -2,16 +2,19 @@
 {
     public class ScanOptions
     {
-        public ScanOptions(string tcpPort, string udpPort, ScanKind scanKind)
+        public ScanOptions(string tcpPort, string udpPort, ScanKind scanKind, string login, string password, bool isRescan = false)
         {
             ScanPaths = new string[] { };
             TcpPort = tcpPort;
             UdpPort = udpPort;
+            Login = login;
+            Password = password;
+            IsRescan = isRescan;
             ScanKind = scanKind;
         }
 
-        public ScanOptions(string tcpPort, string udpPort, string[] paths, bool scanCitical)
-            :this(tcpPort, udpPort, ScanKind.Custom)
+        public ScanOptions(string tcpPort, string udpPort, string[] paths, bool scanCitical, string login, string password, bool isRescan = false)
+            :this(tcpPort, udpPort, ScanKind.Custom, login, password, isRescan)
         {            
             ScanPaths = paths;
             ScanProcesses = scanCitical;
@@ -28,8 +31,10 @@
         //    s.ScanDrivers = scanDrivers;
         //    s.ScanAutoruns = scanAutoruns;
         //    return s;
-        //}
-
+        //}IEnumerable<DeploymentTarget> targets, string login, string password, bool rescanAttempt
+        public bool IsRescan { get; }
+        public string Password { get;  }
+        public string Login { get; }
         public string TcpPort { get; private set; }
         public string UdpPort { get; private set; }
         public string[] ScanPaths { get; private set; }

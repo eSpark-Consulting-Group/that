@@ -10,8 +10,7 @@ using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-
-
+using System.Collections.Generic;
 
 namespace APTAT.Application.Services
 {
@@ -19,7 +18,6 @@ namespace APTAT.Application.Services
     public class AptService : IAptService
     {
         public event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
-        public event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;
         public event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
         public event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
@@ -83,7 +81,7 @@ namespace APTAT.Application.Services
 
 
 
-        public void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState)
+        public void BuildReport(ReportKind reportKind, Object userState)
         {
             IAptReportBuilder reportBuilder = _manager.GetAptReportBuilder();
             reportBuilder.ReportCompleted += OnReportCompleted;
@@ -105,10 +103,10 @@ namespace APTAT.Application.Services
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
-        public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
+        public void BeginScan(DeploymentTarget[] targets, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            IAptScanner scanner = _manager.GetAptScanner(devicesSourceDescription, options);
+            IAptScanner scanner = _manager.GetAptScanner(targets, devicesSourceDescription, options);
 
             if (scanner.ScanOperationContext == null)
             {
@@ -118,7 +116,7 @@ namespace APTAT.Application.Services
                 scanner.ScanCompleted += OnScanCompleted;
             }
 
-            scanner.BeginScan(targets, login, password, scanner.ScanOperationContext != null, userState);
+            scanner.BeginScan(userState);
         }
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
@@ -156,9 +154,31 @@ namespace APTAT.Application.Services
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
+        public double GetProgressOfOperations(HashSet<Guid> operationUids)
+        {
+            var scanResults = _manager.AggregatedScanResults.ScanResults
+                .Where(r => operationUids.Contains(r.OperationUid)).OfType<IAptScanResult>()
+                .Where(r => r.ResultType != Core.ScanResultType.NotPerformed).ToArray();
+            var result = scanResults.Sum(sr => sr.Percentage) / (scanResults.Count() * 100) * 100d;
+            return result;
+        }
+
+        public GetFileStatisticsEventArgs GetCurrentStatistics()
+        {
+            GetFileStatisticsEventArgs args = new GetFileStatisticsEventArgs();
+            var result = _manager.AggregatedScanResults;
+            args.OperationUid = result.OperationUid;
+            args.SuccededCount = result.SucceededTargetsCount;
+            args.CanceledCount = result.CanceledTargetsCount;
+            args.FailedCount = result.FailedTargetsCount;
+            args.NotPerformedCount = result.NotPerformedTargetsCount;
+            args.FilesStatistics = result.CalculateFilesStatistics();
+            args.DistinctFileFound = result.GetDistinctFilesCount();
+            return args;
+        }
+
         private void OnScanInProgress(Object sender, AptScanInProgressEventArgs e)
         {
-            ScanProgressChangedEventArgs args = new ScanProgressChangedEventArgs(e.Percentage, e.OperationUid);
             ScanProgressItem[] scanProgressItems = new ScanProgressItem[e.ProgressItems.Length];
             for (var i = 0; i < e.ProgressItems.Length; ++i)
             {
@@ -193,14 +213,13 @@ namespace APTAT.Application.Services
             Action action = () =>
             {
                 ScanStatusChanged?.Invoke(this, new ScanStatusChangedEventArgs(scanProgressItems, null));
-                ScanProgressChanged?.Invoke(this, args);
             };
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-            Action action = () =>
+          Action action = () =>
             {
                 BeginScanCompletedEventArgs args = new BeginScanCompletedEventArgs(e.OperationUid, e.RescanAttempt, e.State, e.Error);
                 BeginScanCompleted?.Invoke(this, args);
@@ -220,13 +239,11 @@ namespace APTAT.Application.Services
             }
 
             ScanCompletedEventArgs args = new ScanCompletedEventArgs();
+            args.OperationUid = e.OperationUid;
             args.SuccededCount = e.SucceededCount;
             args.CanceledCount = e.CanceledCount;
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
-            args.FilesStatistics = e.FilesStatistics;
-            args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
-            args.DistinctFileFound = _manager.GetDistinctFilesCount();
 
 
             Action action = () =>
@@ -255,7 +272,7 @@ namespace APTAT.Application.Services
             NetworkCredential networkCredential)
         {
             _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName, 
-                camPassword, networkCredential);
+                camPassword, networkCredential, "CDM");
         }
 
         public string GetValkyrieDetailsLink()

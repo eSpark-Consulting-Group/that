@@ -17,7 +17,7 @@ namespace APTAT.Core.Reports
 
         public void BeginLastBuildReport(ReportType reportType, object state = null)
         {
-            var operationContext = _aptAtManager.LastAptScanOperationContext;
+            var operationContext = _aptAtManager.AggregatedScanResults;
             if (operationContext != null)
             {
                 if (!operationContext.CompletedTime.HasValue || operationContext.CompletedTime.Value == DateTime.MinValue)
@@ -25,7 +25,7 @@ namespace APTAT.Core.Reports
                 AptReportData data = new AptReportData
                 {
                     OperationUid = operationContext.OperationUid,
-                    ScanStarted = operationContext.Started.ToLocalTime(),
+                    ScanStarted = operationContext.StartedTime.ToLocalTime(),
                     ScanFinished = (DateTime) operationContext.CompletedTime?.ToLocalTime(),
                     TargetsFailed = operationContext.FailedTargetsCount,
                     TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
@@ -36,7 +36,7 @@ namespace APTAT.Core.Reports
                         .ToDictionary(k => k.Key, k => k.Value, StringComparer.OrdinalIgnoreCase),
                     ValkyrieOperationUid = _aptAtManager.ValkyrieOperationUid,
                     FlsLookupOperationUid = _aptAtManager.FlsLookupOperationUid,
-                    DevicesSourceDescription = operationContext.DevicesSourceDescription
+                    DevicesSourceDescription = operationContext.DeviceSourceDescription
                 };
 
                 ReportBuilder.BuildReportDelegate action = _reportBuilder.Build;

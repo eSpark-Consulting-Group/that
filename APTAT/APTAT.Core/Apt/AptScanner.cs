@@ -11,12 +11,12 @@ namespace APTAT.Core.Apt
 {
     internal class AptScanner : IAptScanner
     {
-        private IAptScanMergeableOperationContext _mainScanOperationContext;
+        private IAptScanOperationContext _scanOperationContext;
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly IDevicesSourceDescription _devicesSourceDescription;
-
-        private ConcurrentDictionary<Guid, object> _rescanOperations;
-        private bool _mainOperationCompleted;
+        private Guid _operationUid;
+        private readonly IEnumerable<DeploymentTarget> _targets;
+            
         
         private readonly ScanOptions _options;
 
@@ -24,112 +24,73 @@ namespace APTAT.Core.Apt
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
         public event EventHandler<ComputerScanCompletedEventArgs> ComputerScanCompleted; 
-        public IAptScanOperationContext ScanOperationContext { get { return _mainScanOperationContext; } }
-        internal AptScanner(IDescentSubSystem descentSubSystem, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+        public IAptScanOperationContext ScanOperationContext { get { return _scanOperationContext; } }
+        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<DeploymentTarget> targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
             _devicesSourceDescription = devicesSourceDescription;
             _descentSubSystem = descentSubSystem;
 
+            _targets = targets;
             _options = options;
-
-            _rescanOperations = new ConcurrentDictionary<Guid, object>();
         }
 
         private void OnDescentCompleted(object sender, DescentEventArgs e)
         {
             var aptScanCompletedEventArgs = e as AptScanCompletedEventArgs;
-            if (aptScanCompletedEventArgs == null) return;
-
-            if (_rescanOperations.ContainsKey(e.OperationUid))
-            {
-                object val;
-                if (_rescanOperations.TryRemove(e.OperationUid, out val) && !_mainOperationCompleted)
-                    return;
-            }
-            else
-                _mainOperationCompleted = true;
-
-            if (_rescanOperations.Count > 0)
-                return;
-
+            if (aptScanCompletedEventArgs == null || e.OperationUid != _operationUid) return;
+            
             _descentSubSystem.DescentCompleted -= OnDescentCompleted;
-            if (_mainScanOperationContext != null)
+            if (_scanOperationContext != null)
             {
-                _mainScanOperationContext.OperationProgressChanged -= scanOperationContext_OperationProgressChanged;
-                _mainScanOperationContext.ComputerDescentCompleted -= ScanOperationContextOnComputerDescentCompleted;
+                _scanOperationContext.OperationProgressChanged -= scanOperationContext_OperationProgressChanged;
+                _scanOperationContext.ComputerDescentCompleted -= ScanOperationContextOnComputerDescentCompleted;
             }
 
             OnScanCompleted(new ScanCompletedEventArgs()
             {
-                OperationUid = _mainScanOperationContext.OperationUid,
-                CanceledCount = _mainScanOperationContext.CanceledTargetsCount,
-                FailedCount = _mainScanOperationContext.FailedTargetsCount,
-                NotPerformedCount = _mainScanOperationContext.NotPerformedTargetsCount,
-                SucceededCount = _mainScanOperationContext.SucceededTargetsCount,
-                TotalCount = _mainScanOperationContext.TotalTargetsCount,
-                FilesStatistics = _mainScanOperationContext.CalculateFilesStatistics()
+                OperationUid = _scanOperationContext.OperationUid,
+                CanceledCount = _scanOperationContext.CanceledTargetsCount,
+                FailedCount = _scanOperationContext.FailedTargetsCount,
+                NotPerformedCount = _scanOperationContext.NotPerformedTargetsCount,
+                SucceededCount = _scanOperationContext.SucceededTargetsCount,
+                TotalCount = _scanOperationContext.TotalTargetsCount,
             });
         }
 
-        public void BeginScan(IEnumerable<DeploymentTarget> targets, string login, string password, bool rescanAttempt, object state = null)
+        public void BeginScan(object state = null)
         {
-            var context = new ScanContext();
-            context.Action = StartScan;
-            context.State = state;
-            context.RescanAttempt = rescanAttempt;
-
-            var args = new ScanContextActionArgs();
-            args.Targets = targets;
-            args.Login = login;
-            args.Password = password;
-            args.GuidAcquired = _ => context.OperationGuid = _;
-
-            _descentSubSystem.DescentCompleted -= OnDescentCompleted;
+            Action action = StartScan;
+            Context context = new Context() { Action = action, State = state };
             _descentSubSystem.DescentCompleted += OnDescentCompleted;
-
-            context.Action.BeginInvoke(args, BeginScanCallback, context);
+            action.BeginInvoke(BeginScanCallback, context);
         }
 
-        private void StartScan(ScanContextActionArgs args)
+        private void StartScan()
         {
-            var scanner = new AptDescentScanner(args.Targets, args.Login, args.Password, _devicesSourceDescription, _options);
-            _descentSubSystem.StartScan(scanner, args.GuidAcquired);
+            Guid operationUid;
+            var scanner = new AptDescentScanner(_targets, _options.Login, _options.Password, _devicesSourceDescription, _options);
+            _descentSubSystem.StartScan(scanner, out operationUid);
+            _operationUid = operationUid;
         }
 
         private void BeginScanCallback(IAsyncResult ar)
         {
-            var context = ar.AsyncState as ScanContext;
+            Context context = ar.AsyncState as Context;
             if (context == null)
                 return;
-
             ScanStartedEventArgs args = new ScanStartedEventArgs();
             try
             {
                 context.Action.EndInvoke(ar);
-                args.OperationUid = context.OperationGuid;
-                args.RescanAttempt = context.RescanAttempt;
+                args.OperationUid = _operationUid;
+                args.RescanAttempt = _options.IsRescan;
                 args.State = context.State;
-
-                var scanOperationContext = (IAptScanMergeableOperationContext)_descentSubSystem.GetDescentResultsByOperationUid(args.OperationUid);
-                if (scanOperationContext != null)
+               
+                _scanOperationContext = (IAptScanOperationContext)_descentSubSystem.GetDescentResultsByOperationUid(args.OperationUid);
+                if (_scanOperationContext != null)
                 {
-                    scanOperationContext.OperationProgressChanged += scanOperationContext_OperationProgressChanged;
-                    scanOperationContext.ComputerDescentCompleted += ScanOperationContextOnComputerDescentCompleted;
-
-                    if (!args.RescanAttempt)
-                        _mainScanOperationContext = scanOperationContext;
-                    else
-                    {
-                        scanOperationContext.MergeOperationProgressAction = _ => 
-                            _mainScanOperationContext.MergeOperationProgress(_, 
-                                scanOperationContext.GetComputerDescentResultByTargetUid);
-
-                        scanOperationContext.MergeOperationResultAction = _ =>
-                            _mainScanOperationContext.MergeOperationResult(_,
-                                scanOperationContext.GetComputerDescentResultByTargetUid);
-
-                        _rescanOperations.TryAdd(args.OperationUid, null);
-                    }
+                    _scanOperationContext.OperationProgressChanged += scanOperationContext_OperationProgressChanged;
+                    _scanOperationContext.ComputerDescentCompleted += ScanOperationContextOnComputerDescentCompleted;                    
                 }
             }
             catch (Exception ex)
@@ -150,7 +111,7 @@ namespace APTAT.Core.Apt
             var result = computerDescentResult as IAptScanResult;
             if (result != null)
             {
-                OnComputerScanCompleted(new ComputerScanCompletedEventArgs(_mainScanOperationContext.OperationUid, 
+                OnComputerScanCompleted(new ComputerScanCompletedEventArgs(_scanOperationContext.OperationUid, 
                     result));
             }
         }
@@ -159,7 +120,7 @@ namespace APTAT.Core.Apt
         {
             OnScanInProgress(new AptScanInProgressEventArgs()
             {
-                OperationUid = _mainScanOperationContext.OperationUid, 
+                OperationUid = _scanOperationContext.OperationUid, 
                 Percentage = e.Percentage,
                 ProgressItems = e.ProgressItems
             });
@@ -184,16 +145,11 @@ namespace APTAT.Core.Apt
         {
             ScanInProgress?.Invoke(this, args);
         }
-
-        internal class ScanContext
+        internal class Context
         {
-            internal Action<ScanContextActionArgs> Action { get; set; }
+            internal Action Action { get; set; }
             internal object State { get; set; }
-
-            internal Guid OperationGuid { get; set; }
-            internal bool RescanAttempt { get; set; }
         }
-
         internal class ScanContextActionArgs
         {
             public IEnumerable<DeploymentTarget> Targets { get; set; }
@@ -201,8 +157,6 @@ namespace APTAT.Core.Apt
             public string Login { get; set; }
 
             public string Password { get; set; }
-
-            public Action<Guid> GuidAcquired { get; set; }
         }
     }
 }

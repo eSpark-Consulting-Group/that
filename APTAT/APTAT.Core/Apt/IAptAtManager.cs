@@ -7,6 +7,8 @@ using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Valkyrie;
 using System.Collections.ObjectModel;
+using APTAT.Core.Apt;
+using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Core
 {
@@ -16,8 +18,9 @@ namespace APTAT.Core
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
+        IAggregatedAptScanResult AggregatedScanResults { get; }
 
-        IAptScanner GetAptScanner(IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+        IAptScanner GetAptScanner(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         IAptReportBuilder GetAptReportBuilder();
 
@@ -28,17 +31,12 @@ namespace APTAT.Core
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential, string productName);
 
         string GetValkyrieDetailsLink();
-        int GetDistinctFilesCount();
-
-
-
     }
 
     internal interface IAptAtManagerInternal : IAptAtManager
     {
         Guid ValkyrieOperationUid { get; }
         Guid FlsLookupOperationUid { get; }
-        IAptScanOperationContext LastAptScanOperationContext { get; }
         ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
     }
 }

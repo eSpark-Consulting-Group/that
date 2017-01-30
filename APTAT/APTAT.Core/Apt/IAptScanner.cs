@@ -8,7 +8,7 @@ namespace APTAT.Core
     public interface IAptScanner
     {
         IAptScanOperationContext ScanOperationContext { get; }
-        void BeginScan(IEnumerable<DeploymentTarget> targets, string login, string password, bool rescanAttempt, object state = null);
+        void BeginScan(object state = null);
 
         event EventHandler<ScanStartedEventArgs> ScanStarted;
         event EventHandler<ScanCompletedEventArgs> ScanCompleted;

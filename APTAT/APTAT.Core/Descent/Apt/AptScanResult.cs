@@ -8,7 +8,7 @@ namespace APTAT.Core.Descent.Apt
 {
     public class AptScanResult : ComputerDescentResult, IAptScanResult
     {
-        public AptScanResult(IComputer computer) : base(computer)
+        public AptScanResult(IComputer computer, Guid operationUid) : base(computer, operationUid)
         {
             ResultType = ScanResultType.InProgress;
         }
@@ -22,11 +22,7 @@ namespace APTAT.Core.Descent.Apt
                 
             }
         }
-
-        public string HostName => Computer?.Name;
-
-        public string IPAddress => Computer?.IPAddress;
-        public string OrganizationUnit => Computer?.OrganizationUnit;
+        
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
@@ -104,12 +100,6 @@ namespace APTAT.Core.Descent.Apt
         public int AutorunsCount { get; set; }
         public string ResultErrorText { get; set; }
         public ScanResultType ResultType { get; set; }
-
-
-        public int BadFilesCount
-        {
-            get { return UnknownFilesCount + MalwareFilesCount; }
-        }
 
         public TargetVerdict TargetVerdict
         {

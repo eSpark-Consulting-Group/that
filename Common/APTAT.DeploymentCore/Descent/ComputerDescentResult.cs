@@ -8,12 +8,14 @@ namespace APTAT.DeploymentCore.Descent
     {
         public Guid TargetUid { get; }
         public IComputer Computer { get; }
-        public ComputerDescentResult( IComputer computer)			
-		{
+        public Guid OperationUid { get; }
+        public ComputerDescentResult(IComputer computer, Guid operationUid)
+        {
             Computer = computer;
             StatusMessage = FormattedText.Empty;
             ShortStatusMessage = FormattedText.Empty;
             ErrorCode = String.Empty;
+            OperationUid = operationUid;
             SystemMessage = String.Empty;
             Modified = DateTime.UtcNow;
             SystemCode = 0;

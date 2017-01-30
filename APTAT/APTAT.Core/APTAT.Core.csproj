@@ -65,9 +65,11 @@
     <Compile Include="$(SolutionDir)CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AptAtManager.cs" />
+    <Compile Include="Apt\AggregatedAptScanResult.cs" />
+    <Compile Include="Apt\AptAtManager.cs" />
     <Compile Include="AptScanInProgressEventArgs.cs" />
-    <Compile Include="AptScanStage.cs" />
+    <Compile Include="Apt\IAggregatedAptScanResult.cs" />
+    <Compile Include="Descent\Apt\AptScanStage.cs" />
     <Compile Include="Apt\AptScanner.cs" />
     <Compile Include="Apt\AptScannerFactory.cs" />
     <Compile Include="Apt\IAptScannerFactory.cs" />
@@ -112,9 +114,9 @@
     <Compile Include="FLS\FlsVerdict.cs" />
     <Compile Include="FLS\IFlsApiProvider.cs" />
     <Compile Include="FLS\IFlsManager.cs" />
-    <Compile Include="IAptAtManager.cs" />
-    <Compile Include="IAptScanner.cs" />
-    <Compile Include="IAptScanOperationContext.cs" />
+    <Compile Include="Apt\IAptAtManager.cs" />
+    <Compile Include="Apt\IAptScanner.cs" />
+    <Compile Include="Descent\Apt\IAptScanOperationContext.cs" />
     <Compile Include="IDistinctFileHelper.cs" />
     <Compile Include="IFilesStatistics.cs" />
     <Compile Include="IFlsResult.cs" />

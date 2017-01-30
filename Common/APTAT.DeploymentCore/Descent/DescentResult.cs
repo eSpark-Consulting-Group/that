@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Messages;
@@ -10,54 +11,53 @@ using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.DeploymentCore.Descent
 {
-	public class DescentResult : IDescentQueryResult
-	{
-        private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks 
+    public class DescentResult : IDescentQueryResult
+    {
+        private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks
             = new ConcurrentDictionary<Guid, Action<TimeSpan>>();
         private readonly IDescentWatcher _descentWatcher;
 
         private readonly Dictionary<Guid, bool> _reportedByUid = new Dictionary<Guid, bool>();
 
-		private readonly object _sync = new object();
+        private readonly object _sync = new object();
 
-	    protected DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
-	        int totalComputersCount, IComputerDescentResultFactory computerDescentResultFactory = null) 
+        protected DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
+            int totalComputersCount, IComputerDescentResultFactory computerDescentResultFactory = null)
             : this(computers, devicesSourceDescription, computerDescentResultFactory)
-	    {
-	        TotalTargetsCount = totalComputersCount;
-	    }
+        {
+            TotalTargetsCount = totalComputersCount;
+        }
 
-        public DescentResult( IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
+        public DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
             IComputerDescentResultFactory computerDescentResultFactory = null, IDescentWatcherFactory descentWatcherFactory = null)
-		{
+        {
             if (descentWatcherFactory == null)
                 descentWatcherFactory = new DescentWatcherFactory();
             if (computerDescentResultFactory == null)
                 computerDescentResultFactory = new ComputerDescentResultFactory();
 
             _descentWatcher = descentWatcherFactory.CreateDescentWatcher(OnDescentTimeout);
-		    DevicesSourceDescription = devicesSourceDescription;
 
-            foreach ( var computer in computers )
-			{
-				var result = computerDescentResultFactory.CreateComputerDescentResult(computer);
-				_reportedByUid[computer.Uid] = false;
-				ResultsByUid.AddOrUpdate(computer.Uid, result, (key, value) => value);
+            DevicesSourceDescription = devicesSourceDescription;
+            OperationUid = Guid.NewGuid();
+            foreach (var computer in computers)
+            {
+                var result = computerDescentResultFactory.CreateComputerDescentResult(computer, OperationUid);
+                _reportedByUid[computer.Uid] = false;
+                ResultsByUid.AddOrUpdate(computer.Uid, result, (key, value) => value);
                 _descentWatcher.AddIdentity(computer.Uid);
             }
-
-			OperationUid = Guid.NewGuid();
-			CompletedTime = null;
+            CompletedTime = null;
             InProgressCount = ResultsByUid.Count(r => !r.Value.Completed);
-		    TotalTargetsCount = ResultsByUid.Count;
-			StartTime = DateTime.UtcNow;
+            TotalTargetsCount = ResultsByUid.Count;
+            StartTime = DateTime.UtcNow;
             _descentWatcher.Start();
         }
 
-	    public interface IDescentWatcherFactory
-	    {
-	        IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeou);
-	    }
+        public interface IDescentWatcherFactory
+        {
+            IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeou);
+        }
         protected sealed class DescentWatcherFactory : IDescentWatcherFactory
         {
             public IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout)
@@ -69,21 +69,20 @@ namespace APTAT.DeploymentCore.Descent
 
         public interface IComputerDescentResultFactory
         {
-            IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer);
+            IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid);
         }
 
-	    protected sealed class ComputerDescentResultFactory : IComputerDescentResultFactory
-	    {
-	        public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer)
-	        {
-	            return new ComputerDescentResult(computer);
-	        }
+        protected sealed class ComputerDescentResultFactory : IComputerDescentResultFactory
+        {
+            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid)
+            {
+                return new ComputerDescentResult(computer, operationUid);
+            }
 
-    	}
+        }
 
         protected ConcurrentDictionary<Guid, IComputerDescentResultInternal> ResultsByUid { get; }
             = new ConcurrentDictionary<Guid, IComputerDescentResultInternal>();
-
 
         public IDevicesSourceDescription DevicesSourceDescription { get; }
         public int InProgressCount { get; private set; }
@@ -91,80 +90,80 @@ namespace APTAT.DeploymentCore.Descent
         public int FailedCount { get; private set; }
         public int TotalTargetsCount { get; }
         public Guid OperationUid { get; }
-		public bool Completed { get { return InProgressCount == 0; } }
-		public DateTime? CompletedTime { get; private set; }
+        public bool Completed { get { return InProgressCount == 0; } }
+        public DateTime? CompletedTime { get; private set; }
         public DateTime StartTime { get; }
 
-		public virtual void OnDescendOperationEvent( bool ok, Guid computerUid, FormattedText errorMessage, 
+        public virtual void OnDescendOperationEvent(bool ok, Guid computerUid, FormattedText errorMessage,
             FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage, bool isCanceled = false)
-		{
-			IOperationDescentResult operationResult;
-			IComputerDescentResultInternal computerDescentResult;
-			if( !ResultsByUid.TryGetValue(computerUid, out computerDescentResult ) )
-			{
-				throw new InvalidOperationException( "Computer result not found by UID " + computerUid);
-			}
-            
-			if( !ok)
-			{
-				operationResult = new OperationDescentResult(computerUid, false, errorMessage, shortStatusMessage, 
+        {
+            IOperationDescentResult operationResult;
+            IComputerDescentResultInternal computerDescentResult;
+            if (!ResultsByUid.TryGetValue(computerUid, out computerDescentResult))
+            {
+                throw new InvalidOperationException("Computer result not found by UID " + computerUid);
+            }
+
+            if (!ok)
+            {
+                operationResult = new OperationDescentResult(false, errorMessage, shortStatusMessage,
                     errorCode, systemMessage, systemCode, isCanceled);
-			}
-			else
-			{
-				operationResult = new OperationDescentResult(computerUid, true, FormattedText.Empty, shortStatusMessage, 
+            }
+            else
+            {
+                operationResult = new OperationDescentResult(true, FormattedText.Empty, shortStatusMessage,
                     String.Empty, String.Empty, 0, isCanceled);
-			}
+            }
 
-			var inprogressCount = ProcessResult(computerUid, operationResult);
+            var inprogressCount = ProcessResult(computerUid, operationResult);
 
-			LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
-				"Computer agent descent {1}{0} operation uid: {2}{0} computer: {3}{0} elapsed: {4}{0} error code: {5} ({6}){0} system message: {7}{0} remaining: {8}{0}",
-				Environment.NewLine, ok ? "SUCCEEDED" : "FAILED", OperationUid, computerDescentResult.Computer.Name, DateTime.UtcNow - StartTime, errorCode, systemCode, systemMessage, inprogressCount);
+            LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
+                "Computer agent descent {1}{0} operation uid: {2}{0} computer: {3}{0} elapsed: {4}{0} error code: {5} ({6}){0} system message: {7}{0} remaining: {8}{0}",
+                Environment.NewLine, ok ? "SUCCEEDED" : "FAILED", OperationUid, computerDescentResult.Computer.Name, DateTime.UtcNow - StartTime, errorCode, systemCode, systemMessage, inprogressCount);
 
-		}
-        
-		private int ProcessResult(Guid uid, IOperationDescentResult operationResult)
-		{
-			int count;
-			var result = ResultsByUid[uid];
-            UpdateStatus(result, operationResult);
-			ResultsByUid[uid] = result;
+        }
 
-		    if (result.Completed)
-		        OnComputerDescentCompleted(result);
+        private int ProcessResult(Guid uid, IOperationDescentResult operationResult)
+        {
+            int count;
+            var result = ResultsByUid[uid];
+            result.UpdateStatus(operationResult);
+            ResultsByUid[uid] = result;
 
-			lock (_sync)
-			{
-				if (result.Completed && !_reportedByUid[uid])
-				{
-					if (result.Succeeded)
-						SucceededCount++;
-					else
-						FailedCount++;
+            if (result.Completed)
+                OnComputerDescentCompleted(result);
+
+            lock (_sync)
+            {
+                if (result.Completed && !_reportedByUid[uid])
+                {
+                    if (result.Succeeded)
+                        SucceededCount++;
+                    else
+                        FailedCount++;
 
                     InProgressCount--;
-					_reportedByUid[uid] = true;
+                    _reportedByUid[uid] = true;
                     _descentWatcher.ExcludeIdentity(uid);
 
                     CheckCompletion();
-				}
-				count = InProgressCount;
-			}
-			return count;
-		}
+                }
+                count = InProgressCount;
+            }
+            return count;
+        }
 
         private void CheckCompletion()
-		{
-			if (InProgressCount == 0 && CompletedTime == null)
-			{
-				CompletedTime = DateTime.UtcNow;
-				LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
-					"Deployment operation completed{0} uid: {1}{0} elapsed: {2}{0} total: {3}{0} succeeded: {4}{0} failed: {5}{0}",
-					Environment.NewLine, OperationUid, CompletedTime.Value - StartTime, ResultsByUid.Count, SucceededCount, FailedCount);
-				OnDescentCompleted();
-			}
-		}
+        {
+            if (InProgressCount == 0 && CompletedTime == null)
+            {
+                CompletedTime = DateTime.UtcNow;
+                LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
+                    "Deployment operation completed{0} uid: {1}{0} elapsed: {2}{0} total: {3}{0} succeeded: {4}{0} failed: {5}{0}",
+                    Environment.NewLine, OperationUid, CompletedTime.Value - StartTime, ResultsByUid.Count, SucceededCount, FailedCount);
+                OnDescentCompleted();
+            }
+        }
 
         public void RegisterTimeoutCallback(Guid agentIdentity, Action<TimeSpan> callback)
         {
@@ -176,7 +175,7 @@ namespace APTAT.DeploymentCore.Descent
             Action<TimeSpan> item;
             _timeoutCallbacks.TryRemove(agentIdentity, out item);
         }
-       
+
 
         protected virtual void OnDescentTimeout(Guid agentIdentity)
         {
@@ -194,49 +193,42 @@ namespace APTAT.DeploymentCore.Descent
             _descentWatcher.ExcludeIdentity(agentIdentity);
         }
 
-		protected virtual void OnDescentCompleted()
-		{
-			DescentCompleted?.Invoke();
-		}
+        protected virtual void OnDescentCompleted()
+        {
+            DescentCompleted?.Invoke(this,this);
+        }
 
-	    protected virtual void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)
-	    {
+        protected virtual void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)
+        {
             ComputerDescentCompleted?.Invoke(this, computerDescentResult);
-	    }
-
-		public event Action DescentCompleted;
-	    public event EventHandler<IComputerDescentResult> ComputerDescentCompleted;
-
-        protected virtual void UpdateStatus(IComputerDescentResultInternal result, IDescentProgressItem item)
-        {
-            result.UpdateStatus(item);
         }
 
-        protected virtual void UpdateStatus(IComputerDescentResultInternal result, IOperationDescentResult item)
-        {
-            result.UpdateStatus(item);
-        }
+        public event EventHandler<IDescentResult> DescentCompleted;
+        public event EventHandler<IComputerDescentResult> ComputerDescentCompleted;
 
         #region IChangeTrackingListener Members
 
-        public virtual void Changed( params ChangesTrackingItem[] items )
-		{
-			foreach( var item in items )
-			{
-				if( item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem )
-				{
-					var progressItem = ( IDescentProgressItem )item.ChangedItem;
+        public virtual void Changed(params ChangesTrackingItem[] items)
+        {
+            foreach (var item in items)
+            {
+                if (item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
+                {
+                    var progressItem = (IDescentProgressItem)item.ChangedItem;
                     if (progressItem.OperationUid == OperationUid && ResultsByUid.ContainsKey(progressItem.ComputerUid))
                     {
                         var originalResult = ResultsByUid[progressItem.ComputerUid];
                         if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 ||
                             originalResult.StatusMessage != progressItem.StatusMessage)
-                            UpdateStatus(originalResult, progressItem);
+                        {
+
+                            originalResult.UpdateStatus(progressItem);
+                        }
                         _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                     }
                 }
-			}
-		}
+            }
+        }
 
 
         public List<IComputerDescentResult> ComputerDescentResults
@@ -254,6 +246,6 @@ namespace APTAT.DeploymentCore.Descent
 
         public virtual Guid SessionId { get { return OperationUid; } }
 
-		#endregion
-	}
+        #endregion
+    }
 }
