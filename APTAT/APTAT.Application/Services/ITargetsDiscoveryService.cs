@@ -27,8 +27,7 @@ namespace APTAT.Application.Services
         Task<GetDomainNameResponse> GetCurrentDomainName();
         bool IsLocalAddress(string name);
 
-
-
+        IpAddressWrapper[] GetPrivateAddressRanges();
 
         string GetLoggedInUser();
     }

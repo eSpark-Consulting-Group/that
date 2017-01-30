@@ -104,6 +104,18 @@ namespace APTAT.Application.Services
             return new GetDomainNameResponse(null, e.Error);
         }
 
+        public IpAddressWrapper[] GetPrivateAddressRanges()
+        {
+            var addressList = AddressRangeHelper.GetLocalAddressRange();
+            List<IpAddressWrapper> list = new List<IpAddressWrapper>();
+            foreach (var addr in addressList)
+            {
+                list.Add(new IpAddressWrapper() { Text = addr.Item1.ToString()+"/"+addr.Item2});
+            }
+            return list.ToArray();
+
+        }
+
         public string GetLoggedInUser()
         {
             if (!String.IsNullOrEmpty(Environment.UserDomainName))
