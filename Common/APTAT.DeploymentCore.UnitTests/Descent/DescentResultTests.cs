@@ -37,7 +37,7 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Mock.Arrange(() => Computer2.Name).Returns("comp2");
             Mock.Arrange(() => Computer3.Name).Returns("comp3");
             _computerDescentResultFactory = Mock.Create<DescentResult.IComputerDescentResultFactory>(Behavior.Strict);
-            Mock.Arrange(() => _computerDescentResultFactory.CreateComputerDescentResult(Arg.IsAny<IComputer>()))
+            Mock.Arrange(() => _computerDescentResultFactory.CreateComputerDescentResult(Arg.IsAny<IComputer>(), Arg.AnyGuid))
                 .Returns((IComputer c) =>
                 {
                     var r = Mock.Create<IComputerDescentResultInternal>(Behavior.Strict);

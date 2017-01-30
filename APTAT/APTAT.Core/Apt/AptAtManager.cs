@@ -279,6 +279,11 @@ namespace APTAT.Core
         private readonly Dictionary<string, CloudVerdict> _flsHashResults = new Dictionary<string, CloudVerdict>();
         private readonly IDistinctFileHelper _distinctHelper;
 
+        public int GetDistinctFilesCount()
+        {
+            return AggregatedScanResults.GetDistinctFilesCount();
+        }
+
         private void FlsManagerOnAnalyzed(object sender, FlsRequestEventArgs e)
         {
             if (e.Results.Any())

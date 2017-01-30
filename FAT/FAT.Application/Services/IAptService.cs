@@ -144,7 +144,7 @@ namespace FAT.Application.Services
         event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
         event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
-        void BeginScan(DeploymentTarget[] items, String login, String password, Object userStatem
+        void BeginScan(DeploymentTarget[] items, Object userStatem
             , IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);

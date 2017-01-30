@@ -4,6 +4,7 @@ using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using DDT.Core.Descent;
 using DDT.Application.Models;
+using System.Threading.Tasks;
 
 namespace DDT.Application.Services
 {
@@ -24,8 +25,8 @@ namespace DDT.Application.Services
                 null, deploymentTimeOut, packageX86, packageX64);
             Guid operationUid = Guid.Empty;
             DeploymentStartedEventArgs args = null;
-            _descent.StartScan(scanner, _ => args = new DeploymentStartedEventArgs(_));
-            return args;            
+            _descent.StartScan(scanner, out operationUid);
+            return new DeploymentStartedEventArgs(operationUid);
         }
 
         public GetModifiedComputerResultsForOperationEventArgs GetModifiedComputerResultsForOperation(Guid operationUid, DateTime? lastUtcTime)

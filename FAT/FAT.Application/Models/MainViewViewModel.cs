@@ -1096,14 +1096,14 @@ namespace FAT.Application.Models
                     customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
                     scanKind = ScanKind.Custom;
                     options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
-                        customScanOptions.ScanCriticalAreas);
+                        customScanOptions.ScanCriticalAreas, Login, Password);
                 }
                 else
                 {
-                    options = new ScanOptions(_tcpPort, _udpPort, scanKind);
+                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password);
                 }
 
-                _aptService.BeginScan(e.Items, Login, Password, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _aptService.BeginScan(e.Items, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             }
             else

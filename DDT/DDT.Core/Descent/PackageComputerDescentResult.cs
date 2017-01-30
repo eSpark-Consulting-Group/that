@@ -20,7 +20,7 @@ namespace DDT.Core.Descent
         public string PackageName { get; set; }
         public bool? Is64Bit { get; set; }
 
-        public PackageComputerDescentResult(IComputer computer) : base(computer)
+        public PackageComputerDescentResult(IComputer computer, Guid operationUid) : base(computer, operationUid)
         {
         }
         

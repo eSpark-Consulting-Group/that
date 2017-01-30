@@ -23,6 +23,7 @@ namespace APTAT.Core
         IAptScanner GetAptScanner(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         IAptReportBuilder GetAptReportBuilder();
+        int GetDistinctFilesCount();
 
         void StopScan(Guid[] targets);
         void UpdateFlsPorts(int udpPort, int tcpPort);

@@ -111,15 +111,15 @@ namespace FAT.Application.Services
             App.Current.Dispatcher.BeginInvoke(action);
         }
 
-        public void BeginScan(DeploymentTarget[] targets, String login, String password, Object userState, 
+        public void BeginScan(DeploymentTarget[] targets, Object userState, 
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
-            IAptScanner scanner = _manager.GetAptScanner(devicesSourceDescription, options);
+            IAptScanner scanner = _manager.GetAptScanner(targets, devicesSourceDescription, options);
             scanner.ScanStarted += OnScanStarted;
             scanner.ComputerScanCompleted += OnComputerScanCompleted;
             scanner.ScanInProgress += OnScanInProgress;
             scanner.ScanCompleted += OnScanCompleted;
-            scanner.BeginScan(targets, login, password, scanner.ScanOperationContext != null, userState);
+            scanner.BeginScan(userState);
         }
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)

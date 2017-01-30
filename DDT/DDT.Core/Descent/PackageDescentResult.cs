@@ -3,6 +3,7 @@ using APTAT.Common;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
+using System;
 
 namespace DDT.Core.Descent
 {
@@ -15,9 +16,9 @@ namespace DDT.Core.Descent
 
         protected sealed class PackageComputerDescentResultFactory : IComputerDescentResultFactory
         {
-            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer)
+            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid)
             {
-                return new PackageComputerDescentResult(computer);
+                return new PackageComputerDescentResult(computer, operationUid);
             }
         }
         public override void Changed(params ChangesTrackingItem[] items)
