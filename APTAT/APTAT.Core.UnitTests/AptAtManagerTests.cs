@@ -316,7 +316,7 @@ namespace APTAT.Core.UnitTests
 
             //Valkyrie Client Arange 
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
-            Mock.Arrange(() => valkyrie.StartAnalyze(new CamRegistration("", "", ""), new List<ValkyrieFileInfo>(), "", "", 1, null)).IgnoreArguments();
+            Mock.Arrange(() => valkyrie.StartAnalyze(new CamRegistration("", "", ""), new List<ValkyrieFileInfo>(), "", "", 1, null,"")).IgnoreArguments();
 
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
@@ -384,7 +384,7 @@ namespace APTAT.Core.UnitTests
 
 
 
-            aptAtManagerUnderTest.StartValkyrieAnalysis("user", "test", "licenceNumber", "user", "test", null);
+            aptAtManagerUnderTest.StartValkyrieAnalysis("user", "test", "licenceNumber", "user", "test", null, "");
             Mock.Raise(() => valkyrie.AnalyzeStarted += null, EventArgs.Empty);
             Mock.Raise(() => valkyrie.AnalyzeProgressChanged += null, new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(10, new ProgressInfo<ValkyrieAnalysisResult>(20, 10, new ValkyrieAnalysisResult[] { })));
             Mock.Raise(() => valkyrie.AnalyzeCompleted += null, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(new ValkyrieAnalysisResult[] { }, null, false, null));

@@ -97,7 +97,7 @@ namespace APTAT.DeploymentCore
             return NetHelp.IsLoopbackAddress(nameOrAddress);
         }
 
-        public IPAddress[] GetHostIpAddresses()
+        public IPAddress[] GetLocalAddressRanges()
         {
             string hostName = Dns.GetHostName();
             IPHostEntry iphostentry = Dns.GetHostEntry(hostName);
@@ -499,6 +499,6 @@ namespace APTAT.DeploymentCore
         IPStatus SendPing(string toString);
         IPHostEntry GetHostEntry();
         bool IsLoopbackAddress(string nameOrAddress);
-        IPAddress[] GetHostIpAddresses();
+        IPAddress[] GetLocalAddressRanges();
     }
 }
