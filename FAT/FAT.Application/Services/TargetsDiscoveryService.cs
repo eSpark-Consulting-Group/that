@@ -106,7 +106,7 @@ namespace FAT.Application.Services
 
         public IPAddress[] GetHostIpAddresses()
         {
-            return _networkHelper.GetHostIpAddresses();
+            return _networkHelper.GetLocalAddressRanges();
         }
 
         public string GetLoggedInUser()
