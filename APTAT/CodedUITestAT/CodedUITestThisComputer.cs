@@ -111,10 +111,12 @@ namespace CodedUITestAT
 
         /// <summary> Checks a given file browser tree item using its name in accordance with APTAT.Application.Models.FolderItem. </summary>
         /// <param name="treeItemName">Set a tree item unique name.</param>
-        private void CheckFileBrowserTreeItem(string treeItemName)
+        /// <param name="isChecked">Defines whether a geiven item should be checked or unchecked.</param>
+        private void CheckFileBrowserTreeItem(string treeItemName, bool isChecked = true)
         {
             if (treeItemName.EndsWith(@"\")) treeItemName = treeItemName.Remove(treeItemName.Length - 1);
             UIMapThisComputer.UIUnknownFileHunterWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = treeItemName;
+            UIMapThisComputer.CheckFileBrowserTreeItemParams.UICheckBoxElementCheckBoxChecked = isChecked;
             UIMapThisComputer.CheckFileBrowserTreeItem();
         }
 
@@ -148,6 +150,30 @@ namespace CodedUITestAT
             return paths;
         }
 
+        /// <summary> Verifies checked items in a given list. </summary>
+        /// <param name="items">Set a list.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void VerifyCheckedItems(List<string> items, TestContext testContext)
+        {
+            foreach (var path in items)
+            {
+                if (IsFileBrowserTreeItemChecked(path)) testContext.WriteLine(String.Format(@"Tree item '{0}' is checked as expected.", path));
+                else Assert.Fail(String.Format(@"Tree item '{0}' is not checked, not expected!", path));
+            }
+        }
+
+        /// <summary> Verifies unchecked items in a given list. </summary>
+        /// <param name="items">Set a list.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        private void VerifyUncheckedItems(List<string> items, TestContext testContext)
+        {
+            foreach (var path in items)
+            {
+                if (!IsFileBrowserTreeItemChecked(path)) testContext.WriteLine(String.Format(@"Tree item '{0}' is not checked as expected.", path));
+                else Assert.Fail(String.Format(@"Tree item '{0}' is checked, not expected!", path));
+            }
+        }
+
         #endregion
 
         #region Test methods
@@ -176,7 +202,7 @@ namespace CodedUITestAT
             pathsToAddThreat.AddRange(paths2);
             pathsToAddThreat.AddRange(additinalPaths);
             CopyThreatTo(pathsToAddThreat, unknown);
-
+            
             UIMapThisComputer.ClickCustomScanButton();
             UIHelper.WaitForControl(ScanCriticalAreasCheckBox());
             
@@ -184,32 +210,25 @@ namespace CodedUITestAT
             var itemsToExpand = new List<string>(paths1);
             var paths2cut = new List<string>(paths2);
             paths2cut.Remove(Path.GetPathRoot(fullPath2));
-            itemsToExpand.AddRange(paths2cut);
-            foreach (var path in itemsToExpand) ExpandFileBrowserTreeItem(path);            
+            itemsToExpand.AddRange(paths2cut);            
+            foreach (var path in itemsToExpand) ExpandFileBrowserTreeItem(path);
             CheckFileBrowserTreeItem(additinalPaths[0]);
             CheckFileBrowserTreeItem(additinalPaths[2]);
             CheckFileBrowserTreeItem(paths2[2]);
-
+            
             // Verifies, which items are actually checked
             var uncheckedItems = new List<string>(paths1);
+            
             uncheckedItems.Add(additinalPaths[1]);
             uncheckedItems.Add(paths2[1]);
-            foreach (var path in uncheckedItems)
-            {
-                if (!IsFileBrowserTreeItemChecked(path)) TestContext.WriteLine(String.Format(@"Tree item '{0}' is not checked as expected.", path));
-                else Assert.Fail(String.Format(@"Tree item '{0}' is checked, not expected!", path));
-            }
-
+            VerifyUncheckedItems(uncheckedItems, TestContext);
+            
             var checkedItems = new List<string>();
             checkedItems.Add(additinalPaths[0]);
             checkedItems.Add(additinalPaths[2]);
             checkedItems.Add(paths2[2]);
             checkedItems.Add(paths2[3]);
-            foreach (var path in checkedItems)
-            {
-                if (IsFileBrowserTreeItemChecked(path)) TestContext.WriteLine(String.Format(@"Tree item '{0}' is checked as expected.", path));
-                else Assert.Fail(String.Format(@"Tree item '{0}' is not checked, not expected!", path));
-            }
+            VerifyCheckedItems(checkedItems, TestContext);
 
             UIMapThisComputer.CheckScanCriticalAreasCheckBox();
             UIMapStartScanWizard.ClickNextButton();
@@ -234,6 +253,75 @@ namespace CodedUITestAT
                     TestContext.WriteLine(String.Format("Instance '{0}' not found at {1} screen.", unexpectedFile.Location, ResultsScreen.ScanResults));
                 else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at {1} screen!", unexpectedFile.Location, ResultsScreen.ScanResults));
             }
+            
+            // The second scan
+            UIMapMain.ClickStartScanButton();
+            UIHelper.WaitForControl(ThisComputerButton());
+            UIMapStartScanWizard.ClickThisComputerButton();
+            UIHelper.WaitForControl(CustomScanButton());
+            UIMapThisComputer.ClickCustomScanButton();
+            UIHelper.WaitForControl(ScanCriticalAreasCheckBox());
+            foreach (var path in itemsToExpand) ExpandFileBrowserTreeItem(path);
+
+            // Verifies automatic selection
+            int checkedItemNumber = 3;
+            checkedItems.Clear();
+            uncheckedItems.Clear();
+            CheckFileBrowserTreeItem(paths1[checkedItemNumber]);
+            checkedItems.AddRange(paths1);
+            for (int i = 0; i < checkedItemNumber; i++)
+            {
+                checkedItems.Remove(paths1[i]);
+                uncheckedItems.Add(paths1[i]);
+            }
+            VerifyCheckedItems(checkedItems, TestContext);
+            VerifyUncheckedItems(uncheckedItems, TestContext);
+
+            // Verifies automatic deselection
+            CheckFileBrowserTreeItem(paths1[checkedItemNumber + 1], false);
+            uncheckedItems.AddRange(checkedItems);
+            VerifyUncheckedItems(uncheckedItems, TestContext);
+
+            // Verifies partial automatic deselection and scan results
+            checkedItems.Clear();
+            uncheckedItems.Clear();
+            CheckFileBrowserTreeItem(paths1[checkedItemNumber]);
+            CheckFileBrowserTreeItem(additinalPaths[2], false);
+            checkedItems.Add(additinalPaths[0]);
+            checkedItems.Add(additinalPaths[1]);
+            uncheckedItems.AddRange(paths1);
+            uncheckedItems.AddRange(additinalPaths);
+            uncheckedItems.Remove(additinalPaths[0]);
+            uncheckedItems.Remove(additinalPaths[1]);
+            VerifyCheckedItems(checkedItems, TestContext);
+            VerifyUncheckedItems(uncheckedItems, TestContext);
+            UIMapStartScanWizard.ClickNextButton();
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickNoButton();
+
+            uncheckedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
+
+            // Verifies the expected and unexpected files at 'Scan results' screen            
+            foreach (var path in checkedItems)
+            {
+                var expectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
+                if (UIHelper.IsThereThreatInstance(expectedFile, ResultsScreen.ScanResults))
+                    TestContext.WriteLine(String.Format("Instance '{0}' found at {1} screen.", expectedFile.Location, ResultsScreen.ScanResults));
+                else Assert.Fail(String.Format("Instance '{0}' not found at {1} screen!", expectedFile.Location, ResultsScreen.ScanResults));
+            }
+
+            foreach (var path in uncheckedItems)
+            {
+                var unexpectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
+                if (!UIHelper.IsThereThreatInstance(unexpectedFile, ResultsScreen.ScanResults))
+                    TestContext.WriteLine(String.Format("Instance '{0}' not found at {1} screen.", unexpectedFile.Location, ResultsScreen.ScanResults));
+                else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at {1} screen!", unexpectedFile.Location, ResultsScreen.ScanResults));
+            }
+
+            // A test cleanup
+            Directory.Delete(paths1[1], true);
+            Directory.Delete(paths2[1], true);
+            File.Delete(Path.Combine(paths1[0], unknown.Name));
         }
         
         #endregion
