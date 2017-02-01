@@ -15,9 +15,7 @@ using ThreadingTask = System.Threading.Tasks.Task;
 namespace APTAT.DeploymentCore.Facade.Descent.Commands
 {
 	public class GetTargetsSummaryCommand:
-		ServiceCommand<GetTargetsSummaryRequest, GetTargetsSummaryResponse>,
-		IEqualityComparer<IComputer>,
-		IEqualityComparer<DeploymentTarget>
+		ServiceCommand<GetTargetsSummaryRequest, GetTargetsSummaryResponse>
 	{
         
         private static readonly int MaxConcurrentTasks = Settings.Default.MaxEndpointsAvailabilityResolverConcurrentTasks;
@@ -156,7 +154,7 @@ namespace APTAT.DeploymentCore.Facade.Descent.Commands
 
         private void ResolveAndTest(IEnumerable<IComputer> sourceComputers)
         {
-            IComputer[] uniqueComputers = sourceComputers.Distinct(this).ToArray();
+            IComputer[] uniqueComputers = sourceComputers.Distinct(new ComputerComparer()).ToArray();
 
             if (uniqueComputers.Count() > MaxDeploymentTargets)
                 //throw new FaultException<TooManyTargetsFault>(new TooManyTargetsFault { MaxAllowableTargets = MaxDeploymentTargets });
@@ -267,36 +265,10 @@ namespace APTAT.DeploymentCore.Facade.Descent.Commands
                                   t.Name = t.DnsName.Split('.').First().ToUpper();
                           });
 
-            results = results.Distinct(this).OrderBy(t => t.Name).ToArray();
+            results = results.Distinct(new DeploymentTargetComparer()).OrderBy(t => t.Name).ToArray();
             TargetsHelper.FindEsmServerHost(_networkObserver, results);
             Response.Targets.AddRange(results);
         }
-
-        public bool Equals(IComputer x, IComputer y)
-        {
-            return x.Name == y.Name && x.DnsName == y.DnsName &&
-                (x.IPAddress != null ? x.IPAddress.Equals(y.IPAddress) :
-                 y.IPAddress != null ? y.IPAddress.Equals(x.IPAddress) :
-                 true);
-        }
-
-		public int GetHashCode(IComputer obj)
-		{
-			return 327 ^
-				(obj.Name ?? String.Empty).GetHashCode() ^
-				(obj.DnsName ?? String.Empty).GetHashCode() ^
-				(obj.IPAddress != null ? obj.GetHashCode() : 0);
-		}
-
-		public bool Equals(DeploymentTarget x, DeploymentTarget y)
-		{
-			return x.IPAddress == y.IPAddress || (String.IsNullOrEmpty(x.IPAddress) && String.IsNullOrEmpty(y.IPAddress) && x.Name == y.Name);
-		}
-
-		public int GetHashCode(DeploymentTarget obj)
-		{
-			return !String.IsNullOrEmpty(obj.IPAddress) ? obj.IPAddress.GetHashCode() : obj.Name.GetHashCode();
-		}
 	}
 
     public static partial class MapperHelper

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,25 +9,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using APTAT.Common;
-using APTAT.DeploymentCore.Facade;
 using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.DeploymentCore
 {
-    public interface IComputer
-    {
-        Guid Uid { get; set; }
-        string Name { get; set; }
-        string DnsName { get; set; }
-        string IPAddress { get; set; }
-        bool IsOnline { get; set; }
-        string OrganizationUnit { get; }
-        string LdapPath { get; set; }
-        SystemKind? SystemKind { get; set; }
-        Boolean IsLocalComputer { get; }
-        DeploymentTargetSource Source { get; set; }
-    }
-
     public class NetworkObserver : INetworkObserver
     {
 
@@ -144,8 +129,8 @@ namespace APTAT.DeploymentCore
                     // The following block extracts all the possible IP addresses associated with the current host in DNS.
                     IPHostEntry ipHostEntry = Dns.GetHostEntry(String.Empty);
                     dnsNames = dnsNames.Union(from address in ipHostEntry.AddressList
-                                              where address.AddressFamily == AddressFamily.InterNetwork
-                                              select address.ToString());
+                        where address.AddressFamily == AddressFamily.InterNetwork
+                        select address.ToString());
                 }
 
                 dnsNames = dnsNames.Where(name => !IsLoopbackAddress(name));
@@ -437,7 +422,7 @@ namespace APTAT.DeploymentCore
                 const string dnsNamePattern = @"^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*$";
 
                 return address.Length < 256 // checks total lenght
-                    && Regex.IsMatch(address, atLeastOneLetterPattern) && Regex.IsMatch(address, dnsNamePattern);
+                       && Regex.IsMatch(address, atLeastOneLetterPattern) && Regex.IsMatch(address, dnsNamePattern);
             }
 
             public static bool IsLoopbackAddress(string nameOrAddress)
@@ -445,8 +430,8 @@ namespace APTAT.DeploymentCore
                 if (nameOrAddress == null) throw new ArgumentNullException("nameOrAddress");
                 IPAddress ip;
                 bool isLoopback = IPAddress.TryParse(nameOrAddress, out ip)
-                                      ? IPAddress.IsLoopback(ip)
-                                      : "localhost" == nameOrAddress.ToLowerInvariant();
+                    ? IPAddress.IsLoopback(ip)
+                    : "localhost" == nameOrAddress.ToLowerInvariant();
                 return isLoopback;
             }
 
@@ -456,49 +441,5 @@ namespace APTAT.DeploymentCore
             }
         }
         #endregion
-    }
-    
-
-    
-    public interface INetworkObserver : IService
-    {
-        /// <summary>
-        /// Resolves the specified dnsName to Computer object.
-        /// </summary>
-        /// <param name="dnsName">The Dns name.</param>
-        /// <returns>Computer object</returns>
-        IPAddress[] ResolveIpByDns(string dnsName);
-
-        /// <summary>
-        /// Resolves the specified DnsName to Computer object.
-        /// </summary>
-        /// <param name="address">The IP Address.</param>
-        /// <returns>Computer object</returns>
-        string ResolveDnsByIp(IPAddress address);
-
-        /// <summary>
-        /// Sending ping to specified hostName in async manner
-        /// </summary>
-        /// <param name="hostName">Computername or ip of computer to ping </param>
-        /// <param name="completedCallback">Callback which will be called upon ping completion</param>
-        void SendPingAsync(string hostName, Action<IPStatus, IPAddress> completedCallback);
-
-        /// <summary>
-        /// Attempts TCP connection to port 445 of specified hostName
-        /// </summary>
-        /// <param name="hostName">Computer name or IP</param>
-        /// <returns>True if connection succeeded</returns>
-        bool TestMsDs(string hostName);
-
-        string GetLocalHostName(bool b);
-        string[] GetSupportedExternalAddresses(bool b);
-        string CutDnsSuffixFromHostName(string oldRemoteHostName);
-        IPAddress[] SafeResolveDns(string hostName);
-        bool IsValidDnsName(string hostName);
-        bool IsValidIpAddress(string hostName);
-        IPStatus SendPing(string toString);
-        IPHostEntry GetHostEntry();
-        bool IsLoopbackAddress(string nameOrAddress);
-        IPAddress[] GetLocalAddressRanges();
     }
 }

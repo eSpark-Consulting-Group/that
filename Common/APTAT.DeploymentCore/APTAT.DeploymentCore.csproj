@@ -51,7 +51,9 @@
     <Compile Include="$(SolutionDir)CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ComputerComparer.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
+    <Compile Include="DeploymentTargetComparer.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs" />
     <Compile Include="Descent\ComputerDescentResult.cs" />
     <Compile Include="Descent\DescentEventArgs.cs" />
@@ -87,7 +89,7 @@
     <Compile Include="Descent\OperationProgressChangedEventArgs.cs" />
     <Compile Include="Descent\Scanner.cs" />
     <Compile Include="Descent\WorkgroupObserver.cs" />
-    <Compile Include="DirectorySubSystem.cs" />
+    <Compile Include="IComputer.cs" />
     <Compile Include="Directory\ActiveDirectoryObserver.cs" />
     <Compile Include="Directory\DevicesSourceDescription.cs" />
     <Compile Include="Directory\Discoverers\Discoverers.cs" />
@@ -135,11 +137,13 @@
     <Compile Include="Facade\Descent\MessageContracts\FindTargetsResponse.cs" />
     <Compile Include="Facade\Descent\MessageContracts\GetTargetsSummary.cs" />
     <Compile Include="AddressRangeHelper.cs" />
+    <Compile Include="INetworkObserver.cs" />
     <Compile Include="Messages\ExtendedResourceManager.cs" />
     <Compile Include="Messages\FormattedText.cs" />
     <Compile Include="IActiveDirectoryObserver.cs" />
     <Compile Include="Messages\MessagingSubSystem.cs" />
     <Compile Include="NetworkBrowser.cs" />
+    <Compile Include="NetworkObserver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\ServerSideMessagesResources.cs" />
     <Compile Include="Properties\Settings.cs" />
