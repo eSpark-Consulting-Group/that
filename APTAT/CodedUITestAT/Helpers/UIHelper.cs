@@ -442,6 +442,33 @@ namespace CodedUITestAT
             }
         }
 
+        /// <summary> Checks whether a given threat is absent at a provided results screen. The indicated screen should be opened. </summary>
+        /// <param name="row">Set a threat.</param>
+        /// <param name="resultsScreen">Set a results screen.</param>
+        /// <param name="testContext">Set a current TestContext.</param>
+        internal static void VerifyAbsentThreat(Threat threat, ResultsScreen resultsScreen, TestContext testContext)
+        {
+            CodedUITestMain useMain = new CodedUITestMain();
+
+            GroupByFiles();
+            useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
+            useMain.UIMapMain.InputTextToSearchBox();
+
+            try
+            {
+                WaitForResultsRow(threat, resultsScreen, testContext);
+                useMain.UIMapMain.ClickClearSearchTextButton();
+                GroupByComputers();
+                Assert.Fail(String.Format("Row '{0}' found at screen '{1}', not expected!", threat.RowName, resultsScreen));
+            }
+            catch (UITestControlNotFoundException)
+            {
+                useMain.UIMapMain.ClickClearSearchTextButton();
+                GroupByComputers();
+                testContext.WriteLine(String.Format("Row '{0}' not found at screen '{1}' as expected.", threat.RowName, resultsScreen));
+            }
+        }
+
         /// <summary> Determines whether there is a given threat instance at a defined results screen. </summary>
         /// <param name="threat">Set a threat.</param>
         /// <param name="resultsScreen">Set a results screen.</param>

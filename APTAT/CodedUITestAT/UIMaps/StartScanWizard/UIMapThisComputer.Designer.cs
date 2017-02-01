@@ -81,6 +81,19 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
             uICheckBoxElementCheckBox.Checked = this.CheckFileBrowserTreeItemParams.UICheckBoxElementCheckBoxChecked;
         }
         
+        /// <summary>
+        /// ClickQuickScanButton
+        /// </summary>
+        public void ClickQuickScanButton()
+        {
+            #region Variable Declarations
+            WpfButton uIQuickScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIQuickScanButton;
+            #endregion
+
+            // Click 'Quick Scan' button
+            Mouse.Click(uIQuickScanButton, new Point(98, 135));
+        }
+        
         #region Properties
         public virtual CheckScanCriticalAreasCheckBoxParams CheckScanCriticalAreasCheckBoxParams
         {
@@ -283,12 +296,30 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
                 return this.mUIScancriticalareasofcCheckBox;
             }
         }
+        
+        public WpfButton UIQuickScanButton
+        {
+            get
+            {
+                if ((this.mUIQuickScanButton == null))
+                {
+                    this.mUIQuickScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIQuickScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "QuickScanButton";
+                    this.mUIQuickScanButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIQuickScanButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUICustomScanButton;
         
         private WpfCheckBox mUIScancriticalareasofcCheckBox;
+        
+        private WpfButton mUIQuickScanButton;
         #endregion
     }
     

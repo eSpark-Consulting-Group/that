@@ -323,6 +323,23 @@ namespace CodedUITestAT
             Directory.Delete(paths2[1], true);
             File.Delete(Path.Combine(paths1[0], unknown.Name));
         }
+
+        [TestMethod]
+        public void QuickScanOfThisComputer()
+        {
+            Computer endpoint = DataHelper.GetEndpoint();
+            Malware malware = SysHelper.InfectForScan(endpoint, ScanType.Quick);
+            UnknownFile unknownFileQuick = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Quick);
+            UnknownFile unknownFileFull = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Full);
+
+            UIMapThisComputer.ClickQuickScanButton();
+            WaitForScanCompleted(ScanType.Quick);
+            UIMapScanCompletedWindow.ClickNoButton();
+
+            UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
+            UIHelper.FindThreat(unknownFileQuick, ResultsScreen.ScanResults, TestContext);
+            UIHelper.VerifyAbsentThreat(unknownFileFull, ResultsScreen.ScanResults, TestContext);
+        }
         
         #endregion
 
