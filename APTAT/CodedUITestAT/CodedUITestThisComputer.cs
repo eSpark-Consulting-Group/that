@@ -332,8 +332,10 @@ namespace CodedUITestAT
             UnknownFile unknownFileQuick = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Quick);
             UnknownFile unknownFileFull = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Full);
 
+            TestContext.WriteLine("Quick Scan started at the scanning host...");
             UIMapThisComputer.ClickQuickScanButton();
             WaitForScanCompleted(ScanType.Quick);
+            TestContext.WriteLine("Quick Scan completed at the scanning host...");
             UIMapScanCompletedWindow.ClickNoButton();
 
             UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
