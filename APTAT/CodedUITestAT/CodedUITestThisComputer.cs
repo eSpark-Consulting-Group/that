@@ -327,7 +327,7 @@ namespace CodedUITestAT
         [TestMethod]
         public void QuickScanOfThisComputerTest()
         {
-            Computer endpoint = DataHelper.GetEndpoint();
+            Computer endpoint = new Computer();
             Malware malware = SysHelper.InfectForScan(endpoint, ScanType.Quick);
             UnknownFile unknownFileQuick = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Quick);
             UnknownFile unknownFileFull = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Full);
