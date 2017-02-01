@@ -325,7 +325,7 @@ namespace CodedUITestAT
         }
 
         [TestMethod]
-        public void QuickScanOfThisComputer()
+        public void QuickScanOfThisComputerTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
             Malware malware = SysHelper.InfectForScan(endpoint, ScanType.Quick);
