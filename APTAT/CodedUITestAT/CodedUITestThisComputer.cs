@@ -59,7 +59,7 @@ namespace CodedUITestAT
         [TestCleanup]
         public void ATTestCleanup()
         {
-            Computer endpoint = DataHelper.GetEndpoint();
+            Computer endpoint = new Computer();
 
             SysHelper.StopApplication();
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
