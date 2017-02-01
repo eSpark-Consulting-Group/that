@@ -32,7 +32,7 @@ namespace FAT.Application
                 AutomationProperties.SetAutomationId(menu, "ScanResultsByComputersContextMenu");
 
                 var item = new RadMenuItem();
-                item.CreateHeaderDataTemplate("Details");
+                item.CreateDetailsHeader();
                 item.Command = ViewModel.SelectCommand;
                 item.Click += item_Click;
                 AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
@@ -51,7 +51,7 @@ namespace FAT.Application
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
 
-                treeList.SelectedItem = cell.DataContext is ThreatInfoItem && !((ThreatInfoItem)cell.DataContext).IsRootItem ? cell.DataContext : null;
+                treeList.SelectedItem = cell.DataContext;
             }
         }
 

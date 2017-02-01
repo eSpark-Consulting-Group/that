@@ -150,36 +150,10 @@ namespace FAT.Application
 
         }
 
-        private CamCredentialsWindow _dialog;
-        private void ShowRegisterToValkyrieWindow()
-        {
-            _dialog = new CamCredentialsWindow();
-            _dialog.Owner = System.Windows.Application.Current.MainWindow;
-            _dialog.OkClick += (sender, args) =>
-            {
-                if (_viewModel.BeginValkyrieAnalysis())
-                    Dispatcher.Invoke((Action)delegate
-                    {
-                        _dialog.loading.IsBusy = true;
-                        _dialog.ok.Visibility = Visibility.Collapsed;
-                    });
-            };
-            _dialog.CancelClick += (sender, args) =>
-            {
-                _viewModel.IsAnalyseWithValkyrieEnabled = true;
-            };
-
-            _dialog.ShowDialog();
-        }
 
         private void ViewModelOnValkyrieAnalyzeStarted(object sender, EventArgs eventArgs)
         {
-            if (_dialog == null) return;
-            Dispatcher.Invoke((Action)delegate
-            {
-                _dialog.Close();
-                _dialog = null;
-            });
+
         }
 
         private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
@@ -189,7 +163,7 @@ namespace FAT.Application
                 _onCompletedAction();
                 return;
             }
-            //if (_dialog == null) return;
+
             if (e.Error == null) return;
             var error = e.Error as AggregateException;
             var exception = error != null ? error.InnerExceptions.First() : e.Error;
@@ -200,19 +174,9 @@ namespace FAT.Application
                 err.Owner = System.Windows.Application.Current.MainWindow;
                 err.ShowDialog();
             }
-                /*_dialog.SetErrorMessage(e.Error.Message);
-            Dispatcher.Invoke((Action)delegate
-            {
-                _dialog.ok.Visibility = Visibility.Visible;
-                _dialog.loading.IsBusy = false;
-            });*/
-        }
-
-        private void ValkyrieClick(Object sender, RoutedEventArgs e)
-        {
-            ShowRegisterToValkyrieWindow();
 
         }
+
 
         private static void ShowReport(RadMenuItem menuItem)
         {

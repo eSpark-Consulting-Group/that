@@ -120,6 +120,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieComputer.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieFile.cs" />
     <Compile Include="Services\MapperHelper.cs" />
@@ -146,9 +147,6 @@
     <Compile Include="Models\ModelBase\ISelectableItem.cs" />
     <Compile Include="Services\FileBrowserService.cs" />
     <Compile Include="Services\IFileBrowserService.cs" />
-    <Compile Include="Views\CamCredentialsWindow.xaml.cs">
-      <DependentUpon>CamCredentialsWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
@@ -179,15 +177,6 @@
     <Compile Include="Views\StartScanLocalView.xaml.cs">
       <DependentUpon>StartScanLocalView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ValkyrieResultUserControlByComputers.xaml.cs">
-      <DependentUpon>ValkyrieResultUserControlByComputers.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ValkyrieDetailsView.xaml.cs">
-      <DependentUpon>ValkyrieDetailsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ValkyrieDetailsWindow.xaml.cs">
-      <DependentUpon>ValkyrieDetailsWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -197,7 +186,6 @@
     <Compile Include="Models\Directory\StartScanByIpViewModel.cs" />
     <Compile Include="Models\Directory\StartScanDomainViewModel.cs" />
     <Compile Include="Models\Directory\StartScanWorkgroupViewModel.cs" />
-    <Compile Include="Models\ValkyrieRegistrationModel.cs" />
     <Compile Include="Models\ModelBase\WizardViewModel.cs" />
     <Compile Include="Views\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
@@ -262,9 +250,6 @@
     <Compile Include="Views\ThreatDetailsWindow.xaml.cs">
       <DependentUpon>ThreatDetailsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ValkyrieResultUserControl.xaml.cs">
-      <DependentUpon>ValkyrieResultUserControl.xaml</DependentUpon>
-    </Compile>
     <Page Include="AppResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -280,10 +265,6 @@
     <Page Include="AgentWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\CamCredentialsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConfirmationWindow.xaml">
       <SubType>Designer</SubType>
@@ -308,18 +289,6 @@
     <Page Include="Views\StartScanLocalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ValkyrieResultUserControlByComputers.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ValkyrieDetailsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ValkyrieDetailsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ErrorWindow.xaml">
       <SubType>Designer</SubType>
@@ -397,10 +366,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ThreatDetailsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ValkyrieResultUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

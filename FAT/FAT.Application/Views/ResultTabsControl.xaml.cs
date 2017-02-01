@@ -19,7 +19,7 @@ namespace FAT.Application
             var relativePoint = (sender as UserControl).TransformToAncestor(this).Transform(new Point(0, 0));
 
             if (relativePoint.Y > 33)
-                grd1.Margin = grd2.Margin = new Thickness(-2);
+                grd1.Margin = new Thickness(-2);
         }
     }
 }

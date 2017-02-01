@@ -125,18 +125,13 @@
         </Grid.Resources>
 
         <TabControl  AutomationProperties.AutomationId="ResultsTabControl" BorderThickness="0" Padding="0 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" FocusVisualStyle="{x:Null}" >
-            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" x:Name="tab" Header="Scan results  " IsSelected="{Binding SelectScan, Mode=TwoWay}"  >
+            <TabItem AutomationProperties.AutomationId="UnknownFilesTab" x:Name="tab" Header="Scan results  "  >
                 <Grid Background="White" x:Name="grd1">
                     <local:ScanResultUserControlByComputers   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}" Loaded="TabItem_Loaded" />
                     <local:ScanResultUserControl  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </Grid>
             </TabItem>
-            <TabItem AutomationProperties.AutomationId="ValkyrieAnalysisResultsTab" Header="Valkyrie analysis results" IsSelected="{Binding SelectValkyrieScan, Mode=TwoWay}" IsEnabled="{Binding ValkyrieEnabled}" >
-                <Grid Background="White" x:Name="grd2">
-                    <local:ValkyrieResultUserControlByComputers  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByComputers, Converter={StaticResource BoolToVisibilityConverter}}"  />
-                    <local:ValkyrieResultUserControl  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding GroupByFiles, Converter={StaticResource BoolToVisibilityConverter}}"  />
-                </Grid>
-            </TabItem>
+
         </TabControl>
 
 

@@ -43,7 +43,7 @@ namespace FAT.Application.Models.Directory
             }
         }
 
-      
+
 
         public ObservableCollection<IpAddressWrapper> IpAddresses { get; private set; }
 
@@ -59,9 +59,12 @@ namespace FAT.Application.Models.Directory
             }
         }
 
-        
 
-        
+
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.NetworkAddresses; }
+        }
 
 
         public DelegateCommand AddIpCommand
@@ -209,7 +212,7 @@ namespace FAT.Application.Models.Directory
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
             Error = null;
-            
+
             if (previousStep == SelectIp && context.IsForward(CurrentStepIndex))
             {
                 if (IpAddresses.Count == 0)
@@ -242,7 +245,7 @@ namespace FAT.Application.Models.Directory
                         Type = ETargetsDiscovererType.NetworkAddresses,
                         Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
                     });
-                var parent = ParentViewModel as IMainViewModel;
+                var parent = ParentViewModel;
                 if (parent != null)
                 {
                     string errorMessage;
@@ -290,7 +293,7 @@ namespace FAT.Application.Models.Directory
                 return;
             }
 
-            
+
             IsBusy = false;
             if (e.Exception == null)
             {
@@ -316,4 +319,4 @@ namespace FAT.Application.Models.Directory
 
         }
     }
-}
+    }

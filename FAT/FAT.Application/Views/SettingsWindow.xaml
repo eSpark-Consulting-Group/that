@@ -35,11 +35,11 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
-                                    
+
                                     <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
 
-                                
+
                                 <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 20 20 20">
 
                                     <Grid.RowDefinitions>
@@ -56,33 +56,48 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    
-                                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}">
+
+                                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}}">
                                         <local:LoginPasswordUserControl Margin="0" Login="{Binding ProxyLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                                     
                                                     Password="{Binding ProxyPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
                                     </Grid>
 
+                                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}">
+                                        <local:LoginPasswordUserControl Margin="0" Login="{Binding RescanLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                    ShowCurrentDomain="{Binding HasCurrentDomainName, UpdateSourceTrigger=PropertyChanged}"  UseCurrentDomain="{Binding UseCurrentDomainForRescan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Password="{Binding RescanPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                    </Grid>
 
+                                    <Grid Grid.Row="3" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <TextBlock Text="FLS TCP Port" Style="{DynamicResource SubTitleTextStyle}"   Margin="0 24 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
 
-
-                                    <TextBlock Text="FLS TCP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="3"  Margin="0 24 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
-                                    <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsTcpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
-                                             Grid.Column="2" Margin="0 17 0 17" HorizontalAlignment="Left" Grid.Row="3" Width="275" x:Name="tcp" MaxLength="5"
+                                    </Grid>
+                                    <Grid Grid.Row="3" Grid.Column="2" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsTcpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                                              Margin="0 17 0 17" HorizontalAlignment="Left"  Width="275" x:Name="tcp" MaxLength="5"
                                              Text="{Binding  TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PortKeyDown">
-                                        <telerik:RadWatermarkTextBox.WatermarkContent>
-                                            <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
-                                        </telerik:RadWatermarkTextBox.WatermarkContent>
-                                    </telerik:RadWatermarkTextBox>
+                                            <telerik:RadWatermarkTextBox.WatermarkContent>
+                                                <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
+                                            </telerik:RadWatermarkTextBox.WatermarkContent>
+                                        </telerik:RadWatermarkTextBox>
+                                    </Grid>
 
-                                    <TextBlock Text="FLS UDP Port" Style="{DynamicResource SubTitleTextStyle}" Grid.Row="4"  Margin="0 7 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
-                                    <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsUdpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
-                                             Grid.Column="2" Margin="0 0 0 17" HorizontalAlignment="Left" Grid.Row="4" Width="275" x:Name="udp" MaxLength="5"
+
+                                    <Grid Grid.Row="4"  Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <TextBlock Text="FLS UDP Port" Style="{DynamicResource SubTitleTextStyle}"  Margin="0 7 0 0" HorizontalAlignment="Right" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
+
+                                    </Grid>
+                                    <Grid Grid.Row="4" Grid.Column="2" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                        <telerik:RadWatermarkTextBox AutomationProperties.AutomationId="FlsUdpPortWatermarkTextBox" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                                              Margin="0 0 0 17" HorizontalAlignment="Left"  Width="275" x:Name="udp" MaxLength="5"
                                              Text="{Binding  UdpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PortKeyDown" Loaded="this_Loaded">
-                                        <telerik:RadWatermarkTextBox.WatermarkContent>
-                                            <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
-                                        </telerik:RadWatermarkTextBox.WatermarkContent>
-                                    </telerik:RadWatermarkTextBox>
+                                            <telerik:RadWatermarkTextBox.WatermarkContent>
+                                                <TextBlock Text="Enter FLS Port" Foreground="{DynamicResource TextBrush2}" />
+                                            </telerik:RadWatermarkTextBox.WatermarkContent>
+                                        </telerik:RadWatermarkTextBox>
+                                    </Grid>
+
 
 
 
@@ -90,8 +105,9 @@
                                 <Border Background="White" Grid.Row="2" >
                                     <StackPanel HorizontalAlignment="Right"  Margin="0,10,10,0" Orientation="Horizontal">
                                         <Button Content="Cancel" Height="32" x:Name="no" Margin="5,5,5,15" Click="Button_CancelClick" Template="{StaticResource BackButton}" Foreground="Black"></Button>
-                                        <Button Content="Save" Height="32"  Margin="5,5,5,15"  Click="Button_Click"   ></Button>
-                                        
+                                        <Button Content="Save" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" ></Button>
+                                        <Button Content="Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}" ></Button>
+
                                     </StackPanel>
                                 </Border>
                             </Grid>

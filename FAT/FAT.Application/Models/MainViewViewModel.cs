@@ -529,10 +529,8 @@ namespace FAT.Application.Models
         }
 
         public bool ValkyrieSendingFiles { get; set; }
-        public bool SelectScan { get; set; }
-        public bool SelectValkyrieScan { get; set; }
         public bool IsQuickScan { get; set; }
-        public bool ValkyrieEnabled { get; set; }
+
 
         private bool _groupingEnabled;
         public bool GroupingEnabled
@@ -633,8 +631,8 @@ namespace FAT.Application.Models
             IsAnalyseWithValkyrieEnabled = false;
             IsValkyrieReportEnabled = false;
 
-            Set(() => SelectScan, true);
-            Set(() => ValkyrieEnabled, false);
+
+
             GroupingEnabled = false;
             GroupByComputers = true;
 
@@ -831,6 +829,13 @@ namespace FAT.Application.Models
             return valkyrieFile;
         }
 
+        public IMainViewModel ParentViewModel
+        {
+            get { return this; }
+        }
+
+        public WizardStepEnum CurrentStep { get; set; }
+
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
         {
             if (_isScanInProgress != false) return;
@@ -846,22 +851,21 @@ namespace FAT.Application.Models
                         SettingsWindow window = new SettingsWindow();
                         window.Owner = System.Windows.Application.Current.MainWindow;
                         window.DataContext = this;
-                        window.ShowCredentials = true;
+                        window.ShowProxyCredentials = true;
                         window.Header = "Proxy Credentials";
 
                         bool retry = window.ShowDialog().GetValueOrDefault();
 
                         if (retry)
                         {
-                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword, null); //no domain?
+                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword, null); 
                             BeginValkyrieAnalysis(cred);
                             return;
                         }
                     }
                 }
-                Set(() => ValkyrieEnabled, false);
-                Set(() => SelectScan, false);
-                Set(() => SelectScan, true);
+
+
             }
             else
             {
@@ -1151,32 +1155,20 @@ namespace FAT.Application.Models
             Keyword = string.Empty;
 
 
-            Set(() => ValkyrieEnabled, true);
-            Set(() => SelectValkyrieScan, false);
-            Set(() => SelectValkyrieScan, true);
+
             Set(() => ValkyrieSendingFiles, true);
         }
 
         public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
-            var model = CompositionHelper.Instance.Resolve<ValkyrieRegistrationModel>();
-            //if (model.ValidateModel())
-            {
-                _camLicenseId = model.LicenseId;
-                _camUserLogin = model.UserName;
-                _camUserPassword = model.Password;
+           
 
-                Set(() => ValkyrieEnabled, true);
-                Set(() => SelectValkyrieScan, false);
-                Set(() => SelectValkyrieScan, true);
                 Set(() => ValkyrieSendingFiles, true);
 
                 _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword,
                     networkCredential);
                 return true;
-            }
-
-            //return false;
+            
         }
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)

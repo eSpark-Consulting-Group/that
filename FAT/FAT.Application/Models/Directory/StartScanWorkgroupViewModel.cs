@@ -48,7 +48,10 @@ namespace FAT.Application.Models
             }
         }
 
-
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.Workgroup; }
+        }
 
         public DelegateCommand ExpandCommand { get; private set; }
 
@@ -88,7 +91,7 @@ namespace FAT.Application.Models
             }
         }
 
-       
+
 
         public StartScanWorkgroupViewModel(ITargetsDiscoveryService targetsDiscoveryService, IStorageService storage)
         {
@@ -143,16 +146,14 @@ namespace FAT.Application.Models
 
             if (!_useCurrentNameDetermined)
             {
-               
+
                 UseCurrentDomainForDeploy = HasCurrentDomainName;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
                 _useCurrentNameDetermined = true;
             }
 
             Password = null;
-
-            //var _workgroup = _storage.GetValue<String>(KnownKeys.Workgroup, false);
-            //RaisePropertyChanged("Workgroup");
+            _workgroupCredentialsChanged = true;
 
             _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
             _targetsDiscoveryService.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
@@ -216,13 +217,13 @@ namespace FAT.Application.Models
                         _targetsDiscoveryService.GetWorkgroup(WorkgroupName, null, new OperationContext { Success = success, UserState = this });
                         _workgroupCredentialsChanged = false;
                     }
-                    
+
                 }
                 else
                     success();
 
-               
-                
+
+
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -242,12 +243,12 @@ namespace FAT.Application.Models
 
                     CheckIfCanUseCurrentCredentials(items);
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
-                                        
+
                     var workGroups = DevicesSourceDescription.GetNetworkDescription(
                         items.GroupBy(i => i.LdapPath).Select(i => i.Key).Distinct().ToArray());
-                _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                       
-                        new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = workGroups } );
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+
+                            new DevicesSourceDescription() { Type = ETargetsDiscovererType.Workgroup, Description = workGroups });
                     success();
                 }
             }
@@ -258,7 +259,7 @@ namespace FAT.Application.Models
                 {
                     string errorMessage;
 
-                    
+
                     parent.Login = Login;
                     parent.Password = Password;
                     if ((UseCurrentDomainForDeploy || parent.ValidateCredentials(out errorMessage)))
@@ -275,7 +276,7 @@ namespace FAT.Application.Models
             }
             else
             {
-                
+
 
                 if (context.IsBackward(CurrentStepIndex))
                 {

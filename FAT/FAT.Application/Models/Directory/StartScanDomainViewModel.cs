@@ -36,11 +36,11 @@ namespace FAT.Application.Models
             }
         }
         private string _defaultDomainName;
-        public string CurrentDomainController {  get { return UseCurrentCredentials ? _defaultDomainName : _domainController; } }
+        public string CurrentDomainController { get { return UseCurrentCredentials ? _defaultDomainName : _domainController; } }
 
 
         private bool _domainCredentialsChanged = true;
-        
+
         private string _domainController;
         public string DomainController
         {
@@ -103,7 +103,10 @@ namespace FAT.Application.Models
             }
         }
 
-        
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.Domain; }
+        }
 
         public DelegateCommand ExpandCommand { get; private set; }
 
@@ -157,7 +160,7 @@ namespace FAT.Application.Models
         protected override void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
         {
             if (previousStep == SelectDomain && context.IsForward(CurrentStepIndex))
-            {          
+            {
                 if (String.IsNullOrEmpty(DomainController) && !UseCurrentDomainForActiveDirectory)
                 {
                     Error = "Please specify Domain Name";
@@ -187,7 +190,7 @@ namespace FAT.Application.Models
                 }
                 else
                     success();
-                
+
             }
             else if (previousStep == SelectTargets && context.IsForward(CurrentStepIndex))
             {
@@ -205,12 +208,12 @@ namespace FAT.Application.Models
                         return;
                     }
 
-                    
+
                     var isOnlyLocal = CheckIfCanUseCurrentCredentials(items);
                     _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                         new DevicesSourceDescription() { Type = ETargetsDiscovererType.ActiveDirectory, Description = CurrentDomainController });
-                    
+
                     if (!_credentialsDetermined)
                     {
                         _credentialsDeterminationLocked = true;
@@ -223,7 +226,7 @@ namespace FAT.Application.Models
                         }
                         else if (!isOnlyLocal)
                             UseCurrentDomainForDeploy = true;
-                        _credentialsDeterminationLocked = false;   
+                        _credentialsDeterminationLocked = false;
                     }
 
                     success();
@@ -231,7 +234,7 @@ namespace FAT.Application.Models
             }
             else if (previousStep == SelectPort && context.IsForward(CurrentStepIndex))
             {
-                var parent = ParentViewModel as IMainViewModel;
+                var parent = ParentViewModel;
                 if (parent != null)
                 {
                     string errorMessage;
@@ -348,15 +351,15 @@ namespace FAT.Application.Models
 
             IsBusy = false;
 
-            
+
             if (e.Exception == null)
             {
                 if (e.Items != null && e.Items.Length > 0)
-                { 
+                {
                     e.Items[0].Name = e.Items[0].Name.Replace("DC=", "").Replace(",", ".");
 
-                Items = e.Items;
-                
+                    Items = e.Items;
+
                     //_targetsDiscoveryService.GetDirectoryItems(DomainController, ActiveDirectoryLogin, ActiveDirectoryPassword, Items[0], new OperationContext { UserState = this, Arg = this });
                 }
 
@@ -395,6 +398,7 @@ namespace FAT.Application.Models
             }
 
         }
+
 
     }
 }

@@ -32,6 +32,19 @@ namespace FAT.Application
 
         #endregion
 
+        #region ShowProxyCredentialsProperty (DependencyProperty)
+        public bool ShowProxyCredentials
+        {
+            get { return (bool)GetValue(ShowProxyCredentialsProperty); }
+            set { SetValue(ShowProxyCredentialsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowProxyCredentialsProperty =
+            DependencyProperty.Register("ShowProxyCredentials", typeof(bool), typeof(SettingsWindow),
+            new PropertyMetadata(false));
+
+        #endregion
+
         #region HeaderProperty (DependencyProperty)
         public string Header
         {
@@ -50,12 +63,12 @@ namespace FAT.Application
         {
             MainViewViewModel model = DataContext as MainViewViewModel;
             string message;
-            if (!ShowCredentials && !model.ValidatePorts(out message))
+            if (!ShowProxyCredentials && !ShowCredentials && !model.ValidatePorts(out message))
             {
                 model.Error = message;
                 return;
             }
-            
+
             this.DialogResult = true;
 
         }

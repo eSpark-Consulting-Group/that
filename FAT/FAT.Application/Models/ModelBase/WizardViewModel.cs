@@ -1,8 +1,5 @@
 ﻿using FAT.Application.Models.ModelBase;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Telerik.Windows.Controls;
 
 namespace FAT.Application.Models
@@ -54,7 +51,7 @@ namespace FAT.Application.Models
     }
 
 
-    public class WizardViewModel : ViewModel
+    public class WizardViewModel : ViewModel, IWizardStepViewModel
     {
         public event EventHandler Completed;
         public event EventHandler Cancelled;
@@ -69,9 +66,9 @@ namespace FAT.Application.Models
         private Int32 _entryIndex;
         private String _currentStep;
 
-        public object ParentViewModel
+        public IMainViewModel ParentViewModel
         {
-            get { return App.Current.MainWindow.DataContext; }
+            get { return App.Current.MainWindow.DataContext as IMainViewModel; }
         }
 
         public Int32 StepsCount
@@ -144,6 +141,12 @@ namespace FAT.Application.Models
             get { return "Next"; }
         }
 
+        public virtual WizardStepEnum Step
+        {
+            get { return WizardStepEnum.None; }
+        }
+
+
         public void SetSteps(String[] steps)
         {
             _steps = steps;
@@ -208,7 +211,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                var parent = ParentViewModel as IMainViewModel;
+                var parent = ParentViewModel;
                 if (parent != null)
                     return parent.CurrentDomainName;
                 return null;

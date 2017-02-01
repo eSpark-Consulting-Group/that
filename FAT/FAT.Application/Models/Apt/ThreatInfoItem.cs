@@ -47,7 +47,7 @@ namespace FAT.Application.Models
         {
             if (obj is ScanStatus)
             {
-                ScanStatus status = (ScanStatus) obj;
+                ScanStatus status = (ScanStatus)obj;
 
                 if (status._value == _value)
                 {
@@ -71,6 +71,7 @@ namespace FAT.Application.Models
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
         private String _statusMessage;
+        private String _statusMessageMemento;
 
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
@@ -90,6 +91,7 @@ namespace FAT.Application.Models
             BadFile.Cloud = verdict;
             IsUnknown = BadFile.IsUnknown;
             IsMalware = BadFile.IsMalware;
+
             Clean = BadFile.Cloud == CloudVerdict.Safe;
             RaisePropertyChanged(nameof(Failed));
         }
@@ -101,16 +103,19 @@ namespace FAT.Application.Models
             int noVerdictFilesCount = 0;
             int safeCount = 0;
             int unknownFilesCount = 0;
-            if (this.Items != null && Items.Any())
+
+
+            foreach (var item in Items)
             {
-                foreach (var item in Items)
-                {
-                    if (item.BadFile.IsMalware) malwareCount++;
-                    else if (item.BadFile.Cloud == CloudVerdict.FailedToAnalyze) failedToAnalyzeCount++;
-                    else if (item.BadFile.Cloud == CloudVerdict.NoVerdict) noVerdictFilesCount++;
-                    else if (item.BadFile.Cloud == CloudVerdict.Safe) safeCount++;
-                    else if (item.BadFile.IsUnknown) unknownFilesCount++;
-                }
+                if (item.BadFile.IsMalware) malwareCount++;
+                else if (item.BadFile.Cloud == CloudVerdict.FailedToAnalyze) failedToAnalyzeCount++;
+                else if (item.BadFile.Cloud == CloudVerdict.NoVerdict) noVerdictFilesCount++;
+                else if (item.BadFile.Cloud == CloudVerdict.Safe) safeCount++;
+                else if (item.BadFile.IsUnknown) unknownFilesCount++;
+            }
+
+            if (malwareCount > 0 || failedToAnalyzeCount > 0 || noVerdictFilesCount > 0 || safeCount > 0 || unknownFilesCount > 0)
+            {
 
                 FailedToAnalyzeCount = failedToAnalyzeCount;
                 NoVerdictFilesCount = noVerdictFilesCount;
@@ -119,22 +124,24 @@ namespace FAT.Application.Models
                 CleanFilesCount = safeCount;
                 IsMalware = malwareCount > 0;
                 IsUnknown = malwareCount == 0 && unknownFilesCount > 0;
+
+                RaisePropertyChanged(nameof(StatusMessage));
             }
-            RaisePropertyChanged(nameof(StatusMessage));
         }
 
         private int _cleanFilesCount;
-        public int CleanFilesCount {
+        public int CleanFilesCount
+        {
             get
             {
                 return _cleanFilesCount;
             }
             set
             {
-                _cleanFilesCount = value; 
+                _cleanFilesCount = value;
                 RaisePropertyChanged(nameof(CleanFilesCount));
-                
-            } 
+
+            }
         }
 
         public Boolean IsUnknown
@@ -208,6 +215,8 @@ namespace FAT.Application.Models
         public string ShortName { get; set; }
 
         public String IpAddress { get; set; }
+
+        public bool IsLocal { get; set; }
 
         public String NameAndIpAddress
         {
@@ -286,7 +295,15 @@ namespace FAT.Application.Models
             get { return _scanStage; }
             set
             {
+                if (_scanStage == value)
+                    return;
+
                 _scanStage = value;
+
+                if (value == ScanStage.Connecting
+                    && string.IsNullOrEmpty(_statusMessageMemento))
+                    _statusMessageMemento = StatusMessageSystem;
+
                 RaisePropertyChanged("ScanStage");
                 RaisePropertyChanged("ScanStatus");
                 RaisePropertyChanged("ScanCompleted");
@@ -313,6 +330,15 @@ namespace FAT.Application.Models
             }
         }
 
+        public void RestoreConnectingState()
+        {
+            ScanStage = ScanStage.Connecting;
+            StatusMessageSystem = _statusMessageMemento;
+            FailedToAnalyzeCount = 0;
+            MalwareFilesCount = 0;
+            UnknownFilesCount = 0;
+            NoVerdictFilesCount = 0;
+        }
 
         public String StatusMessage
         {
@@ -358,7 +384,7 @@ namespace FAT.Application.Models
             string errorCounterText = LookupInProgress > 0 ?
                     $"Lookup in Progress {LookupInProgress}."
                     : String.Empty;
-            
+
 
             if (ScanStage == ScanStage.OperationCompleted)
             {
@@ -369,7 +395,7 @@ namespace FAT.Application.Models
                 }
                 else
                 {
-                     message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}.";
+                    message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}.";
                 }
                 return message;
             }
@@ -378,12 +404,12 @@ namespace FAT.Application.Models
                 return
                     $"{TotalFilesCount} files scanned ({$"{ProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. {errorCounterText}";
             }
-            
 
-            
+
+
         }
 
-        
+
 
         public Int32 UnknownFilesCount
         {
@@ -524,10 +550,18 @@ namespace FAT.Application.Models
             _items = new ObservableCollection<ThreatInfoItem>();
         }
 
+        private DeploymentTarget _deploymentTarget;
+        public DeploymentTarget DeploymentTarget
+        {
+            get { return _deploymentTarget; }
+        }
+
         public ThreatInfoItem(DeploymentTarget deploymentTarget) : this()
         {
+            _deploymentTarget = deploymentTarget;
             Name = deploymentTarget.Name;
             IpAddress = deploymentTarget.IPAddress;
+            IsLocal = deploymentTarget.IsLocalComputer;
             IsRootItem = true;
             IsOnline = deploymentTarget.IsOnline;
             ComputerGuid = deploymentTarget.Uid;

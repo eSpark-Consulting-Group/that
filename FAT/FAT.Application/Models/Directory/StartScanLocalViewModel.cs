@@ -10,11 +10,9 @@ using APTAT.DeploymentCore.Directory;
 using FAT.Application.Models.Apt;
 using FAT.Application.Models.ModelBase;
 
-using Composition = APTAT.Common.CompositionHelper;
 
 namespace FAT.Application.Models
 {
-    //[Composition.CreationPolicy(Composition.CreationPolicy.Singleton)]
     public class StartScanLocalViewModel : WizardViewModel
     {
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
@@ -37,6 +35,11 @@ namespace FAT.Application.Models
                 _scanCriticalAreas = value;
                 RaisePropertyChanged("ScanCriticalAreas");
             }
+        }
+
+        public override WizardStepEnum Step
+        {
+            get { return WizardStepEnum.Local; }
         }
 
         public DelegateCommand ExpandCommand { get; private set; }
@@ -74,11 +77,12 @@ namespace FAT.Application.Models
         private void InvokeExpand(Object arg)
         {
             ExpandCommandContext commandContext = (ExpandCommandContext)arg;
-            var parentFolder = (FolderItem) commandContext.DirectoryItem;
-            
+            var parentFolder = (FolderItem)commandContext.DirectoryItem;
+
             _fileBrowserService.GetFolders(parentFolder, new OperationContext
             {
-                UserState = this, Success = () => commandContext.RaiseCompleted()
+                UserState = this,
+                Success = () => commandContext.RaiseCompleted()
             });
         }
 
@@ -89,9 +93,9 @@ namespace FAT.Application.Models
             if (item != null)
             {
                 item.IsSelected = true;
-            } 
-            Error = null;
             }
+            Error = null;
+        }
 
         private void InvokeUncheckItem(Object arg)
         {
@@ -113,13 +117,13 @@ namespace FAT.Application.Models
                 while (true)
                 {
                     var needCheckChildren = true;
-                    if ( node.IsSelected.GetValueOrDefault())
+                    if (node.IsSelected.GetValueOrDefault())
                     {
                         items.Add(node);
                         needCheckChildren = false;
                     }
                     if (needCheckChildren)
-                        foreach (var nodeChild in node.Items?? Enumerable.Empty<FolderItem>())
+                        foreach (var nodeChild in node.Items ?? Enumerable.Empty<FolderItem>())
                         {
                             if (nodeChild.IsSelected.GetValueOrDefault())
                                 items.Add(nodeChild);
@@ -180,9 +184,9 @@ namespace FAT.Application.Models
                         return;
                     }
                     IsBusy = true;
-                    _storage.SetValue(KnownKeys.CustomScanOptions, 
+                    _storage.SetValue(KnownKeys.CustomScanOptions,
                         new CustomScanOptions(items, _scanCriticalAreas));
-                    
+
                     _targetsDiscoveryService.GetByIpAddresses(new List<IpAddressWrapper>
                     {
                         new IpAddressWrapper() {Text = "localhost", IsDnsName = true}
@@ -195,7 +199,7 @@ namespace FAT.Application.Models
                 {
                     Error = null;
                 }
-                
+
 
                 base.OnStepChanging(success, previousStep, context);
             }
@@ -314,25 +318,27 @@ namespace FAT.Application.Models
             {
                 return;
             }
-            
+
             IsBusy = false;
             if (e.Exception == null)
             {
                 var items = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, items);
-                //_storage.SetValue(KnownKeys.Login, null);
-                //_storage.SetValue(KnownKeys.Password, null);
-                var main = (IMainViewModel) ParentViewModel;
-                main.Login = null;
-                main.Password = null;
-                _storage.SetValue(KnownKeys.DevicesSourceDescription,
-                new DevicesSourceDescription()
+
+                var parent = ParentViewModel;
+                if (parent != null)
                 {
-                    Type = ETargetsDiscovererType.NetworkAddresses,
-                    Description = DevicesSourceDescription.GetNetworkDescription(new[] { "localhost" })
-                });
-                
+                    parent.Login = null;
+                    parent.Password = null;
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription()
+                    {
+                        Type = ETargetsDiscovererType.NetworkAddresses,
+                        Description = DevicesSourceDescription.GetNetworkDescription(new[] { "localhost" })
+                    });
+                }
                 context.Success();
+
             }
             else
             {
