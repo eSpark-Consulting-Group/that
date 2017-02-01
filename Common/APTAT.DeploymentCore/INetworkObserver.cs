@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using APTAT.Common;
+using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.DeploymentCore
 {
@@ -44,6 +45,6 @@ namespace APTAT.DeploymentCore
         IPStatus SendPing(string toString);
         IPHostEntry GetHostEntry();
         bool IsLoopbackAddress(string nameOrAddress);
-        IPAddress[] GetLocalAddressRanges();
+        DeploymentTarget[] AutoResolveByNetworkSubnet();
     }
 }
