@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using FAT.Application.Models;
 using System.Threading.Tasks;
+using APTAT.DeploymentCore;
 
 namespace FAT.Application.Services
 {
@@ -13,6 +14,7 @@ namespace FAT.Application.Services
         event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
         event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
+        event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetsAutoResolving;
         void GetByIpAddresses(IEnumerable<IpAddressWrapper> ipAddresses, Action<bool> localAction, Object userState);
 
         void GetWorkgroup(String workgroupName, DirectoryItem parent, Object userState);
@@ -27,7 +29,7 @@ namespace FAT.Application.Services
 
         Task<GetDomainNameResponse> GetCurrentDomainName();
         bool IsLocalAddress(string name);
-        
+        void StartTargetsAutoDiscovery();
 
         string GetLoggedInUser();
     }

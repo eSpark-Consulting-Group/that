@@ -9,6 +9,20 @@ namespace APTAT.DeploymentCore
 {
     public static class AddressRangeHelper
     {
+        public static IPAddress[] GetVirtualBoxAddresses()
+        {
+            var networkInterface = NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(a => a.Description == "VirtualBox Host-Only Ethernet Adapter");
+            if (networkInterface == null) return new IPAddress[] {};
+            
+            
+            var ips =
+                networkInterface.GetIPProperties()
+                    .UnicastAddresses.Where(a => a.Address.AddressFamily == AddressFamily.InterNetwork)
+                    .Select(ip => ip.Address)
+                    .ToArray();
+
+            return ips;
+        }
 
         public static List<Tuple<IPAddress, IPAddress>> GetLocalAddressRange()
         {

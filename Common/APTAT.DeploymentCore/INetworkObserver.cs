@@ -46,5 +46,6 @@ namespace APTAT.DeploymentCore
         IPHostEntry GetHostEntry();
         bool IsLoopbackAddress(string nameOrAddress);
         DeploymentTarget[] AutoResolveByNetworkSubnet();
+        event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetResolving;
     }
 }

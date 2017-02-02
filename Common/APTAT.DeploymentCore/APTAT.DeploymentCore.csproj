@@ -54,6 +54,7 @@
     <Compile Include="ComputerComparer.cs" />
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="DeploymentTargetComparer.cs" />
+    <Compile Include="DeploymentTargetResolvingEventArg.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs" />
     <Compile Include="Descent\ComputerDescentResult.cs" />
     <Compile Include="Descent\DescentEventArgs.cs" />

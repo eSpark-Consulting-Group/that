@@ -30,6 +30,9 @@ namespace FAT.Application.Services
         {
             _manager = manager;
             _networkHelper = networkHelper;
+            _networkHelper.DeploymentTargetResolving += (sender, e) => {
+                DeploymentTargetsAutoResolving?.Invoke(this, e);
+            };
         }
 
         public event EventHandler<DirectoryItemsResolvedEventArgs> DirectoryItemsResolved;
@@ -37,6 +40,7 @@ namespace FAT.Application.Services
         public event EventHandler<GetDirectoryItemsEventArgs> GetDirectoryRootCompleted;
         public event EventHandler<GetDirectoryItemsEventArgs> GetWorkgroupCompleted;
         public event EventHandler<GetByIpAddressEventArgs> GetByIpAddressesCompleted;
+        public event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetsAutoResolving;
 
         public void ResolveDirectoryItems(DeploymentItem[] directoryItems, String admin, String password,
             Object userState)
@@ -104,10 +108,16 @@ namespace FAT.Application.Services
             return new GetDomainNameResponse(null, e.Error);
         }
 
-        
+
+        public void StartTargetsAutoDiscovery()
+        {
+            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet());
+        }
 
         public string GetLoggedInUser()
         {
+            
+            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet());
             if (!String.IsNullOrEmpty(Environment.UserDomainName))
             {
                 return Environment.UserDomainName + "\\" + Environment.UserName;
@@ -528,6 +538,7 @@ namespace FAT.Application.Services
             return host.HostName == hostInfo.HostName;
 
         }
+        
     }
 
     public class GetDirectoryItemsContext

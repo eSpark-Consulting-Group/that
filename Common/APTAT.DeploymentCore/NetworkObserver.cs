@@ -108,139 +108,8 @@ namespace APTAT.DeploymentCore
             Array.Reverse(ipBytes);
             return new IPAddress(ipBytes);
         }
-        
-        public DeploymentTarget[] AutoResolveByNetworkSubnet()
-        {
-            List<Tuple<IPAddress, IPAddress>> subnetRanges = AddressRangeHelper.GetLocalAddressRange();
-            List<IComputer> sourceComputers = new List<IComputer>();
-            foreach (var range in subnetRanges)
-            {
-                var fromAndToIps = NetHelp.GetIpAddressMinMax(range.Item1, range.Item2);
-                var targetComputers = GetEndpointTargetsInRange(fromAndToIps.Item1, fromAndToIps.Item2);
-                var computers = new List<IComputer>(targetComputers);
-                sourceComputers.AddRange(computers);
-            }
 
-            int MaxDeploymentTargets = 1024;
-            int maxConcurrentTasks = Settings.Default.MaxEndpointsAvailabilityResolverConcurrentTasks;
-            var taskFactory = new TaskFactory(new LimitedConcurrencyLevelTaskScheduler(maxConcurrentTasks));
-
-            IComputer[] uniqueComputers = sourceComputers.Distinct(new ComputerComparer()).ToArray();
-
-            if (uniqueComputers.Length > MaxDeploymentTargets)
-                throw new InvalidOperationException("Too many targets");
-            // Tasks to resolve unknown IPs by DNS name
-            var ipTasks = from target in uniqueComputers
-                          where target.IPAddress == null
-                          let name = target.DnsName ?? target.Name
-                          select taskFactory.StartNew(() =>
-                          {
-                              var IPs = ResolveIpByDns(name);
-                              if (IPs != null)
-                              {
-                                  var extv4 = IPs.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip)).ToArray();
-                                  if (!extv4.Any())
-                                      extv4 = IPs.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToArray();
-                                  if (!extv4.Any())
-                                      extv4 = IPs;
-                                  var firstOrDefault = extv4.FirstOrDefault();
-                                  if (firstOrDefault != null)
-                                      target.IPAddress = firstOrDefault.ToString();
-                              }
-                          });
-
-            ipTasks = ipTasks.ToArray();
-            if (ipTasks.Any())
-            {
-                using (var completeTask = taskFactory.ContinueWhenAll((Task[]) ipTasks, completedTasks => Array.ForEach(completedTasks, t => t.Dispose())))
-                {
-                    completeTask.Wait();
-                }
-            }
-
-            // Tasks to resolve unknown DNS names
-            var dnsTasks = from target in uniqueComputers
-                           where string.IsNullOrEmpty(target.DnsName) && target.IPAddress != null
-                           select taskFactory.StartNew(() => target.DnsName = ResolveDnsByIp(IPAddress.Parse(target.IPAddress)));
-
-            dnsTasks = dnsTasks.ToArray();
-            if (dnsTasks.Any())
-            {
-                using (var completeTask = taskFactory.ContinueWhenAll((Task[]) dnsTasks, completedTasks =>
-                {
-                    foreach (var completedTask in completedTasks)
-                    {
-                        completedTask.Dispose();
-                    }
-                }))
-                {
-                    completeTask.Wait();
-                }
-            }
-
-            var deploymentTargets = new List<DeploymentTarget>(uniqueComputers.Count());
-
-            // Tasks to test targets are online and have port 445 open
-            var testTasks = from target in uniqueComputers
-                            where target.IPAddress != null
-                            select taskFactory.StartNew(() => Tuple.Create(target, TestMsDs(target.IPAddress.ToString())));
-
-            testTasks = testTasks.ToArray();
-            if (testTasks.Any())
-            {
-                var completeTask = taskFactory.ContinueWhenAll(testTasks.ToArray(), completedTasks =>
-                {
-                    var updatedTargets = from target in uniqueComputers
-                                         join task in completedTasks on target equals task.Result.Item1 into relatedTask
-                                         from testTask in relatedTask.DefaultIfEmpty()
-                                         let ipAddress = target.IPAddress.ToStringOrEmpty()
-                                         let name = target.Name != ipAddress ? target.Name : target.DnsName.ToStringOrEmpty()
-                                         select new DeploymentTarget
-                                         {
-                                             Uid = target.Uid, // IComputer.Uid was used as a temp storage for TargetUid
-                                             Name = name,
-                                             DnsName = target.DnsName,
-                                             Source = target.Source,
-                                             IPAddress = ipAddress,
-                                             SystemKind = target.SystemKind,
-                                             IsOnline = testTask?.Result.Item2 ?? false,
-                                             LdapPath = target.LdapPath
-                                         };
-
-                    deploymentTargets.AddRange(updatedTargets);
-                    Array.ForEach(completedTasks, t => t.Dispose());
-                });
-
-                using (completeTask)
-                {
-                    completeTask.Wait();
-                }
-            }
-
-            var results = from c in uniqueComputers
-                          join t in deploymentTargets on c.Uid equals t.Uid into relatedTargets
-                          from rt in relatedTargets.DefaultIfEmpty(new DeploymentTarget
-                          {
-                              Uid = c.Uid,
-                              Name = c.Name,
-                              DnsName = c.DnsName ?? c.Name,
-                              Source = c.Source,
-                              LdapPath = c.LdapPath,
-                              SystemKind = c.SystemKind
-                              // c.IPAddress is always null here
-                          })
-                          select rt.WithSideEffect(t =>
-                          {
-                              if (t.Name == t.DnsName && t.DnsName != t.IPAddress.ToStringOrEmpty())
-                                  t.Name = t.DnsName.Split('.').First().ToUpper();
-                          });
-
-            results = results.Distinct(new DeploymentTargetComparer()).OrderBy(t => t.Name).ToArray();
-            TargetsHelper.FindEsmServerHost(this, results);
-            return results.ToArray();
-        }
-
-        private List<EndpointTarget> GetEndpointTargetsInRange(IPAddress from, IPAddress to)
+        private List<EndpointTarget> GetEndpointTargetsInRangeForAuto(IPAddress from, IPAddress to)
         {
             List<IPAddress> retValue = new List<IPAddress>();
 
@@ -260,25 +129,105 @@ namespace APTAT.DeploymentCore
                 retValue.Add(ipAddress);
             }
 
-            ConcurrentBag<IPAddress> onlineList = new ConcurrentBag<IPAddress>();
+            var serverDnsName = GetLocalHostName(true);
+            var serverAddresses = GetSupportedExternalAddresses(true);
+
+            ConcurrentBag<EndpointTarget> onlineList = new ConcurrentBag<EndpointTarget>();
             Parallel.ForEach(retValue, r =>
             {
-                var status = SendPing(r.ToString());
-                if (status == IPStatus.Success)
+                var target = CheckTarget(r, serverAddresses, serverDnsName);
+                if (target != null)
                 {
-                    onlineList.Add(r);
+                    onlineList.Add(target);
+                    OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target));
                 }
             });
-            var endpointTargets = new List<EndpointTarget>();
-            foreach (var ip in onlineList)
-            {
 
-                endpointTargets.Add(new EndpointTarget { Uid = Guid.NewGuid(), Name = ip.ToString(), IPAddress = ip.ToString() });
+            return onlineList.ToList();
+        }
+
+
+        private EndpointTarget CheckTarget(IPAddress ipAddress, string[] serverAddresses, string serverDnsName)
+        {
+            var status = SendPing(ipAddress.ToString());
+            if (status != IPStatus.Success) return null;
+
+            var target = new EndpointTarget
+            {
+                Uid = Guid.NewGuid(),
+                Name = ipAddress.ToString(),
+                IPAddress = ipAddress.ToString()
+            };
+
+            if (target.IPAddress != null)
+            {
+                target.DnsName = ResolveDnsByIp(IPAddress.Parse(target.IPAddress));
+                target.IsOnline = TestMsDs(target.IPAddress);
+
+                target.IsLocalComputer = serverAddresses.Any(ip => ip == target.IPAddress) || string.Equals(target.DnsName, serverDnsName, StringComparison.InvariantCultureIgnoreCase);
             }
 
-
-            return endpointTargets;
+           
+            return target;
         }
+
+        public event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetResolving;
+
+        public DeploymentTarget[] AutoResolveByNetworkSubnet()
+        {
+            List<Tuple<IPAddress, IPAddress>> subnetRanges = AddressRangeHelper.GetLocalAddressRange();
+
+            List<DeploymentTarget> sourceComputers = new List<DeploymentTarget>();
+            foreach (var range in subnetRanges)
+            {
+                var fromAndToIps = NetHelp.GetIpAddressMinMax(range.Item1, range.Item2);
+                var targetComputers = GetEndpointTargetsInRangeForAuto(fromAndToIps.Item1, fromAndToIps.Item2);
+
+                sourceComputers.AddRange(targetComputers);
+            }
+            return sourceComputers.ToArray();
+
+        }
+
+        //private List<EndpointTarget> GetEndpointTargetsInRange(IPAddress from, IPAddress to)
+        //{
+        //    List<IPAddress> retValue = new List<IPAddress>();
+
+        //    UInt32 fromAddress = IPAddressToEnumerableInt(from);
+        //    UInt32 toAddress = IPAddressToEnumerableInt(to);
+
+        //    if (fromAddress > toAddress)
+        //    {
+        //        UInt32 tmp = fromAddress;
+        //        fromAddress = toAddress;
+        //        toAddress = tmp;
+        //    }
+
+        //    for (UInt32 addr = fromAddress; addr <= toAddress; addr++)
+        //    {
+        //        IPAddress ipAddress = EnumerableIntToIPAddress(addr);
+        //        retValue.Add(ipAddress);
+        //    }
+
+        //    ConcurrentBag<IPAddress> onlineList = new ConcurrentBag<IPAddress>();
+        //    Parallel.ForEach(retValue, r =>
+        //    {
+        //        var status = SendPing(r.ToString());
+        //        if (status == IPStatus.Success)
+        //        {
+        //            onlineList.Add(r);
+        //        }
+        //    });
+        //    var endpointTargets = new List<EndpointTarget>();
+        //    foreach (var ip in onlineList)
+        //    {
+
+        //        endpointTargets.Add(new EndpointTarget { Uid = Guid.NewGuid(), Name = ip.ToString(), IPAddress = ip.ToString() });
+        //    }
+
+
+        //    return endpointTargets;
+        //}
 
         #endregion
 
@@ -319,8 +268,8 @@ namespace APTAT.DeploymentCore
                     // The following block extracts all the possible IP addresses associated with the current host in DNS.
                     IPHostEntry ipHostEntry = Dns.GetHostEntry(String.Empty);
                     dnsNames = dnsNames.Union(from address in ipHostEntry.AddressList
-                        where address.AddressFamily == AddressFamily.InterNetwork
-                        select address.ToString());
+                                              where address.AddressFamily == AddressFamily.InterNetwork
+                                              select address.ToString());
                 }
 
                 dnsNames = dnsNames.Where(name => !IsLoopbackAddress(name));
@@ -552,11 +501,11 @@ namespace APTAT.DeploymentCore
 
                 callback[0] = ar =>
                 {
-                    var port = (int)ar.AsyncState;
+                    var port = (int) ar.AsyncState;
                     try
                     {
                         client.EndConnect(ar);
-                        var remote = (IPEndPoint)client.Client.RemoteEndPoint;
+                        var remote = (IPEndPoint) client.Client.RemoteEndPoint;
                         LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Network, "Connection to {0}:{1} succeeded.", hostName, remote.Port);
                         client.Close();
                         completionCallback(true, remote.Address);
@@ -580,7 +529,7 @@ namespace APTAT.DeploymentCore
                 // which causes WCF calls from Console to fail with timeout.
                 beginConnect(MICROSOFT_DS);
             }
-            
+
             public static IPAddress GetInterNetworkIpAddress(IEnumerable<IPAddress> addressList)
             {
                 if (addressList != null)
@@ -652,5 +601,10 @@ namespace APTAT.DeploymentCore
             }
         }
         #endregion
+
+        protected virtual void OnDeploymentTargetResolving(DeploymentTargetResolvingEventArg e)
+        {
+            DeploymentTargetResolving?.Invoke(this, e);
+        }
     }
 }
