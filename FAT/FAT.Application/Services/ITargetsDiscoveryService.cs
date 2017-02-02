@@ -27,9 +27,7 @@ namespace FAT.Application.Services
 
         Task<GetDomainNameResponse> GetCurrentDomainName();
         bool IsLocalAddress(string name);
-
-        IPAddress[] GetHostIpAddresses();
-
+        
 
         string GetLoggedInUser();
     }
