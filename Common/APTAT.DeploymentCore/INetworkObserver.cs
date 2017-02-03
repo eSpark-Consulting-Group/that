@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Threading;
 using APTAT.Common;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
@@ -45,7 +47,9 @@ namespace APTAT.DeploymentCore
         IPStatus SendPing(string toString);
         IPHostEntry GetHostEntry();
         bool IsLoopbackAddress(string nameOrAddress);
-        DeploymentTarget[] AutoResolveByNetworkSubnet();
+        void AutoResolveByNetworkSubnet(CancellationTokenSource ts);
         event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetResolving;
+        List<Tuple<IPAddress, IPAddress>> GetLocalAddressRange();
+        string GetCurrentWorkgroupName();
     }
 }

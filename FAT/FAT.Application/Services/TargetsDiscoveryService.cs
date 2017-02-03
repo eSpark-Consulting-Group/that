@@ -14,13 +14,12 @@ using System.Net;
 
 using APTAT.DeploymentCore;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace FAT.Application.Services
 {
-
-
-
     public class TargetsDiscoveryService : ITargetsDiscoveryService
     {
         private readonly ITargetsManager _manager;
@@ -64,10 +63,7 @@ namespace FAT.Application.Services
                 SetLocalHostItem(e.Targets);
                 Action action = () =>
                 {
-                    if (DirectoryItemsResolved != null)
-                    {
-                        DirectoryItemsResolved(this, args);
-                    }
+                    DirectoryItemsResolved?.Invoke(this, args);
                 };
                 App.Current.Dispatcher.BeginInvoke(action);
             }
@@ -108,16 +104,31 @@ namespace FAT.Application.Services
             return new GetDomainNameResponse(null, e.Error);
         }
 
+        private CancellationTokenSource _autoDiscoveryCancellation;
 
         public void StartTargetsAutoDiscovery()
         {
-            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet());
+            _autoDiscoveryCancellation = new CancellationTokenSource();
+            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet(_autoDiscoveryCancellation));
         }
 
+        public string GetCurrentWorkgroupName()
+        {
+            return _networkHelper.GetCurrentWorkgroupName();
+        }
+
+        public void StopTargetsAutoDiscovery()
+        {
+            _autoDiscoveryCancellation.Cancel();
+        }
+
+        public async Task<List<Tuple<IPAddress, IPAddress>>> GetTargetRanges()
+        {
+            return await Task.Factory.StartNew(()=>_networkHelper.GetLocalAddressRange());
+        }
+        
         public string GetLoggedInUser()
         {
-            
-            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet());
             if (!String.IsNullOrEmpty(Environment.UserDomainName))
             {
                 return Environment.UserDomainName + "\\" + Environment.UserName;

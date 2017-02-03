@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -109,7 +110,7 @@ namespace APTAT.DeploymentCore
             return new IPAddress(ipBytes);
         }
 
-        private List<EndpointTarget> GetEndpointTargetsInRangeForAuto(IPAddress from, IPAddress to)
+        private List<IPAddress> GetOnlineComputers(IPAddress from, IPAddress to, CancellationTokenSource cancellationTokenSource)
         {
             List<IPAddress> retValue = new List<IPAddress>();
 
@@ -129,28 +130,33 @@ namespace APTAT.DeploymentCore
                 retValue.Add(ipAddress);
             }
 
-            var serverDnsName = GetLocalHostName(true);
-            var serverAddresses = GetSupportedExternalAddresses(true);
+            ConcurrentBag<IPAddress> onlineList = new ConcurrentBag<IPAddress>();
 
-            ConcurrentBag<EndpointTarget> onlineList = new ConcurrentBag<EndpointTarget>();
-            Parallel.ForEach(retValue, r =>
-            {
-                var target = CheckTarget(r, serverAddresses, serverDnsName);
-                if (target != null)
-                {
-                    onlineList.Add(target);
-                    OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target));
-                }
-            });
+          
 
+            ParallelOptions po = new ParallelOptions();
+            po.CancellationToken = cancellationTokenSource.Token;
+            po.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
+
+            Parallel.ForEach(retValue, po, dd =>
+              {
+                  var status = SendPing(dd.ToString());
+                  if (status == IPStatus.Success)
+                  {
+                      onlineList.Add(dd);
+                      po.CancellationToken.ThrowIfCancellationRequested();
+                  }
+              });
+
+            
             return onlineList.ToList();
         }
 
 
         private EndpointTarget CheckTarget(IPAddress ipAddress, string[] serverAddresses, string serverDnsName)
         {
-            var status = SendPing(ipAddress.ToString());
-            if (status != IPStatus.Success) return null;
+            //var status = SendPing(ipAddress.ToString());
+            //if (status != IPStatus.Success) return null;
 
             var target = new EndpointTarget
             {
@@ -173,61 +179,64 @@ namespace APTAT.DeploymentCore
 
         public event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetResolving;
 
-        public DeploymentTarget[] AutoResolveByNetworkSubnet()
+        public List<Tuple<IPAddress, IPAddress>> GetLocalAddressRange()
+        {
+            return AddressRangeHelper.GetLocalAddressRange();
+        }
+
+        public string GetCurrentWorkgroupName()
+        {
+            ManagementObjectSearcher mos = new ManagementObjectSearcher(@"root\CIMV2", @"SELECT * FROM Win32_ComputerSystem");
+
+            foreach (ManagementObject mo in mos.Get())
+            {
+                var obj = mo["Workgroup"];
+                if (obj != null)
+                {
+                    return obj.ToString();
+                }
+            }
+            return null;
+        }
+
+        public void AutoResolveByNetworkSubnet(CancellationTokenSource source)
         {
             List<Tuple<IPAddress, IPAddress>> subnetRanges = AddressRangeHelper.GetLocalAddressRange();
-
-            List<DeploymentTarget> sourceComputers = new List<DeploymentTarget>();
+            
+            List<IPAddress> onlineList = new List<IPAddress>();
             foreach (var range in subnetRanges)
             {
                 var fromAndToIps = NetHelp.GetIpAddressMinMax(range.Item1, range.Item2);
-                var targetComputers = GetEndpointTargetsInRangeForAuto(fromAndToIps.Item1, fromAndToIps.Item2);
-
-                sourceComputers.AddRange(targetComputers);
+                var online = GetOnlineComputers(fromAndToIps.Item1, fromAndToIps.Item2, source);
+                onlineList.AddRange(online);
             }
-            return sourceComputers.ToArray();
 
+
+            int computersCount = onlineList.Count;
+            int processed = 0;
+
+            ParallelOptions po = new ParallelOptions();
+            po.CancellationToken = source.Token;
+            po.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
+            var serverDnsName = GetLocalHostName(true);
+            var serverAddresses = GetSupportedExternalAddresses(true);
+
+            ConcurrentBag<EndpointTarget> endpointTargets = new ConcurrentBag<EndpointTarget>();
+            Parallel.ForEach(onlineList, po, r =>
+            {
+                var target = CheckTarget(r, serverAddresses, serverDnsName);
+                if (target != null)
+                {
+                    endpointTargets.Add(target);
+                    Interlocked.Increment(ref processed);
+                    OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, computersCount, processed));
+
+                    po.CancellationToken.ThrowIfCancellationRequested();
+                }
+            });
         }
 
-        //private List<EndpointTarget> GetEndpointTargetsInRange(IPAddress from, IPAddress to)
-        //{
-        //    List<IPAddress> retValue = new List<IPAddress>();
-
-        //    UInt32 fromAddress = IPAddressToEnumerableInt(from);
-        //    UInt32 toAddress = IPAddressToEnumerableInt(to);
-
-        //    if (fromAddress > toAddress)
-        //    {
-        //        UInt32 tmp = fromAddress;
-        //        fromAddress = toAddress;
-        //        toAddress = tmp;
-        //    }
-
-        //    for (UInt32 addr = fromAddress; addr <= toAddress; addr++)
-        //    {
-        //        IPAddress ipAddress = EnumerableIntToIPAddress(addr);
-        //        retValue.Add(ipAddress);
-        //    }
-
-        //    ConcurrentBag<IPAddress> onlineList = new ConcurrentBag<IPAddress>();
-        //    Parallel.ForEach(retValue, r =>
-        //    {
-        //        var status = SendPing(r.ToString());
-        //        if (status == IPStatus.Success)
-        //        {
-        //            onlineList.Add(r);
-        //        }
-        //    });
-        //    var endpointTargets = new List<EndpointTarget>();
-        //    foreach (var ip in onlineList)
-        //    {
-
-        //        endpointTargets.Add(new EndpointTarget { Uid = Guid.NewGuid(), Name = ip.ToString(), IPAddress = ip.ToString() });
-        //    }
-
-
-        //    return endpointTargets;
-        //}
+       
 
         #endregion
 
@@ -601,10 +610,14 @@ namespace APTAT.DeploymentCore
             }
         }
         #endregion
+        private static object lockObject = new object();
 
         protected virtual void OnDeploymentTargetResolving(DeploymentTargetResolvingEventArg e)
         {
-            DeploymentTargetResolving?.Invoke(this, e);
+            lock (lockObject)
+            {
+                DeploymentTargetResolving?.Invoke(this, e);
+            }
         }
     }
 }
