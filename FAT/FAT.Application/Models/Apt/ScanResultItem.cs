@@ -13,6 +13,11 @@ namespace FAT.Application.Models
         public BadFileItem[] BadFiles { get; set; }
 
         public ScanStage ScanStage { get; set; }
+        public DateTime Modified { get; set; }
         public string StatusMessage { get; set; }
+        public int FailedToAnalyzeFilesCount { get; set; }
+        public int NoVerdictFilesCount { get; set; }
+        public int MalwareFilesCount { get; set; }
+        public double Percentage { get; set; }
     }
 }

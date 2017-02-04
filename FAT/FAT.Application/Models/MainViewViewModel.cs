@@ -16,6 +16,8 @@ using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
+using APTAT.Core.Apt;
+using APTAT.Core.FLS;
 using FAT.Application.Models.Apt;
 using FAT.Application.Models.ModelBase;
 using FAT.Application.Models.Valkyrie;
@@ -683,7 +685,7 @@ namespace FAT.Application.Models
             _aptService.FlsAnalyzeProgressChanged += OnFlsAnalyzeProgressChanged;
         }
 
-        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs e)
+        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs<IAptVerdictContext> e)
         {
             if (e.Exception != null) return;
 

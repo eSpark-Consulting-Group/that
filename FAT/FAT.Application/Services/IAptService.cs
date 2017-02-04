@@ -7,11 +7,23 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
 using APTAT.Core.Descent.Apt;
+using APTAT.Application.Services.EventArgs;
+using APTAT.Core.Apt;
+using APTAT.Core.FLS;
 
 namespace FAT.Application.Services
 {
     public class DomainEventArgs : EventArgs
     {
+        public DomainEventArgs(Object userState, Exception error)
+        {
+            UserState = userState;
+            Exception = error;
+        }
+        public DomainEventArgs()
+        {
+
+        }
         public Object UserState { get; protected set; }
         public Exception Exception { get; set; }
     }
@@ -143,13 +155,24 @@ namespace FAT.Application.Services
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
-        event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
+        event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
         void BeginScan(DeploymentTarget[] items, Object userStatem
             , IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
-        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, string camPassword, NetworkCredential networkCredential);        
+        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, string camPassword
+            , NetworkCredential networkCredential);        
         string GetValkyrieDetailsLink();
+
+        void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
+            ScanOptions options);
+
+        GetModifiedComputerResultsForOperationEventArgs GetModifiedComputerResultsForOperation(Guid operationUid, DateTime? lastUtcTime);
+        GetModifiedFileVerdictsEventArgs GetUpdatedFileVerdict(DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime);
+        event EventHandler<ScanStartedEventArgs> FatScanStarted;
+        event EventHandler<ErrorEventArgs> ErrorOccurred;
+        event EventHandler<ErrorEventArgs> FatScanCompleted;
+
     }
 }
