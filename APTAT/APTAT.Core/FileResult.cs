@@ -9,7 +9,8 @@ using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 namespace APTAT.Core
 {
     public class FileResult : IEquatable<FileResult>
-    { 
+    {
+        private ValkyrieAnalysisResult _valkyrieAnalysisResult;
         public FileResult(IModule badFile)
         {
             Computers = new List<ComputerInformation>();
@@ -58,7 +59,7 @@ namespace APTAT.Core
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
         public DateTime Accessed { get; set; }
-        public string Sha1 { get; set; }
+        public string Sha1 { get; }
         public string Signer { get; set; }
         public string Description { get; set; }
         public string Version { get; set; }
@@ -164,8 +165,19 @@ namespace APTAT.Core
         {
             get { return FileAgeFormatter.GetAge(Created); }
         }
-        
-        public ValkyrieAnalysisResult ValkyrieAnalysisResult { get; private set; }
+
+        public ValkyrieAnalysisResult ValkyrieAnalysisResult
+        {
+            get { return _valkyrieAnalysisResult; }
+            private set
+            {
+                if (_valkyrieAnalysisResult == value) return;;
+                _valkyrieAnalysisResult = value;
+                VerdictModified = DateTime.UtcNow;
+            }
+        }
+
+        public DateTime VerdictModified { get; private set; }
         
         internal void SetValkyrieResult(ValkyrieAnalysisResult valkyrieAnalysisResult)
         {
@@ -177,6 +189,17 @@ namespace APTAT.Core
         public bool Equals(FileResult other)
         {
             return Sha1 == other.Sha1 && ValkyrieAnalysisResult != null && other.ValkyrieAnalysisResult != null;
-        } 
+        }
+
+        public override int GetHashCode()
+        {
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(Sha1);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as FileResult;
+            return other != null && Equals(other);
+        }
     }
 }

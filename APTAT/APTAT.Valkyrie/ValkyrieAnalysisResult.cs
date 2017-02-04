@@ -14,9 +14,8 @@ namespace APTAT.Valkyrie
                 FirstAnalysisDate = basicInfo.FirstAnalysisDate,
                 LastAnalysisDate = basicInfo.LastAnalysisDate,
                 MalwareProbability = basicInfo.MalwareProbability,
-                Verdict = basicInfo.Verdict.ToBusiness(),
                 IsWhiteListed = basicInfo.IsWhiteListed,
-                ReturnCode = basicInfo.ReturnCode
+                ReturnCode = basicInfo.ReturnCode,
             };
             
             result.OperationStatus = result.ReturnCode.ToString();
@@ -55,30 +54,29 @@ namespace APTAT.Valkyrie
         {
             AnalyzeId = valkyrie.AnalyzeId;
             SHA1 = valkyrie.SHA1;
-
+            AnalysisDate = valkyrie.AnalysisDate;
         }
 
-        public ValkyrieAnalysisResult(string Sha1, ValkyrieVerdict verdict)
+        public ValkyrieAnalysisResult(string sha1, ValkyrieVerdict verdict)
         {
-            SHA1 = Sha1;
+            SHA1 = sha1;
             Verdict = verdict;
+            AnalysisDate = DateTime.UtcNow;
         }
-        private ValkyrieAnalysisResult()
-        { }
 
+        public DateTime AnalysisDate { get; }
         public string AnalyzeId { get; private set; }
         public string SHA1 { get; }
         public bool IsWhiteListed { get; private set; }
         public bool IsSubmitted { get; private set; }
         public DateTime? LastAnalysisDate { get; private set; }
-        public ValkyrieVerdict Verdict { get; private set; }
+        public ValkyrieVerdict Verdict { get; }
         public float? MalwareProbability { get; private set; }
         public DateTime? FirstAnalysisDate { get; private set; }
         public ErrorCodesEnum ReturnCode { get; private set; }
         public string OperationStatus { get; private set; }
         public bool IsSkipped { get; private set; }
         public string SkipReason { get; private set; }
-        public SkippReasonEnum? SkipReasonAsEnum { get; private set; }
 
         public string VerdictString
         {
@@ -106,29 +104,37 @@ namespace APTAT.Valkyrie
 
         public static ValkyrieAnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
-            var result = new ValkyrieAnalysisResult(sha1, ValkyrieVerdict.NotAnalyzed) {IsSkipped = true,
-                SkipReason = reason, IsWhiteListed = false, LastAnalysisDate = null};
+            var verdict = ValkyrieVerdict.NotAnalyzed;
+            string operationStatus;
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:
-                    result.OperationStatus = "Exceed size limit (25 MB)";
+                    operationStatus = "Exceed size limit (25 MB)";
                     break;
                 case SkippReasonEnum.Cancelled:
-                    result.OperationStatus = "Cancelled by user";
+                    operationStatus = "Cancelled by user";
                     break;
                 case SkippReasonEnum.WebException:
-                    result.Verdict = ValkyrieVerdict.Pending;
-                    result.OperationStatus = reason;
+                    verdict = ValkyrieVerdict.Pending;
+                    operationStatus = reason;
                     break;
                 case SkippReasonEnum.FileNotFound:
-                    result.OperationStatus = reason;
+                    operationStatus = reason;
                     break;
                 case SkippReasonEnum.Failed:
-                    result.OperationStatus = reason;
+                    operationStatus = reason;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("skippReasonEnum", skippReasonEnum, null);
+                    throw new ArgumentOutOfRangeException(nameof(skippReasonEnum), skippReasonEnum, null);
             }
+            var result = new ValkyrieAnalysisResult(sha1, verdict)
+            {
+                IsSkipped = true,
+                SkipReason = reason,
+                IsWhiteListed = false,
+                LastAnalysisDate = null,
+                OperationStatus = operationStatus
+            };
             return result;
         }
     }

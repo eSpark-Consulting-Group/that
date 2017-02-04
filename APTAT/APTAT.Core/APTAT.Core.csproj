@@ -68,6 +68,7 @@
     <Compile Include="Apt\AggregatedAptScanResult.cs" />
     <Compile Include="Apt\AptAtManager.cs" />
     <Compile Include="AptScanInProgressEventArgs.cs" />
+    <Compile Include="Apt\AptVerdictContext.cs" />
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
     <Compile Include="Descent\Apt\AptScanStage.cs" />
     <Compile Include="Apt\AptScanner.cs" />

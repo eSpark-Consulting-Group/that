@@ -36,6 +36,7 @@ namespace APTAT.Core.Apt
             var operationResult = sender as IAptScanOperationContext;
             operationResult.DescentCompleted -= OnOperationContextDescentCompleted;
             CompletedTime = operationResult.CompletedTime;
+            OperationsInProgress.Remove(operationResult.OperationUid);
         }
 
         private void OnOperationContextComputerDescentCompleted(object sender, IComputerDescentResult computerDescentResult)
@@ -47,8 +48,15 @@ namespace APTAT.Core.Apt
         {
             foreach(var sr in aptScanContext.ScanResults)
                 _scanResults.AddOrUpdate(sr.TargetUid, sr, (key, oldValue) => sr);
-            _baseOperationContext.DescentCompleted += OnOperationContextDescentCompleted;
-            _baseOperationContext.ComputerDescentCompleted += OnOperationContextComputerDescentCompleted;
+            AggregatedOperationUids.Add(aptScanContext.OperationUid);
+            OperationsInProgress.Add(aptScanContext.OperationUid);
+            aptScanContext.DescentCompleted += OnOperationContextDescentCompleted;
+            aptScanContext.ComputerDescentCompleted += OnOperationContextComputerDescentCompleted;
+        }
+
+        public bool IsOperationInProgress(Guid operationUid)
+        {
+            return OperationsInProgress.Contains(operationUid);
         }
 
         public IFilesStatistics CalculateFilesStatistics()
@@ -61,6 +69,8 @@ namespace APTAT.Core.Apt
                 .Distinct().Count();
         }
         public Guid OperationUid { get; private set; }
+        protected HashSet<Guid> AggregatedOperationUids { get; private set; } = new HashSet<Guid>();
+        protected HashSet<Guid> OperationsInProgress { get; private set; } = new HashSet<Guid>();
         public int SucceededTargetsCount { get; private set; }
         public int FailedTargetsCount { get; private set; }
         public int NotPerformedTargetsCount { get; private set; }

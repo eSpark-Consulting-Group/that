@@ -9,6 +9,7 @@ namespace APTAT.Core.Apt
     public interface IAggregatedAptScanResult
     {
         void MergeOperationContext(IAptScanOperationContext aptScanContext);
+        bool IsOperationInProgress(Guid operationUid);
         Guid OperationUid { get; }
         int SucceededTargetsCount { get; }
         int FailedTargetsCount { get; }

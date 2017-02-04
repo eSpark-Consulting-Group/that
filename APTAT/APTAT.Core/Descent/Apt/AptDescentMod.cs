@@ -195,7 +195,8 @@ namespace APTAT.Core.Descent.Apt
             NotifyProgressChanged(operationUid, hostName, computerUid, resourceMessage, scanStage, 0, 0, 0, 0, percentage, 0, 0);
         }
 
-        private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage, int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, double percentage, int errorFilesCount, int failedAtNodeCount)
+        private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage,
+            int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, double percentage, int errorFilesCount, int failedAtNodeCount)
         {
             if ((percentage == 0 || double.IsInfinity(percentage)) && scanStage == AptScanStage.ScanInProgress)
                 return;
@@ -205,7 +206,8 @@ namespace APTAT.Core.Descent.Apt
                 throw new OperationCanceledException();
             FormattedText formattedText = new FormattedText(resourceMessage);
             Tracker?.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, 
-                new AptDescentProgressItem(computerUid, hostName, operationUid, formattedText, scanStage, totalFilesCount, unknownFilesCount, malwaresCount, safeFilesCount, percentage, errorFilesCount, failedAtNodeCount)), false);
+                new AptDescentProgressItem(computerUid, hostName, operationUid, formattedText, scanStage, totalFilesCount, unknownFilesCount
+                , malwaresCount, safeFilesCount, percentage, errorFilesCount, failedAtNodeCount)), false);
         }
 
         protected override void OnDescentHelperCopied(object sender, DescentHelperEventArgs args)

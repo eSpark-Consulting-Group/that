@@ -9,6 +9,10 @@ namespace APTAT.Core
         {
             return result.Cloud == CloudVerdict.FailedToAnalyze || result.Cloud == CloudVerdict.NoVerdict;
         }
+        public static Boolean IsUnknown(this IFlsResult result)
+        {
+            return result.Cloud == CloudVerdict.Unknown || result.Cloud == CloudVerdict.FirstSeen;
+        }
     }
 
     public interface IFlsResult

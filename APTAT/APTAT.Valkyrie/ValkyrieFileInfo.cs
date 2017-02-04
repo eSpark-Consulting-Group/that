@@ -9,8 +9,9 @@ namespace APTAT.Valkyrie
 {
     public class ValkyrieFileInfo
     {
-        public ValkyrieFileInfo()
+        public ValkyrieFileInfo(string sha1)
         {
+            Sha1 = sha1;
             PreviousValkyrieVerdict = ValkyrieVerdict.Pending;
             Paths = new ReadOnlyCollection<string>(_pathList);
         }
@@ -18,7 +19,7 @@ namespace APTAT.Valkyrie
         private readonly List<string> _pathList = new List<string>();
         public ReadOnlyCollection<string> Paths { get; }
 
-        public string Sha1 { get; set; }
+        public string Sha1 { get; }
         public string Ip { get; set; }     
         public CloudVerdict FlsCloud { get; set; }
         public ValkyrieVerdict PreviousValkyrieVerdict { get; set; }
@@ -57,7 +58,7 @@ namespace APTAT.Valkyrie
         }
         public override int GetHashCode()
         {
-            return Sha1.GetHashCode();
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(Sha1);
         }
 
         public override bool Equals(object obj)

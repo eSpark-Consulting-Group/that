@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
@@ -28,6 +29,7 @@ namespace APTAT.Core.Descent.Apt
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
         public AptScanStage ScanStage { get; set; }
+
         private int _malwareCount;
         public int MalwareFilesCount {
             get            
@@ -231,6 +233,11 @@ namespace APTAT.Core.Descent.Apt
             if (item != null)
             {
                 ScanStage = item.ScanStage;
+                UnknownFilesCount = item.UnknownFilesCount;
+                TotalFilesCount = item.TotalFilesCount;
+                MalwareFilesCount = item.MalwaresCount;
+                FailedToAnalyzeFilesCount = item.ErrorFilesCount;
+                NoVerdictFilesCount = item.FailedAtNodeCount;
             }
             if (progress.IsCanceled)
                 ScanStage = AptScanStage.OperationCanceled;

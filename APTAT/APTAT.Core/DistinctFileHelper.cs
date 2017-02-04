@@ -24,11 +24,10 @@ namespace APTAT.Core
                 {
                     if (!files.ContainsKey(badFile.Sha1))
                     {
-                        var val = new ValkyrieFileInfo
+                        var val = new ValkyrieFileInfo(badFile.Sha1)
                         {
                             Ip = scanResult.Computer.IPAddress,
                             Path = badFile.Path,
-                            Sha1 = badFile.Sha1,
                             Size = badFile.Size,
                             FlsCloud = MapCloud(badFile.Cloud),
                             IsLocalComputer = scanResult.Computer.IsLocalComputer

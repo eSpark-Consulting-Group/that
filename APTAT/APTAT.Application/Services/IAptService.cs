@@ -8,6 +8,7 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using System.Collections.Generic;
+using APTAT.Core.FLS;
 
 namespace APTAT.Application.Services
 {
@@ -140,7 +141,7 @@ namespace APTAT.Application.Services
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         event EventHandler ValkyrieAnalyzeStarted;
-        event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
+        event EventHandler<FlsRequestEventArgs<IFlsResult>> FlsAnalyzeProgressChanged;
         void BeginScan(DeploymentTarget[] items, Object userState,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
         void UpdateFlsPorts(int udpPort, int tcpPort);

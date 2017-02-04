@@ -42,6 +42,8 @@ namespace APTAT.Valkyrie
 
         private readonly Object _lookupSync = new object();
         private bool _checkingTimerIsStop = true;
+        private bool _isMainScanFinished = true;
+        private bool _completed = false;
 
         private Timer _progressNotifyTimer;
         private Timer _checkStatusesTimer;
@@ -75,6 +77,7 @@ namespace APTAT.Valkyrie
                 _checkingTimerIsStop = false;
                 foreach (var fileInfo in filesToAnalyze)
                     _lookupContexts.Add(fileInfo);
+                needStartTimer = needStartTimer && _isMainScanFinished;
             }
             if (needStartTimer)
                 _checkStatusesTimer?.Change(TimeSpan.FromSeconds(5).Milliseconds, Timeout.Infinite);
@@ -133,6 +136,7 @@ namespace APTAT.Valkyrie
         {
             _progressNotifyTimer?.Change(Timeout.Infinite, Timeout.Infinite);
             OnAnalyzeProgressChanged(_analysedItems);
+            if (_isMainScanFinished && _analysedItems.Count == 0)  return;
             _progressNotifyTimer?.Change(1000, Timeout.Infinite);
         }
 
@@ -377,7 +381,6 @@ namespace APTAT.Valkyrie
 
         private void OnAnalyzeCompleted()
         {
-            _progressNotifyTimer.Change(Timeout.Infinite, Timeout.Infinite);
             var tmp = AnalyzeCompleted;
             if (tmp != null)
             {
@@ -387,7 +390,6 @@ namespace APTAT.Valkyrie
                             true,null));
                 }, CancellationToken.None);
             }
-
         }
 
         private void OnAnalyzeCompleted(Task task)
@@ -428,9 +430,11 @@ namespace APTAT.Valkyrie
                     _checkingTimerIsStop = false;
                     needStartChecking = true;
                 }
+                _isMainScanFinished = true;
             }
             if (needStartChecking)
                 _checkStatusesTimer.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
+
         }
 
         private void OnAnalyzeProgressChanged(ConcurrentDictionary<string, ValkyrieAnalysisResult> items, bool isUpdate = false)
@@ -721,7 +725,9 @@ namespace APTAT.Valkyrie
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;
+            _lookupContexts.Clear();
             _fileScanned = 0;
+            _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
@@ -729,6 +735,7 @@ namespace APTAT.Valkyrie
 
             Task.Factory.StartNew(t =>
             {
+                _isMainScanFinished = false;
                 var regInfo = Register(camRegistration, productName, proxyCredential);
                 if (regInfo.ReturnCode != 0)
                 {
@@ -759,9 +766,6 @@ namespace APTAT.Valkyrie
                 _progressNotifyTimer.Change(1000, Timeout.Infinite);
                 _filesCount = filesToAnalyze.Count;
                 SubmitToAutomaticAnalysis(filesToAnalyze, _cancellationTokenSource.Token, AddResult);
-                
-                
-                
             }, TaskCreationOptions.None, cancellationToken)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
         }

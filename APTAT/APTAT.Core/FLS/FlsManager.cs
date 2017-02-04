@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using APTAT.Core.FLS;
 using APTAT.Core.Properties;
 
 
@@ -15,7 +16,7 @@ namespace APTAT.Core
         private CancellationToken _cancellationToken;
         private readonly FlsApiProvider _apiProvider = null;
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
-        public event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
+        public event EventHandler<FlsRequestEventArgs<IFlsResult>> FlsAnalyzed;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _isWorking = false;
         private readonly int _uploadInterval;
@@ -229,7 +230,7 @@ namespace APTAT.Core
         {
             if (_cancellationToken.IsCancellationRequested)
                 return;
-            var e = new FlsRequestEventArgs(results, exception);
+            var e = new FlsRequestEventArgs<IFlsResult>(results, exception);
             FlsAnalyzed?.Invoke(this, e);
         }
     }

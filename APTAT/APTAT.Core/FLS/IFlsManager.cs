@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using APTAT.Core.FLS;
 
 namespace APTAT.Core
 {
     public interface IFlsManager
     {
-        event EventHandler<FlsRequestEventArgs> FlsAnalyzed;
+        event EventHandler<FlsRequestEventArgs<IFlsResult>> FlsAnalyzed;
 
         void Enqueue(IEnumerable<string> hashes, bool startIfCancelled = false);
 

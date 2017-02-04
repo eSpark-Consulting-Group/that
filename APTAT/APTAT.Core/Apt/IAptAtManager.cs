@@ -8,6 +8,7 @@ using APTAT.DeploymentCore.Directory;
 using APTAT.Valkyrie;
 using System.Collections.ObjectModel;
 using APTAT.Core.Apt;
+using APTAT.Core.FLS;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Core
@@ -16,7 +17,7 @@ namespace APTAT.Core
     {
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         event AnalyzeCompletedEventHandler<FileResult> ValkyrieAnalyzeCompleted;
-        event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
+        event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
         event EventHandler ValkyrieAnalyzeStarted;
         IAggregatedAptScanResult AggregatedScanResults { get; }
 
@@ -24,6 +25,8 @@ namespace APTAT.Core
 
         IAptReportBuilder GetAptReportBuilder();
         int GetDistinctFilesCount();
+        IAptVerdictContext[] GetModifiedFileVerdicts(DateTime? modifiedDate);
+        FileResult[] GetModifiedValkyrieVerdicts(DateTime? modifiedTime);
 
         void StopScan(Guid[] targets);
         void UpdateFlsPorts(int udpPort, int tcpPort);
