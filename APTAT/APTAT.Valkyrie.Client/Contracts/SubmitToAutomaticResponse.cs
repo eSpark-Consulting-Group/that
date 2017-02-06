@@ -3,11 +3,8 @@ using Valkyrie.WebApiProvider.Enums;
 
 namespace Valkyrie.WebApiProvider.Contracts
 {
-    public class SubmitToAutomaticResponse
+    public class ValkyrieResponse
     {
-        [JsonProperty("analysis_id")]
-        public string AnalysisId { get; set; }
-
         [JsonProperty("result_description")]
         public string ResultDescription { get; set; }
 
@@ -16,5 +13,12 @@ namespace Valkyrie.WebApiProvider.Contracts
 
         [JsonProperty("return_code")]
         public ErrorCodesEnum ReturnCode { get; set; }
+
+    }
+
+    public class SubmitToAutomaticResponse: ValkyrieResponse
+    {
+        [JsonProperty("analysis_id")]
+        public string AnalysisId { get; set; }
     }
 }

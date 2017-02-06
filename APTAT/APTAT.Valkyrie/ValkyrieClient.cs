@@ -634,10 +634,11 @@ namespace APTAT.Valkyrie
                         SubmitToken = basicInfo.SubmitToken,                        
                         EndpointId = endpointId,
                         AptScanId = _aptScanId,
-                        FilePath = fileInfo.Paths.ToArray()
+                        FilePath = WebUtility.HtmlDecode(originalFilePath)
                     };
 
                     SubmitToAutomaticResponse response;
+                    ValkyrieResponse fatSubmitFilesResponse;
                     using (fileInfo.IsLocalComputer || _login == null ? null: 
                         new ImpersonationHelper(_login, "", _password, ImpersonationHelper.Logon32LogonType.NewCredentials))
                     {
@@ -648,10 +649,20 @@ namespace APTAT.Valkyrie
                         using (var fStream = File.OpenRead(remoteFilePath))
                         {
                             response = _provider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token, fileName);
+                            fatSubmitFilesResponse = _provider.FatSubmitFiles(new FatSubmitFilePathsRequest()
+                            {
+                                Sha1 = sha1,
+                                ApiKey = _apiKey,
+                                FilePaths = fileInfo.Paths.ToArray(),
+                                ScanId = _aptScanId
+
+                            });
                         }
                     }
                     if (response.ReturnCode != ErrorCodesEnum.Success)
-                        throw new InvalidOperationException(basicInfo.ReturnCode.GetEnumDescription());
+                        throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+                    if (fatSubmitFilesResponse.ReturnCode != ErrorCodesEnum.Success)
+                        throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
 
                     Trace.WriteLine(
                         $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1: {sha1} FilePath: {originalFilePath} " +

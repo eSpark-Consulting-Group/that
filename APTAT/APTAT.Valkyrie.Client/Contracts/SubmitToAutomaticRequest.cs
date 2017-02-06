@@ -10,7 +10,7 @@ namespace Valkyrie.WebApiProvider.Contracts
 
 
         [JsonProperty("file_path")]
-        public string[] FilePath { get; set; }
+        public string FilePath { get; set; }
 
 
         [JsonProperty("endpoint_id")]

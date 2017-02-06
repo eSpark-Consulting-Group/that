@@ -21,5 +21,6 @@ namespace Valkyrie.WebApiProvider
         SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, FileStream fileStream, CancellationToken token, string originalFilePath);
         SubmitToManualResponse SubmitToManualAnalysis(SubmitToManualRequest request, string filePath, CancellationToken token);
         SubmitToManualResponse SubmitToManualAnalysisWithoutUpload(SubmitToManualRequestSHA1 request);
+        ValkyrieResponse FatSubmitFiles(FatSubmitFilePathsRequest request);
     }
 }

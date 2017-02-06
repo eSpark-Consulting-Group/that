@@ -28,7 +28,9 @@ namespace Valkyrie.WebApiProvider
         private Uri RegisterWithCamLicenseUri => new Uri(_valkyrieBaseUri, "fvs_register_with_cam_license");
         private Uri RegisterWithCamCredentialsUri => new Uri(_valkyrieBaseUri, "fvs_register_with_cam_credentials");
         private Uri CheckAnalysisResultUri => new Uri(_valkyrieBaseUri, "fvs_check_analysis_result");
+        private Uri FatSubmitFilePaths => new Uri(_valkyrieBaseUri, "/fat_submit_file_paths");
         private bool IsProduction => _valkyrieBaseUri.ToString().ToUpper().Contains("staging") == false;
+
         #endregion
         
         private Uri _valkyrieBaseUri;
@@ -154,11 +156,6 @@ namespace Valkyrie.WebApiProvider
 
         public SubmitToAutomaticResponse SubmitToAutomaticAnalysis(SubmitToAutomaticRequest request, FileStream fileStream, CancellationToken token, String originalFilePath)
         {
-            if (token == null)
-            {
-                token = CancellationToken.None;
-            }
-
             var payload = request.ToNameValueCollection();
             var uploadResult = MultipartPostHelper.Post(fileStream, SubmitToAutomaticAnalysisUri.AbsoluteUri, payload, originalFilePath, token);
             var response = JsonConvert.DeserializeObject<SubmitToAutomaticResponse>(uploadResult);
@@ -166,6 +163,7 @@ namespace Valkyrie.WebApiProvider
             {
                 throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
             }
+
             return response;
         }
 
@@ -188,6 +186,16 @@ namespace Valkyrie.WebApiProvider
         //    return response;
         //}
 
+        #region Fat Methods
+
+        public ValkyrieResponse FatSubmitFiles(FatSubmitFilePathsRequest request)
+        {
+            var result = CallValkyrie<ValkyrieResponse>(FatSubmitFilePaths, request);
+            return result;
+        }
+
+        #endregion
+
         public ManualStatusResponse ManualStatus(ManualStatusRequest request)
         {
             var result = CallValkyrie<ManualStatusResponse>(ManualStatusUri, request);
@@ -202,7 +210,7 @@ namespace Valkyrie.WebApiProvider
 
         private T CallValkyrie<T>(Uri apiUri, object request)
         {
-            Trace.WriteLine(string.Format("{0:MM/dd/yy H:mm:ss.ffff} : Call {1}", DateTime.UtcNow, apiUri.ToString()));
+            Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Call {apiUri}");
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
             {
