@@ -9,6 +9,8 @@ namespace FAT.Application.Models
 
         public Boolean IsMalware { get { return Cloud == CloudVerdict.Malware; } }
 
+        public Boolean IsClean { get { return Cloud == CloudVerdict.Safe; } }
+
         public String Name { get; set; }
 
         public Int64 Size { get; set; }

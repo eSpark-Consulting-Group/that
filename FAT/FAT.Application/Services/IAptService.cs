@@ -105,7 +105,6 @@ namespace FAT.Application.Services
         public Int32 FailedCount { get; set; }
         public Int32 CanceledCount { get; set; }
         public Int32 NotPerformedCount { get; set; }  
-        public Int32 MalwaresFound { get; set; }
         public IFilesStatistics FilesStatistics { get; set; }
         public int DistinctFileFound { get; set; }
     }

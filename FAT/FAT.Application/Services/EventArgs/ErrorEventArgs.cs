@@ -2,7 +2,7 @@
 
 namespace APTAT.Application.Services.EventArgs
 {
-    public class ErrorEventArgs
+    public class ErrorEventArgs : System.EventArgs
     {
         public ErrorEventArgs(Exception error)
         {

@@ -152,9 +152,6 @@
     <Compile Include="Models\ModelBase\ISelectableItem.cs" />
     <Compile Include="Services\FileBrowserService.cs" />
     <Compile Include="Services\IFileBrowserService.cs" />
-    <Compile Include="Views\ConfirmationWindow.xaml.cs">
-      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\EmptyStringToBoolConverter.cs" />
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
     <Compile Include="Converters\SelectedIndexToBoolConverter.cs" />
@@ -168,6 +165,9 @@
     <Compile Include="Extensions\PortValidationExtensions.cs" />
     <Compile Include="EULAWindow.xaml.cs">
       <DependentUpon>EULAWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConfirmationWindow.xaml.cs">
+      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginPasswordUserControl.xaml.cs">
       <DependentUpon>LoginPasswordUserControl.xaml</DependentUpon>
@@ -266,13 +266,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ConfirmationWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="EULAWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConfirmationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LoginPasswordUserControl.xaml">
       <SubType>Designer</SubType>

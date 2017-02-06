@@ -137,7 +137,7 @@ namespace FAT.Application.Services
             lock (this)
             {
                 if(!_valkyrieStarted)
-                FatScanCompleted?.Invoke(this, new ErrorEventArgs(null));
+                    FatScanCompleted?.Invoke(this, new ErrorEventArgs(null));
             }
         }
 
@@ -193,6 +193,7 @@ namespace FAT.Application.Services
                     NoVerdictFilesCount = r.NoVerdictFilesCount,
                     FailedToAnalyzeFilesCount = r.FailedToAnalyzeFilesCount,
                     UnknownFilesCount = r.UnknownFilesCount,
+                    CleanFilesCount = r.SafeFilesCount,
                     ScanStage = FromAptScanStage(r.ScanStage),
                     Modified = r.Modified,
                     StatusMessage = r.ShortStatusMessage.ToString(),
@@ -434,8 +435,8 @@ namespace FAT.Application.Services
             args.CanceledCount = e.CanceledCount;
             args.FailedCount = e.FailedCount;
             args.NotPerformedCount = e.NotPerformedCount;
-            args.FilesStatistics = e.FilesStatistics;
-            args.MalwaresFound = e.FilesStatistics.MalwareFilesCount;
+            var fs = _manager.AggregatedScanResults.CalculateFilesStatistics();
+            args.FilesStatistics = fs;
             args.DistinctFileFound = _manager.GetDistinctFilesCount();
 
             Action action = () =>

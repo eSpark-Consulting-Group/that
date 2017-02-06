@@ -34,7 +34,6 @@ namespace FAT.Application
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
-            _viewModel.ValkyrieAnalyzeCompleted += ViewModelOnValkyrieAnalyzeCompleted;
 
 
         }
@@ -82,7 +81,7 @@ namespace FAT.Application
             error.ShowDialog();
         }
 
-        private void OnScanCompleted(Object sender, ScanCompletedEventArgs e)
+        private void OnScanCompleted(Object sender, EventArgs e)
         {
             if (_onCompletedAction != null)
             {
@@ -92,28 +91,6 @@ namespace FAT.Application
 
             if (_confirmation != null && _confirmation.DialogResult == null)
                 _confirmation.DialogResult = false;
-
-            if (e.SuccededCount > 0)
-            {
-                if (e.CanceledCount > 0)
-                    _viewModel.IsReportEnabled = true;
-                else
-                {
-                    if (e.FilesStatistics.UnknownFilesCount > 0
-                        || e.FilesStatistics.FailedToAnalyzeFilesCount > 0
-                        || e.FilesStatistics.NoVerdictFilesCount > 0)
-                    {
-                        Dispatcher.Invoke(delegate
-                        {
-                            _viewModel.BeginValkyrieAnalysis();
-                        });
-                    }
-                    else
-                    {
-                        _viewModel.IsReportEnabled = true;
-                    }
-                }
-            }
 
         }
 

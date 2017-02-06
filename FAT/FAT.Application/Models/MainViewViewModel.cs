@@ -16,6 +16,8 @@ using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
+using APTAT.Application.Services.EventArgs;
+using APTAT.Core;
 using FAT.Application.Models.Apt;
 using FAT.Application.Models.ModelBase;
 using FAT.Application.Models.Valkyrie;
@@ -25,10 +27,9 @@ namespace FAT.Application.Models
 {
     public sealed class MainViewViewModel : ViewModel, IMainViewModel
     {
-        public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
+        public event EventHandler ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
-
-        public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieFile>> ValkyrieAnalyzeCompleted;
+        
 
         private string _tcpPort = "80";
         private string _udpPort = "53";
@@ -38,11 +39,14 @@ namespace FAT.Application.Models
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
+        private DateTime? _lastModifiesComputerDate = null;
+        private DateTime? _lastModifiesFlsVerdictDate = null;
+        private DateTime? _lastModifiesValkyrieVerdictDate = null;
+
         private Guid _operationGuid;
         private DeploymentItem[] _selectedTargets;
 
         private Boolean _isReportEnabled;
-        private Boolean _isValkyrieReportEnabled;
         private Boolean _isValkyrieAnalysCompleted;
         private Boolean? _isScanInProgress = false;
         private Boolean _cancelInProgress = false;
@@ -141,101 +145,101 @@ namespace FAT.Application.Models
         public bool HasMalwares { get; set; }
         public bool HasUnknowns { get; set; }
 
-        private void SimulateCounterActivity()
-        {
-            var testTimer = new DispatcherTimer();
-            testTimer.Interval = TimeSpan.FromSeconds(1);
-            testTimer.Tick += (o, e) =>
-            {
-                if (Percentage == 90)
-                    Set(() => Percentage, 15);
-                else
-                    Set(() => Percentage, Percentage + 15);
+        //private void SimulateCounterActivity()
+        //{
+        //    var testTimer = new DispatcherTimer();
+        //    testTimer.Interval = TimeSpan.FromSeconds(1);
+        //    testTimer.Tick += (o, e) =>
+        //    {
+        //        if (Percentage == 90)
+        //            Set(() => Percentage, 15);
+        //        else
+        //            Set(() => Percentage, Percentage + 15);
 
-                if (!HasMalwares && !HasUnknowns)
-                    Set(() => HasMalwares, true);
-                else if (HasMalwares)
-                {
-                    Set(() => HasMalwares, false);
-                    Set(() => HasUnknowns, true);
-                }
-                else if (HasUnknowns)
-                    Set(() => HasUnknowns, false);
+        //        if (!HasMalwares && !HasUnknowns)
+        //            Set(() => HasMalwares, true);
+        //        else if (HasMalwares)
+        //        {
+        //            Set(() => HasMalwares, false);
+        //            Set(() => HasUnknowns, true);
+        //        }
+        //        else if (HasUnknowns)
+        //            Set(() => HasUnknowns, false);
 
 
-                _scanCounterManager.AddClean();
+        //        _scanCounterManager.AddClean();
 
-                if (Percentage == 30)
-                {
-                    _scanCounterManager.AddPending();
-                }
-                if (Percentage == 45)
-                {
-                    _scanCounterManager.AddPending(-1);
-                    _scanCounterManager.AddMalware();
-                }
-                if (Percentage == 60)
-                {  
-                    _scanCounterManager.AddFailed();
-                }
-                if (Percentage == 75)
-                {
-                    _scanCounterManager.AddPending();     
-                }
-                if (Percentage == 90)
-                {
-                    _scanCounterManager.AddPending(-1);
-                    _scanCounterManager.AddUnknown();
-                }
+        //        if (Percentage == 30)
+        //        {
+        //            _scanCounterManager.AddPending();
+        //        }
+        //        if (Percentage == 45)
+        //        {
+        //            _scanCounterManager.AddPending(-1);
+        //            _scanCounterManager.AddMalware();
+        //        }
+        //        if (Percentage == 60)
+        //        {  
+        //            _scanCounterManager.AddFailed();
+        //        }
+        //        if (Percentage == 75)
+        //        {
+        //            _scanCounterManager.AddPending();     
+        //        }
+        //        if (Percentage == 90)
+        //        {
+        //            _scanCounterManager.AddPending(-1);
+        //            _scanCounterManager.AddUnknown();
+        //        }
 
-            };
-            testTimer.Start();
-        }
+        //    };
+        //    testTimer.Start();
+        //}
 
-        private void SeedComputers()
-        {
-            Computers.Add(new ThreatInfoItem { IsOnline = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", IsRootItem = true, ScanStage = ScanStage.OperationCompleted });
-            Computers.Add(new ThreatInfoItem
-            {
-                IsOnline = true,
-                IpAddress = "10.100.65.11",
-                Name = "EUGENET-PC",
-                IsRootItem = true,
-                ScanStage = ScanStage.OperationCompleted,
-                UnknownFilesCount = 1,
-                Items = new ObservableCollection<ThreatInfoItem>(new[]
-            {
-                new ThreatInfoItem { Name = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true },
-                new ThreatInfoItem{ Name = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true },
-                new ThreatInfoItem{ Name = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true },
-                new ThreatInfoItem{ Name = "application.exe", SizeString = "1 MB", IsOnline = true  }
-            })
-            });
-            Computers.Add(new ThreatInfoItem { IsOnline = true, IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, FailedToAnalyzeCount = 1 });
-            Computers.Add(new ThreatInfoItem { IsOnline = true, IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, MalwareFilesCount = 1 });
-            Computers.Add(new ThreatInfoItem { IsOnline = true, IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationFailed });
-            Computers.Add(new ThreatInfoItem { IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", });
-        }
+        //private void SeedComputers()
+        //{
+        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", IsComptuer = true, ScanStage = ScanStage.OperationCompleted });
+        //    Computers.Add(new ThreatInfoItem
+        //    {
+        //        IsOnline = true,
+        //        IpAddress = "10.100.65.11",
+        //        Name = "EUGENET-PC",
+        //        IsComptuer = true,
+        //        ScanStage = ScanStage.OperationCompleted,
+        //        UnknownFilesCount = 1,
+        //        Items = new ObservableCollection<ThreatInfoItem>(new[]
+        //    {
+        //        new ThreatInfoItem { Name = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true },
+        //        new ThreatInfoItem{ Name = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true },
+        //        new ThreatInfoItem{ Name = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true },
+        //        new ThreatInfoItem{ Name = "application.exe", SizeString = "1 MB", IsOnline = true  }
+        //    })
+        //    });
+        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, FailedToAnalyzeCount = 1 });
+        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, MalwareFilesCount = 1 });
+        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationFailed });
+        //    Computers.Add(new ThreatInfoItem { IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", });
+        //}
 
-        private void SeedFiles()
-        {
-            Files.Add(new ThreatInfoItem { ShortName = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true, Computers =
-                new ObservableCollection<ThreatInfoItem>(new[]
-            {
-                new ThreatInfoItem { Name = "EUGENET-PC", IpAddress = "10.100.65.11", IsOnline = true, IsRootItem = true,ScanStage = ScanStage.OperationCompleted },
-            })});
-            Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true });
-            Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true });
-            Files.Add(new ThreatInfoItem { ShortName = "application.exe", SizeString = "1 MB", IsOnline = true });
-        }
+        //private void SeedFiles()
+        //{
+        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true, Computers =
+        //        new ObservableCollection<ThreatInfoItem>(new[]
+        //    {
+        //        new ThreatInfoItem { Name = "EUGENET-PC", IpAddress = "10.100.65.11", IsOnline = true, IsComptuer = true,ScanStage = ScanStage.OperationCompleted },
+        //    })});
+        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true });
+        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true });
+        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", SizeString = "1 MB", IsOnline = true });
+        //}
 
         #endregion
 
         private async void OnLoaded()
         {
-            SimulateCounterActivity();
-            SeedComputers();
-            SeedFiles();
+            //SimulateCounterActivity();
+            //SeedComputers();
+            //SeedFiles();
 
             Set(() => Loaded, true);
 
@@ -425,12 +429,12 @@ namespace FAT.Application.Models
 
         public Boolean IsDetailsEnabled
         {
-            get { return SelectedItem != null && !SelectedItem.IsRootItem; }
+            get { return SelectedItem != null && !SelectedItem.IsComptuer; }
         }
 
         public Boolean IsMultipleDetailsEnabled
         {
-            get { return SelectedItems != null && SelectedItems.Count == 1 && !SelectedItems[0].IsRootItem; }
+            get { return SelectedItems != null && SelectedItems.Count == 1 && !SelectedItems[0].IsComptuer; }
         }
 
 
@@ -438,7 +442,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsRootItem &&
+                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComptuer &&
                   (_.ScanStage == ScanStage.ScanFailed ||
                   _.ScanStage == ScanStage.OperationFailed ||
                   _.ScanStage == ScanStage.OperationCanceled));
@@ -449,7 +453,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsRootItem &&
+                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComptuer &&
                   (_.ScanStage == ScanStage.ScanInProgress));
             }
         }
@@ -463,33 +467,7 @@ namespace FAT.Application.Models
                 RaisePropertyChanged("IsReportEnabled");
             }
         }
-
-        private bool _isAnalyseWithValkyrieEnabled;
-        public bool IsAnalyseWithValkyrieEnabled
-        {
-            get { return _isAnalyseWithValkyrieEnabled; }
-            set
-            {
-                _isAnalyseWithValkyrieEnabled = value;
-                RaisePropertyChanged("IsAnalyseWithValkyrieEnabled");
-            }
-        }
-
-        public bool ShowFlsReportsMenu
-        {
-            get { return !IsValkyrieReportEnabled; }
-        }
-
-        public bool IsValkyrieReportEnabled
-        {
-            get { return _isValkyrieReportEnabled; }
-            set
-            {
-                _isValkyrieReportEnabled = value;
-                RaisePropertyChanged("IsValkyrieReportEnabled");
-                RaisePropertyChanged("ShowFlsReportsMenu");
-            }
-        }
+        
 
         public ThreatInfoItem SelectedItem
         {
@@ -568,25 +546,23 @@ namespace FAT.Application.Models
 
         public ObservableCollection<ThreatInfoItem> Files { get; set; } = new ObservableCollection<ThreatInfoItem>();
 
-        public ObservableCollection<ThreatInfoItem> Computers { get; set; } = new ObservableCollection<ThreatInfoItem>();
+        public ObservableCollection<ThreatInfoItem> Computers
+        {
+            get { return _computers; }
+            set
+            {
+                _computers = value;
+                RaisePropertyChanged(nameof(Computers));
+            }
+        }
 
 
-        private ScanCounterManager _scanCounterManager;
+        private readonly ScanCounterManager _scanCounterManager;
 
         public ScanCounterCollection ScanCounters
         {
             get
             {
-                if (_scanCounterManager == null)
-                {
-                    _scanCounterManager = new ScanCounterManager();
-                    _scanCounterManager.SelectionChanged = () => 
-                        Set(() => FilterOrders, 
-                            _scanCounterManager.Collection.
-                                Where(_ => _.IsSelected).
-                                    Select(_ => _.Order).ToArray());
-                }
-
                 return _scanCounterManager.Collection;
             }
         }
@@ -614,6 +590,8 @@ namespace FAT.Application.Models
         }
 
         private bool _groupByComputers = true;
+        private ObservableCollection<ThreatInfoItem> _computers = new ObservableCollection<ThreatInfoItem>();
+
         public bool GroupByComputers
         {
             get { return _groupByComputers; }
@@ -656,7 +634,18 @@ namespace FAT.Application.Models
         {
             _aptService = aptService;
             _targetsDiscoveryService = targetsDiscoveryService;
-
+            _scanIterator = new Dictionary<Guid, ScanProgressItem>();
+            _scanCounterManager = new ScanCounterManager();
+            _scanCounterManager.SelectionChanged = () =>
+                Set(() => FilterOrders,
+                    _scanCounterManager.Collection.
+                        Where(_ => _.IsSelected).
+                            Select(_ => _.Order).ToArray());
+            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher)
+            {
+                Interval = TimeSpan.FromMilliseconds(500d)
+            };
+            _scanIteratorTimer.Tick += IterateThroughScan;
             _storage = storage;
 
             ChangeScreenCommand = new DelegateCommand(o =>
@@ -728,7 +717,7 @@ namespace FAT.Application.Models
             var items = new List<ThreatInfoItem>();
             foreach (var item in SelectedItems)
             {
-                if (item.IsRootItem &&
+                if (item.IsComptuer &&
                     (item.ScanStage == ScanStage.ScanFailed ||
                     item.ScanStage == ScanStage.OperationFailed ||
                     item.ScanStage == ScanStage.OperationCanceled))
@@ -756,8 +745,6 @@ namespace FAT.Application.Models
                 IsScanInProgress = true;
                 Percentage = 0;
                 IsReportEnabled = false;
-                IsAnalyseWithValkyrieEnabled = false;
-                IsValkyrieReportEnabled = false;
             }
         }
 
@@ -766,7 +753,7 @@ namespace FAT.Application.Models
             var items = new List<ThreatInfoItem>();
             foreach (var item in SelectedItems)
             {
-                if (item.IsRootItem &&
+                if (item.IsComptuer &&
                     (item.ScanStage == ScanStage.ScanInProgress))
                 {
                     items.Add(item);
@@ -798,8 +785,7 @@ namespace FAT.Application.Models
             LookupInProgressCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
-
-            IsValkyrieReportEnabled = false;
+            
             RescanLogin = null;
             RescanPassword = null;
 
@@ -846,14 +832,17 @@ namespace FAT.Application.Models
 
             _targetsDiscoveryService.DirectoryItemsResolved += OnDirectoryItemsResolved;
 
-            _aptService.BeginScanCompleted += OnBeginScanCompleted;
-            _aptService.ScanStatusChanged += OnScanStatusChanged;
-            _aptService.ComputerScanCompleted += OnComputerScanCompleted;
-            _aptService.ScanCompleted += OnScanCompleted;
-            _aptService.ScanProgressChanged += OnScanProgressChanged;
+            //_aptService.BeginScanCompleted += OnBeginScanCompleted;
+            //_aptService.ScanStatusChanged += OnScanStatusChanged;
+            //_aptService.ScanCompleted += OnScanCompleted;
+            //_aptService.ScanProgressChanged += OnScanProgressChanged;
 
-            _aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
-            _aptService.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
+            //_aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
+            //_aptService.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
+
+            _aptService.FatScanStarted += OnBeginScanCompleted;
+            _aptService.FatScanCompleted += OnScanCompleted;
+            _aptService.ErrorOccurred += OnErrorOccurred;
 
         }
 
@@ -917,15 +906,6 @@ namespace FAT.Application.Models
 
 
             }
-            else
-            {
-                if (_isScanInProgress == false)
-                {
-                    IsValkyrieReportEnabled = true;
-
-
-                }
-            }
 
 
             CancelInProgress = false;
@@ -939,8 +919,7 @@ namespace FAT.Application.Models
 
             RaisePropertyChanged("Header");
             RaisePropertyChanged("ValkyrieDetailsLink");
-
-            ValkyrieAnalyzeCompleted?.Invoke(this, e);
+            
         }
 
 
@@ -951,16 +930,23 @@ namespace FAT.Application.Models
             base.InvokeViewUnloaded(arg);
 
             _targetsDiscoveryService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
-            _aptService.BeginScanCompleted -= OnBeginScanCompleted;
-            _aptService.ScanStatusChanged -= OnScanStatusChanged;
-            _aptService.ComputerScanCompleted -= OnComputerScanCompleted;
-            _aptService.ScanCompleted -= OnScanCompleted;
-            _aptService.ScanProgressChanged -= OnScanProgressChanged;
-            _aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
-            _aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
+            //_aptService.BeginScanCompleted -= OnBeginScanCompleted;
+            //_aptService.ScanStatusChanged -= OnScanStatusChanged;
+            //_aptService.ScanCompleted -= OnScanCompleted;
+            //_aptService.ScanProgressChanged -= OnScanProgressChanged;
+            //_aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
+            //_aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;\
+
+            _aptService.FatScanStarted -= OnBeginScanCompleted;
+            _aptService.FatScanCompleted -= OnScanCompleted;
+            _aptService.ErrorOccurred -= OnErrorOccurred;
+        }
+        private void OnErrorOccurred(Object sender, ErrorEventArgs e)
+        {
+            
         }
 
-        private void OnScanCompleted(Object sender, Services.ScanCompletedEventArgs e)
+        private void OnScanCompleted(Object sender, ErrorEventArgs e)
         {
             ScanCompleted();
             ScanProcessCompleted?.Invoke(this, e);
@@ -994,10 +980,10 @@ namespace FAT.Application.Models
                     item.StatusMessageSystem = "This computer is not accessible.";
                 }
             }
+            //_scanCounterManager.AddComputer(Computers.Count);
 
             if (_onlineItems.Length > 0)
             {
-
 
                 ScanKind scanKind = ScanKind.Quick;
                 if (IsQuickScan)
@@ -1023,7 +1009,7 @@ namespace FAT.Application.Models
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password);
                 }
 
-                _aptService.BeginScan(e.Items, this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _aptService.BeginScan(e.Items, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             }
             else
@@ -1032,17 +1018,11 @@ namespace FAT.Application.Models
             }
         }
 
-        private void OnBeginScanCompleted(Object sender, BeginScanCompletedEventArgs e)
+        private void OnBeginScanCompleted(Object sender, ScanStartedEventArgs e)
         {
-            _operationGuid = e.OperationGuid;
-
-            _scanIterator = new Dictionary<Guid, ScanProgressItem>();
-            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
-            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
-            _scanIteratorTimer.Tick += IterateThroughScan;
+            _operationGuid = e.OperationUid;
+            _scanCounterManager.Clear();
             _scanIteratorTimer.Start();
-
-            IsValkyrieAnalysCompleted = false;
         }
 
         private void ScanCompleted()
@@ -1054,6 +1034,7 @@ namespace FAT.Application.Models
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             UpdateStatus();
             RaisePropertyChanged(nameof(Header));
+            IsReportEnabled = true;
         }
 
         public void OnBeforeBeginValkyrieAnalysis()
@@ -1109,6 +1090,24 @@ namespace FAT.Application.Models
             else
                 return;
 
+            var computers = _aptService.GetModifiedComputerResultsForOperation(_operationGuid, _lastModifiesComputerDate)
+                .Results.ToDictionary(c => c.TargetUid);
+            var files = _aptService.GetUpdatedFileVerdict(_lastModifiesFlsVerdictDate, _lastModifiesValkyrieVerdictDate).Results;
+            if (files.Any())
+            {
+                var maxDate = files.Max(v => v.ValkyrieModifiedDate);
+                if (maxDate != null)
+                    _lastModifiesValkyrieVerdictDate = maxDate;
+                maxDate = files.Max(v => v.FlsVerdictModifiedDate);
+                if (maxDate != null)
+                    _lastModifiesFlsVerdictDate = maxDate;
+            }
+            if (computers.Any())
+            {
+                var maxDate = computers.Values.Max(c => c.Modified);
+                _lastModifiesComputerDate = maxDate;
+            }
+
             Int32 completed = 0;
             Int32 scanned = 0;
             Int32 unknownFiles = 0;
@@ -1117,28 +1116,34 @@ namespace FAT.Application.Models
 
             foreach (var infoItem in _onlineItems)
             {
-                ScanProgressItem scanProgress = null;
-                lock (_scanIterator)
-                {
-                    _scanIterator.TryGetValue(infoItem.ComputerGuid, out scanProgress);
-                    _scanIterator.Remove(infoItem.ComputerGuid);
-                }
+                ScanResultItem scanProgress = null;
+                computers.TryGetValue(infoItem.ComputerGuid, out scanProgress);
                 lock (infoItem)
                 {
+
                     if (infoItem.ScanStage != ScanStage.OperationFailed &&
                         infoItem.ScanStage != ScanStage.OperationCompleted &&
                         infoItem.ScanStage != ScanStage.OperationCanceled)
                     {
                         if (scanProgress != null)
                         {
+                            var cleanFilesDiff = scanProgress.CleanFilesCount - infoItem.CleanFilesCount;
                             infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                            infoItem.CleanFilesCount = scanProgress.CleanFilesCount;
+                            var unknownFilesDiff = scanProgress.UnknownFilesCount - infoItem.UnknownFilesCount;
                             infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
+                            var malwareFilesDiff = scanProgress.MalwareFilesCount - infoItem.MalwareFilesCount;
                             infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
+                            var lookupInProgressCountDiff = (scanProgress.FailedToAnalyzeFilesCount + scanProgress.NoVerdictFilesCount)
+                                - (infoItem.FailedToAnalyzeCount + infoItem.NoVerdictFilesCount);
                             infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
                             infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                            infoItem.ProgressPercentage = scanProgress.ProgressPercentage;
+                            infoItem.ProgressPercentage = scanProgress.Percentage;
                             infoItem.StatusMessageSystem = scanProgress.StatusMessage;
                             infoItem.ScanStage = scanProgress.ScanStage;
+                            _scanCounterManager.AddMalware(malwareFilesDiff);
+                            _scanCounterManager.AddPending(lookupInProgressCountDiff + unknownFilesDiff);
+                            _scanCounterManager.AddClean(cleanFilesDiff);
                         }
                     }
                     if (infoItem.ScanStage == ScanStage.OperationFailed ||
@@ -1147,15 +1152,67 @@ namespace FAT.Application.Models
                         completed++;
 
                     if (infoItem.ScanStage == ScanStage.OperationCompleted)
+                    {
                         scanned++;
+                        if (scanProgress != null && scanProgress.BadFiles.Any() &&
+                            infoItem.Items.Count == 0)
+                        {
+                            foreach (var badFile in scanProgress.BadFiles)
+                            {
+                                var item = new ThreatInfoItem(badFile);
+                                infoItem.Items.Add(item);
+                                item = new ThreatInfoItem(badFile);
+                                var exist = Files.FirstOrDefault(_ =>
+                                    _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
+                                    _.IsMalware == item.IsMalware && _.Failed == item.Failed);
+                                var comp = new ThreatInfoItem
+                                {
+                                    IpAddress = infoItem.IpAddress,
+                                    ComputerGuid = infoItem.ComputerGuid,
+                                    Name = infoItem.Name,
+                                    ShortName = item.Name,
+                                    IsComptuer = true
+                                };
+                                if (exist != null)
+                                    exist.Computers.Add(comp);
+                                else
+                                {
+                                    item.Computers = new ObservableCollection<ThreatInfoItem> { comp };
+                                    Files.Add(item);
+                                }
+                                infoItem.Items = infoItem.Items;
 
-                    if (infoItem.ScanStage == ScanStage.OperationCanceled && !CancelInProgress)
-                        continue;
+                            }
 
+                            if (infoItem.TotalFilesCount != scanProgress.TotalFilesCount)
+                                infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
+                            infoItem.UpdateStatus();
+                            UpdateStatus();
+                        }
+                    }
                     unknownFiles += infoItem.UnknownFilesCount;
                     malwareFiles += infoItem.MalwareFilesCount;
                     lookupInProgressCount += infoItem.FailedToAnalyzeCount;
                     lookupInProgressCount += infoItem.NoVerdictFilesCount;
+                }
+            }
+            foreach (var result in files)
+            {
+                var items = Files.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+                foreach (var threatInfoItem in items)
+                {
+                    threatInfoItem.UpdateFileVerdict(result);
+                }
+                foreach (ThreatInfoItem computer in Computers)
+                {
+                    var files1 = computer.Items.Where(i =>
+                            String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
+                    if (files1.Any())
+                    {
+                        foreach (var f in files1)
+                            f.UpdateFileVerdict(result);
+                    }
                 }
             }
 
@@ -1179,12 +1236,12 @@ namespace FAT.Application.Models
                 ScannedItemsCount = scanned;
             }
 
-            if (completed != OnlineItemsCount)
-                _scanIteratorTimer.Start();
-            else
+            //if (completed != OnlineItemsCount)
+            _scanIteratorTimer.Start();
+            //else
             {
-                if (_scanIteratorTimer.IsEnabled)
-                    _scanIteratorTimer.Stop();
+                //if (_scanIteratorTimer.IsEnabled)
+                //   _scanIteratorTimer.Stop();
             }
 
             RaisePropertyChanged(nameof(Header));
@@ -1214,70 +1271,70 @@ namespace FAT.Application.Models
 
         }
 
-        private void OnComputerScanCompleted(Object sender, GetScanResultCompletedEventArgs e)
-        {
-            var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
-            if (parentItem != null)
-            {
-                lock (parentItem)
-                {
-                    Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
-                    parentItem.ScanStage = e.ScanResult.ScanStage;
-                    parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
-                    if (e.ScanResult.BadFiles != null)
-                    {
-                        foreach (var badFile in e.ScanResult.BadFiles)
-                        {
-                            var item = new ThreatInfoItem(badFile);
-                            parentItem.Items.Add(item);
-                            if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
-                            {
-                                computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
-                            }
-                            item = new ThreatInfoItem(badFile);
+        //private void OnComputerScanCompleted(Object sender, GetScanResultCompletedEventArgs e)
+        //{
+        //    var parentItem = _onlineItems.FirstOrDefault(item => item.ComputerGuid == e.ScanResult.TargetUid);
+        //    if (parentItem != null)
+        //    {
+        //        lock (parentItem)
+        //        {
+        //            Dictionary<Guid, ThreatInfoItem> computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
+        //            parentItem.ScanStage = e.ScanResult.ScanStage;
+        //            parentItem.StatusMessageSystem = e.ScanResult.StatusMessage;
+        //            if (e.ScanResult.BadFiles != null)
+        //            {
+        //                foreach (var badFile in e.ScanResult.BadFiles)
+        //                {
+        //                    var item = new ThreatInfoItem(badFile);
+        //                    parentItem.Items.Add(item);
+        //                    if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
+        //                    {
+        //                        computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
+        //                    }
+        //                    item = new ThreatInfoItem(badFile);
 
-                            var exist = Files.FirstOrDefault(_ =>
-                                _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
-                                _.IsMalware == item.IsMalware);
-                            var comp = new ThreatInfoItem
-                            {
-                                IpAddress = parentItem.IpAddress,
-                                ComputerGuid = e.ScanResult.TargetUid,
-                                Name = parentItem.Name,
-                                ShortName = item.Name,
-                                IsRootItem = true
-                            };
+        //                    var exist = Files.FirstOrDefault(_ =>
+        //                        _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
+        //                        _.IsMalware == item.IsMalware);
+        //                    var comp = new ThreatInfoItem
+        //                    {
+        //                        IpAddress = parentItem.IpAddress,
+        //                        ComputerGuid = e.ScanResult.TargetUid,
+        //                        Name = parentItem.Name,
+        //                        ShortName = item.Name,
+        //                        IsComptuer = true
+        //                    };
 
-                            if (exist != null)
-                                exist.Computers.Add(comp);
-                            else
-                            {
-                                item.Computers = new Collection<ThreatInfoItem>();
-                                item.Computers.Add(comp);
-                                Files.Add(item);
-                            }
-                        }
-                        if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
-                        {
-                            parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
-                            if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
-                            {
-                                computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
-                            }
-                        }
-                        foreach (var computer in computersToUpdate.Values)
-                        {
-                            computer.UpdateStatus();
-                        }
-                        if (computersToUpdate.Any())
-                            UpdateStatus();
-                    }
+        //                    if (exist != null)
+        //                        exist.Computers.Add(comp);
+        //                    else
+        //                    {
+        //                        item.Computers = new Collection<ThreatInfoItem>();
+        //                        item.Computers.Add(comp);
+        //                        Files.Add(item);
+        //                    }
+        //                }
+        //                if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
+        //                {
+        //                    parentItem.TotalFilesCount = e.ScanResult.TotalFilesCount;
+        //                    if (!computersToUpdate.ContainsKey(parentItem.ComputerGuid))
+        //                    {
+        //                        computersToUpdate.Add(parentItem.ComputerGuid, parentItem);
+        //                    }
+        //                }
+        //                foreach (var computer in computersToUpdate.Values)
+        //                {
+        //                    computer.UpdateStatus();
+        //                }
+        //                if (computersToUpdate.Any())
+        //                    UpdateStatus();
+        //            }
 
 
-                    parentItem.Items = parentItem.Items;
-                }
-            }
-        }
+        //            parentItem.Items = parentItem.Items;
+        //        }
+        //    }
+        //}
 
         public Predicate<object> FilterPredicate
         {
@@ -1291,7 +1348,7 @@ namespace FAT.Application.Models
                     if (GroupByComputers)
                     {
                         var o = _ as ThreatInfoItem;
-                        if (o.IsRootItem)
+                        if (o.IsComptuer)
                         {
                             bool hasOrders = !FilterOrders.Any();
                             foreach (int order in FilterOrders)
@@ -1316,7 +1373,7 @@ namespace FAT.Application.Models
                     if (GroupByFiles)
                     {
                         var o = _ as ThreatInfoItem;
-                        if (!o.IsRootItem)
+                        if (!o.IsComptuer)
                         {
                             bool hasOrders = !FilterOrders.Any();
                             foreach (int order in FilterOrders)

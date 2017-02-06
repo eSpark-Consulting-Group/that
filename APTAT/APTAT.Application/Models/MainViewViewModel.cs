@@ -21,6 +21,7 @@ using APTAT.Application.Models.ModelBase;
 using APTAT.Application.Models.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using System.Collections.Concurrent;
+using APTAT.Core.FLS;
 
 
 namespace APTAT.Application.Models
@@ -194,7 +195,7 @@ namespace APTAT.Application.Models
                 if (_cancelInProgress == value) return;
                 _cancelInProgress = value;
 
-                RaisePropertyChanged("Header");
+                RaisePropertyChanged(nameof(Header));
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -851,7 +852,7 @@ namespace APTAT.Application.Models
             _aptService.FlsAnalyzeProgressChanged += OnFlsAnalyzeProgressChanged;
         }
 
-        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs e)
+        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs<IFlsResult> e)
         {
             if (e.Exception != null) return;
 
@@ -1299,7 +1300,7 @@ namespace APTAT.Application.Models
                 _operationGuids.Clear();
             _runningOperationGuids.Add(e.OperationGuid);
             _operationGuids.Add(e.OperationGuid);
-
+            
             _scanIteratorTimer.Start();
 
         }

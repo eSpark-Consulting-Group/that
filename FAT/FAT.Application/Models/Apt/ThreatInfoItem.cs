@@ -2,8 +2,11 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using APTAT.Core.Descent.Apt;
+using System.Runtime.CompilerServices;
+using APTAT.Application.Models.Apt;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+using APTAT.Valkyrie;
+using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace FAT.Application.Models
 {
@@ -70,16 +73,15 @@ namespace FAT.Application.Models
         private Int32 _totalFilesCount;
         private Int32 _unknownFilesCount;
         private Int32 _malwareFilesCount;
+        private Int32 _cleanFilesCount;
         private String _statusMessage;
+        private ValkyrieVerdict _valkyrieVerdict;
         private String _statusMessageMemento;
 
         private ScanStage _scanStage;
         private ObservableCollection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _noVerdictFilesCount;
-        private bool _isUnknown;
-        private bool _isMalware;
-        private bool _safe;
 
         public Boolean HasBadFiles
         {
@@ -89,11 +91,64 @@ namespace FAT.Application.Models
         public void UpdateFileVerdict(CloudVerdict verdict)
         {
             BadFile.Cloud = verdict;
-            IsUnknown = BadFile.IsUnknown;
-            IsMalware = BadFile.IsMalware;
 
-            Clean = BadFile.Cloud == CloudVerdict.Safe;
+            RaisePropertyChanged(nameof(VerdictString));
+            RaisePropertyChanged(nameof(IsMalware));
+            RaisePropertyChanged(nameof(IsUnknown));
+            RaisePropertyChanged(nameof(Clean));
             RaisePropertyChanged(nameof(Failed));
+            RaisePropertyChanged(nameof(Pending));
+        }
+
+        public ValkyrieVerdict ValkyrieVerdict
+        {
+            get { return _valkyrieVerdict; }
+            set
+            {
+                _valkyrieVerdict = value;
+                RaisePropertyChanged(nameof(VerdictString));
+                RaisePropertyChanged(nameof(IsMalware));
+                RaisePropertyChanged(nameof(IsUnknown));
+                RaisePropertyChanged(nameof(Clean));
+                RaisePropertyChanged(nameof(Failed));
+                RaisePropertyChanged(nameof(Pending));
+            }
+        }
+
+        public string VerdictString
+        {
+            get
+            {
+                switch (ValkyrieVerdict)
+                {
+                    case ValkyrieVerdict.NotAnalyzed:
+                        return $"Not Analyzed ({OperationStatus.Replace(Environment.NewLine, "")})";
+                    case ValkyrieVerdict.PotentiallyUnwantedApplication:
+                        return "Malware";
+                    case ValkyrieVerdict.Pending:
+                    case ValkyrieVerdict.FirstSeen:
+                        return "In Analysis";
+                    case ValkyrieVerdict.Undetected:
+                        return "No Threat Found";
+                    case ValkyrieVerdict.PendingFls:
+                        {
+                            switch (BadFile.Cloud)
+                            {
+                                case CloudVerdict.Safe:
+                                    return ValkyrieVerdict.Clean.ToString();
+                                case CloudVerdict.FirstSeen:
+                                case CloudVerdict.FailedToAnalyze:
+                                case CloudVerdict.NoVerdict:
+                                case CloudVerdict.Unknown:
+                                    return "In Analysis";
+                                default:
+                                    return BadFile.Cloud.ToString();
+                            }
+                        }
+                    default:
+                        return ValkyrieVerdict.ToString();
+                }
+            }
         }
 
         public void UpdateStatus()
@@ -122,55 +177,44 @@ namespace FAT.Application.Models
                 MalwareFilesCount = malwareCount;
                 UnknownFilesCount = unknownFilesCount;
                 CleanFilesCount = safeCount;
-                IsMalware = malwareCount > 0;
-                IsUnknown = malwareCount == 0 && unknownFilesCount > 0;
 
                 RaisePropertyChanged(nameof(StatusMessage));
             }
         }
+        
 
-        private int _cleanFilesCount;
-        public int CleanFilesCount
+        public bool IsMalware
         {
             get
             {
-                return _cleanFilesCount;
-            }
-            set
-            {
-                _cleanFilesCount = value;
-                RaisePropertyChanged(nameof(CleanFilesCount));
-
+                return BadFile.IsMalware || ValkyrieVerdict == ValkyrieVerdict.Malware ||
+                        ValkyrieVerdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
             }
         }
 
-        public Boolean IsUnknown
+        public bool Pending
         {
-            get { return _isUnknown; }
-            set
+            get
             {
-                _isUnknown = value;
-                RaisePropertyChanged(nameof(IsUnknown));
+                return (BadFile.IsUnknown && ValkyrieVerdict == ValkyrieVerdict.PendingFls) 
+                    || (ValkyrieVerdict == ValkyrieVerdict.FirstSeen || ValkyrieVerdict == ValkyrieVerdict.Pending);
             }
         }
 
-        public Boolean IsMalware
+        public bool IsUnknown
         {
-            get { return _isMalware; }
-            set
+            get
             {
-                _isMalware = value;
-                RaisePropertyChanged(nameof(IsMalware));
+                return ValkyrieVerdict == ValkyrieVerdict.Undetected;
             }
+
         }
 
-        public Boolean Clean
+        public bool Clean
         {
-            get { return _safe; }
-            set
+            get
             {
-                _safe = value;
-                RaisePropertyChanged(nameof(Clean));
+                return BadFile.IsClean || ValkyrieVerdict == ValkyrieVerdict.Clean;
             }
         }
 
@@ -207,7 +251,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public Boolean IsRootItem { get; set; }
+        public Boolean IsComptuer { get; set; }
 
         public Boolean IsOnline { get; set; }
 
@@ -262,7 +306,6 @@ namespace FAT.Application.Models
         public Guid ComputerGuid { get; set; }
 
         public string LdapPath { get; set; }
-
         public ScanStatus ScanStatus
         {
             get
@@ -287,7 +330,7 @@ namespace FAT.Application.Models
                     return new ScanStatus(ScanStatusEnum.Canceled);
                 }
 
-                return new ScanStatus(IsRootItem ? ScanStatusEnum.InProgress : ScanStatusEnum.Child);
+                return new ScanStatus(IsComptuer ? ScanStatusEnum.InProgress : ScanStatusEnum.Child);
             }
         }
 
@@ -339,6 +382,7 @@ namespace FAT.Application.Models
             MalwareFilesCount = 0;
             UnknownFilesCount = 0;
             NoVerdictFilesCount = 0;
+            CleanFilesCount = 0;
         }
 
         public String StatusMessage
@@ -445,6 +489,21 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(HasMalwares));
                 RaisePropertyChanged(nameof(HasUnknowns));
                 RaisePropertyChanged(nameof(HasFailed));
+            }
+        }
+
+        public Int32 CleanFilesCount
+        {
+            get { return _cleanFilesCount; }
+            set
+            {
+                if (_cleanFilesCount == value)
+                {
+                    return;
+                }
+
+                _cleanFilesCount = value;
+                RaisePropertyChanged(nameof(CleanFilesCount));
             }
         }
 
@@ -563,7 +622,7 @@ namespace FAT.Application.Models
             Name = deploymentTarget.Name;
             IpAddress = deploymentTarget.IPAddress;
             IsLocal = deploymentTarget.IsLocalComputer;
-            IsRootItem = true;
+            IsComptuer = true;
             IsOnline = deploymentTarget.IsOnline;
             ComputerGuid = deploymentTarget.Uid;
             LdapPath = deploymentTarget.LdapPath;
@@ -571,22 +630,40 @@ namespace FAT.Application.Models
 
         public ThreatInfoItem(BadFileItem badFile)
         {
-            IsUnknown = badFile.IsUnknown;
-            IsMalware = badFile.IsMalware;
-            Clean = badFile.Cloud == CloudVerdict.Safe;
             Name = badFile.Name;
             Size = badFile.Size;
             SizeSorting = badFile.SizeSorting;
             SizeString = badFile.FileSizeFormatted;
-            IsRootItem = false;
+            IsComptuer = false;
             IsOnline = true;
             ScanStage = ScanStage.OperationCompleted;
             BadFile = badFile;
+            _valkyrieVerdict = ValkyrieVerdict.PendingFls;;
             if (!string.IsNullOrEmpty(badFile.Product))
                 ShortName = string.Format("{0} ({1})", Path.GetFileName(badFile.Name), badFile.Product);
             else
                 ShortName = Path.GetFileName(badFile.Name);
         }
+
+        public void UpdateFileVerdict(FileVerdictContext fileVerdictContext)
+        {
+            if (fileVerdictContext.ValkyrieAnalysisResult != null)
+            {
+                SkipReason = fileVerdictContext.ValkyrieAnalysisResult.SkipReason;
+                OperationStatus = fileVerdictContext.ValkyrieAnalysisResult.OperationStatus;
+                ValkyrieVerdict = fileVerdictContext.ValkyrieAnalysisResult.Verdict;
+            }
+            if (fileVerdictContext.FlsVerdict != null)
+            {
+                UpdateFileVerdict(fileVerdictContext.FlsVerdict.Value);
+            }
+            //MalwareProbabilityValue = valkyrieAnalysisResult.MalwareProbability;
+
+        }
+
+        public string SkipReason { get; set; }
+
+        public string OperationStatus { get; set; }
 
         public override string ToString()
         {

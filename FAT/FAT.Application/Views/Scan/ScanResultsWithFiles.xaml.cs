@@ -38,7 +38,7 @@ namespace FAT.Application
             if (treeList.SelectedItem != null)
             {
                 var item = treeList.SelectedItem as ThreatInfoItem;
-                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsRootItem && ViewModel.SelectedItem == item)
+                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsComptuer && ViewModel.SelectedItem == item)
                 {
                     ThreatDetailsWindow details = new ThreatDetailsWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
@@ -90,7 +90,7 @@ namespace FAT.Application
                 }
 
                 ThreatInfoItem item = GetDataBoundItem(element);
-                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsRootItem && ViewModel.SelectedItem == item)
+                if (ViewModel.SelectedItem != null && !ViewModel.SelectedItem.IsComptuer && ViewModel.SelectedItem == item)
                 {
                     ViewModel.SelectedItem = item;
                     ThreatDetailsWindow details = new ThreatDetailsWindow();

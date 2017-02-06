@@ -19,5 +19,6 @@ namespace FAT.Application.Models
         public int NoVerdictFilesCount { get; set; }
         public int MalwareFilesCount { get; set; }
         public double Percentage { get; set; }
+        public int CleanFilesCount { get; set; }
     }
 }
