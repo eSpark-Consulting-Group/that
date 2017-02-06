@@ -21,7 +21,7 @@
                                         <Button Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                                     </StackPanel>
 
-                                    <TextBlock Text="Start Scan Wizard" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock Text="Start Scan Wizard" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
 

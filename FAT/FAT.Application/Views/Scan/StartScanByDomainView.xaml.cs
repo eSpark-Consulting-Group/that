@@ -1,26 +1,21 @@
 ﻿using FAT.Application.Models;
 using System;
-using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
-using System.Windows.Input;
 using Telerik.Windows;
 using Telerik.Windows.Controls;
-using FAT.Application.Extensions;
+
 
 namespace FAT.Application
 {
-    /// <summary>
-    /// Interaction logic for StartScanDomainView.xaml
-    /// </summary>
-    public partial class StartScanDomainView : UserControl
+    public partial class StartScanByDomainView : UserControl
     {
         public StartScanDomainViewModel ViewModel
         {
             get { return (StartScanDomainViewModel)DataContext; }
         }
 
-        public StartScanDomainView()
+        public StartScanByDomainView()
         {
             InitializeComponent();
         }

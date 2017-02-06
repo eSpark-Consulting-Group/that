@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FAT.Application.StartScanLocalView"
+﻿<UserControl x:Class="FAT.Application.StartLocalScanView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -67,7 +67,7 @@
                 <Path Data="F1M565,598L562,598L562,595L565,595z" Fill="#FF53974F" Height="3" Stretch="Fill" Width="3" Canvas.Left="18" Canvas.Top="20"/>
             </Canvas>
 
-            <TextBlock Text="Select Directories" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+            <TextBlock Text="Select Directories" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
 
@@ -117,10 +117,10 @@
 
                 <Grid Grid.Row="1" Margin="0 0 0 100">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
-                   FontFamily="Segoe UI" VerticalAlignment="Top" Margin="23,37,0,0">
+                   FontFamily="{StaticResource myriadpro}" VerticalAlignment="Top" Margin="23,37,0,0">
                 Select Local Scan Mode
                     </TextBlock>
-                    <TextBlock Text="{Binding ComputerName}" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Segoe UI Light"  FontSize="24"  Margin="0,12,23,0" SnapsToDevicePixels="True"/>
+                    <TextBlock Text="{Binding ComputerName}" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="{StaticResource myriadpro}"  FontSize="24"  Margin="0,12,23,0" SnapsToDevicePixels="True"/>
                     <Border x:Name="pathSelector" Margin="0 42 0 0">
                         <Grid Margin="0 0 17 0">
                             

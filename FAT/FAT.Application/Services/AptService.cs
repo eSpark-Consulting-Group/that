@@ -485,7 +485,7 @@ namespace FAT.Application.Services
 
                 
                 _manager.StartValkyrieAnalysis(systemLogin, systemPassword, camLicenseId, camUserName,
-                    camPassword, networkCredential, Settings.Default.applicationName);
+                    camPassword, networkCredential, "FAT");
             };
 
             Task.Factory.StartNew(action, TaskCreationOptions.None);

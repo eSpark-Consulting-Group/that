@@ -8,7 +8,6 @@ namespace FAT.Application.Models.ModelBase
         Workgroup,
         NetworkAddresses,
         Local,
-        AutoDiscovery,
         None
     }
 

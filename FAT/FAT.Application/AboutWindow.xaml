@@ -26,7 +26,7 @@
                                                 Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                                     </StackPanel>
 
-                                    <TextBlock Text="About" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock Text="About" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
 
@@ -59,20 +59,20 @@
                                 <TextBlock AutomationProperties.AutomationId="ProductNameTextBlock"
                            Text="Product Name:" 
                            Grid.Row="1" Grid.Column="1"
-                           FontFamily="Segoe UI" Margin="15,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
+                           FontFamily="{StaticResource myriadpro}" Margin="15,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="ProductNameValueTextBlock"
                            Grid.Row="1" Grid.Column="2"
                            x:Name="txtProductName" 
-                           FontFamily="Segoe UI" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
+                           FontFamily="{StaticResource myriadpro}" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="ProductVersionTextBlock"
                            Grid.Row="2" Grid.Column="1"
-                           Text="Product Version:" FontFamily="Segoe UI" Margin="15,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
+                           Text="Product Version:" FontFamily="{StaticResource myriadpro}" Margin="15,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="ProductVersionValueTextBlock"
                            Name="txtProductVersion" Grid.Row="2" Grid.Column="2"
-                           Text="1.1.0.13910" FontFamily="Segoe UI" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
+                           Text="1.1.0.13910" FontFamily="{StaticResource myriadpro}" Margin="0,0,10,5" Foreground="#515151" FontSize="13"></TextBlock>
 
                                 <Button AutomationProperties.AutomationId="CloseAboutButton" Height="32"
                         Grid.Row="3" Grid.ColumnSpan="1" HorizontalAlignment="Right" Content="Close" Margin="0,0,15,5" 
@@ -80,7 +80,7 @@
 
                                 <TextBlock AutomationProperties.AutomationId="CopyrightTextBlock"
                            Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Left"
-                           Text="© 2017 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="Segoe UI" 
+                           Text="© 2017 Comodo Security Solutions, Inc. All Rights Reserved." FontFamily="{StaticResource myriadpro}" 
                            Margin="24,20,0,0" Foreground="#878787" FontSize="13" ></TextBlock>
                             </Grid>
 

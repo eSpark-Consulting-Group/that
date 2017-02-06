@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Threading;
+
 using System.Windows.Threading;
 using Telerik.Windows.Controls;
-using APTAT.Core;
+
 using APTAT.Valkyrie;
 using FAT.Application.Messages;
 using FAT.Application.Extensions;
@@ -16,12 +16,10 @@ using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Core.Descent.Apt;
 using System.Threading.Tasks;
-using APTAT.Core.Apt;
-using APTAT.Core.FLS;
 using FAT.Application.Models.Apt;
 using FAT.Application.Models.ModelBase;
 using FAT.Application.Models.Valkyrie;
-using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
+
 
 namespace FAT.Application.Models
 {
@@ -29,14 +27,9 @@ namespace FAT.Application.Models
     {
         public event EventHandler<Services.ScanCompletedEventArgs> ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
-        public event EventHandler ValkyrieAnalyzeStarted;
+
         public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieFile>> ValkyrieAnalyzeCompleted;
 
-
-
-        private string _camLicenseId;
-        private string _camUserLogin;
-        private string _camUserPassword;
         private string _tcpPort = "80";
         private string _udpPort = "53";
 
@@ -50,7 +43,6 @@ namespace FAT.Application.Models
 
         private Boolean _isReportEnabled;
         private Boolean _isValkyrieReportEnabled;
-        private Boolean? _isValkyrieScanInProgress;
         private Boolean _isValkyrieAnalysCompleted;
         private Boolean? _isScanInProgress = false;
         private Boolean _cancelInProgress = false;
@@ -62,23 +54,13 @@ namespace FAT.Application.Models
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
-        private object _selectedValkyrieItem;
-
-        private ObservableCollection<ThreatInfoItem> _items;
-        private ObservableCollection<ThreatInfoItem> _computers;
-        private ObservableCollection<ValkyrieFile> _itemsValkyrie;
-        private ObservableCollection<ValkyrieComputer> _computersValkyrie;
-        private Object _countersLock = new Object();
-
-        private Collection<ThreatInfoItem> _cache;
-        private Collection<ThreatInfoItem> _cacheComputers;
-        private Collection<ValkyrieFile> _cacheValkyrie;
-        private Collection<ValkyrieComputer> _cacheValkyrieComputers;
 
         private DispatcherTimer _scanIteratorTimer;
         private Dictionary<Guid, ScanProgressItem> _scanIterator;
 
-        public string Uri { get; set; } = "/Views/EULAView.xaml";
+        public string MainUri { get; set; } = "/Views/MainView.xaml";
+
+        public string Uri { get; set; } = "/Views/StartingPage.xaml";
 
         public string CurrentDomainName { get; set; }
         public string CurrentUser { get; set; }
@@ -152,8 +134,111 @@ namespace FAT.Application.Models
             }
         }
 
+        public bool Loaded { get; set; }
+
+        #region 4 Tests
+
+        public bool HasMalwares { get; set; }
+        public bool HasUnknowns { get; set; }
+
+        private void SimulateCounterActivity()
+        {
+            var testTimer = new DispatcherTimer();
+            testTimer.Interval = TimeSpan.FromSeconds(1);
+            testTimer.Tick += (o, e) =>
+            {
+                if (Percentage == 90)
+                    Set(() => Percentage, 15);
+                else
+                    Set(() => Percentage, Percentage + 15);
+
+                if (!HasMalwares && !HasUnknowns)
+                    Set(() => HasMalwares, true);
+                else if (HasMalwares)
+                {
+                    Set(() => HasMalwares, false);
+                    Set(() => HasUnknowns, true);
+                }
+                else if (HasUnknowns)
+                    Set(() => HasUnknowns, false);
+
+
+                _scanCounterManager.AddClean();
+
+                if (Percentage == 30)
+                {
+                    _scanCounterManager.AddPending();
+                }
+                if (Percentage == 45)
+                {
+                    _scanCounterManager.AddPending(-1);
+                    _scanCounterManager.AddMalware();
+                }
+                if (Percentage == 60)
+                {  
+                    _scanCounterManager.AddFailed();
+                }
+                if (Percentage == 75)
+                {
+                    _scanCounterManager.AddPending();     
+                }
+                if (Percentage == 90)
+                {
+                    _scanCounterManager.AddPending(-1);
+                    _scanCounterManager.AddUnknown();
+                }
+
+            };
+            testTimer.Start();
+        }
+
+        private void SeedComputers()
+        {
+            Computers.Add(new ThreatInfoItem { IsOnline = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", IsRootItem = true, ScanStage = ScanStage.OperationCompleted });
+            Computers.Add(new ThreatInfoItem
+            {
+                IsOnline = true,
+                IpAddress = "10.100.65.11",
+                Name = "EUGENET-PC",
+                IsRootItem = true,
+                ScanStage = ScanStage.OperationCompleted,
+                UnknownFilesCount = 1,
+                Items = new ObservableCollection<ThreatInfoItem>(new[]
+            {
+                new ThreatInfoItem { Name = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true },
+                new ThreatInfoItem{ Name = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true },
+                new ThreatInfoItem{ Name = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true },
+                new ThreatInfoItem{ Name = "application.exe", SizeString = "1 MB", IsOnline = true  }
+            })
+            });
+            Computers.Add(new ThreatInfoItem { IsOnline = true, IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, FailedToAnalyzeCount = 1 });
+            Computers.Add(new ThreatInfoItem { IsOnline = true, IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, MalwareFilesCount = 1 });
+            Computers.Add(new ThreatInfoItem { IsOnline = true, IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationFailed });
+            Computers.Add(new ThreatInfoItem { IsRootItem = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", });
+        }
+
+        private void SeedFiles()
+        {
+            Files.Add(new ThreatInfoItem { ShortName = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true, Computers =
+                new ObservableCollection<ThreatInfoItem>(new[]
+            {
+                new ThreatInfoItem { Name = "EUGENET-PC", IpAddress = "10.100.65.11", IsOnline = true, IsRootItem = true,ScanStage = ScanStage.OperationCompleted },
+            })});
+            Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true });
+            Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true });
+            Files.Add(new ThreatInfoItem { ShortName = "application.exe", SizeString = "1 MB", IsOnline = true });
+        }
+
+        #endregion
+
         private async void OnLoaded()
         {
+            SimulateCounterActivity();
+            SeedComputers();
+            SeedFiles();
+
+            Set(() => Loaded, true);
+
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
 
@@ -178,7 +263,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return IsScanInProgress.GetValueOrDefault() || IsValkyrieScanInProgress.GetValueOrDefault();
+                return IsScanInProgress.GetValueOrDefault();
             }
         }
 
@@ -207,7 +292,7 @@ namespace FAT.Application.Models
                 _isScanInProgress = value;
                 RaisePropertyChanged("IsScanInProgress");
                 RaisePropertyChanged(nameof(IsAnyScanInProgress));
-                RaisePropertyChanged(nameof(SearchAvailable));
+
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -232,25 +317,6 @@ namespace FAT.Application.Models
             {
                 _isValkyrieAnalysCompleted = value;
                 RaisePropertyChanged("IsValkyrieAnalysCompleted");
-            }
-        }
-
-        public bool? IsValkyrieScanInProgress
-        {
-            get { return _isValkyrieScanInProgress; }
-            set
-            {
-                _isValkyrieScanInProgress = value;
-                RaisePropertyChanged("IsValkyrieScanInProgress");
-                RaisePropertyChanged(nameof(IsAnyScanInProgress));
-                RaisePropertyChanged(nameof(SearchAvailable));
-
-                App.Current.Dispatcher.BeginInvoke((Action)delegate
-               {
-                   StartScanCommand.InvalidateCanExecute();
-                   StopScanCommand.InvalidateCanExecute();
-               });
-
             }
         }
 
@@ -321,7 +387,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                var commonHeaderName = "Forensic Analysis Tool";
+                var commonHeaderName = string.Empty;
 
                 string header = "Canceling...";
                 if (CancelInProgress)
@@ -335,11 +401,6 @@ namespace FAT.Application.Models
                         header = "Finishing scan...";
                     else
                         header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
-                    return String.Format("{0} ({1})", commonHeaderName, header);
-                }
-                if (IsValkyrieScanInProgress == true && ValkyrieProgressInfo != null)
-                {
-                    header = String.Format("{0:0.00}% Valkyrie analysis...", Percentage).Replace(".00", string.Empty);
                     return String.Format("{0} ({1})", commonHeaderName, header);
                 }
 
@@ -367,9 +428,30 @@ namespace FAT.Application.Models
             get { return SelectedItem != null && !SelectedItem.IsRootItem; }
         }
 
-        public Boolean IsValkyrieDetailsEnabled
+        public Boolean IsMultipleDetailsEnabled
         {
-            get { return SelectedValkyrieItem != null && SelectedValkyrieItem is ValkyrieFile; }
+            get { return SelectedItems != null && SelectedItems.Count == 1 && !SelectedItems[0].IsRootItem; }
+        }
+
+
+        public Boolean IsRestartEnabled
+        {
+            get
+            {
+                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsRootItem &&
+                  (_.ScanStage == ScanStage.ScanFailed ||
+                  _.ScanStage == ScanStage.OperationFailed ||
+                  _.ScanStage == ScanStage.OperationCanceled));
+            }
+        }
+
+        public Boolean IsStopEnabled
+        {
+            get
+            {
+                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsRootItem &&
+                  (_.ScanStage == ScanStage.ScanInProgress));
+            }
         }
 
         public Boolean IsReportEnabled
@@ -415,10 +497,6 @@ namespace FAT.Application.Models
             set
             {
                 _selectedItem = value;
-                RaisePropertyChanged("SelectedItem");
-                RaisePropertyChanged("IsDetailsEnabled");
-
-                SelectCommand.InvalidateCanExecute();
 
                 if (_selectedItem == null)
                 {
@@ -429,39 +507,37 @@ namespace FAT.Application.Models
                     _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, ValkyrieFile>(_selectedItem.BadFile, null));
                 }
 
+                RaisePropertyChanged(nameof(SelectedItem));
+                RaisePropertyChanged(nameof(IsDetailsEnabled));
+
+                SelectCommand.InvalidateCanExecute();
             }
         }
 
-        public object SelectedValkyrieItem
+        private List<ThreatInfoItem> _selectedItems = new List<ThreatInfoItem>();
+        public List<ThreatInfoItem> SelectedItems
         {
-            get { return _selectedValkyrieItem; }
+            get { return _selectedItems; }
             set
             {
-                _selectedValkyrieItem = value == null ? null : (value is ValkyrieFile ? value : null);
-                RaisePropertyChanged("SelectedValkyrieItem");
-                SelectValkyrieCommand.InvalidateCanExecute();
+                _selectedItems = value ?? new List<ThreatInfoItem>();
 
-                if (_selectedValkyrieItem == null)
-                {
-                    _storage.SetValue(KnownKeys.UnknownFile, null);
-                }
-                else
-                {
-                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, ValkyrieFile>(null, (ValkyrieFile)_selectedValkyrieItem));
-                }
+                if (_selectedItems.Count == 1)
+                    SelectedItem = _selectedItems[0];
 
+                RaisePropertyChanged(nameof(IsMultipleDetailsEnabled));
+                RaisePropertyChanged(nameof(IsRestartEnabled));
+                RaisePropertyChanged(nameof(IsStopEnabled));
+
+                SelectMultipleCommand.InvalidateCanExecute();
+                RestartComputerScanCommand.InvalidateCanExecute();
+                RestartComputerScanWithCredentialsCommand.InvalidateCanExecute();
+                StopComputerScanCommand.InvalidateCanExecute();
             }
         }
 
-        public Boolean IsItemsEmpty
-        {
-            get { return _cacheComputers == null || _cacheComputers.Count == 0; }
-        }
 
-        public bool SearchAvailable
-        {
-            get { return !IsItemsEmpty && !IsAnyScanInProgress; }
-        }
+
 
 
         public string ValkyrieDetailsLink
@@ -488,62 +564,38 @@ namespace FAT.Application.Models
             get { return LookupInProgressCount > 0; }
         }
 
-        public ObservableCollection<ValkyrieFile> ItemsValkyrie
+        public ObservableCollection<ThreatInfoItem> DiscoveryResults { get; set; } = new ObservableCollection<ThreatInfoItem>();
+
+        public ObservableCollection<ThreatInfoItem> Files { get; set; } = new ObservableCollection<ThreatInfoItem>();
+
+        public ObservableCollection<ThreatInfoItem> Computers { get; set; } = new ObservableCollection<ThreatInfoItem>();
+
+
+        private ScanCounterManager _scanCounterManager;
+
+        public ScanCounterCollection ScanCounters
         {
-            get { return _itemsValkyrie; }
-            set
+            get
             {
-                _itemsValkyrie = value;
-                RaisePropertyChanged(nameof(ItemsValkyrie));
+                if (_scanCounterManager == null)
+                {
+                    _scanCounterManager = new ScanCounterManager();
+                    _scanCounterManager.SelectionChanged = () => 
+                        Set(() => FilterOrders, 
+                            _scanCounterManager.Collection.
+                                Where(_ => _.IsSelected).
+                                    Select(_ => _.Order).ToArray());
+                }
+
+                return _scanCounterManager.Collection;
             }
         }
 
-        public ObservableCollection<ValkyrieComputer> ComputersValkyrie
-        {
-            get { return _computersValkyrie; }
-            set
-            {
-                _computersValkyrie = value;
-                RaisePropertyChanged(nameof(ComputersValkyrie));
-            }
-        }
 
-        public ObservableCollection<ThreatInfoItem> Items
-        {
-            get { return _items; }
-            set
-            {
-                _items = value;
-                RaisePropertyChanged(nameof(Items));
-            }
-        }
+        public int[] FilterOrders { get; set; } 
 
-        public ObservableCollection<ThreatInfoItem> Computers
-        {
-            get { return _computers; }
-            set
-            {
-                _computers = value;
-                RaisePropertyChanged(nameof(Computers));
-                RaisePropertyChanged(nameof(IsItemsEmpty));
-                RaisePropertyChanged(nameof(SearchAvailable));
-            }
-        }
-
-        public bool ValkyrieSendingFiles { get; set; }
         public bool IsQuickScan { get; set; }
 
-
-        private bool _groupingEnabled;
-        public bool GroupingEnabled
-        {
-            get { return _groupingEnabled; }
-            set
-            {
-                _groupingEnabled = value;
-                RaisePropertyChanged("GroupingEnabled");
-            }
-        }
 
         private bool _groupByFiles;
         public bool GroupByFiles
@@ -551,10 +603,13 @@ namespace FAT.Application.Models
             get { return _groupByFiles; }
             set
             {
+                Set(() => Uri, "/Views/Scan/ScanResultsWithFiles.xaml");
+
                 _groupByFiles = value;
                 _groupByComputers = !value;
                 RaisePropertyChanged("GroupByFiles");
                 RaisePropertyChanged("GroupByComputers");
+                RaisePropertyChanged(nameof(GroupByWatermark));
             }
         }
 
@@ -564,18 +619,36 @@ namespace FAT.Application.Models
             get { return _groupByComputers; }
             set
             {
+                Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
+
                 _groupByFiles = !value;
                 _groupByComputers = value;
                 RaisePropertyChanged("GroupByFiles");
                 RaisePropertyChanged("GroupByComputers");
+                RaisePropertyChanged(nameof(GroupByWatermark));
             }
         }
+
+        public string GroupByWatermark
+        {
+            get
+            {
+                return GroupByComputers ? "Search By Computers" : "Search By Files";
+            }
+        }
+
         public DelegateCommand ChangeScreenCommand { get; private set; }
         public DelegateCommand StartScanCommand { get; private set; }
         public DelegateCommand StopScanCommand { get; private set; }
 
         public DelegateCommand SelectCommand { get; private set; }
-        public DelegateCommand SelectValkyrieCommand { get; private set; }
+
+        public DelegateCommand SelectMultipleCommand { get; private set; }
+
+
+        public DelegateCommand RestartComputerScanCommand { get; private set; }
+        public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
+        public DelegateCommand StopComputerScanCommand { get; private set; }
 
 
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
@@ -588,37 +661,132 @@ namespace FAT.Application.Models
 
             ChangeScreenCommand = new DelegateCommand(o =>
             {
-                Set(() => Uri, "/Views/MainView.xaml");
+                
                 OnLoaded();
+                Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
             });
 
             StartScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
+                AppMessages.ScanMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
-                AppMessages.ChangeScreenMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
+                AppMessages.ScanMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
                 o => StopScanPredicate);
+
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
-            SelectValkyrieCommand = new DelegateCommand(o => { }, o => IsValkyrieDetailsEnabled);
+            SelectMultipleCommand = new DelegateCommand(o => { }, o => IsMultipleDetailsEnabled);
+
+            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
+            RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o =>
+                IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
+            StopComputerScanCommand = new DelegateCommand(o => InvokeStopComputerScan(o), o => IsStopEnabled);
 
             ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.Empty;
         }
 
-        public bool ActiveDirectoryStep { get; set; }
+        private void InvokeRestartComputerScan(Object arg, bool showDialog = false)
+        {
+            if (showDialog)
+            {
+                SettingsWindow window = new SettingsWindow();
+                window.Owner = System.Windows.Application.Current.MainWindow;
+                window.DataContext = this;
+                window.ShowCredentials = true;
+                window.Header = "Scan Credentials";
+
+                bool retry = window.ShowDialog().GetValueOrDefault();
+
+                if (retry)
+                {
+                    RestartComputerScan(true);
+                    return;
+                }
+            }
+            else
+                RestartComputerScan();
+        }
+
+        private void RestartComputerScan(bool useNewCredentials = false)
+        {
+            ScanKind scanKind = ScanKind.Quick;
+            if (IsQuickScan)
+            {
+                scanKind = ScanKind.Quick;
+            }
+            else
+            {
+                scanKind = ScanKind.Full;
+            }
+
+            ScanOptions options;
+            CustomScanOptions customScanOptions = null;
+
+
+            var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
+            var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
+
+            var items = new List<ThreatInfoItem>();
+            foreach (var item in SelectedItems)
+            {
+                if (item.IsRootItem &&
+                    (item.ScanStage == ScanStage.ScanFailed ||
+                    item.ScanStage == ScanStage.OperationFailed ||
+                    item.ScanStage == ScanStage.OperationCanceled))
+                {
+                    item.RestoreConnectingState();
+                    items.Add(item);
+                }
+            }
+            if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+            {
+                customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                scanKind = ScanKind.Custom;
+                options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
+                    customScanOptions.ScanCriticalAreas, login, password, true);
+            }
+            else
+            {
+                options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+            }
+            _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
+                this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+            UpdateStatus();
+            if (!IsScanInProgress.GetValueOrDefault())
+            {
+                IsScanInProgress = true;
+                Percentage = 0;
+                IsReportEnabled = false;
+                IsAnalyseWithValkyrieEnabled = false;
+                IsValkyrieReportEnabled = false;
+            }
+        }
+
+        private void InvokeStopComputerScan(Object arg)
+        {
+            var items = new List<ThreatInfoItem>();
+            foreach (var item in SelectedItems)
+            {
+                if (item.IsRootItem &&
+                    (item.ScanStage == ScanStage.ScanInProgress))
+                {
+                    items.Add(item);
+                }
+            }
+
+            InvokeStopScan(items.Select(_ => _.DeploymentTarget.Uid).ToArray());
+        }
 
         private void InvokeStartScan(Object arg)
         {
             IsQuickScan = (bool)arg;
 
-            Items = new ObservableCollection<ThreatInfoItem>();
+            _scanCounterManager.Clear();
+            Files = new ObservableCollection<ThreatInfoItem>();
             Computers = new ObservableCollection<ThreatInfoItem>();
-            ItemsValkyrie = new ObservableCollection<ValkyrieFile>();
-            ComputersValkyrie = new ObservableCollection<ValkyrieComputer>();
-
-            _cache = new Collection<ThreatInfoItem>();
-            _cacheComputers = new Collection<ThreatInfoItem>();
-            _cacheValkyrie = new Collection<ValkyrieFile>();
-            _cacheValkyrieComputers = new Collection<ValkyrieComputer>();
+            RaisePropertyChanged(nameof(ScanCounters));
+            RaisePropertyChanged(nameof(Files));
+            RaisePropertyChanged(nameof(Computers));
+            
 
             _onlineItems = new ThreatInfoItem[0];
 
@@ -630,12 +798,13 @@ namespace FAT.Application.Models
             LookupInProgressCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
-            IsAnalyseWithValkyrieEnabled = false;
+
             IsValkyrieReportEnabled = false;
+            RescanLogin = null;
+            RescanPassword = null;
 
 
 
-            GroupingEnabled = false;
             GroupByComputers = true;
 
             var value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
@@ -650,9 +819,8 @@ namespace FAT.Application.Models
                     var model = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
 
                     _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets,
-                        ActiveDirectoryStep ? model.ActiveDirectoryLogin : null,
-                        ActiveDirectoryStep ? model.ActiveDirectoryPassword : null, this);
-
+                        CurrentStep == WizardStepEnum.Domain ? model.ActiveDirectoryLogin : null,
+                        CurrentStep == WizardStepEnum.Domain ? model.ActiveDirectoryPassword : null, this);
                 }
             }
         }
@@ -662,9 +830,13 @@ namespace FAT.Application.Models
             if (!IsAnyScanInProgress)
                 return;
 
-            CancelInProgress = true;
+            var targets = new Guid[0];
+            if (arg != null && arg is Guid[])
+                targets = (Guid[])arg;
+            else
+                CancelInProgress = true;
 
-            _aptService.StopScan(new Guid[0]);
+            _aptService.StopScan(targets);
 
         }
 
@@ -679,156 +851,32 @@ namespace FAT.Application.Models
             _aptService.ComputerScanCompleted += OnComputerScanCompleted;
             _aptService.ScanCompleted += OnScanCompleted;
             _aptService.ScanProgressChanged += OnScanProgressChanged;
-            _aptService.ValkyrieAnalyzeProgressChanged += OnValkyrieAnalyzeProgressChanged;
+
             _aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             _aptService.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
-            _aptService.FlsAnalyzeProgressChanged += OnFlsAnalyzeProgressChanged;
+
         }
 
-        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs<IAptVerdictContext> e)
-        {
-            if (e.Exception != null) return;
-
-            var computersToUpdate = new Dictionary<Guid, ThreatInfoItem>();
-            var needUpdateStatus = false;
-            foreach (var result in e.Results)
-            {
-                ValkyrieVerdict newVerdict = ValkyrieVerdict.Pending;
-                if (result.Cloud == CloudVerdict.FirstSeen || result.Cloud == CloudVerdict.Unknown)
-                    newVerdict = ValkyrieVerdict.Pending;
-                if (result.Cloud == CloudVerdict.Malware)
-                    newVerdict = ValkyrieVerdict.Malware;
-                if (result.Cloud == CloudVerdict.Safe)
-                    newVerdict = ValkyrieVerdict.Clean;
-
-                var items = _cache.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
-                foreach (var threatInfoItem in items)
-                {
-                    threatInfoItem.UpdateFileVerdict(result.Cloud);
-                }
 
 
-                foreach (ThreatInfoItem computer in _cacheComputers)
-                {
-                    var files = computer.Items.Where(i =>
-                            String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
-                    if (files.Any())
-                    {
-                        if (!computersToUpdate.ContainsKey(computer.ComputerGuid))
-                            computersToUpdate.Add(computer.ComputerGuid, computer);
-                        var comp = _cacheValkyrieComputers.FirstOrDefault(_ => _.TargetUid == computer.ComputerGuid);
-                        comp?.UpdateFileIfPredicate(result.Sha1, new ValkyrieAnalysisResult(result.Sha1, newVerdict), 
-                            verdict => verdict == ValkyrieVerdict.PendingFls);
-                        foreach (var f in files)
-                            f.UpdateFileVerdict(result.Cloud);
-                    }
-                }
-                if (_cacheValkyrie.Any())
-                {
-                    var file = _cacheValkyrie.FirstOrDefault(_ => String.Equals(_.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase));
-                    if (file != null)
-                    {
-                        if (!file.PendingFls)
-                            continue;
-                        
-                        file.UpdateValkyrieResult(new ValkyrieAnalysisResult(result.Sha1, newVerdict));
-                        Interlocked.Add(ref _lookupInProgressCount, -file.Computers.Count);
-                        RaisePropertyChanged(nameof(LookupInProgressCount));
-                        RaisePropertyChanged(nameof(IsErrorsFound));
-
-                        if (file.IsUnknown)
-                        {
-                            Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
-                            RaisePropertyChanged(nameof(UnknownFilesCount));
-                        }
-                        else if (file.IsMalware)
-                        {
-                            Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
-                            RaisePropertyChanged(nameof(MalwareFilesCount));
-                        }
-                        else if (file.Pending)
-                        {
-                            Interlocked.Add(ref _pendingFilesCount, file.Computers.Count);
-                            RaisePropertyChanged(nameof(PendingFilesCount));
-                            RaisePropertyChanged(nameof(IsPendingFound));
-                        }
-                    }
-                }
-                else
-                   needUpdateStatus = true;
-            }
-            foreach (var computer in computersToUpdate.Values)
-            {
-                computer.UpdateStatus();
-            }
-            if (needUpdateStatus)
-                UpdateStatus();
-        }
         
         void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
             OnBeforeBeginValkyrieAnalysis();
-            ValkyrieAnalyzeStarted?.Invoke(this, e);
+
         }
 
         public string ProxyLogin { get; set; }
         public string ProxyPassword { get; set; }
 
+        public string RescanLogin { get; set; }
+        public string RescanPassword { get; set; }
+
+        public bool UseCurrentDomainForRescan { get; set; }
+
         public void OnPortChanged(int udpPort, int tcpPort)
         {
             _aptService.UpdateFlsPorts(udpPort, tcpPort);
-        }
-
-
-        void CopyMalwaresFromScanResults()
-        {
-            var col = new Collection<ValkyrieFile>();
-            foreach (var file in _cache)
-            {
-                if (!file.IsMalware && !file.Failed)
-                    continue;
-                var valkyrieFile = MapToValkyrieFile(file);
-                col.Add(valkyrieFile);
-            }
-
-            MergeResults(col);
-        }
-
-        private static ValkyrieFile MapToValkyrieFile(ThreatInfoItem file)
-        {
-            var valkyrieFile = new ValkyrieFile
-            {
-                FlsVerdict = file.BadFile.Cloud,
-                Size = file.Size,
-                SizeSorting = file.SizeSorting,
-                Attributes = file.BadFile.Attributes,
-                Created = file.BadFile.Created,
-                Modified = file.BadFile.Modified,
-                Accessed = file.BadFile.Accessed,
-                Sha1 = file.BadFile.Sha1.Trim().ToLower(),
-                Signer = file.BadFile.Signer,
-                Description = file.BadFile.Description,
-                Version = file.BadFile.Version,
-                Copyright = file.BadFile.Copyright,
-                Product = file.BadFile.Product
-            };
-            valkyrieFile.UpdateValkyrieResult(
-                new ValkyrieAnalysisResult(file.BadFile.Sha1, file.IsMalware
-                        ? ValkyrieVerdict.Malware
-                        : ValkyrieVerdict.PendingFls));
-            foreach (var comp in file.Computers)
-            {
-                var computer = new ValkyrieComputer
-                {
-                    Name = comp.Name,
-                    IP = comp.IpAddress,
-                    FilePath = comp.ShortName,
-                    TargetUid = comp.ComputerGuid
-                };
-                valkyrieFile.Path = computer.FilePath;
-                valkyrieFile.Computers.Add(computer);
-            }
-            return valkyrieFile;
         }
 
         public IMainViewModel ParentViewModel
@@ -874,21 +922,16 @@ namespace FAT.Application.Models
                 if (_isScanInProgress == false)
                 {
                     IsValkyrieReportEnabled = true;
-                    MergeResults(e.Result);
-                    CopyMalwaresFromScanResults();
+
+
                 }
             }
-            
 
-            if (e.Cancelled)
-                foreach (var comp in _cacheValkyrieComputers)
-                    comp.Canceling = true;
 
             CancelInProgress = false;
 
-            Set(() => ValkyrieSendingFiles, false);
-            IsValkyrieScanInProgress = false;
-            IsAnalyseWithValkyrieEnabled = false;
+
+
             
             IsReportEnabled = true;
 
@@ -900,135 +943,8 @@ namespace FAT.Application.Models
             ValkyrieAnalyzeCompleted?.Invoke(this, e);
         }
 
-        private void OnValkyrieAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile> e)
-        {
-            var info = e.ProgressInfo;
 
-            if (info != null && e.IsUpdate)
-            {
-                UpdateResults(info.Results);
-                return;
-            }
 
-            Set(() => ValkyrieSendingFiles, false);
-
-            if (info != null && !CancelInProgress)
-            {
-                ValkyrieProgressInfo = info;
-                Percentage = info.Percentage;
-                RaisePropertyChanged("Header");
-                MergeResults(info.Results);
-            }
-        }
-
-        private void UpdateResults(ValkyrieFile[] results)
-        {
-            foreach (var result in results)
-            {
-                var file = _cacheValkyrie.FirstOrDefault(_ => _.Equals(result));
-                if (file != null)
-                {
-                    bool wasPending = false;
-                    bool wasUnknown = false;
-                    if (file.Pending)
-                        wasPending = true;
-                    if (file.IsUnknown)
-                        wasUnknown = true;
-                    var verdictChanged = file.UpdateValkyrieResult(result);
-
-                    if (verdictChanged && wasUnknown)
-                        Interlocked.Add(ref _unknownFilesCount, -file.Computers.Count);
-
-                    if (verdictChanged && wasPending && !file.Pending)
-                        Interlocked.Add(ref _pendingFilesCount, -file.Computers.Count);
-
-                    if (file.IsUnknown)
-                        Interlocked.Add(ref _unknownFilesCount, file.Computers.Count);
-
-                    if (file.IsMalware)
-                        Interlocked.Add(ref _malwareFilesCount, file.Computers.Count);
-
-                    RaisePropertyChanged(nameof(PendingFilesCount));
-                    RaisePropertyChanged(nameof(IsPendingFound));
-                    RaisePropertyChanged(nameof(UnknownFilesCount));
-                    RaisePropertyChanged(nameof(MalwareFilesCount));
-
-                    foreach (var computer in file.Computers)
-                    {
-                        var comp = _cacheValkyrieComputers.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
-                        if (comp != null)
-                            comp.UpdateFile(result);
-                    }
-                }
-            }
-        }
-
-        private void MergeResults(IEnumerable<ValkyrieFile> results)
-        {
-            if (results == null)
-                return;
-
-            if (!_cacheValkyrie.Any())
-            {
-                UnknownFilesCount = 0;
-                MalwareFilesCount = 0;
-            }
-
-            var computersDict = _cacheComputers.ToDictionary(_ => _.ComputerGuid);
-
-            foreach (var result in results)
-            {
-                var file = _cacheValkyrie.FirstOrDefault(_ => _.Equals(result));
-                if (file != null)
-                {
-                    int dummy = 0;
-                    if (file.IsUnknown)
-                        file.MergeComputers(result.Computers, ref _unknownFilesCount);
-                    else if (file.IsMalware)
-                        file.MergeComputers(result.Computers, ref _malwareFilesCount);
-                    else
-                        file.MergeComputers(result.Computers, ref dummy);
-
-                }
-                else
-                {
-                    ItemsValkyrie.Add(result);
-                    _cacheValkyrie.Add(result);
-                    if (result.IsUnknown)
-                        Interlocked.Add(ref _unknownFilesCount, result.Computers.Count);
-                    else if (result.IsMalware)
-                        Interlocked.Add(ref _malwareFilesCount, result.Computers.Count);
-                    else if (result.Pending)
-                        Interlocked.Add(ref _pendingFilesCount, result.Computers.Count);
-                }
-
-                RaisePropertyChanged(nameof(PendingFilesCount));
-                RaisePropertyChanged(nameof(IsPendingFound));
-                RaisePropertyChanged(nameof(UnknownFilesCount));
-                RaisePropertyChanged(nameof(MalwareFilesCount));
-
-                foreach (var computer in result.Computers)
-                {
-                    ThreatInfoItem c;
-                    if (!computersDict.TryGetValue(computer.TargetUid, out c)) continue;
-
-                    var comp = _cacheValkyrieComputers.FirstOrDefault(_ => _.TargetUid == computer.TargetUid);
-                    if (comp != null)
-                        comp.MergeFile(result, computer.FilePath);
-                    else
-                    {
-                        comp = new ValkyrieComputer(computer)
-                        {
-                            TotalDistinctCount = c.DistinctUnknownFilesCount,
-                            TotalCount = c.UnknownFilesCount
-                        };
-                        comp.MergeFile(result, computer.FilePath);
-                        ComputersValkyrie.Add(comp);
-                        _cacheValkyrieComputers.Add(comp);
-                    }
-                }
-            }
-        }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
@@ -1040,7 +956,6 @@ namespace FAT.Application.Models
             _aptService.ComputerScanCompleted -= OnComputerScanCompleted;
             _aptService.ScanCompleted -= OnScanCompleted;
             _aptService.ScanProgressChanged -= OnScanProgressChanged;
-            _aptService.ValkyrieAnalyzeProgressChanged -= OnValkyrieAnalyzeProgressChanged;
             _aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
             _aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
         }
@@ -1069,11 +984,10 @@ namespace FAT.Application.Models
             Set(() => TotalItemsCount, items.Count());
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
             RaisePropertyChanged("OnlineItemsCount");
-            _cacheComputers = new ObservableCollection<ThreatInfoItem>(items);
-            Computers = new ObservableCollection<ThreatInfoItem>(_cacheComputers);
+            Computers = new ObservableCollection<ThreatInfoItem>(items);
 
 
-            foreach (var item in _cacheComputers)
+            foreach (var item in Computers)
             {
                 if (!item.IsOnline)
                 {
@@ -1136,7 +1050,7 @@ namespace FAT.Application.Models
             CancelInProgress = false;
             IsScanInProgress = false;
             ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
-            //IsReportEnabled = ScannedItemsCount > 0;
+
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             UpdateStatus();
             RaisePropertyChanged(nameof(Header));
@@ -1145,29 +1059,19 @@ namespace FAT.Application.Models
         public void OnBeforeBeginValkyrieAnalysis()
         {
             ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.CreateFromTotal(DistinctFilesCount);
-            IsAnalyseWithValkyrieEnabled = false;
-            IsValkyrieScanInProgress = true;
+
+
             IsValkyrieAnalysCompleted = false;
 
-            ItemsValkyrie = new ObservableCollection<ValkyrieFile>();
-            ComputersValkyrie = new ObservableCollection<ValkyrieComputer>();
-            _cacheValkyrie = new Collection<ValkyrieFile>();
-            _cacheValkyrieComputers = new Collection<ValkyrieComputer>();
+
 
             Keyword = string.Empty;
-
-
-
-            Set(() => ValkyrieSendingFiles, true);
         }
 
         public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
         {
-           
 
-                Set(() => ValkyrieSendingFiles, true);
-
-                _aptService.BeginValkyrieAnalysis(Login, Password, _camLicenseId, _camUserLogin, _camUserPassword,
+                _aptService.BeginValkyrieAnalysis(Login, Password, null, null, null,
                     networkCredential);
                 return true;
             
@@ -1245,6 +1149,9 @@ namespace FAT.Application.Models
                     if (infoItem.ScanStage == ScanStage.OperationCompleted)
                         scanned++;
 
+                    if (infoItem.ScanStage == ScanStage.OperationCanceled && !CancelInProgress)
+                        continue;
+
                     unknownFiles += infoItem.UnknownFilesCount;
                     malwareFiles += infoItem.MalwareFilesCount;
                     lookupInProgressCount += infoItem.FailedToAnalyzeCount;
@@ -1291,6 +1198,9 @@ namespace FAT.Application.Models
 
             foreach (var infoItem in _onlineItems)
             {
+                if (infoItem.ScanStage == ScanStage.OperationCanceled)
+                    continue;
+
                 unknownFiles += infoItem.UnknownFilesCount;
                 malwareFiles += infoItem.MalwareFilesCount;
                 lookupInProgressCount += infoItem.FailedToAnalyzeCount;
@@ -1302,7 +1212,6 @@ namespace FAT.Application.Models
             MalwareFilesCount = malwareFiles;
             LookupInProgressCount = lookupInProgressCount;
 
-            RaisePropertyChanged(nameof(Header));
         }
 
         private void OnComputerScanCompleted(Object sender, GetScanResultCompletedEventArgs e)
@@ -1327,7 +1236,7 @@ namespace FAT.Application.Models
                             }
                             item = new ThreatInfoItem(badFile);
 
-                            var exist = _cache.FirstOrDefault(_ =>
+                            var exist = Files.FirstOrDefault(_ =>
                                 _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
                                 _.IsMalware == item.IsMalware);
                             var comp = new ThreatInfoItem
@@ -1345,8 +1254,7 @@ namespace FAT.Application.Models
                             {
                                 item.Computers = new Collection<ThreatInfoItem>();
                                 item.Computers.Add(comp);
-                                _cache.Add(item);
-                                Items.Add(item);
+                                Files.Add(item);
                             }
                         }
                         if (e.ScanResult.TotalFilesCount != parentItem.TotalFilesCount)
@@ -1366,43 +1274,71 @@ namespace FAT.Application.Models
                     }
 
 
-                    parentItem.ScanStage = parentItem.ScanStage;
+                    parentItem.Items = parentItem.Items;
                 }
             }
         }
 
-        protected override void OnKeywordChanged(string oldValue, string newValue)
+        public Predicate<object> FilterPredicate
         {
-            base.OnKeywordChanged(oldValue, newValue);
-
-            if (newValue == oldValue || (newValue != null && newValue.Length < 3))
-                return;
-
-            if (_cacheComputers != null && _cacheComputers.Any())
+            get
             {
-                Computers = new ObservableCollection<ThreatInfoItem>(
-                       _cacheComputers.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
+                return _ =>
+                {
+                    if (_ == null)
+                        return false;
 
-                SelectedItem = null;
-            }
+                    if (GroupByComputers)
+                    {
+                        var o = _ as ThreatInfoItem;
+                        if (o.IsRootItem)
+                        {
+                            bool hasOrders = !FilterOrders.Any();
+                            foreach (int order in FilterOrders)
+                            {
+                                if ((!o.HasBadFiles && order == 1 && o.ScanStage == ScanStage.OperationCompleted) ||
+                                    (o.HasMalwares && order == 2 && o.ScanStage == ScanStage.OperationCompleted) ||
+                                    (o.HasUnknowns && order == 3 && o.ScanStage == ScanStage.OperationCompleted) ||
+                                    (o.ScanStage == ScanStage.OperationFailed && order == 4) ||
+                                    (o.HasFailed && order == 5))
+                                {
+                                    hasOrders = true;
+                                    break;
+                                }
+                            }
 
-            if (_cache != null && _cache.Any())
-            {
-                Items = new ObservableCollection<ThreatInfoItem>(
-                       _cache.Where(item => item.NameAndIpAddress.ContainsString(Keyword)).ToList());
-            }
+                            return hasOrders && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
+                        }
+                        else if (!FilterOrders.Any() && string.IsNullOrEmpty(Keyword))
+                            return true;
+                    }
 
-            if (_cacheValkyrie != null && _cacheValkyrie.Any())
-            {
-                ItemsValkyrie = new ObservableCollection<ValkyrieFile>(
-                       _cacheValkyrie.Where(item => item.Name.ContainsString(Keyword)));
-                SelectedValkyrieItem = null;
-            }
+                    if (GroupByFiles)
+                    {
+                        var o = _ as ThreatInfoItem;
+                        if (!o.IsRootItem)
+                        {
+                            bool hasOrders = !FilterOrders.Any();
+                            foreach (int order in FilterOrders)
+                            { 
+                                if ((o.Clean && order == 1) ||
+                                    (o.IsMalware && order == 2) ||
+                                    (o.IsUnknown && order == 3) ||
+                                    (o.Failed && order == 5))
+                                {
+                                    hasOrders = true;
+                                    break;
+                                }
+                            }
 
-            if (_cacheValkyrieComputers != null && _cacheValkyrieComputers.Any())
-            {
-                ComputersValkyrie = new ObservableCollection<ValkyrieComputer>(
-                       _cacheValkyrieComputers.Where(item => item.FullName.ContainsString(Keyword)));
+                            return hasOrders && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
+                        }
+                        else if (!FilterOrders.Any() && string.IsNullOrEmpty(Keyword))
+                            return true;
+                    }
+
+                    return false;
+                };
             }
         }
 
@@ -1417,17 +1353,6 @@ namespace FAT.Application.Models
             InvokeStopScan(null);
         }
 
-        private async Task TryAction(Task task)
-        {
-            try
-            {
-                await task;
-            }
-            catch (Exception ex)
-            {
-                TryActionException(ex);
-            }
-        }
 
         private async Task<T> TryAction<T>(Task<T> task) where T : class
         {

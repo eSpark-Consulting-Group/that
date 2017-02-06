@@ -8,30 +8,13 @@
                   xmlns:Models="clr-namespace:FAT.Application.Models"
                   xmlns:TemplateSelectors="clr-namespace:FAT.Application.TemplateSelectors"
                   xmlns:Application="clr-namespace:FAT.Application"
-                 xmlns:converters="clr-namespace:FAT.Application.Converters"
+                  xmlns:converters="clr-namespace:FAT.Application.Converters"
                   xmlns:Controls="clr-namespace:FAT.Application.Views" 
+                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                  xmlns:scm= "clr-namespace:System.ComponentModel;assembly=WindowsBase"
                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                   d:DesignHeight="760" d:DesignWidth="1200" Background="White">
-
     <Grid>
-        <Grid.RenderTransform>
-            <TranslateTransform x:Name="translate1" X="1100" />
-        </Grid.RenderTransform>
-        <Grid.Triggers>
-            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="X" BeginTime="0:0:0.0">
-                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
-                                <EasingDoubleKeyFrame.EasingFunction>
-                                    <CubicEase/>
-                                </EasingDoubleKeyFrame.EasingFunction>
-                            </EasingDoubleKeyFrame>
-                        </DoubleAnimationUsingKeyFrames>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-        </Grid.Triggers>
         <Grid.Resources>
             <DataTemplate x:Key="ReportButtonContentTemplate">
                 <Grid>
@@ -39,24 +22,17 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Path Data="M6.0000005,10 C6.5530005,10 7.0000005,10.448 7.0000005,11 L7.0000005,15 C7.0000005,15.552 6.5530005,16 6.0000005,16 5.4470005,16 5.0000005,15.552 5.0000005,15 L5.0000005,11 C5.0000005,10.448 5.4470005,10 6.0000005,10 z M18,9.0000002 C18.553,9 19,9.448 19,10 L19,15 C19,15.552 18.553,16 18,16 17.447001,16 17,15.552 17,15 L17,10 C17,9.448 17.447001,9 18,9.0000002 z M9.0000004,9.0000002 C9.5530003,9 10,9.448 10,10 L10,15 C10,15.552 9.5530003,16 9.0000004,16 8.4470003,16 8.0000005,15.552 8.0000005,15 L8.0000005,10 C8.0000005,9.448 8.4470003,9 9.0000004,9.0000002 z M15,6.9999999 C15.553,6.9999999 16,7.448 16,8 L16,15 C16,15.552 15.553,16 15,16 14.447,16 14,15.552 14.000001,15 L14.000001,8 C14,7.448 14.447,6.9999999 15,6.9999999 z M12,5.0000003 C12.552994,5.0000005 13,5.4480004 13,6.0000005 L13,15 C13,15.551999 12.552994,16 12,16 11.447006,16 11,15.551999 11,15 L11,6.0000005 C11,5.4480004 11.447006,5.0000005 12,5.0000003 z M12,2 C6.4780002,2 2,6.4779999 2,12 2,17.522 6.4780002,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627,0 24,5.3729999 24,12 24,18.627 18.627,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}" 
-                              Height="24" SnapsToDevicePixels="True"
-                              Width="24"
-                              Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource InverseBoolToOpacityConverter}}"
-                              Margin="0,0,10,0"/>
-                    <Path Data="M6.0000005,10 C6.5530005,10 7.0000005,10.448 7.0000005,11 L7.0000005,15 C7.0000005,15.552 6.5530005,16 6.0000005,16 5.4470005,16 5.0000005,15.552 5.0000005,15 L5.0000005,11 C5.0000005,10.448 5.4470005,10 6.0000005,10 z M18,9.0000002 C18.553,9 19,9.448 19,10 L19,15 C19,15.552 18.553,16 18,16 17.447001,16 17,15.552 17,15 L17,10 C17,9.448 17.447001,9 18,9.0000002 z M9.0000004,9.0000002 C9.5530003,9 10,9.448 10,10 L10,15 C10,15.552 9.5530003,16 9.0000004,16 8.4470003,16 8.0000005,15.552 8.0000005,15 L8.0000005,10 C8.0000005,9.448 8.4470003,9 9.0000004,9.0000002 z M15,6.9999999 C15.553,6.9999999 16,7.448 16,8 L16,15 C16,15.552 15.553,16 15,16 14.447,16 14,15.552 14.000001,15 L14.000001,8 C14,7.448 14.447,6.9999999 15,6.9999999 z M12,5.0000003 C12.552994,5.0000005 13,5.4480004 13,6.0000005 L13,15 C13,15.551999 12.552994,16 12,16 11.447006,16 11,15.551999 11,15 L11,6.0000005 C11,5.4480004 11.447006,5.0000005 12,5.0000003 z M12,2 C6.4780002,2 2,6.4779999 2,12 2,17.522 6.4780002,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627,0 24,5.3729999 24,12 24,18.627 18.627,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
-                              Fill="White" 
-                              Height="24"  SnapsToDevicePixels="True"
-                              Width="24"
-                              Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource BoolToOpacityConverter}}"
-                              Margin="0,0,10,0"/>
-
-                    <TextBlock Text="{Binding}" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Foreground="White" Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource BoolToOpacityConverter}}" FontSize="16"
-                   FontFamily="Segoe UI"/>
-                    <TextBlock Text="{Binding}" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource InverseBoolToOpacityConverter}}" FontSize="16"
-                   FontFamily="Segoe UI"/>
+                    <Path x:Name="path" Data="M6.0000005,10 C6.5530005,10 7.0000005,10.448 7.0000005,11 L7.0000005,15 C7.0000005,15.552 6.5530005,16 6.0000005,16 5.4470005,16 5.0000005,15.552 5.0000005,15 L5.0000005,11 C5.0000005,10.448 5.4470005,10 6.0000005,10 z M18,9.0000002 C18.553,9 19,9.448 19,10 L19,15 C19,15.552 18.553,16 18,16 17.447001,16 17,15.552 17,15 L17,10 C17,9.448 17.447001,9 18,9.0000002 z M9.0000004,9.0000002 C9.5530003,9 10,9.448 10,10 L10,15 C10,15.552 9.5530003,16 9.0000004,16 8.4470003,16 8.0000005,15.552 8.0000005,15 L8.0000005,10 C8.0000005,9.448 8.4470003,9 9.0000004,9.0000002 z M15,6.9999999 C15.553,6.9999999 16,7.448 16,8 L16,15 C16,15.552 15.553,16 15,16 14.447,16 14,15.552 14.000001,15 L14.000001,8 C14,7.448 14.447,6.9999999 15,6.9999999 z M12,5.0000003 C12.552994,5.0000005 13,5.4480004 13,6.0000005 L13,15 C13,15.551999 12.552994,16 12,16 11.447006,16 11,15.551999 11,15 L11,6.0000005 C11,5.4480004 11.447006,5.0000005 12,5.0000003 z M12,2 C6.4780002,2 2,6.4779999 2,12 2,17.522 6.4780002,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627,0 24,5.3729999 24,12 24,18.627 18.627,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
+                              Fill="{DynamicResource StrongBrush}"  Height="24" SnapsToDevicePixels="True" Width="24"  Margin="0,0,10,0"/>
+                    <TextBlock x:Name="text" Text="{Binding}" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="15" Margin="0 2 0 0"/>
+                   
                 </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}}" Value="true">
+                        <Setter TargetName="path" Property="Fill" Value="White"/>
+                        <Setter TargetName="text" Property="Foreground" Value="White"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
             <DataTemplate x:Key="AboutButtonContentTemplate">
                 <Grid>
@@ -64,186 +40,418 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Path Data="M9,9.0000021 L14,9.0000021 13,17.000001 C13,17.000001 13,18.000001 15,17.000001 12,21 10,18.000001 10,18.000001 L11,10.000002 9,10.000002 z M12.5,5.0000005 C13.329,5.0000005 14,5.6720004 14,6.5000005 14,7.3280004 13.329,8.0000004 12.5,8.0000002 11.671,8.0000004 11,7.3280004 11,6.5000005 11,5.6720004 11.671,5.0000005 12.5,5.0000005 z M12,2.0000005 C6.4780004,2.0000005 2.0000005,6.4780004 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4780004 17.522,2.0000005 12,2.0000005 z M12,0 C18.627001,0 24,5.3730004 24,12 24,18.627001 18.627001,24 12,24 5.3730004,24 0,18.627001 0,12 0,5.3730004 5.3730004,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}"
-                              Height="24" SnapsToDevicePixels="True"
-                              Stretch="Fill"
-                              Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource InverseBoolToOpacityConverter}}"
-                              Margin="0,0,10,0"
-                              Width="24"/>
-                    <Path Data="M9,9.0000021 L14,9.0000021 13,17.000001 C13,17.000001 13,18.000001 15,17.000001 12,21 10,18.000001 10,18.000001 L11,10.000002 9,10.000002 z M12.5,5.0000005 C13.329,5.0000005 14,5.6720004 14,6.5000005 14,7.3280004 13.329,8.0000004 12.5,8.0000002 11.671,8.0000004 11,7.3280004 11,6.5000005 11,5.6720004 11.671,5.0000005 12.5,5.0000005 z M12,2.0000005 C6.4780004,2.0000005 2.0000005,6.4780004 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4780004 17.522,2.0000005 12,2.0000005 z M12,0 C18.627001,0 24,5.3730004 24,12 24,18.627001 18.627001,24 12,24 5.3730004,24 0,18.627001 0,12 0,5.3730004 5.3730004,0 12,0 z"
-                              Fill="White"
-                              Height="24" SnapsToDevicePixels="True"
-                              Stretch="Fill"
-                              Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource BoolToOpacityConverter}}"
-                              Margin="0,0,10,0"
-                              Width="24"/>
-
-                    <TextBlock Text="{Binding}" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Foreground="White" Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource BoolToOpacityConverter}}" FontSize="16"
-                   FontFamily="Segoe UI"/>
-                    <TextBlock Text="{Binding}" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Opacity="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}, Converter={StaticResource InverseBoolToOpacityConverter}}" FontSize="16"
-                   FontFamily="Segoe UI"/>
+                    <Path x:Name="path" Data="M9,9.0000021 L14,9.0000021 13,17.000001 C13,17.000001 13,18.000001 15,17.000001 12,21 10,18.000001 10,18.000001 L11,10.000002 9,10.000002 z M12.5,5.0000005 C13.329,5.0000005 14,5.6720004 14,6.5000005 14,7.3280004 13.329,8.0000004 12.5,8.0000002 11.671,8.0000004 11,7.3280004 11,6.5000005 11,5.6720004 11.671,5.0000005 12.5,5.0000005 z M12,2.0000005 C6.4780004,2.0000005 2.0000005,6.4780004 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4780004 17.522,2.0000005 12,2.0000005 z M12,0 C18.627001,0 24,5.3730004 24,12 24,18.627001 18.627001,24 12,24 5.3730004,24 0,18.627001 0,12 0,5.3730004 5.3730004,0 12,0 z"
+                              Fill="{DynamicResource StrongBrush}" Height="24" SnapsToDevicePixels="True" Stretch="Fill" Margin="0,0,10,0" Width="24"/>
+                    <TextBlock x:Name="text" Text="{Binding}" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="15" Margin="0 2 0 0"/>
                 </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsOpen, RelativeSource={RelativeSource AncestorType={x:Type telerik:RadDropDownButton}}}" Value="true">
+                        <Setter TargetName="path" Property="Fill" Value="White"/>
+                        <Setter TargetName="text" Property="Foreground" Value="White"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
             <DataTemplate x:Key="ReportButtonListBoxItemTemplate">
                 <TextBlock Text="{Binding}" Style="{StaticResource HeaderTextBlock}" Margin="0 5" FontSize="15"/>
             </DataTemplate>
+
+            <CollectionViewSource x:Key="SortedCounters" Source="{Binding ScanCounters}">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="Order"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <telerik:RadBusyIndicator AutomationProperties.AutomationId="ResolvingComputersBusyIndicator" 
-                                  Grid.Row="1" IsBusy="{Binding IsBusy}" BusyContent="Resolving Computers..." x:Name="loading" Background="Transparent" BorderBrush="Transparent" 
-                                  IsTabStop="false" FocusVisualStyle="{x:Null}">
-            
-            <telerik:RadBusyIndicator AutomationProperties.AutomationId="SendingFilesBusyIndicator" 
-                                      IsBusy="{Binding ValkyrieSendingFiles}" BusyContent="Sending Files for Analysis..." Background="Transparent" BorderBrush="Transparent" 
-                                      IsTabStop="false" FocusVisualStyle="{x:Null}">
+        <Grid Grid.Row="1" Background="#FFFAF9F9" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ProgressBar VerticalAlignment="Top" IsTabStop="false" Value="{Binding Percentage}" Background="#FF18C3A4" FocusVisualStyle="{x:Null}" Margin="0 -6 0 14" />
+
+            <Border x:Name="pr1" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Left" />
+            <Border x:Name="pr2" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Right" />
+
+            <ListBox Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" x:Name="list" BorderThickness="0" Grid.Row="1" Padding="0" Margin="32, 0,32,20" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters}}" >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="MinHeight" Value="104" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Visibility" Value="{Binding Valid, Converter={converters:BoolToVisibilityConverter2}}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="Border" Background="#FF4C6F8A" SnapsToDevicePixels="True" Opacity="0" >
+                                        <Border.RenderTransform>
+                                            <TranslateTransform x:Name="translate2" />
+                                        </Border.RenderTransform>
+                                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="Visibility" Value="Visible">
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate2" Storyboard.TargetProperty="Y" BeginTime="0" >
+                                                            <EasingDoubleKeyFrame KeyTime="0" Value="-300" >
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate2" Storyboard.TargetProperty="Y" BeginTime="0:0:0.2" >
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                                    <CubicEase/>
+                                                                </EasingDoubleKeyFrame.EasingFunction>
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" BeginTime="0">
+                                                            <EasingDoubleKeyFrame KeyTime="0" Value="0" >
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.5">
+                                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1" >
+                                                            </EasingDoubleKeyFrame>
+                                                        </DoubleAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="#FF25A0DA" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Border" Property="Background">
+                                                <Setter.Value>
+                                                    <SolidColorBrush Color="#FF2A80B9" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="True" />
+                                                <Condition Property="Selector.IsSelectionActive" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter TargetName="Border" Property="Background">
+                                                <Setter.Value>
+                                                    <SolidColorBrush Color="#FF25A0DA" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.Resources>
+                    <DataTemplate DataType="{x:Type Models:ComputersCounter}">
+                        <Grid MinWidth="155" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Ellipse Width="40" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center" Fill="White" />
+                            <Path SnapsToDevicePixels="True" Data="M10,22.00001 L10,29.000011 19,30.896008 19,22.00001 z M21,22 L21,30.896 32,33 32,22 z M19,11.105007 L10,13.000007 10,20.000002 19,20.000002 z M32,9.0010004 L21,11.105999 21,20.000998 32,20.000998 z M22,0 C34.149994,0 44,9.848999 44,22 44,34.149994 34.149994,44 22,44 9.8500061,44 0,34.149994 0,22 0,9.848999 9.8500061,0 22,0 z" Fill="#FF19C3A5" HorizontalAlignment="Center" Height="44" Stretch="Fill" VerticalAlignment="Bottom" Width="44" />
+                            <TextBlock FontSize="16" Text="{Binding Count}" Grid.Row="1" HorizontalAlignment="Center" Margin="0 3 0 0" VerticalAlignment="Top" Foreground="White"/>
+                            <TextBlock FontSize="15" Text="Windows Devices" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
+
+                            <Border Background="#FF19C3A5" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
+                            <Border Background="#FFFAF9F9" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type Models:CleanCounter}">
+                        <Grid MinWidth="155" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Ellipse Width="40" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center" Fill="White" />
+                            <Path SnapsToDevicePixels="True" Data="M21.832018,14 L15.872748,15 C15.872748,15 14.831701,24 21.832018,30 z M21.832167,12 L29.832298,14 C29.832298,14 31.832333,26 21.832167,32.153992 12.832017,26 13.832033,14 13.832033,14 z M21.832167,10 L11.832,12.768997 C11.832,16.46199 11.832,28 21.832167,34 32.832348,28.46199 31.832333,16.46199 31.832333,12.768997 z M22,0 C34.149994,0 44,9.8500061 44,22 44,34.149994 34.149994,44 22,44 9.8500061,44 0,34.149994 0,22 0,9.8500061 9.8500061,0 22,0 z" Fill="#FF19C3A5" HorizontalAlignment="Center" Height="44" Stretch="Fill" VerticalAlignment="Bottom" Width="44"/>
+                            <TextBlock FontSize="16" Text="{Binding Count}" Grid.Row="1" HorizontalAlignment="Center" Margin="0 3 0 0" VerticalAlignment="Top" Foreground="White"/>
+                            <TextBlock FontSize="15" Text="Clean Files" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
+
+                            <Border Background="#FF19C3A5" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
+                            <Border Background="#FFFAF9F9" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type Models:MalwareCounter}">
+                        <Grid  MinWidth="155" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Ellipse Width="40" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center" Fill="White" />
+                            <Path SnapsToDevicePixels="True" Data="M27.992153,14.679803 L27.992191,14.680305 C27.997375,14.78598 27.992153,14.679803 27.992153,14.679803 z M16.007809,14.680305 L16.007847,14.679803 C16.007847,14.679803 16.002625,14.78598 16.007809,14.680305 z M23.922001,14.653 C26.853001,15.628 29,18.768 29,22.5 29,27.01 25.865999,30.667 22,30.667 z M20.077999,14.653 L22,30.667 C18.134001,30.667 15,27.01 15,22.5 15,18.768 17.146999,15.628 20.077999,14.653 z M22,11 C23.473,11 24.723,11.413 25.275999,12.729 24.26,12.264 23.157,12 22,12 20.843,12 19.74,12.264 18.724001,12.729 19.277,11.413 20.527,11 22,11 z M27.969015,14.366053 C27.66168,11.251758 25.105938,9 22,9 18.894062,9 16.33832,11.251758 16.030985,14.366053 L16.007847,14.679803 15.787001,14.915126 C15.70625,15.00375 15.627001,15.094 15.55,15.187 15.39,15.078 10,14 10,14 9.4469995,14 9,14.447 9,15 9,15.553 9.4469995,16 10,16 L14.406,16.881001 C13.739,18.105 13.286,19.500999 13.103,21 L9,21 C8.4469995,21 8,21.447001 8,22 8,22.552999 8.4469995,23 9,23 L13.021,23 C13.083,24.507999 13.413,25.931999 13.963,27.207001 L10,28 C9.4469995,28 9,28.447001 9,29 9,29.552999 9.4469995,30 10,30 L14.947,29.011 C16.596001,31.438 19.139999,33 22,33 24.860001,33 27.403999,31.438 29.052999,29.011 L34,30 C34.553001,30 35,29.552999 35,29 35,28.447001 34.553001,28 34,28 L30.037001,27.207001 C30.587,25.931999 30.917,24.507999 30.979,23 L35,23 C35.553001,23 36,22.552999 36,22 36,21.447001 35.553001,21 35,21 L30.896999,21 C30.714001,19.500999 30.261,18.105 29.594,16.881001 L34,16 C34.553001,16 35,15.553 35,15 35,14.447 34.553001,14 34,14 34,14 28.610001,15.078 28.450001,15.187 28.373001,15.094 28.293751,15.00375 28.212999,14.915126 L27.992153,14.679803 M22,0 C34.149994,0 44,9.8500061 44,22 44,34.149994 34.149994,44 22,44 9.8500061,44 0,34.149994 0,22 0,9.8500061 9.8500061,0 22,0 z" Fill="#FFD64332" Height="44" HorizontalAlignment="Center" Stretch="Fill" VerticalAlignment="Bottom"/>
+                            <TextBlock FontSize="16" Text="{Binding Count}" Grid.Row="1" HorizontalAlignment="Center" Margin="0 3 0 0" VerticalAlignment="Top" Foreground="White"/>
+                            <TextBlock FontSize="15" Text="Malicious Files" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
+
+                            <Border Background="#FFD54331" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
+                            <Border Background="#FFFAF9F9" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type Models:UnknownCounter}">
+                        <Grid MinWidth="150" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Ellipse Width="40" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center" Fill="White" />
+                            <Path  SnapsToDevicePixels="True" Data="M22,26 C21.447006,26 21,26.447006 21,27 21,27.552994 21.447006,28 22,28 22.552994,28 23,27.552994 23,27 23,26.447006 22.552994,26 22,26 z M22,17 C20.277,17 19,18.632999 19,20 L19,21 21,21 21,20 C21,19.389 21.437,19 22,19 22.563,19 23,19.389 23,20 23,22.122999 21,22.132999 21,24 21,24.219999 20.936001,24.854 21,25 L23,25 C22.951,24.841 23,24.157999 23,24 23,22.437 25,22.222 25,20 25,18.632999 23.723,17 22,17 z M15,12 L26,12 26,15 29,15 29,32 15,32 z M15,10 C13,10 13,12 13,12 L13,32 C13,34 15,34 15,34 L29,34 C31,34 31,32 31,32 L31,15 26,10 z M22,0 C34.149994,0 44,9.8500061 44,22 44,34.149994 34.149994,44 22,44 9.8500061,44 0,34.149994 0,22 0,9.8500061 9.8500061,0 22,0 z" Fill="#FFFAAE17" HorizontalAlignment="Center" Height="44"  Stretch="Fill" VerticalAlignment="Bottom" Width="44" />
+                            <TextBlock FontSize="16" Text="{Binding Count}" Grid.Row="1" HorizontalAlignment="Center" Margin="0 3 0 0" VerticalAlignment="Top" Foreground="White"/>
+                            <TextBlock FontSize="15" Text="Unknown Files" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
+
+                            <Border Background="#FFF9AD16" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type Models:FailedCounter}">
+                        <Grid MinWidth="100">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Path SnapsToDevicePixels="True" Margin="0 0 0 -11" Data="M17.110564,12.799469 C16.874555,12.799345 16.638545,12.889344 16.458545,13.069842 L14.988484,14.538822 13.574425,13.124842 C13.184394,12.734846 12.551373,12.734846 12.160366,13.124842 11.769359,13.515837 11.769359,14.148827 12.160366,14.538822 L13.574425,15.95281 12.105371,17.421798 C11.744334,17.783794 11.746348,18.366788 12.105371,18.726786 L12.216368,18.836785 C12.576368,19.197782 13.1594,19.197782 13.51943,18.836785 L14.988484,17.366798 16.402543,18.781785 C16.794557,19.17278 17.427579,19.171781 17.817578,18.781785 18.207609,18.39079 18.209623,17.757793 17.817578,17.366798 L16.40355,15.95281 17.873581,14.484829 C18.232604,14.122833 18.232604,13.539839 17.873581,13.179842 L17.762584,13.069842 C17.582584,12.889843 17.346574,12.799594 17.110564,12.799469 z M14.938353,9.9909962 C16.474041,9.9908712 18.009603,10.576366 19.18064,11.747856 21.523753,14.091828 21.523753,17.890795 19.18064,20.232768 16.838565,22.575747 13.0394,22.575747 10.69531,20.232768 8.3521974,17.890795 8.3521974,14.090828 10.69531,11.747856 11.866851,10.576866 13.402665,9.991121 14.938353,9.9909962 z M14,6.0000002 L16,6.0000002 16,9.2159966 C15.529,9.1289968 15.045,9.0769969 14.548,9.076997 14.363,9.0769969 14.182,9.0929969 14,9.103997 z M11,0 L16,5 11,5 z M1.9999995,0 L9.9999999,0 9.9999999,2 1.9999995,2 1.9999995,20 9.3232496,20.026375 C9.3232497,20.026375 11,22 12,22 L1.9999995,22 C1.9999995,22 0,22 0,20 L0,2 C0,2 0,0 1.9999995,0 z" Fill="#FFFAAE17" HorizontalAlignment="Center" Height="22"  Stretch="Fill" VerticalAlignment="Center" Width="20.938"/>
+                            <TextBlock FontSize="16" Text="{Binding Count}" Grid.Row="1" HorizontalAlignment="Center" Margin="0 3 0 0" VerticalAlignment="Top" Foreground="White"/>
+                            <TextBlock FontSize="15" Text="Failed" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
+
+                            <Border Background="#FFF9AD16" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type Models:PendingCounter}" >
+                        <Grid MinWidth="100">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Path SnapsToDevicePixels="True" Margin="0 0 0 -11" Data="M12.999514,10.999746 C12.231904,10.999746 11.464421,11.292745 10.878937,11.878744 9.7079554,13.050749 9.7059566,14.948744 10.87793,16.120749 12.049904,17.292747 13.949876,17.292747 15.120858,16.120749 16.291824,14.948744 16.292831,13.050749 15.120858,11.878744 14.534863,11.292745 13.767125,10.999746 12.999514,10.999746 z M12.999882,8.999997 C14.279604,8.9999974 15.559326,9.4882482 16.535808,10.46475 18.245796,12.174749 18.457767,14.814749 17.171812,16.756751 L20.656729,20.242752 C21.047743,20.633751 21.047743,21.266747 20.656729,21.656746 20.266752,22.047753 19.633769,22.047753 19.242755,21.656746 L15.757839,18.170746 C13.815876,19.456749 11.174922,19.24575 9.4639571,17.534751 7.5119997,15.582747 7.5119997,12.416746 9.4639571,10.46475 10.440439,9.4882482 11.720161,8.9999974 12.999882,8.999997 z M13.999868,5.9999998 L16,5.9999998 15.995125,8.8390002 13.994993,8.2295984 z M11,0 L16,5.0000002 14,5.0000002 11.304,5.0000002 11,5.0000002 11,4.6880002 11,2 z M2,0 L10,0 10,2 2,2 2,20 16,20 C16,22 14,22 14,22 L2,22 C2,22 0,22 0,20 L0,2 C0,2 0,0 2,0 z" Fill="#FFFAAE17" HorizontalAlignment="Center" Height="22" Stretch="Fill" VerticalAlignment="Center" Width="20.95"/>
+                            <TextBlock FontSize="16" Text="{Binding Count}" Grid.Row="1" HorizontalAlignment="Center" Margin="0 3 0 0" VerticalAlignment="Top" Foreground="White"/>
+                            <TextBlock FontSize="15" Text="In Analysis" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
+
+                            <Border Background="#FFF9AD16" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
+                        </Grid>
+                    </DataTemplate>
+
+                </ListBox.Resources>
+            </ListBox>
+
+            <Button Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0" Command="{Binding StartScanCommand}">
                 <Grid>
-                    <ContentControl x:Name="mainContent" IsTabStop="false" FocusVisualStyle="{x:Null}"/>
-
-                    <Grid x:Name="empty">
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsItemsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"   >
-
-                            <TextBlock AutomationProperties.AutomationId="NoScansTextBlock" Text="No scans have been performed yet."
-                   Opacity="0.5"  FontSize="13" Style="{DynamicResource SubTitleTextStyle}"/>
-
-                            <Button AutomationProperties.AutomationId="StartScanningNowButton"
-                    Margin="0,10,0,0"  HorizontalAlignment="Center"
-                    Style="{StaticResource LinkButton}" Loaded="Button_Loaded"
-                    Command="{Binding StartScanCommand}">
-                                <Border Background="White">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}"
-                              Height="24"
-                              Width="24"
-                              Margin="0,0,10,-1"/>
-                                    <TextBlock Text="Scan Now"  Grid.Column="1"  FontSize="20" FontFamily="Segoe UI Light"/>
-                                </Grid>
-                                </Border>
-                            </Button>
-                                
-
-                        </StackPanel>
-
-                        <TextBlock AutomationProperties.AutomationId="ComodoOneReferralTextBlock"
-                                   TextWrapping="Wrap" FontSize="13" TextAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 30"  Width="500">
-                    This product is just one part of Comodo ONE productivity and revenue generation engine. To get more AWESOME products for FREE, please visit
-                <Hyperlink AutomationProperties.AutomationId="ComodoOneReferralLink"
-                           NavigateUri="https://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"> one.comodo.com</Hyperlink></TextBlock>
-                    </Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Path SnapsToDevicePixels="True" Margin="0 0 10 0" Data="M4,12 L14,12 14,14 4,14 z M0,12 L2,12 2,14 0,14 z M4,8.0000002 L16,8.0000002 16,10 4,10 z M0,8.0000002 L2,8.0000002 2,10 0,10 z M4,4 L12,4 12,6 4,6 z M0,4 L2,4 2,6 0,6 z M4,0 L17,0 17,2 4,2 z M0,0 L2,0 2,2 0,2 z" Fill="White" HorizontalAlignment="Left" Height="14" Stretch="Fill" VerticalAlignment="Center" Width="17"/>
+                    <TextBlock Text="Custom Scan" Grid.Column="1"/>
                 </Grid>
-            </telerik:RadBusyIndicator>
-        </telerik:RadBusyIndicator>
+            </Button>
 
-        <Grid Background="#FFFAF9F9" FocusVisualStyle="{x:Null}">
+            <Grid Grid.Row="2" Grid.RowSpan="2" Background="White" Margin="32 0 32 20" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}"/>
+
+            <Controls:SearchUserControl Grid.Row="2" HorizontalAlignment="Left" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}"
+                                        AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        x:Name="SearchTextBox" VerticalAlignment="Bottom"   TabIndex="0"                 
+                                        Margin="32 0 0 0" Watermark="{Binding GroupByWatermark}"
+                                        IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
+            </Controls:SearchUserControl>
+            <Grid Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 32 0" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Group By" Foreground="#FF547D98" FontSize="15" Margin="0 6 10 0"/>
+                <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" Grid.Column="1"
+                      IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}" ToolTip="Computers" >
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Width" Value="40" />
+                            <Setter Property="Height" Value="32" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Grid Background="Transparent"  x:Name="Bg2">
+                                            <Grid  x:Name="Bg" Background="White">
+                                                <Canvas HorizontalAlignment="Center" Height="17" VerticalAlignment="Center" Width="20">
+                                                    <Path SnapsToDevicePixels="True" Data="F1M80,139L94,128L94,139z" Fill="#FF457FAD" Height="11" Opacity="0.3" Stretch="Fill" Width="14" Canvas.Left="3" Canvas.Top="1" x:Name="path1"/>
+                                                    <Path SnapsToDevicePixels="True" Data="M19,15 L20,15 20,16 19,16 z M7,15 L7,16 13,16 13,15 12,15 11,15 9,15 8,15 z M0,15 L1,15 1,16 0,16 z M9,13 L9,14 11,14 11,13 z M2.9999998,0.99999996 L2.9999998,12 17,12 17,0.99999996 z M1.9999999,0 L18,0 18,13 12,13 12,14 14,14 14,15 18,15 18,16 14,16 14,17 6,17 6,16 1.9999999,16 1.9999999,15 6,15 6,14 8,14 8,13 1.9999999,13 z" Fill="#FF457FAD" Height="17" Stretch="Fill" Width="20" x:Name="path2"/>
+                                                </Canvas>
+                                            </Grid>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                <Setter Property="Background" TargetName="Bg" Value="#FFEFF1F3" />
+                                            </Trigger>
+                                            <Trigger Property="ToggleButton.IsChecked" Value="False">
+                                                <Setter Property="Background" TargetName="Bg" Value="White" />
+                                                <Setter Property="Fill" TargetName="path1" Value="#FFC3CCD4" />
+                                                <Setter Property="Fill" TargetName="path2" Value="#FFC3CCD4" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+                <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" Grid.Column="2"
+                      IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}" ToolTip="Files">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Width" Value="40" />
+                            <Setter Property="Height" Value="32" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Grid Background="Transparent"  x:Name="Bg2">
+                                            <Grid  x:Name="Bg" Background="White">
+                                                <Canvas HorizontalAlignment="Center" Height="17" VerticalAlignment="Center" Width="21">
+                                                    <Path SnapsToDevicePixels="True" Data="M14,0 L14,3 13,3 10.182001,3 6,3 6,6.2857143 7,5.5 7,11 6,11 6,12 5,12 5,11 0,11 5,7.0714287 5,3 5,2 6,2 11.454667,2 z" Fill="#FF457FAD" Height="12" Opacity="0.3" Stretch="Fill" Width="14" Canvas.Left="3" Canvas.Top="1" x:Name="path1"/>
+                                                    <Path SnapsToDevicePixels="True" Data="M7,15 L7,16 8.9999998,16 8.9999998,15 8.0000001,15 z M0,15 L1,15 1,16 0,16 z M12,13 L18,13 18,14 12,14 z M12,11 L18,11 18,12 12,12 z M12,9 L18,9 18,10 12,10 z M12,7 L17,7 17,8 12,8 z M10,4.9999999 L10,16 20,16 20,7 18.186005,7 18.167007,4.9999999 z M3,1.0000002 L3,12 8.9999998,12 8.9999998,4 15,4 16,4 17,4 17,1.0000002 z M2,0 L18,0 18,4 19,4 21,6.2030032 21,17 9.0000001,17 6,17 6,16 2,16 2,15 6,15 6,14 8.0000001,14 8.0000001,13 2,13 z" Fill="#FF457FAD" Height="17" Stretch="Fill" Width="21" x:Name="path2"/>
+                                                </Canvas>
+                                            </Grid>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                <Setter Property="Background" TargetName="Bg" Value="#FFEFF1F3" />
+                                            </Trigger>
+                                            <Trigger Property="ToggleButton.IsChecked" Value="False">
+                                                <Setter Property="Background" TargetName="Bg" Value="White" />
+                                                <Setter Property="Fill" TargetName="path1" Value="#FFC3CCD4" />
+                                                <Setter Property="Fill" TargetName="path2" Value="#FFC3CCD4" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+            </Grid>
+
+            <Frame Source="{Binding Uri}" NavigationUIVisibility="Hidden" Grid.Row="3" FocusVisualStyle="{x:Null}" Margin="32 0 32 20"/>
+            <Border BorderThickness="1" BorderBrush="#FFDCE1E5" Grid.Row="2" Grid.RowSpan="2" Margin="32 0 32 20"/>
+
+        </Grid>
+
+        <Grid Background="White" FocusVisualStyle="{x:Null}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="180"/>
-                <ColumnDefinition Width="0"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <telerik:RadToolBar AutomationProperties.AutomationId="MainToolBar" Padding="0" FocusVisualStyle="{x:Null}"
-                                 VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed"  BorderThickness="0" Background="#FFFAF9F9">
-
+            <telerik:RadToolBar AutomationProperties.AutomationId="MainToolBar" Padding="0" Grid.Column="1" FocusVisualStyle="{x:Null}" HorizontalAlignment="Right" Opacity="0" x:Name="toolbar"
+                                 VerticalAlignment="Top"  IsOverflowOpen="False" GripVisibility="Collapsed" IsManipulationEnabled="False" OverflowButtonVisibility="Collapsed"  BorderThickness="0" Background="Transparent">
                 <telerik:RadToolBar.Resources>
-
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
-
                             <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </telerik:RadToolBar.Resources>
-                <telerik:RadButton AutomationProperties.AutomationId="StartScanningButton"
-                               Margin="-2,-2,0,-2"  
-                               FontSize="16"
-                               Padding="20 20 17 20"
-                               IsTabStop="True"
-                               Command="{Binding StartScanCommand}">
-                    <telerik:RadButton.Content>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Path Data="M10,7.0000006 L16,12 10,17 z M12,2 C6.4780004,2 2.0000005,6.4779999 2.0000005,12 2.0000005,17.522 6.4780004,22 12,22 17.522,22 22,17.522 22,12 22,6.4779999 17.522,2 12,2 z M12,0 C18.627001,0 24,5.3729999 24,12 24,18.627 18.627001,24 12,24 5.3730001,24 0,18.627 0,12 0,5.3729999 5.3730001,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}"
-                              Height="24" SnapsToDevicePixels="True"
-                              Width="24"
-                              Margin="0,0,10,0"/>
-                            <TextBlock Text="Start Scan" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16"
-                   FontFamily="Segoe UI"/>
-                        </Grid>
-                    </telerik:RadButton.Content>
-                </telerik:RadButton>
+                <telerik:RadToolBar.RenderTransform>
+                    <TranslateTransform x:Name="translate1" Y="-300" />
+                </telerik:RadToolBar.RenderTransform>
+                <telerik:RadToolBar.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate1" Storyboard.TargetProperty="Y" BeginTime="0:0:0.2">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CubicEase/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="toolbar" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.5">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1" >
 
-                
-
-                <telerik:RadButton AutomationProperties.AutomationId="StopScanningButton"
-                                  Margin="-2,-2,0,-2"  
-                                  Padding="10,20,17,20"
-                                  FontSize="16"
-                                  Command="{Binding StopScanCommand}">
-                    <telerik:RadButton.Content>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Path Data="M7.9999996,8.000001 L16,8.000001 16,16.000001 7.9999996,16.000001 z M12,2.0000005 C6.4779999,2.0000005 2,6.4780004 2,12 2,17.522 6.4779999,22 12,22 17.522,22 22,17.522 22,12 22,6.4780004 17.522,2.0000005 12,2.0000005 z M12,0 C18.627,0 24,5.3730004 24,12 24,18.627001 18.627,24 12,24 5.3729999,24 0,18.627001 0,12 0,5.3730004 5.3729999,0 12,0 z"
-                              Fill="{DynamicResource StrongBrush}" 
-                              Height="24" SnapsToDevicePixels="True"
-                              Width="24" Margin="0,0,10,0"/>
-                            <TextBlock Text="Stop Scan" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16"
-                   FontFamily="Segoe UI"/>
-                        </Grid>
-                    </telerik:RadButton.Content>
-                </telerik:RadButton>
-
-                
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="pr1" Storyboard.TargetProperty="MinWidth" BeginTime="0:0:0.2">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0" >
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CubicEase/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="pr2" Storyboard.TargetProperty="MinWidth" BeginTime="0:0:0.2">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0" >
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CubicEase/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </telerik:RadToolBar.Triggers>
 
                 <telerik:RadDropDownButton AutomationProperties.AutomationId="ReportsDropDownButton"
                                            AutoOpenDelay="0:0:0.0"
                                            Content="Reports"
                                            IsEnabled="{Binding IsReportEnabled}"
-                                           Style="{StaticResource RadDropDownButtonStyle2}"
-                                           Margin="-2,-2,0,-2"  
+                                           BorderThickness="0"
+                                           DropDownIndicatorVisibility="Collapsed"
+                                           Margin="0,-2,0,-3"  
                                            ContentTemplate="{StaticResource ReportButtonContentTemplate}"
                                            x:Name="ReportButton"
+                                           FocusVisualStyle="{x:Null}" 
                                            FontSize="16"
-                                           Padding="10,20,0,20">
+                                           Padding="17,20,20,20">
                     <telerik:RadDropDownButton.DropDownContent>
                         <telerik:RadContextMenu AutomationProperties.AutomationId="ReportsContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0">
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveReportMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" 
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveReportMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Margin="-1"
                                                  Header="Executive" Tag="Executive Report" Click="OnExecutiveReportClick"  Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceReportMenuItem" 
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceReportMenuItem"  Margin="-1"
                                                  HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Device" Tag="Detailed Per-Device Report" Click="OnPerDeviceReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerProgramReportMenuItem"
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerProgramReportMenuItem" Margin="-1"
                                                  HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Program" Tag="Detailed Per-Program Report" Click="OnPerProgramReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveValkyrieReportMenuItem"
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveValkyrieReportMenuItem" Margin="-1"
                                                  HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive Valkyrie" Tag="Executive Valkyrie Report" Click="OnExecutiveReportValkyrieClick"  Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceValkyrieReportMenuItem"
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceValkyrieReportMenuItem" Margin="-1"
                                                  HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Device Valkyrie" Tag="Detailed Per-Device Valkyrie Report" Click="OnPerDeviceReportValkyrieClick" Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerProgramValkyrieReportMenuItem"
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerProgramValkyrieReportMenuItem" Margin="-1"
                                                  HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Program Valkyrie" Tag="Detailed Per-Program Valkyrie Report" Click="OnPerProgramReportValkyrieClick" Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </telerik:RadContextMenu>
                     </telerik:RadDropDownButton.DropDownContent>
                 </telerik:RadDropDownButton>
 
                 <telerik:RadButton AutomationProperties.AutomationId="OptionsButton"
-                                  Margin="-2,-2,0,-2"  
+                                  Margin="0,-2,0,-3"  
                                   Padding="17,20,17,20"
                                   FontSize="16"
+                                   BorderThickness="0"
+                                   FocusVisualStyle="{x:Null}" 
                                    IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                   Click="OptionsClick">
                     <telerik:RadButton.Content>
@@ -256,54 +464,59 @@
                               Fill="{DynamicResource StrongBrush}" 
                               Height="24" Stretch="Fill" SnapsToDevicePixels="True"
                               Width="24" Margin="0,0,10,0"/>
-                            <TextBlock Text="Options" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="16"
-                   FontFamily="Segoe UI"/>
+                            <TextBlock Text="Options" Margin="0 2 0 0" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" FontSize="15" />
                         </Grid>
                     </telerik:RadButton.Content>
                 </telerik:RadButton>
 
-                <telerik:RadDropDownButton AutomationProperties.AutomationId="HelpDropDownButton"
-                                          AutoOpenDelay="0:0:0.0"
-                                          Content="Help"
-                                          Style="{StaticResource RadDropDownButtonStyle2}"
-                                          Margin="-2,-2,0,-2"  
-                                          ContentTemplate="{StaticResource AboutButtonContentTemplate}"
-                                          x:Name="HelpButton"
-                                          FontSize="16"
-                                          Padding="17,20,0,20">
+                <telerik:RadDropDownButton AutomationProperties.AutomationId="HelpDropDownButton" AutoOpenDelay="0:0:0.0" Content="Help" BorderThickness="0" DropDownIndicatorVisibility="Collapsed"
+                                          FocusVisualStyle="{x:Null}" Margin="0,-2,-5,-3" ContentTemplate="{StaticResource AboutButtonContentTemplate}" x:Name="HelpButton" FontSize="16" Padding="17,20,20,20">
                     <telerik:RadDropDownButton.DropDownContent>
-                        <telerik:RadContextMenu AutomationProperties.AutomationId="HelpContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0">
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="AboutMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="About" Click="AboutClick"  />
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="AgentRequirementsMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Agent Requirements" Click="AgentClick"  />
+                        <telerik:RadContextMenu AutomationProperties.AutomationId="HelpContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0" >
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="AboutMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="About" Click="AboutClick" Margin="-1" />
+                            <telerik:RadMenuItem AutomationProperties.AutomationId="AgentRequirementsMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Header="Agent Requirements" Margin="-1"  Click="AgentClick" />
                         </telerik:RadContextMenu>
                     </telerik:RadDropDownButton.DropDownContent>
                 </telerik:RadDropDownButton>
 
             </telerik:RadToolBar>
-
-            <Controls:SearchUserControl
-                                        AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        x:Name="SearchTextBox" Grid.Column="1" VerticalAlignment="Top"   TabIndex="0"                 
-                                        Margin="0 3 17 0" Width="145" HorizontalAlignment="Right"  
-                                        IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
-            </Controls:SearchUserControl>
-
         </Grid>
 
+        <TextBlock x:Name="BusyContent" Opacity="0" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="Black" FontFamily="{StaticResource myriadpro}" Margin="32,0,0,0" FontSize="20">
+            <TextBlock.RenderTransform>
+                    <TranslateTransform x:Name="translate3" Y="-300" />
+                </TextBlock.RenderTransform>
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate3" Storyboard.TargetProperty="Y" BeginTime="0:0:0.2">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0" >
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <CubicEase/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="BusyContent" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.5">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1" >
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+            <Run Text="Scanning In Progress... "/><Run Text="{Binding Percentage}" /><Run Text="%"/> 
+        </TextBlock>
 
-
-        <Border Grid.Row="2"  Background="{StaticResource StrongBrush}" Visibility="{Binding IsItemsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-            <Border Background="Transparent"  Visibility="{Binding ValkyrieEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
-                <Border Background="Transparent"  Height="27"  Visibility="{Binding IsValkyrieAnalysCompleted, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock AutomationProperties.AutomationId="ValkyrieTextBlock" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Hyperlink AutomationProperties.AutomationId="ValkyrieLink"
-                       x:Name="ValkyrieHyperLink" NavigateUri="{Binding ValkyrieDetailsLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FFF7E78C" FontSize="16">
-                       Please click here to see the detailed results
-            </Hyperlink>
-                    </TextBlock>
-                </Border>
-            </Border>
-
+        <Border Height="1" Background="#FFF3F3F3" Grid.Row="2" />
+        <Border Grid.Row="3" Height="48"  Background="White" >
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock  Text="Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
+                <TextBlock Cursor="Hand">
+                    <Hyperlink NavigateUri="http://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">one.comodo.com </Hyperlink>
+                </TextBlock>
+                <TextBlock  Text=" to learn how Comodo can help protect your environment." Foreground="#FF547D98" FontSize="13"/>
+            </StackPanel>
         </Border>
 
     </Grid>

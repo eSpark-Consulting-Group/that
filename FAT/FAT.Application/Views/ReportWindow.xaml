@@ -33,7 +33,7 @@
                                     </StackPanel>
 
                                     <TextBlock AutomationProperties.AutomationId="ReportTitleTextBlock"
-                                               Text="{Binding ElementName=this, Path=Header}" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" 
+                                               Text="{Binding ElementName=this, Path=Header}" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" 
                                                HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>

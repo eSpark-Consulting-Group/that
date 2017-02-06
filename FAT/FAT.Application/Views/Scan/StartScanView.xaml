@@ -23,7 +23,7 @@
 
                 <Grid Grid.Row="1">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
-                   FontFamily="Segoe UI" VerticalAlignment="Top" Margin="23,37,0,0">
+                   FontFamily="{StaticResource myriadpro}" VerticalAlignment="Top" Margin="23,37,0,0">
                 Select Scan Targets
                     </TextBlock>
                     <Border x:Name="pathSelector" Margin="0 42 0 0">
@@ -468,10 +468,10 @@
 
                     <Border x:Name="wizardBorder" Visibility="Collapsed" >
                         <Grid>
-                            <App:StartScanDomainView AutomationProperties.AutomationId="ActiveDirectoryView" x:Name="viewScanDomain" Visibility="Collapsed"  />
-                            <App:StartScanWorkgroupView AutomationProperties.AutomationId="WorkgroupView" x:Name="viewScanWorkgroup" Visibility="Collapsed"   />
+                            <App:StartScanByDomainView AutomationProperties.AutomationId="ActiveDirectoryView" x:Name="viewScanDomain" Visibility="Collapsed"  />
+                            <App:StartScanByWorkgroupView AutomationProperties.AutomationId="WorkgroupView" x:Name="viewScanWorkgroup" Visibility="Collapsed"   />
                             <App:StartScanByIpView AutomationProperties.AutomationId="NetworkAddressesView" x:Name="viewScanByIp" Visibility="Collapsed"  />
-                            <App:StartScanLocalView x:Name="viewScanLocal" Visibility="Collapsed"  />
+                            <App:StartLocalScanView x:Name="viewScanLocal" Visibility="Collapsed"  />
                         </Grid>
                     </Border>
                 </Grid>

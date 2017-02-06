@@ -25,7 +25,7 @@
                                                 Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                                     </StackPanel>
 
-                                    <TextBlock Text="Agent Requirements" Foreground="White" FontFamily="Segoe UI Light"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock Text="Agent Requirements" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
 
@@ -63,41 +63,41 @@
 
                                 <TextBlock AutomationProperties.AutomationId="TurnedOnTextBlock" 
                                            Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                                           <Run Text="Check whether a target computer is turned on and connected to the network." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                           <Run Text="Check whether a target computer is turned on and connected to the network." FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13" />
                                 </TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="FirewallOffTextBlock" 
                                            Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                                           <Run Text="Check whether firewall on a target computer is turned Off." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                           <Run Text="Check whether firewall on a target computer is turned Off." FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13" />
                                 </TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="IpAddressTextBlock"
                                            Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                                           <Run Text="Check whether IP address of a target computer is correct." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                           <Run Text="Check whether IP address of a target computer is correct." FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13" />
                                 </TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="EnableSharingTextBlock"
                                            Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                                           <Run Text="In the Network Neighbourhood run Network Wizard, enable file sharing." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                           <Run Text="In the Network Neighbourhood run Network Wizard, enable file sharing." FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13" />
                                 </TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="PasswordNotBlankTextBlock"
                                            Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                                           <Run Text="Make sure Administrator password is not blank and correct." FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
+                                           <Run Text="Make sure Administrator password is not blank and correct." FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13" />
                                 </TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="ForceguestTextBlock"
                                            Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                                           <Run Text="Check whether 'Forceguest' option on target computer is disabled:" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
-                                           <Run Text="HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa" FontFamily="Segoe UI" Foreground="#FF3A7FBF" FontSize="13"/>
-                                           <Run Text="'forceguest' dword is 0." FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
+                                           <Run Text="Check whether 'Forceguest' option on target computer is disabled:" FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13" />
+                                           <Run Text="HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa" FontFamily="{StaticResource myriadpro}" Foreground="#FF3A7FBF" FontSize="13"/>
+                                           <Run Text="'forceguest' dword is 0." FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13"/>
                                 </TextBlock>
 
                                 <TextBlock AutomationProperties.AutomationId="LocalAccountTokenTextBlock"
                                            Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="-98,8,0,0">
-                                           <Run Text="If the account is not a built-in Administrator, check whether:" FontFamily="Segoe UI" Foreground="#515151" FontSize="13" />
-                                           <Run Text="HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System" FontFamily="Segoe UI" Foreground="#FF3A7FBF" FontSize="13"/>
-                                           <Run Text="'LocalAccountTokenFilterPolicy' dword is 1." FontFamily="Segoe UI" Foreground="#515151" FontSize="13"/>
+                                           <Run Text="If the account is not a built-in Administrator, check whether:" FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13" />
+                                           <Run Text="HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System" FontFamily="{StaticResource myriadpro}" Foreground="#FF3A7FBF" FontSize="13"/>
+                                           <Run Text="'LocalAccountTokenFilterPolicy' dword is 1." FontFamily="{StaticResource myriadpro}" Foreground="#515151" FontSize="13"/>
                                 </TextBlock>
 
                                 <Button AutomationProperties.AutomationId="CloseAgentRequirementsButton" Height="32"

@@ -1,0 +1,60 @@
+﻿<UserControl    
+                x:Class="FAT.Application.DiscoveryResults"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:Models="clr-namespace:FAT.Application.Models"
+                xmlns:TemplateSelectors="clr-namespace:FAT.Application.TemplateSelectors"
+                xmlns:Application="clr-namespace:FAT.Application"      
+                xmlns:converters="clr-namespace:FAT.Application.Converters" 
+                xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
+                xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+                d:DesignHeight="400" d:DesignWidth="600">
+    <Grid x:Name="grid" Opacity="0">
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1" >
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <telerik:RadTreeListView x:Name="tree" CanUserFreezeColumns="False" AutoGenerateColumns="False" SelectionMode="Extended" EnableRowVirtualization="True" IsReadOnly="True" ItemsSource="{Binding DiscoveryResults}"   
+                                 AutoExpandItems="False" HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" FocusVisualStyle="{x:Null}" ScrollMode="Deferred" >
+            <telerik:RadTreeListView.Resources>
+                <DataTemplate x:Key="NameColumnTemplate">
+                    <Grid >
+
+                        
+                        
+                        <TextBlock Margin="26 2 0 0" Text="test"/>
+
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate x:Key="IPColumnTemplate">
+                    <Grid>
+                        <TextBlock Margin="26 2 0 0" Text="test"/>
+                    </Grid>
+                </DataTemplate>
+
+                
+            </telerik:RadTreeListView.Resources>
+            <telerik:RadTreeListView.ChildTableDefinitions>
+                <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
+            </telerik:RadTreeListView.ChildTableDefinitions>
+            <telerik:RadTreeListView.Columns>
+                <telerik:GridViewColumn CellTemplate="{StaticResource NameColumnTemplate}" IsFilterable="False"  Focusable="False" Header="Name" IsReadOnly="True" MinWidth="200" Width="600*" SortMemberPath="Name" />
+                <telerik:GridViewColumn CellTemplate="{StaticResource IPColumnTemplate}"  IsFilterable="False"   Focusable="False" Header="IP" IsReadOnly="True" TextAlignment="Left" MinWidth="200" Width="200*" SortMemberPath="IP"/>
+            </telerik:RadTreeListView.Columns>
+        </telerik:RadTreeListView>
+    </Grid>
+</UserControl>

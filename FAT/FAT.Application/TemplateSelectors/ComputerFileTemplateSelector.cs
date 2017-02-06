@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using FAT.Application.Models.Valkyrie;
-using APTAT.Core;
+using FAT.Application.Models;
 
 namespace FAT.Application.TemplateSelectors
 {
-    class ValkyrieNameTemplateSelector : DataTemplateSelector
+    public class ComputerFileTemplateSelector : DataTemplateSelector
     {
         public DataTemplate FileTemplate { get; set; }
         public DataTemplate ComputerTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(Object item, DependencyObject container)
         {
-            if (item is ValkyrieFile)
-            {                
-                return FileTemplate;
-            }
-            
-            if(item is ValkyrieComputer)
+            if (item is ThreatInfoItem)
             {
-                return ComputerTemplate;
+                ThreatInfoItem threatInfo = (ThreatInfoItem)item;
+                if (threatInfo.IsRootItem)
+                {
+                    return ComputerTemplate;
+                }
+                return FileTemplate;
             }
             return null;
         }
-        
-      
     }
 }

@@ -45,19 +45,21 @@ namespace FAT.Application.Extensions
             path.SetValue(Path.HeightProperty, 24d);
             path.SetValue(Path.WidthProperty, 24d);
             path.SetValue(Path.MarginProperty, new Thickness(0, 5, 5, 5));
+            path.SetValue(Path.SnapsToDevicePixelsProperty, true);
 
             var text = new FrameworkElementFactory(typeof(TextBlock));
             text.SetValue(TextBlock.MarginProperty, new Thickness(5, 0, 5, 0));
             text.SetValue(TextBlock.VerticalAlignmentProperty, VerticalAlignment.Center);
             text.SetBinding(TextBlock.TextProperty, new Binding());
             text.SetValue(TextBlock.FontSizeProperty, 15d);
-            text.SetValue(TextBlock.FontFamilyProperty, new FontFamily("Segoe UI"));
+            text.SetValue(TextBlock.FontFamilyProperty, new FontFamily("myriadpro"));
 
             stack.AppendChild(path);
             stack.AppendChild(text);
 
             template.VisualTree = stack;
 
+            menuItem.Margin = new Thickness(-1);
             menuItem.HeaderTemplate = template;
             menuItem.Header = header;
         }

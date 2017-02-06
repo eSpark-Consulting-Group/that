@@ -13,17 +13,14 @@ using System.Windows;
 
 namespace FAT.Application
 {
-    /// <summary>
-    /// Interaction logic for StartScanLocalView.xaml
-    /// </summary>
-    public partial class StartScanLocalView : UserControl
+    public partial class StartLocalScanView : UserControl
     {
         public StartScanLocalViewModel ViewModel
         {
             get { return (StartScanLocalViewModel)DataContext; }
         }
 
-        public StartScanLocalView()
+        public StartLocalScanView()
         {
             InitializeComponent();
         }

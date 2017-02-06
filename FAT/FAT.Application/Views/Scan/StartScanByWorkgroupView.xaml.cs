@@ -11,12 +11,9 @@ using System.Windows;
 
 namespace FAT.Application
 {
-    /// <summary>
-    /// Interaction logic for StartScanWorkgroupView.xaml
-    /// </summary>
-    public partial class StartScanWorkgroupView : UserControl
+    public partial class StartScanByWorkgroupView : UserControl
     {
-        public StartScanWorkgroupView()
+        public StartScanByWorkgroupView()
         {
             InitializeComponent();
         }

@@ -6,16 +6,13 @@ using FAT.Application.Services;
 using Telerik.Windows;
 using System.Diagnostics;
 using System.Linq;
-using APTAT.Core;
 using APTAT.Valkyrie;
-using Process = System.Diagnostics.Process;
 using ScanCompletedEventArgs = FAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
 using FAT.Application.Messages;
-using System.Threading.Tasks;
 using FAT.Application.Models.Valkyrie;
 using Telerik.Windows.Controls;
-using System.Windows.Controls;
+using FAT.Application.Views;
 
 namespace FAT.Application
 {
@@ -37,12 +34,13 @@ namespace FAT.Application
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
-            _viewModel.ValkyrieAnalyzeStarted += ViewModelOnValkyrieAnalyzeStarted;
             _viewModel.ValkyrieAnalyzeCompleted += ViewModelOnValkyrieAnalyzeCompleted;
+
+
         }
 
         [MessageReceiver]
-        public void AcceptMessage(ChangeScreen message)
+        public void AcceptMessage(ChangeScreen<object> message)
         {
             switch (message.Message)
             {
@@ -51,11 +49,6 @@ namespace FAT.Application
                     details.Owner = System.Windows.Application.Current.MainWindow;
                     if (details.ShowDialog() == true && message.Action != null)
                     {
-                        empty.Visibility = Visibility.Collapsed;
-
-                        if (mainContent.Content == null)
-                            mainContent.Content = new ResultTabsControl();
-                        
                         message.Action(details.IsQuickScan);
                     }
                     break;
@@ -64,6 +57,17 @@ namespace FAT.Application
                     _confirmation.Owner = System.Windows.Application.Current.MainWindow;
                     if (_confirmation.ShowDialog() == true && message.Action != null)
                         message.Action(null);
+                    break;
+            }
+        }
+
+        [MessageReceiver]
+        public void AcceptMessage(ChangeScreen<SearchUserControl> message)
+        {
+            switch (message.Message)
+            {
+                case ChangeScreenTypes.FilterTarget:
+                    message.Action(SearchTextBox);
                     break;
             }
         }
@@ -89,36 +93,6 @@ namespace FAT.Application
             if (_confirmation != null && _confirmation.DialogResult == null)
                 _confirmation.DialogResult = false;
 
-            ScanCompletedWindow scanCompletedWindow = new ScanCompletedWindow();
-            scanCompletedWindow.Text.Text = String.Empty;
-            scanCompletedWindow.Text.Text += "Scan Summary:";
-            scanCompletedWindow.Text.Text += String.Format("{0}{1} Total Scan Attempts", Environment.NewLine, e.SuccededCount + e.CanceledCount + e.FailedCount + e.NotPerformedCount);
-            scanCompletedWindow.Text.Text += Environment.NewLine;
-
-            if (e.SuccededCount > 0) scanCompletedWindow.Text.Text += String.Format("- {0} Successful Scans", e.SuccededCount);
-            if (e.CanceledCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Canceled Scans", Environment.NewLine, e.CanceledCount);
-            if (e.FailedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Failed Scans", Environment.NewLine, e.FailedCount);
-            if (e.NotPerformedCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Computers Inaccessible", Environment.NewLine, e.NotPerformedCount);
-
-            scanCompletedWindow.Text.Text += Environment.NewLine + Environment.NewLine + "Threat Detection Summary:";
-            int total = e.FilesStatistics.UnknownFilesCount + e.FilesStatistics.MalwareFilesCount + e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount;
-            if (e.FilesStatistics.TotalFilesCount > 0)
-            {
-                scanCompletedWindow.Text.Text += String.Format("{0}{1} Total Threats Found*", Environment.NewLine, total);
-            }
-            scanCompletedWindow.Text.Text += String.Format("{0}- {1} Unknown Files", Environment.NewLine, e.FilesStatistics.UnknownFilesCount);
-
-            if (e.FilesStatistics.MalwareFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Malicious Files", Environment.NewLine, e.FilesStatistics.MalwareFilesCount);
-            if (e.FilesStatistics.FailedToAnalyzeFilesCount > 0 || e.FilesStatistics.NoVerdictFilesCount > 0) scanCompletedWindow.Text.Text += String.Format("{0}- {1} Lookup in Progress", Environment.NewLine, e.FilesStatistics.FailedToAnalyzeFilesCount + e.FilesStatistics.NoVerdictFilesCount);
-
-            scanCompletedWindow.Text.Text += String.Format("{0}{1}* {2} files have unique hash values", Environment.NewLine, Environment.NewLine, e.DistinctFileFound);
-
-            if (e.FilesStatistics.MalwareFilesCount > 0 || e.FilesStatistics.UnknownFilesCount > 0 || e.FilesStatistics.FailedToAnalyzeFilesCount > 0 || e.FilesStatistics.NoVerdictFilesCount > 0)
-                scanCompletedWindow.path2.Visibility = Visibility.Visible;
-            else
-                scanCompletedWindow.path1.Visibility = Visibility.Visible;
-
-            scanCompletedWindow.Owner = System.Windows.Application.Current.MainWindow;
             if (e.SuccededCount > 0)
             {
                 if (e.CanceledCount > 0)
@@ -129,8 +103,6 @@ namespace FAT.Application
                         || e.FilesStatistics.FailedToAnalyzeFilesCount > 0
                         || e.FilesStatistics.NoVerdictFilesCount > 0)
                     {
-                        _viewModel.IsAnalyseWithValkyrieEnabled = true;
-
                         Dispatcher.Invoke(delegate
                         {
                             _viewModel.BeginValkyrieAnalysis();
@@ -138,21 +110,10 @@ namespace FAT.Application
                     }
                     else
                     {
-                        scanCompletedWindow.DataContext = DataContext;
-                        scanCompletedWindow.ShowDialog();
                         _viewModel.IsReportEnabled = true;
                     }
-
-                    if (e.FilesStatistics.TotalFilesCount != e.FilesStatistics.SafeFilesCount)
-                        _viewModel.GroupingEnabled = true;
                 }
             }
-
-        }
-
-
-        private void ViewModelOnValkyrieAnalyzeStarted(object sender, EventArgs eventArgs)
-        {
 
         }
 
@@ -174,7 +135,6 @@ namespace FAT.Application
                 err.Owner = System.Windows.Application.Current.MainWindow;
                 err.ShowDialog();
             }
-
         }
 
 
@@ -240,7 +200,7 @@ namespace FAT.Application
         public void OnAppClose(Action action)
         {
             _onCompletedAction = action;
-            loading.BusyContent = "Closing...";
+            BusyContent.Text = "Closing...";
             _viewModel.OnAppClose();
         }
 
@@ -282,11 +242,6 @@ namespace FAT.Application
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
-        }
-
-        private void Button_Loaded(object sender, RoutedEventArgs e)
-        {
-            (sender as Button).Command.Execute(null);
         }
     }
 }

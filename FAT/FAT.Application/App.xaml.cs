@@ -13,6 +13,7 @@ namespace FAT.Application
     {
         private EventWaitHandle _event;
         private SplashWindow _splash;
+        private EULAWindow _eula;
         private bool _initialized;
 
         protected override void OnStartup(StartupEventArgs e)
@@ -44,13 +45,13 @@ namespace FAT.Application
                         typeof(APTAT.Core.DependencyLocator.DependencyLocator)
                     });
                 });
-                op.Completed += DispatcherOperationCompleted;
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal, Current.Dispatcher);
-                timer.Interval = TimeSpan.FromMilliseconds(2000);
+                timer.Interval = TimeSpan.FromMilliseconds(1500);
                 timer.Tick += TimerTick;
                 timer.Start();
 
+                op.Completed += DispatcherOperationCompleted;
                 op.Priority = DispatcherPriority.Normal;
 
                 Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
@@ -65,12 +66,20 @@ namespace FAT.Application
         {
             if (_initialized)
             {
-                var timer = sender as DispatcherTimer;
-                timer.Tick -= TimerTick;
-                timer.Stop();
-                
+                if (_eula != null)
+                {
+                    (sender as DispatcherTimer).Stop();
+                    _splash?.Dispatcher.Invoke(_splash.Close);
+                    _eula.ShowDialog();
+                    return;
+                }
+
                 var window = new MainWindow();
-                window.Loaded += (s, a) => _splash.Dispatcher.Invoke(_splash.Close);
+                window.Loaded += (s, a) =>
+                {
+                    _eula = new EULAWindow();
+                    _eula.Owner = window;
+                };
                 window.Show();
                 window.Activate();
             }
@@ -78,9 +87,6 @@ namespace FAT.Application
 
         private void DispatcherOperationCompleted(object sender, EventArgs e)
         {
-            var op = sender as DispatcherOperation;
-            op.Completed -= DispatcherOperationCompleted;
-
             _initialized = true;
         }
 

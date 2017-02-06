@@ -7,39 +7,17 @@ using FAT.Application.Models;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 using FAT.Application.Extensions;
-
+using FAT.Application.Messages;
 
 namespace FAT.Application
 {
-    /// <summary>
-    /// Interaction logic for ScanResultUserControlByComputers.xaml
-    /// </summary>
-    public partial class ScanResultUserControlByComputers : UserControl
+    public partial class ScanResultsWithFiles : UserControl
     {
-        public ScanResultUserControlByComputers()
+        public ScanResultsWithFiles()
         {
             InitializeComponent();
 
-            Loaded += (s, e) =>
-            {
-                if (RadContextMenu.GetContextMenu(treeList) != null)
-                    return;
-
-                var menu = new RadContextMenu();
-                menu.IconColumnWidth = 0;
-                menu.Width = 160;
-                menu.Opened += menu_Opened;
-                AutomationProperties.SetAutomationId(menu, "ScanResultsByComputersContextMenu");
-
-                var item = new RadMenuItem();
-                item.CreateDetailsHeader();
-                item.Command = ViewModel.SelectCommand;
-                item.Click += item_Click;
-                AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
-                menu.Items.Add(item);
-
-                RadContextMenu.SetContextMenu(treeList, menu);
-            };
+            DataContext = App.Current.MainWindow.DataContext;
         }
 
         void menu_Opened(object sender, RoutedEventArgs e)
@@ -71,7 +49,7 @@ namespace FAT.Application
 
         public MainViewViewModel ViewModel
         {
-            get { return this.DataContext as MainViewViewModel; }
+            get { return this.DataContext as MainViewViewModel; }     
         }
 
         private ThreatInfoItem GetDataBoundItem(FrameworkElement element)
@@ -129,18 +107,30 @@ namespace FAT.Application
                 e.Cancel = true;
                 return;
             }
+
         }
 
-        private void OnRadGridViewDistinctValuesLoading(Object sender, GridViewDistinctValuesLoadingEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            e.ItemsSource = new[]
-            {
-                new ScanStatus(ScanStatusEnum.InProgress),
-                new ScanStatus(ScanStatusEnum.Canceled),
-                new ScanStatus(ScanStatusEnum.Completed),
-                new ScanStatus(ScanStatusEnum.Failed),
-                new ScanStatus(ScanStatusEnum.Offline)
-            };
+            if (RadContextMenu.GetContextMenu(treeList) != null)
+                return;
+
+            var menu = new RadContextMenu();
+            menu.IconColumnWidth = 0;
+            menu.Width = 160;
+            menu.Opened += menu_Opened;
+            AutomationProperties.SetAutomationId(menu, "ScanResultsContextMenu");
+
+            var item = new RadMenuItem();
+            item.CreateDetailsHeader();
+            item.Command = ViewModel.SelectCommand;
+            item.Click += item_Click;
+            AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
+            menu.Items.Add(item);
+
+            RadContextMenu.SetContextMenu(treeList, menu);
+
+            AppMessages.FilterMessage.Send(ChangeScreenTypes.FilterTarget, _ => _.Target = treeList);
         }
     }
 }

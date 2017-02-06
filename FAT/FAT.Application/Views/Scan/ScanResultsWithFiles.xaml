@@ -1,0 +1,138 @@
+﻿<UserControl    AutomationProperties.AutomationId="ScanResultsWithFilesScreen"
+                x:Class="FAT.Application.ScanResultsWithFiles"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:Models="clr-namespace:FAT.Application.Models"
+                xmlns:TemplateSelectors="clr-namespace:FAT.Application.TemplateSelectors"
+                xmlns:converters="clr-namespace:FAT.Application.Converters"
+                xmlns:Application="clr-namespace:FAT.Application"
+                xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
+                xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+                d:DesignHeight="400" d:DesignWidth="600" Loaded="UserControl_Loaded">
+    <Grid x:Name="grid" Opacity="0">
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1" >
+                                <EasingDoubleKeyFrame.EasingFunction>
+                                    <CubicEase/>
+                                </EasingDoubleKeyFrame.EasingFunction>
+                            </EasingDoubleKeyFrame>
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Telerik.Windows.Themes.Windows8;component/Themes/Telerik.Windows.Controls.Navigation.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+        <telerik:RadTreeListView AutomationProperties.AutomationId="UnknownFilesTree"
+                                 SelectedItem="{Binding SelectedItem}" 
+                                 CanUserFreezeColumns="False"                  
+                                 CanUserReorderColumns="False"
+                                 x:Name="treeList" 
+                                 AutoGenerateColumns="False" 
+                                 IsReadOnly="True" 
+                                 ItemsSource="{Binding Files}"   
+                                 AutoExpandItems="False"
+                                 Sorting="treeList_Sorting"
+                                 HierarchyIndent="34"
+                                 EnableRowVirtualization="True" 
+                                 IsSynchronizedWithCurrentItem="False" 
+                                 ScrollMode="Deferred"
+                                 MouseDoubleClick="OnTreeDoubleClick" >
+
+            <telerik:RadTreeListView.Resources>
+
+              
+                <DataTemplate x:Key="ComputerTemplate">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    <TextBlock Margin="8,0,0,0" Text="{Binding NameAndIpAddress}" FontSize="14" Grid.Column="0" HorizontalAlignment="Left"/>
+                        <TextBlock Margin="8,0" Text="{Binding ShortName}"  FontSize="13" Grid.Column="1" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}" />
+
+                  </Grid>
+                </DataTemplate>
+                <DataTemplate x:Key="FileTemplate">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Path Margin="3,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"  SnapsToDevicePixels="True"
+                              Opacity="{Binding IsMalware, Converter={StaticResource BoolToOpacityConverter}}" Data="M6,3 C6.5529938,3 7,3.446991 7,3.9999999 L7,5.2770081 C7.5950012,5.6239929 8,6.2609863 8,7 8,8.1040039 7.1049957,9 6,9 4.8950043,9 4,8.1040039 3.9999999,7 4,6.2609863 4.4049988,5.6239929 5,5.2770081 L5,3.9999999 C5,3.446991 5.4470062,3 6,3 z M6,2.0000001 C4.896,2 4,2.896 3.9999999,3.9999999 L2,3 2,3.9999999 3.8669999,4.934 C3.571,5.2360001 3.342,5.596 3.195,6 L2,6 2,7 3,7 C3,7.2509999 3.04,7.4920001 3.099,7.7259998 L2,8 2,9 3.486,8.6279998 C4.021,9.4520001 4.944,10 6,10 7.056,10 7.9790001,9.4520001 8.5139999,8.6279998 L10,9 10,8 8.901,7.7259998 C8.96,7.4920001 9,7.2509999 9,7 L10,7 10,6 8.8049998,6 C8.658,5.596 8.4289999,5.2360001 8.1329999,4.934 L10,3.9999999 10,3 8,3.9999999 C8,2.896 7.1040001,2 6,2.0000001 z M6,0 C9.3130002,0 12,2.687 12,6 12,9.3130002 9.3130002,12 6,12 2.687,12 0,9.3130002 0,6 0,2.687 2.687,0 6,0 z" Fill="#FFD64332" Height="12" Stretch="Fill" Width="12"/>
+
+                        <Path Margin="3,0,0,0"  HorizontalAlignment="Left" VerticalAlignment="Center"  SnapsToDevicePixels="True"
+                            Opacity="{Binding IsUnknown, Converter={StaticResource BoolToOpacityConverter}}" Data="M5.9990082,8.8329992 C5.6310143,8.8329992 5.3330116,9.1320076 5.3330116,9.5 5.3330116,9.8679914 5.6310143,10.167 5.9990082,10.167 6.3680096,10.167 6.6660118,9.8679914 6.6660118,9.5 6.6660118,9.1320076 6.3680096,8.8329992 5.9990082,8.8329992 z M6.0009999,2.8329999 C4.8520002,2.8329999 4.0009999,3.9219971 4.0009999,4.8329949 L4.0009999,5.4999928 5.3340001,5.4999928 5.3340001,4.8329949 C5.3340001,4.4259953 5.625,4.1669965 6.0009999,4.1669965 6.3759999,4.1669965 6.6669998,4.4259953 6.6669998,4.8329949 6.6669998,6.248991 5.3340001,6.2549911 5.3340001,7.4999881 5.3340001,7.6459875 5.2909999,8.0689869 5.3340001,8.1669865 L6.6669998,8.1669865 C6.6350002,8.0609865 6.6669998,7.6049876 6.6669998,7.4999881 6.6669998,6.4579906 8.0010004,6.3139911 8.0010004,4.8329949 8.0010004,3.9219971 7.1490002,2.8329999 6.0009999,2.8329999 z M5.75,0 L6.25,0 C9.4259949,0 12,2.5740051 12,5.75 L12,6.25 C12,9.4259949 9.4259949,12 6.25,12 L5.75,12 C2.5740051,12 0,9.4259949 0,6.25 L0,5.75 C0,2.5740051 2.5740051,0 5.75,0 z" Fill="#FFFAAE17" Stretch="Fill" Width="12" Height="12"/>
+
+                        <Path Margin="3,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" SnapsToDevicePixels="True"
+                            Opacity="{Binding Failed, Converter={StaticResource BoolToOpacityConverter}}" Data="M5.968008,4.0129905 C7.0720081,4.0129905 7.968008,4.9089904 7.968008,6.0129905 7.968008,7.1169905 7.0720081,8.01299 5.968008,8.01299 4.8640079,8.01299 3.968008,7.1169905 3.968008,6.0129905 3.968008,4.9089904 4.8640079,4.0129905 5.968008,4.0129905 z M5.9996824,7.8684025E-08 C7.5351639,0.00024809757 9.0706458,0.58623085 10.242134,1.7577004 12.344114,3.8586421 12.554102,7.1285581 10.886123,9.4714975 L9.418138,8.0035352 C9.7591376,7.414546 9.9681344,6.7415752 9.9681344,6.0125909 9.9681344,3.8036508 8.177155,2.0126986 5.9681811,2.0126986 3.759207,2.0126986 1.9682274,3.8036508 1.9682274,6.0125909 1.9682274,8.2215309 3.759207,10.012484 5.9681811,10.012484 6.720171,10.012484 7.4151702,9.7924881 8.0161614,9.4315052 L9.4711461,10.886453 C7.1291628,12.554422 3.8592119,12.343414 1.7572314,10.242473 -0.58574378,7.8995337 -0.58574378,4.099648 1.7572314,1.7567087 2.9287188,0.58523903 4.4642005,-0.00024781308 5.9996824,7.8684025E-08 z" Fill="#FFFAAE17" Height="12" Stretch="Fill" Width="12" />
+
+                        <Path Margin="3,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"  SnapsToDevicePixels="True"
+                              Opacity="{Binding Clean, Converter={StaticResource BoolToOpacityConverter}}" Data="M10,8.9719849 C9.9940033,8.9799805 9.9869995,8.9869995 9.9810028,8.9949951 L10,9 z M2,8.9719849 L2,9 2.0189972,8.9949951 C2.0130005,8.9869995 2.0059967,8.9799805 2,8.9719849 z M10,3 L9.9839935,3.0069885 C9.9889984,3.0140076 9.9949951,3.019989 10,3.0270081 z M6,3 L8.042,3.7503333 C8.042,3.7503333 8,7 6,9 z M2,3 L2,3.0270081 C2.0050049,3.019989 2.0110016,3.0140076 2.0160065,3.0069885 z M6,2 L3,3 C3,5 2.826004,8.0950012 6,10 9,8 9,5 9,3 z M6,0 C9.3130035,0 12,2.6860046 12,6 12,9.3129883 9.3130035,12 6,12 2.6869965,12 0,9.3129883 0,6 0,2.6860046 2.6869965,0 6,0 z" Fill="#FF19C3A5" Height="12" Stretch="Fill" Width="12" />
+
+                        <Path Margin="3,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"  SnapsToDevicePixels="True"
+                              Opacity="{Binding HasErrors, Converter={StaticResource BoolToOpacityConverter}}" Data="F1M159.9355,236.1582C160.2945,236.5182,160.2945,237.1012,159.9355,237.4632L158.4655,238.9312L159.8795,240.3452C160.2715,240.7362,160.2695,241.3692,159.8795,241.7602C159.4895,242.1502,158.8565,242.1512,158.4645,241.7602L157.0505,240.3452L155.5815,241.8152C155.2215,242.1762,154.6385,242.1762,154.2785,241.8152L154.1675,241.7052C153.8085,241.3452,153.8065,240.7622,154.1675,240.4002L155.6365,238.9312L154.2225,237.5172C153.8315,237.1272,153.8315,236.4942,154.2225,236.1032C154.6135,235.7132,155.2465,235.7132,155.6365,236.1032L157.0505,237.5172L158.5205,236.0482C158.8805,235.6872,159.4645,235.6882,159.8245,236.0482z M152.7575,234.7262C150.4145,237.0692,150.4145,240.8692,152.7575,243.2112C155.1015,245.5542,158.9005,245.5542,161.2425,243.2112C163.5855,240.8692,163.5855,237.0702,161.2425,234.7262C158.9005,232.3832,155.1005,232.3842,152.7575,234.7262" Fill="#FFFAAE17" Height="12" Stretch="Fill" Width="12" />
+
+
+                        <TextBlock Margin="8,5,0,0" Text="{Binding ShortName}" FontSize="14" Grid.Column="1" Foreground="{Binding ElementName=txt, Path=Foreground, Converter={converters:ColorToWhiteConverter}}" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}"/>
+                        <TextBlock Margin="8,6,0,8" x:Name="txt" Text="{Binding InstancesCount}" Grid.Column="2" HorizontalAlignment="Left" FontSize="13"/>
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate x:Key="SizeColumn">
+                    <TextBlock Text="{Binding SizeString}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding SizeString}" TextAlignment="Right" Margin="3 0"/>
+                </DataTemplate>
+
+                <DataTemplate x:Key="VerdictColumn">
+                    <TextBlock Text="{Binding ScanStatus}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding ScanStatus}" TextAlignment="Left" Margin="3 0"/>
+                </DataTemplate>
+                <TemplateSelectors:ComputerFileTemplateSelector x:Key="NameTemplateSelector" 
+                                                                FileTemplate="{StaticResource FileTemplate}"
+                                                                ComputerTemplate="{StaticResource ComputerTemplate}"/>
+            </telerik:RadTreeListView.Resources>
+            <telerik:RadTreeListView.ChildTableDefinitions>
+                <telerik:TreeListViewTableDefinition ItemsSource="{Binding Computers}" />
+            </telerik:RadTreeListView.ChildTableDefinitions>
+            <telerik:RadTreeListView.Columns>
+                <telerik:GridViewColumn 
+                    IsFilterable="False"
+                    ShowFilterButton="False"
+                    ShowFieldFilters="False"
+                    HeaderCellStyle="{StaticResource HeaderCellStyle}"
+                    CellTemplateSelector="{StaticResource NameTemplateSelector}"
+                    Header="      Name" MinWidth="300"
+                    Width="540*"        
+                    SortMemberPath="ShortName" />
+                <telerik:GridViewColumn 
+                    CellTemplate="{StaticResource SizeColumn}"
+                    SortMemberPath="SizeSorting"
+                    IsFilterable="False"
+                    Header="Size"  
+                    HeaderCellStyle="{StaticResource HeaderCellStyle}"
+                    TextAlignment="Right"
+                    Width="80*" MinWidth="80"/>
+                <telerik:GridViewColumn 
+                    SortMemberPath="ScanStatus"
+                    CellTemplate="{StaticResource VerdictColumn}"   
+                    IsFilterable="False"
+                    Header="Verdict"  
+                    HeaderCellStyle="{StaticResource HeaderCellStyle}"
+                    TextAlignment="Left"
+                    Width="160*" MinWidth="80"/>
+            </telerik:RadTreeListView.Columns>
+        </telerik:RadTreeListView>
+    </Grid>
+</UserControl>

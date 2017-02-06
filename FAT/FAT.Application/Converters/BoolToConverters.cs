@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using FAT.Application.MarkupExtensions;
 
+
 namespace FAT.Application.Converters
 {
     public class BoolToVisibilityConverter2 : ConverterMarkupExtension<BoolToVisibilityConverter2>
@@ -84,6 +85,25 @@ namespace FAT.Application.Converters
                 return false;
             }
             return true;
+        }
+    }
+
+    public class IntToBoolConverter : ConverterMarkupExtension<IntToBoolConverter>
+    {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool inverse = parameter != null && parameter.ToString() == "!";
+
+            if ((double)value >= 1)
+            {
+                return !inverse;
+            }
+            return inverse;
+        }
+
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

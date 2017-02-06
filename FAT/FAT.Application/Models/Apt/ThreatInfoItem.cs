@@ -182,6 +182,7 @@ namespace FAT.Application.Models
             }
         }
 
+
         public Boolean HasMalwares
         {
             get
@@ -202,7 +203,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return MalwareFilesCount == 0 && UnknownFilesCount == 0;
+                return MalwareFilesCount == 0 && UnknownFilesCount == 0 && HasBadFiles;
             }
         }
 

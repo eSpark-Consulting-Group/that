@@ -37,7 +37,8 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>FAT.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -57,11 +58,9 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -120,8 +119,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ColorToWhiteConverter.cs" />
+    <Compile Include="Converters\ProgressBarHighlightConverter.cs" />
     <Compile Include="Models\Apt\FileVerdictContext.cs" />
     <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
+    <Compile Include="Models\ScanCounter.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieComputer.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieFile.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
@@ -135,7 +137,6 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToConverters.cs" />
-    <Compile Include="Converters\ContentToPathConverter.cs" />
     <Compile Include="AgentWindow.xaml.cs">
       <DependentUpon>AgentWindow.xaml</DependentUpon>
     </Compile>
@@ -157,7 +158,6 @@
     <Compile Include="Converters\EmptyStringToBoolConverter.cs" />
     <Compile Include="Converters\ScanStageToOpacityConverter.cs" />
     <Compile Include="Converters\SelectedIndexToBoolConverter.cs" />
-    <Compile Include="Converters\StringToHyperlinkConverter.cs" />
     <Compile Include="Converters\StringToVisibiltyConverter.cs" />
     <Compile Include="Messages\MessageManager.cs" />
     <Compile Include="Messages\MessageTokens.cs" />
@@ -166,20 +166,23 @@
     <Compile Include="Services\ITargetsDiscoveryService.cs" />
     <Compile Include="Services\TargetsDiscoveryService.cs" />
     <Compile Include="Extensions\PortValidationExtensions.cs" />
-    <Compile Include="Views\EULAView.xaml.cs">
-      <DependentUpon>EULAView.xaml</DependentUpon>
+    <Compile Include="EULAWindow.xaml.cs">
+      <DependentUpon>EULAWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginPasswordUserControl.xaml.cs">
       <DependentUpon>LoginPasswordUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ScanResultUserControl.xaml.cs">
-      <DependentUpon>ScanResultUserControl.xaml</DependentUpon>
+    <Compile Include="Views\DiscoveryResults.xaml.cs">
+      <DependentUpon>DiscoveryResults.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scan\ScanResultsWithFiles.xaml.cs">
+      <DependentUpon>ScanResultsWithFiles.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchUserControl.xaml.cs">
       <DependentUpon>SearchUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StartScanLocalView.xaml.cs">
-      <DependentUpon>StartScanLocalView.xaml</DependentUpon>
+    <Compile Include="Views\Scan\StartLocalScanView.xaml.cs">
+      <DependentUpon>StartLocalScanView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
@@ -197,23 +200,14 @@
     <Compile Include="Views\ReportWindow.xaml.cs">
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ResultTabsControl.xaml.cs">
-      <DependentUpon>ResultTabsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ScanCompletedWindow.xaml.cs">
-      <DependentUpon>ScanCompletedWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\BoolToOpacityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\DirectoryItemTypeToOpacityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
-    <Compile Include="Converters\ScanStageToBrushConverter.cs" />
     <Compile Include="Models\Apt\ScanProgressItem.cs" />
     <Compile Include="Models\Apt\ScanResultItem.cs" />
     <Compile Include="Models\Apt\BadFileItem.cs" />
-    <Compile Include="Converters\NullableConverter.cs" />
-    <Compile Include="Views\ScanResultUserControlByComputers.xaml.cs">
-      <DependentUpon>ScanResultUserControlByComputers.xaml</DependentUpon>
+    <Compile Include="Views\Scan\ScanResultsWithComputers.xaml.cs">
+      <DependentUpon>ScanResultsWithComputers.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\SearchExtensions.cs" />
     <Compile Include="Services\AptService.cs" />
@@ -228,23 +222,25 @@
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StartScanByIpView.xaml.cs">
+    <Compile Include="Views\Scan\StartScanByIpView.xaml.cs">
       <DependentUpon>StartScanByIpView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StartScanDomainView.xaml.cs">
-      <DependentUpon>StartScanDomainView.xaml</DependentUpon>
+    <Compile Include="Views\Scan\StartScanByDomainView.xaml.cs">
+      <DependentUpon>StartScanByDomainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StartScanView.xaml.cs">
+    <Compile Include="Views\Scan\StartScanView.xaml.cs">
       <DependentUpon>StartScanView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StartScanWindow.xaml.cs">
+    <Compile Include="Views\Scan\StartScanWindow.xaml.cs">
       <DependentUpon>StartScanWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StartScanWorkgroupView.xaml.cs">
-      <DependentUpon>StartScanWorkgroupView.xaml</DependentUpon>
+    <Compile Include="Views\Scan\StartScanByWorkgroupView.xaml.cs">
+      <DependentUpon>StartScanByWorkgroupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TemplateSelectors\MainViewNameTemplateSelector.cs" />
-    <Compile Include="TemplateSelectors\ValkyrieNameTemplateSelector.cs" />
+    <Compile Include="TemplateSelectors\ComputerFileTemplateSelector.cs" />
+    <Compile Include="Views\StartingPage.xaml.cs">
+      <DependentUpon>StartingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TextEntryListView.xaml.cs">
       <DependentUpon>TextEntryListView.xaml</DependentUpon>
     </Compile>
@@ -274,7 +270,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EULAView.xaml">
+    <Page Include="EULAWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -282,7 +278,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ScanResultUserControl.xaml">
+    <Page Include="Views\DiscoveryResults.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Scan\ScanResultsWithFiles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -290,7 +290,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\StartScanLocalView.xaml">
+    <Page Include="Views\Scan\StartLocalScanView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -303,14 +303,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReportWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ResultTabsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ScanCompletedWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -333,7 +325,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\ScanResultUserControlByComputers.xaml">
+    <Page Include="Views\Scan\ScanResultsWithComputers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -341,23 +333,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StartScanByIpView.xaml">
+    <Page Include="Views\Scan\StartScanByIpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StartScanDomainView.xaml">
+    <Page Include="Views\Scan\StartScanByDomainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StartScanView.xaml">
+    <Page Include="Views\Scan\StartScanView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StartScanWindow.xaml">
+    <Page Include="Views\Scan\StartScanWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StartScanWorkgroupView.xaml">
+    <Page Include="Views\Scan\StartScanByWorkgroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StartingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,26 +386,14 @@
     </Compile>
     <Resource Include="EULA.pdf" />
     <Resource Include="Assets\checkmark.png" />
-    <Resource Include="Assets\splash2.png" />
-    <Content Include="cmdapt64.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="FAT.ico" />
-    <Content Include="ResourceCopy.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Assets\splash.png" />
+    <Resource Include="Assets\eula.png" />
     <Content Include="trl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="tvl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="cmdapt86.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="buildScript.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -417,13 +401,8 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Fonts\segoeui.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fonts\segoeuil.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="app.manifest" />
+    <Resource Include="Fonts\myriadproregular-webfont.ttf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
