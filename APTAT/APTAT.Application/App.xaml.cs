@@ -43,6 +43,7 @@ namespace APTAT.Application
                         typeof(Valkyrie.DependencyLocator.DependencyLocator),
                         typeof(Core.DependencyLocator.DependencyLocator)
                     });
+                    CompositionHelper.Instance.Verify();
                 });
                 op.Completed += DispatcherOperationCompleted;
 
