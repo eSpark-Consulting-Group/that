@@ -235,6 +235,7 @@ namespace APTAT.Core.Descent.Apt
                 ScanStage = item.ScanStage;
                 UnknownFilesCount = item.UnknownFilesCount;
                 TotalFilesCount = item.TotalFilesCount;
+                SafeFilesCount = item.SafeFilesCount;
                 MalwareFilesCount = item.MalwaresCount;
                 FailedToAnalyzeFilesCount = item.ErrorFilesCount;
                 NoVerdictFilesCount = item.FailedAtNodeCount;

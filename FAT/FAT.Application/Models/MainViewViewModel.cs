@@ -50,9 +50,6 @@ namespace FAT.Application.Models
         private Boolean _cancelInProgress = false;
 
         private Int32 _scannedItemsCount;
-        private Int32 _unknownFilesCount;
-        private Int32 _malwareFilesCount;
-        private Int32 _pendingFilesCount;
 
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
@@ -711,7 +708,7 @@ namespace FAT.Application.Models
             //_aptService.ScanCompleted -= OnScanCompleted;
             //_aptService.ScanProgressChanged -= OnScanProgressChanged;
             //_aptService.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
-            //_aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;\
+            //_aptService.ValkyrieAnalyzeStarted -= OnValkyrieAnalyzeStarted;
 
             _aptService.FatScanStarted -= OnBeginScanCompleted;
             _aptService.FatScanCompleted -= OnScanCompleted;
@@ -727,6 +724,7 @@ namespace FAT.Application.Models
             ScanCompleted();
             RaisePropertyChanged(nameof(ValkyrieDetailsLink));
             ScanProcessCompleted?.Invoke(this, e);
+            Percentage = 100;
         }
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
@@ -823,7 +821,8 @@ namespace FAT.Application.Models
             var computers = operationResult.Results.ToDictionary(c => c.TargetUid);
             if (!CancelInProgress)
             {
-                Percentage = operationResult.Percentage;
+                if (Math.Abs(Percentage - 100) > 0.01)
+                    Percentage = operationResult.Percentage;
                 RaisePropertyChanged(nameof(Header));
             }
             
@@ -846,6 +845,7 @@ namespace FAT.Application.Models
             Int32 completed = 0;
             Int32 scanned = 0;
 
+            IScanCounterDiff counterDiff = new ScanCounterDiff();
             foreach (var infoItem in _onlineItems)
             {
                 ScanResultItem scanProgress = null;
@@ -856,28 +856,7 @@ namespace FAT.Application.Models
                 {
                     if (scanProgress != null)
                     {
-                        var cleanFilesDiff = scanProgress.CleanFilesCount - infoItem.CleanFilesCount;
-                        var unknownFilesDiff = scanProgress.UnknownFilesCount - infoItem.UnknownFilesCount;
-                        var malwareFilesDiff = scanProgress.MalwareFilesCount - infoItem.MalwareFilesCount;
-                        var lookupInProgressCountDiff = (scanProgress.FailedToAnalyzeFilesCount + scanProgress.NoVerdictFilesCount)
-                            - (infoItem.FailedToAnalyzeCount + infoItem.NoVerdictFilesCount);
-                        infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                        infoItem.CleanFilesCount = scanProgress.CleanFilesCount;
-                        infoItem.UnknownFilesCount = scanProgress.UnknownFilesCount;
-                        infoItem.MalwareFilesCount = scanProgress.MalwareFilesCount;
-                        infoItem.FailedToAnalyzeCount = scanProgress.FailedToAnalyzeFilesCount;
-                        infoItem.NoVerdictFilesCount = scanProgress.NoVerdictFilesCount;
-                        infoItem.ProgressPercentage = scanProgress.Percentage;
-                        infoItem.StatusMessageSystem = scanProgress.StatusMessage;
-                        infoItem.ScanStage = scanProgress.ScanStage;
-                        _scanCounterManager.AddMalware(malwareFilesDiff);
-                        _scanCounterManager.AddInProgress(lookupInProgressCountDiff + unknownFilesDiff);
-                        _scanCounterManager.AddClean(cleanFilesDiff);
-
-                        if (!HasUnknowns)
-                            Set(() => HasUnknowns, unknownFilesDiff > 0 || lookupInProgressCountDiff > 0);
-                        if (!HasMalwares)
-                            Set(() => HasMalwares, malwareFilesDiff > 0);
+                        infoItem.UpdateCounters(scanProgress, counterDiff);
                     }
 
                 }
@@ -917,10 +896,7 @@ namespace FAT.Application.Models
                             }
 
                         }
-
-                        if (infoItem.TotalFilesCount != scanProgress.TotalFilesCount)
-                            infoItem.TotalFilesCount = scanProgress.TotalFilesCount;
-                        infoItem.UpdateStatus();
+                        infoItem.UpdateCounters(scanProgress, counterDiff);
                     }
                 }
             }
@@ -939,17 +915,26 @@ namespace FAT.Application.Models
             }
             if (files.Any())
             {
-                IScanCounterDiff counterDiff = new ScanCounterDiff();
                 foreach (ThreatInfoItem computer in Computers)
                 {
                     computer.UpdateVerdictForFiles(files, counterDiff);
                 }
-                _scanCounterManager.UpdateCounters(counterDiff);
             }
             if (scanned > ScannedItemsCount)
             {
                 ScannedItemsCount = scanned;
             }
+            _scanCounterManager.UpdateCounters(counterDiff);
+
+
+            if (!HasUnknowns)
+                Set(() => HasUnknowns, _scanCounterManager.CounterCollection
+                    .Any(c => (c.OrderAsEnum == UiFinalVerdict.Unknown && c.Count > 0) ||
+                        (c.OrderAsEnum == UiFinalVerdict.InAnalysis && c.Count > 0)
+                        || (c.OrderAsEnum == UiFinalVerdict.NotAnalyse && c.Count > 0)));
+            if (!HasMalwares)
+                Set(() => HasMalwares, _scanCounterManager.CounterCollection
+                    .Any(c => c.OrderAsEnum == UiFinalVerdict.Malware && c.Count > 0));
 
             //if (completed != OnlineItemsCount)
             _scanIteratorTimer.Start();

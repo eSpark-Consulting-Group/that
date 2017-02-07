@@ -422,12 +422,6 @@
                                            Padding="17,20,20,20">
                     <telerik:RadDropDownButton.DropDownContent>
                         <telerik:RadContextMenu AutomationProperties.AutomationId="ReportsContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0">
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveReportMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}"  Margin="-1"
-                                                 Header="Executive" Tag="Executive Report" Click="OnExecutiveReportClick"  Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceReportMenuItem"  Margin="-1"
-                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Device" Tag="Detailed Per-Device Report" Click="OnPerDeviceReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
-                            <telerik:RadMenuItem AutomationProperties.AutomationId="PerProgramReportMenuItem" Margin="-1"
-                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Program" Tag="Detailed Per-Program Report" Click="OnPerProgramReportClick" Visibility="{Binding ShowFlsReportsMenu, Converter={StaticResource BoolToVisibilityConverter}}" />
                             <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveValkyrieReportMenuItem" Margin="-1"
                                                  HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive Valkyrie" Tag="Executive Valkyrie Report" Click="OnExecutiveReportValkyrieClick"  Visibility="{Binding IsValkyrieReportEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
                             <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceValkyrieReportMenuItem" Margin="-1"
