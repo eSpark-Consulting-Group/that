@@ -677,6 +677,12 @@ namespace FAT.Application.Models
         public void UpdateVerdictForFiles(FileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff)
         {
             if (!IsComputer) throw new NotSupportedException();
+            bool anyUpdated = false;
+            var cleanDiff = 0;
+            var unknownDiff = 0;
+            var malwareDiff = 0;
+            var notAnalyzedDiff = 0;
+            var inAnalysizDiff = 0;
             foreach (var verdictContext in fileVerdictContext)
             {
                 List<ThreatInfoItem> items;
@@ -686,43 +692,48 @@ namespace FAT.Application.Models
                     {
                         switch (item.FinalVerdict)
                         {
-                            case UiFinalVerdict.Clean:
-                                scanCounterDiff.CleanFilesDiff--;
-                                break;
                             case UiFinalVerdict.InAnalysis:
-                                scanCounterDiff.InProgressFilesDiff--;
+                                inAnalysizDiff--;
                                 break;
                             case UiFinalVerdict.Unknown:
-                                scanCounterDiff.UnknownFilesDiff--;
-                                break;
-                            case UiFinalVerdict.Malware:
-                                scanCounterDiff.MaliciousFilesDiff--;
-                                break;
-                            case UiFinalVerdict.NotAnalyse:
-                                scanCounterDiff.NotAnalyzedFilesDiff--;
+                                unknownDiff--;
                                 break;
                         }
-                        item.UpdateFileVerdict(verdictContext);
+                        anyUpdated = anyUpdated || item.UpdateFileVerdict(verdictContext);
                         switch (item.FinalVerdict)
                         {
                             case UiFinalVerdict.Clean:
-                                scanCounterDiff.CleanFilesDiff++;
+                                cleanDiff++;
                                 break;
                             case UiFinalVerdict.InAnalysis:
-                                scanCounterDiff.InProgressFilesDiff++;
+                                inAnalysizDiff++;
                                 break;
                             case UiFinalVerdict.Unknown:
-                                scanCounterDiff.UnknownFilesDiff++;
+                                unknownDiff++;
                                 break;
                             case UiFinalVerdict.Malware:
-                                scanCounterDiff.MaliciousFilesDiff++;
+                                malwareDiff++;
                                 break;
                             case UiFinalVerdict.NotAnalyse:
-                                scanCounterDiff.NotAnalyzedFilesDiff++;
+                                notAnalyzedDiff++;
                                 break;
                         }
                     }
                 }
+            }
+            if (anyUpdated)
+            {
+                CleanFilesCount += cleanDiff;
+                scanCounterDiff.CleanFilesDiff += cleanDiff;
+                UnknownFilesCount += unknownDiff;
+                scanCounterDiff.UnknownFilesDiff += unknownDiff;
+                MalwareFilesCount += malwareDiff;
+                scanCounterDiff.MaliciousFilesDiff += malwareDiff;
+                NotAnalyzedFilesCount += notAnalyzedDiff;
+                scanCounterDiff.NotAnalyzedFilesDiff += notAnalyzedDiff;
+                PendingFilesCount += inAnalysizDiff;
+                scanCounterDiff.InProgressFilesDiff += inAnalysizDiff;
+                RaisePropertyChanged(nameof(StatusMessage));
             }
         }
 
@@ -731,8 +742,8 @@ namespace FAT.Application.Models
         {
             counterDiff.CleanFilesDiff += scanProgress.CleanFilesCount - CleanFilesCount;
             counterDiff.InProgressFilesDiff += scanProgress.UnknownFilesCount + scanProgress.FailedToAnalyzeFilesCount +
-                                                scanProgress.NoVerdictFilesCount- PendingFilesCount;
-            counterDiff.MaliciousFilesDiff = scanProgress.MalwareFilesCount - MalwareFilesCount;
+                                                scanProgress.NoVerdictFilesCount - PendingFilesCount;
+            counterDiff.MaliciousFilesDiff += scanProgress.MalwareFilesCount - MalwareFilesCount;
             
             TotalFilesCount = scanProgress.TotalFilesCount;
             CleanFilesCount = scanProgress.CleanFilesCount;

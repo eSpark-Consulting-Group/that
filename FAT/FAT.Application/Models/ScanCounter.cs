@@ -69,7 +69,7 @@ namespace FAT.Application.Models
 
         public virtual int Order => -1;
 
-        public UiFinalVerdict OrderAsEnum => (UiFinalVerdict) Order;
+        public CounterOrder OrderAsEnum => (CounterOrder) Order;
 
         protected virtual void RaisePropertyChanged(string name)
         {

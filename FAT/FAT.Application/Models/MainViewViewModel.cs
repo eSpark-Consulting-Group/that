@@ -865,49 +865,46 @@ namespace FAT.Application.Models
                 {
                     if (scanProgress != null)
                     {
+                        infoItem.ScanStage = scanProgress.ScanStage;
+                        if (infoItem.ScanStage == ScanStage.OperationCompleted)
+                        {
+                            scanned++;
+                            if (scanProgress.BadFiles.Any() && infoItem.Items.Count == 0)
+                            {
+                                foreach (var badFile in scanProgress.BadFiles)
+                                {
+                                    var item = new ThreatInfoItem(badFile);
+                                    infoItem.AddFile(item);
+                                    item = new ThreatInfoItem(badFile);
+                                    var exist = Files.FirstOrDefault(_ =>
+                                        _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
+                                        _.IsMalware == item.IsMalware && _.Failed == item.Failed);
+                                    var comp = new ThreatInfoItem
+                                    {
+                                        IpAddress = infoItem.IpAddress,
+                                        ComputerGuid = infoItem.ComputerGuid,
+                                        Name = infoItem.Name,
+                                        ShortName = item.Name,
+                                        IsComputer = true
+                                    };
+                                    if (exist != null)
+                                        exist.Computers.Add(comp);
+                                    else
+                                    {
+                                        item.Computers = new ObservableCollection<ThreatInfoItem> { comp };
+                                        Files.Add(item);
+                                    }
+
+                                }
+                            }
+                        }
                         infoItem.UpdateCounters(scanProgress, counterDiff);
                     }
-
                 }
                 if (infoItem.ScanStage == ScanStage.OperationFailed ||
                     infoItem.ScanStage == ScanStage.OperationCompleted ||
                     infoItem.ScanStage == ScanStage.OperationCanceled)
                     completed++;
-
-                if (infoItem.ScanStage == ScanStage.OperationCompleted)
-                {
-                    scanned++;
-                    if (scanProgress != null && scanProgress.BadFiles.Any() &&
-                        infoItem.Items.Count == 0)
-                    {
-                        foreach (var badFile in scanProgress.BadFiles)
-                        {
-                            var item = new ThreatInfoItem(badFile);
-                            infoItem.AddFile(item);
-                            item = new ThreatInfoItem(badFile);
-                            var exist = Files.FirstOrDefault(_ =>
-                                _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
-                                _.IsMalware == item.IsMalware && _.Failed == item.Failed);
-                            var comp = new ThreatInfoItem
-                            {
-                                IpAddress = infoItem.IpAddress,
-                                ComputerGuid = infoItem.ComputerGuid,
-                                Name = infoItem.Name,
-                                ShortName = item.Name,
-                                IsComputer = true
-                            };
-                            if (exist != null)
-                                exist.Computers.Add(comp);
-                            else
-                            {
-                                item.Computers = new ObservableCollection<ThreatInfoItem> { comp };
-                                Files.Add(item);
-                            }
-
-                        }
-                        infoItem.UpdateCounters(scanProgress, counterDiff);
-                    }
-                }
             }
             //var safeFilesDiff = 0;
             //var uFilesDiff = 0;
@@ -936,12 +933,15 @@ namespace FAT.Application.Models
             _scanCounterManager.UpdateCounters(counterDiff);
 
 
-            Set(() => HasMalwares, _scanCounterManager.CounterCollection
-                    .Any(c => c.OrderAsEnum == UiFinalVerdict.Malware && c.Count > 0));
-            Set(() => HasUnknownsOnly, !HasMalwares && _scanCounterManager.CounterCollection
-                    .Any(c => (c.OrderAsEnum == UiFinalVerdict.Unknown && c.Count > 0) ||
-                        (c.OrderAsEnum == UiFinalVerdict.InAnalysis && c.Count > 0)
-                        || (c.OrderAsEnum == UiFinalVerdict.NotAnalyse && c.Count > 0)));
+            if (!HasMalwares)
+            {
+                Set(() => HasMalwares, _scanCounterManager.CounterCollection
+                        .Any(c => c.OrderAsEnum == CounterOrder.Malware && c.Count > 0));
+                Set(() => HasUnknownsOnly, !HasMalwares && _scanCounterManager.CounterCollection
+                        .Any(c => (c.OrderAsEnum == CounterOrder.Unknown && c.Count > 0) ||
+                            (c.OrderAsEnum == CounterOrder.InProgress && c.Count > 0)
+                            || (c.OrderAsEnum == CounterOrder.NotAnalyzed && c.Count > 0)));
+            }
 
             //if (completed != OnlineItemsCount)
             _scanIteratorTimer.Start();
