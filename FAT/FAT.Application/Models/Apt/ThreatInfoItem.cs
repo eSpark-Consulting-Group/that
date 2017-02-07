@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using APTAT.Application.Models.Apt;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
@@ -20,53 +21,15 @@ namespace FAT.Application.Models
         Failed
     }
 
-    public struct ScanStatus : IComparable
+    public enum UiFinalVerdict
     {
-        private readonly ScanStatusEnum _value;
-
-
-        public ScanStatus(ScanStatusEnum value)
-        {
-            _value = value;
-        }
-
-        public override string ToString()
-        {
-            if (_value == ScanStatusEnum.InProgress)
-            {
-                return "In Progress";
-            }
-
-
-            return _value.ToString();
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override Boolean Equals(Object obj)
-        {
-            if (obj is ScanStatus)
-            {
-                ScanStatus status = (ScanStatus)obj;
-
-                if (status._value == _value)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-
-        public int CompareTo(object obj)
-        {
-            return 0;
-        }
+        Clean,
+        Unknown,
+        Malware,
+        InAnalysis,
+        NotAnalyse
     }
+
 
     public class ThreatInfoItem : DomainObject
     {
@@ -79,9 +42,19 @@ namespace FAT.Application.Models
         private String _statusMessageMemento;
 
         private ScanStage _scanStage;
-        private ObservableCollection<ThreatInfoItem> _items;
         private int _errorFilesCount;
         private int _noVerdictFilesCount;
+        private Dictionary<string,ThreatInfoItem> _itemsDict = new Dictionary<string, ThreatInfoItem>(StringComparer.OrdinalIgnoreCase);
+
+        public Collection<ThreatInfoItem> Computers { get; set; }
+        public BadFileItem BadFile { get; }
+
+        public DeploymentTarget DeploymentTarget { get; }
+        public double ProgressPercentage { get; set; }
+
+        public string SkipReason { get; set; }
+
+        public string OperationStatus { get; set; }
 
         public Boolean HasBadFiles
         {
@@ -115,38 +88,66 @@ namespace FAT.Application.Models
             }
         }
 
-        public string VerdictString
+        public UiFinalVerdict FinalVerdict
         {
             get
             {
                 switch (ValkyrieVerdict)
                 {
                     case ValkyrieVerdict.NotAnalyzed:
-                        return $"Not Analyzed ({OperationStatus.Replace(Environment.NewLine, "")})";
+                        return UiFinalVerdict.NotAnalyse;
                     case ValkyrieVerdict.PotentiallyUnwantedApplication:
-                        return "Malware";
+                    case ValkyrieVerdict.Malware:
+                        return UiFinalVerdict.Malware;
                     case ValkyrieVerdict.Pending:
                     case ValkyrieVerdict.FirstSeen:
-                        return "In Analysis";
+                        return UiFinalVerdict.InAnalysis;
                     case ValkyrieVerdict.Undetected:
-                        return "No Threat Found";
+                        return UiFinalVerdict.Unknown;
+                    case ValkyrieVerdict.Clean:
+                        return UiFinalVerdict.Clean;
                     case ValkyrieVerdict.PendingFls:
                         {
                             switch (BadFile.Cloud)
                             {
                                 case CloudVerdict.Safe:
-                                    return ValkyrieVerdict.Clean.ToString();
+                                    return UiFinalVerdict.Clean;
                                 case CloudVerdict.FirstSeen:
                                 case CloudVerdict.FailedToAnalyze:
                                 case CloudVerdict.NoVerdict:
                                 case CloudVerdict.Unknown:
-                                    return "In Analysis";
+                                    return UiFinalVerdict.InAnalysis;
+                                case CloudVerdict.Malware:
+                                    return UiFinalVerdict.Malware;
+
                                 default:
-                                    return BadFile.Cloud.ToString();
+                                    throw new ArgumentOutOfRangeException("BadFile");
                             }
                         }
                     default:
-                        return ValkyrieVerdict.ToString();
+                        throw new ArgumentOutOfRangeException("ValkyrieVerdict");
+                }
+            }
+        }
+
+        public string VerdictString
+        {
+            get
+            {
+                switch (FinalVerdict)
+                {
+                    case UiFinalVerdict.Clean:
+                        return "Clean";
+                    case UiFinalVerdict.InAnalysis:
+                        return "In Analysis";
+                    case UiFinalVerdict.Malware:
+                        return "Malware";
+                    case UiFinalVerdict.NotAnalyse:
+                        return $"Not Analyzed ({OperationStatus.Replace(Environment.NewLine, "")})";
+                    case UiFinalVerdict.Unknown:
+                        return "No Threat Found";
+                    default:
+                        throw new ArgumentOutOfRangeException("FinalVerdict");
                 }
             }
         }
@@ -559,15 +560,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Items
-        {
-            get { return _items; }
-            set
-            {
-                _items = value;
-                RaisePropertyChanged("Items");
-            }
-        }
+        public ObservableCollection<ThreatInfoItem> Items { get; }
 
         public int DistinctUnknownFilesCount
         {
@@ -593,32 +586,23 @@ namespace FAT.Application.Models
 
                 var uniqueComputers = Computers.GroupBy(_ => _.ComputerGuid).Select(_ => _.Key).Count();
 
-                return string.Format("{0} instances on {1} computer{2}.", Computers.Count,
-                    uniqueComputers, uniqueComputers > 1 ? "s" : string.Empty);
+                return $"{Computers.Count} instances on {uniqueComputers}" +
+                    $" computer{(uniqueComputers > 1 ? "s" : string.Empty)}.";
             }
         }
-
-        public Collection<ThreatInfoItem> Computers { get; set; }
-
-        public BadFileItem BadFile { get; private set; }
-        public double ProgressPercentage { get; set; }
 
         public ThreatInfoItem()
         {
             StatusMessageSystem = "Initializing...";
 
-            _items = new ObservableCollection<ThreatInfoItem>();
+            Items = new ObservableCollection<ThreatInfoItem>();
         }
 
-        private DeploymentTarget _deploymentTarget;
-        public DeploymentTarget DeploymentTarget
-        {
-            get { return _deploymentTarget; }
-        }
+
 
         public ThreatInfoItem(DeploymentTarget deploymentTarget) : this()
         {
-            _deploymentTarget = deploymentTarget;
+            DeploymentTarget = deploymentTarget;
             Name = deploymentTarget.Name;
             IpAddress = deploymentTarget.IPAddress;
             IsLocal = deploymentTarget.IsLocalComputer;
@@ -640,13 +624,14 @@ namespace FAT.Application.Models
             BadFile = badFile;
             _valkyrieVerdict = ValkyrieVerdict.PendingFls;;
             if (!string.IsNullOrEmpty(badFile.Product))
-                ShortName = string.Format("{0} ({1})", Path.GetFileName(badFile.Name), badFile.Product);
+                ShortName = $"{Path.GetFileName(badFile.Name)} ({badFile.Product})";
             else
                 ShortName = Path.GetFileName(badFile.Name);
         }
 
-        public void UpdateFileVerdict(FileVerdictContext fileVerdictContext)
+        public bool UpdateFileVerdict(FileVerdictContext fileVerdictContext)
         {
+            var prevFinalVerdict = FinalVerdict;
             if (fileVerdictContext.ValkyrieAnalysisResult != null)
             {
                 SkipReason = fileVerdictContext.ValkyrieAnalysisResult.SkipReason;
@@ -657,13 +642,69 @@ namespace FAT.Application.Models
             {
                 UpdateFileVerdict(fileVerdictContext.FlsVerdict.Value);
             }
+            return prevFinalVerdict != FinalVerdict;
             //MalwareProbabilityValue = valkyrieAnalysisResult.MalwareProbability;
-
         }
 
-        public string SkipReason { get; set; }
+        public void UpdateVerdictForFiles(FileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff)
+        {
+            if (!IsComptuer) throw new NotSupportedException();
+            foreach (var verdictContext in fileVerdictContext)
+            {
+                ThreatInfoItem item;
+                if (_itemsDict.TryGetValue(verdictContext.Sha1, out item))
+                {
+                    switch (item.FinalVerdict)
+                    {
+                        case UiFinalVerdict.Clean:
+                            scanCounterDiff.CleanFilesDiff--;
+                            break;
+                        case UiFinalVerdict.InAnalysis:
+                            scanCounterDiff.InProgressFilesDiff--;
+                            break;
+                        case UiFinalVerdict.Unknown:
+                            scanCounterDiff.UnknownFilesDiff--;
+                            break;
+                        case UiFinalVerdict.Malware:
+                            scanCounterDiff.MaliciousFilesDiff--;
+                            break;
+                        case UiFinalVerdict.NotAnalyse:
+                            scanCounterDiff.NotAnalyzedFilesDiff--;
+                            break;
+                    }
+                    item.UpdateFileVerdict(verdictContext);
+                    switch (item.FinalVerdict)
+                    {
+                        case UiFinalVerdict.Clean:
+                            scanCounterDiff.CleanFilesDiff++;
+                            break;
+                        case UiFinalVerdict.InAnalysis:
+                            scanCounterDiff.InProgressFilesDiff++;
+                            break;
+                        case UiFinalVerdict.Unknown:
+                            scanCounterDiff.UnknownFilesDiff++;
+                            break;
+                        case UiFinalVerdict.Malware:
+                            scanCounterDiff.MaliciousFilesDiff++;
+                            break;
+                        case UiFinalVerdict.NotAnalyse:
+                            scanCounterDiff.NotAnalyzedFilesDiff++;
+                            break;
+                    }
+                }
+            }
+        }
 
-        public string OperationStatus { get; set; }
+        public void AddFile(ThreatInfoItem threatInfoItem)
+        {
+            if (!IsComptuer) throw new NotSupportedException();
+            if (threatInfoItem.IsComptuer) throw new ArgumentException();
+            var shouldRaise = Items.Count == 0;
+            Items.Add(threatInfoItem);
+            _itemsDict.Add(threatInfoItem.BadFile.Sha1,threatInfoItem);
+            if (shouldRaise)
+                RaisePropertyChanged(nameof(Items));
+        }
 
         public override string ToString()
         {

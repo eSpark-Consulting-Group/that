@@ -183,6 +183,7 @@ namespace FAT.Application.Services
         {
             var result = _manager.AggregatedScanResults;
             var completed = !result.IsOperationInProgress(operationUid);
+            var percentage = GetProgressOfOperations(operationUid) / 2;
             var mappedResult = result.ScanResults.Where(c => lastUtcTime == null || c.Modified > lastUtcTime)
                 .Select(r => new ScanResultItem
                 {
@@ -215,7 +216,16 @@ namespace FAT.Application.Services
                             Cloud = m.Cloud,
                         }).ToArray()
                 }).ToArray();
-            return new GetModifiedComputerResultsForOperationEventArgs(mappedResult, completed);
+            return new GetModifiedComputerResultsForOperationEventArgs(mappedResult, completed, percentage);
+        }
+
+        public double GetProgressOfOperations(Guid operationUid)
+        {
+            var scanResults = _manager.AggregatedScanResults.ScanResults
+                .OfType<IAptScanResult>()
+                .Where(r => r.ResultType != APTAT.Core.ScanResultType.NotPerformed).ToArray();
+            var result = scanResults.Sum(sr => sr.Percentage) / (scanResults.Count() * 100) * 100d;
+            return result;
         }
 
         public GetModifiedFileVerdictsEventArgs GetUpdatedFileVerdict(DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime)

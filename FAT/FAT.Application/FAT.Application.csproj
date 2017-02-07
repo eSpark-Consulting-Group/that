@@ -122,6 +122,8 @@
     <Compile Include="Converters\ColorToWhiteConverter.cs" />
     <Compile Include="Converters\ProgressBarHighlightConverter.cs" />
     <Compile Include="Models\Apt\FileVerdictContext.cs" />
+    <Compile Include="Models\Apt\ScanStatus.cs" />
+    <Compile Include="Models\IScanCounterDiff.cs" />
     <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
     <Compile Include="Models\ScanCounter.cs" />
     <Compile Include="Models\Valkyrie\ValkyrieComputer.cs" />
@@ -384,10 +386,23 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="buildScript.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="SfxPackage\7zSD.sfx" />
+    <None Include="SfxPackage\CreateSfx.bat" />
     <Resource Include="EULA.pdf" />
     <Resource Include="Assets\checkmark.png" />
     <Resource Include="Assets\splash.png" />
     <Resource Include="Assets\eula.png" />
+    <Content Include="cmdapt64.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="cmdapt86.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SfxPackage\7za.exe" />
+    <Resource Include="SfxPackage\config.txt" />
     <Content Include="trl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -6,6 +6,25 @@ using System.ComponentModel;
 
 namespace FAT.Application.Models
 {
+    public class ScanCounterDiff : IScanCounterDiff
+    {
+        public int UnknownFilesDiff { get; set; }
+        public int MaliciousFilesDiff { get; set; }
+        public int InProgressFilesDiff { get; set; }
+        public int CleanFilesDiff { get; set; }
+        public int NotAnalyzedFilesDiff { get; set; }
+    }
+
+    public enum CounterOrder
+    {
+        Computer,
+        Clean,
+        InProgress,
+        Malware,
+        NotAnalyzed,
+        Unknown
+    }
+
     public abstract class ScanCounter : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -162,13 +181,31 @@ namespace FAT.Application.Models
         {
             AddCounter<PendingCounter>(count);
         }
+
+        public void UpdateCounters(IScanCounterDiff scanCounterDiff)
+        {
+            lock (_sync)
+            {
+                ScanCounter item;
+                if (_counters.TryGetValue((int) CounterOrder.Clean, out item))
+                    item.Count += scanCounterDiff.CleanFilesDiff;
+                if (_counters.TryGetValue((int)CounterOrder.InProgress, out item))
+                    item.Count += scanCounterDiff.InProgressFilesDiff;
+                if (_counters.TryGetValue((int)CounterOrder.Malware, out item))
+                    item.Count += scanCounterDiff.MaliciousFilesDiff;
+                if (_counters.TryGetValue((int)CounterOrder.NotAnalyzed, out item))
+                    item.Count += scanCounterDiff.NotAnalyzedFilesDiff;
+                if (_counters.TryGetValue((int)CounterOrder.Unknown, out item))
+                    item.Count += scanCounterDiff.UnknownFilesDiff;
+            }
+        }
     }
 
     public class ComputersCounter : ScanCounter
     {
         public override int Order
         {
-            get { return 0; }
+            get { return (int)CounterOrder.Computer; }
         }
     }
 
@@ -176,7 +213,7 @@ namespace FAT.Application.Models
     {
         public override int Order
         {
-            get { return 1; }
+            get { return (int)CounterOrder.Clean; }
         }
     }
 
@@ -184,7 +221,7 @@ namespace FAT.Application.Models
     {
         public override int Order
         {
-            get { return 2; }
+            get { return (int)CounterOrder.Malware; }
         }
     }
 
@@ -192,7 +229,7 @@ namespace FAT.Application.Models
     {
         public override int Order
         {
-            get { return 3; }
+            get { return (int)CounterOrder.Unknown; }
         }
     }
 
@@ -200,14 +237,14 @@ namespace FAT.Application.Models
     {
         public override int Order
         {
-            get { return 4; }
+            get { return (int)CounterOrder.NotAnalyzed; }
         }
     }
     public class PendingCounter : ScanCounter
     {
         public override int Order
         {
-            get { return 5; }
+            get { return (int)CounterOrder.InProgress; }
         }
     }
 }
