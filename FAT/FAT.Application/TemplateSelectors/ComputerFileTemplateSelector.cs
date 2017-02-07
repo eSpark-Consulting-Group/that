@@ -15,7 +15,7 @@ namespace FAT.Application.TemplateSelectors
             if (item is ThreatInfoItem)
             {
                 ThreatInfoItem threatInfo = (ThreatInfoItem)item;
-                if (threatInfo.IsComptuer)
+                if (threatInfo.IsComputer)
                 {
                     return ComputerTemplate;
                 }

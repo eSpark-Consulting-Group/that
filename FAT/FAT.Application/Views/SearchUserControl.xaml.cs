@@ -33,7 +33,14 @@ namespace FAT.Application.Views
 
         public static readonly DependencyProperty TargetProperty =
             DependencyProperty.Register("Target", typeof(RadTreeListView), typeof(SearchUserControl),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, OnTargetChanged));
+
+        private static void OnTargetChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            var control = obj as SearchUserControl;
+            if (!string.IsNullOrEmpty(control.Keyword) || (control.FilterOrders != null && control.FilterOrders.Length > 0))
+                control.UpdateTargetPredicate();
+        }
 
         #endregion
 
@@ -65,30 +72,13 @@ namespace FAT.Application.Views
         private static void OnKeywordChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             var control = obj as SearchUserControl;
+            control.UpdateTargetPredicate();
+
             var value = e.NewValue as string;
             if (string.IsNullOrEmpty(value))
                 control.clear.Visibility = Visibility.Collapsed;
             else
                 control.clear.Visibility = Visibility.Visible;
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                if (control.Target != null)
-                {
-                    if (control.Target.FilterDescriptors.Count == 0)
-                        control.Target.FilterDescriptors.Add(new FilterDescriptor<object>
-                        {
-                            FilteringExpression = _ => control.Predicate(_)
-                        });
-                    else
-                        control.Target.FilterDescriptors.Reset();
-                }
-            }
-
-            if (string.IsNullOrEmpty(value) && control.FilterOrders.Length == 0)
-            {
-                control.Target?.FilterDescriptors.Clear();
-            }
         }
 
         #endregion
@@ -107,21 +97,7 @@ namespace FAT.Application.Views
         private static void OnFilterOrdersChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             var control = obj as SearchUserControl;
-            var value = e.NewValue as int[];
-
-            if (control.Target != null)
-            {
-                if (control.Target.FilterDescriptors.Count == 0)
-                    control.Target.FilterDescriptors.Add(new FilterDescriptor<object>
-                    {
-                        FilteringExpression = _ => control.Predicate(_)
-                    });
-                else
-                    control.Target.FilterDescriptors.Reset();
-            }
-
-            if (value.Length == 0 && string.IsNullOrEmpty(control.Keyword))
-                control.Target.FilterDescriptors.Clear();
+            control.UpdateTargetPredicate();
         }
 
         #endregion
@@ -145,6 +121,24 @@ namespace FAT.Application.Views
         }
 
         #endregion
+
+        private void UpdateTargetPredicate()
+        {
+            if (Target == null)
+                return;
+
+            if (Target.FilterDescriptors.Count == 0)
+                Target.FilterDescriptors.Add(new FilterDescriptor<object>
+                {
+                    FilteringExpression = _ => Predicate(_)
+                });
+            else
+                Target.FilterDescriptors.Reset();
+
+            if (string.IsNullOrEmpty(Keyword) && (FilterOrders == null || FilterOrders.Length == 0))
+                Target.FilterDescriptors.Clear();
+        }
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

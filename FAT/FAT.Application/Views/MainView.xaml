@@ -509,7 +509,7 @@
         </TextBlock>
 
         <Border Height="1" Background="#FFF3F3F3" Grid.Row="2" />
-        <Border Grid.Row="3" Height="48"  Background="White" >
+        <Border Grid.Row="3" Height="46"  Background="White" >
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock  Text="Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
                 <TextBlock Cursor="Hand">

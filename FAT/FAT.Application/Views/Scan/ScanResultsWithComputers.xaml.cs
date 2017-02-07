@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 using FAT.Application.Extensions;
 using FAT.Application.Messages;
+using System.Collections.Generic;
 
 namespace FAT.Application
 {
@@ -22,85 +24,7 @@ namespace FAT.Application
 
         private MainViewViewModel ViewModel
         {
-            get { return this.DataContext as MainViewViewModel; }
-        }
-
-        private void menu_Opened(object sender, RoutedEventArgs e)
-        {
-            RadContextMenu menu = (RadContextMenu)sender;
-            var cell = menu.GetClickedElement<GridViewCell>();
-            if (cell != null && !cell.IsSelected)
-            {
-                cell.IsSelected = true;
-                cell.IsCurrent = true;
-
-                treeList.SelectedItem = cell.DataContext;
-            }
-            ViewModel.SelectedItems = ViewModel.SelectedItems;
-        }
-
-        private void item_Click(object sender, RoutedEventArgs e)
-        {
-            if (treeList.SelectedItem != null)
-            {
-                var item = treeList.SelectedItem as ThreatInfoItem;
-                if (ViewModel.SelectedItems != null && ViewModel.SelectedItems.Count == 1 &&
-                    !ViewModel.SelectedItems[0].IsComptuer && ViewModel.SelectedItems[0] == item)
-                {
-                    ThreatDetailsWindow details = new ThreatDetailsWindow();
-                    details.Owner = System.Windows.Application.Current.MainWindow;
-                    details.ShowDialog();
-                }
-            }
-        }
-
-        private ThreatInfoItem GetDataBoundItem(FrameworkElement element)
-        {
-            if (element == null)
-            {
-                return null;
-            }
-
-            if (element.Parent == null)
-            {
-                return null;
-            }
-
-            FrameworkElement parent = (FrameworkElement)element.Parent;
-            if (parent == null)
-            {
-                return null;
-            }
-
-            parent = (FrameworkElement)parent.Parent;
-            if (parent == null)
-            {
-                return null;
-            }
-
-            return parent.DataContext as ThreatInfoItem;
-        }
-
-        private void OnTreeDoubleClick(Object sender, MouseButtonEventArgs e)
-        {
-            if (e.OriginalSource != null)
-            {
-                FrameworkElement element = e.OriginalSource as FrameworkElement;
-                if (element == null)
-                {
-                    return;
-                }
-
-                ThreatInfoItem item = GetDataBoundItem(element);
-                if (ViewModel.SelectedItems != null && ViewModel.SelectedItems.Count == 1 &&
-                    !ViewModel.SelectedItems[0].IsComptuer && ViewModel.SelectedItems[0] == item)
-                {
-                    ViewModel.SelectedItem = item;
-                    ThreatDetailsWindow details = new ThreatDetailsWindow();
-                    details.Owner = System.Windows.Application.Current.MainWindow;
-                    details.ShowDialog();
-                }
-            }
+            get { return DataContext as MainViewViewModel; }
         }
 
         private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
@@ -118,7 +42,45 @@ namespace FAT.Application
                 ViewModel.SelectedItems.Add(item);
             foreach (ThreatInfoItem item in e.RemovedItems)
                 ViewModel.SelectedItems.Remove(item);
+            ViewModel.SelectedItems = ViewModel.SelectedItems;
+        }
 
+        private void treeList_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var element = e.OriginalSource as FrameworkElement;
+            var cell = element.GetVisualParent<GridViewCell>();
+            if (cell != null && !cell.IsSelected)
+            {
+                cell.IsSelected = true;
+                cell.IsCurrent = true;
+                treeList.SelectedItem = cell.DataContext;
+
+                ViewModel.SelectedItems = new List<ThreatInfoItem>(new[] { cell.DataContext as ThreatInfoItem });
+            }
+        }
+
+        private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ViewModel.SelectedItems.Count == 1 && !ViewModel.SelectedItem.IsComputer)
+            {
+                var details = new ThreatDetailsWindow();
+                details.Owner = App.Current.MainWindow;
+                details.ShowDialog();
+            }
+        }
+
+        private void menu_Opened(object sender, RoutedEventArgs e)
+        {
+            var menu = sender as RadContextMenu;
+            if (!menu.Items.OfType<RadMenuItem>().Any(_ => _.Command.CanExecute(null)))
+                menu.IsOpen = false;
+        }
+
+        private void item_Click(object sender, RoutedEventArgs e)
+        {
+            var details = new ThreatDetailsWindow();
+            details.Owner = App.Current.MainWindow;
+            details.ShowDialog();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -137,6 +99,7 @@ namespace FAT.Application
             item.Command = ViewModel.SelectMultipleCommand;
             item.Click += item_Click;
             AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
+            item.SetVisibilityBinding();
             menu.Items.Add(item);
 
             item = new RadMenuItem();
@@ -162,5 +125,4 @@ namespace FAT.Application
             AppMessages.FilterMessage.Send(ChangeScreenTypes.FilterTarget, _ => _.Target = treeList);
         }
     }
-
 }

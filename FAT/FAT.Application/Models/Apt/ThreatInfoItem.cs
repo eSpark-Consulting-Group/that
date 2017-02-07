@@ -221,18 +221,19 @@ namespace FAT.Application.Models
 
         public Boolean Failed
         {
-            get
-            {
-                return !IsUnknown && !IsMalware && !Clean;
-            }
+            get;set;
         }
 
+        public bool HasClean
+        {
+            get { return ScanStage == ScanStage.OperationCompleted && !HasBadFiles; }
+        }
 
         public Boolean HasMalwares
         {
             get
             {
-                return MalwareFilesCount > 0;
+                return ScanStage == ScanStage.OperationCompleted && MalwareFilesCount > 0;
             }
         }
 
@@ -240,19 +241,27 @@ namespace FAT.Application.Models
         {
             get
             {
-                return MalwareFilesCount == 0 && UnknownFilesCount > 0;
+                return ScanStage == ScanStage.OperationCompleted && MalwareFilesCount == 0 && UnknownFilesCount > 0;
             }
         }
 
-        public Boolean HasFailed
+        public bool HasFailed
         {
             get
             {
-                return MalwareFilesCount == 0 && UnknownFilesCount == 0 && HasBadFiles;
+                return ScanStage == ScanStage.OperationFailed || (ScanStage == ScanStage.OperationCompleted && FailedToAnalyzeCount > 0);
             }
         }
 
-        public Boolean IsComptuer { get; set; }
+        public Boolean HasPending
+        {
+            get
+            {
+                return ScanStage == ScanStage.OperationCompleted && LookupInProgress > 0;
+            }
+        }
+
+        public Boolean IsComputer { get; set; }
 
         public Boolean IsOnline { get; set; }
 
@@ -331,7 +340,7 @@ namespace FAT.Application.Models
                     return new ScanStatus(ScanStatusEnum.Canceled);
                 }
 
-                return new ScanStatus(IsComptuer ? ScanStatusEnum.InProgress : ScanStatusEnum.Child);
+                return new ScanStatus(IsComputer ? ScanStatusEnum.InProgress : ScanStatusEnum.Child);
             }
         }
 
@@ -352,6 +361,12 @@ namespace FAT.Application.Models
                 RaisePropertyChanged("ScanStage");
                 RaisePropertyChanged("ScanStatus");
                 RaisePropertyChanged("ScanCompleted");
+
+                RaisePropertyChanged(nameof(HasClean));
+                RaisePropertyChanged(nameof(HasMalwares));
+                RaisePropertyChanged(nameof(HasUnknowns));
+                RaisePropertyChanged(nameof(HasFailed));
+                RaisePropertyChanged(nameof(HasPending));
             }
         }
 
@@ -423,12 +438,12 @@ namespace FAT.Application.Models
 
         }
 
-        public Int32 LookupInProgress => FailedToAnalyzeCount + NoVerdictFilesCount;
+        public Int32 LookupInProgress => NoVerdictFilesCount;
         private string GetStatusMessage()
         {
 
             string errorCounterText = LookupInProgress > 0 ?
-                    $"Lookup in Progress {LookupInProgress}."
+                    $"In Analysis {LookupInProgress}."
                     : String.Empty;
 
 
@@ -437,18 +452,18 @@ namespace FAT.Application.Models
                 string message;
                 if (LookupInProgress > 0)
                 {
-                    message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. Lookup in Progress: {LookupInProgress}";
+                    message = $"Completed: Total scanned: {TotalFilesCount}. Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. In Analysis: {LookupInProgress}";
                 }
                 else
                 {
-                    message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}.";
+                    message = $"Completed: Total scanned: {TotalFilesCount}. Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}.";
                 }
                 return message;
             }
             else
             {
                 return
-                    $"{TotalFilesCount} files scanned ({$"{ProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown files: {UnknownFilesCount}. Malicious files: {MalwareFilesCount}. {errorCounterText}";
+                    $"{TotalFilesCount} scanned ({$"{ProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. {errorCounterText}";
             }
 
 
@@ -469,8 +484,9 @@ namespace FAT.Application.Models
                 _unknownFilesCount = value;
                 RaisePropertyChanged(nameof(UnknownFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasUnknowns));
-                RaisePropertyChanged(nameof(HasFailed));
+                RaisePropertyChanged(nameof(HasPending));
             }
         }
 
@@ -487,9 +503,10 @@ namespace FAT.Application.Models
                 _malwareFilesCount = value;
                 RaisePropertyChanged(nameof(MalwareFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasMalwares));
                 RaisePropertyChanged(nameof(HasUnknowns));
-                RaisePropertyChanged(nameof(HasFailed));
+                RaisePropertyChanged(nameof(HasPending));
             }
         }
 
@@ -522,7 +539,9 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(FailedToAnalyzeCount));
                 RaisePropertyChanged(nameof(LookupInProgress));
                 RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasFailed));
+                RaisePropertyChanged(nameof(HasPending));
             }
         }
 
@@ -540,7 +559,8 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(NoVerdictFilesCount));
                 RaisePropertyChanged(nameof(LookupInProgress));
                 RaisePropertyChanged(nameof(HasBadFiles));
-                RaisePropertyChanged(nameof(HasFailed));
+                RaisePropertyChanged(nameof(HasClean));
+                RaisePropertyChanged(nameof(HasPending));
             }
         }
 
@@ -606,7 +626,7 @@ namespace FAT.Application.Models
             Name = deploymentTarget.Name;
             IpAddress = deploymentTarget.IPAddress;
             IsLocal = deploymentTarget.IsLocalComputer;
-            IsComptuer = true;
+            IsComputer = true;
             IsOnline = deploymentTarget.IsOnline;
             ComputerGuid = deploymentTarget.Uid;
             LdapPath = deploymentTarget.LdapPath;
@@ -618,11 +638,11 @@ namespace FAT.Application.Models
             Size = badFile.Size;
             SizeSorting = badFile.SizeSorting;
             SizeString = badFile.FileSizeFormatted;
-            IsComptuer = false;
+            IsComputer = false;
             IsOnline = true;
             ScanStage = ScanStage.OperationCompleted;
             BadFile = badFile;
-            _valkyrieVerdict = ValkyrieVerdict.PendingFls;;
+            _valkyrieVerdict = ValkyrieVerdict.PendingFls;
             if (!string.IsNullOrEmpty(badFile.Product))
                 ShortName = $"{Path.GetFileName(badFile.Name)} ({badFile.Product})";
             else
@@ -648,7 +668,7 @@ namespace FAT.Application.Models
 
         public void UpdateVerdictForFiles(FileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff)
         {
-            if (!IsComptuer) throw new NotSupportedException();
+            if (!IsComputer) throw new NotSupportedException();
             foreach (var verdictContext in fileVerdictContext)
             {
                 ThreatInfoItem item;
@@ -697,8 +717,8 @@ namespace FAT.Application.Models
 
         public void AddFile(ThreatInfoItem threatInfoItem)
         {
-            if (!IsComptuer) throw new NotSupportedException();
-            if (threatInfoItem.IsComptuer) throw new ArgumentException();
+            if (!IsComputer) throw new NotSupportedException();
+            if (threatInfoItem.IsComputer) throw new ArgumentException();
             var shouldRaise = Items.Count == 0;
             Items.Add(threatInfoItem);
             _itemsDict.Add(threatInfoItem.BadFile.Sha1,threatInfoItem);

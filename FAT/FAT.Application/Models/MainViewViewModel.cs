@@ -140,107 +140,10 @@ namespace FAT.Application.Models
 
         public bool Loaded { get; set; }
 
-        #region 4 Tests
 
-        public bool HasMalwares { get; set; }
-        public bool HasUnknowns { get; set; }
-
-        //private void SimulateCounterActivity()
-        //{
-        //    var testTimer = new DispatcherTimer();
-        //    testTimer.Interval = TimeSpan.FromSeconds(1);
-        //    testTimer.Tick += (o, e) =>
-        //    {
-        //        if (Percentage == 90)
-        //            Set(() => Percentage, 15);
-        //        else
-        //            Set(() => Percentage, Percentage + 15);
-
-        //        if (!HasMalwares && !HasUnknowns)
-        //            Set(() => HasMalwares, true);
-        //        else if (HasMalwares)
-        //        {
-        //            Set(() => HasMalwares, false);
-        //            Set(() => HasUnknowns, true);
-        //        }
-        //        else if (HasUnknowns)
-        //            Set(() => HasUnknowns, false);
-
-
-        //        _scanCounterManager.AddClean();
-
-        //        if (Percentage == 30)
-        //        {
-        //            _scanCounterManager.AddPending();
-        //        }
-        //        if (Percentage == 45)
-        //        {
-        //            _scanCounterManager.AddPending(-1);
-        //            _scanCounterManager.AddMalware();
-        //        }
-        //        if (Percentage == 60)
-        //        {  
-        //            _scanCounterManager.AddFailed();
-        //        }
-        //        if (Percentage == 75)
-        //        {
-        //            _scanCounterManager.AddPending();     
-        //        }
-        //        if (Percentage == 90)
-        //        {
-        //            _scanCounterManager.AddPending(-1);
-        //            _scanCounterManager.AddUnknown();
-        //        }
-
-        //    };
-        //    testTimer.Start();
-        //}
-
-        //private void SeedComputers()
-        //{
-        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", IsComptuer = true, ScanStage = ScanStage.OperationCompleted });
-        //    Computers.Add(new ThreatInfoItem
-        //    {
-        //        IsOnline = true,
-        //        IpAddress = "10.100.65.11",
-        //        Name = "EUGENET-PC",
-        //        IsComptuer = true,
-        //        ScanStage = ScanStage.OperationCompleted,
-        //        UnknownFilesCount = 1,
-        //        Items = new ObservableCollection<ThreatInfoItem>(new[]
-        //    {
-        //        new ThreatInfoItem { Name = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true },
-        //        new ThreatInfoItem{ Name = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true },
-        //        new ThreatInfoItem{ Name = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true },
-        //        new ThreatInfoItem{ Name = "application.exe", SizeString = "1 MB", IsOnline = true  }
-        //    })
-        //    });
-        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, FailedToAnalyzeCount = 1 });
-        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationCompleted, MalwareFilesCount = 1 });
-        //    Computers.Add(new ThreatInfoItem { IsOnline = true, IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", ScanStage = ScanStage.OperationFailed });
-        //    Computers.Add(new ThreatInfoItem { IsComptuer = true, IpAddress = "10.100.65.11", Name = "EUGENET-PC", });
-        //}
-
-        //private void SeedFiles()
-        //{
-        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", Clean = true, SizeString = "1 MB", IsOnline = true, Computers =
-        //        new ObservableCollection<ThreatInfoItem>(new[]
-        //    {
-        //        new ThreatInfoItem { Name = "EUGENET-PC", IpAddress = "10.100.65.11", IsOnline = true, IsComptuer = true,ScanStage = ScanStage.OperationCompleted },
-        //    })});
-        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsMalware = true, SizeString = "1 MB", IsOnline = true });
-        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", IsUnknown = true, SizeString = "1 MB", IsOnline = true });
-        //    Files.Add(new ThreatInfoItem { ShortName = "application.exe", SizeString = "1 MB", IsOnline = true });
-        //}
-
-        #endregion
 
         private async void OnLoaded()
         {
-            //SimulateCounterActivity();
-            //SeedComputers();
-            //SeedFiles();
-
             Set(() => Loaded, true);
 
             var name = await TryAction(GetCurrentDomainName());
@@ -385,12 +288,12 @@ namespace FAT.Application.Models
 
         public Boolean IsDetailsEnabled
         {
-            get { return SelectedItem != null && !SelectedItem.IsComptuer; }
+            get { return SelectedItem != null && !SelectedItem.IsComputer; }
         }
 
         public Boolean IsMultipleDetailsEnabled
         {
-            get { return SelectedItems != null && SelectedItems.Count == 1 && !SelectedItems[0].IsComptuer; }
+            get { return SelectedItems != null && SelectedItems.Count == 1 && !SelectedItems[0].IsComputer; }
         }
 
 
@@ -398,9 +301,9 @@ namespace FAT.Application.Models
         {
             get
             {
-                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComptuer &&
+                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComputer &&
                   (_.ScanStage == ScanStage.ScanFailed ||
-                  _.ScanStage == ScanStage.OperationFailed ||
+                  (_.ScanStage == ScanStage.OperationFailed) ||
                   _.ScanStage == ScanStage.OperationCanceled));
             }
         }
@@ -409,8 +312,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComptuer &&
-                  (_.ScanStage == ScanStage.ScanInProgress));
+                return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComputer && _.ScanStage == ScanStage.ScanInProgress);
             }
         }
 
@@ -442,7 +344,6 @@ namespace FAT.Application.Models
                 }
 
                 RaisePropertyChanged(nameof(SelectedItem));
-                RaisePropertyChanged(nameof(IsDetailsEnabled));
 
                 SelectCommand.InvalidateCanExecute();
             }
@@ -501,7 +402,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return _scanCounterManager.Collection;
+                return _scanCounterManager.CounterCollection;
             }
         }
 
@@ -574,11 +475,7 @@ namespace FAT.Application.Models
             _targetsDiscoveryService = targetsDiscoveryService;
             _scanIterator = new Dictionary<Guid, ScanProgressItem>();
             _scanCounterManager = new ScanCounterManager();
-            _scanCounterManager.SelectionChanged = () =>
-                Set(() => FilterOrders,
-                    _scanCounterManager.Collection.
-                        Where(_ => _.IsSelected).
-                            Select(_ => _.Order).ToArray());
+            _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher)
             {
                 Interval = TimeSpan.FromMilliseconds(500d)
@@ -655,7 +552,7 @@ namespace FAT.Application.Models
             var items = new List<ThreatInfoItem>();
             foreach (var item in SelectedItems)
             {
-                if (item.IsComptuer &&
+                if (item.IsComputer &&
                     (item.ScanStage == ScanStage.ScanFailed ||
                     item.ScanStage == ScanStage.OperationFailed ||
                     item.ScanStage == ScanStage.OperationCanceled))
@@ -690,8 +587,7 @@ namespace FAT.Application.Models
             var items = new List<ThreatInfoItem>();
             foreach (var item in SelectedItems)
             {
-                if (item.IsComptuer &&
-                    (item.ScanStage == ScanStage.ScanInProgress))
+                if (item.IsComputer && item.ScanStage == ScanStage.ScanInProgress)
                 {
                     items.Add(item);
                 }
@@ -1074,7 +970,7 @@ namespace FAT.Application.Models
                                 ComputerGuid = infoItem.ComputerGuid,
                                 Name = infoItem.Name,
                                 ShortName = item.Name,
-                                IsComptuer = true
+                                IsComputer = true
                             };
                             if (exist != null)
                                 exist.Computers.Add(comp);
@@ -1200,24 +1096,26 @@ namespace FAT.Application.Models
         {
             get
             {
-                return _ =>
+                return item =>
                 {
-                    if (_ == null)
+                    if (item == null)
                         return false;
+
+                    var o = item as ThreatInfoItem;
+                    int[] orders = FilterOrders.ToArray();
+                    bool hasOrders = !orders.Any();
 
                     if (GroupByComputers)
                     {
-                        var o = _ as ThreatInfoItem;
-                        if (o.IsComptuer)
-                        {
-                            bool hasOrders = !FilterOrders.Any();
-                            foreach (int order in FilterOrders)
+                        if (o.IsComputer)
+                        {   
+                            foreach (int order in orders)
                             {
-                                if ((!o.HasBadFiles && order == 1 && o.ScanStage == ScanStage.OperationCompleted) ||
-                                    (o.HasMalwares && order == 2 && o.ScanStage == ScanStage.OperationCompleted) ||
-                                    (o.HasUnknowns && order == 3 && o.ScanStage == ScanStage.OperationCompleted) ||
-                                    (o.ScanStage == ScanStage.OperationFailed && order == 4) ||
-                                    (o.HasFailed && order == 5))
+                                if ((o.HasClean && order == (int)CounterOrder.Clean) ||
+                                    (o.HasMalwares && order == (int)CounterOrder.Malware) ||
+                                    (o.HasUnknowns && order == (int)CounterOrder.Unknown) ||
+                                    (o.HasFailed && order == (int)CounterOrder.NotAnalyzed) ||
+                                    (o.HasPending && order == (int)CounterOrder.InProgress))
                                 {
                                     hasOrders = true;
                                     break;
@@ -1226,22 +1124,20 @@ namespace FAT.Application.Models
 
                             return hasOrders && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
                         }
-                        else if (!FilterOrders.Any() && string.IsNullOrEmpty(Keyword))
+                        else if (!orders.Any() && string.IsNullOrEmpty(Keyword))
                             return true;
                     }
-
-                    if (GroupByFiles)
+                    else if (GroupByFiles)
                     {
-                        var o = _ as ThreatInfoItem;
-                        if (!o.IsComptuer)
+                        if (!o.IsComputer)
                         {
-                            bool hasOrders = !FilterOrders.Any();
-                            foreach (int order in FilterOrders)
+                            foreach (int order in orders)
                             { 
-                                if ((o.Clean && order == 1) ||
-                                    (o.IsMalware && order == 2) ||
-                                    (o.IsUnknown && order == 3) ||
-                                    (o.Failed && order == 5))
+                                if ((o.Clean && order == (int)CounterOrder.Clean) ||
+                                    (o.IsMalware && order == (int)CounterOrder.Malware) ||
+                                    (o.IsUnknown && order == (int)CounterOrder.Unknown) ||
+                                    (o.Failed && order == (int)CounterOrder.NotAnalyzed) ||
+                                    (o.Pending && order == (int)CounterOrder.InProgress))
                                 {
                                     hasOrders = true;
                                     break;

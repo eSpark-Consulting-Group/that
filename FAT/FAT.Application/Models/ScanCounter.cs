@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 
 namespace FAT.Application.Models
 {
@@ -101,18 +103,20 @@ namespace FAT.Application.Models
     {
         private readonly Dictionary<int, ScanCounter> _counters;
         private readonly ScanCounterCollection _collection;
+        private Collection<int> _selected;
         private static object _sync = new object();
 
-        public Action SelectionChanged { get; set; }
+        public Action<int[]> SelectedOrdersChanged { get; set; }
 
         public ScanCounterManager()
         {
             _counters = new Dictionary<int, ScanCounter>();
             _collection = new ScanCounterCollection();
             _collection.ExternalEnumerator = () => GetCounters;
+            _selected = new Collection<int>();
         }
 
-        public ScanCounterCollection Collection
+        public ScanCounterCollection CounterCollection
         {
             get { return _collection; }
         }
@@ -130,7 +134,7 @@ namespace FAT.Application.Models
             if (count == 0) return;
             lock (_sync)
             {
-                var counter = new T { Count = count, SelectionChanged = _ => SelectionChanged?.Invoke() };
+                var counter = new T { Count = count, SelectionChanged = CounterSelectionChanged };
                 if (_counters.ContainsKey(counter.Order))
                     _counters[counter.Order].Count += count;
                 else if (count > 0)
@@ -139,6 +143,16 @@ namespace FAT.Application.Models
                     _collection.AddCollectionChanged(counter);
                 }
             }
+        }
+
+        private void CounterSelectionChanged(ScanCounter counter)
+        {
+            if (counter.IsSelected)
+                _selected.Add(counter.Order);
+            else
+                _selected.Remove(counter.Order);
+
+            SelectedOrdersChanged?.Invoke(_selected.ToArray());
         }
 
         private IEnumerable<ScanCounter> GetCounters
