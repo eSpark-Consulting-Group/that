@@ -1372,7 +1372,7 @@
                                 RelativeSource={RelativeSource Self}}" Value="True">
                             <Setter TargetName="Indicator" Property="Background" Value="#FFD54331"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding DataContext.HasUnknowns,
+                        <DataTrigger Binding="{Binding DataContext.HasUnknownsOnly,
                                 RelativeSource={RelativeSource Self}}" Value="True">
                             <Setter TargetName="Indicator" Property="Background" Value="#FFF9AD16"/>
                         </DataTrigger>

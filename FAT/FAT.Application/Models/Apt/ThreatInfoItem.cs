@@ -24,11 +24,11 @@ namespace FAT.Application.Models
 
     public enum UiFinalVerdict
     {
-        Clean,
-        Unknown,
+        Clean = 1,
         Malware,
+        Unknown,
+        NotAnalyse,
         InAnalysis,
-        NotAnalyse
     }
 
 

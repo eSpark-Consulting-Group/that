@@ -226,9 +226,17 @@ namespace FAT.Application.Models
 
         public bool HasMalwares { get; set; }
 
-        public bool HasUnknowns { get; set; }
+        public bool HasUnknownsOnly { get; set; }
 
-        public Double Percentage { get; set; }
+        public Double Percentage    
+        {
+            get { return _percentage; }
+            set
+            {
+                _percentage = value;
+                RaisePropertyChanged(nameof(Percentage));
+            }
+        }
 
         public String Header
         {
@@ -401,6 +409,7 @@ namespace FAT.Application.Models
 
         private bool _groupByComputers = true;
         private ObservableCollection<ThreatInfoItem> _computers = new ObservableCollection<ThreatInfoItem>();
+        private double _percentage;
 
         public bool GroupByComputers
         {
@@ -927,14 +936,12 @@ namespace FAT.Application.Models
             _scanCounterManager.UpdateCounters(counterDiff);
 
 
-            if (!HasUnknowns)
-                Set(() => HasUnknowns, _scanCounterManager.CounterCollection
+            Set(() => HasMalwares, _scanCounterManager.CounterCollection
+                    .Any(c => c.OrderAsEnum == UiFinalVerdict.Malware && c.Count > 0));
+            Set(() => HasUnknownsOnly, !HasMalwares && _scanCounterManager.CounterCollection
                     .Any(c => (c.OrderAsEnum == UiFinalVerdict.Unknown && c.Count > 0) ||
                         (c.OrderAsEnum == UiFinalVerdict.InAnalysis && c.Count > 0)
                         || (c.OrderAsEnum == UiFinalVerdict.NotAnalyse && c.Count > 0)));
-            if (!HasMalwares)
-                Set(() => HasMalwares, _scanCounterManager.CounterCollection
-                    .Any(c => c.OrderAsEnum == UiFinalVerdict.Malware && c.Count > 0));
 
             //if (completed != OnlineItemsCount)
             _scanIteratorTimer.Start();
