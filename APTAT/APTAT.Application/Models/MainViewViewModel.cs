@@ -21,6 +21,7 @@ using APTAT.Application.Models.ModelBase;
 using APTAT.Application.Models.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using System.Collections.Concurrent;
+using APTAT.Core.Apt;
 using APTAT.Core.FLS;
 
 
@@ -852,7 +853,7 @@ namespace APTAT.Application.Models
             _aptService.FlsAnalyzeProgressChanged += OnFlsAnalyzeProgressChanged;
         }
 
-        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs<IFlsResult> e)
+        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs<IAptVerdictContext> e)
         {
             if (e.Exception != null) return;
 

@@ -185,7 +185,7 @@ namespace APTAT.Core.Apt
 
         private List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IAptScanResult[] results)
         {
-            return _distinctHelper.GetDistinctUknownFileInfo(results);
+            return _distinctHelper.GetDistinctFileInfo(results);
         }
 
         public IAptScanner GetAptScanner(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)

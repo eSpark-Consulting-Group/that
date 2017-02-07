@@ -16,5 +16,6 @@ namespace APTAT.Common
         void RegisterModules(IEnumerable<Type> moduleTypes);
 
         T Resolve<T>() where T : class;
+        void AllowOverridingRegistrations(bool allow);
     }
 }

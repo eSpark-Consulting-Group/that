@@ -11,6 +11,8 @@ using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using System.Collections.Generic;
+using APTAT.Core.Apt;
+using APTAT.Core.FLS;
 
 namespace APTAT.Application.Services
 {
@@ -25,7 +27,7 @@ namespace APTAT.Application.Services
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
         public event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
         public event EventHandler ValkyrieAnalyzeStarted;
-        public event EventHandler<FlsRequestEventArgs> FlsAnalyzeProgressChanged;
+        public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
         private IAptAtManager _manager;
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
         public Guid SessionId
@@ -42,7 +44,7 @@ namespace APTAT.Application.Services
 
         }
 
-        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs e)
+        private void OnFlsAnalyzeProgressChanged(object sender, FlsRequestEventArgs<IAptVerdictContext> e)
         {
             Action action = () =>
             {

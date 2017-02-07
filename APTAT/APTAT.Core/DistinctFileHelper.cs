@@ -3,14 +3,28 @@ using APTAT.Valkyrie;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 
 namespace APTAT.Core
 {
-    
+    public class FATFileFilter : DistinctFileHelper
+    {
+        protected override bool Filter(IModule module)
+        {
+            return module.Cloud == CloudVerdict.Unknown || module.Cloud == CloudVerdict.FirstSeen || module.Cloud == CloudVerdict.Malware;
+        }
+    }
+
+
     public class DistinctFileHelper : IDistinctFileHelper
     {
-        public List<ValkyrieFileInfo> GetDistinctUknownFileInfo(IAptScanResult[] results)
+        protected virtual bool Filter(IModule module)
+        {
+            return module.Cloud == CloudVerdict.Unknown || module.Cloud == CloudVerdict.FirstSeen;
+        }
+
+        public List<ValkyrieFileInfo> GetDistinctFileInfo(IAptScanResult[] results)
         {
             IAptScanResult[] scanResults = results.OrderByDescending(r => r.Computer.IsLocalComputer)
                 .ToArray();
@@ -18,7 +32,7 @@ namespace APTAT.Core
             Dictionary<string, ValkyrieFileInfo> files = new Dictionary<string, ValkyrieFileInfo>(StringComparer.OrdinalIgnoreCase);
             foreach (var scanResult in scanResults)
             {
-                var modules = scanResult.GetUnknownFiles();
+                var modules = scanResult.Files.Where(Filter);
 
                 foreach (var badFile in modules)
                 {

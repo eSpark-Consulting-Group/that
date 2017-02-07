@@ -15,6 +15,7 @@ using System.Net;
 using APTAT.DeploymentCore;
 using System.Collections.ObjectModel;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace APTAT.Application.Services
 {
@@ -118,6 +119,8 @@ namespace APTAT.Application.Services
 
         public string GetLoggedInUser()
         {
+            
+
             if (!String.IsNullOrEmpty(Environment.UserDomainName))
             {
                 return Environment.UserDomainName + "\\" + Environment.UserName;

@@ -86,5 +86,10 @@ namespace APTAT.Common
         {
             return _container.GetInstance<T>();
         }
+
+        public void AllowOverridingRegistrations(bool allow)
+        {
+            _container.Options.AllowOverridingRegistrations = allow;
+        }
     }
 }

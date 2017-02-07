@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
@@ -15,7 +12,7 @@ using Telerik.JustMock;
 using Xunit;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using APTAT.Core.Descent;
-using Telerik.JustMock.Helpers;
+using APTAT.Core.FLS;
 
 namespace APTAT.Core.UnitTests
 {
@@ -61,7 +58,7 @@ namespace APTAT.Core.UnitTests
             aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
             Mock.Raise(() => fls.FlsAnalyzed += null, args: new object[]
             {
-                new FlsRequestEventArgs(new IFlsResult[] {new FlsResult {Sha1="", Cloud=CloudVerdict.Unknown } }, null)}
+                new FlsRequestEventArgs<IFlsResult>(new IFlsResult[] {new FlsResult {Sha1="", Cloud=CloudVerdict.Unknown } }, null)}
             );
 
 
@@ -450,15 +447,15 @@ namespace APTAT.Core.UnitTests
             aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
             bool flsAnalyzeProgressChangedEventCalled = false;
             Assert.Equal(Guid.Empty, aptAtManagerUnderTest.FlsLookupOperationUid);
-            EventHandler<FlsRequestEventArgs> handler = (sender, args) =>
+            
+
+            aptAtManagerUnderTest.FlsAnalyzeProgressChanged += (sender, args) =>
             {
                 Assert.Null(args.Exception);
                 Assert.True(args.Results.Count() == scanResultSafe.Files.Count());
                 Assert.All(args.Results, (r) => Assert.Equal(CloudVerdict.Safe, r.Cloud));
                 flsAnalyzeProgressChangedEventCalled = true;
             };
-
-            aptAtManagerUnderTest.FlsAnalyzeProgressChanged += handler;
 
 
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(operationGuid, scanResultFailedToAnalyze) });
@@ -477,7 +474,7 @@ namespace APTAT.Core.UnitTests
             }
             Assert.Empty(aptAtManagerUnderTest.ValkyrieAnalysisResult);
             Assert.Equal(Guid.Empty, aptAtManagerUnderTest.ValkyrieOperationUid);
-            aptAtManagerUnderTest.FlsAnalyzeProgressChanged -= handler;
+        
 
 
         }
@@ -530,7 +527,7 @@ namespace APTAT.Core.UnitTests
             aptAtManagerUnderTest.GetAptScanner(dts2, description, scanOptions);
             bool flsAnalyzeProgressChangedEventCalled = false;
 
-            EventHandler<FlsRequestEventArgs> handler = (sender, args) =>
+            EventHandler<FlsRequestEventArgs<IAptVerdictContext>> handler = (sender, args) =>
             {
                 flsAnalyzeProgressChangedEventCalled = true;
             };
@@ -567,12 +564,10 @@ namespace APTAT.Core.UnitTests
             aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
             bool flsAnalyzeProgressChangedEventCalled = false;
 
-            EventHandler<FlsRequestEventArgs> handler = (sender, args) =>
-            {
-                flsAnalyzeProgressChangedEventCalled = true;
-            };
-
-            aptAtManagerUnderTest.FlsAnalyzeProgressChanged += handler;
+            aptAtManagerUnderTest.FlsAnalyzeProgressChanged += (sender, args) =>
+           {
+               flsAnalyzeProgressChangedEventCalled = true;
+           };
 
             Guid guid = new Guid("C2630D90-9CCE-4C94-A452-4EAE4DE78863");
 
@@ -611,7 +606,7 @@ namespace APTAT.Core.UnitTests
 
             bool flsAnalyzeProgressChangedEventCalled = false;
 
-            EventHandler<FlsRequestEventArgs> handler = (sender, args) =>
+            EventHandler<FlsRequestEventArgs<IAptVerdictContext>> handler = (sender, args) =>
             {
                 flsAnalyzeProgressChangedEventCalled = true;
             };
@@ -747,7 +742,7 @@ namespace APTAT.Core.UnitTests
 
 
             DistinctFileHelper helper = new DistinctFileHelper();
-            var result = helper.GetDistinctUknownFileInfo(new[] { scanResult, scanResult2 });
+            var result = helper.GetDistinctFileInfo(new[] { scanResult, scanResult2 });
             Assert.NotNull(result);
             Assert.NotEmpty(result);
             Assert.Equal(5, result.Count);
