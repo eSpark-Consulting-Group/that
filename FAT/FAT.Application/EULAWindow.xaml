@@ -87,7 +87,7 @@
                                 <Border  Grid.Row="7" VerticalAlignment="Bottom"  Background="White">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Content="Cancel"  Margin="0,15,5,15" Click="NoClick" Height="32" Template="{StaticResource BackButton}" Foreground="Black"></Button>
-                                        <Button Content="I AGREE"  Margin="5,15,15,15" Click="YesClick" Height="32" Command="{Binding ChangeScreenCommand}"></Button>
+                                        <Button Content="I AGREE"  Margin="5,15,15,15" Click="YesClick" Height="32" Command="{Binding OnLoadedCommand}"></Button>
                                     </StackPanel>
                                 </Border>
                             </Grid>

@@ -96,7 +96,7 @@ namespace FAT.Application
 
             var item = new RadMenuItem();
             item.CreateDetailsHeader();
-            item.Command = ViewModel.SelectMultipleCommand;
+            item.Command = ViewModel.SelectCommand;
             item.Click += item_Click;
             AutomationProperties.SetAutomationId(item, "DetailsContextMenuItem");
             item.SetVisibilityBinding();

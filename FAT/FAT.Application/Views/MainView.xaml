@@ -78,10 +78,11 @@
 
             <ProgressBar VerticalAlignment="Top" IsTabStop="false" Value="{Binding Percentage}" Background="#FF18C3A4" FocusVisualStyle="{x:Null}" Margin="0 -6 0 14" />
 
-            <Border x:Name="pr1" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Left" />
-            <Border x:Name="pr2" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Right" />
+            <Border x:Name="pr1" SnapsToDevicePixels="True" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Left" />
+            <Border x:Name="pr2" SnapsToDevicePixels="True" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Right" />
 
-            <ListBox Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" x:Name="list" BorderThickness="0" Grid.Row="1" Padding="0" Margin="32, 0,32,20" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters}}" >
+            <ListBox Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" x:Name="list" BorderThickness="0" 
+                     Grid.Row="1" Padding="0" Margin="32, 0,32,20" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters}}" >
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"></StackPanel>
@@ -92,11 +93,11 @@
                         <Setter Property="MinHeight" Value="104" />
                         <Setter Property="Margin" Value="0" />
                         <Setter Property="Visibility" Value="{Binding Valid, Converter={converters:BoolToVisibilityConverter2}}" />
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border x:Name="Border" Background="#FF4C6F8A" SnapsToDevicePixels="True" Opacity="0" >
+                                    <Border x:Name="Border" Background="#FF4C6F8A" SnapsToDevicePixels="True">
                                         <Border.RenderTransform>
                                             <TranslateTransform x:Name="translate2" />
                                         </Border.RenderTransform>
@@ -134,22 +135,14 @@
                                             <Setter TargetName="Border" Property="Background" Value="#FF25A0DA" />
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Border" Property="Background">
-                                                <Setter.Value>
-                                                    <SolidColorBrush Color="#FF2A80B9" />
-                                                </Setter.Value>
-                                            </Setter>
+                                            <Setter TargetName="Border" Property="Background" Value="#FF2A80B9" />
                                         </Trigger>
                                         <MultiTrigger>
                                             <MultiTrigger.Conditions>
                                                 <Condition Property="IsSelected" Value="True" />
                                                 <Condition Property="Selector.IsSelectionActive" Value="True" />
                                             </MultiTrigger.Conditions>
-                                            <Setter TargetName="Border" Property="Background">
-                                                <Setter.Value>
-                                                    <SolidColorBrush Color="#FF25A0DA" />
-                                                </Setter.Value>
-                                            </Setter>
+                                            <Setter TargetName="Border" Property="Background" Value="#FF25A0DA" />
                                         </MultiTrigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -229,7 +222,7 @@
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type Models:FailedCounter}">
+                    <DataTemplate DataType="{x:Type Models:NotAnalyzedCounter}">
                         <Grid MinWidth="100">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -245,7 +238,7 @@
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type Models:PendingCounter}" >
+                    <DataTemplate DataType="{x:Type Models:InProgressCounter}" >
                         <Grid MinWidth="100">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -264,7 +257,7 @@
                 </ListBox.Resources>
             </ListBox>
 
-            <Button Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0" Command="{Binding StartScanCommand}">
+            <Button Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StartScanCommand}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -359,7 +352,7 @@
             </Grid>
 
             <Frame Source="{Binding Uri}" NavigationUIVisibility="Hidden" Grid.Row="3" FocusVisualStyle="{x:Null}" Margin="32 0 32 20"/>
-            <Border BorderThickness="1" BorderBrush="#FFDCE1E5" Grid.Row="2" Grid.RowSpan="2" Margin="32 0 32 20"/>
+            <Border BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#FFDCE1E5" Grid.Row="2" Grid.RowSpan="2" Margin="32 0 32 20"/>
 
         </Grid>
 
@@ -394,7 +387,6 @@
                                 </DoubleAnimationUsingKeyFrames>
                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="toolbar" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.5">
                                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1" >
-
                                     </EasingDoubleKeyFrame>
                                 </DoubleAnimationUsingKeyFrames>
                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="pr1" Storyboard.TargetProperty="MinWidth" BeginTime="0:0:0.2">
@@ -450,9 +442,9 @@
                                   Margin="0,-2,0,-3"  
                                   Padding="17,20,17,20"
                                   FontSize="16"
-                                   BorderThickness="0"
-                                   FocusVisualStyle="{x:Null}" 
-                                   IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                                  BorderThickness="0"
+                                  FocusVisualStyle="{x:Null}" 
+                                  IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
                                   Click="OptionsClick">
                     <telerik:RadButton.Content>
                         <Grid>
@@ -482,7 +474,7 @@
             </telerik:RadToolBar>
         </Grid>
 
-        <TextBlock x:Name="BusyContent" Opacity="0" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="Black" FontFamily="{StaticResource myriadpro}" Margin="32,0,0,0" FontSize="20">
+        <TextBlock x:Name="BusyContent" Opacity="0" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="Black" FontFamily="{StaticResource myriadpro}" Margin="32,0,0,0" FontSize="19">
             <TextBlock.RenderTransform>
                     <TranslateTransform x:Name="translate3" Y="-300" />
                 </TextBlock.RenderTransform>
@@ -505,7 +497,7 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </TextBlock.Triggers>
-            <Run Text="Scanning In Progress... "/><Run Text="{Binding Percentage}" /><Run Text="%"/> 
+            <Run Text="{Binding Header}" FontFamily="myriadpro" FontSize="19"/>
         </TextBlock>
 
         <Border Height="1" Background="#FFF3F3F3" Grid.Row="2" />

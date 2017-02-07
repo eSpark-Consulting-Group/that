@@ -139,9 +139,11 @@ namespace FAT.Application.Models
 
 
 
-        private async void OnLoaded()
+        private async void OnLoaded(object o)
         {
+
             Set(() => Loaded, true);
+            Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
 
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
@@ -231,11 +233,9 @@ namespace FAT.Application.Models
         {
             get
             {
-                var commonHeaderName = string.Empty;
-
                 string header = "Canceling...";
                 if (CancelInProgress)
-                    return String.Format("{0} ({1})", commonHeaderName, header);
+                    return header;
 
                 if (IsScanInProgress == true)
                 {
@@ -245,10 +245,10 @@ namespace FAT.Application.Models
                         header = "Finishing scan...";
                     else
                         header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
-                    return String.Format("{0} ({1})", commonHeaderName, header);
+                    return header;
                 }
 
-                return commonHeaderName;
+                return string.Empty;
             }
         }
 
@@ -270,11 +270,6 @@ namespace FAT.Application.Models
         public Boolean IsDetailsEnabled
         {
             get { return SelectedItem != null && !SelectedItem.IsComputer; }
-        }
-
-        public Boolean IsMultipleDetailsEnabled
-        {
-            get { return SelectedItems != null && SelectedItems.Count == 1 && !SelectedItems[0].IsComputer; }
         }
 
 
@@ -325,8 +320,6 @@ namespace FAT.Application.Models
                 }
 
                 RaisePropertyChanged(nameof(SelectedItem));
-
-                SelectCommand.InvalidateCanExecute();
             }
         }
 
@@ -341,11 +334,7 @@ namespace FAT.Application.Models
                 if (_selectedItems.Count == 1)
                     SelectedItem = _selectedItems[0];
 
-                RaisePropertyChanged(nameof(IsMultipleDetailsEnabled));
-                RaisePropertyChanged(nameof(IsRestartEnabled));
-                RaisePropertyChanged(nameof(IsStopEnabled));
-
-                SelectMultipleCommand.InvalidateCanExecute();
+                SelectCommand.InvalidateCanExecute();
                 RestartComputerScanCommand.InvalidateCanExecute();
                 RestartComputerScanWithCredentialsCommand.InvalidateCanExecute();
                 StopComputerScanCommand.InvalidateCanExecute();
@@ -435,13 +424,11 @@ namespace FAT.Application.Models
             }
         }
 
-        public DelegateCommand ChangeScreenCommand { get; private set; }
+        public DelegateCommand OnLoadedCommand { get; private set; }
         public DelegateCommand StartScanCommand { get; private set; }
         public DelegateCommand StopScanCommand { get; private set; }
-
         public DelegateCommand SelectCommand { get; private set; }
 
-        public DelegateCommand SelectMultipleCommand { get; private set; }
 
 
         public DelegateCommand RestartComputerScanCommand { get; private set; }
@@ -463,12 +450,7 @@ namespace FAT.Application.Models
             _scanIteratorTimer.Tick += IterateThroughScan;
             _storage = storage;
 
-            ChangeScreenCommand = new DelegateCommand(o =>
-            {
-                
-                OnLoaded();
-                Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
-            });
+            OnLoadedCommand = new DelegateCommand(OnLoaded);
 
             StartScanCommand = new DelegateCommand(o =>
                 AppMessages.ScanMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
@@ -478,7 +460,6 @@ namespace FAT.Application.Models
                 o => StopScanPredicate);
 
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
-            SelectMultipleCommand = new DelegateCommand(o => { }, o => IsMultipleDetailsEnabled);
 
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o =>
@@ -555,8 +536,9 @@ namespace FAT.Application.Models
             if (!IsScanInProgress.GetValueOrDefault())
             {
                 IsScanInProgress = true;
-                Percentage = 0;
                 IsReportEnabled = false;
+                Percentage = 0;
+                RaisePropertyChanged(nameof(Header));
             }
         }
 
@@ -583,7 +565,7 @@ namespace FAT.Application.Models
             Computers = new ObservableCollection<ThreatInfoItem>();
             RaisePropertyChanged(nameof(ScanCounters));
             RaisePropertyChanged(nameof(Files));
-            RaisePropertyChanged(nameof(Computers));
+ 
             
 
             _onlineItems = new ThreatInfoItem[0];
@@ -834,11 +816,10 @@ namespace FAT.Application.Models
             else
                 return;
             var operationResult = _aptService.GetModifiedComputerResultsForOperation(_operationGuid, _lastModifiesComputerDate);
-            var computers = operationResult
-                .Results.ToDictionary(c => c.TargetUid);
+            var computers = operationResult.Results.ToDictionary(c => c.TargetUid);
             if (!CancelInProgress)
             {
-                Set(() => Percentage, operationResult.Percentage);
+                Percentage = operationResult.Percentage;
                 RaisePropertyChanged(nameof(Header));
             }
             
@@ -886,7 +867,7 @@ namespace FAT.Application.Models
                         infoItem.StatusMessageSystem = scanProgress.StatusMessage;
                         infoItem.ScanStage = scanProgress.ScanStage;
                         _scanCounterManager.AddMalware(malwareFilesDiff);
-                        _scanCounterManager.AddPending(lookupInProgressCountDiff + unknownFilesDiff);
+                        _scanCounterManager.AddInProgress(lookupInProgressCountDiff + unknownFilesDiff);
                         _scanCounterManager.AddClean(cleanFilesDiff);
                     }
                 }
@@ -1046,58 +1027,57 @@ namespace FAT.Application.Models
                     if (item == null)
                         return false;
 
-                    var o = item as ThreatInfoItem;
-                    int[] orders = FilterOrders.ToArray();
-                    bool hasOrders = !orders.Any();
-
+                    var o = item as ThreatInfoItem;                 
                     if (GroupByComputers)
                     {
                         if (o.IsComputer)
-                        {   
-                            foreach (int order in orders)
-                            {
-                                if ((o.HasClean && order == (int)CounterOrder.Clean) ||
-                                    (o.HasMalwares && order == (int)CounterOrder.Malware) ||
-                                    (o.HasUnknowns && order == (int)CounterOrder.Unknown) ||
-                                    (o.HasFailed && order == (int)CounterOrder.NotAnalyzed) ||
-                                    (o.HasPending && order == (int)CounterOrder.InProgress))
-                                {
-                                    hasOrders = true;
-                                    break;
-                                }
-                            }
-
-                            return hasOrders && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
-                        }
-                        else if (!orders.Any() && string.IsNullOrEmpty(Keyword))
-                            return true;
+                            return FilterComputerByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
+                        else
+                           return FilterFileByOrders(o);
                     }
                     else if (GroupByFiles)
                     {
                         if (!o.IsComputer)
-                        {
-                            foreach (int order in orders)
-                            { 
-                                if ((o.Clean && order == (int)CounterOrder.Clean) ||
-                                    (o.IsMalware && order == (int)CounterOrder.Malware) ||
-                                    (o.IsUnknown && order == (int)CounterOrder.Unknown) ||
-                                    (o.Failed && order == (int)CounterOrder.NotAnalyzed) ||
-                                    (o.Pending && order == (int)CounterOrder.InProgress))
-                                {
-                                    hasOrders = true;
-                                    break;
-                                }
-                            }
-
-                            return hasOrders && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
-                        }
-                        else if (!FilterOrders.Any() && string.IsNullOrEmpty(Keyword))
+                            return FilterFileByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
+                        else 
                             return true;
                     }
 
                     return false;
                 };
             }
+        }
+
+        private bool FilterComputerByOrders(ThreatInfoItem item)
+        {
+            int[] orders = FilterOrders.ToArray();
+            if (!orders.Any()) return true;
+            foreach (int order in orders)
+            {
+                if ((item.HasClean && order == (int)CounterOrder.Clean) ||
+                    (item.HasMalwares && order == (int)CounterOrder.Malware) ||
+                    (item.HasUnknowns && order == (int)CounterOrder.Unknown) ||
+                    (item.HasFailed && order == (int)CounterOrder.NotAnalyzed) ||
+                    (item.HasPending && order == (int)CounterOrder.InProgress))
+                    return true;
+            }
+            return false;
+        }
+
+        private bool FilterFileByOrders(ThreatInfoItem item)
+        {
+            int[] orders = FilterOrders.ToArray();
+            if (!orders.Any()) return true;
+            foreach (int order in orders)
+            {
+                if ((item.Clean && order == (int)CounterOrder.Clean) ||
+                    (item.IsMalware && order == (int)CounterOrder.Malware) ||
+                    (item.IsUnknown && order == (int)CounterOrder.Unknown) ||
+                    (item.Failed && order == (int)CounterOrder.NotAnalyzed) ||
+                    (item.Pending && order == (int)CounterOrder.InProgress))
+                    return true;
+            }
+            return false;
         }
 
         public void SetReportKind(ReportKind kind)

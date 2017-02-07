@@ -61,6 +61,7 @@ namespace FAT.Application.Models
                 if (_isSelected != value)
                 {
                     _isSelected = value;
+                    RaisePropertyChanged(nameof(IsSelected));
                     SelectionChanged?.Invoke(this);
                 }
             }
@@ -187,23 +188,23 @@ namespace FAT.Application.Models
             AddCounter<UnknownCounter>(count);
         }
 
-        public void AddFailed(int count = 1)
+        public void AddNotAnalyzed(int count = 1)
         {
-            AddCounter<FailedCounter>(count);
+            AddCounter<NotAnalyzedCounter>(count);
         }
 
-        public void AddPending(int count = 1)
+        public void AddInProgress(int count = 1)
         {
-            AddCounter<PendingCounter>(count);
+            AddCounter<InProgressCounter>(count);
         }
 
         public void UpdateCounters(IScanCounterDiff scanCounterDiff)
         {
             AddClean(scanCounterDiff.CleanFilesDiff);
-            AddFailed(scanCounterDiff.NotAnalyzedFilesDiff);
             AddMalware(scanCounterDiff.MaliciousFilesDiff);
             AddUnknown(scanCounterDiff.UnknownFilesDiff);
-            AddPending(scanCounterDiff.InProgressFilesDiff);
+            AddNotAnalyzed(scanCounterDiff.NotAnalyzedFilesDiff);
+            AddInProgress(scanCounterDiff.InProgressFilesDiff);
         }
     }
 
@@ -239,14 +240,14 @@ namespace FAT.Application.Models
         }
     }
 
-    public class FailedCounter : ScanCounter
+    public class NotAnalyzedCounter : ScanCounter
     {
         public override int Order
         {
             get { return (int)CounterOrder.NotAnalyzed; }
         }
     }
-    public class PendingCounter : ScanCounter
+    public class InProgressCounter : ScanCounter
     {
         public override int Order
         {
