@@ -235,6 +235,7 @@ namespace FAT.Application.Models
             {
                 _percentage = value;
                 RaisePropertyChanged(nameof(Percentage));
+                RaisePropertyChanged(nameof(Header));
             }
         }
 
@@ -548,7 +549,6 @@ namespace FAT.Application.Models
                 IsScanInProgress = true;
                 IsReportEnabled = false;
                 Percentage = 0;
-                RaisePropertyChanged(nameof(Header));
             }
         }
 
@@ -575,8 +575,9 @@ namespace FAT.Application.Models
             Computers = new ObservableCollection<ThreatInfoItem>();
             RaisePropertyChanged(nameof(ScanCounters));
             RaisePropertyChanged(nameof(Files));
- 
-            
+            Set(() => HasUnknownsOnly, false);
+            Set(() => HasMalwares, false);
+
 
             _onlineItems = new ThreatInfoItem[0];
 
@@ -730,10 +731,16 @@ namespace FAT.Application.Models
 
         private void OnScanCompleted(Object sender, ErrorEventArgs e)
         {
-            ScanCompleted();
+            CancelInProgress = false;
+            IsScanInProgress = false;
+            ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
+
+            _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
+
+            IsReportEnabled = true;
             RaisePropertyChanged(nameof(ValkyrieDetailsLink));
             ScanProcessCompleted?.Invoke(this, e);
-            Percentage = 100;
+            Percentage = 0;
         }
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
@@ -809,16 +816,7 @@ namespace FAT.Application.Models
             _scanIteratorTimer.Start();
         }
 
-        private void ScanCompleted()
-        {
-            CancelInProgress = false;
-            IsScanInProgress = false;
-            ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
 
-            _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
-            RaisePropertyChanged(nameof(Header));
-            IsReportEnabled = true;
-        }
 
         private void IterateThroughScan(object sender, EventArgs e)
         {
@@ -832,7 +830,6 @@ namespace FAT.Application.Models
             {
                 if (Math.Abs(Percentage - 100) > 0.01)
                     Percentage = operationResult.Percentage;
-                RaisePropertyChanged(nameof(Header));
             }
             
             var files = _aptService.GetUpdatedFileVerdict(_lastModifiesFlsVerdictDate, _lastModifiesValkyrieVerdictDate).Results;
@@ -935,12 +932,9 @@ namespace FAT.Application.Models
 
             if (!HasMalwares)
             {
-                Set(() => HasMalwares, _scanCounterManager.CounterCollection
-                        .Any(c => c.OrderAsEnum == CounterOrder.Malware && c.Count > 0));
-                Set(() => HasUnknownsOnly, !HasMalwares && _scanCounterManager.CounterCollection
-                        .Any(c => (c.OrderAsEnum == CounterOrder.Unknown && c.Count > 0) ||
-                            (c.OrderAsEnum == CounterOrder.InProgress && c.Count > 0)
-                            || (c.OrderAsEnum == CounterOrder.NotAnalyzed && c.Count > 0)));
+                Set(() => HasMalwares, _scanCounterManager.HasMalwares);
+                if (!HasMalwares)
+                    Set(() => HasUnknownsOnly, _scanCounterManager.HasUnknowns || _scanCounterManager.HasNotAnalyzed || _scanCounterManager.HasInProgress);
             }
 
             //if (completed != OnlineItemsCount)
@@ -951,7 +945,6 @@ namespace FAT.Application.Models
                 //   _scanIteratorTimer.Stop();
             }
 
-            RaisePropertyChanged(nameof(Percentage));
             RaisePropertyChanged(nameof(Header));
         }
         
@@ -1036,7 +1029,7 @@ namespace FAT.Application.Models
                         if (o.IsComputer)
                             return FilterComputerByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
                         else
-                           return FilterFileByOrders(o);
+                            return FilterFileByOrders(o);
                     }
                     else if (GroupByFiles)
                     {
@@ -1053,8 +1046,8 @@ namespace FAT.Application.Models
 
         private bool FilterComputerByOrders(ThreatInfoItem item)
         {
+            if (FilterOrders == null || !FilterOrders.Any()) return true;
             int[] orders = FilterOrders.ToArray();
-            if (!orders.Any()) return true;
             foreach (int order in orders)
             {
                 if ((item.HasClean && order == (int)CounterOrder.Clean) ||
@@ -1069,8 +1062,8 @@ namespace FAT.Application.Models
 
         private bool FilterFileByOrders(ThreatInfoItem item)
         {
+            if (FilterOrders == null || !FilterOrders.Any()) return true;
             int[] orders = FilterOrders.ToArray();
-            if (!orders.Any()) return true;
             foreach (int order in orders)
             {
                 if ((item.Clean && order == (int)CounterOrder.Clean) ||

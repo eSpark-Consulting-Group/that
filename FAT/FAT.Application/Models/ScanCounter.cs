@@ -21,10 +21,10 @@ namespace FAT.Application.Models
     {
         Computer,
         Clean,
-        InProgress,
         Malware,
+        Unknown,
         NotAnalyzed,
-        Unknown
+        InProgress
     }
 
     public abstract class ScanCounter : INotifyPropertyChanged
@@ -32,6 +32,7 @@ namespace FAT.Application.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Action<ScanCounter> SelectionChanged { get; set; }
+        public Action<ScanCounter> CountChanged { get; set; }
 
         private int _count;
         public int Count
@@ -39,11 +40,15 @@ namespace FAT.Application.Models
             get { return _count; }
             set
             {
-                _count = value;
-                if (!Valid && IsSelected)
-                    IsSelected = false;
-                RaisePropertyChanged(nameof(Count));
-                RaisePropertyChanged(nameof(Valid));
+                if (_count != value)
+                {
+                    _count = value;
+                    if (!Valid && IsSelected)
+                        IsSelected = false;
+                    RaisePropertyChanged(nameof(Count));
+                    RaisePropertyChanged(nameof(Valid));
+                    CountChanged?.Invoke(this);
+                }
             }
         }
 
@@ -126,6 +131,11 @@ namespace FAT.Application.Models
             lock (_sync)
             {
                 _counters.Clear();
+                if (_selected.Any())
+                {
+                    _selected.Clear();
+                    SelectedOrdersChanged?.Invoke(null);
+                }
             }
         }
 
@@ -134,18 +144,17 @@ namespace FAT.Application.Models
             if (count == 0) return;
             lock (_sync)
             {
-                var counter = new T { Count = count, SelectionChanged = CounterSelectionChanged };
-                if (_counters.ContainsKey(counter.Order))
-                    _counters[counter.Order].Count += count;
-                else if (count > 0)
+                var counter = new T { SelectionChanged = SelectionChanged, CountChanged = CountChanged };
+                if (!_counters.ContainsKey(counter.Order))
                 {
-                    _counters[counter.Order] = counter;
+                    _counters.Add(counter.Order, counter);
                     _collection.AddCollectionChanged(counter);
                 }
+                _counters[counter.Order].Count += count;
             }
         }
 
-        private void CounterSelectionChanged(ScanCounter counter)
+        private void SelectionChanged(ScanCounter counter)
         {
             if (counter.IsSelected)
                 _selected.Add(counter.Order);
@@ -153,6 +162,28 @@ namespace FAT.Application.Models
                 _selected.Remove(counter.Order);
 
             SelectedOrdersChanged?.Invoke(_selected.ToArray());
+        }
+
+        private void CountChanged(ScanCounter counter)
+        {
+            switch (counter.OrderAsEnum)
+            {
+                case CounterOrder.Clean:
+                    HasClean = counter.Valid;
+                    break;
+                case CounterOrder.Malware:
+                    HasMalwares = counter.Valid;
+                    break;
+                case CounterOrder.Unknown:
+                    HasUnknowns = counter.Valid;
+                    break;
+                case CounterOrder.NotAnalyzed:
+                    HasNotAnalyzed = counter.Valid;
+                    break;
+                case CounterOrder.InProgress:
+                    HasInProgress = counter.Valid;
+                    break;
+            }
         }
 
         private IEnumerable<ScanCounter> GetCounters
@@ -196,6 +227,16 @@ namespace FAT.Application.Models
         {
             AddCounter<InProgressCounter>(count);
         }
+
+        public bool HasClean { get; private set; }
+
+        public bool HasMalwares { get; private set; }
+
+        public bool HasUnknowns { get; private set; }
+
+        public bool HasNotAnalyzed { get; private set; }
+
+        public bool HasInProgress { get; private set; }
 
         public void UpdateCounters(IScanCounterDiff scanCounterDiff)
         {

@@ -27,8 +27,8 @@ namespace FAT.Application.Models
         Clean = 1,
         Malware,
         Unknown,
-        NotAnalyse,
-        InAnalysis,
+        NotAnalyzed,
+        InProgress
     }
 
 
@@ -113,13 +113,13 @@ namespace FAT.Application.Models
                 switch (ValkyrieVerdict)
                 {
                     case ValkyrieVerdict.NotAnalyzed:
-                        return UiFinalVerdict.NotAnalyse;
+                        return UiFinalVerdict.NotAnalyzed;
                     case ValkyrieVerdict.PotentiallyUnwantedApplication:
                     case ValkyrieVerdict.Malware:
                         return UiFinalVerdict.Malware;
                     case ValkyrieVerdict.Pending:
                     case ValkyrieVerdict.FirstSeen:
-                        return UiFinalVerdict.InAnalysis;
+                        return UiFinalVerdict.InProgress;
                     case ValkyrieVerdict.Undetected:
                         return UiFinalVerdict.Unknown;
                     case ValkyrieVerdict.Clean:
@@ -134,7 +134,7 @@ namespace FAT.Application.Models
                                 case CloudVerdict.FailedToAnalyze:
                                 case CloudVerdict.NoVerdict:
                                 case CloudVerdict.Unknown:
-                                    return UiFinalVerdict.InAnalysis;
+                                    return UiFinalVerdict.InProgress;
                                 case CloudVerdict.Malware:
                                     return UiFinalVerdict.Malware;
 
@@ -156,12 +156,12 @@ namespace FAT.Application.Models
                 {
                     case UiFinalVerdict.Clean:
                         return "Clean";
-                    case UiFinalVerdict.InAnalysis:
+                    case UiFinalVerdict.InProgress:
                         return "In Analysis";
                     case UiFinalVerdict.Malware:
                         return "Malware";
-                    case UiFinalVerdict.NotAnalyse:
-                        return $"Not Analyzed ({OperationStatus.Replace(Environment.NewLine, "")})";
+                    case UiFinalVerdict.NotAnalyzed:
+                        return $"Failed ({OperationStatus.Replace(Environment.NewLine, "")})";
                     case UiFinalVerdict.Unknown:
                         return "No Threat Found";
                     default:
@@ -241,7 +241,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return !IsUnknown && !IsMalware && !Clean;
+                return !IsUnknown && !IsMalware && !Clean && !Pending;
             }
         }
 
@@ -262,7 +262,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ScanStage == ScanStage.OperationCompleted && MalwareFilesCount == 0 && UnknownFilesCount > 0;
+                return ScanStage == ScanStage.OperationCompleted && !HasMalwares && UnknownFilesCount > 0;
             }
         }
 
@@ -270,7 +270,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ScanStage == ScanStage.OperationFailed || (ScanStage == ScanStage.OperationCompleted && NotAnalyzedFilesCount > 0);
+                return ScanStage == ScanStage.OperationFailed || (!HasMalwares && !HasUnknowns && !HasPending && NotAnalyzedFilesCount > 0);
             }
         }
 
@@ -278,7 +278,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ScanStage == ScanStage.OperationCompleted && PendingFilesCount > 0;
+                return ScanStage == ScanStage.OperationCompleted && !HasMalwares && !HasUnknowns && PendingFilesCount > 0;
             }
         }
 
@@ -500,6 +500,8 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(UnknownFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
                 RaisePropertyChanged(nameof(HasUnknowns));
+                RaisePropertyChanged(nameof(HasPending));
+                RaisePropertyChanged(nameof(HasFailed));
             }
         }
 
@@ -517,6 +519,9 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(MalwareFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
                 RaisePropertyChanged(nameof(HasMalwares));
+                RaisePropertyChanged(nameof(HasUnknowns));
+                RaisePropertyChanged(nameof(HasPending));
+                RaisePropertyChanged(nameof(HasFailed));
             }
         }
 
@@ -550,6 +555,7 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(PendingFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
                 RaisePropertyChanged(nameof(HasPending));
+                RaisePropertyChanged(nameof(HasFailed));
             }
         }
 
@@ -692,7 +698,7 @@ namespace FAT.Application.Models
                     {
                         switch (item.FinalVerdict)
                         {
-                            case UiFinalVerdict.InAnalysis:
+                            case UiFinalVerdict.InProgress:
                                 inAnalysizDiff--;
                                 break;
                             case UiFinalVerdict.Unknown:
@@ -705,7 +711,7 @@ namespace FAT.Application.Models
                             case UiFinalVerdict.Clean:
                                 cleanDiff++;
                                 break;
-                            case UiFinalVerdict.InAnalysis:
+                            case UiFinalVerdict.InProgress:
                                 inAnalysizDiff++;
                                 break;
                             case UiFinalVerdict.Unknown:
@@ -714,7 +720,7 @@ namespace FAT.Application.Models
                             case UiFinalVerdict.Malware:
                                 malwareDiff++;
                                 break;
-                            case UiFinalVerdict.NotAnalyse:
+                            case UiFinalVerdict.NotAnalyzed:
                                 notAnalyzedDiff++;
                                 break;
                         }
