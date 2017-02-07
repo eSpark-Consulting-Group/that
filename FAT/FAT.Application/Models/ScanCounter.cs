@@ -127,6 +127,7 @@ namespace FAT.Application.Models
 
         private void AddCounter<T>(int count) where T : ScanCounter, new()
         {
+            if (count == 0) return;
             lock (_sync)
             {
                 var counter = new T { Count = count, SelectionChanged = _ => SelectionChanged?.Invoke() };
@@ -184,20 +185,11 @@ namespace FAT.Application.Models
 
         public void UpdateCounters(IScanCounterDiff scanCounterDiff)
         {
-            lock (_sync)
-            {
-                ScanCounter item;
-                if (_counters.TryGetValue((int) CounterOrder.Clean, out item))
-                    item.Count += scanCounterDiff.CleanFilesDiff;
-                if (_counters.TryGetValue((int)CounterOrder.InProgress, out item))
-                    item.Count += scanCounterDiff.InProgressFilesDiff;
-                if (_counters.TryGetValue((int)CounterOrder.Malware, out item))
-                    item.Count += scanCounterDiff.MaliciousFilesDiff;
-                if (_counters.TryGetValue((int)CounterOrder.NotAnalyzed, out item))
-                    item.Count += scanCounterDiff.NotAnalyzedFilesDiff;
-                if (_counters.TryGetValue((int)CounterOrder.Unknown, out item))
-                    item.Count += scanCounterDiff.UnknownFilesDiff;
-            }
+            AddClean(scanCounterDiff.CleanFilesDiff);
+            AddFailed(scanCounterDiff.NotAnalyzedFilesDiff);
+            AddMalware(scanCounterDiff.MaliciousFilesDiff);
+            AddUnknown(scanCounterDiff.UnknownFilesDiff);
+            AddPending(scanCounterDiff.InProgressFilesDiff);
         }
     }
 

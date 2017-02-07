@@ -1105,12 +1105,15 @@ namespace FAT.Application.Models
                     threatInfoItem.UpdateFileVerdict(result);
                 }
             }
-            IScanCounterDiff counterDiff = new ScanCounterDiff();
-            foreach (ThreatInfoItem computer in Computers)
+            if (files.Any())
             {
-                computer.UpdateVerdictForFiles(files, counterDiff);
+                IScanCounterDiff counterDiff = new ScanCounterDiff();
+                foreach (ThreatInfoItem computer in Computers)
+                {
+                    computer.UpdateVerdictForFiles(files, counterDiff);
+                }
+                _scanCounterManager.UpdateCounters(counterDiff);
             }
-            _scanCounterManager.UpdateCounters(counterDiff);
             if (scanned > ScannedItemsCount)
             {
                 ScannedItemsCount = scanned;
