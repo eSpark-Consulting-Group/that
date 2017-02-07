@@ -14,7 +14,7 @@
                                      MinHeight="32" MaxHeight="32"  BorderThickness="1" BorderBrush="#FFD6D4D4"  x:Name="search" Padding="30 7 0 0" 
                                      Text="{Binding ElementName=this, Path=Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" >
             <telerik:RadWatermarkTextBox.WatermarkContent>
-                <TextBlock Margin="0 2 0 0" FontSize="15" Foreground="#FF547D98"/>
+                <TextBlock Margin="0 1 0 0" FontSize="14" Opacity="0.5" Foreground="#FF547D98"/>
             </telerik:RadWatermarkTextBox.WatermarkContent>
         </telerik:RadWatermarkTextBox>
 

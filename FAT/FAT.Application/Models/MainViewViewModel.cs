@@ -227,6 +227,10 @@ namespace FAT.Application.Models
             }
         }
 
+        public bool HasMalwares { get; set; }
+
+        public bool HasUnknowns { get; set; }
+
         public Double Percentage { get; set; }
 
         public String Header
@@ -869,7 +873,13 @@ namespace FAT.Application.Models
                         _scanCounterManager.AddMalware(malwareFilesDiff);
                         _scanCounterManager.AddInProgress(lookupInProgressCountDiff + unknownFilesDiff);
                         _scanCounterManager.AddClean(cleanFilesDiff);
+
+                        if (!HasUnknowns)
+                            Set(() => HasUnknowns, unknownFilesDiff > 0 || lookupInProgressCountDiff > 0);
+                        if (!HasMalwares)
+                            Set(() => HasMalwares, malwareFilesDiff > 0);
                     }
+
                 }
                 if (infoItem.ScanStage == ScanStage.OperationFailed ||
                     infoItem.ScanStage == ScanStage.OperationCompleted ||
@@ -949,6 +959,7 @@ namespace FAT.Application.Models
                 //   _scanIteratorTimer.Stop();
             }
 
+            RaisePropertyChanged(nameof(Percentage));
             RaisePropertyChanged(nameof(Header));
         }
         
@@ -1040,7 +1051,7 @@ namespace FAT.Application.Models
                         if (!o.IsComputer)
                             return FilterFileByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
                         else 
-                            return true;
+                            return false;
                     }
 
                     return false;

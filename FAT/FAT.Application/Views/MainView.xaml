@@ -282,7 +282,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Group By" Foreground="#FF547D98" FontSize="15" Margin="0 6 10 0"/>
+                <TextBlock Text="Group By" Foreground="#FF547D98" FontSize="14" Opacity="0.5" Margin="0 6 10 0"/>
                 <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" Grid.Column="1"
                       IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}" ToolTip="Computers" >
                     <ToggleButton.Style>
