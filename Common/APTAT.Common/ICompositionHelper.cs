@@ -17,5 +17,6 @@ namespace APTAT.Common
 
         T Resolve<T>() where T : class;
         void AllowOverridingRegistrations(bool allow);
+        void Verify();
     }
 }

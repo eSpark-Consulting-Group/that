@@ -78,8 +78,13 @@ namespace APTAT.Common
                 container.RegisterCollection<IDependencyLocatorModule>(moduleTypes);
                 container.RegisterInitializer<IDependencyLocatorModule>(_ => _.RegisterDependencies(this));
                 container.Verify();
-                _container.Verify();
             }
+        }
+
+        public void Verify()
+        {
+          
+            _container.Verify();
         }
 
         public T Resolve<T>() where T : class

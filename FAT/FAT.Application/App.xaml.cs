@@ -40,10 +40,11 @@ namespace FAT.Application
                     {
                         typeof(APTAT.Common.DependencyLocator),
                         typeof(APTAT.DeploymentCore.DependencyLocator),
-                        typeof(DependencyLocator),
                         typeof(APTAT.Valkyrie.DependencyLocator.DependencyLocator),
-                        typeof(APTAT.Core.DependencyLocator.DependencyLocator)
+                        typeof(APTAT.Core.DependencyLocator.DependencyLocator),
+                        typeof(DependencyLocator)
                     });
+                    CompositionHelper.Instance.Verify();
                 });
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal, Current.Dispatcher);

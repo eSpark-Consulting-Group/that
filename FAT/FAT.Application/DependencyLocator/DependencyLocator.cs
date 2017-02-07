@@ -1,5 +1,6 @@
 ﻿using FAT.Application.Services;
 using APTAT.Common;
+using APTAT.Core;
 
 namespace FAT.Application
 {
@@ -11,7 +12,8 @@ namespace FAT.Application
             resolver.RegisterSingleton<IAptService, AptService>();
             resolver.RegisterSingleton<IStorageService, StorageService>();
             resolver.RegisterSingleton<IFileBrowserService, FileBrowserService>();
-
+            resolver.AllowOverridingRegistrations(true);
+            resolver.RegisterSingleton<IDistinctFileHelper,FATFileFilter>();
         }
     }
 }

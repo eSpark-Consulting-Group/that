@@ -11,8 +11,8 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProvider>();
             resolver.RegisterSingleton<IAptScannerFactory, AptScannerFactory>();
             resolver.RegisterSingleton<IAptAtManager, AptAtManager>();
-            resolver.Register<IFlsManager, FlsManager>();
-            resolver.Register<IDistinctFileHelper, DistinctFileHelper>();
+            resolver.RegisterSingleton<IFlsManager, FlsManager>();
+            resolver.RegisterSingleton<IDistinctFileHelper, DistinctFileHelper>();
         }
     }
 }
