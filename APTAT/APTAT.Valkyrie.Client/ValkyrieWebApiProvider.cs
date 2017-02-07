@@ -63,7 +63,7 @@ namespace Valkyrie.WebApiProvider
             var response = CallValkyrie<RegisterWithResponse>(RegisterWithCamCredentialsUri, request);
             return response;
         }
-
+        
         public StartAndFinalizeScanResponse StartScan(StartScanRequest request)
         {
             var response = CallValkyrie<StartAndFinalizeScanResponse>(StartScanUri, request);

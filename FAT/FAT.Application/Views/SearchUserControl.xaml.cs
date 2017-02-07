@@ -86,7 +86,9 @@ namespace FAT.Application.Views
             }
 
             if (string.IsNullOrEmpty(value) && control.FilterOrders.Length == 0)
-                control.Target.FilterDescriptors.Clear();
+            {
+                control.Target?.FilterDescriptors.Clear();
+            }
         }
 
         #endregion

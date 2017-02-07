@@ -144,24 +144,14 @@ namespace FAT.Application.Services
     }
 
     public interface IAptService : IDisposable
-    {
-        event EventHandler<BeginScanCompletedEventArgs> BeginScanCompleted;
-        event EventHandler<ScanStatusChangedEventArgs> ScanStatusChanged;
-        event EventHandler<ScanCompletedEventArgs> ScanCompleted;
-        event EventHandler<GetScanResultCompletedEventArgs> ComputerScanCompleted;
+    { 
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-        event EventHandler<ScanProgressChangedEventArgs> ScanProgressChanged;   
-        event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieFile>> ValkyrieAnalyzeProgressChanged;
-        event AnalyzeCompletedEventHandler<ValkyrieFile> ValkyrieAnalyzeCompleted;
-        event EventHandler ValkyrieAnalyzeStarted;
-        event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
-        void BeginScan(DeploymentTarget[] items, Object userStatem
-            , IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+       
+        
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
-        void BeginValkyrieAnalysis(string login, string password, string camLicenseId, string camUserName, string camPassword
-            , NetworkCredential networkCredential);        
+        
         string GetValkyrieDetailsLink();
 
         void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,

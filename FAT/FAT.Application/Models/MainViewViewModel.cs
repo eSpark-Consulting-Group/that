@@ -676,7 +676,7 @@ namespace FAT.Application.Models
                 options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
             }
             _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
-                this, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
             if (!IsScanInProgress.GetValueOrDefault())
             {
                 IsScanInProgress = true;
@@ -831,7 +831,8 @@ namespace FAT.Application.Models
                         if (retry)
                         {
                             NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword, null); 
-                            BeginValkyrieAnalysis(cred);
+                           // BeginValkyrieAnalysis(cred);
+//---------------------------------------------------------------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>
                             return;
                         }
                     }
@@ -976,15 +977,7 @@ namespace FAT.Application.Models
             IsValkyrieAnalysCompleted = false;
             Keyword = string.Empty;
         }
-
-        public bool BeginValkyrieAnalysis(NetworkCredential networkCredential = null)
-        {
-
-                _aptService.BeginValkyrieAnalysis(Login, Password, null, null, null,
-                    networkCredential);
-                return true;
-            
-        }
+        
 
         private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
         {
