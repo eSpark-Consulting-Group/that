@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using APTAT.Application.Models.Apt;
@@ -47,6 +48,7 @@ namespace FAT.Application.Models
         private Dictionary<string,ThreatInfoItem> _itemsDict = new Dictionary<string, ThreatInfoItem>(StringComparer.OrdinalIgnoreCase);
 
         public Collection<ThreatInfoItem> Computers { get; set; }
+        public float? MalwareProbabilityValue { get; set; }
         public BadFileItem BadFile { get; }
 
         public DeploymentTarget DeploymentTarget { get; }
@@ -55,6 +57,7 @@ namespace FAT.Application.Models
         public string SkipReason { get; set; }
 
         public string OperationStatus { get; set; }
+        public bool IsWhiteListed { get; set; }
 
         public Boolean HasBadFiles
         {
@@ -72,7 +75,17 @@ namespace FAT.Application.Models
             RaisePropertyChanged(nameof(Failed));
             RaisePropertyChanged(nameof(Pending));
         }
-
+        public string MalwareProbability
+        {
+            get
+            {
+                if (MalwareProbabilityValue.HasValue)
+                {
+                    return MalwareProbabilityValue.Value.ToString("P", CultureInfo.InvariantCulture);
+                }
+                return String.Empty;
+            }
+        }
         public ValkyrieVerdict ValkyrieVerdict
         {
             get { return _valkyrieVerdict; }
@@ -221,7 +234,10 @@ namespace FAT.Application.Models
 
         public Boolean Failed
         {
-            get;set;
+            get
+            {
+                return !IsUnknown && !IsMalware && !Clean;
+            }
         }
 
         public bool HasClean
@@ -657,6 +673,8 @@ namespace FAT.Application.Models
                 SkipReason = fileVerdictContext.ValkyrieAnalysisResult.SkipReason;
                 OperationStatus = fileVerdictContext.ValkyrieAnalysisResult.OperationStatus;
                 ValkyrieVerdict = fileVerdictContext.ValkyrieAnalysisResult.Verdict;
+                IsWhiteListed = fileVerdictContext.ValkyrieAnalysisResult.IsWhiteListed;
+                MalwareProbabilityValue = fileVerdictContext.ValkyrieAnalysisResult.MalwareProbability;
             }
             if (fileVerdictContext.FlsVerdict != null)
             {

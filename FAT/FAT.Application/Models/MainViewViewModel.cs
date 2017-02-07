@@ -20,7 +20,6 @@ using APTAT.Application.Services.EventArgs;
 using APTAT.Core;
 using FAT.Application.Models.Apt;
 using FAT.Application.Models.ModelBase;
-using FAT.Application.Models.Valkyrie;
 
 
 namespace FAT.Application.Models
@@ -47,7 +46,6 @@ namespace FAT.Application.Models
         private DeploymentItem[] _selectedTargets;
 
         private Boolean _isReportEnabled;
-        private Boolean _isValkyrieAnalysCompleted;
         private Boolean? _isScanInProgress = false;
         private Boolean _cancelInProgress = false;
 
@@ -59,8 +57,7 @@ namespace FAT.Application.Models
         private ThreatInfoItem[] _onlineItems;
         private ThreatInfoItem _selectedItem;
 
-        private DispatcherTimer _scanIteratorTimer;
-        private Dictionary<Guid, ScanProgressItem> _scanIterator;
+        private readonly DispatcherTimer _scanIteratorTimer;
 
         public string MainUri { get; set; } = "/Views/MainView.xaml";
 
@@ -216,23 +213,7 @@ namespace FAT.Application.Models
                 return IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress;
             }
         }
-
-        public bool IsValkyrieAnalysCompleted
-        {
-            get { return _isValkyrieAnalysCompleted; }
-            set
-            {
-                _isValkyrieAnalysCompleted = value;
-                RaisePropertyChanged("IsValkyrieAnalysCompleted");
-            }
-        }
-
-        public int DistinctFilesCount
-        {
-            get { return ValkyrieProgressInfo.TotalFileCount; }
-        }
-
-        public ProgressInfo<ValkyrieFile> ValkyrieProgressInfo { get; set; }
+        
 
         public Int32 ScannedItemsCount
         {
@@ -340,7 +321,7 @@ namespace FAT.Application.Models
                 }
                 else
                 {
-                    _storage.SetValue(KnownKeys.UnknownFile, Tuple.Create<BadFileItem, ValkyrieFile>(_selectedItem.BadFile, null));
+                    _storage.SetValue(KnownKeys.UnknownFile, _selectedItem);
                 }
 
                 RaisePropertyChanged(nameof(SelectedItem));
@@ -473,7 +454,6 @@ namespace FAT.Application.Models
         {
             _aptService = aptService;
             _targetsDiscoveryService = targetsDiscoveryService;
-            _scanIterator = new Dictionary<Guid, ScanProgressItem>();
             _scanCounterManager = new ScanCounterManager();
             _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher)
@@ -504,8 +484,6 @@ namespace FAT.Application.Models
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o =>
                 IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
             StopComputerScanCommand = new DelegateCommand(o => InvokeStopComputerScan(o), o => IsStopEnabled);
-
-            ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.Empty;
         }
 
         private void InvokeRestartComputerScan(Object arg, bool showDialog = false)
@@ -661,28 +639,12 @@ namespace FAT.Application.Models
 
             _targetsDiscoveryService.DirectoryItemsResolved += OnDirectoryItemsResolved;
 
-            //_aptService.BeginScanCompleted += OnBeginScanCompleted;
-            //_aptService.ScanStatusChanged += OnScanStatusChanged;
-            //_aptService.ScanCompleted += OnScanCompleted;
-            //_aptService.ScanProgressChanged += OnScanProgressChanged;
-
-            //_aptService.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
-            //_aptService.ValkyrieAnalyzeStarted += OnValkyrieAnalyzeStarted;
-
             _aptService.FatScanStarted += OnBeginScanCompleted;
             _aptService.FatScanCompleted += OnScanCompleted;
             _aptService.ErrorOccurred += OnErrorOccurred;
 
         }
-
-
-
         
-        void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
-        {
-            OnBeforeBeginValkyrieAnalysis();
-
-        }
 
         public string ProxyLogin { get; set; }
         public string ProxyPassword { get; set; }
@@ -704,7 +666,7 @@ namespace FAT.Application.Models
 
         public WizardStepEnum CurrentStep { get; set; }
 
-        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
+        void OnValkyrieAnalyzeCompleted(ErrorEventArgs e)
         {
             if (_isScanInProgress != false) return;
             if (e.Error != null)
@@ -744,8 +706,6 @@ namespace FAT.Application.Models
 
             
             IsReportEnabled = true;
-
-            IsValkyrieAnalysCompleted = true;
 
             RaisePropertyChanged("Header");
             RaisePropertyChanged("ValkyrieDetailsLink");
@@ -867,26 +827,6 @@ namespace FAT.Application.Models
             IsReportEnabled = true;
         }
 
-        public void OnBeforeBeginValkyrieAnalysis()
-        {
-            ValkyrieProgressInfo = ProgressInfo<ValkyrieFile>.CreateFromTotal(DistinctFilesCount);
-            IsValkyrieAnalysCompleted = false;
-            Keyword = string.Empty;
-        }
-        
-
-        private void OnScanProgressChanged(Object sender, ScanProgressChangedEventArgs e)
-        {
-            if (_operationGuid == e.OperationGuid)
-            {
-                if (!CancelInProgress)
-                {
-                    Percentage = e.Percentage;
-                    RaisePropertyChanged("Header");
-                }
-            }
-        }
-
         private void IterateThroughScan(object sender, EventArgs e)
         {
             if (_scanIteratorTimer.IsEnabled)
@@ -896,7 +836,12 @@ namespace FAT.Application.Models
             var operationResult = _aptService.GetModifiedComputerResultsForOperation(_operationGuid, _lastModifiesComputerDate);
             var computers = operationResult
                 .Results.ToDictionary(c => c.TargetUid);
-            Set(() => Percentage, operationResult.Percentage);
+            if (!CancelInProgress)
+            {
+                Set(() => Percentage, operationResult.Percentage);
+                RaisePropertyChanged(nameof(Header));
+            }
+            
             var files = _aptService.GetUpdatedFileVerdict(_lastModifiesFlsVerdictDate, _lastModifiesValkyrieVerdictDate).Results;
             if (files.Any())
             {

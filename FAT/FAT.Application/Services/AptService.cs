@@ -4,7 +4,6 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using FAT.Application.Models.Valkyrie;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
 using APTAT.Core.Reports;

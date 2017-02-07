@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using FAT.Application.Models;
-using FAT.Application.Models.Valkyrie;
 using APTAT.Core;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;

@@ -9,8 +9,8 @@ using System.Linq;
 using APTAT.Valkyrie;
 using ScanCompletedEventArgs = FAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
+using APTAT.Application.Services.EventArgs;
 using FAT.Application.Messages;
-using FAT.Application.Models.Valkyrie;
 using Telerik.Windows.Controls;
 using FAT.Application.Views;
 
@@ -94,7 +94,7 @@ namespace FAT.Application
 
         }
 
-        private void ViewModelOnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieFile> e)
+        private void ViewModelOnValkyrieAnalyzeCompleted(object sender, ErrorEventArgs e)
         {
             if (_onCompletedAction != null)
             {

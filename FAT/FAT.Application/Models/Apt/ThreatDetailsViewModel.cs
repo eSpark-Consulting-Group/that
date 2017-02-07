@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.IO;
-using FAT.Application.Models.Valkyrie;
 using FAT.Application.Services;
 using APTAT.Core;
 using APTAT.Core.Descent.Apt;
@@ -220,60 +219,33 @@ namespace FAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            var file = _storage.GetValue<Tuple<BadFileItem, ValkyrieFile>>(KnownKeys.UnknownFile, false);
-            var badFile = file.Item1;
-            var valkyrieFile = file.Item2;
+            var badFile = _storage.GetValue<ThreatInfoItem>(KnownKeys.UnknownFile, false);
 
-            if (badFile == null && valkyrieFile == null)
+            if (badFile == null)
                 return;
+            
+            IsMalware = badFile.IsMalware;
+            IsUnknown = badFile.IsUnknown;
+            Clean = badFile.Clean;
+            Failed = badFile.Failed;
+            Pending = badFile.Pending;
+                       
+            Verdict = badFile.VerdictString;
 
-            if (badFile != null)
-            {
-                switch (badFile.Cloud)
-                {
-                    case CloudVerdict.NoVerdict:
-                    case CloudVerdict.FailedToAnalyze:
-                        Failed = true;
-                        Verdict = "Lookup in Progress";
-                        break;
-                    case CloudVerdict.FirstSeen:
-                    case CloudVerdict.Unknown:
-                        Verdict = "Unknown";
-                        IsUnknown = true;
-                        break;
-                    case CloudVerdict.Malware:
-                        Verdict = "Malware";
-                        IsMalware = true;
-                        break;
-                    case CloudVerdict.Safe:
-                        Verdict = "Clean";
-                        Clean = true;
-                        break;
-                }
-            }
-            else
-            {
-                IsMalware = valkyrieFile.IsMalware;
-                IsUnknown = valkyrieFile.IsUnknown;
-                Clean = valkyrieFile.Clean;
-                Failed = valkyrieFile.Failed;
-                Pending = valkyrieFile.Pending;
-                Verdict = valkyrieFile.VerdictString;
-            }
-            FileName = badFile != null ? Path.GetFileName(badFile.Name) : valkyrieFile.Name;
-            Size = badFile != null ? badFile.FileSizeFormatted : valkyrieFile.FileSizeFormatted;
-            Created = badFile != null ? badFile.Created.ToLocalTime() : valkyrieFile.Created.ToLocalTime();
-            Modified = badFile != null ? badFile.Modified.ToLocalTime() : valkyrieFile.Modified.ToLocalTime();
-            Accessed = badFile != null ? badFile.Accessed.ToLocalTime() : valkyrieFile.Accessed.ToLocalTime();
-            Hash = NAIfEmpty(badFile != null ? badFile.Sha1?.ToUpper() : valkyrieFile.Sha1?.ToUpper());
-            Signer = NAIfEmpty(badFile != null ? badFile.Signer : valkyrieFile.Signer);
-            Description = NAIfEmpty(badFile != null ? badFile.Description : valkyrieFile.Description);
-            Version = NAIfEmpty(badFile != null ? badFile.Version : valkyrieFile.Version);
-            Copyright = NAIfEmpty(badFile != null ? badFile.Copyright : valkyrieFile.Copyright);
-            Product = NAIfEmpty(badFile != null ? badFile.Product : valkyrieFile.Product);
-            IsWhitelisted = valkyrieFile != null && valkyrieFile.IsWhiteListed ? "yes" : "no";
-            MalwareProbability = (valkyrieFile != null && valkyrieFile.MalwareProbabilityValue.HasValue) ? 
-                (valkyrieFile.MalwareProbabilityValue.Value / 100).ToString("P") : "";
+            FileName = Path.GetFileName(badFile.Name);
+            Size = badFile.BadFile.FileSizeFormatted;
+            Created = badFile.BadFile.Created.ToLocalTime();
+            Modified = badFile.BadFile.Modified.ToLocalTime();
+            Accessed = badFile.BadFile.Accessed.ToLocalTime();
+            Hash = NAIfEmpty(badFile.BadFile.Sha1?.ToUpper());
+            Signer = NAIfEmpty(badFile.BadFile.Signer);
+            Description = NAIfEmpty(badFile.BadFile.Description);
+            Version = NAIfEmpty(badFile.BadFile.Version);
+            Copyright = NAIfEmpty(badFile.BadFile.Copyright);
+            Product = NAIfEmpty(badFile.BadFile.Product);
+            IsWhitelisted = badFile.IsWhiteListed ? "yes" : "no";
+            MalwareProbability = badFile.MalwareProbabilityValue.HasValue ? 
+                (badFile.MalwareProbabilityValue.Value / 100).ToString("P") : "";
         }
 
         private String NAIfEmpty(String str)
