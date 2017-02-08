@@ -8,7 +8,6 @@ using System.Net;
 using System.Windows.Threading;
 using Telerik.Windows.Controls;
 
-using APTAT.Valkyrie;
 using FAT.Application.Messages;
 using FAT.Application.Extensions;
 using FAT.Application.Services;
@@ -51,6 +50,7 @@ namespace FAT.Application.Models
         private Boolean _isAutoDiscoveryInProgress;
         private Boolean _isAutoDiscoveryCompleted;
         private Boolean _cancelInProgress;
+        private double _percentage;
 
         private Int32 _scannedItemsCount;
 
@@ -149,6 +149,8 @@ namespace FAT.Application.Models
             Set(() => Uri, "/Views/DiscoveryResults.xaml");
             Set(() => Loaded, true);
 
+            _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
+            _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
             _targetsDiscoveryService.StartTargetsAutoDiscovery();
 
             var name = await TryAction(GetCurrentDomainName());
@@ -231,6 +233,12 @@ namespace FAT.Application.Models
             set
             {
                 _isAutoDiscoveryCompleted = value;
+                if (value)
+                {
+                    IsAutoDiscoveryInProgress = false;
+                    Percentage = 0;
+                    _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
+                }
 
                 RaisePropertyChanged(nameof(IsAutoDiscoveryCompleted));
             }
@@ -291,8 +299,6 @@ namespace FAT.Application.Models
                 if (IsAutoDiscoveryInProgress)
                 {
                     if (Percentage == 0)
-                        header = "Starting discovery...";
-                    else if (Percentage == 100)
                         header = string.Empty;
                     else
                         header = String.Format("{0:0.00}% Discovering...", Percentage).Replace(".00", string.Empty);
@@ -301,19 +307,6 @@ namespace FAT.Application.Models
 
 
                 return string.Empty;
-            }
-        }
-
-        public Int32 OnlineItemsCount
-        {
-            get
-            {
-                if (_onlineItems == null)
-                {
-                    return 0;
-                }
-
-                return _onlineItems.Length;
             }
         }
 
@@ -393,10 +386,6 @@ namespace FAT.Application.Models
             }
         }
 
-
-
-
-
         public string ValkyrieDetailsLink
         {
             get { return _aptService.GetValkyrieDetailsLink(); }
@@ -405,8 +394,18 @@ namespace FAT.Application.Models
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
 
-        public ObservableCollection<ThreatInfoItem> Files { get; set; }
+        private ObservableCollection<ThreatInfoItem> _files;
+        public ObservableCollection<ThreatInfoItem> Files
+        {
+            get { return _files; }
+            set
+            {
+                _files = value;
+                RaisePropertyChanged(nameof(Files));
+            }
+        }
 
+        private ObservableCollection<ThreatInfoItem> _computers;
         public ObservableCollection<ThreatInfoItem> Computers
         {
             get { return _computers; }
@@ -434,7 +433,6 @@ namespace FAT.Application.Models
 
 
         public bool GroupEnabled { get; set; }
-
         private bool _groupByFiles;
         public bool GroupByFiles
         {
@@ -451,10 +449,7 @@ namespace FAT.Application.Models
             }
         }
 
-        private bool _groupByComputers = true;
-        private ObservableCollection<ThreatInfoItem> _computers = new ObservableCollection<ThreatInfoItem>();
-        private double _percentage;
-
+        private bool _groupByComputers;
         public bool GroupByComputers
         {
             get { return _groupByComputers; }
@@ -493,19 +488,21 @@ namespace FAT.Application.Models
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
             IAptService aptService, IStorageService storage)
         {
-            _aptService = aptService;
             _targetsDiscoveryService = targetsDiscoveryService;
+            _aptService = aptService;
+            _storage = storage;
+
             _scanCounterManager = new ScanCounterManager();
             _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
+
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher)
             {
                 Interval = TimeSpan.FromMilliseconds(500d)
             };
             _scanIteratorTimer.Tick += IterateThroughScan;
-            _storage = storage;
+
 
             OnLoadedCommand = new DelegateCommand(OnLoaded);
-
             StartScanCommand = new DelegateCommand(o =>
                 AppMessages.ScanMessage.Send(MessageTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
@@ -514,6 +511,8 @@ namespace FAT.Application.Models
                 o => StopScanPredicate);
             StopAutoDiscoveryCommand = new DelegateCommand(InvokeStopAutoDiscovery);
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
+
+
 
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o =>
@@ -597,7 +596,6 @@ namespace FAT.Application.Models
 
         private void InvokeStopAutoDiscovery(Object arg)
         {
-            IsAutoDiscoveryInProgress = false;
             IsAutoDiscoveryCompleted = true;
             Percentage = 0;
             _targetsDiscoveryService.StopTargetsAutoDiscovery();
@@ -624,8 +622,8 @@ namespace FAT.Application.Models
             _scanCounterManager.Clear();
             Files = new ObservableCollection<ThreatInfoItem>();
             Computers = new ObservableCollection<ThreatInfoItem>();
-            RaisePropertyChanged(nameof(ScanCounters));
-            RaisePropertyChanged(nameof(Files));
+
+
             Set(() => HasUnknownsOnly, false);
             Set(() => HasMalwares, false);
 
@@ -683,7 +681,7 @@ namespace FAT.Application.Models
             base.InvokeViewLoaded(arg);
 
             _targetsDiscoveryService.DirectoryItemsResolved += OnDirectoryItemsResolved;
-            _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
+
 
             _aptService.FatScanStarted += OnBeginScanCompleted;
             _aptService.FatScanCompleted += OnScanCompleted;
@@ -738,19 +736,15 @@ namespace FAT.Application.Models
 
         private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArg e)
         {
-            Percentage = e.Progress  * 100d;
             if (e.Target != null)
             {
                 DiscoveryResults.Add(e.Target);
+                _scanCounterManager.AddComputer();
+                Percentage = e.Progress * 100d;
             }
-            _scanCounterManager.AddComputer();
 
             if (Percentage == 100)
-            {
-                Percentage = 0;
                 IsAutoDiscoveryCompleted = true;
-                IsAutoDiscoveryInProgress = false;
-            }
         }
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
@@ -782,8 +776,7 @@ namespace FAT.Application.Models
                     item.StatusMessageSystem = "This computer is not accessible.";
                 }
             }
-            //_scanCounterManager.AddComputer(Computers.Count);
-
+            
             if (_onlineItems.Length > 0)
             {
 
@@ -970,9 +963,9 @@ namespace FAT.Application.Models
                     if (item == null)
                         return false;
 
-                    var o = item as ThreatInfoItem;                 
                     if (GroupByComputers)
                     {
+                        var o = item as ThreatInfoItem;
                         if (o.IsComputer)
                             return FilterComputerByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
@@ -980,13 +973,17 @@ namespace FAT.Application.Models
                     }
                     else if (GroupByFiles)
                     {
+                        var o = item as ThreatInfoItem;
                         if (!o.IsComputer)
                             return FilterFileByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
-                        else 
+                        else
                             return false;
                     }
-
-                    return false;
+                    else
+                    {
+                        var o = item as DeploymentTarget;
+                        return o.DnsName.ContainsString(Keyword) || o.Name.ContainsString(Keyword);
+                    }
                 };
             }
         }

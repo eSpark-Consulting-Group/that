@@ -92,9 +92,14 @@ namespace FAT.Application.Models
             return GetEnumerator();
         }
 
-        public void AddCollectionChanged(ScanCounter counter)
+        public void AddToCollection(ScanCounter counter)
         {
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, counter));
+        }
+
+        public void ResetCollection()
+        {
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
     }
 
@@ -125,6 +130,7 @@ namespace FAT.Application.Models
             lock (_sync)
             {
                 _counters.Clear();
+                _collection.ResetCollection();
                 if (_selected.Any())
                 {
                     _selected.Clear();
@@ -148,7 +154,7 @@ namespace FAT.Application.Models
                 if (!_counters.ContainsKey(counter.Order))
                 {
                     _counters.Add(counter.Order, counter);
-                    _collection.AddCollectionChanged(counter);
+                    _collection.AddToCollection(counter);
                 }
                 _counters[counter.Order].Count += count;
             }
