@@ -177,7 +177,7 @@ namespace APTAT.DeploymentCore
             return null;
         }
 
-        public void AutoResolveByNetworkSubnet(CancellationTokenSource source)
+        public void AutoResolveByNetworkSubnet(CancellationTokenSource cts)
         {
             List<Tuple<IPAddress, IPAddress>> subnetRanges = AddressRangeHelper.GetLocalAddressRange();
             
@@ -194,14 +194,13 @@ namespace APTAT.DeploymentCore
             int processed = 0;
 
             ParallelOptions po = new ParallelOptions();
-            po.CancellationToken = source.Token;
+            po.CancellationToken = cts.Token;
             po.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
             var serverDnsName = GetLocalHostName(true);
             var serverAddresses = GetSupportedExternalAddresses(true);
 
             double progress = 0;
-            Parallel.ForEach(ipAddresses, po, r =>
-            {
+            Action<IPAddress> action = (r) => {
                 po.CancellationToken.ThrowIfCancellationRequested();
                 var target = CheckTarget(r, serverAddresses, serverDnsName);
 
@@ -218,7 +217,20 @@ namespace APTAT.DeploymentCore
                     }
                     OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
                 }
-            });
+            };
+            try
+            {
+                Parallel.ForEach(ipAddresses, po, action);
+            }
+            catch (OperationCanceledException e)
+            {
+                LogHelper.Trace(TraceEventType.Information, e.Message);
+            }
+            finally
+            {
+                cts.Dispose();
+            }
+
         }
 
        

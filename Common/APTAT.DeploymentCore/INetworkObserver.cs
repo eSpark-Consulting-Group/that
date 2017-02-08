@@ -47,7 +47,7 @@ namespace APTAT.DeploymentCore
         IPStatus SendPing(string toString);
         IPHostEntry GetHostEntry();
         bool IsLoopbackAddress(string nameOrAddress);
-        void AutoResolveByNetworkSubnet(CancellationTokenSource ts);
+        void AutoResolveByNetworkSubnet(CancellationTokenSource cts);
         event EventHandler<DeploymentTargetResolvingEventArg> DeploymentTargetResolving;
         List<Tuple<IPAddress, IPAddress>> GetLocalAddressRange();
         string GetCurrentWorkgroupName();
