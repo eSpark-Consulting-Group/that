@@ -126,7 +126,7 @@ namespace APTAT.Valkyrie
             var proxy = WebRequest.GetSystemWebProxy();
             if (networkCredential != null)
             {
-                proxy = new WebProxy();
+             //   proxy = new WebProxy();
                 proxy.Credentials = networkCredential;
             }
             return proxy;

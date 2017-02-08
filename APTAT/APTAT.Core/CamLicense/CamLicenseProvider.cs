@@ -76,7 +76,7 @@ namespace APTAT.Core
             var proxy = WebRequest.GetSystemWebProxy();
             if (networkCredential != null)
             {
-                proxy = new WebProxy();
+             //   proxy = new WebProxy();
                 proxy.Credentials = networkCredential;
             }
             ProxySettings.Proxy = proxy;
