@@ -31,6 +31,7 @@ namespace FAT.Application.Services
         bool IsLocalAddress(string name);
         Task<List<Tuple<IPAddress, IPAddress>>> GetTargetRanges();
         void StartTargetsAutoDiscovery();
+        void StopTargetsAutoDiscovery();
         string GetCurrentWorkgroupName();
         string GetLoggedInUser();
     }
