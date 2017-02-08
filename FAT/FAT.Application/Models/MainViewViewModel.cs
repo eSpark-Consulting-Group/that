@@ -932,22 +932,23 @@ namespace FAT.Application.Models
                                 {
                                     var item = new ThreatInfoItem(badFile);
                                     infoItem.AddFile(item);
+                                    item = new ThreatInfoItem(badFile);
                                     var exist = Files.FirstOrDefault(_ =>
                                         _.BadFile.Sha1 == item.BadFile.Sha1 && _.IsUnknown == item.IsUnknown &&
                                         _.IsMalware == item.IsMalware && _.Failed == item.Failed);
-                                    //var comp = new ThreatInfoItem
-                                    //{
-                                    //    IpAddress = infoItem.IpAddress,
-                                    //    ComputerGuid = infoItem.ComputerGuid,
-                                    //    Name = infoItem.Name,
-                                    //    ShortName = item.Name,
-                                    //    IsComputer = true
-                                    //};
+                                    var comp = new ThreatInfoItem
+                                    {
+                                        IpAddress = infoItem.IpAddress,
+                                        ComputerGuid = infoItem.ComputerGuid,
+                                        Name = infoItem.Name,
+                                        ShortName = item.Name,
+                                        IsComputer = true
+                                    };
                                     if (exist != null)
-                                        exist.Computers.Add(infoItem);
+                                        exist.Computers.Add(comp);
                                     else
                                     {
-                                        item.Computers = new ObservableCollection<ThreatInfoItem> { infoItem };
+                                        item.Computers = new ObservableCollection<ThreatInfoItem> { comp };
                                         Files.Add(item);
                                     }
 
