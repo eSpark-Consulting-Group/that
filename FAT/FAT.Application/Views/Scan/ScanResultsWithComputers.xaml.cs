@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Linq;
 using System.Windows;
 using System.Windows.Automation;
@@ -9,7 +9,6 @@ using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 using FAT.Application.Extensions;
 using FAT.Application.Messages;
-using System.Collections.Generic;
 
 namespace FAT.Application
 {
@@ -30,10 +29,7 @@ namespace FAT.Application
         private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
         {
             if (ViewModel.IsAnyScanInProgress)
-            {
                 e.Cancel = true;
-                return;
-            }
         }
 
         private void treeList_SelectionChanged(object sender, SelectionChangeEventArgs e)
@@ -53,20 +49,13 @@ namespace FAT.Application
             {
                 cell.IsSelected = true;
                 cell.IsCurrent = true;
+
+                treeList.SelectedItem = null;
+                ViewModel.SelectedItems.Clear();
                 treeList.SelectedItem = cell.DataContext;
-
-                ViewModel.SelectedItems = new List<ThreatInfoItem>(new[] { cell.DataContext as ThreatInfoItem });
             }
-        }
-
-        private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (ViewModel.SelectedItems.Count == 1 && !ViewModel.SelectedItem.IsComputer)
-            {
-                var details = new ThreatDetailsWindow();
-                details.Owner = App.Current.MainWindow;
-                details.ShowDialog();
-            }
+            else
+                ViewModel.SelectedItems = ViewModel.SelectedItems;
         }
 
         private void menu_Opened(object sender, RoutedEventArgs e)
@@ -74,6 +63,12 @@ namespace FAT.Application
             var menu = sender as RadContextMenu;
             if (!menu.Items.OfType<RadMenuItem>().Any(_ => _.Command.CanExecute(null)))
                 menu.IsOpen = false;
+        }
+
+        private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ViewModel.SelectedItems.Count == 1 && !ViewModel.SelectedItem.IsComputer)
+                item_Click(sender, e);
         }
 
         private void item_Click(object sender, RoutedEventArgs e)
@@ -122,7 +117,7 @@ namespace FAT.Application
 
             RadContextMenu.SetContextMenu(treeList, menu);
 
-            AppMessages.FilterMessage.Send(ChangeScreenTypes.FilterTarget, _ => _.Target = treeList);
+            AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
         }
     }
 }

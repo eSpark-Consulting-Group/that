@@ -464,10 +464,10 @@ namespace FAT.Application.Models
             OnLoadedCommand = new DelegateCommand(OnLoaded);
 
             StartScanCommand = new DelegateCommand(o =>
-                AppMessages.ScanMessage.Send(ChangeScreenTypes.StartScan, InvokeStartScan),
+                AppMessages.ScanMessage.Send(MessageTypes.StartScan, InvokeStartScan),
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
-                AppMessages.ScanMessage.Send(ChangeScreenTypes.StopScan, InvokeStopScan),
+                AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => StopScanPredicate);
 
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
@@ -1027,14 +1027,14 @@ namespace FAT.Application.Models
                     if (GroupByComputers)
                     {
                         if (o.IsComputer)
-                            return FilterComputerByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
+                            return FilterComputerByOrders(o) && Keyword.ContainsString(o.NameAndIpAddress);
                         else
                             return FilterFileByOrders(o);
                     }
                     else if (GroupByFiles)
                     {
                         if (!o.IsComputer)
-                            return FilterFileByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ToLower().Contains(Keyword.ToLower()));
+                            return FilterFileByOrders(o) && Keyword.ContainsString(o.NameAndIpAddress);
                         else 
                             return false;
                     }

@@ -367,7 +367,7 @@
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="True"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding" Value="10 6 10 0"/>
+        <Setter Property="Padding" Value="10 7 10 0"/>
         <Setter Property="VerticalContentAlignment" Value="Top"/>
         <Setter Property="Background" Value="White" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>

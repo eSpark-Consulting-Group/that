@@ -13,6 +13,7 @@ using APTAT.Application.Services.EventArgs;
 using FAT.Application.Messages;
 using Telerik.Windows.Controls;
 using FAT.Application.Views;
+using static FAT.Application.Messages.AppMessages;
 
 namespace FAT.Application
 {
@@ -39,11 +40,11 @@ namespace FAT.Application
         }
 
         [MessageReceiver]
-        public void AcceptMessage(ChangeScreen<object> message)
+        public void AcceptMessage(AppMessage<object> message)
         {
-            switch (message.Message)
+            switch (message.Type)
             {
-                case ChangeScreenTypes.StartScan:
+                case MessageTypes.StartScan:
                     StartScanWindow details = new StartScanWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
                     if (details.ShowDialog() == true && message.Action != null)
@@ -51,7 +52,7 @@ namespace FAT.Application
                         message.Action(details.IsQuickScan);
                     }
                     break;
-                case ChangeScreenTypes.StopScan:
+                case MessageTypes.StopScan:
                     _confirmation = new ConfirmationWindow();
                     _confirmation.Owner = System.Windows.Application.Current.MainWindow;
                     if (_confirmation.ShowDialog() == true && message.Action != null)
@@ -61,11 +62,11 @@ namespace FAT.Application
         }
 
         [MessageReceiver]
-        public void AcceptMessage(ChangeScreen<SearchUserControl> message)
+        public void AcceptMessage(AppMessage<SearchUserControl> message)
         {
-            switch (message.Message)
+            switch (message.Type)
             {
-                case ChangeScreenTypes.FilterTarget:
+                case MessageTypes.FilterTarget:
                     message.Action(SearchTextBox);
                     break;
             }

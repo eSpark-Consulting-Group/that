@@ -33,17 +33,6 @@ namespace FAT.Application.Models.Directory
             set;
         }
 
-        public ObservableCollection<DeploymentItem> Items
-        {
-            get { return _items; }
-            set
-            {
-                _items = value;
-                RaisePropertyChanged("Items");
-            }
-        }
-
-
 
         public ObservableCollection<IpAddressWrapper> IpAddresses { get; private set; }
 
@@ -115,35 +104,20 @@ namespace FAT.Application.Models.Directory
 
             Password = null;
 
-            // restore IP addresses list 
-            /*ObservableCollection<IpAddressWrapper> storedIpAddresses = _storage.GetValue<ObservableCollection<IpAddressWrapper>>(KnownKeys.IpAddresses, false);
-            if (storedIpAddresses != null)
-            {
-                if (IpAddresses.Count != 0)
-                {
-                    foreach (var item in storedIpAddresses)
-                    {
-                        if (!IpAddresses.Contains(item))
-                        {
-                            IpAddresses.Add(item);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var item in storedIpAddresses)
-                    {
-                        IpAddresses.Add(item);
-                    }
-                }
-
-                RaisePropertyChanged("IpAddresses");
-            }*/
+            GetTargetRanges();
 
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;
         }
 
+        private async void GetTargetRanges()
+        {
+            var range = await _targetsDiscoveryService.GetTargetRanges();
+            if (range.Any())
+                Set(() => DefaultRange, range.FirstOrDefault().Item1.ToString());
+        }
+
+        public string DefaultRange { get; set; }
 
         protected override void InvokeViewUnloaded(Object arg)
         {
@@ -223,9 +197,6 @@ namespace FAT.Application.Models.Directory
 
 
                 IsBusy = true;
-                //_storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
-
-
 
                 _targetsDiscoveryService.GetByIpAddresses(IpAddresses, CheckIfCanUseCurrentCredentials, new OperationContext { Success = success, UserState = this });
 
@@ -235,9 +206,7 @@ namespace FAT.Application.Models.Directory
 
 
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                //_storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                //_storage.SetValue(KnownKeys.UdpPort, _udpPort);
-                //_storage.SetValue(KnownKeys.IpAddresses, IpAddresses);
+
                 var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription()
@@ -300,8 +269,7 @@ namespace FAT.Application.Models.Directory
 
                 CheckedItems = new Collection<Object>(e.Items.OrderBy(o => o.Name).ToArray());
                 _storage.SetValue(KnownKeys.CheckedDirectoryItems, CheckedItems);
-                //_storage.SetValue(KnownKeys.TcpPort, _tcpPort);
-                //_storage.SetValue(KnownKeys.UdpPort, _udpPort);
+
                 var ipAddressesString = IpAddresses.Select(elm => elm.FormattedText).ToArray();
                 _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription()
@@ -313,7 +281,7 @@ namespace FAT.Application.Models.Directory
             }
             else
             {
-                //Items = new ObservableCollection<DeploymentItem>();
+
                 Error = e.Exception.Message;
             }
 

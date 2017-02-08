@@ -2,10 +2,19 @@
 {
     public interface IScanCounterDiff
     {
-        int CleanFilesDiff { get; set; }
-        int InProgressFilesDiff { get; set; }
-        int MaliciousFilesDiff { get; set; }
-        int NotAnalyzedFilesDiff { get; set; }
-        int UnknownFilesDiff { get; set; }
+        int CleanDiff { get; set; }
+        int MalwareDiff { get; set; }
+        int UnknownDiff { get; set; }
+        int NotAnalyzedDiff { get; set; }
+        int InProgressDiff { get; set; }
+    }
+
+    public class ScanCounterDiff : IScanCounterDiff
+    {
+        public int CleanDiff { get; set; }
+        public int MalwareDiff { get; set; }
+        public int UnknownDiff { get; set; }
+        public int NotAnalyzedDiff { get; set; }
+        public int InProgressDiff { get; set; }
     }
 }

@@ -8,15 +8,6 @@ using System.Linq;
 
 namespace FAT.Application.Models
 {
-    public class ScanCounterDiff : IScanCounterDiff
-    {
-        public int UnknownFilesDiff { get; set; }
-        public int MaliciousFilesDiff { get; set; }
-        public int InProgressFilesDiff { get; set; }
-        public int CleanFilesDiff { get; set; }
-        public int NotAnalyzedFilesDiff { get; set; }
-    }
-
     public enum CounterOrder
     {
         Computer,
@@ -52,11 +43,6 @@ namespace FAT.Application.Models
             }
         }
 
-        public bool Valid
-        {
-            get { return Count > 0; }
-        }
-
         private bool _isSelected;
         public bool IsSelected
         {
@@ -72,7 +58,15 @@ namespace FAT.Application.Models
             }
         }
 
-        public virtual int Order => -1;
+        public bool Valid
+        {
+            get { return Count > 0; }
+        }
+
+        public virtual int Order
+        {
+            get { return -1; }
+        }
 
         public CounterOrder OrderAsEnum => (CounterOrder) Order;
 
@@ -142,9 +136,15 @@ namespace FAT.Application.Models
         private void AddCounter<T>(int count) where T : ScanCounter, new()
         {
             if (count == 0) return;
+
+            var counter = new T
+            {
+                SelectionChanged = SelectionChanged,
+                CountChanged = CountChanged
+            };
+
             lock (_sync)
             {
-                var counter = new T { SelectionChanged = SelectionChanged, CountChanged = CountChanged };
                 if (!_counters.ContainsKey(counter.Order))
                 {
                     _counters.Add(counter.Order, counter);
@@ -240,11 +240,11 @@ namespace FAT.Application.Models
 
         public void UpdateCounters(IScanCounterDiff scanCounterDiff)
         {
-            AddClean(scanCounterDiff.CleanFilesDiff);
-            AddMalware(scanCounterDiff.MaliciousFilesDiff);
-            AddUnknown(scanCounterDiff.UnknownFilesDiff);
-            AddNotAnalyzed(scanCounterDiff.NotAnalyzedFilesDiff);
-            AddInProgress(scanCounterDiff.InProgressFilesDiff);
+            AddClean(scanCounterDiff.CleanDiff);
+            AddMalware(scanCounterDiff.MalwareDiff);
+            AddUnknown(scanCounterDiff.UnknownDiff);
+            AddNotAnalyzed(scanCounterDiff.NotAnalyzedDiff);
+            AddInProgress(scanCounterDiff.InProgressDiff);
         }
     }
 

@@ -270,7 +270,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ScanStage == ScanStage.OperationFailed || (!HasMalwares && !HasUnknowns && !HasPending && NotAnalyzedFilesCount > 0);
+                return ScanStage == ScanStage.OperationFailed || (ScanStage == ScanStage.OperationCompleted && !HasMalwares && !HasUnknowns && !HasPending && NotAnalyzedFilesCount > 0);
             }
         }
 
@@ -730,15 +730,15 @@ namespace FAT.Application.Models
             if (anyUpdated)
             {
                 CleanFilesCount += cleanDiff;
-                scanCounterDiff.CleanFilesDiff += cleanDiff;
+                scanCounterDiff.CleanDiff += cleanDiff;
                 UnknownFilesCount += unknownDiff;
-                scanCounterDiff.UnknownFilesDiff += unknownDiff;
+                scanCounterDiff.UnknownDiff += unknownDiff;
                 MalwareFilesCount += malwareDiff;
-                scanCounterDiff.MaliciousFilesDiff += malwareDiff;
+                scanCounterDiff.MalwareDiff += malwareDiff;
                 NotAnalyzedFilesCount += notAnalyzedDiff;
-                scanCounterDiff.NotAnalyzedFilesDiff += notAnalyzedDiff;
+                scanCounterDiff.NotAnalyzedDiff += notAnalyzedDiff;
                 PendingFilesCount += inAnalysizDiff;
-                scanCounterDiff.InProgressFilesDiff += inAnalysizDiff;
+                scanCounterDiff.InProgressDiff += inAnalysizDiff;
                 RaisePropertyChanged(nameof(StatusMessage));
             }
         }
@@ -746,10 +746,10 @@ namespace FAT.Application.Models
 
         public void UpdateCounters(ScanResultItem scanProgress, IScanCounterDiff counterDiff)
         {
-            counterDiff.CleanFilesDiff += scanProgress.CleanFilesCount - CleanFilesCount;
-            counterDiff.InProgressFilesDiff += scanProgress.UnknownFilesCount + scanProgress.FailedToAnalyzeFilesCount +
+            counterDiff.CleanDiff += scanProgress.CleanFilesCount - CleanFilesCount;
+            counterDiff.InProgressDiff += scanProgress.UnknownFilesCount + scanProgress.FailedToAnalyzeFilesCount +
                                                 scanProgress.NoVerdictFilesCount - PendingFilesCount;
-            counterDiff.MaliciousFilesDiff += scanProgress.MalwareFilesCount - MalwareFilesCount;
+            counterDiff.MalwareDiff += scanProgress.MalwareFilesCount - MalwareFilesCount;
             
             TotalFilesCount = scanProgress.TotalFilesCount;
             CleanFilesCount = scanProgress.CleanFilesCount;

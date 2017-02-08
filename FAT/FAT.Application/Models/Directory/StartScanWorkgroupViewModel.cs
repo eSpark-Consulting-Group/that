@@ -27,15 +27,8 @@ namespace FAT.Application.Models
         IStorageService _storage;
 
 
-
-
-
         private readonly ICollection<Object> _checkedItems;
-        public ICollection<Object> CheckedItems
-        {
-            get;
-            set;
-        }
+
 
         private ObservableCollection<DirectoryItem> _items;
         public ObservableCollection<DirectoryItem> Items
@@ -155,6 +148,8 @@ namespace FAT.Application.Models
             Password = null;
             _workgroupCredentialsChanged = true;
 
+            GetCurrentWorkgroupName();
+
             _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
             _targetsDiscoveryService.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
 
@@ -180,6 +175,11 @@ namespace FAT.Application.Models
             }
 
             return result;
+        }
+
+        private void GetCurrentWorkgroupName()
+        {
+            WorkgroupName = _targetsDiscoveryService.GetCurrentWorkgroupName();
         }
 
         protected override async void OnStepChanging(Action success, String previousStep, ChangeStepCommandContext context)
@@ -276,14 +276,10 @@ namespace FAT.Application.Models
             }
             else
             {
-
-
                 if (context.IsBackward(CurrentStepIndex))
                 {
                     Error = null;
                 }
-
-                //_storage.SetValue(KnownKeys.Workgroup, _workgroup);
 
                 base.OnStepChanging(success, previousStep, context);
             }
@@ -333,14 +329,12 @@ namespace FAT.Application.Models
                 else
                     e.Parent.Items = new ObservableCollection<DirectoryItem>(e.Items.OrderBy(o => o.Name));
 
-                // _storage.SetValue(KnownKeys.Workgroup, _workgroup);
-
                 Error = null;
                 context.Success();
             }
             else
             {
-                //  Items = new ObservableCollection<DeploymentItem>();
+
                 Error = "No Workgroups found";
                 _workgroupCredentialsChanged = true;
             }

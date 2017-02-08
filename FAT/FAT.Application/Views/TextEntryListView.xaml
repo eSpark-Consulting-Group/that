@@ -33,7 +33,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <TextBox AutomationProperties.AutomationId="NetworkAddressTextBox"  Padding="10 6 30 0"
+        <TextBox AutomationProperties.AutomationId="NetworkAddressTextBox" Text="{Binding DefaultRange}" Padding="10 6 30 0"
                      Grid.Row="0" Margin="0 5" HorizontalAlignment="Stretch" x:Name="InputTextBox" BorderThickness="0">
 
         </TextBox>

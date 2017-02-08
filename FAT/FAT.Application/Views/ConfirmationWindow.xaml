@@ -26,7 +26,7 @@
                                         <Button Style="{StaticResource CloseButton}" Click="OnCloseClick" Width="18" Height="18" Margin="20 0 0 0" ToolTip="Close"/>
                                     </StackPanel>
 
-                                    <TextBlock Text="Stop Scan" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock Text="Stop Scan" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="19" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
 
@@ -37,11 +37,11 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Margin="20,15,10,10">
-                                    
-                                        <Path HorizontalAlignment="Left"  VerticalAlignment="Top"  Margin="0 5 0 0" Data="M7.9999999,8.0000027 L16,8.0000027 16,16.000003 7.9999999,16.000003 z M12,2 C6.4779997,2 1.9999995,6.4780002 1.9999995,12 1.9999995,17.522 6.4779997,22 12,22 17.521999,22 22,17.522 22,12 22,6.4780002 17.521999,2 12,2 z M12,0 C18.627,0 24,5.3730001 24,12 24,18.627 18.627,24 12,24 5.3729997,24 0,18.627 0,12 0,5.3730001 5.3729997,0 12,0 z" Fill="#FFD84332" Height="40" Stretch="Fill" Width="40" SnapsToDevicePixels="True"/>
+
+                                    <Path HorizontalAlignment="Left"  VerticalAlignment="Top"  Margin="0 5 0 0" Data="M7.9999999,8.0000027 L16,8.0000027 16,16.000003 7.9999999,16.000003 z M12,2 C6.4779997,2 1.9999995,6.4780002 1.9999995,12 1.9999995,17.522 6.4779997,22 12,22 17.521999,22 22,17.522 22,12 22,6.4780002 17.521999,2 12,2 z M12,0 C18.627,0 24,5.3730001 24,12 24,18.627 18.627,24 12,24 5.3729997,24 0,18.627 0,12 0,5.3730001 5.3729997,0 12,0 z" Fill="{DynamicResource StrongBrush}" Height="38" Stretch="Fill" Width="38" SnapsToDevicePixels="True"/>
 
 
-                                    <TextBlock Text="Scan not yet completed!"  
+                                    <TextBlock Text="Scan is not yet completed!"  
                            Style="{StaticResource HeaderTextBlock}"
                            FontSize="20" 
                            Foreground="#555" 
@@ -52,7 +52,7 @@
                                 </StackPanel>
 
                                 <TextBlock TextWrapping="Wrap" Grid.Row="1" VerticalAlignment="Center" Margin="78,0,0,30"  FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}">
-                        <Run Text="Do you want to stop it?" />
+                        <Run Text="Do you want to stop it? You can restart it later." />
                                 </TextBlock>
 
                                 <Border Background="White" Grid.Row="2" >
