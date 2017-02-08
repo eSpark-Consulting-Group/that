@@ -53,7 +53,7 @@ namespace FAT.Application.Models
         public BadFileItem BadFile { get; }
 
         public DeploymentTarget DeploymentTarget { get; }
-        public double ProgressPercentage { get; set; }
+        public double RemoteScanningPercentage { get; set; }
 
         public string SkipReason { get; set; }
 
@@ -170,37 +170,27 @@ namespace FAT.Application.Models
             }
         }
 
-        public void UpdateStatus()
+      
+        public int? FilesToCheckOnValkyrieCount { get; private set; }
+        public void RemoteScanCompleted()
         {
-            int malwareCount = 0;
-            int failedToAnalyzeCount = 0;
-            int pendingFilesCount = 0;
-            int safeCount = 0;
-            int unknownFilesCount = 0;
+            ThreatInfoItem[] files = Items.Where(i => i.ShouldCheckOnValkyrie).ToArray();
+            FilesToCheckOnValkyrieCount = files.Length;
+        }
 
-
-            foreach (var item in Items)
+        public double ValkyrieProgressPercentage
+        {
+            get
             {
-                if (item.IsMalware) malwareCount++;
-                else if (item.Failed) failedToAnalyzeCount++;
-                else if (item.Pending) pendingFilesCount++;
-                else if (item.Clean) safeCount++;
-                else if (item.IsUnknown) unknownFilesCount++;
-            }
-
-            if (malwareCount > 0 || failedToAnalyzeCount > 0 || pendingFilesCount > 0 || safeCount > 0 || unknownFilesCount > 0)
-            {
-
-                PendingFilesCount = pendingFilesCount;
-                NotAnalyzedFilesCount = failedToAnalyzeCount;
-                MalwareFilesCount = malwareCount;
-                UnknownFilesCount = unknownFilesCount;
-                CleanFilesCount = safeCount;
-
-                RaisePropertyChanged(nameof(StatusMessage));
+                if (FilesToCheckOnValkyrieCount == null) return 0;
+                if (FilesToCheckOnValkyrieCount == 0) return 100;
+                var count = Items.Count(f => f.ValkyrieVerdict != ValkyrieVerdict.PendingFls);
+                return count / (double)FilesToCheckOnValkyrieCount.Value;
             }
         }
-        
+
+
+        public bool ShouldCheckOnValkyrie => BadFile.IsUnknown || BadFile.IsMalware;
 
         public bool IsMalware
         {
@@ -466,8 +456,9 @@ namespace FAT.Application.Models
                     $"In Analysis {PendingFilesCount}."
                     : String.Empty;
 
-
-            if (ScanStage == ScanStage.OperationCompleted)
+            
+            
+            if (Math.Abs(TotalProgressPercentage - 100) < 0.1)
             {
                 string message = $"Completed: Total scanned: {TotalFilesCount}. Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}.";
                 if (PendingFilesCount > 0)
@@ -482,8 +473,9 @@ namespace FAT.Application.Models
             }
             else
             {
-                return
-                    $"{TotalFilesCount} scanned ({$"{ProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. {errorCounterText}";
+                
+                var m =     $"{TotalFilesCount} scanned ({$"{TotalProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. {errorCounterText}";
+                return m;
             }
         }
 
@@ -623,6 +615,16 @@ namespace FAT.Application.Models
             }
         }
 
+        public double TotalProgressPercentage
+        {
+            get
+            {
+                var valkyriePercent = (ValkyrieProgressPercentage * 100) / 2;
+                if (valkyriePercent > 50) valkyriePercent = 50;
+                return RemoteScanningPercentage + valkyriePercent;
+            }
+        }
+
         public ThreatInfoItem()
         {
             StatusMessageSystem = "Initializing...";
@@ -684,6 +686,7 @@ namespace FAT.Application.Models
         {
             if (!IsComputer) throw new NotSupportedException();
             bool anyUpdated = false;
+            bool shouldUpdateStatus = false;
             var cleanDiff = 0;
             var unknownDiff = 0;
             var malwareDiff = 0;
@@ -694,6 +697,7 @@ namespace FAT.Application.Models
                 List<ThreatInfoItem> items;
                 if (_itemsDict.TryGetValue(verdictContext.Sha1, out items))
                 {
+                    shouldUpdateStatus = true;
                     foreach (var item in items)
                     {
                         switch (item.FinalVerdict)
@@ -748,8 +752,9 @@ namespace FAT.Application.Models
                 scanCounterDiff.NotAnalyzedDiff += notAnalyzedDiff;
                 PendingFilesCount += inAnalysizDiff;
                 scanCounterDiff.InProgressDiff += inAnalysizDiff;
-                RaisePropertyChanged(nameof(StatusMessage));
             }
+            if (shouldUpdateStatus)
+                RaisePropertyChanged(nameof(StatusMessage));
         }
 
 
@@ -764,9 +769,10 @@ namespace FAT.Application.Models
             CleanFilesCount = scanProgress.CleanFilesCount;
             PendingFilesCount = scanProgress.UnknownFilesCount + scanProgress.NoVerdictFilesCount + scanProgress.FailedToAnalyzeFilesCount;
             MalwareFilesCount = scanProgress.MalwareFilesCount;
-            ProgressPercentage = scanProgress.Percentage / 2;
+            RemoteScanningPercentage = scanProgress.Percentage / 2;
             StatusMessageSystem = scanProgress.StatusMessage;
             ScanStage = scanProgress.ScanStage;
+            RaisePropertyChanged(nameof(StatusMessage));
         }
 
         public void AddFile(ThreatInfoItem threatInfoItem)

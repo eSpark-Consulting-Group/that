@@ -124,7 +124,10 @@ namespace FAT.Application.Services
 
         public void StopTargetsAutoDiscovery()
         {
-            _autoDiscoveryCancellation.Cancel();
+            if (_autoDiscoveryCancellation.Token.CanBeCanceled)
+            {
+                _autoDiscoveryCancellation.Cancel();
+            }
         }
 
         public async Task<List<Tuple<IPAddress, IPAddress>>> GetTargetRanges()

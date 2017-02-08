@@ -830,11 +830,7 @@ namespace FAT.Application.Models
             var operationResult = _aptService.GetModifiedResultsForOperation(_operationGuid, _lastModifiesComputerDate,
                 _lastModifiesFlsVerdictDate, _lastModifiesValkyrieVerdictDate);
             var computers = operationResult.Computers.ToDictionary(c => c.TargetUid);
-            if (!CancelInProgress)
-            {
-                if (Math.Abs(Percentage - 100) > 0.01)
-                    Percentage = operationResult.Percentage;
-            }
+
             
             var files = operationResult.Files;
             if (files.Any())
@@ -854,7 +850,7 @@ namespace FAT.Application.Models
 
             Int32 completed = 0;
             Int32 scanned = 0;
-
+            double percentages = 0;
             IScanCounterDiff counterDiff = new ScanCounterDiff();
             foreach (var infoItem in _onlineItems)
             {
@@ -897,6 +893,7 @@ namespace FAT.Application.Models
                                     }
 
                                 }
+                                infoItem.RemoteScanCompleted();
                             }
                         }
                         infoItem.UpdateCounters(scanProgress, counterDiff);
@@ -906,6 +903,12 @@ namespace FAT.Application.Models
                     infoItem.ScanStage == ScanStage.OperationCompleted ||
                     infoItem.ScanStage == ScanStage.OperationCanceled)
                     completed++;
+                percentages += infoItem.TotalProgressPercentage;
+            }
+            if (!CancelInProgress)
+            {
+                if (Math.Abs(Percentage - 100) > 0.01)
+                    Percentage = percentages / (double) _onlineItems.Length;
             }
             //var safeFilesDiff = 0;
             //var uFilesDiff = 0;
