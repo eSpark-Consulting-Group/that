@@ -202,6 +202,7 @@ namespace APTAT.DeploymentCore
             double progress = 0;
             Parallel.ForEach(ipAddresses, po, r =>
             {
+                po.CancellationToken.ThrowIfCancellationRequested();
                 var target = CheckTarget(r, serverAddresses, serverDnsName);
 
                 Interlocked.Increment(ref processed);
@@ -217,9 +218,6 @@ namespace APTAT.DeploymentCore
                     }
                     OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
                 }
-
-                po.CancellationToken.ThrowIfCancellationRequested();
-
             });
         }
 
