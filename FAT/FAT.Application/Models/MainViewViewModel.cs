@@ -731,7 +731,7 @@ namespace FAT.Application.Models
             IsReportEnabled = true;
             RaisePropertyChanged(nameof(ValkyrieDetailsLink));
             ScanProcessCompleted?.Invoke(this, e);
-            Percentage = 0;
+            Percentage = 100;
         }
 
         private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArg e)
@@ -740,10 +740,11 @@ namespace FAT.Application.Models
             {
                 DiscoveryResults.Add(e.Target);
                 _scanCounterManager.AddComputer();
-                Percentage = e.Progress * 100d;
             }
 
-            if (Percentage == 100)
+            Percentage = e.Progress * 100d;
+
+            if (Math.Abs(Percentage - 100) < 0.0001)
                 IsAutoDiscoveryCompleted = true;
         }
 
@@ -765,7 +766,6 @@ namespace FAT.Application.Models
             var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
             Set(() => TotalItemsCount, items.Count());
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
-            RaisePropertyChanged("OnlineItemsCount");
             Computers = new ObservableCollection<ThreatInfoItem>(items);
 
 
@@ -815,9 +815,9 @@ namespace FAT.Application.Models
 
         private void OnBeginScanCompleted(Object sender, ScanStartedEventArgs e)
         {
-            _operationGuid = e.OperationUid;
-            _scanCounterManager.Clear();
-            _scanIteratorTimer.Start();
+           _operationGuid = e.OperationUid;
+           _scanCounterManager.Clear();
+           _scanIteratorTimer.Start();
         }
 
 
@@ -1048,8 +1048,6 @@ namespace FAT.Application.Models
 
         private void TryActionException(Exception ex)
         {
-
-
             LogHelper.Trace(TraceEventType.Error, $"TryAction error: {ex.GetType()} {ex.Message}{Environment.NewLine}{ex.StackTrace}");
         }
 

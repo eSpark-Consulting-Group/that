@@ -46,7 +46,6 @@ namespace APTAT.Core
             {
                 try
                 {
-                    throw new WebException();
                     response = GetFreeLicense();
                     success = response.Data.Message == "Success";
                     if (success) return response.Data.LicenseKey;

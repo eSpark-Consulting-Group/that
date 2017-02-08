@@ -212,7 +212,7 @@ namespace APTAT.DeploymentCore
                         progress = 100;
                     }
                     else
-                    {
+                   {
                         progress = processed / (double) computersCount;
                     }
                     OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
@@ -611,10 +611,7 @@ namespace APTAT.DeploymentCore
 
         protected virtual void OnDeploymentTargetResolving(DeploymentTargetResolvingEventArg e)
         {
-            lock (lockObject)
-            {
-                DeploymentTargetResolving?.Invoke(this, e);
-            }
+            DeploymentTargetResolving?.Invoke(this, e);
         }
     }
 }
