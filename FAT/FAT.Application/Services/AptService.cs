@@ -2,7 +2,9 @@
 using APTAT.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
@@ -13,6 +15,7 @@ using APTAT.Core.CamLicense;
 using APTAT.Application.Services.EventArgs;
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Properties;
+using APTAT.Common;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace FAT.Application.Services
@@ -22,8 +25,10 @@ namespace FAT.Application.Services
     {
         private IAptAtManager _manager;
         private readonly ICamLicenseProvider _camLicenseProvider;
+        private readonly ISettingsViewModel _proxyCredentialsProvider;
         private string _camLicense = null;
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
+        private NetworkCredential _proxyCredentials;
 
         private string _systemLogin;
         private string _systemPassword;
@@ -32,10 +37,11 @@ namespace FAT.Application.Services
         {
             get { return _sessionGuid; }
         }
-        public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider)
+        public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider, ISettingsViewModel settingsViewModel)
         {
             _camLicenseProvider = camLicenseProvider;
             _manager = aptAtManager;
+            _proxyCredentialsProvider = settingsViewModel;
 
             #region new style
             _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted2;
@@ -101,7 +107,6 @@ namespace FAT.Application.Services
         #endregion
         #region Scan for FAT
         public event EventHandler<ScanStartedEventArgs> FatScanStarted;
-        public event EventHandler<ErrorEventArgs> ErrorOccurred;
         public event EventHandler<ErrorEventArgs> FatScanCompleted;
 
         public void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
@@ -135,39 +140,60 @@ namespace FAT.Application.Services
 
         private void OnComputerScanCompleted2(Object sender, ComputerScanCompletedEventArgs e)
         {
-            Action action = () =>
+            Action action = StartValkyrieAnalysis;
+            if (e.CompletedResult.SafeFilesCount != e.CompletedResult.TotalFilesCount)
             {
                 lock (this)
                 {
                     if (_valkyrieStarted) return;
-                    string camLicenseId;
-                    try
-                    {
-                        camLicenseId = _camLicense ??
-                                       (_camLicense = _camLicenseProvider.TryGetFreeLicense(null));
-                    }
-                    catch (Exception ex)
-                    {
-                        Action a = () =>
-                        {
-                            ErrorOccurred?.Invoke(this, new ErrorEventArgs(ex));
-                        };
-                        App.Current.Dispatcher.BeginInvoke(a);
-                        return;
-                    }
-
-
-                    _manager.StartValkyrieAnalysis(_systemLogin, _systemPassword, camLicenseId, null,
-                        null, null, Settings.Default.applicationName);
                     _valkyrieStarted = true;
                 }
-            };
-            if (e.CompletedResult.SafeFilesCount != e.CompletedResult.TotalFilesCount)
-            {
                 Task.Factory.StartNew(action, TaskCreationOptions.None);
                 var scanner = sender as IAptScanner;
                 if (scanner != null) scanner.ComputerScanCompleted -= OnComputerScanCompleted2;
             }
+        }
+
+        private void StartValkyrieAnalysis()
+        {
+            string camLicenseId;
+            try
+            {
+                camLicenseId = _camLicense ??
+                               (_camLicense = _camLicenseProvider.TryGetFreeLicense(null));
+            }
+            catch (Exception ex)
+            {
+                OnErrorOccurred(ex);
+                return;
+            }
+            _manager.StartValkyrieAnalysis(_systemLogin, _systemPassword, camLicenseId, null,
+                null, _proxyCredentials, Settings.Default.applicationName);
+        }
+
+        public void OnErrorOccurred(Exception ex)
+        {
+            var webException = ex as WebException;
+            var httpWebResponse = webException?.Response as HttpWebResponse;
+            HttpStatusCode? code = httpWebResponse?.StatusCode;
+            if (code == HttpStatusCode.ProxyAuthenticationRequired)
+            {
+                try
+                {
+                    _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                    StartValkyrieAnalysis();
+                    return;
+                }
+                catch (Exception)
+                {
+                    LogHelper.Trace(TraceEventType.Information, "Scan was cancelled by user");
+                }
+            }
+            Action a = () =>
+            {
+                FatScanCompleted?.Invoke(this, new ErrorEventArgs(ex));
+            };
+            App.Current.Dispatcher.BeginInvoke(a);
         }
 
         public GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, DateTime? lastUtcTime,
@@ -241,12 +267,16 @@ namespace FAT.Application.Services
 
         void OnValkyrieAnalyzeCompleted2(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
+            lock (this)
+            {
+                
+            }
             Action action;
             if (e.Error != null)
-            { 
+            {
                 action = () =>
                 {
-                    ErrorOccurred?.Invoke(this, new ErrorEventArgs(e.Error));
+                    OnErrorOccurred(e.Error);
                 };
             }
             else

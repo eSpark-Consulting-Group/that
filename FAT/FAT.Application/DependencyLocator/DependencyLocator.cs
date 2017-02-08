@@ -9,6 +9,7 @@ namespace FAT.Application
         public void RegisterDependencies(ICompositionHelper resolver)
         {
             resolver.RegisterSingleton<ITargetsDiscoveryService, TargetsDiscoveryService>();
+            resolver.RegisterSingleton<ISettingsViewModel, SettingsViewModel>();
             resolver.RegisterSingleton<IAptService, AptService>();
             resolver.RegisterSingleton<IStorageService, StorageService>();
             resolver.RegisterSingleton<IFileBrowserService, FileBrowserService>();

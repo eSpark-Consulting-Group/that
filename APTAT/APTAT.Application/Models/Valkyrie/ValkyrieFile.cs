@@ -245,7 +245,7 @@ namespace APTAT.Application.Models.Valkyrie
                 len = len / 1024;
             }
 
-            string result = String.Format("{0:0.##} {1}", len, sizes[order]);
+            string result = $"{len:0.##} {sizes[order]}";
 
             return result;
         }

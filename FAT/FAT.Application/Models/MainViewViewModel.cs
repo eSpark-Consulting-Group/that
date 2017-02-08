@@ -687,7 +687,6 @@ namespace FAT.Application.Models
 
             _aptService.FatScanStarted += OnBeginScanCompleted;
             _aptService.FatScanCompleted += OnScanCompleted;
-            _aptService.ErrorOccurred += OnErrorOccurred;
 
         }
 
@@ -700,7 +699,6 @@ namespace FAT.Application.Models
 
             _aptService.FatScanStarted -= OnBeginScanCompleted;
             _aptService.FatScanCompleted -= OnScanCompleted;
-            _aptService.ErrorOccurred -= OnErrorOccurred;
         }
 
 
@@ -723,55 +721,6 @@ namespace FAT.Application.Models
         }
 
         public WizardStepEnum CurrentStep { get; set; }
-
-        void OnValkyrieAnalyzeCompleted(ErrorEventArgs e)
-        {
-            if (_isScanInProgress != false) return;
-            if (e.Error != null)
-            {
-                var webException = e.Error as WebException;
-                var httpWebResponse = webException?.Response as HttpWebResponse;
-                if (httpWebResponse != null)
-                {
-                    HttpStatusCode code = httpWebResponse.StatusCode;
-                    if (code == HttpStatusCode.ProxyAuthenticationRequired)
-                    {
-                        SettingsWindow window = new SettingsWindow();
-                        window.Owner = System.Windows.Application.Current.MainWindow;
-                        window.DataContext = this;
-                        window.ShowProxyCredentials = true;
-                        window.Header = "Proxy Credentials";
-
-                        bool retry = window.ShowDialog().GetValueOrDefault();
-
-                        if (retry)
-                        {
-                            NetworkCredential cred = new NetworkCredential(ProxyLogin, ProxyPassword, null); 
-                           // BeginValkyrieAnalysis(cred);
-//---------------------------------------------------------------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>
-                            return;
-                        }
-                    }
-                }
-
-
-            }
-
-
-            CancelInProgress = false;
-
-            IsReportEnabled = true;
-
-            RaisePropertyChanged("Header");
-            RaisePropertyChanged("ValkyrieDetailsLink");
-            
-        }
-
-
-        private void OnErrorOccurred(Object sender, ErrorEventArgs e)
-        {
-            
-        }
 
         private void OnScanCompleted(Object sender, ErrorEventArgs e)
         {

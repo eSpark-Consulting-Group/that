@@ -160,7 +160,6 @@ namespace FAT.Application.Services
             DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime);
 
         event EventHandler<ScanStartedEventArgs> FatScanStarted;
-        event EventHandler<ErrorEventArgs> ErrorOccurred;
         event EventHandler<ErrorEventArgs> FatScanCompleted;
 
     }
