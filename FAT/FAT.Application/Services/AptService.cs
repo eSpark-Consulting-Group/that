@@ -1,22 +1,19 @@
 ﻿using FAT.Application.Models;
 using APTAT.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
 using APTAT.Core.Reports;
-using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.CamLicense;
 using APTAT.Application.Services.EventArgs;
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Properties;
-using APTAT.Core.Apt;
-using APTAT.Core.FLS;
-using FAT.Application.Properties;
+using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace FAT.Application.Services
 {
@@ -173,13 +170,39 @@ namespace FAT.Application.Services
             }
         }
 
-        public GetModifiedComputerResultsForOperationEventArgs GetModifiedComputerResultsForOperation(Guid operationUid, DateTime? lastUtcTime)
+        public GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, DateTime? lastUtcTime,
+            DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime)
         {
             var result = _manager.AggregatedScanResults;
             var completed = !result.IsOperationInProgress(operationUid);
             var percentage = GetProgressOfOperations(operationUid) / 2;
-            var mappedResult = result.ScanResults.Where(c => lastUtcTime == null || c.Modified > lastUtcTime)
-                .Select(r => new ScanResultItem
+            List<ScanResultItem> mappedResult = new List<ScanResultItem>();
+            Dictionary<string,IModule> modules = new Dictionary<string,IModule>(StringComparer.OrdinalIgnoreCase);
+            foreach (var r in result.ScanResults.Where(c => lastUtcTime == null || c.Modified > lastUtcTime))
+            {
+                List<BadFileItem> badfiles = new List<BadFileItem>();
+                foreach (var m in r.BadFiles)
+                {
+                    if (!modules.ContainsKey(m.Sha1)&&(m.IsUnknown() || m.Cloud == CloudVerdict.Malware))
+                        modules.Add(m.Sha1, m);
+                    badfiles.Add(new BadFileItem
+                    {
+                        Name = m.Path,
+                        Size = m.Size,
+                        Accessed = m.Accessed,
+                        Created = m.Created,
+                        Modified = m.Modified,
+                        Product = m.Product,
+                        Copyright = m.Copyright,
+                        Version = m.Version,
+                        Description = m.Description,
+                        Signer = m.Signer,
+                        Attributes = m.Attributes,
+                        Sha1 = m.Sha1,
+                        Cloud = m.Cloud,
+                    });
+                }
+                mappedResult.Add(new ScanResultItem
                 {
                     TargetUid = r.TargetUid,
                     TotalFilesCount = r.TotalFilesCount,
@@ -192,45 +215,28 @@ namespace FAT.Application.Services
                     ScanStage = FromAptScanStage(r.ScanStage),
                     Modified = r.Modified,
                     StatusMessage = r.ShortStatusMessage.ToString(),
-                    BadFiles = r.BadFiles
-                        .Select(m => new BadFileItem
-                        {
-                            Name = m.Path,
-                            Size = m.Size,
-                            Accessed = m.Accessed,
-                            Created = m.Created,
-                            Modified = m.Modified,
-                            Product = m.Product,
-                            Copyright = m.Copyright,
-                            Version = m.Version,
-                            Description = m.Description,
-                            Signer = m.Signer,
-                            Attributes = m.Attributes,
-                            Sha1 = m.Sha1,
-                            Cloud = m.Cloud,
-                        }).ToArray()
-                }).ToArray();
-            return new GetModifiedComputerResultsForOperationEventArgs(mappedResult, completed, percentage);
+                    BadFiles = badfiles.ToArray()
+                });
+            }
+
+            var files = _manager.GetModifiedFileVerdicts(lastFlcUtcTime);
+            Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResults;
+            var valkyrieResult = _manager.GetModifiedValkyrieVerdicts(lastValkyrieTime, modules, out valkyrieAnalysisResults);
+            var mappedFiles = files
+                .Select(r => new FileVerdictContext(r.Sha1, r.Cloud, r.ModifiedDateTime)).ToList();
+            mappedFiles.AddRange(valkyrieResult.Select(vr =>
+                new FileVerdictContext(vr.Sha1, vr.ValkyrieAnalysisResult, vr.VerdictModified)));
+            mappedFiles.AddRange(valkyrieAnalysisResults.Values.Select(vr =>
+                new FileVerdictContext(vr.SHA1, vr, DateTime.MinValue)));
+            return new GetModifiedResultsForOperationEventArgs(mappedResult.ToArray(), mappedFiles.ToArray(), completed, percentage);
         }
 
         public double GetProgressOfOperations(Guid operationUid)
         {
-            var scanResults = _manager.AggregatedScanResults.ScanResults
-                .OfType<IAptScanResult>()
+            var scanResults = _manager.AggregatedScanResults.ScanResults.OfType<IAptScanResult>()
                 .Where(r => r.ResultType != APTAT.Core.ScanResultType.NotPerformed).ToArray();
             var result = scanResults.Sum(sr => sr.Percentage) / (scanResults.Count() * 100) * 100d;
             return result;
-        }
-
-        public GetModifiedFileVerdictsEventArgs GetUpdatedFileVerdict(DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime)
-        {
-            var result = _manager.GetModifiedFileVerdicts(lastFlcUtcTime);
-            var valkyrieResult = _manager.GetModifiedValkyrieVerdicts(lastValkyrieTime);
-            var mappedResult = result
-                .Select(r => new FileVerdictContext(r.Sha1, r.Cloud, r.ModifiedDateTime)).ToList();
-            mappedResult.AddRange(valkyrieResult.Select(vr => 
-                new FileVerdictContext(vr.Sha1, vr.ValkyrieAnalysisResult, vr.VerdictModified)));
-            return new GetModifiedFileVerdictsEventArgs(mappedResult.ToArray());
         }
 
         void OnValkyrieAnalyzeCompleted2(object sender, AnalyzeCompletedEventArgs<FileResult> e)

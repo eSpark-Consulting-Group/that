@@ -127,8 +127,7 @@
     <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
     <Compile Include="Models\ScanCounter.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
-    <Compile Include="Services\EventArgs\GetModifiedComputerResultsForOperationEventArgs.cs" />
-    <Compile Include="Services\EventArgs\GetModifiedFileVerdictsEventArgs.cs" />
+    <Compile Include="Services\EventArgs\GetModifiedResultsForOperationEventArgs.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>

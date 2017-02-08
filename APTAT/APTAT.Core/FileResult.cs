@@ -30,26 +30,6 @@ namespace APTAT.Core
             Product = badFile.Product;
         }
 
-        public FileResult(FileResult result)
-        {
-            Computers = new List<ComputerInformation>();
-            Id = result.Id;
-            Path = result.Path;
-            Cloud = result.Cloud;
-            Size = result.Size;
-            Attributes = result.Attributes;
-            Created = result.Created;
-            Modified = result.Modified;
-            Accessed = result.Accessed;
-            Sha1 = result.Sha1.Trim().ToLower();
-            Signer = result.Signer;
-            Description = result.Description;
-            Version = result.Version;
-            Copyright = result.Copyright;
-            Product = result.Product;
-            ValkyrieAnalysisResult = new ValkyrieAnalysisResult(result.ValkyrieAnalysisResult);
-        }
-
         public string Id { get; set; }
         public string Path { get; set; }
         public Descent.Apt.CloudVerdict Cloud { get; set; }

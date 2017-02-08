@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
@@ -26,7 +27,8 @@ namespace APTAT.Core
         IAptReportBuilder GetAptReportBuilder();
         int GetDistinctFilesCount();
         IAptVerdictContext[] GetModifiedFileVerdicts(DateTime? modifiedDate);
-        FileResult[] GetModifiedValkyrieVerdicts(DateTime? modifiedTime);
+        FileResult[] GetModifiedValkyrieVerdicts(DateTime? modifiedDate, Dictionary<string, IModule> modules
+            , out Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResults);
 
         void StopScan(Guid[] targets);
         void UpdateFlsPorts(int udpPort, int tcpPort);
@@ -41,6 +43,6 @@ namespace APTAT.Core
     {
         Guid ValkyrieOperationUid { get; }
         Guid FlsLookupOperationUid { get; }
-        ConcurrentDictionary<string, FileResult> ValkyrieAnalysisResult { get; }
+        Dictionary<string, FileResult> ValkyrieAnalysisResult { get; }
     }
 }

@@ -494,7 +494,7 @@ namespace APTAT.Application.Models
                     return;
                 }
                 _totalFilesCount = value;
-                RaisePropertyChanged("TotalFilesCount");
+                RaisePropertyChanged(nameof(TotalFilesCount));
             }
         }
 
@@ -532,8 +532,8 @@ namespace APTAT.Application.Models
 
                 var uniqueComputers = Computers.GroupBy(_ => _.ComputerGuid).Select(_ => _.Key).Count();
 
-                return string.Format("{0} instances on {1} computer{2}.", Computers.Count,
-                    uniqueComputers, uniqueComputers > 1 ? "s" : string.Empty);
+                return $"{Computers.Count} instances on {uniqueComputers}" +
+                       $" computer{(uniqueComputers > 1 ? "s" : string.Empty)}.";
             }
         }
 
@@ -581,7 +581,7 @@ namespace APTAT.Application.Models
             ScanStage = ScanStage.OperationCompleted;
             BadFile = badFile;
             if (!string.IsNullOrEmpty(badFile.Product))
-                ShortName = string.Format("{0} ({1})", Path.GetFileName(badFile.Name), badFile.Product);
+                ShortName = $"{Path.GetFileName(badFile.Name)} ({badFile.Product})";
             else
                 ShortName = Path.GetFileName(badFile.Name);
         }

@@ -156,8 +156,9 @@ namespace FAT.Application.Services
         void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options);
 
-        GetModifiedComputerResultsForOperationEventArgs GetModifiedComputerResultsForOperation(Guid operationUid, DateTime? lastUtcTime);
-        GetModifiedFileVerdictsEventArgs GetUpdatedFileVerdict(DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime);
+        GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, DateTime? lastUtcTime,
+            DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime);
+
         event EventHandler<ScanStartedEventArgs> FatScanStarted;
         event EventHandler<ErrorEventArgs> ErrorOccurred;
         event EventHandler<ErrorEventArgs> FatScanCompleted;
