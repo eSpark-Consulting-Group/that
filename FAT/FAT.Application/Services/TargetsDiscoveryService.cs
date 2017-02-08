@@ -30,7 +30,12 @@ namespace FAT.Application.Services
             _manager = manager;
             _networkHelper = networkHelper;
             _networkHelper.DeploymentTargetResolving += (sender, e) => {
-                DeploymentTargetsAutoResolving?.Invoke(this, e);
+                Action action = () =>
+                {
+                    DeploymentTargetsAutoResolving?.Invoke(this, e);
+                };
+                App.Current.Dispatcher.BeginInvoke(action);
+                
             };
         }
 

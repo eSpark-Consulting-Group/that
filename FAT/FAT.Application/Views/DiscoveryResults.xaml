@@ -10,14 +10,14 @@
                 xmlns:converters="clr-namespace:FAT.Application.Converters" 
                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                 xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
-                d:DesignHeight="400" d:DesignWidth="600">
+                d:DesignHeight="400" d:DesignWidth="600" Loaded="UserControl_Loaded">
     <Grid x:Name="grid" Opacity="0">
         <Grid.Triggers>
             <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
                 <BeginStoryboard>
                     <Storyboard>
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.0">
-                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1" >
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.2">
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1" >
                                 <EasingDoubleKeyFrame.EasingFunction>
                                     <CubicEase/>
                                 </EasingDoubleKeyFrame.EasingFunction>
@@ -27,23 +27,28 @@
                 </BeginStoryboard>
             </EventTrigger>
         </Grid.Triggers>
-        <telerik:RadTreeListView x:Name="tree" CanUserFreezeColumns="False" AutoGenerateColumns="False" SelectionMode="Extended" EnableRowVirtualization="True" IsReadOnly="True" ItemsSource="{Binding DiscoveryResults}"   
+        <telerik:RadTreeListView x:Name="treeList" CanUserFreezeColumns="False" AutoGenerateColumns="False" SelectionMode="Extended" EnableRowVirtualization="True" IsReadOnly="True" ItemsSource="{Binding DiscoveryResults}"   
                                  AutoExpandItems="False" HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" FocusVisualStyle="{x:Null}" ScrollMode="Deferred" >
             <telerik:RadTreeListView.Resources>
-                <DataTemplate x:Key="NameColumnTemplate">
-                    <Grid >
+                <DataTemplate x:Key="NameTemplate">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Canvas Height="17" Width="20" Margin="3,0,0,0">
+                            <Path SnapsToDevicePixels="True" Data="F1M80,139L94,128L94,139z" Fill="{Binding ElementName=txt, Path=Foreground}" Height="11" Canvas.Left="3" Opacity="0.3" Stretch="Fill" Canvas.Top="1" Width="14"/>
+                            <Path SnapsToDevicePixels="True" Data="M19,15 L20,15 20,16 19,16 z M7,15 L7,16 13,16 13,15 12,15 11,15 9,15 8,15 z M0,15 L1,15 1,16 0,16 z M9,13 L9,14 11,14 11,13 z M2.9999998,0.99999996 L2.9999998,12 17,12 17,0.99999996 z M1.9999999,0 L18,0 18,13 12,13 12,14 14,14 14,15 18,15 18,16 14,16 14,17 6,17 6,16 1.9999999,16 1.9999999,15 6,15 6,14 8,14 8,13 1.9999999,13 z" Fill="{Binding ElementName=txt, Path=Foreground}" Height="17" Stretch="Fill" Width="20"/>
+                        </Canvas>
 
-                        
-                        
-                        <TextBlock Margin="26 2 0 0" Text="test"/>
+                        <TextBlock Margin="8,0,0,0" Grid.Column="1" x:Name="txt" Text="{Binding DnsName}" FontSize="14"  HorizontalAlignment="Left"/>
 
                     </Grid>
                 </DataTemplate>
 
-                <DataTemplate x:Key="IPColumnTemplate">
-                    <Grid>
-                        <TextBlock Margin="26 2 0 0" Text="test"/>
-                    </Grid>
+                <DataTemplate x:Key="IPTemplate">
+                    <TextBlock Text="{Binding IPAddress}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding IPAddress}" TextAlignment="Left" Margin="3 0"/>
                 </DataTemplate>
 
                 
@@ -52,8 +57,24 @@
                 <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
             </telerik:RadTreeListView.ChildTableDefinitions>
             <telerik:RadTreeListView.Columns>
-                <telerik:GridViewColumn CellTemplate="{StaticResource NameColumnTemplate}" IsFilterable="False"  Focusable="False" Header="Name" IsReadOnly="True" MinWidth="200" Width="600*" SortMemberPath="Name" />
-                <telerik:GridViewColumn CellTemplate="{StaticResource IPColumnTemplate}"  IsFilterable="False"   Focusable="False" Header="IP" IsReadOnly="True" TextAlignment="Left" MinWidth="200" Width="200*" SortMemberPath="IP"/>
+            <telerik:GridViewColumn
+                    IsFilterable="False"
+                    ShowFilterButton="False"
+                    ShowFieldFilters="False"
+                    HeaderCellStyle="{StaticResource HeaderCellStyle}"
+                    CellTemplate="{StaticResource NameTemplate}"
+                    Header="      Name" MinWidth="300"
+                    Width="500*"        
+                    SortMemberPath="DnsName" />
+                <telerik:GridViewColumn
+                    IsFilterable="False"
+                    ShowFilterButton="False"
+                    ShowFieldFilters="False"
+                    HeaderCellStyle="{StaticResource HeaderCellStyle}"
+                    CellTemplate="{StaticResource IPTemplate}"
+                    Header="IP" MinWidth="180"
+                    Width="180*"        
+                    SortMemberPath="IPAddressSorting" />
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>

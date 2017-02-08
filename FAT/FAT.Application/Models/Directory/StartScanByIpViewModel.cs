@@ -25,7 +25,7 @@ namespace FAT.Application.Models.Directory
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
-        private ObservableCollection<DeploymentItem> _items;
+
 
         public ICollection<Object> CheckedItems
         {
@@ -113,11 +113,18 @@ namespace FAT.Application.Models.Directory
         private async void GetTargetRanges()
         {
             var range = await _targetsDiscoveryService.GetTargetRanges();
-            if (range.Any())
-                Set(() => DefaultRange, range.FirstOrDefault().Item1.ToString());
+            foreach (var tuple in range)
+            {
+                var ipAddress = new IpAddressWrapper();
+                ipAddress.Text = string.Join("/", tuple.Item1, tuple.Item2);
+                string validationMessage;
+                if (_validator.Validate1(ipAddress, out validationMessage) &&
+                   _validator.Validate2(ipAddress, out validationMessage))
+                    IpAddresses.Add(ipAddress);
+            }
         }
 
-        public string DefaultRange { get; set; }
+
 
         protected override void InvokeViewUnloaded(Object arg)
         {

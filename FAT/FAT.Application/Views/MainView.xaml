@@ -257,7 +257,19 @@
                 </ListBox.Resources>
             </ListBox>
 
-            <Button Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StartScanCommand}">
+            <Button Visibility="{Binding IsAutoDiscoveryInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopAutoDiscoveryCommand}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Path SnapsToDevicePixels="True" Margin="0 0 10 0" Data="M7,5 L9,5 L12,8 L9,11 L7,11 L10.093994,8 z M5,5 L8,8 L5,11 z M8,2 C4.6870117,2 2,4.6860046 2,8 C2,11.313995 4.6870117,14 8,14 C11.312988,14 14,11.313995 14,8 C14,4.6860046 11.312988,2 8,2 z M8,0 C12.417999,0 16,3.5820007 16,8 C16,12.417999 12.417999,16 8,16 C3.5820007,16 0,12.417999 0,8 C0,3.5820007 3.5820007,0 8,0 z" Fill="White" Height="16" Stretch="Fill" Width="16"/>
+                    <TextBlock Text="Skip Discovery" Grid.Column="1"/>
+                </Grid>
+            </Button>
+
+
+            <Button Visibility="{Binding IsAutoDiscoveryCompleted, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StartScanCommand}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -282,87 +294,85 @@
 
             <Grid Grid.Row="2" Grid.RowSpan="2" Background="White" Margin="32 0 32 20" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}"/>
 
-            <Controls:SearchUserControl Grid.Row="2" HorizontalAlignment="Left" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}"
-                                        AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        x:Name="SearchTextBox" VerticalAlignment="Bottom"   TabIndex="0"                 
-                                        Margin="32 0 0 0" Watermark="{Binding GroupByWatermark}"
-                                        IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
-            </Controls:SearchUserControl>
-            <Grid Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 32 0" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Group By" Foreground="#FF547D98" FontSize="14" Opacity="0.5" Margin="0 6 10 0"/>
-                <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" Grid.Column="1"
+            <Grid Grid.Row="2" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" Margin="32 0">
+                <Controls:SearchUserControl HorizontalAlignment="Left"  AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        x:Name="SearchTextBox" VerticalAlignment="Bottom" Watermark="{Binding GroupByWatermark}" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
+                </Controls:SearchUserControl>
+                <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Group By" Foreground="#FF547D98" FontSize="14" Opacity="0.5" Margin="0 6 10 0"/>
+                    <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" Grid.Column="1"
                       IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}" ToolTip="Computers" >
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Setter Property="Width" Value="40" />
-                            <Setter Property="Height" Value="32" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Grid Background="Transparent"  x:Name="Bg2">
-                                            <Grid  x:Name="Bg" Background="White">
-                                                <Canvas HorizontalAlignment="Center" Height="17" VerticalAlignment="Center" Width="20">
-                                                    <Path SnapsToDevicePixels="True" Data="F1M80,139L94,128L94,139z" Fill="#FF457FAD" Height="11" Opacity="0.3" Stretch="Fill" Width="14" Canvas.Left="3" Canvas.Top="1" x:Name="path1"/>
-                                                    <Path SnapsToDevicePixels="True" Data="M19,15 L20,15 20,16 19,16 z M7,15 L7,16 13,16 13,15 12,15 11,15 9,15 8,15 z M0,15 L1,15 1,16 0,16 z M9,13 L9,14 11,14 11,13 z M2.9999998,0.99999996 L2.9999998,12 17,12 17,0.99999996 z M1.9999999,0 L18,0 18,13 12,13 12,14 14,14 14,15 18,15 18,16 14,16 14,17 6,17 6,16 1.9999999,16 1.9999999,15 6,15 6,14 8,14 8,13 1.9999999,13 z" Fill="#FF457FAD" Height="17" Stretch="Fill" Width="20" x:Name="path2"/>
-                                                </Canvas>
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Width" Value="40" />
+                                <Setter Property="Height" Value="32" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Grid Background="Transparent"  x:Name="Bg2">
+                                                <Grid  x:Name="Bg" Background="White">
+                                                    <Canvas HorizontalAlignment="Center" Height="17" VerticalAlignment="Center" Width="20">
+                                                        <Path SnapsToDevicePixels="True" Data="F1M80,139L94,128L94,139z" Fill="#FF457FAD" Height="11" Opacity="0.3" Stretch="Fill" Width="14" Canvas.Left="3" Canvas.Top="1" x:Name="path1"/>
+                                                        <Path SnapsToDevicePixels="True" Data="M19,15 L20,15 20,16 19,16 z M7,15 L7,16 13,16 13,15 12,15 11,15 9,15 8,15 z M0,15 L1,15 1,16 0,16 z M9,13 L9,14 11,14 11,13 z M2.9999998,0.99999996 L2.9999998,12 17,12 17,0.99999996 z M1.9999999,0 L18,0 18,13 12,13 12,14 14,14 14,15 18,15 18,16 14,16 14,17 6,17 6,16 1.9999999,16 1.9999999,15 6,15 6,14 8,14 8,13 1.9999999,13 z" Fill="#FF457FAD" Height="17" Stretch="Fill" Width="20" x:Name="path2"/>
+                                                    </Canvas>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                                <Setter Property="Background" TargetName="Bg" Value="#FFEFF1F3" />
-                                            </Trigger>
-                                            <Trigger Property="ToggleButton.IsChecked" Value="False">
-                                                <Setter Property="Background" TargetName="Bg" Value="White" />
-                                                <Setter Property="Fill" TargetName="path1" Value="#FFC3CCD4" />
-                                                <Setter Property="Fill" TargetName="path2" Value="#FFC3CCD4" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-                <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" Grid.Column="2"
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                    <Setter Property="Background" TargetName="Bg" Value="#FFEFF1F3" />
+                                                </Trigger>
+                                                <Trigger Property="ToggleButton.IsChecked" Value="False">
+                                                    <Setter Property="Background" TargetName="Bg" Value="White" />
+                                                    <Setter Property="Fill" TargetName="path1" Value="#FFC3CCD4" />
+                                                    <Setter Property="Fill" TargetName="path2" Value="#FFC3CCD4" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" Grid.Column="2"
                       IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}" ToolTip="Files">
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Setter Property="Width" Value="40" />
-                            <Setter Property="Height" Value="32" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Grid Background="Transparent"  x:Name="Bg2">
-                                            <Grid  x:Name="Bg" Background="White">
-                                                <Canvas HorizontalAlignment="Center" Height="17" VerticalAlignment="Center" Width="21">
-                                                    <Path SnapsToDevicePixels="True" Data="M14,0 L14,3 13,3 10.182001,3 6,3 6,6.2857143 7,5.5 7,11 6,11 6,12 5,12 5,11 0,11 5,7.0714287 5,3 5,2 6,2 11.454667,2 z" Fill="#FF457FAD" Height="12" Opacity="0.3" Stretch="Fill" Width="14" Canvas.Left="3" Canvas.Top="1" x:Name="path1"/>
-                                                    <Path SnapsToDevicePixels="True" Data="M7,15 L7,16 8.9999998,16 8.9999998,15 8.0000001,15 z M0,15 L1,15 1,16 0,16 z M12,13 L18,13 18,14 12,14 z M12,11 L18,11 18,12 12,12 z M12,9 L18,9 18,10 12,10 z M12,7 L17,7 17,8 12,8 z M10,4.9999999 L10,16 20,16 20,7 18.186005,7 18.167007,4.9999999 z M3,1.0000002 L3,12 8.9999998,12 8.9999998,4 15,4 16,4 17,4 17,1.0000002 z M2,0 L18,0 18,4 19,4 21,6.2030032 21,17 9.0000001,17 6,17 6,16 2,16 2,15 6,15 6,14 8.0000001,14 8.0000001,13 2,13 z" Fill="#FF457FAD" Height="17" Stretch="Fill" Width="21" x:Name="path2"/>
-                                                </Canvas>
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Width" Value="40" />
+                                <Setter Property="Height" Value="32" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Grid Background="Transparent"  x:Name="Bg2">
+                                                <Grid  x:Name="Bg" Background="White">
+                                                    <Canvas HorizontalAlignment="Center" Height="17" VerticalAlignment="Center" Width="21">
+                                                        <Path SnapsToDevicePixels="True" Data="M14,0 L14,3 13,3 10.182001,3 6,3 6,6.2857143 7,5.5 7,11 6,11 6,12 5,12 5,11 0,11 5,7.0714287 5,3 5,2 6,2 11.454667,2 z" Fill="#FF457FAD" Height="12" Opacity="0.3" Stretch="Fill" Width="14" Canvas.Left="3" Canvas.Top="1" x:Name="path1"/>
+                                                        <Path SnapsToDevicePixels="True" Data="M7,15 L7,16 8.9999998,16 8.9999998,15 8.0000001,15 z M0,15 L1,15 1,16 0,16 z M12,13 L18,13 18,14 12,14 z M12,11 L18,11 18,12 12,12 z M12,9 L18,9 18,10 12,10 z M12,7 L17,7 17,8 12,8 z M10,4.9999999 L10,16 20,16 20,7 18.186005,7 18.167007,4.9999999 z M3,1.0000002 L3,12 8.9999998,12 8.9999998,4 15,4 16,4 17,4 17,1.0000002 z M2,0 L18,0 18,4 19,4 21,6.2030032 21,17 9.0000001,17 6,17 6,16 2,16 2,15 6,15 6,14 8.0000001,14 8.0000001,13 2,13 z" Fill="#FF457FAD" Height="17" Stretch="Fill" Width="21" x:Name="path2"/>
+                                                    </Canvas>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                                <Setter Property="Background" TargetName="Bg" Value="#FFEFF1F3" />
-                                            </Trigger>
-                                            <Trigger Property="ToggleButton.IsChecked" Value="False">
-                                                <Setter Property="Background" TargetName="Bg" Value="White" />
-                                                <Setter Property="Fill" TargetName="path1" Value="#FFC3CCD4" />
-                                                <Setter Property="Fill" TargetName="path2" Value="#FFC3CCD4" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                    <Setter Property="Background" TargetName="Bg" Value="#FFEFF1F3" />
+                                                </Trigger>
+                                                <Trigger Property="ToggleButton.IsChecked" Value="False">
+                                                    <Setter Property="Background" TargetName="Bg" Value="White" />
+                                                    <Setter Property="Fill" TargetName="path1" Value="#FFC3CCD4" />
+                                                    <Setter Property="Fill" TargetName="path2" Value="#FFC3CCD4" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                </Grid>
             </Grid>
-
             <Frame Source="{Binding Uri}" NavigationUIVisibility="Hidden" Grid.Row="3" FocusVisualStyle="{x:Null}" Margin="32 0 32 20"/>
             <Border BorderThickness="1" SnapsToDevicePixels="True" BorderBrush="#FFDCE1E5" Grid.Row="2" Grid.RowSpan="2" Margin="32 0 32 20"/>
 

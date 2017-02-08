@@ -29,6 +29,20 @@ namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
 
         public string IPAddress { get; set; }
 
+        public string IPAddressSorting
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(IPAddress))
+                    return string.Empty;
+
+                var ver = Version.Parse(IPAddress);
+                var str = string.Format("C{0:000}.{1:000}.{2:000}.{3:000}",
+                    ver.Major, ver.Minor, ver.Build, ver.Revision);
+                return str;
+            }
+        }
+
         public System.Net.IPAddress GetIPAddress()
         {
             LogHelper.Trace(System.Diagnostics.TraceEventType.Information, "GetIPAddress was called  IP" + (String.IsNullOrWhiteSpace(this.IPAddress)? "Empty": this.IPAddress));
