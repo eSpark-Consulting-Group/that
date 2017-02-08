@@ -704,6 +704,15 @@ namespace FAT.Application.Models
                             case UiFinalVerdict.Unknown:
                                 unknownDiff--;
                                 break;
+                            case UiFinalVerdict.Malware:
+                                malwareDiff--;
+                                break;
+                            case UiFinalVerdict.NotAnalyzed:
+                                notAnalyzedDiff--;
+                                break;
+                            case UiFinalVerdict.Clean:
+                                cleanDiff--;
+                                break;
                         }
                         anyUpdated = anyUpdated || item.UpdateFileVerdict(verdictContext);
                         switch (item.FinalVerdict)

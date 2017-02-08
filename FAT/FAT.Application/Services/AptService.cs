@@ -44,7 +44,7 @@ namespace FAT.Application.Services
             _proxyCredentialsProvider = settingsViewModel;
 
             #region new style
-            _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted2;
+            _manager.ValkyrieAnalyzeCompleted += OnValkyrieAnalyzeCompleted;
             #endregion
         }
         #region reporting
@@ -115,20 +115,20 @@ namespace FAT.Application.Services
             IAptScanner scanner = _manager.GetAptScanner(targets, devicesSourceDescription, options);
             _systemLogin = options.Login;
             _systemPassword = options.Password;
-            scanner.ScanStarted += OnScanStarted2;
-            scanner.ComputerScanCompleted += OnComputerScanCompleted2;
-            scanner.ScanCompleted += OnScanCompleted2;
+            scanner.ScanStarted += OnScanStarted;
+            scanner.ComputerScanCompleted += OnComputerScanCompleted;
+            scanner.ScanCompleted += OnScanCompleted;
             scanner.BeginScan();
         }
 
-        private void OnScanCompleted2(Object sender, APTAT.Core.ScanCompletedEventArgs e)
+        private void OnScanCompleted(Object sender, APTAT.Core.ScanCompletedEventArgs e)
         {
             var scanner = sender as IAptScanner;
             if (scanner != null)
             {
-                scanner.ScanCompleted -= OnScanCompleted2;
-                scanner.ScanStarted -= OnScanStarted2;
-                scanner.ComputerScanCompleted -= OnComputerScanCompleted2;
+                scanner.ScanCompleted -= OnScanCompleted;
+                scanner.ScanStarted -= OnScanStarted;
+                scanner.ComputerScanCompleted -= OnComputerScanCompleted;
             }
             lock (this)
             {
@@ -138,7 +138,7 @@ namespace FAT.Application.Services
         }
 
 
-        private void OnComputerScanCompleted2(Object sender, ComputerScanCompletedEventArgs e)
+        private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
         {
             Action action = StartValkyrieAnalysis;
             if (e.CompletedResult.SafeFilesCount != e.CompletedResult.TotalFilesCount)
@@ -150,7 +150,7 @@ namespace FAT.Application.Services
                 }
                 Task.Factory.StartNew(action, TaskCreationOptions.None);
                 var scanner = sender as IAptScanner;
-                if (scanner != null) scanner.ComputerScanCompleted -= OnComputerScanCompleted2;
+                if (scanner != null) scanner.ComputerScanCompleted -= OnComputerScanCompleted;
             }
         }
 
@@ -265,12 +265,8 @@ namespace FAT.Application.Services
             return result;
         }
 
-        void OnValkyrieAnalyzeCompleted2(object sender, AnalyzeCompletedEventArgs<FileResult> e)
+        void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
-            lock (this)
-            {
-                
-            }
             Action action;
             if (e.Error != null)
             {
@@ -289,13 +285,13 @@ namespace FAT.Application.Services
 
             App.Current.Dispatcher.BeginInvoke(action);
         }
-        private void OnScanStarted2(Object sender, ScanStartedEventArgs e)
+        private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
             _valkyrieStarted = false;
             var scanner = sender as IAptScanner;
             if (scanner != null)
             {
-                scanner.ScanStarted -= OnScanStarted2;
+                scanner.ScanStarted -= OnScanStarted;
             }
             Action action = () =>
             {
@@ -383,7 +379,7 @@ namespace FAT.Application.Services
         {
             if (_manager != null)
             {
-                _manager.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted2;
+                _manager.ValkyrieAnalyzeCompleted -= OnValkyrieAnalyzeCompleted;
                 _manager.Dispose();
                 _manager = null;
             }

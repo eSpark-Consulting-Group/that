@@ -1,6 +1,7 @@
 ﻿using FAT.Application.Services;
 using APTAT.Common;
 using APTAT.Core;
+using FAT.Application.Models;
 
 namespace FAT.Application
 {

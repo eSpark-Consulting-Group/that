@@ -273,44 +273,6 @@ namespace APTAT.Valkyrie
             }
         }
 
-        //private Guid GetEndpointId()
-        //{
-        //    string subKeyName = @"SOFTWARE\COMODO\APTAT";
-        //    const string keyValueName = "EndpointID";
-
-        //    RegistryKey key = Registry.CurrentUser.OpenSubKey(subKeyName, true);
-
-        //    if (key == null)
-        //    {
-        //        key = Registry.CurrentUser.CreateSubKey(subKeyName);
-        //        var guid = Guid.NewGuid();
-        //        if (key != null)
-        //        {
-        //            key.SetValue(keyValueName, guid, RegistryValueKind.String);
-        //            key.Dispose();
-        //        }
-        //        return guid;
-        //    }
-        //    else
-        //    {
-        //        var id = key.GetValue(keyValueName);
-        //        if (id == null)
-        //        {
-        //            var guid = Guid.NewGuid();
-        //            key.SetValue(keyValueName, guid, RegistryValueKind.String);
-        //            key.Dispose();
-        //            return guid;
-        //        }
-        //        else
-        //        {
-        //            key.Dispose();
-        //            Guid result;
-        //            Guid.TryParse(id.ToString(), out result);
-        //            return result;
-        //        }
-        //    }
-        //}
-
        
         private void SubmitToAutomaticAnalysis(List<ValkyrieFileInfo> badFiles, 
             CancellationToken cancellationToken, Action< ValkyrieAnalysisResult,ValkyrieFileInfo> addAction,  bool parallels = true)
