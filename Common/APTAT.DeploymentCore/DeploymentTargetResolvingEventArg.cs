@@ -5,16 +5,15 @@ namespace APTAT.DeploymentCore
 {
     public class DeploymentTargetResolvingEventArg:EventArgs
     {
-        public DeploymentTargetResolvingEventArg(DeploymentTarget target, int endpointCount, int endpointProcessed)
+        public DeploymentTargetResolvingEventArg(DeploymentTarget target, double  progress)
         {
             this.Target = target;
-            this.TotalEndpointsFound = endpointCount;
-            this.EndpointProcessed = endpointProcessed;
+            this.Progress = progress;
+            
         }
 
-        public int EndpointProcessed { get; set; }
+        public double Progress { get; set; }
 
-        public int TotalEndpointsFound { get; set; }
 
         public DeploymentTarget Target { get; }
     }

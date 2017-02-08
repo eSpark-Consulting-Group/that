@@ -110,7 +110,7 @@ namespace APTAT.DeploymentCore
             return new IPAddress(ipBytes);
         }
 
-        private List<IPAddress> GetOnlineComputers(IPAddress from, IPAddress to, CancellationTokenSource cancellationTokenSource)
+        private List<IPAddress> GetComputersInRange(IPAddress from, IPAddress to)
         {
             List<IPAddress> retValue = new List<IPAddress>();
 
@@ -129,35 +129,14 @@ namespace APTAT.DeploymentCore
                 IPAddress ipAddress = EnumerableIntToIPAddress(addr);
                 retValue.Add(ipAddress);
             }
-
-            ConcurrentBag<IPAddress> onlineList = new ConcurrentBag<IPAddress>();
-
-          
-
-            ParallelOptions po = new ParallelOptions();
-            po.CancellationToken = cancellationTokenSource.Token;
-            po.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
-
-            Parallel.ForEach(retValue, po, dd =>
-              {
-                  var status = SendPing(dd.ToString());
-                  if (status == IPStatus.Success)
-                  {
-                      onlineList.Add(dd);
-                      po.CancellationToken.ThrowIfCancellationRequested();
-                  }
-              });
-
-            
-            return onlineList.ToList();
+            return retValue;
         }
-
-
+        
         private EndpointTarget CheckTarget(IPAddress ipAddress, string[] serverAddresses, string serverDnsName)
         {
-            //var status = SendPing(ipAddress.ToString());
-            //if (status != IPStatus.Success) return null;
-
+            var status = SendPing(ipAddress.ToString());
+            if (status != IPStatus.Success) return null;
+            
             var target = new EndpointTarget
             {
                 Uid = Guid.NewGuid(),
@@ -172,7 +151,6 @@ namespace APTAT.DeploymentCore
 
                 target.IsLocalComputer = serverAddresses.Any(ip => ip == target.IPAddress) || string.Equals(target.DnsName, serverDnsName, StringComparison.InvariantCultureIgnoreCase);
             }
-
            
             return target;
         }
@@ -203,16 +181,16 @@ namespace APTAT.DeploymentCore
         {
             List<Tuple<IPAddress, IPAddress>> subnetRanges = AddressRangeHelper.GetLocalAddressRange();
             
-            List<IPAddress> onlineList = new List<IPAddress>();
+            List<IPAddress> ipAddresses = new List<IPAddress>();
             foreach (var range in subnetRanges)
             {
                 var fromAndToIps = NetHelp.GetIpAddressMinMax(range.Item1, range.Item2);
-                var online = GetOnlineComputers(fromAndToIps.Item1, fromAndToIps.Item2, source);
-                onlineList.AddRange(online);
+                var computersInRange = GetComputersInRange(fromAndToIps.Item1, fromAndToIps.Item2);
+                ipAddresses.AddRange(computersInRange);
             }
 
 
-            int computersCount = onlineList.Count;
+            int computersCount = ipAddresses.Count;
             int processed = 0;
 
             ParallelOptions po = new ParallelOptions();
@@ -221,18 +199,27 @@ namespace APTAT.DeploymentCore
             var serverDnsName = GetLocalHostName(true);
             var serverAddresses = GetSupportedExternalAddresses(true);
 
-            ConcurrentBag<EndpointTarget> endpointTargets = new ConcurrentBag<EndpointTarget>();
-            Parallel.ForEach(onlineList, po, r =>
+            double progress = 0;
+            Parallel.ForEach(ipAddresses, po, r =>
             {
                 var target = CheckTarget(r, serverAddresses, serverDnsName);
-                if (target != null)
-                {
-                    endpointTargets.Add(target);
-                    Interlocked.Increment(ref processed);
-                    OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, computersCount, processed));
 
-                    po.CancellationToken.ThrowIfCancellationRequested();
+                Interlocked.Increment(ref processed);
+                lock (lockObject)
+                {
+                    if (computersCount == 0)
+                    {
+                        progress = 100;
+                    }
+                    else
+                    {
+                        progress = processed / (double) computersCount;
+                    }
+                    OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
                 }
+
+                po.CancellationToken.ThrowIfCancellationRequested();
+
             });
         }
 

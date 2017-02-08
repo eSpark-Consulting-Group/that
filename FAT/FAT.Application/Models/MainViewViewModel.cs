@@ -789,8 +789,11 @@ namespace FAT.Application.Models
 
         private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArg e)
         {
-            Percentage = (e.EndpointProcessed * 1d / e.TotalEndpointsFound) * 100d;
-            DiscoveryResults.Add(e.Target);
+            Percentage = e.Progress  * 100d;
+            if (e.Target != null)
+            {
+                DiscoveryResults.Add(e.Target);
+            }
             _scanCounterManager.AddComputer();
 
             if (Percentage == 100)

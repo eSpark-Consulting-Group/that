@@ -134,6 +134,8 @@ namespace FAT.Application.Services
         
         public string GetLoggedInUser()
         {
+
+
             if (!String.IsNullOrEmpty(Environment.UserDomainName))
             {
                 return Environment.UserDomainName + "\\" + Environment.UserName;
@@ -158,10 +160,7 @@ namespace FAT.Application.Services
                 GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, result, e.State);
                 Action action = () =>
                 {
-                    if (GetDirectoryRootCompleted != null)
-                    {
-                        GetDirectoryRootCompleted(this, args);
-                    }
+                    GetDirectoryRootCompleted?.Invoke(this, args);
                 };
                 App.Current.Dispatcher.BeginInvoke(action);
             }
@@ -170,10 +169,7 @@ namespace FAT.Application.Services
                 GetDirectoryItemsEventArgs args = new GetDirectoryItemsEventArgs(null, null, e.State, e.Error);
                 Action action = () =>
                 {
-                    if (GetDirectoryRootCompleted != null)
-                    {
-                        GetDirectoryRootCompleted(this, args);
-                    }
+                    GetDirectoryRootCompleted?.Invoke(this, args);
                 };
                 App.Current.Dispatcher.BeginInvoke(action);
             }
