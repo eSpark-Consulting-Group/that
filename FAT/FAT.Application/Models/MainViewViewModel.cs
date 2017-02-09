@@ -52,7 +52,6 @@ namespace FAT.Application.Models
         private Boolean? _isScanInProgress = false;
         private Boolean _isAutoDiscoveryInProgress;
         private Boolean _isAutoDiscoveryCompleted;
-        private Boolean _containsLocal;
         private Boolean _cancelInProgress;
         private ThreatInfoItem[] _onlineItems;
         private readonly DispatcherTimer _scanIteratorTimer;
@@ -174,9 +173,7 @@ namespace FAT.Application.Models
                 _isScanInProgress = value;
                 RaisePropertyChanged(nameof(IsScanInProgress));
                 RaisePropertyChanged(nameof(IsAnyScanInProgress));
-
-                if (value == true)
-                    Set(() => ScanWasOnceStarted, true);
+                RaisePropertyChanged(nameof(Header));
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -192,8 +189,9 @@ namespace FAT.Application.Models
             set
             {
                 _isAutoDiscoveryInProgress = value;
-                RaisePropertyChanged(nameof(IsAnyScanInProgress));
                 RaisePropertyChanged(nameof(IsAutoDiscoveryInProgress));
+                RaisePropertyChanged(nameof(IsAnyScanInProgress));
+                RaisePropertyChanged(nameof(Header));
             }
         }
 
@@ -248,10 +246,12 @@ namespace FAT.Application.Models
         {
             get
             {
-                string header = "Canceling...";
-                if (CancelInProgress)
-                    return header;
+                string header = string.Empty;
 
+                if (CancelInProgress)
+                    return "Canceling...";
+                if (IsScanInProgress == null)
+                    return "Discovering Computers...";
                 if (IsScanInProgress == true)
                 {
                     if (Percentage == 0)
@@ -264,10 +264,8 @@ namespace FAT.Application.Models
                 }
                 if (IsAutoDiscoveryInProgress)
                 {
-                    if (Percentage == 0)
-                        header = string.Empty;
-                    else
-                        header = String.Format("{0:0.00}% Discovering...", Percentage).Replace(".00", string.Empty);
+                    if (Percentage > 0)
+                        header = String.Format("{0:0.00}% Discovering Computers...", Percentage).Replace(".00", string.Empty);
                     return header;
                 }
 
@@ -513,7 +511,6 @@ namespace FAT.Application.Models
             Set(() => Uri, "/Views/DiscoveryResults.xaml");
             Set(() => Loaded, true);
 
-            _containsLocal = false;
             _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
             _targetsDiscoveryService.StartTargetsAutoDiscovery();
 
@@ -521,6 +518,7 @@ namespace FAT.Application.Models
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
 
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
+            UseCurrentDomainForRescan = HasCurrentDomainName;
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }
@@ -702,8 +700,8 @@ namespace FAT.Application.Models
                 var targets = value.OfType<DeploymentItem>().ToArray();
                 if (targets.Length > 0)
                 {
-                    IsBusy = true;
                     IsScanInProgress = null;
+                    Set(() => ScanWasOnceStarted, true);
 
                     var model = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
 
@@ -781,17 +779,11 @@ namespace FAT.Application.Models
         {
             if (e.Target != null)
             {
-                var target = e.Target;
-                if (e.Target.IsLocalComputer)
+                if (!e.Target.IsLocalComputer || !DiscoveryResults.Any(_ => _.IsLocalComputer))
                 {
-                    if (!_containsLocal)
-                        _containsLocal = true;
-                    else
-                        target = null;
+                    DiscoveryResults.Add(e.Target);
+                    _scanCounterManager.AddComputer();
                 }
-
-                DiscoveryResults.Add(target);
-                _scanCounterManager.AddComputer();
             }
 
             Percentage = e.Progress * 100d;
@@ -802,7 +794,7 @@ namespace FAT.Application.Models
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
-            IsBusy = false;
+
             IsScanInProgress = true;
             if (e.Exception != null)
             {
@@ -1064,7 +1056,6 @@ namespace FAT.Application.Models
 
         public void OnAppClose()
         {
-            IsBusy = true;
             InvokeStopScan(null);
         }
 

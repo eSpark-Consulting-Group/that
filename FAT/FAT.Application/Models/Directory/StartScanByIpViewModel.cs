@@ -25,8 +25,6 @@ namespace FAT.Application.Models.Directory
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
-
-
         public ICollection<Object> CheckedItems
         {
             get;
@@ -100,11 +98,13 @@ namespace FAT.Application.Models.Directory
                 UseCurrentDomainForDeploy = HasCurrentDomainName;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
                 _useCurrentNameDetermined = true;
+
+                GetTargetRanges();
             }
 
             Password = null;
 
-            GetTargetRanges();
+
 
             _targetsDiscoveryService.GetByIpAddressesCompleted -= OnGetByIpAddressesCompleted;
             _targetsDiscoveryService.GetByIpAddressesCompleted += OnGetByIpAddressesCompleted;

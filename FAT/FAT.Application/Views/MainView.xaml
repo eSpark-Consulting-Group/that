@@ -66,6 +66,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="1" Background="#FFFAF9F9" >
@@ -289,19 +290,21 @@
                         <TextBlock Text="Custom Scan" Grid.Column="1" Margin="0 2 0 0"/>
                     </Grid>
                 </Button>
-                <Button  Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Path SnapsToDevicePixels="True" Margin="0 0 10 0" Data="M15,16 C15.553009,16 16,16.447998 16,17 C16,17.552002 15.553009,18 15,18 C14.446991,18 14,17.552002 14,17 C14,16.447998 14.446991,16 15,16 z M12,16 C12.553009,16 13,16.447998 13,17 C13,17.552002 12.553009,18 12,18 C11.446991,18 11,17.552002 11,17 C11,16.447998 11.446991,16 12,16 z M9,16 C9.553009,16 10,16.447998 10,17 C10,17.552002 9.553009,18 9,18 C8.446991,18 8,17.552002 8,17 C8,16.447998 8.446991,16 9,16 z M6,16 C6.553009,16 7,16.447998 7,17 C7,17.552002 6.553009,18 6,18 C5.446991,18 5,17.552002 5,17 C5,16.447998 5.446991,16 6,16 z M2.9999998,16 C3.5529938,16 4,16.447998 4,17 C4,17.552002 3.5529938,18 2.9999998,18 C2.4470062,18 2,17.552002 1.9999999,17 C2,16.447998 2.4470062,16 2.9999998,16 z M15,13 C15.553009,13 16,13.447998 16,14 C16,14.552002 15.553009,15 15,15 C14.446991,15 14,14.552002 14,14 C14,13.447998 14.446991,13 15,13 z M2.9999998,13 C3.5529938,13 4,13.447998 4,14 C4,14.552002 3.5529938,15 2.9999998,15 C2.4470062,15 2,14.552002 1.9999999,14 C2,13.447998 2.4470062,13 2.9999998,13 z M15,10 C15.553009,10 16,10.447998 16,11 C16,11.552002 15.553009,12 15,12 C14.446991,12 14,11.552002 14,11 C14,10.447998 14.446991,10 15,10 z M2.9999998,10 C3.5529938,10 4,10.447998 4,11 C4,11.552002 3.5529938,12 2.9999998,12 C2.4470062,12 2,11.552002 1.9999999,11 C2,10.447998 2.4470062,10 2.9999998,10 z M0.5,6 C0.77600098,6 1,6.223999 1,6.5 L1,7 L17,7 L17,6.5 C17,6.223999 17.223999,6 17.5,6 C17.776001,6 18,6.223999 18,6.5 L18,7 L18,8 L18,8.5 C18,8.776001 17.776001,9 17.5,9 C17.223999,9 17,8.776001 17,8.5 L17,8 L1,8 L1,8.5 C1,8.776001 0.77600098,9 0.5,9 C0.22399902,9 0,8.776001 0,8.5 L0,8 L0,7 L0,6.5 C0,6.223999 0.22399902,6 0.5,6 z M13,0 L16,3 L13,3 z M1.9999999,0 L12,0 L12,3.75 C12,3.8880005 12.112,4 12.25,4 L16,4 L16,6 L1.9999999,6 z" Fill="White" Height="18" Stretch="Fill" Width="18"/>
-                        <TextBlock Text="Custom Scan" Grid.Column="1" Margin="0 2 0 0"/>
-                    </Grid>
-                </Button>
+                <Grid Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                    <Button  Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Path SnapsToDevicePixels="True" Margin="0 0 10 0" Data="M15,16 C15.553009,16 16,16.447998 16,17 C16,17.552002 15.553009,18 15,18 C14.446991,18 14,17.552002 14,17 C14,16.447998 14.446991,16 15,16 z M12,16 C12.553009,16 13,16.447998 13,17 C13,17.552002 12.553009,18 12,18 C11.446991,18 11,17.552002 11,17 C11,16.447998 11.446991,16 12,16 z M9,16 C9.553009,16 10,16.447998 10,17 C10,17.552002 9.553009,18 9,18 C8.446991,18 8,17.552002 8,17 C8,16.447998 8.446991,16 9,16 z M6,16 C6.553009,16 7,16.447998 7,17 C7,17.552002 6.553009,18 6,18 C5.446991,18 5,17.552002 5,17 C5,16.447998 5.446991,16 6,16 z M2.9999998,16 C3.5529938,16 4,16.447998 4,17 C4,17.552002 3.5529938,18 2.9999998,18 C2.4470062,18 2,17.552002 1.9999999,17 C2,16.447998 2.4470062,16 2.9999998,16 z M15,13 C15.553009,13 16,13.447998 16,14 C16,14.552002 15.553009,15 15,15 C14.446991,15 14,14.552002 14,14 C14,13.447998 14.446991,13 15,13 z M2.9999998,13 C3.5529938,13 4,13.447998 4,14 C4,14.552002 3.5529938,15 2.9999998,15 C2.4470062,15 2,14.552002 1.9999999,14 C2,13.447998 2.4470062,13 2.9999998,13 z M15,10 C15.553009,10 16,10.447998 16,11 C16,11.552002 15.553009,12 15,12 C14.446991,12 14,11.552002 14,11 C14,10.447998 14.446991,10 15,10 z M2.9999998,10 C3.5529938,10 4,10.447998 4,11 C4,11.552002 3.5529938,12 2.9999998,12 C2.4470062,12 2,11.552002 1.9999999,11 C2,10.447998 2.4470062,10 2.9999998,10 z M0.5,6 C0.77600098,6 1,6.223999 1,6.5 L1,7 L17,7 L17,6.5 C17,6.223999 17.223999,6 17.5,6 C17.776001,6 18,6.223999 18,6.5 L18,7 L18,8 L18,8.5 C18,8.776001 17.776001,9 17.5,9 C17.223999,9 17,8.776001 17,8.5 L17,8 L1,8 L1,8.5 C1,8.776001 0.77600098,9 0.5,9 C0.22399902,9 0,8.776001 0,8.5 L0,8 L0,7 L0,6.5 C0,6.223999 0.22399902,6 0.5,6 z M13,0 L16,3 L13,3 z M1.9999999,0 L12,0 L12,3.75 C12,3.8880005 12.112,4 12.25,4 L16,4 L16,6 L1.9999999,6 z" Fill="White" Height="18" Stretch="Fill" Width="18"/>
+                            <TextBlock Text="Custom Scan" Grid.Column="1" Margin="0 2 0 0"/>
+                        </Grid>
+                    </Button>
+                </Grid>
             </StackPanel>
 
-            <Button Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopScanCommand}">
+            <Button x:Name="cancel" Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopScanCommand}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -536,8 +539,12 @@
             <Run Text="{Binding Header}" FontFamily="myriadpro" FontSize="19"/>
         </TextBlock>
 
-        <Border Height="1" Background="#FFF3F3F3" Grid.Row="2" />
-        <Border Grid.Row="3" Height="46"  Background="White" >
+        <Border Height="46" Grid.Row="3" Margin="32 20" Background="#FF2A80B9" Visibility="Collapsed">
+            
+        </Border>
+        
+        <Border Height="1" Background="#FFF3F3F3" Grid.Row="3" VerticalAlignment="Bottom"/>
+        <Border Grid.Row="4" Height="46"  Background="White" >
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock  Text="Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
                 <TextBlock Cursor="Hand">

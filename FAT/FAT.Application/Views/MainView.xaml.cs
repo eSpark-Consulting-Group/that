@@ -47,9 +47,7 @@ namespace FAT.Application
                     StartScanWindow details = new StartScanWindow();
                     details.Owner = System.Windows.Application.Current.MainWindow;
                     if (details.ShowDialog() == true && message.Action != null)
-                    {
                         message.Action(details.IsQuickScan);
-                    }
                     break;
                 case MessageTypes.StopScan:
                     _confirmation = new ConfirmationWindow();

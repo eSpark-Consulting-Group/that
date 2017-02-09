@@ -143,12 +143,12 @@ namespace FAT.Application.Models
                 UseCurrentDomainForDeploy = HasCurrentDomainName;
                 RaisePropertyChanged(nameof(UseCurrentCredentials));
                 _useCurrentNameDetermined = true;
+
+                GetCurrentWorkgroupName();
             }
 
             Password = null;
             _workgroupCredentialsChanged = true;
-
-            GetCurrentWorkgroupName();
 
             _targetsDiscoveryService.GetWorkgroupCompleted -= OnGetWorkgroupCompleted;
             _targetsDiscoveryService.GetWorkgroupCompleted += OnGetWorkgroupCompleted;
