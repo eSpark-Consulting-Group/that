@@ -71,8 +71,6 @@ namespace APTAT.Valkyrie
                 foreach (var fileInfo in filesToAnalyze)
                     _lookupContexts.Add(fileInfo);
             }
-            _cancellationTokenSource.Cancel();
-            _checkStatusesTimer.Change(0, Timeout.Infinite);
         }
 
         private RegisterWithResponse Register(CamRegistration camRegistration, string productName, 
