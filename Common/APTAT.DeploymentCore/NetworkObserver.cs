@@ -203,7 +203,7 @@ namespace APTAT.DeploymentCore
             Action<IPAddress> action = (r) => {
                 po.CancellationToken.ThrowIfCancellationRequested();
                 var target = CheckTarget(r, serverAddresses, serverDnsName);
-
+               
                 Interlocked.Increment(ref processed);
                 lock (lockObject)
                 {
@@ -215,7 +215,14 @@ namespace APTAT.DeploymentCore
                    {
                         progress = processed / (double) computersCount;
                     }
-                    OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
+                    if (target != null && target.IsOnline)
+                    {
+                        OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
+                    }
+                    else
+                    {
+                        OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(null, progress));
+                    }
                 }
             };
             try
