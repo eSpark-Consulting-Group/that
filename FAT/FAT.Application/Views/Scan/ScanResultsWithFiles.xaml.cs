@@ -25,12 +25,6 @@ namespace FAT.Application
             get { return DataContext as MainViewViewModel; }
         }
 
-        private void treeList_Sorting(object sender, GridViewSortingEventArgs e)
-        {
-            if (ViewModel.IsAnyScanInProgress)
-                e.Cancel = true;
-        }
-
         private void treeList_SelectionChanged(object sender, SelectionChangeEventArgs e)
         {
             foreach (ThreatInfoItem item in e.AddedItems)

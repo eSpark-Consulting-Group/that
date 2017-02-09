@@ -7,7 +7,6 @@ using Telerik.Windows;
 using System.Diagnostics;
 using System.Linq;
 using APTAT.Valkyrie;
-using ScanCompletedEventArgs = FAT.Application.Services.ScanCompletedEventArgs;
 using System.ComponentModel;
 using APTAT.Application.Services.EventArgs;
 using FAT.Application.Messages;
@@ -35,8 +34,6 @@ namespace FAT.Application
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
-
-
         }
 
         [MessageReceiver]
@@ -122,27 +119,6 @@ namespace FAT.Application
             details.Header = menuItem.Tag as string;
             details.Owner = System.Windows.Application.Current.MainWindow;
             details.ShowDialog();
-        }
-
-        private void OnExecutiveReportClick(Object sender, RadRoutedEventArgs e)
-        {
-            _viewModel.SetReportKind(ReportKind.Executive);
-            ReportButton.IsOpen = false;
-            ShowReport(sender as RadMenuItem);
-        }
-
-        private void OnPerDeviceReportClick(Object sender, RadRoutedEventArgs e)
-        {
-            _viewModel.SetReportKind(ReportKind.DetailedPerDevice);
-            ReportButton.IsOpen = false;
-            ShowReport(sender as RadMenuItem);
-        }
-
-        private void OnPerProgramReportClick(Object sender, RadRoutedEventArgs e)
-        {
-            _viewModel.SetReportKind(ReportKind.DetailedPerProgram);
-            ReportButton.IsOpen = false;
-            ShowReport(sender as RadMenuItem);
         }
 
         private void OnExecutiveReportValkyrieClick(Object sender, RadRoutedEventArgs e)

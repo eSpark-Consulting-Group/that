@@ -1340,7 +1340,7 @@
                         <Decorator x:Name="PART_Indicator" HorizontalAlignment="Left" Margin="0 4 0 4">
                             <Grid>
                                 <Border x:Name="Indicator" Margin="0 3 0 2" Background="{TemplateBinding Background}" SnapsToDevicePixels="True"/>
-                                <Border x:Name="Animation" Background="#FF2A80B9" Margin="0 2" SnapsToDevicePixels="True">
+                                <Border x:Name="Animation" Background="Transparent" Margin="0 2" SnapsToDevicePixels="True">
                                     <Border.Resources>
                                         <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill" EndPoint="0,0" StartPoint="-100,0" MappingMode="Absolute">
                                             <GradientStop Color="#00000000" Offset="0" />
@@ -1365,16 +1365,16 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="ProgressBar.IsIndeterminate" Value="False">
-                            <Setter TargetName="Animation" Property="Background" Value="White" />
+                            <Setter TargetName="Animation" Property="Background" Value="Transparent" />
                         </Trigger>
 
-                        <DataTrigger Binding="{Binding DataContext.HasMalwares,
+                        <DataTrigger Binding="{Binding DataContext.RaisedHasMalwares,
                                 RelativeSource={RelativeSource Self}}" Value="True">
                             <Setter TargetName="Indicator" Property="Background" Value="#FFD54331"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding DataContext.HasUnknownsOnly,
+                        <DataTrigger Binding="{Binding DataContext.IsAnyScanInProgress,
                                 RelativeSource={RelativeSource Self}}" Value="True">
-                            <Setter TargetName="Indicator" Property="Background" Value="#FFF9AD16"/>
+                            <Setter TargetName="Animation" Property="Background" Value="White"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

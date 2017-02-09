@@ -45,7 +45,6 @@
                                  AutoGenerateColumns="False" 
                                  IsReadOnly="True" 
                                  ItemsSource="{Binding Files}"   
-                                 Sorting="treeList_Sorting"
                                  AutoExpandItems="False"
                                  HierarchyIndent="30"
                                  Validation.ErrorTemplate="{x:Null}"
@@ -119,7 +118,7 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="VerdictColumn">
-                    <TextBlock Text="{Binding ScanStatus}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding ScanStatus}" TextAlignment="Left" Margin="3 0"/>
+                    <TextBlock Text="{Binding VerdictString}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding VerdictString}" TextAlignment="Left" Margin="3 0"/>
                 </DataTemplate>
                 
                 <TemplateSelectors:ComputerFileTemplateSelector x:Key="NameTemplateSelector" 
@@ -148,7 +147,7 @@
                     TextAlignment="Right"
                     Width="80*" MinWidth="80"/>
                 <telerik:GridViewColumn 
-                    SortMemberPath="ScanStatus"
+                    SortMemberPath="VerdictString"
                     CellTemplate="{StaticResource VerdictColumn}"   
                     IsFilterable="False"
                     Header="Verdict"  

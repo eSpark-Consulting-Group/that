@@ -152,6 +152,9 @@ namespace FAT.Application.Models
         {
             get
             {
+                if (IsComputer)
+                    return string.Empty;
+
                 switch (FinalVerdict)
                 {
                     case UiFinalVerdict.Clean:
@@ -196,8 +199,9 @@ namespace FAT.Application.Models
         {
             get
             {
-                return BadFile.IsMalware || ValkyrieVerdict == ValkyrieVerdict.Malware ||
-                        ValkyrieVerdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
+                return BadFile.IsMalware || 
+                    ValkyrieVerdict == ValkyrieVerdict.Malware ||
+                    ValkyrieVerdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
             }
         }
 
@@ -205,8 +209,9 @@ namespace FAT.Application.Models
         {
             get
             {
-                return (BadFile.IsUnknown && ValkyrieVerdict == ValkyrieVerdict.PendingFls) 
-                    || (ValkyrieVerdict == ValkyrieVerdict.FirstSeen || ValkyrieVerdict == ValkyrieVerdict.Pending);
+                return ValkyrieVerdict == ValkyrieVerdict.PendingFls || 
+                    ValkyrieVerdict == ValkyrieVerdict.FirstSeen || 
+                    ValkyrieVerdict == ValkyrieVerdict.Pending;
             }
         }
 
@@ -223,7 +228,8 @@ namespace FAT.Application.Models
         {
             get
             {
-                return BadFile.IsClean || ValkyrieVerdict == ValkyrieVerdict.Clean;
+                return BadFile.IsClean ||
+                    ValkyrieVerdict == ValkyrieVerdict.Clean;
             }
         }
 
@@ -237,7 +243,10 @@ namespace FAT.Application.Models
 
         public bool HasClean
         {
-            get { return ScanStage == ScanStage.OperationCompleted && CleanFilesCount > 0; }
+            get
+            {
+                return ScanStage == ScanStage.OperationCompleted && !HasBadFiles;
+            }
         }
 
         public Boolean HasMalwares
@@ -491,6 +500,7 @@ namespace FAT.Application.Models
                 _unknownFilesCount = value;
                 RaisePropertyChanged(nameof(UnknownFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasUnknowns));
                 RaisePropertyChanged(nameof(HasPending));
                 RaisePropertyChanged(nameof(HasFailed));
@@ -510,6 +520,7 @@ namespace FAT.Application.Models
                 _malwareFilesCount = value;
                 RaisePropertyChanged(nameof(MalwareFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasMalwares));
                 RaisePropertyChanged(nameof(HasUnknowns));
                 RaisePropertyChanged(nameof(HasPending));
@@ -529,7 +540,6 @@ namespace FAT.Application.Models
 
                 _cleanFilesCount = value;
                 RaisePropertyChanged(nameof(CleanFilesCount));
-                RaisePropertyChanged(nameof(HasClean));
             }
         }
 
@@ -546,6 +556,7 @@ namespace FAT.Application.Models
                 _pendingFilesCount = value;
                 RaisePropertyChanged(nameof(PendingFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasPending));
                 RaisePropertyChanged(nameof(HasFailed));
             }
@@ -564,6 +575,7 @@ namespace FAT.Application.Models
                 _notAnalyzedFilesCount = value;
                 RaisePropertyChanged(nameof(NotAnalyzedFilesCount));
                 RaisePropertyChanged(nameof(HasBadFiles));
+                RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasFailed));
             }
         }

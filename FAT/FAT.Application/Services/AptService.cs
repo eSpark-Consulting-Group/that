@@ -132,8 +132,14 @@ namespace FAT.Application.Services
             }
             lock (this)
             {
-                if(!_valkyrieStarted)
-                    FatScanCompleted?.Invoke(this, new ErrorEventArgs(null));
+                if (!_valkyrieStarted)
+                {
+                    Action a = () =>
+                    {
+                        FatScanCompleted?.Invoke(this, new ErrorEventArgs(null));
+                    };
+                    App.Current.Dispatcher.BeginInvoke(a);
+                }
             }
         }
 

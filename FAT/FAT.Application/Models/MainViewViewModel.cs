@@ -27,13 +27,8 @@ namespace FAT.Application.Models
     {
         public event EventHandler ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
-        
-
-        private string _tcpPort = "80";
-        private string _udpPort = "53";
 
         private readonly IAptService _aptService;
-
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
 
@@ -42,24 +37,17 @@ namespace FAT.Application.Models
         private DateTime? _lastModifiesValkyrieVerdictDate = null;
 
         private Guid _operationGuid;
-        private DeploymentItem[] _selectedTargets;
 
-        private Boolean _isReportEnabled;
         private Boolean? _isScanInProgress = false;
         private Boolean _isAutoDiscoveryInProgress;
         private Boolean _isAutoDiscoveryCompleted;
         private Boolean _cancelInProgress;
-        private double _percentage;
-
-        private Int32 _scannedItemsCount;
 
         private ThreatInfoItem[] _onlineItems;
-        private ThreatInfoItem _selectedItem;
 
         private readonly DispatcherTimer _scanIteratorTimer;
 
-        public string MainUri { get; set; } = "/Views/MainView.xaml";
-
+        #region Props
         public string Uri { get; set; } = "/Views/StartingPage.xaml";
 
         public string CurrentDomainName { get; set; }
@@ -81,17 +69,27 @@ namespace FAT.Application.Models
         }
 
 
-        public string Login
+        public string Login { get; set; }
+        public string Password { get; set; }
+
+        public string ProxyLogin { get; set; }
+        public string ProxyPassword { get; set; }
+
+        public string RescanLogin { get; set; }
+        public string RescanPassword { get; set; }
+
+        public bool UseCurrentDomainForRescan { get; set; }
+
+        public IMainViewModel ParentViewModel
         {
-            get; set;
+            get { return this; }
         }
 
-        public string Password
-        {
-            get; set;
-        }
+        public WizardStepEnum CurrentStep { get; set; }
 
 
+
+        private string _tcpPort = "80";
         public String TcpPort
         {
             get { return _tcpPort; }
@@ -112,7 +110,7 @@ namespace FAT.Application.Models
             }
         }
 
-
+        private string _udpPort = "53";
         public String UdpPort
         {
             get { return _udpPort; }
@@ -136,47 +134,13 @@ namespace FAT.Application.Models
 
         public bool Loaded { get; set; }
 
-
-
-        private async void OnLoaded(object o)
-        {
-            IsAutoDiscoveryInProgress = true;
-            DiscoveryResults = new ObservableCollection<DeploymentTarget>();
-            RaisePropertyChanged(nameof(DiscoveryResults));
-            RaisePropertyChanged(nameof(Header));
-
-            Set(() => Uri, "/Views/DiscoveryResults.xaml");
-            Set(() => Loaded, true);
-
-            _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
-            _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
-            _targetsDiscoveryService.StartTargetsAutoDiscovery();
-
-            var name = await TryAction(GetCurrentDomainName());
-            CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
-
-            CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
-            RaisePropertyChanged(nameof(CurrentDomainNameContent));
-            RaisePropertyChanged(nameof(HasCurrentDomainName));
-        }
-
-        private async Task<string> GetCurrentDomainName()
-        {
-            var result = await _targetsDiscoveryService.GetCurrentDomainName();
-
-            if (result.Exception != null)
-            {
-                return null;
-            }
-
-            return result.Name;
-        }
+        public bool ScanWasOnceStarted { get; set; }
 
         public bool IsAnyScanInProgress
         {
             get
             {
-                return IsScanInProgress.GetValueOrDefault();
+                return IsScanInProgress.GetValueOrDefault() || IsAutoDiscoveryInProgress;
             }
         }
 
@@ -203,9 +167,11 @@ namespace FAT.Application.Models
             set
             {
                 _isScanInProgress = value;
-                RaisePropertyChanged("IsScanInProgress");
+                RaisePropertyChanged(nameof(IsScanInProgress));
                 RaisePropertyChanged(nameof(IsAnyScanInProgress));
 
+                if (value == true)
+                    Set(() => ScanWasOnceStarted, true);
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -221,7 +187,7 @@ namespace FAT.Application.Models
             set
             {
                 _isAutoDiscoveryInProgress = value;
-
+                RaisePropertyChanged(nameof(IsAnyScanInProgress));
                 RaisePropertyChanged(nameof(IsAutoDiscoveryInProgress));
             }
         }
@@ -235,8 +201,8 @@ namespace FAT.Application.Models
                 if (value)
                 {
                     IsAutoDiscoveryInProgress = false;
-                    Percentage = 0;
                     _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
+                    Percentage = 0;
                 }
 
                 RaisePropertyChanged(nameof(IsAutoDiscoveryCompleted));
@@ -250,22 +216,24 @@ namespace FAT.Application.Models
                 return IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress;
             }
         }
-        
 
-        public Int32 ScannedItemsCount
+
+        private int _scannedItemsCount;
+        public int ScannedItemsCount
         {
             get { return _scannedItemsCount; }
             set
             {
                 _scannedItemsCount = value;
-                RaisePropertyChanged("ScannedItemsCount");
+                RaisePropertyChanged(nameof(ScannedItemsCount));
             }
         }
 
-        public bool HasMalwares { get; set; }
+        public bool RaisedHasMalwares { get; set; }
 
-        public bool HasUnknownsOnly { get; set; }
+        public bool RaisedHasUnknowns { get; set; }
 
+        private Double _percentage;
         public Double Percentage    
         {
             get { return _percentage; }
@@ -336,6 +304,7 @@ namespace FAT.Application.Models
             }
         }
 
+        private Boolean _isReportEnabled;
         public Boolean IsReportEnabled
         {
             get { return _isReportEnabled; }
@@ -345,8 +314,8 @@ namespace FAT.Application.Models
                 RaisePropertyChanged("IsReportEnabled");
             }
         }
-        
 
+        private ThreatInfoItem _selectedItem;
         public ThreatInfoItem SelectedItem
         {
             get { return _selectedItem; }
@@ -392,6 +361,7 @@ namespace FAT.Application.Models
         
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
+
 
         private ObservableCollection<ThreatInfoItem> _files;
         public ObservableCollection<ThreatInfoItem> Files
@@ -472,17 +442,20 @@ namespace FAT.Application.Models
             }
         }
 
+        #endregion
+
+        #region Commands
         public DelegateCommand OnLoadedCommand { get; private set; }
         public DelegateCommand StartScanCommand { get; private set; }
         public DelegateCommand StopScanCommand { get; private set; }
         public DelegateCommand SelectCommand { get; private set; }
         public DelegateCommand StopAutoDiscoveryCommand { get; private set; }
-
+        public DelegateCommand StartScanWithDiscoveryResultsCommand { get; private set; }
 
         public DelegateCommand RestartComputerScanCommand { get; private set; }
         public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
         public DelegateCommand StopComputerScanCommand { get; private set; }
-
+        #endregion
 
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
             IAptService aptService, IStorageService storage)
@@ -494,13 +467,15 @@ namespace FAT.Application.Models
             _scanCounterManager = new ScanCounterManager();
             _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
 
-            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher)
-            {
-                Interval = TimeSpan.FromMilliseconds(500d)
-            };
+            _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);
+            _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
             _scanIteratorTimer.Tick += IterateThroughScan;
 
+            InitCommands();  
+        }
 
+        private void InitCommands()
+        {
             OnLoadedCommand = new DelegateCommand(OnLoaded);
             StartScanCommand = new DelegateCommand(o =>
                 AppMessages.ScanMessage.Send(MessageTypes.StartScan, InvokeStartScan),
@@ -509,14 +484,46 @@ namespace FAT.Application.Models
                 AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => StopScanPredicate);
             StopAutoDiscoveryCommand = new DelegateCommand(InvokeStopAutoDiscovery);
+            StartScanWithDiscoveryResultsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true));
             SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
-
-
-
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o =>
                 IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
             StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan, o => IsStopEnabled);
+        }
+
+        private async void OnLoaded(object o)
+        {
+            IsAutoDiscoveryInProgress = true;
+            DiscoveryResults = new ObservableCollection<DeploymentTarget>();
+            RaisePropertyChanged(nameof(DiscoveryResults));
+            RaisePropertyChanged(nameof(Header));
+
+            Set(() => Uri, "/Views/DiscoveryResults.xaml");
+            Set(() => Loaded, true);
+
+            _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
+            _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
+            _targetsDiscoveryService.StartTargetsAutoDiscovery();
+
+            var name = await TryAction(GetCurrentDomainName());
+            CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
+
+            CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
+            RaisePropertyChanged(nameof(CurrentDomainNameContent));
+            RaisePropertyChanged(nameof(HasCurrentDomainName));
+        }
+
+        private async Task<string> GetCurrentDomainName()
+        {
+            var result = await _targetsDiscoveryService.GetCurrentDomainName();
+
+            if (result.Exception != null)
+            {
+                return null;
+            }
+
+            return result.Name;
         }
 
         private void InvokeRestartComputerScan(Object arg, bool showDialog = false)
@@ -596,7 +603,6 @@ namespace FAT.Application.Models
         private void InvokeStopAutoDiscovery(Object arg)
         {
             IsAutoDiscoveryCompleted = true;
-            Percentage = 0;
             _targetsDiscoveryService.StopTargetsAutoDiscovery();
         }
 
@@ -619,12 +625,13 @@ namespace FAT.Application.Models
             IsQuickScan = (bool)arg;
 
             _scanCounterManager.Clear();
+
             Files = new ObservableCollection<ThreatInfoItem>();
             Computers = new ObservableCollection<ThreatInfoItem>();
 
 
-            Set(() => HasUnknownsOnly, false);
-            Set(() => HasMalwares, false);
+            Set(() => RaisedHasUnknowns, false);
+            Set(() => RaisedHasMalwares, false);
 
 
             _onlineItems = new ThreatInfoItem[0];
@@ -638,22 +645,22 @@ namespace FAT.Application.Models
             RescanPassword = null;
 
 
-            GroupEnabled = true;
-            RaisePropertyChanged(nameof(GroupEnabled));
+            Set(() => GroupEnabled, true);
+
             GroupByComputers = true;
 
             var value = _storage.GetValue<ICollection<Object>>(KnownKeys.CheckedDirectoryItems, true);
             if (value != null)
             {
-                _selectedTargets = value.OfType<DeploymentItem>().ToArray();
-                if (_selectedTargets.Length > 0)
+                var targets = value.OfType<DeploymentItem>().ToArray();
+                if (targets.Length > 0)
                 {
                     IsBusy = true;
                     IsScanInProgress = null;
 
                     var model = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
 
-                    _targetsDiscoveryService.ResolveDirectoryItems(_selectedTargets,
+                    _targetsDiscoveryService.ResolveDirectoryItems(targets,
                         CurrentStep == WizardStepEnum.Domain ? model.ActiveDirectoryLogin : null,
                         CurrentStep == WizardStepEnum.Domain ? model.ActiveDirectoryPassword : null, this);
                 }
@@ -699,28 +706,13 @@ namespace FAT.Application.Models
         }
 
 
-        public string ProxyLogin { get; set; }
-        public string ProxyPassword { get; set; }
-
-        public string RescanLogin { get; set; }
-        public string RescanPassword { get; set; }
-
-        public bool UseCurrentDomainForRescan { get; set; }
-
         public void OnPortChanged(int udpPort, int tcpPort)
         {
             _aptService.UpdateFlsPorts(udpPort, tcpPort);
         }
 
-        public IMainViewModel ParentViewModel
-        {
-            get { return this; }
-        }
-
-        public WizardStepEnum CurrentStep { get; set; }
-
         private void OnScanCompleted(Object sender, ErrorEventArgs e)
-        {
+        { 
             CancelInProgress = false;
             IsScanInProgress = false;
             ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
@@ -730,6 +722,7 @@ namespace FAT.Application.Models
             IsReportEnabled = true;
             RaisePropertyChanged(nameof(ValkyrieDetailsLink));
             ScanProcessCompleted?.Invoke(this, e);
+
             Percentage = 100;
         }
 
@@ -938,20 +931,14 @@ namespace FAT.Application.Models
             _scanCounterManager.UpdateCounters(counterDiff);
 
 
-            if (!HasMalwares)
+            if (!RaisedHasMalwares)
             {
-                Set(() => HasMalwares, _scanCounterManager.HasMalwares);
-                if (!HasMalwares)
-                    Set(() => HasUnknownsOnly, _scanCounterManager.HasUnknowns || _scanCounterManager.HasNotAnalyzed || _scanCounterManager.HasInProgress);
+                Set(() => RaisedHasMalwares, _scanCounterManager.HasMalwares);
+                if (!RaisedHasMalwares)
+                    Set(() => RaisedHasUnknowns, _scanCounterManager.HasUnknowns || _scanCounterManager.HasNotAnalyzed || _scanCounterManager.HasInProgress);
             }
 
-            //if (completed != OnlineItemsCount)
             _scanIteratorTimer.Start();
-            //else
-            {
-                //if (_scanIteratorTimer.IsEnabled)
-                //   _scanIteratorTimer.Stop();
-            }
 
             RaisePropertyChanged(nameof(Header));
         }

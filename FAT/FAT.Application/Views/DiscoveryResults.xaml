@@ -27,7 +27,7 @@
                 </BeginStoryboard>
             </EventTrigger>
         </Grid.Triggers>
-        <telerik:RadTreeListView x:Name="treeList" CanUserFreezeColumns="False" AutoGenerateColumns="False" SelectionMode="Extended" EnableRowVirtualization="True" IsReadOnly="True" ItemsSource="{Binding DiscoveryResults}"   
+        <telerik:RadTreeListView x:Name="treeList" CanUserFreezeColumns="False" AutoGenerateColumns="False" SelectionMode="Extended" EnableRowVirtualization="True" SelectionChanged="treeList_SelectionChanged" IsReadOnly="True" ItemsSource="{Binding DiscoveryResults}"   
                                  AutoExpandItems="False" HierarchyIndent="12" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" FocusVisualStyle="{x:Null}" ScrollMode="Deferred" >
             <telerik:RadTreeListView.Resources>
                 <DataTemplate x:Key="NameTemplate">
