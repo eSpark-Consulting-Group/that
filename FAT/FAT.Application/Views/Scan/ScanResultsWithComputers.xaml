@@ -167,16 +167,11 @@
                     <TextBlock Text="{Binding SizeString}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding SizeString}" TextAlignment="Right" Margin="3 0"/>
                 </DataTemplate>
 
-                <DataTemplate x:Key="ScanStatusColumn">
-                    <TextBlock Text="{Binding ScanStatus}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding ScanStatus}" TextAlignment="Left" Margin="3 0"/>
-                </DataTemplate>
-                
                 <DataTemplate x:Key="VerdictColumn">
                     <TextBlock Text="{Binding VerdictString}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding VerdictString}" TextAlignment="Left" Margin="3 0"/>
                 </DataTemplate>
-                
+
                 <TemplateSelectors:ComputerFileTemplateSelector x:Key="NameTemplateSelector" FileTemplate="{StaticResource FileTemplate}" ComputerTemplate="{StaticResource ComputerTemplate}"/>
-                <TemplateSelectors:ComputerFileTemplateSelector x:Key="VerdictColumnSelector" FileTemplate="{StaticResource VerdictColumn}" ComputerTemplate="{StaticResource ScanStatusColumn}"/>
             </telerik:RadTreeListView.Resources>
             <telerik:RadTreeListView.ChildTableDefinitions>
                 <telerik:TreeListViewTableDefinition ItemsSource="{Binding Items}" />
@@ -201,9 +196,8 @@
                     Width="80*" MinWidth="80"/>
                 <telerik:GridViewColumn 
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
-                    CellTemplateSelector="{StaticResource VerdictColumnSelector}"   
+                    CellTemplate="{StaticResource VerdictColumn}"   
                     IsFilterable="False"
-                    SortMemberPath="ScanStatus"
                     Header="Verdict"  
                     TextAlignment="Left"
                     Width="160*" MinWidth="80"/>

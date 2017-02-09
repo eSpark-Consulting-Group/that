@@ -581,6 +581,7 @@ namespace FAT.Application.Models
                 Files = new ObservableCollection<ThreatInfoItem>();
                 Set(() => GroupEnabled, true);
                 GroupByComputers = true;
+                Set(() => ScanWasOnceStarted, true);
             }
 
             if (_onlineItems.Length > 0)

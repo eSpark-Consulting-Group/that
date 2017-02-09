@@ -199,8 +199,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return BadFile.IsMalware ||
-                    ValkyrieVerdict == ValkyrieVerdict.Malware ||
+                return ValkyrieVerdict == ValkyrieVerdict.Malware ||
                     ValkyrieVerdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
             }
         }
@@ -219,8 +218,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return BadFile.IsUnknown || 
-                    ValkyrieVerdict == ValkyrieVerdict.Undetected;
+                return ValkyrieVerdict == ValkyrieVerdict.Undetected;
             }
 
         }

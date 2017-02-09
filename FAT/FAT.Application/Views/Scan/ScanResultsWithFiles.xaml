@@ -108,7 +108,7 @@
                             <Path SnapsToDevicePixels="True" Data="M0,8.0000001 L4,8.0000001 4,9 0,9 z M0,6 L5,6 5,7 0,7 z M0,4 L9,4 9,5 0,5 z M0,2 L5,2 5,3 0,3 z M0,0 L5,0 5,1 0,1 z" Fill="{Binding ElementName=txt, Path=Foreground}" Height="9" Canvas.Left="2" Opacity="0.30000299215316772" Stretch="Fill" Canvas.Top="2" Width="9"/>
                         </Canvas>
 
-                        <TextBlock Margin="8,5,0,0" Text="{Binding ShortName}" FontSize="14" Grid.Column="1" Foreground="{Binding ElementName=txt, Path=Foreground, Converter={converters:ColorToWhiteConverter}}" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}"/>
+                        <TextBlock Margin="8,5,0,0" Text="{Binding ShortName}" FontSize="13" Grid.Column="1" Foreground="{Binding ElementName=txt, Path=Foreground, Converter={converters:ColorToWhiteConverter}}" TextTrimming="CharacterEllipsis" ToolTip="{Binding ShortName}"/>
                         <TextBlock Margin="8,6,0,8" x:Name="txt" Text="{Binding InstancesCount}" Grid.Column="2" HorizontalAlignment="Left" FontSize="13"/>
                     </Grid>
                 </DataTemplate>

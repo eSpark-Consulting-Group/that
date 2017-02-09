@@ -539,10 +539,29 @@
             <Run Text="{Binding Header}" FontFamily="myriadpro" FontSize="19"/>
         </TextBlock>
 
-        <Border Height="46" Grid.Row="3" Margin="32 20" Background="#FF2A80B9" Visibility="Collapsed">
-            
-        </Border>
-        
+        <Grid Grid.Row="3" Background="#FFFAF9F9" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
+            <Border Height="46" Margin="32 0 32 20" Background="#FF2A80B9" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Foreground="White" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Please enter your email to receive a detailed scan results report:"/>
+                    <telerik:RadWatermarkTextBox MaxLength="50" Margin="7 0 0 0" Grid.Column="1" Width="300"
+                                     MinHeight="31" MaxHeight="31"  BorderThickness="1" BorderBrush="#FFD6D4D4"  Padding="7 7 0 0" 
+                                     Background="White" >
+                        <telerik:RadWatermarkTextBox.WatermarkContent>
+                            <TextBlock Margin="0 1 0 0" FontSize="14" Opacity="0.5" Text="customermail@enterprise.com" Foreground="#FF547D98"/>
+                        </telerik:RadWatermarkTextBox.WatermarkContent>
+                    </telerik:RadWatermarkTextBox>
+                    <Button Content="Submit" BorderBrush="White" Command="{Binding SubmitToEmailCommand}" MaxHeight="32" Grid.Column="2" Margin="7"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+
         <Border Height="1" Background="#FFF3F3F3" Grid.Row="3" VerticalAlignment="Bottom"/>
         <Border Grid.Row="4" Height="46"  Background="White" >
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">

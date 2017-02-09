@@ -61,7 +61,7 @@
                 <Path Data="F1M634,323C634,323.552,633.553,324,633,324C632.447,324,632,323.552,632,323C632,322.448,632.447,322,633,322C633.553,322,634,322.448,634,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="92" Canvas.Top="34"/>
                 <Path Data="F1M631,323C631,323.552,630.553,324,630,324C629.447,324,629,323.552,629,323C629,322.448,629.447,322,630,322C630.553,322,631,322.448,631,323" Fill="#FF457FAD" Height="2" Stretch="Fill" Width="2" Canvas.Left="89" Canvas.Top="34"/>
             </Canvas>
-            <TextBlock Text="Network Addresses" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+            <TextBlock Text="Network Addresses" FontFamily="{StaticResource myriadpro}"  FontSize="19" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
         <Grid  Grid.Row="1" Margin="30,0,0,0" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectPort, FallbackValue=Collapsed}">
@@ -88,7 +88,7 @@
                 <Path Data="F1M636,665.1416L636,674.9996L618.142,674.9996C618.588,676.7216,620.139,677.9996,622,677.9996L635,677.9996C637.209,677.9996,639,676.2086,639,673.9996L639,668.9996C639,667.1386,637.723,665.5876,636,665.1416" Fill="#FF457FAD" Height="12.858" Opacity="0.19999699294567108" Stretch="Fill" Width="20.858" Canvas.Left="72.142" Canvas.Top="15.142"/>
             </Canvas>
 
-            <TextBlock Text="Scan Credentials" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
+            <TextBlock Text="Scan Credentials" FontFamily="{StaticResource myriadpro}"  FontSize="19" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
 
