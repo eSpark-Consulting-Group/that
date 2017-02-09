@@ -193,12 +193,12 @@ namespace APTAT.Core.Apt
 
         private void OnScannerOnScanCompleted(object sender, ComputerScanCompletedEventArgs args)
         {
-            var resultsUpdated = AddResultsToDictionary(args.CompletedResult.Files.ToArray());
+            var resultsUpdated = AddResultsToDictionary(args.CompletedResult.Files.ToArray(), true);
             if (resultsUpdated)
                 args.CompletedResult.RecalculateStatistics();
         }
 
-        private bool AddResultsToDictionary(IFlsResult[] resultsFiles)
+        private bool AddResultsToDictionary(IFlsResult[] resultsFiles, bool fromRemoteScanner = false)
         {
             bool resultsUpdated = false;
             var addToAnalyze = new List<IFlsResult>();
@@ -256,7 +256,7 @@ namespace APTAT.Core.Apt
                     var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v =>
                             new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.InQueue)), GetResultsEnumerator().ToArray())
                         .Values;
-                    _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
+                    _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
                     lock (ValkyrieAnalysisResult)
                     {
                         foreach (var fileInfo in valkyrieAnalysisResults)
