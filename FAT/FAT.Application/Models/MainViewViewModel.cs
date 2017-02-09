@@ -447,6 +447,8 @@ namespace FAT.Application.Models
             }
         }
 
+        public string Email { get; set; }
+
         #endregion
 
         #region Commands
@@ -456,7 +458,7 @@ namespace FAT.Application.Models
         public DelegateCommand SelectCommand { get; private set; }
         public DelegateCommand StopAutoDiscoveryCommand { get; private set; }
         public DelegateCommand StartScanWithDiscoveryResultsCommand { get; private set; }
-
+        public DelegateCommand SubmitToEmailCommand { get; private set; }
         public DelegateCommand RestartComputerScanCommand { get; private set; }
         public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
         public DelegateCommand StopComputerScanCommand { get; private set; }
@@ -493,6 +495,7 @@ namespace FAT.Application.Models
                 o => SelectedDiscoveryResults.Any());
             SelectCommand = new DelegateCommand(o => { }, 
                 o => IsDetailsEnabled);
+            SubmitToEmailCommand = new DelegateCommand(InvokeSendEmail);
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), 
                 o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), 
@@ -521,6 +524,11 @@ namespace FAT.Application.Models
             UseCurrentDomainForRescan = HasCurrentDomainName;
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
+        }
+
+        private void InvokeSendEmail(Object arg)
+        {
+
         }
 
         private async Task<string> GetCurrentDomainName()
