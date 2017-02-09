@@ -56,12 +56,11 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-
                                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}}">
-                                        <local:LoginPasswordUserControl Margin="0" Login="{Binding ProxyLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                                    
+                                        <local:LoginPasswordUserControl Margin="0" Login="{Binding ProxyLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
                                                     Password="{Binding ProxyPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
                                     </Grid>
+
 
                                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}">
                                         <local:LoginPasswordUserControl Margin="0" Login="{Binding RescanLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
@@ -98,22 +97,25 @@
                                         </telerik:RadWatermarkTextBox>
                                     </Grid>
 
-
-
-
                                 </Grid>
                                 <Border Background="White" Grid.Row="2" >
                                     <StackPanel HorizontalAlignment="Right"  Margin="0,10,10,0" Orientation="Horizontal">
-                                        <Button Content="Cancel" Height="32" x:Name="no" Margin="5,5,5,15" Click="Button_CancelClick" Template="{StaticResource BackButton}" Foreground="Black"></Button>
-                                        <Button Content="Save" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" ></Button>
-                                        <Button Content="Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}" ></Button>
-
+                                        <Button Content="Cancel" Height="32" x:Name="no" Margin="5,5,5,15" Click="Button_CancelClick" Template="{StaticResource BackButton}" Foreground="Black"/>
+                                        <Button Content="Save" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
+                                        <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                                            <Button Content="Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                        </Grid>
+                                        <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}">
+                                            <Button Content="Quick Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                        </Grid>
+                                        <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}">
+                                            <Button Content="Full Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                        </Grid>
                                     </StackPanel>
                                 </Border>
                             </Grid>
 
-                            <Border Grid.Row="1" BorderThickness="0" Background="{DynamicResource ErrorBrush2}" BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" 
-                Visibility="{Binding HasErrors, Converter={converters:BoolToVisibilityConverter2}, FallbackValue=Collapsed}">
+                            <Border Grid.Row="1" BorderThickness="0" Background="{DynamicResource ErrorBrush2}" BorderBrush="#FF6A0101" VerticalAlignment="Top" CornerRadius="0" Visibility="{Binding HasErrors, Converter={converters:BoolToVisibilityConverter2}, FallbackValue=Collapsed}">
                                 <Grid>
                                     <TextBlock AutomationProperties.AutomationId="ErrorTextBlock" Foreground="White" Text="{Binding Error}" Style="{DynamicResource SubTitleTextStyle}" Margin="20 10"   FontSize="13"/>
                                     <Button Style="{StaticResource CloseButton}" Background="White" Command="{Binding ClearErrorMessageCommand}" Margin="0 0 20 0" Width="12" Height="12" HorizontalAlignment="Right"  ToolTip="Hide" />

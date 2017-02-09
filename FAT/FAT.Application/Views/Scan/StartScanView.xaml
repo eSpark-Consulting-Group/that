@@ -38,7 +38,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Button AutomationProperties.AutomationId="ActiveDirectoryButton"
-                                    Click="OnActiveDirectoryClick" Content="Scan computers by selecting them from Active Directory" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Margin="17 17 0 0">
+                                    Click="OnActiveDirectoryClick" Content="Scan computers selected from Active Directory" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Margin="17 17 0 0">
                                 <Button.Template>
                                     <ControlTemplate TargetType="{x:Type Button}">
                                         <FrameworkTemplate.Resources>
@@ -141,7 +141,7 @@
                             </Button>
 
                             <Button AutomationProperties.AutomationId="WorkgroupButton"
-                                    Click="OnWorkgroupClick" Content="Scan computers by selecting them from Workgroup" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Row="1" Margin="17 17 0 0">
+                                    Click="OnWorkgroupClick" Content="Scan computers selected from Workgroups" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Row="1" Margin="17 17 0 0">
                                 <Button.Template>
                                     <ControlTemplate TargetType="{x:Type Button}">
                                         <FrameworkTemplate.Resources>
@@ -258,7 +258,7 @@
                             </Button>
 
                             <Button AutomationProperties.AutomationId="NetworkAddressesButton"
-                                    Content="Scan computers by specifying IP addresses or endpoint names" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" 
+                                    Content="Scan computers with specified IP addresses or endpoint names" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" 
                                     Grid.Column="1" Margin="17 17 17 0" Click="OnIpClick">
                                 <Button.Template>
                                     <ControlTemplate TargetType="{x:Type Button}">

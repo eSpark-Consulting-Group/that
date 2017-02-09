@@ -264,7 +264,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Path SnapsToDevicePixels="True" Margin="0 0 10 0" Data="M7,5 L9,5 L12,8 L9,11 L7,11 L10.093994,8 z M5,5 L8,8 L5,11 z M8,2 C4.6870117,2 2,4.6860046 2,8 C2,11.313995 4.6870117,14 8,14 C11.312988,14 14,11.313995 14,8 C14,4.6860046 11.312988,2 8,2 z M8,0 C12.417999,0 16,3.5820007 16,8 C16,12.417999 12.417999,16 8,16 C3.5820007,16 0,12.417999 0,8 C0,3.5820007 3.5820007,0 8,0 z" Fill="White" Height="16" Stretch="Fill" Width="16"/>
-                    <TextBlock Text="Skip Discovery" Grid.Column="1"/>
+                    <TextBlock Text="Skip Discovery" Grid.Column="1" Margin="0 1 0 0"/>
                 </Grid>
             </Button>
 
@@ -276,7 +276,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Path SnapsToDevicePixels="True" Margin="0 0 10 0" Data="M4,12 L14,12 14,14 4,14 z M0,12 L2,12 2,14 0,14 z M4,8.0000002 L16,8.0000002 16,10 4,10 z M0,8.0000002 L2,8.0000002 2,10 0,10 z M4,4 L12,4 12,6 4,6 z M0,4 L2,4 2,6 0,6 z M4,0 L17,0 17,2 4,2 z M0,0 L2,0 2,2 0,2 z" Fill="White" HorizontalAlignment="Left" Height="14" Stretch="Fill" VerticalAlignment="Center" Width="17"/>
-                        <TextBlock Text="Scan Selected" Grid.Column="1" />
+                        <TextBlock Text="Scan Selected" Grid.Column="1" Margin="0 1 0 0"/>
                     </Grid>
                 </Button>
                 <Button  Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Background="#FF91ADBD" BorderBrush="#FF91ADBD" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
@@ -308,7 +308,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Path SnapsToDevicePixels="True" Margin="0 0 10 0"  Data="M5,5 L11,5 11,11 5,11 z M8,2 C4.6870117,2 2,4.6860046 2,8 2,11.313995 4.6870117,14 8,14 11.312988,14 14,11.313995 14,8 14,4.6860046 11.312988,2 8,2 z M8,0 C12.417999,0 16,3.5820007 16,8 16,12.417999 12.417999,16 8,16 3.5820007,16 0,12.417999 0,8 0,3.5820007 3.5820007,0 8,0 z" Fill="White" Height="16" Stretch="Fill" Width="16"/>
-                    <TextBlock Text="Stop Scan" Grid.Column="1"/>
+                    <TextBlock Text="Stop Scan" Grid.Column="1" Margin="0 1 0 0"/>
                 </Grid>
             </Button>
 

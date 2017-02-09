@@ -207,17 +207,10 @@ namespace FAT.Application.Models
                     IsAutoDiscoveryInProgress = false;
                     _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
                     Percentage = 0;
+                    Set(() => SelectDiscoveryResults, true);
                 }
 
                 RaisePropertyChanged(nameof(IsAutoDiscoveryCompleted));
-            }
-        }
-
-        public bool StopScanPredicate
-        {
-            get
-            {
-                return IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress;
             }
         }
 
@@ -232,6 +225,8 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(ScannedItemsCount));
             }
         }
+
+        public int TotalItemsCount { get; set; }
 
         public bool RaisedHasMalwares { get; set; }
 
@@ -280,13 +275,18 @@ namespace FAT.Application.Models
             }
         }
 
-        public int TotalItemsCount { get; set; }
-
         public Boolean IsDetailsEnabled
         {
             get { return SelectedItem != null && !SelectedItem.IsComputer; }
         }
 
+        public bool IsGlobalStopEnabled
+        {
+            get
+            {
+                return IsAnyScanInProgress && IsScanInProgress.HasValue && !CancelInProgress;
+            }
+        }
 
         public Boolean IsRestartEnabled
         {
@@ -359,9 +359,20 @@ namespace FAT.Application.Models
             get { return _aptService.GetValkyrieDetailsLink(); }
         }
         
+        public bool SelectDiscoveryResults { get; set; }
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
 
+        private List<DeploymentTarget> _selectedDiscoveryResults = new List<DeploymentTarget>();
+        public List<DeploymentTarget> SelectedDiscoveryResults
+        {
+            get { return _selectedDiscoveryResults; }
+            set
+            {
+                _selectedDiscoveryResults = value ?? new List<DeploymentTarget>();
+                StartScanWithDiscoveryResultsCommand.InvalidateCanExecute();
+            }
+        }
 
         public ObservableCollection<ThreatInfoItem> Files
         {
@@ -398,6 +409,7 @@ namespace FAT.Application.Models
 
 
         public bool GroupEnabled { get; set; }
+
         public bool GroupByFiles
         {
             get { return _groupByFiles; }
@@ -476,14 +488,18 @@ namespace FAT.Application.Models
                 o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
             StopScanCommand = new DelegateCommand(o =>
                 AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
-                o => StopScanPredicate);
+                o => IsGlobalStopEnabled);
             StopAutoDiscoveryCommand = new DelegateCommand(InvokeStopAutoDiscovery);
-            StartScanWithDiscoveryResultsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true));
-            SelectCommand = new DelegateCommand(o => { }, o => IsDetailsEnabled);
-            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), o => IsRestartEnabled);
-            RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), o =>
-                IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
-            StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan, o => IsStopEnabled);
+            StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults, 
+                o => SelectedDiscoveryResults.Any());
+            SelectCommand = new DelegateCommand(o => { }, 
+                o => IsDetailsEnabled);
+            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), 
+                o => IsRestartEnabled);
+            RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), 
+                o =>  IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
+            StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan, 
+                o => IsStopEnabled);
         }
 
         private async void OnLoaded(object o)
@@ -539,10 +555,23 @@ namespace FAT.Application.Models
                 }
             }
             else
-                RestartComputerScan();
+                RestartComputerScan(false);
         }
 
-        private void RestartComputerScan(bool useNewCredentials = false)
+        private void InvokeScanWithDiscoveryResults(Object arg)
+        {
+            SettingsWindow window = new SettingsWindow();
+            window.Owner = System.Windows.Application.Current.MainWindow;
+            window.DataContext = this;
+            window.ShowCredentials = true;
+            window.ShowScanModes = true;
+            window.Header = "Scan Credentials";
+
+            if (window.ShowDialog().GetValueOrDefault())
+                RestartComputerScan(true, true);
+        }
+
+        private void RestartComputerScan(bool useNewCredentials, bool useDiscoveryResults = false)
         {
             ScanKind scanKind = ScanKind.Quick;
             if (IsQuickScan)
@@ -554,25 +583,11 @@ namespace FAT.Application.Models
                 scanKind = ScanKind.Full;
             }
 
-            ScanOptions options;
-            CustomScanOptions customScanOptions = null;
-
-
             var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
             var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
 
-            var items = new List<ThreatInfoItem>();
-            foreach (var item in SelectedItems)
-            {
-                if (item.IsComputer &&
-                    (item.ScanStage == ScanStage.ScanFailed ||
-                    item.ScanStage == ScanStage.OperationFailed ||
-                    item.ScanStage == ScanStage.OperationCanceled))
-                {
-                    item.RestoreConnectingState();
-                    items.Add(item);
-                }
-            }
+            ScanOptions options;
+            CustomScanOptions customScanOptions = null;
             if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
             {
                 customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
@@ -584,8 +599,31 @@ namespace FAT.Application.Models
             {
                 options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
             }
-            _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
-                _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+
+            if (!useDiscoveryResults)
+            {
+                var items = new List<ThreatInfoItem>();
+                foreach (var item in SelectedItems)
+                {
+                    if (item.IsComputer &&
+                        (item.ScanStage == ScanStage.ScanFailed ||
+                        item.ScanStage == ScanStage.OperationFailed ||
+                        item.ScanStage == ScanStage.OperationCanceled))
+                    {
+                        item.RestoreConnectingState();
+                        items.Add(item);
+                    }
+                }
+                
+                _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
+                    _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+            }
+            else
+            {
+                options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+                _aptService.BeginScan(SelectedDiscoveryResults.ToArray(),
+                    _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+            }
             if (!IsScanInProgress.GetValueOrDefault())
             {
                 IsScanInProgress = true;
@@ -912,10 +950,16 @@ namespace FAT.Application.Models
 
             if (!RaisedHasMalwares)
             {
-                Set(() => RaisedHasMalwares, _scanCounterManager.HasMalwares);
+                Set(() => RaisedHasMalwares, 
+                    _scanCounterManager.HasMalwares);
+
                 if (!RaisedHasMalwares)
-                    Set(() => RaisedHasUnknowns, _scanCounterManager.HasUnknowns || _scanCounterManager.HasNotAnalyzed || _scanCounterManager.HasInProgress);
+                    Set(() => RaisedHasUnknowns, 
+                        _scanCounterManager.HasUnknowns || 
+                        _scanCounterManager.HasNotAnalyzed || 
+                        _scanCounterManager.HasInProgress);
             }
+
             if (Math.Abs(Percentage - 100) < 0.01)
                 OnScanCompleted();
             RaisePropertyChanged(nameof(Header));

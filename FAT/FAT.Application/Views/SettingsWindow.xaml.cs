@@ -1,10 +1,9 @@
-﻿using FAT.Application.Extensions;
+﻿
 using FAT.Application.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Telerik.Windows.Controls;
 
 namespace FAT.Application
 {
@@ -18,6 +17,18 @@ namespace FAT.Application
             InitializeComponent();
         }
 
+        #region ShowProxyCredentialsProperty (DependencyProperty)
+        public bool ShowProxyCredentials
+        {
+            get { return (bool)GetValue(ShowProxyCredentialsProperty); }
+            set { SetValue(ShowProxyCredentialsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowProxyCredentialsProperty =
+            DependencyProperty.Register("ShowProxyCredentials", typeof(bool), typeof(SettingsWindow),
+            new PropertyMetadata(false));
+
+        #endregion
 
         #region ShowCredentialsProperty (DependencyProperty)
         public bool ShowCredentials
@@ -32,15 +43,15 @@ namespace FAT.Application
 
         #endregion
 
-        #region ShowProxyCredentialsProperty (DependencyProperty)
-        public bool ShowProxyCredentials
+        #region ShowScanModesProperty (DependencyProperty)
+        public bool ShowScanModes
         {
-            get { return (bool)GetValue(ShowProxyCredentialsProperty); }
-            set { SetValue(ShowProxyCredentialsProperty, value); }
+            get { return (bool)GetValue(ShowScanModesProperty); }
+            set { SetValue(ShowScanModesProperty, value); }
         }
 
-        public static readonly DependencyProperty ShowProxyCredentialsProperty =
-            DependencyProperty.Register("ShowProxyCredentials", typeof(bool), typeof(SettingsWindow),
+        public static readonly DependencyProperty ShowScanModesProperty =
+            DependencyProperty.Register("ShowScanModes", typeof(bool), typeof(SettingsWindow),
             new PropertyMetadata(false));
 
         #endregion
