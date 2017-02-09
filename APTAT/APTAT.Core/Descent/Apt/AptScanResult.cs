@@ -7,7 +7,7 @@ using APTAT.DeploymentCore.Descent;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptScanResult : ComputerDescentResult, IAptScanResult
+    public class AptScanResult : ComputerDescentResult, IAptScanResultInternal
     {
         public AptScanResult(IComputer computer, Guid operationUid) : base(computer, operationUid)
         {
@@ -252,12 +252,18 @@ namespace APTAT.Core.Descent.Apt
             if (Completed && !Succeeded && !IsCanceled)
                 ScanStage = AptScanStage.OperationFailed;
             if (Completed && Succeeded && !IsCanceled)
-                ScanStage = AptScanStage.OperationCompleted;
+                ScanStage = AptScanStage.RemoteOperationCompleted;
             if (Completed && !Succeeded && !IsCanceled)
                 ScanStage = AptScanStage.OperationFailed;
         }
 
-       
+        public void SetCompleted()
+        {
+            if (ScanStage == AptScanStage.RemoteOperationCompleted)
+                ScanStage = AptScanStage.OperationCompleted;
+            Modified = DateTime.UtcNow;
+        }
+
     }
 
     

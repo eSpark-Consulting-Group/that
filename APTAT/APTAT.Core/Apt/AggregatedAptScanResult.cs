@@ -34,9 +34,13 @@ namespace APTAT.Core.Apt
         private void OnOperationContextDescentCompleted(object sender, IDescentResult descentResult)
         {
             var operationResult = sender as IAptScanOperationContext;
-            operationResult.DescentCompleted -= OnOperationContextDescentCompleted;
-            CompletedTime = operationResult.CompletedTime;
-            OperationsInProgress.Remove(operationResult.OperationUid);
+            if (operationResult != null)
+            {
+                operationResult.DescentCompleted -= OnOperationContextDescentCompleted;
+                operationResult.ComputerDescentCompleted -= OnOperationContextComputerDescentCompleted;
+                CompletedTime = operationResult.CompletedTime;
+                OperationsInProgress.Remove(operationResult.OperationUid);
+            }
         }
 
         private void OnOperationContextComputerDescentCompleted(object sender, IComputerDescentResult computerDescentResult)
@@ -46,8 +50,10 @@ namespace APTAT.Core.Apt
 
         public void MergeOperationContext(IAptScanOperationContext aptScanContext)
         {
-            foreach(var sr in aptScanContext.ScanResults)
+            foreach (var sr in aptScanContext.ScanResults)
+            {
                 _scanResults.AddOrUpdate(sr.TargetUid, sr, (key, oldValue) => sr);
+            }
             AggregatedOperationUids.Add(aptScanContext.OperationUid);
             OperationsInProgress.Add(aptScanContext.OperationUid);
             aptScanContext.DescentCompleted += OnOperationContextDescentCompleted;

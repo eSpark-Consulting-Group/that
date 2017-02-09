@@ -46,14 +46,15 @@ namespace FAT.Application.Models
         private String _statusMessageMemento;
 
         private ScanStage _scanStage;
-        private Dictionary<string, List<ThreatInfoItem>> _itemsDict = new Dictionary<string, List<ThreatInfoItem>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, List<ThreatInfoItem>> _itemsDict 
+            = new Dictionary<string, List<ThreatInfoItem>>(StringComparer.OrdinalIgnoreCase);
 
         public Collection<ThreatInfoItem> Computers { get; set; }
         public float? MalwareProbabilityValue { get; set; }
         public BadFileItem BadFile { get; }
 
         public DeploymentTarget DeploymentTarget { get; }
-        public double RemoteScanningPercentage { get; set; }
+        private double RemoteScanningPercentage { get; set; }
 
         public string SkipReason { get; set; }
 
@@ -110,6 +111,10 @@ namespace FAT.Application.Models
         {
             get
             {
+                if (BadFile.Cloud == CloudVerdict.Malware)
+                    return UiFinalVerdict.Malware;
+                if(BadFile.Cloud == CloudVerdict.Safe)
+                    return UiFinalVerdict.Clean;
                 switch (ValkyrieVerdict)
                 {
                     case ValkyrieVerdict.NotAnalyzed:
@@ -125,6 +130,7 @@ namespace FAT.Application.Models
                     case ValkyrieVerdict.Clean:
                         return UiFinalVerdict.Clean;
                     case ValkyrieVerdict.PendingFls:
+                    case ValkyrieVerdict.InQueue:
                         {
                             switch (BadFile.Cloud)
                             {
@@ -174,11 +180,11 @@ namespace FAT.Application.Models
         }
 
       
-        public int? FilesToCheckOnValkyrieCount { get; private set; }
+        public ThreatInfoItem[] FilesToCheckOnValkyrieCount { get; private set; }
         public void RemoteScanCompleted()
         {
             ThreatInfoItem[] files = Items.Where(i => i.ShouldCheckOnValkyrie).ToArray();
-            FilesToCheckOnValkyrieCount = files.Length;
+            FilesToCheckOnValkyrieCount = files;
         }
 
         public double ValkyrieProgressPercentage
@@ -186,9 +192,10 @@ namespace FAT.Application.Models
             get
             {
                 if (FilesToCheckOnValkyrieCount == null) return 0;
-                if (FilesToCheckOnValkyrieCount == 0) return 100;
-                var count = Items.Count(f => f.ValkyrieVerdict != ValkyrieVerdict.PendingFls);
-                return count / (double)FilesToCheckOnValkyrieCount.Value;
+                if (FilesToCheckOnValkyrieCount.Length == 0) return 100;
+                var count = FilesToCheckOnValkyrieCount.Count(f => f.ValkyrieVerdict != ValkyrieVerdict.PendingFls
+                && f.ValkyrieVerdict != ValkyrieVerdict.InQueue);
+                return count / (double)FilesToCheckOnValkyrieCount.Length;
             }
         }
 
@@ -209,6 +216,7 @@ namespace FAT.Application.Models
             get
             {
                 return ValkyrieVerdict == ValkyrieVerdict.PendingFls || 
+                    ValkyrieVerdict == ValkyrieVerdict.InQueue ||
                     ValkyrieVerdict == ValkyrieVerdict.FirstSeen || 
                     ValkyrieVerdict == ValkyrieVerdict.Pending;
             }
@@ -435,6 +443,7 @@ namespace FAT.Application.Models
                     case ScanStage.ScanFailed:
                     case ScanStage.OperationFailed:
                     case ScanStage.OperationCanceled:
+                        
                         return StatusMessageSystem;
 
 
@@ -445,7 +454,7 @@ namespace FAT.Application.Models
                     case ScanStage.ScanResultsProcessing:
                     case ScanStage.DescentOperationCompleted:
                     case ScanStage.OperationCompleted:
-
+                    case ScanStage.RemoteOperationCompleted:
                         return GetStatusMessage();
 
 
@@ -630,9 +639,13 @@ namespace FAT.Application.Models
         {
             get
             {
+
+                if (ScanStage == ScanStage.OperationCanceled || ScanStage == ScanStage.OperationFailed ||
+                    ScanStage == ScanStage.ScanFailed)
+                    return 100;
                 var valkyriePercent = (ValkyrieProgressPercentage * 100) / 2;
                 if (valkyriePercent > 50) valkyriePercent = 50;
-                return RemoteScanningPercentage + valkyriePercent;
+                return RemoteScanningPercentage/2 + valkyriePercent;
             }
         }
 
@@ -732,7 +745,7 @@ namespace FAT.Application.Models
                                 cleanDiff--;
                                 break;
                         }
-                        anyUpdated = anyUpdated || item.UpdateFileVerdict(verdictContext);
+                        anyUpdated = anyUpdated | item.UpdateFileVerdict(verdictContext);
                         switch (item.FinalVerdict)
                         {
                             case UiFinalVerdict.Clean:
@@ -783,7 +796,7 @@ namespace FAT.Application.Models
             CleanFilesCount = scanProgress.CleanFilesCount;
             PendingFilesCount = scanProgress.UnknownFilesCount + scanProgress.NoVerdictFilesCount + scanProgress.FailedToAnalyzeFilesCount;
             MalwareFilesCount = scanProgress.MalwareFilesCount;
-            RemoteScanningPercentage = scanProgress.Percentage / 2;
+            RemoteScanningPercentage = scanProgress.Percentage;
             StatusMessageSystem = scanProgress.StatusMessage;
             ScanStage = scanProgress.ScanStage;
             RaisePropertyChanged(nameof(StatusMessage));

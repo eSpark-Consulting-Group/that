@@ -19,6 +19,7 @@
         DescentOperationCompleted,
         OperationFailed,
         OperationCanceled,
+        RemoteOperationCompleted,
         OperationCompleted
     }
 

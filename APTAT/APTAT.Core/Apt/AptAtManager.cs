@@ -211,7 +211,7 @@ namespace APTAT.Core.Apt
                     if (!_flsHashResults.ContainsKey(r.Sha1))
                     {
                         _flsHashResults[r.Sha1] = new AptVerdictContext(r.Sha1, r.Cloud);
-                        if (r.IsUnknown())
+                        if (_distinctHelper.ShouldSendToValkyrie(r))
                             newUnknownFiles.Add(r);
                         if (r.IsNotAnalyzed())
                             addToAnalyze.Add(r);
@@ -254,7 +254,7 @@ namespace APTAT.Core.Apt
                 if (filesToAnalyze.Any())
                 {
                     var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v =>
-                            new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.Pending)), GetResultsEnumerator().ToArray())
+                            new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.InQueue)), GetResultsEnumerator().ToArray())
                         .Values;
                     _valkyrieClient.AddFilesToAnalyze(filesToAnalyze);
                     lock (ValkyrieAnalysisResult)
@@ -379,7 +379,6 @@ namespace APTAT.Core.Apt
                 _descentSubSystem.StopAllScans(0);
 
                 _flsManager.Cancel();
-                _isValkyrieStarted = false;
                 _valkyrieClient.AnalyzeAsyncCancel();
                 lock (_flsHashResults)
                 {

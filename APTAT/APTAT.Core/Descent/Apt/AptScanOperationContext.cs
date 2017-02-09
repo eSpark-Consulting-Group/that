@@ -33,6 +33,17 @@ namespace APTAT.Core.Descent.Apt
             });
         }
 
+        protected override void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)
+        {
+            base.OnComputerDescentCompleted(computerDescentResult);
+            if (computerDescentResult is IAptScanResultInternal)
+            {
+                var aptResult = (IAptScanResultInternal) computerDescentResult;
+                if (aptResult.ScanStage == AptScanStage.RemoteOperationCompleted)
+                    aptResult.SetCompleted();
+            }
+        }
+
         public override Guid SessionId
         {
             get { return _sessionId; }

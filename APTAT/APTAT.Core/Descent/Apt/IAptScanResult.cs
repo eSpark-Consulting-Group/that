@@ -7,6 +7,10 @@ using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Apt
 {
+    public interface IAptScanResultInternal : IAptScanResult
+    {
+        void SetCompleted();
+    }
     public interface IAptScanResult : IComputerDescentResult
     {
         string OsName { get; }

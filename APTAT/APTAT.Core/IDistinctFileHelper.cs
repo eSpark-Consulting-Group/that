@@ -8,5 +8,6 @@ namespace APTAT.Core
     public interface IDistinctFileHelper
     {
         List<ValkyrieFileInfo> GetDistinctFileInfo(IAptScanResult[] results);
+        bool ShouldSendToValkyrie(IFlsResult module);
     }
 }

@@ -10,7 +10,7 @@ namespace APTAT.Core
 {
     public class FATFileFilter : DistinctFileHelper
     {
-        protected override bool Filter(IModule module)
+        public override bool ShouldSendToValkyrie(IFlsResult module)
         {
             return module.Cloud == CloudVerdict.Unknown || module.Cloud == CloudVerdict.FirstSeen || module.Cloud == CloudVerdict.Malware;
         }
@@ -19,7 +19,7 @@ namespace APTAT.Core
 
     public class DistinctFileHelper : IDistinctFileHelper
     {
-        protected virtual bool Filter(IModule module)
+        public virtual bool ShouldSendToValkyrie(IFlsResult module)
         {
             return module.Cloud == CloudVerdict.Unknown || module.Cloud == CloudVerdict.FirstSeen;
         }
@@ -32,7 +32,7 @@ namespace APTAT.Core
             Dictionary<string, ValkyrieFileInfo> files = new Dictionary<string, ValkyrieFileInfo>(StringComparer.OrdinalIgnoreCase);
             foreach (var scanResult in scanResults)
             {
-                var modules = scanResult.Files.Where(Filter);
+                var modules = scanResult.Files.Where(ShouldSendToValkyrie);
 
                 foreach (var badFile in modules)
                 {

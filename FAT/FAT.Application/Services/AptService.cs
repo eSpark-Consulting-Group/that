@@ -146,15 +146,9 @@ namespace FAT.Application.Services
 
         private void OnComputerScanCompleted(Object sender, ComputerScanCompletedEventArgs e)
         {
-            Action action = StartValkyrieAnalysis;
+
             if (e.CompletedResult.SafeFilesCount != e.CompletedResult.TotalFilesCount)
             {
-                lock (this)
-                {
-                    if (_valkyrieStarted) return;
-                    _valkyrieStarted = true;
-                }
-                Task.Factory.StartNew(action, TaskCreationOptions.None);
                 var scanner = sender as IAptScanner;
                 if (scanner != null) scanner.ComputerScanCompleted -= OnComputerScanCompleted;
             }
@@ -212,43 +206,48 @@ namespace FAT.Application.Services
             Dictionary<string,IModule> modules = new Dictionary<string,IModule>(StringComparer.OrdinalIgnoreCase);
             foreach (var r in result.ScanResults.Where(c => lastUtcTime == null || c.Modified > lastUtcTime))
             {
+                var modified = r.Modified;
+                var scanStage = r.ScanStage;
                 List<BadFileItem> badfiles = new List<BadFileItem>();
-                foreach (var m in r.BadFiles)
                 {
-                    if (!modules.ContainsKey(m.Sha1)&&(m.IsUnknown() || m.Cloud == CloudVerdict.Malware))
-                        modules.Add(m.Sha1, m);
-                    badfiles.Add(new BadFileItem
+                    foreach (var m in r.BadFiles)
                     {
-                        Name = m.Path,
-                        Size = m.Size,
-                        Accessed = m.Accessed,
-                        Created = m.Created,
-                        Modified = m.Modified,
-                        Product = m.Product,
-                        Copyright = m.Copyright,
-                        Version = m.Version,
-                        Description = m.Description,
-                        Signer = m.Signer,
-                        Attributes = m.Attributes,
-                        Sha1 = m.Sha1,
-                        Cloud = m.Cloud,
+                        if (!modules.ContainsKey(m.Sha1) && (m.IsUnknown() || m.Cloud == CloudVerdict.Malware))
+                            modules.Add(m.Sha1, m);
+                        badfiles.Add(new BadFileItem
+                        {
+                            Name = m.Path,
+                            Size = m.Size,
+                            Accessed = m.Accessed,
+                            Created = m.Created,
+                            Modified = m.Modified,
+                            Product = m.Product,
+                            Copyright = m.Copyright,
+                            Version = m.Version,
+                            Description = m.Description,
+                            Signer = m.Signer,
+                            Attributes = m.Attributes,
+                            Sha1 = m.Sha1,
+                            Cloud = m.Cloud,
+                        });
+                    }
+                    mappedResult.Add(new ScanResultItem
+                    {
+                        TargetUid = r.TargetUid,
+                        TotalFilesCount = r.TotalFilesCount,
+                        Percentage = r.Percentage,
+                        MalwareFilesCount = r.MalwareFilesCount,
+                        NoVerdictFilesCount = r.NoVerdictFilesCount,
+                        FailedToAnalyzeFilesCount = r.FailedToAnalyzeFilesCount,
+                        UnknownFilesCount = r.UnknownFilesCount,
+                        CleanFilesCount = r.SafeFilesCount,
+                        ScanStage = FromAptScanStage(scanStage),
+                        Modified = modified,
+                        StatusMessage = r.ShortStatusMessage.ToString(),
+                        BadFiles = badfiles.ToArray()
                     });
+
                 }
-                mappedResult.Add(new ScanResultItem
-                {
-                    TargetUid = r.TargetUid,
-                    TotalFilesCount = r.TotalFilesCount,
-                    Percentage = r.Percentage,
-                    MalwareFilesCount = r.MalwareFilesCount,
-                    NoVerdictFilesCount = r.NoVerdictFilesCount,
-                    FailedToAnalyzeFilesCount = r.FailedToAnalyzeFilesCount,
-                    UnknownFilesCount = r.UnknownFilesCount,
-                    CleanFilesCount = r.SafeFilesCount,
-                    ScanStage = FromAptScanStage(r.ScanStage),
-                    Modified = r.Modified,
-                    StatusMessage = r.ShortStatusMessage.ToString(),
-                    BadFiles = badfiles.ToArray()
-                });
             }
 
             var files = _manager.GetModifiedFileVerdicts(lastFlcUtcTime);
@@ -293,12 +292,13 @@ namespace FAT.Application.Services
         }
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-            _valkyrieStarted = false;
             var scanner = sender as IAptScanner;
             if (scanner != null)
             {
                 scanner.ScanStarted -= OnScanStarted;
             }
+            StartValkyrieAnalysis();
+            
             Action action = () =>
             {
                 ScanStartedEventArgs args = new ScanStartedEventArgs
@@ -371,6 +371,9 @@ namespace FAT.Application.Services
 
                 case AptScanStage.OperationCanceled:
                     return ScanStage.OperationCanceled;
+
+                case AptScanStage.RemoteOperationCompleted:
+                    return ScanStage.RemoteOperationCompleted;
 
                 default:
                     return ScanStage.Unknown;

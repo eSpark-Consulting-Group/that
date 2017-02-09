@@ -184,7 +184,7 @@ namespace APTAT.Core.Descent.Apt
                             "Completed: Total files scanned: {0}. Unknown files: {1}. Malicious files: {2}.",
                             result.TotalFilesCount, result.UnknownFilesCount, result.MalwareFilesCount) +
                             (result.LookupInProgressFilesCount > 0 ? String.Format(" Lookup in Progress: {0}.", result.LookupInProgressFilesCount) : String.Empty)),
-                    AptScanStage.OperationCompleted, result.TotalFilesCount, result.UnknownFilesCount,
+                    AptScanStage.RemoteOperationCompleted, result.TotalFilesCount, result.UnknownFilesCount,
                     result.MalwareFilesCount, result.SafeFilesCount, 100, result.FailedToAnalyzeFilesCount,
                     result.NoVerdictFilesCount);
             }

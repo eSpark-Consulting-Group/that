@@ -84,7 +84,7 @@ namespace APTAT.DeploymentCore.Descent
         }
 
         public double Percentage { get; private set; }
-        public DateTime Modified { get; private set; }
+        public DateTime Modified { get; protected set; }
 		public bool Completed { get; private set; }
 		public bool Succeeded { get; private set; }
 		public FormattedText StatusMessage { get; private set; }

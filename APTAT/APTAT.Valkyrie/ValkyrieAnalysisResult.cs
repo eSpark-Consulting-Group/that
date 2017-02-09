@@ -160,6 +160,9 @@ namespace APTAT.Valkyrie
         [Description("In Analysis")]
         Pending,
 
+        [Description("In Analysis")]
+        InQueue,
+
         [Description("Lookup in Progress")]
         PendingFls
     }

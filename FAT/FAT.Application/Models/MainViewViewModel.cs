@@ -27,7 +27,7 @@ namespace FAT.Application.Models
     {
         public event EventHandler ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> ErrorOccurred;
-        
+
 
         private string _tcpPort = "80";
         private string _udpPort = "53";
@@ -958,11 +958,9 @@ namespace FAT.Application.Models
                     completed++;
                 percentages += infoItem.TotalProgressPercentage;
             }
-            if (!CancelInProgress)
-            {
-                if (Math.Abs(Percentage - 100) > 0.01)
-                    Percentage = percentages / (double) _onlineItems.Length;
-            }
+            if (Math.Abs(Percentage - 100) > 0.01 && _onlineItems.Length > 0)
+                Percentage = percentages / (double)_onlineItems.Length;
+
 
             if (files.Any())
             {
