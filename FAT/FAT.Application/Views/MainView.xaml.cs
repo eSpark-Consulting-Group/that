@@ -33,7 +33,9 @@ namespace FAT.Application
             _viewModel = DataContext as MainViewViewModel;
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
-            _viewModel.DomainTargetsResolveFailure += OnDomainTargetsResolveFailure;
+            _viewModel.ErrorOccurred += OnErrorOccurred;
+
+
         }
 
         [MessageReceiver]
@@ -71,11 +73,13 @@ namespace FAT.Application
 
         private ConfirmationWindow _confirmation;
 
-        private void OnDomainTargetsResolveFailure(Object sender, DomainEventArgs e)
+        private void OnErrorOccurred(Object sender, DomainEventArgs e)
         {
-            ErrorWindow error = new ErrorWindow();
-            error.Text.Text = e.Exception.Message;
-            error.Owner = System.Windows.Application.Current.MainWindow;
+            ErrorWindow error = new ErrorWindow
+            {
+                Text = {Text = e.Exception.Message},
+                Owner = System.Windows.Application.Current.MainWindow
+            };
             error.ShowDialog();
         }
 

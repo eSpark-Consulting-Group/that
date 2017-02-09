@@ -28,13 +28,13 @@ namespace APTAT.Valkyrie
         private readonly string _endpointId;
         private ConcurrentBag<ValkyrieAnalysisResult> _analysisResults;
         private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems
-            = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
+            = new ConcurrentDictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
 
         private ConcurrentDictionary<string, ValkyrieAnalysisResult> _pendingItemsResolved
-            = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
+            = new ConcurrentDictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
 
         private readonly Dictionary<string, ValkyrieAnalyseOperationContext> _automaticAnalyseInProgressByHash
-            = new Dictionary<string, ValkyrieAnalyseOperationContext>(); 
+            = new Dictionary<string, ValkyrieAnalyseOperationContext>(StringComparer.OrdinalIgnoreCase); 
         private readonly Object _automaticAnalyseSync = new object();
         private string _aptScanId;
         private readonly Object _aptScanIdLock = new object();
@@ -242,15 +242,21 @@ namespace APTAT.Valkyrie
             }
         }
 
+        private void AddLookupContext(ValkyrieFileInfo fileInfo, ValkyrieVerdict previousVerdict)
+        {
+            if (_cancellationTokenSource.IsCancellationRequested)
+                lock (_lookupSync)
+                {
+                    fileInfo.PreviousValkyrieVerdict = ValkyrieVerdict.NotAnalyzed;
+                    _lookupContexts.Add(fileInfo);
+                }
+        }
+
         private void MergeAutomaticAnalysisResult(CheckAnalysisResultResponse result, ValkyrieAnalyseOperationContext fileInfo)
         {
             if (result.ReturnCode == ErrorCodesEnum.AnalysisNotFound)
             {
-                lock (_lookupSync)
-                {
-                    fileInfo.ValkyrieFileInfo.PreviousValkyrieVerdict = ValkyrieVerdict.NotAnalyzed;
-                    _lookupContexts.Add(fileInfo.ValkyrieFileInfo);
-                }
+                AddLookupContext(fileInfo.ValkyrieFileInfo, ValkyrieVerdict.NotAnalyzed);
                 lock (_automaticAnalyseSync)
                 {
                     _automaticAnalyseInProgressByHash.Remove(fileInfo.HashSha1);
@@ -259,11 +265,7 @@ namespace APTAT.Valkyrie
             else if (result.ReturnCode == ErrorCodesEnum.Success)
             {
                 if (result.Verdict.ToBusiness() == ValkyrieVerdict.Undetected)
-                    lock (_lookupSync)
-                    {
-                        fileInfo.ValkyrieFileInfo.PreviousValkyrieVerdict = result.Verdict.ToBusiness();
-                        _lookupContexts.Add(fileInfo.ValkyrieFileInfo);
-                    }
+                    AddLookupContext(fileInfo.ValkyrieFileInfo, result.Verdict.ToBusiness());
                 lock (_automaticAnalyseSync)
                 {
                     _automaticAnalyseInProgressByHash.Remove(fileInfo.HashSha1);
@@ -578,6 +580,10 @@ namespace APTAT.Valkyrie
                 }
                 else
                 {
+                    if (_cancellationTokenSource.IsCancellationRequested)
+                    {
+                        return CancelOperation(originalFilePath, sha1);
+                    }
                     lock (_automaticAnalyseSync)
                     {
                         ValkyrieAnalyseOperationContext context;
@@ -610,6 +616,10 @@ namespace APTAT.Valkyrie
                         var fileName = Path.GetFileName(orgFilePath);
                         using (var fStream = File.OpenRead(remoteFilePath))
                         {
+                            if (_cancellationTokenSource.IsCancellationRequested)
+                            {
+                                return CancelOperation(originalFilePath, sha1);
+                            }
                             response = _provider.SubmitToAutomaticAnalysis(request, fStream, _cancellationTokenSource.Token, fileName);
                             fatSubmitFilesResponse = _provider.FatSubmitFiles(new FatSubmitFilePathsRequest()
                             {
@@ -673,6 +683,7 @@ namespace APTAT.Valkyrie
 
             Interlocked.Increment(ref _fileScanned);
             _analysedItems.TryAdd(result.SHA1, result);
+
             if ((result.Verdict == ValkyrieVerdict.Undetected 
                 || result.Verdict == ValkyrieVerdict.Pending
                 || result.Verdict == ValkyrieVerdict.FirstSeen)

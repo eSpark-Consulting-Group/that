@@ -26,25 +26,34 @@ namespace FAT.Application.Models
     public sealed class MainViewViewModel : ViewModel, IMainViewModel
     {
         public event EventHandler ScanProcessCompleted;
-        public event EventHandler<DomainEventArgs> DomainTargetsResolveFailure;
+        public event EventHandler<DomainEventArgs> ErrorOccurred;
+        
 
+        private string _tcpPort = "80";
+        private string _udpPort = "53";
+        private Double _percentage;
+        private ThreatInfoItem _selectedItem;
         private readonly IAptService _aptService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
+        private Boolean _isReportEnabled;
+        private ObservableCollection<ThreatInfoItem> _files;
+        private ObservableCollection<ThreatInfoItem> _computers;
+        private readonly ScanCounterManager _scanCounterManager;
+        private bool _groupByFiles;
+        private bool _groupByComputers;
 
         private DateTime? _lastModifiesComputerDate = null;
         private DateTime? _lastModifiesFlsVerdictDate = null;
         private DateTime? _lastModifiesValkyrieVerdictDate = null;
+        private List<ThreatInfoItem> _selectedItems = new List<ThreatInfoItem>();
 
         private Guid _operationGuid;
-
         private Boolean? _isScanInProgress = false;
         private Boolean _isAutoDiscoveryInProgress;
         private Boolean _isAutoDiscoveryCompleted;
         private Boolean _cancelInProgress;
-
         private ThreatInfoItem[] _onlineItems;
-
         private readonly DispatcherTimer _scanIteratorTimer;
 
         #region Props
@@ -72,9 +81,6 @@ namespace FAT.Application.Models
         public string Login { get; set; }
         public string Password { get; set; }
 
-        public string ProxyLogin { get; set; }
-        public string ProxyPassword { get; set; }
-
         public string RescanLogin { get; set; }
         public string RescanPassword { get; set; }
 
@@ -88,8 +94,7 @@ namespace FAT.Application.Models
         public WizardStepEnum CurrentStep { get; set; }
 
 
-
-        private string _tcpPort = "80";
+        
         public String TcpPort
         {
             get { return _tcpPort; }
@@ -109,8 +114,7 @@ namespace FAT.Application.Models
                 }
             }
         }
-
-        private string _udpPort = "53";
+        
         public String UdpPort
         {
             get { return _udpPort; }
@@ -232,8 +236,7 @@ namespace FAT.Application.Models
         public bool RaisedHasMalwares { get; set; }
 
         public bool RaisedHasUnknowns { get; set; }
-
-        private Double _percentage;
+        
         public Double Percentage    
         {
             get { return _percentage; }
@@ -303,8 +306,7 @@ namespace FAT.Application.Models
                 return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComputer && _.ScanStage == ScanStage.ScanInProgress);
             }
         }
-
-        private Boolean _isReportEnabled;
+        
         public Boolean IsReportEnabled
         {
             get { return _isReportEnabled; }
@@ -314,8 +316,7 @@ namespace FAT.Application.Models
                 RaisePropertyChanged("IsReportEnabled");
             }
         }
-
-        private ThreatInfoItem _selectedItem;
+        
         public ThreatInfoItem SelectedItem
         {
             get { return _selectedItem; }
@@ -336,7 +337,6 @@ namespace FAT.Application.Models
             }
         }
 
-        private List<ThreatInfoItem> _selectedItems = new List<ThreatInfoItem>();
         public List<ThreatInfoItem> SelectedItems
         {
             get { return _selectedItems; }
@@ -363,7 +363,6 @@ namespace FAT.Application.Models
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
 
 
-        private ObservableCollection<ThreatInfoItem> _files;
         public ObservableCollection<ThreatInfoItem> Files
         {
             get { return _files; }
@@ -374,7 +373,6 @@ namespace FAT.Application.Models
             }
         }
 
-        private ObservableCollection<ThreatInfoItem> _computers;
         public ObservableCollection<ThreatInfoItem> Computers
         {
             get { return _computers; }
@@ -385,8 +383,6 @@ namespace FAT.Application.Models
             }
         }
 
-
-        private readonly ScanCounterManager _scanCounterManager;
         public ScanCounterCollection ScanCounters
         {
             get
@@ -402,7 +398,6 @@ namespace FAT.Application.Models
 
 
         public bool GroupEnabled { get; set; }
-        private bool _groupByFiles;
         public bool GroupByFiles
         {
             get { return _groupByFiles; }
@@ -418,7 +413,6 @@ namespace FAT.Application.Models
             }
         }
 
-        private bool _groupByComputers;
         public bool GroupByComputers
         {
             get { return _groupByComputers; }
@@ -637,7 +631,6 @@ namespace FAT.Application.Models
             _onlineItems = new ThreatInfoItem[0];
 
             SelectedItem = null;
-            ScannedItemsCount = 0;
             Percentage = 0;
             IsReportEnabled = false;
             
@@ -712,17 +705,21 @@ namespace FAT.Application.Models
         }
 
         private void OnScanCompleted(Object sender, ErrorEventArgs e)
-        { 
+        {
+            if (e.Error != null)
+            {
+                ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
+            }
             CancelInProgress = false;
+        }
+
+        private void OnScanCompleted()
+        {
             IsScanInProgress = false;
-            ScannedItemsCount = _onlineItems.Count(i => i.ScanStage == ScanStage.OperationCompleted);
-
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
-
             IsReportEnabled = true;
             RaisePropertyChanged(nameof(ValkyrieDetailsLink));
-            ScanProcessCompleted?.Invoke(this, e);
-
+            ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
             Percentage = 100;
         }
 
@@ -744,10 +741,9 @@ namespace FAT.Application.Models
         {
             IsBusy = false;
             IsScanInProgress = true;
-            ScannedItemsCount = 0;
             if (e.Exception != null)
             {
-                DomainTargetsResolveFailure?.Invoke(this, new DomainEventArgs { Exception = e.Exception });
+                ErrorOccurred?.Invoke(this, new DomainEventArgs { Exception = e.Exception });
                 IsScanInProgress = false;
                 return;
             }
@@ -823,8 +819,8 @@ namespace FAT.Application.Models
             var operationResult = _aptService.GetModifiedResultsForOperation(_operationGuid, _lastModifiesComputerDate,
                 _lastModifiesFlsVerdictDate, _lastModifiesValkyrieVerdictDate);
             var computers = operationResult.Computers.ToDictionary(c => c.TargetUid);
-
             
+
             var files = operationResult.Files;
             if (files.Any())
             {
@@ -903,10 +899,6 @@ namespace FAT.Application.Models
                 if (Math.Abs(Percentage - 100) > 0.01)
                     Percentage = percentages / (double) _onlineItems.Length;
             }
-            //var safeFilesDiff = 0;
-            //var uFilesDiff = 0;
-            //var mFilesDiff = 0;
-            //var inAnalysisDiff = 0;
 
             if (files.Any())
             {
@@ -914,19 +906,6 @@ namespace FAT.Application.Models
                 {
                     computer.UpdateVerdictForFiles(files, counterDiff);
                 }
-            }
-            //foreach (var result in files)
-            //{
-            //    var items = Files.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
-
-            //    foreach (var threatInfoItem in items)
-            //    {
-            //        threatInfoItem.UpdateFileVerdict(result);
-            //    }
-            //}
-            if (scanned > ScannedItemsCount)
-            {
-                ScannedItemsCount = scanned;
             }
             _scanCounterManager.UpdateCounters(counterDiff);
 
@@ -937,12 +916,12 @@ namespace FAT.Application.Models
                 if (!RaisedHasMalwares)
                     Set(() => RaisedHasUnknowns, _scanCounterManager.HasUnknowns || _scanCounterManager.HasNotAnalyzed || _scanCounterManager.HasInProgress);
             }
-
-            _scanIteratorTimer.Start();
-
+            if (Math.Abs(Percentage - 100) < 0.01)
+                OnScanCompleted();
             RaisePropertyChanged(nameof(Header));
+            _scanIteratorTimer.Start();
         }
-      
+
         public Predicate<object> FilterPredicate
         {
             get

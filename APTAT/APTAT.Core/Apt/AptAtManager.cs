@@ -25,7 +25,7 @@ namespace APTAT.Core.Apt
         private readonly IFlsManager _flsManager;
         private IValkyrieClient _valkyrieClient;
         private readonly Dictionary<string, IAptVerdictContext> _flsHashResults 
-            = new Dictionary<string, IAptVerdictContext>();
+            = new Dictionary<string, IAptVerdictContext>(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<IAptVerdictContext> _verdictUpdateHistory 
             = new HashSet<IAptVerdictContext>();
         private readonly IDistinctFileHelper _distinctHelper;
@@ -242,14 +242,14 @@ namespace APTAT.Core.Apt
             Dictionary<string, CloudVerdict> dict;
             if (verdictUpdatedAny)
             {
-                dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud);
+                dict = verdictUpdated.ToDictionary((t) => t.Sha1, v => v.Cloud, StringComparer.OrdinalIgnoreCase);
                 UpdateLastResult(dict);
             }
             if ((verdictUpdatedAny || newUnknownFiles.Any()) && _isValkyrieStarted)
             {
                 dict = verdictUpdated.Where(v => v.IsUnknown())
                     .Concat(newUnknownFiles)
-                    .ToDictionary(t => t.Sha1, v => v.Cloud);
+                    .ToDictionary(t => t.Sha1, v => v.Cloud, StringComparer.OrdinalIgnoreCase);
                 List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);
                 if (filesToAnalyze.Any())
                 {
@@ -302,7 +302,7 @@ namespace APTAT.Core.Apt
         public FileResult[] GetModifiedValkyrieVerdicts(DateTime? modifiedDate, Dictionary<string, IModule> modules
             , out Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResults)
         {
-            valkyrieAnalysisResults = new Dictionary<string, ValkyrieAnalysisResult>();
+            valkyrieAnalysisResults = new Dictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
             if (modules.Count == 0 && modifiedDate.HasValue && modifiedDate >= _latestValkyrieVerdictUpdate)
             {
                 return new FileResult[0];

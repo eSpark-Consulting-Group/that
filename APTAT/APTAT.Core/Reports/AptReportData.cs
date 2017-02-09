@@ -38,11 +38,11 @@ namespace APTAT.Core.Reports
                 switch (DevicesSourceDescription.Type)
                 {
                     case ETargetsDiscovererType.ActiveDirectory:
-                        return string.Format("Active Directory ({0})", (string)(DevicesSourceDescription.Description));
+                        return $"Active Directory ({DevicesSourceDescription.Description})";
                     case ETargetsDiscovererType.NetworkAddresses:
-                        return string.Format("Network Addresses ({0}) ", (string)(DevicesSourceDescription.Description));
+                        return $"Network Addresses ({DevicesSourceDescription.Description}) ";
                     case ETargetsDiscovererType.Workgroup:
-                        return string.Format("Workgroup ({0})", (string)(DevicesSourceDescription.Description));
+                        return $"Workgroup ({DevicesSourceDescription.Description})";
                     default:
                         return string.Empty;
                 }
@@ -476,12 +476,12 @@ namespace APTAT.Core.Reports
             var targets = new List<ScannedTarget>();
 
             List<DetailedBadFile> nonUniqueBadFilesInternal = new List<DetailedBadFile>();
-            Dictionary<string, DetailedBadFile> globalUniqueFiles = new Dictionary<string, DetailedBadFile>();
+            Dictionary<string, DetailedBadFile> globalUniqueFiles = new Dictionary<string, DetailedBadFile>(StringComparer.OrdinalIgnoreCase);
             foreach (var flsResult in flsResults)
             {
                 if (flsResult.ResultType != Core.ScanResultType.Completed)
                     continue;
-                Dictionary<string, DetailedBadFile> uniqueFiles = new Dictionary<string, DetailedBadFile>();
+                Dictionary<string, DetailedBadFile> uniqueFiles = new Dictionary<string, DetailedBadFile>(StringComparer.OrdinalIgnoreCase);
 
                 int mergedSafeCount = 0;
                 int mergedUnknownCount = 0;
