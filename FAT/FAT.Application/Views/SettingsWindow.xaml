@@ -106,7 +106,7 @@
                                             <Button Content="Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
                                         </Grid>
                                         <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}">
-                                            <Button Content="Quick Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                            <Button Content="Quick Scan" Height="32"  Margin="5,5,5,15"  Click="ButtonQuick_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
                                         </Grid>
                                         <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}">
                                             <Button Content="Full Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>

@@ -69,6 +69,7 @@ namespace FAT.Application
 
         #endregion
 
+       public bool IsQuickScan { get; set; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -80,8 +81,22 @@ namespace FAT.Application
                 return;
             }
 
-            this.DialogResult = true;
+            IsQuickScan = false;
+            DialogResult = true;
+        }
 
+        private void ButtonQuick_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewViewModel model = DataContext as MainViewViewModel;
+            string message;
+            if (!ShowProxyCredentials && !ShowCredentials && !model.ValidatePorts(out message))
+            {
+                model.Error = message;
+                return;
+            }
+
+            IsQuickScan = true;
+            DialogResult = true;
         }
 
         private void Button_CancelClick(object sender, RoutedEventArgs e)

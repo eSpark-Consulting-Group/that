@@ -497,7 +497,7 @@ namespace FAT.Application.Models
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), 
                 o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), 
-                o =>  IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
+                o => IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
             StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan, 
                 o => IsStopEnabled);
         }
@@ -550,12 +550,12 @@ namespace FAT.Application.Models
 
                 if (retry)
                 {
-                    RestartComputerScan(true);
+                    RestartComputerScan(true, IsQuickScan);
                     return;
                 }
             }
             else
-                RestartComputerScan(false);
+                RestartComputerScan(false, IsQuickScan);
         }
 
         private void InvokeScanWithDiscoveryResults(Object arg)
@@ -568,67 +568,81 @@ namespace FAT.Application.Models
             window.Header = "Scan Credentials";
 
             if (window.ShowDialog().GetValueOrDefault())
-                RestartComputerScan(true, true);
+                RestartComputerScan(true, window.IsQuickScan, true);
         }
 
-        private void RestartComputerScan(bool useNewCredentials, bool useDiscoveryResults = false)
+        private void RestartComputerScan(bool useNewCredentials, bool isQuickScan, bool useDiscoveryResults = false)
         {
-            ScanKind scanKind = ScanKind.Quick;
-            if (IsQuickScan)
+            if (useDiscoveryResults)
             {
-                scanKind = ScanKind.Quick;
-            }
-            else
-            {
-                scanKind = ScanKind.Full;
-            }
-
-            var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
-            var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
-
-            ScanOptions options;
-            CustomScanOptions customScanOptions = null;
-            if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
-            {
-                customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
-                scanKind = ScanKind.Custom;
-                options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
-                    customScanOptions.ScanCriticalAreas, login, password, true);
-            }
-            else
-            {
-                options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+                var items = SelectedDiscoveryResults.Select(t => new ThreatInfoItem(t)).ToArray();
+                Set(() => TotalItemsCount, items.Length);
+                _onlineItems = items.Where(item => item.IsOnline).ToArray();
+                Computers = new ObservableCollection<ThreatInfoItem>(items);
+                Set(() => GroupEnabled, true);
+                GroupByComputers = true;
             }
 
-            if (!useDiscoveryResults)
+            if (_onlineItems.Length > 0)
             {
-                var items = new List<ThreatInfoItem>();
-                foreach (var item in SelectedItems)
+
+                ScanKind scanKind = ScanKind.Quick;
+                if (isQuickScan)
                 {
-                    if (item.IsComputer &&
-                        (item.ScanStage == ScanStage.ScanFailed ||
-                        item.ScanStage == ScanStage.OperationFailed ||
-                        item.ScanStage == ScanStage.OperationCanceled))
-                    {
-                        item.RestoreConnectingState();
-                        items.Add(item);
-                    }
+                    scanKind = ScanKind.Quick;
                 }
-                
-                _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
-                    _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
-            }
-            else
-            {
-                options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
-                _aptService.BeginScan(SelectedDiscoveryResults.ToArray(),
-                    _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
-            }
-            if (!IsScanInProgress.GetValueOrDefault())
-            {
-                IsScanInProgress = true;
-                IsReportEnabled = false;
-                Percentage = 0;
+                else
+                {
+                    scanKind = ScanKind.Full;
+                }
+
+                var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
+                var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
+
+                ScanOptions options;
+                CustomScanOptions customScanOptions = null;
+                if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+                {
+                    customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                    scanKind = ScanKind.Custom;
+                    options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
+                        customScanOptions.ScanCriticalAreas, login, password, true);
+                }
+                else
+                {
+                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+                }
+
+                if (!useDiscoveryResults)
+                {
+                    var items = new List<ThreatInfoItem>();
+                    foreach (var item in SelectedItems)
+                    {
+                        if (item.IsComputer &&
+                            (item.ScanStage == ScanStage.ScanFailed ||
+                            item.ScanStage == ScanStage.OperationFailed ||
+                            item.ScanStage == ScanStage.OperationCanceled))
+                        {
+                            item.RestoreConnectingState();
+                            items.Add(item);
+                        }
+                    }
+
+                    _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
+                        _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                }
+                else
+                {
+                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+                    _aptService.BeginScan(SelectedDiscoveryResults.ToArray(),
+                        _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                }
+                if (!IsScanInProgress.GetValueOrDefault())
+                {
+                    IsScanInProgress = true;
+                    IsReportEnabled = false;
+                    Percentage = 0;
+                }
             }
         }
 
@@ -790,7 +804,7 @@ namespace FAT.Application.Models
                 return;
             }
             var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
-            Set(() => TotalItemsCount, items.Count());
+            Set(() => TotalItemsCount, items.Length);
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
             Computers = new ObservableCollection<ThreatInfoItem>(items);
 
