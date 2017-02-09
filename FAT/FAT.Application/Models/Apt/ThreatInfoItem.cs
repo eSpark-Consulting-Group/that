@@ -199,7 +199,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return BadFile.IsMalware || 
+                return BadFile.IsMalware ||
                     ValkyrieVerdict == ValkyrieVerdict.Malware ||
                     ValkyrieVerdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
             }
@@ -219,7 +219,8 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ValkyrieVerdict == ValkyrieVerdict.Undetected;
+                return BadFile.IsUnknown || 
+                    ValkyrieVerdict == ValkyrieVerdict.Undetected;
             }
 
         }
@@ -656,6 +657,9 @@ namespace FAT.Application.Models
             IsOnline = deploymentTarget.IsOnline;
             ComputerGuid = deploymentTarget.Uid;
             LdapPath = deploymentTarget.LdapPath;
+
+            if (Name == IpAddress)
+                Name = deploymentTarget.DnsName;
         }
 
         public ThreatInfoItem(BadFileItem badFile)

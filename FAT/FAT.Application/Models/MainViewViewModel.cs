@@ -52,6 +52,7 @@ namespace FAT.Application.Models
         private Boolean? _isScanInProgress = false;
         private Boolean _isAutoDiscoveryInProgress;
         private Boolean _isAutoDiscoveryCompleted;
+        private Boolean _containsLocal;
         private Boolean _cancelInProgress;
         private ThreatInfoItem[] _onlineItems;
         private readonly DispatcherTimer _scanIteratorTimer;
@@ -512,7 +513,7 @@ namespace FAT.Application.Models
             Set(() => Uri, "/Views/DiscoveryResults.xaml");
             Set(() => Loaded, true);
 
-            _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
+            _containsLocal = false;
             _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
             _targetsDiscoveryService.StartTargetsAutoDiscovery();
 
@@ -579,6 +580,7 @@ namespace FAT.Application.Models
                 Set(() => TotalItemsCount, items.Length);
                 _onlineItems = items.Where(item => item.IsOnline).ToArray();
                 Computers = new ObservableCollection<ThreatInfoItem>(items);
+                Files = new ObservableCollection<ThreatInfoItem>();
                 Set(() => GroupEnabled, true);
                 GroupByComputers = true;
             }
@@ -779,7 +781,16 @@ namespace FAT.Application.Models
         {
             if (e.Target != null)
             {
-                DiscoveryResults.Add(e.Target);
+                var target = e.Target;
+                if (e.Target.IsLocalComputer)
+                {
+                    if (!_containsLocal)
+                        _containsLocal = true;
+                    else
+                        target = null;
+                }
+
+                DiscoveryResults.Add(target);
                 _scanCounterManager.AddComputer();
             }
 
