@@ -29,7 +29,7 @@ namespace FAT.Application.Extensions
 
         public static void CreateStopScanHeader(this RadMenuItem menuItem)
         {
-            CreateHeaderDataTemplate(menuItem, "Stop Scan", "M7.9999999,7.9999999 L16,7.9999999 16,16 7.9999999,16 z M12,2 C6.478,2 2,6.478 2,12 2,17.522 6.478,22 12,22 17.522,22 22,17.522 22,12 22,6.478 17.522,2 12,2 z M12,0 C18.627,0 24,5.3729999 24,12 24,18.627 18.627,24 12,24 5.3729999,24 0,18.627 0,12 0,5.3729999 5.3729999,0 12,0 z");
+            CreateHeaderDataTemplate(menuItem, "Cancel Scan", "M7.9999999,7.9999999 L16,7.9999999 16,16 7.9999999,16 z M12,2 C6.478,2 2,6.478 2,12 2,17.522 6.478,22 12,22 17.522,22 22,17.522 22,12 22,6.478 17.522,2 12,2 z M12,0 C18.627,0 24,5.3729999 24,12 24,18.627 18.627,24 12,24 5.3729999,24 0,18.627 0,12 0,5.3729999 5.3729999,0 12,0 z");
         }
 
         private static void CreateHeaderDataTemplate(RadMenuItem menuItem, string header, string icon)
