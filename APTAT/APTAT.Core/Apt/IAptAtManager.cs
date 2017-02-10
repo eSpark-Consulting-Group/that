@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Core
 {
@@ -38,7 +39,7 @@ namespace APTAT.Core
 
         string GetValkyrieDetailsLink();
 
-        void SubmitEmail(string[] addresses);
+        OperationResult SubmitEmail(string[] addresses);
     }
 
     internal interface IAptAtManagerInternal : IAptAtManager

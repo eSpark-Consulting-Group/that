@@ -233,7 +233,16 @@ namespace Valkyrie.WebApiProvider
 
         public ValkyrieResponse SubmitEmail(SubscribeEmailRequest request)
         {
-            var result = CallValkyrie<ValkyrieResponse>(FatEmailSubstcription, request);
+            ValkyrieResponse result;
+            try
+            {
+                result = CallValkyrie<ValkyrieResponse>(FatEmailSubstcription, request);
+            }
+            catch (Exception e)
+            {
+                result = new ValkyrieResponse() {ResultMessage = e.Message, Error = e, ReturnCode = ErrorCodesEnum.None};
+            }
+            
             return result;
         }
 

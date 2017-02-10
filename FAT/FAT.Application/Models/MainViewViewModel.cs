@@ -533,7 +533,7 @@ namespace FAT.Application.Models
 
         private void InvokeSubmitEmail(Object arg)
         {
-            if (_aptService.SubmitEmail(Email.Split(new[] { ',', ';'})))
+            if (_aptService.SubmitEmail(Email.Split(new[] { ',', ';'})).IsSucceeded)
                 Set(() => HideSubmitEmail, true);
         }
 
@@ -773,12 +773,26 @@ namespace FAT.Application.Models
 
         private void OnScanCompleted(Object sender, ErrorEventArgs e)
         {
+            
             if (e.Error != null)
             {
+                if (e.Error is OperationCanceledException)
+                {
+                    HandleValkyrieCancellation();
+                    return;
+                }
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
 
             CancelInProgress = false;
+        }
+
+        private void HandleValkyrieCancellation()
+        {
+            foreach (var computer in Computers.Where(s=>Math.Abs(s.TotalProgressPercentage - 100) > 0.001))
+            {
+                computer.ScanStage = ScanStage.OperationCanceled;
+            }
         }
 
         private void OnScanCompleted()

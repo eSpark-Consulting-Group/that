@@ -121,6 +121,7 @@
     <Compile Include="IDistinctFileHelper.cs" />
     <Compile Include="IFilesStatistics.cs" />
     <Compile Include="IFlsResult.cs" />
+    <Compile Include="OperationResult.cs" />
     <Compile Include="OsInfoHelper.cs" />
     <Compile Include="Reports\AptReportBuilder.cs" />
     <Compile Include="Reports\IAptReportBuilder.cs" />

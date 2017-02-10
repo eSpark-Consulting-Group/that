@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Valkyrie
 {
@@ -15,6 +16,6 @@ namespace APTAT.Valkyrie
             string login, string password, int machineCount, NetworkCredential proxyCredential, string productName);
         string GetValkyrieDetailsLink();
         void SetBaseUri(Uri uri);
-        void SubmitEmail(string[] addresses);
+        ValkyrieResponse SubmitEmail(string[] addresses);
     }
 }

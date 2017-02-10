@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Valkyrie.WebApiProvider.Enums;
 
 namespace Valkyrie.WebApiProvider.Contracts
@@ -13,6 +14,8 @@ namespace Valkyrie.WebApiProvider.Contracts
 
         [JsonProperty("return_code")]
         public ErrorCodesEnum ReturnCode { get; set; }
+        
+        public Exception Error { get; set; }
 
     }
 

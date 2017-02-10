@@ -272,6 +272,7 @@ namespace FAT.Application.Services
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
+            
             Action action;
             if (e.Error != null)
             {
@@ -284,7 +285,12 @@ namespace FAT.Application.Services
             {
                 action = () =>
                 {
-                    FatScanCompleted?.Invoke(this, new ErrorEventArgs(null));
+                    ErrorEventArgs args = new ErrorEventArgs(null);
+                    if (e.Cancelled)
+                    {
+                        args.Error = new OperationCanceledException("Scan operation was canceled.");
+                    }
+                    FatScanCompleted?.Invoke(this, args);
                 };
             }
 
@@ -326,11 +332,11 @@ namespace FAT.Application.Services
             return _manager.GetValkyrieDetailsLink();
         }
 
-        public bool SubmitEmail(string[] addresses)
+        public OperationResult SubmitEmail(string[] addresses)
         {
-            _manager.SubmitEmail(addresses);
+            var result = _manager.SubmitEmail(addresses);
+            return result;
 
-            return true;
         }
 
         private ScanStage FromAptScanStage(AptScanStage stage)

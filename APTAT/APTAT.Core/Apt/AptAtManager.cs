@@ -13,6 +13,8 @@ using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
+using Valkyrie.WebApiProvider.Contracts;
+using Valkyrie.WebApiProvider.Enums;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
@@ -409,9 +411,15 @@ namespace APTAT.Core.Apt
             return _valkyrieClient.GetValkyrieDetailsLink();
         }
 
-        public void SubmitEmail(string[] addresses)
+        public OperationResult SubmitEmail(string[] addresses)
         {
-            _valkyrieClient.SubmitEmail(addresses);
+            var response = _valkyrieClient.SubmitEmail(addresses);
+
+            if (response.Error == null && response.ReturnCode == ErrorCodesEnum.Success)
+            {
+                return new OperationResult() {IsSucceeded = true};
+            }
+            return new OperationResult() { IsSucceeded = false, Error = response.Error, ErrorMessage = response.ResultMessage};
         }
 
         public void Dispose()
