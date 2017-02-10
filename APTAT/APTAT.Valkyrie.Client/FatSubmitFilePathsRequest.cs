@@ -12,6 +12,6 @@ namespace Valkyrie.WebApiProvider
         public string Sha1 { get; set; }
 
         [JsonProperty("file_paths")]
-        public string[] FilePaths { get; set; }
+        public FilePath[] FilePaths { get; set; }
     }
 }

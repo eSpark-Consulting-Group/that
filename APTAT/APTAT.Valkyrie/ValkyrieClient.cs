@@ -8,6 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
@@ -484,11 +485,23 @@ namespace APTAT.Valkyrie
                                 return CancelOperation(originalFilePath, sha1);
                             }
                             response = _provider.SubmitToAutomaticAnalysis(request, fStream, cancellationToken, fileName);
+
+                            FilePath[] paths = new FilePath[fileInfo.Paths.Count];
+                            for (int i = 0; i < fileInfo.Paths.Count; i++)
+                            {
+                                var uri = new Uri(fileInfo.Paths[i]);
+                                paths[i] = new FilePath()
+                                {
+                                    MachineName = uri.Host,
+                                    Path = uri.LocalPath.Substring(uri.Host.Length + 3)
+                                };
+                            }
+
                             fatSubmitFilesResponse = _provider.FatSubmitFiles(new FatSubmitFilePathsRequest()
                             {
                                 Sha1 = sha1,
                                 ApiKey = _apiKey,
-                                FilePaths = fileInfo.Paths.ToArray(),
+                                FilePaths = paths, 
                                 ScanId = _aptScanId
 
                             });

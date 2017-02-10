@@ -58,6 +58,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Contracts\CheckAnalysisResultResponse.cs" />
+    <Compile Include="Contracts\FilePath.cs" />
     <Compile Include="Contracts\SubscribeEmailRequest.cs" />
     <Compile Include="Contracts\RegisterWithCamCredentials.cs" />
     <Compile Include="Contracts\RegisterWithCamLicenseRequest.cs" />
