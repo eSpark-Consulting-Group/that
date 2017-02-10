@@ -779,22 +779,9 @@ namespace FAT.Application.Models
             
             if (e.Error != null)
             {
-                if (e.Error is OperationCanceledException)
-                {
-                    HandleValkyrieCancellation();
-                    return;
-                }
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
             
-        }
-
-        private void HandleValkyrieCancellation()
-        {
-            foreach (var computer in Computers.Where(s=>Math.Abs(s.TotalProgressPercentage - 100) > 0.001))
-            {
-                computer.ScanStage = ScanStage.OperationCanceled;
-            }
         }
 
         private void OnScanCompleted()
@@ -947,7 +934,6 @@ namespace FAT.Application.Models
                         infoItem.ScanStage = scanProgress.ScanStage;
                         if (infoItem.ScanStage == ScanStage.OperationCompleted)
                         {
-                            scanned++;
                             if (scanProgress.BadFiles.Any() && infoItem.Items.Count == 0)
                             {
                                 foreach (var badFile in scanProgress.BadFiles)
@@ -993,6 +979,8 @@ namespace FAT.Application.Models
                 {
                     infoItem.TrySetCancelledStatus();
                 }
+                if (localPercentage == 100 && infoItem.ScanStage == ScanStage.OperationCompleted)
+                    scanned++;
                 percentages += localPercentage;
             }
             if (Math.Abs(Percentage - 100) > 0.01 && _onlineItems.Length > 0)
@@ -1017,7 +1005,7 @@ namespace FAT.Application.Models
             if (Math.Abs(Percentage - 100) < 0.01)
                 OnScanCompleted();
             RaisePropertyChanged(nameof(Header));
-
+            ScannedItemsCount = scanned;
             if (!_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Start();
         }
