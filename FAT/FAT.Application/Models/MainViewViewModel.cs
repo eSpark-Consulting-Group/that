@@ -176,7 +176,7 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(IsScanInProgress));
                 RaisePropertyChanged(nameof(IsAnyScanInProgress));
                 RaisePropertyChanged(nameof(Header));
-
+                RaisePropertyChanged(nameof(ComputersHeader));
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StartScanCommand.InvalidateCanExecute();
@@ -224,6 +224,7 @@ namespace FAT.Application.Models
             {
                 _scannedItemsCount = value;
                 RaisePropertyChanged(nameof(ScannedItemsCount));
+                RaisePropertyChanged(nameof(ComputersHeader));
             }
         }
 
@@ -241,6 +242,20 @@ namespace FAT.Application.Models
                 _percentage = value;
                 RaisePropertyChanged(nameof(Percentage));
                 RaisePropertyChanged(nameof(Header));
+                RaisePropertyChanged(nameof(ComputersHeader));
+            }
+        }
+
+        public String ComputersHeader
+        {
+            get
+            {
+                if (IsScanInProgress == true && Percentage > 0 && Percentage < 100)
+                {
+                    return $"({ScannedItemsCount} of {TotalItemsCount} Computers)";
+                }
+
+                return string.Empty;
             }
         }
 
@@ -516,7 +531,6 @@ namespace FAT.Application.Models
             IsAutoDiscoveryInProgress = true;
             DiscoveryResults = new ObservableCollection<DeploymentTarget>();
             RaisePropertyChanged(nameof(DiscoveryResults));
-            RaisePropertyChanged(nameof(Header));
 
             Set(() => Uri, "/Views/DiscoveryResults.xaml");
             Set(() => Loaded, true);
@@ -526,9 +540,9 @@ namespace FAT.Application.Models
 
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
-
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
             UseCurrentDomainForRescan = HasCurrentDomainName;
+
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }
@@ -594,6 +608,7 @@ namespace FAT.Application.Models
 
                 var items = SelectedDiscoveryResults.Select(t => new ThreatInfoItem(t)).ToArray();
                 Set(() => TotalItemsCount, items.Length);
+                ScannedItemsCount = 0;
                 _onlineItems = items.Where(item => item.IsOnline).ToArray();
                 Computers = new ObservableCollection<ThreatInfoItem>(items);
                 Files = new ObservableCollection<ThreatInfoItem>();
@@ -828,6 +843,7 @@ namespace FAT.Application.Models
             }
             var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
             Set(() => TotalItemsCount, items.Length);
+            ScannedItemsCount = 0;
             _onlineItems = items.Where(item => item.IsOnline).ToArray();
             Computers = new ObservableCollection<ThreatInfoItem>(items);
 
@@ -1004,8 +1020,9 @@ namespace FAT.Application.Models
 
             if (Math.Abs(Percentage - 100) < 0.01)
                 OnScanCompleted();
-            RaisePropertyChanged(nameof(Header));
+
             ScannedItemsCount = scanned;
+
             if (!_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Start();
         }

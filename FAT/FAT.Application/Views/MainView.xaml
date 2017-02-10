@@ -12,7 +12,8 @@
                   xmlns:Controls="clr-namespace:FAT.Application.Views" 
                   xmlns:sys="clr-namespace:System;assembly=mscorlib"
                   xmlns:scm= "clr-namespace:System.ComponentModel;assembly=WindowsBase"
-                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
+                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+                  mc:Ignorable="d" 
                   d:DesignHeight="760" d:DesignWidth="1200" Background="White">
     <Grid>
         <Grid.Resources>
@@ -34,6 +35,7 @@
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
+            
             <DataTemplate x:Key="AboutButtonContentTemplate">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -51,6 +53,7 @@
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
+            
             <DataTemplate x:Key="ReportButtonListBoxItemTemplate">
                 <TextBlock Text="{Binding}" Style="{StaticResource HeaderTextBlock}" Margin="0 5" FontSize="15"/>
             </DataTemplate>
@@ -61,6 +64,7 @@
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
         </Grid.Resources>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -254,7 +258,6 @@
                             <Border Background="#FFF9AD16" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
                         </Grid>
                     </DataTemplate>
-
                 </ListBox.Resources>
             </ListBox>
 
@@ -280,6 +283,7 @@
                         <TextBlock Text="Scan Selected" Grid.Column="1" Margin="0 1 0 0"/>
                     </Grid>
                 </Button>
+                
                 <Button  Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Background="#FF91ADBD" BorderBrush="#FF91ADBD" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -290,6 +294,7 @@
                         <TextBlock Text="Custom Scan" Grid.Column="1" Margin="0 1 0 0"/>
                     </Grid>
                 </Button>
+
                 <Grid Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
                     <Button MinWidth="190" MaxWidth="190" Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
                         <Grid>
@@ -315,7 +320,7 @@
                 </Grid>
             </Button>
 
-            <Button MinWidth="190" MaxWidth="190" Background="White" Foreground="#FF2A80B9" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,0,32,20" >
+            <Button MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,0,32,20" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -547,7 +552,8 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </TextBlock.Triggers>
-            <Run Text="{Binding Header, Mode=OneWay}" FontFamily="myriadpro" FontSize="19"/>
+            <Run Text="{Binding Header, Mode=OneWay}" FontFamily="myriadpro" FontSize="19"/> <Run Text="{Binding ComputersHeader, Mode=OneWay}" FontFamily="myriadpro" FontSize="15"/>
+            
         </TextBlock>
 
         <Grid Grid.Row="3" Background="#FFFAF9F9" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
@@ -574,14 +580,16 @@
             </Border>
         </Grid>
 
-
         <Border Height="1" Background="#FFF3F3F3" Grid.Row="3" VerticalAlignment="Bottom"/>
+        
         <Border Grid.Row="4" Height="46"  Background="White" >
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock  Text="Comodo Forensic Analysis Tool is part of the Comodo ONE portfolio of security solutions. Visit " Foreground="#FF547D98" FontSize="13"/>
+                
                 <TextBlock Cursor="Hand">
                     <Hyperlink NavigateUri="http://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">one.comodo.com </Hyperlink>
                 </TextBlock>
+                
                 <TextBlock  Text=" to learn how Comodo can help protect your environment." Foreground="#FF547D98" FontSize="13"/>
             </StackPanel>
         </Border>
