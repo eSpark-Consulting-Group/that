@@ -993,8 +993,8 @@ namespace FAT.Application.Models
                                     }
 
                                 }
-                                infoItem.RemoteScanCompleted();
                             }
+                            infoItem.RemoteScanCompleted();
                         }
                         infoItem.UpdateCounters(scanProgress, counterDiff);
                     }

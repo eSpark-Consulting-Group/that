@@ -241,7 +241,10 @@ namespace APTAT.Core.Descent.Apt
                 NoVerdictFilesCount = item.FailedAtNodeCount;
             }
             if (progress.IsCanceled)
+            {
                 ScanStage = AptScanStage.OperationCanceled;
+                Modified = DateTime.UtcNow;
+            }
         }
 
         public override void UpdateStatus(IOperationDescentResult result)
@@ -255,6 +258,7 @@ namespace APTAT.Core.Descent.Apt
                 ScanStage = AptScanStage.RemoteOperationCompleted;
             if (Completed && !Succeeded && !IsCanceled)
                 ScanStage = AptScanStage.OperationFailed;
+            Modified = DateTime.UtcNow;
         }
 
         public void SetCompleted()

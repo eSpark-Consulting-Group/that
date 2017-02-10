@@ -249,7 +249,7 @@ namespace APTAT.Core.Apt
             }
             if ((verdictUpdatedAny || newUnknownFiles.Any()) && _isValkyrieStarted)
             {
-                dict = verdictUpdated.Where(v => v.IsUnknown())
+                dict = verdictUpdated.Where(v => _distinctHelper.ShouldSendToValkyrie(v))
                     .Concat(newUnknownFiles)
                     .ToDictionary(t => t.Sha1, v => v.Cloud, StringComparer.OrdinalIgnoreCase);
                 List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dict);

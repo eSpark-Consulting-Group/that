@@ -17,14 +17,13 @@ namespace APTAT.DeploymentCore.Descent
             ErrorCode = String.Empty;
             OperationUid = operationUid;
             SystemMessage = String.Empty;
-            Modified = DateTime.UtcNow;
             SystemCode = 0;
             TargetUid = computer.Uid;
-		}
+            Modified = DateTime.UtcNow;
+        }
 
 		public virtual void UpdateStatus(IOperationDescentResult result)			
 		{
-            Modified = DateTime.UtcNow;
 			StatusMessage = result.StatusMessage;
 			ShortStatusMessage = result.ShortStatusMessage;
 			ErrorCode = result.ErrorCode;
@@ -34,6 +33,7 @@ namespace APTAT.DeploymentCore.Descent
 		    IsCanceled = result.IsCanceled;
             Percentage = 100;
             Completed = true;
+            Modified = DateTime.UtcNow;
         }
 
         public virtual void UpdateStatus(IDescentProgressItem progress)
@@ -57,9 +57,8 @@ namespace APTAT.DeploymentCore.Descent
             }
             if (update)
             {
-                Modified = DateTime.UtcNow;
                 Completed = false;
-                
+                Modified = DateTime.UtcNow;
             }
 		}
 
@@ -70,12 +69,12 @@ namespace APTAT.DeploymentCore.Descent
 			Succeeded = false;
             Completed = true;
             Percentage = 100;
-            Modified = DateTime.UtcNow;
 			ErrorCode = errorCode.ToString();
 			ShortStatusMessage = new FormattedText(new ResourceText(shortMessage, shortMessage));
 			StatusMessage = new FormattedText(new ResourceText(detailedMessage, detailedMessage));
 			SystemMessage = detailedMessage;
-		}
+            Modified = DateTime.UtcNow;
+        }
 
         public void SetSystemKind(SystemKind systemKind)
         {

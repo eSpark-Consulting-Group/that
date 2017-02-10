@@ -71,7 +71,8 @@ namespace APTAT.Valkyrie
                 foreach (var fileInfo in filesToAnalyze)
                     _lookupContexts.Add(fileInfo);
             }
-            _checkStatusesTimer?.Change(0, Timeout.Infinite);
+            if(shouldStartImmediately)
+                _checkStatusesTimer?.Change(0, Timeout.Infinite);
         }
 
         private RegisterWithResponse Register(CamRegistration camRegistration, string productName, 
@@ -328,10 +329,13 @@ namespace APTAT.Valkyrie
 
         public void AnalyzeAsyncCancel()
         {
-            _cancellationTokenSource?.Cancel();
-            _checkStatusesTimer?.Change(0, Timeout.Infinite);
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                _checkStatusesTimer?.Change(0, Timeout.Infinite);
+            }
         }
-        
+
         private void OnAnalyzeCompleted(Task task)
         {
             Exception exception = null;
