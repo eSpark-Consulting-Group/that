@@ -113,5 +113,17 @@ namespace FAT.Application
 
             AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
         }
+
+        private void treeList_DistinctValuesLoading(object sender, GridViewDistinctValuesLoadingEventArgs e)
+        {
+            e.ItemsSource = new[]
+            {
+                new ScanStatus(ScanStatusEnum.InProgress),
+                new ScanStatus(ScanStatusEnum.Canceled),
+                new ScanStatus(ScanStatusEnum.Completed),
+                new ScanStatus(ScanStatusEnum.Failed),
+                new ScanStatus(ScanStatusEnum.Offline)
+            };
+        }
     }
 }

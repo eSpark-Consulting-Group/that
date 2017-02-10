@@ -357,7 +357,9 @@ namespace FAT.Application.Models
         {
             get { return _aptService.GetValkyrieDetailsLink(); }
         }
-        
+
+        public bool ValkyrieDetailsLinkAvailable { get; set; }
+
         public bool SelectDiscoveryResults { get; set; }
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
@@ -586,6 +588,8 @@ namespace FAT.Application.Models
         {
             if (useDiscoveryResults)
             {
+                _scanCounterManager.Clear();
+
                 var items = SelectedDiscoveryResults.Select(t => new ThreatInfoItem(t)).ToArray();
                 Set(() => TotalItemsCount, items.Length);
                 _onlineItems = items.Where(item => item.IsOnline).ToArray();
@@ -692,6 +696,7 @@ namespace FAT.Application.Models
             Set(() => RaisedHasUnknowns, false);
             Set(() => RaisedHasMalwares, false);
 
+            Set(() => ValkyrieDetailsLinkAvailable, false);
 
             _onlineItems = new ThreatInfoItem[0];
 
@@ -772,6 +777,7 @@ namespace FAT.Application.Models
             {
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
+
             CancelInProgress = false;
         }
 
@@ -780,7 +786,8 @@ namespace FAT.Application.Models
             IsScanInProgress = false;
             _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
             IsReportEnabled = true;
-            RaisePropertyChanged(nameof(ValkyrieDetailsLink));
+
+            Set(() => ValkyrieDetailsLinkAvailable, true);
             ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
             Percentage = 100;
         }
@@ -1066,9 +1073,18 @@ namespace FAT.Application.Models
             _storage.SetValue(KnownKeys.ReportKind, kind);
         }
 
-        public void OnAppClose()
+        public void OnAppClose(Action action)
         {
-            InvokeStopScan(null);
+            if (IsAnyScanInProgress)
+            {
+                if (IsAutoDiscoveryInProgress)
+                {
+                    InvokeStopAutoDiscovery(null);
+                    action?.Invoke();
+                }
+                else
+                    InvokeStopScan(null);
+            }
         }
 
 

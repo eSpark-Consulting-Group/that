@@ -304,7 +304,7 @@
                 </Grid>
             </StackPanel>
 
-            <Button x:Name="cancel" Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopScanCommand}">
+            <Button Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopScanCommand}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -312,6 +312,17 @@
                     </Grid.ColumnDefinitions>
                     <Path SnapsToDevicePixels="True" Margin="0 0 10 0"  Data="M5,5 L11,5 11,11 5,11 z M8,2 C4.6870117,2 2,4.6860046 2,8 2,11.313995 4.6870117,14 8,14 11.312988,14 14,11.313995 14,8 14,4.6860046 11.312988,2 8,2 z M8,0 C12.417999,0 16,3.5820007 16,8 16,12.417999 12.417999,16 8,16 3.5820007,16 0,12.417999 0,8 0,3.5820007 3.5820007,0 8,0 z" Fill="White" Height="16" Stretch="Fill" Width="16"/>
                     <TextBlock Text="Stop Scan" Grid.Column="1" Margin="0 1 0 0"/>
+                </Grid>
+            </Button>
+
+            <Button Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,0,32,20" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Path SnapsToDevicePixels="True" Data="M12.943627,23.874329 L17.437399,18.910006 L24.570972,13.992882 L30.40645,10.847046 L39.059811,7.6478262 L48.160633,5.8953371 L60.816639,4.7121854 L83.489822,2.7841458 L101.81413,1.2394772 L109.77987,0.079194352 L109.40237,2.5929551 L108.3713,5.1833119 L105.62657,8.962821 L97.554482,9.532486 L76.043823,12.994296 L74.992889,14.747112 L96.324661,11.19766 L104.3432,10.701199 L103.40407,14.743629 L101.33668,17.059908 L99.93586,18.428024 L91.835823,19.052465 L83.713425,20.049379 L69.67112,22.678602 L68.687263,24.299957 L82.997894,21.615957 L91.137543,20.5144 L99.298592,19.841232 L99.063805,22.503321 L96.816589,26.036339 L92.836449,29.20784 L82.806595,30.162687 L73.338219,31.344084 L63.81271,33.283138 L62.705872,34.827805 L72.566788,32.790157 L82.739838,31.48797 L89.661278,30.873014 L83.735786,43.80003 L76.871155,52.213543 L60.861145,62.697571 L59.821388,63.519203 L58.949333,64.735222 L58.71455,66.378487 L59.150578,67.890289 L61.464874,73.707443 L46.505798,88.935387 L41.00515,83.588921 L36.443638,80.461266 L30.341337,76.838509 L21.618725,77.059708 L20.746672,77.684128 L14.005025,77.684128 L11.388864,75.909401 L11.455945,73.707428 L12.294457,73.18158 L12.260918,71.242531 L10.413008,70.133034 L10.382648,66.970047 L8.8397837,65.786896 L8.8733244,63.453457 L9.6112156,63.168625 L9.7006569,61.152889 L7.1962972,59.224792 L7.1962972,57.121414 L13.341215,49.223099 L13.139772,40.024422 L13.904403,39.593262 L13.72552,36.350555 L6.9279733,34.59774 L9.4323654,28.50668 z" Height="18" Stretch="Fill" Width="18" Fill="White" />
+                    <TextBlock Text="Scan Results" Grid.Column="1" Margin="0 2 0 0"/>
                 </Grid>
             </Button>
 
@@ -536,7 +547,7 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </TextBlock.Triggers>
-            <Run Text="{Binding Header}" FontFamily="myriadpro" FontSize="19"/>
+            <Run Text="{Binding Header, Mode=OneWay}" FontFamily="myriadpro" FontSize="19"/>
         </TextBlock>
 
         <Grid Grid.Row="3" Background="#FFFAF9F9" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
@@ -548,7 +559,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="13" VerticalAlignment="Center" Text="When all files are analyzed, you will receive a detailed report to the provided email(s)." Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}"/>
+                    <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="13" VerticalAlignment="Center" Text="When all files are analyzed, you will receive a detailed report at the provided email(s)." Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}"/>
 
                     <TextBlock Foreground="White" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Please enter your email(s) to receive a detailed scan results report:" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
                     <telerik:RadWatermarkTextBox MaxLength="50" Margin="7 0 0 0" Grid.Column="1" Width="300" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"

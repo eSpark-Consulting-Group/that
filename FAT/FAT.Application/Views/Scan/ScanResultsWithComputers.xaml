@@ -38,6 +38,7 @@
                                  SelectionChanged="treeList_SelectionChanged"
                                  PreviewMouseDown="treeList_MouseDown"
                                  MouseDoubleClick="treeList_MouseDoubleClick"
+                                 DistinctValuesLoading="treeList_DistinctValuesLoading"
                                  SelectionMode="Extended"
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList" 
@@ -185,7 +186,7 @@
                 <telerik:GridViewColumn 
                     IsFilterable="False"
                     ShowFilterButton="False"
-                    FilterMemberPath="ScanStatus"
+                    
                     ShowFieldFilters="False"
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
                     CellTemplateSelector="{StaticResource NameTemplateSelector}"
@@ -202,8 +203,9 @@
                 <telerik:GridViewColumn 
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
                     CellTemplateSelector="{StaticResource VerdictColumnSelector}"   
-                    IsFilterable="False"
+                    IsFilterable="True"
                     SortMemberPath="ScanStatus"
+                    FilterMemberPath="ScanStatus"
                     Header="Verdict"  
                     TextAlignment="Left"
                     Width="160*" MinWidth="80"/>

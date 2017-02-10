@@ -165,7 +165,7 @@
                                              IsEnabled="{Binding EnumerateWorkgroups, Converter={converters:BoolInvertConverter}, ConverterParameter=!}" 
                                              Text="{Binding WorkgroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <telerik:RadWatermarkTextBox.WatermarkContent>
-                        <TextBlock Text="Enter Workgroup Name" Foreground="{DynamicResource TextBrush2}" />
+                        <TextBlock Margin="0 1 0 0" Text="Enter Workgroup Name" Foreground="{DynamicResource TextBrush2}" />
                     </telerik:RadWatermarkTextBox.WatermarkContent>
                    
                 </telerik:RadWatermarkTextBox>

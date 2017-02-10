@@ -34,8 +34,6 @@ namespace FAT.Application
 
             _viewModel.ScanProcessCompleted += OnScanCompleted;
             _viewModel.ErrorOccurred += OnErrorOccurred;
-
-
         }
 
         [MessageReceiver]
@@ -157,7 +155,7 @@ namespace FAT.Application
         {
             _onCompletedAction = action;
             BusyContent.Text = "Closing...";
-            _viewModel.OnAppClose();
+            _viewModel.OnAppClose(action);
         }
 
         private void OptionsClick(object sender, RoutedEventArgs e)
@@ -197,6 +195,12 @@ namespace FAT.Application
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(_viewModel.ValkyrieDetailsLink));
             e.Handled = true;
         }
     }
