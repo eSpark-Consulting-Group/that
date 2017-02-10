@@ -552,7 +552,7 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </TextBlock.Triggers>
-            <Run Text="{Binding Header, Mode=OneWay}" FontFamily="myriadpro" FontSize="19"/> <Run Text="{Binding ComputersHeader, Mode=OneWay}" FontFamily="myriadpro" Foreground="#FF457FAD" FontSize="15"/>
+            <Run Text="{Binding Header, Mode=OneWay}" FontFamily="myriadpro" FontSize="19"/> <Run Text="{Binding ComputersHeader, Mode=OneWay}" FontFamily="myriadpro" Foreground="#FF457FAD" FontSize="14"/>
             
         </TextBlock>
 

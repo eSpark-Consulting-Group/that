@@ -1021,7 +1021,7 @@ namespace FAT.Application.Models
             
             _scanCounterManager.UpdateCounters(counterDiff);
 
-
+            ScannedItemsCount = scanned;
             if (!RaisedHasMalwares)
             {
                 Set(() => RaisedHasMalwares, 
@@ -1036,9 +1036,7 @@ namespace FAT.Application.Models
 
             if (Math.Abs(Percentage - 100) < 0.01)
                 OnScanCompleted();
-
-            ScannedItemsCount = scanned;
-
+            else
             if (!_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Start();
         }

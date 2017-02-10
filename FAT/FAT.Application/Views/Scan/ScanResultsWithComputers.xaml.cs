@@ -101,13 +101,13 @@ namespace FAT.Application
             item.CreateRestartScanWithCredentialsHeader();
             item.Command = ViewModel.RestartComputerScanWithCredentialsCommand;
             item.SetVisibilityBinding();
-            menu.Items.Add(item);*/
+            menu.Items.Add(item);
 
             item = new RadMenuItem();
             item.CreateStopScanHeader();
             item.Command = ViewModel.StopComputerScanCommand;
             item.SetVisibilityBinding();
-            menu.Items.Add(item);
+            menu.Items.Add(item);*/
 
             RadContextMenu.SetContextMenu(treeList, menu);
 
