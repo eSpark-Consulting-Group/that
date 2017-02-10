@@ -32,7 +32,7 @@ namespace FAT.Application.Services
 
         private string _systemLogin;
         private string _systemPassword;
-        private bool _valkyrieStarted = false;
+        private bool _isValkyrieStarted = false;
         public Guid SessionId
         {
             get { return _sessionGuid; }
@@ -112,6 +112,10 @@ namespace FAT.Application.Services
         public void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options)
         {
+            lock (this)
+            {
+                _isValkyrieStarted = false;
+            }
             IAptScanner scanner = _manager.GetAptScanner(targets, devicesSourceDescription, options);
             _systemLogin = options.Login;
             _systemPassword = options.Password;
@@ -132,7 +136,7 @@ namespace FAT.Application.Services
             }
             lock (this)
             {
-                if (!_valkyrieStarted)
+                if (!_isValkyrieStarted)
                 {
                     Action a = () =>
                     {
@@ -156,6 +160,11 @@ namespace FAT.Application.Services
 
         private void StartValkyrieAnalysis()
         {
+            lock (this)
+            {
+                if (_isValkyrieStarted) return;
+                _isValkyrieStarted = true;
+            }
             string camLicenseId;
             try
             {
@@ -268,7 +277,6 @@ namespace FAT.Application.Services
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {
-            
             Action action;
             if (e.Error != null)
             {
@@ -332,6 +340,11 @@ namespace FAT.Application.Services
 
         public OperationResult SubmitEmail(string[] addresses)
         {
+            lock (this)
+            {
+                if (_isValkyrieStarted == false)
+                    StartValkyrieAnalysis();
+            }
             var result = _manager.SubmitEmail(addresses);
             return result;
 
