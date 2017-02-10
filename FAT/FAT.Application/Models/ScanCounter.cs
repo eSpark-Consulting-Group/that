@@ -136,6 +136,11 @@ namespace FAT.Application.Models
                     _selected.Clear();
                     SelectedOrdersChanged?.Invoke(null);
                 }
+                HasClean = false;
+                HasMalwares = false;
+                HasUnknowns = false;
+                HasNotAnalyzed = false;
+                HasInProgress = false;
             }
         }
 

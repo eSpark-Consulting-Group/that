@@ -909,8 +909,9 @@ namespace FAT.Application.Models
 
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
-           _operationGuid = e.OperationUid;
-            _scanCounterManager.Clear(); 
+            _operationGuid = e.OperationUid;
+
+            _scanCounterManager.Clear();
 
             if (!_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Start();
@@ -1036,7 +1037,7 @@ namespace FAT.Application.Models
 
             if (Math.Abs(Percentage - 100) < 0.01)
                 OnScanCompleted();
-            else
+
             if (!_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Start();
         }
