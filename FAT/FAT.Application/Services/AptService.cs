@@ -326,6 +326,13 @@ namespace FAT.Application.Services
             return _manager.GetValkyrieDetailsLink();
         }
 
+        public bool SubmitEmail(string[] addresses)
+        {
+            _manager.SubmitEmail(addresses);
+
+            return true;
+        }
+
         private ScanStage FromAptScanStage(AptScanStage stage)
         {
             switch (stage)

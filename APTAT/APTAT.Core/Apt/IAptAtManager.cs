@@ -37,6 +37,8 @@ namespace APTAT.Core
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential, string productName);
 
         string GetValkyrieDetailsLink();
+
+        void SubmitEmail(string[] addresses);
     }
 
     internal interface IAptAtManagerInternal : IAptAtManager

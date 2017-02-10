@@ -206,7 +206,8 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ValkyrieVerdict == ValkyrieVerdict.Malware ||
+                return BadFile.IsMalware ||
+                    ValkyrieVerdict == ValkyrieVerdict.Malware ||
                     ValkyrieVerdict == ValkyrieVerdict.PotentiallyUnwantedApplication;
             }
         }
@@ -215,10 +216,11 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ValkyrieVerdict == ValkyrieVerdict.PendingFls || 
+                return !IsMalware && !IsUnknown && !Clean &&
+                    (ValkyrieVerdict == ValkyrieVerdict.PendingFls || 
                     ValkyrieVerdict == ValkyrieVerdict.InQueue ||
                     ValkyrieVerdict == ValkyrieVerdict.FirstSeen || 
-                    ValkyrieVerdict == ValkyrieVerdict.Pending;
+                    ValkyrieVerdict == ValkyrieVerdict.Pending);
             }
         }
 
@@ -226,7 +228,8 @@ namespace FAT.Application.Models
         {
             get
             {
-                return ValkyrieVerdict == ValkyrieVerdict.Undetected;
+                return !IsMalware && 
+                    ValkyrieVerdict == ValkyrieVerdict.Undetected;
             }
 
         }

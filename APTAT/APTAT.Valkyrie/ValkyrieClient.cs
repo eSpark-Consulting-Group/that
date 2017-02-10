@@ -621,5 +621,10 @@ namespace APTAT.Valkyrie
         {
             _provider.SetBaseUri(uri);
         }
+
+        public void SubmitEmail(string[] addresses)
+        {
+            _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
+        }
     }
 }

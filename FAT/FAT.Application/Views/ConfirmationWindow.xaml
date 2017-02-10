@@ -52,7 +52,7 @@
                                 </StackPanel>
 
                                 <TextBlock TextWrapping="Wrap" Grid.Row="1" VerticalAlignment="Center" Margin="78,0,0,30"  FontSize="16"  Foreground="#555" Style="{StaticResource HeaderTextBlock}">
-                        <Run Text="Do you want to stop it now? You may restart it anytime later." />
+                        <Run Text="Do you want to stop it now? You may     restart it anytime later." />
                                 </TextBlock>
 
                                 <Border Background="White" Grid.Row="2" >

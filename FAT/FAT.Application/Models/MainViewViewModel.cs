@@ -429,6 +429,7 @@ namespace FAT.Application.Models
             get { return _groupByComputers; }
             set
             {
+                Set(() => GroupEnabled, true);
                 Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
 
                 _groupByFiles = !value;
@@ -447,7 +448,9 @@ namespace FAT.Application.Models
             }
         }
 
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
+
+        public bool HideSubmitEmail { get; set; }
 
         #endregion
 
@@ -458,7 +461,7 @@ namespace FAT.Application.Models
         public DelegateCommand SelectCommand { get; private set; }
         public DelegateCommand StopAutoDiscoveryCommand { get; private set; }
         public DelegateCommand StartScanWithDiscoveryResultsCommand { get; private set; }
-        public DelegateCommand SubmitToEmailCommand { get; private set; }
+        public DelegateCommand SubmitEmailCommand { get; private set; }
         public DelegateCommand RestartComputerScanCommand { get; private set; }
         public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
         public DelegateCommand StopComputerScanCommand { get; private set; }
@@ -495,7 +498,7 @@ namespace FAT.Application.Models
                 o => SelectedDiscoveryResults.Any());
             SelectCommand = new DelegateCommand(o => { }, 
                 o => IsDetailsEnabled);
-            SubmitToEmailCommand = new DelegateCommand(InvokeSendEmail);
+            SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail);
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), 
                 o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), 
@@ -526,9 +529,10 @@ namespace FAT.Application.Models
             RaisePropertyChanged(nameof(HasCurrentDomainName));
         }
 
-        private void InvokeSendEmail(Object arg)
+        private void InvokeSubmitEmail(Object arg)
         {
-
+            if (_aptService.SubmitEmail(Email.Split(new[] { ',', ';'})))
+                Set(() => HideSubmitEmail, true);
         }
 
         private async Task<string> GetCurrentDomainName()
@@ -587,7 +591,7 @@ namespace FAT.Application.Models
                 _onlineItems = items.Where(item => item.IsOnline).ToArray();
                 Computers = new ObservableCollection<ThreatInfoItem>(items);
                 Files = new ObservableCollection<ThreatInfoItem>();
-                Set(() => GroupEnabled, true);
+
                 GroupByComputers = true;
                 Set(() => ScanWasOnceStarted, true);
             }
@@ -697,9 +701,6 @@ namespace FAT.Application.Models
             
             RescanLogin = null;
             RescanPassword = null;
-
-
-            Set(() => GroupEnabled, true);
 
             GroupByComputers = true;
 
@@ -868,8 +869,10 @@ namespace FAT.Application.Models
         private void OnBeginScanCompleted(Object sender, ScanStartedEventArgs e)
         {
            _operationGuid = e.OperationUid;
-           _scanCounterManager.Clear();
-           _scanIteratorTimer.Start();
+            //_scanCounterManager.Clear();  it breaks rescan case
+
+            if (!_scanIteratorTimer.IsEnabled)
+                _scanIteratorTimer.Start();
         }
 
 
@@ -987,7 +990,9 @@ namespace FAT.Application.Models
             if (Math.Abs(Percentage - 100) < 0.01)
                 OnScanCompleted();
             RaisePropertyChanged(nameof(Header));
-            _scanIteratorTimer.Start();
+
+            if (!_scanIteratorTimer.IsEnabled)
+                _scanIteratorTimer.Start();
         }
 
         public Predicate<object> FilterPredicate

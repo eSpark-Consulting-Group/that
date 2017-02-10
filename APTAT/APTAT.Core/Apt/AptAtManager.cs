@@ -409,6 +409,11 @@ namespace APTAT.Core.Apt
             return _valkyrieClient.GetValkyrieDetailsLink();
         }
 
+        public void SubmitEmail(string[] addresses)
+        {
+            _valkyrieClient.SubmitEmail(addresses);
+        }
+
         public void Dispose()
         {
             if (_valkyrieClient != null)

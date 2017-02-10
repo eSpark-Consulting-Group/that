@@ -152,6 +152,7 @@ namespace FAT.Application.Services
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
         
         string GetValkyrieDetailsLink();
+        bool SubmitEmail(string[] addresses);
 
         void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options);
