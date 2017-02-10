@@ -222,19 +222,16 @@ namespace APTAT.Valkyrie
 
         private void MergeResult(ValkyrieAnalysisResult result, ValkyrieFileInfo fileInfo, CancellationToken cancellationToken)
         {
-            if (result.IsSubmitted || (result.Verdict != ValkyrieVerdict.FirstSeen &&
-                                       result.Verdict != ValkyrieVerdict.Pending))
-            {
-                if (result.Verdict == ValkyrieVerdict.Undetected)
-                    lock (_lookupSync)
-                    {
-                        _lookupContexts.Add(fileInfo);
-                    }
-                if (result.Verdict != fileInfo.PreviousValkyrieVerdict)
+            if (!result.IsSubmitted && (result.Verdict == ValkyrieVerdict.FirstSeen || 
+                    result.Verdict == ValkyrieVerdict.Undetected || result.Verdict == ValkyrieVerdict.Pending))
+                lock (_lookupSync)
                 {
-                    fileInfo.PreviousValkyrieVerdict = result.Verdict;
-                    _pendingItemsResolved.TryAdd(result.SHA1, result);
+                    _lookupContexts.Add(fileInfo);
                 }
+            if (result.Verdict != fileInfo.PreviousValkyrieVerdict)
+            {
+                fileInfo.PreviousValkyrieVerdict = result.Verdict;
+                _pendingItemsResolved.TryAdd(result.SHA1, result);
             }
         }
 
@@ -501,6 +498,7 @@ namespace APTAT.Valkyrie
                     Trace.WriteLine(
                         $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1: {sha1} FilePath: {originalFilePath} " +
                         $"Presence = {basicInfo.Presence}, [File Uploaded]");
+
                     lock (_automaticAnalyseSync)
                     {
                         _automaticAnalyseInProgressByHash[fileInfo.Sha1] = new ValkyrieAnalyseOperationContext

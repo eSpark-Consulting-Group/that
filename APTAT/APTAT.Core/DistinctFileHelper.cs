@@ -38,7 +38,7 @@ namespace APTAT.Core
                 {
                     if (!files.ContainsKey(badFile.Sha1))
                     {
-                        var val = new ValkyrieFileInfo(badFile.Sha1)
+                        var val = new ValkyrieFileInfo(badFile.Sha1, ValkyrieVerdict.InQueue)
                         {
                             Ip = scanResult.Computer.IPAddress,
                             Path = badFile.Path,

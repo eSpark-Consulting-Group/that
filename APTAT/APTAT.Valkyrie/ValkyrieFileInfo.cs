@@ -9,10 +9,10 @@ namespace APTAT.Valkyrie
 {
     public class ValkyrieFileInfo
     {
-        public ValkyrieFileInfo(string sha1)
+        public ValkyrieFileInfo(string sha1, ValkyrieVerdict previousVerdict)
         {
             Sha1 = sha1;
-            PreviousValkyrieVerdict = ValkyrieVerdict.Pending;
+            PreviousValkyrieVerdict = previousVerdict;
             Paths = new ReadOnlyCollection<string>(_pathList);
         }
         public string Path { get; set; }

@@ -20,7 +20,8 @@ namespace FAT.Application.Models
         OperationFailed,
         OperationCanceled,
         OperationCompleted,
-        RemoteOperationCompleted
+        RemoteOperationCompleted,
+        OperationCancelling
     }
 
     public class ScanProgressItem : DomainObject
