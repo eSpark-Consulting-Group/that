@@ -3,11 +3,11 @@ using System.Net;
 
 namespace FAT.Application.Models
 {
-    public interface ISettingsViewModel
+    public interface IProxySettingsViewModel
     {
         NetworkCredential GetProxyCredentials();
     }
-    public class SettingsViewModel : ISettingsViewModel
+    public class ProxySettingsViewModel : IProxySettingsViewModel
     {
         public string ProxyLogin { get; set; }
         public string ProxyPassword { get; set; }
@@ -25,7 +25,7 @@ namespace FAT.Application.Models
                 retry = window.ShowDialog().GetValueOrDefault();
             });
             if (!retry)
-                throw new OperationCanceledException();
+                return null;
             return new NetworkCredential(ProxyLogin, ProxyPassword, null);
         }
     }

@@ -91,7 +91,7 @@ namespace FAT.Application
             item.SetVisibilityBinding();
             menu.Items.Add(item);
 
-            item = new RadMenuItem();
+            /*item = new RadMenuItem();
             item.CreateRestartScanHeader();
             item.Command = ViewModel.RestartComputerScanCommand;
             item.SetVisibilityBinding();
@@ -107,7 +107,7 @@ namespace FAT.Application
             item.CreateStopScanHeader();
             item.Command = ViewModel.StopComputerScanCommand;
             item.SetVisibilityBinding();
-            menu.Items.Add(item);
+            menu.Items.Add(item);*/
 
             RadContextMenu.SetContextMenu(treeList, menu);
 

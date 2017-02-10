@@ -128,7 +128,7 @@
     <Compile Include="Models\ScanCounter.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
     <Compile Include="Services\EventArgs\GetModifiedResultsForOperationEventArgs.cs" />
-    <Compile Include="Models\SettingsViewModel.cs" />
+    <Compile Include="Models\ProxySettingsViewModel.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>

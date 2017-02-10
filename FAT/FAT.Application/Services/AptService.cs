@@ -25,7 +25,7 @@ namespace FAT.Application.Services
     {
         private IAptAtManager _manager;
         private readonly ICamLicenseProvider _camLicenseProvider;
-        private readonly ISettingsViewModel _proxyCredentialsProvider;
+        private readonly IProxySettingsViewModel _proxyCredentialsProvider;
         private string _camLicense = null;
         private readonly Guid _sessionGuid = new Guid("C78DA9FA-4DC3-4F26-B7C3-304D24220B15");
         private NetworkCredential _proxyCredentials;
@@ -37,7 +37,7 @@ namespace FAT.Application.Services
         {
             get { return _sessionGuid; }
         }
-        public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider, ISettingsViewModel settingsViewModel)
+        public AptService(IAptAtManager aptAtManager, ICamLicenseProvider camLicenseProvider, IProxySettingsViewModel settingsViewModel)
         {
             _camLicenseProvider = camLicenseProvider;
             _manager = aptAtManager;
@@ -108,7 +108,7 @@ namespace FAT.Application.Services
         #region Scan for FAT
         public event EventHandler<ScanStartedEventArgs> FatScanStarted;
         public event EventHandler<ErrorEventArgs> FatScanCompleted;
-
+        public event EventHandler CancelScanStarted;
         public void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options)
         {
@@ -178,16 +178,12 @@ namespace FAT.Application.Services
             HttpStatusCode? code = httpWebResponse?.StatusCode;
             if (code == HttpStatusCode.ProxyAuthenticationRequired)
             {
-                try
-                {
-                    _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
+                if (_proxyCredentials != null)
                     StartValkyrieAnalysis();
-                    return;
-                }
-                catch (Exception)
-                {
-                    LogHelper.Trace(TraceEventType.Information, "Scan was cancelled by user");
-                }
+                else
+                    StopScan(new Guid[0]);
+                return;
             }
             Action a = () =>
             {
@@ -320,6 +316,8 @@ namespace FAT.Application.Services
         public void StopScan(Guid[] targets)
         {
             _manager.StopScan(targets);
+
+            CancelScanStarted?.Invoke(this, new EventArgs());
         }
 
         public void UpdateFlsPorts(int udpPort, int tcpPort)

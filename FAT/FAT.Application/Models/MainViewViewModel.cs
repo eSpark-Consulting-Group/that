@@ -602,7 +602,6 @@ namespace FAT.Application.Models
 
             if (_onlineItems.Length > 0)
             {
-
                 ScanKind scanKind = ScanKind.Quick;
                 if (isQuickScan)
                 {
@@ -735,8 +734,6 @@ namespace FAT.Application.Models
             var targets = new Guid[0];
             if (arg != null && arg is Guid[])
                 targets = (Guid[])arg;
-            else
-                CancelInProgress = true;
 
             _aptService.StopScan(targets);
 
@@ -749,8 +746,9 @@ namespace FAT.Application.Models
             _targetsDiscoveryService.DirectoryItemsResolved += OnDirectoryItemsResolved;
 
 
-            _aptService.FatScanStarted += OnBeginScanCompleted;
+            _aptService.FatScanStarted += OnScanStarted;
             _aptService.FatScanCompleted += OnScanCompleted;
+            _aptService.CancelScanStarted += OnCancelScanStarted;
 
         }
 
@@ -761,7 +759,8 @@ namespace FAT.Application.Models
             _targetsDiscoveryService.DirectoryItemsResolved -= OnDirectoryItemsResolved;
             _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
 
-            _aptService.FatScanStarted -= OnBeginScanCompleted;
+            _aptService.CancelScanStarted -= OnCancelScanStarted;
+            _aptService.FatScanStarted -= OnScanStarted;
             _aptService.FatScanCompleted -= OnScanCompleted;
         }
 
@@ -887,16 +886,19 @@ namespace FAT.Application.Models
             }
         }
 
-        private void OnBeginScanCompleted(Object sender, ScanStartedEventArgs e)
+        private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
            _operationGuid = e.OperationUid;
-            //_scanCounterManager.Clear();  it breaks rescan case
+            _scanCounterManager.Clear(); 
 
             if (!_scanIteratorTimer.IsEnabled)
                 _scanIteratorTimer.Start();
         }
 
-
+        private void OnCancelScanStarted(object sender, EventArgs e)
+        {
+            CancelInProgress = true;
+        }
 
         private void IterateThroughScan(object sender, EventArgs e)
         {
