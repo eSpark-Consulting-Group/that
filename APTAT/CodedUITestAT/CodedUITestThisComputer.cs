@@ -332,8 +332,8 @@ namespace CodedUITestAT
             UnknownFile unknownFileQuick = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Quick);
             UnknownFile unknownFileFull = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Full);
 
-            TestContext.WriteLine("Quick Scan started at the scanning host...");
             UIMapThisComputer.ClickQuickScanButton();
+            TestContext.WriteLine("Quick Scan started at the scanning host...");
             WaitForScanCompleted(ScanType.Quick);
             TestContext.WriteLine("Quick Scan completed at the scanning host...");
             UIMapScanCompletedWindow.ClickNoButton();
@@ -341,8 +341,32 @@ namespace CodedUITestAT
             UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
             UIHelper.FindThreat(unknownFileQuick, ResultsScreen.ScanResults, TestContext);
             UIHelper.VerifyAbsentThreat(unknownFileFull, ResultsScreen.ScanResults, TestContext);
+
+            // A test cleanup
+            File.Delete(unknownFileFull.Location);
         }
-        
+
+        [TestMethod]
+        public void FullScanOfThisComputerTest()
+        {
+            Computer endpoint = new Computer();
+            Malware malware = SysHelper.InfectForScan(endpoint, ScanType.Full);            
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Full);
+            
+            UIMapThisComputer.ClickFullScanButton();
+            TestContext.WriteLine("Full Scan started at the scanning host...");
+            WaitForScanCompleted(ScanType.Full);
+            TestContext.WriteLine("Full Scan completed at the scanning host...");
+            UIMapScanCompletedWindow.ClickNoButton();
+
+            UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);            
+            UIHelper.FindThreat(unknownFile, ResultsScreen.ScanResults, TestContext);
+
+            // A test cleanup
+            File.Delete(malware.Location);
+            File.Delete(unknownFile.Location);
+        }
+
         #endregion
 
         #region Test Context property

@@ -94,6 +94,19 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
             Mouse.Click(uIQuickScanButton, new Point(98, 135));
         }
         
+        /// <summary>
+        /// ClickFullScanButton
+        /// </summary>
+        public void ClickFullScanButton()
+        {
+            #region Variable Declarations
+            WpfButton uIFullScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIFullScanButton;
+            #endregion
+
+            // Click 'Full Scan' button
+            Mouse.Click(uIFullScanButton, new Point(147, 114));
+        }
+        
         #region Properties
         public virtual CheckScanCriticalAreasCheckBoxParams CheckScanCriticalAreasCheckBoxParams
         {
@@ -312,6 +325,22 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
                 return this.mUIQuickScanButton;
             }
         }
+        
+        public WpfButton UIFullScanButton
+        {
+            get
+            {
+                if ((this.mUIFullScanButton == null))
+                {
+                    this.mUIFullScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIFullScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "FullScanButton";
+                    this.mUIFullScanButton.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIFullScanButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -320,6 +349,8 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         private WpfCheckBox mUIScancriticalareasofcCheckBox;
         
         private WpfButton mUIQuickScanButton;
+        
+        private WpfButton mUIFullScanButton;
         #endregion
     }
     
