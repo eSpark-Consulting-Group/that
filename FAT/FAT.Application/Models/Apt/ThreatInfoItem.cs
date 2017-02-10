@@ -211,9 +211,11 @@ namespace FAT.Application.Models
                     if( ScanStage == ScanStage.OperationCancelling)
                         ScanStage = ScanStage.OperationCanceled;
                     _valkyrieProgressPercentageCached = percentage;
+                    ValkyrieProgressPercentage = percentage;
                     RaisePropertyChanged(nameof(ScanStatus));
                 }
-                ValkyrieProgressPercentage = percentage;
+                else
+                   ValkyrieProgressPercentage = percentage;
             }
         }
 
