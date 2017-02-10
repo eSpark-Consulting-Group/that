@@ -407,10 +407,8 @@ namespace FAT.Application.Models
                     && string.IsNullOrEmpty(_statusMessageMemento))
                     _statusMessageMemento = StatusMessageSystem;
 
-                RaisePropertyChanged("ScanStage");
                 RaisePropertyChanged(nameof(ScanStatus));
                 RaisePropertyChanged(nameof(StatusMessage));
-                RaisePropertyChanged("ScanCompleted");
 
                 RaisePropertyChanged(nameof(HasClean));
                 RaisePropertyChanged(nameof(HasMalwares));

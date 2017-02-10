@@ -841,11 +841,27 @@ namespace FAT.Application.Models
             {
                 return;
             }
-            var items = e.Items.Select(t => new ThreatInfoItem(t)).ToArray();
-            Set(() => TotalItemsCount, items.Length);
+
+            bool localAdded = false;
+            var list = new ObservableCollection<ThreatInfoItem>();
+            foreach (var item in e.Items)
+            {
+                if (item.IsLocalComputer)
+                {
+                    if (!localAdded)
+                    {
+                        list.Add(new ThreatInfoItem(item));
+                        localAdded = true;
+                    }
+                }
+                else
+                    list.Add(new ThreatInfoItem(item));
+            }
+
+            Set(() => TotalItemsCount, list.Count);
             ScannedItemsCount = 0;
-            _onlineItems = items.Where(item => item.IsOnline).ToArray();
-            Computers = new ObservableCollection<ThreatInfoItem>(items);
+            _onlineItems = list.Where(item => item.IsOnline).ToArray();
+            Computers = list;
 
 
             foreach (var item in Computers)
@@ -1070,7 +1086,7 @@ namespace FAT.Application.Models
                 if ((item.HasClean && order == (int)CounterOrder.Clean) ||
                     (item.HasMalwares && order == (int)CounterOrder.Malware) ||
                     (item.HasUnknowns && order == (int)CounterOrder.Unknown) ||
-                    (item.HasFailed && order == (int)CounterOrder.NotAnalyzed) ||
+                    (item.HasFailed && item.ScanStage == ScanStage.OperationCompleted && order == (int)CounterOrder.NotAnalyzed) ||
                     (item.HasPending && order == (int)CounterOrder.InProgress))
                     return true;
             }
@@ -1083,11 +1099,11 @@ namespace FAT.Application.Models
             int[] orders = FilterOrders.ToArray();
             foreach (int order in orders)
             {
-                if (item.Clean && order == (int)CounterOrder.Clean ||
-                    item.IsMalware && order == (int)CounterOrder.Malware ||
-                    item.IsUnknown && order == (int)CounterOrder.Unknown ||
-                    item.Failed && order == (int)CounterOrder.NotAnalyzed ||
-                    item.Pending && order == (int)CounterOrder.InProgress)
+                if ((item.Clean && order == (int)CounterOrder.Clean) ||
+                    (item.IsMalware && order == (int)CounterOrder.Malware) ||
+                    (item.IsUnknown && order == (int)CounterOrder.Unknown) ||
+                    (item.Failed && order == (int)CounterOrder.NotAnalyzed) ||
+                    (item.Pending && order == (int)CounterOrder.InProgress))
                     return true;
             }
             return false;
