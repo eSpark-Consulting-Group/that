@@ -1521,6 +1521,10 @@
                             <Setter TargetName="Animation" Property="Background" Value="Transparent" />
                         </Trigger>
 
+                        <DataTrigger Binding="{Binding DataContext.RaisedHasUnknowns,
+                                RelativeSource={RelativeSource Self}}" Value="True">
+                            <Setter TargetName="Indicator" Property="Background" Value="#FFF9AD16"/>
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding DataContext.RaisedHasMalwares,
                                 RelativeSource={RelativeSource Self}}" Value="True">
                             <Setter TargetName="Indicator" Property="Background" Value="#FFD54331"/>
