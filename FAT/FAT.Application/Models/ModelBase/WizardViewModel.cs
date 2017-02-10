@@ -242,7 +242,7 @@ namespace FAT.Application.Models
             }
         }
 
-        private bool _useCurrentDomainForDeploy;
+        private bool _useCurrentDomainForDeploy = false;
         public bool UseCurrentDomainForDeploy
         {
             get { return _useCurrentDomainForDeploy; }
@@ -257,7 +257,7 @@ namespace FAT.Application.Models
             }
         }
 
-        private string _login;
+        private string _login = "administrator";
         public string Login
         {
             get { return UseCurrentDomainForDeploy ? null : _login; }
@@ -270,7 +270,7 @@ namespace FAT.Application.Models
             }
         }
 
-        private string _password;
+        private string _password = "test";
         public string Password
         {
             get { return UseCurrentDomainForDeploy ? null : _password; }

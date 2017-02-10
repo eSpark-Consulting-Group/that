@@ -165,6 +165,8 @@ namespace FAT.Application.Models
             }
         }
 
+        public Boolean IsScanCancelled { get; set; }
+
         public Boolean? IsScanInProgress
         {
             get { return _isScanInProgress; }
@@ -656,6 +658,7 @@ namespace FAT.Application.Models
                 if (!IsScanInProgress.GetValueOrDefault())
                 {
                     IsScanInProgress = true;
+                    IsScanCancelled = false;
                     IsReportEnabled = false;
                     Percentage = 0;
                 }
@@ -701,6 +704,7 @@ namespace FAT.Application.Models
 
             SelectedItem = null;
             Percentage = 0;
+            IsScanCancelled = false;
             IsReportEnabled = false;
             
             RescanLogin = null;
@@ -733,7 +737,7 @@ namespace FAT.Application.Models
 
             var targets = new Guid[0];
             if (arg != null && arg is Guid[])
-                targets = (Guid[])arg;
+                targets = (Guid[]) arg;
 
             _aptService.StopScan(targets);
 
@@ -782,8 +786,7 @@ namespace FAT.Application.Models
                 }
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
-
-            CancelInProgress = false;
+            
         }
 
         private void HandleValkyrieCancellation()
@@ -802,7 +805,7 @@ namespace FAT.Application.Models
 
             Set(() => ValkyrieDetailsLinkAvailable, true);
             ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
-            Percentage = 100;
+            CancelInProgress = false;
         }
 
         private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArg e)
@@ -864,10 +867,9 @@ namespace FAT.Application.Models
                 }
 
                 ScanOptions options;
-                CustomScanOptions customScanOptions = null;
                 if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
                 {
-                    customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                    var customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
                     scanKind = ScanKind.Custom;
                     options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
                         customScanOptions.ScanCriticalAreas, Login, Password);
@@ -898,6 +900,7 @@ namespace FAT.Application.Models
         private void OnCancelScanStarted(object sender, EventArgs e)
         {
             CancelInProgress = true;
+            IsScanCancelled = true;
         }
 
         private void IterateThroughScan(object sender, EventArgs e)
@@ -937,7 +940,7 @@ namespace FAT.Application.Models
                 computers.TryGetValue(infoItem.ComputerGuid, out scanProgress);
                 if (infoItem.ScanStage != ScanStage.OperationFailed &&
                         infoItem.ScanStage != ScanStage.OperationCompleted &&
-                        infoItem.ScanStage != ScanStage.OperationCanceled)
+                        infoItem.ScanStage != ScanStage.OperationCanceled )
                 {
                     if (scanProgress != null)
                     {
@@ -982,19 +985,20 @@ namespace FAT.Application.Models
                     infoItem.ScanStage == ScanStage.OperationCompleted ||
                     infoItem.ScanStage == ScanStage.OperationCanceled)
                     completed++;
-                percentages += infoItem.TotalProgressPercentage;
+                if (files.Any())
+                    infoItem.UpdateVerdictForFiles(files, counterDiff);
+                var localPercentage = infoItem.TotalProgressPercentage;
+                if (IsScanCancelled && localPercentage < 100 && infoItem.ScanStage != ScanStage.OperationCancelling
+                    && infoItem.ScanStage != ScanStage.OperationCanceled)
+                {
+                    infoItem.TrySetCancelledStatus();
+                }
+                percentages += localPercentage;
             }
             if (Math.Abs(Percentage - 100) > 0.01 && _onlineItems.Length > 0)
                 Percentage = percentages / (double)_onlineItems.Length;
 
-
-            if (files.Any())
-            {
-                foreach (ThreatInfoItem computer in Computers)
-                {
-                    computer.UpdateVerdictForFiles(files, counterDiff);
-                }
-            }
+            
             _scanCounterManager.UpdateCounters(counterDiff);
 
 
@@ -1074,11 +1078,11 @@ namespace FAT.Application.Models
             int[] orders = FilterOrders.ToArray();
             foreach (int order in orders)
             {
-                if ((item.Clean && order == (int)CounterOrder.Clean) ||
-                    (item.IsMalware && order == (int)CounterOrder.Malware) ||
-                    (item.IsUnknown && order == (int)CounterOrder.Unknown) ||
-                    (item.Failed && order == (int)CounterOrder.NotAnalyzed) ||
-                    (item.Pending && order == (int)CounterOrder.InProgress))
+                if (item.Clean && order == (int)CounterOrder.Clean ||
+                    item.IsMalware && order == (int)CounterOrder.Malware ||
+                    item.IsUnknown && order == (int)CounterOrder.Unknown ||
+                    item.Failed && order == (int)CounterOrder.NotAnalyzed ||
+                    item.Pending && order == (int)CounterOrder.InProgress)
                     return true;
             }
             return false;
