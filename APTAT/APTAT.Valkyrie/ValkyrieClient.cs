@@ -493,7 +493,7 @@ namespace APTAT.Valkyrie
                     if (response.ReturnCode != ErrorCodesEnum.Success)
                         throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
                     if (fatSubmitFilesResponse.ReturnCode != ErrorCodesEnum.Success)
-                        throw new InvalidOperationException(response.ReturnCode.GetEnumDescription());
+                        throw new InvalidOperationException(fatSubmitFilesResponse.ReturnCode.GetEnumDescription());
 
                     Trace.WriteLine(
                         $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff}: SHA1: {sha1} FilePath: {originalFilePath} " +
@@ -622,6 +622,7 @@ namespace APTAT.Valkyrie
 
         public ValkyrieResponse SubmitEmail(string[] addresses)
         {
+           
             return _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
         }
     }
