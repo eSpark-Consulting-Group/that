@@ -372,11 +372,6 @@ namespace FAT.Application.Models
                     return new ScanStatus(ScanStatusEnum.Offline);
                 }
 
-                if (TotalProgressPercentage == 100)
-                {
-                    return new ScanStatus(ScanStatusEnum.Completed);
-                }
-
                 if (ScanStage == ScanStage.OperationFailed)
                 {
                     return new ScanStatus(ScanStatusEnum.Failed);
@@ -385,6 +380,11 @@ namespace FAT.Application.Models
                 if (ScanStage == ScanStage.OperationCanceled)
                 {
                     return new ScanStatus(ScanStatusEnum.Canceled);
+                }
+
+                if (TotalProgressPercentage == 100)
+                {
+                    return new ScanStatus(ScanStatusEnum.Completed);
                 }
 
                 return new ScanStatus(IsComputer ? ScanStatusEnum.InProgress : ScanStatusEnum.Child);
