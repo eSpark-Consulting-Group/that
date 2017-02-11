@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,7 +12,6 @@ using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
-using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
@@ -446,6 +444,7 @@ namespace APTAT.Core.Apt
                 lock (_verdictUpdateHistory)
                     foreach (var result in e.Results)
                     {
+                        _verdictUpdateHistory.Remove(result);
                         _verdictUpdateHistory.Add(result);
                     }
                 FlsAnalyzeProgressChanged?.Invoke(this, e);

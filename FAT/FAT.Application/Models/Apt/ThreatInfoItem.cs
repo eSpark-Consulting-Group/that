@@ -199,6 +199,9 @@ namespace FAT.Application.Models
             else if (FilesToCheckOnValkyrieCount.Length == 0)
             {
                 ValkyrieProgressPercentage = 100;
+                _valkyrieProgressPercentageCached = 100;
+                if (ScanStage == ScanStage.OperationCancelling)
+                    ScanStage = ScanStage.OperationCanceled;
                 RaisePropertyChanged(nameof(ScanStatus));
             }
             else
