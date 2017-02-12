@@ -1019,7 +1019,16 @@ namespace FAT.Application.Models
             if (Math.Abs(Percentage - 100) > 0.01 && _onlineItems.Length > 0)
                 Percentage = percentages / (double)_onlineItems.Length;
 
-            
+            foreach (var result in files)
+            {
+                var items = Files.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+                foreach (var threatInfoItem in items)
+                {
+                    threatInfoItem.UpdateFileVerdict(result);
+                }
+            }
+
             _scanCounterManager.UpdateCounters(counterDiff);
 
             ScannedItemsCount = scanned;
