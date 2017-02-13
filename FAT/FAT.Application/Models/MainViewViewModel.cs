@@ -144,7 +144,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return IsScanInProgress.GetValueOrDefault() || IsAutoDiscoveryInProgress;
+                return IsScanInProgress.GetValueOrDefault(true) || IsAutoDiscoveryInProgress;
             }
         }
 
@@ -463,7 +463,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return GroupByComputers ? "Search By Computers" : "Search By Files";
+                return !GroupByFiles ? "Search By Computers" : "Search By Files";
             }
         }
 
@@ -508,7 +508,7 @@ namespace FAT.Application.Models
             OnLoadedCommand = new DelegateCommand(OnLoaded);
             StartScanCommand = new DelegateCommand(o =>
                 AppMessages.ScanMessage.Send(MessageTypes.StartScan, InvokeStartScan),
-                o => !IsAnyScanInProgress && IsScanInProgress.HasValue);
+                o => !IsAnyScanInProgress);
             StopScanCommand = new DelegateCommand(o =>
                 AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => IsGlobalStopEnabled);

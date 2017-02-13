@@ -320,7 +320,7 @@
                 </Grid>
             </Button>
 
-            <Button MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,0,32,20" >
+            <Button MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,50,32,20" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -569,7 +569,7 @@
 
                     <TextBlock Foreground="White" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Please enter your email(s) to receive a detailed scan results report:" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
                     <telerik:RadWatermarkTextBox MaxLength="50" Margin="7 0 0 0" Grid.Column="1" Width="300" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
-                                     MinHeight="32" MaxHeight="32"  BorderThickness="1" BorderBrush="#FFD6D4D4"  Padding="7 7 0 0" 
+                                     MinHeight="31" MaxHeight="31"  BorderThickness="1" BorderBrush="#FFD6D4D4"  Padding="7 7 0 0" 
                                      Background="White" Text="{Binding Email}">
                         <telerik:RadWatermarkTextBox.WatermarkContent>
                             <TextBlock Margin="0 1 0 0" FontSize="14" Opacity="0.5" Text="customermail@enterprise.com" Foreground="#FF547D98"/>
