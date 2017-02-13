@@ -52,6 +52,7 @@ namespace APTAT.Core.Apt
 
         private IEnumerable<IAptScanResult> GetResultsEnumerator()
         {
+            if(AggregatedScanResults == null) return new IAptScanResult[] {};
             return AggregatedScanResults.ScanResults;
         }
 
