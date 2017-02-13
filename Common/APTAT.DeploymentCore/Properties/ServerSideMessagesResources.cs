@@ -377,6 +377,9 @@ namespace APTAT.DeploymentCore.Properties
 
         public static readonly ResourceText DescentFormatDescriptionWithoutSuggestion =
                 resourceMan.GetResourceText(SourceName, "DescentFormatDescriptionWithoutSuggestion");
+        public static readonly ResourceText RPCServerIsTooBusyToCompleteThisOperation =
+                resourceMan.GetResourceText(SourceName, "RPCServerIsTooBusy");
+
 
         public static string GetString(string name)
         {

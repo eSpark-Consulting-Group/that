@@ -485,9 +485,6 @@ Would you like to download and register it in the ESM?</value>
   <data name="ScanTerminatedUnexpectedlyMessage" xml:space="preserve">
     <value>Terminated unexpectedly</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
   <data name="TargetComputerNotManagedMessage" xml:space="preserve">
     <value>Target computer is no longer managed.</value>
   </data>
@@ -606,5 +603,8 @@ Please apply for support.</value>
   </data>
   <data name="YesLiteral" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="RPCServerIsTooBusy" xml:space="preserve">
+    <value>The RPC server is too busy to complete this operation.</value>
   </data>
 </root>

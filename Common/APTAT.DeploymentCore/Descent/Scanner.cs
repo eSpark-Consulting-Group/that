@@ -198,6 +198,9 @@ namespace APTAT.DeploymentCore.Descent
                 case DescentStatus.status_operation_canceled:
                     description = new ResourceText("null", "Scan operation was canceled.");
                     break;
+                case DescentStatus.status_rpc_server_is_too_busy:
+                    description = ServerSideMessagesResources.RPCServerIsTooBusyToCompleteThisOperation;
+                    break;
                 default:
                     description = ServerSideMessagesResources.UnsupportedErrorMessage;
                     break;

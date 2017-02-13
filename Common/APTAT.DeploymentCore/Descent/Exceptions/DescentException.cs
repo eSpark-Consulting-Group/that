@@ -55,7 +55,8 @@ namespace APTAT.DeploymentCore.Descent.Exceptions
             status_operation_canceled = 1004,
             status_error_product_version = 1005,
             status_success_reboot_required = 1006,
-            status_agent_was_crashed = 1007
+            status_agent_was_crashed = 1007,
+            status_rpc_server_is_too_busy =1008
         }
 
         public class DescentException : Exception
@@ -77,6 +78,7 @@ namespace APTAT.DeploymentCore.Descent.Exceptions
             private const int ERROR_ACCESS_DENIED = 5;
             private const int ERROR_WRONG_TARGET_NAME = 1396;
             private const int ERROR_SUCCESS_REBOOT_REQUIRED = 3010;
+            private const int ERROR_RPC_S_SERVER_TOO_BUSY = 1723;
 
             public DescentException(DescentHelper.RemoteResponse response)
             {
@@ -116,6 +118,9 @@ namespace APTAT.DeploymentCore.Descent.Exceptions
                         break;
                     case ERROR_BAD_USERNAME:
                         _status = DescentStatus.status_login_invalid_username;
+                        break;
+                    case ERROR_RPC_S_SERVER_TOO_BUSY:
+                        _status = DescentStatus.status_rpc_server_is_too_busy;
                         break;
                     case ERROR_TRUSTED_RELATIONSHIP_FAILURE:
                         _status = DescentStatus.status_login_trusted_relationship_failure;
