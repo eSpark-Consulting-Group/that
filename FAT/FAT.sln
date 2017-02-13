@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT.Application", "FAT.Application\FAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{544313F0-D8AC-4440-8A49-83C8DC3B6433} = {544313F0-D8AC-4440-8A49-83C8DC3B6433}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Common", "..\Common\APTAT.Common\APTAT.Common.csproj", "{49BA3C32-1495-4EA5-8D32-3997788ADE2F}"
 EndProject
