@@ -37,7 +37,7 @@ namespace FAT.Application
             }
             else
             {
-                App.Current.Shutdown();
+                _mainView.OnAppClose(App.Current.Shutdown);
             }
         }
 

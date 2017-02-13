@@ -331,8 +331,13 @@ namespace FAT.Application.Services
         public void UpdateFlsPorts(int udpPort, int tcpPort)
         {
             _manager.UpdateFlsPorts(udpPort, tcpPort);
-
         }
+
+        public async Task OnAppClosing()
+        {
+            await _manager.OnAppClosing();
+        }
+
         public string GetValkyrieDetailsLink()
         {
             return _manager.GetValkyrieDetailsLink();

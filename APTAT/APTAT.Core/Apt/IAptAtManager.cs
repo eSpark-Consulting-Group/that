@@ -8,6 +8,7 @@ using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Valkyrie;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
@@ -32,6 +33,7 @@ namespace APTAT.Core
             , out Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResults);
 
         void StopScan(Guid[] targets);
+        Task OnAppClosing();
         void UpdateFlsPorts(int udpPort, int tcpPort);
 
         void StartValkyrieAnalysis(string login, string password, 

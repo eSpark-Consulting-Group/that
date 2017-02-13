@@ -10,6 +10,7 @@ namespace APTAT.Core.Apt
     {
         void MergeOperationContext(IAptScanOperationContext aptScanContext);
         bool IsOperationInProgress(Guid operationUid);
+        bool IsOperationInProgress();
         Guid OperationUid { get; }
         int SucceededTargetsCount { get; }
         int FailedTargetsCount { get; }

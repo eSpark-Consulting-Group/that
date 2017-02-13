@@ -25,6 +25,7 @@ namespace APTAT.Core.Apt
             StartedTime = aptScanContext.Started;
             DeviceSourceDescription = aptScanContext.DevicesSourceDescription;
             CompletedTime = aptScanContext.CompletedTime;
+            OperationsInProgress.Add(aptScanContext.OperationUid);
             _scanResults = new ConcurrentDictionary<Guid, IAptScanResult> 
                 (aptScanContext.ScanResults.ToDictionary(r => r.TargetUid));
             _baseOperationContext.DescentCompleted += OnOperationContextDescentCompleted;
@@ -63,6 +64,11 @@ namespace APTAT.Core.Apt
         public bool IsOperationInProgress(Guid operationUid)
         {
             return OperationsInProgress.Contains(operationUid);
+        }
+
+        public bool IsOperationInProgress()
+        {
+            return OperationsInProgress.Any();
         }
 
         public IFilesStatistics CalculateFilesStatistics()

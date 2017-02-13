@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.FLS;
@@ -29,8 +31,12 @@ namespace APTAT.Core.Apt
         private readonly HashSet<IAptVerdictContext> _verdictUpdateHistory 
             = new HashSet<IAptVerdictContext>();
         private readonly IDistinctFileHelper _distinctHelper;
+
         private bool _isValkyrieStarted;
         private DateTime? _latestValkyrieVerdictUpdate = null;
+        
+        private int _filesShouldSendToValkyrieCount = 0;
+        private int _filesWithFlsErrorCount = 0;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
@@ -117,9 +123,16 @@ namespace APTAT.Core.Apt
             {
                 foreach (var fileResult in valkyrieAnalysisResult)
                 {
-                    if (valkyrieAnalysisResultInternal.Remove(fileResult.Sha1) && !e.IsUpdate)
+                    FileResult file;
+                    if (valkyrieAnalysisResultInternal.TryGetValue(fileResult.Sha1, out file))
                     {
-                        Debug.Assert(true, "valkyrie upload twice the same file");
+                        valkyrieAnalysisResultInternal.Remove(file.Sha1);
+                        if (!e.IsUpdate)
+                            Debug.Assert(true, "valkyrie upload twice the same file");
+                        if (file.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.InQueue)
+                        {
+                            _filesShouldSendToValkyrieCount--;
+                        }
                     }
                     valkyrieAnalysisResultInternal.Add(fileResult.Sha1, fileResult);
 
@@ -132,7 +145,20 @@ namespace APTAT.Core.Apt
             ProgressInfo<FileResult> progressInfo = new ProgressInfo<FileResult>(info.TotalFileCount,
                 info.ProcessedFileCount, valkyrieAnalysisResult.ToArray());
             ValkyrieAnalyzeProgressChanged?.Invoke(this,
-                    new ValkyrieAnalyzeProgressChangedEventArgs<FileResult>(e.Percent, progressInfo, e.IsUpdate));
+                                   new ValkyrieAnalyzeProgressChangedEventArgs<FileResult>(e.Percent, progressInfo, e.IsUpdate));
+            TryInvokeEndScan();
+        }
+
+        private void TryInvokeEndScan()
+        {
+            lock (_flsHashResults)
+            {
+                lock (ValkyrieAnalysisResult)
+                {
+                    if (!AggregatedScanResults.IsOperationInProgress() && _filesWithFlsErrorCount == 0 && _filesShouldSendToValkyrieCount == 0)
+                        _valkyrieClient.SendEndScanAsync();
+                }
+            }
         }
 
         private static Dictionary<string, FileResult> GetFullResult(IEnumerable<ValkyrieAnalysisResult> valkyrieResult,
@@ -207,6 +233,8 @@ namespace APTAT.Core.Apt
             var newUnknownFiles = new List<IFlsResult>();
             lock (_flsHashResults)
             {
+                if (!fromRemoteScanner)
+                    _filesWithFlsErrorCount -= _filesWithFlsErrorCount;
                 foreach (var r in resultsFiles)
                 {
                     if (!_flsHashResults.ContainsKey(r.Sha1))
@@ -237,6 +265,7 @@ namespace APTAT.Core.Apt
                         }
                     }
                 }
+                _filesWithFlsErrorCount += addToAnalyze.Count;
                 verdictUpdatedAny = verdictUpdated.Any();
                 var dictToValkyrie = new Dictionary<string, CloudVerdict>(StringComparer.OrdinalIgnoreCase);
                 if (verdictUpdatedAny)
@@ -270,6 +299,7 @@ namespace APTAT.Core.Apt
                         _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
                         lock (ValkyrieAnalysisResult)
                         {
+                            _filesShouldSendToValkyrieCount += filesToAnalyze.Count;
                             foreach (var fileInfo in valkyrieAnalysisResults)
                                 ValkyrieAnalysisResult.Add(fileInfo.Sha1, fileInfo);
                         }
@@ -283,13 +313,13 @@ namespace APTAT.Core.Apt
             if (addToAnalyze.Any())
                 _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1), true);
             //  temp.Select(t)
+            TryInvokeEndScan();
             return resultsUpdated;
         }
 
         private List<ValkyrieFileInfo> GetFilesToAnalyzeForValkyrie(Dictionary<string, CloudVerdict> dict)
         {
-            IEnumerable<IAptScanResult> results = GetResultsEnumerator().ToArray();
-            IAptScanResult[] aptScanResults = results as IAptScanResult[] ?? results.ToArray();
+            IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
             List<ValkyrieFileInfo> distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
             List<ValkyrieFileInfo> fileInfoList = distinctFileList.Where(x => dict.ContainsKey(x.Sha1)).ToList();
 
@@ -356,6 +386,8 @@ namespace APTAT.Core.Apt
                 AggregatedScanResults = new AggregatedAptScanResult(scanner.ScanOperationContext);
                 _flsManager.Cancel();
                 _isValkyrieStarted = false;
+                _filesShouldSendToValkyrieCount = 0;
+                _filesWithFlsErrorCount = 0;
                 _valkyrieClient.AnalyzeAsyncCancel();
                 lock (_flsHashResults)
                 {
@@ -375,6 +407,7 @@ namespace APTAT.Core.Apt
                 scanner.ComputerScanCompleted -= OnScannerOnScanCompleted;
                 scanner.ScanCompleted -= OnScanCompleted;
             }
+            TryInvokeEndScan();
         }
 
         public IAptReportBuilder GetAptReportBuilder()
@@ -443,6 +476,14 @@ namespace APTAT.Core.Apt
                 _valkyrieClient.Dispose();
                 _valkyrieClient = null;
             }
+            if (_flsManager != null)
+            {
+                _flsManager.FlsAnalyzed -= FlsManagerOnAnalyzed;
+            }
+        }
+        public async Task OnAppClosing()
+        {
+            await _valkyrieClient.SendEndScan();
         }
 
         public void UpdateFlsPorts(int udpPort, int tcpPort)

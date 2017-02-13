@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using Valkyrie.WebApiProvider.Contracts;
 
 namespace APTAT.Valkyrie
@@ -15,6 +16,8 @@ namespace APTAT.Valkyrie
         void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
             string login, string password, int machineCount, NetworkCredential proxyCredential, string productName);
         string GetValkyrieDetailsLink();
+        void SendEndScanAsync();
+        Task SendEndScan();
         void SetBaseUri(Uri uri);
         ValkyrieResponse SubmitEmail(string[] addresses);
     }

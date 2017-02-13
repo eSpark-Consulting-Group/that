@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using FAT.Application.Models;
 using APTAT.Core;
 using APTAT.DeploymentCore.Directory;
@@ -159,6 +160,8 @@ namespace FAT.Application.Services
 
         GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, DateTime? lastUtcTime,
             DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime);
+
+        Task OnAppClosing();
 
         event EventHandler<ScanStartedEventArgs> FatScanStarted;
         event EventHandler<ErrorEventArgs> FatScanCompleted;

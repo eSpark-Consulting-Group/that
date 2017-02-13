@@ -1113,7 +1113,7 @@ namespace FAT.Application.Models
             _storage.SetValue(KnownKeys.ReportKind, kind);
         }
 
-        public void OnAppClose(Action action)
+        public async void OnAppClose(Action action)
         {
             if (IsAnyScanInProgress)
             {
@@ -1124,6 +1124,11 @@ namespace FAT.Application.Models
                 }
                 else
                     InvokeStopScan(null);
+            }
+            else
+            {
+                await _aptService.OnAppClosing();
+                action?.Invoke();
             }
         }
 

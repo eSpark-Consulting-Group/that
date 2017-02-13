@@ -73,6 +73,18 @@ namespace Valkyrie.WebApiProvider
 
         public StartAndFinalizeScanResponse EndScan(EndScanRequest request)
         {
+            StartAndFinalizeScanResponse response = null;
+            try
+            {
+                response = CallValkyrie<StartAndFinalizeScanResponse>(EndScanUri, request);
+            }
+            catch (Exception)
+            {
+            }
+            return response;
+        }
+        public StartAndFinalizeScanResponse EndScanWithErrorHandling(EndScanRequest request)
+        {
             bool success = false;
             int retry = 0;
             StartAndFinalizeScanResponse response = new StartAndFinalizeScanResponse();

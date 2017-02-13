@@ -8,7 +8,6 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.XPath;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
@@ -72,7 +71,7 @@ namespace APTAT.Valkyrie
                 foreach (var fileInfo in filesToAnalyze)
                     _lookupContexts.Add(fileInfo);
             }
-            if(shouldStartImmediately)
+            if (shouldStartImmediately)
                 _checkStatusesTimer?.Change(0, Timeout.Infinite);
         }
 
@@ -137,25 +136,25 @@ namespace APTAT.Valkyrie
         {
             _checkStatusesTimer?.Change(Timeout.Infinite, Timeout.Infinite);
             var waitNextInterval = false;
-            var needEndScan = false;
             if (_aptScanId == null)
             {
                 lock (_aptScanIdLock)
                 {
+                    var attemptCount = 0;
                     while (true)
                     {
                         if (_aptScanId != null)
                             break;
                         if (_apiKey == null)
                             waitNextInterval = true;
+                        if (attemptCount == 5) break;
                         var startScanResult = _provider.StartScan(new StartScanRequest(_apiKey));
                         if (startScanResult.ReturnCode == ErrorCodesEnum.Success)
                         {
                             _aptScanId = startScanResult.AptScanId;
-                            needEndScan = true;
+                            waitNextInterval = false;
                         }
-                        else
-                            waitNextInterval = true;
+                        attemptCount++;
                     }
                 }
             }
@@ -163,11 +162,6 @@ namespace APTAT.Valkyrie
             {
                 CheckNewStatusesOnValkyrie();
                 OnAnalyzeProgressChanged(_pendingItemsResolved, true);
-                if (needEndScan)
-                    Task.Factory.StartNew(t =>
-                    {
-                        _provider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId));
-                    }, TaskCreationOptions.None);
             }
             var resetTimerImmediately = false;
             if (_cancellationTokenSource.IsCancellationRequested)
@@ -332,6 +326,7 @@ namespace APTAT.Valkyrie
         {
             if (_cancellationTokenSource != null)
             {
+                SendEndScanAsync();
                 _cancellationTokenSource.Cancel();
                 _checkStatusesTimer?.Change(0, Timeout.Infinite);
             }
@@ -356,11 +351,6 @@ namespace APTAT.Valkyrie
                     exception = aggregateException;
                 }
             }
-            else if (_aptScanId != null)
-                Task.Factory.StartNew(t =>
-                    { 
-                        _provider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId)); 
-                    }, TaskCreationOptions.None);
 
             Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Scan Completed for API_KEY = {_apiKey}");
             _isMainScanFinished = true;
@@ -396,7 +386,7 @@ namespace APTAT.Valkyrie
                 }
                 tmp(this,
                     new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(progressInt,
-                        new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, newResults), isUpdate));
+                         new ProgressInfo<ValkyrieAnalysisResult>(_filesCount, _fileScanned, newResults), isUpdate));
 
             }
         }
@@ -574,6 +564,26 @@ namespace APTAT.Valkyrie
             return $@"{_provider.GetBaseUri()}signup_apikey/{_apiKey}";
         }
 
+        public void SendEndScanAsync()
+        {
+            if (_aptScanId != null)
+                Task.Factory.StartNew(t =>
+                {
+                    _provider.EndScanWithErrorHandling(new EndScanRequest(_apiKey, _machineCount, _aptScanId));
+                }, TaskCreationOptions.None);
+        }
+
+        public async Task SendEndScan()
+        {
+            await Task.Factory.StartNew(t =>
+            {
+                if (_aptScanId != null)
+                {
+                    _provider.EndScan(new EndScanRequest(_apiKey, _machineCount, _aptScanId));
+                }
+            }, TaskCreationOptions.None);
+        }
+
         public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
             string login, string password, int machineCount, NetworkCredential proxyCredential, string productName)
         {
@@ -584,6 +594,7 @@ namespace APTAT.Valkyrie
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
+            _filesCount = filesToAnalyze.Count;
 
             Task.Factory.StartNew(t =>
             {
@@ -600,23 +611,27 @@ namespace APTAT.Valkyrie
                 _login = login;
                 _password = password;
                 OnAnalyzeStarted();
-                if (!filesToAnalyze.Any()) return;
                 
-                StartAndFinalizeScanResponse startScanResult;
+                StartAndFinalizeScanResponse startScanResult = null;
                 lock (_aptScanIdLock)
                 {
-                    startScanResult = _provider.StartScan(new StartScanRequest(regInfo.Key));
-                    _aptScanId = startScanResult.AptScanId;
+                    if (_aptScanId == null)
+                    {
+                        startScanResult = _provider.StartScan(new StartScanRequest(regInfo.Key));
+                        _aptScanId = startScanResult.AptScanId;
+                    }
                 }
 
-                if (startScanResult.ReturnCode != 0)
+                if (startScanResult != null && startScanResult.ReturnCode != 0)
                 {
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
                     throw new InvalidOperationException(startScanResult.ResultDescription);
                 }
-                Thread.Sleep(2000);
+                if (!filesToAnalyze.Any()) return;
+                
+                if (startScanResult != null)
+                    Thread.Sleep(2000);
                 _progressNotifyTimer.Change(1000, Timeout.Infinite);
-                _filesCount = filesToAnalyze.Count;
                 SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, AddResult);
             }, TaskCreationOptions.None, cancellationToken)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
@@ -639,7 +654,6 @@ namespace APTAT.Valkyrie
 
         public ValkyrieResponse SubmitEmail(string[] addresses)
         {
-           
             return _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
         }
     }

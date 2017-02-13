@@ -8,6 +8,7 @@ namespace Valkyrie.WebApiProvider
     public interface IValkyrieWebApiProvider
     {
         CheckAnalysisResultResponse CheckAnalysisResult(CheckAnalysisResultRequest request);
+        StartAndFinalizeScanResponse EndScanWithErrorHandling(EndScanRequest request);
         StartAndFinalizeScanResponse EndScan(EndScanRequest request);
         Uri GetBaseUri();
         BasicInfoResponse GetBasicInfo(InfoRequest request);
