@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.GridView;
 
 namespace FAT.Application
 {
@@ -58,9 +59,25 @@ namespace FAT.Application
             ViewModel.SelectedDiscoveryResults = ViewModel.SelectedDiscoveryResults;
         }
 
-        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {     
+            var element = e.OriginalSource as FrameworkElement;
+            var cell = element.GetVisualParent<GridViewCell>();
+            if (cell != null && cell.IsSelected)
+                cell.ParentRow.IsSelected = true;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var element = e.OriginalSource as FrameworkElement;
+            var cell = element.GetVisualParent<GridViewCell>();
+            if (cell != null && !cell.IsSelected)
+                cell.ParentRow.IsSelected = false;
         }
     }
 }

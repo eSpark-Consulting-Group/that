@@ -1274,7 +1274,7 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox AutomationProperties.AutomationId="{Binding}" 
+                        <CheckBox AutomationProperties.AutomationId="{Binding}" SnapsToDevicePixels="True"
                                                       IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0" Background="#FFC8D9E7"
 											          Content="{Binding ConvertedValue, Converter={StaticResource DistinctValueConverter}}"											  
 											          VerticalContentAlignment="Top" Padding="8 -2 0 0" FontSize="13"  Foreground="#FF457FAD">

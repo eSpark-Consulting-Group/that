@@ -37,6 +37,66 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
+
+                        <CheckBox Background="#FFC8D9E7" Margin="-24 0 0 0" HorizontalAlignment="Left" SnapsToDevicePixels="True" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor,
+                                         AncestorType={x:Type telerik:GridViewCell}}, Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked">
+                            <CheckBox.Template>
+
+                                <ControlTemplate TargetType="CheckBox">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal" />
+                                                <VisualState x:Name="Pressed">
+                                                </VisualState>
+
+                                                <VisualState x:Name="Disabled">
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                            <VisualStateGroup x:Name="CheckStates">
+                                                <VisualState x:Name="Checked">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="CheckIcon" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                                <VisualState x:Name="Unchecked" />
+                                                <VisualState x:Name="Indeterminate">
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Grid Opacity="0" Background="{TemplateBinding Background}" x:Name="Root" SnapsToDevicePixels="True"/>
+                                        <Border x:Name="Bd">
+                                            <Grid Height="16" Width="16">
+                                                <Path x:Name="Icon" SnapsToDevicePixels="True" Data="F1M67,284.11L55,284.11L55,272.11L67,272.11z M53,286.11L69,286.11L69,270.11L53,270.11z" Fill="{Binding ElementName=Root, Path=Background}" Height="16" Stretch="Fill" Width="16"/>
+
+                                                <Path Opacity="0" x:Name="CheckIcon" SnapsToDevicePixels="True" Data="M4,4.0000148 L12,4.0000148 12,12.000014 4,12.000014 z M2,2 L2,14 14,14 14,2 z M0,0 L16,0 16,16 0,16 z" Fill="{Binding ElementName=Root, Path=Background}" Height="16" Stretch="Fill" Width="16"/>
+
+                                            </Grid>
+                                        </Border>
+                                        <ContentPresenter Grid.Column="1" x:Name="PART_ContentHost" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Trigger.Property="UIElement.IsKeyboardFocused" Trigger.Value="True" >
+                                            <Setter Setter.TargetName="Root" Property="Background" Value="{DynamicResource StrongBrush2}" />
+                                        </Trigger>
+                                        <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True" >
+                                            <Setter Setter.TargetName="Root" Property="Background" Value="{DynamicResource StrongBrush2}" />
+                                        </Trigger>
+                                        <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                            <Setter Setter.TargetName="Root" Property="Background" Value="#FF457EAC" />
+                                        </Trigger>
+                                        <Trigger Trigger.Property="IsChecked" Trigger.Value="True">
+                                            <Setter Setter.TargetName="Root" Property="Background" Value="White" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </CheckBox.Template>
+                        </CheckBox>
+
                         <Canvas Height="17" Width="20" Margin="3,0,0,0">
                             <Path SnapsToDevicePixels="True" Data="F1M80,139L94,128L94,139z" Fill="{Binding ElementName=txt, Path=Foreground}" Height="11" Canvas.Left="3" Opacity="0.3" Stretch="Fill" Canvas.Top="1" Width="14"/>
                             <Path SnapsToDevicePixels="True" Data="M19,15 L20,15 20,16 19,16 z M7,15 L7,16 13,16 13,15 12,15 11,15 9,15 8,15 z M0,15 L1,15 1,16 0,16 z M9,13 L9,14 11,14 11,13 z M2.9999998,0.99999996 L2.9999998,12 17,12 17,0.99999996 z M1.9999999,0 L18,0 18,13 12,13 12,14 14,14 14,15 18,15 18,16 14,16 14,17 6,17 6,16 1.9999999,16 1.9999999,15 6,15 6,14 8,14 8,13 1.9999999,13 z" Fill="{Binding ElementName=txt, Path=Foreground}" Height="17" Stretch="Fill" Width="20"/>
@@ -45,6 +105,7 @@
                         <TextBlock Margin="8,0,0,0" Grid.Column="1" x:Name="txt" Text="{Binding DnsName}" FontSize="14"  HorizontalAlignment="Left"/>
 
                     </Grid>
+                    
                 </DataTemplate>
 
                 <DataTemplate x:Key="IPTemplate">

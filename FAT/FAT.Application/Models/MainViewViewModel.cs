@@ -46,7 +46,9 @@ namespace FAT.Application.Models
         private DateTime? _lastModifiesComputerDate = null;
         private DateTime? _lastModifiesFlsVerdictDate = null;
         private DateTime? _lastModifiesValkyrieVerdictDate = null;
+
         private List<ThreatInfoItem> _selectedItems = new List<ThreatInfoItem>();
+        private List<DeploymentTarget> _selectedDiscoveryResults = new List<DeploymentTarget>();
 
         private Guid _operationGuid;
         private Boolean? _isScanInProgress = false;
@@ -381,7 +383,6 @@ namespace FAT.Application.Models
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
 
-        private List<DeploymentTarget> _selectedDiscoveryResults = new List<DeploymentTarget>();
         public List<DeploymentTarget> SelectedDiscoveryResults
         {
             get { return _selectedDiscoveryResults; }
@@ -842,20 +843,10 @@ namespace FAT.Application.Models
                 return;
             }
 
-            bool localAdded = false;
             var list = new ObservableCollection<ThreatInfoItem>();
             foreach (var item in e.Items)
             {
-                if (item.IsLocalComputer)
-                {
-                    if (!localAdded)
-                    {
-                        list.Add(new ThreatInfoItem(item));
-                        localAdded = true;
-                    }
-                }
-                else
-                    list.Add(new ThreatInfoItem(item));
+                list.Add(new ThreatInfoItem(item));
             }
 
             Set(() => TotalItemsCount, list.Count);

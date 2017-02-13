@@ -320,7 +320,7 @@
                 </Grid>
             </Button>
 
-            <Button MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,50,32,20" >
+            <Button MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,52,32,20" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -344,8 +344,9 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Group By" Foreground="#FF547D98" FontSize="14" Opacity="0.5" Margin="0 6 10 0"/>
+                    
                     <ToggleButton AutomationProperties.AutomationId="GroupByComputersToggleButton" Grid.Column="1"
-                      IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}" ToolTip="Computers" >
+                        IsChecked="{Binding GroupByComputers, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByFiles}" ToolTip="Computers" >
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Setter Property="Width" Value="40" />
@@ -377,8 +378,9 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
+                    
                     <ToggleButton AutomationProperties.AutomationId="GroupByFilesToggleButton" Grid.Column="2"
-                      IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}" ToolTip="Files">
+                        IsChecked="{Binding GroupByFiles, Mode=TwoWay}" IsHitTestVisible="{Binding GroupByComputers}" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}" ToolTip="Files">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Setter Property="Width" Value="40" />
