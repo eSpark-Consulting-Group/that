@@ -230,11 +230,11 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
         public void ClickHelpButton()
         {
             #region Variable Declarations
-            WpfButton uIHelpButtonButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UIHelpButtonButton;
+            WpfButton uIHelpButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIHelpButton;
             #endregion
 
-            // Click 'HelpButton' button
-            Mouse.Click(uIHelpButtonButton, new Point(52, 33));
+            // Click 'Help' button
+            Mouse.Click(uIHelpButton, new Point(52, 32));
         }
         
         /// <summary>
@@ -444,6 +444,18 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
                 return this.mUIUnknownFileHunterWindow1;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -474,6 +486,8 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -1193,6 +1207,41 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
             }
         }
         
+        public WpfWindow UIWpfWindow
+        {
+            get
+            {
+                if ((this.mUIWpfWindow == null))
+                {
+                    this.mUIWpfWindow = new WpfWindow(this);
+                    #region Search Criteria
+                    this.mUIWpfWindow.SearchProperties[WpfWindow.PropertyNames.Name] = "Stop Scan";
+                    this.mUIWpfWindow.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+                    this.mUIWpfWindow.SearchConfigurations.Add(SearchConfiguration.AlwaysSearch);
+                    this.mUIWpfWindow.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIWpfWindow;
+            }
+        }
+        
+        public WpfWindow UIWpfWindow1
+        {
+            get
+            {
+                if ((this.mUIWpfWindow1 == null))
+                {
+                    this.mUIWpfWindow1 = new WpfWindow(this);
+                    #region Search Criteria
+                    this.mUIWpfWindow1.SearchProperties[WpfWindow.PropertyNames.Name] = "Agent Requirements";
+                    this.mUIWpfWindow1.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+                    this.mUIWpfWindow1.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIWpfWindow1;
+            }
+        }
+        
         public WpfWindow UIWpfWindow2
         {
             get
@@ -1306,6 +1355,107 @@ namespace CodedUITestAT.UIMaps.UIMapHelpClasses
         
         #region Fields
         private WpfMenuItem mUIAgentRequirementsMenuItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIViewsMainViewxamlPane2 UIViewsMainViewxamlPane
+        {
+            get
+            {
+                if ((this.mUIViewsMainViewxamlPane == null))
+                {
+                    this.mUIViewsMainViewxamlPane = new UIViewsMainViewxamlPane2(this);
+                }
+                return this.mUIViewsMainViewxamlPane;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIViewsMainViewxamlPane2 mUIViewsMainViewxamlPane;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIViewsMainViewxamlPane2 : WpfPane
+    {
+        
+        public UIViewsMainViewxamlPane2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfPane.PropertyNames.ClassName] = "Uia.Frame";
+            this.SearchProperties[WpfPane.PropertyNames.AutomationId] = "MainFrame";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIMainToolBarToolBar UIMainToolBarToolBar
+        {
+            get
+            {
+                if ((this.mUIMainToolBarToolBar == null))
+                {
+                    this.mUIMainToolBarToolBar = new UIMainToolBarToolBar(this);
+                }
+                return this.mUIMainToolBarToolBar;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIMainToolBarToolBar mUIMainToolBarToolBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIMainToolBarToolBar : WpfToolBar
+    {
+        
+        public UIMainToolBarToolBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfToolBar.PropertyNames.AutomationId] = "MainToolBar";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIHelpButton
+        {
+            get
+            {
+                if ((this.mUIHelpButton == null))
+                {
+                    this.mUIHelpButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIHelpButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "HelpDropDownButton";
+                    this.mUIHelpButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIHelpButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIHelpButton;
         #endregion
     }
 }

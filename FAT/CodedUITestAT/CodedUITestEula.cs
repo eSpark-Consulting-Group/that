@@ -68,15 +68,16 @@ namespace CodedUITestAT
         public void VerifyEulaDefaultsTest()
         {
             CodedUITestMain useMain = new CodedUITestMain();
+            CodedUITestHelp useHelp = new CodedUITestHelp();
                         
             UIMapEula.ClickCancelButton();
-            if (!useMain.MainWindow().Exists) TestContext.WriteLine("Main application window is closed after clicking Cancel button.");
-            else Assert.Fail("Main application window is not closed after clicking Cancel button!");
+            if (!useMain.MainWindow().Exists) TestContext.WriteLine("The main application window is closed after clicking Cancel button.");
+            else Assert.Fail("The main application window is not closed after clicking Cancel button!");
 
             SysHelper.StartApplication(DataHelper.GetEndpoint());
             UIMapEula.ClickIAcceptButton();
-            if (useMain.MainWindow().Exists) TestContext.WriteLine("Main application window is successfully opened after clicking 'I Accept' button.");
-            else Assert.Fail("Main application window is not opened after clicking 'I Accept' button!");
+            if (UIHelper.IsClickable(useHelp.HelpButton())) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
+            else Assert.Fail("The main application window is not available after clicking I Accept button!");
 
             UIMapMain.ClickCloseButton();
             SysHelper.StartApplication(DataHelper.GetEndpoint());
@@ -85,14 +86,14 @@ namespace CodedUITestAT
             TestContext.WriteLine("EULA document is shown after clicking License Agreement link.");
 
             UIMapEula.ClickCancelButton();
-            if (!useMain.MainWindow().Exists) TestContext.WriteLine("Main application window is closed after clicking Cancel button.");
-            else Assert.Fail("Main application window is not closed after clicking Cancel button!");
+            if (!useMain.MainWindow().Exists) TestContext.WriteLine("The main application window is closed after clicking Cancel button.");
+            else Assert.Fail("The main application window is not closed after clicking Cancel button!");
 
             SysHelper.StartApplication(DataHelper.GetEndpoint());
             UIMapEula.ClickLicenseAgreementLink();
             UIMapEula.ClickIAcceptButton();
-            if (useMain.MainWindow().Exists) TestContext.WriteLine("Main application window is successfully opened after clicking 'I Accept' button.");
-            else Assert.Fail("Main application window is not opened after clicking 'I Accept' button!");
+            if (UIHelper.IsClickable(useHelp.HelpButton())) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
+            else Assert.Fail("The main application window is not available after clicking I Accept button!");
         }
 
         #endregion

@@ -59,7 +59,7 @@ namespace CodedUITestAT
 
         internal WpfButton HelpButton()
         {
-            return UIMapHelp.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIRadToolBarToolBar.UIHelpButtonButton;
+            return UIMapHelp.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIHelpButton;
         }
 
         #endregion
