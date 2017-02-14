@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.FLS;
@@ -33,6 +31,7 @@ namespace APTAT.Core.Apt
         private readonly IDistinctFileHelper _distinctHelper;
 
         private bool _isValkyrieStarted;
+        private bool _isValkyrieScanEnded = false;
         private DateTime? _latestValkyrieVerdictUpdate = null;
         
         private int _filesShouldSendToValkyrieCount = 0;
@@ -103,6 +102,7 @@ namespace APTAT.Core.Apt
         private void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
         {
             _isValkyrieStarted = true;
+            _isValkyrieScanEnded = false;
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
         }
 
@@ -156,8 +156,12 @@ namespace APTAT.Core.Apt
             {
                 lock (ValkyrieAnalysisResult)
                 {
-                    if (!AggregatedScanResults.IsOperationInProgress() && _filesWithFlsErrorCount == 0 && _filesShouldSendToValkyrieCount == 0)
+                    if (!AggregatedScanResults.IsOperationInProgress() && _filesWithFlsErrorCount == 0 &&
+                        _filesShouldSendToValkyrieCount == 0 && _isValkyrieStarted && !_isValkyrieScanEnded)
+                    {
+                        _isValkyrieScanEnded = true;
                         _valkyrieClient.SendEndScanAsync();
+                    }
                 }
             }
         }
@@ -484,6 +488,7 @@ namespace APTAT.Core.Apt
         }
         public async Task OnAppClosing()
         {
+            if (_isValkyrieScanEnded) return;
             await _valkyrieClient.SendEndScan();
         }
 
