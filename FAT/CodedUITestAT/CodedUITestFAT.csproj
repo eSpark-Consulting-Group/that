@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodedUITestAT</RootNamespace>
+    <AssemblyName>CodedUITestAT</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>True</IsCodedUITest>
+    <TestProjectType>CodedUITest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' Or '$(VisualStudioVersion)' == '11.0'">
+      <ItemGroup>
+        <Reference Include="UIAutomationTypes" />
+      </ItemGroup>
+    </When>
+  </Choose>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessObjects\Computers\Computer.cs" />
+    <Compile Include="BusinessObjects\Computers\ScanStatus.cs" />
+    <Compile Include="BusinessObjects\Files\ValkyrieVerdict.cs" />
+    <Compile Include="BusinessObjects\Files\Verdict.cs" />
+    <Compile Include="BusinessObjects\Files\Malware.cs" />
+    <Compile Include="BusinessObjects\Files\Threat.cs" />
+    <Compile Include="BusinessObjects\Files\UnknownFile.cs" />
+    <Compile Include="BusinessObjects\IRow.cs" />
+    <Compile Include="BusinessObjects\MouseClick.cs" />
+    <Compile Include="BusinessObjects\PortType.cs" />
+    <Compile Include="BusinessObjects\Reports\Report.cs" />
+    <Compile Include="BusinessObjects\Reports\ReportType.cs" />
+    <Compile Include="BusinessObjects\ResultsScreen.cs" />
+    <Compile Include="BusinessObjects\Computers\ScanType.cs" />
+    <Compile Include="BusinessObjects\UIAction.cs" />
+    <Compile Include="CodedUITestCommon.cs" />
+    <Compile Include="CodedUITestHelp.cs" />
+    <Compile Include="CodedUITestEula.cs" />
+    <Compile Include="CodedUITestMain.cs" />
+    <Compile Include="CodedUITestReports.cs" />
+    <Compile Include="CodedUITestThisComputer.cs" />
+    <Compile Include="Helpers\DataHelper.cs" />
+    <Compile Include="Helpers\SysHelper.cs" />
+    <Compile Include="Helpers\TextHelper.cs" />
+    <Compile Include="Helpers\UIHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\Errors.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Errors.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\General.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>General.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Reports.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Reports.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Results.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Results.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ResultsValkyrie.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>ResultsValkyrie.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ScanCompleted.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>ScanCompleted.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Scanner.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Scanner.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Staging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Staging.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\WaitingTime.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>WaitingTime.settings</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\Details\UIMapValkyrieDetailsWindow.cs">
+      <DependentUpon>UIMapValkyrieDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\Details\UIMapValkyrieDetailsWindow.Designer.cs">
+      <DependentUpon>UIMapValkyrieDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapActiveDirectory.cs">
+      <DependentUpon>UIMapActiveDirectory.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapActiveDirectory.Designer.cs">
+      <DependentUpon>UIMapActiveDirectory.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.Designer.cs">
+      <DependentUpon>UIMapNetworkAddresses.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapThisComputer.cs">
+      <DependentUpon>UIMapThisComputer.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapThisComputer.Designer.cs">
+      <DependentUpon>UIMapThisComputer.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapWorkgroup.cs">
+      <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapWorkgroup.Designer.cs">
+      <DependentUpon>UIMapWorkgroup.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapHelp.cs">
+      <DependentUpon>UIMapHelp.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapHelp.Designer.cs">
+      <DependentUpon>UIMapHelp.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapCamCredentialsWindow.cs">
+      <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapCamCredentialsWindow.Designer.cs">
+      <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\Details\UIMapDetailsWindow.cs">
+      <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\Details\UIMapDetailsWindow.Designer.cs">
+      <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapEula.cs">
+      <DependentUpon>UIMapEula.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapEula.Designer.cs">
+      <DependentUpon>UIMapEula.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapMain.cs">
+      <DependentUpon>UIMapMain.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapMain.Designer.cs">
+      <DependentUpon>UIMapMain.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapStartScanWizard.cs">
+      <DependentUpon>UIMapStartScanWizard.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\StartScanWizard\UIMapStartScanWizard.Designer.cs">
+      <DependentUpon>UIMapStartScanWizard.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapReports.cs">
+      <DependentUpon>UIMapReports.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapReports.Designer.cs">
+      <DependentUpon>UIMapReports.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapResultsWindow.cs">
+      <DependentUpon>UIMapResultsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapResultsWindow.Designer.cs">
+      <DependentUpon>UIMapResultsWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapScanCompletedWindow.cs">
+      <DependentUpon>UIMapScanCompletedWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapScanCompletedWindow.Designer.cs">
+      <DependentUpon>UIMapScanCompletedWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapStopScanWindow.cs">
+      <DependentUpon>UIMapStopScanWindow.uitest</DependentUpon>
+    </Compile>
+    <Compile Include="UIMaps\UIMapStopScanWindow.Designer.cs">
+      <DependentUpon>UIMapStopScanWindow.uitest</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Deployment.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Settings\Errors.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\General.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>General.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Settings\Reports.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\Results.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Results.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\ResultsValkyrie.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ResultsValkyrie.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\ScanCompleted.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ScanCompleted.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\Scanner.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Scanner.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\Staging.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Staging.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Settings\WaitingTime.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>WaitingTime.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="UIMaps\Details\UIMapValkyrieDetailsWindow.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapActiveDirectory.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapNetworkAddresses.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapWorkgroup.uitest" />
+    <None Include="UIMaps\UIMapHelp.uitest" />
+    <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
+    <None Include="UIMaps\Details\UIMapDetailsWindow.uitest" />
+    <None Include="UIMaps\UIMapEula.uitest" />
+    <None Include="UIMaps\UIMapMain.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapStartScanWizard.uitest" />
+    <None Include="UIMaps\UIMapReports.uitest" />
+    <None Include="UIMaps\UIMapResultsWindow.uitest" />
+    <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
+    <None Include="UIMaps\UIMapStopScanWindow.uitest" />
+    <None Include="UIMaps\StartScanWizard\UIMapThisComputer.uitest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PsSysinternalsTools\PsExec.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="PsSysinternalsTools\pskill.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Target Name="AfterBuild">
+    <Exec Condition="'$(Cnat)' != ''" Command="xcopy /Y &quot;$(Cnat)&quot;  &quot;$(OutDir)&quot;" />
+  </Target>
+</Project>

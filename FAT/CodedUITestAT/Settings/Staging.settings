@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CodedUITestAT.Settings" GeneratedClassName="Staging">
+  <Profiles />
+  <Settings>
+    <Setting Name="HostsFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Windows\System32\drivers\etc\hosts</Value>
+    </Setting>
+    <Setting Name="FlsProductionServerAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">fls.security.comodo.com</Value>
+    </Setting>
+    <Setting Name="ValkyrieProductionServerAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">valkyrie.comodo.com</Value>
+    </Setting>
+    <Setting Name="FlsDedicatedIpAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">91.209.196.27</Value>
+    </Setting>
+    <Setting Name="ValkyrieStagingIpAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">178.255.87.6</Value>
+    </Setting>
+    <Setting Name="CamKeyStaging" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">99ad2659-a30e-4dcb-9a75-b71750a35398</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

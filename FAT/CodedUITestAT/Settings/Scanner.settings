@@ -1,0 +1,29 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CodedUITestAT.Settings" GeneratedClassName="Scanner">
+  <Profiles />
+  <Settings>
+    <Setting Name="ServiceName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ScannerService.exe</Value>
+    </Setting>
+    <Setting Name="Directory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Windows\ComodoAptAtScanner</Value>
+    </Setting>
+    <Setting Name="ExeName64" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">cmdapt64.exe</Value>
+    </Setting>
+    <Setting Name="ExeName86" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">cmdapt86.exe</Value>
+    </Setting>
+    <Setting Name="TxtFiles" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;scan_status.txt&lt;/string&gt;
+  &lt;string&gt;tvl.txt&lt;/string&gt;
+  &lt;string&gt;trl.txt&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="StartupFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Users\{0}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CodedUITestAT.Settings" GeneratedClassName="Errors">
+  <Profiles />
+  <Settings>
+    <Setting Name="SpecifyPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please specify Password</Value>
+    </Setting>
+    <Setting Name="SpecifyNetworkAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please enter at least one network address</Value>
+    </Setting>
+    <Setting Name="SpecifyLogin" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please specify Login</Value>
+    </Setting>
+    <Setting Name="SpecifyTcpPort" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please specify TCP Port</Value>
+    </Setting>
+    <Setting Name="SpecifyUdpPort" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please specify UDP Port</Value>
+    </Setting>
+    <Setting Name="SpecifyWorkgroup" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please specify Workgroup</Value>
+    </Setting>
+    <Setting Name="SpecifyDomainName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please specify Domain Name</Value>
+    </Setting>
+    <Setting Name="WorkgroupNotFound" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">No Workgroups found</Value>
+    </Setting>
+    <Setting Name="DomainNotFound" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Domain '{0}' does not exist or could not be contacted under the specified credentials</Value>
+    </Setting>
+    <Setting Name="SpecifyComputer" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please select at least one item</Value>
+    </Setting>
+    <Setting Name="SpecifyDomainAdministrator" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Please specify Domain Administrator</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

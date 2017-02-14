@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FAT.Bootstrapper", "FAT.Bootstrapper\FAT.Bootstrapper.vcxproj", "{544313F0-D8AC-4440-8A49-83C8DC3B6433}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodedUITestFAT", "CodedUITestAT\CodedUITestFAT.csproj", "{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,12 +123,24 @@ Global
 		{544313F0-D8AC-4440-8A49-83C8DC3B6433}.Release|x64.Build.0 = Release|x64
 		{544313F0-D8AC-4440-8A49-83C8DC3B6433}.Release|x86.ActiveCfg = Release|Win32
 		{544313F0-D8AC-4440-8A49-83C8DC3B6433}.Release|x86.Build.0 = Release|Win32
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Debug|x64.Build.0 = Debug|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|x64.ActiveCfg = Release|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|x64.Build.0 = Release|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -151,5 +165,8 @@ Global
 		SccProjectUniqueName7 = FAT.Application\\FAT.Application.csproj
 		SccProjectName7 = FAT.Application
 		SccLocalPath7 = FAT.Application
+		SccProjectUniqueName8 = CodedUITestAT\\CodedUITestFAT.csproj
+		SccProjectName8 = CodedUITestAT
+		SccLocalPath8 = CodedUITestAT
 	EndGlobalSection
 EndGlobal
