@@ -16,9 +16,9 @@ namespace DDT.Core.Descent
 
         protected sealed class PackageComputerDescentResultFactory : IComputerDescentResultFactory
         {
-            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid)
+            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
             {
-                return new PackageComputerDescentResult(computer, operationUid);
+                return new PackageComputerDescentResult(computer, operationUid, timeStampProvider);
             }
         }
         public override void Changed(params ChangesTrackingItem[] items)

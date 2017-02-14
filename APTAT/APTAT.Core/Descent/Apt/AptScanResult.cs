@@ -9,7 +9,8 @@ namespace APTAT.Core.Descent.Apt
 {
     public class AptScanResult : ComputerDescentResult, IAptScanResultInternal
     {
-        public AptScanResult(IComputer computer, Guid operationUid) : base(computer, operationUid)
+        public AptScanResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider) 
+            : base(computer, operationUid, timeStampProvider)
         {
             ResultType = ScanResultType.InProgress;
         }
@@ -243,7 +244,7 @@ namespace APTAT.Core.Descent.Apt
             if (progress.IsCanceled)
             {
                 ScanStage = AptScanStage.OperationCanceled;
-                Modified = DateTime.UtcNow;
+                Modified = TimeStampProvider.GetCurretTimestamp();
             }
         }
 
@@ -256,19 +257,14 @@ namespace APTAT.Core.Descent.Apt
                 ScanStage = AptScanStage.OperationFailed;
             if (Completed && Succeeded && !IsCanceled)
                 ScanStage = AptScanStage.RemoteOperationCompleted;
-            if (Completed && !Succeeded && !IsCanceled)
-                ScanStage = AptScanStage.OperationFailed;
-            Modified = DateTime.UtcNow;
+            Modified = TimeStampProvider.GetCurretTimestamp();
         }
 
         public void SetCompleted()
         {
             if (ScanStage == AptScanStage.RemoteOperationCompleted)
                 ScanStage = AptScanStage.OperationCompleted;
-            Modified = DateTime.UtcNow;
+            Modified = TimeStampProvider.GetCurretTimestamp();
         }
-
     }
-
-    
 }

@@ -18,7 +18,7 @@ namespace DDT.Application.Models
         public string ErrorCode { get; set; }
         public string SystemMessage { get; set; }
         public int SystemCode { get; set; }
-        public DateTime ModifiedTime { get; set; }
+        public TimeSpan ModifiedTime { get; set; }
         public string PackageName { get; set; }
         public bool? Is64 { get; set; }
     }

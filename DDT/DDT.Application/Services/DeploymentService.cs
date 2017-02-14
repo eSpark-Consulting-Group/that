@@ -29,7 +29,7 @@ namespace DDT.Application.Services
             return new DeploymentStartedEventArgs(operationUid);
         }
 
-        public GetModifiedComputerResultsForOperationEventArgs GetModifiedComputerResultsForOperation(Guid operationUid, DateTime? lastUtcTime)
+        public GetModifiedComputerResultsForOperationEventArgs GetModifiedComputerResultsForOperation(Guid operationUid, TimeSpan? lastUtcTime)
         {
             IDescentQueryResult result = _descent.GetDescentResultsByOperationUid(operationUid);
             bool completed = result.Completed;

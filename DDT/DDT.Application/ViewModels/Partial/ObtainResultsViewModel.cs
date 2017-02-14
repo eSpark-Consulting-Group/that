@@ -20,7 +20,7 @@ namespace DDT.Application.ViewModels
         public ObservableCollection<DiscoveryTargetWrapper> Results { get; private set; }
 
         private DispatcherTimer _getResultsTimer;
-        private DateTime? _getResultsTimestamp;
+        private TimeSpan? _getResultsTimestamp;
         private Guid _operation;
 
         private string _keywordResults;
