@@ -10,15 +10,19 @@ using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.DeploymentCore.Descent
 {
-    public class DescentResult : IDescentQueryResult
+    public class DescentResult : IDescentQueryResult, ITimeStampProvider
     {
         private readonly ConcurrentDictionary<Guid, Action<TimeSpan>> _timeoutCallbacks
             = new ConcurrentDictionary<Guid, Action<TimeSpan>>();
         private readonly IDescentWatcher _descentWatcher;
 
+        private readonly Stopwatch _stopWatch = new Stopwatch();
+        private readonly Object _stopWatchSync = new Object();
+
         private readonly Dictionary<Guid, bool> _reportedByUid = new Dictionary<Guid, bool>();
 
         private readonly object _sync = new object();
+        //protected readonly object ResultUpdatingSync = new object();
 
         protected DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
             int totalComputersCount, IComputerDescentResultFactory computerDescentResultFactory = null)
@@ -34,14 +38,14 @@ namespace APTAT.DeploymentCore.Descent
                 descentWatcherFactory = new DescentWatcherFactory();
             if (computerDescentResultFactory == null)
                 computerDescentResultFactory = new ComputerDescentResultFactory();
-
+            _stopWatch.Start();
             _descentWatcher = descentWatcherFactory.CreateDescentWatcher(OnDescentTimeout);
 
             DevicesSourceDescription = devicesSourceDescription;
             OperationUid = Guid.NewGuid();
             foreach (var computer in computers)
             {
-                var result = computerDescentResultFactory.CreateComputerDescentResult(computer, OperationUid);
+                var result = computerDescentResultFactory.CreateComputerDescentResult(computer, OperationUid, this);
                 _reportedByUid[computer.Uid] = false;
                 ResultsByUid.AddOrUpdate(computer.Uid, result, (key, value) => value);
                 _descentWatcher.AddIdentity(computer.Uid);
@@ -68,14 +72,14 @@ namespace APTAT.DeploymentCore.Descent
 
         public interface IComputerDescentResultFactory
         {
-            IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid);
+            IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider);
         }
 
         protected sealed class ComputerDescentResultFactory : IComputerDescentResultFactory
         {
-            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid)
+            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
             {
-                return new ComputerDescentResult(computer, operationUid);
+                return new ComputerDescentResult(computer, operationUid, timeStampProvider);
             }
 
         }
@@ -96,26 +100,29 @@ namespace APTAT.DeploymentCore.Descent
         public virtual void OnDescendOperationEvent(bool ok, Guid computerUid, FormattedText errorMessage,
             FormattedText shortStatusMessage, string errorCode, int systemCode, string systemMessage, bool isCanceled = false)
         {
-            IOperationDescentResult operationResult;
             IComputerDescentResultInternal computerDescentResult;
-            if (!ResultsByUid.TryGetValue(computerUid, out computerDescentResult))
+            int inprogressCount;
+            //lock (ResultUpdatingSync)
             {
-                throw new InvalidOperationException("Computer result not found by UID " + computerUid);
-            }
+                IOperationDescentResult operationResult;
+                if (!ResultsByUid.TryGetValue(computerUid, out computerDescentResult))
+                {
+                    throw new InvalidOperationException("Computer result not found by UID " + computerUid);
+                }
 
-            if (!ok)
-            {
-                operationResult = new OperationDescentResult(false, errorMessage, shortStatusMessage,
-                    errorCode, systemMessage, systemCode, isCanceled);
-            }
-            else
-            {
-                operationResult = new OperationDescentResult(true, FormattedText.Empty, shortStatusMessage,
-                    String.Empty, String.Empty, 0, isCanceled);
-            }
+                if (!ok)
+                {
+                    operationResult = new OperationDescentResult(false, errorMessage, shortStatusMessage,
+                        errorCode, systemMessage, systemCode, isCanceled);
+                }
+                else
+                {
+                    operationResult = new OperationDescentResult(true, FormattedText.Empty, shortStatusMessage,
+                        String.Empty, String.Empty, 0, isCanceled);
+                }
 
-            var inprogressCount = ProcessResult(computerUid, operationResult);
-
+                inprogressCount = ProcessResult(computerUid, operationResult);
+            }
             LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
                 "Computer agent descent {1}{0} operation uid: {2}{0} computer: {3}{0} elapsed: {4}{0} error code: {5} ({6}){0} system message: {7}{0} remaining: {8}{0}",
                 Environment.NewLine, ok ? "SUCCEEDED" : "FAILED", OperationUid, computerDescentResult.Computer.Name, DateTime.UtcNow - StartTime, errorCode, systemCode, systemMessage, inprogressCount);
@@ -209,21 +216,25 @@ namespace APTAT.DeploymentCore.Descent
 
         public virtual void Changed(params ChangesTrackingItem[] items)
         {
-            foreach (var item in items)
+            //lock (ResultUpdatingSync)
             {
-                if (item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
+                foreach (var item in items)
                 {
-                    var progressItem = (IDescentProgressItem)item.ChangedItem;
-                    if (progressItem.OperationUid == OperationUid && ResultsByUid.ContainsKey(progressItem.ComputerUid))
+                    if (item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
                     {
-                        var originalResult = ResultsByUid[progressItem.ComputerUid];
-                        if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 ||
-                            originalResult.StatusMessage != progressItem.StatusMessage)
+                        var progressItem = (IDescentProgressItem) item.ChangedItem;
+                        if (progressItem.OperationUid == OperationUid &&
+                            ResultsByUid.ContainsKey(progressItem.ComputerUid))
                         {
+                            var originalResult = ResultsByUid[progressItem.ComputerUid];
+                            if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 ||
+                                originalResult.StatusMessage != progressItem.StatusMessage)
+                            {
 
-                            originalResult.UpdateStatus(progressItem);
+                                originalResult.UpdateStatus(progressItem);
+                            }
+                            _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                         }
-                        _descentWatcher.NotifyProgress(progressItem.ComputerUid);
                     }
                 }
             }
@@ -244,6 +255,14 @@ namespace APTAT.DeploymentCore.Descent
         }
 
         public virtual Guid SessionId { get { return OperationUid; } }
+
+        public TimeSpan GetCurretTimestamp()
+        {
+            lock (_stopWatchSync)
+            {
+                return _stopWatch.Elapsed;
+            }
+        }
 
         #endregion
     }

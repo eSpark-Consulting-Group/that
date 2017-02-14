@@ -201,7 +201,7 @@ namespace FAT.Application.Services
             App.Current.Dispatcher.BeginInvoke(a);
         }
 
-        public GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, DateTime? lastUtcTime,
+        public GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, TimeSpan? lastUtcTime,
             DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime)
         {
             var result = _manager.AggregatedScanResults;

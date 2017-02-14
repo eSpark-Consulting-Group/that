@@ -158,7 +158,7 @@ namespace FAT.Application.Services
         void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options);
 
-        GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, DateTime? lastUtcTime,
+        GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, TimeSpan? lastUtcTime,
             DateTime? lastFlcUtcTime, DateTime? lastValkyrieTime);
 
         Task OnAppClosing();

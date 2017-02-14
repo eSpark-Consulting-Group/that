@@ -37,17 +37,18 @@ namespace APTAT.DeploymentCore.UnitTests.Descent
             Mock.Arrange(() => Computer2.Name).Returns("comp2");
             Mock.Arrange(() => Computer3.Name).Returns("comp3");
             _computerDescentResultFactory = Mock.Create<DescentResult.IComputerDescentResultFactory>(Behavior.Strict);
-            Mock.Arrange(() => _computerDescentResultFactory.CreateComputerDescentResult(Arg.IsAny<IComputer>(), Arg.AnyGuid))
-                .Returns((IComputer c) =>
+            Mock.Arrange(() => _computerDescentResultFactory.CreateComputerDescentResult(Arg.IsAny<IComputer>(), Arg.AnyGuid,
+                Arg.IsAny<ITimeStampProvider>()))
+                .Returns((IComputer c, Guid operatoinUid, ITimeStampProvider timeStampProvider) =>
                 {
                     var r = Mock.Create<IComputerDescentResultInternal>(Behavior.Strict);
-                    var modified = DateTime.UtcNow;
+                    TimeSpan modified = TimeSpan.Zero;
                     var completed = false;
                     var succeeded = false;
                     Mock.Arrange(() => r.UpdateStatus(Arg.IsAny<IOperationDescentResult>()))
                         .DoInstead((IOperationDescentResult result) =>
                         {
-                            modified = DateTime.UtcNow;
+                            modified = timeStampProvider.GetCurretTimestamp();
                             completed = true;
                             succeeded = result.Succeeded;
                         }).MustBeCalled();

@@ -43,7 +43,7 @@ namespace FAT.Application.Models
         private bool _groupByFiles;
         private bool _groupByComputers;
 
-        private DateTime? _lastModifiesComputerDate = null;
+        private TimeSpan? _lastModifiesComputerDate = null;
         private DateTime? _lastModifiesFlsVerdictDate = null;
         private DateTime? _lastModifiesValkyrieVerdictDate = null;
 

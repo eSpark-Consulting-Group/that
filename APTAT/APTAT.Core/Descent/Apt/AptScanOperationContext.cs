@@ -10,7 +10,6 @@ namespace APTAT.Core.Descent.Apt
 {
     public class AptScanOperationContext : DescentResult, IAptScanOperationContext
     {
-        private readonly Guid _sessionId = Guid.NewGuid();
 
         public AptScanOperationContext(IEnumerable<IComputer> computers, int totalTargetCount,
             IDevicesSourceDescription devicesSourceDescription)
@@ -19,11 +18,12 @@ namespace APTAT.Core.Descent.Apt
         }
         public DateTime Started { get { return StartTime; } }
 
-        private readonly object _sync = new object();
-
         public override void Changed(params ChangesTrackingItem[] items)
         {
-            base.Changed(items);
+            //lock (ResultUpdatingSync)
+            {
+                base.Changed(items);
+            }
             if (items == null) return;
             OnOperationProgressChanged(new AptOperationProgressChangedEventArgs()
             {
@@ -36,17 +36,15 @@ namespace APTAT.Core.Descent.Apt
         protected override void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)
         {
             base.OnComputerDescentCompleted(computerDescentResult);
-            if (computerDescentResult is IAptScanResultInternal)
+            //lock (ResultUpdatingSync)
             {
-                var aptResult = (IAptScanResultInternal) computerDescentResult;
-                if (aptResult.ScanStage == AptScanStage.RemoteOperationCompleted)
-                    aptResult.SetCompleted();
+                if (computerDescentResult is IAptScanResultInternal)
+                {
+                    var aptResult = (IAptScanResultInternal) computerDescentResult;
+                    if (aptResult.ScanStage == AptScanStage.RemoteOperationCompleted)
+                        aptResult.SetCompleted();
+                }
             }
-        }
-
-        public override Guid SessionId
-        {
-            get { return _sessionId; }
         }
 
         public int SucceededTargetsCount { get;  set; }
@@ -90,9 +88,9 @@ namespace APTAT.Core.Descent.Apt
 
         private sealed class AptComputerDescentResultFactory : IComputerDescentResultFactory
         {
-            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid)
+            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
             {
-                return new AptScanResult(computer, operationUid);
+                return new AptScanResult(computer, operationUid, timeStampProvider);
             }
         }
     }

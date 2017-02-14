@@ -6,10 +6,11 @@ namespace APTAT.DeploymentCore.Descent
 {
     public class ComputerDescentResult : IComputerDescentResultInternal
     {
+        protected readonly ITimeStampProvider TimeStampProvider;
         public Guid TargetUid { get; }
         public IComputer Computer { get; }
         public Guid OperationUid { get; }
-        public ComputerDescentResult(IComputer computer, Guid operationUid)
+        public ComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
         {
             Computer = computer;
             StatusMessage = FormattedText.Empty;
@@ -19,7 +20,8 @@ namespace APTAT.DeploymentCore.Descent
             SystemMessage = String.Empty;
             SystemCode = 0;
             TargetUid = computer.Uid;
-            Modified = DateTime.UtcNow;
+            TimeStampProvider = timeStampProvider;
+            Modified = TimeStampProvider?.GetCurretTimestamp()??TimeSpan.Zero;
         }
 
 		public virtual void UpdateStatus(IOperationDescentResult result)			
@@ -33,7 +35,7 @@ namespace APTAT.DeploymentCore.Descent
 		    IsCanceled = result.IsCanceled;
             Percentage = 100;
             Completed = true;
-            Modified = DateTime.UtcNow;
+            Modified = TimeStampProvider.GetCurretTimestamp();
         }
 
         public virtual void UpdateStatus(IDescentProgressItem progress)
@@ -58,7 +60,7 @@ namespace APTAT.DeploymentCore.Descent
             if (update)
             {
                 Completed = false;
-                Modified = DateTime.UtcNow;
+                Modified = TimeStampProvider.GetCurretTimestamp();
             }
 		}
 
@@ -73,17 +75,17 @@ namespace APTAT.DeploymentCore.Descent
 			ShortStatusMessage = new FormattedText(new ResourceText(shortMessage, shortMessage));
 			StatusMessage = new FormattedText(new ResourceText(detailedMessage, detailedMessage));
 			SystemMessage = detailedMessage;
-            Modified = DateTime.UtcNow;
+            Modified = TimeStampProvider.GetCurretTimestamp();
         }
 
         public void SetSystemKind(SystemKind systemKind)
         {
             Computer.SystemKind = systemKind;
-            Modified = DateTime.UtcNow;
+            Modified = TimeStampProvider.GetCurretTimestamp();
         }
 
         public double Percentage { get; private set; }
-        public DateTime Modified { get; protected set; }
+        public TimeSpan Modified { get; protected set; }
 		public bool Completed { get; private set; }
 		public bool Succeeded { get; private set; }
 		public FormattedText StatusMessage { get; private set; }

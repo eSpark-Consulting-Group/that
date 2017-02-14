@@ -86,6 +86,7 @@
     <Compile Include="Descent\IDescentWatcher.cs" />
     <Compile Include="Descent\IOperationDescentResult.cs" />
     <Compile Include="Descent\IScanner.cs" />
+    <Compile Include="Descent\ITimeStampProvider.cs" />
     <Compile Include="Descent\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Descent\OperationDescentResult.cs" />
     <Compile Include="Descent\OperationProgressChangedEventArgs.cs" />

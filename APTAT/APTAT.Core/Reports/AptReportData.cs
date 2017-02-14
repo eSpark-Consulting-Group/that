@@ -228,7 +228,7 @@ namespace APTAT.Core.Reports
                 List<IAptScanResult> scanResults = new List<IAptScanResult>();
                 foreach (var t in targets)
                 {
-                    var scanResult = new AptScanResult(t.Computer, Guid.Empty)
+                    var scanResult = new AptScanResult(t.Computer, Guid.Empty, null)
                     {
                         MalwareFilesCount = t.MalwareFilesCount,
                         UnknownFilesCount = t.UnknownFilesCount,
