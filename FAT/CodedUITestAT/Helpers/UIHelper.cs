@@ -135,7 +135,7 @@ namespace CodedUITestAT
         /// <summary> Determines whether a given UI control is cliackable. </summary>
         /// <param name="control">Set a UI control.</param>
         /// <returns>True, if the UI control is clickable.</returns>
-        internal static bool IsClickable(UITestControl control)
+        internal static bool IsClickable(this UITestControl control)
         {
             Point point;
             return control.TryGetClickablePoint(out point);

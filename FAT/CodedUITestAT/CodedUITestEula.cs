@@ -76,10 +76,11 @@ namespace CodedUITestAT
 
             SysHelper.StartApplication(DataHelper.GetEndpoint());
             UIMapEula.ClickIAcceptButton();
-            if (UIHelper.IsClickable(useHelp.HelpButton())) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
+            if (useHelp.HelpButton().IsClickable()) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
             else Assert.Fail("The main application window is not available after clicking I Accept button!");
 
             UIMapMain.ClickCloseButton();
+            if (YesDialogButton().IsClickable()) UIMapStopScanWindow.ClickYesButton();
             SysHelper.StartApplication(DataHelper.GetEndpoint());
             UIMapEula.ClickLicenseAgreementLink();
             UIMapEula.AssertEulaDocument();
@@ -92,7 +93,7 @@ namespace CodedUITestAT
             SysHelper.StartApplication(DataHelper.GetEndpoint());
             UIMapEula.ClickLicenseAgreementLink();
             UIMapEula.ClickIAcceptButton();
-            if (UIHelper.IsClickable(useHelp.HelpButton())) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
+            if (useHelp.HelpButton().IsClickable()) TestContext.WriteLine("The main application window is available after clicking I Accept button.");
             else Assert.Fail("The main application window is not available after clicking I Accept button!");
         }
 

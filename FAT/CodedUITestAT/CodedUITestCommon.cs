@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
+using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 
 namespace CodedUITestAT
 {
@@ -63,6 +64,21 @@ namespace CodedUITestAT
         }
         private UIMapStartScanWizard mapStartScanWizard;
 
+        /// <summary> UIMap for Stop Scan window, UIMapStopScanWindow.uitest. </summary>
+        public UIMapStopScanWindow UIMapStopScanWindow
+        {
+            get
+            {
+                if ((this.mapStopScanWindow == null))
+                {
+                    this.mapStopScanWindow = new UIMapStopScanWindow();
+                }
+
+                return this.mapStopScanWindow;
+            }
+        }
+        private UIMapStopScanWindow mapStopScanWindow;
+
         #endregion
 
         #region Control methods
@@ -91,6 +107,15 @@ namespace CodedUITestAT
         internal WpfText MaliciousFilesCounterTextBlock()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text1;
+        }
+
+        #endregion
+
+        #region Stop Scan window
+
+        internal WpfButton YesDialogButton()
+        {
+            return UIMapStopScanWindow.UIForensicAnalysisToolWindow.UIYesButton;
         }
 
         #endregion

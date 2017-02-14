@@ -113,11 +113,11 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         public void ClickCloseButton()
         {
             #region Variable Declarations
-            WpfButton uICloseButtonButton = this.UIUnknownFileHunterWindow.UICloseButtonButton;
+            WpfButton uICloseButtonButton = this.UIForensicAnalysisToolWindow.UICloseButtonButton;
             #endregion
 
             // Click 'CloseButton' button
-            Mouse.Click(uICloseButtonButton, new Point(13, 10));
+            Mouse.Click(uICloseButtonButton, new Point(6, 10));
         }
         
         /// <summary>
@@ -433,6 +433,18 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIUnknownFileHunterWindow1;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -459,6 +471,8 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -1463,6 +1477,42 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         #region Fields
         private WpfEdit mUISearchWatermarkTextBEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UICloseButtonButton
+        {
+            get
+            {
+                if ((this.mUICloseButtonButton == null))
+                {
+                    this.mUICloseButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICloseButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CloseButton";
+                    this.mUICloseButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICloseButtonButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUICloseButtonButton;
         #endregion
     }
 }

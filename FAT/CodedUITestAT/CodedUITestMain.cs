@@ -134,21 +134,6 @@ namespace CodedUITestAT
         }
         private UIMapValkyrieDetailsWindow mapValkyrieDetailsWindow;
 
-        /// <summary> UIMap for Stop Scan window, UIMapStopScanWindow.uitest. </summary>
-        public UIMapStopScanWindow UIMapStopScanWindow
-        {
-            get
-            {
-                if ((this.mapStopScanWindow == null))
-                {
-                    this.mapStopScanWindow = new UIMapStopScanWindow();
-                }
-
-                return this.mapStopScanWindow;
-            }
-        }
-        private UIMapStopScanWindow mapStopScanWindow;
-
         #endregion
         
         #region Initialize and cleanup
@@ -350,15 +335,6 @@ namespace CodedUITestAT
         private WpfButton CloseValkyrieDetailsButton()
         {
             return UIMapValkyrieDetailsWindow.UIUnknownFileHunterWindow.UIValkyrieDetailsWindoCustom.UICloseButton;
-        }
-
-        #endregion
-
-        #region Stop Scan window
-
-        private WpfButton YesDialogButton()
-        {
-            return UIMapStopScanWindow.UIUnknownFileHunter0scWindow.UIYesButton;
         }
 
         #endregion
