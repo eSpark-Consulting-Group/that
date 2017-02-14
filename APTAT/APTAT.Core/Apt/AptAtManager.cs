@@ -135,10 +135,13 @@ namespace APTAT.Core.Apt
                             _filesShouldSendToValkyrieCount--;
                         }
                     }
-                    valkyrieAnalysisResultInternal.Add(fileResult.Sha1, fileResult);
+                    if (file != null || !e.IsUpdate)
+                    {
+                        valkyrieAnalysisResultInternal.Add(fileResult.Sha1, fileResult);
 
-                    if (_latestValkyrieVerdictUpdate == null || fileResult.VerdictModified > _latestValkyrieVerdictUpdate.Value)
-                        _latestValkyrieVerdictUpdate = fileResult.VerdictModified;
+                        if (_latestValkyrieVerdictUpdate == null || fileResult.VerdictModified > _latestValkyrieVerdictUpdate.Value)
+                            _latestValkyrieVerdictUpdate = fileResult.VerdictModified;
+                    }
                 }
                 if (valkyrieAnalysisResult.Any())
                     ValkyrieOperationUid = Guid.NewGuid();
@@ -172,7 +175,7 @@ namespace APTAT.Core.Apt
             Dictionary<string, FileResult> fileResults = new Dictionary<string, FileResult>(StringComparer.OrdinalIgnoreCase);
             var valkyrieAnalysisResults = valkyrieResult as ValkyrieAnalysisResult[] ?? valkyrieResult.ToArray();
             foreach (var scanResult in scanResults)
-            {
+            { 
                 foreach (var badFile in scanResult.BadFiles)
                 {
                     FileResult found;
@@ -233,7 +236,7 @@ namespace APTAT.Core.Apt
         {
             var resultsUpdated = false;
             var verdictUpdatedAny = false;
-            var addToAnalyze = new List<IFlsResult>();
+            var addToAnalyze = new HashSet<IFlsResult>();
             var verdictUpdated = new List<IAptVerdictContext>();
             var newUnknownFiles = new List<IFlsResult>();
             lock (_flsHashResults)
@@ -244,11 +247,12 @@ namespace APTAT.Core.Apt
                 {
                     if (!_flsHashResults.ContainsKey(r.Sha1))
                     {
-                        _flsHashResults[r.Sha1] = new AptVerdictContext(r.Sha1, r.Cloud);
-                        if (_distinctHelper.ShouldSendToValkyrie(r))
-                            newUnknownFiles.Add(r);
+                        var verdictContext = new AptVerdictContext(r.Sha1, r.Cloud);
+                        _flsHashResults[r.Sha1] = verdictContext;
+                        if (_distinctHelper.ShouldSendToValkyrie(verdictContext))
+                            newUnknownFiles.Add(verdictContext);
                         if (r.IsNotAnalyzed())
-                            addToAnalyze.Add(r);
+                            addToAnalyze.Add(verdictContext);
                     }
                     else
                     {
@@ -267,6 +271,7 @@ namespace APTAT.Core.Apt
                             item.Cloud = r.Cloud;
                             var clone = item.Clone();
                             verdictUpdated.Add(clone);
+                            addToAnalyze.Remove(item);
                         }
                     }
                 }
@@ -292,7 +297,8 @@ namespace APTAT.Core.Apt
                 {
                     foreach (var unknownFile in newUnknownFiles)
                     {
-                        dictToValkyrie.Add(unknownFile.Sha1, unknownFile.Cloud);
+                        if(!dictToValkyrie.ContainsKey(unknownFile.Sha1))
+                            dictToValkyrie.Add(unknownFile.Sha1, unknownFile.Cloud);
                     }
                     List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dictToValkyrie);
                     if (filesToAnalyze.Any())
@@ -431,6 +437,7 @@ namespace APTAT.Core.Apt
 
                 _flsManager.Cancel();
                 _valkyrieClient.AnalyzeAsyncCancel();
+                _isValkyrieScanEnded = true;
                 lock (_flsHashResults)
                 {
                     _flsHashResults.Clear();
@@ -450,7 +457,7 @@ namespace APTAT.Core.Apt
                 var results = GetResultsEnumerator();
                 var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
                 List<ValkyrieFileInfo> distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
-                 _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length,
+                _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length,
                     proxyCredential, productName);
             }
         }

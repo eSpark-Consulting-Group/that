@@ -17,7 +17,6 @@ namespace APTAT.Valkyrie
 {
     public sealed class ValkyrieClient : IValkyrieClient
     {
-        
         private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
@@ -127,8 +126,14 @@ namespace APTAT.Valkyrie
         private void ProgressNotifyTimerCallback(object state)
         {
             _progressNotifyTimer?.Change(Timeout.Infinite, Timeout.Infinite);
-            OnAnalyzeProgressChanged(_analysedItems);
-            if (_isMainScanFinished && _analysedItems.Count == 0)  return;
+            if (_isMainScanFinished && _analysedItems.Count == 0)
+            {
+                OnAnalyzeProgressChanged(_pendingItemsResolved, true);
+            }
+            else
+            {
+                OnAnalyzeProgressChanged(_analysedItems);
+            }
             _progressNotifyTimer?.Change(1000, Timeout.Infinite);
         }
 
@@ -161,7 +166,6 @@ namespace APTAT.Valkyrie
             if (!waitNextInterval)
             {
                 CheckNewStatusesOnValkyrie();
-                OnAnalyzeProgressChanged(_pendingItemsResolved, true);
             }
             var resetTimerImmediately = false;
             if (_cancellationTokenSource.IsCancellationRequested)
@@ -176,6 +180,8 @@ namespace APTAT.Valkyrie
                     if (_automaticAnalyseInProgressByHash.Any())
                         resetTimerImmediately = true;
                 }
+                if (!resetTimerImmediately)
+                    Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Valkyrie queue is Empty");
             }
             _checkStatusesTimer?.Change(resetTimerImmediately? 100 : _changeTrakingIntervalInMs, Timeout.Infinite);
         }
@@ -189,7 +195,7 @@ namespace APTAT.Valkyrie
                 filesToAnalyze = _lookupContexts.ToList();
                 _lookupContexts.Clear();
             }
-            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult, false);
+            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult);
             List<ValkyrieAnalyseOperationContext> filesToCheckAnalysisResult;
             lock (_automaticAnalyseSync)
             {
@@ -200,18 +206,19 @@ namespace APTAT.Valkyrie
             {
                 CheckAnalysisResultResponse automaticAnalysisResponse = null;
                 Exception ex = null;
-                try
-                {
-                    automaticAnalysisResponse =
-                        _provider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: context.AnalysisId,
-                                        apiKey: _apiKey));
-                }
-                catch (Exception)
-                {
-                    Trace.WriteLine(
-                        $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : CheckAnalysisResult failed = {context.HashSha1} Reason : {ex.Message}" +
-                        $" {ex.InnerException?.Message ?? string.Empty}");
-                }
+                if(!cancellationToken.IsCancellationRequested)
+                    try
+                    {
+                        automaticAnalysisResponse =
+                            _provider.CheckAnalysisResult(new CheckAnalysisResultRequest(analysisId: context.AnalysisId,
+                                            apiKey: _apiKey));
+                    }
+                    catch (Exception)
+                    {
+                        Trace.WriteLine(
+                            $"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : CheckAnalysisResult failed = {context.HashSha1} Reason : {ex.Message}" +
+                            $" {ex.InnerException?.Message ?? string.Empty}");
+                    }
                 MergeAutomaticAnalysisResult(automaticAnalysisResponse, context, cancellationToken);
             }
         }
@@ -244,7 +251,12 @@ namespace APTAT.Valkyrie
         private void MergeAutomaticAnalysisResult(CheckAnalysisResultResponse result, ValkyrieAnalyseOperationContext fileInfo,
             CancellationToken cancellationToken)
         {
-            if (result != null && result.ReturnCode == ErrorCodesEnum.AnalysisNotFound)
+            if (cancellationToken.IsCancellationRequested)
+            {
+                _pendingItemsResolved.TryAdd(result.SHA1,
+                    CancelOperation(fileInfo.ValkyrieFileInfo.GetFullPath(), fileInfo.HashSha1));
+            }
+            else if (result != null && result.ReturnCode == ErrorCodesEnum.AnalysisNotFound)
             {
                 AddLookupContext(fileInfo.ValkyrieFileInfo, ValkyrieVerdict.NotAnalyzed, cancellationToken);
             }
@@ -611,7 +623,7 @@ namespace APTAT.Valkyrie
                 _login = login;
                 _password = password;
                 OnAnalyzeStarted();
-                
+
                 StartAndFinalizeScanResponse startScanResult = null;
                 lock (_aptScanIdLock)
                 {
@@ -627,11 +639,11 @@ namespace APTAT.Valkyrie
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
                     throw new InvalidOperationException(startScanResult.ResultDescription);
                 }
+                _progressNotifyTimer.Change(1000, Timeout.Infinite);
                 if (!filesToAnalyze.Any()) return;
                 
                 if (startScanResult != null)
                     Thread.Sleep(2000);
-                _progressNotifyTimer.Change(1000, Timeout.Infinite);
                 SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, AddResult);
             }, TaskCreationOptions.None, cancellationToken)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
@@ -644,7 +656,6 @@ namespace APTAT.Valkyrie
             _checkStatusesTimer?.Dispose();
             _checkStatusesTimer = null;
             _cancellationTokenSource?.Dispose();
-            _cancellationTokenSource = null;
         }
 
         public void SetBaseUri(Uri uri)

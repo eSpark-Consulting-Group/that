@@ -202,6 +202,7 @@ namespace APTAT.DeploymentCore.Descent
         protected virtual void OnDescentCompleted()
         {
             DescentCompleted?.Invoke(this,this);
+            _stopWatch.Stop();
         }
 
         protected virtual void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)

@@ -662,17 +662,20 @@ namespace FAT.Application.Models
                         }
                     }
 
+                    _lastModifiesComputerDate = null;
                     _aptService.BeginScan(items.Select(_ => _.DeploymentTarget).ToArray(),
                         _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
                 }
                 else
                 {
+                    _lastModifiesComputerDate = null;
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
                     _aptService.BeginScan(SelectedDiscoveryResults.ToArray(),
                         _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
                 }
                 if (!IsScanInProgress.GetValueOrDefault())
                 {
+                    _lastModifiesComputerDate = null;
                     IsScanInProgress = true;
                     IsScanCancelled = false;
                     IsReportEnabled = false;
@@ -889,6 +892,7 @@ namespace FAT.Application.Models
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password);
                 }
 
+                _lastModifiesComputerDate = null;
                 _aptService.BeginScan(e.Items, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             }
@@ -955,8 +959,7 @@ namespace FAT.Application.Models
                 {
                     if (scanProgress != null)
                     {
-                        infoItem.ScanStage = scanProgress.ScanStage;
-                        if (infoItem.ScanStage == ScanStage.OperationCompleted)
+                        if (scanProgress.ScanStage == ScanStage.OperationCompleted)
                         {
                             if (scanProgress.BadFiles.Any() && infoItem.Items.Count == 0)
                             {

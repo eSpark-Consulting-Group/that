@@ -8,16 +8,18 @@ namespace APTAT.Common
     {
         public static void Trace(TraceEventType severity, string format, params object[] args)
         {
-            Trace(Assembly.GetCallingAssembly(), severity, TraceCategory.General, Guid.Empty, null, format, args);
+            Trace(severity, TraceCategory.General, Guid.Empty, null, format, args);
         }
 
         public static void Trace(TraceEventType severity, TraceCategory traceCategory, string format, params object[] args)
         {
-            Trace(Assembly.GetCallingAssembly(), severity, traceCategory, Guid.Empty, null, format, args);
+            Trace(severity, traceCategory, Guid.Empty, null, format, args);
         }
 
-        public static void Trace(Assembly callingAssembly, TraceEventType severity, TraceCategory traceCategory, Guid activityId, Guid? relatedActivityId, string format, params object[] args)
+        public static void Trace(TraceEventType severity, TraceCategory traceCategory, Guid activityId, Guid? relatedActivityId, string format, params object[] args)
         {
+            System.Diagnostics.Trace.Write($"{DateTime.UtcNow} : ");
+                
             switch (severity)
             {
                 case TraceEventType.Critical:
