@@ -1730,7 +1730,7 @@ namespace CodedUITestAT
             AssertErrorText(String.Format(Settings.Errors.Default.DomainNotFound, nonExistentDomainName), TestContext);
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void VerifyThreatValkyrieDetailsTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -1912,7 +1912,7 @@ namespace CodedUITestAT
             UIMapResultsWindow.ClickClearFilterButton();
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void QuickScanOfIpRangeTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -1955,7 +1955,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scan results' screen.", unknownFile.Location));
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void QuickScanOfSubnetTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
@@ -1998,7 +1998,7 @@ namespace CodedUITestAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scan results' screen.", unknownFile.Location));
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongTestTimeout)]
         public void CheckValkyrieAnalysisResultsPanelTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();

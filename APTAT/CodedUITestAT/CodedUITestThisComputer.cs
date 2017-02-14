@@ -346,7 +346,7 @@ namespace CodedUITestAT
             File.Delete(unknownFileFull.Location);
         }
 
-        [TestMethod]
+        [TestMethod, Timeout(DataHelper.LongestTestTimeout)]
         public void FullScanOfThisComputerTest()
         {
             Computer endpoint = new Computer();
