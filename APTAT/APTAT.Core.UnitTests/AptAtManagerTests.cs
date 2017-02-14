@@ -732,7 +732,7 @@ namespace APTAT.Core.UnitTests
             duplicatedSha1Collection.AddRange(ModuleCollectionFactory.GetMockModules(CloudVerdict.FirstSeen));
 
             //Mock.Arrange(() => scanResult.Files).Returns(() => modules.ToArray());
-            Mock.Arrange(() => scanResult.GetUnknownFiles()).Returns(() => duplicatedSha1Collection.ToArray());
+//            Mock.Arrange(() => scanResult.UnknownFiles).Returns(() => duplicatedSha1Collection.ToArray());
 
             var computer1 = Mock.Create<IComputer>();
             Mock.Arrange(() => computer1.IPAddress).Returns(() => "10.100.65.102");
@@ -741,7 +741,7 @@ namespace APTAT.Core.UnitTests
 
             var scanResult2 = Mock.Create<IAptScanResult>(Behavior.Strict);
             var modules2 = ModuleCollectionFactory.GetMockModules(CloudVerdict.FirstSeen);
-            Mock.Arrange(() => scanResult2.GetUnknownFiles()).Returns(() => modules2.ToArray());
+ //           Mock.Arrange(() => scanResult2.UnknownFiles).Returns(() => modules2.ToArray());
             Mock.Arrange(() => scanResult2.Files).Returns(() => modules2.ToArray());
 
             var computer2 = Mock.Create<IComputer>();

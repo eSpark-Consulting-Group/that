@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using APTAT.Core.Descent.Apt;
 using System.Linq;
+using APTAT.Core.Reports;
 
 namespace APTAT.Core
 {

@@ -24,24 +24,19 @@ namespace APTAT.Core.Descent.Apt
                 
             }
         }
-        
+
+        public string OrganizationUnit => Computer?.OrganizationUnit;
+        public string HostName => Computer?.Name;
+
+        public string IPAddress => Computer?.IPAddress;
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
         public int SafeFilesCount { get; set; }
         public AptScanStage ScanStage { get; set; }
 
-        private int _malwareCount;
-        public int MalwareFilesCount {
-            get            
-            {
-                return _malwareCount;
-            }
-            set
-            {
-                _malwareCount = value;
-            }
-        }
+        public int MalwareFilesCount { get; set; }
+
         public int EmptyFilesCount { get; set; }
 
         public int LookupInProgressFilesCount => FailedToAnalyzeFilesCount + NoVerdictFilesCount;
@@ -104,6 +99,12 @@ namespace APTAT.Core.Descent.Apt
         public string ResultErrorText { get; set; }
         public ScanResultType ResultType { get; set; }
 
+
+        public int BadFilesCount
+        {
+            get { return UnknownFilesCount + MalwareFilesCount; }
+        }
+
         public TargetVerdict TargetVerdict
         {
             get
@@ -137,6 +138,43 @@ namespace APTAT.Core.Descent.Apt
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }
+        }
+
+        private ScanModule[] ScanModules
+        {
+            get
+            {
+                if (Files == null) return new ScanModule[] {};
+                var q = from module in Files
+                        where !module.Sha1.StartsWith("0000000000000000000000000000000000000000")
+                        select new ScanModule()
+                        {
+                            Sha1 = module.Sha1,
+                            Accessed = module.Accessed,
+                            AccessedInternal = module.AccessedInternal,
+                            Attributes = module.Attributes,
+                            Cloud = module.Cloud,
+                            CloudDate = module.CloudDate,
+                            Copyright = module.Copyright,
+                            Created = module.Created,
+                            CreatedInternal = module.CreatedInternal,
+                            Description = module.Description,
+                            FileAge = module.FileAge,
+                            FileAttributes = module.FileAttributes,
+                            FileSizeFormatted = module.FileSizeFormatted,
+                            Id = module.Id,
+                            IsBad = module.IsBad,
+                            IsUnknownOrFailed = module.IsUnknownOrFailed,
+                            Modified = module.Modified,
+                            ModifiedInternal = module.ModifiedInternal,
+                            Path = module.Path,
+                            Product = module.Product,
+                            Signer = module.Signer,
+                            Size = module.Size,
+                            Version = module.Version
+                        };
+                return q.ToArray();
             }
         }
 
@@ -175,25 +213,25 @@ namespace APTAT.Core.Descent.Apt
             return (from file in Files where file.Cloud == cloudVerdict select file).ToArray();
         }
 
-        public IModule[] GetUnknownFiles()
-        {
-            return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
-        }
+        //public IModule[] GetUnknownFiles()
+        //{
+        //    return (from file in Files where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
+        //}
 
 
-        public IModule[] GetLookupInProgressFiles()
-        {
-            return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
-        }
-        public IModule[] GetFailedToAnalyzeFiles()
-        {            
-            return (from file in Files where  file.Cloud == CloudVerdict.FailedToAnalyze select file).ToArray();
-        }
+        //public IModule[] GetLookupInProgressFiles()
+        //{
+        //    return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
+        //}
+        //public IModule[] GetFailedToAnalyzeFiles()
+        //{            
+        //    return (from file in Files where  file.Cloud == CloudVerdict.FailedToAnalyze select file).ToArray();
+        //}
 
-        public IModule[] GetNoVerdictFiles()
-        {            
-            return (from file in Files where file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
-        }
+        //public IModule[] GetNoVerdictFiles()
+        //{            
+        //    return (from file in Files where file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
+        //}
 
         public IModule[] GetBadFiles()
         {
@@ -266,5 +304,43 @@ namespace APTAT.Core.Descent.Apt
                 ScanStage = AptScanStage.OperationCompleted;
             Modified = TimeStampProvider.GetCurretTimestamp();
         }
+
+        public ScanModule[] MalwareFiles
+        {
+            get
+            {
+                return (from file in ScanModules where file.Cloud == CloudVerdict.Malware select file).ToArray();
+            }
+        }
+        public ScanModule[] UnknownFiles
+        {
+            get
+            {
+                return (from file in ScanModules where file.Cloud == CloudVerdict.Unknown || file.Cloud == CloudVerdict.FirstSeen select file).ToArray();
+            }
+        }
+
+        public ScanModule[] LookupInProgressFiles
+        {
+            get
+            {
+                return (from file in ScanModules where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
+            }
+        }
+
+        public IModule[] PendingFiles
+        {
+            get
+            {
+                return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
+            }
+        }
+
+        public DetailedBadFile[] UknownFilesValkyrie { get; set; }
+        public DetailedBadFile[] MaliciousFilesValkyrie { get; internal set; }
+        public DetailedBadFile[] FailedToAnalyzeFilesValkyrie { get; internal set; }
+        public DetailedBadFile[] PendingAnalysisFilesValkyrie { get; internal set; }
     }
+
+
 }
