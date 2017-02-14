@@ -59,7 +59,7 @@ namespace CodedUITestAT
         internal static string GetWorkingFolder()
         {
             return Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
-            //return @"C:\CNAT";
+            //return @"C:\FAT";
         }
 
         /// <summary> Gets a root directory of endpoint machine in the environment from a local environment variable. </summary>

@@ -18,9 +18,9 @@ set ServerRoot=C
 
 set EndpointRoot=%ServerRoot%
 
-set TargetDir=%ServerRoot%:\UFH
+set TargetDir=%ServerRoot%:\FAT
 
-set ProductExeName=UnknownFileHunter.exe
+set ProductExeName=ForensicAnalysisTool.exe
 
 set DataSource=AutotestsData\AT
 

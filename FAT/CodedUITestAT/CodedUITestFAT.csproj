@@ -326,6 +326,6 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <Exec Condition="'$(Cnat)' != ''" Command="xcopy /Y &quot;$(Cnat)&quot;  &quot;$(OutDir)&quot;" />
+    <Exec Condition="'$(Fat)' != ''" Command="xcopy /Y &quot;$(Fat)&quot;  &quot;$(OutDir)&quot;" />
   </Target>
 </Project>

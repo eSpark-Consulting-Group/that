@@ -30,16 +30,42 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
     {
         
         /// <summary>
+        /// ClickCancelButton
+        /// </summary>
+        public void ClickCancelButton()
+        {
+            #region Variable Declarations
+            WpfButton uICancelButton = this.UIForensicAnalysisToolWindow.UICancelButton;
+            #endregion
+
+            // Click 'Cancel' button
+            Mouse.Click(uICancelButton, new Point(80, 12));
+        }
+        
+        /// <summary>
         /// ClickIAcceptButton
         /// </summary>
         public void ClickIAcceptButton()
         {
             #region Variable Declarations
-            WpfButton uIIAcceptButton = this.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIIAcceptButton;
+            WpfButton uIIACCEPTButton = this.UIForensicAnalysisToolWindow.UIIACCEPTButton;
             #endregion
 
-            // Click 'I Accept' button
-            Mouse.Click(uIIAcceptButton, new Point(99, 8));
+            // Click 'I ACCEPT' button
+            Mouse.Click(uIIACCEPTButton, new Point(61, 9));
+        }
+        
+        /// <summary>
+        /// ClickLicenseAgreementLink
+        /// </summary>
+        public void ClickLicenseAgreementLink()
+        {
+            #region Variable Declarations
+            WpfHyperlink uILicenseagreementHyperlink1 = this.UIForensicAnalysisToolWindow.UILicenseagreementText.UILicenseagreementHyperlink1;
+            #endregion
+
+            // Click 'License agreement' link
+            Mouse.Click(uILicenseagreementHyperlink1, new Point(50, 10));
         }
         
         /// <summary>
@@ -48,7 +74,7 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
         public void AssertEulaDocument()
         {
             #region Variable Declarations
-            WpfControl uIEulaDocumentDocument = this.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIEulaDocumentDocument;
+            WpfControl uIEulaDocumentDocument = this.UIForensicAnalysisToolWindow.UIEulaDocumentDocument;
             #endregion
 
             // Verify that the 'Exists' property of 'EulaDocument' document equals 'True'
@@ -103,6 +129,18 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
                 return this.mUIUnknownFileHunterWindow;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -113,6 +151,8 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
         private UICOMODOUnknownFileHunWindow1 mUICOMODOUnknownFileHunWindow1;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -408,6 +448,147 @@ namespace CodedUITestAT.UIMaps.UIMapEulaClasses
         private WpfControl mUIEulaDocumentDocument;
         
         private WpfButton mUIIAcceptButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UICancelButton
+        {
+            get
+            {
+                if ((this.mUICancelButton == null))
+                {
+                    this.mUICancelButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICancelButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CancelButton";
+                    this.mUICancelButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICancelButton;
+            }
+        }
+        
+        public UILicenseagreementText UILicenseagreementText
+        {
+            get
+            {
+                if ((this.mUILicenseagreementText == null))
+                {
+                    this.mUILicenseagreementText = new UILicenseagreementText(this);
+                }
+                return this.mUILicenseagreementText;
+            }
+        }
+        
+        public WpfButton UIIACCEPTButton
+        {
+            get
+            {
+                if ((this.mUIIACCEPTButton == null))
+                {
+                    this.mUIIACCEPTButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIIACCEPTButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "IAcceptButton";
+                    this.mUIIACCEPTButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIIACCEPTButton;
+            }
+        }
+        
+        public WpfControl UIEulaDocumentDocument
+        {
+            get
+            {
+                if ((this.mUIEulaDocumentDocument == null))
+                {
+                    this.mUIEulaDocumentDocument = new WpfControl(this);
+                    #region Search Criteria
+                    this.mUIEulaDocumentDocument.SearchProperties[WpfControl.PropertyNames.ControlType] = "Document";
+                    this.mUIEulaDocumentDocument.SearchProperties[WpfControl.PropertyNames.AutomationId] = "EulaDocument";
+                    this.mUIEulaDocumentDocument.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIEulaDocumentDocument;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUICancelButton;
+        
+        private UILicenseagreementText mUILicenseagreementText;
+        
+        private WpfButton mUIIACCEPTButton;
+        
+        private WpfControl mUIEulaDocumentDocument;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UILicenseagreementText : WpfText
+    {
+        
+        public UILicenseagreementText(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfText.PropertyNames.Name] = "License agreement";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfHyperlink UILicenseagreementHyperlink
+        {
+            get
+            {
+                if ((this.mUILicenseagreementHyperlink == null))
+                {
+                    this.mUILicenseagreementHyperlink = new WpfHyperlink(this);
+                    #region Search Criteria
+                    this.mUILicenseagreementHyperlink.SearchProperties[WpfHyperlink.PropertyNames.Name] = "License agreement";
+                    this.mUILicenseagreementHyperlink.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUILicenseagreementHyperlink;
+            }
+        }
+        
+        public WpfHyperlink UILicenseagreementHyperlink1
+        {
+            get
+            {
+                if ((this.mUILicenseagreementHyperlink1 == null))
+                {
+                    this.mUILicenseagreementHyperlink1 = new WpfHyperlink(this);
+                    #region Search Criteria
+                    this.mUILicenseagreementHyperlink1.SearchProperties[WpfHyperlink.PropertyNames.AutomationId] = "LicenseAgreementLink";
+                    this.mUILicenseagreementHyperlink1.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUILicenseagreementHyperlink1;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfHyperlink mUILicenseagreementHyperlink;
+        
+        private WpfHyperlink mUILicenseagreementHyperlink1;
         #endregion
     }
 }

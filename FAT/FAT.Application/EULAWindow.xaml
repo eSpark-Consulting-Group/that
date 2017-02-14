@@ -23,7 +23,6 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-
                             <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
                                 <Grid>
                                     <TextBlock Text="Forensic Analysis Tool" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
@@ -52,7 +51,8 @@
 
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top"
                                     Margin="170,10,0,0" Grid.Row="2" Cursor="Hand" Opacity="{Binding ElementName=eula, Path=Opacity}">
-                                    <Hyperlink PreviewMouseLeftButtonDown="Hyperlink_MouseDown"  Foreground="#FF547D98" FontSize="13">License agreement</Hyperlink>
+                                    <Hyperlink AutomationProperties.AutomationId="LicenseAgreementLink"
+                                               PreviewMouseLeftButtonDown="Hyperlink_MouseDown"  Foreground="#FF547D98" FontSize="13">License agreement</Hyperlink>
                                 </TextBlock>
 
                                 <Border Height="1" Grid.Row="3" Margin="170, 20, 50, 10" Background="#FFEAECED" SnapsToDevicePixels="True" Opacity="{Binding ElementName=eula, Path=Opacity}"/>
@@ -63,7 +63,7 @@
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top"
                                     Margin="170,0,0,0" Grid.Row="5" Text="COMODO Forensic Analysis Tool License Agreement" Opacity="{Binding ElementName=eula, Path=Opacity}"/>
 
-                                <telerik:RadPdfViewer AutomationProperties.AutomationId="EulaDocument"  Grid.RowSpan="7" MaxHeight="0" 
+                                <telerik:RadPdfViewer AutomationProperties.AutomationId="EulaDocument" Grid.RowSpan="7" MaxHeight="0" 
                                           x:Name="pdf" Mode="TextSelection" DocumentChanged="pdf_DocumentChanged" BorderThickness="0" VerticalAlignment="Stretch" 
                                           HorizontalAlignment="Stretch" Background="#FFFCFCFC" >
                                     <telerik:RadPdfViewer.Triggers>
@@ -86,10 +86,13 @@
 
                                 <Border  Grid.Row="7" VerticalAlignment="Bottom"  Background="White">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Button Content="Cancel"  Margin="0,15,5,15" Click="NoClick" Height="32" Template="{StaticResource BackButton}" Foreground="Black"></Button>
-                                        <Button Content="I ACCEPT"  Margin="5,15,15,15" Click="YesClick" Height="32" Command="{Binding OnLoadedCommand}"></Button>
+                                        <Button AutomationProperties.AutomationId="CancelButton" Content="Cancel"  Margin="0,15,5,15" Click="NoClick" Height="32" 
+                                                Template="{StaticResource BackButton}" Foreground="Black"></Button>
+                                        <Button AutomationProperties.AutomationId="IAcceptButton" Content="I ACCEPT"  Margin="5,15,15,15" Click="YesClick" Height="32" 
+                                                Command="{Binding OnLoadedCommand}"></Button>
                                     </StackPanel>
                                 </Border>
+                                
                             </Grid>
                         </Grid>
                     </Border>
