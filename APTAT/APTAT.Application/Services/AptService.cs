@@ -321,6 +321,7 @@ namespace APTAT.Application.Services
                 case AptScanStage.DescentOperationCompleted:
                     return ScanStage.DescentOperationCompleted;
 
+                case AptScanStage.RemoteOperationCompleted:
                 case AptScanStage.OperationCompleted:
                     return ScanStage.OperationCompleted;
 
