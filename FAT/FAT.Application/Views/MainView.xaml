@@ -316,7 +316,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Path SnapsToDevicePixels="True" Margin="0 0 10 0"  Data="M5,5 L11,5 11,11 5,11 z M8,2 C4.6870117,2 2,4.6860046 2,8 2,11.313995 4.6870117,14 8,14 11.312988,14 14,11.313995 14,8 14,4.6860046 11.312988,2 8,2 z M8,0 C12.417999,0 16,3.5820007 16,8 16,12.417999 12.417999,16 8,16 3.5820007,16 0,12.417999 0,8 0,3.5820007 3.5820007,0 8,0 z" Fill="White" Height="16" Stretch="Fill" Width="16"/>
-                    <TextBlock Text="Cancel Scan" Grid.Column="1" Margin="0 1 0 0"/>
+                    <TextBlock Text="Stop Scan" Grid.Column="1" Margin="0 1 0 0"/>
                 </Grid>
             </Button>
 

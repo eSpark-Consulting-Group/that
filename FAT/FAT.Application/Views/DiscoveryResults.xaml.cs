@@ -68,7 +68,7 @@ namespace FAT.Application
         {     
             var element = e.OriginalSource as FrameworkElement;
             var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null && cell.IsSelected)
+            if (cell != null && cell.IsSelected && cell.IsMouseOver && !cell.ParentRow.IsSelected)
                 cell.ParentRow.IsSelected = true;
         }
 
@@ -76,7 +76,7 @@ namespace FAT.Application
         {
             var element = e.OriginalSource as FrameworkElement;
             var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null && !cell.IsSelected)
+            if (cell != null && !cell.IsSelected && cell.IsMouseOver && cell.ParentRow.IsSelected)
                 cell.ParentRow.IsSelected = false;
         }
     }
