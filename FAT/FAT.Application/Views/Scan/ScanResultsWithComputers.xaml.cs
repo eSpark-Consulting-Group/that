@@ -125,10 +125,5 @@ namespace FAT.Application
                 new ScanStatus(ScanStatusEnum.Offline)
             };
         }
-
-        private void treeList_Filtered(object sender, GridViewFilteredEventArgs e)
-        {
-
-        }
     }
 }

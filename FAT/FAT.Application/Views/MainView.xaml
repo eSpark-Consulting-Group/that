@@ -280,7 +280,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Path SnapsToDevicePixels="True" Margin="0 0 10 0" Data="M4,12 L14,12 14,14 4,14 z M0,12 L2,12 2,14 0,14 z M4,8.0000002 L16,8.0000002 16,10 4,10 z M0,8.0000002 L2,8.0000002 2,10 0,10 z M4,4 L12,4 12,6 4,6 z M0,4 L2,4 2,6 0,6 z M4,0 L17,0 17,2 4,2 z M0,0 L2,0 2,2 0,2 z" Fill="White" HorizontalAlignment="Left" Height="14" Stretch="Fill" VerticalAlignment="Center" Width="17"/>
-                        <TextBlock Text="Scan Selected" Grid.Column="1" Margin="0 1 0 0"/>
+                        <TextBlock Text="Scan Now" Grid.Column="1" Margin="0 1 0 0"/>
                     </Grid>
                 </Button>
                 

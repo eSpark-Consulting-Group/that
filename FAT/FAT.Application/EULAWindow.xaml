@@ -58,7 +58,7 @@
                                 <Border Height="1" Grid.Row="3" Margin="170, 20, 50, 10" Background="#FFEAECED" SnapsToDevicePixels="True" Opacity="{Binding ElementName=eula, Path=Opacity}"/>
 
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top" Opacity="{Binding ElementName=eula, Path=Opacity}"
-                                    Margin="170,10,0,0" Grid.Row="4" Text="By clicking 'I AGREE', you agree you have read and accepted"/>
+                                    Margin="170,10,0,0" Grid.Row="4" Text="By clicking 'I ACCEPT', you agree you have read and accepted"/>
 
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top"
                                     Margin="170,0,0,0" Grid.Row="5" Text="COMODO Forensic Analysis Tool License Agreement" Opacity="{Binding ElementName=eula, Path=Opacity}"/>

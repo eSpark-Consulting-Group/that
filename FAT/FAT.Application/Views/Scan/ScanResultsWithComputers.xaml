@@ -39,7 +39,6 @@
                                  PreviewMouseDown="treeList_MouseDown"
                                  MouseDoubleClick="treeList_MouseDoubleClick"
                                  DistinctValuesLoading="treeList_DistinctValuesLoading"
-                                 Filtered="treeList_Filtered"
                                  SelectionMode="Single"
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList" 

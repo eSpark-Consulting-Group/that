@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Data;
+using System.Linq;
+using Telerik.Windows.Controls.GridView;
 
 namespace FAT.Application.Views
 {
@@ -127,16 +129,14 @@ namespace FAT.Application.Views
             if (Target == null)
                 return;
 
-            if (Target.FilterDescriptors.Count == 0)
-                Target.FilterDescriptors.Add(new FilterDescriptor<object>
-                {
-                    FilteringExpression = _ => Predicate(_)
-                });
+            var filter = Target.FilterDescriptors.FirstOrDefault(_ => _ is FilterDescriptor<object>);
+            if (filter == null)
+                Target.FilterDescriptors.Add(filter = new FilterDescriptor<object> { FilteringExpression = _ => Predicate(_) });
             else
                 Target.FilterDescriptors.Reset();
 
             if (string.IsNullOrEmpty(Keyword) && (FilterOrders == null || FilterOrders.Length == 0))
-                Target.FilterDescriptors.Clear();
+                Target.FilterDescriptors.Remove(filter);
         }
 
 
