@@ -82,7 +82,7 @@ namespace CodedUITestAT
         [TestMethod]
         public void VerifyAboutWindowContentTest()
         {
-            string productName = Settings.General.Default.ATApplicationName;
+            string productName = Settings.General.Default.FATApplicationName;
             string productVersion = SysHelper.GetProductVersion();
             string copyrightText = "© " + String.Format(Settings.General.Default.CopyrightText, DateTime.Now.Year.ToString());
 

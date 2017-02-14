@@ -40,9 +40,9 @@ namespace CodedUITestAT
         /// <summary> Stops the application under test. </summary>
         internal static void StopApplication()
         {
-            if (IsThereProcess(Settings.General.Default.ATApplicationProcessName))
+            if (IsThereProcess(Settings.General.Default.FATApplicationProcessName))
             { 
-                KillProcesses(Settings.General.Default.ATApplicationProcessName);
+                KillProcesses(Settings.General.Default.FATApplicationProcessName);
                 Playback.Wait(2000);
             }
         }
@@ -487,7 +487,7 @@ namespace CodedUITestAT
         /// <summary> Gets a directory containing the product files. </summary>
         internal static string GetProductDirectory()
         {
-            string procName = Settings.General.Default.ATApplicationProcessName;
+            string procName = Settings.General.Default.FATApplicationProcessName;
             string productProcessLocation = SysHelper.GetProcessLocation(procName);
 
             if (String.IsNullOrEmpty(productProcessLocation)) throw new Exception(String.Format("The product process '{0}' and directory not found!", procName));

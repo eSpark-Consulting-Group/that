@@ -25,10 +25,10 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("UnknownFileHunter")]
-        public string ATApplicationProcessName {
+        [global::System.Configuration.DefaultSettingValueAttribute("ForensicAnalysisTool")]
+        public string FATApplicationProcessName {
             get {
-                return ((string)(this["ATApplicationProcessName"]));
+                return ((string)(this["FATApplicationProcessName"]));
             }
         }
         
@@ -88,10 +88,10 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Unknown File Hunter")]
-        public string ATApplicationName {
+        [global::System.Configuration.DefaultSettingValueAttribute("Forensic Analysis Tool")]
+        public string FATApplicationName {
             get {
-                return ((string)(this["ATApplicationName"]));
+                return ((string)(this["FATApplicationName"]));
             }
         }
         

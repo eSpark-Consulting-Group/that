@@ -52,7 +52,7 @@ namespace CodedUITestAT
 
         internal WpfButton IAcceptButton()
         {
-            return UIMapEula.UIUnknownFileHunterWindow.UIViewsEULAViewxamlPane.UIEulaWindowCustom.UIIAcceptButton;
+            return UIMapEula.UIForensicAnalysisToolWindow.UIIACCEPTButton;
         }
 
         private WpfControl EulaDocument()
