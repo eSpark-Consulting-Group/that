@@ -169,7 +169,7 @@ namespace FAT.Application.Services
             try
             {
                 camLicenseId = _camLicense ??
-                               (_camLicense = _camLicenseProvider.TryGetFreeLicense(null));
+                               (_camLicense = _camLicenseProvider.TryGetFreeLicense(_proxyCredentials));
             }
             catch (Exception ex)
             {
@@ -189,7 +189,10 @@ namespace FAT.Application.Services
             {
                 _proxyCredentials = _proxyCredentialsProvider.GetProxyCredentials();
                 if (_proxyCredentials != null)
+                {
+                    _isValkyrieStarted = false;
                     StartValkyrieAnalysis();
+                }
                 else
                     StopScan(new Guid[0]);
                 return;
