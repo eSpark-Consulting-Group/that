@@ -11,6 +11,7 @@ namespace APTAT.Core.TelerikReports
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailedDevicesValkyrieReport));
             Telerik.Reporting.GraphGroup graphGroup1 = new Telerik.Reporting.GraphGroup();
+            Telerik.Reporting.Drawing.ColorPalette colorPalette1 = new Telerik.Reporting.Drawing.ColorPalette();
             Telerik.Reporting.GraphGroup graphGroup4 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.GraphTitle graphTitle1 = new Telerik.Reporting.GraphTitle();
             Telerik.Reporting.GraphTitle graphTitle2 = new Telerik.Reporting.GraphTitle();
@@ -266,6 +267,11 @@ namespace APTAT.Core.TelerikReports
             graphGroup1.Name = "uidGroup";
             graphGroup1.Sortings.Add(new Telerik.Reporting.Sorting("= Fields.BadFilesCount", Telerik.Reporting.SortDirection.Asc));
             this.graph1.CategoryGroups.Add(graphGroup1);
+            colorPalette1.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(0))))));
+            colorPalette1.Colors.Add(System.Drawing.Color.Maroon);
+            colorPalette1.Colors.Add(System.Drawing.Color.Silver);
+            colorPalette1.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(146)))), ((int)(((byte)(255))))));
+            this.graph1.ColorPalette = colorPalette1;
             this.graph1.CoordinateSystems.Add(this.cartesianCoordinateSystem1);
             this.graph1.Legend.Style.LineColor = System.Drawing.Color.LightGray;
             this.graph1.Legend.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
