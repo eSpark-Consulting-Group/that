@@ -395,7 +395,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // subReport2
             // 
-            this.subReport2.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.UnknownFilesCount>0"));
+            this.subReport2.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.UnknownFiles.Length >0"));
             this.subReport2.Bindings.Add(new Telerik.Reporting.Binding("ReportSource.ReportDocument.DataSource", "=ReportItem.DataObject.UnknownFiles"));
             this.subReport2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.1000006198883057D));
             this.subReport2.Name = "subReport2";
@@ -408,7 +408,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // textBox45
             // 
-            this.textBox45.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=Fields.MalwareFilesCount > 0"));
+            this.textBox45.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=Fields.UnknownFilesCount > 0"));
             this.textBox45.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(3.2297768939315574E-06D));
             this.textBox45.Name = "textBox45";
             this.textBox45.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(1.0999997854232788D));
@@ -441,7 +441,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // textBox46
             // 
-            this.textBox46.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=Fields.MalwareFilesCount > 0"));
+            this.textBox46.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=Fields.LookupInProgressFilesCount > 0"));
             this.textBox46.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.0793749988079071D), Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D));
             this.textBox46.Name = "textBox46";
             this.textBox46.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(1.0999997854232788D));

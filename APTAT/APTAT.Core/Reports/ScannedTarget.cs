@@ -81,7 +81,7 @@ namespace APTAT.Core.Reports
 
         public int BadFilesCount
         {
-            get { return UnknownFilesCount + MalwareFilesCount + TotalFilesCount + PendingAnalysisFilesCount; }
+            get { return UnknownFilesCount + MalwareFilesCount +  PendingAnalysisFilesCount + NotAnalyzedFilesCount; }
         }
 
         public string Instances
