@@ -23,11 +23,12 @@ namespace FAT.Application
         {
             var _mainView = MainFrame.Content as MainView;
 
-            if (_mainView != null && _mainView.IsScanInProgress)
+            if (_mainView != null && (_mainView.IsScanInProgress || _mainView.IsDiscoveryInProgress))
             {
                 ConfirmationWindow confirmation = new ConfirmationWindow
                 {
-                    Owner = System.Windows.Application.Current.MainWindow
+                    Owner = System.Windows.Application.Current.MainWindow,
+                    Title = _mainView.IsScanInProgress ? "Scan" : "Discovery"
                 };
 
                 if (confirmation.ShowDialog() == true)

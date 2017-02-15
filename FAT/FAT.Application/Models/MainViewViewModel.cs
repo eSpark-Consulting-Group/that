@@ -550,8 +550,10 @@ namespace FAT.Application.Models
 
         private void InvokeSubmitEmail(Object arg)
         {
-            if (_aptService.SubmitEmail(Email.Split(new[] { ',', ';'})).IsSucceeded)
+            if (_aptService.SubmitEmail(Email.Split(new[] { ',', ';' })).IsSucceeded)
                 Set(() => HideSubmitEmail, true);
+            else
+            { }
         }
 
         private async Task<string> GetCurrentDomainName()
@@ -800,7 +802,7 @@ namespace FAT.Application.Models
             {
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
-            
+            ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
         }
 
         private void OnScanCompleted()

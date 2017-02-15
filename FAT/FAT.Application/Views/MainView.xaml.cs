@@ -146,7 +146,15 @@ namespace FAT.Application
         {
             get
             {
-                return _viewModel.IsAnyScanInProgress;
+                return _viewModel.IsScanInProgress.GetValueOrDefault(false);
+            }
+        }
+
+        public bool IsDiscoveryInProgress
+        {
+            get
+            {
+                return _viewModel.IsAutoDiscoveryInProgress || _viewModel.IsScanInProgress == null;
             }
         }
 
