@@ -58,6 +58,8 @@ namespace FAT.Application.Models
             }
         }
 
+        public string Percentage { get; set; }
+
         public bool Valid
         {
             get { return Count > 0; }
@@ -69,6 +71,14 @@ namespace FAT.Application.Models
         }
 
         public CounterOrder OrderAsEnum => (CounterOrder) Order;
+
+        public void UpdatePercentage(int total)
+        {
+            if (total > 0)
+                Percentage = string.Format("({0:0.0}%)",
+                    Count * 100d / total).Replace(".0", string.Empty);
+            RaisePropertyChanged(nameof(Percentage));
+        }
 
         protected virtual void RaisePropertyChanged(string name)
         {
@@ -108,6 +118,7 @@ namespace FAT.Application.Models
         private readonly Dictionary<int, ScanCounter> _counters;
         private readonly ScanCounterCollection _collection;
         private Collection<int> _selected;
+        private int _total;
         private static object _sync = new object();
 
         public Action<int[]> SelectedOrdersChanged { get; set; }
@@ -131,6 +142,7 @@ namespace FAT.Application.Models
             {
                 _counters.Clear();
                 _collection.ResetCollection();
+                _total = 0;
                 if (_selected.Any())
                 {
                     _selected.Clear();
@@ -146,8 +158,6 @@ namespace FAT.Application.Models
 
         private void AddCounter<T>(int count) where T : ScanCounter, new()
         {
-            if (count == 0) return;
-
             var counter = new T
             {
                 SelectionChanged = SelectionChanged,
@@ -162,6 +172,7 @@ namespace FAT.Application.Models
                     _collection.AddToCollection(counter);
                 }
                 _counters[counter.Order].Count += count;
+                _counters[counter.Order].UpdatePercentage(_total);
             }
         }
 
@@ -214,27 +225,27 @@ namespace FAT.Application.Models
             AddCounter<ComputersCounter>(count);
         }
 
-        public void AddClean(int count = 1)
+        private void AddClean(int count = 1)
         {
             AddCounter<CleanCounter>(count);
         }
 
-        public void AddMalware(int count = 1)
+        private void AddMalware(int count = 1)
         {
             AddCounter<MalwareCounter>(count);
         }
 
-        public void AddUnknown(int count = 1)
+        private void AddUnknown(int count = 1)
         {
             AddCounter<UnknownCounter>(count);
         }
 
-        public void AddNotAnalyzed(int count = 1)
+        private void AddNotAnalyzed(int count = 1)
         {
             AddCounter<NotAnalyzedCounter>(count);
         }
 
-        public void AddInProgress(int count = 1)
+        private void AddInProgress(int count = 1)
         {
             AddCounter<InProgressCounter>(count);
         }
@@ -251,6 +262,12 @@ namespace FAT.Application.Models
 
         public void UpdateCounters(IScanCounterDiff scanCounterDiff)
         {
+            _total += scanCounterDiff.CleanDiff;
+            _total += scanCounterDiff.MalwareDiff;
+            _total += scanCounterDiff.UnknownDiff;
+            _total += scanCounterDiff.NotAnalyzedDiff;
+            _total += scanCounterDiff.InProgressDiff;
+
             AddClean(scanCounterDiff.CleanDiff);
             AddMalware(scanCounterDiff.MalwareDiff);
             AddUnknown(scanCounterDiff.UnknownDiff);

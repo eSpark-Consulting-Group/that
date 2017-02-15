@@ -741,6 +741,7 @@ namespace FAT.Application.Models
                 {
                     IsScanInProgress = null;
                     Set(() => ScanWasOnceStarted, true);
+                    Keyword = null;
 
                     var model = CompositionHelper.Instance.Resolve<StartScanDomainViewModel>();
 
@@ -807,13 +808,16 @@ namespace FAT.Application.Models
 
         private void OnScanCompleted()
         {
-            IsScanInProgress = false;
-            _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
-            IsReportEnabled = true;
+            if (IsScanInProgress.GetValueOrDefault())
+            {
+                IsScanInProgress = false;
+                _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
+                IsReportEnabled = true;
 
-            Set(() => ValkyrieDetailsLinkAvailable, true);
-            ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
-            CancelInProgress = false;
+                Set(() => ValkyrieDetailsLinkAvailable, true);
+
+                CancelInProgress = false;
+            }
         }
 
         private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArg e)
@@ -1062,7 +1066,7 @@ namespace FAT.Application.Models
                         if (o.IsComputer)
                             return FilterComputerByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
-                            return FilterFileByOrders(o);
+                            return FilterFileByOrders(o) && string.IsNullOrEmpty(Keyword);
                     }
                     else if (GroupByFiles)
                     {
