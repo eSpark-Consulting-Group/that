@@ -601,7 +601,14 @@ namespace APTAT.Valkyrie
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;
-            _lookupContexts.Clear();
+            lock (_lookupSync)
+            {
+                _lookupContexts.Clear();
+            }
+            lock (_automaticAnalyseSync)
+            {
+                _automaticAnalyseInProgressByHash.Clear();
+            }
             _fileScanned = 0;
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
@@ -619,7 +626,6 @@ namespace APTAT.Valkyrie
                 }
                 _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 _pendingItemsResolved.Clear();
-                _automaticAnalyseInProgressByHash.Clear();
                 _login = login;
                 _password = password;
                 OnAnalyzeStarted();
