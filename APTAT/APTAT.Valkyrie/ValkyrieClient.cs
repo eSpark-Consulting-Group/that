@@ -8,10 +8,12 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using APTAT.Common;
+using Timer = System.Timers.Timer;
 
 namespace APTAT.Valkyrie
 {
@@ -58,8 +60,15 @@ namespace APTAT.Valkyrie
             _provider = provider;
             _endpointId = machineKeyProvider.GlobalMachineKey;
             _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
-            _progressNotifyTimer = new Timer(ProgressNotifyTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
-            _checkStatusesTimer = new Timer(CheckStatusesTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
+            _progressNotifyTimer = new Timer
+            {
+                AutoReset = true,
+                Interval = 1000
+            }; //ProgressNotifyTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
+            _progressNotifyTimer.Elapsed += ProgressNotifyTimerCallback;
+            _checkStatusesTimer = new Timer {AutoReset = false};
+                //CheckStatusesTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
+            _checkStatusesTimer.Elapsed += CheckStatusesTimerCallback;
         }
 
         public void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately)
@@ -71,7 +80,9 @@ namespace APTAT.Valkyrie
                     _lookupContexts.Add(fileInfo);
             }
             if (shouldStartImmediately)
-                _checkStatusesTimer?.Change(0, Timeout.Infinite);
+            {
+                Task.Factory.StartNew(() => CheckStatusesTimerCallback(this, null));
+            }
         }
 
         private RegisterWithResponse Register(CamRegistration camRegistration, string productName, 
@@ -123,9 +134,10 @@ namespace APTAT.Valkyrie
             return proxy;
         }
 
-        private void ProgressNotifyTimerCallback(object state)
+        private void ProgressNotifyTimerCallback(object state, ElapsedEventArgs elapsedEventArgs)
         {
-            _progressNotifyTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+            if (!_progressNotifyTimer.Enabled) return;
+           _progressNotifyTimer.Stop();
             if (_isMainScanFinished && _analysedItems.Count == 0)
             {
                 OnAnalyzeProgressChanged(_pendingItemsResolved, true);
@@ -134,12 +146,25 @@ namespace APTAT.Valkyrie
             {
                 OnAnalyzeProgressChanged(_analysedItems);
             }
-            _progressNotifyTimer?.Change(1000, Timeout.Infinite);
+            _progressNotifyTimer.Start();
         }
 
-        private void CheckStatusesTimerCallback(object state)
+        private void CheckStatusesTimerCallback(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            _checkStatusesTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+            lock (_checkStatusesTimer)
+            {
+                if (_checkStatusesTimer.Enabled)
+                    _checkStatusesTimer.Stop();
+                else
+                {
+                    if (sender == this)
+                    {
+                        _checkStatusesTimer.Interval = 50;
+                        return;
+                    }
+                    _checkStatusesTimer.Interval = _changeTrakingIntervalInMs;
+                }
+            }
             var waitNextInterval = false;
             if (_aptScanId == null)
             {
@@ -183,7 +208,10 @@ namespace APTAT.Valkyrie
                 if (!resetTimerImmediately)
                     Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Valkyrie queue is Empty");
             }
-            _checkStatusesTimer?.Change(resetTimerImmediately? 100 : _changeTrakingIntervalInMs, Timeout.Infinite);
+            lock (_checkStatusesTimer)
+            {
+                _checkStatusesTimer.Start();
+            }
         }
 
         private void CheckNewStatusesOnValkyrie()
@@ -253,7 +281,7 @@ namespace APTAT.Valkyrie
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                _pendingItemsResolved.TryAdd(result.SHA1,
+                _pendingItemsResolved.TryAdd(fileInfo.HashSha1,
                     CancelOperation(fileInfo.ValkyrieFileInfo.GetFullPath(), fileInfo.HashSha1));
             }
             else if (result != null && result.ReturnCode == ErrorCodesEnum.AnalysisNotFound)
@@ -340,7 +368,7 @@ namespace APTAT.Valkyrie
             {
                 SendEndScanAsync();
                 _cancellationTokenSource.Cancel();
-                _checkStatusesTimer?.Change(0, Timeout.Infinite);
+                Task.Factory.StartNew(() => CheckStatusesTimerCallback(this, null));
             }
         }
 
@@ -369,7 +397,10 @@ namespace APTAT.Valkyrie
             AnalyzeCompleted?.Invoke(this,
                 new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(_analysisResults.ToArray(), exception,
                     task.IsCanceled, task.AsyncState));
-            _checkStatusesTimer?.Change(_changeTrakingIntervalInMs, Timeout.Infinite);
+            lock (_checkStatusesTimer)
+            {
+                _checkStatusesTimer.Start();
+            }
 
         }
 
@@ -567,8 +598,6 @@ namespace APTAT.Valkyrie
             {
                 AddLookupContext(info, result.Verdict, cancellationToken);
             }
-
-            //Task.Factory.StartNew(OnAnalyzeProgressChanged, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
         }
 
         public string GetValkyrieDetailsLink()
@@ -648,7 +677,7 @@ namespace APTAT.Valkyrie
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
                     throw new InvalidOperationException(startScanResult.ResultDescription);
                 }
-                _progressNotifyTimer.Change(1000, Timeout.Infinite);
+                _progressNotifyTimer.Start();
                 if (!filesToAnalyze.Any()) return;
                 
                 if (startScanResult != null)
