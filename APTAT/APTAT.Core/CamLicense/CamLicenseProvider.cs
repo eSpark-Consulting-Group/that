@@ -143,7 +143,6 @@ namespace APTAT.Core
         private byte[] PostData(string destinationUrl, byte[] bytes)
         {
             var request = (HttpWebRequest) WebRequest.Create(destinationUrl);
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             request.ContentType = "text/xml; encoding='utf-8'";
             request.ContentLength = bytes.Length;
             request.Method = "POST";
