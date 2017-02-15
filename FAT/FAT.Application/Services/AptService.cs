@@ -199,6 +199,7 @@ namespace FAT.Application.Services
                 FatScanCompleted?.Invoke(this, new ErrorEventArgs(ex));
             };
             App.Current.Dispatcher.BeginInvoke(a);
+            StopScan(new Guid[0]);
         }
 
         public GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, TimeSpan? lastUtcTime,

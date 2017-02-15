@@ -167,6 +167,7 @@ namespace APTAT.DeploymentCore.Descent
                 LogHelper.Trace(TraceEventType.Verbose, TraceCategory.Descent,
                     "Deployment operation completed{0} uid: {1}{0} elapsed: {2}{0} total: {3}{0} succeeded: {4}{0} failed: {5}{0}",
                     Environment.NewLine, OperationUid, CompletedTime.Value - StartTime, ResultsByUid.Count, SucceededCount, FailedCount);
+                _stopWatch.Stop();
                 OnDescentCompleted();
             }
         }
@@ -202,7 +203,6 @@ namespace APTAT.DeploymentCore.Descent
         protected virtual void OnDescentCompleted()
         {
             DescentCompleted?.Invoke(this,this);
-            _stopWatch.Stop();
         }
 
         protected virtual void OnComputerDescentCompleted(IComputerDescentResult computerDescentResult)
