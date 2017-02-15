@@ -1,14 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
-using APTAT.DeploymentCore.Directory;
-using APTAT.Valkyrie;
-using Valkyrie.WebApiProvider.Enums;
-using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
-using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Core.Reports
 {
@@ -87,7 +81,7 @@ namespace APTAT.Core.Reports
 
         public int BadFilesCount
         {
-            get { return UnknownFilesCount + MalwareFilesCount + TotalFilesCount + FailedToAnalyzeFilesCount; }
+            get { return UnknownFilesCount + MalwareFilesCount + TotalFilesCount + PendingAnalysisFilesCount; }
         }
 
         public string Instances
@@ -97,7 +91,7 @@ namespace APTAT.Core.Reports
                 StringBuilder sb = new StringBuilder();
                 foreach (var instance in BadFileInstances)
                 {
-                    string str = String.Format("{0}\n", instance.Path);
+                    string str = $"{instance.Path}\n";
                     sb.AppendLine(str);
                 }
                 return sb.ToString();
