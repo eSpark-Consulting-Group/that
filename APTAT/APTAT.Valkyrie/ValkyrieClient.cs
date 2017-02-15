@@ -170,7 +170,7 @@ namespace APTAT.Valkyrie
             var resetTimerImmediately = false;
             if (_cancellationTokenSource.IsCancellationRequested)
             {
-                lock (_lookupContexts)
+                lock (_lookupSync)
                 {
                     if (_lookupContexts.Any())
                         resetTimerImmediately = true;
