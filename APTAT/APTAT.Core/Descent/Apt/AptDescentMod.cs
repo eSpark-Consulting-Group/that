@@ -132,7 +132,7 @@ namespace APTAT.Core.Descent.Apt
         protected override DescentHelper CreateDescentHelper(InstallAgentThreadParams agentTp)
         {
             var tp = (AptInstallAgentThreadParams)agentTp;
-            var dh = new AptDescentHelper(tp.RemoteHostInfo, tp.Options);
+            var dh = new AptDescentHelper(tp.RemoteHostInfo, tp.Options, TaskFactory.CancellationToken);
             
             dh.ScanProgressChanged += OnScanProgressChanged;
             dh.ScanCompleted += OnScanCompleted;

@@ -54,8 +54,8 @@ namespace APTAT.Core.Descent.Apt
 		    protected override string ServiceName { get {return "ScannerService.exe"; } }
             protected override string ServiceDisplayName { get { return "Comodo APT Scanner"; } }
 
-            public AptDescentHelper( RemoteHostInfo info, ScanOptions options)
-                : base (info)
+            public AptDescentHelper( RemoteHostInfo info, ScanOptions options, CancellationToken cancellationToken)
+                : base (info, cancellationToken)
 			{
                 _options = options;
 			}

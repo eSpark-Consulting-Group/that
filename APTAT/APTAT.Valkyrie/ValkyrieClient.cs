@@ -601,23 +601,26 @@ namespace APTAT.Valkyrie
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;
-            lock (_lookupSync)
-            {
-                _lookupContexts.Clear();
-            }
-            lock (_automaticAnalyseSync)
-            {
-                _automaticAnalyseInProgressByHash.Clear();
-            }
             _fileScanned = 0;
-            _cancellationTokenSource?.Dispose();
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
             _filesCount = filesToAnalyze.Count;
 
             Task.Factory.StartNew(t =>
             {
                 _isMainScanFinished = false;
+                _cancellationTokenSource?.Cancel();
+                _cancellationTokenSource?.Dispose();
+                _cancellationTokenSource = cancellationTokenSource;
+                lock (_lookupSync)
+                {
+                    _lookupContexts.Clear();
+                }
+                lock (_automaticAnalyseSync)
+                {
+                    _automaticAnalyseInProgressByHash.Clear();
+                }
+
                 var regInfo = Register(camRegistration, productName, proxyCredential);
                 if (regInfo.ReturnCode != 0)
                 {

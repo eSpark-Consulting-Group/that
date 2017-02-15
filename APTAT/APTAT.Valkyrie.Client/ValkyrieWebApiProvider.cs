@@ -29,7 +29,7 @@ namespace Valkyrie.WebApiProvider
         private Uri RegisterWithCamCredentialsUri => new Uri(_valkyrieBaseUri, "fvs_register_with_cam_credentials");
         private Uri CheckAnalysisResultUri => new Uri(_valkyrieBaseUri, "fvs_check_analysis_result");
         private Uri FatSubmitFilePaths => new Uri(_valkyrieBaseUri, "fat_submit_file_paths");
-        private Uri FatEmailSubstcription => new Uri(_valkyrieBaseUri, "fat_email_substcription");
+        private Uri FatEmailSubstcription => new Uri(_valkyrieBaseUri, "fat_email_subscription");
         private bool IsProduction => _valkyrieBaseUri.ToString().ToUpper().Contains("staging") == false;
 
         #endregion

@@ -27,6 +27,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             private readonly NetworkHelper _networkHelper = new NetworkHelper();
 		    protected string PackageFileName;
 		    protected readonly INetworkObserver NetworkObserver;
+		    private readonly CancellationToken _cancellationToken;
 
             public class RemoteResponse
 			{
@@ -67,10 +68,11 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 		    }
 
 
-            public DescentHelper(RemoteHostInfo info)
+            public DescentHelper(RemoteHostInfo info, CancellationToken cancellationToken)
 		    {
 		        NetworkObserver = CompositionHelper.Instance.Resolve<INetworkObserver>();
 				RemoteHostInfo = info;
+		        _cancellationToken = cancellationToken;
 				_oldRemoteHostName = info.HostName;
 				InitPaths();
 			}
@@ -113,20 +115,27 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 			{
 				_loginException = null;
 
-				try
-				{
-					_networkHelper.GrantNetworkAccessToRemoteComputer(
-						login,
-						RemoteHostInfo.Password,
-						RemoteAdminPath,
-						impersonateAsNetworkService );
-				}
-				catch ( Win32Exception ex )
-				{
-					_loginException = ex;
-					return false;
-				}
+                Stopwatch s = new Stopwatch();
+                s.Start();
 
+			    try
+			    {
+			        _networkHelper.GrantNetworkAccessToRemoteComputer(
+			            login,
+			            RemoteHostInfo.Password,
+			            RemoteAdminPath,
+			            impersonateAsNetworkService);
+			    }
+			    catch (Win32Exception ex)
+			    {
+			        _loginException = ex;
+			        return false;
+			    }
+			    finally
+			    {
+			        LogHelper.Trace(TraceEventType.Verbose, $"GrantNetworkAccessToRemoteComputer elapsed {s.Elapsed}");
+                    s.Stop();
+			    }
 				return true;
 			}
 
@@ -140,15 +149,24 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				{
 					string login;
 
-					login = string.Format("{0}\\{1}", domain, userName);
+                    if (_cancellationToken.IsCancellationRequested)
+                        throw new OperationCanceledException();
+
+                    login = string.Format("{0}\\{1}", domain, userName);
 					if (TryLogin(impersonateAsNetworkService, login))
 						return;
 
-					login = string.Format("{0}@{1}", userName, domain);
+                    if (_cancellationToken.IsCancellationRequested)
+                        throw new OperationCanceledException();
+
+                    login = string.Format("{0}@{1}", userName, domain);
 					if (TryLogin(impersonateAsNetworkService, login))
 						return;
 
-					if ( RemoteHostInfo.Login != login )
+                    if (_cancellationToken.IsCancellationRequested)
+                        throw new OperationCanceledException();
+
+                    if ( RemoteHostInfo.Login != login )
 					{
 						if ( TryLogin( impersonateAsNetworkService, RemoteHostInfo.Login ) )
 							return;
@@ -165,6 +183,8 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				    int attemptsCount = 3;
                     while (attemptsCount > 0)
                     {
+                        if (_cancellationToken.IsCancellationRequested)
+                            throw new OperationCanceledException();
                         if (TryLogin(impersonateAsNetworkService, RemoteHostInfo.Login))
                             return;
                         attemptsCount--;
@@ -202,9 +222,12 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
 			    if( dnsResolvingNeeded )
 				{
-					// try to avoid specific network problem
-					// Just using IP address instead of computer name
-					IPAddress[] ips = NetworkObserver.SafeResolveDns( RemoteHostInfo.HostName );
+                    if (_cancellationToken.IsCancellationRequested)
+                        throw new OperationCanceledException();
+
+                    // try to avoid specific network problem
+                    // Just using IP address instead of computer name
+                    IPAddress[] ips = NetworkObserver.SafeResolveDns( RemoteHostInfo.HostName );
 					if( ips == null || ips.Length == 0 )
 					{
 						throw new DescentException( DescentStatus.status_cannot_resolve_remote_hostname,
