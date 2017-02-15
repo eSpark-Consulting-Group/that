@@ -28,6 +28,7 @@
     <SolidColorBrush x:Key="ErrorBrush2" Color="#FFAD2E29" />
 
     <converters:StringToVisibiltyConverter x:Key="StringToVisibiltyConverter"/>
+    <converters:EmptyStringToVisibiltyConverter x:Key="EmptyStringToVisibiltyConverter"/>
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
     <converters:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>

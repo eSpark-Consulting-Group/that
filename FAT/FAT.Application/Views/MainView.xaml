@@ -568,7 +568,7 @@
             
         </TextBlock>
 
-        <Grid Grid.Row="3" Background="#FFFAF9F9" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
+        <Grid Grid.Row="3" Background="#FFFAF9F9" Visibility="{Binding ComputersHeader, Converter={StaticResource EmptyStringToVisibiltyConverter}}">
             <Border x:Name="border" Height="46" Margin="32 0 32 20" Background="#FF2A80B9" >
                 <Grid>
                     <Grid.ColumnDefinitions>

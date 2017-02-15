@@ -30,4 +30,22 @@ namespace FAT.Application.Converters
             throw new NotImplementedException();
         }
     }
+
+    public class EmptyStringToVisibiltyConverter : IValueConverter
+    {
+        public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
+        {
+            if (!string.IsNullOrEmpty(value as string))
+            {
+                return Visibility.Visible;
+            }
+
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(Object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

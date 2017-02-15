@@ -158,7 +158,8 @@ namespace FAT.Application.Models
                 if (_cancelInProgress == value) return;
                 _cancelInProgress = value;
 
-                RaisePropertyChanged("Header");
+                RaisePropertyChanged(nameof(Header));
+                RaisePropertyChanged(nameof(ComputersHeader));
 
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
@@ -252,9 +253,9 @@ namespace FAT.Application.Models
         {
             get
             {
-                if (IsScanInProgress.HasValue && Percentage > 0 && Percentage <= 100)
+                if (!IsAutoDiscoveryInProgress && !CancelInProgress && !IsScanCancelled && Percentage > 0 && Percentage <= 100)
                 {
-                    return $"(Files: {_scanCounterManager.Total} | Computers: {ScannedItemsCount})";
+                    return $"(Files: {_scanCounterManager.Total} | Computers: {ScannedItemsCount} of {TotalItemsCount})";
                 }
 
                 return string.Empty;
@@ -289,10 +290,12 @@ namespace FAT.Application.Models
                 }
                 else
                 {
+                    if (IsScanCancelled)
+                        return "Scan Canceled";
                     if (Percentage > 0)
                         return "Scan Completed";
                 }
-
+                
 
                 return string.Empty;
             }
