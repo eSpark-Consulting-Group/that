@@ -252,9 +252,9 @@ namespace FAT.Application.Models
         {
             get
             {
-                if (IsScanInProgress == true && Percentage > 0 && Percentage < 100)
+                if (IsScanInProgress.HasValue && Percentage > 0 && Percentage <= 100)
                 {
-                    return $"({ScannedItemsCount} of {TotalItemsCount} Computers)";
+                    return $"(Files: {_scanCounterManager.Total} | Computers: {ScannedItemsCount})";
                 }
 
                 return string.Empty;
@@ -271,6 +271,12 @@ namespace FAT.Application.Models
                     return "Canceling...";
                 if (IsScanInProgress == null)
                     return "Discovering Computers...";
+                if (IsAutoDiscoveryInProgress)
+                {
+                    if (Percentage > 0)
+                        header = String.Format("{0:0.00}% Discovering Computers...", Percentage).Replace(".00", string.Empty);
+                    return header;
+                }
                 if (IsScanInProgress == true)
                 {
                     if (Percentage == 0)
@@ -281,11 +287,10 @@ namespace FAT.Application.Models
                         header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
                     return header;
                 }
-                if (IsAutoDiscoveryInProgress)
+                else
                 {
                     if (Percentage > 0)
-                        header = String.Format("{0:0.00}% Discovering Computers...", Percentage).Replace(".00", string.Empty);
-                    return header;
+                        return "Scan Completed";
                 }
 
 

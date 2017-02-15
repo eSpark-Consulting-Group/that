@@ -136,6 +136,11 @@ namespace FAT.Application.Models
             get { return _collection; }
         }
 
+        public int Total
+        {
+            get { return _total; }
+        }
+
         public void Clear()
         {
             lock (_sync)
