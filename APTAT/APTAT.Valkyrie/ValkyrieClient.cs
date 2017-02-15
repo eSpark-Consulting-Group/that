@@ -195,7 +195,7 @@ namespace APTAT.Valkyrie
                 filesToAnalyze = _lookupContexts.ToList();
                 _lookupContexts.Clear();
             }
-            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult);
+            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult, false);
             List<ValkyrieAnalyseOperationContext> filesToCheckAnalysisResult;
             lock (_automaticAnalyseSync)
             {
