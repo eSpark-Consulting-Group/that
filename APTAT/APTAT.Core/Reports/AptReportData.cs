@@ -518,6 +518,7 @@ namespace APTAT.Core.Reports
                                 mergedSafeCount++;
                                 break;
                             case ValkyrieVerdict.Pending:
+                            case ValkyrieVerdict.InQueue:
                             case ValkyrieVerdict.FirstSeen:
                                 mergedPendingFilesCount++;
                                 //      _pendingAnalysisFilesCount++;
