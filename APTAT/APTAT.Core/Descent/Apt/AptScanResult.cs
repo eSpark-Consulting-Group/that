@@ -13,7 +13,13 @@ namespace APTAT.Core.Descent.Apt
             : base(computer, operationUid, timeStampProvider)
         {
             ResultType = ScanResultType.InProgress;
+            HostName = computer?.Name;
+            IPAddress = computer?.IPAddress;
+           
         }
+        public string IPAddress { get; }
+        public string HostName { get;  }
+
         public string OsName
         {
             get
