@@ -129,7 +129,7 @@ namespace APTAT.Core.Apt
                     {
                         valkyrieAnalysisResultInternal.Remove(file.Sha1);
                         if (!e.IsUpdate)
-                            Debug.Assert(true, "valkyrie upload twice the same file");
+                            Debug.Assert(true, "uploaded twice the same file to valkyrie");
                         if (file.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.InQueue)
                         {
                             _filesShouldSendToValkyrieCount--;
