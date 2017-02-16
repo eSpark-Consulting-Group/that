@@ -12,13 +12,14 @@ using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Common.MachineKey;
+using APTAT.DeploymentCore;
 
 namespace APTAT.Core.Descent.Wmi
 {
     public class WmiScanner : Scanner
     {
         protected readonly ConcurrentDictionary<Guid, Thread> Threads = new ConcurrentDictionary<Guid, Thread>();
-        public WmiScanner(IEnumerable<DeploymentTarget> targets, string login, string password,
+        public WmiScanner(IEnumerable<IComputer> targets, string login, string password,
             DevicesSourceDescription devicesSourceDescription)
             : base(targets, login, password, devicesSourceDescription)
         {

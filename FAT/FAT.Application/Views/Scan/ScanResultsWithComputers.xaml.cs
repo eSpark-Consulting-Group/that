@@ -28,9 +28,9 @@ namespace FAT.Application
 
         private void treeList_SelectionChanged(object sender, SelectionChangeEventArgs e)
         {
-            foreach (ThreatInfoItem item in e.AddedItems)
+            foreach (IThreatInfoItem item in e.AddedItems)
                 ViewModel.SelectedItems.Add(item);
-            foreach (ThreatInfoItem item in e.RemovedItems)
+            foreach (IThreatInfoItem item in e.RemovedItems)
                 ViewModel.SelectedItems.Remove(item);
             ViewModel.SelectedItems = ViewModel.SelectedItems;
         }

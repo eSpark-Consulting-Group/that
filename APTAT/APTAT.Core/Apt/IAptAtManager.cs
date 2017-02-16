@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
+using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using Valkyrie.WebApiProvider.Contracts;
 
@@ -24,7 +25,7 @@ namespace APTAT.Core
         event EventHandler ValkyrieAnalyzeStarted;
         IAggregatedAptScanResult AggregatedScanResults { get; }
 
-        IAptScanner GetAptScanner(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+        IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
 
         IAptReportBuilder GetAptReportBuilder();
         int GetDistinctFilesCount();

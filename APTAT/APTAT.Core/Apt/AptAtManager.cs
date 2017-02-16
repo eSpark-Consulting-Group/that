@@ -8,6 +8,7 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Core.FLS;
 using APTAT.Core.Properties;
 using APTAT.Core.Reports;
+using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
@@ -213,7 +214,7 @@ namespace APTAT.Core.Apt
             return _distinctHelper.GetDistinctFileInfo(results);
         }
 
-        public IAptScanner GetAptScanner(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+        public IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
             _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
             var scanner = _aptScannerFactory

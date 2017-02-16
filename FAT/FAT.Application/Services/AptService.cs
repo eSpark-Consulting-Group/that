@@ -16,6 +16,7 @@ using APTAT.Application.Services.EventArgs;
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Properties;
 using APTAT.Common;
+using APTAT.DeploymentCore;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace FAT.Application.Services
@@ -109,7 +110,7 @@ namespace FAT.Application.Services
         public event EventHandler<ScanStartedEventArgs> FatScanStarted;
         public event EventHandler<ErrorEventArgs> FatScanCompleted;
         public event EventHandler CancelScanStarted;
-        public void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
+        public void BeginScan(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options)
         {
             lock (this)
@@ -217,7 +218,7 @@ namespace FAT.Application.Services
             {
                 var modified = r.Modified;
                 var scanStage = r.ScanStage;
-                List<BadFileItem> badfiles = new List<BadFileItem>();
+                List<IBadFileItem> badfiles = new List<IBadFileItem>();
                 {
                     foreach (var m in r.BadFiles)
                     {

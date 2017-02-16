@@ -3,7 +3,7 @@ using APTAT.Core.Descent.Apt;
 
 namespace FAT.Application.Models
 {
-    public class BadFileItem
+    public class BadFileItem : IBadFileItem
     {
         public Boolean IsUnknown { get { return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen; } }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using APTAT.Common;
+using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Directory;
@@ -14,7 +15,7 @@ namespace APTAT.Core.Descent.Apt
         private AptDescentMod _descentMod;
         private ScanOptions _scanOptions;
 
-        public AptDescentScanner(IEnumerable<DeploymentTarget> targets, string login, string password,
+        public AptDescentScanner(IEnumerable<IComputer> targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, ScanOptions scanOptions) 
             : base(targets, login, password, devicesSourceDescription)
         {

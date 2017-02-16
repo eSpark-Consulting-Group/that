@@ -59,6 +59,9 @@
     <Reference Include="System.Windows.Presentation" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.JustMock">
+      <HintPath>..\..\ThirdParty\Telerik.JustMock.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
@@ -79,8 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTest1.cs" />
-    <Compile Include="UnitTest1.DispatcherUtil.cs" />
+    <Compile Include="ThreatInfoItemTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

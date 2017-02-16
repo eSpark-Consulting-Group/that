@@ -10,6 +10,7 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Application.Services.EventArgs;
 using APTAT.Core.Apt;
 using APTAT.Core.FLS;
+using APTAT.DeploymentCore;
 
 namespace FAT.Application.Services
 {
@@ -155,7 +156,7 @@ namespace FAT.Application.Services
         string GetValkyrieDetailsLink();
         OperationResult SubmitEmail(string[] addresses);
 
-        void BeginScan(DeploymentTarget[] targets, IDevicesSourceDescription devicesSourceDescription,
+        void BeginScan(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription,
             ScanOptions options);
 
         GetModifiedResultsForOperationEventArgs GetModifiedResultsForOperation(Guid operationUid, TimeSpan? lastUtcTime,

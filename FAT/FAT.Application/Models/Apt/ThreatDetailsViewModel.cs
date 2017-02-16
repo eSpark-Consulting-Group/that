@@ -219,7 +219,7 @@ namespace FAT.Application.Models
         {
             base.InvokeViewLoaded(arg);
 
-            var badFile = _storage.GetValue<ThreatInfoItem>(KnownKeys.UnknownFile, false);
+            var badFile = _storage.GetValue<IThreatInfoItem>(KnownKeys.UnknownFile, false);
 
             if (badFile == null)
                 return;

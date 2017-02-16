@@ -10,7 +10,7 @@ namespace FAT.Application.Models
 
         public Int32 UnknownFilesCount { get; set; }
 
-        public BadFileItem[] BadFiles { get; set; }
+        public IBadFileItem[] BadFiles { get; set; }
 
         public ScanStage ScanStage { get; set; }
         public TimeSpan Modified { get; set; }

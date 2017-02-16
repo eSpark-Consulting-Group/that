@@ -6,6 +6,7 @@ using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using System.Collections.Concurrent;
+using APTAT.DeploymentCore;
 
 namespace APTAT.Core.Apt
 {
@@ -15,7 +16,7 @@ namespace APTAT.Core.Apt
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly IDevicesSourceDescription _devicesSourceDescription;
         private Guid _operationUid;
-        private readonly IEnumerable<DeploymentTarget> _targets;
+        private readonly IEnumerable<IComputer> _targets;
             
         
         private readonly ScanOptions _options;
@@ -25,7 +26,7 @@ namespace APTAT.Core.Apt
         public event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
         public event EventHandler<ComputerScanCompletedEventArgs> ComputerScanCompleted; 
         public IAptScanOperationContext ScanOperationContext { get { return _scanOperationContext; } }
-        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<DeploymentTarget> targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<IComputer> targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
         {
             _devicesSourceDescription = devicesSourceDescription;
             _descentSubSystem = descentSubSystem;
@@ -152,7 +153,7 @@ namespace APTAT.Core.Apt
         }
         internal class ScanContextActionArgs
         {
-            public IEnumerable<DeploymentTarget> Targets { get; set; }
+            public IEnumerable<IComputer> Targets { get; set; }
 
             public string Login { get; set; }
 

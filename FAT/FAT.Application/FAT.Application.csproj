@@ -121,6 +121,8 @@
     <Compile Include="Converters\ColorToWhiteConverter.cs" />
     <Compile Include="Converters\ProgressBarHighlightConverter.cs" />
     <Compile Include="Models\Apt\FileVerdictContext.cs" />
+    <Compile Include="Models\Apt\IBadFileItem.cs" />
+    <Compile Include="Models\Apt\IThreatInfoItem.cs" />
     <Compile Include="Models\Apt\ScanStatus.cs" />
     <Compile Include="Models\IScanCounterDiff.cs" />
     <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />

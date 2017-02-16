@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using APTAT.Application.Models.Apt;
+using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
@@ -31,7 +32,7 @@ namespace FAT.Application.Models
     }
 
 
-    public class ThreatInfoItem : DomainObject
+    public class ThreatInfoItem : DomainObject, IThreatInfoItem
     {
         private Int32 _totalFilesCount;
         private Int32 _unknownFilesCount;
@@ -46,14 +47,14 @@ namespace FAT.Application.Models
         private String _statusMessageMemento;
 
         private ScanStage _scanStage;
-        private readonly Dictionary<string, List<ThreatInfoItem>> _itemsDict 
-            = new Dictionary<string, List<ThreatInfoItem>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, List<IThreatInfoItem>> _itemsDict 
+            = new Dictionary<string, List<IThreatInfoItem>>(StringComparer.OrdinalIgnoreCase);
 
-        public Collection<ThreatInfoItem> Computers { get; set; }
+        public Collection<IThreatInfoItem> Computers { get; set; }
         public float? MalwareProbabilityValue { get; set; }
-        public BadFileItem BadFile { get; }
+        public IBadFileItem BadFile { get; }
 
-        public DeploymentTarget DeploymentTarget { get; }
+        public IComputer DeploymentTarget { get; }
         private double RemoteScanningPercentage { get; set; }
 
         public string SkipReason { get; set; }
@@ -180,10 +181,11 @@ namespace FAT.Application.Models
         }
 
       
-        public ThreatInfoItem[] FilesToCheckOnValkyrieCount { get; private set; }
+        public IThreatInfoItem[] FilesToCheckOnValkyrieCount { get; private set; }
+
         public void RemoteScanCompleted()
         {
-            ThreatInfoItem[] files = Items.Where(i => i.ShouldCheckOnValkyrie).ToArray();
+            IThreatInfoItem[] files = Items.Where(i => i.ShouldCheckOnValkyrie).ToArray();
             FilesToCheckOnValkyrieCount = files;
             ReCalculateValkyriePercentage();
         }
@@ -632,7 +634,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Items { get; }
+        public ObservableCollection<IThreatInfoItem> Items { get; }
 
         public int DistinctUnknownFilesCount
         {
@@ -681,27 +683,27 @@ namespace FAT.Application.Models
         {
             StatusMessageSystem = "Initializing...";
 
-            Items = new ObservableCollection<ThreatInfoItem>();
+            Items = new ObservableCollection<IThreatInfoItem>();
         }
 
 
 
-        public ThreatInfoItem(DeploymentTarget deploymentTarget) : this()
+        public ThreatInfoItem(IComputer deploymentTarget) : this()
         {
             DeploymentTarget = deploymentTarget;
             Name = deploymentTarget.Name;
             IpAddress = deploymentTarget.IPAddress;
             IsLocal = deploymentTarget.IsLocalComputer;
-            IsComputer = true;
             IsOnline = deploymentTarget.IsOnline;
             ComputerGuid = deploymentTarget.Uid;
             LdapPath = deploymentTarget.LdapPath;
+            IsComputer = true;
 
             if (Name == IpAddress)
                 Name = deploymentTarget.DnsName;
         }
 
-        public ThreatInfoItem(BadFileItem badFile)
+        public ThreatInfoItem(IBadFileItem badFile)
         {
             Name = badFile.Name;
             Size = badFile.Size;
@@ -749,7 +751,7 @@ namespace FAT.Application.Models
             var inAnalysizDiff = 0;
             foreach (var verdictContext in fileVerdictContext)
             {
-                List<ThreatInfoItem> items;
+                List<IThreatInfoItem> items;
                 if (_itemsDict.TryGetValue(verdictContext.Sha1, out items))
                 {
                     shouldUpdateStatus = true;
@@ -833,7 +835,7 @@ namespace FAT.Application.Models
             RaisePropertyChanged(nameof(StatusMessage));
         }
 
-        public void AddFile(ThreatInfoItem threatInfoItem)
+        public void AddFile(IThreatInfoItem threatInfoItem)
         {
             if (!IsComputer) throw new NotSupportedException();
             if (threatInfoItem.IsComputer) throw new ArgumentException();
@@ -842,7 +844,7 @@ namespace FAT.Application.Models
             if (_itemsDict.ContainsKey(threatInfoItem.BadFile.Sha1))
                 _itemsDict[threatInfoItem.BadFile.Sha1].Add(threatInfoItem);
             else
-                _itemsDict.Add(threatInfoItem.BadFile.Sha1, new List<ThreatInfoItem> {threatInfoItem});
+                _itemsDict.Add(threatInfoItem.BadFile.Sha1, new List<IThreatInfoItem> {threatInfoItem});
             if (shouldRaise)
                 RaisePropertyChanged(nameof(Items));
         }

@@ -32,13 +32,13 @@ namespace FAT.Application.Models
         private string _tcpPort = "80";
         private string _udpPort = "53";
         private Double _percentage;
-        private ThreatInfoItem _selectedItem;
+        private IThreatInfoItem _selectedItem;
         private readonly IAptService _aptService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
         private Boolean _isReportEnabled;
-        private ObservableCollection<ThreatInfoItem> _files;
-        private ObservableCollection<ThreatInfoItem> _computers;
+        private ObservableCollection<IThreatInfoItem> _files;
+        private ObservableCollection<IThreatInfoItem> _computers;
         private readonly ScanCounterManager _scanCounterManager;
         private bool _groupByFiles;
         private bool _groupByComputers;
@@ -47,15 +47,15 @@ namespace FAT.Application.Models
         private DateTime? _lastModifiesFlsVerdictDate = null;
         private DateTime? _lastModifiesValkyrieVerdictDate = null;
 
-        private List<ThreatInfoItem> _selectedItems = new List<ThreatInfoItem>();
-        private List<DeploymentTarget> _selectedDiscoveryResults = new List<DeploymentTarget>();
+        private List<IThreatInfoItem> _selectedItems = new List<IThreatInfoItem>();
+        private List<IComputer> _selectedDiscoveryResults = new List<IComputer>();
 
         private Guid _operationGuid;
         private Boolean? _isScanInProgress = false;
         private Boolean _isAutoDiscoveryInProgress;
         private Boolean _isAutoDiscoveryCompleted;
         private Boolean _cancelInProgress;
-        private ThreatInfoItem[] _onlineItems;
+        private IThreatInfoItem[] _onlineItems;
         private readonly DispatcherTimer _scanIteratorTimer;
 
         #region Props
@@ -343,7 +343,7 @@ namespace FAT.Application.Models
             }
         }
         
-        public ThreatInfoItem SelectedItem
+        public IThreatInfoItem SelectedItem
         {
             get { return _selectedItem; }
             set
@@ -363,12 +363,12 @@ namespace FAT.Application.Models
             }
         }
 
-        public List<ThreatInfoItem> SelectedItems
+        public List<IThreatInfoItem> SelectedItems
         {
             get { return _selectedItems; }
             set
             {
-                _selectedItems = value ?? new List<ThreatInfoItem>();
+                _selectedItems = value ?? new List<IThreatInfoItem>();
 
                 if (_selectedItems.Count == 1)
                     SelectedItem = _selectedItems[0];
@@ -391,17 +391,17 @@ namespace FAT.Application.Models
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
 
-        public List<DeploymentTarget> SelectedDiscoveryResults
+        public List<IComputer> SelectedDiscoveryResults
         {
             get { return _selectedDiscoveryResults; }
             set
             {
-                _selectedDiscoveryResults = value ?? new List<DeploymentTarget>();
+                _selectedDiscoveryResults = value ?? new List<IComputer>();
                 StartScanWithDiscoveryResultsCommand.InvalidateCanExecute();
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Files
+        public ObservableCollection<IThreatInfoItem> Files
         {
             get { return _files; }
             set
@@ -411,7 +411,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public ObservableCollection<ThreatInfoItem> Computers
+        public ObservableCollection<IThreatInfoItem> Computers
         {
             get { return _computers; }
             set
@@ -621,8 +621,8 @@ namespace FAT.Application.Models
                 Set(() => TotalItemsCount, items.Length);
                 ScannedItemsCount = 0;
                 _onlineItems = items.Where(item => item.IsOnline).ToArray();
-                Computers = new ObservableCollection<ThreatInfoItem>(items);
-                Files = new ObservableCollection<ThreatInfoItem>();
+                Computers = new ObservableCollection<IThreatInfoItem>(items);
+                Files = new ObservableCollection<IThreatInfoItem>();
 
                 GroupByComputers = true;
                 Set(() => ScanWasOnceStarted, true);
@@ -659,7 +659,7 @@ namespace FAT.Application.Models
 
                 if (!useDiscoveryResults)
                 {
-                    var items = new List<ThreatInfoItem>();
+                    var items = new List<IThreatInfoItem>();
                     foreach (var item in SelectedItems)
                     {
                         if (item.IsComputer &&
@@ -702,7 +702,7 @@ namespace FAT.Application.Models
 
         private void InvokeStopComputerScan(Object arg)
         {
-            var items = new List<ThreatInfoItem>();
+            var items = new List<IThreatInfoItem>();
             foreach (var item in SelectedItems)
             {
                 if (item.IsComputer && item.ScanStage == ScanStage.ScanInProgress)
@@ -720,8 +720,8 @@ namespace FAT.Application.Models
 
             _scanCounterManager.Clear();
 
-            Files = new ObservableCollection<ThreatInfoItem>();
-            Computers = new ObservableCollection<ThreatInfoItem>();
+            Files = new ObservableCollection<IThreatInfoItem>();
+            Computers = new ObservableCollection<IThreatInfoItem>();
 
 
             Set(() => RaisedHasUnknowns, false);
@@ -729,7 +729,7 @@ namespace FAT.Application.Models
 
             Set(() => ValkyrieDetailsLinkAvailable, false);
 
-            _onlineItems = new ThreatInfoItem[0];
+            _onlineItems = new IThreatInfoItem[0];
 
             SelectedItem = null;
             Percentage = 0;
@@ -860,7 +860,7 @@ namespace FAT.Application.Models
                 return;
             }
 
-            var list = new ObservableCollection<ThreatInfoItem>();
+            var list = new ObservableCollection<IThreatInfoItem>();
             foreach (var item in e.Items)
             {
                 list.Add(new ThreatInfoItem(item));
@@ -997,7 +997,7 @@ namespace FAT.Application.Models
                                         exist.Computers.Add(comp);
                                     else
                                     {
-                                        item.Computers = new ObservableCollection<ThreatInfoItem> { comp };
+                                        item.Computers = new ObservableCollection<IThreatInfoItem> { comp };
                                         Files.Add(item);
                                     }
 
@@ -1031,9 +1031,9 @@ namespace FAT.Application.Models
             {
                 var items = Files.Where(i => String.Equals(i.BadFile.Sha1, result.Sha1, StringComparison.OrdinalIgnoreCase)).ToArray();
 
-                foreach (var threatInfoItem in items)
+                foreach (var IThreatInfoItem in items)
                 {
-                    threatInfoItem.UpdateFileVerdict(result);
+                    IThreatInfoItem.UpdateFileVerdict(result);
                 }
             }
 
@@ -1070,7 +1070,7 @@ namespace FAT.Application.Models
 
                     if (GroupByComputers)
                     {
-                        var o = item as ThreatInfoItem;
+                        var o = item as IThreatInfoItem;
                         if (o.IsComputer)
                             return FilterComputerByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
@@ -1078,7 +1078,7 @@ namespace FAT.Application.Models
                     }
                     else if (GroupByFiles)
                     {
-                        var o = item as ThreatInfoItem;
+                        var o = item as IThreatInfoItem;
                         if (!o.IsComputer)
                             return FilterFileByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
@@ -1093,7 +1093,7 @@ namespace FAT.Application.Models
             }
         }
 
-        private bool FilterComputerByOrders(ThreatInfoItem item)
+        private bool FilterComputerByOrders(IThreatInfoItem item)
         {
             if (FilterOrders == null || !FilterOrders.Any()) return true;
             int[] orders = FilterOrders.ToArray();
@@ -1109,7 +1109,7 @@ namespace FAT.Application.Models
             return false;
         }
 
-        private bool FilterFileByOrders(ThreatInfoItem item)
+        private bool FilterFileByOrders(IThreatInfoItem item)
         {
             if (FilterOrders == null || !FilterOrders.Any()) return true;
             int[] orders = FilterOrders.ToArray();

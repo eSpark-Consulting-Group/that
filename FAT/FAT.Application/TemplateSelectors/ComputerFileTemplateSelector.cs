@@ -12,9 +12,9 @@ namespace FAT.Application.TemplateSelectors
 
         public override DataTemplate SelectTemplate(Object item, DependencyObject container)
         {
-            if (item is ThreatInfoItem)
+            if (item is IThreatInfoItem)
             {
-                ThreatInfoItem threatInfo = (ThreatInfoItem)item;
+                IThreatInfoItem threatInfo = (IThreatInfoItem)item;
                 if (threatInfo.IsComputer)
                 {
                     return ComputerTemplate;
