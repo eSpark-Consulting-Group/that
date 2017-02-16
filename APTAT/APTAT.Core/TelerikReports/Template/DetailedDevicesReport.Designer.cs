@@ -44,9 +44,9 @@ namespace APTAT.Core.TelerikReports
             this.detail = new Telerik.Reporting.DetailSection();
             this.panelCharts = new Telerik.Reporting.Panel();
             this.textBox17 = new Telerik.Reporting.TextBox();
-            this.graphTop10VulnerableDevices = new Telerik.Reporting.Graph();
+            this.graph1 = new Telerik.Reporting.Graph();
             this.cartesianCoordinateSystem1 = new Telerik.Reporting.CartesianCoordinateSystem();
-            this.graphAxisX = new Telerik.Reporting.GraphAxis();
+            this.graphAxis1 = new Telerik.Reporting.GraphAxis();
             this.graphAxis2 = new Telerik.Reporting.GraphAxis();
             this.objectDataSource1 = new Telerik.Reporting.ObjectDataSource();
             this.barSeries1 = new Telerik.Reporting.BarSeries();
@@ -212,7 +212,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // detail
             // 
-            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(46.200000762939453D);
+            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(43.761455535888672D);
             this.detail.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panelCharts,
             this.list1,
@@ -224,10 +224,10 @@ namespace APTAT.Core.TelerikReports
             // 
             this.panelCharts.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.textBox17,
-            this.graphTop10VulnerableDevices});
-            this.panelCharts.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(11.59999942779541D));
+            this.graph1});
+            this.panelCharts.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(12.111458778381348D));
             this.panelCharts.Name = "panelCharts";
-            this.panelCharts.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.826244354248047D), Telerik.Reporting.Drawing.Unit.Cm(15.799797058105469D));
+            this.panelCharts.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.826244354248047D), Telerik.Reporting.Drawing.Unit.Cm(11.849996566772461D));
             // 
             // textBox17
             // 
@@ -241,55 +241,55 @@ namespace APTAT.Core.TelerikReports
             this.textBox17.TextWrap = false;
             this.textBox17.Value = "Summary Chart";
             // 
-            // graphTop10VulnerableDevices
+            // graph1
             // 
-            this.graphTop10VulnerableDevices.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.Top10VulnerableDevices"));
+            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.Top10VulnerableDevices"));
             graphGroup1.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
             graphGroup1.Label = "=Fields.Name";
             graphGroup1.Name = "uidGroup";
             graphGroup1.Sortings.Add(new Telerik.Reporting.Sorting("= Fields.BadFilesCount", Telerik.Reporting.SortDirection.Asc));
-            this.graphTop10VulnerableDevices.CategoryGroups.Add(graphGroup1);
-            this.graphTop10VulnerableDevices.CoordinateSystems.Add(this.cartesianCoordinateSystem1);
-            this.graphTop10VulnerableDevices.DataSource = this.objectDataSource1;
-            this.graphTop10VulnerableDevices.Legend.Style.LineColor = System.Drawing.Color.LightGray;
-            this.graphTop10VulnerableDevices.Legend.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
-            this.graphTop10VulnerableDevices.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.7683716530855236E-08D), Telerik.Reporting.Drawing.Unit.Cm(1.4500972032546997D));
-            this.graphTop10VulnerableDevices.Name = "graphTop10VulnerableDevices";
-            this.graphTop10VulnerableDevices.PlotAreaStyle.LineColor = System.Drawing.Color.LightGray;
-            this.graphTop10VulnerableDevices.PlotAreaStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
-            this.graphTop10VulnerableDevices.Series.Add(this.barSeries1);
-            this.graphTop10VulnerableDevices.SeriesGroups.Add(graphGroup2);
-            this.graphTop10VulnerableDevices.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.826244354248047D), Telerik.Reporting.Drawing.Unit.Cm(14.349700927734375D));
-            this.graphTop10VulnerableDevices.Style.Padding.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.graphTop10VulnerableDevices.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.graphTop10VulnerableDevices.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.graphTop10VulnerableDevices.Style.Padding.Top = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.graph1.CategoryGroups.Add(graphGroup1);
+            this.graph1.CoordinateSystems.Add(this.cartesianCoordinateSystem1);
+            this.graph1.DataSource = this.objectDataSource1;
+            this.graph1.Legend.Style.LineColor = System.Drawing.Color.LightGray;
+            this.graph1.Legend.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
+            this.graph1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.7683716530855236E-08D), Telerik.Reporting.Drawing.Unit.Cm(1.4500972032546997D));
+            this.graph1.Name = "graph1";
+            this.graph1.PlotAreaStyle.LineColor = System.Drawing.Color.LightGray;
+            this.graph1.PlotAreaStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
+            this.graph1.Series.Add(this.barSeries1);
+            this.graph1.SeriesGroups.Add(graphGroup2);
+            this.graph1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.826244354248047D), Telerik.Reporting.Drawing.Unit.Cm(10.399899482727051D));
+            this.graph1.Style.Padding.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.graph1.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.graph1.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.graph1.Style.Padding.Top = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             graphTitle1.Position = Telerik.Reporting.GraphItemPosition.TopCenter;
             graphTitle1.Style.Color = System.Drawing.Color.Gray;
             graphTitle1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
             graphTitle1.Style.LineColor = System.Drawing.Color.LightGray;
             graphTitle1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
             graphTitle1.Text = "Top 10 Vulnerable Devices";
-            this.graphTop10VulnerableDevices.Titles.Add(graphTitle1);
+            this.graph1.Titles.Add(graphTitle1);
             // 
             // cartesianCoordinateSystem1
             // 
             this.cartesianCoordinateSystem1.Name = "cartesianCoordinateSystem1";
-            this.cartesianCoordinateSystem1.XAxis = this.graphAxisX;
+            this.cartesianCoordinateSystem1.XAxis = this.graphAxis1;
             this.cartesianCoordinateSystem1.YAxis = this.graphAxis2;
             // 
-            // graphAxisX
+            // graphAxis1
             // 
-            this.graphAxisX.LabelAngle = 90;
-            this.graphAxisX.MajorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
-            this.graphAxisX.MajorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.graphAxisX.MajorGridLineStyle.Visible = true;
-            this.graphAxisX.MinorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
-            this.graphAxisX.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.graphAxisX.MinorGridLineStyle.Visible = false;
-            this.graphAxisX.Name = "graphAxisX";
-            numericalScale1.DataPointTicks = true;
-            this.graphAxisX.Scale = numericalScale1;
+            this.graphAxis1.MajorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
+            this.graphAxis1.MajorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.graphAxis1.MajorGridLineStyle.Visible = true;
+            this.graphAxis1.MinorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
+            this.graphAxis1.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.graphAxis1.MinorGridLineStyle.Visible = false;
+            this.graphAxis1.Name = "graphAxis1";
+            numericalScale1.LabelStep = 1D;
+            numericalScale1.MajorStep = 1D;
+            this.graphAxis1.Scale = numericalScale1;
             // 
             // graphAxis2
             // 
@@ -337,7 +337,7 @@ namespace APTAT.Core.TelerikReports
             this.list1.ColumnGroups.Add(tableGroup1);
             this.list1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panel1});
-            this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(28.5D));
+            this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(26.061456680297852D));
             this.list1.Name = "list1";
             tableGroup2.Groupings.Add(new Telerik.Reporting.Grouping(null));
             tableGroup2.Name = "DetailGroup";
@@ -720,7 +720,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // textBox36
             // 
-            this.textBox36.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(27.399999618530273D));
+            this.textBox36.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(24.899999618530273D));
             this.textBox36.Name = "textBox36";
             this.textBox36.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.3999996185302734D), Telerik.Reporting.Drawing.Unit.Cm(1.0999997854232788D));
             this.textBox36.Style.Color = System.Drawing.Color.Gray;
@@ -1161,9 +1161,9 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.TextBox textBox46;
         private Template.FileDetailsSubreport fileDetailsSubreport2;
         private Template.FileDetailsSubreport fileDetailsSubreport3;
-        private Telerik.Reporting.Graph graphTop10VulnerableDevices;
+        private Telerik.Reporting.Graph graph1;
         private Telerik.Reporting.CartesianCoordinateSystem cartesianCoordinateSystem1;
-        private Telerik.Reporting.GraphAxis graphAxisX;
+        private Telerik.Reporting.GraphAxis graphAxis1;
         private Telerik.Reporting.GraphAxis graphAxis2;
         private Telerik.Reporting.ObjectDataSource objectDataSource1;
         private Telerik.Reporting.BarSeries barSeries1;

@@ -22,9 +22,6 @@ namespace APTAT.Core.TelerikReports
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-           //graphAxisX.
-           //cartesianCoordinateSystem1.XAxis.
         }
-
     }
 }
