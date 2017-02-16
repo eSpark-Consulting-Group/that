@@ -399,7 +399,6 @@ namespace APTAT.Core.Reports
         {
             get
             {
-
                 IEnumerable<ScannedTarget> targets;
                 IEnumerable<DetailedBadFile> files;
                 MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
@@ -412,12 +411,14 @@ namespace APTAT.Core.Reports
                 List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
                 foreach (var scanResult in top10)
                 {
-                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-
-                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-
-                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Lookup in Progress", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-
+                    if (scanResult.UnknownFilesCount > 0)
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    if (scanResult.MalwareFilesCount > 0)
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    if (scanResult.NotAnalyzedFilesCount > 0)
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Lookup in Progress", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    //if (scanResult.NoVerdictFilesCount > 0)
+                    //    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NoVerdictFilesCount, BadFileType = "No Verdict", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 }
 
                 return devices.ToArray();
@@ -440,11 +441,11 @@ namespace APTAT.Core.Reports
                 List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
                 foreach (var scanResult in top10)
                 {
-                    
+                    if (scanResult.UnknownFilesCount > 0)
                         devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                    
+                    if (scanResult.MalwareFilesCount > 0)
                         devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                    
+                    if (scanResult.NotAnalyzedFilesCount > 0)
                         devices.Add(new VulnerableDeviceInfoEx()
                         {
                             BadFilesCount = scanResult.NotAnalyzedFilesCount,
@@ -452,7 +453,7 @@ namespace APTAT.Core.Reports
                             Name = scanResult.HostName,
                             Uid = scanResult.TargetUid
                         });
-                    
+                    if (scanResult.PendingAnalysisFilesCount > 0)
                         devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.PendingAnalysisFilesCount, BadFileType = "Pending", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 }
 

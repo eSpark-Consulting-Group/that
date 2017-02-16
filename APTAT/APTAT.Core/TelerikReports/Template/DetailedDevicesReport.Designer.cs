@@ -14,7 +14,6 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.GraphTitle graphTitle1 = new Telerik.Reporting.GraphTitle();
             Telerik.Reporting.NumericalScale numericalScale1 = new Telerik.Reporting.NumericalScale();
             Telerik.Reporting.CategoryScale categoryScale1 = new Telerik.Reporting.CategoryScale();
-            Telerik.Reporting.Drawing.ColorPalette colorPalette1 = new Telerik.Reporting.Drawing.ColorPalette();
             Telerik.Reporting.GraphGroup graphGroup2 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.TableGroup tableGroup1 = new Telerik.Reporting.TableGroup();
             Telerik.Reporting.TableGroup tableGroup2 = new Telerik.Reporting.TableGroup();
@@ -300,16 +299,13 @@ namespace APTAT.Core.TelerikReports
             // 
             // objectDataSource1
             // 
+                        
             this.objectDataSource1.Name = "objectDataSource1";
             // 
             // barSeries1
             // 
             this.barSeries1.ArrangeMode = Telerik.Reporting.GraphSeriesArrangeMode.Stacked;
             this.barSeries1.CategoryGroup = graphGroup1;
-            colorPalette1.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(0))))));
-            colorPalette1.Colors.Add(System.Drawing.Color.Maroon);
-            colorPalette1.Colors.Add(System.Drawing.Color.Silver);
-            this.barSeries1.ColorPalette = colorPalette1;
             this.barSeries1.CoordinateSystem = this.cartesianCoordinateSystem1;
             this.barSeries1.DataPointLabel = "= Sum(Fields.BadFilesCount)";
             this.barSeries1.DataPointLabelConnectorStyle.Padding.Bottom = Telerik.Reporting.Drawing.Unit.Point(2D);
