@@ -344,8 +344,8 @@
             <Grid Grid.Row="2" Grid.RowSpan="2" Background="White" Margin="32 0 32 20" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}"/>
 
             <Grid Grid.Row="2" Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" Margin="32 0">
-                <Controls:SearchUserControl HorizontalAlignment="Left"  AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        x:Name="SearchTextBox" VerticalAlignment="Bottom" Watermark="{Binding GroupByWatermark}" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
+                <Controls:SearchUserControl HorizontalAlignment="Stretch" Margin="0 0 180 0" AutomationProperties.AutomationId="SearchControl" Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        x:Name="SearchTextBox" Watermark="{Binding GroupByWatermark}" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}">
                 </Controls:SearchUserControl>
                 <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}">
                     <Grid.ColumnDefinitions>
@@ -568,7 +568,7 @@
             
         </TextBlock>
 
-        <Grid Grid.Row="3" Background="#FFFAF9F9" Visibility="{Binding ComputersHeader, Converter={StaticResource EmptyStringToVisibiltyConverter}}">
+        <Grid Grid.Row="3" Background="#FFFAF9F9" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
             <Border x:Name="border" Height="46" Margin="32 0 32 20" Background="#FF2A80B9" >
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -577,12 +577,14 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="13" VerticalAlignment="Center" Text="When all files are analyzed, you will receive a detailed report at the provided email(s)." Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}"/>
+                    <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="13" VerticalAlignment="Center"  Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}">
+                        <Run Text="When all the files are analyzed, you will receive a detailed report at "/><Run Text="{Binding Email}"/>
+                    </TextBlock>
 
-                    <TextBlock Foreground="White" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Please enter your email(s) to receive a detailed scan results report:" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
+                    <TextBlock Foreground="White" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Please enter your email to receive a detailed scan results report:" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
                     <telerik:RadWatermarkTextBox MaxLength="50" Margin="7 0 0 0" Grid.Column="1" Width="300" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
                                      MinHeight="31" MaxHeight="31"  BorderThickness="1" BorderBrush="#FFD6D4D4"  Padding="7 7 0 0" 
-                                     Background="White" Text="{Binding Email}">
+                                     Background="White" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <telerik:RadWatermarkTextBox.WatermarkContent>
                             <TextBlock Margin="0 1 0 0" FontSize="14" Opacity="0.5" Text="customermail@enterprise.com" Foreground="#FF547D98"/>
                         </telerik:RadWatermarkTextBox.WatermarkContent>

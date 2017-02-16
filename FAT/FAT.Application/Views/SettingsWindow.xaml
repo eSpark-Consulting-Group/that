@@ -63,9 +63,9 @@
 
 
                                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="570" Margin="0 10 0 10" Grid.Row="1" Grid.ColumnSpan="3" Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}">
-                                        <local:LoginPasswordUserControl Margin="0" Login="{Binding RescanLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                                    ShowCurrentDomain="{Binding HasCurrentDomainName, UpdateSourceTrigger=PropertyChanged}"  UseCurrentDomain="{Binding UseCurrentDomainForRescan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Password="{Binding RescanPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                        <local:LoginPasswordUserControl Margin="0" Login="{Binding Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                    ShowCurrentDomain="{Binding UseCurrentCredentials, UpdateSourceTrigger=PropertyChanged}"  UseCurrentDomain="{Binding UseCurrentDomainForDeploy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
                                     </Grid>
 
                                     <Grid Grid.Row="3" Visibility="{Binding ElementName=this, Path=ShowProxyCredentials, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
@@ -106,10 +106,10 @@
                                             <Button Content="Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
                                         </Grid>
                                         <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}">
-                                            <Button Content="Quick Scan" Height="32"  Margin="5,5,5,15"  Click="ButtonQuick_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                            <Button Content="Quick Scan" Height="32"  Margin="5,5,5,15"  Click="ButtonQuick_Click"   Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
                                         </Grid>
                                         <Grid Visibility="{Binding ElementName=this, Path=ShowScanModes, Converter={converters:BoolToVisibilityConverter2}}">
-                                            <Button Content="Full Scan" Height="32"  Margin="5,5,5,15"  Click="Button_Click"  Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
+                                            <Button Content="Full Scan" Height="32"  Margin="5,5,5,15"  Click="ButtonFull_Click"   Visibility="{Binding ElementName=this, Path=ShowCredentials, Converter={converters:BoolToVisibilityConverter2}}"/>
                                         </Grid>
                                     </StackPanel>
                                 </Border>

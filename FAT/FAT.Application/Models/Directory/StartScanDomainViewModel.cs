@@ -289,12 +289,8 @@ namespace FAT.Application.Models
             if (selectedItems.Length > 1) return false;
             foreach (var address in selectedItems)
             {
-                var depItem = (DirectoryItem)address;
-                if (depItem.Type != DirectoryItemType.Computer) return false;
-                if (!_targetsDiscoveryService.IsLocalAddress(depItem.Name))
-                {
+                if (address.Type != DirectoryItemType.Computer || !address.IsLocalComputer)
                     return false;
-                }
             }
 
             return true;

@@ -20,6 +20,8 @@ using FAT.Application.Models.Apt;
 using FAT.Application.Models.ModelBase;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+using FAT.Application.Models.Directory;
+using System.Text.RegularExpressions;
 
 namespace FAT.Application.Models
 {
@@ -79,14 +81,8 @@ namespace FAT.Application.Models
             get { return !string.IsNullOrEmpty(CurrentDomainName); }
         }
 
-
         public string Login { get; set; }
         public string Password { get; set; }
-
-        public string RescanLogin { get; set; }
-        public string RescanPassword { get; set; }
-
-        public bool UseCurrentDomainForRescan { get; set; }
 
         public IMainViewModel ParentViewModel
         {
@@ -164,6 +160,7 @@ namespace FAT.Application.Models
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StopScanCommand.InvalidateCanExecute();
+                    SubmitEmailCommand.InvalidateCanExecute();
                 });
             }
         }
@@ -176,14 +173,17 @@ namespace FAT.Application.Models
             set
             {
                 _isScanInProgress = value;
+
                 RaisePropertyChanged(nameof(IsScanInProgress));
                 RaisePropertyChanged(nameof(IsAnyScanInProgress));
                 RaisePropertyChanged(nameof(Header));
                 RaisePropertyChanged(nameof(ComputersHeader));
+
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StartScanCommand.InvalidateCanExecute();
                     StopScanCommand.InvalidateCanExecute();
+                    SubmitEmailCommand.InvalidateCanExecute();
                 });
             }
         }
@@ -226,8 +226,8 @@ namespace FAT.Application.Models
             set
             {
                 _scannedItemsCount = value;
+
                 RaisePropertyChanged(nameof(ScannedItemsCount));
-                RaisePropertyChanged(nameof(ComputersHeader));
             }
         }
 
@@ -243,9 +243,15 @@ namespace FAT.Application.Models
             set
             {
                 _percentage = value;
+
                 RaisePropertyChanged(nameof(Percentage));
                 RaisePropertyChanged(nameof(Header));
                 RaisePropertyChanged(nameof(ComputersHeader));
+
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    SubmitEmailCommand.InvalidateCanExecute();
+                });
             }
         }
 
@@ -476,7 +482,17 @@ namespace FAT.Application.Models
             }
         }
 
-        public string Email { get; set; } = string.Empty;
+        private string _email = string.Empty;
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                _email = value;
+                RaisePropertyChanged(nameof(Email));
+                SubmitEmailCommand.InvalidateCanExecute();
+            }
+        }
 
         public bool HideSubmitEmail { get; set; }
 
@@ -526,7 +542,8 @@ namespace FAT.Application.Models
                 o => SelectedDiscoveryResults.Any());
             SelectCommand = new DelegateCommand(o => { }, 
                 o => IsDetailsEnabled);
-            SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail);
+            SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail, 
+                o => !string.IsNullOrEmpty(ComputersHeader) && IsValidEmail(Email));
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), 
                 o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), 
@@ -550,7 +567,6 @@ namespace FAT.Application.Models
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
-            UseCurrentDomainForRescan = HasCurrentDomainName;
 
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));
@@ -562,6 +578,20 @@ namespace FAT.Application.Models
                 Set(() => HideSubmitEmail, true);
             else
             { }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            if (String.IsNullOrEmpty(email))
+                return false;
+
+            return Regex.IsMatch(email,
+                      @"^(([^<>()[\]\\.,;:\s@\""]+"
+                    + @"(\.[^<>()[\]\\.,;:\s@\""]+)*)|(\"".+\""))@"
+                    + @"((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+                    + @"\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+"
+                    + @"[a-zA-Z]{2,}))$",
+                      RegexOptions.IgnoreCase);
         }
 
         private async Task<string> GetCurrentDomainName()
@@ -590,28 +620,30 @@ namespace FAT.Application.Models
 
                 if (retry)
                 {
-                    RestartComputerScan(true, IsQuickScan);
+                    RestartComputerScan(IsQuickScan);
                     return;
                 }
             }
             else
-                RestartComputerScan(false, IsQuickScan);
+                RestartComputerScan(IsQuickScan);
         }
 
         private void InvokeScanWithDiscoveryResults(Object arg)
         {
+            var model = new StartScanCredentialsViewModel(SelectedDiscoveryResults);
+
             SettingsWindow window = new SettingsWindow();
             window.Owner = System.Windows.Application.Current.MainWindow;
-            window.DataContext = this;
+            window.DataContext = model;
             window.ShowCredentials = true;
             window.ShowScanModes = true;
             window.Header = "Scan Credentials";
 
             if (window.ShowDialog().GetValueOrDefault())
-                RestartComputerScan(true, window.IsQuickScan, true);
+                RestartComputerScan(window.IsQuickScan, true);
         }
 
-        private void RestartComputerScan(bool useNewCredentials, bool isQuickScan, bool useDiscoveryResults = false)
+        private void RestartComputerScan(bool isQuickScan, bool useDiscoveryResults = false)
         {
             if (useDiscoveryResults)
             {
@@ -640,9 +672,6 @@ namespace FAT.Application.Models
                     scanKind = ScanKind.Full;
                 }
 
-                var login = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanLogin ?? Login) : null) : Login;
-                var password = useNewCredentials ? (!UseCurrentDomainForRescan ? (RescanPassword ?? Password) : null) : Password;
-
                 ScanOptions options;
                 CustomScanOptions customScanOptions = null;
                 if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
@@ -650,11 +679,11 @@ namespace FAT.Application.Models
                     customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
                     scanKind = ScanKind.Custom;
                     options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
-                        customScanOptions.ScanCriticalAreas, login, password, true);
+                        customScanOptions.ScanCriticalAreas, Login, Password, true);
                 }
                 else
                 {
-                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
                 }
 
                 if (!useDiscoveryResults)
@@ -679,7 +708,7 @@ namespace FAT.Application.Models
                 else
                 {
                     _lastModifiesComputerDate = null;
-                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, login, password, true);
+                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
                     _aptService.BeginScan(SelectedDiscoveryResults.ToArray(),
                         _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
                 }
@@ -735,9 +764,7 @@ namespace FAT.Application.Models
             Percentage = 0;
             IsScanCancelled = false;
             IsReportEnabled = false;
-            
-            RescanLogin = null;
-            RescanPassword = null;
+
 
             GroupByComputers = true;
 
@@ -825,6 +852,7 @@ namespace FAT.Application.Models
                 Set(() => ValkyrieDetailsLinkAvailable, true);
 
                 CancelInProgress = false;
+                ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
             }
         }
 

@@ -28,7 +28,6 @@
     <SolidColorBrush x:Key="ErrorBrush2" Color="#FFAD2E29" />
 
     <converters:StringToVisibiltyConverter x:Key="StringToVisibiltyConverter"/>
-    <converters:EmptyStringToVisibiltyConverter x:Key="EmptyStringToVisibiltyConverter"/>
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
     <converters:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
@@ -308,7 +307,7 @@
         <Setter Property="FontFamily" Value="{StaticResource myriadpro}" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush4}"/>
-        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="None"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="True"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -364,9 +363,9 @@
         <Setter Property="FontFamily" Value="{StaticResource myriadpro}" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush4}"/>
-        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="None"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="True"/>
+        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="False"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="10 7 10 0"/>
         <Setter Property="VerticalContentAlignment" Value="Top"/>
@@ -434,7 +433,7 @@
         <Setter Property="FontFamily" Value="{StaticResource myriadpro}" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush4}"/>
-        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="None"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="True"/>
         <Setter Property="BorderThickness" Value="0"/>

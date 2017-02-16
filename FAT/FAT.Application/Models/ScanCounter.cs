@@ -75,9 +75,13 @@ namespace FAT.Application.Models
         public void UpdatePercentage(int total)
         {
             if (total > 0)
-                Percentage = string.Format("({0:0.0}%)",
-                    Count * 100d / total).Replace(".0", string.Empty);
-            RaisePropertyChanged(nameof(Percentage));
+            {
+                Percentage = string.Format("({0:0.00}%)",
+                    Count * 100d / total).
+                    Replace(".00", string.Empty).
+                    Replace("0.00", string.Empty);
+                RaisePropertyChanged(nameof(Percentage));
+            }
         }
 
         protected virtual void RaisePropertyChanged(string name)

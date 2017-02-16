@@ -81,22 +81,28 @@ namespace FAT.Application
                 return;
             }
 
-            IsQuickScan = false;
             DialogResult = true;
         }
 
         private void ButtonQuick_Click(object sender, RoutedEventArgs e)
         {
-            MainViewViewModel model = DataContext as MainViewViewModel;
-            string message;
-            if (!ShowProxyCredentials && !ShowCredentials && !model.ValidatePorts(out message))
+            var model = DataContext as WizardViewModel;
+            model.ChangeStepCommand.Execute(null);
+            if (!model.HasErrors)
             {
-                model.Error = message;
-                return;
+                IsQuickScan = true;
+                DialogResult = true;
             }
+        }
 
-            IsQuickScan = true;
-            DialogResult = true;
+        private void ButtonFull_Click(object sender, RoutedEventArgs e)
+        {
+            var model = DataContext as WizardViewModel;
+            model.ChangeStepCommand.Execute(null);
+            if (!model.HasErrors)
+            {
+                DialogResult = true;
+            }
         }
 
         private void Button_CancelClick(object sender, RoutedEventArgs e)

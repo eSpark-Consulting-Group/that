@@ -204,11 +204,11 @@
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
                     CellTemplateSelector="{StaticResource VerdictColumnSelector}"   
                     IsFilterable="True"
-                    SortMemberPath="ScanStatus"
+
                     FilterMemberPath="ScanStatus"
                     Header="Verdict"  
                     TextAlignment="Left"
-                    Width="160*" MinWidth="80"/>
+                    Width="160*" MinWidth="120"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>

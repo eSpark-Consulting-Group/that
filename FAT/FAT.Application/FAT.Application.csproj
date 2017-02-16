@@ -124,6 +124,7 @@
     <Compile Include="Models\Apt\IBadFileItem.cs" />
     <Compile Include="Models\Apt\IThreatInfoItem.cs" />
     <Compile Include="Models\Apt\ScanStatus.cs" />
+    <Compile Include="Models\Directory\StartScanCredentialsViewModel.cs" />
     <Compile Include="Models\IScanCounterDiff.cs" />
     <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
     <Compile Include="Models\ScanCounter.cs" />

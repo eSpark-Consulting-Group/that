@@ -2,7 +2,7 @@
                 x:Class="FAT.Application.MainWindow"
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                Title="Forensic Analysis Tool" Height="760" MinHeight="760" Width="1015" MinWidth="1015" 
+                Title="Forensic Analysis Tool" Height="745" MinHeight="745" Width="1015" MinWidth="1015" 
                 WindowStyle="None" WindowStartupLocation="CenterScreen"
                 MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
                 ResizeMode="CanResizeWithGrip" AllowsTransparency="True" Background="Transparent">
