@@ -399,6 +399,7 @@ namespace APTAT.Core.Reports
         {
             get
             {
+
                 IEnumerable<ScannedTarget> targets;
                 IEnumerable<DetailedBadFile> files;
                 MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);

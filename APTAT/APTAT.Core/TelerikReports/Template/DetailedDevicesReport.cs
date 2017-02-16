@@ -22,16 +22,8 @@ namespace APTAT.Core.TelerikReports
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-        }
-
-        public void RotateAxisXLable()
-        {
-            cartesianCoordinateSystem1.XAxis.LabelAngle = 90;
-        }
-
-        public void ChangeScaleForOne()
-        {
-           ((NumericalScale) graphAxisX.Scale ).LabelStep= 1;
+           //graphAxisX.
+           //cartesianCoordinateSystem1.XAxis.
         }
 
     }

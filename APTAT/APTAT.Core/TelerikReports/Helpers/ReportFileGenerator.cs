@@ -2,8 +2,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using APTAT.Core.Reports;
 
 namespace APTAT.Core.TelerikReports
 {
@@ -39,7 +37,7 @@ namespace APTAT.Core.TelerikReports
         //    return null;
         //}
 
-        public string Build(string resultfileName, AptReportData data, ReportType reportType, ReportFormat reportFormat, string operationUid)
+        public string Build(string resultfileName, object data, ReportType reportType, ReportFormat reportFormat, string operationUid)
         {
             if (data == null) return null;
             //var foundReportFileName = LookupForExistentReport(operationUid, reportType, reportFormat);
@@ -57,14 +55,7 @@ namespace APTAT.Core.TelerikReports
                      return renderer.Render(new DetailedPrograms(), data, fName);
 
                 case ReportType.DetailedPerDeviceReport:
-                    var ddrep = new DetailedDevicesReport();
-                    var max = data.Top10VulnerableDevices.Select(d => d.BadFilesCount).Max();
-                    if (max <= 5)
-                    {
-                        ddrep.ChangeScaleForOne();
-                    }
-                    
-                    return renderer.Render(ddrep, data, fName);
+                    return renderer.Render(new DetailedDevicesReport(), data, fName);
 
                 case ReportType.ExecutiveValkyrieReport:
                     return renderer.Render(new ExecutiveValkyrieReport(), data, fName);
