@@ -11,11 +11,14 @@ namespace APTAT.Core.TelerikReports
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailedDevicesReport));
             Telerik.Reporting.GraphGroup graphGroup1 = new Telerik.Reporting.GraphGroup();
+            Telerik.Reporting.GraphGroup graphGroup4 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.GraphTitle graphTitle1 = new Telerik.Reporting.GraphTitle();
             Telerik.Reporting.NumericalScale numericalScale1 = new Telerik.Reporting.NumericalScale();
+            Telerik.Reporting.NumericalScaleCrossAxisPosition numericalScaleCrossAxisPosition1 = new Telerik.Reporting.NumericalScaleCrossAxisPosition();
             Telerik.Reporting.CategoryScale categoryScale1 = new Telerik.Reporting.CategoryScale();
-            Telerik.Reporting.Drawing.ColorPalette colorPalette1 = new Telerik.Reporting.Drawing.ColorPalette();
             Telerik.Reporting.GraphGroup graphGroup2 = new Telerik.Reporting.GraphGroup();
+            Telerik.Reporting.Drawing.ColorPalette colorPalette1 = new Telerik.Reporting.Drawing.ColorPalette();
+            Telerik.Reporting.GraphGroup graphGroup3 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.TableGroup tableGroup1 = new Telerik.Reporting.TableGroup();
             Telerik.Reporting.TableGroup tableGroup2 = new Telerik.Reporting.TableGroup();
             Telerik.Reporting.InstanceReportSource instanceReportSource1 = new Telerik.Reporting.InstanceReportSource();
@@ -212,7 +215,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // detail
             // 
-            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(46.200000762939453D);
+            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(50.200004577636719D);
             this.detail.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panelCharts,
             this.list1,
@@ -251,6 +254,7 @@ namespace APTAT.Core.TelerikReports
             this.graphTop10VulnerableDevices.CategoryGroups.Add(graphGroup1);
             this.graphTop10VulnerableDevices.CoordinateSystems.Add(this.cartesianCoordinateSystem1);
             this.graphTop10VulnerableDevices.DataSource = this.objectDataSource1;
+            this.graphTop10VulnerableDevices.Legend.Position = Telerik.Reporting.GraphItemPosition.BottomCenter;
             this.graphTop10VulnerableDevices.Legend.Style.LineColor = System.Drawing.Color.LightGray;
             this.graphTop10VulnerableDevices.Legend.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
             this.graphTop10VulnerableDevices.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(4.7683716530855236E-08D), Telerik.Reporting.Drawing.Unit.Cm(1.4500972032546997D));
@@ -258,7 +262,9 @@ namespace APTAT.Core.TelerikReports
             this.graphTop10VulnerableDevices.PlotAreaStyle.LineColor = System.Drawing.Color.LightGray;
             this.graphTop10VulnerableDevices.PlotAreaStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
             this.graphTop10VulnerableDevices.Series.Add(this.barSeries1);
-            this.graphTop10VulnerableDevices.SeriesGroups.Add(graphGroup2);
+            graphGroup4.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.BadFileType"));
+            graphGroup4.Name = "badFileTypeGroup";
+            this.graphTop10VulnerableDevices.SeriesGroups.Add(graphGroup4);
             this.graphTop10VulnerableDevices.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.826244354248047D), Telerik.Reporting.Drawing.Unit.Cm(14.349700927734375D));
             this.graphTop10VulnerableDevices.Style.Padding.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graphTop10VulnerableDevices.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(10D);
@@ -280,21 +286,27 @@ namespace APTAT.Core.TelerikReports
             // 
             // graphAxisX
             // 
-            this.graphAxisX.LabelAngle = 90;
+            this.graphAxisX.LabelAngle = 0;
+            this.graphAxisX.LabelPlacement = Telerik.Reporting.GraphAxisLabelPlacement.AtMinimum;
             this.graphAxisX.MajorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
             this.graphAxisX.MajorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.graphAxisX.MajorGridLineStyle.Visible = true;
             this.graphAxisX.MinorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
             this.graphAxisX.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.graphAxisX.MinorGridLineStyle.Visible = false;
+            this.graphAxisX.MultiLevelCategoryLabels = false;
             this.graphAxisX.Name = "graphAxisX";
-            numericalScale1.DataPointTicks = true;
+            numericalScaleCrossAxisPosition1.Position = Telerik.Reporting.GraphScaleCrossAxisPosition.Auto;
+            numericalScaleCrossAxisPosition1.Value = 0D;
+            numericalScale1.CrossAxisPositions.Add(numericalScaleCrossAxisPosition1);
             this.graphAxisX.Scale = numericalScale1;
+            this.graphAxisX.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
             // 
             // graphAxis2
             // 
             this.graphAxis2.MajorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
             this.graphAxis2.MajorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.graphAxis2.MajorGridLineStyle.Visible = false;
             this.graphAxis2.MinorGridLineStyle.LineColor = System.Drawing.Color.LightGray;
             this.graphAxis2.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.graphAxis2.MinorGridLineStyle.Visible = false;
@@ -308,7 +320,11 @@ namespace APTAT.Core.TelerikReports
             // barSeries1
             // 
             this.barSeries1.ArrangeMode = Telerik.Reporting.GraphSeriesArrangeMode.Stacked;
-            this.barSeries1.CategoryGroup = graphGroup1;
+            graphGroup2.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
+            graphGroup2.Label = "=Fields.Name";
+            graphGroup2.Name = "uidGroup";
+            graphGroup2.Sortings.Add(new Telerik.Reporting.Sorting("= Fields.BadFilesCount", Telerik.Reporting.SortDirection.Asc));
+            this.barSeries1.CategoryGroup = graphGroup2;
             colorPalette1.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(0))))));
             colorPalette1.Colors.Add(System.Drawing.Color.Maroon);
             colorPalette1.Colors.Add(System.Drawing.Color.Silver);
@@ -322,9 +338,9 @@ namespace APTAT.Core.TelerikReports
             this.barSeries1.DataPointStyle.Visible = true;
             this.barSeries1.LegendItem.Value = "= Fields.BadFileType";
             this.barSeries1.Name = "barSeries1";
-            graphGroup2.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.BadFileType"));
-            graphGroup2.Name = "badFileTypeGroup";
-            this.barSeries1.SeriesGroup = graphGroup2;
+            graphGroup3.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.BadFileType"));
+            graphGroup3.Name = "badFileTypeGroup";
+            this.barSeries1.SeriesGroup = graphGroup3;
             this.barSeries1.X = "= Sum(Fields.BadFilesCount)";
             // 
             // list1
@@ -337,7 +353,7 @@ namespace APTAT.Core.TelerikReports
             this.list1.ColumnGroups.Add(tableGroup1);
             this.list1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panel1});
-            this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(28.5D));
+            this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(32.5D));
             this.list1.Name = "list1";
             tableGroup2.Groupings.Add(new Telerik.Reporting.Grouping(null));
             tableGroup2.Name = "DetailGroup";
@@ -720,7 +736,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // textBox36
             // 
-            this.textBox36.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(27.399999618530273D));
+            this.textBox36.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(31.400001525878906D));
             this.textBox36.Name = "textBox36";
             this.textBox36.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.3999996185302734D), Telerik.Reporting.Drawing.Unit.Cm(1.0999997854232788D));
             this.textBox36.Style.Color = System.Drawing.Color.Gray;

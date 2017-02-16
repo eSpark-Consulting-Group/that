@@ -302,7 +302,7 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // dsModule
             // 
-            this.dsModule.DataSource = typeof(APTAT.Core.Descent.Apt.Module);
+            this.dsModule.DataSource = typeof(APTAT.Core.Reports.ScanModule);
             this.dsModule.Name = "dsModule";
             // 
             // FileDetailsSubreport
