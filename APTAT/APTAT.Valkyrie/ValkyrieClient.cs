@@ -170,22 +170,8 @@ namespace APTAT.Valkyrie
             {
                 lock (_aptScanIdLock)
                 {
-                    var attemptCount = 0;
-                    while (true)
-                    {
-                        if (_aptScanId != null)
-                            break;
-                        if (_apiKey == null)
-                            waitNextInterval = true;
-                        if (attemptCount == 5) break;
-                        var startScanResult = _provider.StartScan(new StartScanRequest(_apiKey));
-                        if (startScanResult.ReturnCode == ErrorCodesEnum.Success)
-                        {
-                            _aptScanId = startScanResult.AptScanId;
-                            waitNextInterval = false;
-                        }
-                        attemptCount++;
-                    }
+                    if (_aptScanId != null)
+                        waitNextInterval = true;
                 }
             }
             if (!waitNextInterval)
@@ -223,7 +209,7 @@ namespace APTAT.Valkyrie
                 filesToAnalyze = _lookupContexts.ToList();
                 _lookupContexts.Clear();
             }
-            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult, false);
+            SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult, true);
             List<ValkyrieAnalyseOperationContext> filesToCheckAnalysisResult;
             lock (_automaticAnalyseSync)
             {
@@ -665,14 +651,11 @@ namespace APTAT.Valkyrie
                 StartAndFinalizeScanResponse startScanResult = null;
                 lock (_aptScanIdLock)
                 {
-                    if (_aptScanId == null)
-                    {
-                        startScanResult = _provider.StartScan(new StartScanRequest(regInfo.Key));
-                        _aptScanId = startScanResult.AptScanId;
-                    }
+                    startScanResult = _provider.StartScan(new StartScanRequest(regInfo.Key));
+                    _aptScanId = startScanResult.AptScanId;
                 }
 
-                if (startScanResult != null && startScanResult.ReturnCode != 0)
+                if (startScanResult.ReturnCode != 0)
                 {
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
                     throw new InvalidOperationException(startScanResult.ResultDescription);
@@ -680,8 +663,7 @@ namespace APTAT.Valkyrie
                 _progressNotifyTimer.Start();
                 if (!filesToAnalyze.Any()) return;
                 
-                if (startScanResult != null)
-                    Thread.Sleep(2000);
+                Thread.Sleep(2000);
                 SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, AddResult);
             }, TaskCreationOptions.None, cancellationToken)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);

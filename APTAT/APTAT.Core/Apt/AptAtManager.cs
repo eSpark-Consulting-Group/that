@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using APTAT.Common;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.FLS;
 using APTAT.Core.Properties;
@@ -104,6 +105,7 @@ namespace APTAT.Core.Apt
         {
             _isValkyrieStarted = true;
             _isValkyrieScanEnded = false;
+            _filesShouldSendToValkyrieCount = 0;
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
         }
 
@@ -133,7 +135,8 @@ namespace APTAT.Core.Apt
                             Debug.Assert(true, "uploaded twice the same file to valkyrie");
                         if (file.ValkyrieAnalysisResult.Verdict == ValkyrieVerdict.InQueue)
                         {
-                            _filesShouldSendToValkyrieCount--;
+                            if (_filesShouldSendToValkyrieCount > 0)
+                                _filesShouldSendToValkyrieCount--;
                         }
                     }
                     if (file != null || !e.IsUpdate)
@@ -306,9 +309,8 @@ namespace APTAT.Core.Apt
                     {
                         var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v =>
                                     new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.InQueue)),
-                                GetResultsEnumerator().ToArray())
-                            .Values;
-                        _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
+                                GetResultsEnumerator().ToArray()).Values;
+                       _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
                         lock (ValkyrieAnalysisResult)
                         {
                             _filesShouldSendToValkyrieCount += filesToAnalyze.Count;

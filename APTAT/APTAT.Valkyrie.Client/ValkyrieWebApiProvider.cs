@@ -229,7 +229,7 @@ namespace Valkyrie.WebApiProvider
             {
                 if (!IsProduction)
                 {
-                    ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+                    //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 }
                 if (ProxySettings.Proxy != null)
                 {
@@ -237,7 +237,7 @@ namespace Valkyrie.WebApiProvider
                 }
                 byte[] response = client.UploadValues(apiUri, payload);
                 string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
-                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {$"{apiUri} {Environment.NewLine}{responseEncoded}"}");
+                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {apiUri} {Environment.NewLine}{responseEncoded}");
                 var result = JsonConvert.DeserializeObject<T>(responseEncoded);
                 return result;
             }
