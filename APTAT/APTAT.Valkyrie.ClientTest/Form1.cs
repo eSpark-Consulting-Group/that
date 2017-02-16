@@ -24,7 +24,7 @@ namespace Aptat.Valkyrie.ClientTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-         //   ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest(){});
+            ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest(){});
             
         }
 

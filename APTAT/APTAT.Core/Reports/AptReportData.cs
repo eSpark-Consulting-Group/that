@@ -13,11 +13,6 @@ namespace APTAT.Core.Reports
 {
     public class AptReportData
     {
-        public AptReportData()
-        {
-            Targets = new IAptScanResult[] { };
-        }
-    
         private MergedScanResults _mergedScanResultsCache;
         private int _safeFilesCount = -1;
         private int _unknownFilesCount = -1;
@@ -40,7 +35,6 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                if (DevicesSourceDescription == null) return String.Empty;
                 switch (DevicesSourceDescription.Type)
                 {
                     case ETargetsDiscovererType.ActiveDirectory:
@@ -55,7 +49,6 @@ namespace APTAT.Core.Reports
             }
         }
         public bool IsActiveDirectoryDevicesSource { get { return DevicesSourceDescription.Type == ETargetsDiscovererType.ActiveDirectory; } }
-        
 
         public int TargetsNotPerformed { get; set; }
         public int TargetsScanned
@@ -235,7 +228,6 @@ namespace APTAT.Core.Reports
                 List<IAptScanResult> scanResults = new List<IAptScanResult>();
                 foreach (var t in targets)
                 {
-                    var endPointFiles = (from file in files where file.Targets.Any(tg => tg.TargetUid == t.TargetUid) select file).ToArray();
                     var scanResult = new AptScanResult(t.Computer, Guid.Empty, null)
                     {
                         MalwareFilesCount = t.MalwareFilesCount,
@@ -248,13 +240,11 @@ namespace APTAT.Core.Reports
                         TotalFilesCount = t.TotalFilesCount,
                         FailedToAnalyzeFilesCount = t.FailedToAnalyzeFilesCount,
                         NoVerdictFilesCount = t.NoVerdictFilesCount,
-                        PendingAnalysisFilesCount = t.PendingAnalysisFilesCount,
-                        UknownFilesValkyrie = endPointFiles.Where(f => f.FileType == BadFileType.Unknown).ToArray(),
-                        MaliciousFilesValkyrie = endPointFiles.Where(f => f.FileType == BadFileType.Infected).ToArray(),
-                        FailedToAnalyzeFilesValkyrie = endPointFiles.Where(f => f.FileType == BadFileType.NotAnalyzed).ToArray(),
-                        PendingAnalysisFilesValkyrie = endPointFiles.Where(f => f.FileType == BadFileType.Pending).ToArray()
+                        PendingAnalysisFilesCount = t.PendingAnalysisFilesCount
+                     
                     };
 
+                    scanResult.SetAptReportInstance(t.AptReport);
                     scanResults.Add(scanResult);
                 }
 
@@ -264,7 +254,6 @@ namespace APTAT.Core.Reports
 
         private void CalculateTotal()
         {
-            if (Targets == null) return;
             var statistics = StatisticsCalculator.CalculateFilesStatistics(Targets);
 
             ReplaceStatistics(statistics);
@@ -283,194 +272,163 @@ namespace APTAT.Core.Reports
             _pendingAnalysisFilesCount = statistics.PendingAnalysisFilesCount;
         }
 
-     
-
-        public ItemRatingInfo[] FileRating
+        public ItemRatingInfo[] GetFileRatingCollection()
         {
-            get
+            var itemRatingInfoList = new List<ItemRatingInfo>()
             {
-                var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + LookupInProgressFilesCount;
+                new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = "Trusted"},
+                new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = "Unknown"},
+                //**
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = "Malicious" },
+                new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = LookupInProgressFilesCount, Value = "Lookup In Progress" },
+                //new FileRatingInfo() { CloudVerdict = CloudVerdict.NoVerdict, Count = NoVerdictFilesCount, Value = "No Verdict " }
+
+            };
+
+            return itemRatingInfoList.ToArray();
+        }
+
+        public ItemRatingInfo[] GetFileRatingCollectionValkyrie()
+        {
+            var itemRatingInfoList = new List<ItemRatingInfo>
+            {
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = "Trusted"},
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = "Unknown"},
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = "Malicious" },
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = "Lookup In Progress" },
+                new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = "In Analysis" }
                 
-                var itemRatingInfoList = new List<ItemRatingInfo>()
-                {                    
-                    new FileRatingInfo(){CloudVerdict = CloudVerdict.Safe, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", SafeFilesCount  / (double)total)},            
-                    new FileRatingInfo(){CloudVerdict = CloudVerdict.Unknown, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", UnknownFilesFound / (double) total)},                    
-                    new FileRatingInfo() { CloudVerdict = CloudVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", MalwareFilesFound / (double) total)},
-                    new FileRatingInfo() { CloudVerdict = CloudVerdict.FailedToAnalyze, Count = LookupInProgressFilesCount, Value = string.Format("Lookup In Progress ({0:P2})" , LookupInProgressFilesCount / (double) total)},
-                    //new FileRatingInfo() { CloudVerdict = CloudVerdict.NoVerdict, Count = NoVerdictFilesCount, Value = "No Verdict " }
-                };                
-                                
-                return itemRatingInfoList.ToArray();
-            }
+            };
+
+            return itemRatingInfoList.ToArray();
         }
 
-        public ItemRatingInfo[] FileRatingValkyrie
+        public ItemRatingInfo[] GetDevicesRatingCollection()
         {
-            get
+            int safe = 0;
+            int vulnerable = 0;
+            int infected = 0;
+            int unknown = 0;
+            //int notscanned = 0;
+            var groupped = from target in Targets group target by target.TargetVerdict into temp select temp;
+            foreach (var item in groupped)
             {
-                var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + NotAnalyzedFilesCount +  PendingAnalysisFilesCount;
-          
-                var itemRatingInfoList = new List<ItemRatingInfo>
-                {
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", SafeFilesCount / (double) total)},
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", UnknownFilesFound / (double) total)},
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", MalwareFilesFound / (double) total)},
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = string.Format("Lookup In Progress ({0:P2})" , NotAnalyzedFilesCount / (double) total)},
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = PendingAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , PendingAnalysisFilesCount / (double) total )}
-                };
-
-                return itemRatingInfoList.ToArray();
+                if (item.Key == TargetVerdict.Safe)
+                    safe = item.Count();
+                if (item.Key == TargetVerdict.Infected)
+                    infected = item.Count();
+                if (item.Key == TargetVerdict.Vulnerable)
+                    vulnerable = item.Count();
+                if (item.Key == TargetVerdict.Unknown)
+                    unknown = item.Count();
             }
-        }
 
-        public ItemRatingInfo[] DevicesRating 
-        {
-            get
-            {                
-                int safe = 0;
-                int vulnerable = 0;
-                int infected = 0;
-                int unknown = 0;
-                //int notscanned = 0;
-                var groupped = from target in Targets group target by target.TargetVerdict into temp select temp;
-                foreach (var item in groupped)
-                {
-                    if (item.Key == TargetVerdict.Safe)
-                        safe = item.Count();
-                    if (item.Key == TargetVerdict.Infected)
-                        infected = item.Count();
-                    if (item.Key == TargetVerdict.Vulnerable)
-                        vulnerable = item.Count();
-                    if (item.Key == TargetVerdict.Unknown)
-                        unknown = item.Count();
-                }
-
-                int total = safe + vulnerable + infected + unknown;
-                
-
-                return new ItemRatingInfo[]
-                {                    
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = string.Format("Safe ({0:P2})", safe / (double) total)},                    
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = string.Format("Infected ({0:P2})", infected / (double)total)},
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = string.Format("At Risk ({0:P2})", vulnerable / (double) total)},
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = string.Format("Not Scanned ({0:P2})", unknown / (double) total)}
-                };
-            }
-        }
-
-
-        public ItemRatingInfo[] DevicesRatingValkyrie
-        {
-            get
+            return new ItemRatingInfo[]
             {
-                IEnumerable<ScannedTarget> targets;
-                IEnumerable<DetailedBadFile> files;
-                MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
-
-
-                int safe = 0;
-                int vulnerable = 0;
-                int infected = 0;
-                int unknown = 0;
-                //int notscanned = 0;
-                var groupped = from target in targets group target by target.TargetVerdict into temp select temp;
-                foreach (var item in groupped)
-                {
-                    if (item.Key == TargetVerdict.Safe)
-                        safe = item.Count();
-                    if (item.Key == TargetVerdict.Infected)
-                        infected = item.Count();
-                    if (item.Key == TargetVerdict.Vulnerable)
-                        vulnerable = item.Count();
-                    if (item.Key == TargetVerdict.Unknown)
-                        unknown = item.Count();
-                }
-
-                int total = safe + vulnerable + infected + unknown;
-
-                return new ItemRatingInfo[]
-                {
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = string.Format("Safe ({0:P2})", safe / (double) total)},
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = string.Format("Infected ({0:P2})", infected / (double)total)},
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = string.Format("At Risk ({0:P2})", vulnerable / (double) total)},
-                    new TargetRatingInfo(){TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = string.Format("Not Scanned ({0:P2})", unknown / (double) total)}
-                };
-            }
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
+                new TargetRatingInfo {TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = "Not Scanned"},
+            };
         }
 
-        
-        public VulnerableDeviceInfoEx[] Top10VulnerableDevices
+
+        public ItemRatingInfo[] GetDevicesRatingCollectionValkyrie()
         {
-            get
+            IEnumerable<ScannedTarget> targets;
+            IEnumerable<DetailedBadFile> files;
+            MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+
+            int safe = 0;
+            int vulnerable = 0;
+            int infected = 0;
+            int unknown = 0;
+            //int notscanned = 0;
+            var groupped = from target in targets group target by target.TargetVerdict into temp select temp;
+            foreach (var item in groupped)
             {
-                IEnumerable<ScannedTarget> targets;
-                IEnumerable<DetailedBadFile> files;
-                MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
-
-                var top10 = (from target in targets
-                             where target.BadFilesCount > 0
-                             orderby target.BadFilesCount descending
-                             select target).Take(10);
-
-                List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
-                foreach (var scanResult in top10)
-                {
-                    if (scanResult.UnknownFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                    if (scanResult.MalwareFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                    if (scanResult.NotAnalyzedFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Lookup in Progress", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                    //if (scanResult.NoVerdictFilesCount > 0)
-                    //    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NoVerdictFilesCount, BadFileType = "No Verdict", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                }
-
-                return devices.ToArray();
+                if (item.Key == TargetVerdict.Safe)
+                    safe = item.Count();
+                if (item.Key == TargetVerdict.Infected)
+                    infected = item.Count();
+                if (item.Key == TargetVerdict.Vulnerable)
+                    vulnerable = item.Count();
+                if (item.Key == TargetVerdict.Unknown)
+                    unknown = item.Count();
             }
-        }
 
-        public VulnerableDeviceInfoEx[] Top10VulnerableDevicesValkyrie
-        {
-            get
+            return new ItemRatingInfo[]
             {
-                IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
-                IEnumerable<DetailedBadFile> files;
-                MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
-
-                var top10 = (from target in targets
-                             where target.BadFilesCount > 0
-                             orderby target.BadFilesCount descending
-                             select target).Take(10);
-
-                List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
-                foreach (var scanResult in top10)
-                {
-                    if (scanResult.UnknownFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                    if (scanResult.MalwareFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                    if (scanResult.NotAnalyzedFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx()
-                        {
-                            BadFilesCount = scanResult.NotAnalyzedFilesCount,
-                            BadFileType = "Not Analyzed",
-                            Name = scanResult.HostName,
-                            Uid = scanResult.TargetUid
-                        });
-                    if (scanResult.PendingAnalysisFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.PendingAnalysisFilesCount, BadFileType = "Pending", Name = scanResult.HostName, Uid = scanResult.TargetUid });
-                }
-
-                return devices.ToArray();
-            }
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Safe, Count = safe, Value = "Safe"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Vulnerable, Count = vulnerable, Value = "At Risk"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.Infected, Count = infected, Value = "Infected"},
+                new TargetRatingInfo(){TargetVerdict = TargetVerdict.NotScanned, Count = unknown, Value = "Not Scanned"},
+            };
         }
-        public MostWantedBadFileInfo[] Top10PopularBadFiles
+        public VulnerableDeviceInfoEx[] GetTop10VulnerableDevices()
         {
-            get
-            {                    
-                var allBadFiles = GetAllBadFilesSorted();
-                return GetTop10PopularBadFiles(allBadFiles);
+            IEnumerable<ScannedTarget> targets;
+            IEnumerable<DetailedBadFile> files;
+            MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+            var top10 = (from target in targets
+                         where target.BadFilesCount > 0
+                         orderby target.BadFilesCount descending
+                         select target).Take(10);
+
+            List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
+            foreach (var scanResult in top10)
+            {
+                if (scanResult.UnknownFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                if (scanResult.MalwareFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                if (scanResult.NotAnalyzedFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Lookup in Progress", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                //if (scanResult.NoVerdictFilesCount > 0)
+                //    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NoVerdictFilesCount, BadFileType = "No Verdict", Name = scanResult.HostName, Uid = scanResult.TargetUid });
             }
+
+            return devices.ToArray();
+        }
+
+        public VulnerableDeviceInfoEx[] GetTop10VulnerableDevicesValkyrie()
+        {
+            IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
+            IEnumerable<DetailedBadFile> files;
+            MergeResults(Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+            var top10 = (from target in targets
+                         where target.BadFilesCount > 0
+                         orderby target.BadFilesCount descending
+                         select target).Take(10);
+
+            List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
+            foreach (var scanResult in top10)
+            {
+                if (scanResult.UnknownFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                if (scanResult.MalwareFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                if (scanResult.NotAnalyzedFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx()
+                    {
+                        BadFilesCount = scanResult.NotAnalyzedFilesCount,
+                        BadFileType = "Not Analyzed",
+                        Name = scanResult.HostName,
+                        Uid = scanResult.TargetUid
+                    });
+                if (scanResult.PendingAnalysisFilesCount > 0)
+                    devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.PendingAnalysisFilesCount, BadFileType = "Pending", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+            }
+
+            return devices.ToArray();
+        }
+        public MostWantedBadFileInfo[] GetTop10PopularBadFiles()
+        {
+            var allBadFiles = GetAllBadFilesSorted();
+            return GetTop10PopularBadFiles(allBadFiles);
         }
 
         public MostWantedBadFileInfo[] GetTop10PopularBadFiles(DetailedBadFile[] files)
@@ -745,19 +703,6 @@ namespace APTAT.Core.Reports
             }
         }
 
-        
-        public DetailedBadFile[] AllBadFilesSorted
-        {
-            get;set;
-            
-        
-        }
-
-        public void UpdateAllBadFilesSorted()
-        {
-            AllBadFilesSorted = GetAllBadFilesSorted(false);
-        }
-
         public DetailedBadFile[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
         {
             IEnumerable<ScannedTarget> targets;
@@ -902,7 +847,206 @@ namespace APTAT.Core.Reports
         }
     }
 
-    
+    public class DetailedBadFile
+    {
+        private readonly List<ScannedTarget> _targets = new List<ScannedTarget>();
+
+        public DetailedBadFile()
+        {
+        }
+
+        public DetailedBadFile(IModule module, ScannedTarget target)
+        {
+            Verdict = ValkyrieVerdict.NotAnalyzed;
+            if (module != null)
+            {
+                Sha1 = module.Sha1;
+                Name = System.IO.Path.GetFileName(module.Path);
+                Path = module.Path;
+                Size = module.Size;
+                Signer = module.Signer.TrimTo();
+                Version = module.Version;
+                Copyright = module.Copyright;
+                Product = module.Product.TrimTo();
+                Cloud = module.Cloud;
+                FileSizeFormatted = module.FileSizeFormatted;
+                Created = module.Created;
+                Accessed = module.Accessed;
+                Modified = module.Modified;
+                FileAge = module.FileAge;
+            }
+
+            target.BadFileInstances.Add(new BadFileInstanceInfo(module));
+            _targets.Add(target);
+        }
+        public string Path { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
+        public DateTime Accessed { get; set; }
+
+        public string Sha1 { get; set; }
+        public string Name { get; set; }
+
+        public long Size { get; set; }
+        public string Signer { get; set; }
+        public string Version { get; set; }
+        public string Copyright { get; set; }
+        public string Product { get; set; }
+        public Descent.Apt.CloudVerdict Cloud { get; set; }
+        public string FileSizeFormatted { get; set; }
+
+        public BadFileType FileType
+        {
+            get
+            {
+                if (Verdict == ValkyrieVerdict.FirstSeen || Verdict == ValkyrieVerdict.Pending)
+                {
+                    return BadFileType.Pending;
+                }
+
+                if (Verdict == ValkyrieVerdict.NotAnalyzed)
+                {
+                    if (Cloud == CloudVerdict.NoVerdict || Cloud == CloudVerdict.FailedToAnalyze)
+                        return BadFileType.NotAnalyzed;
+
+                    return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
+                }
+                return Verdict == ValkyrieVerdict.Undetected ? BadFileType.Unknown : BadFileType.Infected;
+            }
+        }
+
+        public void SetValkyrieAnalysis(ValkyrieAnalysisResult analysisResult)
+        {
+            if (analysisResult == null)
+                return;
+            IsWhiteListed = analysisResult.IsWhiteListed;
+            MalwareProbability = analysisResult.MalwareProbability;
+            ReturnCode = analysisResult.ReturnCode;
+            Verdict = analysisResult.Verdict;
+            IsWhiteListed = analysisResult.IsWhiteListed;
+            IsSkipped = analysisResult.IsSkipped;
+            SkipReason = analysisResult.SkipReason;
+            OperationStatus = analysisResult.OperationStatus;
+        }
+
+
+
+        public int TargetsCount
+        {
+            get { return Targets.Count; }
+        }
+
+
+        public string CloudString
+        {
+            get
+            {
+                switch (Cloud)
+                {
+                    case CloudVerdict.Safe:
+                        return "Trusted";
+                    case CloudVerdict.Unknown:
+                        return "Unknown";
+                    case CloudVerdict.Malware:
+                        return "Malware";
+                    case CloudVerdict.FirstSeen:
+                        return "Unknown (FirstSeen)";
+                    case CloudVerdict.FailedToAnalyze:
+                    case CloudVerdict.NoVerdict:
+                        return "Lookup in Progress";
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                ;
+            }
+        }
+
+        public List<ScannedTarget> Targets
+        {
+            get { return _targets; }
+        }
+
+        public int InstancesTotalCount
+        {
+            get
+            {
+                return _targets.Sum(t => t.BadFileInstances.Count);
+            }
+        }
+        public class BadFileInstanceInfo
+        {
+            public BadFileInstanceInfo()
+            {
+            }
+
+            public BadFileInstanceInfo(IModule module)
+            {
+                if (module != null)
+                {
+                    Id = module.Id;
+                    Path = module.Path;
+                    Created = module.Created;
+                    Modified = module.Modified;
+                    Accessed = module.Accessed;
+                }
+            }
+
+            public string Id { get; set; }
+            public string Path { get; set; }
+            public DateTime Created { get; set; }
+            public DateTime Modified { get; set; }
+            public DateTime Accessed { get; set; }
+        }
+
+        public bool IsWhiteListed { get; set; }
+
+        public string WhiteListed
+        {
+            get { return IsWhiteListed ? "Yes" : "No"; }
+        }
+
+        public float? MalwareProbability { get; set; }
+
+        public string MalwareProbabilityFormatted
+        {
+            get { return string.Format("{0:P}", MalwareProbability / 100); }
+        }
+
+        public ErrorCodesEnum ReturnCode { get; set; }
+
+        public ValkyrieVerdict Verdict { get; set; }
+
+        public string ValkyrieVerdictString
+        {
+            get
+            {
+                string result = this.Verdict.GetEnumDescription();
+                if (this.IsSkipped)
+                {
+                    if (!String.IsNullOrWhiteSpace(this.OperationStatus))
+                    {
+                        if (OperationStatus.Length > 80)
+                        {
+                            var s = OperationStatus.Substring(0, 80);
+                            s = s.Substring(0, s.LastIndexOf(" "));
+                            return result += " (" + s + ")";
+                        }
+                        result += " (" + this.OperationStatus + ")";
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        public bool IsSkipped { get; set; }
+
+        public string SkipReason { get; set; }
+
+        public string OperationStatus { get; set; }
+
+        public string FileAge { get; set; }
+    }
 
     public abstract class ItemRatingInfo
     {

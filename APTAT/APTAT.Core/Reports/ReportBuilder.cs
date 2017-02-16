@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using APTAT.Core.TelerikReports;
+using System.Reflection;
+using APTAT.Core.Descent.Apt;
+using Microsoft.Reporting.WinForms;
 
 namespace APTAT.Core.Reports
 {
     public class ReportBuilder
     {
+        private const string ExecutiveReportName = "ExecutiveAptReport";
+        private const string DetailedPerDeviceReportName = "DetailedPerDeviceAptReport";
+        private const string DetailedPerProgramReportName = "DetailedPerProgramAptReport";
+
+        private const string ExecutiveReportNameValkyrie = "ExecutiveAptReportValkyrie";
+        private const string DetailedPerDeviceReportNameValkyrie = "DetailedPerDeviceAptReportValkyrie";
+        private const string DetailedPerProgramReportNameValkyrie = "DetailedPerProgramAptReportValkyrie";
+
         private string _fileName;
 
         public delegate string BuildReportDelegate(AptReportData data, ReportType reportType);
@@ -17,12 +27,12 @@ namespace APTAT.Core.Reports
         public string Build(AptReportData data, ReportType reportType)
         {
             if (data == null)
-                return null;
-
-            var existentName = string.Empty;
-            var flsReportKey = data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
-            var valkyrieReportKey = data.ValkyrieOperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
-            var reportKey = string.Empty;
+                return null;                      
+            
+            var existentName = String.Empty;
+            var flsReportKey = data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType.ToString();
+            var valkyrieReportKey = data.ValkyrieOperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType.ToString();
+            var reportKey = String.Empty;
             if (_cache.Reports.Keys.Contains(flsReportKey))
             {
                 existentName = _cache.Reports[flsReportKey];
@@ -33,102 +43,467 @@ namespace APTAT.Core.Reports
                 existentName = _cache.Reports[valkyrieReportKey];
                 reportKey = valkyrieReportKey;
             }
-            if (!string.IsNullOrWhiteSpace(existentName))
+            if (!String.IsNullOrWhiteSpace(existentName))
             {
                 if (File.Exists(existentName))
                 {
                     _fileName = existentName;
                     return existentName;
                 }
-                _cache.Reports.Remove(reportKey);
+                else
+                {
+                    _cache.Reports.Remove(reportKey);
+                }
             }
             
+            
             _fileName = GetFileName(reportType);
-
+        
             switch (reportType)
             {
                 case ReportType.Executive:
                     _cache.Reports.Add(flsReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.ExecutiveReport, ReportFormat.PDF, flsReportKey);
+                    BuildExecutiveReport(_fileName, data);
                     break;
-
-                case ReportType.DetailedPerDevice:
-                    _cache.Reports.Add(flsReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.DetailedPerDeviceReport, ReportFormat.PDF, flsReportKey);
-                    break;
-
-                case ReportType.DetailedPerProgram:
-                    _cache.Reports.Add(flsReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.DetailedPerProgramReport, ReportFormat.PDF, flsReportKey);
-                    break;
-
                 case ReportType.ExecutiveWithValkyrie:
                     _cache.Reports.Add(valkyrieReportKey, _fileName);
-                    BuildExecutiveWithValkyrieReport(_fileName, data, valkyrieReportKey);
+                    BuildExecutiveWithValkyrieReport(_fileName, data);
                     break;
-
+                case ReportType.DetailedPerDevice:
+                    _cache.Reports.Add(flsReportKey, _fileName);
+                    BuildDetailedPerDeviceReport(_fileName, data);
+                    break;
                 case ReportType.DetailedPerDeviceWithValkyrie:
                     _cache.Reports.Add(valkyrieReportKey, _fileName);
-                    BuildDetailedPerDeviceWithValkyrieReport(_fileName, data, valkyrieReportKey);
+                    BuildDetailedPerDeviceWithValkyrieReport(_fileName, data);
                     break;
-
+                case ReportType.DetailedPerProgram:
+                    _cache.Reports.Add(flsReportKey, _fileName);
+                    BuildDetailedPerProgramReport(_fileName, data, "APTAT.Core.Reports.DetailedPrograms.rdlc");
+                    break;
                 case ReportType.DetailedPerProgramWithValkyrie:
                     _cache.Reports.Add(valkyrieReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.DetailedPerProgramValkyrieReport, ReportFormat.PDF, valkyrieReportKey);
+                    BuildDetailedPerProgramReport(_fileName, data, reportName: "APTAT.Core.Reports.DetailedProgramsWithValkyrie.rdlc");
                     break;
-
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(reportType));
+                    throw new ArgumentOutOfRangeException("reportType");
             }
 
             return _fileName;
         }
 
-        private readonly IReportFileGenerator _reportFileGenerator = new ReportFileGenerator(new FileHelper());
-
-        private void BuildExecutiveWithValkyrieReport(string fileName, AptReportData data, string uid)
+        private static void BuildExecutiveReport(string fileName, AptReportData data)
         {
-            data.GetAllBadFilesSorted(false);
-            _reportFileGenerator.Build(fileName, data, TelerikReports.ReportType.ExecutiveValkyrieReport, ReportFormat.PDF, uid);
+            ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollection());
+            ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollection());
+
+            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.Executive.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
         }
 
-        private void BuildDetailedPerDeviceWithValkyrieReport(string fileName, AptReportData data, string uid)
+        private static void BuildExecutiveWithValkyrieReport(string fileName, AptReportData data)
         {
-            var x = data.SucceededTargetsWithValkyrie.ToArray();
-            _reportFileGenerator.Build(fileName, data, TelerikReports.ReportType.DetailedPerDeviceWithValkyrieReport, ReportFormat.PDF, uid);
+            data.GetAllBadFilesSorted(false);
+            
+            ReportDataSource fileRatingDataSource = new ReportDataSource("FileRatingDataSet", data.GetFileRatingCollectionValkyrie());
+            ReportDataSource devicesRatingDataSource = new ReportDataSource("DevicesRatingDataSet", data.GetDevicesRatingCollectionValkyrie());
+
+            GenerateExecutiveReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.ExecutiveWithValkyrie.rdlc", null, fileRatingDataSource, devicesRatingDataSource);
+        }
+
+        private static void BuildDetailedPerDeviceReport(string fileName, AptReportData data)
+        {
+            var allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargets);
+            var vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevices());
+            var unknownFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.UnknownFiles.rdlc", ReportName = "UnknownFiles" };
+            var maliciousFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.MaliciousFiles.rdlc", ReportName = "MaliciousFiles" };
+            var lookupInProgressFilesSubReportContext = new SubReportContext() { Data = data.SucceededTargets, DataSourceName = "ModuleDataSet", FileName = "APTAT.Core.Reports.LookupInProgressFiles.rdlc", ReportName = "LookupInProgressFiles" };
+            
+
+            GenerateDetailedPerDevicesReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.DetailedDevices.rdlc", null, new [] { allDevicesDataSource, vulnerableDevicesExDataSource }, new [] { unknownFilesSubReportContext, maliciousFilesSubReportContext, lookupInProgressFilesSubReportContext });
+        }
+
+        private static void BuildDetailedPerDeviceWithValkyrieReport(string fileName, AptReportData data)
+        {
+            var allBadFilesData = data.GetAllBadFilesSorted(false);
+            var allDevicesDataSource = new ReportDataSource("ScanResultDataSet", data.SucceededTargetsWithValkyrie);
+            var vulnerableDevicesExDataSource = new ReportDataSource("VulnerableDeviceExDataSet", data.GetTop10VulnerableDevicesValkyrie());
+            //ReportDataSource valkyrieVerdictDataSource = new ReportDataSource("ValkyrieDataSet", allBadFilesData);
+            var unknownFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.UnknownFilesWithValkyrie.rdlc", ReportName = "UnknownFiles" };
+            var maliciousFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.MaliciousFilesWithValkyrie.rdlc", ReportName = "MaliciousFiles" };
+            var failedToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.FailedToAnalyzeWithValkyrie.rdlc", ReportName = "FailedToAnalyzeFiles" };
+            var pendingToAnalyzeFilesSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.PendingAnalysisFiles.rdlc", ReportName = "PendingAnalysisFiles" };                        
+            //SubReportContext valkyrieVerdictSubReportContext = new SubReportContext() { Data = allBadFilesData, DataSourceName = "ValkyrieDataSet", FileName = "APTAT.Core.Reports.ValkyrieResult.rdlc", ReportName = "ValkyrieVerdict" };
+
+            GenerateDetailedPerDevicesWithValkyrieReportFile(fileName, "AptReportDataSet", new [] { data }, "APTAT.Core.Reports.DetailedDevicesWithValkyrie.rdlc", null, new [] { allDevicesDataSource, vulnerableDevicesExDataSource/*, valkyrieVerdictDataSource*/ }, new [] { unknownFilesSubReportContext, maliciousFilesSubReportContext, failedToAnalyzeFilesSubReportContext, pendingToAnalyzeFilesSubReportContext /*, valkyrieVerdictSubReportContext*/ });
+        }
+
+        private static void BuildDetailedPerProgramReport(string fileName, AptReportData data, string reportName)
+        {
+            var allBadFilesData = data.GetAllBadFilesSorted();
+            var allBadFilesDataSource = new ReportDataSource("DetailedBadFileDataSet", allBadFilesData);
+            var mostWantedProgramsExDataSource = new ReportDataSource("MostWantedBadFileDataSet", data.GetTop10PopularBadFiles());
+            var devicesSubReportDataSource = new SubReportContext { Data = allBadFilesData, DataSourceName = "ScannedTargetDataSet", FileName = "APTAT.Core.Reports.Devices.rdlc", ReportName = "Devices" };
+
+            GenerateDetailedPerProgramReportFile(fileName, "AptReportDataSet",
+                new [] { data }, reportName,
+                null,
+                new [] { allBadFilesDataSource, mostWantedProgramsExDataSource },
+                new [] { devicesSubReportDataSource });
+        }
+
+        private static void GenerateExecutiveReportFile(string path, string dataSourceName, object data, string reportSourceFile, ReportParameter[] parameters, params ReportDataSource[] additionDataSource)
+        {
+            using (LocalReport localReport = new LocalReport())
+            {
+                Stream reportContentStream =
+                    Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
+                localReport.LoadReportDefinition(reportContentStream);
+
+                //ReportParameter languageParam = new Microsoft.Reporting.WinForms.ReportParameter("Language", cultureInfo.Name);
+                //ReportParameter dateCreated = new Microsoft.Reporting.WinForms.ReportParameter("DateCreated", TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZone).ToString());
+                ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString(CultureInfo.InvariantCulture));
+                localReport.SetParameters(new[] { reportDateParam });
+
+                if (parameters != null && parameters.Any())
+                    localReport.SetParameters(parameters);
+
+                localReport.DataSources.Add(new ReportDataSource(dataSourceName, data));
+                if (additionDataSource != null)
+                {
+                    foreach (var reportDataSource in additionDataSource)
+                    {
+                        localReport.DataSources.Add(reportDataSource);
+                    }
+                }
+
+
+                ExportToFile(path, localReport);
+            }
+        }
+
+        private static void GenerateDetailedPerDevicesReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters,
+            ReportDataSource[] additionDataSource, SubReportContext[] subReports)
+        {
+            using (LocalReport localReport = new LocalReport())
+            {
+
+                //===========================================================================
+                SubreportProcessingEventHandler subReportProcessingDelegate;
+                subReportProcessingDelegate = delegate(object sender, SubreportProcessingEventArgs e)
+                {
+                    string computerKey = e.Parameters[0].Values[0];
+                    Guid uid = new Guid(computerKey);
+
+
+                    var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                    if (context != null)
+                    {
+                        IEnumerable<IAptScanResult> targets = context.Data as IEnumerable<IAptScanResult>;
+                        if (targets != null)
+                        {
+                            IAptScanResult item = (from entry in targets where entry.TargetUid == uid select entry).FirstOrDefault(); //data[computerKey];
+                            if (item != null)
+                            {
+                                IModule[] items = {};
+                                if (e.ReportPath == "UnknownFiles")
+                                {
+                                    items = item.GetUnknownFiles();
+                                }
+                                else if (e.ReportPath == "MaliciousFiles")
+                                {
+                                    items = item.GetFilesByStatus(CloudVerdict.Malware);                                    
+                                }
+                                else if (e.ReportPath == "LookupInProgressFiles")
+                                {
+                                    items = item.GetLookupInProgressFiles();
+                                }
+                                else if (e.ReportPath == "NoVerdictFiles")
+                                {
+                                    items = item.GetNoVerdictFiles();
+                                }
+                             
+                                
+                                e.DataSources.Add(new ReportDataSource(context.DataSourceName, items));
+                            }
+                        }
+                    }
+
+                };
+                localReport.SubreportProcessing += subReportProcessingDelegate;
+                //===========================================================================
+
+
+                Stream reportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
+                localReport.LoadReportDefinition(reportContentStream);
+
+                foreach (var subReport in subReports)
+                {
+                    Stream subreportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(subReport.FileName);
+                    localReport.LoadSubreportDefinition(subReport.ReportName, subreportContentStream);
+                }
+
+
+                //ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                //localReport.SetParameters(new[] { reportDateParam });
+
+                ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                ReportParameter reportDirectotyParam = new ReportParameter("IsActiveDirectorySource", ((AptReportData[])data)[0].IsActiveDirectoryDevicesSource.ToString());
+                localReport.SetParameters(new[] { reportDateParam, reportDirectotyParam });
+
+                if (parameters != null && parameters.Count() > 0)
+                    localReport.SetParameters(parameters);
+
+                localReport.DataSources.Add(new ReportDataSource(dataSourceName, data));
+                if (additionDataSource != null)
+                {
+                    foreach (var reportDataSource in additionDataSource)
+                    {
+                        localReport.DataSources.Add(reportDataSource);
+                    }
+                }
+
+
+                ExportToFile(path, localReport, subReportProcessingDelegate);
+            }
+        }
+
+        private static void GenerateDetailedPerDevicesWithValkyrieReportFile(string path, string dataSourceName, object data, string reportSourceFile, IEnumerable<ReportParameter> parameters, IEnumerable<ReportDataSource> additionDataSource, IEnumerable<SubReportContext> subReports)
+        {
+            using (LocalReport localReport = new LocalReport())
+            {
+
+                //===========================================================================
+                SubreportProcessingEventHandler subReportProcessingDelegate = null;
+                subReportProcessingDelegate = delegate(object sender, SubreportProcessingEventArgs e)
+                {
+                    string computerKey = e.Parameters[0].Values[0];
+                    Guid uid = new Guid(computerKey);
+
+                    if (e.ReportPath == "UnknownFiles")
+                    {
+                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                        if (context != null)
+                        {
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
+                            if (targets != null)
+                            {
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.Unknown)));
+                            }
+                        }
+                    }
+                    else if (e.ReportPath == "MaliciousFiles")
+                    {
+                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                        if (context != null)
+                        {
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
+                            if (targets != null)
+                            {
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.Infected)));
+                            }
+                        }
+                    }
+                    else if (e.ReportPath == "FailedToAnalyzeFiles")
+                    {
+                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                        if (context != null)
+                        {
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
+                            if (targets != null)
+                            {
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.NotAnalyzed)));
+                            }
+                        }
+                    }
+                    else if (e.ReportPath == "PendingAnalysisFiles")
+                    {
+                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                        if (context != null)
+                        {
+                            IEnumerable<DetailedBadFile> targets = context.Data as IEnumerable<DetailedBadFile>;
+                            if (targets != null)
+                            {
+                                DetailedBadFile[] items = (from entry in targets where entry.Targets.Any(t => t.TargetUid == uid) select entry).ToArray();
+                                if (targets != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, items.Where(f => f.FileType == BadFileType.Pending).ToList()));
+                            }
+                        }
+                    }     
+                    
+                };
+                localReport.SubreportProcessing += subReportProcessingDelegate;
+                //===========================================================================
+
+
+                Stream reportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
+                localReport.LoadReportDefinition(reportContentStream);
+
+                foreach (var subReport in subReports)
+                {
+                    Stream subreportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(subReport.FileName);
+                    localReport.LoadSubreportDefinition(subReport.ReportName, subreportContentStream);
+                }
+
+
+                //ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                //localReport.SetParameters(new[] { reportDateParam });
+
+                ReportParameter reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                ReportParameter reportDirectotyParam = new ReportParameter("IsActiveDirectorySource", ((AptReportData[])data)[0].IsActiveDirectoryDevicesSource.ToString());
+                localReport.SetParameters(new[] { reportDateParam, reportDirectotyParam });
+
+                if (parameters != null && parameters.Count() > 0)
+                    localReport.SetParameters(parameters);
+
+                localReport.DataSources.Add(new ReportDataSource(dataSourceName, data));
+                if (additionDataSource != null)
+                {
+                    foreach (var reportDataSource in additionDataSource)
+                    {
+                        localReport.DataSources.Add(reportDataSource);
+                    }
+                }
+
+
+                ExportToFile(path, localReport, subReportProcessingDelegate);
+            }
+        }
+
+        private static void GenerateDetailedPerProgramReportFile(string path, string dataSourceName, object data, string reportSourceFile, ReportParameter[] parameters, ReportDataSource[] additionDataSource, SubReportContext[] subReports)
+        {
+            using (LocalReport localReport = new LocalReport())
+            {
+                //===========================================================================
+                SubreportProcessingEventHandler subReportProcessingDelegate = null;
+                subReportProcessingDelegate = delegate(object sender, SubreportProcessingEventArgs e)
+                {
+                    string fileId = e.Parameters[0].Values[0];
+
+                    if (e.ReportPath == "Devices")
+                    {
+                        var context = (from subReport in subReports where subReport.ReportName == e.ReportPath select subReport).FirstOrDefault();
+                        if (context != null)
+                        {
+                            IEnumerable<DetailedBadFile> files = context.Data as IEnumerable<DetailedBadFile>;
+                            if (files != null)
+                            {
+                                DetailedBadFile item = (from entry in files where entry.Sha1 == fileId select entry).FirstOrDefault(); //data[computerKey];
+                                if (item != null)
+                                    e.DataSources.Add(new ReportDataSource(context.DataSourceName, item.Targets));
+                            }
+                        }
+                    }
+                };
+                localReport.SubreportProcessing += subReportProcessingDelegate;
+                //===========================================================================
+
+
+                var reportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportSourceFile);
+                localReport.LoadReportDefinition(reportContentStream);
+
+                foreach (var subReport in subReports)
+                {
+                    var subreportContentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(subReport.FileName);
+                    localReport.LoadSubreportDefinition(subReport.ReportName, subreportContentStream);
+                }
+
+
+                var reportDateParam = new ReportParameter("ReportDate", DateTime.Now.ToString());
+                var reportDirectotyParam = new ReportParameter("IsActiveDirectorySource", ((AptReportData[])data)[0].IsActiveDirectoryDevicesSource.ToString());
+                localReport.SetParameters(new[] { reportDateParam, reportDirectotyParam });
+
+                if (parameters != null && parameters.Any())
+                    localReport.SetParameters(parameters);
+
+                localReport.DataSources.Add(new ReportDataSource(dataSourceName, data));
+                if (additionDataSource != null)
+                {
+                    foreach (var reportDataSource in additionDataSource)
+                    {
+                        localReport.DataSources.Add(reportDataSource);
+                    }
+                }
+
+
+                ExportToFile(path, localReport, subReportProcessingDelegate);
+            }
+        }
+
+        private static void ExportToFile(string path, LocalReport localReport, SubreportProcessingEventHandler subReportProcessingDelegate = null)
+        {
+            const string exportType = "PDF";
+
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            Warning[] warnings;
+            string[] streams;
+
+            byte[] renderedBytes = localReport.Render(
+                exportType,
+                null,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+
+            localReport.DataSources.Clear();
+            localReport.SetParameters(new ReportParameter[0]);
+            if (subReportProcessingDelegate != null)
+                localReport.SubreportProcessing -= subReportProcessingDelegate;
+            localReport.ReleaseSandboxAppDomain();
+
+            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                fs.Write(renderedBytes, 0, renderedBytes.Length);
+            }
         }
 
         private static string GetFileName(ReportType reportType)
-        {
-            var timeStamp = DateTime.Now.ToString("s", CultureInfo.CurrentCulture).Replace(":", "").Replace("-", "");
+        {            
+            var timeStamp = DateTime.Now.ToString("s", CultureInfo.CurrentCulture).Replace(":","").Replace("-","");
+            // .ToString("yyyyMMddHHmmss");
             const string fileFormatString = "{0}-{1}.pdf";
             switch (reportType)
             {
                 case ReportType.Executive:
-                    return string.Format(fileFormatString, "ExecutiveAptReport", timeStamp);
+                    return String.Format(fileFormatString, ExecutiveReportName, timeStamp);
                 case ReportType.ExecutiveWithValkyrie:
-                    return string.Format(fileFormatString, "ExecutiveAptReportValkyrie", timeStamp);
+                    return String.Format(fileFormatString, ExecutiveReportNameValkyrie, timeStamp);
                 case ReportType.DetailedPerDevice:
-                    return string.Format(fileFormatString, "DetailedPerDeviceAptReport", timeStamp);
+                    return String.Format(fileFormatString, DetailedPerDeviceReportName, timeStamp);
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    return string.Format(fileFormatString, "DetailedPerDeviceAptReportValkyrie", timeStamp);
+                    return String.Format(fileFormatString, DetailedPerDeviceReportNameValkyrie, timeStamp);
                 case ReportType.DetailedPerProgram:
-                    return string.Format(fileFormatString, "DetailedPerProgramAptReport", timeStamp);
+                    return String.Format(fileFormatString, DetailedPerProgramReportName, timeStamp);
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    return string.Format(fileFormatString, "DetailedPerProgramAptReportValkyrie", timeStamp);
+                    return String.Format(fileFormatString, DetailedPerProgramReportNameValkyrie, timeStamp);
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(reportType));
+                    throw new ArgumentOutOfRangeException("reportType");
             }
         }
     }
-
-    internal sealed class ReportNamesCache
+    
+    public sealed class ReportNamesCache
     {
-        private static readonly ReportNamesCache instance = new ReportNamesCache();
         static ReportNamesCache() { }
         private ReportNamesCache() { }
         public Dictionary<string, string> Reports = new Dictionary<string, string>();
-        public static ReportNamesCache Instance => instance;
+        public static ReportNamesCache Instance { get; } = new ReportNamesCache();
+    }
+    public class SubReportContext
+    {
+        public string DataSourceName { get; set; }
+        public object Data { get; set; }
+        public string ReportName { get; set; }
+        public string FileName { get; set; }
     }
 }

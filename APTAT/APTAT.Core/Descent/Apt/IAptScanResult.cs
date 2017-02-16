@@ -1,5 +1,9 @@
-﻿using APTAT.Core.Reports;
+﻿using System;
+using APTAT.Core.Reports;
+using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
+using APTAT.DeploymentCore.Descent.Exceptions.Transport;
+using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Apt
 {
@@ -10,9 +14,6 @@ namespace APTAT.Core.Descent.Apt
     public interface IAptScanResult : IComputerDescentResult
     {
         string OsName { get; }
-        string HostName { get; }
-        string OrganizationUnit { get; }
-        string IPAddress { get; }
         string FileName { get; set; }
         int TotalFilesCount { get; set; }
         int UnknownFilesCount { get; set; }
@@ -36,19 +37,13 @@ namespace APTAT.Core.Descent.Apt
         IModule[] BadFiles { get; }
         AptReport AptReport { get; }
         IModule[] GetFilesByStatus(CloudVerdict cloudVerdict);
-        //IModule[] GetUnknownFiles();
-        //IModule[] GetFailedToAnalyzeFiles();
-        //IModule[] GetNoVerdictFiles();
+        IModule[] GetUnknownFiles();
+        IModule[] GetFailedToAnalyzeFiles();
+        IModule[] GetNoVerdictFiles();
         IModule[] GetBadFiles();      
-   //     IModule[] GetLookupInProgressFiles();
+        IModule[] GetLookupInProgressFiles();
         void RecalculateStatistics();
-        ScanModule[] MalwareFiles { get; }               
-        ScanModule[] UnknownFiles { get; }
-        ScanModule[] LookupInProgressFiles { get; }
-        DetailedBadFile[] UknownFilesValkyrie { get;  }
-        DetailedBadFile[] MaliciousFilesValkyrie { get; }
-        DetailedBadFile[] FailedToAnalyzeFilesValkyrie { get; }
-        DetailedBadFile[] PendingAnalysisFilesValkyrie { get; }
+        
 
     }
 }
