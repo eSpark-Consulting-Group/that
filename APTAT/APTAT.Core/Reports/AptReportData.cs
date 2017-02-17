@@ -512,25 +512,32 @@ namespace APTAT.Core.Reports
                         }
                         #region Calculate Statistics
 
-                        switch (fileResult.ValkyrieAnalysisResult.Verdict)
+                        do
                         {
-                            case ValkyrieVerdict.Clean:
-                                mergedSafeCount++;
-                                break;
-                            case ValkyrieVerdict.Pending:
-                            case ValkyrieVerdict.InQueue:
-                            case ValkyrieVerdict.FirstSeen:
-                                mergedPendingFilesCount++;
-                                //      _pendingAnalysisFilesCount++;
-                                break;
-                            case ValkyrieVerdict.Undetected:
-                                mergedUnknownCount++;
-                                break;
-                            case ValkyrieVerdict.Malware:
-                            case ValkyrieVerdict.PotentiallyUnwantedApplication:
+                            if (module.Cloud == CloudVerdict.Malware)
+                            {
                                 mergedMalwareCount++;
                                 break;
-                            case ValkyrieVerdict.NotAnalyzed:
+                            }
+                            switch (fileResult.ValkyrieAnalysisResult.Verdict)
+                            {
+                                case ValkyrieVerdict.Clean:
+                                    mergedSafeCount++;
+                                    break;
+                                case ValkyrieVerdict.Pending:
+                                case ValkyrieVerdict.InQueue:
+                                case ValkyrieVerdict.FirstSeen:
+                                    mergedPendingFilesCount++;
+                                    //      _pendingAnalysisFilesCount++;
+                                    break;
+                                case ValkyrieVerdict.Undetected:
+                                    mergedUnknownCount++;
+                                    break;
+                                case ValkyrieVerdict.Malware:
+                                case ValkyrieVerdict.PotentiallyUnwantedApplication:
+                                    mergedMalwareCount++;
+                                    break;
+                                case ValkyrieVerdict.NotAnalyzed:
                                 {
                                     switch (module.Cloud)
                                     {
@@ -552,10 +559,12 @@ namespace APTAT.Core.Reports
                                             throw new ArgumentOutOfRangeException();
                                     }
                                 }
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        } while (false);
+
 
                         #endregion
                     }
@@ -900,7 +909,9 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                if (Verdict == ValkyrieVerdict.FirstSeen || Verdict == ValkyrieVerdict.Pending)
+                if(Cloud == CloudVerdict.Malware) return BadFileType.Infected;
+
+                if (Verdict == ValkyrieVerdict.FirstSeen || Verdict == ValkyrieVerdict.Pending || Verdict == ValkyrieVerdict.InQueue)
                 {
                     return BadFileType.Pending;
                 }
