@@ -4,7 +4,7 @@
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 Title="Forensic Analysis Tool" Height="745" MinHeight="745" Width="1015" MinWidth="1015" 
                 WindowStyle="None" WindowStartupLocation="CenterScreen"
-                MaxHeight="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
+                
                 ResizeMode="CanResizeWithGrip" AllowsTransparency="True" Background="Transparent">
 
     <Border x:Name="Shadow" CornerRadius="4" BorderBrush="#11000000" BorderThickness="1" Margin="0">

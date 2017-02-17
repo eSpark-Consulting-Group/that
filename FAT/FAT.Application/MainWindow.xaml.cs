@@ -17,6 +17,8 @@ namespace FAT.Application
             InitializeComponent();
 
             DataContext = CompositionHelper.Instance.Resolve<MainViewViewModel>();
+
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
 
         private void OnCloseClick(object sender, RoutedEventArgs e)
@@ -48,6 +50,7 @@ namespace FAT.Application
 
         private void SwitchState(Button sender)
         {
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             switch (WindowState)
             {
                 case WindowState.Normal:
