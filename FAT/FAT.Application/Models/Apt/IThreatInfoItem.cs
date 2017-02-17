@@ -14,6 +14,8 @@ namespace FAT.Application.Models
         int CleanFilesCount { get; set; }
         Guid ComputerGuid { get; set; }
         Collection<IThreatInfoItem> Computers { get; set; }
+        IThreatInfoItem Parent { get; set; }
+
         IComputer DeploymentTarget { get; }
         int DistinctUnknownFilesCount { get; }
         bool Failed { get; }

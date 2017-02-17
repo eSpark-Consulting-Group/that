@@ -51,6 +51,8 @@ namespace FAT.Application.Models
             = new Dictionary<string, List<IThreatInfoItem>>(StringComparer.OrdinalIgnoreCase);
 
         public Collection<IThreatInfoItem> Computers { get; set; }
+
+        public IThreatInfoItem Parent { get; set; }
         public float? MalwareProbabilityValue { get; set; }
         public IBadFileItem BadFile { get; }
 
@@ -394,7 +396,7 @@ namespace FAT.Application.Models
                     return new ScanStatus(ScanStatusEnum.Completed);
                 }
 
-                return new ScanStatus(IsComputer ? ScanStatusEnum.InProgress : ScanStatusEnum.Child);
+                return IsComputer ? new ScanStatus(ScanStatusEnum.InProgress) : Parent.ScanStatus;
             }
         }
 
@@ -840,6 +842,7 @@ namespace FAT.Application.Models
             if (!IsComputer) throw new NotSupportedException();
             if (threatInfoItem.IsComputer) throw new ArgumentException();
             var shouldRaise = Items.Count == 0;
+            threatInfoItem.Parent = this;
             Items.Add(threatInfoItem);
             if (_itemsDict.ContainsKey(threatInfoItem.BadFile.Sha1))
                 _itemsDict[threatInfoItem.BadFile.Sha1].Add(threatInfoItem);

@@ -291,7 +291,7 @@ namespace FAT.Application.Models
                     else if (Percentage == 100)
                         header = "Finishing scan...";
                     else
-                        header = String.Format("{0:0.00}% Scanning...", Percentage).Replace(".00", string.Empty);
+                        header = String.Format("{0:0.00}% Scan In Progress...", Percentage).Replace(".00", string.Empty);
                     return header;
                 }
                 else
@@ -1021,7 +1021,8 @@ namespace FAT.Application.Models
                                         ComputerGuid = infoItem.ComputerGuid,
                                         Name = infoItem.Name,
                                         ShortName = item.Name,
-                                        IsComputer = true
+                                        IsComputer = true,
+                                        Parent = item
                                     };
                                     if (exist != null)
                                         exist.Computers.Add(comp);
@@ -1104,7 +1105,7 @@ namespace FAT.Application.Models
                         if (o.IsComputer)
                             return FilterComputerByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
-                            return FilterFileByOrders(o) && string.IsNullOrEmpty(Keyword);
+                            return FilterFileByOrders(o) && o.Parent.NameAndIpAddress.ContainsString(Keyword);
                     }
                     else if (GroupByFiles)
                     {
@@ -1112,7 +1113,7 @@ namespace FAT.Application.Models
                         if (!o.IsComputer)
                             return FilterFileByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
-                            return false;
+                            return o.Parent.NameAndIpAddress.ContainsString(Keyword);
                     }
                     else
                     {
