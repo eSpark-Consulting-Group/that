@@ -897,7 +897,19 @@ namespace FAT.Application.Models
             IsScanInProgress = true;
             if (e.Exception != null)
             {
-                ErrorOccurred?.Invoke(this, new DomainEventArgs { Exception = e.Exception });
+                var msg =
+                    @"The setting 'SupportedDnsNames' in the application configuration file should contain at least one external (not loopback) address.";
+                var agrEx = e.Exception as AggregateException;
+
+                if (e.Exception.Message == msg || (agrEx != null && agrEx.InnerExceptions.Any(x=>x.Message == msg)))
+                {
+                    ErrorOccurred?.Invoke(this,
+                        new DomainEventArgs {Exception = new InvalidOperationException("No network connection")});
+                }
+                else
+                {
+                    ErrorOccurred?.Invoke(this, new DomainEventArgs {Exception = e.Exception});
+                }
                 IsScanInProgress = false;
                 return;
             }
