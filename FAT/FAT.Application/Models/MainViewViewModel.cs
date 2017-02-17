@@ -22,6 +22,7 @@ using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using FAT.Application.Models.Directory;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace FAT.Application.Models
 {
@@ -562,8 +563,23 @@ namespace FAT.Application.Models
             Set(() => Loaded, true);
 
             _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
-            _targetsDiscoveryService.StartTargetsAutoDiscovery();
+            
+            await _targetsDiscoveryService.StartTargetsAutoDiscovery().ContinueWith(ts =>
+            {
+                if (ts.Exception != null)
+                {
+                    if (ts.Exception.InnerExceptions.Any(e=>e.Message == @"The setting 'SupportedDnsNames' in the application configuration file should contain at least one external (not loopback) address."))
+                    {
+                        InvokeStopAutoDiscovery(null);
+                        App.Current.Dispatcher.BeginInvoke((Action) delegate
+                        {
+                            ErrorOccurred?.Invoke(this, new DomainEventArgs(null, new InvalidOperationException("No network adapter found")));
+                        });
+                    }
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted);
 
+            
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
@@ -1190,7 +1206,16 @@ namespace FAT.Application.Models
             }
             catch (Exception ex)
             {
-                TryActionException(ex);
+                var domainException = ex as DirectoryQueryException;
+                if (domainException != null && domainException.Error == DirectoryError.DefaultDomainNotFound)
+                {
+
+                }
+                else
+                {
+                    TryActionException(ex);
+                    ErrorOccurred?.Invoke(this, new DomainEventArgs(null, ex));
+                }
             }
             return taskResult;
         }

@@ -16,6 +16,7 @@ using APTAT.DeploymentCore;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace FAT.Application.Services
@@ -111,10 +112,10 @@ namespace FAT.Application.Services
 
         private CancellationTokenSource _autoDiscoveryCancellation;
 
-        public void StartTargetsAutoDiscovery()
+        public async Task StartTargetsAutoDiscovery()
         {
             _autoDiscoveryCancellation = new CancellationTokenSource();
-            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet(_autoDiscoveryCancellation));
+            await Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet(_autoDiscoveryCancellation));
         }
 
         public string GetCurrentWorkgroupName()
