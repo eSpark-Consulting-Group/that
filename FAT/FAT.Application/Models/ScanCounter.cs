@@ -79,7 +79,7 @@ namespace FAT.Application.Models
                 Percentage = string.Format("({0:0.00}%)",
                     Count * 100d / total).
                     Replace(".00", string.Empty).
-                    Replace("0.00", string.Empty);
+                    Replace("0.00", "0.01");
                 RaisePropertyChanged(nameof(Percentage));
             }
         }

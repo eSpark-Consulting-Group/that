@@ -630,7 +630,9 @@ namespace FAT.Application.Models
 
         private void InvokeScanWithDiscoveryResults(Object arg)
         {
-            var model = new StartScanCredentialsViewModel(SelectedDiscoveryResults);
+            var model = CompositionHelper.Instance.Resolve<StartScanCredentialsViewModel>();
+            model.ViewLoadedCommand.Execute(null);
+            model.CheckIfCanUseCurrentCredentials(SelectedDiscoveryResults);
 
             SettingsWindow window = new SettingsWindow();
             window.Owner = System.Windows.Application.Current.MainWindow;

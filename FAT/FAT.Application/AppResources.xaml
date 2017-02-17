@@ -918,15 +918,7 @@
                 <VisualStateGroup x:Name="SelectionStates">
                     <VisualState x:Name="Unselected" />
                     <VisualState x:Name="SelectedUnfocused">
-                        <Storyboard>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background_Selected" Storyboard.TargetProperty="Visibility">
-                                <DiscreteObjectKeyFrame KeyTime="00:00:00">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <Visibility>Visible</Visibility>
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                            </ObjectAnimationUsingKeyFrames>
-                        </Storyboard>
+                        
                     </VisualState>
                 </VisualStateGroup>
                 <VisualStateGroup x:Name="CommonStates">
@@ -943,16 +935,7 @@
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Selected">
-                        <Storyboard>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Background_Selected" Storyboard.TargetProperty="Visibility">
-                                <DiscreteObjectKeyFrame KeyTime="00:00:00">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <Visibility>Visible</Visibility>
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                            </ObjectAnimationUsingKeyFrames>
-
-                        </Storyboard>
+                        
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
@@ -1059,6 +1042,7 @@
                 <Setter Property="Foreground" Value="White" />
                 <Setter TargetName="bord2" Property="Visibility" Value="Collapsed" />
                 <Setter TargetName="bord3" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="Background_Selected" Property="Visibility" Value="Visible" />
             </Trigger>
             <Trigger Property="IsSelected" Value="false">
                 <Setter Property="Foreground" Value="#FF457FAD" />
