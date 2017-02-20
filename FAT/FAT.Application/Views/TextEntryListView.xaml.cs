@@ -217,6 +217,8 @@ Computer Name: HomeComputer";
 
             if (RemoveCommand != null && RemoveCommand.CanExecute(args))
                 RemoveCommand.Execute(args);
+
+            InputTextBox.Focus();
         }
 
         private void RemoveAllButton_Click(object sender, RoutedEventArgs e)
@@ -231,6 +233,8 @@ Computer Name: HomeComputer";
 
             if (RemoveAllCommand != null && RemoveAllCommand.CanExecute(args))
                 RemoveAllCommand.Execute(args);
+
+            InputTextBox.Focus();
         }
 
         private void InputTextBox_KeyDown(object sender, KeyEventArgs e)

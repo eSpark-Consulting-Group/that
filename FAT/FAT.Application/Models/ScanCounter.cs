@@ -70,6 +70,11 @@ namespace FAT.Application.Models
             get { return -1; }
         }
 
+        public virtual bool IsEnabled
+        {
+            get { return true; }
+        }
+
         public CounterOrder OrderAsEnum => (CounterOrder) Order;
 
         public void UpdatePercentage(int total)
@@ -290,6 +295,11 @@ namespace FAT.Application.Models
         public override int Order
         {
             get { return (int)CounterOrder.Computer; }
+        }
+
+        public override bool IsEnabled
+        {
+            get { return false; }
         }
     }
 
