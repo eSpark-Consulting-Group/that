@@ -25,6 +25,11 @@ namespace APTAT.Core
         }
 
         public List<ValkyrieFileInfo> GetDistinctFileInfo(IAptScanResult[] results)
+        {            
+            return GetDistinctFileInfoDict(results).Values.ToList();
+        }
+
+        public Dictionary<string, ValkyrieFileInfo> GetDistinctFileInfoDict(IAptScanResult[] results)
         {
             IAptScanResult[] scanResults = results.OrderByDescending(r => r.Computer.IsLocalComputer)
                 .ToArray();
@@ -56,9 +61,8 @@ namespace APTAT.Core
                     }
                 }
             }
-            return files.Values.ToList();
+            return files;
         }
-
         private static Valkyrie.CloudVerdict MapCloud(Descent.Apt.CloudVerdict cloud)
         {
             switch (cloud)

@@ -19,6 +19,7 @@ namespace APTAT.Valkyrie
         void SendEndScanAsync();
         Task SendEndScan();
         void SetBaseUri(Uri uri);
+        void AllowSubmit(Dictionary<string, ValkyrieFileInfo> updatedData);
         ValkyrieResponse SubmitEmail(string[] addresses);
     }
 }

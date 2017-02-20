@@ -6,6 +6,7 @@
         Cancelled,
         FileNotFound, 
         WebException,
-        Failed
+        Failed,
+        WaitNextInterval
     }
 }

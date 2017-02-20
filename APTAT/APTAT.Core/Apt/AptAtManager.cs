@@ -422,6 +422,11 @@ namespace APTAT.Core.Apt
                 scanner.ScanCompleted -= OnScanCompleted;
             }
             TryInvokeEndScan();
+            if (_isValkyrieStarted )
+            {
+                IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
+                this._valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
+            }
         }
 
         public IAptReportBuilder GetAptReportBuilder()

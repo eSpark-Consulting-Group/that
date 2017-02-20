@@ -227,10 +227,9 @@ namespace Valkyrie.WebApiProvider
             var payload = request.ToNameValueCollection();
             using (WebClient client = new WebClient())
             {
-                if (!IsProduction)
-                {
-                    //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-                }
+                
+
+                
                 if (ProxySettings.Proxy != null)
                 {
                     client.Proxy = ProxySettings.Proxy;

@@ -100,12 +100,12 @@ namespace APTAT.Valkyrie
             }
         }
 
-
+        public SkippReasonEnum SkipReasonEnum { get; internal set; }
 
         public static ValkyrieAnalysisResult CreateSkipInfo(string sha1, string reason, SkippReasonEnum skippReasonEnum)
         {
             var verdict = ValkyrieVerdict.NotAnalyzed;
-            string operationStatus;
+            string operationStatus = null;
             switch (skippReasonEnum)
             {
                 case SkippReasonEnum.Skipped:
@@ -113,6 +113,9 @@ namespace APTAT.Valkyrie
                     break;
                 case SkippReasonEnum.Cancelled:
                     operationStatus = "Cancelled by user";
+                    break;
+                case SkippReasonEnum.WaitNextInterval:
+                    verdict = ValkyrieVerdict.Pending;
                     break;
                 case SkippReasonEnum.WebException:
                     verdict = ValkyrieVerdict.Pending;
@@ -131,6 +134,7 @@ namespace APTAT.Valkyrie
             {
                 IsSkipped = true,
                 SkipReason = reason,
+                SkipReasonEnum = skippReasonEnum,
                 IsWhiteListed = false,
                 LastAnalysisDate = null,
                 OperationStatus = operationStatus
