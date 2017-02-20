@@ -1207,7 +1207,7 @@
                 </Border>
             </Button>
 
-            <Popup x:Name="PART_DropDownPopup" VerticalOffset="-5" HorizontalOffset="-130">
+            <Popup x:Name="PART_DropDownPopup" VerticalOffset="-4" HorizontalOffset="-130">
                 <Popup.StaysOpen>True</Popup.StaysOpen>
                 <Popup.AllowsTransparency>True</Popup.AllowsTransparency>
 
@@ -1244,82 +1244,93 @@
 				CornerRadius="0" MaxWidth="120"
 				BorderBrush="{TemplateBinding BorderBrush}">
 
-            <ListBox AutomationProperties.AutomationId="StatusesListBox" Visibility="{TemplateBinding DistinctFiltersVisibility}"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <ListBox AutomationProperties.AutomationId="StatusesListBox" Visibility="{TemplateBinding DistinctFiltersVisibility}"
                                          x:Name="PART_DistinctValuesList" Margin="{TemplateBinding Padding}"
 								         ItemsSource="{Binding DistinctValues}"								 
 								         ScrollViewer.HorizontalScrollBarVisibility="Auto"
 							             ItemContainerStyle="{StaticResource DistinctValueListBoxItemStyle}"
 								         SelectionMode="Multiple" BorderThickness="0" Background="Transparent">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel  />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel  />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox AutomationProperties.AutomationId="{Binding}" SnapsToDevicePixels="True"
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox AutomationProperties.AutomationId="{Binding}" SnapsToDevicePixels="True"
                                                       IsChecked="{Binding IsActive, Mode=TwoWay}" Margin="0 0 2 0" Background="#FFC8D9E7"
 											          Content="{Binding ConvertedValue, Converter={StaticResource DistinctValueConverter}}"											  
 											          VerticalContentAlignment="Top" Padding="8 -2 0 0" FontSize="13"  Foreground="#FF457FAD">
-                            <CheckBox.Template>
+                                <CheckBox.Template>
 
-                                <ControlTemplate TargetType="CheckBox">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="CommonStates">
-                                                <VisualState x:Name="Normal" />
-                                                <VisualState x:Name="Pressed">
-                                                </VisualState>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="Pressed">
+                                                    </VisualState>
 
-                                                <VisualState x:Name="Disabled">
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                            <VisualStateGroup x:Name="CheckStates">
-                                                <VisualState x:Name="Checked">
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="CheckIcon" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0"/>
-                                                    </Storyboard>
-                                                </VisualState>
-                                                <VisualState x:Name="Unchecked" />
-                                                <VisualState x:Name="Indeterminate">
-                                                </VisualState>
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
-                                        <Grid Opacity="0" Background="{TemplateBinding Background}" x:Name="Root" SnapsToDevicePixels="True"/>
-                                        <Border x:Name="Bd">
-                                            <Grid Height="16" Width="16">
-                                                <Path x:Name="Icon" SnapsToDevicePixels="True" Data="F1M67,284.11L55,284.11L55,272.11L67,272.11z M53,286.11L69,286.11L69,270.11L53,270.11z" Fill="{Binding ElementName=Root, Path=Background}" Height="16" Stretch="Fill" Width="16"/>
+                                                    <VisualState x:Name="Disabled">
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                                <VisualStateGroup x:Name="CheckStates">
+                                                    <VisualState x:Name="Checked">
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetName="CheckIcon" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Unchecked" />
+                                                    <VisualState x:Name="Indeterminate">
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <Grid Opacity="0" Background="{TemplateBinding Background}" x:Name="Root" SnapsToDevicePixels="True"/>
+                                            <Border x:Name="Bd">
+                                                <Grid Height="16" Width="16">
+                                                    <Path x:Name="Icon" SnapsToDevicePixels="True" Data="F1M67,284.11L55,284.11L55,272.11L67,272.11z M53,286.11L69,286.11L69,270.11L53,270.11z" Fill="{Binding ElementName=Root, Path=Background}" Height="16" Stretch="Fill" Width="16"/>
 
-                                                <Path Opacity="0" x:Name="CheckIcon" SnapsToDevicePixels="True" Data="M4,4.0000148 L12,4.0000148 12,12.000014 4,12.000014 z M2,2 L2,14 14,14 14,2 z M0,0 L16,0 16,16 0,16 z" Fill="{Binding ElementName=Root, Path=Background}" Height="16" Stretch="Fill" Width="16"/>
+                                                    <Path Opacity="0" x:Name="CheckIcon" SnapsToDevicePixels="True" Data="M4,4.0000148 L12,4.0000148 12,12.000014 4,12.000014 z M2,2 L2,14 14,14 14,2 z M0,0 L16,0 16,16 0,16 z" Fill="{Binding ElementName=Root, Path=Background}" Height="16" Stretch="Fill" Width="16"/>
 
                                                 </Grid>
-                                        </Border>
-                                        <ContentPresenter Grid.Column="1" x:Name="PART_ContentHost" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                    </Grid>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Trigger.Property="UIElement.IsKeyboardFocused" Trigger.Value="True" >
-                                            <Setter Setter.TargetName="Root" Property="Background" Value="{DynamicResource StrongBrush2}" />
-                                        </Trigger>
-                                        <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True" >
-                                            <Setter Setter.TargetName="Root" Property="Background" Value="{DynamicResource StrongBrush2}" />
-                                        </Trigger>
-                                        <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
-                                            <Setter Setter.TargetName="Root" Property="Background" Value="#FF457EAC" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </CheckBox.Template>
-                        </CheckBox>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                                            </Border>
+                                            <ContentPresenter Grid.Column="1" x:Name="PART_ContentHost" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Trigger.Property="UIElement.IsKeyboardFocused" Trigger.Value="True" >
+                                                <Setter Setter.TargetName="Root" Property="Background" Value="{DynamicResource StrongBrush2}" />
+                                            </Trigger>
+                                            <Trigger Trigger.Property="UIElement.IsMouseOver" Trigger.Value="True" >
+                                                <Setter Setter.TargetName="Root" Property="Background" Value="{DynamicResource StrongBrush2}" />
+                                            </Trigger>
+                                            <Trigger Trigger.Property="IsPressed" Trigger.Value="True">
+                                                <Setter Setter.TargetName="Root" Property="Background" Value="#FF457EAC" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </CheckBox.Template>
+                            </CheckBox>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
 
-            </ListBox>
-
+                </ListBox>
+                <Button AutomationProperties.AutomationId="ClearFilterButton" x:Name="PART_ClearFilterButton" Grid.Row="1"
+								Margin="0 0 0 11"   Foreground="#FF457FAD" BorderBrush="#FFE7E3E7"
+								telerik:LocalizationManager.ResourceKey="GridViewClearFilter"
+								Height="23" Width="96" />
+            </Grid>
+            
         </Border>
 
     </ControlTemplate>

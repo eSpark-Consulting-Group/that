@@ -436,6 +436,7 @@ namespace FAT.Application.Models
             }
         }
 
+        public bool StatusFilterReset { get; set; }
 
         public int[] FilterOrders { get; set; } 
 
@@ -1063,7 +1064,10 @@ namespace FAT.Application.Models
                             }
                             infoItem.RemoteScanCompleted();
                         }
-                        infoItem.UpdateCounters(scanProgress, counterDiff);
+
+
+                        if (infoItem.UpdateCounters(scanProgress, counterDiff))
+                            Set(() => StatusFilterReset, !StatusFilterReset);
                     }
                 }
                 if (infoItem.ScanStage == ScanStage.OperationFailed ||

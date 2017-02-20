@@ -22,6 +22,7 @@ namespace FAT.Application.Views
             {
                 BindingOperations.SetBinding(this, PredicateProperty, new Binding("FilterPredicate"));
                 BindingOperations.SetBinding(this, FilterOrdersProperty, new Binding("FilterOrders"));
+                BindingOperations.SetBinding(this, StatusFilterResetProperty, new Binding("StatusFilterReset"));
             }
         }
 
@@ -104,6 +105,32 @@ namespace FAT.Application.Views
 
         #endregion
 
+        #region StatusFilterResetProperty (DependencyProperty)
+
+        public bool StatusFilterReset
+        {
+            get { return (bool)GetValue(StatusFilterResetProperty); }
+            set { SetValue(StatusFilterResetProperty, value); }
+        }
+
+        public static readonly DependencyProperty StatusFilterResetProperty =
+            DependencyProperty.Register("StatusFilterReset", typeof(bool), typeof(SearchUserControl),
+            new PropertyMetadata(false, OnStatusFilterResetChanged));
+
+        private static void OnStatusFilterResetChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            var control = obj as SearchUserControl;
+
+            if (control.Target == null)
+                return;
+
+            var filter = control.Target.FilterDescriptors.FirstOrDefault(_ => _ is MemberColumnFilterDescriptor);
+            if (filter != null)
+                control.Target.FilterDescriptors.Reset();
+        }
+
+        #endregion
+
         #region WatermarkProperty (DependencyProperty)
         public string Watermark
         {
@@ -139,12 +166,10 @@ namespace FAT.Application.Views
                 Target.FilterDescriptors.Remove(filter);
         }
 
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             search.Text = null;
             search.DelayedFocus();
         }
-
     }
 }

@@ -820,8 +820,10 @@ namespace FAT.Application.Models
         }
 
 
-        public void UpdateCounters(ScanResultItem scanProgress, IScanCounterDiff counterDiff)
+        public bool UpdateCounters(ScanResultItem scanProgress, IScanCounterDiff counterDiff)
         {
+            bool stageChanged = ScanStage != scanProgress.ScanStage;
+
             counterDiff.CleanDiff += scanProgress.CleanFilesCount - CleanFilesCount;
             counterDiff.InProgressDiff += scanProgress.UnknownFilesCount + scanProgress.FailedToAnalyzeFilesCount +
                                                 scanProgress.NoVerdictFilesCount - PendingFilesCount;
@@ -835,6 +837,8 @@ namespace FAT.Application.Models
             StatusMessageSystem = scanProgress.StatusMessage;
             ScanStage = scanProgress.ScanStage;
             RaisePropertyChanged(nameof(StatusMessage));
+
+            return IsComputer && stageChanged;
         }
 
         public void AddFile(IThreatInfoItem threatInfoItem)
