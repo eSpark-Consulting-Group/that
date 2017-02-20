@@ -15,6 +15,7 @@ namespace APTAT.Core.Descent.Apt
             ResultType = ScanResultType.InProgress;
             HostName = computer?.Name;
             IPAddress = computer?.IPAddress;
+            OrganizationUnit = computer?.OrganizationUnit;
            
         }
         public string IPAddress { get; }
@@ -227,6 +228,8 @@ namespace APTAT.Core.Descent.Apt
         {
             get { return _aptReport; }
         }
+
+        public string OrganizationUnit { get; }
 
         internal IModule[] GetPendingAnalysisFiles()
         {

@@ -15,6 +15,7 @@ namespace APTAT.Core.Descent.Apt
     {
         string IPAddress { get;  }
         string HostName { get;  }
+        string OrganizationUnit { get; }
         string OsName { get; }
         string FileName { get; set; }
         int TotalFilesCount { get; set; }
