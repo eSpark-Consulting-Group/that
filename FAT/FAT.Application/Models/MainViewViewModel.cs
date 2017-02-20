@@ -590,10 +590,12 @@ namespace FAT.Application.Models
 
         private void InvokeSubmitEmail(Object arg)
         {
-            if (_aptService.SubmitEmail(Email.Split(new[] { ',', ';' })).IsSucceeded)
+            var result = _aptService.SubmitEmail(Email.Split(new[] { ',', ';' }));
+
+            if (result.IsSucceeded)
                 Set(() => HideSubmitEmail, true);
             else
-            { }
+                ErrorOccurred?.Invoke(this, new DomainEventArgs(null, new InvalidOperationException(result.ErrorMessage)));
         }
 
         private bool IsValidEmail(string email)
@@ -635,10 +637,7 @@ namespace FAT.Application.Models
                 bool retry = window.ShowDialog().GetValueOrDefault();
 
                 if (retry)
-                {
                     RestartComputerScan(IsQuickScan);
-                    return;
-                }
             }
             else
                 RestartComputerScan(IsQuickScan);
@@ -865,7 +864,7 @@ namespace FAT.Application.Models
             {
                 IsScanInProgress = false;
                 _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
-                IsReportEnabled = true;
+                IsReportEnabled = !IsScanCancelled || ScannedItemsCount > 0;
 
                 Set(() => ValkyrieDetailsLinkAvailable, true);
 
