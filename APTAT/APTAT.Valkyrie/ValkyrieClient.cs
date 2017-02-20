@@ -30,6 +30,8 @@ namespace APTAT.Valkyrie
         private ConcurrentDictionary<string, ValkyrieAnalysisResult> _analysedItems
             = new ConcurrentDictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
 
+        private string[] _emails = null;
+
         private readonly ConcurrentDictionary<string, ValkyrieAnalysisResult> _pendingItemsResolved
             = new ConcurrentDictionary<string, ValkyrieAnalysisResult>(StringComparer.OrdinalIgnoreCase);
 
@@ -661,6 +663,10 @@ namespace APTAT.Valkyrie
                     throw new InvalidOperationException(startScanResult.ResultDescription);
                 }
                 _progressNotifyTimer.Start();
+
+                if (_emails != null)
+                    SubmitEmail(_emails);
+
                 if (!filesToAnalyze.Any()) return;
                 
                 Thread.Sleep(2000);
@@ -685,7 +691,10 @@ namespace APTAT.Valkyrie
 
         public ValkyrieResponse SubmitEmail(string[] addresses)
         {
-            return _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
+            var result = _provider.SubmitEmail(new SubscribeEmailRequest { ApiKey = _apiKey, ScanId = _aptScanId, CustomerEmails = addresses });
+            if (result.ReturnCode == ErrorCodesEnum.Success)
+                _emails = addresses;
+            return result;
         }
     }
 }
