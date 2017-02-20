@@ -900,6 +900,8 @@ namespace FAT.Application.Models
                 {
                     ErrorOccurred?.Invoke(this, new DomainEventArgs { Exception = exception });
                 }
+
+                IsScanInProgress = false;
             }
         }
 
