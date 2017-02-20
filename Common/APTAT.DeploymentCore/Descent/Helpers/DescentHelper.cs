@@ -299,9 +299,11 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
 					originalException = ex;
 				}
+                if (_cancellationToken.IsCancellationRequested)
+                    throw new OperationCanceledException();
 
-				// try to use dns name without domain suffix
-				string hostNameWithoutSuffix = NetworkObserver.CutDnsSuffixFromHostName( _oldRemoteHostName );
+                // try to use dns name without domain suffix
+                string hostNameWithoutSuffix = NetworkObserver.CutDnsSuffixFromHostName( _oldRemoteHostName );
 				if( hostNameWithoutSuffix != _oldRemoteHostName )
 				{
 					SetHostName( hostNameWithoutSuffix );
@@ -327,6 +329,8 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     originalException = exception;
                 }
 
+                if (_cancellationToken.IsCancellationRequested)
+                    throw new OperationCanceledException();
                 // We failed. Trying to impersonate as network service
                 try
                 {

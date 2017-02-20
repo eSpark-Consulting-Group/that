@@ -88,11 +88,14 @@ namespace FAT.Application.Tests
             };
             var file = Mock.Create<IThreatInfoItem>(Behavior.Strict);
             var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
-            
+
+            Mock.ArrangeSet(() => file.Parent = target);
             Mock.Arrange(() => file.BadFile).Returns(badFile);
             Mock.Arrange(() => file.IsComputer).Returns(false);
             Mock.Arrange(() => badFile.Sha1).Returns("231");
+
             target.AddFile(file);
+
             Assert.True(itemsRaised);
         }
 
