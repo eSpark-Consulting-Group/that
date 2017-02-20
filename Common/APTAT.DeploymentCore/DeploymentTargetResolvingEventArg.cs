@@ -5,13 +5,15 @@ namespace APTAT.DeploymentCore
 {
     public class DeploymentTargetResolvingEventArg:EventArgs
     {
-        public DeploymentTargetResolvingEventArg(DeploymentTarget target, double  progress)
+        public DeploymentTargetResolvingEventArg(DeploymentTarget target, double  progress, Exception exception = null)
         {
             this.Target = target;
             this.Progress = progress;
-            
+            this.Error = exception;
+
         }
 
+        public Exception Error { get; set; }
         public double Progress { get; set; }
 
 

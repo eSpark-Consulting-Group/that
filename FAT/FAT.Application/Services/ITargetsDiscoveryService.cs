@@ -30,7 +30,7 @@ namespace FAT.Application.Services
         Task<GetDomainNameResponse> GetCurrentDomainName();
         bool IsLocalAddress(string name);
         Task<List<Tuple<IPAddress, IPAddress>>> GetTargetRanges();
-        Task StartTargetsAutoDiscovery();
+        void StartTargetsAutoDiscovery();
         void StopTargetsAutoDiscovery();
         string GetCurrentWorkgroupName();
         string GetLoggedInUser();

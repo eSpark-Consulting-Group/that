@@ -563,23 +563,8 @@ namespace FAT.Application.Models
             Set(() => Loaded, true);
 
             _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
-            
-            await _targetsDiscoveryService.StartTargetsAutoDiscovery().ContinueWith(ts =>
-            {
-                if (ts.Exception != null)
-                {
-                    if (ts.Exception.InnerExceptions.Any(e=>e.Message == @"The setting 'SupportedDnsNames' in the application configuration file should contain at least one external (not loopback) address."))
-                    {
-                        InvokeStopAutoDiscovery(null);
-                        App.Current.Dispatcher.BeginInvoke((Action) delegate
-                        {
-                            ErrorOccurred?.Invoke(this, new DomainEventArgs(null, new InvalidOperationException("No network adapter found")));
-                        });
-                    }
-                }
-            }, TaskContinuationOptions.OnlyOnFaulted);
+            _targetsDiscoveryService.StartTargetsAutoDiscovery();
 
-            
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
@@ -875,6 +860,12 @@ namespace FAT.Application.Models
 
         private void OnDeploymentTargetsAutoResolving(object sender, DeploymentTargetResolvingEventArg e)
         {
+            if (e.Error != null)
+            {
+                HandleNetworkConnectionError(e.Error);
+                return;
+            }
+            
             if (e.Target != null)
             {
                 if (!e.Target.IsLocalComputer || !DiscoveryResults.Any(_ => _.IsLocalComputer))
@@ -890,26 +881,35 @@ namespace FAT.Application.Models
                 IsAutoDiscoveryCompleted = true;
         }
 
+        private void HandleNetworkConnectionError(Exception exception)
+        {
+            if (exception != null)
+            {
+                var msg =
+                    @"The setting 'SupportedDnsNames' in the application configuration file should contain at least one external (not loopback) address.";
+                var agrEx = exception as AggregateException;
+
+                if (exception.Message == msg || (agrEx != null && agrEx.InnerExceptions.Any(x => x.Message == msg)))
+                {
+                    InvokeStopAutoDiscovery(null);
+
+                    ErrorOccurred?.Invoke(this,
+                        new DomainEventArgs { Exception = new InvalidOperationException("No network connection") });
+                }
+                else
+                {
+                    ErrorOccurred?.Invoke(this, new DomainEventArgs { Exception = exception });
+                }
+            }
+        }
+
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
 
             IsScanInProgress = true;
             if (e.Exception != null)
             {
-                var msg =
-                    @"The setting 'SupportedDnsNames' in the application configuration file should contain at least one external (not loopback) address.";
-                var agrEx = e.Exception as AggregateException;
-
-                if (e.Exception.Message == msg || (agrEx != null && agrEx.InnerExceptions.Any(x=>x.Message == msg)))
-                {
-                    ErrorOccurred?.Invoke(this,
-                        new DomainEventArgs {Exception = new InvalidOperationException("No network connection")});
-                }
-                else
-                {
-                    ErrorOccurred?.Invoke(this, new DomainEventArgs {Exception = e.Exception});
-                }
-                IsScanInProgress = false;
+                HandleNetworkConnectionError(e.Exception);
                 return;
             }
             if (e.Items == null)

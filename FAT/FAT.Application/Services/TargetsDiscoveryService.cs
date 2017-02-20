@@ -112,10 +112,10 @@ namespace FAT.Application.Services
 
         private CancellationTokenSource _autoDiscoveryCancellation;
 
-        public async Task StartTargetsAutoDiscovery()
+        public void StartTargetsAutoDiscovery()
         {
             _autoDiscoveryCancellation = new CancellationTokenSource();
-            await Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet(_autoDiscoveryCancellation));
+            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet(_autoDiscoveryCancellation));
         }
 
         public string GetCurrentWorkgroupName()

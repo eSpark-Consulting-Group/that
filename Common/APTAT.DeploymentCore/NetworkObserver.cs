@@ -131,12 +131,12 @@ namespace APTAT.DeploymentCore
             }
             return retValue;
         }
-        
+
         private EndpointTarget CheckTarget(IPAddress ipAddress, string[] serverAddresses, string serverDnsName)
         {
             var status = SendPing(ipAddress.ToString());
             if (status != IPStatus.Success) return null;
-            
+
             var target = new EndpointTarget
             {
                 Uid = Guid.NewGuid(),
@@ -151,7 +151,7 @@ namespace APTAT.DeploymentCore
 
                 target.IsLocalComputer = serverAddresses.Any(ip => ip == target.IPAddress) || string.Equals(target.DnsName, serverDnsName, StringComparison.InvariantCultureIgnoreCase);
             }
-           
+
             return target;
         }
 
@@ -179,68 +179,68 @@ namespace APTAT.DeploymentCore
 
         public void AutoResolveByNetworkSubnet(CancellationTokenSource cts)
         {
-            List<Tuple<IPAddress, IPAddress>> subnetRanges = AddressRangeHelper.GetLocalAddressRange();
-            
-            List<IPAddress> ipAddresses = new List<IPAddress>();
-            foreach (var range in subnetRanges)
-            {
-                var fromAndToIps = NetHelp.GetIpAddressMinMax(range.Item1, range.Item2);
-                var computersInRange = GetComputersInRange(fromAndToIps.Item1, fromAndToIps.Item2);
-                ipAddresses.AddRange(computersInRange);
-            }
-
-
-            int computersCount = ipAddresses.Count;
-            int processed = 0;
-
-            ParallelOptions po = new ParallelOptions();
-            po.CancellationToken = cts.Token;
-            po.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
-            var serverDnsName = GetLocalHostName(true);
-            var serverAddresses = GetSupportedExternalAddresses(true);
-
-            double progress = 0;
-            Action<IPAddress> action = (r) => {
-                po.CancellationToken.ThrowIfCancellationRequested();
-                var target = CheckTarget(r, serverAddresses, serverDnsName);
-               
-                Interlocked.Increment(ref processed);
-                lock (lockObject)
-                {
-                    if (computersCount == 0)
-                    {
-                        progress = 100;
-                    }
-                    else
-                   {
-                        progress = processed / (double) computersCount;
-                    }
-                    if (target != null && target.IsOnline)
-                    {
-                        OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
-                    }
-                    else
-                    {
-                        OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(null, progress));
-                    }
-                }
-            };
             try
             {
+                List<Tuple<IPAddress, IPAddress>> subnetRanges = AddressRangeHelper.GetLocalAddressRange();
+
+                List<IPAddress> ipAddresses = new List<IPAddress>();
+                foreach (var range in subnetRanges)
+                {
+                    var fromAndToIps = NetHelp.GetIpAddressMinMax(range.Item1, range.Item2);
+                    var computersInRange = GetComputersInRange(fromAndToIps.Item1, fromAndToIps.Item2);
+                    ipAddresses.AddRange(computersInRange);
+                }
+
+
+                int computersCount = ipAddresses.Count;
+                int processed = 0;
+
+                ParallelOptions po = new ParallelOptions
+                {
+                    CancellationToken = cts.Token,
+                    MaxDegreeOfParallelism = System.Environment.ProcessorCount
+                };
+                var serverDnsName = GetLocalHostName(true);
+                var serverAddresses = GetSupportedExternalAddresses(true);
+
+                double progress = 0;
+                Action<IPAddress> action = r =>
+                {
+                    po.CancellationToken.ThrowIfCancellationRequested();
+                    var target = CheckTarget(r, serverAddresses, serverDnsName);
+
+                    Interlocked.Increment(ref processed);
+                    lock (lockObject)
+                    {
+                        if (computersCount == 0)
+                        {
+                            progress = 100;
+                        }
+                        else
+                        {
+                            progress = processed / (double) computersCount;
+                        }
+                        if (target != null && target.IsOnline)
+                        {
+                            OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(target, progress));
+                        }
+                        else
+                        {
+                            OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(null, progress));
+                        }
+                    }
+                };
+
                 Parallel.ForEach(ipAddresses, po, action);
             }
-            catch (OperationCanceledException e)
+            catch (Exception e)
             {
-                LogHelper.Trace(TraceEventType.Information, e.Message);
-            }
-            finally
-            {
-                cts.Dispose();
-            }
+                OnDeploymentTargetResolving(new DeploymentTargetResolvingEventArg(null, 0, e));
+            }           
 
         }
 
-       
+
 
         #endregion
 
