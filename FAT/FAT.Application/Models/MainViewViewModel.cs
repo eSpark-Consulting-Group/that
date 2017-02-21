@@ -710,6 +710,13 @@ namespace FAT.Application.Models
                 }
                 else
                 {
+                    var ipAddressesString = SelectedDiscoveryResults.Select(_ => _.IPAddress).ToArray();
+                    _storage.SetValue(KnownKeys.DevicesSourceDescription,
+                    new DevicesSourceDescription()
+                    {
+                        Type = ETargetsDiscovererType.NetworkAddresses,
+                        Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
+                    });
                     _lastModifiesComputerDate = null;
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
                     _aptService.BeginScan(SelectedDiscoveryResults.ToArray(),
