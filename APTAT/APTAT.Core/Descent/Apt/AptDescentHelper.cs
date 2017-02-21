@@ -306,6 +306,7 @@ namespace APTAT.Core.Descent.Apt
                             {
                                 if (readFileAttemptsCount > 0)
                                     --readFileAttemptsCount;
+                                findFileAttemptsCount = 20;
                                 throw new StatusFileEmptyException();
                             }
                             readFileAttemptsCount = 20;
@@ -314,7 +315,10 @@ namespace APTAT.Core.Descent.Apt
                             if (temp.Length != 14 && temp.Length != 13)
                             {
                                 if (checkFileHeaderAttemptsCount > 0)
+                                {
                                     --checkFileHeaderAttemptsCount;
+                                }
+                                findFileAttemptsCount = 20;
                                 throw new ResponseFileHeaderInvalidException();
                                 //throw new Exception("Response file header is not valid");
                             }
@@ -370,6 +374,10 @@ namespace APTAT.Core.Descent.Apt
                             }
 
                             EnAptStage status = (EnAptStage) statusInt;
+                            if (status != EnAptStage.EnApt_Complete)
+                            {
+                                findFileAttemptsCount = 20;
+                            }
 
                             if (isServiceRunning.HasValue && !isServiceRunning.Value && status != EnAptStage.EnApt_Complete &&
                                 status != EnAptStage.EnApt_Failed)
