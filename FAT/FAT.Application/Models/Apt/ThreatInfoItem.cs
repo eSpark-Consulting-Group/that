@@ -661,7 +661,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public ObservableCollection<IThreatInfoItem> Items { get; }
+        public ObservableCollection<IThreatInfoItem> Items { get; private set; }
 
         public int DistinctUnknownFilesCount
         {
@@ -868,13 +868,18 @@ namespace FAT.Application.Models
             if (threatInfoItem.IsComputer) throw new ArgumentException();
             var shouldRaise = Items.Count == 0;
             threatInfoItem.Parent = this;
-            Items.Add(threatInfoItem);
+            
             if (_itemsDict.ContainsKey(threatInfoItem.BadFile.Sha1))
                 _itemsDict[threatInfoItem.BadFile.Sha1].Add(threatInfoItem);
             else
-                _itemsDict.Add(threatInfoItem.BadFile.Sha1, new List<IThreatInfoItem> {threatInfoItem});
+                _itemsDict.Add(threatInfoItem.BadFile.Sha1, new List<IThreatInfoItem> { threatInfoItem });
             if (shouldRaise)
+            {
+                Items = new ObservableCollection<IThreatInfoItem>(new[] { threatInfoItem });
                 RaisePropertyChanged(nameof(Items));
+            }
+            else
+                Items.Add(threatInfoItem);
         }
 
         public void TrySetCancelledStatus()

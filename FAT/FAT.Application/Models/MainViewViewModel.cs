@@ -661,6 +661,7 @@ namespace FAT.Application.Models
 
                 GroupByComputers = true;
                 Set(() => ScanWasOnceStarted, true);
+                Keyword = null;
             }
 
             if (_onlineItems.Length > 0)
