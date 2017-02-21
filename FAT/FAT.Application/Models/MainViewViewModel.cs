@@ -935,8 +935,7 @@ namespace FAT.Application.Models
             }
 
             var items = e.Items.Select(AddComputer).ToArray();
-            Set(() => TotalItemsCount, items.Length);  
-            ScannedItemsCount = 0;
+
 
             var local = items.FirstOrDefault(item => item.IsLocal);
             if (local != null)
@@ -946,6 +945,9 @@ namespace FAT.Application.Models
 
             items = _onlineItems.Union(items.Where(item => !item.IsOnline)).ToArray();
             Computers = new ObservableCollection<IThreatInfoItem>(items);
+
+            Set(() => TotalItemsCount, items.Length);
+            ScannedItemsCount = 0;
 
             foreach (var item in Computers)
             {
@@ -1158,7 +1160,7 @@ namespace FAT.Application.Models
                         if (!o.IsComputer)
                             return FilterFileByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
-                            return o.Parent.NameAndIpAddress.ContainsString(Keyword);
+                            return false;
                     }
                     else
                     {
