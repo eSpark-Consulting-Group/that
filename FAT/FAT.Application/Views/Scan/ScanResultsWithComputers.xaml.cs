@@ -61,8 +61,13 @@ namespace FAT.Application
 
         private void treeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (ViewModel.SelectedItems.Count == 1 && !ViewModel.SelectedItem.IsComputer)
-                item_Click(sender, e);
+            var element = e.OriginalSource as FrameworkElement;
+            var cell = element.GetVisualParent<GridViewCell>();
+            if (cell != null)
+            {
+                if (ViewModel.SelectedItems.Count == 1 && !ViewModel.SelectedItem.IsComputer)
+                    item_Click(sender, e);
+            }
         }
 
         private void item_Click(object sender, RoutedEventArgs e)

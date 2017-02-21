@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-
 using System.Windows.Threading;
 using Telerik.Windows.Controls;
-
 using FAT.Application.Messages;
 using FAT.Application.Extensions;
 using FAT.Application.Services;
@@ -22,7 +20,7 @@ using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using FAT.Application.Models.Directory;
 using System.Text.RegularExpressions;
-using System.Threading;
+
 
 namespace FAT.Application.Models
 {
@@ -939,9 +937,15 @@ namespace FAT.Application.Models
             var items = e.Items.Select(AddComputer).ToArray();
             Set(() => TotalItemsCount, items.Length);  
             ScannedItemsCount = 0;
-            _onlineItems = items.Where(item => item.IsOnline).ToArray();
-            Computers = new ObservableCollection<IThreatInfoItem>(items);
 
+            var local = items.FirstOrDefault(item => item.IsLocal);
+            if (local != null)
+                _onlineItems = (new[] { local }).Union(items.Where(item => item.IsOnline && !item.IsLocal)).ToArray();
+            else
+                _onlineItems = items.Where(item => item.IsOnline).ToArray();
+
+            items = _onlineItems.Union(items.Where(item => !item.IsOnline)).ToArray();
+            Computers = new ObservableCollection<IThreatInfoItem>(items);
 
             foreach (var item in Computers)
             {
@@ -978,7 +982,7 @@ namespace FAT.Application.Models
                 }
 
                 _lastModifiesComputerDate = null;
-                _aptService.BeginScan(e.Items, _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+                _aptService.BeginScan(items.Select(item => item.DeploymentTarget).ToArray(), _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
 
             }
             else
