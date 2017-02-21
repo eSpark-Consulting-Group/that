@@ -532,7 +532,7 @@ namespace APTAT.Valkyrie
                             response = _provider.SubmitToAutomaticAnalysis(request, fStream, cancellationToken, fileName);
 
                             ValkyrieFileInfo fileInfoNew = null;
-                            if (_filesToSubmit.ContainsKey(fileInfo.Sha1))
+                            if (_filesToSubmit != null && _filesToSubmit.ContainsKey(fileInfo.Sha1))
                             {
                                 fileInfoNew = _filesToSubmit[fileInfo.Sha1];
                             }
@@ -662,6 +662,9 @@ namespace APTAT.Valkyrie
                 _isMainScanFinished = false;
                 _cancellationTokenSource?.Cancel();
                 _cancellationTokenSource?.Dispose();
+
+                _submitAllowed = false;
+                _filesToSubmit = new Dictionary<string, ValkyrieFileInfo>();
                 _cancellationTokenSource = cancellationTokenSource;
                 lock (_lookupSync)
                 {
