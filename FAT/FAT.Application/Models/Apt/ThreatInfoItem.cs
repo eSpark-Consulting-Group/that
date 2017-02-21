@@ -190,6 +190,8 @@ namespace FAT.Application.Models
             IThreatInfoItem[] files = Items.Where(i => i.ShouldCheckOnValkyrie).ToArray();
             FilesToCheckOnValkyrieCount = files;
             ReCalculateValkyriePercentage();
+            RaisePropertyChanged(nameof(ScanStatusAsString));
+            RaisePropertyChanged(nameof(StatusMessage));
         }
 
         public double ValkyrieProgressPercentage { get; set; }
@@ -206,7 +208,7 @@ namespace FAT.Application.Models
                 _valkyrieProgressPercentageCached = 100;
                 if (ScanStage == ScanStage.OperationCancelling)
                     ScanStage = ScanStage.OperationCanceled;
-                RaisePropertyChanged(nameof(ScanStatus));
+
             }
             else
             {
@@ -219,7 +221,7 @@ namespace FAT.Application.Models
                         ScanStage = ScanStage.OperationCanceled;
                     _valkyrieProgressPercentageCached = percentage;
                     ValkyrieProgressPercentage = percentage;
-                    RaisePropertyChanged(nameof(ScanStatus));
+
                 }
                 else
                    ValkyrieProgressPercentage = percentage;
@@ -400,6 +402,29 @@ namespace FAT.Application.Models
             }
         }
 
+        public Action ScanStatusUpdated { get; set; }
+
+        private string _previousScanStatusAsString;
+        public string ScanStatusAsString
+        {
+            get
+            {
+                var newValue = ScanStatus.AsString;
+                if (!string.IsNullOrEmpty(_previousScanStatusAsString))
+                {
+                    if (_previousScanStatusAsString != newValue)
+                    {
+                        _previousScanStatusAsString = newValue;
+                        ScanStatusUpdated?.Invoke();
+                    }
+                }
+                else
+                    _previousScanStatusAsString = newValue;
+
+                return newValue;
+            }
+        }
+
         public ScanStage ScanStage
         {
             get { return _scanStage; }
@@ -414,7 +439,7 @@ namespace FAT.Application.Models
                     && string.IsNullOrEmpty(_statusMessageMemento))
                     _statusMessageMemento = StatusMessageSystem;
 
-                RaisePropertyChanged(nameof(ScanStatus));
+                RaisePropertyChanged(nameof(ScanStatusAsString));
                 RaisePropertyChanged(nameof(StatusMessage));
 
                 RaisePropertyChanged(nameof(HasClean));
@@ -816,14 +841,13 @@ namespace FAT.Application.Models
             {
                 ReCalculateValkyriePercentage();
                 RaisePropertyChanged(nameof(StatusMessage));
+                RaisePropertyChanged(nameof(ScanStatusAsString));
             }
         }
 
 
-        public bool UpdateCounters(ScanResultItem scanProgress, IScanCounterDiff counterDiff)
+        public void UpdateCounters(ScanResultItem scanProgress, IScanCounterDiff counterDiff)
         {
-            bool stageChanged = ScanStage != scanProgress.ScanStage;
-
             counterDiff.CleanDiff += scanProgress.CleanFilesCount - CleanFilesCount;
             counterDiff.InProgressDiff += scanProgress.UnknownFilesCount + scanProgress.FailedToAnalyzeFilesCount +
                                                 scanProgress.NoVerdictFilesCount - PendingFilesCount;
@@ -836,9 +860,6 @@ namespace FAT.Application.Models
             RemoteScanningPercentage = scanProgress.Percentage;
             StatusMessageSystem = scanProgress.StatusMessage;
             ScanStage = scanProgress.ScanStage;
-            RaisePropertyChanged(nameof(StatusMessage));
-
-            return IsComputer && stageChanged;
         }
 
         public void AddFile(IThreatInfoItem threatInfoItem)

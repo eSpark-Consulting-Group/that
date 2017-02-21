@@ -10,6 +10,7 @@
                 xmlns:converters="clr-namespace:FAT.Application.Converters"
                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                 xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+                xmlns:sys="clr-namespace:System;assembly=mscorlib"
                 d:DesignHeight="400" d:DesignWidth="600" Loaded="UserControl_Loaded">
     <Grid x:Name="grid" Opacity="0">
         <Grid.Triggers>
@@ -169,7 +170,7 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="ScanStatusColumn">
-                    <TextBlock Text="{Binding ScanStatus}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding ScanStatus}" TextAlignment="Left" Margin="3 0"/>
+                    <TextBlock Text="{Binding ScanStatusAsString}" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding ScanStatusAsString}" TextAlignment="Left" Margin="3 0"/>
                 </DataTemplate>
                 
                 <DataTemplate x:Key="VerdictColumn">
@@ -204,7 +205,6 @@
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
                     CellTemplateSelector="{StaticResource VerdictColumnSelector}"   
                     IsFilterable="True"
-
                     FilterMemberPath="ScanStatus"
                     Header="Verdict"  
                     TextAlignment="Left"

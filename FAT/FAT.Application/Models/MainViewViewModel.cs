@@ -436,7 +436,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public bool StatusFilterReset { get; set; }
+        public bool? FilterReset { get; set; } = false;
 
         public int[] FilterOrders { get; set; } 
 
@@ -652,7 +652,7 @@ namespace FAT.Application.Models
             {
                 _scanCounterManager.Clear();
 
-                var items = SelectedDiscoveryResults.Select(t => new ThreatInfoItem(t)).ToArray();
+                var items = SelectedDiscoveryResults.Select(AddComputer).ToArray();
                 Set(() => TotalItemsCount, items.Length);
                 ScannedItemsCount = 0;
                 _onlineItems = items.Where(item => item.IsOnline).ToArray();
@@ -755,7 +755,7 @@ namespace FAT.Application.Models
             Files = new ObservableCollection<IThreatInfoItem>();
             Computers = new ObservableCollection<IThreatInfoItem>();
 
-
+            Set(() => FilterReset, null);
             Set(() => RaisedHasUnknowns, false);
             Set(() => RaisedHasMalwares, false);
 
@@ -906,6 +906,14 @@ namespace FAT.Application.Models
             }
         }
 
+        private IThreatInfoItem AddComputer(IComputer target)
+        {
+            var item = new ThreatInfoItem(target);
+            item.ScanStatusUpdated = () => Set(() => FilterReset, !FilterReset.GetValueOrDefault());
+
+            return item;
+        }
+
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
 
@@ -920,16 +928,11 @@ namespace FAT.Application.Models
                 return;
             }
 
-            var list = new ObservableCollection<IThreatInfoItem>();
-            foreach (var item in e.Items)
-            {
-                list.Add(new ThreatInfoItem(item));
-            }
-
-            Set(() => TotalItemsCount, list.Count);
+            var items = e.Items.Select(AddComputer).ToArray();
+            Set(() => TotalItemsCount, items.Length);  
             ScannedItemsCount = 0;
-            _onlineItems = list.Where(item => item.IsOnline).ToArray();
-            Computers = list;
+            _onlineItems = items.Where(item => item.IsOnline).ToArray();
+            Computers = new ObservableCollection<IThreatInfoItem>(items);
 
 
             foreach (var item in Computers)
@@ -1066,8 +1069,7 @@ namespace FAT.Application.Models
                         }
 
 
-                        if (infoItem.UpdateCounters(scanProgress, counterDiff))
-                            Set(() => StatusFilterReset, !StatusFilterReset);
+                        infoItem.UpdateCounters(scanProgress, counterDiff);
                     }
                 }
                 if (infoItem.ScanStage == ScanStage.OperationFailed ||

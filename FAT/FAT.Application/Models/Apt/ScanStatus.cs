@@ -23,6 +23,15 @@ namespace FAT.Application.Models
             return _value.ToString();
         }
 
+        public string AsString
+        {
+            get
+            {
+                return ToString();
+            }
+        }
+
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
@@ -46,7 +55,7 @@ namespace FAT.Application.Models
 
         public int CompareTo(object obj)
         {
-            return 0;
+            return GetHashCode();
         }
     }
 }

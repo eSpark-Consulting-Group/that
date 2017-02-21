@@ -22,7 +22,7 @@ namespace FAT.Application.Views
             {
                 BindingOperations.SetBinding(this, PredicateProperty, new Binding("FilterPredicate"));
                 BindingOperations.SetBinding(this, FilterOrdersProperty, new Binding("FilterOrders"));
-                BindingOperations.SetBinding(this, StatusFilterResetProperty, new Binding("StatusFilterReset"));
+                BindingOperations.SetBinding(this, FilterResetProperty, new Binding("FilterReset"));
             }
         }
 
@@ -105,28 +105,31 @@ namespace FAT.Application.Views
 
         #endregion
 
-        #region StatusFilterResetProperty (DependencyProperty)
+        #region FilterResetProperty (DependencyProperty)
 
-        public bool StatusFilterReset
+        public bool? FilterReset
         {
-            get { return (bool)GetValue(StatusFilterResetProperty); }
-            set { SetValue(StatusFilterResetProperty, value); }
+            get { return (bool?)GetValue(FilterResetProperty); }
+            set { SetValue(FilterResetProperty, value); }
         }
 
-        public static readonly DependencyProperty StatusFilterResetProperty =
-            DependencyProperty.Register("StatusFilterReset", typeof(bool), typeof(SearchUserControl),
-            new PropertyMetadata(false, OnStatusFilterResetChanged));
+        public static readonly DependencyProperty FilterResetProperty =
+            DependencyProperty.Register("FilterReset", typeof(bool?), typeof(SearchUserControl),
+            new PropertyMetadata(null, OnFilterResetChanged));
 
-        private static void OnStatusFilterResetChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        private static void OnFilterResetChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             var control = obj as SearchUserControl;
 
-            if (control.Target == null)
+            if (control.Target == null || !control.Target.FilterDescriptors.Any(_ => _ is MemberColumnFilterDescriptor))
                 return;
 
-            var filter = control.Target.FilterDescriptors.FirstOrDefault(_ => _ is MemberColumnFilterDescriptor);
-            if (filter != null)
+            var newValue = e.NewValue as bool?;
+
+            if (newValue.HasValue)
                 control.Target.FilterDescriptors.Reset();
+            else
+                control.Target.FilterDescriptors.Clear();
         }
 
         #endregion
@@ -156,7 +159,9 @@ namespace FAT.Application.Views
             if (Target == null)
                 return;
 
-            var filter = Target.FilterDescriptors.FirstOrDefault(_ => _ is FilterDescriptor<object>);
+            Target.FilterDescriptors.SuspendNotifications();
+
+            var filter = Target.FilterDescriptors.FirstOrDefault(_ => _ is FilterDescriptor<object>);  
             if (filter == null)
                 Target.FilterDescriptors.Add(filter = new FilterDescriptor<object> { FilteringExpression = _ => Predicate(_) });
             else
@@ -164,6 +169,8 @@ namespace FAT.Application.Views
 
             if (string.IsNullOrEmpty(Keyword) && (FilterOrders == null || FilterOrders.Length == 0))
                 Target.FilterDescriptors.Remove(filter);
+
+            Target.FilterDescriptors.ResumeNotifications();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
