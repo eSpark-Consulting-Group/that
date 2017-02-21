@@ -54,7 +54,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
-            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, string.Empty, string.Empty);
+            var scanOptions = CreateScanOptions(80, 53);
             Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.Is(Int32.Parse(scanOptions.UdpPort)), Arg.Is(Int32.Parse(scanOptions.TcpPort)))).OccursOnce();
             var deploymentTargets = GetDeploymentTargets();
             var description = Mock.Create<IDevicesSourceDescription>();
@@ -99,7 +99,9 @@ namespace APTAT.Core.UnitTests
         public void GetAptReportBuilderTest()
         {
             var failedToAnalyzeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze);
-            var scanOptions = new ScanOptions("111", "444", ScanKind.Quick, "", "");
+            //var scanOptions = new ScanOptions("111", "444", ScanKind.Quick, "", "");
+            IScanOptions scanOptions = CreateScanOptions(80,53);
+
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
@@ -121,6 +123,14 @@ namespace APTAT.Core.UnitTests
             Mock.AssertAll(descent);
             Mock.AssertAll(aptScanner);
             Mock.AssertAll(aptScannerFactory);
+        }
+
+        private static IScanOptions CreateScanOptions(int tcpPort, int udpPort)
+        {
+            var scanOptions = Mock.Create<IScanOptions>(Behavior.Strict);
+            Mock.Arrange(() => scanOptions.TcpPort).Returns(() => tcpPort.ToString());
+            Mock.Arrange(() => scanOptions.UdpPort).Returns(() => udpPort.ToString());            
+            return scanOptions;
         }
 
         [Fact]
@@ -158,7 +168,7 @@ namespace APTAT.Core.UnitTests
         public void GetValkyrieDetailsLinkTest()
         {
             var failedToAnalyzeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze);
-            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
@@ -286,7 +296,8 @@ namespace APTAT.Core.UnitTests
         {
             Guid operationGuid = new Guid("C2630D90-9CCE-4C94-A452-4EAE4DE78863");
             var failedToAnalyzeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze);
-            var scanOptions = new ScanOptions("111", "444", ScanKind.Quick, "", "");
+            
+            var scanOptions = CreateScanOptions(111, 444);
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             Mock.Arrange(() => descent.StopAllScans(Arg.AnyInt)).OccursOnce();
             //FLS Manager Arange
@@ -337,7 +348,7 @@ namespace APTAT.Core.UnitTests
 
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             //Mock.Arrange(() => aptScanner.ScanOperationContext).Returns(() => scanContext);
-            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             var deploymentTargets = GetDeploymentTargets();
 
             var description = Mock.Create<IDevicesSourceDescription>();
@@ -446,7 +457,7 @@ namespace APTAT.Core.UnitTests
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
-            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             var deploymentTargets = GetDeploymentTargets();
 
             var description = new DevicesSourceDescription { Description = "Test Device" };
@@ -523,7 +534,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()), Arg.AnyBool)).MustBeCalled();
-            ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
             var description = new DevicesSourceDescription { Description = "Test Device" };
 
@@ -574,7 +585,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
-            ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             var description = new DevicesSourceDescription { Description = "Test Device" };
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var deploymentTargets = GetDeploymentTargets();
@@ -609,7 +620,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
-            ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             DeploymentTarget dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
             var description = new DevicesSourceDescription { Description = "Test Device" };
 
@@ -659,7 +670,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
-            ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             DeploymentTarget dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
             var description = new DevicesSourceDescription { Description = "Test Device" };
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
@@ -695,7 +706,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
-            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
             var description = new DevicesSourceDescription { Description = "Test Device" };
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
@@ -721,7 +732,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
-            var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
+            var scanOptions = CreateScanOptions(80, 53);
             var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
             var description = new DevicesSourceDescription { Description = "Test Device" };
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);

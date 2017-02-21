@@ -19,14 +19,14 @@ namespace APTAT.Core.Apt
         private readonly IEnumerable<IComputer> _targets;
             
         
-        private readonly ScanOptions _options;
+        private readonly IScanOptions _options;
 
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
         public event EventHandler<ComputerScanCompletedEventArgs> ComputerScanCompleted; 
         public IAptScanOperationContext ScanOperationContext { get { return _scanOperationContext; } }
-        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<IComputer> targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<IComputer> targets, IDevicesSourceDescription devicesSourceDescription, IScanOptions options)
         {
             _devicesSourceDescription = devicesSourceDescription;
             _descentSubSystem = descentSubSystem;

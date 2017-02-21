@@ -92,6 +92,7 @@
     <Compile Include="Descent\Apt\IAptDescentProgressItem.cs" />
     <Compile Include="Descent\Apt\IAptScanResult.cs" />
     <Compile Include="Descent\Apt\IModule.cs" />
+    <Compile Include="Descent\Apt\IScanOptions.cs" />
     <Compile Include="Descent\Apt\ScanKind.cs" />
     <Compile Include="Descent\Apt\ScanOption.cs" />
     <Compile Include="Descent\Wmi\WmiScanner.cs" />

@@ -13,10 +13,10 @@ namespace APTAT.Core.Descent.Apt
     public class AptDescentScanner : Scanner
     {        
         private AptDescentMod _descentMod;
-        private ScanOptions _scanOptions;
+        private IScanOptions _scanOptions;
 
         public AptDescentScanner(IEnumerable<IComputer> targets, string login, string password,
-            IDevicesSourceDescription devicesSourceDescription, ScanOptions scanOptions) 
+            IDevicesSourceDescription devicesSourceDescription, IScanOptions scanOptions) 
             : base(targets, login, password, devicesSourceDescription)
         {
             _scanOptions = scanOptions;

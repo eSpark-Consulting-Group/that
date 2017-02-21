@@ -217,7 +217,7 @@ namespace APTAT.Core.Apt
             return _distinctHelper.GetDistinctFileInfo(results);
         }
 
-        public IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+        public IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, IScanOptions options)
         {
             _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
             var scanner = _aptScannerFactory

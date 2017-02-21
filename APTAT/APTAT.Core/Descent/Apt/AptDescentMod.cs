@@ -24,10 +24,10 @@ namespace APTAT.Core.Descent.Apt
         {
             public AptScanResult Result { get; set; }
          
-            public ScanOptions Options { get; set; }
+            public IScanOptions Options { get; set; }
         }
         public void StartAptScan(RemoteHostInfo remoteHostInfo, IDescentCallback cb, Guid agentIdentity,
-            AptScanResult result, Guid operationUid,  ScanOptions scanOptions)
+            AptScanResult result, Guid operationUid,  IScanOptions scanOptions)
         {
             AptInstallAgentThreadParams tp = new AptInstallAgentThreadParams
             {

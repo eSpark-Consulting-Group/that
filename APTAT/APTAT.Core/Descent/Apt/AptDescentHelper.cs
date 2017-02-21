@@ -54,7 +54,7 @@ namespace APTAT.Core.Descent.Apt
 		    protected override string ServiceName { get {return "ScannerService.exe"; } }
             protected override string ServiceDisplayName { get { return "Comodo APT Scanner"; } }
 
-            public AptDescentHelper( RemoteHostInfo info, ScanOptions options, CancellationToken cancellationToken)
+            public AptDescentHelper( RemoteHostInfo info, IScanOptions options, CancellationToken cancellationToken)
                 : base (info, cancellationToken)
 			{
                 _options = options;
@@ -200,7 +200,7 @@ namespace APTAT.Core.Descent.Apt
             //======================================================================
 
 		    
-            private readonly ScanOptions _options;
+            private readonly IScanOptions _options;
 
             protected override string GetPackageFileName(bool is64)
 		    {
@@ -229,7 +229,7 @@ namespace APTAT.Core.Descent.Apt
                 return serviceParams.ToArray();
             }
 
-            private static string GetScanScope(ScanOptions options)
+            private static string GetScanScope(IScanOptions options)
             {
                 switch (options.ScanKind)
                 {
@@ -244,11 +244,10 @@ namespace APTAT.Core.Descent.Apt
 
                     default:
                         throw new InvalidOperationException("Not supported scan kind");                        
-                }
-                
+                }                
             }
 
-            private static string GetScanRegionArgs(ScanOptions options)
+            private static string GetScanRegionArgs(IScanOptions options)
             {
                 List<string> regions = new List<string>();
                 if (options.ScanProcesses) regions.Add("processes");

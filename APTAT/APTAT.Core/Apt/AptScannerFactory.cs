@@ -12,7 +12,7 @@ namespace APTAT.Core.Apt
     {
         public IAptScanner CreateAptScanner(IDescentSubSystem descentSubSystem, 
             IEnumerable<IComputer> targets, 
-            IDevicesSourceDescription devicesSourceDescription, ScanOptions options)
+            IDevicesSourceDescription devicesSourceDescription, IScanOptions options)
         {
             return new AptScanner(descentSubSystem, targets, devicesSourceDescription, options);
         }

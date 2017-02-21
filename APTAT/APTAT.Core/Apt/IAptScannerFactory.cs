@@ -11,6 +11,6 @@ namespace APTAT.Core.Apt
     {
         IAptScanner CreateAptScanner(IDescentSubSystem descentSubSystem,
             IEnumerable<IComputer> targets, 
-            IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+            IDevicesSourceDescription devicesSourceDescription, IScanOptions options);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace APTAT.Core.Descent.Apt
 {
-    public class ScanOptions
+    public class ScanOptions : IScanOptions
     {
         public ScanOptions(string tcpPort, string udpPort, ScanKind scanKind, string login, string password, bool isRescan = false)
         {

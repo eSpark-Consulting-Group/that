@@ -25,7 +25,7 @@ namespace APTAT.Core
         event EventHandler ValkyrieAnalyzeStarted;
         IAggregatedAptScanResult AggregatedScanResults { get; }
 
-        IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, ScanOptions options);
+        IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, IScanOptions options);
 
         IAptReportBuilder GetAptReportBuilder();
         int GetDistinctFilesCount();
