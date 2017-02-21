@@ -163,7 +163,7 @@ namespace APTAT.Core.Apt
             {
                 lock (ValkyrieAnalysisResult)
                 {
-                    if (!AggregatedScanResults.IsOperationInProgress() && _filesWithFlsErrorCount == 0 &&
+                    if (AggregatedScanResults != null && !AggregatedScanResults.IsOperationInProgress() && _filesWithFlsErrorCount == 0 &&
                         _filesShouldSendToValkyrieCount == 0 && _isValkyrieStarted && !_isValkyrieScanEnded)
                     {
                         _isValkyrieScanEnded = true;
@@ -297,7 +297,7 @@ namespace APTAT.Core.Apt
                     UpdateLastResult(dict);
 
                 }
-                if ((verdictUpdatedAny || newUnknownFiles.Any()) && _isValkyrieStarted)
+                if ((dictToValkyrie.Any() || newUnknownFiles.Any()) && _isValkyrieStarted)
                 {
                     foreach (var unknownFile in newUnknownFiles)
                     {
