@@ -99,35 +99,54 @@ namespace FAT.Application.Tests
             Assert.True(itemsRaised);
         }
 
-        //[Fact]
-        //public void AddFirstItemShouldRaiseItemsPropertyChanged()
-        //{
-        //    var computer = Mock.Create<IComputer>(Behavior.Strict);
-        //    var uid = Guid.NewGuid();
-        //    Mock.Arrange(() => computer.Name).Returns("comp1");
-        //    Mock.Arrange(() => computer.IPAddress).Returns("10.8.65.171");
-        //    Mock.Arrange(() => computer.IsOnline).Returns(true);
-        //    Mock.Arrange(() => computer.IsLocalComputer).Returns(false);
-        //    Mock.Arrange(() => computer.Uid).Returns(uid);
-        //    Mock.Arrange(() => computer.LdapPath).Returns(String.Empty);
-        //    ThreatInfoItem target = new ThreatInfoItem(computer);
+        [Theory]
+        [InlineData(1000, 13,32,23,12,10,32.21)]
+        [InlineData(100, 1, 0, 0, 0, 1, 2.21)]
+        [InlineData(1000, 0, 0, 0, 0, 0, 1.21)]
+        [InlineData(1000, 0, 1, 1, 1, 0, 1.21)]
+        public void UpdateCountersTest(int totalFiles, int cleanFilesCount, int malwaresFilesCount, int unknownFilesCount,
+            int noVerdictFilesCount, int failedToAnalyzeFilesCount, double percentage)
+        {
+            var computer = Mock.Create<IComputer>(Behavior.Strict);
+            var uid = Guid.NewGuid();
+            Mock.Arrange(() => computer.Name).Returns("comp1");
+            Mock.Arrange(() => computer.IPAddress).Returns("10.8.65.171");
+            Mock.Arrange(() => computer.IsOnline).Returns(true);
+            Mock.Arrange(() => computer.IsLocalComputer).Returns(false);
+            Mock.Arrange(() => computer.Uid).Returns(uid);
+            Mock.Arrange(() => computer.LdapPath).Returns(String.Empty);
+            ThreatInfoItem target = new ThreatInfoItem(computer);
+            
+            var scanResultItem = Mock.Create<IScanResultItem>(Behavior.Strict);
+            Mock.Arrange(() => scanResultItem.CleanFilesCount).Returns(cleanFilesCount);
+            Mock.Arrange(() => scanResultItem.TotalFilesCount).Returns(totalFiles);
+            Mock.Arrange(() => scanResultItem.MalwareFilesCount).Returns(malwaresFilesCount);
+            Mock.Arrange(() => scanResultItem.UnknownFilesCount).Returns(unknownFilesCount);
+            Mock.Arrange(() => scanResultItem.NoVerdictFilesCount).Returns(noVerdictFilesCount);
+            Mock.Arrange(() => scanResultItem.FailedToAnalyzeFilesCount).Returns(failedToAnalyzeFilesCount);
+            Mock.Arrange(() => scanResultItem.Percentage).Returns(percentage);
+            Mock.Arrange(() => scanResultItem.StatusMessage).Returns(String.Empty);
+            Mock.Arrange(() => scanResultItem.ScanStage).Returns(ScanStage.ScanInProgress);
 
-        //    bool itemsRaised = false;
+            var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
+            Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(0);
+            Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(0);
+            Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(0);
+            Mock.ArrangeSet(() => scanCounterDiff.CleanDiff = cleanFilesCount);
+            Mock.ArrangeSet(() => scanCounterDiff.MalwareDiff =malwaresFilesCount);
+            Mock.ArrangeSet(() => scanCounterDiff.InProgressDiff = (noVerdictFilesCount + 
+                failedToAnalyzeFilesCount + unknownFilesCount));
+            
 
+            target.UpdateCounters(scanResultItem, scanCounterDiff);
+            Assert.Equal(totalFiles, target.TotalFilesCount);
+            Assert.Equal(percentage/2, target.TotalProgressPercentage);
+            Assert.Equal(malwaresFilesCount, target.MalwareFilesCount);
+            Assert.Equal(cleanFilesCount, target.CleanFilesCount);
+            Assert.Equal((noVerdictFilesCount +
+                failedToAnalyzeFilesCount + unknownFilesCount), target.PendingFilesCount);
+            Assert.Equal(ScanStage.ScanInProgress, target.ScanStage);
 
-        //    var file = Mock.Create<IThreatInfoItem>(Behavior.Strict);
-        //    var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
-        //    Mock.Arrange(() => file.BadFile).Returns(badFile);
-        //    Mock.Arrange(() => file.IsComputer).Returns(false);
-        //    Mock.Arrange(() => badFile.Sha1).Returns("231");
-
-        //    target.AddFile(file);
-        //    target.PropertyChanged += (sender, args) =>
-        //    {
-        //        if (args.PropertyName == "Items")
-        //            itemsRaised = true;
-        //    };
-        //    target.UpdateVerdictForFiles();
-        //}
+        }
     }
 }

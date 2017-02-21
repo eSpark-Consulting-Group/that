@@ -13,7 +13,6 @@ using Xunit;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using APTAT.Core.Descent;
 using APTAT.Core.FLS;
-using Telerik.JustMock.Helpers;
 
 namespace APTAT.Core.UnitTests
 {

@@ -9,7 +9,7 @@ using APTAT.Valkyrie;
 
 namespace APTAT.Application.Models.Apt
 {
-    public class FileVerdictContext
+    public class FileVerdictContext : IFileVerdictContext
     {
         public string Sha1 { get;  }
         public FlsResult? FlsVerdict { get;  }

@@ -18,7 +18,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 			private readonly List<string> _filesToDeleteOnQuit = new List<string>();
             protected readonly ServiceHelper ServiceHelper = new ServiceHelper();
             private bool _objectDestroyed = false;
-            protected RemoteHostInfo RemoteHostInfo;
+            protected IRemoteHostInfo RemoteHostInfo;
 			private readonly string _oldRemoteHostName; // old name without changing it to IP address
 			protected string RemoteAdminPath;
             public string RemoteWorkingDirectory;
@@ -27,7 +27,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             private readonly NetworkHelper _networkHelper = new NetworkHelper();
 		    protected string PackageFileName;
 		    protected readonly INetworkObserver NetworkObserver;
-		    private readonly CancellationToken _cancellationToken;
+		    protected readonly CancellationToken CancellationToken;
 
             public class RemoteResponse
 			{
@@ -72,7 +72,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 		    {
 		        NetworkObserver = CompositionHelper.Instance.Resolve<INetworkObserver>();
 				RemoteHostInfo = info;
-		        _cancellationToken = cancellationToken;
+		        CancellationToken = cancellationToken;
 				_oldRemoteHostName = info.HostName;
 				InitPaths();
 			}
@@ -149,21 +149,21 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				{
 					string login;
 
-                    if (_cancellationToken.IsCancellationRequested)
+                    if (CancellationToken.IsCancellationRequested)
                         throw new OperationCanceledException();
 
                     login = string.Format("{0}\\{1}", domain, userName);
 					if (TryLogin(impersonateAsNetworkService, login))
 						return;
 
-                    if (_cancellationToken.IsCancellationRequested)
+                    if (CancellationToken.IsCancellationRequested)
                         throw new OperationCanceledException();
 
                     login = string.Format("{0}@{1}", userName, domain);
 					if (TryLogin(impersonateAsNetworkService, login))
 						return;
 
-                    if (_cancellationToken.IsCancellationRequested)
+                    if (CancellationToken.IsCancellationRequested)
                         throw new OperationCanceledException();
 
                     if ( RemoteHostInfo.Login != login )
@@ -183,7 +183,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				    int attemptsCount = 3;
                     while (attemptsCount > 0)
                     {
-                        if (_cancellationToken.IsCancellationRequested)
+                        if (CancellationToken.IsCancellationRequested)
                             throw new OperationCanceledException();
                         if (TryLogin(impersonateAsNetworkService, RemoteHostInfo.Login))
                             return;
@@ -222,7 +222,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
 			    if( dnsResolvingNeeded )
 				{
-                    if (_cancellationToken.IsCancellationRequested)
+                    if (CancellationToken.IsCancellationRequested)
                         throw new OperationCanceledException();
 
                     // try to avoid specific network problem
@@ -299,7 +299,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 
 					originalException = ex;
 				}
-                if (_cancellationToken.IsCancellationRequested)
+                if (CancellationToken.IsCancellationRequested)
                     throw new OperationCanceledException();
 
                 // try to use dns name without domain suffix
@@ -329,7 +329,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     originalException = exception;
                 }
 
-                if (_cancellationToken.IsCancellationRequested)
+                if (CancellationToken.IsCancellationRequested)
                     throw new OperationCanceledException();
                 // We failed. Trying to impersonate as network service
                 try

@@ -198,12 +198,13 @@ namespace APTAT.Core.Descent.Apt
         private void NotifyProgressChanged(Guid operationUid, string hostName, Guid computerUid, ResourceText resourceMessage, AptScanStage scanStage,
             int totalFilesCount, int unknownFilesCount, int malwaresCount, int safeFilesCount, double percentage, int errorFilesCount, int failedAtNodeCount)
         {
+            var tp = _paramsPerTargetUid[computerUid];
+            if (TaskFactory.CancellationToken.IsCancellationRequested || tp.RemoteHostInfo.IsCancelled)
+                throw new OperationCanceledException();
+
             if ((percentage == 0 || double.IsInfinity(percentage)) && scanStage == AptScanStage.ScanInProgress)
                 return;
 
-            var tp = _paramsPerTargetUid[computerUid];
-            if (TaskFactory.CancellationToken.IsCancellationRequested || tp.IsCancelled) 
-                throw new OperationCanceledException();
             FormattedText formattedText = new FormattedText(resourceMessage);
             Tracker?.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed, 
                 new AptDescentProgressItem(computerUid, hostName, operationUid, formattedText, scanStage, totalFilesCount, unknownFilesCount

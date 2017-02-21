@@ -35,14 +35,13 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             public IDescentCallback DescentCallback { get; set; }
             public Guid AgentIdentity { get; set; }
             public Guid OperationUid { get; set; }
-            public Boolean IsCancelled { get; set; }
         }
 
         public void StopScan(Guid targetGuid)
         {
             InstallAgentThreadParams args;
             if (ParamsByUid.TryGetValue(targetGuid, out args))
-                args.IsCancelled = true;
+                args.RemoteHostInfo.IsCancelled = true;
         }
 
         protected void StartDeploymentThread(InstallAgentThreadParams tp)
@@ -78,7 +77,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
         {
             InstallAgentThreadParams tp;
             ParamsByUid.TryGetValue(computerUid, out tp);
-            if (checkCancellation && (TaskFactory.CancellationToken.IsCancellationRequested || (tp != null && tp.IsCancelled)))
+            if (checkCancellation && (TaskFactory.CancellationToken.IsCancellationRequested || (tp != null && tp.RemoteHostInfo.IsCancelled)))
                 throw new OperationCanceledException();
             FormattedText formattedText = new FormattedText(resourceMessage);
             Tracker?.NotifyChanged(new ChangesTrackingItem(ChangeType.Changed,
@@ -102,7 +101,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
             var tp = ParamsByUid[args.TargetUid];
             NotifyProgressChanged(tp.OperationUid, tp.RemoteHostInfo.HostName, tp.AgentIdentity, ServerSideMessagesResources.DescentProgressAgentInstallStartingHelperService, 30);
         }
-
+        
 
 
         protected virtual void DeploymentThread(object obj)

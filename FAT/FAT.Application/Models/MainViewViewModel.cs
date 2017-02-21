@@ -1035,7 +1035,7 @@ namespace FAT.Application.Models
             IScanCounterDiff counterDiff = new ScanCounterDiff();
             foreach (var infoItem in _onlineItems)
             {
-                ScanResultItem scanProgress = null;
+                IScanResultItem scanProgress = null;
                 computers.TryGetValue(infoItem.ComputerGuid, out scanProgress);
                 if (infoItem.ScanStage != ScanStage.OperationFailed &&
                         infoItem.ScanStage != ScanStage.OperationCompleted &&

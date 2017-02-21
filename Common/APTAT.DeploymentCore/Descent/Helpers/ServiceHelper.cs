@@ -577,7 +577,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                 return;
 
             SERVICE_STATUS ss = new SERVICE_STATUS();
-
+            int error = 0;
             if(QueryServiceStatus(m_serviceHandle, ref ss))
             {
                 if (ss.currentState != (int)SERVICE_STATE.SERVICE_STOPPED)
@@ -606,8 +606,11 @@ namespace APTAT.DeploymentCore.Descent.Helpers
                     QueryServiceStatus(m_serviceHandle, ref ss);
                 }
             }
-            var error = Marshal.GetLastWin32Error();
-            LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({error})");
+            else
+            {
+                error = Marshal.GetLastWin32Error();
+                LogHelper.Trace(TraceEventType.Warning, TraceCategory.Network, $"Cannot query service status ({error})");
+            }
             if (error == 6 && c < 4)
             {
                 if (!ReInitialize())

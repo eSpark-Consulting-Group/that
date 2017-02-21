@@ -7,19 +7,16 @@ namespace APTAT.Application.Services.EventArgs
 {
     public class GetModifiedResultsForOperationEventArgs : DomainEventArgs
     {
-        public GetModifiedResultsForOperationEventArgs(ScanResultItem[] computerResults,
-            FileVerdictContext[] files, Boolean operationCompleted, double percentage)
+        public GetModifiedResultsForOperationEventArgs(IScanResultItem[] computerResults,
+            IFileVerdictContext[] files, Boolean operationCompleted)
         {
             OperationCompleted = operationCompleted;
-            Percentage = percentage;
             Computers = computerResults;
             Files = files;
         }
 
         public Boolean OperationCompleted { get; }
-        public double Percentage { get; }
-
-        public ScanResultItem[] Computers { get; }
-        public FileVerdictContext[] Files { get; }
+        public IScanResultItem[] Computers { get; }
+        public IFileVerdictContext[] Files { get; }
     }
 }

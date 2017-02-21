@@ -211,8 +211,7 @@ namespace FAT.Application.Services
         {
             var result = _manager.AggregatedScanResults;
             var completed = !result.IsOperationInProgress(operationUid);
-            var percentage = GetProgressOfOperations(operationUid) / 2;
-            List<ScanResultItem> mappedResult = new List<ScanResultItem>();
+            List<IScanResultItem> mappedResult = new List<IScanResultItem>();
             Dictionary<string,IModule> modules = new Dictionary<string,IModule>(StringComparer.OrdinalIgnoreCase);
             foreach (var r in result.ScanResults.Where(c => lastUtcTime == null || c.Modified > lastUtcTime))
             {
@@ -263,22 +262,15 @@ namespace FAT.Application.Services
             var files = _manager.GetModifiedFileVerdicts(lastFlcUtcTime);
             Dictionary<string, ValkyrieAnalysisResult> valkyrieAnalysisResults;
             var valkyrieResult = _manager.GetModifiedValkyrieVerdicts(lastValkyrieTime, modules, out valkyrieAnalysisResults);
-            var mappedFiles = files
-                .Select(r => new FileVerdictContext(r.Sha1, r.Cloud, r.ModifiedDateTime)).ToList();
+            List<IFileVerdictContext> mappedFiles = files
+                .Select(r => new FileVerdictContext(r.Sha1, r.Cloud, r.ModifiedDateTime)).OfType<IFileVerdictContext>().ToList();
             mappedFiles.AddRange(valkyrieResult.Select(vr =>
                 new FileVerdictContext(vr.Sha1, vr.ValkyrieAnalysisResult, vr.VerdictModified)));
             mappedFiles.AddRange(valkyrieAnalysisResults.Values.Select(vr =>
                 new FileVerdictContext(vr.SHA1, vr, DateTime.MinValue)));
-            return new GetModifiedResultsForOperationEventArgs(mappedResult.ToArray(), mappedFiles.ToArray(), completed, percentage);
+            return new GetModifiedResultsForOperationEventArgs(mappedResult.ToArray(), mappedFiles.ToArray(), completed);
         }
-
-        public double GetProgressOfOperations(Guid operationUid)
-        {
-            var scanResults = _manager.AggregatedScanResults.ScanResults.OfType<IAptScanResult>()
-                .Where(r => r.ResultType != APTAT.Core.ScanResultType.NotPerformed).ToArray();
-            var result = scanResults.Sum(sr => sr.Percentage) / (scanResults.Count() * 100) * 100d;
-            return result;
-        }
+        
 
         void OnValkyrieAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<FileResult> e)
         {

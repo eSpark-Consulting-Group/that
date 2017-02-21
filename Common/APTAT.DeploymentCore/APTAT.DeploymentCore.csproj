@@ -72,6 +72,7 @@
     <Compile Include="Descent\Helpers\DescentMod.cs" />
     <Compile Include="Descent\Helpers\IDescentCallback.cs" />
     <Compile Include="Descent\Helpers\INetworkHelper.cs" />
+    <Compile Include="Descent\Helpers\IRemoteHostInfo.cs" />
     <Compile Include="Descent\Helpers\NetworkHelper.cs" />
     <Compile Include="Descent\Helpers\RemoteHostInfo.cs" />
     <Compile Include="Descent\Helpers\RemoteInstallerJob.cs" />

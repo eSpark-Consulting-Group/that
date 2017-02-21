@@ -283,6 +283,9 @@ namespace APTAT.Core.Descent.Apt
 
                     try
                     {
+                        if (CancellationToken.IsCancellationRequested || RemoteHostInfo.IsCancelled)
+                            throw new OperationCanceledException();
+
                         bool? isServiceRunning = ServiceHelper.IsServiceRunning();
                         using (FileStream fs = new FileStream(_responseFilePathForCurrentComputer, FileMode.Open,
                             FileAccess.Read, FileShare.ReadWrite))

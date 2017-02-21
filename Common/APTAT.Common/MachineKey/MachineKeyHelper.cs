@@ -435,7 +435,7 @@ namespace APTAT.Common.MachineKey
                 }
                 return productId + productRevision + serial;
             }
-            catch(Exception e)
+            catch(Exception )
             {
                 return null;
             }

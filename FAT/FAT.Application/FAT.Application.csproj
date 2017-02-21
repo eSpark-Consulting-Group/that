@@ -122,6 +122,8 @@
     <Compile Include="Converters\ProgressBarHighlightConverter.cs" />
     <Compile Include="Models\Apt\FileVerdictContext.cs" />
     <Compile Include="Models\Apt\IBadFileItem.cs" />
+    <Compile Include="Models\Apt\IFileVerdictContext.cs" />
+    <Compile Include="Models\Apt\IScanResultItem.cs" />
     <Compile Include="Models\Apt\IThreatInfoItem.cs" />
     <Compile Include="Models\Apt\ScanStatus.cs" />
     <Compile Include="Models\Directory\StartScanCredentialsViewModel.cs" />

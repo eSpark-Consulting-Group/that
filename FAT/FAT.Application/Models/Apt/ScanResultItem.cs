@@ -2,7 +2,7 @@
 
 namespace FAT.Application.Models
 {
-    public class ScanResultItem
+    public class ScanResultItem : IScanResultItem
     {
         public Guid TargetUid { get; set; }
 

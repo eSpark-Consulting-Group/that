@@ -747,7 +747,7 @@ namespace FAT.Application.Models
                 ShortName = Path.GetFileName(badFile.Name);
         }
 
-        public bool UpdateFileVerdict(FileVerdictContext fileVerdictContext)
+        public bool UpdateFileVerdict(IFileVerdictContext fileVerdictContext)
         {
             var prevFinalVerdict = FinalVerdict;
             if (fileVerdictContext.ValkyrieAnalysisResult != null)
@@ -766,7 +766,7 @@ namespace FAT.Application.Models
             //MalwareProbabilityValue = valkyrieAnalysisResult.MalwareProbability;
         }
 
-        public void UpdateVerdictForFiles(FileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff)
+        public void UpdateVerdictForFiles(IFileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff)
         {
             if (!IsComputer) throw new NotSupportedException();
             bool anyUpdated = false;
@@ -846,7 +846,7 @@ namespace FAT.Application.Models
         }
 
 
-        public void UpdateCounters(ScanResultItem scanProgress, IScanCounterDiff counterDiff)
+        public void UpdateCounters(IScanResultItem scanProgress, IScanCounterDiff counterDiff)
         {
             counterDiff.CleanDiff += scanProgress.CleanFilesCount - CleanFilesCount;
             counterDiff.InProgressDiff += scanProgress.UnknownFilesCount + scanProgress.FailedToAnalyzeFilesCount +

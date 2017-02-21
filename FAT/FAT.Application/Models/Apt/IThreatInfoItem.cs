@@ -70,9 +70,9 @@ namespace FAT.Application.Models
         void RestoreConnectingState();
         string ToString();
         void TrySetCancelledStatus();
-        void UpdateCounters(ScanResultItem scanProgress, IScanCounterDiff counterDiff);
-        bool UpdateFileVerdict(FileVerdictContext fileVerdictContext);
+        void UpdateCounters(IScanResultItem scanProgress, IScanCounterDiff counterDiff);
+        bool UpdateFileVerdict(IFileVerdictContext fileVerdictContext);
         void UpdateFileVerdict(APTAT.Core.Descent.Apt.CloudVerdict verdict);
-        void UpdateVerdictForFiles(FileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff);
+        void UpdateVerdictForFiles(IFileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff);
     }
 }
