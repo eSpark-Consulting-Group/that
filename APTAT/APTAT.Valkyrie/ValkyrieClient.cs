@@ -50,6 +50,7 @@ namespace APTAT.Valkyrie
         private int _machineCount;
         private string _login;
         private string _password;
+        private bool _isCheckingInProgress = false;
 
         bool _submitAllowed;
 
@@ -58,7 +59,6 @@ namespace APTAT.Valkyrie
         public event EventHandler AnalyzeStarted;
 
         private readonly IValkyrieWebApiProvider _provider;
-        private List<ValkyrieFileInfo> _filesForSubmit = new List<ValkyrieFileInfo>();
         private Dictionary<string, ValkyrieFileInfo> _filesToSubmit;
 
         public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider)
@@ -81,6 +81,7 @@ namespace APTAT.Valkyrie
         {
             _filesToSubmit = updatedData;
             _submitAllowed = true;
+            Task.Factory.StartNew(() => CheckStatusesTimerCallback(this, null));
         }
         public void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately)
         {
@@ -166,15 +167,14 @@ namespace APTAT.Valkyrie
             {
                 if (_checkStatusesTimer.Enabled)
                     _checkStatusesTimer.Stop();
-                else
+                if (_isCheckingInProgress)
                 {
                     if (sender == this)
-                    {
                         _checkStatusesTimer.Interval = 50;
-                        return;
-                    }
-                    _checkStatusesTimer.Interval = _changeTrakingIntervalInMs;
+                    return;
                 }
+                _isCheckingInProgress = true;
+                _checkStatusesTimer.Interval = _changeTrakingIntervalInMs;
             }
             var waitNextInterval = false;
             if (_aptScanId == null)
@@ -207,6 +207,9 @@ namespace APTAT.Valkyrie
             }
             lock (_checkStatusesTimer)
             {
+                if (resetTimerImmediately)
+                    _checkStatusesTimer.Interval = 50;
+                _isCheckingInProgress = false;
                 _checkStatusesTimer.Start();
             }
         }
@@ -221,18 +224,6 @@ namespace APTAT.Valkyrie
                 _lookupContexts.Clear();
             }
             SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, MergeResult, true);
-
-            ///////////////////////////
-            //if (_submitAllowed)
-            //{
-            //    lock (_lookupSync)
-            //    {
-            //        filesToAnalyze = _filesForSubmit.ToList();
-            //        _lookupContexts.Clear();
-            //    }
-            //    SubmitToAutomaticAnalysis(_filesForSubmit, cancellationToken, MergeResult, true);
-            //}
-            //////////////////////////////
 
             List<ValkyrieAnalyseOperationContext> filesToCheckAnalysisResult;
             lock (_automaticAnalyseSync)
