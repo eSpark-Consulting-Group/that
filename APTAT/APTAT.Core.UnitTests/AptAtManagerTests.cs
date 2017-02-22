@@ -44,13 +44,23 @@ namespace APTAT.Core.UnitTests
             Assert.Null(target.AggregatedScanResults);
         }
 
+        /// <summary>
+        /// Remote Scanner returns Failed to analyze 
+        /// Than Fls Manager returns 3 safe result for previously failed files
+        /// Espected: 
+        /// 1. Must be called Enque with all Failed To Analyze files
+        /// 2. Must be raized event FlsAnalyzeProgressChanged with all Safe files from flsManager
+        /// </summary>
         [Fact]
         public void FlsEventTest()
-        {
+        {            
+            var failedToAnalyzeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze);
+            var sha1WithNextItterationClean = failedToAnalyzeModules.Take(3).Select(s=>s.Sha1);
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var flsManager = Mock.Create<IFlsManager>(Behavior.Strict);
-            Mock.Arrange(() => flsManager.Enqueue(new string[] { }, false)).IgnoreArguments().MustBeCalled();
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var failedToAnalyzeHashes = failedToAnalyzeModules.Select(m => m.Sha1).ToArray();
+            Mock.Arrange(() => flsManager.Enqueue(Arg.Matches<IEnumerable<string>>(s=>s.Compare(failedToAnalyzeHashes)),true)).MustBeCalled();
+            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);            
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
@@ -59,18 +69,20 @@ namespace APTAT.Core.UnitTests
             var deploymentTargets = GetDeploymentTargets();
             var description = Mock.Create<IDevicesSourceDescription>();
             var distinctFileHelper = Mock.Create<IDistinctFileHelper>(Behavior.Strict);
-            Mock.Arrange(() => distinctFileHelper.ShouldSendToValkyrie(null)).IgnoreArguments().Returns(true);
+            Mock.Arrange(() => distinctFileHelper.ShouldSendToValkyrie(null)).IgnoreArguments().Returns(false);
             Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, description, scanOptions)).Returns(() => aptScanner).OccursOnce();
             var aptAtManagerUnderTest = new AptAtManager(descent, valkyrie, flsManager, aptScannerFactory, distinctFileHelper);
             aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
             var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
-            var modules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze);
-            Mock.Arrange(() => scanResult.Files).Returns(() => modules.ToArray());
+            
+            Mock.Arrange(() => scanResult.Files).Returns(() => failedToAnalyzeModules.ToArray());
             bool isRaised = false;
             ManualResetEventSlim ev = new ManualResetEventSlim(); 
             aptAtManagerUnderTest.FlsAnalyzeProgressChanged += (s, e) =>            
             {
                 isRaised = true;
+                var sha1Array = e.Results.Select(r => r.Sha1).ToArray();
+                Assert.True(sha1WithNextItterationClean.Compare(sha1Array));
                 ev.Set();        
             };
 
@@ -79,10 +91,16 @@ namespace APTAT.Core.UnitTests
                 new ComputerScanCompletedEventArgs(Guid.NewGuid(),scanResult)}
             );
 
-            Mock.Raise(() => flsManager.FlsAnalyzed += null, args: new object[]
+            List<IFlsResult> flsResults = new List<IFlsResult>();
+            foreach (var ss in sha1WithNextItterationClean)
             {
-                new FlsRequestEventArgs<IFlsResult>(new IFlsResult[] {new FlsResult {Sha1= modules.First().Sha1, Cloud=CloudVerdict.Safe} }, null)}
-            );
+                var flsResult = Mock.Create<IFlsResult>();
+                Mock.Arrange(() => flsResult.Cloud).Returns(CloudVerdict.Safe);
+                Mock.Arrange(() => flsResult.Sha1).Returns(ss);
+                flsResults.Add(flsResult);
+            }
+            
+            Mock.Raise(() => flsManager.FlsAnalyzed += null, args: new object[] { new FlsRequestEventArgs<IFlsResult>(flsResults.ToArray(), null) });
             ev.Wait(TimeSpan.FromMilliseconds(500));
 
             Assert.True(isRaised);
