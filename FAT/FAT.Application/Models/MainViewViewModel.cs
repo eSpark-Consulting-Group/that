@@ -434,7 +434,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public bool? FilterReset { get; set; } = false;
+        public bool? FilterReset { get; set; }
 
         public int[] FilterOrders { get; set; } 
 
@@ -758,10 +758,12 @@ namespace FAT.Application.Models
 
             _scanCounterManager.Clear();
 
+            Set(() => FilterReset, (bool?)null);
+
             Files = new ObservableCollection<IThreatInfoItem>();
             Computers = new ObservableCollection<IThreatInfoItem>();
 
-            Set(() => FilterReset, null);
+
             Set(() => RaisedHasUnknowns, false);
             Set(() => RaisedHasMalwares, false);
 
@@ -1160,7 +1162,7 @@ namespace FAT.Application.Models
                         if (!o.IsComputer)
                             return FilterFileByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
-                            return false;
+                            return FilterFileByOrders(o.Parent) && o.Parent.NameAndIpAddress.ContainsString(Keyword);
                     }
                     else
                     {

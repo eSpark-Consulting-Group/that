@@ -20,7 +20,7 @@ namespace FAT.Application.Views
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                BindingOperations.SetBinding(this, PredicateProperty, new Binding("FilterPredicate"));
+                BindingOperations.SetBinding(this, FilterPredicateProperty, new Binding("FilterPredicate"));
                 BindingOperations.SetBinding(this, FilterOrdersProperty, new Binding("FilterOrders"));
                 BindingOperations.SetBinding(this, FilterResetProperty, new Binding("FilterReset"));
             }
@@ -47,16 +47,16 @@ namespace FAT.Application.Views
 
         #endregion
 
-        #region PredicateProperty (DependencyProperty)
+        #region FilterPredicateProperty (DependencyProperty)
 
-        public Predicate<object> Predicate
+        public Predicate<object> FilterPredicate
         {
-            get { return (Predicate<object>)GetValue(PredicateProperty); }
-            set { SetValue(PredicateProperty, value); }
+            get { return (Predicate<object>)GetValue(FilterPredicateProperty); }
+            set { SetValue(FilterPredicateProperty, value); }
         }
 
-        public static readonly DependencyProperty PredicateProperty =
-            DependencyProperty.Register("Predicate", typeof(Predicate<object>), typeof(SearchUserControl),
+        public static readonly DependencyProperty FilterPredicateProperty =
+            DependencyProperty.Register("FilterPredicate", typeof(Predicate<object>), typeof(SearchUserControl),
             new PropertyMetadata(null));
 
         #endregion
@@ -115,7 +115,7 @@ namespace FAT.Application.Views
 
         public static readonly DependencyProperty FilterResetProperty =
             DependencyProperty.Register("FilterReset", typeof(bool?), typeof(SearchUserControl),
-            new PropertyMetadata(null, OnFilterResetChanged));
+            new PropertyMetadata(false, OnFilterResetChanged));
 
         private static void OnFilterResetChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -126,10 +126,15 @@ namespace FAT.Application.Views
 
             var newValue = e.NewValue as bool?;
 
+            control.Target.FilterDescriptors.SuspendNotifications();
+
             if (newValue.HasValue)
                 control.Target.FilterDescriptors.Reset();
             else
-                control.Target.FilterDescriptors.Clear();
+                foreach (var column in control.Target.Columns)
+                    column.ClearFilters();
+
+            control.Target.FilterDescriptors.ResumeNotifications();
         }
 
         #endregion
@@ -163,7 +168,7 @@ namespace FAT.Application.Views
 
             var filter = Target.FilterDescriptors.FirstOrDefault(_ => _ is FilterDescriptor<object>);  
             if (filter == null)
-                Target.FilterDescriptors.Add(filter = new FilterDescriptor<object> { FilteringExpression = _ => Predicate(_) });
+                Target.FilterDescriptors.Add(filter = new FilterDescriptor<object> { FilteringExpression = _ => FilterPredicate(_) });
             else
                 Target.FilterDescriptors.Reset();
 

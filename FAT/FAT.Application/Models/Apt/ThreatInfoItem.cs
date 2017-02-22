@@ -190,8 +190,6 @@ namespace FAT.Application.Models
             IThreatInfoItem[] files = Items.Where(i => i.ShouldCheckOnValkyrie).ToArray();
             FilesToCheckOnValkyrieCount = files;
             ReCalculateValkyriePercentage();
-            RaisePropertyChanged(nameof(ScanStatusAsString));
-            RaisePropertyChanged(nameof(StatusMessage));
         }
 
         public double ValkyrieProgressPercentage { get; set; }
@@ -226,6 +224,10 @@ namespace FAT.Application.Models
                 else
                    ValkyrieProgressPercentage = percentage;
             }
+
+            RaisePropertyChanged(nameof(ScanStatusAsString));
+            RaisePropertyChanged(nameof(ScanStatus));
+            RaisePropertyChanged(nameof(StatusMessage));
         }
 
         public bool ShouldCheckOnValkyrie => BadFile.IsUnknown || BadFile.IsMalware;
@@ -440,6 +442,7 @@ namespace FAT.Application.Models
                     _statusMessageMemento = StatusMessageSystem;
 
                 RaisePropertyChanged(nameof(ScanStatusAsString));
+                RaisePropertyChanged(nameof(ScanStatus));
                 RaisePropertyChanged(nameof(StatusMessage));
 
                 RaisePropertyChanged(nameof(HasClean));
@@ -840,8 +843,6 @@ namespace FAT.Application.Models
             if (shouldUpdateStatus)
             {
                 ReCalculateValkyriePercentage();
-                RaisePropertyChanged(nameof(StatusMessage));
-                RaisePropertyChanged(nameof(ScanStatusAsString));
             }
         }
 
