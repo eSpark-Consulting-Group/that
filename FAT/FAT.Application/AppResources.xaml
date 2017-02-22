@@ -970,7 +970,7 @@
                 <controls:GridViewToggleButton x:Name="PART_ExpandButton" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Width="0"
 						    Grid.Column="1" Grid.ColumnSpan="2" PresentationMode="PlusMinus" IsTabStop="False" Margin="12 15 12 0" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
 
-                <CheckBox x:Name="check" Background="#FFC8D9E7" Opacity="{Binding ElementName=PART_ExpandButton, Path=Opacity}" IsHitTestVisible="{Binding ElementName=PART_ExpandButton, Path=Opacity, Converter={converters:IntToBoolConverter}}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
+                <CheckBox x:Name="check" Background="#FFC8D9E7" Visibility="Collapsed"  IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
 						    Grid.Column="1" Grid.ColumnSpan="2" Margin="12 11 12 0" RenderTransform="{Binding ElementName=PART_ExpandButton, Path=RenderTransform}">
                     <CheckBox.Template>
                         <ControlTemplate TargetType="ToggleButton">
@@ -1047,6 +1047,10 @@
             <Trigger Property="IsSelected" Value="false">
                 <Setter Property="Foreground" Value="#FF457FAD" />
             </Trigger>
+            <DataTrigger Binding="{Binding DataContext.HasItems,
+                                RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 

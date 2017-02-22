@@ -666,6 +666,11 @@ namespace FAT.Application.Models
 
         public ObservableCollection<IThreatInfoItem> Items { get; private set; }
 
+        public bool HasItems
+        {
+            get { return (Items != null && Items.Any()) || (Computers != null && Computers.Any()); }
+        }
+
         public int DistinctUnknownFilesCount
         {
             get
@@ -766,7 +771,7 @@ namespace FAT.Application.Models
                 UpdateFileVerdict(fileVerdictContext.FlsVerdict.Value);
             }
             return prevFinalVerdict != FinalVerdict;
-            //MalwareProbabilityValue = valkyrieAnalysisResult.MalwareProbability;
+
         }
 
         public void UpdateVerdictForFiles(IFileVerdictContext[] fileVerdictContext, IScanCounterDiff scanCounterDiff)
@@ -867,17 +872,19 @@ namespace FAT.Application.Models
         {
             if (!IsComputer) throw new NotSupportedException();
             if (threatInfoItem.IsComputer) throw new ArgumentException();
-            var shouldRaise = Items.Count == 0;
+
             threatInfoItem.Parent = this;
             
             if (_itemsDict.ContainsKey(threatInfoItem.BadFile.Sha1))
                 _itemsDict[threatInfoItem.BadFile.Sha1].Add(threatInfoItem);
             else
                 _itemsDict.Add(threatInfoItem.BadFile.Sha1, new List<IThreatInfoItem> { threatInfoItem });
-            if (shouldRaise)
+
+            if (Items == null || Items.Count == 0)
             {
                 Items = new ObservableCollection<IThreatInfoItem>(new[] { threatInfoItem });
                 RaisePropertyChanged(nameof(Items));
+                RaisePropertyChanged(nameof(HasItems));
             }
             else
                 Items.Add(threatInfoItem);
