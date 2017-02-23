@@ -41,18 +41,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ThirdParty\Microsoft.ReportViewer.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ThirdParty\Microsoft.ReportViewer.WinForms.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +53,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Reporting, Version=10.2.16.1025, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\Telerik.Reporting.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(SolutionDir)CommonAssemblyInfo.cs">
@@ -125,8 +122,11 @@
     <Compile Include="OperationResult.cs" />
     <Compile Include="OsInfoHelper.cs" />
     <Compile Include="Reports\AptReportBuilder.cs" />
+    <Compile Include="Reports\DetailedBadFile.cs" />
     <Compile Include="Reports\IAptReportBuilder.cs" />
     <Compile Include="Reports\ReportCompletedEventArgs.cs" />
+    <Compile Include="Reports\ScanModule.cs" />
+    <Compile Include="Reports\ScannedTarget.cs" />
     <Compile Include="Reports\StringExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -145,6 +145,70 @@
     <Compile Include="StatisticsCalculator.cs" />
     <Compile Include="Storage\Storage.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Helpers\FileHelper.cs" />
+    <Compile Include="TelerikReports\Helpers\IFileHelper.cs" />
+    <Compile Include="TelerikReports\Helpers\IRenderStrategy.cs" />
+    <Compile Include="TelerikReports\Helpers\IReportFileGenerator.cs" />
+    <Compile Include="TelerikReports\Helpers\IReportNamesCache.cs" />
+    <Compile Include="TelerikReports\Helpers\RenderPdfStrategy.cs" />
+    <Compile Include="TelerikReports\Helpers\RenderStrategyFactory.cs" />
+    <Compile Include="TelerikReports\Helpers\ReportFileGenerator.cs" />
+    <Compile Include="TelerikReports\Helpers\ReportNamesCache.cs" />
+    <Compile Include="TelerikReports\Helpers\ReportType.cs" />
+    <Compile Include="TelerikReports\Template\DetailedDevicesReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedDevicesReport.Designer.cs">
+      <DependentUpon>DetailedDevicesReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedDevicesValkyrieReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedDevicesValkyrieReport.Designer.cs">
+      <DependentUpon>DetailedDevicesValkyrieReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedPrograms.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedPrograms.Designer.cs">
+      <DependentUpon>DetailedPrograms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedProgramsValkyrieReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedProgramsValkyrieReport.Designer.cs">
+      <DependentUpon>DetailedProgramsValkyrieReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\Devices.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\Devices.Designer.cs">
+      <DependentUpon>Devices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveReport.Designer.cs">
+      <DependentUpon>ExecutiveReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveValkyrieReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveValkyrieReport.Designer.cs">
+      <DependentUpon>ExecutiveValkyrieReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\FileDetailsSubreport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\FileDetailsSubreport.Designer.cs">
+      <DependentUpon>FileDetailsSubreport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\FileDetailsValkyrieSubreport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\FileDetailsValkyrieSubreport.Designer.cs">
+      <DependentUpon>FileDetailsValkyrieSubreport.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -167,51 +231,33 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\PendingAnalysisFiles.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesReport.resx">
+      <DependentUpon>DetailedDevicesReport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\NoVerdictFiles.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesValkyrieReport.resx">
+      <DependentUpon>DetailedDevicesValkyrieReport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\FailedToAnalyzeWithValkyrie.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\DetailedPrograms.resx">
+      <DependentUpon>DetailedPrograms.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\LookupInProgressFiles.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\DetailedProgramsValkyrieReport.resx">
+      <DependentUpon>DetailedProgramsValkyrieReport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\DetailedDevicesWithValkyrie.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\Devices.resx">
+      <DependentUpon>Devices.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\DetailedDevices.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\ExecutiveReport.resx">
+      <DependentUpon>ExecutiveReport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\DetailedProgramsWithValkyrie.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\ExecutiveValkyrieReport.resx">
+      <DependentUpon>ExecutiveValkyrieReport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\DetailedPrograms.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\FileDetailsSubreport.resx">
+      <DependentUpon>FileDetailsSubreport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Devices.rdlc" />
-    <EmbeddedResource Include="Reports\ExecutiveWithValkyrie.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Executive.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MaliciousFilesWithValkyrie.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\MaliciousFiles.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\UnknownFilesWithValkyrie.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\UnknownFiles.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\ValkyrieResult.rdlc">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="TelerikReports\Template\FileDetailsValkyrieSubreport.resx">
+      <DependentUpon>FileDetailsValkyrieSubreport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -232,7 +278,6 @@
       <Name>APTAT.Valkyrie</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

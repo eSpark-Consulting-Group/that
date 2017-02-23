@@ -22,7 +22,7 @@ namespace APTAT.Core.Reports
             {
                 if (!operationContext.CompletedTime.HasValue || operationContext.CompletedTime.Value == DateTime.MinValue)
                     throw new DataNotReadyException();
-                AptReportData data = new AptReportData
+                var data = new AptReportData
                 {
                     OperationUid = operationContext.OperationUid,
                     ScanStarted = operationContext.StartedTime.ToLocalTime(),
@@ -39,8 +39,9 @@ namespace APTAT.Core.Reports
                     DevicesSourceDescription = operationContext.DeviceSourceDescription
                 };
 
+                data.UpdateAllBadFilesSorted();
                 ReportBuilder.BuildReportDelegate action = _reportBuilder.Build;
-                Context context = new Context() { Action = action, State = state };
+                Context context = new Context { Action = action, State = state };
                 action.BeginInvoke(data, reportType, BuildReportCallback, context);
             }
             else
