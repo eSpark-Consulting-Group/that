@@ -1068,13 +1068,16 @@ namespace FAT.Application.Models
                                         ComputerGuid = infoItem.ComputerGuid,
                                         Name = infoItem.Name,
                                         ShortName = item.Name,
-                                        IsComputer = true,
-                                        Parent = item
+                                        IsComputer = true
                                     };
                                     if (exist != null)
+                                    {
+                                        comp.Parent = exist;
                                         exist.Computers.Add(comp);
+                                    }
                                     else
                                     {
+                                        comp.Parent = item;
                                         item.Computers = new ObservableCollection<IThreatInfoItem> { comp };
                                         Files.Add(item);
                                     }
