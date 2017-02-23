@@ -128,7 +128,10 @@ namespace FAT.Application
 
         private void PortKeyDown(object sender, KeyEventArgs e)
         {
-            bool flag = (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || (e.Key >= Key.D0 && e.Key <= Key.D9);
+            bool shift = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+            bool ctrl = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+            bool flag = (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || (e.Key >= Key.D0 && e.Key <= Key.D9 && !shift && !ctrl);
 
             if (e.Key == Key.Tab || e.Key == Key.Enter || e.Key == Key.Delete || e.Key == Key.Back)
                 flag = true;
