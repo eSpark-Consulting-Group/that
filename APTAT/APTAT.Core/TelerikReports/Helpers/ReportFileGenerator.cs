@@ -70,7 +70,13 @@ namespace APTAT.Core.TelerikReports
                     return renderer.Render(new ExecutiveValkyrieReport(), data, fName);
 
                 case ReportType.DetailedPerDeviceWithValkyrieReport:
-                    return renderer.Render(new DetailedDevicesValkyrieReport(), data, fName);
+                    var valkyrieDetailedDevicesReport = new DetailedDevicesValkyrieReport();
+                    var topVulnerableDevicesValk = data.Top10VulnerableDevicesValkyrie.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
+                    if (topVulnerableDevicesValk <= 5)
+                    {
+                        valkyrieDetailedDevicesReport.ChangeScaleForOne();
+                    }
+                    return renderer.Render(valkyrieDetailedDevicesReport, data, fName);
                 
                case ReportType.DetailedPerProgramValkyrieReport:
                     return renderer.Render(new DetailedProgramsValkyrieReport(), data, fName);

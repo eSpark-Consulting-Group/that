@@ -23,5 +23,10 @@ namespace APTAT.Core.TelerikReports
             // TODO: Add any constructor code after InitializeComponent call
             //
         }
+
+        internal void ChangeScaleForOne()
+        {
+            ((NumericalScale) graphAxis1.Scale).LabelStep = 1;
+        }
     }
 }
