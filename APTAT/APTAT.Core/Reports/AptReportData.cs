@@ -254,7 +254,7 @@ namespace APTAT.Core.Reports
                         FailedToAnalyzeFilesValkyrie = endPointFiles.Where(f => f.FileType == BadFileType.NotAnalyzed).ToArray(),
                         PendingAnalysisFilesValkyrie = endPointFiles.Where(f => f.FileType == BadFileType.Pending).ToArray()
                     };
-
+                    scanResult.SetAptReportInstance(t.AptReport);
                     scanResults.Add(scanResult);
                 }
 
