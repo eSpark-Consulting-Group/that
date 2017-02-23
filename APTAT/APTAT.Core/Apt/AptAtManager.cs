@@ -106,6 +106,8 @@ namespace APTAT.Core.Apt
             _isValkyrieStarted = true;
             _isValkyrieScanEnded = false;
             _filesShouldSendToValkyrieCount = 0;
+            ValkyrieAnalysisResult.Clear();
+            ValkyrieOperationUid = Guid.NewGuid();
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
         }
 
@@ -403,6 +405,7 @@ namespace APTAT.Core.Apt
                 _filesShouldSendToValkyrieCount = 0;
                 _filesWithFlsErrorCount = 0;
                 _valkyrieClient.AnalyzeAsyncCancel();
+                ValkyrieOperationUid = Guid.NewGuid();
                 lock (_flsHashResults)
                 {
                     _flsHashResults.Clear();
@@ -421,6 +424,8 @@ namespace APTAT.Core.Apt
                 scanner.ComputerScanCompleted -= OnScannerOnScanCompleted;
                 scanner.ScanCompleted -= OnScanCompleted;
             }
+            if (e.SucceededCount > 0)
+                FlsLookupOperationUid = Guid.NewGuid();
             TryInvokeEndScan();
             if (_isValkyrieStarted )
             {
