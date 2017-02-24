@@ -10,31 +10,31 @@ namespace APTAT.Core.TelerikReports
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailedDevicesValkyrieReport));
+            Telerik.Reporting.GraphGroup graphGroup1 = new Telerik.Reporting.GraphGroup();
+            Telerik.Reporting.Drawing.ColorPalette colorPalette1 = new Telerik.Reporting.Drawing.ColorPalette();
+            Telerik.Reporting.GraphGroup graphGroup4 = new Telerik.Reporting.GraphGroup();
+            Telerik.Reporting.GraphTitle graphTitle1 = new Telerik.Reporting.GraphTitle();
+            Telerik.Reporting.GraphTitle graphTitle2 = new Telerik.Reporting.GraphTitle();
+            Telerik.Reporting.NumericalScale numericalScale1 = new Telerik.Reporting.NumericalScale();
+            Telerik.Reporting.CategoryScale categoryScale1 = new Telerik.Reporting.CategoryScale();
+            Telerik.Reporting.GraphGroup graphGroup2 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.GraphGroup graphGroup3 = new Telerik.Reporting.GraphGroup();
-            Telerik.Reporting.Drawing.ColorPalette colorPalette3 = new Telerik.Reporting.Drawing.ColorPalette();
-            Telerik.Reporting.GraphGroup graphGroup6 = new Telerik.Reporting.GraphGroup();
-            Telerik.Reporting.GraphTitle graphTitle5 = new Telerik.Reporting.GraphTitle();
-            Telerik.Reporting.GraphTitle graphTitle6 = new Telerik.Reporting.GraphTitle();
-            Telerik.Reporting.NumericalScale numericalScale3 = new Telerik.Reporting.NumericalScale();
-            Telerik.Reporting.CategoryScale categoryScale3 = new Telerik.Reporting.CategoryScale();
-            Telerik.Reporting.GraphGroup graphGroup8 = new Telerik.Reporting.GraphGroup();
-            Telerik.Reporting.GraphGroup graphGroup9 = new Telerik.Reporting.GraphGroup();
-            Telerik.Reporting.TableGroup tableGroup5 = new Telerik.Reporting.TableGroup();
-            Telerik.Reporting.TableGroup tableGroup6 = new Telerik.Reporting.TableGroup();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule19 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule20 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule21 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule22 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule23 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule24 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule25 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule26 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule27 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.TypeReportSource typeReportSource9 = new Telerik.Reporting.TypeReportSource();
-            Telerik.Reporting.TypeReportSource typeReportSource10 = new Telerik.Reporting.TypeReportSource();
-            Telerik.Reporting.TypeReportSource typeReportSource11 = new Telerik.Reporting.TypeReportSource();
-            Telerik.Reporting.TypeReportSource typeReportSource12 = new Telerik.Reporting.TypeReportSource();
-            Telerik.Reporting.Drawing.StyleRule styleRule3 = new Telerik.Reporting.Drawing.StyleRule();
+            Telerik.Reporting.TableGroup tableGroup1 = new Telerik.Reporting.TableGroup();
+            Telerik.Reporting.TableGroup tableGroup2 = new Telerik.Reporting.TableGroup();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule1 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule2 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule3 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule4 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.TypeReportSource typeReportSource1 = new Telerik.Reporting.TypeReportSource();
+            Telerik.Reporting.TypeReportSource typeReportSource2 = new Telerik.Reporting.TypeReportSource();
+            Telerik.Reporting.TypeReportSource typeReportSource3 = new Telerik.Reporting.TypeReportSource();
+            Telerik.Reporting.TypeReportSource typeReportSource4 = new Telerik.Reporting.TypeReportSource();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule5 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule6 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule7 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule8 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.FormattingRule formattingRule9 = new Telerik.Reporting.Drawing.FormattingRule();
+            Telerik.Reporting.Drawing.StyleRule styleRule1 = new Telerik.Reporting.Drawing.StyleRule();
             this.pageHeaderSection1 = new Telerik.Reporting.PageHeaderSection();
             this.textBox34 = new Telerik.Reporting.TextBox();
             this.shape2 = new Telerik.Reporting.Shape();
@@ -80,6 +80,10 @@ namespace APTAT.Core.TelerikReports
             this.textBox37 = new Telerik.Reporting.TextBox();
             this.textBox61 = new Telerik.Reporting.TextBox();
             this.textBox60 = new Telerik.Reporting.TextBox();
+            this.subReportMalware = new Telerik.Reporting.SubReport();
+            this.subReportUknownFiles = new Telerik.Reporting.SubReport();
+            this.subReportPendingAnalysis = new Telerik.Reporting.SubReport();
+            this.subReportFailedToAnalyze = new Telerik.Reporting.SubReport();
             this.textBox36 = new Telerik.Reporting.TextBox();
             this.panel5 = new Telerik.Reporting.Panel();
             this.textBox2 = new Telerik.Reporting.TextBox();
@@ -118,10 +122,6 @@ namespace APTAT.Core.TelerikReports
             this.textBox18 = new Telerik.Reporting.TextBox();
             this.shape4 = new Telerik.Reporting.Shape();
             this.dsDetailsPerDevices = new Telerik.Reporting.ObjectDataSource();
-            this.subReportMalware = new Telerik.Reporting.SubReport();
-            this.subReportUknownFiles = new Telerik.Reporting.SubReport();
-            this.subReportPendingAnalysis = new Telerik.Reporting.SubReport();
-            this.subReportFailedToAnalyze = new Telerik.Reporting.SubReport();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // pageHeaderSection1
@@ -214,6 +214,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // panelCharts
             // 
+            this.panelCharts.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevicesValkyrie.Length > 0"));
             this.panelCharts.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.textBox17,
             this.graph1});
@@ -236,16 +237,16 @@ namespace APTAT.Core.TelerikReports
             // graph1
             // 
             this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.Top10VulnerableDevicesValkyrie"));
-            graphGroup3.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
-            graphGroup3.Label = "=Fields.Name";
-            graphGroup3.Name = "uidGroup";
-            graphGroup3.Sortings.Add(new Telerik.Reporting.Sorting("= Fields.BadFilesCount", Telerik.Reporting.SortDirection.Asc));
-            this.graph1.CategoryGroups.Add(graphGroup3);
-            colorPalette3.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(0))))));
-            colorPalette3.Colors.Add(System.Drawing.Color.Maroon);
-            colorPalette3.Colors.Add(System.Drawing.Color.Silver);
-            colorPalette3.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(146)))), ((int)(((byte)(255))))));
-            this.graph1.ColorPalette = colorPalette3;
+            graphGroup1.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
+            graphGroup1.Label = "=Fields.Name";
+            graphGroup1.Name = "uidGroup";
+            graphGroup1.Sortings.Add(new Telerik.Reporting.Sorting("= Fields.BadFilesCount", Telerik.Reporting.SortDirection.Asc));
+            this.graph1.CategoryGroups.Add(graphGroup1);
+            colorPalette1.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(0))))));
+            colorPalette1.Colors.Add(System.Drawing.Color.Maroon);
+            colorPalette1.Colors.Add(System.Drawing.Color.Silver);
+            colorPalette1.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(146)))), ((int)(((byte)(255))))));
+            this.graph1.ColorPalette = colorPalette1;
             this.graph1.CoordinateSystems.Add(this.cartesianCoordinateSystem1);
             this.graph1.Legend.Style.LineColor = System.Drawing.Color.LightGray;
             this.graph1.Legend.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
@@ -254,27 +255,27 @@ namespace APTAT.Core.TelerikReports
             this.graph1.PlotAreaStyle.LineColor = System.Drawing.Color.LightGray;
             this.graph1.PlotAreaStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
             this.graph1.Series.Add(this.barSeries1);
-            graphGroup6.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.BadFileType"));
-            graphGroup6.Name = "badFileTypeGroup";
-            this.graph1.SeriesGroups.Add(graphGroup6);
+            graphGroup4.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.BadFileType"));
+            graphGroup4.Name = "badFileTypeGroup";
+            this.graph1.SeriesGroups.Add(graphGroup4);
             this.graph1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.826244354248047D), Telerik.Reporting.Drawing.Unit.Cm(10.399899482727051D));
             this.graph1.Style.Padding.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graph1.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graph1.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graph1.Style.Padding.Top = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            graphTitle5.Position = Telerik.Reporting.GraphItemPosition.TopCenter;
-            graphTitle5.Style.Color = System.Drawing.Color.Gray;
-            graphTitle5.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
-            graphTitle5.Style.LineColor = System.Drawing.Color.LightGray;
-            graphTitle5.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
-            graphTitle5.Text = "Top 10 Vulnerable Devices";
-            graphTitle6.Position = Telerik.Reporting.GraphItemPosition.BottomCenter;
-            graphTitle6.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
-            graphTitle6.Style.LineColor = System.Drawing.Color.LightGray;
-            graphTitle6.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
-            graphTitle6.Text = "Number of Unknown Files/Malicious Files/Lookup in Progress /In Analysis Files ";
-            this.graph1.Titles.Add(graphTitle5);
-            this.graph1.Titles.Add(graphTitle6);
+            graphTitle1.Position = Telerik.Reporting.GraphItemPosition.TopCenter;
+            graphTitle1.Style.Color = System.Drawing.Color.Gray;
+            graphTitle1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
+            graphTitle1.Style.LineColor = System.Drawing.Color.LightGray;
+            graphTitle1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
+            graphTitle1.Text = "Top 10 Vulnerable Devices";
+            graphTitle2.Position = Telerik.Reporting.GraphItemPosition.BottomCenter;
+            graphTitle2.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
+            graphTitle2.Style.LineColor = System.Drawing.Color.LightGray;
+            graphTitle2.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
+            graphTitle2.Text = "Number of Unknown Files/Malicious Files/Lookup in Progress /In Analysis Files ";
+            this.graph1.Titles.Add(graphTitle1);
+            this.graph1.Titles.Add(graphTitle2);
             // 
             // cartesianCoordinateSystem1
             // 
@@ -290,7 +291,7 @@ namespace APTAT.Core.TelerikReports
             this.graphAxis1.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.graphAxis1.MinorGridLineStyle.Visible = false;
             this.graphAxis1.Name = "graphAxis1";
-            this.graphAxis1.Scale = numericalScale3;
+            this.graphAxis1.Scale = numericalScale1;
             // 
             // graphAxis2
             // 
@@ -300,16 +301,16 @@ namespace APTAT.Core.TelerikReports
             this.graphAxis2.MinorGridLineStyle.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.graphAxis2.MinorGridLineStyle.Visible = false;
             this.graphAxis2.Name = "graphAxis2";
-            this.graphAxis2.Scale = categoryScale3;
+            this.graphAxis2.Scale = categoryScale1;
             // 
             // barSeries1
             // 
             this.barSeries1.ArrangeMode = Telerik.Reporting.GraphSeriesArrangeMode.Stacked;
-            graphGroup8.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
-            graphGroup8.Label = "=Fields.Name";
-            graphGroup8.Name = "uidGroup";
-            graphGroup8.Sortings.Add(new Telerik.Reporting.Sorting("= Fields.BadFilesCount", Telerik.Reporting.SortDirection.Asc));
-            this.barSeries1.CategoryGroup = graphGroup8;
+            graphGroup2.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.Uid"));
+            graphGroup2.Label = "=Fields.Name";
+            graphGroup2.Name = "uidGroup";
+            graphGroup2.Sortings.Add(new Telerik.Reporting.Sorting("= Fields.BadFilesCount", Telerik.Reporting.SortDirection.Asc));
+            this.barSeries1.CategoryGroup = graphGroup2;
             this.barSeries1.CoordinateSystem = this.cartesianCoordinateSystem1;
             this.barSeries1.DataPointLabel = "= Sum(Fields.BadFilesCount)";
             this.barSeries1.DataPointLabelConnectorStyle.Padding.Bottom = Telerik.Reporting.Drawing.Unit.Point(2D);
@@ -319,9 +320,9 @@ namespace APTAT.Core.TelerikReports
             this.barSeries1.DataPointStyle.Visible = true;
             this.barSeries1.LegendItem.Value = "= Fields.BadFileType";
             this.barSeries1.Name = "barSeries1";
-            graphGroup9.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.BadFileType"));
-            graphGroup9.Name = "badFileTypeGroup";
-            this.barSeries1.SeriesGroup = graphGroup9;
+            graphGroup3.Groupings.Add(new Telerik.Reporting.Grouping("= Fields.BadFileType"));
+            graphGroup3.Name = "badFileTypeGroup";
+            this.barSeries1.SeriesGroup = graphGroup3;
             this.barSeries1.X = "= Sum(Fields.BadFilesCount)";
             // 
             // list1
@@ -330,15 +331,15 @@ namespace APTAT.Core.TelerikReports
             this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D)));
             this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(14.983612060546875D)));
             this.list1.Body.SetCellContent(0, 0, this.panel1);
-            tableGroup5.Name = "ColumnGroup";
-            this.list1.ColumnGroups.Add(tableGroup5);
+            tableGroup1.Name = "ColumnGroup";
+            this.list1.ColumnGroups.Add(tableGroup1);
             this.list1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panel1});
             this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(26.061456680297852D));
             this.list1.Name = "list1";
-            tableGroup6.Groupings.Add(new Telerik.Reporting.Grouping(null));
-            tableGroup6.Name = "DetailGroup";
-            this.list1.RowGroups.Add(tableGroup6);
+            tableGroup2.Groupings.Add(new Telerik.Reporting.Grouping(null));
+            tableGroup2.Name = "DetailGroup";
+            this.list1.RowGroups.Add(tableGroup2);
             this.list1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(14.983612060546875D));
             // 
             // panel1
@@ -350,7 +351,7 @@ namespace APTAT.Core.TelerikReports
             this.subReportPendingAnalysis,
             this.subReportFailedToAnalyze});
             this.panel1.Name = "panel1";
-            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.773329734802246D), Telerik.Reporting.Drawing.Unit.Cm(14.983612060546875D));
+            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667496681213379D), Telerik.Reporting.Drawing.Unit.Cm(14.983612060546875D));
             // 
             // panel6
             // 
@@ -498,19 +499,19 @@ namespace APTAT.Core.TelerikReports
             // 
             // shape5
             // 
-            formattingRule19.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule19.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(204)))), ((int)(((byte)(8)))));
-            formattingRule20.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "2"));
-            formattingRule20.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
-            formattingRule21.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "1"));
-            formattingRule21.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(150)))), ((int)(((byte)(60)))));
-            formattingRule22.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "0"));
-            formattingRule22.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(61)))), ((int)(((byte)(21)))));
+            formattingRule1.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "3"));
+            formattingRule1.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(204)))), ((int)(((byte)(8)))));
+            formattingRule2.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "2"));
+            formattingRule2.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
+            formattingRule3.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "1"));
+            formattingRule3.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(150)))), ((int)(((byte)(60)))));
+            formattingRule4.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetVerdict)", Telerik.Reporting.FilterOperator.Equal, "0"));
+            formattingRule4.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(61)))), ((int)(((byte)(21)))));
             this.shape5.ConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
-            formattingRule19,
-            formattingRule20,
-            formattingRule21,
-            formattingRule22});
+            formattingRule1,
+            formattingRule2,
+            formattingRule3,
+            formattingRule4});
             this.shape5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.71437495946884155D), Telerik.Reporting.Drawing.Unit.Cm(1.2999981641769409D));
             this.shape5.Name = "shape5";
             this.shape5.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.NS);
@@ -590,7 +591,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox40.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(9.70000171661377D), Telerik.Reporting.Drawing.Unit.Cm(0.59999996423721313D));
             this.textBox40.Style.Color = System.Drawing.Color.DimGray;
             this.textBox40.Style.Font.Name = "Segoe UI Light";
-            this.textBox40.Value = "= Fields.MaliciousFilesValkyrie";
+            this.textBox40.Value = "= Fields.MalwareFilesCount";
             // 
             // textBox39
             // 
@@ -636,6 +637,58 @@ namespace APTAT.Core.TelerikReports
             this.textBox60.Style.Color = System.Drawing.Color.DimGray;
             this.textBox60.Style.Font.Name = "Segoe UI Light";
             this.textBox60.Value = "= Fields.PendingAnalysisFilesCount";
+            // 
+            // subReportMalware
+            // 
+            this.subReportMalware.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.MaliciousFilesValkyrie.Length>0"));
+            this.subReportMalware.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(10.438543319702148D));
+            this.subReportMalware.Name = "subReportMalware";
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Malicious (\" + Fields.MalwareFilesCount + \"):\""));
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Red"));
+            typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "MaliciousFilesValkyrie"));
+            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
+    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            this.subReportMalware.ReportSource = typeReportSource1;
+            this.subReportMalware.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
+            // 
+            // subReportUknownFiles
+            // 
+            this.subReportUknownFiles.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.UknownFilesValkyrie.Length>0"));
+            this.subReportUknownFiles.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(11.538540840148926D));
+            this.subReportUknownFiles.Name = "subReportUknownFiles";
+            typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Unknown Files (\" + Fields.UnknownFilesCount + \"):\""));
+            typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Gold"));
+            typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "UknownFilesValkyrie"));
+            typeReportSource2.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
+    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            this.subReportUknownFiles.ReportSource = typeReportSource2;
+            this.subReportUknownFiles.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
+            // 
+            // subReportPendingAnalysis
+            // 
+            this.subReportPendingAnalysis.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.PendingAnalysisFilesValkyrie.Length>0"));
+            this.subReportPendingAnalysis.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(12.638542175292969D));
+            this.subReportPendingAnalysis.Name = "subReportPendingAnalysis";
+            typeReportSource3.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"In Analysis(\" + Fields.PendingAnalysisFilesCount + \"):\""));
+            typeReportSource3.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "#0092ff"));
+            typeReportSource3.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "PendingAnalysisFilesValkyrie"));
+            typeReportSource3.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
+    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            this.subReportPendingAnalysis.ReportSource = typeReportSource3;
+            this.subReportPendingAnalysis.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
+            // 
+            // subReportFailedToAnalyze
+            // 
+            this.subReportFailedToAnalyze.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.FailedToAnalyzeFilesValkyrie.Length>0"));
+            this.subReportFailedToAnalyze.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(13.738546371459961D));
+            this.subReportFailedToAnalyze.Name = "subReportFailedToAnalyze";
+            typeReportSource4.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Lookup In Progress (\" + Fields.LookupInProgressFilesCount + \"):\""));
+            typeReportSource4.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Silver"));
+            typeReportSource4.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "FailedToAnalyzeFilesValkyrie"));
+            typeReportSource4.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
+    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            this.subReportFailedToAnalyze.ReportSource = typeReportSource4;
+            this.subReportFailedToAnalyze.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
             // 
             // textBox36
             // 
@@ -823,22 +876,22 @@ namespace APTAT.Core.TelerikReports
             // 
             // shape1
             // 
-            formattingRule23.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel) ", Telerik.Reporting.FilterOperator.Equal, "4"));
-            formattingRule23.Style.Color = System.Drawing.Color.Silver;
-            formattingRule24.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule24.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
-            formattingRule25.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "2"));
-            formattingRule25.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(204)))), ((int)(((byte)(8)))));
-            formattingRule26.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "1"));
-            formattingRule26.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(61)))), ((int)(((byte)(21)))));
-            formattingRule27.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "0"));
-            formattingRule27.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(150)))), ((int)(((byte)(60)))));
+            formattingRule5.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel) ", Telerik.Reporting.FilterOperator.Equal, "4"));
+            formattingRule5.Style.Color = System.Drawing.Color.Silver;
+            formattingRule6.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "3"));
+            formattingRule6.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
+            formattingRule7.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "2"));
+            formattingRule7.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(204)))), ((int)(((byte)(8)))));
+            formattingRule8.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "1"));
+            formattingRule8.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(61)))), ((int)(((byte)(21)))));
+            formattingRule9.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "0"));
+            formattingRule9.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(150)))), ((int)(((byte)(60)))));
             this.shape1.ConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
-            formattingRule23,
-            formattingRule24,
-            formattingRule25,
-            formattingRule26,
-            formattingRule27});
+            formattingRule5,
+            formattingRule6,
+            formattingRule7,
+            formattingRule8,
+            formattingRule9});
             this.shape1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.76729166507720947D), Telerik.Reporting.Drawing.Unit.Cm(1.72041654586792D));
             this.shape1.Name = "shape1";
             this.shape1.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.NS);
@@ -1028,58 +1081,6 @@ namespace APTAT.Core.TelerikReports
             this.dsDetailsPerDevices.DataSource = typeof(APTAT.Core.Reports.AptReportData);
             this.dsDetailsPerDevices.Name = "dsDetailsPerDevices";
             // 
-            // subReportMalware
-            // 
-            this.subReportMalware.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.MaliciousFilesValkyrie.Length>0"));
-            this.subReportMalware.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(10.438543319702148D));
-            this.subReportMalware.Name = "subReportMalware";
-            typeReportSource9.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Malicious (\" + Fields.MalwareFilesCount + \"):\""));
-            typeReportSource9.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Red"));
-            typeReportSource9.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "MaliciousFilesValkyrie"));
-            typeReportSource9.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
-            this.subReportMalware.ReportSource = typeReportSource9;
-            this.subReportMalware.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
-            // 
-            // subReportUknownFiles
-            // 
-            this.subReportUknownFiles.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.UknownFilesValkyrie.Length>0"));
-            this.subReportUknownFiles.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(11.538540840148926D));
-            this.subReportUknownFiles.Name = "subReportUknownFiles";
-            typeReportSource10.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Unknown Files (\" + Fields.UnknownFilesCount + \"):\""));
-            typeReportSource10.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Gold"));
-            typeReportSource10.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "UknownFilesValkyrie"));
-            typeReportSource10.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
-            this.subReportUknownFiles.ReportSource = typeReportSource10;
-            this.subReportUknownFiles.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
-            // 
-            // subReportPendingAnalysis
-            // 
-            this.subReportPendingAnalysis.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.PendingAnalysisFilesValkyrie.Length>0"));
-            this.subReportPendingAnalysis.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(12.638542175292969D));
-            this.subReportPendingAnalysis.Name = "subReportPendingAnalysis";
-            typeReportSource11.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"In Analysis(\" + Fields.PendingAnalysisFilesCount + \"):\""));
-            typeReportSource11.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "#0092ff"));
-            typeReportSource11.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "PendingAnalysisFilesValkyrie"));
-            typeReportSource11.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
-            this.subReportPendingAnalysis.ReportSource = typeReportSource11;
-            this.subReportPendingAnalysis.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
-            // 
-            // subReportFailedToAnalyze
-            // 
-            this.subReportFailedToAnalyze.Bindings.Add(new Telerik.Reporting.Binding("Visible", "=ReportItem.DataObject.FailedToAnalyzeFilesValkyrie.Length>0"));
-            this.subReportFailedToAnalyze.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.10583332926034927D), Telerik.Reporting.Drawing.Unit.Cm(13.738546371459961D));
-            this.subReportFailedToAnalyze.Name = "subReportFailedToAnalyze";
-            typeReportSource12.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Lookup In Progress (\" + Fields.LookupInProgressFilesCount + \"):\""));
-            typeReportSource12.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Silver"));
-            typeReportSource12.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "FailedToAnalyzeFilesValkyrie"));
-            typeReportSource12.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
-            this.subReportFailedToAnalyze.ReportSource = typeReportSource12;
-            this.subReportFailedToAnalyze.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
-            // 
             // DetailedDevicesValkyrieReport
             // 
             this.DataSource = this.dsDetailsPerDevices;
@@ -1090,13 +1091,13 @@ namespace APTAT.Core.TelerikReports
             this.Name = "ExecutiveReportt";
             this.PageSettings.Margins = new Telerik.Reporting.Drawing.MarginsU(Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D), Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D), Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D), Telerik.Reporting.Drawing.Unit.Mm(25.399999618530273D));
             this.PageSettings.PaperKind = System.Drawing.Printing.PaperKind.A4;
-            styleRule3.Selectors.AddRange(new Telerik.Reporting.Drawing.ISelector[] {
+            styleRule1.Selectors.AddRange(new Telerik.Reporting.Drawing.ISelector[] {
             new Telerik.Reporting.Drawing.TypeSelector(typeof(Telerik.Reporting.TextItemBase)),
             new Telerik.Reporting.Drawing.TypeSelector(typeof(Telerik.Reporting.HtmlTextBox))});
-            styleRule3.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Point(2D);
-            styleRule3.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Point(2D);
+            styleRule1.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Point(2D);
+            styleRule1.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Point(2D);
             this.StyleSheet.AddRange(new Telerik.Reporting.Drawing.StyleRule[] {
-            styleRule3});
+            styleRule1});
             this.Width = Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
