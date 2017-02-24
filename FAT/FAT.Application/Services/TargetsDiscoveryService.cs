@@ -202,7 +202,7 @@ namespace FAT.Application.Services
                 if (address != null)
                     item.IsLocalComputer = IPAddress.IsLoopback(address) || hostInfo.AddressList.Contains(address);
                 else
-                    item.IsLocalComputer = IsLocalAddress(item.DnsName);
+                    item.IsLocalComputer = IsLocalAddress(item.DnsName ?? item.Name);
             }
         }
 
@@ -229,6 +229,7 @@ namespace FAT.Application.Services
                         Name = target.Name,
                         LdapPath = target.LdapPath,
                         TargetUid = target.Uid,
+                        IsLocalComputer = target.IsLocalComputer,
                         Type = FromDomainEntryType(target.EntryType)
                     };
                 }
@@ -305,6 +306,7 @@ namespace FAT.Application.Services
             if (e.Error == null)
             {
                 DeploymentTarget[] targets = e.Targets;
+                SetLocalHostItem(e.Targets);
                 ObservableCollection<DirectoryItem> result = new ObservableCollection<DirectoryItem>();
                 for (Int32 i = 0; i < targets.Length; ++i)
                 {
