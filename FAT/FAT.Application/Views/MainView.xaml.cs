@@ -13,6 +13,7 @@ using FAT.Application.Messages;
 using Telerik.Windows.Controls;
 using FAT.Application.Views;
 using static FAT.Application.Messages.AppMessages;
+using FAT.Application.Extensions;
 
 namespace FAT.Application
 {
@@ -210,6 +211,11 @@ namespace FAT.Application
         {
             Process.Start(new ProcessStartInfo(_viewModel.ValkyrieDetailsLink));
             e.Handled = true;
+        }
+
+        private void EditEmail(object sender, RoutedEventArgs e)
+        {
+            email.DelayedFocus();
         }
     }
 }

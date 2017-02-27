@@ -506,6 +506,7 @@ namespace FAT.Application.Models
         public DelegateCommand StopAutoDiscoveryCommand { get; private set; }
         public DelegateCommand StartScanWithDiscoveryResultsCommand { get; private set; }
         public DelegateCommand SubmitEmailCommand { get; private set; }
+        public DelegateCommand EditEmailCommand { get; private set; }
         public DelegateCommand RestartComputerScanCommand { get; private set; }
         public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
         public DelegateCommand StopComputerScanCommand { get; private set; }
@@ -544,6 +545,8 @@ namespace FAT.Application.Models
                 o => IsDetailsEnabled);
             SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail, 
                 o => !string.IsNullOrEmpty(ComputersHeader) && IsValidEmail(Email));
+            EditEmailCommand = new DelegateCommand(o =>
+                Set(() => HideSubmitEmail, false));
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), 
                 o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), 

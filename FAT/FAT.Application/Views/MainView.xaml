@@ -580,11 +580,11 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="13" VerticalAlignment="Center"  Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}">
-                        <Run Text="When all the files are analyzed, you will receive a detailed report at "/><Run Text="{Binding Email}"/>
+                        <Run Text="When all the files are analyzed, you will receive a detailed report at "/><Run Text="{Binding Email}" FontWeight="Bold"/>
                     </TextBlock>
 
                     <TextBlock Foreground="White" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Please enter your email to receive a detailed scan results report:" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"/>
-                    <telerik:RadWatermarkTextBox MaxLength="254" Margin="7 0 0 0" Grid.Column="1" Width="300" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
+                    <telerik:RadWatermarkTextBox MaxLength="254" Margin="7 0 0 0" x:Name="email" Grid.Column="1" Width="300" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"
                                      MinHeight="31" MaxHeight="31"  BorderThickness="1" BorderBrush="#FFD6D4D4" Padding="7 7 0 0" 
                                      Background="White" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <telerik:RadWatermarkTextBox.WatermarkContent>
@@ -592,6 +592,7 @@
                         </telerik:RadWatermarkTextBox.WatermarkContent>
                     </telerik:RadWatermarkTextBox>
                     <Button Content="Submit" BorderBrush="White" Command="{Binding SubmitEmailCommand}" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" MaxHeight="32" Grid.Column="2" Margin="7"/>
+                    <Button Content="Edit Email" Click="EditEmail" BorderBrush="White" Command="{Binding EditEmailCommand}" Visibility="{Binding HideSubmitEmail, Converter={converters:BoolToVisibilityConverter2}}" MaxHeight="32" Grid.Column="2" Margin="7"/>
                 </Grid>
             </Border>
         </Grid>
