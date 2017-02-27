@@ -250,9 +250,9 @@ namespace APTAT.Core.Reports
                         FailedToAnalyzeFilesCount = t.FailedToAnalyzeFilesCount,
                         NoVerdictFilesCount = t.NoVerdictFilesCount,
                         PendingAnalysisFilesCount = t.PendingAnalysisFilesCount,
-                        MalwareFiles = t.MalwareFiles,
-                        UnknownFiles = t.UnknownFiles,
-                        LookupInProgressFiles = t.LookupInProgressFiles
+                        MalwareFiles = t.MalwareFiles.Select(s=>s.Map()).DefaultIfEmpty().ToArray(),
+                        UnknownFiles = t.UnknownFiles.Select(s => s.Map()).DefaultIfEmpty().ToArray(),
+                        LookupInProgressFiles = t.LookupInProgressFiles.Select(s => s.Map()).DefaultIfEmpty().ToArray()
                     };
 
                     scanResults.Add(scanResult);

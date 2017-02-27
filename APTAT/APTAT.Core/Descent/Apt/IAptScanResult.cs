@@ -34,9 +34,9 @@ namespace APTAT.Core.Descent.Apt
         IModule[] GetFilesByStatus(CloudVerdict cloudVerdict);        
         IModule[] GetBadFiles();         
         void RecalculateStatistics();
-        ScanModule[] MalwareFiles { get; }               
-        ScanModule[] UnknownFiles { get; }
-        ScanModule[] LookupInProgressFiles { get; }
+        IModule[] MalwareFiles { get; }
+        IModule[] UnknownFiles { get; }
+        IModule[] LookupInProgressFiles { get; }
 
     }
 }

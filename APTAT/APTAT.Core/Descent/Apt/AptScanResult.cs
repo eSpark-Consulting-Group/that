@@ -121,7 +121,7 @@ namespace APTAT.Core.Descent.Apt
             }
         }
 
-        private ScanModule[] ScanModules
+        private IModule[] ScanModules
         {
             get
             {
@@ -264,14 +264,14 @@ namespace APTAT.Core.Descent.Apt
             Modified = TimeStampProvider.GetCurretTimestamp();
         }
 
-        public ScanModule[] MalwareFiles
+        public IModule[] MalwareFiles
         {
             get
             {
                 return (from file in ScanModules where file.Cloud == CloudVerdict.Malware select file).ToArray();
             }
         }
-        public ScanModule[] UnknownFiles
+        public IModule[] UnknownFiles
         {
             get
             {
@@ -279,7 +279,7 @@ namespace APTAT.Core.Descent.Apt
             }
         }
 
-        public ScanModule[] LookupInProgressFiles
+        public IModule[] LookupInProgressFiles
         {
             get
             {
