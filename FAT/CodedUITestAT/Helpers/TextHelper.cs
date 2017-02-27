@@ -71,5 +71,12 @@ namespace CodedUITestAT
 
             return str;
         }
+
+        /// <summary> Removes an "extension" from a given string. </summary>
+        internal static string WithoutExtension(this string str)
+        {
+            int dotPosition = str.LastIndexOf(".");
+            return str.Remove(dotPosition);
+        }
     }
 }

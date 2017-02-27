@@ -152,7 +152,7 @@ namespace CodedUITestAT
             */
             UIMapReports.ClickCloseReportButton();
         }
-
+        
         #endregion
 
         #region Test methods
@@ -172,7 +172,7 @@ namespace CodedUITestAT
             BasicReportTest(ReportType.Executive, TestContext);
             
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
-            useMain.InputCamCredentials(TestContext);
+            //useMain.InputCamCredentials(TestContext);
             useMain.WaitForValkyrieResults(TestContext);
 
             BasicReportTest(ReportType.ExecutiveValkyrie, TestContext);
@@ -195,7 +195,7 @@ namespace CodedUITestAT
             BasicReportTest(ReportType.PerDevice, TestContext);
 
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
-            useMain.InputCamCredentials(TestContext);
+            //useMain.InputCamCredentials(TestContext);
             useMain.WaitForValkyrieResults(TestContext);
             
             BasicReportTest(ReportType.PerDeviceValkyrie, TestContext);
@@ -218,7 +218,7 @@ namespace CodedUITestAT
             BasicReportTest(ReportType.PerProgram, TestContext);
 
             useMain.UIMapMain.ClickAnalyseWithValkyrieButton();
-            useMain.InputCamCredentials(TestContext);
+            //useMain.InputCamCredentials(TestContext);
             useMain.WaitForValkyrieResults(TestContext);
 
             BasicReportTest(ReportType.PerProgramValkyrie, TestContext);

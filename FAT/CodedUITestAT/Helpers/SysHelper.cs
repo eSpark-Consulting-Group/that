@@ -24,11 +24,9 @@ namespace CodedUITestAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static void StartApplication(Computer endpoint)
         {
-            if (DataHelper.IsStaging())
-            {
-                RedirectToValkyrieStaging();
-                RedirectToFlsDedicated(endpoint);
-            }
+            if (DataHelper.IsFlsStaging()) RedirectToFlsStaging(endpoint);
+
+            if (DataHelper.IsValkyrieStaging()) RedirectToValkyrieStaging();
 
             StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
@@ -40,9 +38,9 @@ namespace CodedUITestAT
         /// <summary> Stops the application under test. </summary>
         internal static void StopApplication()
         {
-            if (IsThereProcess(Settings.General.Default.FATApplicationProcessName))
+            if (IsThereProcess(DataHelper.ProductExeName.WithoutExtension()))
             { 
-                KillProcesses(Settings.General.Default.FATApplicationProcessName);
+                KillProcesses(DataHelper.ProductExeName.WithoutExtension());
                 Playback.Wait(2000);
             }
         }
@@ -327,38 +325,37 @@ namespace CodedUITestAT
             }
         }
 
-        /// <summary> Edit hosts file on the server VM and adds Valkyrie staging server address. </summary>
-        private static void RedirectToValkyrieStaging()
+        /// <summary> Installs 7-zip at the local machine. </summary>
+        private static void Install7z()
         {
-            string hostsFilePath = DataHelper.GetServerRoot() +  Settings.Staging.Default.HostsFile;
-            string address = String.Format(@"{0} {1}", Settings.Staging.Default.ValkyrieStagingIpAddress, Settings.Staging.Default.ValkyrieProductionServerAddress);
-            string initialFileContent;
+            string workingFolder = DataHelper.GetWorkingFolder();
+            string argument = @"/S";
 
-            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) 
-            { 
-                initialFileContent = stream.ReadToEnd();
-                stream.Close();
-            }
-            
-            if (!initialFileContent.Contains(address))
-            using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
-            {
-               stream.WriteLine();
-               stream.WriteLine(address);
-               stream.Close();
-            }
+            if (Environment.Is64BitOperatingSystem) StartProcess(workingFolder, Settings.General.Default.SevenZExeNameX64, argument);
+            else StartProcess(workingFolder, Settings.General.Default.SevenZExeNameX32, argument);
         }
 
-        /// <summary> Edit hosts file on the endpoint VM and adds FLS staging server address. </summary>
+        /// <summary> Edits the application configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
+        private static void RedirectToValkyrieStaging()
+        {
+            string workingFolder = DataHelper.GetWorkingFolder();
+            
+            Install7z();
+
+
+
+        }
+
+        /// <summary> Edits hosts file on the given endpoint and adds FLS staging server address. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
-        private static void RedirectToFlsDedicated(Computer endpoint)
+        private static void RedirectToFlsStaging(Computer endpoint)
         {
             string hostsFilePath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Staging.Default.HostsFile);
-            string address = String.Format("{0} {1}", Settings.Staging.Default.FlsDedicatedIpAddress, Settings.Staging.Default.FlsProductionServerAddress);
+            string address = String.Format("{0} {1}", Settings.Staging.Default.FlsStagingIpAddress, Settings.Staging.Default.FlsProductionServerAddress);
             string initialFileContent;
 
             using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) 
-            { 
+            {
                 initialFileContent = stream.ReadToEnd();
                 stream.Close();
             }
@@ -487,7 +484,7 @@ namespace CodedUITestAT
         /// <summary> Gets a directory containing the product files. </summary>
         internal static string GetProductDirectory()
         {
-            string procName = Settings.General.Default.FATApplicationProcessName;
+            string procName = DataHelper.ProductExeName.WithoutExtension();
             string productProcessLocation = SysHelper.GetProcessLocation(procName);
 
             if (String.IsNullOrEmpty(productProcessLocation)) throw new Exception(String.Format("The product process '{0}' and directory not found!", procName));

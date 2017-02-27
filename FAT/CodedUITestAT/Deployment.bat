@@ -1,10 +1,12 @@
 REM Gets build deployment arguments (Deploy step) and sets the necessary local machine variables
 
-set IsStaging=%~1
+set IsFlsStaging=%~1
 
-set BuildLocation=%~2
+set IsValkyrieStaging=%~2
 
-set EndpointName=%~3
+set BuildLocation=%~3
+
+set EndpointName=%~4
 
 set ServerLogin=tester
 
@@ -30,7 +32,9 @@ set MalwaresFolder=Malfolder
 
 REM Stores the local machine variables to be used in autotests
 
-setx _IsStaging %IsStaging% /m
+setx _IsFlsStaging %IsFlsStaging% /m
+
+setx _IsValkyrieStaging %IsValkyrieStaging% /m
 
 setx _ServerLogin %ServerLogin% /m
 
@@ -61,6 +65,8 @@ xcopy "%BuildLocation%\%ProductExeName%" "%TargetDir%\" /y
 xcopy "\\esmbuildstorage\%DataSource%\%MalwaresFolder%" "%ServerRoot%:\%MalwaresFolder%\" /e /y
 
 xcopy "%BuildLocation%\PsSysinternalsTools\ps*.exe" "%TargetDir%\" /e /y
+
+xcopy "%BuildLocation%\7z\7z*.exe" "%TargetDir%\" /e /y
 
 
 

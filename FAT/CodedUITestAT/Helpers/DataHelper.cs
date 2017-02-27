@@ -31,21 +31,24 @@ namespace CodedUITestAT
 
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
 
-        /// <summary> Determines whether the autotests will run using staging FLS and Valkyrie servers. Gets the data from a local environment variable. </summary>
-        internal static bool IsStaging()
+        /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
+        internal static bool IsFlsStaging()
         {
-            string isStagingStr = Environment.GetEnvironmentVariable("_IsStaging", EnvironmentVariableTarget.Machine);
+            string isStagingStr = Environment.GetEnvironmentVariable("_IsFlsStaging", EnvironmentVariableTarget.Machine);
             int isStaging = Int32.Parse(isStagingStr);
 
             if (isStaging == 0) return false;
             else return true;
         }
 
-        /// <summary> Gets a proper CAM license key. </summary>
-        internal static string GetCamKey()
+        /// <summary> Determines whether the autotests will run using Valkyrie staging server. Gets the data from a local environment variable. </summary>
+        internal static bool IsValkyrieStaging()
         {
-            if (IsStaging()) return Settings.Staging.Default.CamKeyStaging;
-            else return Settings.General.Default.CamKey;
+            string isStagingStr = Environment.GetEnvironmentVariable("_IsValkyrieStaging", EnvironmentVariableTarget.Machine);
+            int isStaging = Int32.Parse(isStagingStr);
+
+            if (isStaging == 0) return false;
+            else return true;
         }
 
         /// <summary> Gets data on an internal endpoint obtained from a local environment variable. </summary>

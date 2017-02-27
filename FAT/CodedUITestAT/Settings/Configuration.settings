@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CodedUITestAT.Settings" GeneratedClassName="Configuration">
+  <Profiles />
+  <Settings>
+    <Setting Name="CamStagingSettingNameValue" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">UseDevCam</Value>
+    </Setting>
+    <Setting Name="ConfigSettingElementValue" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">value</Value>
+    </Setting>
+    <Setting Name="ConfigSettingsXPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">//APTAT.Core.Properties.Settings</Value>
+    </Setting>
+    <Setting Name="ConfigSettingAttributeName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">name</Value>
+    </Setting>
+    <Setting Name="CamStagingSettingValue" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ValkyrieStagingSettingNameValue" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">valkyrieBaseUrl</Value>
+    </Setting>
+    <Setting Name="ValkyrieStagingSettingValue" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://staging.valkyrie.comodo.com/</Value>
+    </Setting>
+    <Setting Name="ConfigSettingElementSetting" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">setting</Value>
+    </Setting>
+    <Setting Name="ConfigSettingAttributeSerialize" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">serializeAs</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

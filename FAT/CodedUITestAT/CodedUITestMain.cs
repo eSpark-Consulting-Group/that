@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Linq;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
@@ -13,7 +12,6 @@ using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
-using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 
@@ -547,20 +545,6 @@ namespace CodedUITestAT
             }
         }
 
-        /// <summary> Inputs CAM credentials at the respective popup window. </summary>
-        /// <param name="testContext">Set a current TestContext.</param>
-        internal void InputCamCredentials(TestContext testContext)
-        {
-            WpfEdit camLoginTextBox = CamLoginTextBox();
-            UIHelper.WaitForControlIsEnabled(camLoginTextBox);
-            testContext.WriteLine("'Submit to Valkyrie' window appeared...");
-            UIMapCamCredentialsWindow.InputLoginParams.UILoginWatermarkTextBoEditSendKeys = Settings.General.Default.CamLogin;
-            if (camLoginTextBox.Text.Contains(" ")) UIMapCamCredentialsWindow.InputLogin();
-            UIMapCamCredentialsWindow.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = Settings.General.Default.CamPassword;
-            UIMapCamCredentialsWindow.InputPassword();
-            UIMapCamCredentialsWindow.ClickOkButton();
-        }
-
         /// <summary> Asserts the counters values for the bottom panel. </summary>
         /// <param name="expectedUnknownCount">Set an expected Unknown files counter value.</param>
         /// <param name="expectedMalwareCount">Set an expected Malicious file counter value.</param>
@@ -780,7 +764,7 @@ namespace CodedUITestAT
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickYesButton();
                         
-            InputCamCredentials(TestContext);
+            //InputCamCredentials(TestContext);
                 
             // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
             WaitForValkyrieResults(TestContext);
@@ -828,7 +812,7 @@ namespace CodedUITestAT
             
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
             TestContext.WriteLine("'Submit to Valkyrie' window appeared...");
-            UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = DataHelper.GetCamKey();
+            //UIMapCamCredentialsWindow.InputCamKeyParams.UICamLicenseKeyWatermaEditSendKeys = DataHelper.GetCamKey();
             UIMapCamCredentialsWindow.InputCamKey();
             UIMapCamCredentialsWindow.ClickOkButton();
             
@@ -1054,7 +1038,7 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickYesButton();
 
-            InputCamCredentials(TestContext);
+            //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
 
             // Searches with a correct input
@@ -1254,7 +1238,7 @@ namespace CodedUITestAT
             WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             UIMapScanCompletedWindow.ClickYesButton();
-            InputCamCredentials(TestContext);
+            //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.GroupByFiles();
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
@@ -1716,7 +1700,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             UIMapScanCompletedWindow.ClickYesButton();
-            InputCamCredentials(TestContext);
+            //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
 
             // Opens a threat details via context menu
@@ -1986,7 +1970,7 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
             UIMapScanCompletedWindow.ClickYesButton();
-            InputCamCredentials(TestContext);
+            //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
             AssertPanelCountersData(0, 0, 1, TestContext);
@@ -2003,7 +1987,7 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
             UIMapScanCompletedWindow.ClickYesButton();
-            InputCamCredentials(TestContext);
+            //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
             AssertPanelCountersData(0, 1, 1, TestContext);
@@ -2011,7 +1995,7 @@ namespace CodedUITestAT
                                                                                                                 TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
             AssertPanelCountersData(1, 1, 0, TestContext);
         }
-
+        
         #endregion
 
         #region Test Context property

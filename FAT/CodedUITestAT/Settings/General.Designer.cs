@@ -25,42 +25,6 @@ namespace CodedUITestAT.Settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ForensicAnalysisTool")]
-        public string FATApplicationProcessName {
-            get {
-                return ((string)(this["FATApplicationProcessName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("esm.reseller@gmail.com")]
-        public string CamLogin {
-            get {
-                return ((string)(this["CamLogin"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("sellthemall")]
-        public string CamPassword {
-            get {
-                return ((string)(this["CamPassword"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("c593bd1c-ca67-4013-914d-0fe852d72108")]
-        public string CamKey {
-            get {
-                return ((string)(this["CamKey"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://valkyrie.comodo.com/signup_apikey")]
         public string ValkyrieUri {
             get {
@@ -192,6 +156,24 @@ namespace CodedUITestAT.Settings {
         public string AdTreeComputersElement {
             get {
                 return ((string)(this["AdTreeComputersElement"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7z1604-x64.exe")]
+        public string SevenZExeNameX64 {
+            get {
+                return ((string)(this["SevenZExeNameX64"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7z1604.exe")]
+        public string SevenZExeNameX32 {
+            get {
+                return ((string)(this["SevenZExeNameX32"]));
             }
         }
     }
