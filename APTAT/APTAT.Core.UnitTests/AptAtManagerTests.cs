@@ -625,7 +625,7 @@ namespace APTAT.Core.UnitTests
 
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(guid, scanResult) });
             Assert.False(flsAnalyzeProgressChangedEventCalled, "Should not be raised event FlsAnalyzeProgressChanged");
-            Mock.Raise(() => aptScanner.ScanCompleted += null, new ScanCompletedEventArgs() { OperationUid = guid }, null);
+            Mock.Raise(() => aptScanner.ScanCompleted += null, args: new object[] { new ScanCompletedEventArgs() { OperationUid = guid } });
         }
 
         [Fact]
@@ -672,7 +672,7 @@ namespace APTAT.Core.UnitTests
             Mock.Assert(() => fls.Enqueue(Arg.IsAny<IEnumerable<string>>(), Arg.Matches<bool>(flag => flag == true)), "Flag should be true");
             Mock.Assert(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(s => s.Except(failedToAnalyzeHashes).Any() == false && s.Count() == modules.Where(m => m.Cloud == CloudVerdict.FailedToAnalyze).Count()), Arg.AnyBool), "Should contain failed hashes only");
 
-            Mock.Raise(() => aptScanner.ScanCompleted += null, new ScanCompletedEventArgs() { OperationUid = guid }, null);
+            Mock.Raise(() => aptScanner.ScanCompleted += null, new object[] { new ScanCompletedEventArgs() { OperationUid = guid }});
         }
 
 
@@ -690,8 +690,12 @@ namespace APTAT.Core.UnitTests
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
             var scanOptions = CreateScanOptions(80, 53);
-            DeploymentTarget dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
-            var description = new DevicesSourceDescription { Description = "Test Device" };
+            IComputer dt = Mock.Create<IComputer>(Behavior.Strict);
+            Mock.Arrange(() => dt.Uid).Returns(Guid.NewGuid());
+            Mock.Arrange(() => dt.IPAddress).Returns("10.100.65.102");
+            //new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
+            var description = Mock.Create<IDevicesSourceDescription>();
+            Mock.Arrange(()=>description.Description).Returns("Test Device");
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var dts2 = new[] { dt };
 
@@ -707,7 +711,7 @@ namespace APTAT.Core.UnitTests
             target.GetAptScanner(dts2, description, scanOptions);
 
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(guid, scanResult) });
-            Mock.Raise(() => aptScanner.ScanCompleted += null, new ScanCompletedEventArgs() { OperationUid = guid }, null);
+            Mock.Raise(() => aptScanner.ScanCompleted += null, args: new object[] { new ScanCompletedEventArgs() { OperationUid = guid } });
 
             Mock.AssertAll(fls);
         }
