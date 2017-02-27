@@ -86,8 +86,8 @@
             <Border x:Name="pr1" SnapsToDevicePixels="True" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Left" />
             <Border x:Name="pr2" SnapsToDevicePixels="True" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Right" />
 
-            <ListBox Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" x:Name="list" BorderThickness="0" IsEnabled="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
-                     Grid.Row="1" Padding="0" Margin="32, 0,32,20" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters}}" >
+            <ListBox Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" x:Name="list" BorderThickness="0" IsHitTestVisible="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                     Grid.Row="1" Padding="0" Margin="32, 0,32,20" FocusVisualStyle="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters}}" >
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"></StackPanel>
@@ -100,6 +100,7 @@
                         <Setter Property="Visibility" Value="{Binding Valid, Converter={converters:BoolToVisibilityConverter2}}" />
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -170,8 +171,8 @@
                             <TextBlock FontSize="16" Text="{Binding Count}" Grid.Row="1" HorizontalAlignment="Center" Margin="0 3 0 0" VerticalAlignment="Top" Foreground="White"/>
                             <TextBlock FontSize="15" Text="Devices Found" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
 
-                            <Border Background="#FF19C3A5" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
-                            <Border Background="#FFFAF9F9" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
+                            <Border Background="#FF19C3A5" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
+                            
                         </Grid>
                     </DataTemplate>
 
@@ -190,8 +191,8 @@
                             </TextBlock>
                             <TextBlock FontSize="15" Text="Clean Files" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
 
-                            <Border Background="#FF19C3A5" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
-                            <Border Background="#FFFAF9F9" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
+                            <Border Background="#FF19C3A5" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
+                            <Border Background="#FFFAF9F9" SnapsToDevicePixels="True" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
                         </Grid>
                     </DataTemplate>
 
@@ -210,8 +211,8 @@
                             </TextBlock>
                             <TextBlock FontSize="15" Text="Malicious Files" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
 
-                            <Border Background="#FFD54331" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
-                            <Border Background="#FFFAF9F9" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
+                            <Border Background="#FFD54331" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Height="4" Grid.Row="2"/>
+                            <Border Background="#FFFAF9F9" SnapsToDevicePixels="True" Width="5" Grid.RowSpan="3" HorizontalAlignment="Right"/>
                         </Grid>
                     </DataTemplate>
 
@@ -230,7 +231,7 @@
                             </TextBlock>
                             <TextBlock FontSize="15" Text="Unknown Files" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
 
-                            <Border Background="#FFF9AD16" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
+                            <Border Background="#FFF9AD16" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
                         </Grid>
                     </DataTemplate>
 
@@ -248,7 +249,7 @@
                             </TextBlock>
                             <TextBlock FontSize="15" Text="Failed" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
 
-                            <Border Background="#FFF9AD16" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
+                            <Border Background="#FFF9AD16" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
                         </Grid>
                     </DataTemplate>
 
@@ -266,7 +267,7 @@
                             </TextBlock>
                             <TextBlock FontSize="15" Text="In Analysis" Grid.Row="2" Margin="0 -4 0 10" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFB6C6D2"/>
 
-                            <Border Background="#FFF9AD16" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
+                            <Border Background="#FFF9AD16" SnapsToDevicePixels="True" VerticalAlignment="Bottom" Height="4" Grid.Row="2" />
                         </Grid>
                     </DataTemplate>
                 </ListBox.Resources>
