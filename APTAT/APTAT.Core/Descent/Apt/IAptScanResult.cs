@@ -8,11 +8,7 @@ namespace APTAT.Core.Descent.Apt
         void SetCompleted();
     }
     public interface IAptScanResult : IComputerDescentResult
-    {
-        string OsName { get; }
-        string HostName { get; }
-        string OrganizationUnit { get; }
-        string IPAddress { get; }
+    {        
         string FileName { get; set; }
         int TotalFilesCount { get; set; }
         int UnknownFilesCount { get; set; }
@@ -41,10 +37,6 @@ namespace APTAT.Core.Descent.Apt
         ScanModule[] MalwareFiles { get; }               
         ScanModule[] UnknownFiles { get; }
         ScanModule[] LookupInProgressFiles { get; }
-        DetailedBadFile[] UknownFilesValkyrie { get;  }
-        DetailedBadFile[] MaliciousFilesValkyrie { get; }
-        DetailedBadFile[] FailedToAnalyzeFilesValkyrie { get; }
-        DetailedBadFile[] PendingAnalysisFilesValkyrie { get; }
 
     }
 }

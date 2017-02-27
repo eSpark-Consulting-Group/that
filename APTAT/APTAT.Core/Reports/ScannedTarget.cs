@@ -1,14 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
-using APTAT.DeploymentCore.Directory;
-using APTAT.Valkyrie;
-using Valkyrie.WebApiProvider.Enums;
-using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
-using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
 namespace APTAT.Core.Reports
 {
@@ -25,9 +19,9 @@ namespace APTAT.Core.Reports
             if (aptScanResult == null) throw new ArgumentNullException(nameof(aptScanResult));
             Computer = aptScanResult.Computer;
             TargetUid = aptScanResult.TargetUid;
-            HostName = aptScanResult.Computer.Name;
-            IpAddress = aptScanResult.Computer.IPAddress;
-            OsName = aptScanResult.OsName;
+            HostName = aptScanResult.Computer?.Name;
+            IpAddress = aptScanResult.Computer?.IPAddress;
+            OsName = aptScanResult.AptReport.Computer?.Os?.ToString();
             OrganizationUnit = aptScanResult.Computer.OrganizationUnit;
             TotalFilesCount = aptScanResult.TotalFilesCount;
             UnknownFilesCount = aptScanResult.UnknownFilesCount;

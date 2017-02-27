@@ -30,15 +30,14 @@ namespace APTAT.Core.Reports
                     TargetsFailed = operationContext.FailedTargetsCount,
                     TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
                     TotalTargetsCount = operationContext.TotalTargetsCount,
-                    TargetsSucceeded = operationContext.SucceededTargetsCount,
-                    Targets = operationContext.ScanResults.ToArray(),
+                    TargetsSucceeded = operationContext.SucceededTargetsCount,                    
                     ValkyrieAnalysisResult = _aptAtManager.ValkyrieAnalysisResult
                         .ToDictionary(k => k.Key, k => k.Value, StringComparer.OrdinalIgnoreCase),
                     ValkyrieOperationUid = _aptAtManager.ValkyrieOperationUid,
                     FlsLookupOperationUid = _aptAtManager.FlsLookupOperationUid,
                     DevicesSourceDescription = operationContext.DeviceSourceDescription
                 };
-
+                data.SetTargets(operationContext.ScanResults.ToArray());
                 data.UpdateAllBadFilesSorted();
                 ReportBuilder.BuildReportDelegate action = _reportBuilder.Build;
                 Context context = new Context { Action = action, State = state };

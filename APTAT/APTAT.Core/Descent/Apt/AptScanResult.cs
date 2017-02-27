@@ -14,21 +14,7 @@ namespace APTAT.Core.Descent.Apt
         {
             ResultType = ScanResultType.InProgress;
         }
-        public string OsName
-        {
-            get
-            {
-                if (_aptReport != null && _aptReport.Computer != null && _aptReport.Computer.Os != null)
-                    return _aptReport.Computer.Os.ToString();
-                return null;
-                
-            }
-        }
-
-        public string OrganizationUnit => Computer?.OrganizationUnit;
-        public string HostName => Computer?.Name;
-
-        public string IPAddress => Computer?.IPAddress;
+     
         public string FileName { get; set; }
         public int TotalFilesCount { get; set; }
         public int UnknownFilesCount { get; set; }
@@ -207,8 +193,6 @@ namespace APTAT.Core.Descent.Apt
             return (from file in Files where file.Cloud == cloudVerdict select file).ToArray();
         }
 
-
-
         public IModule[] GetBadFiles()
         {
             var files = Files;
@@ -216,7 +200,6 @@ namespace APTAT.Core.Descent.Apt
                 return new IModule[0];
             return (from file in files where file.IsBad select file).ToArray();
         }
-
         
         public void SetAptReportInstance(AptReport report)
         {
@@ -311,11 +294,7 @@ namespace APTAT.Core.Descent.Apt
                 return (from file in Files where file.Cloud == CloudVerdict.FailedToAnalyze || file.Cloud == CloudVerdict.NoVerdict select file).ToArray();
             }
         }
-
-        public DetailedBadFile[] UknownFilesValkyrie { get; set; }
-        public DetailedBadFile[] MaliciousFilesValkyrie { get; internal set; }
-        public DetailedBadFile[] FailedToAnalyzeFilesValkyrie { get; internal set; }
-        public DetailedBadFile[] PendingAnalysisFilesValkyrie { get; internal set; }
+  
     }
 
 
