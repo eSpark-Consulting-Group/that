@@ -633,7 +633,6 @@ namespace APTAT.Core.TelerikReports
             this.subReport2.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.0793749988079071D), Telerik.Reporting.Drawing.Unit.Cm(10.299999237060547D));
             this.subReport2.Name = "subReport2";
             typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Unknown Files (\" + Fields.UnknownFilesCount + \"):\""));
-            typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("Count", "=Fields.MalwareFilesCount"));
             typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Gold"));
             typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "UnknownFiles"));
             typeReportSource2.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsSubreport, APTAT.Core, Version=2.1." +
