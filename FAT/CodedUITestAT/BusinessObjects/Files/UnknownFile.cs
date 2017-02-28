@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace CodedUITestAT
+﻿namespace CodedUITestAT
 {
     /// <summary> Represents an unknown file. </summary>
     internal sealed class UnknownFile : Threat

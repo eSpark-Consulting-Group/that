@@ -29,6 +29,7 @@ namespace CodedUITestAT
         /// <summary> Determines whether 'Group by Files' view is currently selected. </summary>
         internal static bool IsGroupedByFiles = false;
 
+        /// <summary> The application executable name. </summary>
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
 
         /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
@@ -41,6 +42,9 @@ namespace CodedUITestAT
             else return true;
         }
 
+        /// <summary> Indicates whether the application is redirected to FLS staging server. </summary>
+        internal static bool IsRedirectedToFlsStaging = false;
+
         /// <summary> Determines whether the autotests will run using Valkyrie staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsValkyrieStaging()
         {
@@ -50,6 +54,9 @@ namespace CodedUITestAT
             if (isStaging == 0) return false;
             else return true;
         }
+
+        /// <summary> Indicates whether the application is redirected to Valkyrie and CAM staging servers. </summary>
+        internal static bool IsRedirectedToValkyrieStaging = false;
 
         /// <summary> Gets data on an internal endpoint obtained from a local environment variable. </summary>
         internal static Computer GetEndpoint()

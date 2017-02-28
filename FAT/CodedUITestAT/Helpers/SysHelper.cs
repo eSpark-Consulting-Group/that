@@ -24,13 +24,21 @@ namespace CodedUITestAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static void StartApplication(Computer endpoint)
         {
-            if (DataHelper.IsFlsStaging()) RedirectToFlsStaging(endpoint);
+            string extractedSfxPath = null;
 
-            if (DataHelper.IsValkyrieStaging())
+            if (DataHelper.IsFlsStaging() && !DataHelper.IsRedirectedToFlsStaging)
             {
-                string extractedSfxPath = RedirectToValkyrieStaging();
-                StartProcess(extractedSfxPath, DataHelper.ProductExeName, String.Empty);
+                RedirectToFlsStaging(endpoint);
+                DataHelper.IsRedirectedToFlsStaging = true;
             }
+
+            if (DataHelper.IsValkyrieStaging() && !DataHelper.IsRedirectedToValkyrieStaging)
+            {
+                extractedSfxPath = RedirectToValkyrieStaging();
+                DataHelper.IsRedirectedToValkyrieStaging = true;
+            }
+
+            if (DataHelper.IsRedirectedToValkyrieStaging) StartProcess(extractedSfxPath, DataHelper.ProductExeName, String.Empty);
             else StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
