@@ -24,8 +24,6 @@ namespace CodedUITestAT
         /// <param name="endpoint">Set an endpoint.</param>
         internal static void StartApplication(Computer endpoint)
         {
-            string extractedSfxPath = null;
-
             if (DataHelper.IsFlsStaging() && !DataHelper.IsRedirectedToFlsStaging)
             {
                 RedirectToFlsStaging(endpoint);
@@ -34,11 +32,11 @@ namespace CodedUITestAT
 
             if (DataHelper.IsValkyrieStaging() && !DataHelper.IsRedirectedToValkyrieStaging)
             {
-                extractedSfxPath = RedirectToValkyrieStaging();
+                RedirectToValkyrieStaging();
                 DataHelper.IsRedirectedToValkyrieStaging = true;
             }
 
-            if (DataHelper.IsRedirectedToValkyrieStaging) StartProcess(extractedSfxPath, DataHelper.ProductExeName, String.Empty);
+            if (DataHelper.IsRedirectedToValkyrieStaging) StartProcess(DataHelper.ExtractedProductPath, DataHelper.ProductExeName, String.Empty);
             else StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
@@ -348,10 +346,10 @@ namespace CodedUITestAT
 
         /// <summary> Extracts the application SFX archive and edits the application configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
         /// <returns>Path to the extracted application archive.</returns>
-        private static string RedirectToValkyrieStaging()
+        private static void RedirectToValkyrieStaging()
         {
             string workingFolder = DataHelper.GetWorkingFolder();
-            string extractedSfxPath = Path.Combine(workingFolder, DataHelper.ProductExeName.WithoutExtension());
+            string extractedSfxPath = DataHelper.ExtractedProductPath;
             string sevenZArgument = String.Format(@"e {0} -o{1}", Path.Combine(workingFolder, DataHelper.ProductExeName), extractedSfxPath);
             string sevenZPath;
 
@@ -366,8 +364,6 @@ namespace CodedUITestAT
             // Edits the application config file
             XmlHelper.AddConfigSetting(extractedSfxPath, Settings.Configuration.Default.CamStagingSettingNameValue, Settings.Configuration.Default.CamStagingSettingValue);
             XmlHelper.AddConfigSetting(extractedSfxPath, Settings.Configuration.Default.ValkyrieStagingSettingNameValue, Settings.Configuration.Default.ValkyrieStagingSettingValue);
-
-            return extractedSfxPath;
         }
 
         /// <summary> Edits hosts file on the given endpoint and adds FLS staging server address. </summary>

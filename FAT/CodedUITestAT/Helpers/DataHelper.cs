@@ -1,12 +1,13 @@
 ﻿using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UITesting;
 
 namespace CodedUITestAT
 {
-    /// <summary> Contains the project global constants and gets the local environment variables stored during a test build deployment process using a batch file (find in the project). </summary>
+    /// <summary> Contains the project global constants, variables, and gets the local environment variables stored during a test build deployment process using a batch file (find in the project). </summary>
     internal static class DataHelper
     {
-        #region Constants
+        #region Global constants
         
         /// <summary> Default waiting time for tests. </summary>
         internal const int DefaultWaitTime = 15000; // Milliseconds
@@ -19,16 +20,29 @@ namespace CodedUITestAT
 
         #endregion
 
-        #region Environment variables
-
-        internal static readonly string Username = Environment.GetEnvironmentVariable("_ServerLogin", EnvironmentVariableTarget.Machine);
-        internal static readonly string Password = Environment.GetEnvironmentVariable("_ServerPassword", EnvironmentVariableTarget.Machine);
-        
-        internal static readonly string EncryptedPassword = Playback.EncryptText(Password);
+        #region Global variables
 
         /// <summary> Determines whether 'Group by Files' view is currently selected. </summary>
         internal static bool IsGroupedByFiles = false;
 
+        /// <summary> Indicates whether the application is redirected to FLS staging server. </summary>
+        internal static bool IsRedirectedToFlsStaging = false;
+
+        /// <summary> Indicates whether the application is redirected to Valkyrie and CAM staging servers. </summary>
+        internal static bool IsRedirectedToValkyrieStaging = false;
+
+        #endregion
+
+        #region Environment variables
+
+        /// <summary> A user name for authentication. </summary>
+        internal static readonly string Username = Environment.GetEnvironmentVariable("_ServerLogin", EnvironmentVariableTarget.Machine);
+
+        /// <summary> A user password for authentication. </summary>
+        internal static readonly string Password = Environment.GetEnvironmentVariable("_ServerPassword", EnvironmentVariableTarget.Machine);
+
+        internal static readonly string EncryptedPassword = Playback.EncryptText(Password);
+                
         /// <summary> The application executable name. </summary>
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
 
@@ -40,10 +54,7 @@ namespace CodedUITestAT
 
             if (isStaging == 0) return false;
             else return true;
-        }
-
-        /// <summary> Indicates whether the application is redirected to FLS staging server. </summary>
-        internal static bool IsRedirectedToFlsStaging = false;
+        }               
 
         /// <summary> Determines whether the autotests will run using Valkyrie staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsValkyrieStaging()
@@ -53,10 +64,7 @@ namespace CodedUITestAT
 
             if (isStaging == 0) return false;
             else return true;
-        }
-
-        /// <summary> Indicates whether the application is redirected to Valkyrie and CAM staging servers. </summary>
-        internal static bool IsRedirectedToValkyrieStaging = false;
+        }               
 
         /// <summary> Gets data on an internal endpoint obtained from a local environment variable. </summary>
         internal static Computer GetEndpoint()
@@ -71,6 +79,9 @@ namespace CodedUITestAT
             return Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
             //return @"C:\FAT";
         }
+
+        /// <summary> A path to the extracted application SFX archive. </summary>
+        internal static readonly string ExtractedProductPath = Path.Combine(GetWorkingFolder(), ProductExeName.WithoutExtension());
 
         /// <summary> Gets a root directory of endpoint machine in the environment from a local environment variable. </summary>
         /// <param name="IsAdminShare">Determines whether the root should be returned in a form of admin share. </param>        
