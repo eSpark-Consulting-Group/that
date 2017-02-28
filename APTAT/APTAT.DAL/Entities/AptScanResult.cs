@@ -65,9 +65,13 @@ namespace APTAT.DAL.Entities
         [Required]
         [StringLength(1000)]
         public string ComputerName { get; set; }
-
+        
+        [StringLength(50)]
+        public string OsName { get; set; }
         public bool Succeeded { get; set; }
-
+        [StringLength(100)]
         public string StatusMessage { get; set; }
+        public string OrganizationUnit { get; set; }
+        public string LdapPath { get; set; }
     }
 }

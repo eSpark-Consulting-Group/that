@@ -77,18 +77,60 @@ namespace APTAT.DAL.Entities
         [ForeignKey("AptScanResultId")]
         public AptScanResult AptScanResult { get; set; }
         public long AptScanResultId { get; set; }
-
-        public CloudVerdict Cloud { get; set; }
-        public DateTime CloudDate { get; set; }
+        private DateTime? _cloudDate;
+        public DateTime? CloudDate
+        {
+            get
+            {
+                return _cloudDate;
+            }
+            set
+            {
+                _cloudDate = value.MinValueToNull();
+            }
+        }
         public long Size { get; set; }
         [MaxLength(6)]
         public string Attributes { get; set; }
-        public DateTime CreatedInternal { get; set; }
-        public DateTime ModifiedInternal { get; set; }
-        public DateTime AccessedInternal { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
-        public DateTime Accessed { get; set; }
+
+        public DateTime? Created
+        {
+            get
+            {
+                return _createdDate;
+            }
+            set
+            {
+                _createdDate = value.MinValueToNull();
+            }
+        }
+        private DateTime? _modifiedDate;
+        public DateTime? Modified
+        {
+            get
+            {
+                return _modifiedDate;
+            }
+            set
+            {
+                _modifiedDate = value.MinValueToNull();
+            }
+        }
+        private DateTime? _accessed;
+        private DateTime? _createdDate;
+
+        public DateTime? Accessed
+        {
+            get
+            {
+                return _accessed;
+            }
+            set
+            {
+                _accessed = value.MinValueToNull();
+            }
+        }
+
         public string Signer { get; set; }
         public string Description { get; set; }
         [MaxLength(300)]

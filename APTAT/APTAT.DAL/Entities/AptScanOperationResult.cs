@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APTAT.DeploymentCore.Directory;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -86,5 +87,8 @@ namespace APTAT.DAL.Entities
                                     : DateTime.SpecifyKind(value.Value, DateTimeKind.Utc);
             }
         }
+
+        public string SourceDescription { get; set; }
+        public ETargetsDiscovererType? Source { get; set; }
     }
 }
