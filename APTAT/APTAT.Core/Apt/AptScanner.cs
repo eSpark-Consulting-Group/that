@@ -55,6 +55,7 @@ namespace APTAT.Core.Apt
                 NotPerformedCount = _scanOperationContext.NotPerformedTargetsCount,
                 SucceededCount = _scanOperationContext.SucceededTargetsCount,
                 TotalCount = _scanOperationContext.TotalTargetsCount,
+                OperationContext = _scanOperationContext
             });
         }
 

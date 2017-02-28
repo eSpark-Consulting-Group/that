@@ -8,6 +8,9 @@ namespace APTAT.Core.DependencyLocator
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
+            APTAT.DAL.DependencyLocator.DependencyLocator d = new APTAT.DAL.DependencyLocator.DependencyLocator();
+            d.RegisterDependencies(resolver);
+
             resolver.RegisterSingleton<ICamLicenseProvider, CamLicenseProvider>();
             resolver.RegisterSingleton<IAptScannerFactory, AptScannerFactory>();
             resolver.RegisterSingleton<IAptAtManager, AptAtManager>();

@@ -57,9 +57,25 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServerCompact, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.SqlServerCompact.6.1.3\lib\net45\EntityFramework.SqlServerCompact.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -390,6 +406,7 @@
     <None Include="buildScript.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="SfxPackage\7zSD.sfx" />
     <None Include="SfxPackage\CreateSfx.bat" />
     <Resource Include="EULA.pdf" />
@@ -477,7 +494,11 @@ del "$(TargetDir)archive.7z"
 xcopy "$(SolutionDir)$(ConfigurationName)\FAT.Bootstrapper.exe" "$(TargetDir)" /Y
 "$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.pdf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)ForensicAnalysisTool.exe" "$(TargetDir)ForensicAnalysisTool.exe.config" "$(TargetDir)FAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
 copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)FAT.exe" || goto :error
-del  "$(TargetDir)archive.7z"</PostBuildEvent>
+del  "$(TargetDir)archive.7z"
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "D:\Projects\ComodoESM SME\Sources\APTAT\packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "D:\Projects\ComodoESM SME\Sources\APTAT\packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

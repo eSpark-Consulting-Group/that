@@ -80,7 +80,6 @@
   <ItemGroup>
     <Compile Include="AptAtManagerTests.cs" />
     <Compile Include="ArrayExt.cs" />
-    <Compile Include="DistinctFileHelperTest.cs" />
     <Compile Include="ModuleCollectionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValkyrieClientTest.cs" />
@@ -101,6 +100,10 @@
     <ProjectReference Include="..\APTAT.Core\APTAT.Core.csproj">
       <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
       <Name>APTAT.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\APTAT.DAL\APTAT.DAL.csproj">
+      <Project>{af4ace83-d560-40ec-aa29-5b962e1d3c5c}</Project>
+      <Name>APTAT.DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\APTAT.Valkyrie\APTAT.Valkyrie.csproj">
       <Project>{46f67d2c-9368-456a-875a-f96628c18f90}</Project>

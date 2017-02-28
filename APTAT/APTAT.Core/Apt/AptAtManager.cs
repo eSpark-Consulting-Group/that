@@ -4,17 +4,18 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using APTAT.Common;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.FLS;
 using APTAT.Core.Properties;
 using APTAT.Core.Reports;
+using APTAT.DAL.Entities;
+using APTAT.DAL.Storage;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
+using AptScanResult = APTAT.DAL.Entities.AptScanResult;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
@@ -25,6 +26,7 @@ namespace APTAT.Core.Apt
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly IAptScannerFactory _aptScannerFactory;
         private readonly IFlsManager _flsManager;
+        private readonly IEntityStorage _entityStorage;
         private IValkyrieClient _valkyrieClient;
         private readonly Dictionary<string, IAptVerdictContext> _flsHashResults 
             = new Dictionary<string, IAptVerdictContext>(StringComparer.OrdinalIgnoreCase);
@@ -85,9 +87,10 @@ namespace APTAT.Core.Apt
 
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager,
-            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper)
+            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IEntityStorage storageContext)
         {
             _descentSubSystem = descentSubSystem;
+            _entityStorage = storageContext;
             _aptScannerFactory = aptScannerFactory;
             _distinctHelper = distinctHelper;
 
@@ -236,6 +239,24 @@ namespace APTAT.Core.Apt
             var resultsUpdated = AddResultsToDictionary(args.CompletedResult.Files.ToArray(), true);
             if (resultsUpdated)
                 args.CompletedResult.RecalculateStatistics();
+            using (var context = _entityStorage.GetContext())
+            {
+                var result = context.AptScanResultRepository.GetByTargetUidAndOperationUid(args.CompletedResult.Computer.Uid,
+                    args.OperationUid);
+                result.Succeeded = args.CompletedResult.Succeeded;
+                result.StatusMessage = args.CompletedResult.ShortStatusMessage.ToString();
+                foreach (var file in args.CompletedResult.Files)
+                {
+                    result.Modules.Add(new DAL.Entities.Module
+                    { 
+                        Sha1 = file.Sha1,
+                        VerdictSource = VerdictSource.RemoteAgent,
+                        CloudVerdict = (DAL.Entities.CloudVerdict)file.Cloud,
+                        Path = file.Path
+                    });
+                }
+                context.SaveChanges();
+            }
         }
 
         private bool AddResultsToDictionary(IFlsResult[] resultsFiles, bool fromRemoteScanner = false)
@@ -412,6 +433,25 @@ namespace APTAT.Core.Apt
                     _verdictUpdateHistory.Clear();
                 }
                 ValkyrieAnalysisResult.Clear();
+                var dataObject = new AptScanOperationResult
+                {
+                    OperationUid = scanner.ScanOperationContext.OperationUid,
+                    Started = scanner.ScanOperationContext.Started
+                };
+                foreach (var aptScanResult in scanner.ScanOperationContext.ScanResults)
+                {
+                    dataObject.AptScanResults.Add(new AptScanResult
+                    {
+                        IpAddress = aptScanResult.Computer.IPAddress,
+                        ComputerName = aptScanResult.Computer.Name,
+                        TargetUid = aptScanResult.TargetUid,
+                    });
+                }
+                using (var context = _entityStorage.GetContext())
+                {
+                    context.AptScanOperationResultRepository.Add(dataObject);
+                    context.SaveChanges();
+                }
             }
         }
 
@@ -426,6 +466,12 @@ namespace APTAT.Core.Apt
             }
             if (e.SucceededCount > 0)
                 FlsLookupOperationUid = Guid.NewGuid();
+            using (var context = _entityStorage.GetContext())
+            {
+                var operation = context.AptScanOperationResultRepository.GetByOperationUid(e.OperationUid);
+                operation.Finished = e.OperationContext.CompletedTime;
+                context.SaveChanges();
+            }
             TryInvokeEndScan();
             if (_isValkyrieStarted )
             {

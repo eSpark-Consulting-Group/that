@@ -1,4 +1,5 @@
 using System;
+using APTAT.Core.Descent;
 
 namespace APTAT.Core
 {
@@ -10,5 +11,6 @@ namespace APTAT.Core
         public int SucceededCount { get; set; }
         public int FailedCount { get; set; }
         public int CanceledCount { get; set; }
+        public IAptScanOperationContext OperationContext { get; set; }
     }
 }
