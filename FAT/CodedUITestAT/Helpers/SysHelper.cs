@@ -346,13 +346,13 @@ namespace CodedUITestAT
             string extractedSfxPath = Path.Combine(workingFolder, DataHelper.ProductExeName.WithoutExtension());
             string sevenZArgument = String.Format(@"e {0} -o{1}", Path.Combine(workingFolder, DataHelper.ProductExeName), extractedSfxPath);
             string sevenZPath;
-            
+
             // Installs 7z
             Install7z();
 
             // Uses 7z to dearchive the application SFX archive
-            if (Environment.Is64BitOperatingSystem) sevenZPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), Settings.General.Default.SevenZFolder);
-            else sevenZPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), Settings.General.Default.SevenZFolder);
+            if (Environment.Is64BitOperatingSystem) sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramW6432%"), Settings.General.Default.SevenZFolder);
+            else sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%"), Settings.General.Default.SevenZFolder);
             StartProcess(sevenZPath, Settings.General.Default.SevenZExeName, sevenZArgument);
 
             // Edits the application config file
