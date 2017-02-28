@@ -62,8 +62,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Reporting, Version=10.2.16.1025, Culture=neutral, PublicKeyToken=a9d7983dfcc261be">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Telerik.Reporting">
       <HintPath>..\..\ThirdParty\Telerik.Reporting.dll</HintPath>
     </Reference>
   </ItemGroup>
