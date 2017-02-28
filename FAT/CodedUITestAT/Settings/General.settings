@@ -47,11 +47,17 @@
     <Setting Name="AdTreeComputersElement" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Computers</Value>
     </Setting>
-    <Setting Name="SevenZExeNameX64" Type="System.String" Scope="Application">
+    <Setting Name="SevenZInstallerNameX64" Type="System.String" Scope="Application">
       <Value Profile="(Default)">7z1604-x64.exe</Value>
     </Setting>
-    <Setting Name="SevenZExeNameX32" Type="System.String" Scope="Application">
+    <Setting Name="SevenZInstallerNameX32" Type="System.String" Scope="Application">
       <Value Profile="(Default)">7z1604.exe</Value>
+    </Setting>
+    <Setting Name="SevenZFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">7-Zip</Value>
+    </Setting>
+    <Setting Name="SevenZExeName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">7z.exe</Value>
     </Setting>
   </Settings>
 </SettingsFile>

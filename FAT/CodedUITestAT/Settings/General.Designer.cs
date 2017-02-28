@@ -162,18 +162,36 @@ namespace CodedUITestAT.Settings {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7z1604-x64.exe")]
-        public string SevenZExeNameX64 {
+        public string SevenZInstallerNameX64 {
             get {
-                return ((string)(this["SevenZExeNameX64"]));
+                return ((string)(this["SevenZInstallerNameX64"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7z1604.exe")]
-        public string SevenZExeNameX32 {
+        public string SevenZInstallerNameX32 {
             get {
-                return ((string)(this["SevenZExeNameX32"]));
+                return ((string)(this["SevenZInstallerNameX32"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7-Zip")]
+        public string SevenZFolder {
+            get {
+                return ((string)(this["SevenZFolder"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7z.exe")]
+        public string SevenZExeName {
+            get {
+                return ((string)(this["SevenZExeName"]));
             }
         }
     }

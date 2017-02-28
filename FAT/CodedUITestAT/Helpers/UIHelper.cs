@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 
 namespace CodedUITestAT
 {
-    /// <summary> Contains general methods for work with UI. </summary>
+    /// <summary> Contains common methods for work with UI. </summary>
     internal static class UIHelper
     {
         /// <summary> Waits for a specific UI control appearance. </summary>

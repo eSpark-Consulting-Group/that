@@ -17,7 +17,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CodedUITestAT
 {
-    /// <summary> Contains methods for work with OS, processes, services, etc. </summary>
+    /// <summary> Contains common methods for work with OS, processes, services, etc. </summary>
     internal static class SysHelper
     {
         /// <summary> Starts the application under test. </summary>
@@ -26,9 +26,12 @@ namespace CodedUITestAT
         {
             if (DataHelper.IsFlsStaging()) RedirectToFlsStaging(endpoint);
 
-            if (DataHelper.IsValkyrieStaging()) RedirectToValkyrieStaging();
-
-            StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
+            if (DataHelper.IsValkyrieStaging())
+            {
+                string extractedSfxPath = RedirectToValkyrieStaging();
+                StartProcess(extractedSfxPath, DataHelper.ProductExeName, String.Empty);
+            }
+            else StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
             UIHelper.WaitForControl(useEula.IAcceptButton(), Settings.WaitingTime.Default.LaunchAppWaitTime);        
@@ -331,19 +334,32 @@ namespace CodedUITestAT
             string workingFolder = DataHelper.GetWorkingFolder();
             string argument = @"/S";
 
-            if (Environment.Is64BitOperatingSystem) StartProcess(workingFolder, Settings.General.Default.SevenZExeNameX64, argument);
-            else StartProcess(workingFolder, Settings.General.Default.SevenZExeNameX32, argument);
+            if (Environment.Is64BitOperatingSystem) StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX64, argument);
+            else StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX32, argument);
         }
 
-        /// <summary> Edits the application configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
-        private static void RedirectToValkyrieStaging()
+        /// <summary> Extracts the application SFX archive and edits the application configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
+        /// <returns>Path to the extracted application archive.</returns>
+        private static string RedirectToValkyrieStaging()
         {
             string workingFolder = DataHelper.GetWorkingFolder();
+            string extractedSfxPath = Path.Combine(workingFolder, DataHelper.ProductExeName.WithoutExtension());
+            string sevenZArgument = String.Format(@"e {0} -o{1}", Path.Combine(workingFolder, DataHelper.ProductExeName), extractedSfxPath);
+            string sevenZPath;
             
+            // Installs 7z
             Install7z();
 
+            // Uses 7z to dearchive the application SFX archive
+            if (Environment.Is64BitOperatingSystem) sevenZPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), Settings.General.Default.SevenZFolder);
+            else sevenZPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), Settings.General.Default.SevenZFolder);
+            StartProcess(sevenZPath, Settings.General.Default.SevenZExeName, sevenZArgument);
 
+            // Edits the application config file
+            XmlHelper.AddConfigSetting(extractedSfxPath, Settings.Configuration.Default.CamStagingSettingNameValue, Settings.Configuration.Default.CamStagingSettingValue);
+            XmlHelper.AddConfigSetting(extractedSfxPath, Settings.Configuration.Default.ValkyrieStagingSettingNameValue, Settings.Configuration.Default.ValkyrieStagingSettingValue);
 
+            return extractedSfxPath;
         }
 
         /// <summary> Edits hosts file on the given endpoint and adds FLS staging server address. </summary>
