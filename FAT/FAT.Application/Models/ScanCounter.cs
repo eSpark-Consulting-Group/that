@@ -122,7 +122,23 @@ namespace FAT.Application.Models
         }
     }
 
-    public class ScanCounterManager
+    public interface IScanCounterManager
+    {
+        ScanCounterCollection CounterCollection { get; }
+        int Total { get; }
+        bool HasClean { get;  }
+        bool HasMalwares { get;  }
+        bool HasUnknowns { get; }
+        bool HasNotAnalyzed { get; }
+        bool HasInProgress { get; }
+        Action<int[]> SelectedOrdersChanged { set; }
+
+        void AddComputer();
+        void UpdateCounters(IScanCounterDiff scanCounterDiff);
+        void Clear();
+    }
+
+    public class ScanCounterManager : IScanCounterManager
     {
         private readonly Dictionary<int, ScanCounter> _counters;
         private readonly ScanCounterCollection _collection;
@@ -130,7 +146,7 @@ namespace FAT.Application.Models
         private int _total;
         private static object _sync = new object();
 
-        public Action<int[]> SelectedOrdersChanged { get; set; }
+        public Action<int[]> SelectedOrdersChanged { private get; set; }
 
         public ScanCounterManager()
         {
@@ -150,25 +166,21 @@ namespace FAT.Application.Models
             get { return _total; }
         }
 
-        public void Clear()
-        {
-            lock (_sync)
-            {
-                _counters.Clear();
-                _collection.ResetCollection();
-                _total = 0;
-                if (_selected.Any())
-                {
-                    _selected.Clear();
-                    SelectedOrdersChanged?.Invoke(null);
-                }
-                HasClean = false;
-                HasMalwares = false;
-                HasUnknowns = false;
-                HasNotAnalyzed = false;
-                HasInProgress = false;
-            }
-        }
+        public bool HasClean => CleanCount > 0;
+        public bool HasMalwares => MalwaresCount > 0;
+        public bool HasUnknowns => UnknownsCount > 0;
+        public bool HasNotAnalyzed => NotAnalyzedCount > 0;
+        public bool HasInProgress => InProgressCount > 0;
+
+        public int CleanCount { get; private set; }
+
+        public int MalwaresCount { get; private set; }
+
+        public int UnknownsCount { get; private set; }
+
+        public int NotAnalyzedCount { get; private set; }
+
+        public int InProgressCount { get; private set; }
 
         private void AddCounter<T>(int count) where T : ScanCounter, new()
         {
@@ -205,19 +217,19 @@ namespace FAT.Application.Models
             switch (counter.OrderAsEnum)
             {
                 case CounterOrder.Clean:
-                    HasClean = counter.Valid;
+                    CleanCount = counter.Count;
                     break;
                 case CounterOrder.Malware:
-                    HasMalwares = counter.Valid;
+                    MalwaresCount = counter.Count;
                     break;
                 case CounterOrder.Unknown:
-                    HasUnknowns = counter.Valid;
+                    UnknownsCount = counter.Count;
                     break;
                 case CounterOrder.NotAnalyzed:
-                    HasNotAnalyzed = counter.Valid;
+                    NotAnalyzedCount = counter.Count;
                     break;
                 case CounterOrder.InProgress:
-                    HasInProgress = counter.Valid;
+                    InProgressCount = counter.Count;
                     break;
             }
         }
@@ -234,9 +246,9 @@ namespace FAT.Application.Models
             }
         }
 
-        public void AddComputer(int count = 1)
+        public void AddComputer()
         {
-            AddCounter<ComputersCounter>(count);
+            AddCounter<ComputersCounter>(1);
         }
 
         private void AddClean(int count = 1)
@@ -264,23 +276,36 @@ namespace FAT.Application.Models
             AddCounter<InProgressCounter>(count);
         }
 
-        public bool HasClean { get; private set; }
-
-        public bool HasMalwares { get; private set; }
-
-        public bool HasUnknowns { get; private set; }
-
-        public bool HasNotAnalyzed { get; private set; }
-
-        public bool HasInProgress { get; private set; }
+        public void Clear()
+        {
+            lock (_sync)
+            {
+                _counters.Clear();
+                _collection.ResetCollection();
+                _total = 0;
+                if (_selected.Any())
+                {
+                    _selected.Clear();
+                    SelectedOrdersChanged?.Invoke(null);
+                }
+                CleanCount = 0;
+                MalwaresCount = 0;
+                UnknownsCount = 0;
+                NotAnalyzedCount = 0;
+                InProgressCount = 0;
+            }
+        }
 
         public void UpdateCounters(IScanCounterDiff scanCounterDiff)
         {
-            _total += scanCounterDiff.CleanDiff;
-            _total += scanCounterDiff.MalwareDiff;
-            _total += scanCounterDiff.UnknownDiff;
-            _total += scanCounterDiff.NotAnalyzedDiff;
-            _total += scanCounterDiff.InProgressDiff;
+            lock (_sync)
+            {
+                _total += scanCounterDiff.CleanDiff;
+                _total += scanCounterDiff.MalwareDiff;
+                _total += scanCounterDiff.UnknownDiff;
+                _total += scanCounterDiff.NotAnalyzedDiff;
+                _total += scanCounterDiff.InProgressDiff;
+            }
 
             AddClean(scanCounterDiff.CleanDiff);
             AddMalware(scanCounterDiff.MalwareDiff);

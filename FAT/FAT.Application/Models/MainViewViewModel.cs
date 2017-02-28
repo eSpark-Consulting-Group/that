@@ -34,13 +34,16 @@ namespace FAT.Application.Models
         private string _udpPort = "53";
         private Double _percentage;
         private IThreatInfoItem _selectedItem;
+
         private readonly IAptService _aptService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
+        private readonly IScanCounterManager _scanCounterManager;
+
         private Boolean _isReportEnabled;
         private ObservableCollection<IThreatInfoItem> _files;
         private ObservableCollection<IThreatInfoItem> _computers;
-        private readonly ScanCounterManager _scanCounterManager;
+
         private bool _groupByFiles;
         private bool _groupByComputers;
 
@@ -513,13 +516,13 @@ namespace FAT.Application.Models
         #endregion
 
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
-            IAptService aptService, IStorageService storage)
+            IAptService aptService, IStorageService storage, IScanCounterManager scanCounterManager)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _aptService = aptService;
             _storage = storage;
 
-            _scanCounterManager = new ScanCounterManager();
+            _scanCounterManager = scanCounterManager;
             _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
 
             _scanIteratorTimer = new DispatcherTimer(DispatcherPriority.Normal, App.Current.Dispatcher);

@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScanCounterTests.cs" />
     <Compile Include="ThreatInfoItemTests.cs" />
   </ItemGroup>
   <ItemGroup>
