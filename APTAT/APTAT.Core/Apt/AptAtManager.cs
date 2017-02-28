@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.FLS;
@@ -61,11 +62,9 @@ namespace APTAT.Core.Apt
 
         private void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors)
         {
-
             bool isUpdated = false;
             foreach (var result in GetResultsEnumerator().ToArray())
             {
-
                 var files =
                     result.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict).ToArray();
 
@@ -445,6 +444,8 @@ namespace APTAT.Core.Apt
                         IpAddress = aptScanResult.Computer.IPAddress,
                         ComputerName = aptScanResult.Computer.Name,
                         TargetUid = aptScanResult.TargetUid,
+                        Succeeded = aptScanResult.Succeeded,
+                        StatusMessage = aptScanResult.ShortStatusMessage.ToString()
                     });
                 }
                 using (var context = _entityStorage.GetContext())

@@ -2,7 +2,6 @@
 using APTAT.Core;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,12 +9,10 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Valkyrie;
 using APTAT.Core.Reports;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Core.CamLicense;
 using APTAT.Application.Services.EventArgs;
 using APTAT.Application.Models.Apt;
 using APTAT.Application.Properties;
-using APTAT.Common;
 using APTAT.DeploymentCore;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
@@ -134,6 +131,7 @@ namespace FAT.Application.Services
                 scanner.ScanCompleted -= OnScanCompleted;
                 scanner.ScanStarted -= OnScanStarted;
                 scanner.ComputerScanCompleted -= OnComputerScanCompleted;
+                scanner.Dispose();
             }
             lock (this)
             {

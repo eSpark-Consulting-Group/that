@@ -17,7 +17,6 @@ namespace APTAT.DeploymentCore.Descent
         protected readonly string Login;
         protected readonly string Password;
         protected readonly IComputer[] Targets;
-        protected readonly IComputer[] OnlineTargets;
         protected readonly CancellationToken CancellationToken;
         protected readonly IDevicesSourceDescription DevicesSourceDescription;
         protected CancellationTokenSource CancellationTokenSource { get; private set; }
@@ -35,23 +34,10 @@ namespace APTAT.DeploymentCore.Descent
                 new LimitedConcurrencyLevelTaskScheduler(Settings.Default.DescentMaximumConcurrencyLevel));
             var deploymentTargets   = targets as IComputer[] ?? targets.ToArray();
             Targets = deploymentTargets.ToArray();
-            OnlineTargets = GetOnlineComputers(deploymentTargets); ;
             Login = login;
             Password = password;
         }
-
-        protected static IComputer[] GetOnlineComputers(IEnumerable<IComputer> targets)
-        {
-            List<IComputer> onlineTargetsInternal = new List<IComputer>();
-            var deploymentTargets = targets as IComputer[] ?? targets.ToArray();
-            for (int index = 0; index < deploymentTargets.Length; index++)
-            {
-                var target = deploymentTargets[index];
-                if (target.IsOnline)
-                    onlineTargetsInternal.Add(target);
-            }
-            return onlineTargetsInternal.ToArray();
-        }
+        
 
         public virtual DescentEventArgs GetDescentCompletedEventArgs(IDescentQueryResult result)
         {

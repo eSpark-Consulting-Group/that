@@ -223,7 +223,7 @@ namespace APTAT.Application.Models
             {
                 if (!string.IsNullOrEmpty(IpAddress))
                 {
-                    return String.Format("{0} ({1})", Name, IpAddress);
+                    return $"{Name} ({IpAddress})";
                 }
 
                 return Name;
@@ -243,8 +243,7 @@ namespace APTAT.Application.Models
                     else
                     {
                         var ver = Version.Parse(IpAddress);
-                        var str = string.Format("C{0:000}.{1:000}.{2:000}.{3:000}",
-                            ver.Major, ver.Minor, ver.Build, ver.Revision);
+                        var str = $"C{ver.Major:000}.{ver.Minor:000}.{ver.Build:000}.{ver.Revision:000}";
                         return str;
                     }
                 }

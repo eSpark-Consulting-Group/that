@@ -5,7 +5,7 @@ using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 
 namespace APTAT.Core
 {
-    public interface IAptScanner
+    public interface IAptScanner : IDisposable
     {
         IAptScanOperationContext ScanOperationContext { get; }
         void BeginScan(object state = null);

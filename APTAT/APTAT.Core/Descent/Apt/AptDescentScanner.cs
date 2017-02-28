@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using APTAT.Common;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
+using APTAT.DeploymentCore.Descent.Exceptions.Transport;
 using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
+using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Apt
 {
     public class AptDescentScanner : Scanner
     {        
         private AptDescentMod _descentMod;
-        private IScanOptions _scanOptions;
+        private readonly IScanOptions _scanOptions;
 
         public AptDescentScanner(IEnumerable<IComputer> targets, string login, string password,
             IDevicesSourceDescription devicesSourceDescription, IScanOptions scanOptions) 
@@ -24,7 +27,7 @@ namespace APTAT.Core.Descent.Apt
 
         public override IDescentQueryResult ValidateAndGetResult()
         {
-            var result = new AptScanOperationContext(OnlineTargets, Targets.Length, DevicesSourceDescription);
+            var result = new AptScanOperationContext(Targets, Targets.Length, DevicesSourceDescription);
             return result;
           }
 
@@ -47,20 +50,32 @@ namespace APTAT.Core.Descent.Apt
 
         public override void StartScan(IChangeTrackingSubSystem changeTrackingSubSystem, IDescentQueryResult result)
         {
-            var scanResults = (AptScanOperationContext)result;
-            if (_descentMod != null)
-            {
-                _descentMod.Release();
-            }
+            TaskFactory.StartNew(StartScanThread, 
+                new Tuple<IDescentQueryResult, IChangeTrackingSubSystem>(result, changeTrackingSubSystem), TaskCreationOptions.LongRunning);
+            
+        }
+
+        private void StartScanThread(object parameters)
+        {
+            var tuple = (Tuple<IDescentQueryResult, IChangeTrackingSubSystem>) parameters;
+            var changeTrackingSubSystem = tuple.Item2;
+            var scanResults = (AptScanOperationContext)tuple.Item1;
+            _descentMod?.Release();
             _descentMod = new AptDescentMod(TaskFactory, changeTrackingSubSystem);
-            foreach (var computer in OnlineTargets)
+            FormattedText offlineText = new FormattedText(new ResourceText("null", "This computer is not accessible."));
+            foreach (var computer in Targets)
             {
-                var ri = new RemoteHostInfo(computer.Uid,
-                    (computer.IPAddress != null) ? computer.IPAddress.ToString() : computer.DnsName,
+                if (!computer.IsOnline)
+                {
+                    scanResults.OnDescendOperationEvent(false, computer.Uid, offlineText, offlineText, String.Empty, 0,
+                        String.Empty);
+                    continue;
+                }
+                var ri = new RemoteHostInfo(computer.Uid, computer.IPAddress ?? computer.DnsName,
                     Login, Password, computer.IsLocalComputer);
                 var scanResult = (AptScanResult)scanResults.GetComputerDescentResultByTargetUid(computer.Uid);
-                var job = new RemoteInstallerJob(result, changeTrackingSubSystem, this, computer);
-                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, result.OperationUid, _scanOptions);
+                var job = new RemoteInstallerJob(scanResults, changeTrackingSubSystem, this, computer);
+                _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, scanResults.OperationUid, _scanOptions);
             }
         }
 

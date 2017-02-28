@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-using System.Collections.Concurrent;
 using APTAT.DeploymentCore;
 
 namespace APTAT.Core.Apt
@@ -17,8 +16,9 @@ namespace APTAT.Core.Apt
         private readonly IDevicesSourceDescription _devicesSourceDescription;
         private Guid _operationUid;
         private readonly IEnumerable<IComputer> _targets;
-            
-        
+        private ManualResetEventSlim _manualResetEvent = new ManualResetEventSlim(false);
+
+
         private readonly IScanOptions _options;
 
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
@@ -128,13 +128,20 @@ namespace APTAT.Core.Apt
             });
         }
 
+        public void Dispose()
+        {
+            _manualResetEvent.Dispose();
+        }
+
         protected virtual void OnScanStarted(ScanStartedEventArgs args)
         {
             ScanStarted?.Invoke(this, args);
+            _manualResetEvent.Set();
         }
 
         protected virtual void OnComputerScanCompleted(ComputerScanCompletedEventArgs args)
         {
+            _manualResetEvent.Wait();
             ComputerScanCompleted?.Invoke(this, args);
         }
 
