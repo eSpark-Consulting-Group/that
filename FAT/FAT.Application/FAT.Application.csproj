@@ -504,7 +504,7 @@
       del "$(TargetDir)FAT.exe"
       del "$(TargetDir)archive.7z"
       xcopy "$(SolutionDir)$(ConfigurationName)\FAT.Bootstrapper.exe" "$(TargetDir)" /Y
-      "$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.pdf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)ForensicAnalysisTool.exe" "$(TargetDir)ForensicAnalysisTool.exe.config" "$(TargetDir)FAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)Fonts" || goto :error
+      "$(ProjectDir)SfxPackage\7za.exe" a   "$(TargetDir)archive.7z" "$(TargetDir)*.txt" "$(TargetDir)*.pdf" "$(TargetDir)archive.7z" "$(TargetDir)*.dll" "$(TargetDir)ForensicAnalysisTool.exe" "$(TargetDir)ForensicAnalysisTool.exe.config" "$(TargetDir)FAT.Bootstrapper.exe" "$(TargetDir)cmdapt86.exe" "$(TargetDir)cmdapt64.exe" "$(TargetDir)amd64" "$(TargetDir)x86" || goto :error
       copy /b "$(ProjectDir)SfxPackage\7zSD.sfx" + "$(ProjectDir)SfxPackage\config.txt" + "$(TargetDir)archive.7z" "$(TargetDir)FAT.exe" || goto :error
       del  "$(TargetDir)archive.7z"</PostBuildEvent>
   </PropertyGroup>
