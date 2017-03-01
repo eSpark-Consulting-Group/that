@@ -6,6 +6,7 @@ using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
+using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
 
 namespace CodedUITestAT
 {
@@ -79,6 +80,21 @@ namespace CodedUITestAT
         }
         private UIMapStopScanWindow mapStopScanWindow;
 
+        /// <summary> UIMap for Discovery window, UIMapDiscovery.uitest. </summary>
+        public UIMapDiscovery UIMapDiscovery
+        {
+            get
+            {
+                if ((this.mapDiscovery == null))
+                {
+                    this.mapDiscovery = new UIMapDiscovery();
+                }
+
+                return this.mapDiscovery;
+            }
+        }
+        private UIMapDiscovery mapDiscovery;
+
         #endregion
 
         #region Control methods
@@ -116,6 +132,15 @@ namespace CodedUITestAT
         internal WpfButton YesDialogButton()
         {
             return UIMapStopScanWindow.UIForensicAnalysisToolWindow.UIYesButton;
+        }
+
+        #endregion
+
+        #region Discovery screen
+
+        internal WpfButton SkipDiscoveryButton()
+        {
+            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UISkipDiscoveryButtonButton;
         }
 
         #endregion

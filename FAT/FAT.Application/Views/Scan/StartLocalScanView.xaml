@@ -1,4 +1,5 @@
-﻿<UserControl x:Class="FAT.Application.StartLocalScanView"
+﻿<UserControl AutomationProperties.AutomationId="ThisComputerScreen"
+             x:Class="FAT.Application.StartLocalScanView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -70,9 +71,6 @@
             <TextBlock Text="Select Directories" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" Grid.Column="1" Margin="36,20,0,0" SnapsToDevicePixels="True"/>
         </Grid>
 
-
-
-
         <Grid x:Name="panelSelectComputers" Grid.Row="2" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
             <Grid.Resources>
                 <DataTemplate x:Key="DomainTreeItemTemplate">
@@ -87,7 +85,7 @@
             </Grid.Resources>
 
             <Border Margin="160,30,160,30" BorderThickness="0" Background="White">
-                <telerik:RadTreeView AutomationProperties.AutomationId="fileBrowserTree"
+                <telerik:RadTreeView AutomationProperties.AutomationId="FileBrowserTree"
                                  x:Name="fileBrowserTree"                               
                                  SnapsToDevicePixels="True"
                                  IsOptionElementsEnabled="True"
@@ -104,10 +102,9 @@
                                  IsLoadOnDemandEnabled="True" />
             </Border>
 
-
-
         </Grid>
-        <Grid x:Name="panelSelectPort" Background="White" Grid.Row="1" Grid.RowSpan="2" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectPort, FallbackValue=Collapsed}">
+        <Grid x:Name="panelSelectPort" Background="White" Grid.Row="1" Grid.RowSpan="2" 
+              Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectPort, FallbackValue=Collapsed}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -130,7 +127,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button 
+                            <Button AutomationProperties.AutomationId="FullScanButton"
                                     Content="Full Scan" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Column="0" 
                                     Margin="17 17 0 0" Click="OnFullClick">
                                 <Button.Template>
@@ -227,7 +224,7 @@
                                 </Button.Triggers>
                             </Button>
 
-                            <Button 
+                            <Button AutomationProperties.AutomationId="QuickScanButton"
                                     Content="Quick Scan" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Column="1" 
                                     Margin="17 17 0 0" Click="OnQuickClick">
                                 <Button.Template>
@@ -330,7 +327,7 @@
                                 </Button.Triggers>
                             </Button>
 
-                            <Button 
+                            <Button AutomationProperties.AutomationId="CustomScanButton"
                                     Content="Custom Scan" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Grid.Column="2" 
                                     Margin="17 17 0 0" Click="OnCustomClick">
                                 <Button.Template>
@@ -361,7 +358,6 @@
                                                         <RowDefinition Height="Auto"/>
                                                         <RowDefinition Height="*"/>
                                                     </Grid.RowDefinitions>
-
 
                                                     <Canvas   Margin="30 50 0 0">
                                                         <Path Data="F1M389,879C389,881.359,387.958,883,386.673,883L274.326,883C273.043,883,272,881.359,272,879C272,876.641,273.043,875,274.326,875L386.673,875C387.958,875,389,876.641,389,879" Fill="#FF457FAD" Height="8" Opacity="0.270004004240036" Stretch="Fill" Canvas.Left="21.029" Canvas.Top="73" Width="117"/>
@@ -453,7 +449,8 @@
 
         </Grid>
         <Grid x:Name="customScanOptions" Grid.Row="3" Visibility="{Binding CurrentStep, Converter={StaticResource StringToVisibiltyConverter}, ConverterParameter=SelectTargets, FallbackValue=Collapsed}">
-            <CheckBox IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left" Margin="160, 0, 0, 30" 
+            <CheckBox AutomationProperties.AutomationId="ScanCriticalAreasCheckBox"
+                      IsChecked="{Binding ScanCriticalAreas}" HorizontalAlignment="Left" Margin="160, 0, 0, 30" 
                       Content="Scan critical areas of computer which are most often targeted by malware"></CheckBox>
         </Grid>
     </Grid>

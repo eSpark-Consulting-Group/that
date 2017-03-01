@@ -152,11 +152,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickThisComputerButton()
         {
             #region Variable Declarations
-            WpfButton uIScanThisComputerButton = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScanThisComputerButton;
+            WpfButton uIScanThisComputerButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScanThisComputerButton;
             #endregion
 
             // Click 'Scan This Computer' button
-            Mouse.Click(uIScanThisComputerButton, new Point(77, 127));
+            Mouse.Click(uIScanThisComputerButton, new Point(180, 49));
         }
         
         #region Properties
@@ -195,6 +195,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUIUnknownFileHunterWindow1;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -203,6 +215,8 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -617,6 +631,107 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         
         private WpfButton mUIScancomputersbyspeciButton;
         
+        private WpfButton mUIScanThisComputerButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIScanningWizardWindowCustom2 UIScanningWizardWindowCustom
+        {
+            get
+            {
+                if ((this.mUIScanningWizardWindowCustom == null))
+                {
+                    this.mUIScanningWizardWindowCustom = new UIScanningWizardWindowCustom2(this);
+                }
+                return this.mUIScanningWizardWindowCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIScanningWizardWindowCustom2 mUIScanningWizardWindowCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIScanningWizardWindowCustom2 : WpfCustom
+    {
+        
+        public UIScanningWizardWindowCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ScanningWizardWindow";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UILoadingProgressBar2 UILoadingProgressBar
+        {
+            get
+            {
+                if ((this.mUILoadingProgressBar == null))
+                {
+                    this.mUILoadingProgressBar = new UILoadingProgressBar2(this);
+                }
+                return this.mUILoadingProgressBar;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UILoadingProgressBar2 mUILoadingProgressBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UILoadingProgressBar2 : WpfProgressBar
+    {
+        
+        public UILoadingProgressBar2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Loading...";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIScanThisComputerButton
+        {
+            get
+            {
+                if ((this.mUIScanThisComputerButton == null))
+                {
+                    this.mUIScanThisComputerButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScanThisComputerButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ThisComputerButton";
+                    this.mUIScanThisComputerButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIScanThisComputerButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
         private WpfButton mUIScanThisComputerButton;
         #endregion
     }

@@ -46,11 +46,12 @@ namespace CodedUITestAT
             SysHelper.StartApplication(DataHelper.GetEndpoint());
 
             CodedUITestEula useEula = new CodedUITestEula();
-            CodedUITestMain useMain = new CodedUITestMain();
             useEula.UIMapEula.ClickIAcceptButton();
+            
+            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+            UIMapDiscovery.ClickCustomScanButton();
 
-            UIHelper.WaitForControlIsEnabled(useMain.StartScanButton());
-            UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControl(ThisComputerButton());
             UIMapStartScanWizard.ClickThisComputerButton();
             UIHelper.WaitForControl(CustomScanButton());
@@ -72,11 +73,11 @@ namespace CodedUITestAT
 
         private WpfButton ThisComputerButton()
         {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScanThisComputerButton;
+            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScanThisComputerButton; 
         }
         private WpfButton CustomScanButton()
         {
-            return UIMapThisComputer.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UICustomScanButton;
+            return UIMapThisComputer.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UICustomScanButton;
         }
 
         private WpfCheckBox ScanCriticalAreasCheckBox()
@@ -86,7 +87,7 @@ namespace CodedUITestAT
 
         #endregion
 
-        #region Local helper methods       
+        #region Local helper methods
 
         /// <summary> Locally copies a given threat to each given path. </summary>
         /// <param name="paths">Set a path.</param>

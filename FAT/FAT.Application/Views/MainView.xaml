@@ -273,7 +273,9 @@
                 </ListBox.Resources>
             </ListBox>
 
-            <Button Visibility="{Binding IsAutoDiscoveryInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopAutoDiscoveryCommand}">
+            <Button AutomationProperties.AutomationId="SkipDiscoveryButton"
+                    Visibility="{Binding IsAutoDiscoveryInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" 
+                    HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopAutoDiscoveryCommand}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -285,7 +287,9 @@
             </Button>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Visibility="{Binding IsAutoDiscoveryCompleted, Converter={converters:BoolToVisibilityConverter2}}">
-                <Button  Height="32" Command="{Binding StartScanWithDiscoveryResultsCommand}" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+                <Button AutomationProperties.AutomationId="ScanNowButton"
+                        Height="32" Command="{Binding StartScanWithDiscoveryResultsCommand}" 
+                        Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -295,8 +299,10 @@
                         <TextBlock Text="Scan Now" Grid.Column="1" Margin="0 1 0 0"/>
                     </Grid>
                 </Button>
-                
-                <Button  Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Background="#FF91ADBD" BorderBrush="#FF91ADBD" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
+
+                <Button AutomationProperties.AutomationId="CustomScanButton"
+                        Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Background="#FF91ADBD" BorderBrush="#FF91ADBD" 
+                        Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -308,7 +314,9 @@
                 </Button>
 
                 <Grid Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}">
-                    <Button MinWidth="190" MaxWidth="190" Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
+                    <Button AutomationProperties.AutomationId="NewCustomScanButton"
+                            MinWidth="190" MaxWidth="190" Height="32" Margin="10 0 0 0" Command="{Binding StartScanCommand}" 
+                            Visibility="{Binding ScanWasOnceStarted, Converter={converters:BoolToVisibilityConverter2}}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -321,7 +329,9 @@
                 </Grid>
             </StackPanel>
 
-            <Button Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopScanCommand}">
+            <Button AutomationProperties.AutomationId="StopScanButton"
+                    Visibility="{Binding IsScanInProgress, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" VerticalAlignment="Top" 
+                    HorizontalAlignment="Right" Margin="32,0,32,20" Command="{Binding StopScanCommand}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -332,7 +342,9 @@
                 </Grid>
             </Button>
 
-            <Button MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,52,32,20" >
+            <Button AutomationProperties.AutomationId="DetailedScanResultsButton"
+                    MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" 
+                    Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,52,32,20" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

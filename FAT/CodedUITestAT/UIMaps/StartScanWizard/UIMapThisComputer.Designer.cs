@@ -35,11 +35,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         public void ClickCustomScanButton()
         {
             #region Variable Declarations
-            WpfButton uICustomScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UICustomScanButton;
+            WpfButton uICustomScanButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UICustomScanButton;
             #endregion
 
             // Click 'Custom Scan' button
-            Mouse.Click(uICustomScanButton, new Point(110, 152));
+            Mouse.Click(uICustomScanButton, new Point(118, 130));
         }
         
         /// <summary>
@@ -48,7 +48,7 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         public void CheckScanCriticalAreasCheckBox()
         {
             #region Variable Declarations
-            WpfCheckBox uIScancriticalareasofcCheckBox = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIScancriticalareasofcCheckBox;
+            WpfCheckBox uIScancriticalareasofcCheckBox = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIScancriticalareasofcCheckBox;
             #endregion
 
             // Select 'Scan critical areas of computer which are most oft...' check box
@@ -61,11 +61,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         public void ExpandFileBrowserTreeItem()
         {
             #region Variable Declarations
-            WpfButton uIExpanderButton = this.UIUnknownFileHunterWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.UIExpanderButton;
+            WpfButton uIExpanderButton = this.UIForensicAnalysisToolWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.UIExpanderButton;
             #endregion
 
             // Click 'Expander' button
-            Mouse.Click(uIExpanderButton, new Point(5, 12));
+            Mouse.Click(uIExpanderButton, new Point(9, 9));
         }
         
         /// <summary>
@@ -74,7 +74,7 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         public void CheckFileBrowserTreeItem()
         {
             #region Variable Declarations
-            WpfCheckBox uICheckBoxElementCheckBox = this.UIUnknownFileHunterWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.UICheckBoxElementCheckBox;
+            WpfCheckBox uICheckBoxElementCheckBox = this.UIForensicAnalysisToolWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.UICheckBoxElementCheckBox;
             #endregion
 
             // Select 'CheckBoxElement' check box
@@ -87,11 +87,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         public void ClickQuickScanButton()
         {
             #region Variable Declarations
-            WpfButton uIQuickScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIQuickScanButton;
+            WpfButton uIQuickScanButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIQuickScanButton;
             #endregion
 
             // Click 'Quick Scan' button
-            Mouse.Click(uIQuickScanButton, new Point(98, 135));
+            Mouse.Click(uIQuickScanButton, new Point(114, 153));
         }
         
         /// <summary>
@@ -100,11 +100,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         public void ClickFullScanButton()
         {
             #region Variable Declarations
-            WpfButton uIFullScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIFullScanButton;
+            WpfButton uIFullScanButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIFullScanButton;
             #endregion
 
             // Click 'Full Scan' button
-            Mouse.Click(uIFullScanButton, new Point(147, 114));
+            Mouse.Click(uIFullScanButton, new Point(81, 102));
         }
         
         #region Properties
@@ -143,6 +143,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
                 return this.mUIUnknownFileHunterWindow;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -151,6 +163,8 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         private CheckFileBrowserTreeItemParams mCheckFileBrowserTreeItemParams;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -472,6 +486,297 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses
         private WpfButton mUIExpanderButton;
         
         private WpfCheckBox mUICheckBoxElementCheckBox;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIScanningWizardWindowCustom1 UIScanningWizardWindowCustom
+        {
+            get
+            {
+                if ((this.mUIScanningWizardWindowCustom == null))
+                {
+                    this.mUIScanningWizardWindowCustom = new UIScanningWizardWindowCustom1(this);
+                }
+                return this.mUIScanningWizardWindowCustom;
+            }
+        }
+        
+        public UIThisComputerScreenCustom3 UIThisComputerScreenCustom
+        {
+            get
+            {
+                if ((this.mUIThisComputerScreenCustom == null))
+                {
+                    this.mUIThisComputerScreenCustom = new UIThisComputerScreenCustom3(this);
+                }
+                return this.mUIThisComputerScreenCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIScanningWizardWindowCustom1 mUIScanningWizardWindowCustom;
+        
+        private UIThisComputerScreenCustom3 mUIThisComputerScreenCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIScanningWizardWindowCustom1 : WpfCustom
+    {
+        
+        public UIScanningWizardWindowCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ScanningWizardWindow";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIThisComputerScreenCustom2 UIThisComputerScreenCustom
+        {
+            get
+            {
+                if ((this.mUIThisComputerScreenCustom == null))
+                {
+                    this.mUIThisComputerScreenCustom = new UIThisComputerScreenCustom2(this);
+                }
+                return this.mUIThisComputerScreenCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIThisComputerScreenCustom2 mUIThisComputerScreenCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisComputerScreenCustom2 : WpfCustom
+    {
+        
+        public UIThisComputerScreenCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartLocalScanView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ThisComputerScreen";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UICustomScanButton
+        {
+            get
+            {
+                if ((this.mUICustomScanButton == null))
+                {
+                    this.mUICustomScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICustomScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CustomScanButton";
+                    this.mUICustomScanButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICustomScanButton;
+            }
+        }
+        
+        public WpfCheckBox UIScancriticalareasofcCheckBox
+        {
+            get
+            {
+                if ((this.mUIScancriticalareasofcCheckBox == null))
+                {
+                    this.mUIScancriticalareasofcCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUIScancriticalareasofcCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "ScanCriticalAreasCheckBox";
+                    this.mUIScancriticalareasofcCheckBox.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIScancriticalareasofcCheckBox;
+            }
+        }
+        
+        public WpfButton UIQuickScanButton
+        {
+            get
+            {
+                if ((this.mUIQuickScanButton == null))
+                {
+                    this.mUIQuickScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIQuickScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "QuickScanButton";
+                    this.mUIQuickScanButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIQuickScanButton;
+            }
+        }
+        
+        public WpfButton UIFullScanButton
+        {
+            get
+            {
+                if ((this.mUIFullScanButton == null))
+                {
+                    this.mUIFullScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIFullScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "FullScanButton";
+                    this.mUIFullScanButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIFullScanButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUICustomScanButton;
+        
+        private WpfCheckBox mUIScancriticalareasofcCheckBox;
+        
+        private WpfButton mUIQuickScanButton;
+        
+        private WpfButton mUIFullScanButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisComputerScreenCustom3 : WpfCustom
+    {
+        
+        public UIThisComputerScreenCustom3(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartLocalScanView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ThisComputerScreen";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIFileBrowserTreeTree1 UIFileBrowserTreeTree
+        {
+            get
+            {
+                if ((this.mUIFileBrowserTreeTree == null))
+                {
+                    this.mUIFileBrowserTreeTree = new UIFileBrowserTreeTree1(this);
+                }
+                return this.mUIFileBrowserTreeTree;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIFileBrowserTreeTree1 mUIFileBrowserTreeTree;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIFileBrowserTreeTree1 : WpfTree
+    {
+        
+        public UIFileBrowserTreeTree1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTree.PropertyNames.AutomationId] = "FileBrowserTree";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UICTreeItem1 UICTreeItem
+        {
+            get
+            {
+                if ((this.mUICTreeItem == null))
+                {
+                    this.mUICTreeItem = new UICTreeItem1(this);
+                }
+                return this.mUICTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UICTreeItem1 mUICTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UICTreeItem1 : WpfTreeItem
+    {
+        
+        public UICTreeItem1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTreeItem.PropertyNames.Name] = "C:";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UICheckBoxElementCheckBox
+        {
+            get
+            {
+                if ((this.mUICheckBoxElementCheckBox == null))
+                {
+                    this.mUICheckBoxElementCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUICheckBoxElementCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "CheckBoxElement";
+                    this.mUICheckBoxElementCheckBox.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUICheckBoxElementCheckBox.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICheckBoxElementCheckBox;
+            }
+        }
+        
+        public WpfButton UIExpanderButton
+        {
+            get
+            {
+                if ((this.mUIExpanderButton == null))
+                {
+                    this.mUIExpanderButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIExpanderButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "Expander";
+                    this.mUIExpanderButton.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUIExpanderButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIExpanderButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUICheckBoxElementCheckBox;
+        
+        private WpfButton mUIExpanderButton;
         #endregion
     }
 }
