@@ -428,6 +428,12 @@ namespace APTAT.Core.Apt
             if (e.SucceededCount > 0)
                 FlsLookupOperationUid = Guid.NewGuid();
             _entityStorage.UpdateScanResults(e.OperationContext);
+            TryInvokeEndScan();
+            if (_isValkyrieStarted)
+            {
+                IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
+                this._valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
+            }
         }
 
         public IAptReportBuilder GetAptReportBuilder()

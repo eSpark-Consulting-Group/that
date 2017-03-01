@@ -472,7 +472,7 @@ namespace APTAT.Valkyrie
                         return result;
                     }
                 }
-                if (!basicInfo.Upload || fileInfo.FlsCloud != CloudVerdict.FirstSeen)
+                if (!basicInfo.Upload)
                 {
                     result = ValkyrieAnalysisResult.Create(basicInfo);
                 }
