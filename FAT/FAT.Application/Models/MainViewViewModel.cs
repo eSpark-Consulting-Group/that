@@ -94,7 +94,7 @@ namespace FAT.Application.Models
         public WizardStepEnum CurrentStep { get; set; }
 
 
-        
+
         public String TcpPort
         {
             get { return _tcpPort; }
@@ -114,7 +114,7 @@ namespace FAT.Application.Models
                 }
             }
         }
-        
+
         public String UdpPort
         {
             get { return _udpPort; }
@@ -238,8 +238,8 @@ namespace FAT.Application.Models
         public bool RaisedHasMalwares { get; set; }
 
         public bool RaisedHasUnknowns { get; set; }
-        
-        public Double Percentage    
+
+        public Double Percentage
         {
             get { return _percentage; }
             set
@@ -303,7 +303,7 @@ namespace FAT.Application.Models
                     if (Percentage > 0)
                         return "Scan Completed";
                 }
-                
+
 
                 return string.Empty;
             }
@@ -340,7 +340,7 @@ namespace FAT.Application.Models
                 return SelectedItems != null && SelectedItems.Count > 0 && SelectedItems.Any(_ => _.IsComputer && _.ScanStage == ScanStage.ScanInProgress);
             }
         }
-        
+
         public Boolean IsReportEnabled
         {
             get { return _isReportEnabled; }
@@ -350,7 +350,7 @@ namespace FAT.Application.Models
                 RaisePropertyChanged("IsReportEnabled");
             }
         }
-        
+
         public IThreatInfoItem SelectedItem
         {
             get { return _selectedItem; }
@@ -429,7 +429,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public ScanCounterCollection ScanCounters
+        public IScanCounterCollection ScanCounters
         {
             get
             {
@@ -439,7 +439,7 @@ namespace FAT.Application.Models
 
         public bool? FilterReset { get; set; }
 
-        public int[] FilterOrders { get; set; } 
+        public int[] FilterOrders { get; set; }
 
         public bool IsQuickScan { get; set; }
 
@@ -529,7 +529,7 @@ namespace FAT.Application.Models
             _scanIteratorTimer.Interval = TimeSpan.FromMilliseconds(500d);
             _scanIteratorTimer.Tick += IterateThroughScan;
 
-            InitCommands();  
+            InitCommands();
         }
 
         private void InitCommands()
@@ -542,19 +542,19 @@ namespace FAT.Application.Models
                 AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => IsGlobalStopEnabled);
             StopAutoDiscoveryCommand = new DelegateCommand(InvokeStopAutoDiscovery);
-            StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults, 
+            StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults,
                 o => SelectedDiscoveryResults.Any());
-            SelectCommand = new DelegateCommand(o => { }, 
+            SelectCommand = new DelegateCommand(o => { },
                 o => IsDetailsEnabled);
-            SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail, 
+            SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail,
                 o => !string.IsNullOrEmpty(ComputersHeader) && IsValidEmail(Email));
             EditEmailCommand = new DelegateCommand(o =>
                 Set(() => HideSubmitEmail, false));
-            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o), 
+            RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o),
                 o => IsRestartEnabled);
-            RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true), 
+            RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true),
                 o => IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
-            StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan, 
+            StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan,
                 o => IsStopEnabled);
         }
 
@@ -811,7 +811,7 @@ namespace FAT.Application.Models
 
             var targets = new Guid[0];
             if (arg != null && arg is Guid[])
-                targets = (Guid[]) arg;
+                targets = (Guid[])arg;
 
             _aptService.StopScan(targets);
 
@@ -850,7 +850,7 @@ namespace FAT.Application.Models
 
         private void OnScanCompleted(Object sender, ErrorEventArgs e)
         {
-            
+
             if (e.Error != null)
             {
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
@@ -880,7 +880,7 @@ namespace FAT.Application.Models
                 HandleNetworkConnectionError(e.Error);
                 return;
             }
-            
+
             if (e.Target != null)
             {
                 if (!e.Target.IsLocalComputer || !DiscoveryResults.Any(_ => _.IsLocalComputer))
@@ -964,7 +964,7 @@ namespace FAT.Application.Models
                     item.StatusMessageSystem = "This computer is not accessible.";
                 }
             }
-            
+
             if (_onlineItems.Length > 0)
             {
 
@@ -1026,7 +1026,7 @@ namespace FAT.Application.Models
             var operationResult = _aptService.GetModifiedResultsForOperation(_operationGuid, _lastModifiesComputerDate,
                 _lastModifiesFlsVerdictDate, _lastModifiesValkyrieVerdictDate);
             var computers = operationResult.Computers.ToDictionary(c => c.TargetUid);
-            
+
 
             var files = operationResult.Files;
             if (files.Any())
@@ -1054,7 +1054,7 @@ namespace FAT.Application.Models
                 computers.TryGetValue(infoItem.ComputerGuid, out scanProgress);
                 if (infoItem.ScanStage != ScanStage.OperationFailed &&
                         infoItem.ScanStage != ScanStage.OperationCompleted &&
-                        infoItem.ScanStage != ScanStage.OperationCanceled )
+                        infoItem.ScanStage != ScanStage.OperationCanceled)
                 {
                     if (scanProgress != null)
                     {
@@ -1131,13 +1131,13 @@ namespace FAT.Application.Models
             ScannedItemsCount = scanned;
             if (!RaisedHasMalwares)
             {
-                Set(() => RaisedHasMalwares, 
+                Set(() => RaisedHasMalwares,
                     _scanCounterManager.HasMalwares);
 
                 if (!RaisedHasMalwares)
-                    Set(() => RaisedHasUnknowns, 
-                        _scanCounterManager.HasUnknowns || 
-                        _scanCounterManager.HasNotAnalyzed || 
+                    Set(() => RaisedHasUnknowns,
+                        _scanCounterManager.HasUnknowns ||
+                        _scanCounterManager.HasNotAnalyzed ||
                         _scanCounterManager.HasInProgress);
             }
 

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 
@@ -18,12 +16,41 @@ namespace FAT.Application.Models
         InProgress
     }
 
-    public abstract class ScanCounter : INotifyPropertyChanged
+    public interface IScanCounterFactory
+    {
+        IScanCounter CreateCounterByCounterOrder(CounterOrder counterOrder);
+    }
+
+    public class ScanCounterFactory : IScanCounterFactory
+    {
+        public IScanCounter CreateCounterByCounterOrder(CounterOrder counterOrder)
+        {
+            switch (counterOrder)
+            {
+                case CounterOrder.Clean:
+                    return new CleanCounter();
+                case CounterOrder.Computer:
+                    return new ComputersCounter();
+                case CounterOrder.InProgress:
+                    return new InProgressCounter();
+                case CounterOrder.Malware:
+                    return new MalwareCounter();
+                case CounterOrder.NotAnalyzed:
+                    return new NotAnalyzedCounter();
+                case CounterOrder.Unknown:
+                    return new UnknownCounter();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(counterOrder));
+            }
+        }
+    }
+
+    public abstract class ScanCounter : IScanCounter
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Action<ScanCounter> SelectionChanged { get; set; }
-        public Action<ScanCounter> CountChanged { get; set; }
+        public Action<IScanCounter> SelectionChanged { get; set; }
+        public Action<IScanCounter> CountChanged { get; set; }
 
         private int _count;
         public int Count
@@ -95,36 +122,9 @@ namespace FAT.Application.Models
         }
     }
 
-    public class ScanCounterCollection : IEnumerable<ScanCounter>, INotifyCollectionChanged
-    {
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        public Func<IEnumerable<ScanCounter>> ExternalEnumerator { get; set; }
-
-        public IEnumerator<ScanCounter> GetEnumerator()
-        {
-            return ExternalEnumerator?.Invoke().GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void AddToCollection(ScanCounter counter)
-        {
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, counter));
-        }
-
-        public void ResetCollection()
-        {
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-    }
-
     public interface IScanCounterManager
     {
-        ScanCounterCollection CounterCollection { get; }
+        IScanCounterCollection CounterCollection { get; }
         int Total { get; }
         bool HasClean { get;  }
         bool HasMalwares { get;  }
@@ -140,23 +140,26 @@ namespace FAT.Application.Models
 
     public class ScanCounterManager : IScanCounterManager
     {
-        private readonly Dictionary<int, ScanCounter> _counters;
-        private readonly ScanCounterCollection _collection;
+        private readonly Dictionary<int, IScanCounter> _counters;
+        private readonly IScanCounterCollection _collection;
+        private readonly IScanCounterFactory _scanCounterFactory;
         private Collection<int> _selected;
         private int _total;
         private static object _sync = new object();
 
         public Action<int[]> SelectedOrdersChanged { private get; set; }
 
-        public ScanCounterManager()
+        public ScanCounterManager(IScanCounterCollection scanCounterCollection, 
+            IScanCounterFactory scanCounterFactory)
         {
-            _counters = new Dictionary<int, ScanCounter>();
-            _collection = new ScanCounterCollection();
+            _scanCounterFactory = scanCounterFactory;
+            _counters = new Dictionary<int, IScanCounter>();
+            _collection = scanCounterCollection;
             _collection.ExternalEnumerator = () => GetCounters;
             _selected = new Collection<int>();
         }
 
-        public ScanCounterCollection CounterCollection
+        public IScanCounterCollection CounterCollection
         {
             get { return _collection; }
         }
@@ -182,27 +185,25 @@ namespace FAT.Application.Models
 
         public int InProgressCount { get; private set; }
 
-        private void AddCounter<T>(int count) where T : ScanCounter, new()
+        private void AddCounter(CounterOrder counterOrder, int count)
         {
-            var counter = new T
-            {
-                SelectionChanged = SelectionChanged,
-                CountChanged = CountChanged
-            };
-
+            int counterOrderInt = (int) counterOrder;
             lock (_sync)
             {
-                if (!_counters.ContainsKey(counter.Order))
+                if (!_counters.ContainsKey(counterOrderInt))
                 {
+                    var counter = _scanCounterFactory.CreateCounterByCounterOrder(counterOrder);
+                    counter.SelectionChanged = SelectionChanged;
+                    counter.CountChanged = CountChanged;
                     _counters.Add(counter.Order, counter);
                     _collection.AddToCollection(counter);
                 }
-                _counters[counter.Order].Count += count;
-                _counters[counter.Order].UpdatePercentage(_total);
+                _counters[counterOrderInt].Count += count;
+                _counters[counterOrderInt].UpdatePercentage(_total);
             }
         }
 
-        private void SelectionChanged(ScanCounter counter)
+        private void SelectionChanged(IScanCounter counter)
         {
             if (counter.IsSelected)
                 _selected.Add(counter.Order);
@@ -212,7 +213,7 @@ namespace FAT.Application.Models
             SelectedOrdersChanged?.Invoke(_selected.ToArray());
         }
 
-        private void CountChanged(ScanCounter counter)
+        private void CountChanged(IScanCounter counter)
         {
             switch (counter.OrderAsEnum)
             {
@@ -234,7 +235,7 @@ namespace FAT.Application.Models
             }
         }
 
-        private IEnumerable<ScanCounter> GetCounters
+        private IEnumerable<IScanCounter> GetCounters
         {
             get
             {
@@ -248,32 +249,32 @@ namespace FAT.Application.Models
 
         public void AddComputer()
         {
-            AddCounter<ComputersCounter>(1);
+            AddCounter(CounterOrder.Computer,1);
         }
 
         private void AddClean(int count = 1)
         {
-            AddCounter<CleanCounter>(count);
+            AddCounter(CounterOrder.Clean, count);
         }
 
         private void AddMalware(int count = 1)
         {
-            AddCounter<MalwareCounter>(count);
+            AddCounter(CounterOrder.Malware, count);
         }
 
         private void AddUnknown(int count = 1)
         {
-            AddCounter<UnknownCounter>(count);
+            AddCounter(CounterOrder.Unknown, count);
         }
 
         private void AddNotAnalyzed(int count = 1)
         {
-            AddCounter<NotAnalyzedCounter>(count);
+            AddCounter(CounterOrder.NotAnalyzed, count);
         }
 
         private void AddInProgress(int count = 1)
         {
-            AddCounter<InProgressCounter>(count);
+            AddCounter(CounterOrder.InProgress, count);
         }
 
         public void Clear()
