@@ -9,7 +9,7 @@ namespace FAT.Application.Models
     {
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public Func<IEnumerable<IScanCounter>> ExternalEnumerator { get; set; }
+        public Func<IEnumerable<IScanCounter>> ExternalEnumerator { private get; set; }
 
         public IEnumerator<IScanCounter> GetEnumerator()
         {

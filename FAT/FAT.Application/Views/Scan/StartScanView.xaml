@@ -98,7 +98,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock HorizontalAlignment="Center" Opacity="0.5" Grid.Column="1" Grid.Row="1" Style="{DynamicResource SubTitleTextStyle}" TextAlignment="Center" FontSize="13" Width="140" TextWrapping="Wrap"  Text="Scan computers by selecting them from Active Directory"/>
+                                                    <TextBlock HorizontalAlignment="Center" Opacity="0.5" Grid.Column="1" Grid.Row="1" Style="{DynamicResource SubTitleTextStyle}" TextAlignment="Center" FontSize="13" Width="140" TextWrapping="Wrap"  Text="{TemplateBinding Content}"/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>
@@ -215,7 +215,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock Opacity="0.5" Grid.Column="1" Grid.Row="1" FontSize="13" Style="{DynamicResource SubTitleTextStyle}" TextAlignment="Center" HorizontalAlignment="Center" Width="140" TextWrapping="Wrap"  Text="Scan computers by selecting them from Workgroup"/>
+                                                    <TextBlock Opacity="0.5" Grid.Column="1" Grid.Row="1" FontSize="13" Style="{DynamicResource SubTitleTextStyle}" TextAlignment="Center" HorizontalAlignment="Center" Width="140" TextWrapping="Wrap"  Text="{TemplateBinding Content}"/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>
@@ -323,7 +323,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock Opacity="0.5" Grid.Row="1" Grid.Column="1" Style="{DynamicResource SubTitleTextStyle}" HorizontalAlignment="Center" FontSize="13" TextAlignment="Center" MaxWidth="140" TextWrapping="Wrap" Text="Scan computers by specifying IP addresses or endpoint names"/>
+                                                    <TextBlock Opacity="0.5" Grid.Row="1" Grid.Column="1" Style="{DynamicResource SubTitleTextStyle}" HorizontalAlignment="Center" FontSize="13" TextAlignment="Center" MaxWidth="140" TextWrapping="Wrap" Text="{TemplateBinding Content}"/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>
@@ -421,7 +421,7 @@
                                                         </TextBlock.Text>
                                                     </TextBlock>
 
-                                                    <TextBlock Opacity="0.5" Grid.Row="1" Grid.Column="1" Style="{DynamicResource SubTitleTextStyle}" FontSize="13" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Scan this computer"/>
+                                                    <TextBlock Opacity="0.5" Grid.Row="1" Grid.Column="1" Style="{DynamicResource SubTitleTextStyle}" FontSize="13" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{TemplateBinding Content}"/>
                                                 </Grid>
                                                 <Border Background="#FFF1F0F0" Height="1" VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" SnapsToDevicePixels="True"/>
                                             </Grid>

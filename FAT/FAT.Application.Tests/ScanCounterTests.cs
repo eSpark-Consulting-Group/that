@@ -70,7 +70,7 @@ namespace FAT.Application.Tests
         [InlineData(1, 51, 0, 0, 15, 80)]
         [InlineData(2, 0, 77, 0, 0, 200)]
         [InlineData(0, 67, 0, 15, 0, 150)]
-        public void UpdateCountersMultiThreadTest(int cleanCount, int malwaresCount, int unknownCount, int notAnalyzedCount, int inProgressCount, int count)
+        public void UpdateCountersMultiThreadTest(int cleanCount, int malwaresCount, int unknownCount, int notAnalyzedCount, int inProgressCount, int threadCount)
         {
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
             var scanCounterManager = new ScanCounterManager(new ScanCounterCollection(), new ScanCounterFactory());
@@ -83,40 +83,33 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(notAnalyzedCount);
             Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(inProgressCount);
 
-            var tasks = new Task[count];
-            using (CountdownEvent e = new CountdownEvent(count))
+            using (var e = new CountdownEvent(threadCount))
             {
-                int i = 0;
-                do
+                foreach(var e2 in Enumerable.Range(1, threadCount))
                 {
-                    tasks[i] = Task.Run(() =>
+                    Task.Run(() =>
                     {
                         scanCounterManager.UpdateCounters(scanCounterDiff);
                         e.Signal();
                     });
-                    i++;
                 }
-                while (i < count);
                 e.Wait();
             }
-            
-
 
             Assert.NotEmpty(scanCounterManager.CounterCollection);
-            Assert.Equal(total * count, scanCounterManager.Total);
-            Assert.Equal(cleanCount * count, scanCounterManager.CleanCount);
-            Assert.Equal(malwaresCount * count, scanCounterManager.MalwaresCount);
-            Assert.Equal(unknownCount * count, scanCounterManager.UnknownsCount);
-            Assert.Equal(notAnalyzedCount * count, scanCounterManager.NotAnalyzedCount);
-            Assert.Equal(inProgressCount * count, scanCounterManager.InProgressCount);
+            Assert.Equal(total * threadCount, scanCounterManager.Total);
+            Assert.Equal(cleanCount * threadCount, scanCounterManager.CleanCount);
+            Assert.Equal(malwaresCount * threadCount, scanCounterManager.MalwaresCount);
+            Assert.Equal(unknownCount * threadCount, scanCounterManager.UnknownsCount);
+            Assert.Equal(notAnalyzedCount * threadCount, scanCounterManager.NotAnalyzedCount);
+            Assert.Equal(inProgressCount * threadCount, scanCounterManager.InProgressCount);
         }
 
         [Fact]
-        public void ClearAfterUpdateTest()
+        public void ClearTest()
         {
             var scanCounterManager = new ScanCounterManager(new ScanCounterCollection(), new ScanCounterFactory());
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
-            
 
             Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(1);
             Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(2);
@@ -124,6 +117,7 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(4);
             Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(5);
 
+            scanCounterManager.UpdateCounters(scanCounterDiff);
             scanCounterManager.Clear();
 
             Assert.Empty(scanCounterManager.CounterCollection);

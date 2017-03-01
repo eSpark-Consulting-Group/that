@@ -1,143 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FAT.Application.Models
 {
-    public enum CounterOrder
-    {
-        Computer,
-        Clean,
-        Malware,
-        Unknown,
-        NotAnalyzed,
-        InProgress
-    }
-
-    public interface IScanCounterFactory
-    {
-        IScanCounter CreateCounterByCounterOrder(CounterOrder counterOrder);
-    }
-
-    public class ScanCounterFactory : IScanCounterFactory
-    {
-        public IScanCounter CreateCounterByCounterOrder(CounterOrder counterOrder)
-        {
-            switch (counterOrder)
-            {
-                case CounterOrder.Clean:
-                    return new CleanCounter();
-                case CounterOrder.Computer:
-                    return new ComputersCounter();
-                case CounterOrder.InProgress:
-                    return new InProgressCounter();
-                case CounterOrder.Malware:
-                    return new MalwareCounter();
-                case CounterOrder.NotAnalyzed:
-                    return new NotAnalyzedCounter();
-                case CounterOrder.Unknown:
-                    return new UnknownCounter();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(counterOrder));
-            }
-        }
-    }
-
-    public abstract class ScanCounter : IScanCounter
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public Action<IScanCounter> SelectionChanged { get; set; }
-        public Action<IScanCounter> CountChanged { get; set; }
-
-        private int _count;
-        public int Count
-        {
-            get { return _count; }
-            set
-            {
-                if (_count != value)
-                {
-                    _count = value;
-                    if (!Valid && IsSelected)
-                        IsSelected = false;
-                    RaisePropertyChanged(nameof(Count));
-                    RaisePropertyChanged(nameof(Valid));
-                    CountChanged?.Invoke(this);
-                }
-            }
-        }
-
-        private bool _isSelected;
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    RaisePropertyChanged(nameof(IsSelected));
-                    SelectionChanged?.Invoke(this);
-                }
-            }
-        }
-
-        public string Percentage { get; set; }
-
-        public bool Valid
-        {
-            get { return Count > 0; }
-        }
-
-        public virtual int Order
-        {
-            get { return -1; }
-        }
-
-        public virtual bool IsEnabled
-        {
-            get { return true; }
-        }
-
-        public CounterOrder OrderAsEnum => (CounterOrder) Order;
-
-        public void UpdatePercentage(int total)
-        {
-            if (total > 0)
-            {
-                Percentage = string.Format("({0:0.00}%)",
-                    Count * 100d / total).
-                    Replace(".00", string.Empty).
-                    Replace("0.00", "0.01");
-                RaisePropertyChanged(nameof(Percentage));
-            }
-        }
-
-        protected virtual void RaisePropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-    }
-
-    public interface IScanCounterManager
-    {
-        IScanCounterCollection CounterCollection { get; }
-        int Total { get; }
-        bool HasClean { get;  }
-        bool HasMalwares { get;  }
-        bool HasUnknowns { get; }
-        bool HasNotAnalyzed { get; }
-        bool HasInProgress { get; }
-        Action<int[]> SelectedOrdersChanged { set; }
-
-        void AddComputer();
-        void UpdateCounters(IScanCounterDiff scanCounterDiff);
-        void Clear();
-    }
-
     public class ScanCounterManager : IScanCounterManager
     {
         private readonly Dictionary<int, IScanCounter> _counters;
@@ -149,7 +18,7 @@ namespace FAT.Application.Models
 
         public Action<int[]> SelectedOrdersChanged { private get; set; }
 
-        public ScanCounterManager(IScanCounterCollection scanCounterCollection, 
+        public ScanCounterManager(IScanCounterCollection scanCounterCollection,
             IScanCounterFactory scanCounterFactory)
         {
             _scanCounterFactory = scanCounterFactory;
@@ -187,7 +56,7 @@ namespace FAT.Application.Models
 
         private void AddCounter(CounterOrder counterOrder, int count)
         {
-            int counterOrderInt = (int) counterOrder;
+            int counterOrderInt = (int)counterOrder;
             lock (_sync)
             {
                 if (!_counters.ContainsKey(counterOrderInt))
@@ -249,7 +118,7 @@ namespace FAT.Application.Models
 
         public void AddComputer()
         {
-            AddCounter(CounterOrder.Computer,1);
+            AddCounter(CounterOrder.Computer, 1);
         }
 
         private void AddClean(int count = 1)
@@ -313,58 +182,6 @@ namespace FAT.Application.Models
             AddUnknown(scanCounterDiff.UnknownDiff);
             AddNotAnalyzed(scanCounterDiff.NotAnalyzedDiff);
             AddInProgress(scanCounterDiff.InProgressDiff);
-        }
-    }
-
-    public class ComputersCounter : ScanCounter
-    {
-        public override int Order
-        {
-            get { return (int)CounterOrder.Computer; }
-        }
-
-        public override bool IsEnabled
-        {
-            get { return false; }
-        }
-    }
-
-    public class CleanCounter : ScanCounter
-    {
-        public override int Order
-        {
-            get { return (int)CounterOrder.Clean; }
-        }
-    }
-
-    public class MalwareCounter : ScanCounter
-    {
-        public override int Order
-        {
-            get { return (int)CounterOrder.Malware; }
-        }
-    }
-
-    public class UnknownCounter : ScanCounter
-    {
-        public override int Order
-        {
-            get { return (int)CounterOrder.Unknown; }
-        }
-    }
-
-    public class NotAnalyzedCounter : ScanCounter
-    {
-        public override int Order
-        {
-            get { return (int)CounterOrder.NotAnalyzed; }
-        }
-    }
-    public class InProgressCounter : ScanCounter
-    {
-        public override int Order
-        {
-            get { return (int)CounterOrder.InProgress; }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace FAT.Application.Models
 {
     public interface IScanCounterCollection : IEnumerable<IScanCounter>, INotifyCollectionChanged
     {
-        Func<IEnumerable<IScanCounter>> ExternalEnumerator { get; set; }
+        Func<IEnumerable<IScanCounter>> ExternalEnumerator { set; }
         void AddToCollection(IScanCounter counter);
         void ResetCollection();
     }
