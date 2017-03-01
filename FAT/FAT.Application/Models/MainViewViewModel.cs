@@ -965,37 +965,33 @@ namespace FAT.Application.Models
                 }
             }
 
-            if (_onlineItems.Length > 0)
+            ScanKind scanKind = ScanKind.Quick;
+            if (IsQuickScan)
             {
-
-                ScanKind scanKind = ScanKind.Quick;
-                if (IsQuickScan)
-                {
-                    scanKind = ScanKind.Quick;
-                }
-                else
-                {
-                    scanKind = ScanKind.Full;
-                }
-
-                ScanOptions options;
-                if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
-                {
-                    var customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
-                    scanKind = ScanKind.Custom;
-                    options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
-                        customScanOptions.ScanCriticalAreas, Login, Password);
-                }
-                else
-                {
-                    options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password);
-                }
-
-                _lastModifiesComputerDate = null;
-                _aptService.BeginScan(items.Select(item => item.DeploymentTarget).ToArray(), _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
-
+                scanKind = ScanKind.Quick;
             }
             else
+            {
+                scanKind = ScanKind.Full;
+            }
+
+            ScanOptions options;
+            if (_storage.ContainsKey(KnownKeys.CustomScanOptions))
+            {
+                var customScanOptions = _storage.GetValue<CustomScanOptions>(KnownKeys.CustomScanOptions, true);
+                scanKind = ScanKind.Custom;
+                options = new ScanOptions(_tcpPort, _udpPort, customScanOptions.FolderItems.Select(f => f.FullName).ToArray(),
+                    customScanOptions.ScanCriticalAreas, Login, Password);
+            }
+            else
+            {
+                options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password);
+            }
+
+            _lastModifiesComputerDate = null;
+            _aptService.BeginScan(items.Select(item => item.DeploymentTarget).ToArray(), _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
+
+            if (_onlineItems.Length == 0)
             {
                 IsScanInProgress = false;
             }
