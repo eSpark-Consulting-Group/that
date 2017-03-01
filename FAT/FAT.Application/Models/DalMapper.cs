@@ -25,7 +25,11 @@ namespace FAT.Application.Models
         {
             ScanResultItem result = new ScanResultItem();
             result.BadFiles = MapBadFiles(scan.Modules);
-            result.ScanStage = scan.ScanStage.MapScanStageToBusiness();             
+            result.ScanStage = scan.ScanStage.MapScanStageToBusiness();
+            result.StatusMessage = scan.StatusMessage;
+            result.TargetUid = scan.TargetUid;
+            result.TotalFilesCount = scan.Modules.Count();
+            result.UnknownFilesCount = scan.Modules.Where(m => m.IsUnknownOrFailed == true).Count(); //Need to check condition !??
             return result;
 
         }
