@@ -71,6 +71,7 @@
     <Compile Include="Entities\AptScanOperationResult.cs" />
     <Compile Include="Entities\AptScanResult.cs" />
     <Compile Include="Entities\Module.cs" />
+    <Compile Include="Entities\ScanStage.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\Core\ExecuteDbQueryExtensions.cs" />

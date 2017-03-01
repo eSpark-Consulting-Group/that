@@ -13,7 +13,7 @@ namespace APTAT.DAL.Storage.Core
     {
         private readonly List<ISortingKey<TSource>> _sortingKeys;
 
-        internal Sorting()
+        public Sorting()
         {
             _sortingKeys = new List<ISortingKey<TSource>>(10);
         }

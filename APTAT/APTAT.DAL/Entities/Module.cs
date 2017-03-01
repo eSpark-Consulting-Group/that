@@ -59,11 +59,12 @@ namespace APTAT.DAL.Entities
         [Key]
         public int Id { get; set; }
 
+
         [Required]
         [Index]
         [MaxLength(40)]
         public string Sha1 { get; set; }
-
+        public string Name { get; set; }
         [Required]
         public CloudVerdict CloudVerdict { get; set; }
 

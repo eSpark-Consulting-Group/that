@@ -146,6 +146,7 @@
     <Compile Include="Models\Counter\IScanCounterManager.cs" />
     <Compile Include="Models\Counter\ScanCounterFactory.cs" />
     <Compile Include="Models\Counter\ScanCounterManager.cs" />
+    <Compile Include="Models\DalMapper.cs" />
     <Compile Include="Models\Directory\StartScanCredentialsViewModel.cs" />
     <Compile Include="Models\Counter\IScanCounter.cs" />
     <Compile Include="Models\Counter\IScanCounterCollection.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
     <Compile Include="Models\Counter\ScanCounter.cs" />
     <Compile Include="Models\Counter\ScanCounterCollection.cs" />
+    <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
     <Compile Include="Services\EventArgs\GetModifiedResultsForOperationEventArgs.cs" />
     <Compile Include="Models\ProxySettingsViewModel.cs" />
@@ -479,6 +481,10 @@
     <ProjectReference Include="..\..\APTAT\APTAT.Core\APTAT.Core.csproj">
       <Project>{9e80a126-241c-4079-8975-e16204d03e8d}</Project>
       <Name>APTAT.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\APTAT\APTAT.DAL\APTAT.DAL.csproj">
+      <Project>{af4ace83-d560-40ec-aa29-5b962e1d3c5c}</Project>
+      <Name>APTAT.DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\APTAT\APTAT.Valkyrie\APTAT.Valkyrie.csproj">
       <Project>{46f67d2c-9368-456a-875a-f96628c18f90}</Project>

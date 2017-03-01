@@ -21,13 +21,13 @@ namespace APTAT.DAL.Storage.Core
         private readonly Paging _paging;
         private readonly Sorting<TSource> _sorting;
 
-        internal SortingAndPaging(Sorting<TSource> sorting = null, Paging paging = null)
+        public SortingAndPaging(Sorting<TSource> sorting = null, Paging paging = null)
         {
             _paging = paging ?? new Paging();
             _sorting = sorting ?? new Sorting<TSource>();
         }
 
-        internal SortingAndPaging(Paging paging)
+        public SortingAndPaging(Paging paging)
             : this(null, paging)
         {
         }

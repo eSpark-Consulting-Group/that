@@ -73,5 +73,6 @@ namespace APTAT.DAL.Entities
         public string StatusMessage { get; set; }
         public string OrganizationUnit { get; set; }
         public string LdapPath { get; set; }
+        public ScanStage ScanStage { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using APTAT.DAL.Entities;
+using System.IO;
 
 namespace APTAT.Core.Apt
 {
@@ -16,6 +17,7 @@ namespace APTAT.Core.Apt
             module.Accessed = file.AccessedInternal;            
             module.Attributes = file.Attributes;            
             module.CloudDate = file.CloudDate;
+            module.Name = Path.GetFileName(file.Path);
             module.CloudVerdict = MapCloud(file.Cloud);
             module.Copyright = file.Copyright;
             module.Created = file.CreatedInternal;            
@@ -36,6 +38,27 @@ namespace APTAT.Core.Apt
             module.Version = file.Version;            
             return module;
 
+        }
+
+        public static Descent.Apt.CloudVerdict MapFromDal(this DAL.Entities.CloudVerdict cloudVerdict)
+        {            
+            switch (cloudVerdict)
+            {
+                case DAL.Entities.CloudVerdict.Safe:
+                    return Descent.Apt.CloudVerdict.Safe;                    
+                case DAL.Entities.CloudVerdict.Unknown:
+                    return Descent.Apt.CloudVerdict.Unknown;                    
+                case DAL.Entities.CloudVerdict.Malware:
+                    return Descent.Apt.CloudVerdict.Malware;                    
+                case DAL.Entities.CloudVerdict.FirstSeen:
+                    return Descent.Apt.CloudVerdict.FirstSeen;                    
+                case DAL.Entities.CloudVerdict.FailedToAnalyze:
+                    return Descent.Apt.CloudVerdict.FailedToAnalyze;                    
+                case DAL.Entities.CloudVerdict.NoVerdict:
+                    return Descent.Apt.CloudVerdict.NoVerdict;                    
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cloudVerdict));                    
+            }
         }
 
         public static DAL.Entities.CloudVerdict MapCloud(Descent.Apt.CloudVerdict cloudVerdict)
@@ -65,5 +88,7 @@ namespace APTAT.Core.Apt
                     
             }
         }
+
+        
     }
 }
