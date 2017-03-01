@@ -67,9 +67,9 @@ namespace FAT.Application.Tests
 
         [Theory]
         [InlineData(156, 40, 1, 50, 0, 100)]
-        [InlineData(1, 51, 0, 0, 15, 100)]
-        [InlineData(2, 0, 77, 0, 0, 100)]
-        [InlineData(0, 67, 0, 15, 0, 100)]
+        [InlineData(1, 51, 0, 0, 15, 80)]
+        [InlineData(2, 0, 77, 0, 0, 200)]
+        [InlineData(0, 67, 0, 15, 0, 150)]
         public void UpdateCountersMultiThreadTest(int cleanCount, int malwaresCount, int unknownCount, int notAnalyzedCount, int inProgressCount, int count)
         {
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
@@ -84,20 +84,23 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(inProgressCount);
 
             var tasks = new Task[count];
-            ManualResetEventSlim e = new ManualResetEventSlim(false, count);
-            int i = 0;
-            do
+            using (CountdownEvent e = new CountdownEvent(count))
             {
-                tasks[i] = Task.Run(() =>
+                int i = 0;
+                do
                 {
-                    scanCounterManager.UpdateCounters(scanCounterDiff);
-                    e.Set();
-                });
-                i++;
+                    tasks[i] = Task.Run(() =>
+                    {
+                        scanCounterManager.UpdateCounters(scanCounterDiff);
+                        e.Signal();
+                    });
+                    i++;
+                }
+                while (i < count);
+                e.Wait();
             }
-            while (i < count);
+            
 
-            e.Wait();
 
             Assert.NotEmpty(scanCounterManager.CounterCollection);
             Assert.Equal(total * count, scanCounterManager.Total);
