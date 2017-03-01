@@ -8,13 +8,12 @@ copy ResourceCopy.exe sfx\ResourceCopy.exe
 copy ForensicAnalysisTool.exe sfx\ForensicAnalysisTool.exe
 cd sfx
 
-START /WAIT ResourceCopy.exe ForensicAnalysisTool.exe FAT.exe
-ResourceHacker -compile version.rc, version.res
-ren FAT.exe FAT_old.exe
-ResourceHacker -modify FAT_old.exe, FAT.exe, version.res,,,
+START /WAIT ResourceCopy.exe ForensicAnalysisTool.exe ForensicAnalysisTool.exe
+del ForensicAnalysisTool.exe
+START /WAIT ResourceHacker -compile version.rc, version.res
+START /WAIT ResourceHacker -modify FAT.exe, ForensicAnalysisTool.exe, version.res,,,
 
 del version.rc
 del version.res
-del FAT_old.exe
-del ForensicAnalysisTool.exe
+del FAT.exe
 del ResourceCopy.exe
