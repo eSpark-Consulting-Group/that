@@ -154,6 +154,8 @@
     <Compile Include="ScanResultsProcessor.cs" />
     <Compile Include="ScanStartedEventArgs.cs" />
     <Compile Include="StatisticsCalculator.cs" />
+    <Compile Include="Storage\IStorageSubSystem.cs" />
+    <Compile Include="Storage\StorageSubSystem.cs" />
     <Compile Include="TelerikReports\Helpers\FileHelper.cs" />
     <Compile Include="TelerikReports\Helpers\IFileHelper.cs" />
     <Compile Include="TelerikReports\Helpers\IRenderStrategy.cs" />

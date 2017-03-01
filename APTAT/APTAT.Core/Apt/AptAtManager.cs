@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.FLS;
 using APTAT.Core.Properties;
 using APTAT.Core.Reports;
-using APTAT.DAL.Entities;
-using APTAT.DAL.Storage;
+using APTAT.Core.Storage;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
 using APTAT.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
-using AptScanResult = APTAT.DAL.Entities.AptScanResult;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
@@ -27,7 +24,7 @@ namespace APTAT.Core.Apt
         private readonly IDescentSubSystem _descentSubSystem;
         private readonly IAptScannerFactory _aptScannerFactory;
         private readonly IFlsManager _flsManager;
-        private readonly IEntityStorage _entityStorage;
+        private readonly IStorageSubSystem _entityStorage;
         private IValkyrieClient _valkyrieClient;
         private readonly Dictionary<string, IAptVerdictContext> _flsHashResults
             = new Dictionary<string, IAptVerdictContext>(StringComparer.OrdinalIgnoreCase);
@@ -86,10 +83,10 @@ namespace APTAT.Core.Apt
 
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager,
-            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IEntityStorage storageContext)
+            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage)
         {
             _descentSubSystem = descentSubSystem;
-            _entityStorage = storageContext;
+            _entityStorage = storage;
             _aptScannerFactory = aptScannerFactory;
             _distinctHelper = distinctHelper;
 
@@ -238,22 +235,7 @@ namespace APTAT.Core.Apt
             var resultsUpdated = AddResultsToDictionary(args.CompletedResult.Files.ToArray(), true);
             if (resultsUpdated)
                 args.CompletedResult.RecalculateStatistics();
-            using (var context = _entityStorage.GetContext())
-            {
-                var result = context.AptScanResultRepository.GetByTargetUidAndOperationUid(args.CompletedResult.Computer.Uid,
-                    args.OperationUid);
-                result.Succeeded = args.CompletedResult.Succeeded;
-                result.StatusMessage = args.CompletedResult.ShortStatusMessage.ToString();
-                result.OrganizationUnit = args.CompletedResult.Computer.OrganizationUnit;
-                result.OsName = args.CompletedResult.AptReport.Computer.Os.ToString();
-                result.TargetUid = args.CompletedResult.TargetUid;
-
-                foreach (var file in args.CompletedResult.Files)
-                {
-                    result.Modules.Add(Mapper.MapModule(file, VerdictSource.RemoteAgent));
-                }
-                context.SaveChanges();
-            }
+            _entityStorage.SaveScanResults(args.OperationUid, args.CompletedResult);
         }
 
         private bool AddResultsToDictionary(IFlsResult[] resultsFiles, bool fromRemoteScanner = false)
@@ -430,33 +412,7 @@ namespace APTAT.Core.Apt
                     _verdictUpdateHistory.Clear();
                 }
                 ValkyrieAnalysisResult.Clear();
-                var dataObject = new AptScanOperationResult
-                {
-                    OperationUid = scanner.ScanOperationContext.OperationUid,
-                    Started = scanner.ScanOperationContext.Started,
-                    SourceDescription = scanner.ScanOperationContext?.DevicesSourceDescription?.Description,
-                    Source = scanner.ScanOperationContext?.DevicesSourceDescription.Type,
-
-                };
-                foreach (var aptScanResult in scanner.ScanOperationContext.ScanResults)
-                {
-                    dataObject.AptScanResults.Add(new AptScanResult
-                    {
-                        IpAddress = aptScanResult.Computer?.IPAddress,
-                        ComputerName = aptScanResult.Computer?.Name,
-                        OrganizationUnit = aptScanResult.Computer?.OrganizationUnit,
-                        OsName = aptScanResult.AptReport?.Computer?.Os.ToString(),
-                        LdapPath = aptScanResult.Computer?.LdapPath,
-                        TargetUid = aptScanResult.TargetUid,
-                        Succeeded = aptScanResult.Succeeded,
-                        StatusMessage = aptScanResult.ShortStatusMessage.ToString()
-                    });
-                }
-                using (var context = _entityStorage.GetContext())
-                {
-                    context.AptScanOperationResultRepository.Add(dataObject);
-                    context.SaveChanges();
-                }
+                _entityStorage.SaveOperationContext(scanner.ScanOperationContext);
             }
         }
 
@@ -471,18 +427,7 @@ namespace APTAT.Core.Apt
             }
             if (e.SucceededCount > 0)
                 FlsLookupOperationUid = Guid.NewGuid();
-            using (var context = _entityStorage.GetContext())
-            {
-                var operation = context.AptScanOperationResultRepository.GetByOperationUid(e.OperationUid);
-                operation.Finished = e.OperationContext.CompletedTime;
-                context.SaveChanges();
-            }
-            TryInvokeEndScan();
-            if (_isValkyrieStarted)
-            {
-                IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
-                this._valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
-            }
+            _entityStorage.UpdateScanResults(e.OperationContext);
         }
 
         public IAptReportBuilder GetAptReportBuilder()
