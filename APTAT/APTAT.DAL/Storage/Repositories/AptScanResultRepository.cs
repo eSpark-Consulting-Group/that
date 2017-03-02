@@ -4,13 +4,14 @@ using System.Linq;
 using APTAT.DAL;
 using APTAT.DAL.Entities;
 using APTAT.DAL.Storage.Core;
+using System.Diagnostics;
 
 namespace APTAT.Core.Storage.Repositories
 {
     public interface IAptScanResultRepository : IRepository<AptScanResult>
     {
         AptScanResult GetByTargetUidAndOperationUid(Guid targetUid, Guid operationUid);
-        AptScanResult[] GetByOperationUid(Guid operationUid);
+        AptScanResultDTO[] GetByOperationUid(Guid operationUid);
 
     }
 
@@ -28,13 +29,30 @@ namespace APTAT.Core.Storage.Repositories
                 .ExecuteDbQuerySingleOrDefault();
         }
 
-        public AptScanResult[] GetByOperationUid(Guid operationUid)
+        public AptScanResultDTO[] GetByOperationUid(Guid operationUid)
         {
-            AptScanResult[] result = DbSet
-                .Include(c => c.Modules)
+
+            var query = DbSet
                 .Where(c => c.OperationResult.OperationUid == operationUid)
-                .ToArray();
+                .Include(c => c.Modules)
+                .Select(c => new
+                {
+                    Models = c.Modules,
+                    TotalCount = c.Modules.Count(),
+                    UnknownsCount = c.Modules.Count(m => m.CloudVerdict == CloudVerdict.Unknown),
+                    Data = c
+                }).ToArray();
+            
+            var result = query.Select(r =>
+               new AptScanResultDTO()
+               {
+                   ScanResult = r.Data,
+                   TotalCount = r.TotalCount,
+                   UnknownsCount = r.UnknownsCount
+               }).ToArray();
+            
             return result;
+
         }
 
         protected override DbSet<AptScanResult> DbSet

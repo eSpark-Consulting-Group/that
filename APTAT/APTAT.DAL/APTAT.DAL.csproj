@@ -91,6 +91,7 @@
     <Compile Include="Storage\Core\StorageHelper.cs" />
     <Compile Include="Storage\EntityStorage.cs" />
     <Compile Include="Storage\Repositories\AptScanOperationResultRepository.cs" />
+    <Compile Include="Storage\DTO\AptScanResultDTO.cs" />
     <Compile Include="Storage\Repositories\AptScanResultRepository.cs" />
     <Compile Include="Storage\Repositories\ModulesRepository.cs" />
     <Compile Include="Storage\Storage.cs" />

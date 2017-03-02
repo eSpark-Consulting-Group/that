@@ -1,5 +1,6 @@
 ﻿using APTAT.Core.Apt;
 using APTAT.Core.Descent.Apt;
+using APTAT.Core.Storage.Repositories;
 using APTAT.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace FAT.Application.Models
 {
     public static class DalMapper
     {
-        public static IScanResultItem[] MapCollection(this IEnumerable<APTAT.DAL.Entities.AptScanResult> aptScanResults)
+        public static IScanResultItem[] MapCollection(this IEnumerable<AptScanResultDTO> aptScanResults)
         {
             List<IScanResultItem> result = new List<IScanResultItem>();
             foreach (var scanRes in aptScanResults)
@@ -19,19 +20,19 @@ namespace FAT.Application.Models
                 result.Add(scanRes.MapItem());
             }
             return result.ToArray();
-
         }
-        public static IScanResultItem MapItem(this APTAT.DAL.Entities.AptScanResult scan)
+
+        public static IScanResultItem MapItem(this AptScanResultDTO dto)
         {
+            var scan = dto.ScanResult;
             ScanResultItem result = new ScanResultItem();
             result.BadFiles = MapBadFiles(scan.Modules);
             result.ScanStage = scan.ScanStage.MapScanStageToBusiness();
             result.StatusMessage = scan.StatusMessage;
             result.TargetUid = scan.TargetUid;
-            result.TotalFilesCount = scan.Modules.Count();
-            result.UnknownFilesCount = scan.Modules.Where(m => m.IsUnknownOrFailed == true).Count(); //Need to check condition !??
+            result.TotalFilesCount = dto.TotalCount;
+            result.UnknownFilesCount = dto.UnknownsCount; 
             return result;
-
         }
 
         public static ScanStage MapScanStageToBusiness(this APTAT.DAL.Entities.ScanStage stage)
