@@ -15,5 +15,10 @@
                 //base.Source = value;
             }
         }
+
+        public bool HasItems
+        {
+            get { return false; }
+        }
     }
 }

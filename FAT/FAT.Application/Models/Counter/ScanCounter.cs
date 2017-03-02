@@ -53,7 +53,7 @@ namespace FAT.Application.Models
             }
         }
 
-        public string Percentage { get; private set; }
+        public string Percentage { get; set; }
 
         public bool Valid
         {
