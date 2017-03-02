@@ -192,7 +192,7 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <SetStateAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyComputersToggleButton">
+    <SetStateAction UIObjectName="UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIGroupByComputersToggToggleButton">
       <ParameterName />
       <State>Pressed</State>
     </SetStateAction>
@@ -205,7 +205,7 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <SetStateAction UIObjectName="UIMapResultsWindow.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton">
+    <SetStateAction UIObjectName="UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIGroupByFilesToggleBuToggleButton">
       <ParameterName />
       <State>Pressed</State>
     </SetStateAction>
@@ -1193,6 +1193,62 @@
                     <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
                     <PropertyCondition Name="ControlType">Button</PropertyCondition>
                     <PropertyCondition Name="AutomationId">ClearFilterButton</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
+                </UIObject>
+              </Descendants>
+            </UIObject>
+          </Descendants>
+        </TopLevelWindow>
+        <TopLevelWindow ControlType="Window" Id="UIForensicAnalysisToolWindow" FriendlyName="Forensic Analysis Tool" SpecialControlType="None" SessionId="26542466">
+          <TechnologyName>UIA</TechnologyName>
+          <WindowTitles>
+            <WindowTitle>Forensic Analysis Tool</WindowTitle>
+          </WindowTitles>
+          <AndCondition>
+            <PropertyCondition Name="ControlType">Window</PropertyCondition>
+            <PropertyCondition Name="Name">Forensic Analysis Tool</PropertyCondition>
+            <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+            <PropertyCondition Name="ClassName" Operator="Contains">HwndWrapper</PropertyCondition>
+          </AndCondition>
+          <SupportLevel>0</SupportLevel>
+          <Descendants>
+            <UIObject ControlType="Pane" Id="UIViewsMainViewxamlPane" FriendlyName="Views/MainView.xaml" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Forensic Analysis Tool</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Pane</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.Frame</PropertyCondition>
+                <PropertyCondition Name="AutomationId">MainFrame</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="ToggleButton" Id="UIGroupByFilesToggleBuToggleButton" FriendlyName="GroupByFilesToggleButton" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">ToggleButton</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">GroupByFilesToggleButton</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
+                </UIObject>
+                <UIObject ControlType="ToggleButton" Id="UIGroupByComputersToggToggleButton" FriendlyName="GroupByComputersToggleButton" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">ToggleButton</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">GroupByComputersToggleButton</PropertyCondition>
                   </AndCondition>
                   <SupportLevel>0</SupportLevel>
                   <Descendants />

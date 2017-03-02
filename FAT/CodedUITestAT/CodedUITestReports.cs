@@ -167,7 +167,7 @@ namespace CodedUITestAT
             
             useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);
-            useMain.UIMapScanCompletedWindow.ClickNoButton();
+            //useMain.UIMapScanCompletedWindow.ClickNoButton();
 
             BasicReportTest(ReportType.Executive, TestContext);
             
@@ -190,7 +190,7 @@ namespace CodedUITestAT
 
             useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);
-            useMain.UIMapScanCompletedWindow.ClickNoButton();
+            //useMain.UIMapScanCompletedWindow.ClickNoButton();
 
             BasicReportTest(ReportType.PerDevice, TestContext);
 
@@ -213,7 +213,7 @@ namespace CodedUITestAT
 
             useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);
-            useMain.UIMapScanCompletedWindow.ClickNoButton();
+            //useMain.UIMapScanCompletedWindow.ClickNoButton();
 
             BasicReportTest(ReportType.PerProgram, TestContext);
 

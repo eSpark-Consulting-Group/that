@@ -127,11 +127,11 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapStartScanningWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton">
+    <MouseAction UIObjectName="UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UINextButton">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
       <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="25" Y="22" />
+      <Location X="53" Y="23" />
       <WheelDirection>0</WheelDirection>
       <ActionType>Click</ActionType>
       <MouseButton>Left</MouseButton>
@@ -514,6 +514,19 @@
                         <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
                         <PropertyCondition Name="ControlType">Button</PropertyCondition>
                         <PropertyCondition Name="AutomationId">ThisComputerButton</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                    <UIObject ControlType="Button" Id="UINextButton" FriendlyName="Next" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">Button</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">NextButton</PropertyCondition>
                       </AndCondition>
                       <SupportLevel>0</SupportLevel>
                       <Descendants />

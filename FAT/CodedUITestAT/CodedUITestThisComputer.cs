@@ -82,7 +82,7 @@ namespace CodedUITestAT
 
         private WpfCheckBox ScanCriticalAreasCheckBox()
         {
-            return UIMapThisComputer.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIScancriticalareasofcCheckBox;
+            return UIMapThisComputer.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIThisComputerScreenCustom.UIScancriticalareasofcCheckBox;
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace CodedUITestAT
         private void ExpandFileBrowserTreeItem(string treeItemName)
         {
             if (treeItemName.EndsWith(@"\")) treeItemName = treeItemName.Remove(treeItemName.Length - 1);
-            UIMapThisComputer.UIUnknownFileHunterWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = treeItemName;
+            UIMapThisComputer.UIForensicAnalysisToolWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = treeItemName;
             UIMapThisComputer.ExpandFileBrowserTreeItem();
         }
 
@@ -116,7 +116,7 @@ namespace CodedUITestAT
         private void CheckFileBrowserTreeItem(string treeItemName, bool isChecked = true)
         {
             if (treeItemName.EndsWith(@"\")) treeItemName = treeItemName.Remove(treeItemName.Length - 1);
-            UIMapThisComputer.UIUnknownFileHunterWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = treeItemName;
+            UIMapThisComputer.UIForensicAnalysisToolWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = treeItemName;
             UIMapThisComputer.CheckFileBrowserTreeItemParams.UICheckBoxElementCheckBoxChecked = isChecked;
             UIMapThisComputer.CheckFileBrowserTreeItem();
         }
@@ -126,8 +126,8 @@ namespace CodedUITestAT
         private bool IsFileBrowserTreeItemChecked(string treeItemName)
         {
             if (treeItemName.EndsWith(@"\")) treeItemName = treeItemName.Remove(treeItemName.Length - 1);
-            UIMapThisComputer.UIUnknownFileHunterWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = treeItemName;
-            WpfCheckBox checkbox = UIMapThisComputer.UIUnknownFileHunterWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.UICheckBoxElementCheckBox;
+            UIMapThisComputer.UIForensicAnalysisToolWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] = treeItemName;
+            WpfCheckBox checkbox = UIMapThisComputer.UIForensicAnalysisToolWindow.UIThisComputerScreenCustom.UIFileBrowserTreeTree.UICTreeItem.UICheckBoxElementCheckBox;
             return checkbox.Checked;
         }
 
@@ -231,12 +231,11 @@ namespace CodedUITestAT
             checkedItems.Add(paths2[3]);
             VerifyCheckedItems(checkedItems, TestContext);
 
-            UIMapThisComputer.CheckScanCriticalAreasCheckBox();
+            //UIMapThisComputer.CheckScanCriticalAreasCheckBox();
             UIMapStartScanWizard.ClickNextButton();
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickNoButton();
 
-            checkedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
+            //checkedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
 
             // Verifies the expected and unexpected files at 'Scan results' screen            
             foreach (var path in checkedItems)
@@ -298,7 +297,6 @@ namespace CodedUITestAT
             VerifyUncheckedItems(uncheckedItems, TestContext);
             UIMapStartScanWizard.ClickNextButton();
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickNoButton();
 
             uncheckedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
 
@@ -337,7 +335,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Quick Scan started at the scanning host...");
             WaitForScanCompleted(ScanType.Quick);
             TestContext.WriteLine("Quick Scan completed at the scanning host...");
-            UIMapScanCompletedWindow.ClickNoButton();
+            //UIMapScanCompletedWindow.ClickNoButton();
 
             UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
             UIHelper.FindThreat(unknownFileQuick, ResultsScreen.ScanResults, TestContext);
@@ -358,7 +356,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Full Scan started at the scanning host...");
             WaitForScanCompleted(ScanType.Full);
             TestContext.WriteLine("Full Scan completed at the scanning host...");
-            UIMapScanCompletedWindow.ClickNoButton();
+            //UIMapScanCompletedWindow.ClickNoButton();
 
             UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);            
             UIHelper.FindThreat(unknownFile, ResultsScreen.ScanResults, TestContext);

@@ -165,11 +165,11 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void ClickGroupByComputersToggleButton()
         {
             #region Variable Declarations
-            WpfToggleButton uIGroupbyComputersToggleButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyComputersToggleButton;
+            WpfToggleButton uIGroupByComputersToggToggleButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIGroupByComputersToggToggleButton;
             #endregion
 
-            // Set to 'Pressed' state 'Group by Computers' toggle button
-            uIGroupbyComputersToggleButton.Pressed = this.ClickGroupByComputersToggleButtonParams.UIGroupbyComputersToggleButtonPressed;
+            // Set to 'Pressed' state 'GroupByComputersToggleButton' toggle button
+            uIGroupByComputersToggToggleButton.Pressed = this.ClickGroupByComputersToggleButtonParams.UIGroupByComputersToggToggleButtonPressed;
         }
         
         /// <summary>
@@ -178,11 +178,11 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         public void ClickGroupByFilesToggleButton()
         {
             #region Variable Declarations
-            WpfToggleButton uIGroupbyFilesToggleButton = this.UIUnknownFileHunterWindow.UIViewsMainViewxamlPane.UIResultsScreenCustom.UIGroupbyFilesToggleButton;
+            WpfToggleButton uIGroupByFilesToggleBuToggleButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIGroupByFilesToggleBuToggleButton;
             #endregion
 
-            // Set to 'Pressed' state 'Group by Files' toggle button
-            uIGroupbyFilesToggleButton.Pressed = this.ClickGroupByFilesToggleButtonParams.UIGroupbyFilesToggleButtonPressed;
+            // Set to 'Pressed' state 'GroupByFilesToggleButton' toggle button
+            uIGroupByFilesToggleBuToggleButton.Pressed = this.ClickGroupByFilesToggleButtonParams.UIGroupByFilesToggleBuToggleButtonPressed;
         }
         
         /// <summary>
@@ -393,6 +393,18 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIUnknownFileHunterWindow1;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -421,6 +433,8 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -553,9 +567,9 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         /// <summary>
-        /// Set to 'Pressed' state 'Group by Computers' toggle button
+        /// Set to 'Pressed' state 'GroupByComputersToggleButton' toggle button
         /// </summary>
-        public bool UIGroupbyComputersToggleButtonPressed = true;
+        public bool UIGroupByComputersToggToggleButtonPressed = true;
         #endregion
     }
     
@@ -568,9 +582,9 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         /// <summary>
-        /// Set to 'Pressed' state 'Group by Files' toggle button
+        /// Set to 'Pressed' state 'GroupByFilesToggleButton' toggle button
         /// </summary>
-        public bool UIGroupbyFilesToggleButtonPressed = true;
+        public bool UIGroupByFilesToggleBuToggleButtonPressed = true;
         #endregion
     }
     
@@ -2219,6 +2233,93 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         #region Fields
         private WpfButton mUIClearFilterButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIViewsMainViewxamlPane2 UIViewsMainViewxamlPane
+        {
+            get
+            {
+                if ((this.mUIViewsMainViewxamlPane == null))
+                {
+                    this.mUIViewsMainViewxamlPane = new UIViewsMainViewxamlPane2(this);
+                }
+                return this.mUIViewsMainViewxamlPane;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIViewsMainViewxamlPane2 mUIViewsMainViewxamlPane;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIViewsMainViewxamlPane2 : WpfPane
+    {
+        
+        public UIViewsMainViewxamlPane2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfPane.PropertyNames.ClassName] = "Uia.Frame";
+            this.SearchProperties[WpfPane.PropertyNames.AutomationId] = "MainFrame";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfToggleButton UIGroupByFilesToggleBuToggleButton
+        {
+            get
+            {
+                if ((this.mUIGroupByFilesToggleBuToggleButton == null))
+                {
+                    this.mUIGroupByFilesToggleBuToggleButton = new WpfToggleButton(this);
+                    #region Search Criteria
+                    this.mUIGroupByFilesToggleBuToggleButton.SearchProperties[WpfToggleButton.PropertyNames.AutomationId] = "GroupByFilesToggleButton";
+                    this.mUIGroupByFilesToggleBuToggleButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIGroupByFilesToggleBuToggleButton;
+            }
+        }
+        
+        public WpfToggleButton UIGroupByComputersToggToggleButton
+        {
+            get
+            {
+                if ((this.mUIGroupByComputersToggToggleButton == null))
+                {
+                    this.mUIGroupByComputersToggToggleButton = new WpfToggleButton(this);
+                    #region Search Criteria
+                    this.mUIGroupByComputersToggToggleButton.SearchProperties[WpfToggleButton.PropertyNames.AutomationId] = "GroupByComputersToggleButton";
+                    this.mUIGroupByComputersToggToggleButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIGroupByComputersToggToggleButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfToggleButton mUIGroupByFilesToggleBuToggleButton;
+        
+        private WpfToggleButton mUIGroupByComputersToggToggleButton;
         #endregion
     }
 }

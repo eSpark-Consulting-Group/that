@@ -100,11 +100,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickNextButton()
         {
             #region Variable Declarations
-            WpfButton uINextButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
+            WpfButton uINextButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UINextButton;
             #endregion
 
             // Click 'Next' button
-            Mouse.Click(uINextButton, new Point(25, 22));
+            Mouse.Click(uINextButton, new Point(53, 23));
         }
         
         /// <summary>
@@ -729,10 +729,28 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUIScanThisComputerButton;
             }
         }
+        
+        public WpfButton UINextButton
+        {
+            get
+            {
+                if ((this.mUINextButton == null))
+                {
+                    this.mUINextButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUINextButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "NextButton";
+                    this.mUINextButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUINextButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUIScanThisComputerButton;
+        
+        private WpfButton mUINextButton;
         #endregion
     }
 }

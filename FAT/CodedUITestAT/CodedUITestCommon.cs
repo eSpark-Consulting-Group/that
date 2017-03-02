@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapMainClasses;
-using CodedUITestAT.UIMaps.UIMapScanCompletedWindowClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
@@ -34,21 +33,6 @@ namespace CodedUITestAT
             }
         }
         private UIMapMain mapMain;
-
-        /// <summary> UIMap for Scan Completed window, UIMapScanCompletedWindow.uitest. </summary>
-        public UIMapScanCompletedWindow UIMapScanCompletedWindow
-        {
-            get
-            {
-                if ((this.mapScanCompletedWindow == null))
-                {
-                    this.mapScanCompletedWindow = new UIMapScanCompletedWindow();
-                }
-
-                return this.mapScanCompletedWindow;
-            }
-        }
-        private UIMapScanCompletedWindow mapScanCompletedWindow;
 
         /// <summary> UIMap for Start Scanning Wizard screen, UIMapStartScanWizard.uitest. </summary>
         public UIMapStartScanWizard UIMapStartScanWizard
@@ -99,15 +83,6 @@ namespace CodedUITestAT
 
         #region Control methods
 
-        #region Scan Results window
-
-        internal WpfText ScanCompletedTextBlock()
-        {
-            return UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIScanCompletedDoyouwaText;
-        }
-
-        #endregion
-
         #region Results panel
 
         internal WpfText LookupInProgressCounterTextBlock()
@@ -145,6 +120,15 @@ namespace CodedUITestAT
 
         #endregion
 
+        #region Main screen
+
+        internal WpfButton ReportsButton()
+        {
+            return UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIReportsButton;
+        }
+
+        #endregion
+
         #endregion
 
         #region Helper methods
@@ -165,8 +149,9 @@ namespace CodedUITestAT
                     break;
                 default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType));
             }
-
-            UIHelper.WaitForControl(ScanCompletedTextBlock(), waitTime);
+                        
+            UIHelper.WaitForControl(ReportsButton());
+            UIHelper.WaitForControlIsClickable(ReportsButton(), waitTime);
         }
 
         /// <summary> Waits for no 'Lookup in Progress' files count. </summary>

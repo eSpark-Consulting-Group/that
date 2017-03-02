@@ -231,12 +231,6 @@
     <Compile Include="UIMaps\UIMapResultsWindow.Designer.cs">
       <DependentUpon>UIMapResultsWindow.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\UIMapScanCompletedWindow.cs">
-      <DependentUpon>UIMapScanCompletedWindow.uitest</DependentUpon>
-    </Compile>
-    <Compile Include="UIMaps\UIMapScanCompletedWindow.Designer.cs">
-      <DependentUpon>UIMapScanCompletedWindow.uitest</DependentUpon>
-    </Compile>
     <Compile Include="UIMaps\UIMapStopScanWindow.cs">
       <DependentUpon>UIMapStopScanWindow.uitest</DependentUpon>
     </Compile>
@@ -305,7 +299,6 @@
     <None Include="UIMaps\StartScanWizard\UIMapStartScanWizard.uitest" />
     <None Include="UIMaps\UIMapReports.uitest" />
     <None Include="UIMaps\UIMapResultsWindow.uitest" />
-    <None Include="UIMaps\UIMapScanCompletedWindow.uitest" />
     <None Include="UIMaps\UIMapStopScanWindow.uitest" />
     <None Include="UIMaps\StartScanWizard\UIMapThisComputer.uitest" />
   </ItemGroup>

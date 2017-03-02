@@ -267,16 +267,7 @@ namespace CodedUITestAT
         #endregion
 
         #endregion
-
-        #region Scan Results window
-                
-        private WpfText ScanStatisticsTextBlock()
-        {
-            return UIMapScanCompletedWindow.UIUnknownFileHunterWindow.UIComputerStatistics1TText;
-        }
-
-        #endregion
-
+        
         #region CAM Credentials window
 
         private WpfEdit CamLoginTextBox()
@@ -754,15 +745,15 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
 
             WaitForScanCompleted(ScanType.Quick);
-
+            /*
             if (ScanCompletedTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.ScanCompletedText))
                 TestContext.WriteLine(String.Format("Scan Completed window appeared with text containing: '{0}'.", Settings.ScanCompleted.Default.ScanCompletedText));
             else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!", Settings.ScanCompleted.Default.ScanCompletedText));
-
+            */
             // Gets the number of Unknown and Malicious files found at Scan Completed window
             WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-            UIMapScanCompletedWindow.ClickYesButton();
+            //UIMapScanCompletedWindow.ClickYesButton();
                         
             //InputCamCredentials(TestContext);
                 
@@ -808,7 +799,7 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-            UIMapScanCompletedWindow.ClickYesButton();
+            //UIMapScanCompletedWindow.ClickYesButton();
             
             UIHelper.WaitForControlIsEnabled(CamLoginTextBox());
             TestContext.WriteLine("'Submit to Valkyrie' window appeared...");
@@ -1036,7 +1027,7 @@ namespace CodedUITestAT
             string error = "error";
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickYesButton();
+            //UIMapScanCompletedWindow.ClickYesButton();
 
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
@@ -1103,7 +1094,7 @@ namespace CodedUITestAT
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickNoButton();
+            //UIMapScanCompletedWindow.ClickNoButton();
             UIHelper.WaitForControlIsClickable(StartScanButton());
 
             // Opens a threat details via context menu
@@ -1181,7 +1172,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(0, 1, 0, TestContext);
                         
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
@@ -1190,7 +1181,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(1, 0, 0, TestContext);
                         
             malware = SysHelper.InfectForScan(endpoint);
@@ -1198,14 +1189,14 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(1, 1, 0, TestContext);
             
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(0, 0, 0, TestContext);
         }
 
@@ -1237,7 +1228,7 @@ namespace CodedUITestAT
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
-            UIMapScanCompletedWindow.ClickYesButton();
+            //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.GroupByFiles();
@@ -1303,7 +1294,7 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
 
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
@@ -1392,7 +1383,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Quick Scan button clicked...");
 
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             UIMapMain.ClickStartScanButton();
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
@@ -1491,7 +1482,7 @@ namespace CodedUITestAT
             TestContext.WriteLine("Quick Scan button clicked...");
 
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             TestContext.WriteLine("Scan completed...");
             UIHelper.WaitForControlIsClickable(StartScanButton());
             UIMapMain.ClickStartScanButton();
@@ -1531,7 +1522,7 @@ namespace CodedUITestAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan button clicked...");
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             TestContext.WriteLine("Scan completed...");
         }
 
@@ -1548,7 +1539,7 @@ namespace CodedUITestAT
             WaitForScanCompleted(scanType);
             TestContext.WriteLine(String.Format("Scan '{0}' completed.", scanType));
             
-            UIMapScanCompletedWindow.ClickNoButton();
+            //UIMapScanCompletedWindow.ClickNoButton();
             UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
             UIHelper.FindThreat(unknownFile, ResultsScreen.ScanResults, TestContext);
         }
@@ -1699,7 +1690,7 @@ namespace CodedUITestAT
             // Performs a scan
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickYesButton();
+            //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
 
@@ -1800,7 +1791,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.InProgress, TestContext, waitTime);
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCloseCrossButton();
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);
         }
 
@@ -1850,7 +1841,7 @@ namespace CodedUITestAT
             
             // Completed scan
             WaitForScanCompleted(ScanType.Quick);
-            UIMapScanCompletedWindow.ClickCloseCrossButton();            
+            //UIMapScanCompletedWindow.ClickCloseCrossButton();            
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);            
             
             SetStatusFilter(ScanStatus.Completed, TestContext);
@@ -1900,9 +1891,9 @@ namespace CodedUITestAT
             InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickQuickScanButton();
 
-            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+            //UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickNoButton();
+            //UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scan results
             UIHelper.ClickRow(ResultsScreen.ScanResults, server);
@@ -1943,9 +1934,9 @@ namespace CodedUITestAT
             InputPassword(DataHelper.Password);
             UIMapStartScanWizard.ClickQuickScanButton();
 
-            UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
+            //UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickNoButton();
+            //UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scanning results
             UIHelper.ClickRow(ResultsScreen.ScanResults, server);
@@ -1969,7 +1960,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickYesButton();
+            //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
@@ -1986,7 +1977,7 @@ namespace CodedUITestAT
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             WaitForNoLookupInProgress();
-            UIMapScanCompletedWindow.ClickYesButton();
+            //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
             UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);

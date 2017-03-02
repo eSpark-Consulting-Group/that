@@ -139,11 +139,11 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         public void ClickReportsDropDownButton()
         {
             #region Variable Declarations
-            WpfButton uIReportButtonButton = this.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIReportButtonButton;
+            WpfButton uIReportsButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIReportsButton;
             #endregion
 
-            // Click 'ReportButton' button
-            Mouse.Click(uIReportButtonButton, new Point(52, 34));
+            // Click 'Reports' button
+            Mouse.Click(uIReportsButton, new Point(50, 17));
         }
         
         /// <summary>
@@ -217,10 +217,10 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         public void InputTextToSearchBox()
         {
             #region Variable Declarations
-            WpfEdit uISearchWatermarkTextBEdit = this.UIUnknownFileHunterWindow1.UISearchControlCustom.UISearchWatermarkTextBEdit;
+            WpfEdit uISearchWatermarkTextBEdit = this.UIForensicAnalysisToolWindow.UISearchControlCustom.UISearchWatermarkTextBEdit;
             #endregion
 
-            // Type '123' in 'SearchWatermarkTextBox' text box
+            // Type 'text' in 'SearchWatermarkTextBox' text box
             Keyboard.SendKeys(uISearchWatermarkTextBEdit, this.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys, ModifierKeys.None);
         }
         
@@ -545,9 +545,9 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         #region Fields
         /// <summary>
-        /// Type '123' in 'SearchWatermarkTextBox' text box
+        /// Type 'text' in 'SearchWatermarkTextBox' text box
         /// </summary>
-        public string UISearchWatermarkTextBEditSendKeys = "123";
+        public string UISearchWatermarkTextBEditSendKeys = "text";
         #endregion
     }
     
@@ -1509,10 +1509,144 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUICloseButtonButton;
             }
         }
+        
+        public UIViewsMainViewxamlPane1 UIViewsMainViewxamlPane
+        {
+            get
+            {
+                if ((this.mUIViewsMainViewxamlPane == null))
+                {
+                    this.mUIViewsMainViewxamlPane = new UIViewsMainViewxamlPane1(this);
+                }
+                return this.mUIViewsMainViewxamlPane;
+            }
+        }
+        
+        public UISearchControlCustom2 UISearchControlCustom
+        {
+            get
+            {
+                if ((this.mUISearchControlCustom == null))
+                {
+                    this.mUISearchControlCustom = new UISearchControlCustom2(this);
+                }
+                return this.mUISearchControlCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUICloseButtonButton;
+        
+        private UIViewsMainViewxamlPane1 mUIViewsMainViewxamlPane;
+        
+        private UISearchControlCustom2 mUISearchControlCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIViewsMainViewxamlPane1 : WpfPane
+    {
+        
+        public UIViewsMainViewxamlPane1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfPane.PropertyNames.ClassName] = "Uia.Frame";
+            this.SearchProperties[WpfPane.PropertyNames.AutomationId] = "MainFrame";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIMainToolBarToolBar UIMainToolBarToolBar
+        {
+            get
+            {
+                if ((this.mUIMainToolBarToolBar == null))
+                {
+                    this.mUIMainToolBarToolBar = new UIMainToolBarToolBar(this);
+                }
+                return this.mUIMainToolBarToolBar;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIMainToolBarToolBar mUIMainToolBarToolBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIMainToolBarToolBar : WpfToolBar
+    {
+        
+        public UIMainToolBarToolBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfToolBar.PropertyNames.AutomationId] = "MainToolBar";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIReportsButton
+        {
+            get
+            {
+                if ((this.mUIReportsButton == null))
+                {
+                    this.mUIReportsButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIReportsButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ReportsDropDownButton";
+                    this.mUIReportsButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIReportsButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIReportsButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UISearchControlCustom2 : WpfCustom
+    {
+        
+        public UISearchControlCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.SearchUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "SearchControl";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfEdit UISearchWatermarkTextBEdit
+        {
+            get
+            {
+                if ((this.mUISearchWatermarkTextBEdit == null))
+                {
+                    this.mUISearchWatermarkTextBEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUISearchWatermarkTextBEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "SearchWatermarkTextBox";
+                    this.mUISearchWatermarkTextBEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUISearchWatermarkTextBEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfEdit mUISearchWatermarkTextBEdit;
         #endregion
     }
 }

@@ -177,11 +177,11 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <MouseAction UIObjectName="UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIReportButtonButton">
+    <MouseAction UIObjectName="UIMapMain.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIMainToolBarToolBar.UIReportsButton">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
       <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Location X="52" Y="34" />
+      <Location X="50" Y="17" />
       <WheelDirection>0</WheelDirection>
       <ActionType>Click</ActionType>
       <MouseButton>Left</MouseButton>
@@ -285,11 +285,11 @@
       <WorkItemId>0</WorkItemId>
       <MarkerRegionType>Action</MarkerRegionType>
     </TestStepMarkerAction>
-    <SendKeysAction UIObjectName="UIMapMain.UIUnknownFileHunterWindow1.UISearchControlCustom.UISearchWatermarkTextBEdit">
+    <SendKeysAction UIObjectName="UIMapMain.UIForensicAnalysisToolWindow.UISearchControlCustom.UISearchWatermarkTextBEdit">
       <ParameterName />
       <ModifierKeys>None</ModifierKeys>
       <IsGlobalHotkey>false</IsGlobalHotkey>
-      <Text Encoded="false">123</Text>
+      <Text Encoded="false">text</Text>
     </SendKeysAction>
     <TestStepMarkerAction Comment="" MarkerInformation="InputTextToSearchBox">
       <ParameterName />
@@ -945,6 +945,76 @@
               </AndCondition>
               <SupportLevel>0</SupportLevel>
               <Descendants />
+            </UIObject>
+            <UIObject ControlType="Pane" Id="UIViewsMainViewxamlPane" FriendlyName="Views/MainView.xaml" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Forensic Analysis Tool</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Pane</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.Frame</PropertyCondition>
+                <PropertyCondition Name="AutomationId">MainFrame</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="ToolBar" Id="UIMainToolBarToolBar" FriendlyName="MainToolBar" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">ToolBar</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">MainToolBar</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants>
+                    <UIObject ControlType="Button" Id="UIReportsButton" FriendlyName="Reports" SpecialControlType="None">
+                      <TechnologyName>UIA</TechnologyName>
+                      <WindowTitles>
+                        <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                      </WindowTitles>
+                      <AndCondition>
+                        <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                        <PropertyCondition Name="ControlType">Button</PropertyCondition>
+                        <PropertyCondition Name="AutomationId">ReportsDropDownButton</PropertyCondition>
+                      </AndCondition>
+                      <SupportLevel>0</SupportLevel>
+                      <Descendants />
+                    </UIObject>
+                  </Descendants>
+                </UIObject>
+              </Descendants>
+            </UIObject>
+            <UIObject ControlType="Custom" Id="UISearchControlCustom" FriendlyName="SearchControl" SpecialControlType="None">
+              <TechnologyName>UIA</TechnologyName>
+              <WindowTitles>
+                <WindowTitle>Forensic Analysis Tool</WindowTitle>
+              </WindowTitles>
+              <AndCondition>
+                <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                <PropertyCondition Name="ControlType">Custom</PropertyCondition>
+                <PropertyCondition Name="ClassName">Uia.SearchUserControl</PropertyCondition>
+                <PropertyCondition Name="AutomationId">SearchControl</PropertyCondition>
+              </AndCondition>
+              <SupportLevel>0</SupportLevel>
+              <Descendants>
+                <UIObject ControlType="Edit" Id="UISearchWatermarkTextBEdit" FriendlyName="SearchWatermarkTextBox" SpecialControlType="None">
+                  <TechnologyName>UIA</TechnologyName>
+                  <WindowTitles>
+                    <WindowTitle>Forensic Analysis Tool</WindowTitle>
+                  </WindowTitles>
+                  <AndCondition>
+                    <PropertyCondition Name="FrameworkId">WPF</PropertyCondition>
+                    <PropertyCondition Name="ControlType">Edit</PropertyCondition>
+                    <PropertyCondition Name="AutomationId">SearchWatermarkTextBox</PropertyCondition>
+                  </AndCondition>
+                  <SupportLevel>0</SupportLevel>
+                  <Descendants />
+                </UIObject>
+              </Descendants>
             </UIObject>
           </Descendants>
         </TopLevelWindow>
