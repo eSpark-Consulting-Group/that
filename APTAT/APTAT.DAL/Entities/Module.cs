@@ -142,7 +142,7 @@ namespace APTAT.DAL.Entities
         public string FileSizeFormatted { get; set; }
         [MaxLength(20)]
         public string FileAge { get; set; }
-        public bool IsBad { get; set; }
-        public bool IsUnknownOrFailed { get; set; }
+
+
     }
 }

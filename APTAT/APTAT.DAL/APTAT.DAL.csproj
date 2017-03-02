@@ -74,6 +74,7 @@
     <Compile Include="Entities\ValkyrieScanInfo.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\ScanStage.cs" />
+    <Compile Include="Enums\ScanKind.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\Core\ExecuteDbQueryExtensions.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Storage\Core\StorageContextBase.cs" />
     <Compile Include="Storage\Core\StorageHelper.cs" />
     <Compile Include="Storage\EntityStorage.cs" />
+    <Compile Include="Storage\DTO\AptScanOperationAptScanOperationDTO.cs" />
     <Compile Include="Storage\Repositories\AptScanOperationResultRepository.cs" />
     <Compile Include="Storage\DTO\AptScanResultDTO.cs" />
     <Compile Include="Storage\Repositories\AptScanResultRepository.cs" />

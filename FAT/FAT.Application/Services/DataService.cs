@@ -1,5 +1,6 @@
 ﻿using APTAT.Core.Apt;
 using APTAT.Core.Descent.Apt;
+using APTAT.Core.Storage.Repositories;
 using APTAT.DAL.Storage;
 using APTAT.DAL.Storage.Core;
 using FAT.Application.Models;
@@ -20,19 +21,21 @@ namespace FAT.Application.Services
         {
             _storageContext = storageContext;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="keyword">Search by computer name and file name</param>
-        /// <returns></returns>
-        //public object GetPreviousScans(string keyword)
-        //{
-        //    using (var storage = _storageContext.GetContext())
-        //    {
-        //        //var data = storage.AptScanOperationResultRepository.GetAll()
-        //        //return data.MapCollection();
-        //    }
-        //}
+
+         //<summary>
+         
+         //</summary>
+         //<param name = "keyword" > Search by computer name and file name</param>
+         //<returns></returns>
+        public AptScanOperationDTO [] GetPreviousScans(string keyword)
+        {
+            using (var storage = _storageContext.GetContext())
+            {
+                var data = storage.AptScanOperationResultRepository.Search(keyword);
+                return Mapper.MapOperationToBusiness(data);
+            }
+            
+        }
         public IScanResultItem[] GetAptScanResults(Guid operationUid)
         {
             using (var storage = _storageContext.GetContext())

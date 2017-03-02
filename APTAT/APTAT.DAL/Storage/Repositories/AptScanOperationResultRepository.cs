@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Linq;using APTAT.DAL;
+using System.Linq;
+using APTAT.DAL;
 using APTAT.DAL.Entities;
 using APTAT.DAL.Storage.Core;
+using System.Diagnostics;
 
 namespace APTAT.Core.Storage.Repositories
 {
     public interface IAptScanOperationResultRepository : IRepository<AptScanOperationResult>
     {
         AptScanOperationResult GetByOperationUid(Guid operationUid);
+        AptScanOperationResult[] Search(string keyworld);
     }
 
     internal sealed class AptScanOperationResultRepository
@@ -31,6 +34,17 @@ namespace APTAT.Core.Storage.Repositories
         public AptScanOperationResult GetByOperationUid(Guid operationUid)
         {
             return DbSet.Where(o => o.OperationUid == operationUid).ExecuteDbQueryFirstOrDefault();
+        }
+
+        public AptScanOperationResult[] Search(string keyword)
+        {
+            DbContext.Database.Log = (x) => Debug.Write(x);
+            var query = DbContext.AptScanOperaionResults;
+            if (keyword != null)
+            {
+                query.Where(o => o.AptScanResults.Any(r => r.ComputerName.Contains(keyword) || r.Modules.Any(m => m.Name.Contains(keyword))));
+            }
+            return query.ExecuteDbQuery();
         }
     }
 }

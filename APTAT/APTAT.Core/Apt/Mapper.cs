@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using APTAT.DAL.Entities;
 using System.IO;
+using APTAT.Core.Storage.Repositories;
 
 namespace APTAT.Core.Apt
 {
@@ -25,9 +26,7 @@ namespace APTAT.Core.Apt
             module.FileAge = file.FileAge;
             module.FileAttributes = file.FileAttributes;
             module.FileSizeFormatted = file.FileSizeFormatted;
-            module.Id = Int32.Parse(file.Id);
-            module.IsBad = file.IsBad;
-            module.IsUnknownOrFailed = file.IsUnknownOrFailed;
+            module.Id = Int32.Parse(file.Id);            
             module.Modified = file.ModifiedInternal;            
             module.Path = file.Path;
             module.Product = file.Product;
@@ -38,6 +37,11 @@ namespace APTAT.Core.Apt
             module.Version = file.Version;            
             return module;
 
+        }
+
+        public static AptScanOperationDTO[] MapOperationToBusiness(AptScanOperationResult[] data)
+        {
+            return new AptScanOperationDTO[1];
         }
 
         public static Descent.Apt.CloudVerdict MapFromDal(this DAL.Entities.CloudVerdict cloudVerdict)

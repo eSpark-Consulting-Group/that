@@ -12,6 +12,7 @@ namespace FAT.Application.Models
 {
     public static class DalMapper
     {
+
         public static IScanResultItem[] MapCollection(this IEnumerable<AptScanResultDTO> aptScanResults)
         {
             List<IScanResultItem> result = new List<IScanResultItem>();
