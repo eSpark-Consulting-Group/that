@@ -67,7 +67,7 @@ namespace APTAT.Core.Storage
                 result.Succeeded = scanResult.Succeeded;
                 result.StatusMessage = scanResult.ShortStatusMessage.ToString();
                 result.OrganizationUnit = scanResult.Computer.OrganizationUnit;                
-                result.OsName = scanResult?.AptReport.Computer.Os.ToString();
+                result.OsName = scanResult.AptReport?.Computer.Os.ToString();
                 result.TargetUid = scanResult.TargetUid;
 
                 foreach (var file in scanResult.Files)
