@@ -12,7 +12,7 @@ namespace FAT.Application.Models
         bool IsSelected { get; set; }
         int Order { get; }
         CounterOrder OrderAsEnum { get; }
-        string Percentage { get; set; }
+        string Percentage { get; }
         bool Valid { get; }
 
         void UpdatePercentage(int total);
