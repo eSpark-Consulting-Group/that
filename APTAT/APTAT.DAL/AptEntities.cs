@@ -33,12 +33,22 @@ namespace APTAT.DAL
         {
         }
 
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+        //    modelBuilder.Entity<ValkyrieScanInfo>()
+        //        .HasRequired(et => et.AptScanOperationResult)
+        //        .WithOptional(eo => eo.ValkyrieScanInfo);
+        //}
+
         // Add a DbSet for each entity type that you want to include in your model. For more information 
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
         
         public virtual DbSet<AptScanResult> AptScanResults { get; set; }
         public virtual DbSet<AptScanOperationResult> AptScanOperaionResults { get; set; }
         public virtual DbSet<Entities.Module> Modules { get; set; }
+        public virtual DbSet<ValkyrieScanInfo> ValkyrieScans { get; set; }
+        public virtual DbSet<ValkyrieFileInfo> ValkyrieFiles { get; set; }
     }
 
     //public class MyEntity

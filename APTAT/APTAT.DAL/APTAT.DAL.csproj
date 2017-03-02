@@ -70,6 +70,8 @@
     <Compile Include="DependencyLocator\DependencyLocator.cs" />
     <Compile Include="Entities\AptScanOperationResult.cs" />
     <Compile Include="Entities\AptScanResult.cs" />
+    <Compile Include="Entities\ValkyrieFileInfo.cs" />
+    <Compile Include="Entities\ValkyrieScanInfo.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\ScanStage.cs" />
     <Compile Include="IEntity.cs" />
@@ -94,6 +96,8 @@
     <Compile Include="Storage\DTO\AptScanResultDTO.cs" />
     <Compile Include="Storage\Repositories\AptScanResultRepository.cs" />
     <Compile Include="Storage\Repositories\ModulesRepository.cs" />
+    <Compile Include="Storage\Repositories\ValkyrieFilesRepository.cs" />
+    <Compile Include="Storage\Repositories\ValkyrieScansRepository.cs" />
     <Compile Include="Storage\Storage.cs" />
   </ItemGroup>
   <ItemGroup>

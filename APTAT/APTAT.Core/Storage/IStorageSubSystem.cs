@@ -13,5 +13,9 @@ namespace APTAT.Core.Storage
         void SaveOperationContext(IAptScanOperationContext aptScanner);
         void UpdateScanResults(IAptScanOperationContext scanOperationContext);
         void SaveScanResults(Guid operationUid, IAptScanResult scanResult);
+        void UpdateVerdictForOperation(Guid operationUid, Dictionary<string, CloudVerdict> resultsWithoutErrors);
+        int SaveValkyrieScan(Guid operationUid, string apiKey, string scanId);
+        void SaveValkyrieResults(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
+        void UpdateValkyrieResult(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
     }
 }

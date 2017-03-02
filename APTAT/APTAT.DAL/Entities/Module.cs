@@ -75,8 +75,8 @@ namespace APTAT.DAL.Entities
         public string Path { get; set; }
 
         [Required]
-        [ForeignKey("AptScanResultId")]
         public AptScanResult AptScanResult { get; set; }
+        [ForeignKey("AptScanResult")]
         public long AptScanResultId { get; set; }
         private DateTime? _cloudDate;
         public DateTime? CloudDate

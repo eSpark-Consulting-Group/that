@@ -52,10 +52,10 @@ namespace APTAT.DAL.Entities
         public Guid TargetUid { get; set; }
 
         [Required]
+        [ForeignKey("OperationResult")]
         public int OperationResultId { get; set; }
 
         [Required]
-        [ForeignKey("OperationResultId")]
         public AptScanOperationResult OperationResult { get; set; }
 
         [Required]

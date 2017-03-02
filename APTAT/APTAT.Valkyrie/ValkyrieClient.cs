@@ -56,7 +56,7 @@ namespace APTAT.Valkyrie
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
         public event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
-        public event EventHandler AnalyzeStarted;
+        public event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
 
         private readonly IValkyrieWebApiProvider _provider;
         private Dictionary<string, ValkyrieFileInfo> _filesToSubmit;
@@ -435,9 +435,9 @@ namespace APTAT.Valkyrie
             }
         }
 
-        private void OnAnalyzeStarted()
+        private void OnAnalyzeStarted(string apiKey, string scanId)
         {
-            AnalyzeStarted?.Invoke(this, EventArgs.Empty);
+            AnalyzeStarted?.Invoke(this, new ValkyrieAnalyzeStartedEventArgs(apiKey, scanId));
         }
 
         private ValkyrieAnalysisResult UploadFile(ValkyrieFileInfo fileInfo, string endpointId, CancellationToken cancellationToken)
@@ -676,7 +676,6 @@ namespace APTAT.Valkyrie
                 _pendingItemsResolved.Clear();
                 _login = login;
                 _password = password;
-                OnAnalyzeStarted();
 
                 StartAndFinalizeScanResponse startScanResult = null;
                 lock (_aptScanIdLock)
@@ -691,6 +690,8 @@ namespace APTAT.Valkyrie
                     throw new InvalidOperationException(startScanResult.ResultDescription);
                 }
                 _progressNotifyTimer.Start();
+
+                OnAnalyzeStarted(_apiKey, _aptScanId);
 
                 if (_emails != null)
                     SubmitEmail(_emails);

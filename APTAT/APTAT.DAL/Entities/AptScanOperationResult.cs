@@ -49,6 +49,8 @@ namespace APTAT.DAL.Entities
         }
 
         public HashSet<AptScanResult> AptScanResults { get; set; }
+        //public HashSet<ValkyrieScanInfo> ValkyrieScanInfoes { get; set; }
+        public ValkyrieScanInfo ValkyrieScanInfo { get; set; }
 
         [Key]
         public int Id { get; set; }

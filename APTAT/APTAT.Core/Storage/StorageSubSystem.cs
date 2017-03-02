@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
@@ -74,6 +71,83 @@ namespace APTAT.Core.Storage
                 {
                     result.Modules.Add(Mapper.MapModule(file, VerdictSource.RemoteAgent));
                 }
+                context.SaveChanges();
+            }
+        }
+
+        public void UpdateVerdictForOperation(Guid operationUid, Dictionary<string, Descent.Apt.CloudVerdict> resultsWithoutErrors)
+        {
+            using (var context = _entityStorage.GetContext())
+            {
+
+            }
+        }
+
+        public int SaveValkyrieScan(Guid operationUid, string apiKey, string scanId)
+        {
+            ValkyrieScanInfo scanInfo;
+            using (var context = _entityStorage.GetContext())
+            {
+                var operation = context.AptScanOperationResultRepository.GetByOperationUid(operationUid);
+                scanInfo = new ValkyrieScanInfo
+                {
+                    ApiKey = apiKey,
+                    ScanId = scanId,
+                    AptScanOperationResult = operation
+                };
+                context.ValkyrieScansRepository.Add(scanInfo);
+                context.SaveChanges();
+            }
+            return scanInfo.AptScanOperationResultId;
+        }
+
+        public void SaveValkyrieResults(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults)
+        {
+            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Count);
+            foreach (var valkyrieResult in valkyrieResults)
+            {
+                files.Add(new ValkyrieFileInfo
+                {
+                    ValkyrieScanInfoId = scanId,
+                    Sha1 = valkyrieResult.Sha1,
+                    IsWhiteListed = valkyrieResult.ValkyrieAnalysisResult.IsWhiteListed,
+                    Verdict = (DAL.Entities.ValkyrieVerdict)valkyrieResult.ValkyrieAnalysisResult.Verdict,
+                    MalwareProbability = valkyrieResult.ValkyrieAnalysisResult.MalwareProbability,
+                    OperationStatus = valkyrieResult.ValkyrieAnalysisResult.OperationStatus,
+                    SkipReason = valkyrieResult.ValkyrieAnalysisResult.SkipReason,
+                    IsSubmitted = valkyrieResult.ValkyrieAnalysisResult.IsSubmitted,
+                    AnalyzeId = valkyrieResult.ValkyrieAnalysisResult.AnalyzeId
+                });
+            }
+            using (var context = _entityStorage.GetContext())
+            {
+                context.ValkyrieFilesRepository.AddMany(files);
+                context.SaveChanges();
+            }
+        }
+
+        public void UpdateValkyrieResult(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults)
+        {
+            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Count);
+            foreach (var valkyrieResult in valkyrieResults)
+            {
+                files.Add(new ValkyrieFileInfo
+                {
+                    ValkyrieScanInfoId = scanId,
+                    Sha1 = valkyrieResult.Sha1,
+                    IsWhiteListed = valkyrieResult.ValkyrieAnalysisResult.IsWhiteListed,
+                    Verdict = (ValkyrieVerdict)valkyrieResult.ValkyrieAnalysisResult.Verdict,
+                    MalwareProbability = valkyrieResult.ValkyrieAnalysisResult.MalwareProbability,
+                    OperationStatus = valkyrieResult.ValkyrieAnalysisResult.OperationStatus,
+                    SkipReason = valkyrieResult.ValkyrieAnalysisResult.SkipReason,
+                    IsSubmitted = valkyrieResult.ValkyrieAnalysisResult.IsSubmitted,
+                    AnalyzeId = valkyrieResult.ValkyrieAnalysisResult.AnalyzeId
+                });
+            }
+            using (var context = _entityStorage.GetContext())
+            {
+                foreach (var file in files)
+                    context.ValkyrieFilesRepository.AddOrUpdate(file);
                 context.SaveChanges();
             }
         }

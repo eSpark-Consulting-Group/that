@@ -10,7 +10,7 @@ namespace APTAT.Valkyrie
     {
         event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>> AnalyzeProgressChanged;
         event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
-        event EventHandler AnalyzeStarted;
+        event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
         void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately);
         void AnalyzeAsyncCancel();
         void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,

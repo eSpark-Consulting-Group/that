@@ -32,7 +32,7 @@ namespace APTAT.Core.Apt
             = new HashSet<IAptVerdictContext>();
         private readonly IDistinctFileHelper _distinctHelper;
 
-        private bool _isValkyrieStarted;
+        private int? _valkyrieScanId;
         private bool _isValkyrieScanEnded = false;
         private DateTime? _latestValkyrieVerdictUpdate = null;
 
@@ -63,7 +63,7 @@ namespace APTAT.Core.Apt
             foreach (var result in GetResultsEnumerator().ToArray())
             {
                 var files =
-                    result.Files.Where(f => f.Cloud == CloudVerdict.FailedToAnalyze || f.Cloud == CloudVerdict.NoVerdict).ToArray();
+                    result.Files.Where(f => f.Cloud != CloudVerdict.Safe && f.Cloud != CloudVerdict.Malware).ToArray();
 
                 foreach (var file in files)
                 {
@@ -77,6 +77,7 @@ namespace APTAT.Core.Apt
             }
             if (isUpdated)
             {
+                _entityStorage.UpdateVerdictForOperation(AggregatedScanResults.OperationUid, resultsWithoutErrors);
                 FlsLookupOperationUid = Guid.NewGuid();
             }
         }
@@ -100,14 +101,14 @@ namespace APTAT.Core.Apt
         }
 
 
-        private void OnValkyrieAnalyzeStarted(object sender, EventArgs e)
+        private void OnValkyrieAnalyzeStarted(object sender, ValkyrieAnalyzeStartedEventArgs e)
         {
-            _isValkyrieStarted = true;
             _isValkyrieScanEnded = false;
             _filesShouldSendToValkyrieCount = 0;
             ValkyrieAnalysisResult.Clear();
             ValkyrieOperationUid = Guid.NewGuid();
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
+            _valkyrieScanId = _entityStorage.SaveValkyrieScan(AggregatedScanResults.OperationUid ,e.ApiKey, e.ScanId);
         }
 
         private void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
@@ -122,7 +123,8 @@ namespace APTAT.Core.Apt
         {
             ProgressInfo<ValkyrieAnalysisResult> info = e.ProgressInfo;
 
-            var valkyrieAnalysisResult = GetFullResult(info.Results, GetResultsEnumerator().ToArray()).Values;
+            var valkyrieAnalysisResultDict = GetFullResult(info.Results, GetResultsEnumerator().ToArray());
+            var valkyrieAnalysisResult = valkyrieAnalysisResultDict.Values;
             var valkyrieAnalysisResultInternal = ValkyrieAnalysisResult;
             lock (ValkyrieAnalysisResult)
             {
@@ -155,6 +157,15 @@ namespace APTAT.Core.Apt
                 info.ProcessedFileCount, valkyrieAnalysisResult.ToArray());
             ValkyrieAnalyzeProgressChanged?.Invoke(this,
                                    new ValkyrieAnalyzeProgressChangedEventArgs<FileResult>(e.Percent, progressInfo, e.IsUpdate));
+            if (_valkyrieScanId != null)
+                if (e.IsUpdate)
+                {
+                    _entityStorage.UpdateValkyrieResult(_valkyrieScanId.Value, valkyrieAnalysisResult);
+                }
+                else
+                {
+                    _entityStorage.SaveValkyrieResults(_valkyrieScanId.Value, valkyrieAnalysisResult);
+                }
             TryInvokeEndScan();
         }
 
@@ -165,7 +176,7 @@ namespace APTAT.Core.Apt
                 lock (ValkyrieAnalysisResult)
                 {
                     if (AggregatedScanResults != null && !AggregatedScanResults.IsOperationInProgress() && _filesWithFlsErrorCount == 0 &&
-                        _filesShouldSendToValkyrieCount == 0 && _isValkyrieStarted && !_isValkyrieScanEnded)
+                        _filesShouldSendToValkyrieCount == 0 && _valkyrieScanId.HasValue && !_isValkyrieScanEnded)
                     {
                         _isValkyrieScanEnded = true;
                         _valkyrieClient.SendEndScanAsync();
@@ -299,7 +310,7 @@ namespace APTAT.Core.Apt
                     UpdateLastResult(dict);
 
                 }
-                if ((dictToValkyrie.Any() || newUnknownFiles.Any()) && _isValkyrieStarted)
+                if ((dictToValkyrie.Any() || newUnknownFiles.Any()) && _valkyrieScanId.HasValue)
                 {
                     foreach (var unknownFile in newUnknownFiles)
                     {
@@ -312,13 +323,14 @@ namespace APTAT.Core.Apt
                         var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v =>
                                     new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.InQueue)),
                                 GetResultsEnumerator().ToArray()).Values;
-                        _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
                         lock (ValkyrieAnalysisResult)
                         {
                             _filesShouldSendToValkyrieCount += filesToAnalyze.Count;
                             foreach (var fileInfo in valkyrieAnalysisResults)
                                 ValkyrieAnalysisResult.Add(fileInfo.Sha1, fileInfo);
                         }
+                        _entityStorage.SaveValkyrieResults(_valkyrieScanId.Value,valkyrieAnalysisResults);
+                        _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
                         ValkyrieOperationUid = Guid.NewGuid();
                     }
                 }
@@ -401,7 +413,7 @@ namespace APTAT.Core.Apt
             {
                 AggregatedScanResults = new AggregatedAptScanResult(scanner.ScanOperationContext);
                 _flsManager.Cancel();
-                _isValkyrieStarted = false;
+                _valkyrieScanId = null;
                 _filesShouldSendToValkyrieCount = 0;
                 _filesWithFlsErrorCount = 0;
                 _valkyrieClient.AnalyzeAsyncCancel();
@@ -429,7 +441,7 @@ namespace APTAT.Core.Apt
                 FlsLookupOperationUid = Guid.NewGuid();
             _entityStorage.UpdateScanResults(e.OperationContext);
             TryInvokeEndScan();
-            if (_isValkyrieStarted)
+            if (_valkyrieScanId.HasValue)
             {
                 IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
                 this._valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
