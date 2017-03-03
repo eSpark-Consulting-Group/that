@@ -1,0 +1,20 @@
+﻿using System;
+using APTAT.Core.Descent.Apt;
+using APTAT.DeploymentCore.Directory;
+
+namespace FAT.Application.Models
+{
+    public interface IScanOperation
+    {
+        string DiscovererDescription { get; set; }
+        int FilesCount { get; set; }
+        DateTime? Finished { get; }
+        int MaliciousCount { get; set; }
+        Guid OperationUid { get; set; }
+        ScanKind ScanMethod { get; set; }
+        IDevicesSourceDescription DevicesSourceDescription { get; set; }
+        DateTime Started { get; set; }
+        int TotalDevicesScanned { get; set; }
+        int UnknownsCount { get; set; }
+    }
+}

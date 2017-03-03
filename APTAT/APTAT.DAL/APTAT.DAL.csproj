@@ -96,6 +96,7 @@
     <Compile Include="Storage\Core\StorageContextBase.cs" />
     <Compile Include="Storage\Core\StorageHelper.cs" />
     <Compile Include="Storage\DTO\AptScanOperationDTO.cs" />
+    <Compile Include="Storage\DTO\IAptScanOperationDTO.cs" />
     <Compile Include="Storage\EntityStorage.cs" />
     <Compile Include="Storage\Repositories\AptScanOperationResultRepository.cs" />
     <Compile Include="Storage\DTO\AptScanResultDTO.cs" />
@@ -113,10 +114,6 @@
     <ProjectReference Include="..\..\Common\APTAT.Common\APTAT.Common.csproj">
       <Project>{49ba3c32-1495-4ea5-8d32-3997788ade2f}</Project>
       <Name>APTAT.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\APTAT.DeploymentCore\APTAT.DeploymentCore.csproj">
-      <Project>{8C99A7F4-76F5-4899-8E57-C032F1E2EC41}</Project>
-      <Name>APTAT.DeploymentCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

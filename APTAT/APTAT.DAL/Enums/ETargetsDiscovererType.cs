@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace APTAT.DAL.Enums
 {
-    //public enum ETargetsDiscovererType
-    //{
-    //    ActiveDirectory,
-    //    NetworkAddresses,
-    //    Workgroup
-    //}
+    public enum ETargetsDiscovererType
+    {
+        ActiveDirectory,
+        NetworkAddresses,
+        Workgroup
+    }
 }

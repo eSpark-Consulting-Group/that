@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace FAT.Application.Services
 {
-    public class DataService 
+    public class DataService : IDataService
     {
         private IEntityStorage _storageContext;
 
@@ -28,22 +28,26 @@ namespace FAT.Application.Services
          //</summary>
          //<param name = "keyword" > Search by computer name and file name</param>
          //<returns></returns>
-        public AptScanOperationDTO [] GetPreviousScans(string keyword)
+        public IScanOperation[] GetPreviousScans(string keyword)
         {
+            IAptScanOperationDTO[] data;
             using (var storage = _storageContext.GetContext())
             {
-                return storage.AptScanOperationResultRepository.Search(keyword);                
-            }
-            
-        }
-        public IScanResultItem[] GetAptScanResults(Guid operationUid)
-        {
-            using (var storage = _storageContext.GetContext())
-            {                
-                var data =  storage.AptScanResultRepository.GetByOperationUid(operationUid);
-                return data.MapCollection();
+                data = storage.AptScanOperationResultRepository.Search(keyword);
             }
 
+            return data.MapCollection();
+
+        }
+        public IScanResultItem GetAptScanResults(Guid operationUid)
+        {
+            AptScanResultDTO[] data;
+            using (var storage = _storageContext.GetContext())
+            {                
+                 data =  storage.AptScanResultRepository.GetByOperationUid(operationUid);
+            }
+
+            return data.MapCollection().SingleOrDefault();
         }
 
     }

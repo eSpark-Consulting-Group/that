@@ -151,13 +151,16 @@
     <Compile Include="Models\Counter\IScanCounter.cs" />
     <Compile Include="Models\Counter\IScanCounterCollection.cs" />
     <Compile Include="Models\Counter\IScanCounterDiff.cs" />
+    <Compile Include="Models\IScanOperation.cs" />
     <Compile Include="Models\ModelBase\IWizardStepViewModel.cs" />
     <Compile Include="Models\Counter\ScanCounter.cs" />
     <Compile Include="Models\Counter\ScanCounterCollection.cs" />
+    <Compile Include="Models\ScanOperation.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
     <Compile Include="Services\EventArgs\GetModifiedResultsForOperationEventArgs.cs" />
     <Compile Include="Models\ProxySettingsViewModel.cs" />
+    <Compile Include="Services\IDataService.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>

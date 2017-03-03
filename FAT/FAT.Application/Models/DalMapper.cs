@@ -1,13 +1,9 @@
-﻿using APTAT.Core.Apt;
-using APTAT.Core.Descent.Apt;
-using APTAT.Core.Storage.Repositories;
+﻿using APTAT.Core.Storage.Repositories;
 using APTAT.Core.Storage;
-using APTAT.DAL.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using APTAT.DAL.Storage.DTO;
+using APTAT.DeploymentCore.Directory;
 
 namespace FAT.Application.Models
 {
@@ -35,6 +31,54 @@ namespace FAT.Application.Models
             result.TotalFilesCount = dto.TotalCount;
             result.UnknownFilesCount = dto.UnknownsCount; 
             return result;
+        }
+
+        public static IScanOperation[] MapCollection(this IEnumerable<IAptScanOperationDTO> aptScanResults)
+        {
+            List<IScanOperation> result = new List<IScanOperation>();
+            foreach (var scanRes in aptScanResults)
+            {
+                result.Add(scanRes.MapItem());
+            }
+            return result.ToArray();
+        }
+
+        public static IScanOperation MapItem(this IAptScanOperationDTO dto)
+        {
+            ScanOperation result = new ScanOperation()
+            {
+                FilesCount = dto.FilesCount,
+                Finished = dto.Finished,
+                ScanMethod = dto.ScanMethod.ToBusiness(),
+                MaliciousCount = dto.MaliciousCount,
+                UnknownsCount = dto.UnknownsCount,
+                Started = dto.Started,
+                OperationUid = dto.OperationUid,
+                TotalDevicesScanned = dto.TotalDevicesScanned,
+                DevicesSourceDescription = new DevicesSourceDescription
+                {
+                    Description = dto.SourceDescription,
+                    Type = dto.Type.ToBusiness()
+                }
+            };
+            return result;
+        }
+
+        public static ETargetsDiscovererType ToBusiness(this APTAT.DAL.Enums.ETargetsDiscovererType source)
+        {
+            switch (source)
+            {
+                case APTAT.DAL.Enums.ETargetsDiscovererType.ActiveDirectory:
+                    return ETargetsDiscovererType.ActiveDirectory;
+
+                case APTAT.DAL.Enums.ETargetsDiscovererType.NetworkAddresses:
+                    return ETargetsDiscovererType.NetworkAddresses;
+                case APTAT.DAL.Enums.ETargetsDiscovererType.Workgroup:
+                    return ETargetsDiscovererType.Workgroup;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(APTAT.DAL.Enums.ETargetsDiscovererType));
+            }
         }
 
         public static ScanStage MapScanStageToBusiness(this APTAT.DAL.Entities.ScanStage stage)

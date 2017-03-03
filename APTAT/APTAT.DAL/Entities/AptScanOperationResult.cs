@@ -1,5 +1,4 @@
 ﻿using APTAT.DAL.Enums;
-using APTAT.DeploymentCore.Directory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

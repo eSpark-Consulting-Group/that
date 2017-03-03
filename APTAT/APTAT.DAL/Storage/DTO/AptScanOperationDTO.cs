@@ -1,11 +1,9 @@
-﻿using APTAT.DAL;
+﻿using System;
 using APTAT.DAL.Enums;
-using APTAT.DeploymentCore.Directory;
-using System;
 
-namespace APTAT.Core.Storage.Repositories
+namespace APTAT.DAL.Storage.DTO
 {
-    public class AptScanOperationDTO
+    public class AptScanOperationDTO : IAptScanOperationDTO
     {
         public int TotalDevicesScanned { get; set; }
         public int FilesCount { get; set; }

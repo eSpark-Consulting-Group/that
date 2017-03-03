@@ -7,13 +7,14 @@ using APTAT.DAL.Storage.Core;
 using System.Diagnostics;
 
 using APTAT.DAL.Enums;
+using APTAT.DAL.Storage.DTO;
 
 namespace APTAT.Core.Storage.Repositories
 {
     public interface IAptScanOperationResultRepository : IRepository<AptScanOperationResult>
     {
         AptScanOperationResult GetByOperationUid(Guid operationUid);
-        AptScanOperationDTO[] Search(string keyworld);
+        IAptScanOperationDTO[] Search(string keyworld);
     }
 
     internal sealed class AptScanOperationResultRepository
@@ -38,7 +39,7 @@ namespace APTAT.Core.Storage.Repositories
             return DbSet.Where(o => o.OperationUid == operationUid).ExecuteDbQueryFirstOrDefault();
         }
 
-        public AptScanOperationDTO[] Search(string keyword)
+        public IAptScanOperationDTO[] Search(string keyword)
         {
       //      DbContext.Database.Log = (x) => Debug.Write(x);
             var query = DbContext.AptScanOperaionResults;

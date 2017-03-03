@@ -26,7 +26,7 @@ namespace APTAT.Core.Storage
                 OperationUid = scanOperationContext.OperationUid,
                 Started = scanOperationContext.Started,
                 SourceDescription = scanOperationContext?.DevicesSourceDescription?.Description,
-                Source = scanOperationContext?.DevicesSourceDescription.Type,
+                Source = scanOperationContext?.DevicesSourceDescription.Type.ToDal(),
                 ScanMethod = scanOperationContext.ScanMethod.ToData()
             };
 

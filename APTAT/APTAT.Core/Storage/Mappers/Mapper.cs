@@ -39,32 +39,22 @@ namespace APTAT.Core.Apt
             return module;
         }
 
-        public static AptScanOperationDTO[] MapOperationToBusiness(AptScanOperationResult[] data)
+        public static ETargetsDiscovererType ToDal(this APTAT.DeploymentCore.Directory.ETargetsDiscovererType source)
         {
-            List<AptScanOperationDTO> result = new List<AptScanOperationDTO>();
-            foreach (var item in data)
+            switch (source)
             {
-                result.Add(MapOperationToBusinessItem(item));
-            }
-            return result.ToArray();
+                case APTAT.DeploymentCore.Directory.ETargetsDiscovererType.ActiveDirectory:
+                    return ETargetsDiscovererType.ActiveDirectory;
 
+                case APTAT.DeploymentCore.Directory.ETargetsDiscovererType.NetworkAddresses:
+                    return ETargetsDiscovererType.NetworkAddresses;
+                case APTAT.DeploymentCore.Directory.ETargetsDiscovererType.Workgroup:
+                    return ETargetsDiscovererType.Workgroup;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(DeploymentCore.Directory.ETargetsDiscovererType));
+            }
         }
-        public static AptScanOperationDTO MapOperationToBusinessItem(AptScanOperationResult operation)
-        {
-            AptScanOperationDTO dto = new AptScanOperationDTO();
-            dto.SourceDescription = operation.SourceDescription;
-            dto.OperationUid = operation.OperationUid;
-            dto.Started = operation.Started;
-            dto.TotalDevicesScanned = operation.AptScanResults.Count;
-            //dto.
-            //dto.UnknownsCount = operation.AptScanResults. 
-            return dto;
-        }
-     
 
     }
-
-
-
-   
 }
