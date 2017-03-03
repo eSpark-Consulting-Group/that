@@ -10,6 +10,7 @@ namespace APTAT.DAL.Storage
         IModulesRepository ModulesRepository { get; }
         IValkyrieScansRepository ValkyrieScansRepository { get; }
         IValkyrieFilesRepository ValkyrieFilesRepository { get; }
+        IEmailRepository EmailRepository { get; }
     }
     internal sealed class StorageContext : StorageContextBase<AptEntities>, IStorageContext
     {
@@ -18,6 +19,7 @@ namespace APTAT.DAL.Storage
         public IModulesRepository ModulesRepository { get; }
         public IValkyrieScansRepository ValkyrieScansRepository { get; }
         public IValkyrieFilesRepository ValkyrieFilesRepository { get; }
+        public IEmailRepository EmailRepository { get; }
 
         public StorageContext(AptEntities context) : base (context)
         {
@@ -26,6 +28,7 @@ namespace APTAT.DAL.Storage
             ModulesRepository = new ModulesRepository(context);
             ValkyrieScansRepository = new ValkyrieScansRepository(context);
             ValkyrieFilesRepository = new ValkyrieFilesRepository(context);
+            EmailRepository = new EmailsRepository(context);
         }
         
         public StorageContext()

@@ -23,11 +23,23 @@ namespace FAT.Application.Services
             _storageContext = storageContext;
         }
 
-         //<summary>
-         
-         //</summary>
-         //<param name = "keyword" > Search by computer name and file name</param>
-         //<returns></returns>
+
+        public string GetEmails()
+        {
+            string emails = "";
+            using (var context = _storageContext.GetContext())
+            {
+                var addresses = context.EmailRepository.EntityQuery.Select(e => e.Address);
+                emails = String.Join(",", addresses);
+                return emails;
+            }
+        }
+
+        //<summary>
+
+        //</summary>
+        //<param name = "keyword" > Search by computer name and file name</param>
+        //<returns></returns>
         public IScanOperation[] GetPreviousScans(string keyword)
         {
             IAptScanOperationDTO[] data;

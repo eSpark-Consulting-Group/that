@@ -8,5 +8,7 @@ namespace FAT.Application.Services
     {
         IScanResultItem GetAptScanResults(Guid operationUid);
         IScanOperation[] GetPreviousScans(string keyword);
+        string GetEmails();
+
     }
 }

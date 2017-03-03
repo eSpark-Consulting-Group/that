@@ -20,6 +20,6 @@ namespace APTAT.Core.Storage
         int SaveValkyrieScan(Guid operationUid, string apiKey, string scanId);
         void SaveValkyrieResults(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
         void UpdateValkyrieResult(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
-
+        void UpdateEmails(string[] emails);
     }
 }

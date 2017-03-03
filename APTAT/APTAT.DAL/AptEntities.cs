@@ -49,6 +49,7 @@ namespace APTAT.DAL
         public virtual DbSet<Entities.Module> Modules { get; set; }
         public virtual DbSet<ValkyrieScanInfo> ValkyrieScans { get; set; }
         public virtual DbSet<ValkyrieFileInfo> ValkyrieFiles { get; set; }
+        public virtual DbSet<Email> Emails { get; set; }
     }
 
     //public class MyEntity

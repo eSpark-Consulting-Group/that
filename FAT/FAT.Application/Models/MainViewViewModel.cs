@@ -36,6 +36,7 @@ namespace FAT.Application.Models
         private IThreatInfoItem _selectedItem;
 
         private readonly IAptService _aptService;
+        private readonly IDataService _dataService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
         private readonly IScanCounterManager _scanCounterManager;
@@ -516,10 +517,12 @@ namespace FAT.Application.Models
         #endregion
 
         public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
-            IAptService aptService, IStorageService storage, IScanCounterManager scanCounterManager)
+            IAptService aptService, IDataService dataService, IStorageService storage, 
+            IScanCounterManager scanCounterManager)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _aptService = aptService;
+            _dataService = dataService;
             _storage = storage;
 
             _scanCounterManager = scanCounterManager;
@@ -573,6 +576,13 @@ namespace FAT.Application.Models
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
+
+            // read email from table in this point.
+            //GetEmails
+
+          Email=  _dataService.GetEmails();
+            if(!string.IsNullOrEmpty(Email))
+                Set(() => HideSubmitEmail, true);
 
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
             RaisePropertyChanged(nameof(HasCurrentDomainName));

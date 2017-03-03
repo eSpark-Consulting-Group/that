@@ -34,5 +34,7 @@ namespace FAT.Application.Services
         void StopTargetsAutoDiscovery();
         string GetCurrentWorkgroupName();
         string GetLoggedInUser();
+       
+
     }
 }

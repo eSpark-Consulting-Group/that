@@ -147,6 +147,8 @@ namespace FAT.Application.Services
             return Environment.UserName;
         }
 
+
+
         private void OnRootDiscovered(object sender, TargetsDiscovererEventArgs e)
         {
             if (e.Error == null)

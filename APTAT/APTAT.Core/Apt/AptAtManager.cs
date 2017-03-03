@@ -504,6 +504,7 @@ namespace APTAT.Core.Apt
 
             if (response.Error == null && response.ReturnCode == ErrorCodesEnum.Success)
             {
+                _entityStorage.UpdateEmails(addresses);
                 return new OperationResult() { IsSucceeded = true };
             }
             return new OperationResult() { IsSucceeded = false, Error = response.Error, ErrorMessage = response.ResultMessage };

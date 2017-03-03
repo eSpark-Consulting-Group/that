@@ -157,5 +157,32 @@ namespace APTAT.Core.Storage
                 context.SaveChanges();
             }
         }
+
+        public void UpdateEmails(string[] newEmails)
+        {
+            using (var context = _entityStorage.GetContext())
+            {
+                var oldEmails=context.EmailRepository.EntityQuery.ToList();
+                foreach (var email in oldEmails)
+                {
+                    context.EmailRepository.Remove(email);
+                    context.SaveChanges();
+                }
+
+               // int cnt = 0;
+                foreach (var email in newEmails)
+                {
+                    Email ems = new Email();
+                          ems.Address = email;
+                       //   ems.Id = cnt;
+                    context.EmailRepository.Add(ems);
+                    context.SaveChanges();
+                  //  cnt++;
+                }
+            }
+        }
+
+
+
     }
 }
