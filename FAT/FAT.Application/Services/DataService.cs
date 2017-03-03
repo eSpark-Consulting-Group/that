@@ -3,6 +3,7 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Core.Storage.Repositories;
 using APTAT.DAL.Storage;
 using APTAT.DAL.Storage.Core;
+using APTAT.DAL.Storage.DTO;
 using FAT.Application.Models;
 using FAT.Application.Services;
 using System;

@@ -92,8 +92,8 @@
     <Compile Include="Storage\Core\Sorting\SortingKeyInternal.cs" />
     <Compile Include="Storage\Core\StorageContextBase.cs" />
     <Compile Include="Storage\Core\StorageHelper.cs" />
+    <Compile Include="Storage\DTO\ScanOperationDTO.cs" />
     <Compile Include="Storage\EntityStorage.cs" />
-    <Compile Include="Storage\DTO\AptScanOperationAptScanOperationDTO.cs" />
     <Compile Include="Storage\Repositories\AptScanOperationResultRepository.cs" />
     <Compile Include="Storage\DTO\AptScanResultDTO.cs" />
     <Compile Include="Storage\Repositories\AptScanResultRepository.cs" />

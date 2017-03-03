@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using APTAT.DAL.Entities;
 using System.IO;
 using APTAT.Core.Storage.Repositories;
+using APTAT.DAL.Storage.DTO;
 
 namespace APTAT.Core.Apt
 {
@@ -36,7 +37,6 @@ namespace APTAT.Core.Apt
             module.VerdictSource = verdictSource;
             module.Version = file.Version;            
             return module;
-
         }
 
         public static AptScanOperationDTO[] MapOperationToBusiness(AptScanOperationResult[] data)
