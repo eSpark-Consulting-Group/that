@@ -41,8 +41,6 @@ namespace APTAT.Core.Storage.Repositories
         public void UpdateVerdictByHashAndOperationUid(Guid operationUid, IGrouping<CloudVerdict, string>[] group,
             VerdictSource verdictSource)
         {
-            Action<string> print = message => Debug.WriteLine(message);
-            DbContext.Database.Log = print;
             foreach (var grouping in group)
             {
                 try

@@ -24,7 +24,14 @@ namespace APTAT.Core
                     XmlSerializer xs = new XmlSerializer(typeof(AptReport));
                     result.SetAptReportInstance(xs.Deserialize(fs) as AptReport);
                 }
-
+                try
+                {
+                    File.Delete(result.FileName);
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Trace(TraceEventType.Error, "Cannot remove results file from '{0}({1})' endpoint: {2}", result.Computer.Name, result.TargetUid, ex.Message);
+                }
                 return true;
             }
             catch (Exception ex)
