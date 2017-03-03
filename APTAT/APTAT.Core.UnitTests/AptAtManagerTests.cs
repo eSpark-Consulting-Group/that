@@ -366,14 +366,16 @@ namespace APTAT.Core.UnitTests
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(53), Arg.Is(80))).OccursOnce();
             Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count() == failedToAnalyzeModules.Count()), Arg.AnyBool)).OccursOnce();
+            Mock.Arrange(() => fls.Cancel()).OccursOnce();
 
             //Valkyrie Client Arange 
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
+            Mock.Arrange(() => valkyrie.AnalyzeAsyncCancel()).OccursOnce();
             Mock.Arrange(() => valkyrie.StartAnalyze(new CamRegistration("", "", ""), new List<ValkyrieFileInfo>(), "", "", 1, null,"")).IgnoreArguments();
 
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
-            //Mock.Arrange(() => aptScanner.ScanOperationContext).Returns(() => scanContext);
+            Mock.Arrange(() => aptScanner.ScanOperationContext).Returns(() => scanContext);
             var scanOptions = CreateScanOptions(80, 53);
             var deploymentTargets = GetDeploymentTargets();
 
@@ -396,7 +398,7 @@ namespace APTAT.Core.UnitTests
 
             aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
 
-            //Mock.Raise(() => aptScanner.ScanStarted += null, args: new object[] { new ScanStartedEventArgs() {Error = null, OperationUid = operationGuid} });
+            Mock.Raise(() => aptScanner.ScanStarted += null, args: new object[] { new ScanStartedEventArgs() {Error = null, OperationUid = operationGuid} });
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(operationGuid, scanResultFailedToAnalyze) });
             Mock.Raise(() => aptScanner.ScanCompleted += null, aptScanner, new ScanCompletedEventArgs() { OperationUid = operationGuid});
             Mock.AssertAll(fls);
@@ -442,7 +444,7 @@ namespace APTAT.Core.UnitTests
 
             aptAtManagerUnderTest.StartValkyrieAnalysis("user", "test", "licenceNumber", "user", "test", null, "");
             Mock.AssertAll(descent);
-            Mock.Raise(() => valkyrie.AnalyzeStarted += null, EventArgs.Empty);
+            Mock.Raise(() => valkyrie.AnalyzeStarted += null, new ValkyrieAnalyzeStartedEventArgs(String.Empty, String.Empty));
             Mock.Raise(() => valkyrie.AnalyzeProgressChanged += null, new ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult>(10, new ProgressInfo<ValkyrieAnalysisResult>(20, 10, new ValkyrieAnalysisResult[] { })));
             Mock.Raise(() => valkyrie.AnalyzeCompleted += null, new AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>(new ValkyrieAnalysisResult[] { }, null, false, null));
 

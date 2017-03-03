@@ -65,6 +65,27 @@ namespace APTAT.Core.Apt
             }
         }
 
+        public static DAL.Entities.CloudVerdict MapToDal(this Descent.Apt.CloudVerdict cloudVerdict)
+        {
+            switch (cloudVerdict)
+            {
+                case Descent.Apt.CloudVerdict.Safe:
+                    return DAL.Entities.CloudVerdict.Safe;
+                case Descent.Apt.CloudVerdict.Unknown:
+                    return DAL.Entities.CloudVerdict.Unknown;
+                case Descent.Apt.CloudVerdict.Malware:
+                    return DAL.Entities.CloudVerdict.Malware;
+                case Descent.Apt.CloudVerdict.FirstSeen:
+                    return DAL.Entities.CloudVerdict.FirstSeen;
+                case Descent.Apt.CloudVerdict.FailedToAnalyze:
+                    return DAL.Entities.CloudVerdict.FailedToAnalyze;
+                case Descent.Apt.CloudVerdict.NoVerdict:
+                    return DAL.Entities.CloudVerdict.NoVerdict;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cloudVerdict));
+            }
+        }
+
         public static DAL.Entities.CloudVerdict MapCloud(Descent.Apt.CloudVerdict cloudVerdict)
         {
             switch (cloudVerdict)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using APTAT.Core.Apt;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
@@ -75,11 +76,13 @@ namespace APTAT.Core.Storage
             }
         }
 
-        public void UpdateVerdictForOperation(Guid operationUid, Dictionary<string, Descent.Apt.CloudVerdict> resultsWithoutErrors)
+        public void UpdateVerdictForOperation(Guid operationUid, Dictionary<string, Descent.Apt.CloudVerdict> resultsWithoutErrors,
+            VerdictSource verdictSource)
         {
+            var group = resultsWithoutErrors.GroupBy(kvp => kvp.Value.MapToDal(), kvp => kvp.Key).ToArray();
             using (var context = _entityStorage.GetContext())
             {
-
+                context.ModulesRepository.UpdateVerdictByHashAndOperationUid(operationUid,group, verdictSource);
             }
         }
 

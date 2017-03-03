@@ -9,6 +9,7 @@ using APTAT.Core.FLS;
 using APTAT.Core.Properties;
 using APTAT.Core.Reports;
 using APTAT.Core.Storage;
+using APTAT.DAL.Entities;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
@@ -16,6 +17,7 @@ using APTAT.Valkyrie;
 using Valkyrie.WebApiProvider.Enums;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
+using ValkyrieFileInfo = APTAT.Valkyrie.ValkyrieFileInfo;
 
 namespace APTAT.Core.Apt
 {
@@ -57,7 +59,7 @@ namespace APTAT.Core.Apt
             return AggregatedScanResults.ScanResults;
         }
 
-        private void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors)
+        private void UpdateLastResult(Dictionary<string, CloudVerdict> resultsWithoutErrors, VerdictSource verdictSource)
         {
             bool isUpdated = false;
             foreach (var result in GetResultsEnumerator().ToArray())
@@ -77,7 +79,7 @@ namespace APTAT.Core.Apt
             }
             if (isUpdated)
             {
-                _entityStorage.UpdateVerdictForOperation(AggregatedScanResults.OperationUid, resultsWithoutErrors);
+                _entityStorage.UpdateVerdictForOperation(AggregatedScanResults.OperationUid, resultsWithoutErrors, verdictSource);
                 FlsLookupOperationUid = Guid.NewGuid();
             }
         }
@@ -307,7 +309,7 @@ namespace APTAT.Core.Apt
                             if (_distinctHelper.ShouldSendToValkyrie(result))
                                 dictToValkyrie.Add(result.Sha1, result.Cloud);
                         }
-                    UpdateLastResult(dict);
+                    UpdateLastResult(dict, fromRemoteScanner? VerdictSource.RemoteAgent : VerdictSource.Apt);
 
                 }
                 if ((dictToValkyrie.Any() || newUnknownFiles.Any()) && _valkyrieScanId.HasValue)
@@ -417,7 +419,8 @@ namespace APTAT.Core.Apt
                 _filesShouldSendToValkyrieCount = 0;
                 _filesWithFlsErrorCount = 0;
                 _valkyrieClient.AnalyzeAsyncCancel();
-                ValkyrieOperationUid = Guid.NewGuid();
+                if (ValkyrieOperationUid != Guid.Empty)
+                    ValkyrieOperationUid = Guid.NewGuid();
                 lock (_flsHashResults)
                 {
                     _flsHashResults.Clear();
