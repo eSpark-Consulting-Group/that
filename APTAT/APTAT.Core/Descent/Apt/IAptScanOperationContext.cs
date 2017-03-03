@@ -16,6 +16,7 @@ namespace APTAT.Core.Descent
         int NotPerformedTargetsCount { get; }
         int CanceledTargetsCount { get; }
         DateTime Started { get; }
+        ScanKind ScanMethod { get; }
         IEnumerable<IAptScanResult> ScanResults { get; }
         event EventHandler<AptOperationProgressChangedEventArgs> OperationProgressChanged;
     }

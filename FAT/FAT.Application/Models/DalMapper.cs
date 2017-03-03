@@ -1,6 +1,7 @@
 ﻿using APTAT.Core.Apt;
 using APTAT.Core.Descent.Apt;
 using APTAT.Core.Storage.Repositories;
+using APTAT.Core.Storage;
 using APTAT.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -143,7 +144,7 @@ namespace FAT.Application.Models
             BadFileItem result = new BadFileItem();
             result.Accessed = file.Accessed.GetValueOrDefault();            
             result.Attributes = file.Attributes;
-            result.Cloud = file.CloudVerdict.MapFromDal();
+            result.Cloud = file.CloudVerdict.ToBusiness();
             result.Copyright = file.Copyright;
             result.Created = file.Created.GetValueOrDefault();
             result.Description = file.Description;

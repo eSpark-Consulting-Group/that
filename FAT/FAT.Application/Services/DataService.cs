@@ -32,8 +32,7 @@ namespace FAT.Application.Services
         {
             using (var storage = _storageContext.GetContext())
             {
-                var data = storage.AptScanOperationResultRepository.Search(keyword);
-                return Mapper.MapOperationToBusiness(data);
+                return storage.AptScanOperationResultRepository.Search(keyword);                
             }
             
         }

@@ -74,7 +74,10 @@
     <Compile Include="Entities\ValkyrieScanInfo.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\ScanStage.cs" />
+    <Compile Include="Enums\ETargetsDiscovererType.cs" />
+    <Compile Include="Enums\CloudVerdict.cs" />
     <Compile Include="Enums\ScanKind.cs" />
+    <Compile Include="Enums\VerdictSource.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\Core\ExecuteDbQueryExtensions.cs" />

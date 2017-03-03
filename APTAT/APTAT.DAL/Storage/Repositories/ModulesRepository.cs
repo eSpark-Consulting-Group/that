@@ -6,9 +6,11 @@ using System.Data.SqlClient;
 using System.Data.SqlServerCe;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;using APTAT.DAL;
+using System.Linq;
+using APTAT.DAL;
 using APTAT.DAL.Entities;
 using APTAT.DAL.Storage.Core;
+using APTAT.DAL.Enums;
 
 namespace APTAT.Core.Storage.Repositories
 {

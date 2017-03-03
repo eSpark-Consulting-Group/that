@@ -57,6 +57,8 @@ namespace APTAT.Core.Descent.Apt
             get { return ResultsByUid.Values.OfType<IAptScanResult>(); }
         }
 
+        public ScanKind ScanMethod { get; set; }
+        
         public IAptScanResult GetAptResultByTargetUid(Guid targetUid)
         {
             var result = GetComputerDescentResultByTargetUid(targetUid);

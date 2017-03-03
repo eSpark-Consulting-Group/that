@@ -28,7 +28,7 @@ namespace APTAT.DAL.Entities
                     throw new ArgumentNullException("value");
                 if (value.Length != 1)
                     throw new ArgumentOutOfRangeException("value");
-                this.Id = (long)value[0];
+                this.Id = (long) value[0];
             }
         }
 
@@ -40,7 +40,7 @@ namespace APTAT.DAL.Entities
                 return (Id == default(long));
             }
         }
-        
+
 
         public HashSet<Module> Modules { get; set; }
 
@@ -65,7 +65,7 @@ namespace APTAT.DAL.Entities
         [Required]
         [StringLength(1000)]
         public string ComputerName { get; set; }
-        
+
         [StringLength(50)]
         public string OsName { get; set; }
         public bool Succeeded { get; set; }
@@ -73,6 +73,6 @@ namespace APTAT.DAL.Entities
         public string StatusMessage { get; set; }
         public string OrganizationUnit { get; set; }
         public string LdapPath { get; set; }
-        public ScanStage ScanStage { get; set; }
+        public ScanStage ScanStage { get; set; }        
     }
 }

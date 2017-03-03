@@ -7,6 +7,8 @@ using APTAT.Core.Descent.Apt;
 using APTAT.DAL.Entities;
 using APTAT.DAL.Storage;
 using AptScanResult = APTAT.DAL.Entities.AptScanResult;
+using APTAT.DAL.Enums;
+
 
 namespace APTAT.Core.Storage
 {
@@ -25,8 +27,9 @@ namespace APTAT.Core.Storage
                 Started = scanOperationContext.Started,
                 SourceDescription = scanOperationContext?.DevicesSourceDescription?.Description,
                 Source = scanOperationContext?.DevicesSourceDescription.Type,
-
+                ScanMethod = scanOperationContext.ScanMethod.ToData()
             };
+
             foreach (var aptScanResult in scanOperationContext.ScanResults)
             {
                 dataObject.AptScanResults.Add(new AptScanResult
@@ -79,7 +82,7 @@ namespace APTAT.Core.Storage
         public void UpdateVerdictForOperation(Guid operationUid, Dictionary<string, Descent.Apt.CloudVerdict> resultsWithoutErrors,
             VerdictSource verdictSource)
         {
-            var group = resultsWithoutErrors.GroupBy(kvp => kvp.Value.MapToDal(), kvp => kvp.Key).ToArray();
+            var group = resultsWithoutErrors.GroupBy(kvp => kvp.Value.ToData(), kvp => kvp.Key).ToArray();
             using (var context = _entityStorage.GetContext())
             {
                 context.ModulesRepository.UpdateVerdictByHashAndOperationUid(operationUid,group, verdictSource);

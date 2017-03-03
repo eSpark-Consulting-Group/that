@@ -18,6 +18,7 @@ using Valkyrie.WebApiProvider.Enums;
 using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using ValkyrieFileInfo = APTAT.Valkyrie.ValkyrieFileInfo;
+using APTAT.DAL.Enums;
 
 namespace APTAT.Core.Apt
 {

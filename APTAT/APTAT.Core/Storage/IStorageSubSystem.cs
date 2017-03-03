@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.DAL.Entities;
+using APTAT.DAL.Enums;
 
 namespace APTAT.Core.Storage
 {
