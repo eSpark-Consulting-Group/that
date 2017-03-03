@@ -164,6 +164,9 @@
   <ItemGroup>
     <ResourceCompile Include="FAT.Bootstrapper.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\FAT.Application\FAT.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

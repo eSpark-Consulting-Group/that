@@ -9,7 +9,7 @@ const wchar_t PATH[] = L"Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Clie
 const wchar_t KEY_INSTALL[] = L"Install";
 const wchar_t KEY_VERSION[] = L"Version";
 const wchar_t FRAMEWORK_DOWNLOAD_LINK[] = L"https://go.microsoft.com/fwlink/?LinkId=528259";
-const wchar_t APP[] = L"ForensicAnalysisTool.exe";
+const wchar_t APP[] = L"bin\\ForensicAnalysisTool.exe";
 const wchar_t ExpectedVersion[] = L"4.6";
 
 
@@ -141,9 +141,29 @@ void Bootstrapper::LaunchApplication()
 
 	LPWSTR szCmdline = _tcsdup(APP);
 
-	CreateProcess(NULL, szCmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+	SHELLEXECUTEINFO shExInfo = { 0 };
+	shExInfo.cbSize = sizeof(shExInfo);
+	shExInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+	shExInfo.hwnd = 0;
+	shExInfo.lpVerb = _T("runas");                // Operation to perform
+	shExInfo.lpFile = szCmdline;       // Application to start    
+	shExInfo.lpParameters = L"";                  // Additional parameters
+	shExInfo.lpDirectory = 0;
+	shExInfo.nShow = SW_SHOW;
+	shExInfo.hInstApp = 0;
 
-	free(szCmdline);
+	if (ShellExecuteEx(&shExInfo))
+	{
+		free(szCmdline);
+		WaitForSingleObject(shExInfo.hProcess, INFINITE);
+		CloseHandle(shExInfo.hProcess);
+	}
+	else
+	{
+		free(szCmdline);
+	}
+	//CreateProcess(NULL, szCmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 
-	WaitForSingleObject(pi.hProcess, INFINITE);
+
+	//WaitForSingleObject(pi.hProcess, INFINITE);
 }

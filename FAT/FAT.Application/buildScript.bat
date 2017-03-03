@@ -1,19 +1,22 @@
+del bin /Q
+del ForensicAnalysisTool.7z
 set ZDIR="..\..\SfxPackage\"
-mkdir "%CD%\sfx"
-"%ZDIR%\7za.exe" a -mx9  "%CD%\archive.7z" "%CD%\*.txt" "%CD%\archive.7z" "%CD%\*.dll" "%CD%\ForensicAnalysisTool.exe" "%CD%\ForensicAnalysisTool.exe.config" "%CD%\FAT.Bootstrapper.exe" "%CD%\cmdapt86.exe" "%CD%\cmdapt64.exe" "%CD%\amd64" "%CD%\x86" || goto :error
-copy /b "%ZDIR%\7zSD.sfx" + "%ZDIR%\config.txt" + "%CD%\archive.7z" "%CD%\sfx\FAT.exe" || goto :error
-del  "%CD%\archive.7z"
+mkdir "%CD%\bin"
+copy *.dll bin\*.dll
+move ForensicAnalysisTool.exe bin\ForensicAnalysisTool.exe
+copy ForensicAnalysisTool.exe.config bin\ForensicAnalysisTool.exe.config
+copy cmdapt64.exe bin\cmdapt64.exe
+copy cmdapt86.exe bin\cmdapt86.exe
+mkdir "%CD%\bin\amd64"
+mkdir "%CD%\bin\x86"
+copy amd64\* bin\amd64\*
+copy x86\* bin\x86\*
+copy *.txt bin\*.txt
+ren FAT.Bootstrapper.exe ForensicAnalysisTool.exe
+Y
+"%ZDIR%\7za.exe" a -mx9 "%CD%\ForensicAnalysisTool.7z" "%CD%\ForensicAnalysisTool.exe" "%CD%\bin" || goto :error
 
-copy ResourceCopy.exe sfx\ResourceCopy.exe
-copy ForensicAnalysisTool.exe sfx\ForensicAnalysisTool.exe
-cd sfx
+ren ForensicAnalysisTool.exe FAT.Bootstrapper.exe
+move bin\ForensicAnalysisTool.exe ForensicAnalysisTool.exe
 
-START /WAIT ResourceCopy.exe ForensicAnalysisTool.exe ForensicAnalysisTool.exe
-del ForensicAnalysisTool.exe
-START /WAIT ResourceHacker -compile version.rc, version.res
-START /WAIT ResourceHacker -modify FAT.exe, ForensicAnalysisTool.exe, version.res,,,
-
-del version.rc
-del version.res
-del FAT.exe
-del ResourceCopy.exe
+del bin /Q
