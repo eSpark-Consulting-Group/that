@@ -25,6 +25,8 @@ namespace APTAT.Core.Descent.Apt
             private const string ScanResultsFileName = "out.xml";
             private readonly string TvlFileName;
             private readonly string TrlFileName;
+            private readonly string TvlFileLocalPath;
+            private readonly string TrlFileLocalPath;
 
             private const string ScopeParamFormat = "--scope \"{0}\"";
             private const string OutputFileParamFormat = "--output \"{0}\"";
@@ -59,9 +61,11 @@ namespace APTAT.Core.Descent.Apt
 			{
                 var folderPath = new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location)
                     .Parent.FullName;
-                TvlFileName = folderPath + "\\" + "tvl.txt";
-                TrlFileName = folderPath + "\\" + "trl.txt";
-			    _additionFiles = new[] {TvlFileName, TrlFileName};
+                TvlFileName = "tvl.txt";
+                TrlFileName = "trl.txt";
+                TrlFileLocalPath = folderPath + "\\" + TrlFileName;
+                TvlFileLocalPath = folderPath + "\\" + TvlFileName;
+                _additionFiles = new[] { TvlFileLocalPath, TrlFileLocalPath };
                 _options = options;
 			}
 
