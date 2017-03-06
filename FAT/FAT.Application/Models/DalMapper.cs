@@ -4,15 +4,16 @@ using System;
 using System.Collections.Generic;
 using APTAT.DAL.Storage.DTO;
 using APTAT.DeploymentCore.Directory;
+using FAT.Application.Models.Apt;
 
 namespace FAT.Application.Models
 {
     public static class DalMapper
     {
 
-        public static IScanResultItem[] MapCollection(this IEnumerable<AptScanResultDTO> aptScanResults)
+        public static IFatScanComputerResult[] MapCollection(this IEnumerable<AptScanResultDTO> aptScanResults)
         {
-            List<IScanResultItem> result = new List<IScanResultItem>();
+            List<IFatScanComputerResult> result = new List<IFatScanComputerResult>();
             foreach (var scanRes in aptScanResults)
             {
                 result.Add(scanRes.MapItem());
@@ -20,16 +21,23 @@ namespace FAT.Application.Models
             return result.ToArray();
         }
 
-        public static IScanResultItem MapItem(this AptScanResultDTO dto)
+        public static IFatScanComputerResult MapItem(this AptScanResultDTO dto)
         {
             var scan = dto.ScanResult;
-            ScanResultItem result = new ScanResultItem();
-            result.BadFiles = MapBadFiles(scan.Modules);
-            result.ScanStage = scan.ScanStage.MapScanStageToBusiness();
-            result.StatusMessage = scan.StatusMessage;
-            result.TargetUid = scan.TargetUid;
-            result.TotalFilesCount = dto.TotalCount;
-            result.UnknownFilesCount = dto.UnknownsCount; 
+            FatScanComputerResult result = new FatScanComputerResult
+            {
+                BadFiles = MapBadFiles(scan.Modules),
+                ScanStage = scan.ScanStage.MapScanStageToBusiness(),
+                StatusMessage = scan.StatusMessage,
+                TargetUid = scan.TargetUid,
+                TotalFilesCount = dto.TotalCount,
+                UnknownFilesCount = dto.UnknownsCount,
+                MalwareFilesCount = dto.MaliciousCount,
+                CleanFilesCount = dto.SafeFilesCount,
+                NotAnalyzedFilesCount = dto.NotAnalyzedFilesCount,
+            };
+            result.InAnalysisFilesCount = result.TotalFilesCount - result.CleanFilesCount
+                - result.NotAnalyzedFilesCount - result.MalwareFilesCount - result.UnknownFilesCount;
             return result;
         }
 

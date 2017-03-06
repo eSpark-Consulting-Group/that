@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FAT.Application.Models.Apt;
 
 namespace FAT.Application.Services
 {
@@ -51,7 +52,7 @@ namespace FAT.Application.Services
             return data.MapCollection();
 
         }
-        public IScanResultItem GetScanOperationDetailed(Guid operationUid)
+        public IFatScanComputerResult[] GetScanOperationDetailed(Guid operationUid)
         {
             AptScanResultDTO[] data;
             using (var storage = _storageContext.GetContext())
@@ -59,7 +60,7 @@ namespace FAT.Application.Services
                  data =  storage.AptScanResultRepository.GetByOperationUid(operationUid);
             }
 
-            return data.MapCollection().SingleOrDefault();
+            return data.MapCollection();
         }
 
     }
