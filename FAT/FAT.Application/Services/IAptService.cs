@@ -71,12 +71,14 @@ namespace FAT.Application.Services
     public class BuildReportCompletedEventArgs : DomainEventArgs
     {
         public String FileName { get; private set; }
+        public byte[] DocumentBytes { get; private set; }
 
-        public BuildReportCompletedEventArgs(String fileName, Exception e, Object userState)
+        public BuildReportCompletedEventArgs(string fileName, byte[] documentBytes, Exception e, Object userState)
         {
-            FileName = fileName;
-            Exception = e;
+            DocumentBytes = documentBytes;
+            Exception = e;           
             UserState = userState;
+            FileName = fileName;
         }
     }
     

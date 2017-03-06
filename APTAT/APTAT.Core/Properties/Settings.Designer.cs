@@ -157,5 +157,14 @@ namespace APTAT.Core.Properties {
                 return ((string)(this["valkyrieBaseUrl"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Reports")]
+        public string ReportFolder {
+            get {
+                return ((string)(this["ReportFolder"]));
+            }
+        }
     }
 }

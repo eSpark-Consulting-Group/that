@@ -47,5 +47,8 @@
     <Setting Name="valkyrieBaseUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://valkyrie.comodo.com/</Value>
     </Setting>
+    <Setting Name="ReportFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Reports</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

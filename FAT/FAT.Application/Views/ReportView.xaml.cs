@@ -22,7 +22,7 @@ namespace FAT.Application
     /// <summary>
     /// Interaction logic for ReportView.xaml
     /// </summary>
-    public partial class ReportView 
+    public partial class ReportView
     {
         private readonly ReportViewModel _viewModel;
 
@@ -35,7 +35,7 @@ namespace FAT.Application
             Unloaded += OnUnloaded;
 
             pdfViewer.DefaultFormatProviderSettings = FormatProviderSettings.ReadOnDemand;
-           
+
         }
 
         private void pdf_DocumentChanged(object sender, DocumentChangedEventArgs e)
@@ -46,18 +46,18 @@ namespace FAT.Application
         private void OnUnloaded(Object sender, RoutedEventArgs e)
         {
             btnPrintPdfDocument.Command = null;
-           btnPageDown.Command = null;
-           btnPageUp.Command = null;
+            btnPageDown.Command = null;
+            btnPageUp.Command = null;
             //btnNext.Command = null;
             //btnPrev.Command = null;
             //btnZoomIn.Command = null;
             //btnZoomOut.Command = null;
             //tbFind.Text = null;
-           //tbPagesCount.Text = null;
+            //tbPagesCount.Text = null;
 
-           BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
-           // BindingOperations.ClearBinding(cbScale, RadComboBox.TextProperty);
-           // BindingOperations.ClearBinding(btnTogglePan, RadToggleButton.IsCheckedProperty);
+            BindingOperations.ClearBinding(tbCurrentPage, TextBox.TextProperty);
+            // BindingOperations.ClearBinding(cbScale, RadComboBox.TextProperty);
+            // BindingOperations.ClearBinding(btnTogglePan, RadToggleButton.IsCheckedProperty);
             //BindingOperations.ClearBinding(btnToggleTextSelection, RadToggleButton.IsCheckedProperty);
 
             _viewModel.ReportOpened -= OnReportOpened;
@@ -67,11 +67,13 @@ namespace FAT.Application
 
         private void OnReportOpened(Object sender, EventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)delegate
-            {
-                using (var stream = File.OpenRead(_viewModel.FileName))
-                    pdfViewer.DocumentSource = new PdfDocumentSource(stream);
-            });
+            Dispatcher.BeginInvoke((Action) delegate
+             {
+                 using (var stream = new MemoryStream(_viewModel.DocumentBytes))
+                 {
+                     pdfViewer.DocumentSource = new PdfDocumentSource(stream);
+                 }
+             });
 
         }
 
@@ -89,7 +91,7 @@ namespace FAT.Application
 
         private void TbFindKeyDown(Object sender, KeyEventArgs e)
         {
-            
+
             if (e.Key == Key.Enter && (search.Text ?? string.Empty).Length > 2)
             {
                 pdfViewer.CommandDescriptors.FindCommandDescriptor.Command.Execute(search.Text);
@@ -104,16 +106,12 @@ namespace FAT.Application
                 clear.Visibility = Visibility.Collapsed;
             else
                 clear.Visibility = Visibility.Visible;
-
-            
         }
 
-
-
         private void Button_Click(object sender, RoutedEventArgs e)
-    {
-        search.Text = null;
-        search.Dispatcher.BeginInvoke((Action)delegate { search.Focus(); });
+        {
+            search.Text = null;
+            search.Dispatcher.BeginInvoke((Action) delegate { search.Focus(); });
             clear.Visibility = Visibility.Collapsed;
         }
 
@@ -123,10 +121,10 @@ namespace FAT.Application
             saveDialog.Filter = "PDF File|*.pdf";
 
             bool? dialogResult = saveDialog.ShowDialog();
-            if (dialogResult == true && File.Exists(_viewModel.FileName))
+            if (dialogResult == true)
             {
                 using (var output = File.Create(saveDialog.FileName))
-                using (var input = File.OpenRead(_viewModel.FileName))
+                using (var input = new MemoryStream(_viewModel.DocumentBytes))
                 {
                     input.Seek(0, SeekOrigin.Begin);
                     input.CopyTo(output);
@@ -134,10 +132,5 @@ namespace FAT.Application
                 }
             }
         }
-
-    private void OnShowInFolder(Object sender, RoutedEventArgs e)
-        {
-            Process.Start(@"Explorer.exe", @"/select," + _viewModel.FileName);
-        }
-    }
+    }  
 }

@@ -51,12 +51,7 @@
                         <converters:FixedDocumentViewerModeConverter x:Key="ModeConverter" />-->
                     </telerik:RadToolBar.Resources>
 
-                    <telerik:RadButton AutomationProperties.AutomationId="ShowInFolderButton" 
-                                       Click="OnShowInFolder" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="0" HorizontalContentAlignment="Center" 
-                                       VerticalContentAlignment="Center" IsBackgroundVisible="False" Margin="16 2 2 2" ToolTip="Show In Folder">
-                   
-                        <Image Source="pack://application:,,,/Telerik.Windows.Controls.FixedDocumentViewers;component/Images/open.png" Stretch="None" />
-                    </telerik:RadButton>
+                    
 
                     <telerik:RadButton AutomationProperties.AutomationId="SaveButton" 
                                        Click="OnSave" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="0" HorizontalContentAlignment="Center" 

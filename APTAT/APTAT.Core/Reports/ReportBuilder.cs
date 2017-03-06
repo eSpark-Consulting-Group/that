@@ -4,98 +4,120 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using APTAT.Core.TelerikReports;
+using APTAT.Core.Properties;
 
 namespace APTAT.Core.Reports
 {
     public class ReportBuilder
     {
-        private string _fileName;
-
-        public delegate string BuildReportDelegate(AptReportData data, ReportType reportType);
+        public delegate ReportFile BuildReportDelegate(AptReportData data, ReportType reportType, bool createFile);
 
         private readonly ReportNamesCache _cache = ReportNamesCache.Instance;
-        public string Build(AptReportData data, ReportType reportType)
-        {
-            if (data == null)
-                return null;
 
+        private string GetReportCacheKey(AptReportData data, ReportType reportType)
+        {
+            switch (reportType.ScanStage())
+            {
+                case ReportScanStage.FlsScan:
+                    return data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
+
+                case ReportScanStage.ValkyrieScan:
+                    return data.ValkyrieOperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
+                default:
+                    throw new NotSupportedException("Scan Stage not supported " + reportType.ScanStage());
+
+            }
+        }
+
+        private ReportFile TryGetReportFromCache(string reportKey)
+        {
             var existentName = string.Empty;
-            var flsReportKey = data.OperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
-            var valkyrieReportKey = data.ValkyrieOperationUid + "-" + data.FlsLookupOperationUid + "-" + reportType;
-            var reportKey = string.Empty;
-            if (_cache.Reports.Keys.Contains(flsReportKey))
+            if (_cache.Reports.Keys.Contains(reportKey))
             {
-                existentName = _cache.Reports[flsReportKey];
-                reportKey = flsReportKey;
+                existentName = _cache.Reports[reportKey];
             }
-            else if (_cache.Reports.Keys.Contains(valkyrieReportKey))
-            {
-                existentName = _cache.Reports[valkyrieReportKey];
-                reportKey = valkyrieReportKey;
-            }
+
             if (!string.IsNullOrWhiteSpace(existentName))
             {
                 if (File.Exists(existentName))
                 {
-                    _fileName = existentName;
-                    return existentName;
+                    var data = File.ReadAllBytes(existentName);
+                    return new ReportFile() { FileName = existentName, Data = data };
                 }
-                _cache.Reports.Remove(reportKey);
+                else
+                {
+                    _cache.Reports.Remove(reportKey);
+                }
             }
-            
-            _fileName = GetFileName(reportType);
+            return null;
+        }
 
+        public ReportFile Build(AptReportData data, ReportType reportType, bool saveFile = true)
+        {
+            if (data == null) return null;
+            
+            var reportKey = GetReportCacheKey(data, reportType);
+            var reportFromCache = TryGetReportFromCache(reportKey);
+            if (reportFromCache != null) return reportFromCache;
+
+            
+            byte[] reportBytes = new byte[1];
             switch (reportType)
             {
                 case ReportType.Executive:
-                    _cache.Reports.Add(flsReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.ExecutiveReport, ReportFormat.PDF, flsReportKey);
+                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.ExecutiveReport, ReportFormat.PDF);
                     break;
 
                 case ReportType.DetailedPerDevice:
-                    _cache.Reports.Add(flsReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.DetailedPerDeviceReport, ReportFormat.PDF, flsReportKey);
+                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerDeviceReport, ReportFormat.PDF);
                     break;
 
                 case ReportType.DetailedPerProgram:
-                    _cache.Reports.Add(flsReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.DetailedPerProgramReport, ReportFormat.PDF, flsReportKey);
+                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerProgramReport, ReportFormat.PDF);
                     break;
 
                 case ReportType.ExecutiveWithValkyrie:
-                    _cache.Reports.Add(valkyrieReportKey, _fileName);
-                    BuildExecutiveWithValkyrieReport(_fileName, data, valkyrieReportKey);
+                    reportBytes = BuildExecutiveWithValkyrieReport(data);
                     break;
 
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    _cache.Reports.Add(valkyrieReportKey, _fileName);
-                    BuildDetailedPerDeviceWithValkyrieReport(_fileName, data, valkyrieReportKey);
+                    reportBytes = BuildDetailedPerDeviceWithValkyrieReport(data);
                     break;
 
                 case ReportType.DetailedPerProgramWithValkyrie:
-                    _cache.Reports.Add(valkyrieReportKey, _fileName);
-                    _reportFileGenerator.Build(_fileName, data, TelerikReports.ReportType.DetailedPerProgramValkyrieReport, ReportFormat.PDF, valkyrieReportKey);
+                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerProgramValkyrieReport, ReportFormat.PDF);
                     break;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reportType));
             }
 
-            return _fileName;
+            string fileName = GetFileName(reportType);
+            if (saveFile)
+            {                
+                using (FileStream fs = new FileStream(fileName, FileMode.Create))
+                {
+                    fs.Write(reportBytes, 0, reportBytes.Length);
+                }                
+                _cache.Reports.Add(reportKey, fileName);
+            }
+
+            var path = Path.Combine(Settings.Default.ReportFolder, fileName);
+            return new ReportFile() { FileName = path, Data = reportBytes };
         }
 
         private readonly IReportFileGenerator _reportFileGenerator = new ReportFileGenerator(new FileHelper());
 
-        private void BuildExecutiveWithValkyrieReport(string fileName, AptReportData data, string uid)
+        private byte[] BuildExecutiveWithValkyrieReport(AptReportData data)
         {
             data.GetAllBadFilesSorted(false);
-            _reportFileGenerator.Build(fileName, data, TelerikReports.ReportType.ExecutiveValkyrieReport, ReportFormat.PDF, uid);
+            return _reportFileGenerator.Build(data, TelerikReports.ReportType.ExecutiveValkyrieReport, ReportFormat.PDF);
         }
 
-        private void BuildDetailedPerDeviceWithValkyrieReport(string fileName, AptReportData data, string uid)
+        private byte[] BuildDetailedPerDeviceWithValkyrieReport(AptReportData data)
         {
-            var x = data.SucceededTargetsWithValkyrie.ToArray();
-            _reportFileGenerator.Build(fileName, data, TelerikReports.ReportType.DetailedPerDeviceWithValkyrieReport, ReportFormat.PDF, uid);
+            data.SucceededTargetsWithValkyrie.ToArray();
+            return _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerDeviceWithValkyrieReport, ReportFormat.PDF);
         }
 
         private static string GetFileName(ReportType reportType)

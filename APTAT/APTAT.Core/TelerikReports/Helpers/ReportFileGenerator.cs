@@ -11,9 +11,9 @@ namespace APTAT.Core.TelerikReports
     public class ReportFileGenerator : IReportFileGenerator
     {
         private const string ExecutiveReportName = "ExecutiveReport";
-        //private readonly IReportNamesCache _cache;
+        
         private const string ReportDefinitionPath = "APTAT.Core.TelerikReports";
-        //private readonly IReportRenderer _reportRenderer;
+        
         private readonly IFileHelper _fileHelper;
 
         public ReportFileGenerator(IFileHelper fileHelper)
@@ -21,40 +21,21 @@ namespace APTAT.Core.TelerikReports
             _fileHelper = fileHelper;            
         }
 
-        //private string LookupForExistentReport(string operationUid, ReportType reportType, ReportFormat reportFormat)
-        //{
-        //    string existentName = _cache.Find(operationUid, reportType, reportFormat);
+        
 
-        //    if (!String.IsNullOrWhiteSpace(existentName))
-        //    {
-        //        if (_fileHelper.IsFileExists(existentName))
-        //        {
-        //            return existentName;
-        //        }
-        //        else
-        //        {
-        //            _cache.Remove(operationUid, reportType, reportFormat);
-        //        }
-        //    }
-        //    return null;
-        //}
-
-        public string Build(string resultfileName, AptReportData data, ReportType reportType, ReportFormat reportFormat, string operationUid)
+        public byte[] Build(AptReportData data, ReportType reportType, ReportFormat reportFormat)
         {
             if (data == null) return null;
-            //var foundReportFileName = LookupForExistentReport(operationUid, reportType, reportFormat);
-            //if (!string.IsNullOrEmpty(foundReportFileName)) return foundReportFileName;
-            //var fileName = GetFileName(reportType);
+            
             var renderer = RenderStrategyFactory.GetRenderStrategy(reportFormat);
-            var fName = Path.GetFileNameWithoutExtension(resultfileName);
+            
             switch (reportType)
             {
                 case ReportType.ExecutiveReport:
-                    return renderer.Render(new ExecutiveReport(), data, fName);
-                    //_cache.Add(operationUid, reportType, reportFormat, filePath);
+                    return renderer.Render(new ExecutiveReport(), data);                    
                     
                 case ReportType.DetailedPerProgramReport:
-                     return renderer.Render(new DetailedPrograms(), data, fName);
+                     return renderer.Render(new DetailedPrograms(), data);
 
                 case ReportType.DetailedPerDeviceReport:
                     var ddrep = new DetailedDevicesReport();
@@ -64,10 +45,10 @@ namespace APTAT.Core.TelerikReports
                         ddrep.ChangeScaleForOne();
                     }
                     
-                    return renderer.Render(ddrep, data, fName);
+                    return renderer.Render(ddrep, data);
 
                 case ReportType.ExecutiveValkyrieReport:
-                    return renderer.Render(new ExecutiveValkyrieReport(), data, fName);
+                    return renderer.Render(new ExecutiveValkyrieReport(), data);
 
                 case ReportType.DetailedPerDeviceWithValkyrieReport:
                     var valkyrieDetailedDevicesReport = new DetailedDevicesValkyrieReport();
@@ -76,30 +57,15 @@ namespace APTAT.Core.TelerikReports
                     {
                         valkyrieDetailedDevicesReport.ChangeScaleForOne();
                     }
-                    return renderer.Render(valkyrieDetailedDevicesReport, data, fName);
+                    return renderer.Render(valkyrieDetailedDevicesReport, data);
                 
                case ReportType.DetailedPerProgramValkyrieReport:
-                    return renderer.Render(new DetailedProgramsValkyrieReport(), data, fName);
+                    return renderer.Render(new DetailedProgramsValkyrieReport(), data);
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reportType));
             }
-        }
-
-        private static string GetFileName(ReportType reportType)
-        {
-            var timeStamp = DateTime.Now.ToString("s", CultureInfo.CurrentCulture).Replace(":", "").Replace("-", "");
-
-            const string FileFormatString = "{0}-{1}.pdf";
-            switch (reportType)
-            {
-                case ReportType.ExecutiveReport:
-                    return String.Format(FileFormatString, ExecutiveReportName, timeStamp);
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(reportType));
-            }
-        }
+        }        
 
     }
 }

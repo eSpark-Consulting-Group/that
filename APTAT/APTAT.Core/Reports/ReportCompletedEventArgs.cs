@@ -10,5 +10,6 @@ namespace APTAT.Core.Reports
         public object State { get; set; }
         public string FileName { get; set; }
         public Exception Error { get; set; }
+        public byte[] DocumentBytes { get; set; }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="AptScanInProgressEventArgs.cs" />
     <Compile Include="Apt\AptVerdictContext.cs" />
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
+    <Compile Include="Reports\ReportFile.cs" />
     <Compile Include="Storage\Mappers\CloudVerdictMapper.cs" />
     <Compile Include="Storage\Mappers\ScanKindMapper.cs" />
     <Compile Include="Storage\Mappers\Mapper.cs" />

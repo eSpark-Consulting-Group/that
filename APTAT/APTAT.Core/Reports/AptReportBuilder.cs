@@ -5,6 +5,7 @@ using APTAT.Common;
 
 namespace APTAT.Core.Reports
 {
+    
     internal class AptReportBuilder : IAptReportBuilder
     {
         private readonly ReportBuilder _reportBuilder = new ReportBuilder();
@@ -15,7 +16,7 @@ namespace APTAT.Core.Reports
             _aptAtManager = aptAtManager;
         }
 
-        public void BeginLastBuildReport(ReportType reportType, object state = null)
+        public void BeginLastBuildReport(ReportType reportType, bool saveFile = true, object state = null)
         {
             var operationContext = _aptAtManager.AggregatedScanResults;
             if (operationContext != null)
@@ -41,7 +42,7 @@ namespace APTAT.Core.Reports
                 data.UpdateAllBadFilesSorted();
                 ReportBuilder.BuildReportDelegate action = _reportBuilder.Build;
                 Context context = new Context { Action = action, State = state };
-                action.BeginInvoke(data, reportType, BuildReportCallback, context);
+                action.BeginInvoke(data, reportType, saveFile, BuildReportCallback, context);
             }
             else
             {
@@ -60,8 +61,9 @@ namespace APTAT.Core.Reports
             ReportCompletedEventArgs args = new ReportCompletedEventArgs();
             try
             {
-                string fileName = context.Action.EndInvoke(ar);
-                args.FileName = fileName;
+                ReportFile reportFile = context.Action.EndInvoke(ar);
+                args.DocumentBytes = reportFile.Data;
+                args.FileName = reportFile.FileName;
                 args.State = context.State;
             }
             catch (Exception ex)

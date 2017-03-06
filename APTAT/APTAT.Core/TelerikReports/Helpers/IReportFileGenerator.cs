@@ -4,7 +4,7 @@ namespace APTAT.Core.TelerikReports
 {
     public interface IReportFileGenerator
     {
-        string Build(string fileName, AptReportData data, ReportType reportType, ReportFormat reportFormat, string operationUid);
+        byte[] Build(AptReportData data, ReportType reportType, ReportFormat reportFormat);
 
     }
 }

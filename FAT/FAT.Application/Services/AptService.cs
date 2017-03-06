@@ -51,12 +51,12 @@ namespace FAT.Application.Services
         {
             IAptReportBuilder reportBuilder = _manager.GetAptReportBuilder();
             reportBuilder.ReportCompleted += OnReportCompleted;
-            reportBuilder.BeginLastBuildReport(ToReportType(reportKind), userState);
+            reportBuilder.BeginLastBuildReport(ToReportType(reportKind), false, userState);
         }
 
         private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
         {
-            BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.Error, e.State);
+            BuildReportCompletedEventArgs args = new BuildReportCompletedEventArgs(e.FileName, e.DocumentBytes, e.Error, e.State);
             if (sender is IAptReportBuilder)
             {
                 var builder = (IAptReportBuilder)sender;
