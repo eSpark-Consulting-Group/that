@@ -6,7 +6,7 @@ namespace FAT.Application.Services
 {
     public interface IDataService
     {
-        IScanResultItem GetAptScanResults(Guid operationUid);
+        IScanResultItem GetScanOperationDetailed(Guid operationUid);
         IScanOperation[] GetPreviousScans(string keyword);
         string GetEmails();
 

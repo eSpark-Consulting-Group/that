@@ -1,12 +1,9 @@
 using System.Data.SqlServerCe;
-using System.Reflection;
 using APTAT.DAL.Entities;
 
 namespace APTAT.DAL
 {
-    using System;
     using System.Data.Entity;
-    using System.Linq;
 
     public class AptEntities : DbContext
     {
@@ -21,7 +18,8 @@ namespace APTAT.DAL
         {
             var builder = new SqlCeConnectionStringBuilder();
             builder.Password = "Test1231";
-            builder.DataSource = "AptDatabase.sdf";
+            builder.DataSource = System.IO.Directory.Exists("data") 
+                ? "data\\AptDatabase.sdf" : "AptDatabase.sdf";
             builder.PersistSecurityInfo = true;
             _connectionString = builder.ToString();
             var sqliteConnectionInitializer = new DropCreateDatabaseIfModelChanges<AptEntities>();

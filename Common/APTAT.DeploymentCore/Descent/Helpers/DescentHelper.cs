@@ -390,7 +390,7 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 				{
                     bool isx64 = System.IO.Directory.Exists(Path.Combine(RemoteAdminPath, "SysWOW64"));
                     CleanUpRemoteContent();
-					CopyFile( descentAgentPath, true ); // "true" means remove after operation is completed
+                    CopyFile( descentAgentPath, true ); // "true" means remove after operation is completed
 				    foreach (var filePath in GetAdditionalFilesToCopy(isx64))
 				    {
                         CopyFile(filePath, true);

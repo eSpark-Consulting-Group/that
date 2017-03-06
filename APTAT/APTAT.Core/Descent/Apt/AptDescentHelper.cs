@@ -23,8 +23,8 @@ namespace APTAT.Core.Descent.Apt
             
 			private const string ScanStatusFileName = "scan_status.txt";
             private const string ScanResultsFileName = "out.xml";
-            private const string TvlFileName = "tvl.txt";
-            private const string TrlFileName = "trl.txt";
+            private readonly string TvlFileName;
+            private readonly string TrlFileName;
 
             private const string ScopeParamFormat = "--scope \"{0}\"";
             private const string OutputFileParamFormat = "--output \"{0}\"";
@@ -40,7 +40,7 @@ namespace APTAT.Core.Descent.Apt
             private string _resultsFile;
 		    private string _tvlFile;
             private string _trlFile;
-            private string[] _additionFiles = new[] { TvlFileName, TrlFileName };
+            private readonly string[] _additionFiles;
 
             private const string AptScannerTempFolderName = "ComodoAptAtScanner";
        
@@ -57,6 +57,11 @@ namespace APTAT.Core.Descent.Apt
             public AptDescentHelper( RemoteHostInfo info, IScanOptions options, CancellationToken cancellationToken)
                 : base (info, cancellationToken)
 			{
+                var folderPath = new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location)
+                    .Parent.FullName;
+                TvlFileName = folderPath + "\\" + "tvl.txt";
+                TrlFileName = folderPath + "\\" + "trl.txt";
+			    _additionFiles = new[] {TvlFileName, TrlFileName};
                 _options = options;
 			}
 
@@ -203,10 +208,12 @@ namespace APTAT.Core.Descent.Apt
             private readonly IScanOptions _options;
 
             protected override string GetPackageFileName(bool is64)
-		    {
+            {
+                var folderPath = new DirectoryInfo(System.Reflection.Assembly.GetEntryAssembly().Location)
+                    .Parent.FullName;
                 if (is64)
-                    return ScannerServiceX64FileName;
-                return ScannerServiceX86FileName;
+                    return folderPath + "\\" + ScannerServiceX64FileName;
+                return folderPath + "\\" + ScannerServiceX86FileName;
             }
 
             protected override string[] GetServiceParams()

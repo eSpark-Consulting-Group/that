@@ -51,7 +51,7 @@ namespace FAT.Application.Services
             return data.MapCollection();
 
         }
-        public IScanResultItem GetAptScanResults(Guid operationUid)
+        public IScanResultItem GetScanOperationDetailed(Guid operationUid)
         {
             AptScanResultDTO[] data;
             using (var storage = _storageContext.GetContext())

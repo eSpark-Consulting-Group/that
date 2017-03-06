@@ -16,7 +16,6 @@ namespace FAT.Application.Models
         DateTime Started { get; set; }
         int TotalDevicesScanned { get; set; }
         int UnknownsCount { get; set; }
-
         IValkyrieOperationInfo ValkyrieOperationInfo { get; set; }
     }
 

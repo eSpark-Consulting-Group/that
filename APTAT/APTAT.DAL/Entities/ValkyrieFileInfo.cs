@@ -42,10 +42,13 @@ namespace APTAT.DAL.Entities
         [Key, Column(Order = 1), ForeignKey(nameof(ValkyrieScanInfo))]
         public int ValkyrieScanInfoId { get; set; }
         [Key, Column(Order = 2)]
+        [Required]
+        [MaxLength(40)]
         public string Sha1 { get; set; }
         public float? MalwareProbability { get; set; }
         public string OperationStatus { get; set; }
         public string SkipReason { get; set; }
+        [Required]
         public ValkyrieVerdict Verdict { get; set; }
         public bool IsWhiteListed { get; set; }
         public virtual ValkyrieScanInfo ValkyrieScanInfo { get; set; }
