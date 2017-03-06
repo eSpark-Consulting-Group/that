@@ -577,10 +577,7 @@ namespace FAT.Application.Models
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
 
-            // read email from table in this point.
-            //GetEmails
-
-          Email=  _dataService.GetEmails();
+            Email=_dataService.GetEmails();
             if(!string.IsNullOrEmpty(Email))
                 Set(() => HideSubmitEmail, true);
 

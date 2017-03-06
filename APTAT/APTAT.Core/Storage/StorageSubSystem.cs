@@ -169,15 +169,10 @@ namespace APTAT.Core.Storage
                     context.SaveChanges();
                 }
 
-               // int cnt = 0;
                 foreach (var email in newEmails)
                 {
-                    Email ems = new Email();
-                          ems.Address = email;
-                       //   ems.Id = cnt;
-                    context.EmailRepository.Add(ems);
+                    context.EmailRepository.Add(new Email { Address = email });
                     context.SaveChanges();
-                  //  cnt++;
                 }
             }
         }
