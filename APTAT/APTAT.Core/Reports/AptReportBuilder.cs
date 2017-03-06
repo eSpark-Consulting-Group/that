@@ -8,15 +8,16 @@ namespace APTAT.Core.Reports
     
     internal class AptReportBuilder : IAptReportBuilder
     {
-        private readonly ReportBuilder _reportBuilder = new ReportBuilder();
+        private readonly IReportBuilder _reportBuilder;
         private readonly IAptAtManagerInternal _aptAtManager;
 
-        public AptReportBuilder(IAptAtManagerInternal aptAtManager)
+        public AptReportBuilder(IAptAtManagerInternal aptAtManager, IReportBuilder reportBuilder)
         {
             _aptAtManager = aptAtManager;
+            _reportBuilder = reportBuilder;
         }
 
-        public void BeginLastBuildReport(ReportType reportType, bool saveFile = true, object state = null)
+        public void BeginLastBuildReport(ReportType reportType,  bool saveFile = true, object state = null)
         {
             var operationContext = _aptAtManager.AggregatedScanResults;
             if (operationContext != null)

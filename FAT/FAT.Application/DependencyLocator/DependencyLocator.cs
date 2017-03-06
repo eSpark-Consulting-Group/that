@@ -2,6 +2,7 @@
 using APTAT.Common;
 using APTAT.Core;
 using FAT.Application.Models;
+using APTAT.Core.Reports;
 
 namespace FAT.Application
 {
@@ -20,6 +21,7 @@ namespace FAT.Application
             resolver.RegisterSingleton<IScanCounterFactory, ScanCounterFactory>();
             resolver.AllowOverridingRegistrations(true);
             resolver.RegisterSingleton<IDistinctFileHelper,FATFileFilter>();
+            resolver.RegisterSingleton<IReportBuilder, ReportBuilderFAT>();
         }
     }
 }

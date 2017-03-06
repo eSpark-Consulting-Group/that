@@ -1,6 +1,7 @@
 ﻿using APTAT.Common;
 using APTAT.Core.Apt;
 using APTAT.Core.CamLicense;
+using APTAT.Core.Reports;
 using APTAT.Core.Storage;
 
 namespace APTAT.Core.DependencyLocator
@@ -18,6 +19,7 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IFlsManager, FlsManager>();
             resolver.RegisterSingleton<IDistinctFileHelper, DistinctFileHelper>();
             resolver.RegisterSingleton<IStorageSubSystem, StorageSubSystem>();
+            resolver.RegisterSingleton<IReportBuilder, ReportBuilder>();
         }
     }
 }

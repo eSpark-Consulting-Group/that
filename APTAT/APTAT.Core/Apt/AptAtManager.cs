@@ -40,6 +40,7 @@ namespace APTAT.Core.Apt
 
         private int _filesShouldSendToValkyrieCount = 0;
         private int _filesWithFlsErrorCount = 0;
+        private IReportBuilder _reportBuilder;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
@@ -86,12 +87,13 @@ namespace APTAT.Core.Apt
 
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager,
-            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage)
+            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage, IReportBuilder reportBuilder)
         {
             _descentSubSystem = descentSubSystem;
             _entityStorage = storage;
             _aptScannerFactory = aptScannerFactory;
             _distinctHelper = distinctHelper;
+            _reportBuilder = reportBuilder;
 
             _valkyrieClient = valkyrieClient;
             _valkyrieClient.SetBaseUri(new Uri(Settings.Default.valkyrieBaseUrl));
@@ -453,7 +455,7 @@ namespace APTAT.Core.Apt
 
         public IAptReportBuilder GetAptReportBuilder()
         {
-            IAptReportBuilder aptReportBuilder = new AptReportBuilder(this);
+            IAptReportBuilder aptReportBuilder = new AptReportBuilder(this, _reportBuilder);
             return aptReportBuilder;
         }
 

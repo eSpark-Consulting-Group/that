@@ -75,6 +75,8 @@
     <Compile Include="AptScanInProgressEventArgs.cs" />
     <Compile Include="Apt\AptVerdictContext.cs" />
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
+    <Compile Include="Reports\ReportBuilderFAT.cs" />
+    <Compile Include="Reports\IReportBuilder.cs" />
     <Compile Include="Reports\ReportFile.cs" />
     <Compile Include="Storage\Mappers\CloudVerdictMapper.cs" />
     <Compile Include="Storage\Mappers\ScanKindMapper.cs" />
@@ -166,7 +168,6 @@
     <Compile Include="TelerikReports\Helpers\IReportNamesCache.cs" />
     <Compile Include="TelerikReports\Helpers\RenderPdfStrategy.cs" />
     <Compile Include="TelerikReports\Helpers\RenderStrategyFactory.cs" />
-    <Compile Include="TelerikReports\Helpers\ReportFileGenerator.cs" />
     <Compile Include="TelerikReports\Helpers\ReportNamesCache.cs" />
     <Compile Include="TelerikReports\Helpers\ReportType.cs" />
     <Compile Include="TelerikReports\Template\DetailedDevicesReport.cs">
@@ -174,6 +175,12 @@
     </Compile>
     <Compile Include="TelerikReports\Template\DetailedDevicesReport.Designer.cs">
       <DependentUpon>DetailedDevicesReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedDevicesReportFAT.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedDevicesReportFAT.Designer.cs">
+      <DependentUpon>DetailedDevicesReportFAT.cs</DependentUpon>
     </Compile>
     <Compile Include="TelerikReports\Template\DetailedDevicesValkyrieReport.cs">
       <SubType>Component</SubType>
@@ -186,6 +193,12 @@
     </Compile>
     <Compile Include="TelerikReports\Template\DetailedPrograms.Designer.cs">
       <DependentUpon>DetailedPrograms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedProgramsReportFAT.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\DetailedProgramsReportFAT.Designer.cs">
+      <DependentUpon>DetailedProgramsReportFAT.cs</DependentUpon>
     </Compile>
     <Compile Include="TelerikReports\Template\DetailedProgramsValkyrieReport.cs">
       <SubType>Component</SubType>
@@ -204,6 +217,12 @@
     </Compile>
     <Compile Include="TelerikReports\Template\ExecutiveReport.Designer.cs">
       <DependentUpon>ExecutiveReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveReportFAT.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\ExecutiveReportFAT.Designer.cs">
+      <DependentUpon>ExecutiveReportFAT.cs</DependentUpon>
     </Compile>
     <Compile Include="TelerikReports\Template\ExecutiveValkyrieReport.cs">
       <SubType>Component</SubType>
@@ -249,11 +268,17 @@
     <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesReport.resx">
       <DependentUpon>DetailedDevicesReport.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesReportFAT.resx">
+      <DependentUpon>DetailedDevicesReportFAT.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\DetailedDevicesValkyrieReport.resx">
       <DependentUpon>DetailedDevicesValkyrieReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\DetailedPrograms.resx">
       <DependentUpon>DetailedPrograms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\DetailedProgramsReportFAT.resx">
+      <DependentUpon>DetailedProgramsReportFAT.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\DetailedProgramsValkyrieReport.resx">
       <DependentUpon>DetailedProgramsValkyrieReport.cs</DependentUpon>
@@ -263,6 +288,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\ExecutiveReport.resx">
       <DependentUpon>ExecutiveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\ExecutiveReportFAT.resx">
+      <DependentUpon>ExecutiveReportFAT.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\ExecutiveValkyrieReport.resx">
       <DependentUpon>ExecutiveValkyrieReport.cs</DependentUpon>

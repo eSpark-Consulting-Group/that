@@ -8,8 +8,58 @@ using APTAT.Core.Properties;
 
 namespace APTAT.Core.Reports
 {
-    public class ReportBuilder
+    public class ReportBuilder : IReportBuilder
     {
+        public ReportBuilder()
+        {
+
+        }
+        protected virtual byte[] Render(AptReportData data, ReportType reportType)
+        {
+            if (data == null) return null;
+
+            var renderer = RenderStrategyFactory.GetRenderStrategy(ReportFormat.PDF);
+
+            switch (reportType)
+            {
+                case ReportType.Executive:
+                    return renderer.Render(new ExecutiveReport(), data);
+
+                case ReportType.DetailedPerProgram:
+                    return renderer.Render(new DetailedPrograms(), data);
+
+                case ReportType.DetailedPerDevice:
+                    var ddrep = new DetailedDevicesReport();
+                    var max = data.Top10VulnerableDevices.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
+                    if (max <= 5)
+                    {
+                        ddrep.ChangeScaleForOne();
+                    }
+
+                    return renderer.Render(ddrep, data);
+
+                case ReportType.ExecutiveWithValkyrie:
+                    data.GetAllBadFilesSorted(false);
+                    return renderer.Render(new ExecutiveValkyrieReport(), data);
+
+                case ReportType.DetailedPerDeviceWithValkyrie:
+                    var valkyrieDetailedDevicesReport = new DetailedDevicesValkyrieReport();
+                    var topVulnerableDevicesValk = data.Top10VulnerableDevicesValkyrie.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
+                    if (topVulnerableDevicesValk <= 5)
+                    {
+                        valkyrieDetailedDevicesReport.ChangeScaleForOne();
+                    }
+                    return renderer.Render(valkyrieDetailedDevicesReport, data);
+
+                case ReportType.DetailedPerProgramWithValkyrie:
+                    data.SucceededTargetsWithValkyrie.ToArray();
+                    return renderer.Render(new DetailedProgramsValkyrieReport(), data);
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(reportType));
+            }
+        }
+
         public delegate ReportFile BuildReportDelegate(AptReportData data, ReportType reportType, bool createFile);
 
         private readonly ReportNamesCache _cache = ReportNamesCache.Instance;
@@ -55,50 +105,22 @@ namespace APTAT.Core.Reports
         public ReportFile Build(AptReportData data, ReportType reportType, bool saveFile = true)
         {
             if (data == null) return null;
-            
+
             var reportKey = GetReportCacheKey(data, reportType);
             var reportFromCache = TryGetReportFromCache(reportKey);
             if (reportFromCache != null) return reportFromCache;
 
-            
+
             byte[] reportBytes = new byte[1];
-            switch (reportType)
-            {
-                case ReportType.Executive:
-                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.ExecutiveReport, ReportFormat.PDF);
-                    break;
-
-                case ReportType.DetailedPerDevice:
-                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerDeviceReport, ReportFormat.PDF);
-                    break;
-
-                case ReportType.DetailedPerProgram:
-                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerProgramReport, ReportFormat.PDF);
-                    break;
-
-                case ReportType.ExecutiveWithValkyrie:
-                    reportBytes = BuildExecutiveWithValkyrieReport(data);
-                    break;
-
-                case ReportType.DetailedPerDeviceWithValkyrie:
-                    reportBytes = BuildDetailedPerDeviceWithValkyrieReport(data);
-                    break;
-
-                case ReportType.DetailedPerProgramWithValkyrie:
-                    reportBytes = _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerProgramValkyrieReport, ReportFormat.PDF);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(reportType));
-            }
+            reportBytes = Render(data, reportType);
 
             string fileName = GetFileName(reportType);
             if (saveFile)
-            {                
+            {
                 using (FileStream fs = new FileStream(fileName, FileMode.Create))
                 {
                     fs.Write(reportBytes, 0, reportBytes.Length);
-                }                
+                }
                 _cache.Reports.Add(reportKey, fileName);
             }
 
@@ -106,19 +128,6 @@ namespace APTAT.Core.Reports
             return new ReportFile() { FileName = path, Data = reportBytes };
         }
 
-        private readonly IReportFileGenerator _reportFileGenerator = new ReportFileGenerator(new FileHelper());
-
-        private byte[] BuildExecutiveWithValkyrieReport(AptReportData data)
-        {
-            data.GetAllBadFilesSorted(false);
-            return _reportFileGenerator.Build(data, TelerikReports.ReportType.ExecutiveValkyrieReport, ReportFormat.PDF);
-        }
-
-        private byte[] BuildDetailedPerDeviceWithValkyrieReport(AptReportData data)
-        {
-            data.SucceededTargetsWithValkyrie.ToArray();
-            return _reportFileGenerator.Build(data, TelerikReports.ReportType.DetailedPerDeviceWithValkyrieReport, ReportFormat.PDF);
-        }
 
         private static string GetFileName(ReportType reportType)
         {

@@ -5,13 +5,5 @@ namespace APTAT.Core.TelerikReports
         PDF, 
         CSV
     }
-    public enum ReportType
-    {
-        ExecutiveReport,
-        DetailedPerProgramReport,
-        DetailedPerDeviceReport,
-        ExecutiveValkyrieReport,
-        DetailedPerDeviceWithValkyrieReport,
-        DetailedPerProgramValkyrieReport
-    }
+  
 }
