@@ -59,7 +59,10 @@ namespace FAT.Application.Models
                 {
                     Description = dto.SourceDescription,
                     Type = dto.Type.ToBusiness()
-                }
+                },
+                ValkyrieOperationInfo = dto.ValkyrieOperationInfo != null ?
+                    new ValkyrieOperationInfo(dto.ValkyrieOperationInfo.ApiKey,
+                    dto.ValkyrieOperationInfo.ScanId): null
             };
             return result;
         }

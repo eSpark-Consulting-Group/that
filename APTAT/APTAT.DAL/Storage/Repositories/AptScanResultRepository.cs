@@ -32,7 +32,6 @@ namespace APTAT.Core.Storage.Repositories
 
         public AptScanResultDTO[] GetByOperationUid(Guid operationUid)
         {
-
             var query = DbSet
                 .Where(c => c.OperationResult.OperationUid == operationUid)
                 .Include(c => c.Modules)

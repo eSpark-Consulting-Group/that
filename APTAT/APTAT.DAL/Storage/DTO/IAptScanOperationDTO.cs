@@ -16,5 +16,6 @@ namespace APTAT.DAL.Storage.DTO
         int TotalDevicesScanned { get; set; }
         ETargetsDiscovererType Type { get; set; }
         int UnknownsCount { get; set; }
+        IValkyrieOperationInfo ValkyrieOperationInfo { get; set; }
     }
 }

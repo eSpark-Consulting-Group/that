@@ -615,7 +615,12 @@ namespace APTAT.Valkyrie
 
         public string GetValkyrieDetailsLink()
         {
-            return $@"{_provider.GetBaseUri()}signup_apikey/{_apiKey}?scan_id={_aptScanId}";
+            return GetValkyrieDetailsLink(_apiKey, _aptScanId);
+        }
+
+        public string GetValkyrieDetailsLink(string apiKey, string scanId)
+        {
+            return $@"{_provider.GetBaseUri()}signup_apikey/{apiKey}?scan_id={scanId}";
         }
 
         public void SendEndScanAsync()

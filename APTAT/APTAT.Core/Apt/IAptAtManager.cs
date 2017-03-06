@@ -41,6 +41,7 @@ namespace APTAT.Core
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential, string productName);
 
         string GetValkyrieDetailsLink();
+        string GetValkyrieDetailsLink(string apiKey, string scanId);
 
         OperationResult SubmitEmail(string[] addresses);
     }

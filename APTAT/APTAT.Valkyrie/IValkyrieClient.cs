@@ -16,6 +16,7 @@ namespace APTAT.Valkyrie
         void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
             string login, string password, int machineCount, NetworkCredential proxyCredential, string productName);
         string GetValkyrieDetailsLink();
+        string GetValkyrieDetailsLink(string apiKey, string scanId);
         void SendEndScanAsync();
         Task SendEndScan();
         void SetBaseUri(Uri uri);

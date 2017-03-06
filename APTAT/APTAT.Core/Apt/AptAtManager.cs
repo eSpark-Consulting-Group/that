@@ -9,7 +9,6 @@ using APTAT.Core.FLS;
 using APTAT.Core.Properties;
 using APTAT.Core.Reports;
 using APTAT.Core.Storage;
-using APTAT.DAL.Entities;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
 using APTAT.DeploymentCore.Directory;
@@ -496,6 +495,11 @@ namespace APTAT.Core.Apt
         public string GetValkyrieDetailsLink()
         {
             return _valkyrieClient.GetValkyrieDetailsLink();
+        }
+
+        public string GetValkyrieDetailsLink(string apiKey, string scanId)
+        {
+            return _valkyrieClient.GetValkyrieDetailsLink(apiKey, scanId);
         }
 
         public OperationResult SubmitEmail(string[] addresses)

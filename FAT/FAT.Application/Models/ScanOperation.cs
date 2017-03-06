@@ -20,5 +20,17 @@ namespace FAT.Application.Models
         public DateTime Started { get; set; }
         public DateTime? Finished { get; internal set; }
         public IDevicesSourceDescription DevicesSourceDescription { get; set; }
+        public IValkyrieOperationInfo ValkyrieOperationInfo { get; set; }
+    }
+
+    public class ValkyrieOperationInfo : IValkyrieOperationInfo
+    {
+        public ValkyrieOperationInfo(string apiKey, string scanId)
+        {
+            ApiKey = apiKey;
+            ScanId = scanId;
+        }
+        public string ApiKey { get;  }
+        public string ScanId { get; }
     }
 }

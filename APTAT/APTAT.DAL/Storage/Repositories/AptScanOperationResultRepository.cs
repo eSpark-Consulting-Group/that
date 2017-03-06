@@ -43,9 +43,10 @@ namespace APTAT.Core.Storage.Repositories
         {
       //      DbContext.Database.Log = (x) => Debug.Write(x);
             var query = DbContext.AptScanOperaionResults;
-            if (keyword != null)
+            if (!String.IsNullOrEmpty(keyword))
             {
-                query.Where(o => o.AptScanResults.Any(r => r.ComputerName.Contains(keyword) || r.Modules.Any(m => m.Name.Contains(keyword))));
+                query.Where(o => o.AptScanResults.Any(r => r.ComputerName.Contains(keyword) 
+                    || r.Modules.Any(m => m.Name.Contains(keyword))));
             }
 
             var query2 = from i in query
@@ -59,10 +60,15 @@ namespace APTAT.Core.Storage.Repositories
                              ScanMethod = i.ScanMethod,                             
                              DiscovererDescription = i.SourceDescription,                             
                              FilesCount = m.Count(),
-                           
                              UnknownsCount = m.Count(f1 => f1.CloudVerdict == CloudVerdict.Unknown),
                              MaliciousCount = m.Count(f1=>f1.CloudVerdict == CloudVerdict.Malware),
-                             TotalDevicesScanned = i.AptScanResults.Where(r2=>r2.Succeeded).Count()
+                             TotalDevicesScanned = i.AptScanResults.Where(r2=>r2.Succeeded).Count(),
+                             ValkyrieOperationInfo = i.ValkyrieScanInfo != null ?
+                             new ValkyrieOperationInfo
+                             {
+                                 ApiKey = i.ValkyrieScanInfo.ApiKey, 
+                                 ScanId = i.ValkyrieScanInfo.ScanId
+                             } : null
 
                          };
 

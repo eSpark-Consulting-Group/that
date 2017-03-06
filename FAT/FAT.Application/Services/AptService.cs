@@ -338,6 +338,11 @@ namespace FAT.Application.Services
             return _manager.GetValkyrieDetailsLink();
         }
 
+        public string GetValkyrieDetailsLink(string apiKey, string scanId)
+        {
+            return _manager.GetValkyrieDetailsLink(apiKey, scanId);
+        }
+
         public OperationResult SubmitEmail(string[] addresses)
         {
             lock (this)

@@ -93,13 +93,12 @@ namespace FAT.Application.Services
     public interface IAptService : IDisposable
     { 
         event EventHandler<BuildReportCompletedEventArgs> BuildReportCompleted;
-       
-        
         void UpdateFlsPorts(int udpPort, int tcpPort);
         void StopScan(Guid[] items);
         void BuildReport(Guid operationGuid, ReportKind reportKind, Object userState);
         
         string GetValkyrieDetailsLink();
+        string GetValkyrieDetailsLink(string apiKey, string scanId);
         OperationResult SubmitEmail(string[] addresses);
 
         void BeginScan(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription,
