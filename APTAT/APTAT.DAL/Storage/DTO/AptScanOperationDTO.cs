@@ -16,5 +16,12 @@ namespace APTAT.DAL.Storage.DTO
         public string SourceDescription { get; set; }
         public DateTime Started { get; set; }
         public DateTime? Finished { get; internal set; }
+        public IValkyrieOperationInfo ValkyrieOperationInfo { get; set; }
+    }
+
+    public class ValkyrieOperationInfo : IValkyrieOperationInfo
+    {
+        public string ScanId { get; set; }
+        public string ApiKey { get; set; }
     }
 }
