@@ -4,7 +4,6 @@ using System.Linq;
 using APTAT.DAL;
 using APTAT.DAL.Entities;
 using APTAT.DAL.Storage.Core;
-using System.Diagnostics;
 using APTAT.DAL.Enums;
 
 namespace APTAT.Core.Storage.Repositories
@@ -37,18 +36,31 @@ namespace APTAT.Core.Storage.Repositories
                 .Include(c => c.Modules)
                 .Select(c => new
                 {
-                    Models = c.Modules,
-                    TotalCount = c.Modules.Count(),
-                    UnknownsCount = c.Modules.Count(m => m.CloudVerdict == CloudVerdict.Unknown),
+                    Modules = c.Modules.GroupJoin(DbContext.ValkyrieFiles,m => new
+                        { sha1 = m.Sha1, oId = m.AptScanResult.OperationResultId},
+                        v => new { sha1 = v.Sha1, oId = v.ValkyrieScanInfoId },
+                        (m,vs) => new { Module = m, Valkyrie = vs.DefaultIfEmpty().FirstOrDefault()}
+                        ),
                     Data = c
                 }).ToArray();
             
             var result = query.Select(r =>
-               new AptScanResultDTO()
+               new AptScanResultDTO
                {
                    ScanResult = r.Data,
-                   TotalCount = r.TotalCount,
-                   UnknownsCount = r.UnknownsCount
+                   TotalCount = r.Modules.Count(),
+                   UnknownsCount = r.Modules.Count(f1 =>
+                                    f1.Valkyrie != null &&
+                                    f1.Valkyrie.Verdict == ValkyrieVerdict.Undetected
+                                    && f1.Module.CloudVerdict != CloudVerdict.Malware),
+                   MaliciousCount = r.Modules.Count(f1 => f1.Module.CloudVerdict == CloudVerdict.Malware
+                          || (f1.Valkyrie != null && (f1.Valkyrie.Verdict == ValkyrieVerdict.Malware
+                          || f1.Valkyrie.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication))),
+                   NotAnalyzedFilesCount = r.Modules.Count(f1 => f1.Module.CloudVerdict != CloudVerdict.Malware
+                            && f1.Valkyrie != null && f1.Valkyrie.Verdict == ValkyrieVerdict.NotAnalyzed
+                            && f1.Module.CloudVerdict != CloudVerdict.Safe),
+                   SafeFilesCount = r.Modules.Count(f1 => f1.Module.CloudVerdict == CloudVerdict.Safe
+                          || (f1.Valkyrie != null && f1.Valkyrie.Verdict == ValkyrieVerdict.Clean)),
                }).ToArray();
             
             return result;

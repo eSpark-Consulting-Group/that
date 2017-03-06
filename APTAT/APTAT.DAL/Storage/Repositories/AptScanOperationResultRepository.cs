@@ -70,7 +70,7 @@ namespace APTAT.Core.Storage.Repositories
                              UnknownsCount = m.Count(f1 => f1.Valkyrie != null &&
                                     f1.Valkyrie.Verdict == ValkyrieVerdict.Undetected
                                     && f1.Module.CloudVerdict != CloudVerdict.Malware),
-                             MaliciousCount = m.Count(f1=>f1.Module.CloudVerdict == CloudVerdict.Malware
+                             MaliciousCount = m.Count(f1 => f1.Module.CloudVerdict == CloudVerdict.Malware
                                     || (f1.Valkyrie != null && f1.Valkyrie.Verdict == ValkyrieVerdict.Malware)),
                              TotalDevicesScanned = i.AptScanResults.Count(r2=>r2.Succeeded),
                              ValkyrieOperationInfo = i.ValkyrieScanInfo != null ?
