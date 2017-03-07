@@ -607,4 +607,7 @@ Please apply for support.</value>
   <data name="RPCServerIsTooBusy" xml:space="preserve">
     <value>The RPC server is too busy to complete this operation.</value>
   </data>
+  <data name="InsufficientSystemResources" xml:space="preserve">
+    <value>Insufficient system resources exist to complete the requested service.</value>
+  </data>
 </root>

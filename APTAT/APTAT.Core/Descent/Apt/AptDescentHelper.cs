@@ -384,6 +384,7 @@ namespace APTAT.Core.Descent.Apt
                             }
 
                             EnAptStage status = (EnAptStage) statusInt;
+
                             if (status != EnAptStage.EnApt_Complete)
                             {
                                 findFileAttemptsCount = 20;
@@ -500,8 +501,16 @@ namespace APTAT.Core.Descent.Apt
                             }
                             else if (status == EnAptStage.EnApt_Failed)
                             {
-                                throw new DescentException(DescentStatus.status_error,
-                                    String.Format("Error returned from a remote computer: {0}", error), 0);
+                                string message = $"Error returned from a remote computer: {error}";
+
+                                if (error.Contains("0x800705aa"))
+                                {
+                                    throw new DescentException(DescentStatus.status_insufficient_system_recources, message, 0);
+                                }
+                                else
+                                {
+                                    throw new DescentException(DescentStatus.status_error, message, 0);
+                                }
                             }
                             else
                             {

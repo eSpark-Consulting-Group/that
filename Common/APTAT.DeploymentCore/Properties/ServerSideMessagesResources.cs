@@ -380,6 +380,8 @@ namespace APTAT.DeploymentCore.Properties
         public static readonly ResourceText RPCServerIsTooBusyToCompleteThisOperation =
                 resourceMan.GetResourceText(SourceName, "RPCServerIsTooBusy");
 
+        public static readonly ResourceText InsufficientSystemResourcesExistToCompleteRequestedService =
+                resourceMan.GetResourceText(SourceName, "InsufficientSystemResources");
 
         public static string GetString(string name)
         {

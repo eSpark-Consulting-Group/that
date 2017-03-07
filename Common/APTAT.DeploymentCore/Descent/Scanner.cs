@@ -187,6 +187,9 @@ namespace APTAT.DeploymentCore.Descent
                 case DescentStatus.status_rpc_server_is_too_busy:
                     description = ServerSideMessagesResources.RPCServerIsTooBusyToCompleteThisOperation;
                     break;
+                case DescentStatus.status_insufficient_system_recources:
+                    description = ServerSideMessagesResources.InsufficientSystemResourcesExistToCompleteRequestedService;
+                    break;
                 default:
                     description = ServerSideMessagesResources.UnsupportedErrorMessage;
                     break;
