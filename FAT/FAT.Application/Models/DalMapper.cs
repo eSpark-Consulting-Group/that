@@ -2,6 +2,7 @@
 using APTAT.Core.Storage;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using APTAT.DAL.Storage.DTO;
 using APTAT.DeploymentCore.Directory;
 using FAT.Application.Models.Apt;
@@ -184,32 +185,29 @@ namespace FAT.Application.Models
             }
         }
 
-        private static IBadFileItem[] MapBadFiles(IEnumerable<APTAT.DAL.Entities.Module> modules)
+        private static IFatFileResult[] MapBadFiles(IEnumerable<APTAT.DAL.Entities.Module> modules)
         {
-            List<IBadFileItem> result = new List<IBadFileItem>();
-            foreach (var file in modules)
-            {
-                result.Add(MapBadFile(file));
-            }
-            return result.ToArray();        
+            return modules.Select(MapBadFile).ToArray();        
         }    
 
-        private static IBadFileItem MapBadFile(APTAT.DAL.Entities.Module file)
+        private static IFatFileResult MapBadFile(APTAT.DAL.Entities.Module file)
         {
-            BadFileItem result = new BadFileItem();
-            result.Accessed = file.Accessed.GetValueOrDefault();            
-            result.Attributes = file.Attributes;
-            result.Cloud = file.CloudVerdict.ToBusiness();
-            result.Copyright = file.Copyright;
-            result.Created = file.Created.GetValueOrDefault();
-            result.Description = file.Description;
-            result.Modified = file.Modified.GetValueOrDefault();
-            result.Product = file.Product;
-            result.Sha1 = file.Sha1;
-            result.Signer = file.Signer;
-            result.Size = file.Size;
-            result.Version = file.Version;
-            result.Name = file.Name;            
+            var result = new FatFileResult
+            {
+                Accessed = file.Accessed.GetValueOrDefault(),
+                Attributes = file.Attributes,
+                Cloud = file.CloudVerdict.ToBusiness(),
+                Copyright = file.Copyright,
+                Created = file.Created.GetValueOrDefault(),
+                Description = file.Description,
+                Modified = file.Modified.GetValueOrDefault(),
+                Product = file.Product,
+                Sha1 = file.Sha1,
+                Signer = file.Signer,
+                Size = file.Size,
+                Version = file.Version,
+                Name = file.Name
+            };
             return result;
         }
     }

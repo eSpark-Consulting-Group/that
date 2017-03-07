@@ -8,7 +8,7 @@ namespace FAT.Application.Models.Apt
 {
     public class FatScanComputerResult : IFatScanComputerResult
     {
-        public IBadFileItem[] BadFiles { get; set; }
+        public IFatFileResult[] BadFiles { get; set; }
         public int CleanFilesCount { get; set; }
         public int MalwareFilesCount { get; set; }
         public int InAnalysisFilesCount { get; set; }

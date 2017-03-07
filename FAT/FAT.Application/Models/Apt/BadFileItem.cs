@@ -5,11 +5,11 @@ namespace FAT.Application.Models
 {
     public class BadFileItem : IBadFileItem
     {
-        public Boolean IsUnknown { get { return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen; } }
+        public virtual Boolean IsUnknown { get { return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen; } }
 
-        public Boolean IsMalware { get { return Cloud == CloudVerdict.Malware; } }
+        public virtual Boolean IsMalware { get { return Cloud == CloudVerdict.Malware; } }
 
-        public Boolean IsClean { get { return Cloud == CloudVerdict.Safe; } }
+        public virtual Boolean IsClean { get { return Cloud == CloudVerdict.Safe; } }
 
         public String Name { get; set; }
 

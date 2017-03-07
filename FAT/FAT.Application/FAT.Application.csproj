@@ -136,9 +136,11 @@
     </ApplicationDefinition>
     <Compile Include="Converters\ColorToWhiteConverter.cs" />
     <Compile Include="Converters\ProgressBarHighlightConverter.cs" />
+    <Compile Include="Models\Apt\FatFileResult.cs" />
     <Compile Include="Models\Apt\FatScanComputerResult.cs" />
     <Compile Include="Models\Apt\FileVerdictContext.cs" />
     <Compile Include="Models\Apt\IBadFileItem.cs" />
+    <Compile Include="Models\Apt\IFatFileResult.cs" />
     <Compile Include="Models\Apt\IFileVerdictContext.cs" />
     <Compile Include="Models\Apt\IFatScanComputerResult.cs" />
     <Compile Include="Models\Apt\IScanResultItem.cs" />
