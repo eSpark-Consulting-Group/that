@@ -28,7 +28,7 @@ namespace APTAT.Core.Reports
 
                 case ReportType.DetailedPerProgramWithValkyrie:
                     data.SucceededTargetsWithValkyrie.ToArray();
-                    return renderer.Render(new DetailedDevicesReportFAT(), data);
+                    return renderer.Render(new DetailedProgramsReportFAT(), data);
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reportType));
