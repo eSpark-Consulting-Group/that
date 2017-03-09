@@ -77,7 +77,9 @@ namespace APTAT.Core.Storage.Repositories
                              new ValkyrieOperationInfo
                              {
                                  ApiKey = i.ValkyrieScanInfo.ApiKey, 
-                                 ScanId = i.ValkyrieScanInfo.ScanId
+                                 ScanId = i.ValkyrieScanInfo.ScanId,
+                                 IsCancelled = i.ValkyrieScanInfo.IsCancelled.GetValueOrDefault(),
+                                 FinishedOnUi = i.ValkyrieScanInfo.FinishedWithoutErrorHandling
                              } : null
 
                          };

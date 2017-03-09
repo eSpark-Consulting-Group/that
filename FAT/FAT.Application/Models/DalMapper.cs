@@ -73,6 +73,13 @@ namespace FAT.Application.Models
                     new ValkyrieOperationInfo(dto.ValkyrieOperationInfo.ApiKey,
                     dto.ValkyrieOperationInfo.ScanId): null
             };
+            if (dto.ValkyrieOperationInfo != null)
+            {
+                result.IsCancelled = dto.ValkyrieOperationInfo.IsCancelled;
+                result.Finished = dto.ValkyrieOperationInfo.FinishedOnUi;
+            }
+            else
+                result.IsFailed = true;
             return result;
         }
 

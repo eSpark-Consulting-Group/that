@@ -21,6 +21,8 @@ namespace FAT.Application.Models
         public DateTime? Finished { get; internal set; }
         public IDevicesSourceDescription DevicesSourceDescription { get; set; }
         public IValkyrieOperationInfo ValkyrieOperationInfo { get; set; }
+        public bool IsFailed { get; set; }
+        public bool IsCancelled { get; set; }
     }
 
     public class ValkyrieOperationInfo : IValkyrieOperationInfo
