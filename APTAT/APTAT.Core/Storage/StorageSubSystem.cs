@@ -99,12 +99,45 @@ namespace APTAT.Core.Storage
                 {
                     ApiKey = apiKey,
                     ScanId = scanId,
-                    AptScanOperationResult = operation
+                    AptScanOperationResult = operation,
+                    Started = DateTime.UtcNow 
                 };
                 context.ValkyrieScansRepository.Add(scanInfo);
                 context.SaveChanges();
             }
             return scanInfo.AptScanOperationResultId;
+        }
+
+        public void TryFinishValkyrieScan(int scanId, bool isCancelled)
+        {
+            using (var context = _entityStorage.GetContext())
+            {
+                var scanInfo = context.ValkyrieScansRepository.ExecuteFind(new object[] { scanId});
+                if (scanInfo.FinishedWithoutErrorHandling == null)
+                    scanInfo.FinishedWithoutErrorHandling = DateTime.UtcNow;
+                if (scanInfo.Finished == null)
+                {
+                    scanInfo.Finished = DateTime.UtcNow;
+                    scanInfo.IsCancelled = isCancelled;
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public void TryFinishComputersValkyrieScan(int scanId)
+        {
+            using (var context = _entityStorage.GetContext())
+            {
+                var scanInfo = context.ValkyrieScansRepository.ExecuteFind(new object[] { scanId });
+                if (scanInfo.FinishedWithoutErrorHandling == null)
+                    scanInfo.FinishedWithoutErrorHandling = DateTime.UtcNow;
+                context.SaveChanges();
+            }
+        }
+
+        public void FailValkyrieScan(int scanId, bool isCancelled)
+        {
+
         }
 
         public void SaveValkyrieResults(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults)

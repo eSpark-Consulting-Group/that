@@ -50,10 +50,16 @@ namespace APTAT.DAL.Entities
         [StringLength(100)]
         public string ScanId { get; set; }
 
-        [Key, ForeignKey(nameof(AptScanOperationResult))]
-        public int AptScanOperationResultId { get; set; }
+        [Required]
+        public DateTime Started { get; set; }
+        public DateTime? Finished { get; set; }
+        public bool? IsCancelled { get; set; }
+        public DateTime? FinishedWithoutErrorHandling { get; set; }
+        public string ErrorMessage { get; set; }
 
         [Required]
+        [Key, ForeignKey(nameof(AptScanOperationResult))]
+        public int AptScanOperationResultId { get; set; }
         public AptScanOperationResult AptScanOperationResult { get; set; }
 
         public HashSet<ValkyrieFileInfo> ValkyrieFileInfos { get; set; }

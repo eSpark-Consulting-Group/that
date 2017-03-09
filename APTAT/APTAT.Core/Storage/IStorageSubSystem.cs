@@ -19,6 +19,9 @@ namespace APTAT.Core.Storage
             VerdictSource verdictSource);
         int SaveValkyrieScan(Guid operationUid, string apiKey, string scanId);
         void SaveValkyrieResults(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
+        void TryFinishValkyrieScan(int scanId, bool isCancelled);
+        void TryFinishComputersValkyrieScan(int scanId);
+        void FailValkyrieScan(int scanId, bool isCancelled);
         void UpdateValkyrieResult(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
         void UpdateEmails(string[] emails);
     }

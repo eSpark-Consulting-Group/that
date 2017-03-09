@@ -372,7 +372,6 @@ namespace APTAT.Core.UnitTests
             //Valkyrie Client Arange 
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
-            Mock.Arrange(() => valkyrie.AnalyzeAsyncCancel()).OccursOnce();
             Mock.Arrange(() => valkyrie.StartAnalyze(new CamRegistration("", "", ""), new List<ValkyrieFileInfo>(), "", "", 1, null,"")).IgnoreArguments();
 
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);

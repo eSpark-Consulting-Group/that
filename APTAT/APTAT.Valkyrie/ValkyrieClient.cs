@@ -14,6 +14,7 @@ using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using APTAT.Common;
 using Timer = System.Timers.Timer;
+using DTO = Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Valkyrie
 {
@@ -472,7 +473,7 @@ namespace APTAT.Valkyrie
                         return result;
                     }
                 }
-                if (!basicInfo.Upload)
+                if (!(basicInfo.Upload && (basicInfo.Verdict == DTO.ValkyrieVerdict.Undetected || basicInfo.Verdict == DTO.ValkyrieVerdict.FirstSeen)))
                 {
                     result = ValkyrieAnalysisResult.Create(basicInfo);
                 }

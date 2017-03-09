@@ -12,10 +12,10 @@ namespace FAT.Application.Models
         int MaliciousCount { get; set; }
         Guid OperationUid { get; set; }
         ScanKind ScanMethod { get; set; }
-        IDevicesSourceDescription DevicesSourceDescription { get; set; }
         DateTime Started { get; set; }
         int TotalDevicesScanned { get; set; }
         int UnknownsCount { get; set; }
+        IDevicesSourceDescription DevicesSourceDescription { get; set; }
         IValkyrieOperationInfo ValkyrieOperationInfo { get; set; }
     }
 
