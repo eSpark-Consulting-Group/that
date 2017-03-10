@@ -12,9 +12,10 @@ namespace APTAT.Core.Reports
     public class DetailedBadFile
     {
         private readonly List<ScannedTarget> _targets = new List<ScannedTarget>();
-
-        public DetailedBadFile(IModule module, ScannedTarget target)
+        private readonly IFinalVerdictCalculator _calculator;
+        public DetailedBadFile(IModule module, ScannedTarget target, IFinalVerdictCalculator calculator)
         {
+            _calculator = calculator;
             Verdict = ValkyrieVerdict.NotAnalyzed;
             if (module != null)
             {
@@ -57,19 +58,44 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                if (Verdict == ValkyrieVerdict.FirstSeen || Verdict == ValkyrieVerdict.Pending)
+                if (this.FinalVerdict.HasValue)
                 {
+                    return GetBadFileTypeFromVerdict();
+                }
+                else
+                {
+                    if (Verdict == ValkyrieVerdict.FirstSeen || Verdict == ValkyrieVerdict.Pending)
+                    {
+                        return BadFileType.Pending;
+                    }
+
+                    if (Verdict == ValkyrieVerdict.NotAnalyzed)
+                    {
+                        if (Cloud == CloudVerdict.NoVerdict || Cloud == CloudVerdict.FailedToAnalyze)
+                            return BadFileType.NotAnalyzed;
+
+                        return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
+                    }
+                    return Verdict == ValkyrieVerdict.Undetected ? BadFileType.Unknown : BadFileType.Infected;
+                }
+            }
+        }
+
+        private BadFileType GetBadFileTypeFromVerdict()
+        {
+            switch (this.FinalVerdict.Value)
+            {
+                case Core.FinalVerdict.Malware:
+                    return BadFileType.Infected;
+                case Core.FinalVerdict.Unknown:
+                    return BadFileType.Unknown;
+                case Core.FinalVerdict.NotAnalyzed:
+                    return BadFileType.NotAnalyzed;
+                case Core.FinalVerdict.InProgress:
                     return BadFileType.Pending;
-                }
+                default:
+                    throw new ArgumentOutOfRangeException("FinalVerdict");
 
-                if (Verdict == ValkyrieVerdict.NotAnalyzed)
-                {
-                    if (Cloud == CloudVerdict.NoVerdict || Cloud == CloudVerdict.FailedToAnalyze)
-                        return BadFileType.NotAnalyzed;
-
-                    return Cloud == CloudVerdict.Unknown || Cloud == CloudVerdict.FirstSeen ? BadFileType.Unknown : BadFileType.Infected;
-                }
-                return Verdict == ValkyrieVerdict.Undetected ? BadFileType.Unknown : BadFileType.Infected;
             }
         }
 
@@ -84,7 +110,7 @@ namespace APTAT.Core.Reports
             IsWhiteListed = analysisResult.IsWhiteListed;
             IsSkipped = analysisResult.IsSkipped;
             SkipReason = analysisResult.SkipReason;
-            OperationStatus = analysisResult.OperationStatus;            
+            OperationStatus = analysisResult.OperationStatus;
         }
 
 
@@ -174,8 +200,26 @@ namespace APTAT.Core.Reports
 
         public ValkyrieVerdict Verdict { get; set; }
 
-        public FinalVerdict FinalVerdict { get; set; }
-        public string FinalVerdictString { get;  set; }
+        public FinalVerdict? FinalVerdict
+        {
+            get
+            {
+                if (_calculator == null) return null;
+                return _calculator.GetFinalVerdict(this.Cloud, this.Verdict);
+            }
+        }
+
+        public string FinalVerdictString
+        {
+            get
+            {
+                if (_calculator == null) return String.Empty;
+                if (!this.FinalVerdict.HasValue) return String.Empty;
+
+                return _calculator.GetVerdictString(this.FinalVerdict.Value);
+            }
+
+        }
         public string ValkyrieVerdictString
         {
             get

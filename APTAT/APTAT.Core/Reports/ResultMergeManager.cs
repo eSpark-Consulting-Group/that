@@ -95,16 +95,15 @@ namespace APTAT.Core.Reports
                     }
                     if (fileResult != null)
                     {
-                        DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+                        DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult),_calculator);
 
                         badFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
-                        badFile.FinalVerdict = _calculator.GetFinalVerdict(badFile.Cloud, fileResult.ValkyrieAnalysisResult.Verdict);
-                        badFile.FinalVerdictString = _calculator.GetVerdictString(badFile.FinalVerdict);
+                        
 
                         if (badFile.Verdict != ValkyrieVerdict.Clean)
                         {
                             AddBadFile(uniqueFiles, badFile, module);
-                            var copiedBadFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+                            var copiedBadFile = new DetailedBadFile(module, new ScannedTarget(flsResult), _calculator);
                             copiedBadFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
                             nonUniqueBadFilesInternal.Add(copiedBadFile);
                         }
@@ -119,9 +118,9 @@ namespace APTAT.Core.Reports
                     {
                         if (module.IsBad)
                         {
-                            DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+                            DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult), _calculator);
                             AddBadFile(uniqueFiles, badFile, module);
-                            DetailedBadFile copiedBadFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
+                            DetailedBadFile copiedBadFile = new DetailedBadFile(module, new ScannedTarget(flsResult), _calculator);
                             nonUniqueBadFilesInternal.Add(copiedBadFile);
                         }
                         #region Calculate Statistics
