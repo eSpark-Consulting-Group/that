@@ -563,8 +563,11 @@ namespace APTAT.Core.Apt
         public async Task OnAppClosing()
         {
             if (_isValkyrieScanEnded.GetValueOrDefault()) return;
-            await _valkyrieClient.SendEndScan();
-            _entityStorage.TryFinishValkyrieScan(_valkyrieScanId.Value, false);
+            if (_valkyrieScanId.HasValue)
+            {
+                await _valkyrieClient.SendEndScan();
+                _entityStorage.TryFinishValkyrieScan(_valkyrieScanId.Value, false);
+            }
         }
 
         public void UpdateFlsPorts(int udpPort, int tcpPort)
