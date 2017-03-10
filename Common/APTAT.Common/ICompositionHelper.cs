@@ -12,6 +12,9 @@ namespace APTAT.Common
         void RegisterSingleton<TIService, TService>()
             where TIService : class
             where TService : class, TIService;
+        void RegisterSingleton<TIService>(Func<TIService> createAction)
+          where TIService : class;
+
 
         void RegisterModules(IEnumerable<Type> moduleTypes);
 
