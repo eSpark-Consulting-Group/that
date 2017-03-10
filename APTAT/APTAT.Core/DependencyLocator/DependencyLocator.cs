@@ -20,7 +20,7 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IDistinctFileHelper, DistinctFileHelper>();
             resolver.RegisterSingleton<IStorageSubSystem, StorageSubSystem>();
             resolver.RegisterSingleton<IReportBuilder, ReportBuilder>();
-            resolver.RegisterSingleton<IFinalVerdictCalculator, FinalVerdictCalculator>();
+            //resolver.RegisterSingleton<IFinalVerdictCalculator, FinalVerdictCalculator>();
             resolver.RegisterSingleton<IResultMergeHelper, ResultMergeHelper>(); 
             resolver.RegisterSingleton<IAptReportBuilder, AptReportBuilder>();
         }

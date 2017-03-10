@@ -12,10 +12,7 @@ namespace APTAT.Core.Reports
     public class DetailedBadFile
     {
         private readonly List<ScannedTarget> _targets = new List<ScannedTarget>();
-
-        public DetailedBadFile()
-        {
-        }
+        private readonly IFinalVerdictCalculator _finalVerdictCalculator = FinalVerdictCalculator.GetInstance();
 
         public DetailedBadFile(IModule module, ScannedTarget target)
         {
@@ -89,6 +86,8 @@ namespace APTAT.Core.Reports
             IsSkipped = analysisResult.IsSkipped;
             SkipReason = analysisResult.SkipReason;
             OperationStatus = analysisResult.OperationStatus;
+            FinalVerdict = _finalVerdictCalculator.GetFinalVerdict(this.Cloud, analysisResult.Verdict);
+            FinalVerdictString = _finalVerdictCalculator.GetVerdictString(this.FinalVerdict);
         }
 
 
@@ -97,7 +96,7 @@ namespace APTAT.Core.Reports
         {
             get { return Targets.Count; }
         }
-        
+
         public string CloudString
         {
             get
@@ -124,7 +123,7 @@ namespace APTAT.Core.Reports
 
 
         public List<ScannedTarget> Targets
-        {            
+        {
             get { return _targets; }
         }
 
@@ -178,6 +177,8 @@ namespace APTAT.Core.Reports
 
         public ValkyrieVerdict Verdict { get; set; }
 
+        public FinalVerdict FinalVerdict { get; private set; }
+        public string FinalVerdictString { get; private set; }
         public string ValkyrieVerdictString
         {
             get

@@ -13,6 +13,10 @@ namespace APTAT.Core.Reports
 {
     public class AptReportData
     {
+        public AptReportData()
+        {
+
+        }
         public AptReportData(IResultMergeHelper mergeHelper)
         {
             _Targets = new IAptScanResult[] { };
@@ -585,6 +589,7 @@ namespace APTAT.Core.Reports
                 MergeNonUniqueResults = nonUniqueBadFiles,
                 MergedTargets = mergedTargets
             };
+            
         }
 
         public DetailedBadFile[] AllBadFilesSorted
