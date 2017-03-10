@@ -99,6 +99,7 @@
     <Compile Include="Storage\DTO\AptScanOperationDTO.cs" />
     <Compile Include="Storage\DTO\IAptScanOperationDTO.cs" />
     <Compile Include="Storage\DTO\IValkyrieOperationInfo.cs" />
+    <Compile Include="Storage\DTO\ModuleWithValkyrie.cs" />
     <Compile Include="Storage\EntityStorage.cs" />
     <Compile Include="Storage\Repositories\AptScanOperationResultRepository.cs" />
     <Compile Include="Storage\DTO\AptScanResultDTO.cs" />

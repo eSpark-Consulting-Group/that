@@ -25,9 +25,10 @@ namespace FAT.Application.Models
         public static IFatScanComputerResult MapItem(this AptScanResultDTO dto)
         {
             var scan = dto.ScanResult;
+
             FatScanComputerResult result = new FatScanComputerResult
             {
-                BadFiles = MapBadFiles(scan.Modules),
+                BadFiles = MapBadFiles(dto.Modules),
                 ScanStage = scan.ScanStage.MapScanStageToBusiness(),
                 StatusMessage = scan.StatusMessage,
                 TargetUid = scan.TargetUid,
@@ -192,12 +193,40 @@ namespace FAT.Application.Models
             }
         }
 
-        private static IFatFileResult[] MapBadFiles(IEnumerable<APTAT.DAL.Entities.Module> modules)
+        private static IFatFileResult[] MapBadFiles(IEnumerable<ModuleWithValkyrie> modules)
         {
-            return modules.Select(MapBadFile).ToArray();        
-        }    
+           var mappedModules = modules.Select(MapBadFile).ToArray();
+           return mappedModules;        
+        }
 
-        private static IFatFileResult MapBadFile(APTAT.DAL.Entities.Module file)
+        public static APTAT.Valkyrie.ValkyrieVerdict ToAptatValkyrieVerdict(this APTAT.DAL.Entities.ValkyrieVerdict valkirieVerdict)
+        {
+            switch (valkirieVerdict)
+            {
+                case APTAT.DAL.Entities.ValkyrieVerdict.Clean:
+                    return APTAT.Valkyrie.ValkyrieVerdict.Clean;
+                case APTAT.DAL.Entities.ValkyrieVerdict.FirstSeen:
+                    return APTAT.Valkyrie.ValkyrieVerdict.FirstSeen;
+                case APTAT.DAL.Entities.ValkyrieVerdict.InQueue:
+                    return APTAT.Valkyrie.ValkyrieVerdict.InQueue;
+                case APTAT.DAL.Entities.ValkyrieVerdict.Malware:
+                    return APTAT.Valkyrie.ValkyrieVerdict.Malware;
+                case APTAT.DAL.Entities.ValkyrieVerdict.NotAnalyzed:
+                    return APTAT.Valkyrie.ValkyrieVerdict.NotAnalyzed;
+                case APTAT.DAL.Entities.ValkyrieVerdict.Pending:
+                    return APTAT.Valkyrie.ValkyrieVerdict.Pending;
+                case APTAT.DAL.Entities.ValkyrieVerdict.PendingFls:
+                    return APTAT.Valkyrie.ValkyrieVerdict.PendingFls;
+                case APTAT.DAL.Entities.ValkyrieVerdict.PotentiallyUnwantedApplication:
+                    return APTAT.Valkyrie.ValkyrieVerdict.PotentiallyUnwantedApplication;
+                case APTAT.DAL.Entities.ValkyrieVerdict.Undetected:
+                    return APTAT.Valkyrie.ValkyrieVerdict.Undetected;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(valkirieVerdict));
+            }
+        }
+
+        private static IFatFileResult MapBadFile(ModuleWithValkyrie file)
         {
             var result = new FatFileResult
             {
@@ -213,7 +242,12 @@ namespace FAT.Application.Models
                 Signer = file.Signer,
                 Size = file.Size,
                 Version = file.Version,
-                Name = file.Name
+                Name = file.Name,
+                IsWhiteListed =(file?.ValkyrieDetails?.IsWhiteListed).GetValueOrDefault(false),
+                MalwareProbabilityValue = file?.ValkyrieDetails?.MalwareProbability,
+                OperationStatus = file?.ValkyrieDetails?.OperationStatus,
+                SkipReason = file?.ValkyrieDetails?.SkipReason,
+                ValkyrieVerdictValue = file?.ValkyrieDetails?.Verdict.ToAptatValkyrieVerdict()
             };
             return result;
         }

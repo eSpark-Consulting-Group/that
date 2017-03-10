@@ -21,3 +21,4 @@ ren ForensicAnalysisTool.exe FAT.Bootstrapper.exe
 move bin\ForensicAnalysisTool.exe ForensicAnalysisTool.exe
 
 del bin /Q
+del data /Q

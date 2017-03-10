@@ -22,7 +22,7 @@ namespace APTAT.DAL.Entities
                 {
                     this.Id,
                 };
-            }
+           } 
 
             set
             {
@@ -30,7 +30,7 @@ namespace APTAT.DAL.Entities
                     throw new ArgumentNullException("value");
                 if (value.Length != 1)
                     throw new ArgumentOutOfRangeException("value");
-                this.Id = (int) value[0];
+                this.Id = (long) value[0];
             }
         }
 
@@ -39,18 +39,19 @@ namespace APTAT.DAL.Entities
         {
             get
             {
-                return (Id == default(int));
+                return (Id == default(long));
             }
         }
 
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
 
         [Required]
         [Index]
         [MaxLength(40)]
         public string Sha1 { get; set; }
+
         public string Name { get; set; }
         [Required]
         public CloudVerdict CloudVerdict { get; set; }
@@ -129,7 +130,6 @@ namespace APTAT.DAL.Entities
         public string FileSizeFormatted { get; set; }
         [MaxLength(20)]
         public string FileAge { get; set; }
-
-
+         
     }
 }
