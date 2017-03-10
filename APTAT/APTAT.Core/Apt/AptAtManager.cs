@@ -40,8 +40,9 @@ namespace APTAT.Core.Apt
 
         private int _filesShouldSendToValkyrieCount = 0;
         private int _filesWithFlsErrorCount = 0;
-        private IReportBuilder _reportBuilder;
+      //  private IReportBuilder _reportBuilder;
         private bool _IsLastScanCancelled = false;
+        private IAptReportBuilder _reportBuilder;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
@@ -90,13 +91,15 @@ namespace APTAT.Core.Apt
 
 
         public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager,
-            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage, IReportBuilder reportBuilder)
+            IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage, 
+            IAptReportBuilder reportBuilder)
         {
             _descentSubSystem = descentSubSystem;
             _entityStorage = storage;
             _aptScannerFactory = aptScannerFactory;
             _distinctHelper = distinctHelper;
             _reportBuilder = reportBuilder;
+            ((IAptReportBuilderInternal) _reportBuilder).Init(this);
 
             _valkyrieClient = valkyrieClient;
             _valkyrieClient.SetBaseUri(new Uri(Settings.Default.valkyrieBaseUrl));
@@ -479,8 +482,7 @@ namespace APTAT.Core.Apt
 
         public IAptReportBuilder GetAptReportBuilder()
         {
-            IAptReportBuilder aptReportBuilder = new AptReportBuilder(this, _reportBuilder);
-            return aptReportBuilder;
+            return _reportBuilder;
         }
 
         public void StopScan(Guid[] targetsUids)

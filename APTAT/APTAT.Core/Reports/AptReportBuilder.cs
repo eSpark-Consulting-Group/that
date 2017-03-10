@@ -5,16 +5,54 @@ using APTAT.Common;
 
 namespace APTAT.Core.Reports
 {
-    
-    internal class AptReportBuilder : IAptReportBuilder
+    internal class AptReportBuilder : ReportBuilderBase
+    {
+        private readonly IResultMergeHelper _mergeHelper;
+        protected override IResultMergeHelper GetResultMergeHelper
+        {
+            get
+            {
+                return _mergeHelper;
+            }
+        }
+        public AptReportBuilder(IReportBuilder reportBuilder)
+            :base (reportBuilder)
+        {
+            _mergeHelper = new ResultMergeHelper();
+        }
+    }
+
+    internal class FatReportBuilder : ReportBuilderBase
+    {
+        private readonly IResultMergeHelper _mergeHelper;
+        protected override IResultMergeHelper GetResultMergeHelper
+        {
+            get
+            {
+                return _mergeHelper;
+            }
+        }
+        public FatReportBuilder(IReportBuilder reportBuilder)
+            : base(reportBuilder)
+        {
+            _mergeHelper = new FatResultMergeHelper();
+        }
+    }
+
+    internal abstract class ReportBuilderBase : IAptReportBuilderInternal
     {
         private readonly IReportBuilder _reportBuilder;
-        private readonly IAptAtManagerInternal _aptAtManager;
+        private IAptAtManagerInternal _aptAtManager;
 
-        public AptReportBuilder(IAptAtManagerInternal aptAtManager, IReportBuilder reportBuilder)
+        public ReportBuilderBase(IReportBuilder reportBuilder)
+        {
+            _reportBuilder = reportBuilder;
+        }
+        protected abstract IResultMergeHelper GetResultMergeHelper { get; } 
+
+        public void Init(IAptAtManagerInternal aptAtManager)
         {
             _aptAtManager = aptAtManager;
-            _reportBuilder = reportBuilder;
         }
 
         public void BeginLastBuildReport(ReportType reportType,  bool saveFile = true, object state = null)
@@ -24,7 +62,7 @@ namespace APTAT.Core.Reports
             {
                 if (!operationContext.CompletedTime.HasValue || operationContext.CompletedTime.Value == DateTime.MinValue)
                     throw new DataNotReadyException();
-                var data = new AptReportData
+                var data = new AptReportData(GetResultMergeHelper)
                 {
                     OperationUid = operationContext.OperationUid,
                     ScanStarted = operationContext.StartedTime.ToLocalTime(),

@@ -75,9 +75,13 @@
     <Compile Include="AptScanInProgressEventArgs.cs" />
     <Compile Include="Apt\AptVerdictContext.cs" />
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
+    <Compile Include="FinalVerdictCalculator.cs" />
+    <Compile Include="IFinalVerdictCalculator.cs" />
+    <Compile Include="Reports\IResultMergeManager.cs" />
     <Compile Include="Reports\ReportBuilderFAT.cs" />
     <Compile Include="Reports\IReportBuilder.cs" />
     <Compile Include="Reports\ReportFile.cs" />
+    <Compile Include="Reports\ResultMergeManager.cs" />
     <Compile Include="Storage\Mappers\CloudVerdictMapper.cs" />
     <Compile Include="Storage\Mappers\ScanKindMapper.cs" />
     <Compile Include="Storage\Mappers\Mapper.cs" />
