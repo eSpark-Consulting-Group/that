@@ -13,16 +13,14 @@ namespace APTAT.Core.Reports
 {
     public class AptReportData
     {
-        public AptReportData()
-        {
-
-        }
         public AptReportData(IResultMergeHelper mergeHelper)
         {
             _Targets = new IAptScanResult[] { };
             _mergeHelper = mergeHelper;
         }
         private MergedScanResults _mergedScanResultsCache;
+
+        readonly IResultMergeHelper _mergeHelper;
 
         private int _safeFilesCount = -1;
         private int _unknownFilesCount = -1;
@@ -569,7 +567,6 @@ namespace APTAT.Core.Reports
             public IEnumerable<DetailedBadFile> MergeUniqueResults { get; set; }
             public IEnumerable<DetailedBadFile> MergeNonUniqueResults { get; set; }
         }
-        IResultMergeHelper _mergeHelper = new FatResultMergeHelper();
         private void MergeResults(IEnumerable<IAptScanResult> flsResults, 
             Dictionary<string, FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
             out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)

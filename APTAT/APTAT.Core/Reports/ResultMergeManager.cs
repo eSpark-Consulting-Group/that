@@ -9,23 +9,61 @@ using static APTAT.Core.Reports.AptReportData;
 
 namespace APTAT.Core.Reports
 {
-    public class FatResultMergeHelper : IResultMergeHelper
+    public class FatResultMergeHelper : ResultMergeHelper
     {
-        public FilesStatistics MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets, out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
+        public FatResultMergeHelper(IFinalVerdictCalculator calc)
+            : base(calc)
         {
-            throw new NotImplementedException();
+
+        }
+        protected override void CalculateStatistics(IModule module, Statistics computerStatistics)
+        {
+            var final = _calculator.GetFinalVerdict(module.Cloud, ValkyrieVerdict.InQueue);
+            UpdateStatisticsByFinalVerdict(computerStatistics, final);
+        }
+
+        private static void UpdateStatisticsByFinalVerdict(Statistics computerStatistics, FinalVerdict final)
+        {
+            switch (final)
+            {
+                case FinalVerdict.Clean:
+                    computerStatistics.MergedSafeCount++;
+                    break;
+                case FinalVerdict.Malware:
+                    computerStatistics.MergedMalwareCount++;
+                    break;
+                case FinalVerdict.Unknown:
+                    computerStatistics.MergedUnknownCount++;
+                    break;
+                case FinalVerdict.NotAnalyzed:
+                    computerStatistics.MergedErrorFilesCount++;
+                    break;
+                case FinalVerdict.InProgress:
+                    computerStatistics.MergedPendingFilesCount++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        protected override void CalculateStatistics(IModule module, FileResult fileResult, Statistics computerStatistics)
+        {
+            var final = _calculator.GetFinalVerdict(module.Cloud, fileResult.ValkyrieAnalysisResult.Verdict);
+            UpdateStatisticsByFinalVerdict(computerStatistics, final);
         }
     }
     public class ResultMergeHelper : IResultMergeHelper
-    {            
-     
-        
+    {
+        protected readonly IFinalVerdictCalculator _calculator;
+
+        public ResultMergeHelper(IFinalVerdictCalculator calculator)
+        {
+            _calculator = calculator;
+        }
 
         public FilesStatistics MergeResults(IEnumerable<IAptScanResult> flsResults, Dictionary<string, FileResult> valkyrieResults, out IEnumerable<ScannedTarget> mergedTargets,
           out IEnumerable<DetailedBadFile> uniqueBadFiles, out IEnumerable<DetailedBadFile> nonUniqueBadFiles)
         {
-          
-
             int totalFilesCount = 0;
             int safeFilesCount = 0;
             int unknownFilesCount = 0;
@@ -45,12 +83,7 @@ namespace APTAT.Core.Reports
                     continue;
                 Dictionary<string, DetailedBadFile> uniqueFiles = new Dictionary<string, DetailedBadFile>(StringComparer.OrdinalIgnoreCase);
 
-                int mergedSafeCount = 0;
-                int mergedUnknownCount = 0;
-                int mergedMalwareCount = 0;
-                int mergedErrorFilesCount = 0;
-                int mergedNoVerdictCount = 0;
-                int mergedPendingFilesCount = 0;
+                var computerStatistics = new Statistics();
                 #region Working with a single scan result
 
                 foreach (var module in flsResult.Files)
@@ -65,6 +98,9 @@ namespace APTAT.Core.Reports
                         DetailedBadFile badFile = new DetailedBadFile(module, new ScannedTarget(flsResult));
 
                         badFile.SetValkyrieAnalysis(fileResult.ValkyrieAnalysisResult);
+                        badFile.FinalVerdict = _calculator.GetFinalVerdict(badFile.Cloud, fileResult.ValkyrieAnalysisResult.Verdict);
+                        badFile.FinalVerdictString = _calculator.GetVerdictString(badFile.FinalVerdict);
+
                         if (badFile.Verdict != ValkyrieVerdict.Clean)
                         {
                             AddBadFile(uniqueFiles, badFile, module);
@@ -74,58 +110,7 @@ namespace APTAT.Core.Reports
                         }
                         #region Calculate Statistics
 
-                        do
-                        {
-                            if (module.Cloud == Descent.Apt.CloudVerdict.Malware)
-                            {
-                                mergedMalwareCount++;
-                                break;
-                            }
-                            switch (fileResult.ValkyrieAnalysisResult.Verdict)
-                            {
-                                case ValkyrieVerdict.Clean:
-                                    mergedSafeCount++;
-                                    break;
-                                case ValkyrieVerdict.Pending:
-                                case ValkyrieVerdict.InQueue:
-                                case ValkyrieVerdict.FirstSeen:
-                                    mergedPendingFilesCount++;
-                                    //      _pendingAnalysisFilesCount++;
-                                    break;
-                                case ValkyrieVerdict.Undetected:
-                                    mergedUnknownCount++;
-                                    break;
-                                case ValkyrieVerdict.Malware:
-                                case ValkyrieVerdict.PotentiallyUnwantedApplication:
-                                    mergedMalwareCount++;
-                                    break;
-                                case ValkyrieVerdict.NotAnalyzed:
-                                    {
-                                        switch (module.Cloud)
-                                        {
-                                            case Descent.Apt.CloudVerdict.Safe:
-                                                mergedSafeCount++;
-                                                break;
-                                            case Descent.Apt.CloudVerdict.Unknown:
-                                            case Descent.Apt.CloudVerdict.FirstSeen:
-                                                mergedUnknownCount++;
-                                                break;
-                                            case Descent.Apt.CloudVerdict.Malware:
-                                                mergedMalwareCount++;
-                                                break;
-                                            case Descent.Apt.CloudVerdict.FailedToAnalyze:
-                                            case Descent.Apt.CloudVerdict.NoVerdict:
-                                                mergedErrorFilesCount++;
-                                                break;
-                                            default:
-                                                throw new ArgumentOutOfRangeException();
-                                        }
-                                    }
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
-                        } while (false);
+                        CalculateStatistics(module, fileResult, computerStatistics);
 
 
                         #endregion
@@ -140,29 +125,7 @@ namespace APTAT.Core.Reports
                             nonUniqueBadFilesInternal.Add(copiedBadFile);
                         }
                         #region Calculate Statistics
-                        switch (module.Cloud)
-                        {
-                            case Descent.Apt.CloudVerdict.Safe:
-                                mergedSafeCount++;
-                                break;
-                            case Descent.Apt.CloudVerdict.Unknown:
-                            case Descent.Apt.CloudVerdict.FirstSeen:
-                                mergedUnknownCount++;
-                                break;
-                            case Descent.Apt.CloudVerdict.Malware:
-                                mergedMalwareCount++;
-                                break;
-                            case Descent.Apt.CloudVerdict.FailedToAnalyze:
-                                mergedErrorFilesCount++;
-                                break;
-                            case Descent.Apt.CloudVerdict.NoVerdict:
-                                mergedNoVerdictCount++;
-                                break;
-
-                            default:
-
-                                throw new ArgumentOutOfRangeException();
-                        }
+                        CalculateStatistics(module, computerStatistics);
                         #endregion
                     }
                 }
@@ -174,12 +137,12 @@ namespace APTAT.Core.Reports
 
                 ScannedTarget target = new ScannedTarget(flsResult)
                 {
-                    MalwareFilesCount = mergedMalwareCount,
-                    SafeFilesCount = mergedSafeCount,
-                    UnknownFilesCount = mergedUnknownCount,
-                    FailedToAnalyzeFilesCount = mergedErrorFilesCount,
-                    NoVerdictFilesCount = mergedNoVerdictCount,
-                    PendingAnalysisFilesCount = mergedPendingFilesCount
+                    MalwareFilesCount = computerStatistics.MergedMalwareCount,
+                    SafeFilesCount = computerStatistics.MergedSafeCount,
+                    UnknownFilesCount = computerStatistics.MergedUnknownCount,
+                    FailedToAnalyzeFilesCount = computerStatistics.MergedErrorFilesCount,
+                    NoVerdictFilesCount = computerStatistics.MergedNoVerdictCount,
+                    PendingAnalysisFilesCount = computerStatistics.MergedPendingFilesCount
                 };
                 target.TargetVerdictString = CalculateTargetVerdictString(target);
 
@@ -198,23 +161,23 @@ namespace APTAT.Core.Reports
                         globalUniqueFiles.Add(badFile.Key, badFile.Value);
                     }
 
-                    badFile.Value.Targets[0].SafeFilesCount = mergedSafeCount;
-                    badFile.Value.Targets[0].UnknownFilesCount = mergedUnknownCount;
-                    badFile.Value.Targets[0].MalwareFilesCount = mergedMalwareCount;
-                    badFile.Value.Targets[0].FailedToAnalyzeFilesCount = mergedErrorFilesCount;
-                    badFile.Value.Targets[0].NoVerdictFilesCount = mergedNoVerdictCount;
-                    badFile.Value.Targets[0].PendingAnalysisFilesCount = mergedPendingFilesCount;
+                    badFile.Value.Targets[0].SafeFilesCount = computerStatistics.MergedSafeCount;
+                    badFile.Value.Targets[0].UnknownFilesCount = computerStatistics.MergedUnknownCount;
+                    badFile.Value.Targets[0].MalwareFilesCount = computerStatistics.MergedMalwareCount;
+                    badFile.Value.Targets[0].FailedToAnalyzeFilesCount = computerStatistics.MergedErrorFilesCount;
+                    badFile.Value.Targets[0].NoVerdictFilesCount = computerStatistics.MergedNoVerdictCount;
+                    badFile.Value.Targets[0].PendingAnalysisFilesCount = computerStatistics.MergedPendingFilesCount;
                 }
 
-                safeFilesCount += mergedSafeCount;
-                unknownFilesCount += mergedUnknownCount;
-                malwareFilesCount += mergedMalwareCount;
-                errorFilesCount += mergedErrorFilesCount;
-                noVerdictFilesCount += mergedNoVerdictCount;
+                safeFilesCount += computerStatistics.MergedSafeCount;
+                unknownFilesCount += computerStatistics.MergedUnknownCount;
+                malwareFilesCount += computerStatistics.MergedMalwareCount;
+                errorFilesCount += computerStatistics.MergedErrorFilesCount;
+                noVerdictFilesCount += computerStatistics.MergedNoVerdictCount;
                 totalFilesCount += flsResult.TotalFilesCount;
                 emptyFilesCount += flsResult.EmptyFilesCount;
                 skippedFilesCount += flsResult.SkippedFilesCount;
-                pendingAnalysisFilesCount += mergedPendingFilesCount;
+                pendingAnalysisFilesCount += computerStatistics.MergedPendingFilesCount;
             }
 
             mergedTargets = targets;
@@ -239,8 +202,90 @@ namespace APTAT.Core.Reports
             return statistics;
         }
 
-     
-        private static string CalculateTargetVerdictString(ScannedTarget target)
+        protected virtual void CalculateStatistics(IModule module, Statistics computerStatistics)
+        {
+            switch (module.Cloud)
+            {
+                case Descent.Apt.CloudVerdict.Safe:
+                    computerStatistics.MergedSafeCount++;
+                    break;
+                case Descent.Apt.CloudVerdict.Unknown:
+                case Descent.Apt.CloudVerdict.FirstSeen:
+                    computerStatistics.MergedUnknownCount++;
+                    break;
+                case Descent.Apt.CloudVerdict.Malware:
+                    computerStatistics.MergedMalwareCount++;
+                    break;
+                case Descent.Apt.CloudVerdict.FailedToAnalyze:
+                    computerStatistics.MergedErrorFilesCount++;
+                    break;
+                case Descent.Apt.CloudVerdict.NoVerdict:
+                    computerStatistics.MergedNoVerdictCount++;
+                    break;
+
+                default:
+
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        protected virtual void CalculateStatistics(IModule module, FileResult fileResult, Statistics computerStatistics)
+        {
+            do
+            {
+                if (module.Cloud == Descent.Apt.CloudVerdict.Malware)
+                {
+                    computerStatistics.MergedMalwareCount++;
+                    break;
+                }
+                switch (fileResult.ValkyrieAnalysisResult.Verdict)
+                {
+                    case ValkyrieVerdict.Clean:
+                        computerStatistics.MergedSafeCount++;
+                        break;
+                    case ValkyrieVerdict.Pending:
+                    case ValkyrieVerdict.InQueue:
+                    case ValkyrieVerdict.FirstSeen:
+                        computerStatistics.MergedPendingFilesCount++;
+                        //      _pendingAnalysisFilesCount++;
+                        break;
+                    case ValkyrieVerdict.Undetected:
+                        computerStatistics.MergedUnknownCount++;
+                        break;
+                    case ValkyrieVerdict.Malware:
+                    case ValkyrieVerdict.PotentiallyUnwantedApplication:
+                        computerStatistics.MergedMalwareCount++;
+                        break;
+                    case ValkyrieVerdict.NotAnalyzed:
+                        {
+                            switch (module.Cloud)
+                            {
+                                case Descent.Apt.CloudVerdict.Safe:
+                                    computerStatistics.MergedSafeCount++;
+                                    break;
+                                case Descent.Apt.CloudVerdict.Unknown:
+                                case Descent.Apt.CloudVerdict.FirstSeen:
+                                    computerStatistics.MergedUnknownCount++;
+                                    break;
+                                case Descent.Apt.CloudVerdict.Malware:
+                                    computerStatistics.MergedMalwareCount++;
+                                    break;
+                                case Descent.Apt.CloudVerdict.FailedToAnalyze:
+                                case Descent.Apt.CloudVerdict.NoVerdict:
+                                    computerStatistics.MergedErrorFilesCount++;
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            } while (false);
+        }
+
+        protected virtual string CalculateTargetVerdictString(ScannedTarget target)
         {
             if (target.MalwareFilesCount > 0)
             {
@@ -269,6 +314,15 @@ namespace APTAT.Core.Reports
             {
                 uniqueFiles.Add(badFile.Sha1, badFile);
             }
+        }
+        protected class Statistics
+        {
+            public int MergedSafeCount { get; set; }
+            public int MergedUnknownCount { get; set; }
+            public int MergedMalwareCount { get; set; }
+            public int MergedErrorFilesCount { get; set; }
+            public int MergedNoVerdictCount { get; set; }
+            public int MergedPendingFilesCount { get; set; }
         }
 
     }

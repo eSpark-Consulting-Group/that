@@ -14,13 +14,8 @@ namespace APTAT.Core
 
     public class FinalVerdictCalculator : IFinalVerdictCalculator
     {
-        private static readonly FinalVerdictCalculator instance = new FinalVerdictCalculator();
 
-        public static FinalVerdictCalculator GetInstance()
-        {
-            return instance;
-        }
-        private FinalVerdictCalculator() { }
+        public FinalVerdictCalculator() { }
         public FinalVerdict GetFinalVerdict(CloudVerdict cloud, APTAT.Valkyrie.ValkyrieVerdict valkyrie)
         {
 
