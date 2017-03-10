@@ -644,15 +644,15 @@ namespace APTAT.Valkyrie
             }, TaskCreationOptions.None);
         }
 
-        public void StartAnalyze(CamRegistration camRegistration, List<ValkyrieFileInfo> filesToAnalyze,
-            string login, string password, int machineCount, NetworkCredential proxyCredential, string productName)
+        public void StartAnalyze(CamRegistration camRegistration, string login, string password, int machineCount, 
+            NetworkCredential proxyCredential, string productName)
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
             _machineCount = machineCount;
             _fileScanned = 0;
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
-            _filesCount = filesToAnalyze.Count;
+            _filesCount = 0;
 
             Task.Factory.StartNew(t =>
             {
@@ -699,13 +699,10 @@ namespace APTAT.Valkyrie
 
                 OnAnalyzeStarted(_apiKey, _aptScanId);
 
-                if (_emails != null)
-                    SubmitEmail(_emails);
-
-                if (!filesToAnalyze.Any()) return;
-
                 Thread.Sleep(2000);
-                SubmitToAutomaticAnalysis(filesToAnalyze, cancellationToken, AddResult);
+
+                if (_emails != null)
+                    SubmitEmail(_emails);                
             }, TaskCreationOptions.None, cancellationToken)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
         }

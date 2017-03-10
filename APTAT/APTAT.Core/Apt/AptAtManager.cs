@@ -34,8 +34,12 @@ namespace APTAT.Core.Apt
             = new HashSet<IAptVerdictContext>();
         private readonly IDistinctFileHelper _distinctHelper;
 
+        Dictionary<string, CloudVerdict> _queueToValkyrie
+            = new Dictionary<string, CloudVerdict>(StringComparer.OrdinalIgnoreCase);
+
         private int? _valkyrieScanId;
         private bool? _isValkyrieScanEnded = false;
+        private bool _isValkyrieEnabled = true;
         private DateTime? _latestValkyrieVerdictUpdate = null;
 
         private int _filesShouldSendToValkyrieCount = 0;
@@ -119,7 +123,13 @@ namespace APTAT.Core.Apt
             ShouldSendToValkyrie.Clear();
             ValkyrieOperationUid = Guid.NewGuid();
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
-            _valkyrieScanId = _entityStorage.SaveValkyrieScan(AggregatedScanResults.OperationUid ,e.ApiKey, e.ScanId);
+            lock (_queueToValkyrie)
+            {
+                _valkyrieScanId = _entityStorage.SaveValkyrieScan(AggregatedScanResults.OperationUid, e.ApiKey, e.ScanId);
+                if (_queueToValkyrie.Count > 0)
+                    AddFilesToValkyrieAnalysis(true, _queueToValkyrie);
+                _queueToValkyrie.Clear();
+            }
         }
 
         private void OnValkyrieManagerAnalyzeCompleted(object sender, AnalyzeCompletedEventArgs<ValkyrieAnalysisResult> e)
@@ -331,32 +341,24 @@ namespace APTAT.Core.Apt
                     UpdateLastResult(dict, fromRemoteScanner? VerdictSource.RemoteAgent : VerdictSource.Apt);
 
                 }
-                if ((dictToValkyrie.Any() || newUnknownFiles.Any()) && _valkyrieScanId.HasValue)
+                if ((dictToValkyrie.Any() || newUnknownFiles.Any()))
                 {
                     foreach (var unknownFile in newUnknownFiles)
                     {
                         if (!dictToValkyrie.ContainsKey(unknownFile.Sha1))
                             dictToValkyrie.Add(unknownFile.Sha1, unknownFile.Cloud);
                     }
-                    List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dictToValkyrie);
-                    if (filesToAnalyze.Any())
+                    lock(_queueToValkyrie)
                     {
-                        var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v =>
-                                    new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.InQueue)),
-                                GetResultsEnumerator().ToArray()).Values;
-                        lock (ValkyrieAnalysisResult)
+                        if (_valkyrieScanId.HasValue)
                         {
-                            _filesShouldSendToValkyrieCount += filesToAnalyze.Count;
-                            foreach (var fileInfo in valkyrieAnalysisResults)
-                            {
-                                ValkyrieAnalysisResult.Add(fileInfo.Sha1, fileInfo);
-                                if (fromRemoteScanner)
-                                    ShouldSendToValkyrie.Add(fileInfo.Sha1);
-                            }
+                            AddFilesToValkyrieAnalysis(fromRemoteScanner, dictToValkyrie);
                         }
-                        _entityStorage.SaveValkyrieResults(_valkyrieScanId.Value,valkyrieAnalysisResults);
-                        _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
-                        ValkyrieOperationUid = Guid.NewGuid();
+                        else
+                            foreach (var value in dictToValkyrie)
+                            {
+                                _queueToValkyrie.Add(value.Key, value.Value);
+                            }
                     }
                 }
             }
@@ -368,6 +370,30 @@ namespace APTAT.Core.Apt
             //  temp.Select(t)
             TryInvokeEndScan();
             return resultsUpdated;
+        }
+
+        private void AddFilesToValkyrieAnalysis(bool fromRemoteScanner, Dictionary<string, CloudVerdict> dictToValkyrie)
+        {
+            List<ValkyrieFileInfo> filesToAnalyze = GetFilesToAnalyzeForValkyrie(dictToValkyrie);
+            if (filesToAnalyze.Any())
+            {
+                var valkyrieAnalysisResults = GetFullResult(filesToAnalyze.Select(v =>
+                            new ValkyrieAnalysisResult(v.Sha1, ValkyrieVerdict.InQueue)),
+                        GetResultsEnumerator().ToArray()).Values;
+                lock (ValkyrieAnalysisResult)
+                {
+                    _filesShouldSendToValkyrieCount += filesToAnalyze.Count;
+                    foreach (var fileInfo in valkyrieAnalysisResults)
+                    {
+                        ValkyrieAnalysisResult.Add(fileInfo.Sha1, fileInfo);
+                        if (fromRemoteScanner)
+                            ShouldSendToValkyrie.Add(fileInfo.Sha1);
+                    }
+                }
+                _entityStorage.SaveValkyrieResults(_valkyrieScanId.Value, valkyrieAnalysisResults);
+                _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
+                ValkyrieOperationUid = Guid.NewGuid();
+            }
         }
 
         private List<ValkyrieFileInfo> GetFilesToAnalyzeForValkyrie(Dictionary<string, CloudVerdict> dict)
@@ -453,6 +479,8 @@ namespace APTAT.Core.Apt
                     _flsHashResults.Clear();
                     _verdictUpdateHistory.Clear();
                 }
+                lock(_queueToValkyrie)
+                    _queueToValkyrie.Clear();
                 ShouldSendToValkyrie.Clear();
                 ValkyrieAnalysisResult.Clear();
                 _IsLastScanCancelled = false;
@@ -517,8 +545,7 @@ namespace APTAT.Core.Apt
                 var camRegistration = new CamRegistration(camLicenseId, camUserName, camPassword);
                 var results = GetResultsEnumerator();
                 var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
-                List<ValkyrieFileInfo> distinctFileList = GetDistinctUknownFileInfo(aptScanResults);
-                _valkyrieClient.StartAnalyze(camRegistration, distinctFileList, login, password, aptScanResults.Length,
+                _valkyrieClient.StartAnalyze(camRegistration, login, password, aptScanResults.Length,
                     proxyCredential, productName);
             }
         }

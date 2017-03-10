@@ -1,16 +1,9 @@
-﻿using APTAT.Core.Apt;
-using APTAT.Core.Descent.Apt;
-using APTAT.Core.Storage.Repositories;
+﻿using APTAT.Core.Storage.Repositories;
 using APTAT.DAL.Storage;
-using APTAT.DAL.Storage.Core;
 using APTAT.DAL.Storage.DTO;
 using FAT.Application.Models;
-using FAT.Application.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FAT.Application.Models.Apt;
 
 namespace FAT.Application.Services
