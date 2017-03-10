@@ -205,7 +205,10 @@ namespace FAT.Application.Models
                 ValkyrieProgressPercentage = 100;
                 _valkyrieProgressPercentageCached = 100;
                 if (ScanStage == ScanStage.OperationCancelling)
+                {
                     ScanStage = ScanStage.OperationCanceled;
+                    StatusMessageSystem = "Scan operation was canceled.";
+                }
 
             }
             else
@@ -213,10 +216,13 @@ namespace FAT.Application.Models
                 var count = FilesToCheckOnValkyrieCount.Count(f => f.ValkyrieVerdict != ValkyrieVerdict.PendingFls
                                                                    && f.ValkyrieVerdict != ValkyrieVerdict.InQueue);
                 var percentage = count / (double) FilesToCheckOnValkyrieCount.Length * 100;
-                if (Math.Abs(percentage - 100) < 0.01)
+                if (Math.Abs(percentage - 100) < 0.001)
                 {
                     if( ScanStage == ScanStage.OperationCancelling)
+                    {
                         ScanStage = ScanStage.OperationCanceled;
+                        StatusMessageSystem = "Scan operation was canceled.";
+                    }
                     _valkyrieProgressPercentageCached = percentage;
                     ValkyrieProgressPercentage = percentage;
 
@@ -500,10 +506,10 @@ namespace FAT.Application.Models
                     case ScanStage.ScanFailed:
                     case ScanStage.OperationFailed:
                     case ScanStage.OperationCanceled:
-                        
+
                         return StatusMessageSystem;
 
-                        case ScanStage.OperationCancelling:
+                    case ScanStage.OperationCancelling:
                         return "Canceling...";
 
 
@@ -897,6 +903,12 @@ namespace FAT.Application.Models
             {
                 ScanStage = ScanStage.OperationCancelling;
             }
+        }
+
+        public void TrySetFailedStatus()
+        {
+            FilesToCheckOnValkyrieCount = new IThreatInfoItem[0];
+            ReCalculateValkyriePercentage();
         }
 
         public override string ToString()

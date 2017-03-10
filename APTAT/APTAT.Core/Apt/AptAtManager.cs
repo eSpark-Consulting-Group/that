@@ -39,7 +39,6 @@ namespace APTAT.Core.Apt
 
         private int? _valkyrieScanId;
         private bool? _isValkyrieScanEnded = false;
-        private bool _isValkyrieEnabled = true;
         private DateTime? _latestValkyrieVerdictUpdate = null;
 
         private int _filesShouldSendToValkyrieCount = 0;

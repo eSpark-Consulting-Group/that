@@ -47,6 +47,7 @@ namespace FAT.Application.Models
 
         private bool _groupByFiles;
         private bool _groupByComputers;
+        private bool _isFailed;
 
         private TimeSpan? _lastModifiesComputerDate = null;
         private DateTime? _lastModifiesFlsVerdictDate = null;
@@ -860,6 +861,7 @@ namespace FAT.Application.Models
 
             if (e.Error != null)
             {
+                _isFailed = true;
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
             ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
@@ -1111,6 +1113,11 @@ namespace FAT.Application.Models
                     && infoItem.ScanStage != ScanStage.OperationCanceled)
                 {
                     infoItem.TrySetCancelledStatus();
+                }
+                if (_isFailed && localPercentage < 100)
+                {
+                    infoItem.TrySetFailedStatus();
+                    localPercentage = infoItem.TotalProgressPercentage;
                 }
                 if (localPercentage == 100 && infoItem.ScanStage == ScanStage.OperationCompleted)
                     scanned++;
