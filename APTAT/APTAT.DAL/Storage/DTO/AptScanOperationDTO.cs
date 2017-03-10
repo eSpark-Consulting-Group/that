@@ -23,7 +23,7 @@ namespace APTAT.DAL.Storage.DTO
     {
         public string ScanId { get; set; }
         public string ApiKey { get; set; }
-        public bool IsCancelled { get; set; }
+        public bool? IsCancelled { get; set; }
         public DateTime? FinishedOnUi { get; set; }
     }
 }

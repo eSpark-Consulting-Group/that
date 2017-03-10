@@ -75,7 +75,7 @@ namespace FAT.Application.Models
             };
             if (dto.ValkyrieOperationInfo != null)
             {
-                result.IsCancelled = dto.ValkyrieOperationInfo.IsCancelled;
+                result.IsCancelled = dto.ValkyrieOperationInfo.IsCancelled?? true;
                 result.Finished = dto.ValkyrieOperationInfo.FinishedOnUi;
             }
             else

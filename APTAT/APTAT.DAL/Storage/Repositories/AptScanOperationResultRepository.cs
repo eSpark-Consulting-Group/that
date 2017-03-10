@@ -78,7 +78,7 @@ namespace APTAT.Core.Storage.Repositories
                              {
                                  ApiKey = i.ValkyrieScanInfo.ApiKey, 
                                  ScanId = i.ValkyrieScanInfo.ScanId,
-                                 IsCancelled = i.ValkyrieScanInfo.IsCancelled.GetValueOrDefault(),
+                                 IsCancelled = i.ValkyrieScanInfo.IsCancelled,
                                  FinishedOnUi = i.ValkyrieScanInfo.FinishedWithoutErrorHandling
                              } : null
 
