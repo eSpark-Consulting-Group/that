@@ -71,12 +71,6 @@ namespace APTAT.Common
             _container.RegisterSingleton<TIService, TService>();
         }
 
-        public void RegisterSingleton<TIService>(Func<TIService> createAction)
-          where TIService : class
-        {
-            _container.RegisterSingleton<TIService>(createAction);
-        }
-
         public void RegisterModules(IEnumerable<Type> moduleTypes)
         {
             using (var container = new Container())
