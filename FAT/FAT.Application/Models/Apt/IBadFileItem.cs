@@ -17,6 +17,7 @@ namespace FAT.Application.Models
         bool IsUnknown { get; }
         DateTime Modified { get; set; }
         string Name { get; set; }
+        string Path { get; set; }
         string Product { get; set; }
         string Sha1 { get; set; }
         string Signer { get; set; }

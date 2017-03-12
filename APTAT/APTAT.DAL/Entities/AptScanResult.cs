@@ -69,10 +69,13 @@ namespace APTAT.DAL.Entities
         [StringLength(50)]
         public string OsName { get; set; }
         public bool Succeeded { get; set; }
+        public bool Canceled { get; set; }
         [StringLength(100)]
         public string StatusMessage { get; set; }
         public string OrganizationUnit { get; set; }
         public string LdapPath { get; set; }
-        public ScanStage ScanStage { get; set; }        
+        public bool IsLocal { get; set; }
+        public bool IsOnline { get; set; }    
+        public int TotalCount { get; set; }   
     }
 }

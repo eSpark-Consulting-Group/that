@@ -6,12 +6,17 @@ namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
 {      
     public class DeploymentTarget : IComputer
 	{
-        public DeploymentTarget()
-        {
-
-        }
 		public Guid Uid { get; set; }
-	    public string Name { get; set; }
+
+        private string _name;
+	    public string Name
+        {
+            get { return (_name == IPAddress && !string.IsNullOrEmpty(DnsName)) ? DnsName : _name; }
+            set
+            {
+                _name = value;
+            }
+        }
 		public string DnsName { get; set; }
 
 	    public string OrganizationUnit

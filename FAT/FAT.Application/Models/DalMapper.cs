@@ -29,58 +29,64 @@ namespace FAT.Application.Models
             FatScanComputerResult result = new FatScanComputerResult
             {
                 BadFiles = MapBadFiles(dto.Modules),
-                ScanStage = scan.ScanStage.MapScanStageToBusiness(),
+                ScanStage = scan.Succeeded ? ScanStage.OperationCompleted : 
+                    (scan.Canceled ? ScanStage.OperationCanceled : ScanStage.OperationFailed), 
                 StatusMessage = scan.StatusMessage,
                 TargetUid = scan.TargetUid,
                 TotalFilesCount = dto.TotalCount,
                 UnknownFilesCount = dto.UnknownsCount,
                 MalwareFilesCount = dto.MaliciousCount,
-                CleanFilesCount = dto.SafeFilesCount,
-                NotAnalyzedFilesCount = dto.NotAnalyzedFilesCount,
+                NotAnalyzedFilesCount = dto.NotAnalyzedCount,
+                InAnalysisFilesCount = dto.InAnalysisCount,
+                CleanFilesCount = dto.TotalCount - dto.UnknownsCount - dto.MaliciousCount - dto.InAnalysisCount - dto.NotAnalyzedCount,
+                Name = scan.ComputerName,
+                IpAddress = scan.IpAddress,
+                IsLocal = scan.IsLocal,
+                IsOnline = scan.IsOnline
             };
-            result.InAnalysisFilesCount = result.TotalFilesCount - result.CleanFilesCount
-                - result.NotAnalyzedFilesCount - result.MalwareFilesCount - result.UnknownFilesCount;
             return result;
         }
 
-        public static IScanOperation[] MapCollection(this IEnumerable<IAptScanOperationDTO> aptScanResults)
+        public static IScanOperation[] MapCollection(this IEnumerable<IAptScanOperationDTO> aptScanResults, Func<IScanOperation, IScanOperationResult> func = null)
         {
             List<IScanOperation> result = new List<IScanOperation>();
             foreach (var scanRes in aptScanResults)
             {
-                result.Add(scanRes.MapItem());
+                result.Add(scanRes.MapItem(func));
             }
             return result.ToArray();
         }
-
-        public static IScanOperation MapItem(this IAptScanOperationDTO dto)
+              
+        public static IScanOperation MapItem(this IAptScanOperationDTO dto, Func<IScanOperation, IScanOperationResult> func = null)
         {
             ScanOperation result = new ScanOperation()
             {
-                FilesCount = dto.FilesCount,
-                Finished = dto.Finished,
+                FilesScanned = dto.FilesScanned,
                 ScanMethod = dto.ScanMethod.ToBusiness(),
                 MaliciousCount = dto.MaliciousCount,
                 UnknownsCount = dto.UnknownsCount,
+                CleanCount = dto.FilesScanned - dto.MaliciousCount - dto.UnknownsCount - dto.NotAnalyzedCount - dto.InAnalysisCount,
+                NotAnalyzedCount = dto.NotAnalyzedCount,
+                InAnalysisCount = dto.InAnalysisCount,
                 Started = dto.Started,
                 OperationUid = dto.OperationUid,
-                TotalDevicesScanned = dto.TotalDevicesScanned,
+                ComputersScanned = dto.ComputersScanned,
+                TotalComputersScanned = dto.TotalComputersScanned,
+                DiscovererDescription = dto.DiscovererDescription,
+                LoadDetailsFunc = func,
+                IsCancelled = dto.Canceled,
+                Finished = dto.ValkyrieOperationInfo?.FinishedOnUi ?? dto.Finished,
+                IsFailed = dto.ValkyrieOperationInfo == null && dto.ComputersScanned == 0,
                 DevicesSourceDescription = new DevicesSourceDescription
                 {
                     Description = dto.SourceDescription,
-                    Type = dto.Type.ToBusiness()
+                    Type = dto.Type.Value.ToBusiness()
                 },
                 ValkyrieOperationInfo = dto.ValkyrieOperationInfo != null ?
                     new ValkyrieOperationInfo(dto.ValkyrieOperationInfo.ApiKey,
                     dto.ValkyrieOperationInfo.ScanId): null
             };
-            if (dto.ValkyrieOperationInfo != null)
-            {
-                result.IsCancelled = dto.ValkyrieOperationInfo.IsCancelled?? true;
-                result.Finished = dto.ValkyrieOperationInfo.FinishedOnUi;
-            }
-            else
-                result.IsFailed = true;
+
             return result;
         }
 
@@ -243,6 +249,7 @@ namespace FAT.Application.Models
                 Size = file.Size,
                 Version = file.Version,
                 Name = file.Name,
+                Path = file.Path,
                 IsWhiteListed =(file?.ValkyrieDetails?.IsWhiteListed).GetValueOrDefault(false),
                 MalwareProbabilityValue = file?.ValkyrieDetails?.MalwareProbability,
                 OperationStatus = file?.ValkyrieDetails?.OperationStatus,

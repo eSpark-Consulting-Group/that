@@ -64,11 +64,59 @@ namespace APTAT.Common
             _container.Register<TIService, TService>(InstancePerDependencyLifestyle);
         }
 
+        public void Register<TIService>(Func<TIService> createAction)
+            where TIService : class
+        {
+            _container.Register(createAction, InstancePerDependencyLifestyle);
+        }
+
+        public void Register<TIService1, TIService2, TService>()
+            where TIService1 : class
+            where TIService2 : class
+            where TService : class, TIService1, TIService2
+        {
+            var registration = InstancePerDependencyLifestyle.CreateRegistration<TService>(_container);
+
+            _container.AddRegistration(typeof(TIService1), registration);
+            _container.AddRegistration(typeof(TIService2), registration);
+        }
+
+        public void RegisterLazy<TIService, TService>()
+            where TIService : class
+            where TService : class, TIService
+        {
+            _container.Register(() => new Lazy<TIService>(_container.GetInstance<TService>), InstancePerDependencyLifestyle);
+        }
+
         public void RegisterSingleton<TIService, TService>()
             where TIService : class
             where TService : class, TIService
         {
             _container.RegisterSingleton<TIService, TService>();
+        }
+
+        public void RegisterSingleton<TIService>(Func<TIService> createAction)
+            where TIService : class
+        {
+            _container.RegisterSingleton(createAction);
+        }
+
+        public void RegisterSingleton<TIService1, TIService2, TService>()
+            where TIService1 : class
+            where TIService2 : class
+            where TService : class, TIService1, TIService2
+        {
+            var registration = Lifestyle.Singleton.CreateRegistration<TService>(_container);
+
+            _container.AddRegistration(typeof(TIService1), registration);
+            _container.AddRegistration(typeof(TIService2), registration);
+        }
+
+        public void RegisterSingletonLazy<TIService, TService>()
+            where TIService : class
+            where TService : class, TIService
+        {
+            _container.RegisterSingleton(() => new Lazy<TIService>(_container.GetInstance<TService>));
         }
 
         public void RegisterModules(IEnumerable<Type> moduleTypes)
@@ -82,8 +130,7 @@ namespace APTAT.Common
         }
 
         public void Verify()
-        {
-          
+        {    
             _container.Verify();
         }
 

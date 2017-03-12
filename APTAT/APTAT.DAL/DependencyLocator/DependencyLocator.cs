@@ -1,6 +1,6 @@
 ﻿using APTAT.Common;
-using APTAT.Core.Storage;
 using APTAT.DAL.Storage;
+using System;
 
 namespace APTAT.DAL.DependencyLocator
 {
@@ -8,7 +8,7 @@ namespace APTAT.DAL.DependencyLocator
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
-            resolver.RegisterSingleton<IEntityStorage, EntityStorage>();
+            resolver.RegisterSingletonLazy<IEntityStorage, EntityStorage>();
         }
     }
 }

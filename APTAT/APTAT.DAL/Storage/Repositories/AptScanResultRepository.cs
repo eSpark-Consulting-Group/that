@@ -76,19 +76,22 @@ namespace APTAT.Core.Storage.Repositories
                        Version = c.Module.Version
                    }),
 
-                   TotalCount = r.Modules.Count(),
-                   UnknownsCount = r.Modules.Count(f1 =>
-                                    f1.Valkyrie != null &&
-                                    f1.Valkyrie.Verdict == ValkyrieVerdict.Undetected
+                   TotalCount = r.Data.TotalCount,
+                   UnknownsCount = r.Modules.Count(f1 => (f1.Valkyrie != null
+                                    && f1.Valkyrie.Verdict == ValkyrieVerdict.Undetected)
                                     && f1.Module.CloudVerdict != CloudVerdict.Malware),
-                   MaliciousCount = r.Modules.Count(f1 => f1.Module.CloudVerdict == CloudVerdict.Malware
-                          || (f1.Valkyrie != null && (f1.Valkyrie.Verdict == ValkyrieVerdict.Malware
-                          || f1.Valkyrie.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication))),
-                   NotAnalyzedFilesCount = r.Modules.Count(f1 => f1.Module.CloudVerdict != CloudVerdict.Malware
-                            && f1.Valkyrie != null && f1.Valkyrie.Verdict == ValkyrieVerdict.NotAnalyzed
-                            && f1.Module.CloudVerdict != CloudVerdict.Safe),
-                   SafeFilesCount = r.Modules.Count(f1 => f1.Module.CloudVerdict == CloudVerdict.Safe
-                          || (f1.Valkyrie != null && f1.Valkyrie.Verdict == ValkyrieVerdict.Clean)),
+                   MaliciousCount = r.Modules.Count(f1 => (f1.Valkyrie != null
+                                    && (f1.Valkyrie.Verdict == ValkyrieVerdict.Malware
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication))
+                                    || f1.Module.CloudVerdict == CloudVerdict.Malware),
+                   InAnalysisCount = r.Modules.Count(f1 => (f1.Valkyrie != null
+                                    && (f1.Valkyrie.Verdict == ValkyrieVerdict.PendingFls
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.InQueue
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.FirstSeen
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.Pending))
+                                    || f1.Module.CloudVerdict == CloudVerdict.FailedToAnalyze),
+                   NotAnalyzedCount = r.Modules.Count(f1 => (f1.Valkyrie != null
+                                    && f1.Valkyrie.Verdict == ValkyrieVerdict.NotAnalyzed)),
                }).ToArray();
             
             return result;

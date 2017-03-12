@@ -63,7 +63,7 @@ namespace FAT.Application
             switch (message.Type)
             {
                 case MessageTypes.FilterTarget:
-                    message.Action(SearchTextBox);
+                    message.Action(_viewModel.CurrentScanAvailable ? SearchTextBox2 : SearchTextBox);
                     break;
             }
         }

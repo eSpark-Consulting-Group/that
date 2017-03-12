@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FAT.Application.Models.Apt
 {
@@ -18,5 +14,15 @@ namespace FAT.Application.Models.Apt
         int TotalFilesCount { get; set; }
         int UnknownFilesCount { get; set; }
         int NotAnalyzedFilesCount { get; set; }
+        string Name { get; set; }
+        string IpAddress { get; set; }
+        bool IsLocal { get; set; }
+        bool IsOnline { get; set; }
+    }
+
+    public interface IScanOperationResult
+    {
+        IScanOperation ScanOperation { get; }
+        IFatScanComputerResult[] ComputerResults { get; }
     }
 }

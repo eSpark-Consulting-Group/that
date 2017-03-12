@@ -7,15 +7,21 @@ namespace FAT.Application.Models
     public interface IScanOperation
     {
         string DiscovererDescription { get; set; }
-        int FilesCount { get; set; }
+        DateTime Started { get; set; }
         DateTime? Finished { get; }
-        int MaliciousCount { get; set; }
         Guid OperationUid { get; set; }
         ScanKind ScanMethod { get; set; }
-        DateTime Started { get; set; }
-        int TotalDevicesScanned { get; set; }
-        int UnknownsCount { get; set; }
         IDevicesSourceDescription DevicesSourceDescription { get; set; }
+        int ComputersScanned { get; set; }
+        int TotalComputersScanned { get; set; }
+        int FilesScanned { get; set; }
+        int UnknownsCount { get; set; }
+        int NotAnalyzedCount { get; set; }
+        int MaliciousCount { get; set; }
+        int InAnalysisCount { get; set; }
+        int CleanCount { get; set; }
+        bool IsFailed { get; set; }
+        bool IsCancelled { get; set; }
         IValkyrieOperationInfo ValkyrieOperationInfo { get; set; }
     }
 

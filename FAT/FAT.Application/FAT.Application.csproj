@@ -160,6 +160,7 @@
     <Compile Include="Models\Counter\ScanCounter.cs" />
     <Compile Include="Models\Counter\ScanCounterCollection.cs" />
     <Compile Include="Models\ScanOperation.cs" />
+    <Compile Include="Models\ScanOperationsManager.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\EventArgs\ErrorEventArgs.cs" />
     <Compile Include="Services\EventArgs\GetModifiedResultsForOperationEventArgs.cs" />
@@ -209,6 +210,9 @@
     </Compile>
     <Compile Include="Views\DiscoveryResults.xaml.cs">
       <DependentUpon>DiscoveryResults.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scan\PreviousScanResults.xaml.cs">
+      <DependentUpon>PreviousScanResults.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Scan\ScanResultsWithFiles.xaml.cs">
       <DependentUpon>ScanResultsWithFiles.xaml</DependentUpon>
@@ -314,6 +318,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DiscoveryResults.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Scan\PreviousScanResults.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -13,7 +13,8 @@
 
     <Grid Background="White">
 
-        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" Background="Transparent" BorderBrush="Transparent">
+        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" BusyContent="Please Wait..." Background="Transparent" BorderBrush="Transparent" 
+                                  IsTabStop="false" FocusVisualStyle="{x:Null}" Focusable="False">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

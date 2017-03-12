@@ -13,6 +13,8 @@ namespace FAT.Application.Models
 
         public String Name { get; set; }
 
+        public String Path { get; set; }
+
         public Int64 Size { get; set; }
 
         public String Attributes { get; set; }

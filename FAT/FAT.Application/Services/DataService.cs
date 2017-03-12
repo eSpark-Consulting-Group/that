@@ -1,4 +1,5 @@
-﻿using APTAT.Core.Storage.Repositories;
+﻿
+using APTAT.Core.Storage.Repositories;
 using APTAT.DAL.Storage;
 using APTAT.DAL.Storage.DTO;
 using FAT.Application.Models;
@@ -10,18 +11,17 @@ namespace FAT.Application.Services
 {
     public class DataService : IDataService
     {
-        private IEntityStorage _storageContext;
+        private Lazy<IEntityStorage> _storageContext;
 
-        public DataService(IEntityStorage storageContext)
+        public DataService(Lazy<IEntityStorage> storageContext)
         {
             _storageContext = storageContext;
         }
 
-
         public string GetEmails()
         {
             string emails = "";
-            using (var context = _storageContext.GetContext())
+            using (var context = _storageContext.Value.Context)
             {
                 var addresses = context.EmailRepository.EntityQuery.Select(e => e.Address);
                 emails = String.Join(",", addresses);
@@ -29,26 +29,21 @@ namespace FAT.Application.Services
             }
         }
 
-        //<summary>
-
-        //</summary>
-        //<param name = "keyword" > Search by computer name and file name</param>
-        //<returns></returns>
         public IScanOperation[] GetPreviousScans(string keyword)
         {
             IAptScanOperationDTO[] data;
-            using (var storage = _storageContext.GetContext())
+            using (var storage = _storageContext.Value.Context)
             {
                 data = storage.AptScanOperationResultRepository.Search(keyword);
             }
 
-            return data.MapCollection();
+            return data.MapCollection(_ => new ScanOperationResult(_, GetScanOperationDetailed(_.OperationUid)));
 
         }
         public IFatScanComputerResult[] GetScanOperationDetailed(Guid operationUid)
         {
             AptScanResultDTO[] data;
-            using (var storage = _storageContext.GetContext())
+            using (var storage = _storageContext.Value.Context)
             {                
                  data =  storage.AptScanResultRepository.GetByOperationUid(operationUid);
             }

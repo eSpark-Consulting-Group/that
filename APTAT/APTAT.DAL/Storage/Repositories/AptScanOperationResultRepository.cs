@@ -8,6 +8,8 @@ using System.Diagnostics;
 
 using APTAT.DAL.Enums;
 using APTAT.DAL.Storage.DTO;
+using System.Data.Entity.Core.Objects;
+using System.Linq.Expressions;
 
 namespace APTAT.Core.Storage.Repositories
 {
@@ -39,52 +41,67 @@ namespace APTAT.Core.Storage.Repositories
             return DbSet.Where(o => o.OperationUid == operationUid).ExecuteDbQueryFirstOrDefault();
         }
 
+        public static Expression<Func<AptScanOperationResult, bool>> SearchByKeyword(string keyword)
+        {
+            return result => result.AptScanResults.Any(r => r.ComputerName.Contains(keyword)
+                     || r.Modules.Any(m => m.Name.Contains(keyword)));
+        }
+
         public IAptScanOperationDTO[] Search(string keyword)
         {
-      //      DbContext.Database.Log = (x) => Debug.Write(x);
-            var query = DbContext.AptScanOperaionResults;
-            if (!String.IsNullOrEmpty(keyword))
-            {
-                query.Where(o => o.AptScanResults.Any(r => r.ComputerName.Contains(keyword) 
-                    || r.Modules.Any(m => m.Name.Contains(keyword))));
-            }
+            var results = string.IsNullOrEmpty(keyword) ? 
+                DbContext.AptScanOperaionResults : 
+                DbContext.AptScanOperaionResults.Where(SearchByKeyword(keyword));
 
-            var query2 = from i in query
-                         let m = 
-                         (from module in i.AptScanResults.SelectMany(sr=>sr.Modules)
+            var query = from i in results
+
+                         let m =
+                         (from module in i.AptScanResults.SelectMany(sr => sr.Modules)
                           join valkyrieFile in i.ValkyrieScanInfo.ValkyrieFileInfos
-                          on new {sha1 =  module.Sha1, oId = module.AptScanResult.OperationResultId}
-                          equals new {sha1 = valkyrieFile.Sha1, oId = valkyrieFile.ValkyrieScanInfoId}
+                          on new { sha1 = module.Sha1, oId = module.AptScanResult.OperationResultId }
+                          equals new { sha1 = valkyrieFile.Sha1, oId = valkyrieFile.ValkyrieScanInfoId }
                           into joined
                           from j in joined.DefaultIfEmpty()
-                          select new {Module = module, Valkyrie = j})
-                         select 
-                         new AptScanOperationDTO()
+                          select new { Module = module, Valkyrie = j })
+
+                         select new AptScanOperationDTO()
                          {
                              OperationUid = i.OperationUid,
                              Started = i.Started,
                              Finished = i.Finished,
-                             ScanMethod = i.ScanMethod,                             
-                             DiscovererDescription = i.SourceDescription,                             
-                             FilesCount = m.Count(),
-                             UnknownsCount = m.Count(f1 => f1.Valkyrie != null &&
-                                    f1.Valkyrie.Verdict == ValkyrieVerdict.Undetected
+                             ScanMethod = i.ScanMethod,
+                             Type = i.Source,
+                             DiscovererDescription = i.SourceDescription,
+                             FilesScanned = i.AptScanResults.Sum(sr => sr.TotalCount),
+                             Canceled = i.AptScanResults.Any(sr => sr.Canceled),
+                             UnknownsCount = m.Count(f1 => (f1.Valkyrie != null
+                                    && f1.Valkyrie.Verdict == ValkyrieVerdict.Undetected)
                                     && f1.Module.CloudVerdict != CloudVerdict.Malware),
-                             MaliciousCount = m.Count(f1 => f1.Module.CloudVerdict == CloudVerdict.Malware
-                                    || (f1.Valkyrie != null && f1.Valkyrie.Verdict == ValkyrieVerdict.Malware)),
-                             TotalDevicesScanned = i.AptScanResults.Count(r2=>r2.Succeeded),
+                             MaliciousCount = m.Count(f1 => (f1.Valkyrie != null
+                                    && (f1.Valkyrie.Verdict == ValkyrieVerdict.Malware
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.PotentiallyUnwantedApplication))
+                                    || f1.Module.CloudVerdict == CloudVerdict.Malware),
+                             InAnalysisCount = m.Count(f1 => (f1.Valkyrie != null
+                                    && (f1.Valkyrie.Verdict == ValkyrieVerdict.PendingFls
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.InQueue
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.FirstSeen
+                                    || f1.Valkyrie.Verdict == ValkyrieVerdict.Pending))
+                                    || f1.Module.CloudVerdict == CloudVerdict.FailedToAnalyze),
+                             NotAnalyzedCount = m.Count(f1 => (f1.Valkyrie != null
+                                    && f1.Valkyrie.Verdict == ValkyrieVerdict.NotAnalyzed)),
+                             ComputersScanned = i.AptScanResults.Count(sr => sr.Succeeded),
+                             TotalComputersScanned = i.AptScanResults.Count,
                              ValkyrieOperationInfo = i.ValkyrieScanInfo != null ?
                              new ValkyrieOperationInfo
                              {
                                  ApiKey = i.ValkyrieScanInfo.ApiKey, 
                                  ScanId = i.ValkyrieScanInfo.ScanId,
-                                 IsCancelled = i.ValkyrieScanInfo.IsCancelled,
                                  FinishedOnUi = i.ValkyrieScanInfo.FinishedWithoutErrorHandling
                              } : null
 
                          };
 
-            return query2.ExecuteDbQuery();
+            return query.ExecuteDbQuery();
         }
     }
 }

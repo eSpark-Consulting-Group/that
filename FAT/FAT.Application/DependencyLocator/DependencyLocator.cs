@@ -16,9 +16,12 @@ namespace FAT.Application
             resolver.RegisterSingleton<IStorageService, StorageService>();
             resolver.RegisterSingleton<IFileBrowserService, FileBrowserService>();
             resolver.RegisterSingleton<IDataService, DataService>();
-            resolver.RegisterSingleton<IScanCounterManager, ScanCounterManager>();
-            resolver.RegisterSingleton<IScanCounterCollection, ScanCounterCollection>();
-            resolver.RegisterSingleton<IScanCounterFactory, ScanCounterFactory>();
+            resolver.RegisterSingleton<IScanOperationsManager, ScanOperationsManager>();
+
+            resolver.Register<IScanCounterCollection, ScanCounterCollection>();
+            resolver.Register<IScanCounterFactory, ScanCounterFactory>();
+            resolver.Register<IScanCounterManager, ScanCounterManager>();
+
             resolver.AllowOverridingRegistrations(true);
             resolver.RegisterSingleton<IDistinctFileHelper,FATFileFilter>();
             resolver.RegisterSingleton<IReportBuilder, ReportBuilderFAT>();

@@ -6,7 +6,6 @@ namespace APTAT.DAL.Storage.DTO
     {
         string ApiKey { get; set; }
         string ScanId { get; set; }
-        bool? IsCancelled { get; set; }
         DateTime? FinishedOnUi { get; set; }
     }
 }

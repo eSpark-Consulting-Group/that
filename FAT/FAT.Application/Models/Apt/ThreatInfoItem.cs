@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using APTAT.Application.Models.Apt;
 using APTAT.DeploymentCore;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.Valkyrie;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 
@@ -57,7 +56,7 @@ namespace FAT.Application.Models
         public IBadFileItem BadFile { get; }
 
         public IComputer DeploymentTarget { get; }
-        private double RemoteScanningPercentage { get; set; }
+        public double RemoteScanningPercentage { get; set; }
 
         public string SkipReason { get; set; }
 
@@ -639,7 +638,7 @@ namespace FAT.Application.Models
         public Int32 NotAnalyzedFilesCount
         {
             get { return _notAnalyzedFilesCount; }
-            private set
+            set
             {
                 if (_notAnalyzedFilesCount == value)
                 {

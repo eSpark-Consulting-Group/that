@@ -14,10 +14,10 @@ namespace APTAT.Core.Storage
 {
     public class StorageSubSystem : IStorageSubSystem
     {
-        private readonly IEntityStorage _entityStorage;
-        public StorageSubSystem(IEntityStorage storage)
+        private readonly Lazy<IEntityStorage> _entityStorage;
+        public StorageSubSystem(Lazy<IEntityStorage> entityStorage)
         {
-            _entityStorage = storage;
+            _entityStorage = entityStorage;
         }
         public void SaveOperationContext(IAptScanOperationContext scanOperationContext)
         {
@@ -39,12 +39,16 @@ namespace APTAT.Core.Storage
                     OrganizationUnit = aptScanResult.Computer?.OrganizationUnit,
                     OsName = aptScanResult.AptReport?.Computer?.Os.ToString(),
                     LdapPath = aptScanResult.Computer?.LdapPath,
+                    IsOnline = aptScanResult.Computer?.IsOnline ?? false,
+                    IsLocal = aptScanResult.Computer?.IsLocalComputer ?? false,
                     TargetUid = aptScanResult.TargetUid,
-                    Succeeded = aptScanResult.Succeeded,
-                    StatusMessage = aptScanResult.ShortStatusMessage.ToString()
+                    Succeeded = aptScanResult.IsCanceled ? false : aptScanResult.Succeeded,
+                    Canceled = aptScanResult.IsCanceled,
+                    StatusMessage = aptScanResult.ShortStatusMessage.ToString(),
+                    TotalCount = aptScanResult.TotalFilesCount
                 });
             }
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 context.AptScanOperationResultRepository.Add(dataObject);
                 context.SaveChanges();
@@ -52,7 +56,7 @@ namespace APTAT.Core.Storage
         }
         public void UpdateScanResults(IAptScanOperationContext scanOperationContext)
         {
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 var operation = context.AptScanOperationResultRepository.GetByOperationUid(scanOperationContext.OperationUid);
                 operation.Finished = scanOperationContext.CompletedTime;
@@ -61,20 +65,29 @@ namespace APTAT.Core.Storage
         }
         public void SaveScanResults(Guid operationUid, IAptScanResult scanResult)
         {
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 var result = context.AptScanResultRepository.GetByTargetUidAndOperationUid(scanResult.Computer.Uid,
                     operationUid);
-                result.Succeeded = scanResult.Succeeded;
+                result.Succeeded = scanResult.IsCanceled ? false : scanResult.Succeeded;
                 result.StatusMessage = scanResult.ShortStatusMessage.ToString();
                 result.OrganizationUnit = scanResult.Computer.OrganizationUnit;                
                 result.OsName = scanResult.AptReport?.Computer.Os.ToString();
                 result.TargetUid = scanResult.TargetUid;
+                result.IpAddress = scanResult.Computer?.IPAddress;
+                result.ComputerName = scanResult.Computer?.Name;
+                result.IsOnline = scanResult.Computer?.IsOnline ?? false;
+                result.IsLocal = scanResult.Computer?.IsLocalComputer ?? false;
+                result.Canceled = scanResult.IsCanceled;
+                result.LdapPath = scanResult.Computer?.LdapPath;
+                result.TotalCount = scanResult.TotalFilesCount;
 
                 foreach (var file in scanResult.Files)
                 {
-                    result.Modules.Add(Mapper.MapModule(file, VerdictSource.RemoteAgent));
+                    if (file.Cloud != Descent.Apt.CloudVerdict.Safe)
+                        result.Modules.Add(Mapper.MapModule(file, VerdictSource.RemoteAgent));
                 }
+
                 context.SaveChanges();
             }
         }
@@ -83,7 +96,7 @@ namespace APTAT.Core.Storage
             VerdictSource verdictSource)
         {
             var group = resultsWithoutErrors.GroupBy(kvp => kvp.Value.ToData(), kvp => kvp.Key).ToArray();
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 context.ModulesRepository.UpdateVerdictByHashAndOperationUid(operationUid,group, verdictSource);
             }
@@ -92,7 +105,7 @@ namespace APTAT.Core.Storage
         public int SaveValkyrieScan(Guid operationUid, string apiKey, string scanId)
         {
             ValkyrieScanInfo scanInfo;
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 var operation = context.AptScanOperationResultRepository.GetByOperationUid(operationUid);
                 scanInfo = new ValkyrieScanInfo
@@ -110,7 +123,7 @@ namespace APTAT.Core.Storage
 
         public void TryFinishValkyrieScan(int scanId, bool isCancelled)
         {
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 var scanInfo = context.ValkyrieScansRepository.ExecuteFind(new object[] { scanId});
                 if (scanInfo.FinishedWithoutErrorHandling == null)
@@ -126,7 +139,7 @@ namespace APTAT.Core.Storage
 
         public void TryFinishComputersValkyrieScan(int scanId)
         {
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 var scanInfo = context.ValkyrieScansRepository.ExecuteFind(new object[] { scanId });
                 if (scanInfo.FinishedWithoutErrorHandling == null)
@@ -158,7 +171,7 @@ namespace APTAT.Core.Storage
                     AnalyzeId = valkyrieResult.ValkyrieAnalysisResult.AnalyzeId
                 });
             }
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 context.ValkyrieFilesRepository.AddMany(files);
                 context.SaveChanges();
@@ -183,7 +196,7 @@ namespace APTAT.Core.Storage
                     AnalyzeId = valkyrieResult.ValkyrieAnalysisResult.AnalyzeId
                 });
             }
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 foreach (var file in files)
                     context.ValkyrieFilesRepository.AddOrUpdate(file);
@@ -193,7 +206,7 @@ namespace APTAT.Core.Storage
 
         public void UpdateEmails(string[] newEmails)
         {
-            using (var context = _entityStorage.GetContext())
+            using (var context = _entityStorage.Value.Context)
             {
                 var oldEmails=context.EmailRepository.EntityQuery.ToList();
                 foreach (var email in oldEmails)

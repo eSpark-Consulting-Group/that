@@ -3,14 +3,22 @@ namespace APTAT.DAL.Storage
 {
     public interface IEntityStorage
     {
-        IStorageContext GetContext();
+        IStorageContext Context { get; }
     }
 
     public sealed class EntityStorage : IEntityStorage
     {
-        public IStorageContext GetContext()
+        public EntityStorage()
         {
-            return new StorageContext();
+
+        }
+
+        public IStorageContext Context
+        {
+            get
+            {
+                return new StorageContext();
+            }
         }
     }
 }

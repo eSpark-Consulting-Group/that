@@ -20,7 +20,7 @@ using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using FAT.Application.Models.Directory;
 using System.Text.RegularExpressions;
-
+using FAT.Application.Helpers;
 
 namespace FAT.Application.Models
 {
@@ -29,17 +29,16 @@ namespace FAT.Application.Models
         public event EventHandler ScanProcessCompleted;
         public event EventHandler<DomainEventArgs> ErrorOccurred;
 
-
         private string _tcpPort = "80";
         private string _udpPort = "53";
         private Double _percentage;
         private IThreatInfoItem _selectedItem;
 
         private readonly IAptService _aptService;
-        private readonly IDataService _dataService;
         private readonly ITargetsDiscoveryService _targetsDiscoveryService;
         private readonly IStorageService _storage;
         private readonly IScanCounterManager _scanCounterManager;
+        private readonly IScanOperationsManager _scanOperationsManager;
 
         private Boolean _isReportEnabled;
         private ObservableCollection<IThreatInfoItem> _files;
@@ -63,8 +62,10 @@ namespace FAT.Application.Models
         private Boolean _cancelInProgress;
         private IThreatInfoItem[] _onlineItems;
         private readonly DispatcherTimer _scanIteratorTimer;
+        private string _email = string.Empty;
 
         #region Props
+
         public string Uri { get; set; } = "/Views/StartingPage.xaml";
 
         public string CurrentDomainName { get; set; }
@@ -88,14 +89,19 @@ namespace FAT.Application.Models
         public string Login { get; set; }
         public string Password { get; set; }
 
-        public IMainViewModel ParentViewModel
+        public ViewModel ParentViewModel
         {
             get { return this; }
         }
 
+        public MainViewViewModel PreviousScansViewModel { get; private set; }
+
+        public MainViewViewModel DataContextSwitcher
+        {
+            get { return PreviousScansViewModel ?? this; }
+        }
+
         public WizardStepEnum CurrentStep { get; set; }
-
-
 
         public String TcpPort
         {
@@ -164,12 +170,13 @@ namespace FAT.Application.Models
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     StopScanCommand.InvalidateCanExecute();
-                    SubmitEmailCommand.InvalidateCanExecute();
                 });
             }
         }
 
         public Boolean IsScanCancelled { get; set; }
+
+        public Boolean IsScanFailed { get; set; }
 
         public Boolean? IsScanInProgress
         {
@@ -187,7 +194,6 @@ namespace FAT.Application.Models
                 {
                     StartScanCommand.InvalidateCanExecute();
                     StopScanCommand.InvalidateCanExecute();
-                    SubmitEmailCommand.InvalidateCanExecute();
                 });
             }
         }
@@ -237,9 +243,27 @@ namespace FAT.Application.Models
 
         public int TotalItemsCount { get; set; }
 
-        public bool RaisedHasMalwares { get; set; }
+        private bool _raisedHasMalwares;
+        public bool RaisedHasMalwares
+        {
+            get { return _raisedHasMalwares; }
+            set
+            {
+                _raisedHasMalwares = value;
+                RaisePropertyChanged(nameof(RaisedHasMalwares));
+            }
+        }
 
-        public bool RaisedHasUnknowns { get; set; }
+        private bool _raisedHasUnknowns;
+        public bool RaisedHasUnknowns
+        {
+            get { return _raisedHasUnknowns; }
+            set
+            {
+                _raisedHasUnknowns = value;
+                RaisePropertyChanged(nameof(RaisedHasUnknowns));
+            }
+        }
 
         public Double Percentage
         {
@@ -251,11 +275,6 @@ namespace FAT.Application.Models
                 RaisePropertyChanged(nameof(Percentage));
                 RaisePropertyChanged(nameof(Header));
                 RaisePropertyChanged(nameof(ComputersHeader));
-
-                App.Current.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    SubmitEmailCommand.InvalidateCanExecute();
-                });
             }
         }
 
@@ -263,7 +282,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                if (!IsAutoDiscoveryInProgress && !CancelInProgress && !IsScanCancelled && Percentage > 0 && Percentage <= 100)
+                if (!IsAutoDiscoveryInProgress && !CancelInProgress && !IsScanCancelled && !IsScanFailed && Percentage > 0 && Percentage <= 100)
                 {
                     return $"(Files: {_scanCounterManager.Total} | Computers: {ScannedItemsCount} of {TotalItemsCount})";
                 }
@@ -302,6 +321,8 @@ namespace FAT.Application.Models
                 {
                     if (IsScanCancelled)
                         return "Scan Canceled";
+                    if (IsScanFailed)
+                        return "Scan Failed";
                     if (Percentage > 0)
                         return "Scan Completed";
                 }
@@ -390,12 +411,26 @@ namespace FAT.Application.Models
             }
         }
 
+        private string _valkyrieDetailsLink;
         public string ValkyrieDetailsLink
         {
-            get { return _aptService.GetValkyrieDetailsLink(); }
+            get { return !CurrentScanAvailable ? _aptService.GetValkyrieDetailsLink() : _valkyrieDetailsLink; }
+            set
+            {
+                _valkyrieDetailsLink = value;
+            }
         }
 
-        public bool ValkyrieDetailsLinkAvailable { get; set; }
+        private bool _valkyrieDetailsLinkAvailable;
+        public bool ValkyrieDetailsLinkAvailable
+        {
+            get { return _valkyrieDetailsLinkAvailable; }
+            set
+            {
+                _valkyrieDetailsLinkAvailable = value;
+                RaisePropertyChanged(nameof(ValkyrieDetailsLinkAvailable));
+            }
+        }
 
         public bool SelectDiscoveryResults { get; set; }
 
@@ -439,12 +474,19 @@ namespace FAT.Application.Models
             }
         }
 
+        public IEnumerable<IScanOperation> ScanOperations
+        {
+            get
+            {
+                return _scanOperationsManager.ScanOperations;
+            }
+        }
+
         public bool? FilterReset { get; set; }
 
         public int[] FilterOrders { get; set; }
 
         public bool IsQuickScan { get; set; }
-
 
         public bool GroupEnabled { get; set; }
 
@@ -487,7 +529,11 @@ namespace FAT.Application.Models
             }
         }
 
-        private string _email = string.Empty;
+        public bool CurrentScanAvailable
+        {
+            get { return PreviousScansViewModel != null; }
+        }
+
         public string Email
         {
             get { return _email; }
@@ -500,6 +546,8 @@ namespace FAT.Application.Models
         }
 
         public bool HideSubmitEmail { get; set; }
+
+        public string ScanKeyword { get; set; }
 
         #endregion
 
@@ -515,16 +563,24 @@ namespace FAT.Application.Models
         public DelegateCommand RestartComputerScanCommand { get; private set; }
         public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
         public DelegateCommand StopComputerScanCommand { get; private set; }
+        public DelegateCommand OpenPreviousScansCommand { get; private set; }
+        public DelegateCommand OpenCurrentScanCommand { get; private set; }
+        public DelegateCommand OpenPreviousScanDetailsCommand { get; private set; }
+        public DelegateCommand SearchPreviousScansCommand { get; private set; }
         #endregion
 
-        public MainViewViewModel(ITargetsDiscoveryService targetsDiscoveryService,
-            IAptService aptService, IDataService dataService, IStorageService storage, 
-            IScanCounterManager scanCounterManager)
+        public MainViewViewModel(
+            ITargetsDiscoveryService targetsDiscoveryService,
+            IAptService aptService, 
+            IStorageService storage, 
+            IScanCounterManager scanCounterManager, 
+            IScanOperationsManager scanOperationsManager)
         {
             _targetsDiscoveryService = targetsDiscoveryService;
             _aptService = aptService;
-            _dataService = dataService;
             _storage = storage;
+
+            _scanOperationsManager = scanOperationsManager;
 
             _scanCounterManager = scanCounterManager;
             _scanCounterManager.SelectedOrdersChanged = orders => Set(() => FilterOrders, orders);
@@ -551,7 +607,7 @@ namespace FAT.Application.Models
             SelectCommand = new DelegateCommand(o => { },
                 o => IsDetailsEnabled);
             SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail,
-                o => !string.IsNullOrEmpty(ComputersHeader) && IsValidEmail(Email));
+                o => IsValidEmail(Email));
             EditEmailCommand = new DelegateCommand(o =>
                 Set(() => HideSubmitEmail, false));
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o),
@@ -560,6 +616,11 @@ namespace FAT.Application.Models
                 o => IsRestartEnabled && SelectedItems.Any(_ => !_.IsLocal));
             StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan,
                 o => IsStopEnabled);
+
+            OpenPreviousScansCommand = new DelegateCommand(InvokeOpenPreviousScans);
+            OpenCurrentScanCommand = new DelegateCommand(InvokeOpenCurrentScan);
+            OpenPreviousScanDetailsCommand = new DelegateCommand(InvokeOpenPreviousScanDetails);
+            SearchPreviousScansCommand = new DelegateCommand(InvokeSearchPreviousScans);
         }
 
         private async void OnLoaded(object o)
@@ -578,8 +639,8 @@ namespace FAT.Application.Models
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
             CurrentDomainName = name?.Replace("DC=", "").Replace(",", ".");
 
-            Email=_dataService.GetEmails();
-            if(!string.IsNullOrEmpty(Email))
+            Email = _scanOperationsManager.GetEmail();
+            if (!string.IsNullOrEmpty(Email))
                 Set(() => HideSubmitEmail, true);
 
             RaisePropertyChanged(nameof(CurrentDomainNameContent));
@@ -772,16 +833,16 @@ namespace FAT.Application.Models
 
             _scanCounterManager.Clear();
 
-            Set(() => FilterReset, (bool?)null);
+            Set(() => FilterReset, null);
 
             Files = new ObservableCollection<IThreatInfoItem>();
             Computers = new ObservableCollection<IThreatInfoItem>();
 
 
-            Set(() => RaisedHasUnknowns, false);
-            Set(() => RaisedHasMalwares, false);
+            RaisedHasUnknowns = false;
+            RaisedHasMalwares = false;
 
-            Set(() => ValkyrieDetailsLinkAvailable, false);
+            ValkyrieDetailsLinkAvailable = false;
 
             _onlineItems = new IThreatInfoItem[0];
 
@@ -799,6 +860,7 @@ namespace FAT.Application.Models
                 var targets = value.OfType<DeploymentItem>().ToArray();
                 if (targets.Length > 0)
                 {
+                    IsBusy = true;
                     IsScanInProgress = null;
                     Set(() => ScanWasOnceStarted, true);
                     Keyword = null;
@@ -822,7 +884,197 @@ namespace FAT.Application.Models
                 targets = (Guid[])arg;
 
             _aptService.StopScan(targets);
+        }
 
+        private void InvokeOpenPreviousScans(Object arg)
+        {
+            if (PreviousScansViewModel != null && arg == null)
+            {
+                PreviousScansViewModel.ValkyrieDetailsLinkAvailable = false;
+                PreviousScansViewModel.Uri = "/Views/Scan/PreviousScanResults.xaml";
+                RaisePropertyChanged(nameof(PreviousScansViewModel));
+                return;
+            }
+
+            IsBusy = true;
+
+            var op = ThreadHelper.Instance.RunOnThreadDelayed(
+                () => _scanOperationsManager.GetPreviousScans(arg as string));
+            op.Completed += DispatcherOperationCompleted;
+            op.Priority = DispatcherPriority.Normal; 
+        }
+
+        private void InvokeSearchPreviousScans(Object arg)
+        {
+            InvokeOpenPreviousScans(PreviousScansViewModel.ScanKeyword ?? string.Empty);
+        }
+
+        private void DispatcherOperationCompleted(object sender, EventArgs e)
+        {
+            var operation = sender as DispatcherOperation;
+            if (operation != null && operation.Status == DispatcherOperationStatus.Completed)
+            {
+                if (PreviousScansViewModel == null)
+                {
+                    var model = CompositionHelper.Instance.Resolve<MainViewViewModel>();
+                    model.Uri = "/Views/Scan/PreviousScanResults.xaml";
+
+                    PreviousScansViewModel = model;
+                    RaisePropertyChanged(nameof(PreviousScansViewModel));
+                    RaisePropertyChanged(nameof(CurrentScanAvailable));
+                }
+                else
+                {
+                    if (operation.Result != null)
+                        MergeScanOperationResult(operation.Result as IScanOperationResult);
+                    else
+                        RaisePropertyChanged(nameof(ScanOperations));
+                }
+            }
+
+            IsBusy = false;
+        }
+
+        private void InvokeOpenCurrentScan(Object arg)
+        {
+            PreviousScansViewModel = null;
+            RaisePropertyChanged(nameof(PreviousScansViewModel));
+            RaisePropertyChanged(nameof(CurrentScanAvailable));
+        }
+
+        private void InvokeOpenPreviousScanDetails(Object arg)
+        {
+            var operation = arg as ScanOperation;
+            if (operation != null && operation.LoadDetailsFunc != null)
+            {
+                IsBusy = true;
+
+                var op = ThreadHelper.Instance.RunOnThreadDelayed(
+                    () => operation.LoadDetailsFunc(operation));
+                op.Completed += DispatcherOperationCompleted;
+                op.Priority = DispatcherPriority.Normal;
+            }
+        }
+
+        private void MergeScanOperationResult(IScanOperationResult result)
+        {
+            var diff = new ScanCounterDiff();
+            diff.MalwareDiff = result.ScanOperation.MaliciousCount;
+            diff.UnknownDiff = result.ScanOperation.UnknownsCount;
+            diff.NotAnalyzedDiff = result.ScanOperation.NotAnalyzedCount;
+            diff.InProgressDiff = result.ScanOperation.InAnalysisCount;
+            diff.CleanDiff = result.ScanOperation.CleanCount;
+
+            App.Current.Dispatcher.BeginInvoke((Action)delegate
+            {
+                PreviousScansViewModel._scanCounterManager.Clear();
+                PreviousScansViewModel._scanCounterManager.UpdateCounters(diff);
+
+                PreviousScansViewModel.RaisedHasMalwares = PreviousScansViewModel._scanCounterManager.HasMalwares;
+
+                if (!PreviousScansViewModel.RaisedHasMalwares)
+                    PreviousScansViewModel.RaisedHasUnknowns =
+                        PreviousScansViewModel._scanCounterManager.HasUnknowns ||
+                        PreviousScansViewModel._scanCounterManager.HasNotAnalyzed ||
+                        PreviousScansViewModel._scanCounterManager.HasInProgress ||
+                        result.ScanOperation.IsCancelled ||
+                        result.ScanOperation.IsFailed;
+            });
+
+            PreviousScansViewModel.ScannedItemsCount = result.ScanOperation.ComputersScanned;
+            PreviousScansViewModel.TotalItemsCount = result.ScanOperation.TotalComputersScanned;
+            PreviousScansViewModel.IsScanCancelled = result.ScanOperation.IsCancelled;
+            PreviousScansViewModel.IsScanFailed = result.ScanOperation.IsFailed;
+
+            MergeScanComputerResults(result.ComputerResults);
+
+            PreviousScansViewModel.Keyword = null;
+            PreviousScansViewModel.Percentage = 100;
+            PreviousScansViewModel.GroupByComputers = true;
+            PreviousScansViewModel.ValkyrieDetailsLinkAvailable = true;
+            ValkyrieDetailsLink = _aptService.GetValkyrieDetailsLink(
+                result.ScanOperation.ValkyrieOperationInfo?.ApiKey, 
+                result.ScanOperation.ValkyrieOperationInfo?.ScanId);
+        }
+
+        private void MergeScanComputerResults(IFatScanComputerResult[] results)
+        {
+            PreviousScansViewModel.Computers = new ObservableCollection<IThreatInfoItem>();
+            PreviousScansViewModel.Files = new ObservableCollection<IThreatInfoItem>();
+
+            foreach (var res in results)
+            {
+                var item = new ThreatInfoItem();
+                item.IsComputer = true;
+                item.IsOnline = res.IsOnline;
+                item.IsLocal = res.IsLocal;
+                item.Name = res.Name;
+                item.IpAddress = res.IpAddress;
+                item.UnknownFilesCount = res.UnknownFilesCount;
+                item.MalwareFilesCount = res.MalwareFilesCount;
+                item.CleanFilesCount = res.CleanFilesCount;
+                item.PendingFilesCount = res.InAnalysisFilesCount;
+                item.NotAnalyzedFilesCount = res.NotAnalyzedFilesCount;
+                item.ValkyrieProgressPercentage = 100;
+                item.RemoteScanningPercentage = 100;
+                item.ScanStage = res.ScanStage;
+                item.StatusMessageSystem = res.StatusMessage;
+
+                foreach (var file in res.BadFiles)
+                {
+                    var badFile = new BadFileItem();
+                    badFile.Name = file.Name;
+                    badFile.Size = file.Size;
+                    badFile.Sha1 = file.Sha1;
+                    badFile.Product = file.Product;
+                    badFile.Accessed = file.Accessed;
+                    badFile.Copyright = file.Copyright;
+                    badFile.Description = file.Description;
+                    badFile.Created = file.Created;
+                    badFile.Modified = file.Modified;
+                    badFile.Cloud = file.Cloud;
+                    badFile.Version = file.Version;
+                    badFile.Signer = file.Signer;
+                    badFile.Attributes = file.Attributes;
+
+                    var ti = new ThreatInfoItem(badFile);
+                    ti.ShortName = file.Name;
+                    ti.Name = file.Path;
+                    if (file.ValkyrieVerdictValue != null)
+                        ti.ValkyrieVerdict = file.ValkyrieVerdictValue.Value;
+
+                    item.AddFile(ti);
+
+                    ti = new ThreatInfoItem(badFile);
+                    ti.ShortName = file.Name;
+                    ti.Name = file.Path;
+                    if (file.ValkyrieVerdictValue != null)
+                        ti.ValkyrieVerdict = file.ValkyrieVerdictValue.Value;
+
+                    var exist = PreviousScansViewModel.Files.FirstOrDefault(_ => String.Equals(_.BadFile.Sha1, ti.BadFile.Sha1, StringComparison.OrdinalIgnoreCase));
+                    var comp = new ThreatInfoItem
+                    {
+                        IpAddress = res.IpAddress,
+                        ComputerGuid = res.TargetUid,
+                        Name = res.Name,
+                        ShortName = ti.Name,
+                        IsComputer = true
+                    };
+                    if (exist != null)
+                    {
+                        comp.Parent = exist;
+                        exist.Computers.Add(comp);
+                    }
+                    else
+                    {
+                        comp.Parent = ti;
+                        ti.Computers = new ObservableCollection<IThreatInfoItem> { comp };
+                        PreviousScansViewModel.Files.Add(ti);
+                    } 
+                }
+
+                PreviousScansViewModel.Computers.Add(item);
+            }
         }
 
         protected override void InvokeViewLoaded(Object arg)
@@ -831,11 +1083,9 @@ namespace FAT.Application.Models
 
             _targetsDiscoveryService.DirectoryItemsResolved += OnDirectoryItemsResolved;
 
-
             _aptService.FatScanStarted += OnScanStarted;
             _aptService.FatScanCompleted += OnScanCompleted;
             _aptService.CancelScanStarted += OnCancelScanStarted;
-
         }
 
         protected override void InvokeViewUnloaded(Object arg)
@@ -939,7 +1189,7 @@ namespace FAT.Application.Models
 
         private void OnDirectoryItemsResolved(Object sender, DirectoryItemsResolvedEventArgs e)
         {
-
+            IsBusy = false;
             IsScanInProgress = true;
             if (e.Exception != null)
             {
@@ -1141,14 +1391,13 @@ namespace FAT.Application.Models
             ScannedItemsCount = scanned;
             if (!RaisedHasMalwares)
             {
-                Set(() => RaisedHasMalwares,
-                    _scanCounterManager.HasMalwares);
+                RaisedHasMalwares = _scanCounterManager.HasMalwares;
 
                 if (!RaisedHasMalwares)
-                    Set(() => RaisedHasUnknowns,
+                    RaisedHasUnknowns =
                         _scanCounterManager.HasUnknowns ||
                         _scanCounterManager.HasNotAnalyzed ||
-                        _scanCounterManager.HasInProgress);
+                        _scanCounterManager.HasInProgress;
             }
 
             if (Math.Abs(Percentage - 100) < 0.01)
@@ -1171,22 +1420,22 @@ namespace FAT.Application.Models
                     {
                         var o = item as IThreatInfoItem;
                         if (o.IsComputer)
-                            return FilterComputerByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
+                            return FilterComputerByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ContainsString(Keyword));
                         else
-                            return FilterFileByOrders(o) && o.Parent.NameAndIpAddress.ContainsString(Keyword);
+                            return FilterFileByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.Parent.NameAndIpAddress.ContainsString(Keyword));
                     }
                     else if (GroupByFiles)
                     {
                         var o = item as IThreatInfoItem;
                         if (!o.IsComputer)
-                            return FilterFileByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
+                            return FilterFileByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ContainsString(Keyword));
                         else
-                            return FilterFileByOrders(o.Parent) && o.Parent.NameAndIpAddress.ContainsString(Keyword);
+                            return FilterFileByOrders(o.Parent) && (string.IsNullOrEmpty(Keyword) || o.Parent.NameAndIpAddress.ContainsString(Keyword));
                     }
                     else
                     {
                         var o = item as DeploymentTarget;
-                        return o.DnsName.ContainsString(Keyword) || o.Name.ContainsString(Keyword);
+                        return string.IsNullOrEmpty(Keyword) || o.DnsName.ContainsString(Keyword) || o.Name.ContainsString(Keyword);
                     }
                 };
             }
@@ -1247,7 +1496,6 @@ namespace FAT.Application.Models
                 action?.Invoke();
             }
         }
-
 
         private async Task<T> TryAction<T>(Task<T> task) where T : class
         {
