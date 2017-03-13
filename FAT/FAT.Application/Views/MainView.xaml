@@ -479,7 +479,7 @@
                     </Button>
                     
                     <Button MinWidth="190" MaxWidth="190" Background="Transparent" Foreground="#FF2A80B9" 
-                    Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,52,32,20" >
+                    Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="32,52,32,20" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -503,7 +503,7 @@
 
                         <Path SnapsToDevicePixels="True" Data="F1M258.0283,287.5352C256.0763,289.4882,252.9103,289.4882,250.9583,287.5352C249.0053,285.5832,249.0053,282.4172,250.9583,280.4642C252.9113,278.5122,256.0773,278.5122,258.0283,280.4642C259.9813,282.4162,259.9813,285.5822,258.0283,287.5352 M258.7353,279.7572C256.3933,277.4142,252.5923,277.4142,250.2513,279.7572C247.9073,282.0992,247.9073,285.8992,250.2513,288.2422C252.3523,290.3442,255.6223,290.5542,257.9663,288.8862L262.2713,293.1922C262.9783,293.8992,263.6853,293.1922,263.6853,293.1922C263.6853,293.1922,264.3923,292.4852,263.6853,291.7782L259.3803,287.4722C261.0483,285.1282,260.8383,281.8592,258.7353,279.7572" Fill="#FF457FAD" Height="15.506" Margin="8 0 0 0" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Center" Width="15.506"/>
 
-                        <Button MinWidth="40" MaxWidth="40" Height="32" Background="#FF2A80B9" HorizontalAlignment="Right" Padding="0" Command="{Binding SearchPreviousScansCommand}">
+                        <Button MinWidth="40" MaxWidth="40" ToolTip="Search" Height="32" Background="#FF2A80B9" HorizontalAlignment="Right" Padding="0" Command="{Binding SearchPreviousScansCommand}">
                             <Path SnapsToDevicePixels="True" Data="F1M258.0283,287.5352C256.0763,289.4882,252.9103,289.4882,250.9583,287.5352C249.0053,285.5832,249.0053,282.4172,250.9583,280.4642C252.9113,278.5122,256.0773,278.5122,258.0283,280.4642C259.9813,282.4162,259.9813,285.5822,258.0283,287.5352 M258.7353,279.7572C256.3933,277.4142,252.5923,277.4142,250.2513,279.7572C247.9073,282.0992,247.9073,285.8992,250.2513,288.2422C252.3523,290.3442,255.6223,290.5542,257.9663,288.8862L262.2713,293.1922C262.9783,293.8992,263.6853,293.1922,263.6853,293.1922C263.6853,293.1922,264.3923,292.4852,263.6853,291.7782L259.3803,287.4722C261.0483,285.1282,260.8383,281.8592,258.7353,279.7572" Fill="White" Height="15.506" Stretch="Fill" VerticalAlignment="Center" Width="15.506"/>
                         </Button>
                     </Grid>

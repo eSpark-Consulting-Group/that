@@ -7,6 +7,8 @@ using FAT.Application.Models;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
 using FAT.Application.Extensions;
+using System.Diagnostics;
+using System.Windows.Navigation;
 
 namespace FAT.Application
 {
@@ -94,6 +96,12 @@ namespace FAT.Application
             RadContextMenu.SetContextMenu(treeList, menu);
 
             //AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

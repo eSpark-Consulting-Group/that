@@ -414,7 +414,7 @@ namespace FAT.Application.Models
         private string _valkyrieDetailsLink;
         public string ValkyrieDetailsLink
         {
-            get { return !CurrentScanAvailable ? _aptService.GetValkyrieDetailsLink() : _valkyrieDetailsLink; }
+            get { return string.IsNullOrEmpty(_valkyrieDetailsLink) ? _aptService.GetValkyrieDetailsLink() : _valkyrieDetailsLink; }
             set
             {
                 _valkyrieDetailsLink = value;
@@ -982,17 +982,14 @@ namespace FAT.Application.Models
             PreviousScansViewModel.TotalItemsCount = result.ScanOperation.TotalComputersScanned;
             PreviousScansViewModel.IsScanCancelled = result.ScanOperation.IsCancelled;
             PreviousScansViewModel.IsScanFailed = result.ScanOperation.IsFailed;
+            PreviousScansViewModel.ValkyrieDetailsLink = result.ScanOperation.ValkyrieOperationInfo?.DetailedLink;
 
             MergeScanComputerResults(result.ComputerResults);
 
             PreviousScansViewModel.Keyword = null;
             PreviousScansViewModel.Percentage = 100;
             PreviousScansViewModel.GroupByComputers = true;
-
             PreviousScansViewModel.ValkyrieDetailsLinkAvailable = true;
-            ValkyrieDetailsLink = _aptService.GetValkyrieDetailsLink(
-                result.ScanOperation.ValkyrieOperationInfo?.ApiKey, 
-                result.ScanOperation.ValkyrieOperationInfo?.ScanId);
         }
 
         private void MergeScanComputerResults(IFatScanComputerResult[] results)

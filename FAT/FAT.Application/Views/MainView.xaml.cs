@@ -213,6 +213,12 @@ namespace FAT.Application
             e.Handled = true;
         }
 
+        private void Button_Click2(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(_viewModel.PreviousScansViewModel.ValkyrieDetailsLink));
+            e.Handled = true;
+        }
+
         private void EditEmail(object sender, RoutedEventArgs e)
         {
             email.DelayedFocus();

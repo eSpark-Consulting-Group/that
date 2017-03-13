@@ -143,5 +143,7 @@ namespace FAT.Application.Models
         }
         public string ApiKey { get;  }
         public string ScanId { get; }
+
+        public string DetailedLink { get; set; }
     }
 }

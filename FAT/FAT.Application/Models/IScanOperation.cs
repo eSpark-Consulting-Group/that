@@ -29,5 +29,6 @@ namespace FAT.Application.Models
     {
         string ApiKey { get; }
         string ScanId { get; }
+        string DetailedLink { get; set; }
     }
 }
