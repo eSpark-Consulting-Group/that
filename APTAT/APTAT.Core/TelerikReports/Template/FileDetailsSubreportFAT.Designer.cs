@@ -70,7 +70,7 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // textBox1
             // 
-            this.textBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(6.3081579959600731E-09D), Telerik.Reporting.Drawing.Unit.Cm(0.16770829260349274D));
+            this.textBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(6.3081579959600731E-09D), Telerik.Reporting.Drawing.Unit.Cm(0.16770827770233154D));
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.399996757507324D), Telerik.Reporting.Drawing.Unit.Cm(0.93001633882522583D));
             this.textBox1.Style.BackgroundColor = System.Drawing.Color.Empty;
@@ -117,10 +117,10 @@ namespace APTAT.Core.TelerikReports.Template
             // list1
             // 
             this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= ReportItem.DataObject"));
-            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(1.9999973773956299D)));
-            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(3.2999987602233887D)));
-            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.0000007152557373D)));
-            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(8.00000286102295D)));
+            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(1.999997615814209D)));
+            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(3.2999989986419678D)));
+            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.0000009536743164D)));
+            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(8.0000038146972656D)));
             this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(0.5D)));
             this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(0.5D)));
             this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(0.5D)));
@@ -401,7 +401,7 @@ namespace APTAT.Core.TelerikReports.Template
             this.dsModule.DataSource = typeof(APTAT.Core.Reports.DetailedBadFile);
             this.dsModule.Name = "dsModule";
             // 
-            // FileDetailsValkyrieSubreport
+            // FileDetailsSubreportFAT
             // 
             this.DataSource = this.dsModule;
             group1.GroupFooter = this.groupFooterSection;
