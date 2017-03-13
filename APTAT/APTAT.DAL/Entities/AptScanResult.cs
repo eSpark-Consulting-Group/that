@@ -58,7 +58,7 @@ namespace APTAT.DAL.Entities
         [Required]
         public AptScanOperationResult OperationResult { get; set; }
 
-        [Required]
+        
         [StringLength(20)]
         public string IpAddress { get; set; }
 
