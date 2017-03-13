@@ -240,6 +240,12 @@
     <Compile Include="TelerikReports\Template\FileDetailsSubreport.Designer.cs">
       <DependentUpon>FileDetailsSubreport.cs</DependentUpon>
     </Compile>
+    <Compile Include="TelerikReports\Template\FileDetailsSubreportFAT.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TelerikReports\Template\FileDetailsSubreportFAT.Designer.cs">
+      <DependentUpon>FileDetailsSubreportFAT.cs</DependentUpon>
+    </Compile>
     <Compile Include="TelerikReports\Template\FileDetailsValkyrieSubreport.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -301,6 +307,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\FileDetailsSubreport.resx">
       <DependentUpon>FileDetailsSubreport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TelerikReports\Template\FileDetailsSubreportFAT.resx">
+      <DependentUpon>FileDetailsSubreportFAT.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelerikReports\Template\FileDetailsValkyrieSubreport.resx">
       <DependentUpon>FileDetailsValkyrieSubreport.cs</DependentUpon>

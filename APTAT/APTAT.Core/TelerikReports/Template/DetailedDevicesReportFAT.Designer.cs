@@ -99,11 +99,7 @@ namespace APTAT.Core.TelerikReports
             this.graphAxis1 = new Telerik.Reporting.GraphAxis();
             this.graphAxis2 = new Telerik.Reporting.GraphAxis();
             this.barSeries1 = new Telerik.Reporting.BarSeries();
-            this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
-            this.textBox18 = new Telerik.Reporting.TextBox();
-            this.shape4 = new Telerik.Reporting.Shape();
             this.panel1 = new Telerik.Reporting.Panel();
-            this.textBox44 = new Telerik.Reporting.TextBox();
             this.list1 = new Telerik.Reporting.List();
             this.panel6 = new Telerik.Reporting.Panel();
             this.panel19 = new Telerik.Reporting.Panel();
@@ -149,6 +145,10 @@ namespace APTAT.Core.TelerikReports
             this.subReportUknownFiles = new Telerik.Reporting.SubReport();
             this.subReportPendingAnalysis = new Telerik.Reporting.SubReport();
             this.subReportFailedToAnalyze = new Telerik.Reporting.SubReport();
+            this.textBox44 = new Telerik.Reporting.TextBox();
+            this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
+            this.textBox18 = new Telerik.Reporting.TextBox();
+            this.shape4 = new Telerik.Reporting.Shape();
             this.dsDetailsPerDevices = new Telerik.Reporting.ObjectDataSource();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
@@ -851,34 +851,6 @@ namespace APTAT.Core.TelerikReports
             this.barSeries1.SeriesGroup = graphGroup3;
             this.barSeries1.X = "= Sum(Fields.BadFilesCount)";
             // 
-            // pageFooterSection1
-            // 
-            this.pageFooterSection1.Height = Telerik.Reporting.Drawing.Unit.Cm(0.60000395774841309D);
-            this.pageFooterSection1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.textBox18,
-            this.shape4});
-            this.pageFooterSection1.Name = "pageFooterSection1";
-            // 
-            // textBox18
-            // 
-            this.textBox18.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(12.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(0.20000393688678742D));
-            this.textBox18.Name = "textBox18";
-            this.textBox18.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(2.9999992847442627D), Telerik.Reporting.Drawing.Unit.Cm(0.40000000596046448D));
-            this.textBox18.Style.Color = System.Drawing.Color.DimGray;
-            this.textBox18.Style.Font.Name = "Segoe UI Light";
-            this.textBox18.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
-            this.textBox18.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
-            this.textBox18.Value = "= \"Page \" + PageNumber +\" of \"+PageCount";
-            // 
-            // shape4
-            // 
-            this.shape4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(3.2297768939315574E-06D));
-            this.shape4.Name = "shape4";
-            this.shape4.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.EW);
-            this.shape4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D), Telerik.Reporting.Drawing.Unit.Cm(0.19999989867210388D));
-            this.shape4.Style.Color = System.Drawing.Color.LightSlateGray;
-            this.shape4.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
-            // 
             // panel1
             // 
             this.panel1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
@@ -887,18 +859,6 @@ namespace APTAT.Core.TelerikReports
             this.panel1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(9.9988508736714721E-05D), Telerik.Reporting.Drawing.Unit.Cm(33.598541259765625D));
             this.panel1.Name = "panel1";
             this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.973443031311035D), Telerik.Reporting.Drawing.Unit.Cm(16.400001525878906D));
-            // 
-            // textBox44
-            // 
-            this.textBox44.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(0.26458331942558289D));
-            this.textBox44.Multiline = false;
-            this.textBox44.Name = "textBox44";
-            this.textBox44.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.9146909713745117D), Telerik.Reporting.Drawing.Unit.Cm(0.73708349466323853D));
-            this.textBox44.Style.Color = System.Drawing.Color.Gray;
-            this.textBox44.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox44.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
-            this.textBox44.TextWrap = false;
-            this.textBox44.Value = "Details per Device";
             // 
             // list1
             // 
@@ -1323,8 +1283,8 @@ namespace APTAT.Core.TelerikReports
             typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Malicious (\" + Fields.MalwareFilesCount + \"):\""));
             typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Red"));
             typeReportSource1.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "MaliciousFilesValkyrie"));
-            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            typeReportSource1.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsSubreportFAT, APTAT.Core, Version=2" +
+    ".0.0.0, Culture=neutral, PublicKeyToken=null";
             this.subReportMalware.ReportSource = typeReportSource1;
             this.subReportMalware.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.858750343322754D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
             // 
@@ -1336,8 +1296,8 @@ namespace APTAT.Core.TelerikReports
             typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Unknown Files (\" + Fields.UnknownFilesCount + \"):\""));
             typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Gold"));
             typeReportSource2.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "UknownFilesValkyrie"));
-            typeReportSource2.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            typeReportSource2.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsSubreportFAT, APTAT.Core, Version=2" +
+    ".0.0.0, Culture=neutral, PublicKeyToken=null";
             this.subReportUknownFiles.ReportSource = typeReportSource2;
             this.subReportUknownFiles.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
             // 
@@ -1349,8 +1309,8 @@ namespace APTAT.Core.TelerikReports
             typeReportSource3.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"In Analysis(\" + Fields.PendingAnalysisFilesCount + \"):\""));
             typeReportSource3.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "#0092ff"));
             typeReportSource3.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "PendingAnalysisFilesValkyrie"));
-            typeReportSource3.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            typeReportSource3.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsSubreportFAT, APTAT.Core, Version=2" +
+    ".0.0.0, Culture=neutral, PublicKeyToken=null";
             this.subReportPendingAnalysis.ReportSource = typeReportSource3;
             this.subReportPendingAnalysis.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
             // 
@@ -1362,10 +1322,50 @@ namespace APTAT.Core.TelerikReports
             typeReportSource4.Parameters.Add(new Telerik.Reporting.Parameter("Title", "=\"Lookup In Progress (\" + Fields.LookupInProgressFilesCount + \"):\""));
             typeReportSource4.Parameters.Add(new Telerik.Reporting.Parameter("MarkColor", "Silver"));
             typeReportSource4.Parameters.Add(new Telerik.Reporting.Parameter("DataSourceBinding", "FailedToAnalyzeFilesValkyrie"));
-            typeReportSource4.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsValkyrieSubreport, APTAT.Core, Vers" +
-    "ion=2.1.0.0, Culture=neutral, PublicKeyToken=null";
+            typeReportSource4.TypeName = "APTAT.Core.TelerikReports.Template.FileDetailsSubreportFAT, APTAT.Core, Version=2" +
+    ".0.0.0, Culture=neutral, PublicKeyToken=null";
             this.subReportFailedToAnalyze.ReportSource = typeReportSource4;
             this.subReportFailedToAnalyze.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.667495727539063D), Telerik.Reporting.Drawing.Unit.Cm(1.0322916507720947D));
+            // 
+            // textBox44
+            // 
+            this.textBox44.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(0.26458331942558289D));
+            this.textBox44.Multiline = false;
+            this.textBox44.Name = "textBox44";
+            this.textBox44.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.9146909713745117D), Telerik.Reporting.Drawing.Unit.Cm(0.73708349466323853D));
+            this.textBox44.Style.Color = System.Drawing.Color.Gray;
+            this.textBox44.Style.Font.Name = "Segoe UI Semibold";
+            this.textBox44.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
+            this.textBox44.TextWrap = false;
+            this.textBox44.Value = "Details per Device";
+            // 
+            // pageFooterSection1
+            // 
+            this.pageFooterSection1.Height = Telerik.Reporting.Drawing.Unit.Cm(0.60000395774841309D);
+            this.pageFooterSection1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
+            this.textBox18,
+            this.shape4});
+            this.pageFooterSection1.Name = "pageFooterSection1";
+            // 
+            // textBox18
+            // 
+            this.textBox18.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(12.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(0.20000393688678742D));
+            this.textBox18.Name = "textBox18";
+            this.textBox18.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(2.9999992847442627D), Telerik.Reporting.Drawing.Unit.Cm(0.40000000596046448D));
+            this.textBox18.Style.Color = System.Drawing.Color.DimGray;
+            this.textBox18.Style.Font.Name = "Segoe UI Light";
+            this.textBox18.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
+            this.textBox18.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right;
+            this.textBox18.Value = "= \"Page \" + PageNumber +\" of \"+PageCount";
+            // 
+            // shape4
+            // 
+            this.shape4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(3.2297768939315574E-06D));
+            this.shape4.Name = "shape4";
+            this.shape4.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.EW);
+            this.shape4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D), Telerik.Reporting.Drawing.Unit.Cm(0.19999989867210388D));
+            this.shape4.Style.Color = System.Drawing.Color.LightSlateGray;
+            this.shape4.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
             // 
             // dsDetailsPerDevices
             // 
