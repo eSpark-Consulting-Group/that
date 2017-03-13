@@ -119,8 +119,8 @@
                 </DataTemplate>
                 <DataTemplate x:Key="MethodColumn">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding ScanMethodStr}" FontSize="13" VerticalAlignment="Center"  Margin="3 0"/>
-                        <TextBlock Cursor="Hand" Margin="10 0 0 0" ToolTip="{Binding ValkyrieOperationInfo.DetailedLink}">
+                        <TextBlock Text="{Binding ScanMethodStr}" FontSize="13" VerticalAlignment="Center"  Margin="3 0" MinWidth="80"/>
+                        <TextBlock Cursor="Hand" ToolTip="{Binding ValkyrieOperationInfo.DetailedLink}">
                             <Hyperlink NavigateUri="{Binding ValkyrieOperationInfo.DetailedLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">Detailed Results</Hyperlink>
                         </TextBlock>
 
@@ -160,7 +160,7 @@
                     SortMemberPath="ScanMethod"
                     Header="Scan Method"  
                     TextAlignment="Left"
-                    MinWidth="200"/>
+                    MinWidth="110"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>

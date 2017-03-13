@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using APTAT.Common;
 using APTAT.DeploymentCore;
 using APTAT.DeploymentCore.Descent;
-using APTAT.DeploymentCore.Descent.Exceptions.Transport;
 using APTAT.DeploymentCore.Descent.Helpers;
 using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Apt
@@ -28,6 +26,7 @@ namespace APTAT.Core.Descent.Apt
         public override IDescentQueryResult ValidateAndGetResult()
         {
             var result = new AptScanOperationContext(Targets, Targets.Length, DevicesSourceDescription);
+            result.ScanMethod = _scanOptions.ScanKind;
             return result;
           }
 
