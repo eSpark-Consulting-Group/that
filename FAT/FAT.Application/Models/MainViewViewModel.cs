@@ -971,14 +971,11 @@ namespace FAT.Application.Models
                 PreviousScansViewModel._scanCounterManager.UpdateCounters(diff);
 
                 PreviousScansViewModel.RaisedHasMalwares = PreviousScansViewModel._scanCounterManager.HasMalwares;
-
                 if (!PreviousScansViewModel.RaisedHasMalwares)
                     PreviousScansViewModel.RaisedHasUnknowns =
                         PreviousScansViewModel._scanCounterManager.HasUnknowns ||
                         PreviousScansViewModel._scanCounterManager.HasNotAnalyzed ||
-                        PreviousScansViewModel._scanCounterManager.HasInProgress ||
-                        result.ScanOperation.IsCancelled ||
-                        result.ScanOperation.IsFailed;
+                        PreviousScansViewModel._scanCounterManager.HasInProgress;
             });
 
             PreviousScansViewModel.ScannedItemsCount = result.ScanOperation.ComputersScanned;
@@ -991,6 +988,7 @@ namespace FAT.Application.Models
             PreviousScansViewModel.Keyword = null;
             PreviousScansViewModel.Percentage = 100;
             PreviousScansViewModel.GroupByComputers = true;
+
             PreviousScansViewModel.ValkyrieDetailsLinkAvailable = true;
             ValkyrieDetailsLink = _aptService.GetValkyrieDetailsLink(
                 result.ScanOperation.ValkyrieOperationInfo?.ApiKey, 
@@ -1023,7 +1021,7 @@ namespace FAT.Application.Models
                 foreach (var file in res.BadFiles)
                 {
                     var badFile = new BadFileItem();
-                    badFile.Name = file.Name;
+                    badFile.Name = file.Path;
                     badFile.Size = file.Size;
                     badFile.Sha1 = file.Sha1;
                     badFile.Product = file.Product;
@@ -1037,21 +1035,27 @@ namespace FAT.Application.Models
                     badFile.Signer = file.Signer;
                     badFile.Attributes = file.Attributes;
 
-                    var ti = new ThreatInfoItem(badFile);
-                    ti.ShortName = file.Name;
-                    ti.Name = file.Path;
-                    if (file.ValkyrieVerdictValue != null)
-                        ti.ValkyrieVerdict = file.ValkyrieVerdictValue.Value;
+                    Func<BadFileItem, IFatFileResult, ThreatInfoItem> createFile = (b, f) =>
+                    {
+                        var t = new ThreatInfoItem(b);
+                        if (f.ValkyrieVerdictValue != null)
+                        {
+                            t.ValkyrieVerdict = f.ValkyrieVerdictValue.Value;
+                            t.OperationStatus = f.OperationStatus;
+                            t.MalwareProbabilityValue = f.MalwareProbabilityValue;
+                            t.SkipReason = f.SkipReason;
+                            t.IsWhiteListed = f.IsWhiteListed;
+                        }
+                        return t;
+                    };
 
+                    var ti = createFile(badFile, file);
                     item.AddFile(ti);
 
-                    ti = new ThreatInfoItem(badFile);
-                    ti.ShortName = file.Name;
-                    ti.Name = file.Path;
-                    if (file.ValkyrieVerdictValue != null)
-                        ti.ValkyrieVerdict = file.ValkyrieVerdictValue.Value;
+                    ti = createFile(badFile, file);
+                    var exist = PreviousScansViewModel.Files.FirstOrDefault(_ => 
+                        String.Equals(_.BadFile.Sha1, ti.BadFile.Sha1, StringComparison.OrdinalIgnoreCase));
 
-                    var exist = PreviousScansViewModel.Files.FirstOrDefault(_ => String.Equals(_.BadFile.Sha1, ti.BadFile.Sha1, StringComparison.OrdinalIgnoreCase));
                     var comp = new ThreatInfoItem
                     {
                         IpAddress = res.IpAddress,
@@ -1060,6 +1064,7 @@ namespace FAT.Application.Models
                         ShortName = ti.Name,
                         IsComputer = true
                     };
+
                     if (exist != null)
                     {
                         comp.Parent = exist;
@@ -1420,22 +1425,22 @@ namespace FAT.Application.Models
                     {
                         var o = item as IThreatInfoItem;
                         if (o.IsComputer)
-                            return FilterComputerByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ContainsString(Keyword));
+                            return FilterComputerByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
-                            return FilterFileByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.Parent.NameAndIpAddress.ContainsString(Keyword));
+                            return FilterFileByOrders(o) && o.Parent.NameAndIpAddress.ContainsString(Keyword);
                     }
                     else if (GroupByFiles)
                     {
                         var o = item as IThreatInfoItem;
                         if (!o.IsComputer)
-                            return FilterFileByOrders(o) && (string.IsNullOrEmpty(Keyword) || o.NameAndIpAddress.ContainsString(Keyword));
+                            return FilterFileByOrders(o) && o.NameAndIpAddress.ContainsString(Keyword);
                         else
-                            return FilterFileByOrders(o.Parent) && (string.IsNullOrEmpty(Keyword) || o.Parent.NameAndIpAddress.ContainsString(Keyword));
+                            return FilterFileByOrders(o.Parent) && o.Parent.NameAndIpAddress.ContainsString(Keyword);
                     }
                     else
                     {
                         var o = item as DeploymentTarget;
-                        return string.IsNullOrEmpty(Keyword) || o.DnsName.ContainsString(Keyword) || o.Name.ContainsString(Keyword);
+                        return o.DnsName.ContainsString(Keyword) || o.Name.ContainsString(Keyword);
                     }
                 };
             }
