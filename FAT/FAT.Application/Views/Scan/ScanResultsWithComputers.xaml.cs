@@ -130,5 +130,10 @@ namespace FAT.Application
                 new ScanStatus(ScanStatusEnum.Offline)
             };
         }
+
+        private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
+        {
+            treeList.ScrollIntoView(e.Row.DataContext);
+        }
     }
 }

@@ -99,5 +99,10 @@ namespace FAT.Application
 
             AppMessages.FilterMessage.Send(MessageTypes.FilterTarget, _ => _.Target = treeList);
         }
+
+        private void treeList_RowIsExpandedChanged(object sender, RowEventArgs e)
+        {
+            treeList.ScrollIntoView(e.Row.DataContext);
+        }
     }
 }

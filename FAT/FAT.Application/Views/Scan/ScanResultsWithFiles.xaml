@@ -38,6 +38,7 @@
                                  SelectionChanged="treeList_SelectionChanged"
                                  PreviewMouseDown="treeList_MouseDown"
                                  MouseDoubleClick="treeList_MouseDoubleClick"
+                                 RowIsExpandedChanged="treeList_RowIsExpandedChanged"
                                  SelectionMode="Single"
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList" 

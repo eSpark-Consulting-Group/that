@@ -40,6 +40,7 @@
                                  PreviewMouseDown="treeList_MouseDown"
                                  MouseDoubleClick="treeList_MouseDoubleClick"
                                  DistinctValuesLoading="treeList_DistinctValuesLoading"
+                                 RowIsExpandedChanged="treeList_RowIsExpandedChanged"
                                  SelectionMode="Single"
                                  CanUserFreezeColumns="False"                                
                                  x:Name="treeList" 
