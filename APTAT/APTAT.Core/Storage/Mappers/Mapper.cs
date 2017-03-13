@@ -43,7 +43,10 @@ namespace APTAT.Core.Apt
                     return ETargetsDiscovererType.NetworkAddresses;
                 case APTAT.DeploymentCore.Directory.ETargetsDiscovererType.Workgroup:
                     return ETargetsDiscovererType.Workgroup;
-
+                case APTAT.DeploymentCore.Directory.ETargetsDiscovererType.AutoDiscovery:
+                    return ETargetsDiscovererType.AutoDiscovery;
+                case APTAT.DeploymentCore.Directory.ETargetsDiscovererType.LocalComputer:
+                    return ETargetsDiscovererType.LocalComputer;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(DeploymentCore.Directory.ETargetsDiscovererType));
             }

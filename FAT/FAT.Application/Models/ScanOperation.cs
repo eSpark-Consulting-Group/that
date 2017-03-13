@@ -98,10 +98,18 @@ namespace FAT.Application.Models
                 {
                     case ETargetsDiscovererType.ActiveDirectory:
                         return "Active Directory";
+
                     case ETargetsDiscovererType.Workgroup:
                         return "Workgroup";
+
                     case ETargetsDiscovererType.NetworkAddresses:
-                        return DiscovererDescription == "localhost" ? "Local" : "Network Addresses";
+                        return "Network Addresses";
+
+                    case ETargetsDiscovererType.LocalComputer:
+                        return "Local Computer";
+
+                    case ETargetsDiscovererType.AutoDiscovery:
+                        return "Auto Discovery";
                 }
 
                 return string.Empty;

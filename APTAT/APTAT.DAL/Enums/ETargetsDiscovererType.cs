@@ -10,6 +10,8 @@ namespace APTAT.DAL.Enums
     {
         ActiveDirectory,
         NetworkAddresses,
-        Workgroup
+        Workgroup,
+        AutoDiscovery,
+        LocalComputer
     }
 }

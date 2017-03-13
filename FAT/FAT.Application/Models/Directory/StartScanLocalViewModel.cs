@@ -333,7 +333,7 @@ namespace FAT.Application.Models
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription()
                     {
-                        Type = ETargetsDiscovererType.NetworkAddresses,
+                        Type = ETargetsDiscovererType.LocalComputer,
                         Description = DevicesSourceDescription.GetNetworkDescription(new[] { "localhost" })
                     });
                 }

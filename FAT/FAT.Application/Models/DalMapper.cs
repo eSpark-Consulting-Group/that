@@ -96,12 +96,14 @@ namespace FAT.Application.Models
             {
                 case APTAT.DAL.Enums.ETargetsDiscovererType.ActiveDirectory:
                     return ETargetsDiscovererType.ActiveDirectory;
-
                 case APTAT.DAL.Enums.ETargetsDiscovererType.NetworkAddresses:
                     return ETargetsDiscovererType.NetworkAddresses;
                 case APTAT.DAL.Enums.ETargetsDiscovererType.Workgroup:
                     return ETargetsDiscovererType.Workgroup;
-
+                case APTAT.DAL.Enums.ETargetsDiscovererType.AutoDiscovery:
+                    return ETargetsDiscovererType.AutoDiscovery;
+                case APTAT.DAL.Enums.ETargetsDiscovererType.LocalComputer:
+                    return ETargetsDiscovererType.LocalComputer;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(APTAT.DAL.Enums.ETargetsDiscovererType));
             }

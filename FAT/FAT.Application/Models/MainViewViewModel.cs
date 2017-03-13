@@ -788,7 +788,7 @@ namespace FAT.Application.Models
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription()
                     {
-                        Type = ETargetsDiscovererType.NetworkAddresses,
+                        Type = ETargetsDiscovererType.AutoDiscovery,
                         Description = DevicesSourceDescription.GetNetworkDescription(ipAddressesString)
                     });
                     _lastModifiesComputerDate = null;
@@ -1261,6 +1261,7 @@ namespace FAT.Application.Models
         private void OnScanStarted(Object sender, ScanStartedEventArgs e)
         {
             _operationGuid = e.OperationUid;
+            _lastModifiesComputerDate = null;
 
             _scanCounterManager.Clear();
 

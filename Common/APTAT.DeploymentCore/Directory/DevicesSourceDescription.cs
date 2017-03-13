@@ -29,6 +29,8 @@ namespace APTAT.DeploymentCore.Directory
     {
         ActiveDirectory,
         NetworkAddresses,
-        Workgroup
+        Workgroup,
+        AutoDiscovery,
+        LocalComputer
     }
 }
