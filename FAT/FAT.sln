@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FAT.Application", "FAT.Application\FAT.Application.csproj", "{89CDF93E-B252-47A9-BB69-4E11D89DA35F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -38,6 +38,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Core.UnitTests", "..\APTAT\APTAT.Core.UnitTests\APTAT.Core.UnitTests.csproj", "{6FE8C46F-D0F2-4313-8F84-070FDCC2DFB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.DAL", "..\APTAT\APTAT.DAL\APTAT.DAL.csproj", "{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APTAT.Valkyrie.Tests", "APTAT.Valkyrie.Tests\APTAT.Valkyrie.Tests.csproj", "{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -191,6 +193,18 @@ Global
 		{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}.Release|x64.Build.0 = Release|Any CPU
 		{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}.Release|x86.ActiveCfg = Release|Any CPU
 		{AF4ACE83-D560-40EC-AA29-5B962E1D3C5C}.Release|x86.Build.0 = Release|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Debug|x64.Build.0 = Debug|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Debug|x86.Build.0 = Debug|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Release|x64.ActiveCfg = Release|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Release|x64.Build.0 = Release|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Release|x86.ActiveCfg = Release|Any CPU
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -199,9 +213,10 @@ Global
 		{9A57CECB-22EE-452B-A081-4F747C23FA59} = {FCF45CEC-6094-4BFE-92CF-3817333D43E5}
 		{1B82F3A7-5887-4C48-9CE4-D5C6A70EEE49} = {FCF45CEC-6094-4BFE-92CF-3817333D43E5}
 		{6FE8C46F-D0F2-4313-8F84-070FDCC2DFB0} = {FCF45CEC-6094-4BFE-92CF-3817333D43E5}
+		{A81DB5F8-8EB7-4F29-95B2-2C040AB29F49} = {FCF45CEC-6094-4BFE-92CF-3817333D43E5}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://pss05v:8080/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -244,5 +259,9 @@ Global
 		SccProjectUniqueName12 = ..\\APTAT\\APTAT.DAL\\APTAT.DAL.csproj
 		SccProjectName12 = ../APTAT/APTAT.DAL
 		SccLocalPath12 = ..\\APTAT\\APTAT.DAL
+		SccProjectUniqueName13 = APTAT.Valkyrie.Tests\\APTAT.Valkyrie.Tests.csproj
+		SccProjectTopLevelParentUniqueName13 = FAT.sln
+		SccProjectName13 = APTAT.Valkyrie.Tests
+		SccLocalPath13 = APTAT.Valkyrie.Tests
 	EndGlobalSection
 EndGlobal

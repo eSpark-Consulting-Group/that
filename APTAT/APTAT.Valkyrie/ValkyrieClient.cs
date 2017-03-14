@@ -8,19 +8,18 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Valkyrie.WebApiProvider;
 using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using APTAT.Common;
-using Timer = System.Timers.Timer;
+
 using DTO = Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Valkyrie
 {
     public sealed class ValkyrieClient : IValkyrieClient
     {
-        private readonly int _changeTrakingIntervalInMs = (int) TimeSpan.FromMinutes(3).TotalMilliseconds;
+        private readonly int _changeTrakingIntervalInMs = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
         private const Int32 MaxFileLenght = 26214400;
         private string _apiKey;
         private int _fileScanned;
@@ -46,8 +45,8 @@ namespace APTAT.Valkyrie
         private readonly Object _lookupSync = new object();
         private bool _isMainScanFinished = true;
 
-        private Timer _progressNotifyTimer;
-        private Timer _checkStatusesTimer;
+        private readonly IScheduler _progressNotifyTimer;
+        private readonly IScheduler _checkStatusesTimer;
         private int _machineCount;
         private string _login;
         private string _password;
@@ -62,20 +61,16 @@ namespace APTAT.Valkyrie
         private readonly IValkyrieWebApiProvider _provider;
         private Dictionary<string, ValkyrieFileInfo> _filesToSubmit;
 
-        public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider)
+        public ValkyrieClient(IMachineKeyProvider machineKeyProvider, IValkyrieWebApiProvider provider, IScheduler progressNotifyTimer, IScheduler checkStatusTimer)
         {
             _provider = provider;
             _endpointId = machineKeyProvider.GlobalMachineKey;
             _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
-            _progressNotifyTimer = new Timer
-            {
-                AutoReset = true,
-                Interval = 1000
-            }; //ProgressNotifyTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
-            _progressNotifyTimer.Elapsed += ProgressNotifyTimerCallback;
-            _checkStatusesTimer = new Timer { AutoReset = false };
-            //CheckStatusesTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
-            _checkStatusesTimer.Elapsed += CheckStatusesTimerCallback;
+            _progressNotifyTimer = progressNotifyTimer;
+            _checkStatusesTimer = checkStatusTimer;
+            _progressNotifyTimer.SetInterval(TimeSpan.FromSeconds(1));
+            _progressNotifyTimer.TimeoutCallback += ProgressNotifyTimerCallback;
+            _checkStatusesTimer.TimeoutCallback += CheckStatusesTimerCallback;
         }
 
         public void AllowSubmit(Dictionary<string, ValkyrieFileInfo> updatedData)
@@ -98,7 +93,7 @@ namespace APTAT.Valkyrie
             }
         }
 
-        private RegisterWithResponse Register(CamRegistration camRegistration, string productName,
+        private RegisterWithResponse Register(ICamRegistration camRegistration, string productName,
             NetworkCredential networkCredential = null)
         {
 
@@ -147,9 +142,9 @@ namespace APTAT.Valkyrie
             return proxy;
         }
 
-        private void ProgressNotifyTimerCallback(object state, ElapsedEventArgs elapsedEventArgs)
+        private void ProgressNotifyTimerCallback(object state, EventArgs elapsedEventArgs)
         {
-            if (!_progressNotifyTimer.Enabled) return;
+            if (!_progressNotifyTimer.IsEnabled) return;
             _progressNotifyTimer.Stop();
             if (_isMainScanFinished && _analysedItems.Count == 0)
             {
@@ -162,20 +157,20 @@ namespace APTAT.Valkyrie
             _progressNotifyTimer.Start();
         }
 
-        private void CheckStatusesTimerCallback(object sender, ElapsedEventArgs elapsedEventArgs)
+        private void CheckStatusesTimerCallback(object sender, EventArgs elapsedEventArgs)
         {
             lock (_checkStatusesTimer)
             {
-                if (_checkStatusesTimer.Enabled)
+                if (_checkStatusesTimer.IsEnabled)
                     _checkStatusesTimer.Stop();
                 if (_isCheckingInProgress)
                 {
                     if (sender == this)
-                        _checkStatusesTimer.Interval = 50;
+                        _checkStatusesTimer.SetInterval(TimeSpan.FromMilliseconds(50));
                     return;
                 }
                 _isCheckingInProgress = true;
-                _checkStatusesTimer.Interval = _changeTrakingIntervalInMs;
+                _checkStatusesTimer.SetInterval(TimeSpan.FromMilliseconds(_changeTrakingIntervalInMs));
             }
             var waitNextInterval = false;
             if (_aptScanId == null)
@@ -209,9 +204,9 @@ namespace APTAT.Valkyrie
             lock (_checkStatusesTimer)
             {
                 if (resetTimerImmediately)
-                    _checkStatusesTimer.Interval = 50;
+                    _checkStatusesTimer.SetInterval(TimeSpan.FromMilliseconds(50));
                 _isCheckingInProgress = false;
-                _checkStatusesTimer.Start();
+                _checkStatusesTimer.Start(false);
             }
         }
 
@@ -417,7 +412,7 @@ namespace APTAT.Valkyrie
 
                 if (_filesCount > 0)
                 {
-                    progress = (_fileScanned / (double) _filesCount) * 100;
+                    progress = (_fileScanned / (double)_filesCount) * 100;
 
                 }
                 var progressInt = Convert.ToInt32(progress);
@@ -644,7 +639,7 @@ namespace APTAT.Valkyrie
             }, TaskCreationOptions.None);
         }
 
-        public void StartAnalyze(CamRegistration camRegistration, string login, string password, int machineCount, 
+        public void StartAnalyze(ICamRegistration camRegistration, string login, string password, int machineCount,
             NetworkCredential proxyCredential, string productName)
         {
             _analysedItems = new ConcurrentDictionary<string, ValkyrieAnalysisResult>();
@@ -702,7 +697,7 @@ namespace APTAT.Valkyrie
                 Thread.Sleep(2000);
 
                 if (_emails != null)
-                    SubmitEmail(_emails);                
+                    SubmitEmail(_emails);
             }, TaskCreationOptions.None, cancellationToken)
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
         }
@@ -710,9 +705,9 @@ namespace APTAT.Valkyrie
         public void Dispose()
         {
             _progressNotifyTimer?.Dispose();
-            _progressNotifyTimer = null;
+
             _checkStatusesTimer?.Dispose();
-            _checkStatusesTimer = null;
+
             _cancellationTokenSource?.Dispose();
         }
 

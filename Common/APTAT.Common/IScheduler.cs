@@ -12,5 +12,6 @@ namespace APTAT.Common
         void SetInterval(TimeSpan period);
         bool Start(bool autoReset = true);
         void Stop();
+        bool IsEnabled { get; }
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace APTAT.Valkyrie
 {
-    public class CamRegistration
+    public class CamRegistration : ICamRegistration
     {
         public CamRegistration(string licenseId, string userName, string password)
         {
