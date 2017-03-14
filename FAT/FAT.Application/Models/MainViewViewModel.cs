@@ -992,12 +992,36 @@ namespace FAT.Application.Models
             PreviousScansViewModel.ValkyrieDetailsLinkAvailable = true;
         }
 
+        private class ComputerComparer : IComparer<IFatScanComputerResult>
+        {
+            public int Compare(IFatScanComputerResult x, IFatScanComputerResult y)
+            {
+                if ((x.IsLocal && !y.IsLocal) || (x.IsOnline && !y.IsOnline))
+                    return -1;
+
+                if ((!x.IsLocal && y.IsLocal) || (!x.IsOnline && y.IsOnline))
+                    return 1;
+
+                if (char.IsDigit(x.Name[0]) && !char.IsDigit(y.Name[0]))
+                    return -1;
+
+                if (!char.IsDigit(x.Name[0]) && char.IsDigit(y.Name[0]))
+                    return 1;
+
+                return x.Name.CompareTo(y.Name);
+            }
+        }
+
         private void MergeScanComputerResults(IFatScanComputerResult[] results)
         {
+            var computers = new SortedList<IFatScanComputerResult, IFatScanComputerResult>(results.Length, new ComputerComparer());
+            foreach (var result in results)
+                computers.Add(result, result);
+
             PreviousScansViewModel.Computers = new ObservableCollection<IThreatInfoItem>();
             PreviousScansViewModel.Files = new ObservableCollection<IThreatInfoItem>();
 
-            foreach (var res in results)
+            foreach (var res in computers.Values)
             {
                 var item = new ThreatInfoItem();
                 item.IsComputer = true;
