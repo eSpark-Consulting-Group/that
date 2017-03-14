@@ -10,7 +10,7 @@
                 xmlns:converters="clr-namespace:FAT.Application.Converters" 
                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" 
                 xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
-                d:DesignHeight="400" d:DesignWidth="600" Loaded="UserControl_Loaded">
+                d:DesignHeight="400" d:DesignWidth="600" Loaded="UserControl_Loaded" x:Name="this">
     <Grid x:Name="grid" Opacity="0">
         <Grid.Triggers>
             <EventTrigger RoutedEvent="FrameworkElement.SizeChanged">
@@ -138,5 +138,7 @@
                     SortMemberPath="IPAddressSorting" />
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
+
+        <CheckBox VerticalAlignment="Top" IsChecked="{Binding ElementName=this, Path=SelectAll, Mode=TwoWay}" HorizontalAlignment="Left" Margin="12 8 0 0" />
     </Grid>
 </UserControl>

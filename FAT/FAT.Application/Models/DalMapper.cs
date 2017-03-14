@@ -76,7 +76,7 @@ namespace FAT.Application.Models
                 LoadDetailsFunc = func,
                 IsCancelled = dto.Canceled,
                 Finished = dto.ValkyrieOperationInfo?.FinishedOnUi ?? dto.Finished,
-                IsFailed = dto.ValkyrieOperationInfo == null && dto.ComputersScanned == 0,
+                IsFailed = !dto.Canceled && dto.ComputersScanned == 0,
                 DevicesSourceDescription = new DevicesSourceDescription
                 {
                     Description = dto.SourceDescription,

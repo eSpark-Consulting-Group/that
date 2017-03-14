@@ -27,20 +27,27 @@ namespace FAT.Application
 
         #region SelectAllProperty (DependencyProperty)
 
-        public bool SelectAll
+        public bool? SelectAll
         {
-            get { return (bool)GetValue(SelectAllProperty); }
+            get { return (bool?)GetValue(SelectAllProperty); }
             set { SetValue(SelectAllProperty, value); }
         }
 
         public static readonly DependencyProperty SelectAllProperty =
-            DependencyProperty.Register("SelectAll", typeof(bool), typeof(DiscoveryResults),
+            DependencyProperty.Register("SelectAll", typeof(bool?), typeof(DiscoveryResults),
             new PropertyMetadata(false, OnSelectAllChanged));
 
         private static void OnSelectAllChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             var control = obj as DiscoveryResults;
-            control.treeList.SelectAll();
+            var newValue = e.NewValue as bool?;
+            if (newValue.HasValue)
+            {
+                if (newValue.Value)
+                    control.treeList.SelectAll();
+                else
+                    control.treeList.UnselectAll();
+            }
         }
 
         #endregion
@@ -57,6 +64,19 @@ namespace FAT.Application
             foreach (DeploymentTarget item in e.RemovedItems)
                 ViewModel.SelectedDiscoveryResults.Remove(item);
             ViewModel.SelectedDiscoveryResults = ViewModel.SelectedDiscoveryResults;
+
+            if (SelectAll.HasValue)
+            {
+                if (treeList.SelectedItems.Count > 0 && treeList.SelectedItems.Count < treeList.Items.Count)
+                    SelectAll = null;
+            }
+            else
+            {
+                if (treeList.SelectedItems.Count == 0)
+                    SelectAll = false;
+                else if (treeList.SelectedItems.Count == treeList.Items.Count)
+                    SelectAll = true;
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

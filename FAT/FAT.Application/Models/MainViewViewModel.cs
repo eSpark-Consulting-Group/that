@@ -53,7 +53,6 @@ namespace FAT.Application.Models
         private DateTime? _lastModifiesValkyrieVerdictDate = null;
 
         private List<IThreatInfoItem> _selectedItems = new List<IThreatInfoItem>();
-        private List<IComputer> _selectedDiscoveryResults = new List<IComputer>();
 
         private Guid _operationGuid;
         private Boolean? _isScanInProgress = false;
@@ -221,7 +220,6 @@ namespace FAT.Application.Models
                     IsAutoDiscoveryInProgress = false;
                     _targetsDiscoveryService.DeploymentTargetsAutoResolving -= OnDeploymentTargetsAutoResolving;
                     Percentage = 0;
-                    Set(() => SelectDiscoveryResults, true);
                 }
 
                 RaisePropertyChanged(nameof(IsAutoDiscoveryCompleted));
@@ -300,19 +298,19 @@ namespace FAT.Application.Models
                 if (CancelInProgress)
                     return "Canceling...";
                 if (IsScanInProgress == null)
-                    return "Discovering Computers...";
+                    return "Discovering In Progress...";
                 if (IsAutoDiscoveryInProgress)
                 {
                     if (Percentage > 0)
-                        header = String.Format("{0:0.00}% Discovering Computers...", Percentage).Replace(".00", string.Empty);
+                        header = String.Format("{0:0.00}% Discovering In Progress...", Percentage).Replace(".00", string.Empty);
                     return header;
                 }
                 if (IsScanInProgress == true)
                 {
                     if (Percentage == 0)
-                        header = "Starting scan...";
+                        header = "Starting Scan...";
                     else if (Percentage == 100)
-                        header = "Finishing scan...";
+                        header = "Finishing Scan...";
                     else
                         header = String.Format("{0:0.00}% Scan In Progress...", Percentage).Replace(".00", string.Empty);
                     return header;
@@ -325,10 +323,9 @@ namespace FAT.Application.Models
                         return "Scan Failed";
                     if (Percentage > 0)
                         return "Scan Completed";
+                    else
+                        return "Discovery Completed";
                 }
-
-
-                return string.Empty;
             }
         }
 
@@ -432,19 +429,11 @@ namespace FAT.Application.Models
             }
         }
 
-        public bool SelectDiscoveryResults { get; set; }
+        public bool? SelectDiscoveryResults { get; set; } = false;
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
 
-        public List<IComputer> SelectedDiscoveryResults
-        {
-            get { return _selectedDiscoveryResults; }
-            set
-            {
-                _selectedDiscoveryResults = value ?? new List<IComputer>();
-                StartScanWithDiscoveryResultsCommand.InvalidateCanExecute();
-            }
-        }
+        public List<IComputer> SelectedDiscoveryResults { get; set; }
 
         public ObservableCollection<IThreatInfoItem> Files
         {
@@ -602,8 +591,7 @@ namespace FAT.Application.Models
                 AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => IsGlobalStopEnabled);
             StopAutoDiscoveryCommand = new DelegateCommand(InvokeStopAutoDiscovery);
-            StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults,
-                o => SelectedDiscoveryResults.Any());
+            StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults);
             SelectCommand = new DelegateCommand(o => { },
                 o => IsDetailsEnabled);
             SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail,
@@ -627,6 +615,7 @@ namespace FAT.Application.Models
         {
             IsAutoDiscoveryInProgress = true;
             DiscoveryResults = new ObservableCollection<DeploymentTarget>();
+            SelectedDiscoveryResults = new List<IComputer>();
             RaisePropertyChanged(nameof(DiscoveryResults));
 
             Set(() => Uri, "/Views/DiscoveryResults.xaml");
@@ -704,6 +693,9 @@ namespace FAT.Application.Models
 
         private void InvokeScanWithDiscoveryResults(Object arg)
         {
+            if (!SelectedDiscoveryResults.Any())
+                Set(() => SelectDiscoveryResults, true);
+
             var model = CompositionHelper.Instance.Resolve<StartScanCredentialsViewModel>();
             model.ViewLoadedCommand.Execute(null);
             model.CheckIfCanUseCurrentCredentials(SelectedDiscoveryResults);
@@ -801,6 +793,7 @@ namespace FAT.Application.Models
                     _lastModifiesComputerDate = null;
                     IsScanInProgress = true;
                     IsScanCancelled = false;
+                    IsScanFailed = false;
                     IsReportEnabled = false;
                     Percentage = 0;
                 }
@@ -849,6 +842,7 @@ namespace FAT.Application.Models
             SelectedItem = null;
             Percentage = 0;
             IsScanCancelled = false;
+            IsScanFailed = false;
             IsReportEnabled = false;
 
 
@@ -975,7 +969,9 @@ namespace FAT.Application.Models
                     PreviousScansViewModel.RaisedHasUnknowns =
                         PreviousScansViewModel._scanCounterManager.HasUnknowns ||
                         PreviousScansViewModel._scanCounterManager.HasNotAnalyzed ||
-                        PreviousScansViewModel._scanCounterManager.HasInProgress;
+                        PreviousScansViewModel._scanCounterManager.HasInProgress ||
+                        PreviousScansViewModel.IsScanFailed ||
+                        PreviousScansViewModel.IsScanCancelled;
             });
 
             PreviousScansViewModel.ScannedItemsCount = result.ScanOperation.ComputersScanned;
@@ -1149,7 +1145,15 @@ namespace FAT.Application.Models
             {
                 IsScanInProgress = false;
                 _storage.SetValue(KnownKeys.OperationGuid, _operationGuid);
-                IsReportEnabled = !IsScanCancelled || ScannedItemsCount > 0;
+
+                if (ScannedItemsCount == 0)
+                {
+                    IsScanFailed = true;
+                    RaisePropertyChanged(nameof(Header));
+                    RaisePropertyChanged(nameof(ComputersHeader));
+                }
+
+                IsReportEnabled = !IsScanCancelled && !IsScanFailed;
 
                 Set(() => ValkyrieDetailsLinkAvailable, true);
 
@@ -1424,7 +1428,8 @@ namespace FAT.Application.Models
                     RaisedHasUnknowns =
                         _scanCounterManager.HasUnknowns ||
                         _scanCounterManager.HasNotAnalyzed ||
-                        _scanCounterManager.HasInProgress;
+                        _scanCounterManager.HasInProgress ||
+                        IsScanFailed;
             }
 
             if (Math.Abs(Percentage - 100) < 0.01)
