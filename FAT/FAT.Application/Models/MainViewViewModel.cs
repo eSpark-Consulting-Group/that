@@ -1136,7 +1136,7 @@ namespace FAT.Application.Models
                 _isFailed = true;
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
-            ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
+            //ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
         }
 
         private void OnScanCompleted()

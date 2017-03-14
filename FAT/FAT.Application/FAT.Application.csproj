@@ -205,6 +205,9 @@
     <Compile Include="Views\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ScanResultWindow.xaml.cs">
+      <DependentUpon>ScanResultWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginPasswordUserControl.xaml.cs">
       <DependentUpon>LoginPasswordUserControl.xaml</DependentUpon>
     </Compile>
@@ -310,6 +313,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConfirmationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ScanResultWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

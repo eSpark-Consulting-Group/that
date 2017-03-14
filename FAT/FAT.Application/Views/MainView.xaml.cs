@@ -91,6 +91,8 @@ namespace FAT.Application
             if (_confirmation != null && _confirmation.DialogResult == null)
                 _confirmation.DialogResult = false;
 
+            new ScanResultWindow().Show();
+
         }
 
         private void ViewModelOnValkyrieAnalyzeCompleted(object sender, ErrorEventArgs e)
