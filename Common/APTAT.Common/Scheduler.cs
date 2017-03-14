@@ -1,18 +1,18 @@
 ﻿using System;
-using SystemTimer = System.Timers.Timer;
+using System.Timers;
 
 namespace APTAT.Common
 {
-    public class Timer : ITimer
+    public class Scheduler : IScheduler
     {
         public event EventHandler TimeoutCallback;
 
         public bool IsEnabled { get { return _timer.Enabled; } }
 
-        private readonly SystemTimer _timer;
-        public Timer()
+        private readonly Timer _timer;
+        public Scheduler()
         {
-            _timer = new SystemTimer();
+            _timer = new Timer();
             _timer.Elapsed += TimerCallback;
         }
         public bool Start(bool autoReset = true)

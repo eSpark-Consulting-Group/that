@@ -15,7 +15,7 @@ namespace APTAT.Core
     {
         private CancellationToken _cancellationToken;
         private readonly IFlsApiProvider _apiProvider = null;
-        private readonly ITimer _timer = null;
+        private readonly IScheduler _timer = null;
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs<IFlsResult>> FlsAnalyzed;
         private CancellationTokenSource _cancellationTokenSource;
@@ -66,7 +66,7 @@ namespace APTAT.Core
             }
         }
 
-        public FlsManager(IFlsApiProvider apiProvider, ITimer timer)
+        public FlsManager(IFlsApiProvider apiProvider, IScheduler timer)
         {
             _timer = timer;
             _apiProvider = apiProvider;

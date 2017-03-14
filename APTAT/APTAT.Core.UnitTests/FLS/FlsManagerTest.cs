@@ -18,7 +18,7 @@ namespace APTAT.Core.UnitTests.FLS
             //Arrange
             var apiProvider = Mock.Create<IFlsApiProvider>(Behavior.Strict);
 
-            var timer = Mock.Create<ITimer>();
+            var timer = Mock.Create<IScheduler>();
             Mock.Arrange(() => apiProvider.UpdateFlsPorts(Arg.Is(32), Arg.Is(98)))
                 .DoNothing().MustBeCalled();
 
@@ -36,7 +36,7 @@ namespace APTAT.Core.UnitTests.FLS
         {
             //Arrange
             var apiProvider = Mock.Create<IFlsApiProvider>(Behavior.Strict);
-            var timer = Mock.Create<ITimer>();
+            var timer = Mock.Create<IScheduler>();
             var flsResponce = Mock.Create<IFlsResponse>();
 
             var hashes = new String[] { "hash1", "hash2" };
@@ -61,7 +61,7 @@ namespace APTAT.Core.UnitTests.FLS
         {
             //Arrange
             var apiProvider = Mock.Create<IFlsApiProvider>();
-            var timer = Mock.Create<ITimer>(Behavior.Strict);
+            var timer = Mock.Create<IScheduler>(Behavior.Strict);
             var hashes = new String[] { "hash1", "hash2" };
             Mock.Arrange(() => timer.SetInterval(Arg.Matches<TimeSpan>(
                 ts => ts.Equals(TimeSpan.FromSeconds(2))))).OccursOnce();
@@ -83,7 +83,7 @@ namespace APTAT.Core.UnitTests.FLS
         {
             //Arrange
             var apiProvider = Mock.Create<IFlsApiProvider>();
-            var timer = Mock.Create<ITimer>(Behavior.Strict);
+            var timer = Mock.Create<IScheduler>(Behavior.Strict);
             Mock.Arrange(() => timer.Dispose())
                 .OccursOnce();
             //Act

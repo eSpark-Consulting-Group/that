@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APTAT.Common
 {
-    public interface ITimer : IDisposable
+    public interface IScheduler : IDisposable
     {
         event EventHandler TimeoutCallback;
         void SetInterval(TimeSpan period);

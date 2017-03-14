@@ -14,7 +14,7 @@ namespace APTAT.DeploymentCore.Descent
         public DescentSubSystem(IChangeTrackingSubSystem changeTrackingSubSystem)
         {
             _tracker = changeTrackingSubSystem;
-            _descentResultsCleanupTimer = new Timer(DescentResultsCleanupTimerCallback, null,
+            _descentResultsCleanupTimer = new System.Threading.Timer(DescentResultsCleanupTimerCallback, null,
                 Settings.Default.DescentResultLifetime, TimeSpan.FromMilliseconds(Timeout.Infinite));
         }
         private static readonly Guid DescentSubSystemIdentifier = new Guid( @"{6E6F58FD-47AC-4d1e-8063-40C2CA9F332E}" );
@@ -27,7 +27,7 @@ namespace APTAT.DeploymentCore.Descent
 
         private readonly IChangeTrackingSubSystem _tracker;
 		private bool _disposed;
-		private Timer _descentResultsCleanupTimer;
+		private System.Threading.Timer _descentResultsCleanupTimer;
 
 		#region IDisposable Members
 

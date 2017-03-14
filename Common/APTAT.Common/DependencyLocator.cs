@@ -8,7 +8,7 @@ namespace APTAT.Common
         {
             resolver.RegisterSingleton<IChangeTrackingSubSystem, ChangeTrackingSubSystem>();
             resolver.RegisterSingleton<IMachineKeyProvider, MachineKeyProvider>();
-            resolver.Register<ITimer, Timer>();
+            resolver.Register<IScheduler, Scheduler>();
         }
     }
 }
