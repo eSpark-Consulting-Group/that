@@ -74,8 +74,8 @@ namespace APTAT.Core.TelerikReports.Template
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.399996757507324D), Telerik.Reporting.Drawing.Unit.Cm(0.93001633882522583D));
             this.textBox1.Style.BackgroundColor = System.Drawing.Color.Empty;
-            this.textBox1.Style.Color = System.Drawing.Color.Gray;
-            this.textBox1.Style.Font.Name = "Segoe UI Light";
+            this.textBox1.Style.Color = System.Drawing.Color.DimGray;
+            this.textBox1.Style.Font.Name = "Segoe UI Semibold";
             this.textBox1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(18D);
             this.textBox1.Value = "= Parameters.Title.Value";
             // 
@@ -110,6 +110,7 @@ namespace APTAT.Core.TelerikReports.Template
             this.textBoxPath.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.47916698455810547D), Telerik.Reporting.Drawing.Unit.Cm(0.057291090488433838D));
             this.textBoxPath.Name = "textBoxPath";
             this.textBoxPath.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.399996757507324D), Telerik.Reporting.Drawing.Unit.Cm(0.49999994039535522D));
+            this.textBoxPath.Style.Color = System.Drawing.Color.DimGray;
             this.textBoxPath.Style.Font.Name = "Segoe UI";
             this.textBoxPath.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
             this.textBoxPath.Value = "= Fields.Path";
@@ -117,8 +118,8 @@ namespace APTAT.Core.TelerikReports.Template
             // list1
             // 
             this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= ReportItem.DataObject"));
-            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(1.999997615814209D)));
-            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(3.2999989986419678D)));
+            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(1.9999973773956299D)));
+            this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(3.2999987602233887D)));
             this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(2.0000009536743164D)));
             this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(8.0000038146972656D)));
             this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(0.5D)));
