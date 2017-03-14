@@ -130,6 +130,10 @@ namespace APTAT.DAL.Entities
         public string FileSizeFormatted { get; set; }
         [MaxLength(20)]
         public string FileAge { get; set; }
-         
+
+        [Required]
+        [Index]
+        public int OperationResultId { get; set; }               
+
     }
 }

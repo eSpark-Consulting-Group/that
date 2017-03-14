@@ -58,7 +58,7 @@ namespace APTAT.Core.Storage.Repositories
                          let m =
                          (from module in i.AptScanResults.SelectMany(sr => sr.Modules)
                           join valkyrieFile in i.ValkyrieScanInfo.ValkyrieFileInfos
-                          on new { sha1 = module.Sha1, oId = module.AptScanResult.OperationResultId }
+                          on new { sha1 = module.Sha1, oId = module.OperationResultId }
                           equals new { sha1 = valkyrieFile.Sha1, oId = valkyrieFile.ValkyrieScanInfoId }
                           into joined
                           from j in joined.DefaultIfEmpty()

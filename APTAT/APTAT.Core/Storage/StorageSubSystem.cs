@@ -85,7 +85,7 @@ namespace APTAT.Core.Storage
                 foreach (var file in scanResult.Files)
                 {
                     if (file.Cloud != Descent.Apt.CloudVerdict.Safe)
-                        result.Modules.Add(Mapper.MapModule(file, VerdictSource.RemoteAgent));
+                        result.Modules.Add(Mapper.MapModule(file, result.OperationResultId, VerdictSource.RemoteAgent));
                 }
 
                 context.SaveChanges();

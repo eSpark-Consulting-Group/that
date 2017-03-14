@@ -7,7 +7,7 @@ namespace APTAT.Core.Apt
 {
     public static class Mapper
     {
-        public static DAL.Entities.Module MapModule(IModule file, VerdictSource verdictSource)
+        public static DAL.Entities.Module MapModule(IModule file, int operationResultId, VerdictSource verdictSource)
         {
             var module = new DAL.Entities.Module();
             module.Accessed = file.AccessedInternal;
@@ -24,6 +24,7 @@ namespace APTAT.Core.Apt
             module.Modified = file.ModifiedInternal;
             module.Path = file.Path;
             module.Product = file.Product;
+            module.OperationResultId = operationResultId;
             module.Sha1 = file.Sha1;
             module.Signer = file.Signer;
             module.Size = file.Size;

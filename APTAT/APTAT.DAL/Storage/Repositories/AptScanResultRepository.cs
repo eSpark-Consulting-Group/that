@@ -38,7 +38,7 @@ namespace APTAT.Core.Storage.Repositories
                 .Select(c => new
                 {
                     Modules = c.Modules.GroupJoin(DbContext.ValkyrieFiles,
-                          m => new { sha1 = m.Sha1, oId = m.AptScanResult.OperationResultId },
+                          m => new { sha1 = m.Sha1, oId = m.OperationResultId },
                           v => new { sha1 = v.Sha1, oId = v.ValkyrieScanInfoId },
                     (m, vs) => new { Module = m, Valkyrie = vs.DefaultIfEmpty().FirstOrDefault() }
                           ),
