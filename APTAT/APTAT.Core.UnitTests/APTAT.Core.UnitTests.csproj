@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="AptAtManagerTests.cs" />
     <Compile Include="ArrayExt.cs" />
+    <Compile Include="FLS\FlsManagerTest.cs" />
     <Compile Include="ModuleCollectionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValkyrieClientTest.cs" />

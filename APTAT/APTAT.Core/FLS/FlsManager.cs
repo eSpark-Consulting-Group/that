@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using APTAT.Core.FLS;
 using APTAT.Core.Properties;
-
+using APTAT.Common;
 
 namespace APTAT.Core
 {
@@ -14,14 +14,14 @@ namespace APTAT.Core
     public sealed class FlsManager : IDisposable, IFlsManager
     {
         private CancellationToken _cancellationToken;
-        private readonly FlsApiProvider _apiProvider = null;
+        private readonly IFlsApiProvider _apiProvider = null;
+        private readonly ITimer _timer = null;
         private readonly BlockingCollection<string> _inputQueue = new BlockingCollection<string>();
         public event EventHandler<FlsRequestEventArgs<IFlsResult>> FlsAnalyzed;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _isWorking = false;
         private readonly int _uploadInterval;
         private readonly int _uploadAtOnce;
-
         private static void ClearCollection<T>(BlockingCollection<T> blockingCollection)
         {
             if (blockingCollection == null)
@@ -40,7 +40,7 @@ namespace APTAT.Core
         {
             try
             {
-                FlsResponse response = _apiProvider.RequestType0(hashes);
+                IFlsResponse response = _apiProvider.RequestType0(hashes);
 
                 if (_cancellationToken.IsCancellationRequested)
                     return;
@@ -55,24 +55,21 @@ namespace APTAT.Core
                 {
                     if (_cancellationToken.IsCancellationRequested)
                         return;
-                    Enqueue(failed.ToArray(), false);
+                    EnqueueInternal(failed.ToArray(), false);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (_cancellationToken.IsCancellationRequested)
                     return;
-                Enqueue(hashes, false);
-                //throw;
+                EnqueueInternal(hashes, false);
             }
-            //       Task.Delay(TimeSpan.FromMinutes(1));
-
-            //   Thread.Sleep(30000); //TODO: Remove after test
         }
 
-        public FlsManager()
+        public FlsManager(IFlsApiProvider apiProvider, ITimer timer)
         {
-            _apiProvider = new FlsApiProvider();
+            _timer = timer;
+            _apiProvider = apiProvider;
             _uploadInterval = int.Parse(Settings.Default.FlsUploadInterval);
             _uploadAtOnce = int.Parse(Settings.Default.FlsUploadHashesAtOnce);
         }
@@ -82,8 +79,13 @@ namespace APTAT.Core
             _apiProvider.UpdateFlsPorts(udpPort: udpPort, tcpPort: tcpPort);
         }
 
-        public void Enqueue(IEnumerable<string> hashes, bool startIfCanceled = true)
+        private void EnqueueInternal(IEnumerable<string> hashes, bool startIfCanceled)
         {
+            foreach (var h in hashes)
+            {
+                _inputQueue.Add(h, _cancellationToken);
+            }
+
             if (!_isWorking)
             {
                 if (!startIfCanceled && _cancellationToken.IsCancellationRequested)
@@ -92,14 +94,35 @@ namespace APTAT.Core
                 _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
-               
-                Task.Run(() => { Start(); }, _cancellationToken);
+                Start();
             }
 
-            foreach (var h in hashes)
+        }
+
+        private void _timer_TimeoutCallback(object sender, EventArgs e)
+        {
+            var buffer = new List<String>();
+            if (_cancellationToken.IsCancellationRequested)
             {
-                _inputQueue.Add(h, _cancellationToken);
+                return;
             }
+            var count = _inputQueue.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var hash = _inputQueue.Take();
+                buffer.Add(hash);
+            }
+            if (buffer.Any())
+            {
+                AnalyzeAsync(buffer.ToArray());
+                buffer.Clear();
+            }
+            _timer.Start(false);
+        }
+
+        public void Enqueue(IEnumerable<string> hashes)
+        {
+            EnqueueInternal(hashes, true);
         }
 
         public void Cancel()
@@ -119,7 +142,8 @@ namespace APTAT.Core
             {
                 ClearCollection(_inputQueue);
             }
-            
+
+            _timer.Stop();
         }
 
 
@@ -131,30 +155,11 @@ namespace APTAT.Core
                 if (_isWorking) throw new InvalidOperationException("FLSManager is working");
                 _isWorking = true;
 
-                var buffer = new List<String>();
+                _timer.TimeoutCallback += _timer_TimeoutCallback;
+                _timer.SetInterval(TimeSpan.FromSeconds(_uploadInterval));
+                _timer.Start(false);
 
-                while (true)
-                {
-                    if (_cancellationToken.IsCancellationRequested)
-                    {
-                        return;
-                    }
-
-                    for (int i = 0; i < _inputQueue.Count; i++)
-                    {
-                        var hash = _inputQueue.Take();
-                        buffer.Add(hash);
-                    }
-                    if (buffer.Any())
-                    {
-                        AnalyzeAsync(buffer.ToArray());
-                        buffer.Clear();
-                    }
-
-                    _cancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(_uploadInterval));
-                    //Thread.Sleep(TimeSpan.FromSeconds(_uploadInterval));
-                    //Task.Delay(TimeSpan.FromSeconds(_uploadInterval), _cancellationToken).Wait();
-                }
+                
             }
             catch (Exception)
             {
@@ -168,47 +173,21 @@ namespace APTAT.Core
 
         }
 
-        private Task AnalyzeAsync(string[] hashes)
+        private void AnalyzeAsync(string[] hashes)
         {
-
             try
             {
-                // offload Parallel.For from the UI thread 
-                // as a long-running operation
-                Task task = Task.Factory.StartNew(() =>
-               {
-
-                   string[][] hashGroups = Split(hashes, _uploadAtOnce).ToArray();
-                   foreach (var h in hashGroups)
-                   {
-                       if (_cancellationToken.IsCancellationRequested)
-                           return;
-                       DoWorkItem(h);
-                   }                   
-                   _cancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(3));
-                   _cancellationToken.ThrowIfCancellationRequested();
-               }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-                task.ContinueWith(_ =>
+                string[][] hashGroups = Split(hashes, _uploadAtOnce).ToArray();
+                foreach (var h in hashGroups)
                 {
-                    try
-                    {
-                        task.Wait(_cancellationToken); // rethrow any error
-                    }
-                    catch (Exception ex)
-                    {
-                        while (ex is AggregateException && ex.InnerException != null)
-                            ex = ex.InnerException;
-                        OnFlsAnalyzed(new IFlsResult[0], ex);
-                    }
-
-                }, TaskScheduler.Default);
-                return task;
+                    if (_cancellationToken.IsCancellationRequested)
+                        return;
+                    DoWorkItem(h);
+                }
             }
             catch (Exception ex)
             {
                 OnFlsAnalyzed(new IFlsResult[0], ex);
-                return Task.FromException(ex);
             }
         }
 
@@ -224,6 +203,7 @@ namespace APTAT.Core
         {
             _inputQueue.CompleteAdding();
             _inputQueue.Dispose();
+            _timer.Dispose();
         }
 
         private void OnFlsAnalyzed(IFlsResult[] results, Exception exception)

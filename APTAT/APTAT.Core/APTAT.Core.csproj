@@ -76,6 +76,7 @@
     <Compile Include="Apt\AptVerdictContext.cs" />
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
     <Compile Include="FinalVerdictCalculator.cs" />
+    <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />
     <Compile Include="Reports\IResultMergeManager.cs" />
     <Compile Include="Reports\ReportBuilderFAT.cs" />

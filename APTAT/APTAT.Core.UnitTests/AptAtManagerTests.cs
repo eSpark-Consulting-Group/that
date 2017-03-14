@@ -64,7 +64,7 @@ namespace APTAT.Core.UnitTests
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var flsManager = Mock.Create<IFlsManager>(Behavior.Strict);
             var failedToAnalyzeHashes = failedToAnalyzeModules.Select(m => m.Sha1).ToArray();
-            Mock.Arrange(() => flsManager.Enqueue(Arg.Matches<IEnumerable<string>>(s=>s.Compare(failedToAnalyzeHashes)),true)).MustBeCalled();
+            Mock.Arrange(() => flsManager.Enqueue(Arg.Matches<IEnumerable<string>>(s=>s.Compare(failedToAnalyzeHashes)))).MustBeCalled();
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);            
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
@@ -369,7 +369,7 @@ namespace APTAT.Core.UnitTests
             //FLS Manager Arange
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(53), Arg.Is(80))).OccursOnce();
-            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count() == failedToAnalyzeModules.Count()), Arg.AnyBool)).OccursOnce();
+            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count() == failedToAnalyzeModules.Count()))).OccursOnce();
             Mock.Arrange(() => fls.Cancel()).OccursOnce();
 
             //Valkyrie Client Arange 
@@ -461,9 +461,6 @@ namespace APTAT.Core.UnitTests
             Mock.AssertAll(aptScannerFactory);
         }
 
-
-
-
         /// <summary>
         /// If first frist computer scan returns Failed To Analyze for all files, and second computer scan returns Safe 
         /// 1. UpdateFlsPort should be called once with tcp 80 udp 53 values for ports
@@ -483,7 +480,7 @@ namespace APTAT.Core.UnitTests
             //FLS Manager Arange
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(53), Arg.Is(80))).OccursOnce();
-            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count() == failedToAnalyzeModules.Count()), Arg.AnyBool)).OccursOnce();
+            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count() == failedToAnalyzeModules.Count()))).OccursOnce();
 
             //Valkyrie Client Arange 
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
@@ -567,7 +564,7 @@ namespace APTAT.Core.UnitTests
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
-            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()), Arg.AnyBool)).MustBeCalled();
+            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()))).MustBeCalled();
             var scanOptions = CreateScanOptions(80, 53);
             var dt = new DeploymentTarget { Uid = Guid.NewGuid(), IPAddress = "10.100.65.102", IsLocalComputer = false, Name = "testComp102", IsOnline = true, SystemKind = SystemKind.Windows8 };
             var description = new DevicesSourceDescription { Description = "Test Device" };
@@ -650,7 +647,7 @@ namespace APTAT.Core.UnitTests
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).Occurs(1, "Fls Ports Updated");
-            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()), Arg.AnyBool)).MustBeCalled("Enqueue method must be called");
+            Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()))).MustBeCalled("Enqueue method must be called");
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
@@ -687,8 +684,8 @@ namespace APTAT.Core.UnitTests
             Mock.Raise(() => aptScanner.ComputerScanCompleted += null, args: new object[] { new ComputerScanCompletedEventArgs(guid, scanResult) });
             Assert.False(flsAnalyzeProgressChangedEventCalled, "Should not be called FlsAnalyzeProgressChanged");
             string[] failedToAnalyzeHashes = modules.Where(m => m.Cloud == CloudVerdict.FailedToAnalyze).Select(m => m.Sha1).ToArray();
-            Mock.Assert(() => fls.Enqueue(Arg.IsAny<IEnumerable<string>>(), Arg.Matches<bool>(flag => flag == true)), "Flag should be true");
-            Mock.Assert(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(s => s.Except(failedToAnalyzeHashes).Any() == false && s.Count() == modules.Where(m => m.Cloud == CloudVerdict.FailedToAnalyze).Count()), Arg.AnyBool), "Should contain failed hashes only");
+            Mock.Assert(() => fls.Enqueue(Arg.IsAny<IEnumerable<string>>()), "Flag should be true");
+            Mock.Assert(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(s => s.Except(failedToAnalyzeHashes).Any() == false && s.Count() == modules.Where(m => m.Cloud == CloudVerdict.FailedToAnalyze).Count())), "Should contain failed hashes only");
 
             Mock.Raise(() => aptScanner.ScanCompleted += null, new object[] { new ScanCompletedEventArgs() { OperationUid = guid }});
         }
@@ -704,7 +701,7 @@ namespace APTAT.Core.UnitTests
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce("FLS Ports Updated");
-            Mock.Arrange(() => fls.Enqueue(Arg.IsAny<IEnumerable<string>>(), Arg.AnyBool)).OccursNever("Enqueue method must NOT be called");
+            Mock.Arrange(() => fls.Enqueue(Arg.IsAny<IEnumerable<string>>())).OccursNever("Enqueue method must NOT be called");
             var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);

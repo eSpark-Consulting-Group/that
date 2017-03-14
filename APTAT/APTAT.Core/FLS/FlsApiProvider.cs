@@ -48,7 +48,7 @@ namespace APTAT.Core
         }
 
 
-        public FlsResponse RequestType0(string[] hashes)
+        public IFlsResponse RequestType0(string[] hashes)
         {
             Init();
             try
@@ -77,7 +77,7 @@ namespace APTAT.Core
             }
         }
 
-        public FlsResponse RequestType0Udp(string[] hashes)
+        private FlsResponse RequestType0Udp(string[] hashes)
         {
             IPEndPoint ipep = new IPEndPoint(_servers[_serverIndex], _udpPort);
             UdpClient newsock = new UdpClient();
@@ -94,7 +94,7 @@ namespace APTAT.Core
             return flsResponse;
         }
 
-        public FlsResponse RequestType0Tcp(string[] hashes)
+        private FlsResponse RequestType0Tcp(string[] hashes)
         {
             var client = new TcpClient
             {

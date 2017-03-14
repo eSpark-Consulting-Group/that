@@ -17,6 +17,10 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IAptScannerFactory, AptScannerFactory>();
             resolver.RegisterSingleton<IAptAtManager, AptAtManager>();
             resolver.RegisterSingleton<IFlsManager, FlsManager>();
+
+            resolver.RegisterSingleton<IFlsApiProvider, FlsApiProvider>();
+            
+
             resolver.RegisterSingleton<IDistinctFileHelper, DistinctFileHelper>();
             resolver.RegisterSingleton<IStorageSubSystem, StorageSubSystem>();
             resolver.RegisterSingleton<IReportBuilder, ReportBuilder>();

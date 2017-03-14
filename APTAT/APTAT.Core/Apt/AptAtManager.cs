@@ -365,7 +365,7 @@ namespace APTAT.Core.Apt
                 OnFlsAnalyzeProgressChangedAsync(
                     new FlsRequestEventArgs<IAptVerdictContext>(verdictUpdated.ToArray(), null));
             if (addToAnalyze.Any())
-                _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1), true);
+                _flsManager.Enqueue(addToAnalyze.Select(f => f.Sha1));
             //  temp.Select(t)
             TryInvokeEndScan();
             return resultsUpdated;

@@ -5,10 +5,10 @@ using APTAT.Core.Descent.Apt;
 
 namespace APTAT.Core
 {
-    public class FlsResponse
+    public class FlsResponse : IFlsResponse
     {
-        public Int32 ClientIdNumber { get; private set; }
-        public Byte NumberOfAnswers { get; private set; }
+        private Int32 ClientIdNumber { get;  set; }
+        private Byte NumberOfAnswers { get;  set; }
 
         public string[] GetFailedToAnalyzeHashes()
         {

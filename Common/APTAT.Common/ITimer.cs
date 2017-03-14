@@ -9,7 +9,7 @@ namespace APTAT.Common
     public interface ITimer : IDisposable
     {
         event EventHandler TimeoutCallback;
-        void SetInverval(TimeSpan period);
+        void SetInterval(TimeSpan period);
         bool Start(bool autoReset = true);
         void Stop();
     }

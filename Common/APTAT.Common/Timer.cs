@@ -24,7 +24,7 @@ namespace APTAT.Common
             return true;
         }
 
-        public void SetInverval(TimeSpan period)
+        public void SetInterval(TimeSpan period)
         {
             _timer.Interval = period.TotalMilliseconds;
         }
