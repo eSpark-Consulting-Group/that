@@ -4,6 +4,7 @@ using APTAT.DAL.Entities;
 namespace APTAT.DAL
 {
     using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
 
     public class AptEntities : DbContext
     {
@@ -17,13 +18,15 @@ namespace APTAT.DAL
         static AptEntities()
         {
             var builder = new SqlCeConnectionStringBuilder();
-            builder.Password = "Test1231";
+            builder.Password = "f8b3cfdacdf529025cfd940255eea5d1f70ea320";
             builder.DataSource = System.IO.Directory.Exists("data") 
                 ? "data\\AptDatabase.sdf" : "AptDatabase.sdf";
             builder.PersistSecurityInfo = true;
             _connectionString = builder.ToString();
-            var sqliteConnectionInitializer = new DropCreateDatabaseIfModelChanges<AptEntities>();
-            Database.SetInitializer(sqliteConnectionInitializer);
+            _connectionString = _connectionString + ";File Access Retry Timeout=15;Max Database Size=4091;Default Lock Timeout=5000;Max Buffer Size=6400";
+            //var sqliteConnectionInitializer = new DropCreateDatabaseIfModelChanges<AptEntities>();
+            //Database.SetInitializer(sqliteConnectionInitializer);
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<AptEntities, Migrations.Configuration>());
         }
 
         public AptEntities()
