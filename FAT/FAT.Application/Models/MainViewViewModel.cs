@@ -263,6 +263,11 @@ namespace FAT.Application.Models
             }
         }
 
+        public bool NotRaisedHasMalwaresOrUnknowns
+        {
+            get { return !RaisedHasMalwares && !RaisedHasUnknowns; }
+        }
+
         public Double Percentage
         {
             get { return _percentage; }
@@ -514,7 +519,7 @@ namespace FAT.Application.Models
         {
             get
             {
-                return !GroupByFiles ? "Search By Computers" : "Search By Files";
+                return !GroupByFiles ? "Search by Computers" : "Search by Files";
             }
         }
 
@@ -1430,6 +1435,8 @@ namespace FAT.Application.Models
                         _scanCounterManager.HasNotAnalyzed ||
                         _scanCounterManager.HasInProgress ||
                         IsScanFailed;
+                else
+                    RaisedHasUnknowns = false;
             }
 
             if (Math.Abs(Percentage - 100) < 0.01)

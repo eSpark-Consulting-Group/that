@@ -44,13 +44,13 @@ namespace FAT.Application
             {
                 case MessageTypes.StartScan:
                     StartScanWindow details = new StartScanWindow();
-                    details.Owner = System.Windows.Application.Current.MainWindow;
+                    details.Owner = App.Current.MainWindow;
                     if (details.ShowDialog() == true && message.Action != null)
                         message.Action(details.IsQuickScan);
                     break;
                 case MessageTypes.StopScan:
                     _confirmation = new ConfirmationWindow();
-                    _confirmation.Owner = System.Windows.Application.Current.MainWindow;
+                    _confirmation.Owner = App.Current.MainWindow;
                     if (_confirmation.ShowDialog() == true && message.Action != null)
                         message.Action(null);
                     break;
@@ -75,7 +75,7 @@ namespace FAT.Application
             ErrorWindow error = new ErrorWindow
             {
                 Text = {Text = e.Exception.Message},
-                Owner = System.Windows.Application.Current.MainWindow
+                Owner = App.Current.MainWindow
             };
             error.ShowDialog();
         }
@@ -91,8 +91,8 @@ namespace FAT.Application
             if (_confirmation != null && _confirmation.DialogResult == null)
                 _confirmation.DialogResult = false;
 
-            new ScanResultWindow().Show();
-
+            if (!_viewModel.IsScanCancelled && !_viewModel.IsScanFailed)
+                new ScanResultWindow { DataContext = _viewModel, Owner = App.Current.MainWindow }.ShowDialog();
         }
 
         private void ViewModelOnValkyrieAnalyzeCompleted(object sender, ErrorEventArgs e)
@@ -110,7 +110,7 @@ namespace FAT.Application
             {
                 var err = new ErrorWindow();
                 err.Text.Text = e.Error.Message;
-                err.Owner = System.Windows.Application.Current.MainWindow;
+                err.Owner = App.Current.MainWindow;
                 err.ShowDialog();
             }
         }
@@ -120,7 +120,7 @@ namespace FAT.Application
         {
             ReportWindow details = new ReportWindow();
             details.Header = menuItem.Tag as string;
-            details.Owner = System.Windows.Application.Current.MainWindow;
+            details.Owner = App.Current.MainWindow;
             details.ShowDialog();
         }
 
@@ -192,14 +192,14 @@ namespace FAT.Application
         private void AboutClick(Object sender, RoutedEventArgs e)
         {
             HelpButton.IsOpen = false;
-            AboutWindow about = new AboutWindow { Owner = System.Windows.Application.Current.MainWindow };
+            AboutWindow about = new AboutWindow { Owner = App.Current.MainWindow };
             about.ShowDialog();
         }
 
         private void AgentClick(Object sender, RoutedEventArgs e)
         {
             HelpButton.IsOpen = false;
-            AgentWindow agent = new AgentWindow { Owner = System.Windows.Application.Current.MainWindow };
+            AgentWindow agent = new AgentWindow { Owner = App.Current.MainWindow };
             agent.ShowDialog();
         }
 

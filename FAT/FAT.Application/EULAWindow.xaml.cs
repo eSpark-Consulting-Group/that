@@ -52,12 +52,10 @@ namespace FAT.Application
             App.Current.Shutdown();
         }
 
-        private async void Hyperlink_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Hyperlink_MouseDown(object sender, MouseButtonEventArgs e)
         {
             eula.Opacity = 0;
             pdf.MaxHeight = 700;
-
-            await Dispatcher.Yield(DispatcherPriority.Background);
 
             var location = Owner.PointToScreen(new Point(-3, -3));
             Left = location.X;
