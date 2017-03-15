@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Navigation;
 
 namespace FAT.Application
@@ -12,6 +13,8 @@ namespace FAT.Application
             InitializeComponent();
         }
  
+        public Func<Visual> GetVisual { get; set; }
+
         private void OnCloseClick(Object sender, RoutedEventArgs e)
         {
             Close();
@@ -19,9 +22,12 @@ namespace FAT.Application
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var location = Owner.PointToScreen(new Point(-3, -3));
-            Left = location.X + 33;
-            Top = location.Y + 280;
+            var location = GetVisual?.Invoke().PointToScreen(new Point(-6, -6));
+            if (location.HasValue)
+            {
+                Left = location.Value.X;
+                Top = location.Value.Y;
+            }
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

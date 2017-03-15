@@ -92,7 +92,13 @@ namespace FAT.Application
                 _confirmation.DialogResult = false;
 
             if (!_viewModel.IsScanCancelled && !_viewModel.IsScanFailed)
-                new ScanResultWindow { DataContext = _viewModel, Owner = App.Current.MainWindow }.ShowDialog();
+            {
+                var result = new ScanResultWindow();
+                result.DataContext = _viewModel;
+                result.Owner = App.Current.MainWindow;
+                result.GetVisual = () => SearchTextBox;
+                result.ShowDialog();
+            }
         }
 
         private void ViewModelOnValkyrieAnalyzeCompleted(object sender, ErrorEventArgs e)
