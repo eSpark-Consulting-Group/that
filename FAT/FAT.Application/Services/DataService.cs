@@ -21,7 +21,6 @@ namespace FAT.Application.Services
         public string GetEmails()
         {
             string emails = "";
-            var count = GetPreciousScansCount();
             using (var context = _storageContext.Value.Context)
             {
                 var addresses = context.EmailRepository.EntityQuery.Select(e => e.Address);
