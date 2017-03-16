@@ -172,7 +172,7 @@ namespace FAT.Application.Models
                     case UiFinalVerdict.Malware:
                         return "Malware";
                     case UiFinalVerdict.NotAnalyzed:
-                        return $"Failed ({OperationStatus.Replace(Environment.NewLine, "")})";
+                        return $"Not Analyzed ({OperationStatus.Replace(Environment.NewLine, "")})";
                     case UiFinalVerdict.Unknown:
                         return "No Threat Found";
                     default:

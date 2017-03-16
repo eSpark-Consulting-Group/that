@@ -14,10 +14,8 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
 {
     public class FindWorkgroupTargetsCommandTests
     {
-        readonly INetworkBrowser _networkBrowserMock;
         public FindWorkgroupTargetsCommandTests()
         {
-            _networkBrowserMock  = Mock.Create<INetworkBrowser>();
         }
 
         [Fact]
@@ -25,7 +23,8 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
         {
             FindTargetsRequest request = new FindTargetsRequest();
 
-            FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(_networkBrowserMock,request);
+            var networkBrowserMock = Mock.Create<INetworkBrowser>(Behavior.Strict);
+            FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(networkBrowserMock, request);
 
             Assert.Equal(request, target.Request);
         }
@@ -41,8 +40,9 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
             expectedComps.Add("comp1");
             expectedComps.Add("comp2");
             expectedComps.Add("comp3");
-            FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(_networkBrowserMock, request);
-            _networkBrowserMock
+            var networkBrowserMock = Mock.Create<INetworkBrowser>(Behavior.Strict);
+            FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(networkBrowserMock, request);
+            networkBrowserMock
                 .Arrange(browser => browser.GetNetworkComputers(ServerType.All, criteria.WorkgroupName, Arg.IsAny<List<string>>()))
                 .DoInstead((ServerType type, string name, List<string> comps) =>
                {
@@ -63,8 +63,9 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
             criteria.WorkgroupName = "test";
             FindTargetsRequest request = new FindTargetsRequest();
             request.SearchCriterion = criteria;
-            FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(_networkBrowserMock, request);
-            _networkBrowserMock
+            var networkBrowserMock = Mock.Create<INetworkBrowser>(Behavior.Strict);
+            FindWorkgroupTargetsCommand target = new FindWorkgroupTargetsCommand(networkBrowserMock, request);
+            networkBrowserMock
                 .Arrange(browser => browser.GetNetworkComputers(ServerType.All, criteria.WorkgroupName, Arg.IsAny<List<string>>()))
                 .Returns(NetServerEnumResults.ERROR_NO_BROWSER_SERVERS_FOUND)
                 .MustBeCalled();
@@ -73,7 +74,6 @@ namespace APTAT.DeploymentCore.UnitTests.Facade.DescentTest.CommandsTests
             Assert.Throws<InvalidOperationException>(() =>
             {
                 target.Execute();
-                var response = target.Response;
             });
         }
     }
