@@ -6,7 +6,7 @@ namespace APTAT.Common
     {
         void RegisterListener(IChangeTrackingListener listener);
         void UnregisterListener(IChangeTrackingListener listener);
-        void NotifyChanged(ChangesTrackingItem item, bool exceptSelfSession);
+        void NotifyChanged(IChangesTrackingItem item, bool exceptSelfSession);
 
     }
     public interface IBusinessObject
@@ -28,7 +28,7 @@ namespace APTAT.Common
     }
     public interface IChangeTrackingListener
     {
-        void Changed(params ChangesTrackingItem[] items);
+        void Changed(params IChangesTrackingItem[] items);
         Guid SessionId { get; }
     }
     public enum ChangeType
@@ -39,15 +39,21 @@ namespace APTAT.Common
     }
 
     [Serializable]
-    public class ChangesTrackingItem
+    public class ChangesTrackingItem : IChangesTrackingItem
     {
-        public readonly ChangeType ChangeType;
-        public readonly IBusinessObject ChangedItem;
+        public ChangeType ChangeType { get; }
+        public IBusinessObject ChangedItem { get; }
 
         public ChangesTrackingItem(ChangeType type, IBusinessObject changed)
         {
             ChangeType = type;
             ChangedItem = changed;
         }
+    }
+
+    public interface IChangesTrackingItem
+    {
+        ChangeType ChangeType { get; }
+        IBusinessObject ChangedItem { get; }
     }
 }

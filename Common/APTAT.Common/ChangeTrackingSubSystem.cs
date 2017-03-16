@@ -96,12 +96,12 @@ namespace APTAT.Common
             }
         }
 
-        public void NotifyChanged(ChangesTrackingItem item, bool exceptSelfSession)
+        public void NotifyChanged(IChangesTrackingItem item, bool exceptSelfSession)
         {
-            NotifyChanged(new ChangesTrackingItem[] { item }, exceptSelfSession);
+            NotifyChanged(new IChangesTrackingItem[] { item }, exceptSelfSession);
         }
 
-        private void NotifyChanged(ChangesTrackingItem[] items, bool exceptSelfSession)
+        private void NotifyChanged(IChangesTrackingItem[] items, bool exceptSelfSession)
         {
             List<Guid> failed = new List<Guid>();
             //GenericContextData<Guid> clientUID = CallContext.GetData(@"ClientUID") as GenericContextData<Guid>;

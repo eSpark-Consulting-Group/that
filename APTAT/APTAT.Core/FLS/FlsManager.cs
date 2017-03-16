@@ -58,7 +58,7 @@ namespace APTAT.Core
                     EnqueueInternal(failed.ToArray(), false);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (_cancellationToken.IsCancellationRequested)
                     return;

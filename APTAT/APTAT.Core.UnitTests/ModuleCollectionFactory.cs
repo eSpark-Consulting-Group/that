@@ -62,15 +62,27 @@ namespace APTAT.Core.UnitTests
             var modules = new[] { module1, module2, module3, module4, module5 };
             return modules;
         }
-
-        public static IModule[] GetMockModules(CloudVerdict verdict)
+        private static int nextHash = 0;
+        public static IModule[] GetMockModules(CloudVerdict verdict, int count = 5)
         {
-            var module1 =  CreateModule("7457a2146e4ffaa326fc32b1eb4473c3bfecbbab", verdict);            
-            var module2 = CreateModule("623780deebc4732a67142bbf948fbe4672b7af81", verdict);
-            var module3 = CreateModule("659b6279cacd43f0311bc2e7bfda91bf3ddcaf3b",verdict);
-            var module4 = CreateModule("113799e6123a2377bb330ed20bda108f60e95f93", verdict);
-            var module5 = CreateModule("0e3d32035931f027173227ee57da531fd5354cf9", verdict);                                   
-            return new[] { module1, module2, module3, module4, module5 };
+            
+            var list = new List<IModule>();
+            for(int i = 0; i < count; i++)
+            {
+                list.Add(CreateModule("hash" + ++nextHash, verdict));
+            }
+            return list.ToArray();
+        }
+
+        public static IModule[] GetMockModules(CloudVerdict verdict, int nextHashCodenumber, int count)
+        {
+
+            var list = new List<IModule>();
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(CreateModule("hash" + ++nextHashCodenumber, verdict));
+            }
+            return list.ToArray();
         }
 
         private static IModule CreateModule(string sha1, CloudVerdict verdict)
@@ -78,11 +90,11 @@ namespace APTAT.Core.UnitTests
             var module = Mock.Create<IModule>(Behavior.Strict);
             Mock.Arrange(() => module.Sha1).Returns(sha1);
             Mock.Arrange(() => module.Cloud).Returns(verdict);
-            Mock.Arrange(() => module.Path).Returns("C:\\Temp\\"+Guid.NewGuid().ToString()).OccursAtLeast(0);
-            Mock.Arrange(() => module.Size).Returns(256).OccursAtLeast(0);
-            Mock.Arrange(() => module.Signer).Returns(String.Empty).OccursAtLeast(0);
-            Mock.Arrange(() => module.Version).Returns("1.0.0.1").OccursAtLeast(0);
-            Mock.Arrange(() => module.Product).Returns("").OccursAtLeast(0);
+            Mock.Arrange(() => module.Path).Returns("C:\\Temp\\"+Guid.NewGuid().ToString());
+            Mock.Arrange(() => module.Size).Returns(256);
+            Mock.Arrange(() => module.Signer).Returns(String.Empty);
+            Mock.Arrange(() => module.Version).Returns("1.0.0.1");
+            Mock.Arrange(() => module.Product).Returns("");
             return module;
 
         }

@@ -5,7 +5,7 @@ using APTAT.Core.FLS;
 
 namespace APTAT.Core
 {
-    public interface IFlsManager
+    public interface IFlsManager : IDisposable
     {
         event EventHandler<FlsRequestEventArgs<IFlsResult>> FlsAnalyzed;
 

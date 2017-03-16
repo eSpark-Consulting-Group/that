@@ -15,7 +15,7 @@ namespace APTAT.Common
 
         #region IChangeTrackingListener Members
 
-        public void Changed(params ChangesTrackingItem[] items)
+        public void Changed(params IChangesTrackingItem[] items)
         {
             _realListener.Changed(items);
         }

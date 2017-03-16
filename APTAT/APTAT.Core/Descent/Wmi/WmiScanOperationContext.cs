@@ -43,14 +43,14 @@ namespace APTAT.Core.Descent.Wmi
             get { return _scanResults; }
         }
 
-        public override void Changed(params ChangesTrackingItem[] items)
+        public override void Changed(params IChangesTrackingItem[] items)
         {
             base.Changed(items);
             foreach (var item in items)
             {
                 if (item.ChangeType == ChangeType.Changed && item.ChangedItem is IDescentProgressItem)
                 {
-                    DescentProgressItem descentProgressItem = (DescentProgressItem)item.ChangedItem;
+                    IDescentProgressItem descentProgressItem = (IDescentProgressItem)item.ChangedItem;
                     WmiScanResult result;
                     if (_scanResults.TryGetValue(descentProgressItem.ComputerUid, out result))
                     {

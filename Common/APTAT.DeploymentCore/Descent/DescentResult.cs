@@ -215,7 +215,7 @@ namespace APTAT.DeploymentCore.Descent
 
         #region IChangeTrackingListener Members
 
-        public virtual void Changed(params ChangesTrackingItem[] items)
+        public virtual void Changed(params IChangesTrackingItem[] items)
         {
             //lock (ResultUpdatingSync)
             {

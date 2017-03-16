@@ -584,6 +584,7 @@ namespace APTAT.Core.Apt
             if (_flsManager != null)
             {
                 _flsManager.FlsAnalyzed -= FlsManagerOnAnalyzed;
+                _flsManager.Dispose();
             }
         }
         public async Task OnAppClosing()

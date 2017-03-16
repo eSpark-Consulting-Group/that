@@ -18,7 +18,7 @@ namespace APTAT.Core.Descent.Apt
         }
         public DateTime Started { get { return StartTime; } }
 
-        public override void Changed(params ChangesTrackingItem[] items)
+        public override void Changed(params IChangesTrackingItem[] items)
         {
             //lock (ResultUpdatingSync)
             {
