@@ -21,12 +21,23 @@ namespace FAT.Application.Services
         public string GetEmails()
         {
             string emails = "";
+            var count = GetPreciousScansCount();
             using (var context = _storageContext.Value.Context)
             {
                 var addresses = context.EmailRepository.EntityQuery.Select(e => e.Address);
                 emails = String.Join(",", addresses);
                 return emails;
             }
+        }
+
+        public int GetPreciousScansCount()
+        {
+            int count;
+            using (var storage = _storageContext.Value.Context)
+            {
+                count = storage.AptScanOperationResultRepository.GetCount();
+            }
+            return count;
         }
 
         public IScanOperation[] GetPreviousScans(string keyword)
