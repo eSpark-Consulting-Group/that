@@ -7,7 +7,7 @@ namespace FAT.Application.Models
     public interface IScanOperationsManager
     {
         void GetPreviousScans(string keyword);
-
+        bool HasPreviousScans();
         IEnumerable<IScanOperation> ScanOperations { get; }
 
         string GetEmail();
@@ -36,6 +36,11 @@ namespace FAT.Application.Models
                         scan.ValkyrieOperationInfo.ApiKey,
                         scan.ValkyrieOperationInfo.ScanId);
             }
+        }
+
+        public bool HasPreviousScans()
+        {
+            return _dataService.HasPreviousScans();
         }
 
         public string GetEmail()

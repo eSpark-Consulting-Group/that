@@ -222,6 +222,7 @@ namespace FAT.Application.Models
                     Percentage = 0;
                 }
 
+                StartScanCommand.InvalidateCanExecute();
                 RaisePropertyChanged(nameof(IsAutoDiscoveryCompleted));
             }
         }
@@ -554,6 +555,7 @@ namespace FAT.Application.Models
         public DelegateCommand StartScanWithDiscoveryResultsCommand { get; private set; }
         public DelegateCommand SubmitEmailCommand { get; private set; }
         public DelegateCommand EditEmailCommand { get; private set; }
+        public DelegateCommand StartAutoDiscoveryCommand { get; private set; }
         public DelegateCommand RestartComputerScanCommand { get; private set; }
         public DelegateCommand RestartComputerScanWithCredentialsCommand { get; private set; }
         public DelegateCommand StopComputerScanCommand { get; private set; }
@@ -603,6 +605,7 @@ namespace FAT.Application.Models
                 o => IsValidEmail(Email));
             EditEmailCommand = new DelegateCommand(o =>
                 Set(() => HideSubmitEmail, false));
+            StartAutoDiscoveryCommand = new DelegateCommand(InvokeStartAutoDiscovery);
             RestartComputerScanCommand = new DelegateCommand(o => InvokeRestartComputerScan(o),
                 o => IsRestartEnabled);
             RestartComputerScanWithCredentialsCommand = new DelegateCommand(o => InvokeRestartComputerScan(o, true),
@@ -610,7 +613,8 @@ namespace FAT.Application.Models
             StopComputerScanCommand = new DelegateCommand(InvokeStopComputerScan,
                 o => IsStopEnabled);
 
-            OpenPreviousScansCommand = new DelegateCommand(InvokeOpenPreviousScans);
+            OpenPreviousScansCommand = new DelegateCommand(InvokeOpenPreviousScans,
+                o => _scanOperationsManager.HasPreviousScans());
             OpenCurrentScanCommand = new DelegateCommand(InvokeOpenCurrentScan);
             OpenPreviousScanDetailsCommand = new DelegateCommand(InvokeOpenPreviousScanDetails);
             SearchPreviousScansCommand = new DelegateCommand(InvokeSearchPreviousScans);
@@ -618,16 +622,9 @@ namespace FAT.Application.Models
 
         private async void OnLoaded(object o)
         {
-            IsAutoDiscoveryInProgress = true;
-            DiscoveryResults = new ObservableCollection<DeploymentTarget>();
-            SelectedDiscoveryResults = new List<IComputer>();
-            RaisePropertyChanged(nameof(DiscoveryResults));
-
-            Set(() => Uri, "/Views/DiscoveryResults.xaml");
             Set(() => Loaded, true);
 
-            _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
-            _targetsDiscoveryService.StartTargetsAutoDiscovery();
+            InvokeStartAutoDiscovery(null);
 
             var name = await TryAction(GetCurrentDomainName());
             CurrentUser = _targetsDiscoveryService.GetLoggedInUser();
@@ -675,6 +672,35 @@ namespace FAT.Application.Models
             }
 
             return result.Name;
+        }
+
+        private void InvokeStartAutoDiscovery(Object arg)
+        {
+            if (_scanIteratorTimer.IsEnabled)
+                _scanIteratorTimer.Stop();
+
+            _scanCounterManager.Clear();
+
+            Set(() => ScanWasOnceStarted, false);
+            Set(() => SelectDiscoveryResults, false);
+            IsScanCancelled = false;
+            IsScanFailed = false;
+            RaisedHasUnknowns = false;
+            RaisedHasMalwares = false;
+            ValkyrieDetailsLinkAvailable = false;
+            IsAutoDiscoveryCompleted = false;
+            Percentage = 0;
+            IsAutoDiscoveryInProgress = true;
+
+            DiscoveryResults = new ObservableCollection<DeploymentTarget>();
+            SelectedDiscoveryResults = new List<IComputer>();
+            RaisePropertyChanged(nameof(DiscoveryResults));
+            StartScanCommand.InvalidateCanExecute();
+
+            Set(() => Uri, "/Views/DiscoveryResults.xaml");
+
+            _targetsDiscoveryService.DeploymentTargetsAutoResolving += OnDeploymentTargetsAutoResolving;
+            _targetsDiscoveryService.StartTargetsAutoDiscovery();
         }
 
         private void InvokeRestartComputerScan(Object arg, bool showDialog = false)
@@ -1141,7 +1167,6 @@ namespace FAT.Application.Models
                 _isFailed = true;
                 ErrorOccurred?.Invoke(this, new DomainEventArgs(null, e.Error));
             }
-            //ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
         }
 
         private void OnScanCompleted()
@@ -1163,6 +1188,9 @@ namespace FAT.Application.Models
                 Set(() => ValkyrieDetailsLinkAvailable, true);
 
                 CancelInProgress = false;
+
+                OpenPreviousScansCommand.InvalidateCanExecute();
+
                 ScanProcessCompleted?.Invoke(this, new DomainEventArgs());
             }
         }

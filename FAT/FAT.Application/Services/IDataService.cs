@@ -1,5 +1,4 @@
 ﻿using System;
-using APTAT.DAL.Storage.DTO;
 using FAT.Application.Models;
 using FAT.Application.Models.Apt;
 
@@ -9,6 +8,7 @@ namespace FAT.Application.Services
     {
         IFatScanComputerResult[] GetScanOperationDetailed(Guid operationUid);
         IScanOperation[] GetPreviousScans(string keyword);
+        bool HasPreviousScans();
         string GetEmails();
 
     }

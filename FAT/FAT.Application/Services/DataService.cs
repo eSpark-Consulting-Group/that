@@ -29,14 +29,14 @@ namespace FAT.Application.Services
             }
         }
 
-        public int GetPreciousScansCount()
+        public bool HasPreviousScans()
         {
             int count;
             using (var storage = _storageContext.Value.Context)
             {
                 count = storage.AptScanOperationResultRepository.GetCount();
             }
-            return count;
+            return count > 0;
         }
 
         public IScanOperation[] GetPreviousScans(string keyword)

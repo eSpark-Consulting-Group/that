@@ -12,7 +12,7 @@ namespace FAT.Application.Converters
         {
             bool inverse = parameter != null && parameter.ToString() == "!";
 
-            if ((bool)(value ?? false))
+            if ((bool)(value ?? true))
             {
                 return !inverse ? Visibility.Visible : Visibility.Collapsed;
             }
