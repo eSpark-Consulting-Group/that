@@ -52,6 +52,8 @@ namespace APTAT.Core.Reports
                         return $"Network Addresses ({DevicesSourceDescription.Description}) ";
                     case ETargetsDiscovererType.Workgroup:
                         return $"Workgroup ({DevicesSourceDescription.Description})";
+                    case ETargetsDiscovererType.LocalComputer:
+                        return $"Local Computer ({DevicesSourceDescription.Description})";
                     default:
                         return string.Empty;
                 }
