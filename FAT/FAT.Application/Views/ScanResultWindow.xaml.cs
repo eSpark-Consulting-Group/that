@@ -13,7 +13,7 @@ namespace FAT.Application
             InitializeComponent();
         }
  
-        public Func<Visual> GetVisual { get; set; }
+        public Func<FrameworkElement> GetVisual { get; set; }
 
         private void OnCloseClick(Object sender, RoutedEventArgs e)
         {
@@ -22,11 +22,12 @@ namespace FAT.Application
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var location = GetVisual?.Invoke().PointToScreen(new Point(-6, -6));
-            if (location.HasValue)
+            var visual = GetVisual?.Invoke();
+            if (visual != null)
             {
-                Left = location.Value.X;
-                Top = location.Value.Y;
+                var location = visual.PointToScreen(new Point(0, -6));
+                Left = (visual.ActualWidth - ActualWidth) / 2d + location.X;
+                Top = location.Y;
             }
         }
 

@@ -96,7 +96,7 @@ namespace FAT.Application
                 var result = new ScanResultWindow();
                 result.DataContext = _viewModel;
                 result.Owner = App.Current.MainWindow;
-                result.GetVisual = () => SearchTextBox;
+                result.GetVisual = () => searchGrid;
                 result.ShowDialog();
             }
         }
