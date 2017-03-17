@@ -81,11 +81,7 @@ namespace APTAT.Core
 
         private void EnqueueInternal(IEnumerable<string> hashes, bool startIfCanceled)
         {
-            foreach (var h in hashes)
-            {
-                _inputQueue.Add(h, _cancellationToken);
-            }
-
+            bool shouldStart = false;
             if (!_isWorking)
             {
                 if (!startIfCanceled && _cancellationToken.IsCancellationRequested)
@@ -94,8 +90,15 @@ namespace APTAT.Core
                 _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = new CancellationTokenSource();
                 _cancellationToken = _cancellationTokenSource.Token;
-                Start();
+                shouldStart = true;
             }
+            foreach (var h in hashes)
+            {
+                _inputQueue.Add(h, _cancellationToken);
+            }
+            if (shouldStart)
+                Start();
+
 
         }
 
@@ -127,7 +130,6 @@ namespace APTAT.Core
 
         public void Cancel()
         {
-            
             if (_cancellationTokenSource != null && _cancellationTokenSource.Token.CanBeCanceled)
             {
                 _cancellationTokenSource.Cancel();
@@ -151,26 +153,21 @@ namespace APTAT.Core
         {            
             try
             {
-
                 if (_isWorking) throw new InvalidOperationException("FLSManager is working");
                 _isWorking = true;
 
                 _timer.TimeoutCallback += _timer_TimeoutCallback;
                 _timer.SetInterval(TimeSpan.FromSeconds(_uploadInterval));
                 _timer.Start(false);
-
-                
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
             {
                 _isWorking = false;
             }
-
         }
 
         private void AnalyzeAsync(string[] hashes)
