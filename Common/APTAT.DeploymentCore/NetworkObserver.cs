@@ -177,7 +177,7 @@ namespace APTAT.DeploymentCore
             return null;
         }
 
-        public void AutoResolveByNetworkSubnet(CancellationTokenSource cts)
+        public void AutoResolveByNetworkSubnet(CancellationToken token)
         {
             try
             {
@@ -194,10 +194,9 @@ namespace APTAT.DeploymentCore
 
                 int computersCount = ipAddresses.Count;
                 int processed = 0;
-
+                var cancellationToken = token;
                 ParallelOptions po = new ParallelOptions
                 {
-                    CancellationToken = cts.Token,
                     MaxDegreeOfParallelism = System.Environment.ProcessorCount
                 };
                 var serverDnsName = GetLocalHostName(true);
@@ -206,12 +205,16 @@ namespace APTAT.DeploymentCore
                 double progress = 0;
                 Action<IPAddress> action = r =>
                 {
-                    po.CancellationToken.ThrowIfCancellationRequested();
+                    if (cancellationToken.IsCancellationRequested) return;
+                    cancellationToken.ThrowIfCancellationRequested();
                     var target = CheckTarget(r, serverAddresses, serverDnsName);
+
+                    if (cancellationToken.IsCancellationRequested) return;
 
                     Interlocked.Increment(ref processed);
                     lock (lockObject)
                     {
+                        if (cancellationToken.IsCancellationRequested) return;
                         if (computersCount == 0)
                         {
                             progress = 100;

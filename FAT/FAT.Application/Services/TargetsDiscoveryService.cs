@@ -114,8 +114,9 @@ namespace FAT.Application.Services
 
         public void StartTargetsAutoDiscovery()
         {
+            _autoDiscoveryCancellation?.Dispose();
             _autoDiscoveryCancellation = new CancellationTokenSource();
-            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet(_autoDiscoveryCancellation));
+            Task.Factory.StartNew(() => _networkHelper.AutoResolveByNetworkSubnet(_autoDiscoveryCancellation.Token));
         }
 
         public string GetCurrentWorkgroupName()
