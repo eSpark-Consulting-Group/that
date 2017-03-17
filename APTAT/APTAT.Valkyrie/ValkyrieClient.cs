@@ -616,7 +616,9 @@ namespace APTAT.Valkyrie
 
         public string GetValkyrieDetailsLink(string apiKey, string scanId)
         {
-            return $@"{_provider.GetBaseUri()}signup_apikey/{apiKey}?scan_id={scanId}";
+            if (!string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(scanId))
+                return $@"{_provider.GetBaseUri()}signup_apikey/{apiKey}?scan_id={scanId}";
+            return null;
         }
 
         public void SendEndScanAsync()

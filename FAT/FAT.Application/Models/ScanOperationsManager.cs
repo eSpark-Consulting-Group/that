@@ -31,7 +31,9 @@ namespace FAT.Application.Models
             ScanOperations = _dataService.GetPreviousScans(keyword);
             foreach (var scan in ScanOperations)
             {
-                if (scan.ValkyrieOperationInfo != null && !string.IsNullOrEmpty(scan.ValkyrieOperationInfo.ScanId))
+                if (scan.ValkyrieOperationInfo != null && 
+                    !string.IsNullOrEmpty(scan.ValkyrieOperationInfo.ScanId) &&
+                    !string.IsNullOrEmpty(scan.ValkyrieOperationInfo.ApiKey))
                     scan.ValkyrieOperationInfo.DetailedLink = _aptService.GetValkyrieDetailsLink(
                         scan.ValkyrieOperationInfo.ApiKey,
                         scan.ValkyrieOperationInfo.ScanId);

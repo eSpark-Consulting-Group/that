@@ -655,7 +655,7 @@
 
                         <telerik:RadDropDownButton AutomationProperties.AutomationId="ReportsDropDownButton"
                                            AutoOpenDelay="0:0:0.0"
-                                           Content="Reports"
+                                           Content="Create Report"
                                            IsEnabled="{Binding IsReportEnabled}"
                                            BorderThickness="0"
                                            DropDownIndicatorVisibility="Collapsed"

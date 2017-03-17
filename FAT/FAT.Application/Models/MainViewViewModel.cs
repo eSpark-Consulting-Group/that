@@ -490,10 +490,13 @@ namespace FAT.Application.Models
             get { return _groupByFiles; }
             set
             {
-                Set(() => Uri, "/Views/Scan/ScanResultsWithFiles.xaml");
+                if (value)
+                {
+                    Set(() => Uri, "/Views/Scan/ScanResultsWithFiles.xaml");
 
+                    _groupByComputers = !value;
+                }
                 _groupByFiles = value;
-                _groupByComputers = !value;
                 RaisePropertyChanged("GroupByFiles");
                 RaisePropertyChanged("GroupByComputers");
                 RaisePropertyChanged(nameof(GroupByWatermark));
@@ -505,10 +508,13 @@ namespace FAT.Application.Models
             get { return _groupByComputers; }
             set
             {
-                Set(() => GroupEnabled, true);
-                Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
+                if (value)
+                {
+                    Set(() => GroupEnabled, true);
+                    Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
 
-                _groupByFiles = !value;
+                    _groupByFiles = !value;
+                }
                 _groupByComputers = value;
                 RaisePropertyChanged("GroupByFiles");
                 RaisePropertyChanged("GroupByComputers");
@@ -686,6 +692,7 @@ namespace FAT.Application.Models
 
             Set(() => ScanWasOnceStarted, false);
             Set(() => SelectDiscoveryResults, false);
+            Set(() => GroupEnabled, false);
             IsScanCancelled = false;
             IsScanFailed = false;
             RaisedHasUnknowns = false;
@@ -694,6 +701,9 @@ namespace FAT.Application.Models
             IsAutoDiscoveryCompleted = false;
             Percentage = 0;
             IsAutoDiscoveryInProgress = true;
+            GroupByComputers = false;
+            GroupByFiles = false;
+            Keyword = null;
 
             DiscoveryResults = new ObservableCollection<DeploymentTarget>();
             SelectedDiscoveryResults = new List<IComputer>();
@@ -1019,7 +1029,8 @@ namespace FAT.Application.Models
             PreviousScansViewModel.Keyword = null;
             PreviousScansViewModel.Percentage = 100;
             PreviousScansViewModel.GroupByComputers = true;
-            PreviousScansViewModel.ValkyrieDetailsLinkAvailable = true;
+            PreviousScansViewModel.ValkyrieDetailsLinkAvailable = !string.IsNullOrEmpty(
+                result.ScanOperation.ValkyrieOperationInfo?.DetailedLink);
         }
 
         private class ComputerComparer : IComparer<IFatScanComputerResult>
@@ -1188,7 +1199,7 @@ namespace FAT.Application.Models
 
                 IsReportEnabled = !IsScanCancelled && !IsScanFailed;
 
-                Set(() => ValkyrieDetailsLinkAvailable, true);
+                ValkyrieDetailsLinkAvailable = _aptService.GetValkyrieDetailsLink() != null;
 
                 CancelInProgress = false;
 
