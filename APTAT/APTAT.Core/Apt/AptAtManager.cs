@@ -457,9 +457,9 @@ namespace APTAT.Core.Apt
         {
             IAptScanner scanner = sender as IAptScanner;
             if (scanner == null) return;
-            if (e.RescanAttempt && AggregatedScanResults != null)
+            /*if (e.RescanAttempt && AggregatedScanResults != null)
                 AggregatedScanResults.MergeOperationContext(scanner.ScanOperationContext);
-            else
+            else*/
             {
                 AggregatedScanResults = new AggregatedAptScanResult(scanner.ScanOperationContext);
                 _flsManager.Cancel();
