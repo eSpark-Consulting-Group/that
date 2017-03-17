@@ -677,7 +677,10 @@ namespace FAT.Application.Models
         private void InvokeStartAutoDiscovery(Object arg)
         {
             if (_scanIteratorTimer.IsEnabled)
+            {
                 _scanIteratorTimer.Stop();
+                _aptService.StopScan(new Guid[0]);
+            }
 
             _scanCounterManager.Clear();
 
@@ -1332,8 +1335,11 @@ namespace FAT.Application.Models
 
         private void OnCancelScanStarted(object sender, EventArgs e)
         {
-            CancelInProgress = true;
-            IsScanCancelled = true;
+            if (_scanIteratorTimer.IsEnabled)
+            {
+                CancelInProgress = true;
+                IsScanCancelled = true;
+            }
         }
 
         private void IterateThroughScan(object sender, EventArgs e)
