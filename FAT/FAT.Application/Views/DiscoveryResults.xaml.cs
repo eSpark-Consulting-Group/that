@@ -21,7 +21,7 @@ namespace FAT.Application
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                BindingOperations.SetBinding(this, SelectAllProperty, new Binding("SelectDiscoveryResults"));
+                BindingOperations.SetBinding(this, SelectAllProperty, new Binding("SelectDiscoveryResults") { Mode = BindingMode.TwoWay });
             }
         }
 
@@ -77,6 +77,7 @@ namespace FAT.Application
                 else if (treeList.SelectedItems.Count == treeList.Items.Count)
                     SelectAll = true;
             }
+            BindingOperations.GetBindingExpression(this, SelectAllProperty).UpdateSource();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
