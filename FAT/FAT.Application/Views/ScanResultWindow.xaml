@@ -38,7 +38,7 @@
 
                                     <TextBlock Grid.Row="1" TextAlignment="Left" Text="Congratulations! Comodo Forensic Analysis has scanned your environment and detected no malicious or unknown files. However, unknown files containing malware with previously unknown exploits can enter any time unnoticed." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65 20 65 15" FontSize="13"/>
                                     <TextBlock Grid.Row="2" TextAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65 12 0 30" FontSize="13">   
-                                        <Hyperlink NavigateUri="http://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate">Comodo Advanced Endpoint Protection</Hyperlink>
+                                        <Hyperlink NavigateUri="https://enterprise.comodo.com/aep-under-the-hood.php" RequestNavigate="Hyperlink_RequestNavigate">Comodo Advanced Endpoint Protection</Hyperlink>
                        
                                         <Run Text=" keeps your endpoints free from malware now and in the future and provides essential management and reporting capabilities. It follows &quot;Default Deny&quot; posture which allows known files to freely run, blocks bad files and automatically launches unknown files inside a secure container until a definitive verdict of &quot;good&quot; or &quot;bad&quot; is delivered. Comodo Auto-Containment™ feature allows to use such unknown files with no impact to the usability and yet no harm to the system." />
                                     </TextBlock>
@@ -55,7 +55,7 @@
 
                                     <TextBlock Grid.Row="1" TextAlignment="Left" Text="Comodo Forensic Analysis has scanned your environment and detected malware on one or more of the systems. We recommend that you reconsider your current security posture to eliminate the danger of infecting your endpoints." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65 20 65 15" FontSize="13"/>
                                     <TextBlock Grid.Row="2" TextAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65 12 0 30" FontSize="13">   
-                                        <Hyperlink NavigateUri="http://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate">Comodo Advanced Endpoint Protection</Hyperlink>
+                                        <Hyperlink NavigateUri="https://enterprise.comodo.com/aep-under-the-hood.php" RequestNavigate="Hyperlink_RequestNavigate">Comodo Advanced Endpoint Protection</Hyperlink>
                        
                                         <Run Text=" keeps your endpoints free from malware now and in the future and provides essential management and reporting capabilities. It follows &quot;Default Deny&quot; posture which allows known files to freely run, blocks bad files and automatically launches unknown files inside a secure container until a definitive verdict of &quot;good&quot; or &quot;bad&quot; is delivered. Comodo Auto-Containment™ feature allows to use such unknown files with no impact to the usability and yet no harm to the system." />
                                     </TextBlock>
@@ -72,7 +72,7 @@
 
                                     <TextBlock Grid.Row="1" TextAlignment="Left" Text="Comodo Forensic Analysis has scanned your environment and detected unknown and thus potentially malicious files which were sent to Comodo Valkyrie for analysis because any new malware begins as an unknown file. Comodo Valkyrie file analysis platform will email you a link to the results of Forensic Analysis in the next few hours." TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65 20 65 15" FontSize="13"/>
                                     <TextBlock Grid.Row="2" TextAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65 12 0 30" FontSize="13">   
-                                        <Hyperlink NavigateUri="http://one.comodo.com" RequestNavigate="Hyperlink_RequestNavigate">Comodo Advanced Endpoint Protection</Hyperlink>
+                                        <Hyperlink NavigateUri="https://enterprise.comodo.com/aep-under-the-hood.php" RequestNavigate="Hyperlink_RequestNavigate">Comodo Advanced Endpoint Protection</Hyperlink>
                        
                                         <Run Text=" keeps your endpoints free from malware now and in the future and provides essential management and reporting capabilities. It follows &quot;Default Deny&quot; posture which allows known files to freely run, blocks bad files and automatically launches unknown files inside a secure container until a definitive verdict of &quot;good&quot; or &quot;bad&quot; is delivered. Comodo Auto-Containment™ feature allows to use such unknown files with no impact to the usability and yet no harm to the system." />
                                     </TextBlock></Grid>
