@@ -477,7 +477,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <ProgressBar VerticalAlignment="Top" IsTabStop="false" DataContext="{Binding PreviousScansViewModel}" Value="{Binding Percentage}" Opacity="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={StaticResource BoolToOpacityConverter}}" Background="#FF18C3A4" FocusVisualStyle="{x:Null}" Margin="0 -6 0 14" />
+                    <ProgressBar VerticalAlignment="Top" IsTabStop="false" DataContext="{Binding PreviousScansViewModel}" Value="{Binding Percentage}" Opacity="{Binding ValkyrieDetailsLinkAvailable, Converter={StaticResource BoolToOpacityConverter}}" Background="#FF18C3A4" FocusVisualStyle="{x:Null}" Margin="0 -6 0 14" />
 
                     <ListBox Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" BorderThickness="0" 
                      Grid.Row="1" Padding="0" Margin="32, 0,32,20" FocusVisualStyle="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters2}}" >

@@ -16,32 +16,32 @@ namespace FAT.Application.Tests
         public void ComputerConstructorTest(bool isLocal, bool isOnline)
         {
             var computer = Mock.Create<IComputer>(Behavior.Strict);
-            var uid = Guid.NewGuid();
-            Mock.Arrange(() => computer.Name).Returns("comp1");
-            Mock.Arrange(() => computer.IPAddress).Returns("10.8.65.171");
+            Mock.Arrange(() => computer.Name).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.DnsName).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.IPAddress).Returns(Arg.AnyString);
             Mock.Arrange(() => computer.IsOnline).Returns(isOnline);
             Mock.Arrange(() => computer.IsLocalComputer).Returns(isLocal);
-            Mock.Arrange(() => computer.Uid).Returns(uid);
-            Mock.Arrange(() => computer.LdapPath).Returns(String.Empty);
+            Mock.Arrange(() => computer.Uid).Returns(Arg.AnyGuid);
+            Mock.Arrange(() => computer.LdapPath).Returns(Arg.AnyString);
             ThreatInfoItem target = new ThreatInfoItem(computer);
-
 
             Assert.True(target.IsComputer);
             Assert.NotNull(target.Items);
-            Assert.True(target.Items.Count == 0);
+            Assert.Empty(target.Items);
             Assert.Null(target.Computers);
             Assert.Null(target.BadFile);
+            Assert.Null(target.Parent);
             Assert.Equal(isOnline, target.IsOnline);
             Assert.Equal(isLocal, target.IsLocal);
-            Assert.Equal(uid, target.ComputerGuid);
             Assert.Equal(computer, target.DeploymentTarget);
 
-            Assert.Equal(0,target.TotalFilesCount);
+            Assert.Equal(0, target.TotalFilesCount);
             Assert.Equal(0, target.TotalProgressPercentage);
             Assert.Equal(0, target.UnknownFilesCount);
             Assert.Equal(0, target.MalwareFilesCount);
             Assert.Equal(0, target.CleanFilesCount);
             Assert.Equal(0, target.PendingFilesCount);
+            Assert.Equal(0, target.NotAnalyzedFilesCount);
             Assert.Equal("Initializing...", target.StatusMessage);
             Assert.Equal("Initializing...", target.StatusMessageSystem);
             Assert.Equal(ScanStage.Unknown, target.ScanStage);
