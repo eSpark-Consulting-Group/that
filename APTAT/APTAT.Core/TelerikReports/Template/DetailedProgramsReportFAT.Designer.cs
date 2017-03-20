@@ -324,13 +324,13 @@ namespace APTAT.Core.TelerikReports
             this.barSeries1.CategoryGroup = graphGroup1;
             this.barSeries1.CoordinateSystem = this.cartesianCoordinateSystem1;
             formattingRule1.Filters.Add(new Telerik.Reporting.Filter("= Fields.BadFileType", Telerik.Reporting.FilterOperator.Equal, "0"));
-            formattingRule1.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            formattingRule1.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(199)))), ((int)(((byte)(0)))));
             formattingRule2.Filters.Add(new Telerik.Reporting.Filter("= Fields.BadFileType", Telerik.Reporting.FilterOperator.Equal, "1"));
-            formattingRule2.Style.BackgroundColor = System.Drawing.Color.Maroon;
+            formattingRule2.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(71)))), ((int)(((byte)(74)))));
             formattingRule3.Filters.Add(new Telerik.Reporting.Filter("= Fields.BadFileType", Telerik.Reporting.FilterOperator.Equal, "2"));
-            formattingRule3.Style.BackgroundColor = System.Drawing.Color.Silver;
+            formattingRule3.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
             formattingRule4.Filters.Add(new Telerik.Reporting.Filter("= Fields.BadFileType", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule4.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(146)))), ((int)(((byte)(255)))));
+            formattingRule4.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
             this.barSeries1.DataPointConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
             formattingRule1,
             formattingRule2,
@@ -391,7 +391,7 @@ namespace APTAT.Core.TelerikReports
             this.panel2,
             this.panel6});
             this.panel1.Name = "panel1";
-            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D), Telerik.Reporting.Drawing.Unit.Cm(10.573339462280273D));
+            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.8301420211792D), Telerik.Reporting.Drawing.Unit.Cm(10.573339462280273D));
             // 
             // panel2
             // 

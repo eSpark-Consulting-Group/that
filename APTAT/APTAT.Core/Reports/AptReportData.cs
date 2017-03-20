@@ -366,7 +366,10 @@ namespace APTAT.Core.Reports
             _pendingAnalysisFilesCount = statistics.PendingAnalysisFilesCount;
         }
 
+        public AptReportData()
+        {
 
+        }
 
         public ItemRatingInfo[] FileRating
         {
@@ -387,18 +390,19 @@ namespace APTAT.Core.Reports
             }
         }
 
-        public ItemRatingInfo[] FileRatingFAT
+        public FileRatingInfoFAT[] FileRatingFAT
         {
             get
             {
-                var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + InAnalysisFilesCount;
+                var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + InAnalysisFilesCount + NotAnalyzedFilesCount;
 
-                var itemRatingInfoList = new List<ItemRatingInfo>
+                var itemRatingInfoList = new List<FileRatingInfoFAT>
                 {
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", SafeFilesCount / (double) total)},
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", UnknownFilesFound / (double) total)},
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", MalwareFilesFound / (double) total)},                    
-                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = InAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , InAnalysisFilesCount / (double) total )}
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", SafeFilesCount / (double) total)},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Unknown, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", UnknownFilesFound / (double) total)},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", MalwareFilesFound / (double) total)},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.InProgress, Count = InAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , InAnalysisFilesCount / (double) total )},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = string.Format("Not Analyzed ({0:P2})" , NotAnalyzedFilesCount / (double) total )}
                 };
 
                 return itemRatingInfoList.ToArray();
@@ -688,6 +692,10 @@ namespace APTAT.Core.Reports
     public class FileRatingInfo : ItemRatingInfo
     {
         public CloudVerdict CloudVerdict { get; set; }
+    }
+    public class FileRatingInfoFAT : ItemRatingInfo
+    {
+        public int CloudVerdict { get; set; }
     }
 
     public class FileRatingValkyrieInfo : ItemRatingInfo
