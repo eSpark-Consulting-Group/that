@@ -63,6 +63,7 @@ namespace APTAT.Valkyrie.Tests
                 .Returns(() => new StartAndFinalizeScanResponse() { ReturnCode = ErrorCodesEnum.Success });
 
             Mock.Arrange(() => apiProviderMock.GetBasicInfo(Arg.IsAny<InfoRequest>())).Returns(new BasicInfoResponse());
+            Mock.Arrange(() => apiProviderMock.GetBasicInfoEmpty()).Returns(new BasicInfoResponse() { ReturnCode = ErrorCodesEnum.BadRequest });
             var statusTimer = Mock.Create<IScheduler>(Behavior.Strict);
             Mock.Arrange(() => statusTimer.IsEnabled).Returns(() => false);
             Mock.Arrange(() => statusTimer.SetInterval(Arg.AnyTimeSpan));
@@ -81,17 +82,16 @@ namespace APTAT.Valkyrie.Tests
             client.AnalyzeStarted += (s, e) => { ev.Set(); };
             client.StartAnalyze(camRegistration, "user", "test", 1, new System.Net.NetworkCredential(), "FAT");
             Mock.Raise(() => statusTimer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
-            ev.Wait(TimeSpan.FromMilliseconds(300));
+            ev.Wait(TimeSpan.FromMilliseconds(500));
             ValkyrieFileInfo fileInfo1 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file.exe" };
             ValkyrieFileInfo fileInfo2 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.InQueue) { Path = @"C:\temp\file.exe" };
             ValkyrieFileInfo fileInfo3 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Undetected) { Path = @"C:\temp\file.exe" };
             ValkyrieFileInfo fileInfo4 = new ValkyrieFileInfo("cf23df2207d99a74fbe169e3eba035e633b65d14", ValkyrieVerdict.Malware) { Path = @"C:\temp\file.exe" };
             client.AddFilesToAnalyze(new List<ValkyrieFileInfo>() { fileInfo1, fileInfo2, fileInfo3, fileInfo4 }, true);
-
             ev2.Wait(TimeSpan.FromMilliseconds(1000));
-            
 
             
+
             //Assert
             Mock.Assert(() => apiProviderMock.StartScan(Arg.Matches<StartScanRequest>((s) => s.ApiKey == apiKey)), Occurs.Once());
             Mock.Assert(() => apiProviderMock.GetBasicInfo(Arg.IsAny<InfoRequest>()), Occurs.Once());
