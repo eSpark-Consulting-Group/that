@@ -153,6 +153,14 @@ namespace APTAT.Core.Reports
             }
         }
 
+        public int InAnalysisFilesCount
+        {
+            get
+            {
+                return PendingAnalysisFilesCount + LookupInProgressFilesCount;
+            }
+        }
+
         public int PendingAnalysisFilesCount
         {
             get
@@ -379,6 +387,23 @@ namespace APTAT.Core.Reports
             }
         }
 
+        public ItemRatingInfo[] FileRatingFAT
+        {
+            get
+            {
+                var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + InAnalysisFilesCount;
+
+                var itemRatingInfoList = new List<ItemRatingInfo>
+                {
+                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", SafeFilesCount / (double) total)},
+                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Undetected, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", UnknownFilesFound / (double) total)},
+                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", MalwareFilesFound / (double) total)},                    
+                    new FileRatingValkyrieInfo { CloudVerdict = ValkyrieVerdict.Pending, Count = InAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , InAnalysisFilesCount / (double) total )}
+                };
+
+                return itemRatingInfoList.ToArray();
+            }
+        }
         public ItemRatingInfo[] FileRatingValkyrie
         {
             get
@@ -600,7 +625,7 @@ namespace APTAT.Core.Reports
 
         public void UpdateAllBadFilesSorted()
         {
-            AllBadFilesSorted = GetAllBadFilesSorted(false);
+            AllBadFilesSorted = GetAllBadFilesSorted();
         }
 
         public DetailedBadFile[] GetAllBadFilesSorted(bool isUniqueSetOfFiles = true)
