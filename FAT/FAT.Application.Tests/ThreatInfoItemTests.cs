@@ -1,30 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using APTAT.Application.Services.EventArgs;
-using APTAT.Common;
-using APTAT.Common.MachineKey;
-using APTAT.Core;
-using APTAT.Core.Apt;
-using APTAT.Core.Descent.Apt;
-using APTAT.Core.Properties;
-using APTAT.DeploymentCore;
-using APTAT.DeploymentCore.Directory;
-using APTAT.DeploymentCore.Facade.Descent.Commands;
-using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
-using APTAT.Valkyrie;
+﻿using APTAT.DeploymentCore;
 using FAT.Application.Models;
-using FAT.Application.Services;
-using Valkyrie.WebApiProvider;
+using System;
+using System.ComponentModel;
+using Telerik.JustMock;
+using Xunit;
 
 namespace FAT.Application.Tests
 {
-    using APTAT.DeploymentCore.Descent;
-    using System;
-    using System.Linq;
-    using System.Threading;
-    using Telerik.JustMock;
-    using Xunit;
-
     public class ThreatInfoItemTests
     {
         [Theory]
@@ -67,36 +49,44 @@ namespace FAT.Application.Tests
         }
 
         [Fact]
-        public void AddFirstItemShouldRaiseItemsPropertyChanged()
+        public void AddFileTest()
         {
             var computer = Mock.Create<IComputer>(Behavior.Strict);
-            var uid = Guid.NewGuid();
-            Mock.Arrange(() => computer.Name).Returns("comp1");
-            Mock.Arrange(() => computer.IPAddress).Returns("10.8.65.171");
-            Mock.Arrange(() => computer.IsOnline).Returns(true);
-            Mock.Arrange(() => computer.IsLocalComputer).Returns(false);
-            Mock.Arrange(() => computer.Uid).Returns(uid);
-            Mock.Arrange(() => computer.LdapPath).Returns(String.Empty);
-            ThreatInfoItem target = new ThreatInfoItem(computer);
-
-            bool itemsRaised = false;
-
-            target.PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == "Items")
-                    itemsRaised = true;
-            };
             var file = Mock.Create<IThreatInfoItem>(Behavior.Strict);
             var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
+            var nonstrict = Mock.Create<INonStrictHelper>();
 
-            Mock.ArrangeSet(() => file.Parent = target);
+            Mock.Arrange(() => computer.Name).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.DnsName).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.IPAddress).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.IsOnline).Returns(Arg.AnyBool);
+            Mock.Arrange(() => computer.IsLocalComputer).Returns(Arg.AnyBool);
+            Mock.Arrange(() => computer.Uid).Returns(Arg.AnyGuid);
+            Mock.Arrange(() => computer.LdapPath).Returns(Arg.AnyString);
+
+            ThreatInfoItem target = new ThreatInfoItem(computer);
+            PropertyChangedEventHandler handler = (sender, args) =>
+            {
+                if (args.PropertyName == "Items" || args.PropertyName == "HasItems")
+                    nonstrict.Action();
+            };
+
+            Mock.Arrange(() => nonstrict.Action()).DoNothing().OccursAtLeast(2);
+            Mock.ArrangeSet(() => file.Parent = Arg.Matches<IThreatInfoItem>(_ => ReferenceEquals(_, target))).MustBeCalled();
             Mock.Arrange(() => file.BadFile).Returns(badFile);
             Mock.Arrange(() => file.IsComputer).Returns(false);
-            Mock.Arrange(() => badFile.Sha1).Returns("231");
+            Mock.Arrange(() => badFile.Sha1).Returns(string.Empty);
 
+            target.PropertyChanged += handler;
             target.AddFile(file);
 
-            Assert.True(itemsRaised);
+            Assert.NotNull(target.Items);
+            Assert.Single(target.Items);
+            Assert.True(target.IsComputer);
+            Assert.All(target.Items, _ => Assert.False(_.IsComputer));
+
+            Mock.Assert(file);
+            Mock.Assert(nonstrict);
         }
 
         [Theory]

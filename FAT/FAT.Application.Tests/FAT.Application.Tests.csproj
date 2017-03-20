@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="INonStrictHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanCounterTests.cs" />
     <Compile Include="ThreatInfoItemTests.cs" />

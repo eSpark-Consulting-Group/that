@@ -205,7 +205,7 @@
     <Compile Include="Views\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ScanResultWindow.xaml.cs">
+    <Compile Include="Views\Scan\ScanResultWindow.xaml.cs">
       <DependentUpon>ScanResultWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginPasswordUserControl.xaml.cs">
@@ -316,7 +316,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ScanResultWindow.xaml">
+    <Page Include="Views\Scan\ScanResultWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

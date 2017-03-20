@@ -1223,6 +1223,8 @@ namespace FAT.Application.Models
                 {
                     DiscoveryResults.Add(e.Target);
                     _scanCounterManager.AddComputer();
+                    if (SelectDiscoveryResults.GetValueOrDefault())
+                        Set(() => SelectDiscoveryResults, null);
                 }
             }
 

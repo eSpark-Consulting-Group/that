@@ -77,6 +77,7 @@ namespace FAT.Application
                 else if (treeList.SelectedItems.Count == treeList.Items.Count)
                     SelectAll = true;
             }
+
             BindingOperations.GetBindingExpression(this, SelectAllProperty).UpdateSource();
         }
 
