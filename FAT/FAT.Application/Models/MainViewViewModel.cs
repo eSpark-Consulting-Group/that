@@ -1521,7 +1521,7 @@ namespace FAT.Application.Models
                     else
                     {
                         var o = item as DeploymentTarget;
-                        return o.DnsName.ContainsString(Keyword) || o.Name.ContainsString(Keyword);
+                        return o.DnsName.ContainsString(Keyword) || o.Name.ContainsString(Keyword) || o.IPAddress.ContainsString(Keyword);
                     }
                 };
             }
