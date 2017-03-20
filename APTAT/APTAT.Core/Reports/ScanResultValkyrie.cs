@@ -23,9 +23,20 @@ namespace APTAT.Core.Reports
         public string IPAddress { get; internal set; }
         public string OsName { get; internal set; }
         public int LookupInProgressFilesCount => FailedToAnalyzeFilesCount + NoVerdictFilesCount;
+        public int InAnalysisFilesCount => LookupInProgressFilesCount + PendingAnalysisFilesCount;
         public DetailedBadFile[] PendingAnalysisFilesValkyrie { get; internal set; }
         public DetailedBadFile[] MaliciousFilesValkyrie { get; internal set; }
         public DetailedBadFile[] FailedToAnalyzeFilesValkyrie { get; internal set; }
+        public DetailedBadFile[] InAnalyzeFiles
+        {
+            get
+            {
+                var inAnalysisFiles = new DetailedBadFile[PendingAnalysisFilesValkyrie.Length + FailedToAnalyzeFilesValkyrie.Length];
+                PendingAnalysisFilesValkyrie.CopyTo(inAnalysisFiles, 0);
+                FailedToAnalyzeFilesValkyrie.CopyTo(inAnalysisFiles, PendingAnalysisFilesValkyrie.Length);
+                return inAnalysisFiles;
+            }
+        }
         public DetailedBadFile[] UknownFilesValkyrie { get; internal set; }
         public TargetVerdict TargetVerdict
         {

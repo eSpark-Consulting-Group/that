@@ -18,7 +18,6 @@ namespace APTAT.Core
         public FinalVerdictCalculator() { }
         public FinalVerdict GetFinalVerdict(CloudVerdict cloud, APTAT.Valkyrie.ValkyrieVerdict valkyrie)
         {
-
             if (cloud == CloudVerdict.Malware)
                 return FinalVerdict.Malware;
             if (cloud == CloudVerdict.Safe)

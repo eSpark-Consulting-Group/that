@@ -243,7 +243,6 @@ namespace APTAT.Core.Reports
                         computerStatistics.MergedSafeCount++;
                         break;
                     case ValkyrieVerdict.Pending:
-                    case ValkyrieVerdict.InQueue:
                     case ValkyrieVerdict.FirstSeen:
                         computerStatistics.MergedPendingFilesCount++;
                         //      _pendingAnalysisFilesCount++;
@@ -255,6 +254,7 @@ namespace APTAT.Core.Reports
                     case ValkyrieVerdict.PotentiallyUnwantedApplication:
                         computerStatistics.MergedMalwareCount++;
                         break;
+                    case ValkyrieVerdict.InQueue:
                     case ValkyrieVerdict.NotAnalyzed:
                         {
                             switch (module.Cloud)

@@ -16,7 +16,7 @@ namespace APTAT.Core.Reports
         public DetailedBadFile(IModule module, ScannedTarget target, IFinalVerdictCalculator calculator)
         {
             _calculator = calculator;
-            Verdict = ValkyrieVerdict.NotAnalyzed;
+            Verdict = ValkyrieVerdict.InQueue;
             if (module != null)
             {
                 Sha1 = module.Sha1;

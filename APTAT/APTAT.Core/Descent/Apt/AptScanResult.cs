@@ -70,6 +70,15 @@ namespace APTAT.Core.Descent.Apt
 
         public int FailedToAnalyzeFilesCount { get; set; }       
         public int NoVerdictFilesCount { get; set; }
+        public int InAnalysisFilesCount
+        {
+            get
+            {
+                return PendingAnalysisFilesCount + LookupInProgressFilesCount;
+
+            }
+        }
+
         public int PendingAnalysisFilesCount { get; set; }
         public int TotalErrorFilesCount
         {
