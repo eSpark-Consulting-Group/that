@@ -157,6 +157,7 @@ namespace APTAT.Valkyrie
             _progressNotifyTimer.Start();
         }
 
+
         private void CheckStatusesTimerCallback(object sender, EventArgs elapsedEventArgs)
         {
             lock (_checkStatusesTimer)
@@ -669,12 +670,16 @@ namespace APTAT.Valkyrie
                     _automaticAnalyseInProgressByHash.Clear();
                 }
 
+                _apiKey = null;
+                _aptScanId = null;
+
                 var regInfo = Register(camRegistration, productName, proxyCredential);
                 if (regInfo.ReturnCode != 0)
                 {
                     var ex = new ValkyrieRegistrationFailedException(regInfo);
                     throw ex;
                 }
+
                 _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 _pendingItemsResolved.Clear();
                 _login = login;
@@ -692,6 +697,19 @@ namespace APTAT.Valkyrie
                     Trace.WriteLine("apt_start_scan failed. " + startScanResult.ResultDescription);
                     throw new InvalidOperationException(startScanResult.ResultDescription);
                 }
+
+
+                //var regInfo2 = _provider.GetBasicInfoEmpty();
+
+                //if (regInfo2.ReturnCode != ErrorCodesEnum.BadRequest)
+                //{
+                //    var resp = new RegisterWithResponse();
+                //    resp.ReturnCode = (int)regInfo2.ReturnCode;
+                //    resp.ResultDescription = regInfo2.ResultDescription;
+                //    var ex = new ValkyrieRegistrationFailedException(resp);
+                //    throw ex;
+                //}
+
                 _progressNotifyTimer.Start();
 
                 OnAnalyzeStarted(_apiKey, _aptScanId);
@@ -704,6 +722,7 @@ namespace APTAT.Valkyrie
                 .ContinueWith(OnAnalyzeCompleted, TaskContinuationOptions.NotOnCanceled);
         }
 
+   
         public void Dispose()
         {
             _progressNotifyTimer?.Dispose();
