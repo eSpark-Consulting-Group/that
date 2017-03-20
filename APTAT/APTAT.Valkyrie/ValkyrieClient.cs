@@ -699,16 +699,16 @@ namespace APTAT.Valkyrie
                 }
 
 
-                //var regInfo2 = _provider.GetBasicInfoEmpty();
+                var regInfo2 = _provider.GetBasicInfoEmpty();
 
-                //if (regInfo2.ReturnCode != ErrorCodesEnum.BadRequest)
-                //{
-                //    var resp = new RegisterWithResponse();
-                //    resp.ReturnCode = (int)regInfo2.ReturnCode;
-                //    resp.ResultDescription = regInfo2.ResultDescription;
-                //    var ex = new ValkyrieRegistrationFailedException(resp);
-                //    throw ex;
-                //}
+                if (regInfo2.ReturnCode != ErrorCodesEnum.BadRequest)
+                {
+                    var resp = new RegisterWithResponse();
+                    resp.ReturnCode = (int)regInfo2.ReturnCode;
+                    resp.ResultDescription = regInfo2.ResultDescription;
+                    var ex = new ValkyrieRegistrationFailedException(resp);
+                    throw ex;
+                }
 
                 _progressNotifyTimer.Start();
 

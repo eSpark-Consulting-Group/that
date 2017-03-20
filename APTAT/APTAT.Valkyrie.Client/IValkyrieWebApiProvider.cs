@@ -24,5 +24,6 @@ namespace Valkyrie.WebApiProvider
         SubmitToManualResponse SubmitToManualAnalysisWithoutUpload(SubmitToManualRequestSHA1 request);
         ValkyrieResponse FatSubmitFiles(FatSubmitFilePathsRequest request);
         ValkyrieResponse SubmitEmail(SubscribeEmailRequest request);
+        BasicInfoResponse GetBasicInfoEmpty();
     }
 }

@@ -8,6 +8,7 @@ using Valkyrie.WebApiProvider.Contracts;
 using Valkyrie.WebApiProvider.Enums;
 using Valkyrie.WebApiProvider.Extensions;
 using Valkyrie.WebApiProvider.Helpers;
+using System.Collections.Specialized;
 
 namespace Valkyrie.WebApiProvider
 {
@@ -35,6 +36,7 @@ namespace Valkyrie.WebApiProvider
         #endregion
         
         private Uri _valkyrieBaseUri;
+
 
         
         /// <summary>
@@ -221,6 +223,26 @@ namespace Valkyrie.WebApiProvider
             return result;
         }
 
+        private T CallValkyrie<T>(Uri apiUri)
+        {
+            Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Call {apiUri}");
+            
+            using (WebClient client = new WebClient())
+            {                
+
+                if (ProxySettings.Proxy != null)
+                {
+                    client.Proxy = ProxySettings.Proxy;
+                }
+                NameValueCollection collection = new NameValueCollection();
+                byte[] response = client.UploadValues(apiUri, collection);
+                string responseEncoded = System.Text.Encoding.UTF8.GetString(response);
+                Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Response for {apiUri} {Environment.NewLine}{responseEncoded}");
+                var result = JsonConvert.DeserializeObject<T>(responseEncoded);
+                return result;
+            }
+        }
+
         private T CallValkyrie<T>(Uri apiUri, object request)
         {
             Trace.WriteLine($"{DateTime.UtcNow:MM/dd/yy H:mm:ss.ffff} : Call {apiUri}");
@@ -265,6 +287,12 @@ namespace Valkyrie.WebApiProvider
         public void SetBaseUri(Uri uri)
         {
             _valkyrieBaseUri = uri;
+        }
+
+        public BasicInfoResponse GetBasicInfoEmpty()
+        {
+            var response = CallValkyrie<BasicInfoResponse>(BasicInfoUri);
+            return response;
         }
     }
 }
