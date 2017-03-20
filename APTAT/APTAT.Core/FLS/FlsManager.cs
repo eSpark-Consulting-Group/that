@@ -117,7 +117,20 @@ namespace APTAT.Core
             }
             if (buffer.Any())
             {
-                AnalyzeAsync(buffer.ToArray());
+                try
+                {
+                    string[][] hashGroups = Split(buffer.ToArray(), _uploadAtOnce).ToArray();
+                    foreach (var h in hashGroups)
+                    {
+                        if (_cancellationToken.IsCancellationRequested)
+                            return;
+                        DoWorkItem(h);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnFlsAnalyzed(new IFlsResult[0], ex);
+                }
                 buffer.Clear();
             }
             _timer.Start(false);
@@ -160,34 +173,13 @@ namespace APTAT.Core
                 _timer.SetInterval(TimeSpan.FromSeconds(_uploadInterval));
                 _timer.Start(false);
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                _isWorking = false;
-            }
-        }
-
-        private void AnalyzeAsync(string[] hashes)
-        {
-            try
-            {
-                string[][] hashGroups = Split(hashes, _uploadAtOnce).ToArray();
-                foreach (var h in hashGroups)
-                {
-                    if (_cancellationToken.IsCancellationRequested)
-                        return;
-                    DoWorkItem(h);
-                }
-            }
             catch (Exception ex)
             {
-                OnFlsAnalyzed(new IFlsResult[0], ex);
+                _isWorking = false;
+                throw ex;
             }
         }
-
+        
         private static IEnumerable<T[]> Split<T>(T[] array, int size)
         {
             for (var i = 0; i < (float) array.Length / size; i++)
