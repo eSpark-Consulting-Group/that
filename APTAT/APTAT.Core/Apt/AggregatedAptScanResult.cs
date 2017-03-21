@@ -96,10 +96,11 @@ namespace APTAT.Core.Apt
         public void CalculateOperationStatistics()
         {
             int failed, notPerformed, succeeded, total, canceled;
-            StatisticsCalculator.CalculateOperationStatistics(ScanResults, out failed, out notPerformed, out succeeded, out total, out canceled);
+            StatisticsCalculator.CalculateOperationStatistics(ScanResults, out failed, 
+                out notPerformed, out succeeded, out total, out canceled);
             SucceededTargetsCount = succeeded;
             FailedTargetsCount = failed;
-            NotPerformedTargetsCount = TotalTargetsCount - total;
+            NotPerformedTargetsCount = notPerformed;
             CanceledTargetsCount = canceled;
         }
     }

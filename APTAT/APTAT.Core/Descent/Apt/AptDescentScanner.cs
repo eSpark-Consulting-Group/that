@@ -64,15 +64,16 @@ namespace APTAT.Core.Descent.Apt
             FormattedText offlineText = new FormattedText(new ResourceText("null", "This computer is not accessible."));
             foreach (var computer in Targets)
             {
+                var scanResult = (AptScanResult)scanResults.GetComputerDescentResultByTargetUid(computer.Uid);
                 if (!computer.IsOnline)
                 {
+                    scanResult.ResultType = ScanResultType.NotPerformed;
                     scanResults.OnDescendOperationEvent(false, computer.Uid, offlineText, offlineText, String.Empty, 0,
                         String.Empty);
                     continue;
                 }
                 var ri = new RemoteHostInfo(computer.Uid, computer.IPAddress ?? computer.DnsName,
                     Login, Password, computer.IsLocalComputer);
-                var scanResult = (AptScanResult)scanResults.GetComputerDescentResultByTargetUid(computer.Uid);
                 var job = new RemoteInstallerJob(scanResults, changeTrackingSubSystem, this, computer);
                 _descentMod.StartAptScan(ri, job, computer.Uid, scanResult, scanResults.OperationUid, _scanOptions);
             }
