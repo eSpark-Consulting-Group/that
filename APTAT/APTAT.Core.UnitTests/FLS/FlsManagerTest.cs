@@ -60,6 +60,7 @@ namespace APTAT.Core.UnitTests.FLS
             //Arrange
             var apiProvider = Mock.Create<IFlsApiProvider>();
             var timer = Mock.Create<IScheduler>(Behavior.Strict);
+            Mock.Arrange(() => timer.SetInterval(Arg.AnyTimeSpan));
             Mock.Arrange(() => timer.Dispose()).OccursOnce();
             //Act
             var fls = new FlsManager(apiProvider, timer);
@@ -90,18 +91,35 @@ namespace APTAT.Core.UnitTests.FLS
             var timer = Mock.Create<IScheduler>(Behavior.Strict);
             var hashes = new String[] { "hash1", "hash2" };
 
-            Mock.Arrange(() => timer.SetInterval(Arg.Matches<TimeSpan>(
-                ts => ts.Equals(TimeSpan.FromSeconds(2))))).OccursOnce();
+            Mock.Arrange(() => timer.SetInterval(Arg.AnyTimeSpan));
             Mock.Arrange(() => timer.Start(false))
                 .Returns(true).OccursOnce();
-            Mock.Arrange(() => timer.Dispose());
+            var fls = new FlsManager(apiProvider, timer);
 
             //Act
-            var fls = new FlsManager(apiProvider, timer);
             fls.Enqueue(hashes);
 
             //Assert
             Mock.Assert(timer);
+            Mock.Arrange(() => timer.Dispose());
+            fls.Dispose();
+        }
+        [Fact(DisplayName = "1. Call Enqueue should start timer. ")]
+        public void ConstructorShouldSetInterval()
+        {
+            //Arrange
+            var apiProvider = Mock.Create<IFlsApiProvider>();
+            var timer = Mock.Create<IScheduler>(Behavior.Strict);
+
+            Mock.Arrange(() => timer.SetInterval(Arg.Matches<TimeSpan>(
+                ts => ts.Equals(TimeSpan.FromSeconds(2))))).OccursOnce();
+
+            //Act
+            var fls = new FlsManager(apiProvider, timer);
+
+            //Assert
+            Mock.Assert(timer);
+            Mock.Arrange(() => timer.Dispose());
             fls.Dispose();
         }
         [Fact(DisplayName = "2. On Fls Analyzed event should rised if analysed not empty.")]
@@ -260,9 +278,10 @@ namespace APTAT.Core.UnitTests.FLS
             CreateMocks(out timer, out flsApiProvider);
             ArrangeFlsProvider(flsApiProvider, results, hashes);
             IFlsManager fls = new FlsManager(flsApiProvider, timer);
-
+            var count = 0;
             fls.FlsAnalyzed += (sender, args) =>
             {
+                count++;
                 raised = true;
             };
 
@@ -270,13 +289,15 @@ namespace APTAT.Core.UnitTests.FLS
             fls.Cancel();
             Mock.Raise(() => timer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
             raised = false;
-
+            count = 0;
             //Act
             fls.Enqueue(hashes);
             Mock.Raise(() => timer.TimeoutCallback += null, args: new object[] { EventArgs.Empty });
 
+            Assert.Equal(1, count);
             //Assert
             Assert.True(raised);
+            Mock.Assert(flsApiProvider);
         }
         [Fact(DisplayName = "8. Stop Scan before call timer tick.")]
         public void OnFlsAnalyzedEventShouldRetrieveAnalisedFilesResultWithCancelBefore()
