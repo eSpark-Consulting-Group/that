@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using APTAT.Core.TelerikReports;
 using APTAT.Core.Properties;
+using APTAT.Core.Apt;
+
 
 namespace APTAT.Core.Reports
 {
@@ -151,6 +153,27 @@ namespace APTAT.Core.Reports
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reportType));
             }
+        }
+
+        public virtual AptReportData CreateReportData(IResultMergeHelper mergeHelper, IAggregatedAptScanResult operationContext,
+            Dictionary<string, FileResult> valkyrieAnalysisResult, Guid ValkyrieOperationUid, Guid FlsLookupOperationUid)
+        {
+            var data = new AptReportData(mergeHelper)
+            {
+                OperationUid = operationContext.OperationUid,
+                ScanStarted = operationContext.StartedTime.ToLocalTime(),
+                ScanFinished = (DateTime)operationContext.CompletedTime?.ToLocalTime(),
+                TargetsFailed = operationContext.FailedTargetsCount,
+                TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
+                TotalTargetsCount = operationContext.TotalTargetsCount,
+                TargetsSucceeded = operationContext.SucceededTargetsCount,
+                ValkyrieAnalysisResult = valkyrieAnalysisResult
+                        .ToDictionary(k => k.Key, k => k.Value, StringComparer.OrdinalIgnoreCase),
+                ValkyrieOperationUid = ValkyrieOperationUid,
+                FlsLookupOperationUid = FlsLookupOperationUid,
+                DevicesSourceDescription = operationContext.DeviceSourceDescription
+            };
+            return data;
         }
     }
 

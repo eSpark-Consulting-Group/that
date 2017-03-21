@@ -6,7 +6,7 @@ using APTAT.DeploymentCore;
 
 namespace APTAT.Core.Reports
 {
-    public class ScannedTarget
+    public class ScannedTarget : ITargetVerdicted
     {
         private readonly List<DetailedBadFile.BadFileInstanceInfo> _badFileInstances = new List<DetailedBadFile.BadFileInstanceInfo>();
 

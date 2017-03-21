@@ -13,7 +13,6 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.Drawing.FormattingRule formattingRule2 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule3 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule4 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule5 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.GraphGroup graphGroup1 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.GraphGroup graphGroup4 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.NumericalScale numericalScale1 = new Telerik.Reporting.NumericalScale();
@@ -145,20 +144,17 @@ namespace APTAT.Core.TelerikReports
             // 
             formattingRule1.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "0"));
             formattingRule1.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(195)))), ((int)(((byte)(163)))));
-            formattingRule2.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "1"));
-            formattingRule2.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(133)))), ((int)(((byte)(194)))));
-            formattingRule3.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "2"));
-            formattingRule3.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(199)))), ((int)(((byte)(0)))));
-            formattingRule4.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule4.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(71)))), ((int)(((byte)(74)))));
-            formattingRule5.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel) ", Telerik.Reporting.FilterOperator.Equal, "4"));
-            formattingRule5.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
+            formattingRule2.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "2"));
+            formattingRule2.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(199)))), ((int)(((byte)(0)))));
+            formattingRule3.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "3"));
+            formattingRule3.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(71)))), ((int)(((byte)(74)))));
+            formattingRule4.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel) ", Telerik.Reporting.FilterOperator.Equal, "4"));
+            formattingRule4.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
             this.shape1.ConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
             formattingRule1,
             formattingRule2,
             formattingRule3,
-            formattingRule4,
-            formattingRule5});
+            formattingRule4});
             this.shape1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.893750011920929D), Telerik.Reporting.Drawing.Unit.Cm(2.0264580249786377D));
             this.shape1.Name = "shape1";
             this.shape1.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.NS);
@@ -617,7 +613,7 @@ namespace APTAT.Core.TelerikReports
             // 
             // graph1
             // 
-            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.FileRatingFAT"));
+            this.graph1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "= Fields.FileRatingValkyrie"));
             graphGroup1.Name = "categoryGroup";
             this.graph1.CategoryGroups.Add(graphGroup1);
             this.graph1.CoordinateSystems.Add(this.polarCoordinateSystem1);

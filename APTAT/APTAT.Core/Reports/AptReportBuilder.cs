@@ -30,21 +30,9 @@ namespace APTAT.Core.Reports
             {
                 if (!operationContext.CompletedTime.HasValue || operationContext.CompletedTime.Value == DateTime.MinValue)
                     throw new DataNotReadyException();
-                var data = new AptReportData(_mergeHelper)
-                {
-                    OperationUid = operationContext.OperationUid,
-                    ScanStarted = operationContext.StartedTime.ToLocalTime(),
-                    ScanFinished = (DateTime) operationContext.CompletedTime?.ToLocalTime(),
-                    TargetsFailed = operationContext.FailedTargetsCount,
-                    TargetsNotPerformed = operationContext.NotPerformedTargetsCount,
-                    TotalTargetsCount = operationContext.TotalTargetsCount,
-                    TargetsSucceeded = operationContext.SucceededTargetsCount,                    
-                    ValkyrieAnalysisResult = _aptAtManager.ValkyrieAnalysisResult
-                        .ToDictionary(k => k.Key, k => k.Value, StringComparer.OrdinalIgnoreCase),
-                    ValkyrieOperationUid = _aptAtManager.ValkyrieOperationUid,
-                    FlsLookupOperationUid = _aptAtManager.FlsLookupOperationUid,
-                    DevicesSourceDescription = operationContext.DeviceSourceDescription
-                };
+
+                AptReportData data = _reportBuilder.CreateReportData(_mergeHelper, operationContext, _aptAtManager.ValkyrieAnalysisResult, _aptAtManager.ValkyrieOperationUid, _aptAtManager.FlsLookupOperationUid);
+
                 data.SetTargets(operationContext.ScanResults.ToArray());
                 data.UpdateAllBadFilesSorted();
                 ReportBuilder.BuildReportDelegate action = _reportBuilder.Build;

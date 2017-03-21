@@ -79,6 +79,7 @@
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />
     <Compile Include="Reports\IResultMergeManager.cs" />
+    <Compile Include="Reports\ITargetVerdict.cs" />
     <Compile Include="Reports\ReportBuilderFAT.cs" />
     <Compile Include="Reports\IReportBuilder.cs" />
     <Compile Include="Reports\ReportFile.cs" />

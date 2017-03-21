@@ -7,7 +7,7 @@ namespace APTAT.Core.Descent.Apt
     {
         void SetCompleted();
     }
-    public interface IAptScanResult : IComputerDescentResult
+    public interface IAptScanResult : IComputerDescentResult, ITargetVerdicted
     {        
         string FileName { get; set; }
         int TotalFilesCount { get; set; }
@@ -26,7 +26,6 @@ namespace APTAT.Core.Descent.Apt
         string ResultErrorText { get; set; }
         AptScanStage ScanStage { get; set; }
         ScanResultType ResultType { get; set; }
-        TargetVerdict TargetVerdict { get; }
         string TargetVerdictString { get; }
         IModule[] Files { get; }
         IModule[] BadFiles { get; }
