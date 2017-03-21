@@ -2,6 +2,7 @@
 using FAT.Application.Models;
 using System;
 using System.ComponentModel;
+using System.IO;
 using Telerik.JustMock;
 using Xunit;
 
@@ -10,19 +11,21 @@ namespace FAT.Application.Tests
     public class ThreatInfoItemTests
     {
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        [InlineData(false, true)]
-        public void ComputerConstructorTest(bool isLocal, bool isOnline)
+        [InlineData("testname", "testdnsname", "testip", true, true, "testldap")]
+        [InlineData("testip", "testdnsname", "testip", false, false, "testldap")]
+        public void ComputerConstructorTest(string name, string dnsName, string ipAddress, bool isOnline, bool isLocal, string ldapPath)
         {
             var computer = Mock.Create<IComputer>(Behavior.Strict);
-            Mock.Arrange(() => computer.Name).Returns(Arg.AnyString);
-            Mock.Arrange(() => computer.DnsName).Returns(Arg.AnyString);
-            Mock.Arrange(() => computer.IPAddress).Returns(Arg.AnyString);
+            var guid = Guid.NewGuid();
+            Mock.Arrange(() => computer.Name).Returns(name);
+            Mock.Arrange(() => computer.DnsName).Returns(dnsName);
+            Mock.Arrange(() => computer.IPAddress).Returns(ipAddress);
             Mock.Arrange(() => computer.IsOnline).Returns(isOnline);
             Mock.Arrange(() => computer.IsLocalComputer).Returns(isLocal);
-            Mock.Arrange(() => computer.Uid).Returns(Arg.AnyGuid);
-            Mock.Arrange(() => computer.LdapPath).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.Uid).Returns(guid);
+            Mock.Arrange(() => computer.LdapPath).Returns(ldapPath);
+
+            //act
             ThreatInfoItem target = new ThreatInfoItem(computer);
 
             Assert.True(target.IsComputer);
@@ -31,10 +34,13 @@ namespace FAT.Application.Tests
             Assert.Null(target.Computers);
             Assert.Null(target.BadFile);
             Assert.Null(target.Parent);
+            Assert.Equal(name == ipAddress ? dnsName : name, target.Name);
+            Assert.Equal(ipAddress, target.IpAddress);
             Assert.Equal(isOnline, target.IsOnline);
             Assert.Equal(isLocal, target.IsLocal);
+            Assert.Equal(guid, target.ComputerGuid);
+            Assert.Equal(ldapPath, target.LdapPath);
             Assert.Equal(computer, target.DeploymentTarget);
-
             Assert.Equal(0, target.TotalFilesCount);
             Assert.Equal(0, target.TotalProgressPercentage);
             Assert.Equal(0, target.UnknownFilesCount);
@@ -48,14 +54,45 @@ namespace FAT.Application.Tests
             Assert.True(target.ScanStatus.Equals(new ScanStatus(isOnline ? ScanStatusEnum.InProgress : ScanStatusEnum.Offline)));
         }
 
-        [Fact]
-        public void AddFileTest()
+        [Theory]
+        [InlineData("testname", 0, "testsize", "testsize2", "testproduct")]
+        [InlineData("testname", 0, "testsize", "testsize2", null)]
+        public void FileConstructorTest(string name, long size, string sizeSorting, string sizeFormatted, string product)
+        {
+            var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
+            Mock.Arrange(() => badFile.Name).Returns(name);
+            Mock.Arrange(() => badFile.Size).Returns(size);
+            Mock.Arrange(() => badFile.SizeSorting).Returns(sizeSorting);
+            Mock.Arrange(() => badFile.FileSizeFormatted).Returns(sizeFormatted);
+            Mock.Arrange(() => badFile.Product).Returns(product);
+
+            //act
+            ThreatInfoItem target = new ThreatInfoItem(badFile);
+
+            Assert.False(target.IsComputer);
+            Assert.Null(target.Items);
+            Assert.Null(target.Computers);
+            Assert.Null(target.DeploymentTarget);
+            Assert.Null(target.Parent);
+            Assert.Equal(name, target.Name);
+            Assert.Equal(size, target.Size);
+            Assert.Equal(sizeSorting, target.SizeSorting);
+            Assert.Equal(sizeFormatted, target.SizeString);
+            Assert.Equal(true, target.IsOnline);
+            Assert.EndsWith(string.IsNullOrEmpty(product) ? Path.GetFileName(target.Name) : ")", target.ShortName);
+            Assert.Equal(badFile, target.BadFile);
+            Assert.Equal(ScanStage.OperationCompleted, target.ScanStage);
+        }
+
+        [Theory]
+        [InlineData("Items")]
+        [InlineData("HasItems")]
+        public void AddFileTest(string propertyName)
         {
             var computer = Mock.Create<IComputer>(Behavior.Strict);
             var file = Mock.Create<IThreatInfoItem>(Behavior.Strict);
             var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
             var nonstrict = Mock.Create<INonStrictHelper>();
-
             Mock.Arrange(() => computer.Name).Returns(Arg.AnyString);
             Mock.Arrange(() => computer.DnsName).Returns(Arg.AnyString);
             Mock.Arrange(() => computer.IPAddress).Returns(Arg.AnyString);
@@ -67,24 +104,23 @@ namespace FAT.Application.Tests
             ThreatInfoItem target = new ThreatInfoItem(computer);
             PropertyChangedEventHandler handler = (sender, args) =>
             {
-                if (args.PropertyName == "Items" || args.PropertyName == "HasItems")
+                if (args.PropertyName == propertyName)
                     nonstrict.Action();
             };
+            target.PropertyChanged += handler;
 
-            Mock.Arrange(() => nonstrict.Action()).DoNothing().OccursAtLeast(2);
+            Mock.Arrange(() => nonstrict.Action()).DoNothing().OccursOnce();
             Mock.ArrangeSet(() => file.Parent = Arg.Matches<IThreatInfoItem>(_ => ReferenceEquals(_, target))).MustBeCalled();
             Mock.Arrange(() => file.BadFile).Returns(badFile);
             Mock.Arrange(() => file.IsComputer).Returns(false);
             Mock.Arrange(() => badFile.Sha1).Returns(string.Empty);
 
-            target.PropertyChanged += handler;
+            //act
             target.AddFile(file);
 
             Assert.NotNull(target.Items);
             Assert.Single(target.Items);
-            Assert.True(target.IsComputer);
             Assert.All(target.Items, _ => Assert.False(_.IsComputer));
-
             Mock.Assert(file);
             Mock.Assert(nonstrict);
         }

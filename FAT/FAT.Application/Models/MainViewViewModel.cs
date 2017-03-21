@@ -264,6 +264,14 @@ namespace FAT.Application.Models
             }
         }
 
+        public bool ShowResult
+        {
+            get
+            {
+                return !IsScanCancelled && !IsScanFailed && (!RaisedHasUnknowns || (_scanCounterManager.HasUnknowns || _scanCounterManager.HasInProgress));
+            }
+        }
+
         public bool NotRaisedHasMalwaresOrUnknowns
         {
             get { return !RaisedHasMalwares && !RaisedHasUnknowns; }
@@ -1481,7 +1489,8 @@ namespace FAT.Application.Models
                         _scanCounterManager.HasUnknowns ||
                         _scanCounterManager.HasNotAnalyzed ||
                         _scanCounterManager.HasInProgress ||
-                        IsScanFailed;
+                        IsScanFailed ||
+                        IsScanCancelled;
                 else
                     RaisedHasUnknowns = false;
             }

@@ -91,7 +91,7 @@ namespace FAT.Application
             if (_confirmation != null && _confirmation.DialogResult == null)
                 _confirmation.DialogResult = false;
 
-            if (!_viewModel.IsScanCancelled && !_viewModel.IsScanFailed)
+            if (_viewModel.ShowResult)
             {
                 var result = new ScanResultWindow();
                 result.DataContext = _viewModel;
