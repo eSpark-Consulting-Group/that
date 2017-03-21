@@ -24,8 +24,10 @@ namespace Aptat.Valkyrie.ClientTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ValkyrieWebApiProvider.RegisterWithCamLicense(new RegisterWithCamLicenseRequest(){});
-            
+            var request = new RegisterWithCamCredentials();
+            ValkyrieWebApiProvider vwap = new ValkyrieWebApiProvider();
+            vwap.RegisterWithCamCredentials(request);
+
         }
 
 //        void _client_AnalyzeProgressChanged(object sender, ProgressChangedEventArgs e)

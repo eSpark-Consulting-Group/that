@@ -87,7 +87,7 @@ namespace APTAT.Application.Services
         {
             IAptReportBuilder reportBuilder = _manager.GetAptReportBuilder();
             reportBuilder.ReportCompleted += OnReportCompleted;
-            reportBuilder.BeginLastBuildReport(ToReportType(reportKind), userState);
+            reportBuilder.BeginLastBuildReport(ToReportType(reportKind),true, userState);
         }
 
         private void OnReportCompleted(Object sender, ReportCompletedEventArgs e)
