@@ -69,8 +69,10 @@ namespace APTAT.Core
         public FlsManager(IFlsApiProvider apiProvider, IScheduler timer)
         {
             _timer = timer;
-            _apiProvider = apiProvider;
+            _timer.TimeoutCallback += _timer_TimeoutCallback;
             _uploadInterval = int.Parse(Settings.Default.FlsUploadInterval);
+            _timer.SetInterval(TimeSpan.FromSeconds(_uploadInterval));
+            _apiProvider = apiProvider;
             _uploadAtOnce = int.Parse(Settings.Default.FlsUploadHashesAtOnce);
         }
 
@@ -169,8 +171,7 @@ namespace APTAT.Core
                 if (_isWorking) throw new InvalidOperationException("FLSManager is working");
                 _isWorking = true;
 
-                _timer.TimeoutCallback += _timer_TimeoutCallback;
-                _timer.SetInterval(TimeSpan.FromSeconds(_uploadInterval));
+                //_timer.TimeoutCallback += _timer_TimeoutCallback;
                 _timer.Start(false);
             }
             catch (Exception ex)
@@ -192,6 +193,7 @@ namespace APTAT.Core
         {
             _inputQueue.CompleteAdding();
             _inputQueue.Dispose();
+            _timer.TimeoutCallback -= _timer_TimeoutCallback;
             _timer.Dispose();
         }
 
