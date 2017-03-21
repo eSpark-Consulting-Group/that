@@ -360,7 +360,7 @@ namespace APTAT.Valkyrie
             }
         }
 
-        public void AnalyzeAsyncCancel()
+        public void AnalyzeAsyncCancel(bool cancelledByUser = true)
         {
             if (_cancellationTokenSource != null)
             {

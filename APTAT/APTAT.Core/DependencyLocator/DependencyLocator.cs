@@ -3,6 +3,7 @@ using APTAT.Core.Apt;
 using APTAT.Core.CamLicense;
 using APTAT.Core.Reports;
 using APTAT.Core.Storage;
+using APTAT.Core.Valkyrie;
 using System;
 
 namespace APTAT.Core.DependencyLocator
@@ -19,10 +20,10 @@ namespace APTAT.Core.DependencyLocator
             resolver.RegisterSingleton<IFlsManager, FlsManager>();
 
             resolver.RegisterSingleton<IFlsApiProvider, FlsApiProvider>();
-            
+            resolver.RegisterSingleton<IValkyrieClientEx, ValkyrieClientWithStorage>();
 
             resolver.RegisterSingleton<IDistinctFileHelper, DistinctFileHelper>();
-            resolver.RegisterSingleton<IStorageSubSystem, StorageSubSystem>();
+            resolver.RegisterSingleton<IStorageSubSystem, IValkyrieStorageSubSystem, StorageSubSystem>();
             resolver.RegisterSingleton<IReportBuilder, ReportBuilder>();
             resolver.RegisterSingleton<IFinalVerdictCalculator, FinalVerdictCalculator>();
             resolver.RegisterSingleton<IResultMergeHelper, ResultMergeHelper>(); 

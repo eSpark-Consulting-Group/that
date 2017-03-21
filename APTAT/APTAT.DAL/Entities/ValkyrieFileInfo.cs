@@ -7,6 +7,7 @@ namespace APTAT.DAL.Entities
 {
     public class ValkyrieFileInfo : IEntity
     {
+        private string _sha1;
         [NotMapped]
         public object[] EntityKeyValues
         {
@@ -44,7 +45,11 @@ namespace APTAT.DAL.Entities
         [Key, Column(Order = 2)]
         [Required]
         [MaxLength(40)]
-        public string Sha1 { get; set; }
+        public string Sha1
+        {
+            get { return _sha1; }
+            set { _sha1 = value.ToLower(); }
+        }
         public float? MalwareProbability { get; set; }
         public string OperationStatus { get; set; }
         public string SkipReason { get; set; }

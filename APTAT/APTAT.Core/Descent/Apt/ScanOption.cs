@@ -1,12 +1,14 @@
-﻿namespace APTAT.Core.Descent.Apt
+﻿using System;
+
+namespace APTAT.Core.Descent.Apt
 {
     public class ScanOptions : IScanOptions
     {
         public ScanOptions(string tcpPort, string udpPort, ScanKind scanKind, string login, string password, bool isRescan = false)
         {
             ScanPaths = new string[] { };
-            TcpPort = tcpPort;
-            UdpPort = udpPort;
+            TcpPort = Int32.Parse(tcpPort);
+            UdpPort = Int32.Parse(udpPort);
             Login = login;
             Password = password;
             IsRescan = isRescan;
@@ -35,8 +37,8 @@
         public bool IsRescan { get; }
         public string Password { get;  }
         public string Login { get; }
-        public string TcpPort { get; private set; }
-        public string UdpPort { get; private set; }
+        public int TcpPort { get; private set; }
+        public int UdpPort { get; private set; }
         public string[] ScanPaths { get; private set; }
         public bool ScanProcesses { get; private set; }
         public bool ScanDrivers { get; private set; }

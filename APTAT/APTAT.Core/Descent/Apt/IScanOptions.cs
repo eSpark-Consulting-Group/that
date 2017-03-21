@@ -11,7 +11,7 @@
         ScanKind ScanKind { get; }
         string[] ScanPaths { get; }
         bool ScanProcesses { get; }
-        string TcpPort { get; }
-        string UdpPort { get; }
+        int TcpPort { get; }
+        int UdpPort { get; }
     }
 }

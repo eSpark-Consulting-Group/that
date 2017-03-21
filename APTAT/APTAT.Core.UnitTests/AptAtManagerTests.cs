@@ -16,6 +16,7 @@ using APTAT.Core.FLS;
 using System.Threading;
 using APTAT.Core.Storage;
 using APTAT.Core.Reports;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Core.UnitTests
 {
@@ -37,7 +38,7 @@ namespace APTAT.Core.UnitTests
             
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
-            var valkyrie = Mock.Create<IValkyrieClient>();
+            var valkyrie = Mock.Create<IValkyrieClientEx>();
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var distinctFileHelper = Mock.Create<IDistinctFileHelper>(Behavior.Strict);
             var storage = Mock.Create<IStorageSubSystem>(Behavior.Strict);                        
@@ -55,7 +56,7 @@ namespace APTAT.Core.UnitTests
 
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.Matches<Uri>(uri => uri.ToString() == @"https://valkyrie.comodo.com/")))
                 .OccursOnce();
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
@@ -74,7 +75,7 @@ namespace APTAT.Core.UnitTests
 
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
-            var valkyrie = Mock.Create<IValkyrieClient>();
+            var valkyrie = Mock.Create<IValkyrieClientEx>();
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var distinctFileHelper = Mock.Create<IDistinctFileHelper>(Behavior.Strict);
             var storage = Mock.Create<IStorageSubSystem>(Behavior.Strict);
@@ -101,7 +102,7 @@ namespace APTAT.Core.UnitTests
 
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
-            var valkyrie = Mock.Create<IValkyrieClient>();
+            var valkyrie = Mock.Create<IValkyrieClientEx>();
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var distinctHelper = Mock.Create<IDistinctFileHelper>(Behavior.Strict);
             var storage = Mock.Create<IStorageSubSystem>(Behavior.Strict);
@@ -129,15 +130,16 @@ namespace APTAT.Core.UnitTests
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var scanOptions = CreateScanOptions(80, 53);
-            Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.Is(Int32.Parse(scanOptions.UdpPort)),
-                Arg.Is(Int32.Parse(scanOptions.TcpPort)))).OccursOnce(); var deploymentTargets = GetDeploymentTargets();
+            Mock.Arrange(() => flsManager.UpdateFlsPorts(scanOptions.UdpPort,
+                scanOptions.TcpPort)).OccursOnce();
+            var deploymentTargets = GetDeploymentTargets();
 
             var description = Mock.Create<IDevicesSourceDescription>();
 
             Mock.Arrange(() => aptScannerFactory.CreateAptScanner(Arg.IsAny<IDescentSubSystem>(), deploymentTargets, 
                 description, scanOptions)).Returns(() => aptScanner).OccursOnce();
 
-            var aptAtManagerUnderTest = new AptAtManager(Mock.Create<IDescentSubSystem>(Behavior.Strict), Mock.Create<IValkyrieClient>(), flsManager, 
+            var aptAtManagerUnderTest = new AptAtManager(Mock.Create<IDescentSubSystem>(Behavior.Strict), Mock.Create<IValkyrieClientEx>(), flsManager, 
                 aptScannerFactory, Mock.Create<IDistinctFileHelper>(), 
                 Mock.Create<IStorageSubSystem>(), Mock.Create<IAptReportBuilderInternal>());
 
@@ -179,20 +181,20 @@ namespace APTAT.Core.UnitTests
                 s => s.Compare(failedToAnalyzeHashes))));
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
-            var scanOptions = CreateScanOptions(80, 53);
-            Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.Is(Int32.Parse(scanOptions.UdpPort)),
-                Arg.Is(Int32.Parse(scanOptions.TcpPort)))).OccursOnce(); var deploymentTargets = GetDeploymentTargets();
+            Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt))
+                .OccursOnce();
+            var deploymentTargets = GetDeploymentTargets();
 
             var description = Mock.Create<IDevicesSourceDescription>();
 
             Mock.Arrange(() => aptScannerFactory.CreateAptScanner(Arg.IsAny<IDescentSubSystem>(), deploymentTargets,
-                description, scanOptions)).Returns(() => aptScanner).OccursOnce();
+                description, Arg.IsAny<IScanOptions>())).Returns(() => aptScanner).OccursOnce();
 
-            var aptAtManagerUnderTest = new AptAtManager(Mock.Create<IDescentSubSystem>(Behavior.Strict), Mock.Create<IValkyrieClient>(), flsManager,
+            var aptAtManagerUnderTest = new AptAtManager(Mock.Create<IDescentSubSystem>(Behavior.Strict), Mock.Create<IValkyrieClientEx>(), flsManager,
                 aptScannerFactory, Mock.Create<IDistinctFileHelper>(),
                 Mock.Create<IStorageSubSystem>(), Mock.Create<IAptReportBuilderInternal>());
 
-            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, Mock.Create<IScanOptions>());
             var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
 
             Mock.Arrange(() => scanResult.Files).Returns(() => failedToAnalyzeModules.Concat(anotherModules).ToArray()).MustBeCalled();
@@ -227,20 +229,19 @@ namespace APTAT.Core.UnitTests
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var scanOptions = CreateScanOptions(80, 53);
-            Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.Is(Int32.Parse(scanOptions.UdpPort)),
-                Arg.Is(Int32.Parse(scanOptions.TcpPort))));
+            Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt));
             var deploymentTargets = GetDeploymentTargets();
 
             var description = Mock.Create<IDevicesSourceDescription>();
 
             Mock.Arrange(() => aptScannerFactory.CreateAptScanner(Arg.IsAny<IDescentSubSystem>(), deploymentTargets,
-                description, scanOptions)).Returns(() => aptScanner).OccursOnce();
+                Arg.IsAny<IDevicesSourceDescription>(), Arg.IsAny<IScanOptions>())).Returns(() => aptScanner).OccursOnce();
 
-            var aptAtManagerUnderTest = new AptAtManager(Mock.Create<IDescentSubSystem>(Behavior.Strict), Mock.Create<IValkyrieClient>(), flsManager,
+            var aptAtManagerUnderTest = new AptAtManager(Mock.Create<IDescentSubSystem>(Behavior.Strict), Mock.Create<IValkyrieClientEx>(), flsManager,
                 aptScannerFactory, Mock.Create<IDistinctFileHelper>(),
                 Mock.Create<IStorageSubSystem>(), Mock.Create<IAptReportBuilderInternal>());
 
-            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, Mock.Create<IScanOptions>());
             var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
 
             Mock.Arrange(() => scanResult.Files).Returns(() => anotherModules.ToArray()).MustBeCalled();
@@ -273,24 +274,24 @@ namespace APTAT.Core.UnitTests
             var failedToAnalyzeModules = ModuleCollectionFactory.GetMockModules(CloudVerdict.FailedToAnalyze, 3);
             var sha1WithNextItterationClean = failedToAnalyzeModules.Select(s=>s.Sha1);
             var failedToAnalyzeHashes = failedToAnalyzeModules.Select(m => m.Sha1).ToArray();
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             Mock.Arrange(() => flsManager.Enqueue(Arg.Matches<IEnumerable<string>>(
                 s=>s.Compare(failedToAnalyzeHashes)))).MustBeCalled();            
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
-            var scanOptions = CreateScanOptions(80, 53);
-            Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.Is(Int32.Parse(scanOptions.UdpPort)), 
-                Arg.Is(Int32.Parse(scanOptions.TcpPort)))).OccursOnce();
+            Mock.Arrange(() => flsManager.UpdateFlsPorts(Arg.AnyInt, 
+                Arg.AnyInt)).OccursOnce();
             var deploymentTargets = GetDeploymentTargets();
             var description = Mock.Create<IDevicesSourceDescription>();
             var distinctFileHelper = Mock.Create<IDistinctFileHelper>(Behavior.Strict);
             Mock.Arrange(() => distinctFileHelper.ShouldSendToValkyrie(null)).IgnoreArguments().Returns(false);
-            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, description, scanOptions)).Returns(() => aptScanner).OccursOnce();
+            Mock.Arrange(() => aptScannerFactory.CreateAptScanner(descent, deploymentTargets, description, Arg.IsAny<IScanOptions>()))
+                .Returns(() => aptScanner).OccursOnce();
             var storage = Mock.Create<IStorageSubSystem>();
             var aptAtManagerUnderTest = new AptAtManager(descent, valkyrie, flsManager, aptScannerFactory, distinctFileHelper, storage, Mock.Create<IAptReportBuilderInternal>());
 
-            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, scanOptions);
+            aptAtManagerUnderTest.GetAptScanner(deploymentTargets, description, Mock.Create<IScanOptions>());
             var scanResult = Mock.Create<IAptScanResult>(Behavior.Strict);
             
             Mock.Arrange(() => scanResult.Files).Returns(() => failedToAnalyzeModules.ToArray()).MustBeCalled();
@@ -333,8 +334,8 @@ namespace APTAT.Core.UnitTests
         private static IScanOptions CreateScanOptions(int tcpPort, int udpPort)
         {
             var scanOptions = Mock.Create<IScanOptions>(Behavior.Strict);
-            Mock.Arrange(() => scanOptions.TcpPort).Returns(() => tcpPort.ToString());
-            Mock.Arrange(() => scanOptions.UdpPort).Returns(() => udpPort.ToString());            
+            Mock.Arrange(() => scanOptions.TcpPort).Returns(() => tcpPort);
+            Mock.Arrange(() => scanOptions.UdpPort).Returns(() => udpPort);            
             return scanOptions;
         }
 
@@ -344,7 +345,7 @@ namespace APTAT.Core.UnitTests
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.Dispose()).OccursOnce();
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).OccursOnce();
             Mock.Arrange(() => valkyrie.Dispose()).OccursOnce();
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
@@ -366,7 +367,7 @@ namespace APTAT.Core.UnitTests
         {
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var description = Mock.Create<IDevicesSourceDescription>();
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
@@ -392,7 +393,7 @@ namespace APTAT.Core.UnitTests
 
         //    var fls = Mock.Create<IFlsManager>(Behavior.Strict);
         //    Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce();
-        //    var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+        //    var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
         //    var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
         //    var scanOptions = new ScanOptions("80", "53", ScanKind.Quick, "", "");
@@ -437,7 +438,7 @@ namespace APTAT.Core.UnitTests
 
         //    var fls = Mock.Create<IFlsManager>(Behavior.Strict);
         //    Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce();
-        //    var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+        //    var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
         //    var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
         //    Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()), Arg.AnyBool)).MustBeCalled();
         //    ScanOptions scanOptions = new ScanOptions("80", "53", ScanKind.Quick);
@@ -490,9 +491,9 @@ namespace APTAT.Core.UnitTests
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.Cancel()).OccursOnce();
             //Valkyrie Client Arange 
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).OccursOnce(Arg.AnyString);
-            Mock.Arrange(() => valkyrie.AnalyzeAsyncCancel()).OccursOnce();
+            Mock.Arrange(() => valkyrie.AnalyzeAsyncCancel(true)).OccursOnce();
             var aptScannerFactory = Mock.Create<IAptScannerFactory>(Behavior.Strict);
             var storage = Mock.Create<IStorageSubSystem>();
 
@@ -526,9 +527,9 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => fls.Cancel()).OccursOnce();
 
             //Valkyrie Client Arange 
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
-            Mock.Arrange(() => valkyrie.StartAnalyze(new CamRegistration("", "", ""), "", "", 1, null,"")).IgnoreArguments();
+            Mock.Arrange(() => valkyrie.StartAnalyze(new CamRegistration("", "", ""), "", "", 1, null,"", Arg.AnyGuid)).IgnoreArguments();
 
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             Mock.Arrange(() => aptScanner.ScanOperationContext).Returns(() => scanContext);
@@ -633,7 +634,7 @@ namespace APTAT.Core.UnitTests
             Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Count() == failedToAnalyzeModules.Count()))).OccursOnce();
 
             //Valkyrie Client Arange 
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var scanOptions = CreateScanOptions(80, 53);
@@ -722,7 +723,7 @@ namespace APTAT.Core.UnitTests
             //Mock.Arrange(() => descent.GetDescentResultsByOperationUid(operationGuid)).Returns(() => new AptScanOperationContext(new List<IComputer>(), 1, new DevicesSourceDescription())).OccursOnce();
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce();
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()))).MustBeCalled();
@@ -774,7 +775,7 @@ namespace APTAT.Core.UnitTests
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce("Fls Ports Updated");
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
@@ -809,7 +810,7 @@ namespace APTAT.Core.UnitTests
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).Occurs(1, "Fls Ports Updated");
             Mock.Arrange(() => fls.Enqueue(Arg.Matches<IEnumerable<string>>(x => x.Any()))).MustBeCalled("Enqueue method must be called");
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
@@ -863,7 +864,7 @@ namespace APTAT.Core.UnitTests
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.AnyInt, Arg.AnyInt)).OccursOnce("FLS Ports Updated");
             Mock.Arrange(() => fls.Enqueue(Arg.IsAny<IEnumerable<string>>())).OccursNever("Enqueue method must NOT be called");
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
@@ -905,7 +906,7 @@ namespace APTAT.Core.UnitTests
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(32), Arg.Is(15)));
 
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
 
@@ -931,7 +932,7 @@ namespace APTAT.Core.UnitTests
             var descent = Mock.Create<IDescentSubSystem>(Behavior.Strict);
             var fls = Mock.Create<IFlsManager>(Behavior.Strict);
             Mock.Arrange(() => fls.UpdateFlsPorts(Arg.Is(53), Arg.Is(80)));
-            var valkyrie = Mock.Create<IValkyrieClient>(Behavior.Strict);
+            var valkyrie = Mock.Create<IValkyrieClientEx>(Behavior.Strict);
             Mock.Arrange(() => valkyrie.SetBaseUri(Arg.AnyUri)).MustBeCalled(Arg.AnyString);
             var aptScanner = Mock.Create<IAptScanner>(Behavior.Strict);
             var scanOptions = CreateScanOptions(80, 53);

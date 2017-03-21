@@ -63,26 +63,26 @@ namespace APTAT.Core
             }
             return files;
         }
-        private static Valkyrie.CloudVerdict MapCloud(Descent.Apt.CloudVerdict cloud)
+        private static APTAT.Valkyrie.CloudVerdict MapCloud(Descent.Apt.CloudVerdict cloud)
         {
             switch (cloud)
             {
                 case Descent.Apt.CloudVerdict.Safe:
-                    return Valkyrie.CloudVerdict.Safe;
+                    return APTAT.Valkyrie.CloudVerdict.Safe;
                 case Descent.Apt.CloudVerdict.Unknown:
-                    return Valkyrie.CloudVerdict.Unknown;
+                    return APTAT.Valkyrie.CloudVerdict.Unknown;
 
                 case Descent.Apt.CloudVerdict.Malware:
-                    return Valkyrie.CloudVerdict.Malware;
+                    return APTAT.Valkyrie.CloudVerdict.Malware;
 
                 case Descent.Apt.CloudVerdict.FirstSeen:
-                    return Valkyrie.CloudVerdict.FirstSeen;
+                    return APTAT.Valkyrie.CloudVerdict.FirstSeen;
 
                 case Descent.Apt.CloudVerdict.FailedToAnalyze:
-                    return Valkyrie.CloudVerdict.FailedToAnalyze;
+                    return APTAT.Valkyrie.CloudVerdict.FailedToAnalyze;
 
                 case Descent.Apt.CloudVerdict.NoVerdict:
-                    return Valkyrie.CloudVerdict.NoVerdict;
+                    return APTAT.Valkyrie.CloudVerdict.NoVerdict;
 
                 default:
                     throw new NotSupportedException("Can not convert to Valkyrie.CloudVerdict from Apt.CloudVerdict " +

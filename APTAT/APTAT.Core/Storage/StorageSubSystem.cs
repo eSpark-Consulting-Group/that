@@ -8,11 +8,12 @@ using APTAT.DAL.Entities;
 using APTAT.DAL.Storage;
 using AptScanResult = APTAT.DAL.Entities.AptScanResult;
 using APTAT.DAL.Enums;
-
+using APTAT.Valkyrie;
+using ValkyrieFileInfo = APTAT.DAL.Entities.ValkyrieFileInfo;
 
 namespace APTAT.Core.Storage
 {
-    public class StorageSubSystem : IStorageSubSystem
+    public class StorageSubSystem : IStorageSubSystem, IValkyrieStorageSubSystem
     {
         private readonly Lazy<IEntityStorage> _entityStorage;
         public StorageSubSystem(Lazy<IEntityStorage> entityStorage)
@@ -153,22 +154,22 @@ namespace APTAT.Core.Storage
 
         }
 
-        public void SaveValkyrieResults(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults)
+        public void SaveValkyrieResults(int scanId, ValkyrieAnalysisResult[] valkyrieResults)
         {
-            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Count);
+            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Length);
             foreach (var valkyrieResult in valkyrieResults)
             {
                 files.Add(new ValkyrieFileInfo
                 {
                     ValkyrieScanInfoId = scanId,
-                    Sha1 = valkyrieResult.Sha1,
-                    IsWhiteListed = valkyrieResult.ValkyrieAnalysisResult.IsWhiteListed,
-                    Verdict = (DAL.Entities.ValkyrieVerdict)valkyrieResult.ValkyrieAnalysisResult.Verdict,
-                    MalwareProbability = valkyrieResult.ValkyrieAnalysisResult.MalwareProbability,
-                    OperationStatus = valkyrieResult.ValkyrieAnalysisResult.OperationStatus,
-                    SkipReason = valkyrieResult.ValkyrieAnalysisResult.SkipReason,
-                    IsSubmitted = valkyrieResult.ValkyrieAnalysisResult.IsSubmitted,
-                    AnalyzeId = valkyrieResult.ValkyrieAnalysisResult.AnalyzeId
+                    Sha1 = valkyrieResult.SHA1,
+                    IsWhiteListed = valkyrieResult.IsWhiteListed,
+                    Verdict = (DAL.Entities.ValkyrieVerdict)valkyrieResult.Verdict,
+                    MalwareProbability = valkyrieResult.MalwareProbability,
+                    OperationStatus = valkyrieResult.OperationStatus,
+                    SkipReason = valkyrieResult.SkipReason,
+                    IsSubmitted = valkyrieResult.IsSubmitted,
+                    AnalyzeId = valkyrieResult.AnalyzeId
                 });
             }
             using (var context = _entityStorage.Value.Context)
@@ -178,22 +179,22 @@ namespace APTAT.Core.Storage
             }
         }
 
-        public void UpdateValkyrieResult(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults)
+        public void UpdateValkyrieResult(int scanId, ValkyrieAnalysisResult[] valkyrieResults)
         {
-            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Count);
+            List<ValkyrieFileInfo> files = new List<ValkyrieFileInfo>(valkyrieResults.Length);
             foreach (var valkyrieResult in valkyrieResults)
             {
                 files.Add(new ValkyrieFileInfo
                 {
                     ValkyrieScanInfoId = scanId,
-                    Sha1 = valkyrieResult.Sha1,
-                    IsWhiteListed = valkyrieResult.ValkyrieAnalysisResult.IsWhiteListed,
-                    Verdict = (ValkyrieVerdict)valkyrieResult.ValkyrieAnalysisResult.Verdict,
-                    MalwareProbability = valkyrieResult.ValkyrieAnalysisResult.MalwareProbability,
-                    OperationStatus = valkyrieResult.ValkyrieAnalysisResult.OperationStatus,
-                    SkipReason = valkyrieResult.ValkyrieAnalysisResult.SkipReason,
-                    IsSubmitted = valkyrieResult.ValkyrieAnalysisResult.IsSubmitted,
-                    AnalyzeId = valkyrieResult.ValkyrieAnalysisResult.AnalyzeId
+                    Sha1 = valkyrieResult.SHA1,
+                    IsWhiteListed = valkyrieResult.IsWhiteListed,
+                    Verdict = (DAL.Entities.ValkyrieVerdict)valkyrieResult.Verdict,
+                    MalwareProbability = valkyrieResult.MalwareProbability,
+                    OperationStatus = valkyrieResult.OperationStatus,
+                    SkipReason = valkyrieResult.SkipReason,
+                    IsSubmitted = valkyrieResult.IsSubmitted,
+                    AnalyzeId = valkyrieResult.AnalyzeId
                 });
             }
             using (var context = _entityStorage.Value.Context)

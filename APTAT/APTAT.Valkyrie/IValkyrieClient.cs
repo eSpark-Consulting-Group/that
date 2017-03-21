@@ -12,7 +12,7 @@ namespace APTAT.Valkyrie
         event EventHandler<AnalyzeCompletedEventArgs<ValkyrieAnalysisResult>> AnalyzeCompleted;
         event EventHandler<ValkyrieAnalyzeStartedEventArgs> AnalyzeStarted;
         void AddFilesToAnalyze(List<ValkyrieFileInfo> filesToAnalyze, bool shouldStartImmediately);
-        void AnalyzeAsyncCancel();
+        void AnalyzeAsyncCancel(bool cancelledByUser = true);
         void StartAnalyze(ICamRegistration camRegistration, string login, string password, int machineCount,
             NetworkCredential proxyCredential, string productName);
         string GetValkyrieDetailsLink();

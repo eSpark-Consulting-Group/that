@@ -7,6 +7,7 @@ using APTAT.Core.Descent;
 using APTAT.Core.Descent.Apt;
 using APTAT.DAL.Entities;
 using APTAT.DAL.Enums;
+using APTAT.Valkyrie;
 
 namespace APTAT.Core.Storage
 {
@@ -17,12 +18,16 @@ namespace APTAT.Core.Storage
         void SaveScanResults(Guid operationUid, IAptScanResult scanResult);
         void UpdateVerdictForOperation(Guid operationUid, Dictionary<string, Descent.Apt.CloudVerdict> resultsWithoutErrors,
             VerdictSource verdictSource);
+
+    }
+    public interface IValkyrieStorageSubSystem
+    {
         int SaveValkyrieScan(Guid operationUid, string apiKey, string scanId);
-        void SaveValkyrieResults(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
+        void SaveValkyrieResults(int scanId, ValkyrieAnalysisResult[] valkyrieResults);
         void TryFinishValkyrieScan(int scanId, bool isCancelled);
         void TryFinishComputersValkyrieScan(int scanId);
         void FailValkyrieScan(int scanId, bool isCancelled);
-        void UpdateValkyrieResult(int scanId, Dictionary<string, FileResult>.ValueCollection valkyrieResults);
+        void UpdateValkyrieResult(int scanId, ValkyrieAnalysisResult[] valkyrieResults);
         void UpdateEmails(string[] emails);
     }
 }

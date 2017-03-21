@@ -514,14 +514,17 @@ namespace APTAT.DeploymentCore.Descent.Helpers
 					catch ( Exception ex )
 					{
 						--attemptsCount;
-						if ( attemptsCount == 0 )
+                        if ( attemptsCount == 0 )
 						{
 							throw new DescentException( DescentStatus.status_remote_cannot_copy_file,
 								ex.Message, 0 );
-						}
-
-						Thread.Sleep( 2000 );
-					}
+                        }
+                        if (CancellationToken.IsCancellationRequested)
+                            throw new OperationCanceledException();
+                        Thread.Sleep( 2000 );
+                        if (CancellationToken.IsCancellationRequested)
+                            throw new OperationCanceledException();
+                    }
 				}
 			}
 

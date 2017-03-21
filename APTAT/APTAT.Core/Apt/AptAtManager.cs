@@ -18,6 +18,7 @@ using ValkyrieVerdict = APTAT.Valkyrie.ValkyrieVerdict;
 using CloudVerdict = APTAT.Core.Descent.Apt.CloudVerdict;
 using ValkyrieFileInfo = APTAT.Valkyrie.ValkyrieFileInfo;
 using APTAT.DAL.Enums;
+using APTAT.Core.Valkyrie;
 
 namespace APTAT.Core.Apt
 {
@@ -27,25 +28,25 @@ namespace APTAT.Core.Apt
         private readonly IAptScannerFactory _aptScannerFactory;
         private readonly IFlsManager _flsManager;
         private readonly IStorageSubSystem _entityStorage;
-        private IValkyrieClient _valkyrieClient;
+        private IValkyrieClientEx _valkyrieClient;
         private readonly Dictionary<string, IAptVerdictContext> _flsHashResults
             = new Dictionary<string, IAptVerdictContext>(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<IAptVerdictContext> _verdictUpdateHistory
             = new HashSet<IAptVerdictContext>();
         private readonly IDistinctFileHelper _distinctHelper;
 
-        Dictionary<string, CloudVerdict> _queueToValkyrie
+        readonly Dictionary<string, CloudVerdict> _queueToValkyrie
             = new Dictionary<string, CloudVerdict>(StringComparer.OrdinalIgnoreCase);
 
-        private int? _valkyrieScanId;
+        private bool _valkyrieScanStarted;
         private bool? _isValkyrieScanEnded = false;
         private DateTime? _latestValkyrieVerdictUpdate = null;
 
         private int _filesShouldSendToValkyrieCount = 0;
         private int _filesWithFlsErrorCount = 0;
-      //  private IReportBuilder _reportBuilder;
-        private bool _IsLastScanCancelled = false;
-        private IAptReportBuilder _reportBuilder;
+        //private IReportBuilder _reportBuilder;
+        private bool _isLastScanCancelled = false;
+        private readonly IAptReportBuilder _reportBuilder;
 
         public event EventHandler<ValkyrieAnalyzeProgressChangedEventArgs<FileResult>> ValkyrieAnalyzeProgressChanged;
         public event EventHandler<FlsRequestEventArgs<IAptVerdictContext>> FlsAnalyzeProgressChanged;
@@ -93,7 +94,7 @@ namespace APTAT.Core.Apt
         }
 
 
-        public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClient valkyrieClient, IFlsManager manager,
+        public AptAtManager(IDescentSubSystem descentSubSystem, IValkyrieClientEx valkyrieClient, IFlsManager manager,
             IAptScannerFactory aptScannerFactory, IDistinctFileHelper distinctHelper, IStorageSubSystem storage, 
             IAptReportBuilder reportBuilder)
         {
@@ -124,7 +125,7 @@ namespace APTAT.Core.Apt
             ValkyrieAnalyzeStarted?.Invoke(this, EventArgs.Empty);
             lock (_queueToValkyrie)
             {
-                _valkyrieScanId = _entityStorage.SaveValkyrieScan(AggregatedScanResults.OperationUid, e.ApiKey, e.ScanId);
+                _valkyrieScanStarted = true;
                 if (_queueToValkyrie.Count > 0)
                     AddFilesToValkyrieAnalysis(true, _queueToValkyrie);
                 _queueToValkyrie.Clear();
@@ -178,15 +179,6 @@ namespace APTAT.Core.Apt
                 info.ProcessedFileCount, valkyrieAnalysisResult.ToArray());
             ValkyrieAnalyzeProgressChanged?.Invoke(this,
                                    new ValkyrieAnalyzeProgressChangedEventArgs<FileResult>(e.Percent, progressInfo, e.IsUpdate));
-            if (_valkyrieScanId != null)
-                if (e.IsUpdate)
-                {
-                    _entityStorage.UpdateValkyrieResult(_valkyrieScanId.Value, valkyrieAnalysisResult);
-                }
-                else
-                {
-                    _entityStorage.SaveValkyrieResults(_valkyrieScanId.Value, valkyrieAnalysisResult);
-                }
             TryInvokeEndScan();
         }
 
@@ -197,18 +189,17 @@ namespace APTAT.Core.Apt
                 lock (ValkyrieAnalysisResult)
                 {
                     if (AggregatedScanResults != null && !AggregatedScanResults.IsOperationInProgress() 
-                        && _valkyrieScanId.HasValue && !_isValkyrieScanEnded.GetValueOrDefault())
+                        && _valkyrieScanStarted && !_isValkyrieScanEnded.GetValueOrDefault())
                     {
                         if (ShouldSendToValkyrie.Count == 0 && _isValkyrieScanEnded == null)
                         {
                             _isValkyrieScanEnded = false;
-                            _entityStorage.TryFinishComputersValkyrieScan(_valkyrieScanId.Value);
+                            _valkyrieClient.TryFinishUsersScanOnStorage();
                         }
                         if (_filesWithFlsErrorCount == 0 && _filesShouldSendToValkyrieCount == 0)
                         {
                             _isValkyrieScanEnded = true;
                             _valkyrieClient.SendEndScanAsync();
-                            _entityStorage.TryFinishValkyrieScan(_valkyrieScanId.Value, _IsLastScanCancelled);
                         }
                     }
                 }
@@ -261,7 +252,7 @@ namespace APTAT.Core.Apt
 
         public IAptScanner GetAptScanner(IComputer[] targets, IDevicesSourceDescription devicesSourceDescription, IScanOptions options)
         {
-            _flsManager.UpdateFlsPorts(int.Parse(options.UdpPort), int.Parse(options.TcpPort));
+            _flsManager.UpdateFlsPorts(options.UdpPort, options.TcpPort);
             var scanner = _aptScannerFactory
                 .CreateAptScanner(_descentSubSystem, targets, devicesSourceDescription, options);
             scanner.ScanStarted += OnScanStarted;
@@ -349,7 +340,7 @@ namespace APTAT.Core.Apt
                     }
                     lock(_queueToValkyrie)
                     {
-                        if (_valkyrieScanId.HasValue)
+                        if (_valkyrieScanStarted)
                         {
                             AddFilesToValkyrieAnalysis(fromRemoteScanner, dictToValkyrie);
                         }
@@ -389,7 +380,6 @@ namespace APTAT.Core.Apt
                             ShouldSendToValkyrie.Add(fileInfo.Sha1);
                     }
                 }
-                _entityStorage.SaveValkyrieResults(_valkyrieScanId.Value, valkyrieAnalysisResults);
                 _valkyrieClient.AddFilesToAnalyze(filesToAnalyze, fromRemoteScanner);
                 ValkyrieOperationUid = Guid.NewGuid();
             }
@@ -463,16 +453,14 @@ namespace APTAT.Core.Apt
             {
                 AggregatedScanResults = new AggregatedAptScanResult(scanner.ScanOperationContext);
                 _flsManager.Cancel();
-                _valkyrieScanId = null;
                 _filesShouldSendToValkyrieCount = 0;
                 _filesWithFlsErrorCount = 0;
                 if (ValkyrieOperationUid != Guid.Empty)
                 {
                     _valkyrieClient.AnalyzeAsyncCancel();
                     ValkyrieOperationUid = Guid.NewGuid();
-                    if (_valkyrieScanId.HasValue && !_isValkyrieScanEnded.GetValueOrDefault())
-                        _entityStorage.TryFinishValkyrieScan(_valkyrieScanId.Value, _IsLastScanCancelled);
                 }
+                _valkyrieScanStarted = false;
                 lock (_flsHashResults)
                 {
                     _flsHashResults.Clear();
@@ -482,7 +470,7 @@ namespace APTAT.Core.Apt
                     _queueToValkyrie.Clear();
                 ShouldSendToValkyrie.Clear();
                 ValkyrieAnalysisResult.Clear();
-                _IsLastScanCancelled = false;
+                _isLastScanCancelled = false;
                 _entityStorage.SaveOperationContext(scanner.ScanOperationContext);
             }
         }
@@ -500,7 +488,7 @@ namespace APTAT.Core.Apt
                 FlsLookupOperationUid = Guid.NewGuid();
             _entityStorage.UpdateScanResults(e.OperationContext);
             TryInvokeEndScan();
-            if (_valkyrieScanId.HasValue)
+            if (_valkyrieScanStarted)
             {
                 IAptScanResult[] aptScanResults = GetResultsEnumerator().ToArray();
                 this._valkyrieClient.AllowSubmit(_distinctHelper.GetDistinctFileInfoDict(aptScanResults));
@@ -514,7 +502,7 @@ namespace APTAT.Core.Apt
 
         public void StopScan(Guid[] targetsUids)
         {
-            _IsLastScanCancelled = true;
+            _isLastScanCancelled = true;
             if (targetsUids.Any())
                 _descentSubSystem.StopOperationForTargetUid(targetsUids);
             else
@@ -524,8 +512,7 @@ namespace APTAT.Core.Apt
                 _flsManager.Cancel();
                 _valkyrieClient.AnalyzeAsyncCancel();
                 _isValkyrieScanEnded = true;
-                if (_valkyrieScanId.HasValue && !_isValkyrieScanEnded.GetValueOrDefault())
-                    _entityStorage.TryFinishValkyrieScan(_valkyrieScanId.Value, true);
+                    
                 lock (_flsHashResults)
                 {
                     _flsHashResults.Clear();
@@ -533,8 +520,7 @@ namespace APTAT.Core.Apt
                 }
             }
         }
-
-
+        
         public void StartValkyrieAnalysis(string login, string password,
             string camLicenseId, string camUserName, string camPassword, NetworkCredential proxyCredential
             , string productName)
@@ -545,7 +531,7 @@ namespace APTAT.Core.Apt
                 var results = GetResultsEnumerator();
                 var aptScanResults = results as IAptScanResult[] ?? results.ToArray();
                 _valkyrieClient.StartAnalyze(camRegistration, login, password, aptScanResults.Length,
-                    proxyCredential, productName);
+                    proxyCredential, productName, AggregatedScanResults.OperationUid);
             }
         }
 
@@ -565,7 +551,6 @@ namespace APTAT.Core.Apt
 
             if (response.Error == null && response.ReturnCode == ErrorCodesEnum.Success)
             {
-                _entityStorage.UpdateEmails(addresses);
                 return new OperationResult() { IsSucceeded = true };
             }
             return new OperationResult() { IsSucceeded = false, Error = response.Error, ErrorMessage = response.ResultMessage };
@@ -590,10 +575,9 @@ namespace APTAT.Core.Apt
         public async Task OnAppClosing()
         {
             if (_isValkyrieScanEnded.GetValueOrDefault()) return;
-            if (_valkyrieScanId.HasValue)
+            if (_valkyrieScanStarted)
             {
                 await _valkyrieClient.SendEndScan();
-                _entityStorage.TryFinishValkyrieScan(_valkyrieScanId.Value, false);
             }
         }
 

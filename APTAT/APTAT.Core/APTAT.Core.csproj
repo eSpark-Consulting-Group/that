@@ -254,6 +254,8 @@
     <Compile Include="TelerikReports\Template\FileDetailsValkyrieSubreport.Designer.cs">
       <DependentUpon>FileDetailsValkyrieSubreport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Valkyrie\IValkyrieClientEx.cs" />
+    <Compile Include="Valkyrie\ValkyrieClientWithStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
