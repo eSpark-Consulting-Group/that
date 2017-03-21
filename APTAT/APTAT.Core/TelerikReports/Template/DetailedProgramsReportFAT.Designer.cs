@@ -31,7 +31,6 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.Drawing.FormattingRule formattingRule11 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule12 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.FormattingRule formattingRule13 = new Telerik.Reporting.Drawing.FormattingRule();
-            Telerik.Reporting.Drawing.FormattingRule formattingRule14 = new Telerik.Reporting.Drawing.FormattingRule();
             Telerik.Reporting.Drawing.StyleRule styleRule1 = new Telerik.Reporting.Drawing.StyleRule();
             this.devices1 = new APTAT.Core.TelerikReports.Template.Devices();
             this.pageHeaderSection1 = new Telerik.Reporting.PageHeaderSection();
@@ -86,7 +85,6 @@ namespace APTAT.Core.TelerikReports
             this.textBox55 = new Telerik.Reporting.TextBox();
             this.textBox40 = new Telerik.Reporting.TextBox();
             this.panel5 = new Telerik.Reporting.Panel();
-            this.shape1 = new Telerik.Reporting.Shape();
             this.textBox59 = new Telerik.Reporting.TextBox();
             this.shape7 = new Telerik.Reporting.Shape();
             this.panel19 = new Telerik.Reporting.Panel();
@@ -131,6 +129,7 @@ namespace APTAT.Core.TelerikReports
             this.panel15 = new Telerik.Reporting.Panel();
             this.textBox15 = new Telerik.Reporting.TextBox();
             this.textBox32 = new Telerik.Reporting.TextBox();
+            this.shape1 = new Telerik.Reporting.Shape();
             this.textBox47 = new Telerik.Reporting.TextBox();
             this.dsAptReportData = new Telerik.Reporting.ObjectDataSource();
             this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
@@ -330,7 +329,7 @@ namespace APTAT.Core.TelerikReports
             formattingRule3.Filters.Add(new Telerik.Reporting.Filter("= Fields.BadFileType", Telerik.Reporting.FilterOperator.Equal, "2"));
             formattingRule3.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
             formattingRule4.Filters.Add(new Telerik.Reporting.Filter("= Fields.BadFileType", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule4.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
+            formattingRule4.Style.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(199)))), ((int)(((byte)(54)))));
             this.barSeries1.DataPointConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
             formattingRule1,
             formattingRule2,
@@ -465,16 +464,16 @@ namespace APTAT.Core.TelerikReports
             // shape5
             // 
             formattingRule5.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "1"));
-            formattingRule5.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(150)))), ((int)(((byte)(60)))));
-            formattingRule6.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "2"));
-            formattingRule6.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
-            formattingRule7.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule7.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(204)))), ((int)(((byte)(8)))));
-            formattingRule8.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "4"));
-            formattingRule8.Style.Color = System.Drawing.Color.Silver;
-            formattingRule9.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "5"));
-            formattingRule9.Style.BackgroundColor = System.Drawing.Color.Empty;
-            formattingRule9.Style.Color = System.Drawing.Color.Silver;
+            formattingRule5.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(199)))), ((int)(((byte)(54)))));
+            formattingRule6.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "3"));
+            formattingRule6.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(199)))), ((int)(((byte)(0)))));
+            formattingRule7.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "2"));
+            formattingRule7.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(71)))), ((int)(((byte)(74)))));
+            formattingRule8.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "5"));
+            formattingRule8.Style.BackgroundColor = System.Drawing.Color.Empty;
+            formattingRule8.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(133)))), ((int)(((byte)(194)))));
+            formattingRule9.Filters.Add(new Telerik.Reporting.Filter("=Fields.FinalVerdict", Telerik.Reporting.FilterOperator.Equal, "4"));
+            formattingRule9.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
             this.shape5.ConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
             formattingRule5,
             formattingRule6,
@@ -713,7 +712,6 @@ namespace APTAT.Core.TelerikReports
             // panel5
             // 
             this.panel5.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
-            this.shape1,
             this.textBox59,
             this.shape7,
             this.panel19,
@@ -729,37 +727,11 @@ namespace APTAT.Core.TelerikReports
             this.panel11,
             this.panel12,
             this.panel14,
-            this.panel15});
+            this.panel15,
+            this.shape1});
             this.panel5.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(7.33716598588785E-09D), Telerik.Reporting.Drawing.Unit.Cm(12.999999046325684D));
             this.panel5.Name = "panel5";
             this.panel5.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.965621948242188D), Telerik.Reporting.Drawing.Unit.Cm(11.500000953674316D));
-            // 
-            // shape1
-            // 
-            formattingRule10.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel) ", Telerik.Reporting.FilterOperator.Equal, "4"));
-            formattingRule10.Style.Color = System.Drawing.Color.Silver;
-            formattingRule11.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "3"));
-            formattingRule11.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
-            formattingRule12.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "2"));
-            formattingRule12.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(204)))), ((int)(((byte)(8)))));
-            formattingRule13.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "1"));
-            formattingRule13.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(61)))), ((int)(((byte)(21)))));
-            formattingRule14.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "0"));
-            formattingRule14.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(150)))), ((int)(((byte)(60)))));
-            this.shape1.ConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
-            formattingRule10,
-            formattingRule11,
-            formattingRule12,
-            formattingRule13,
-            formattingRule14});
-            this.shape1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.76729166507720947D), Telerik.Reporting.Drawing.Unit.Cm(1.4037505388259888D));
-            this.shape1.Name = "shape1";
-            this.shape1.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.NS);
-            this.shape1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(0.29999998211860657D), Telerik.Reporting.Drawing.Unit.Cm(9.7962503433227539D));
-            this.shape1.Stretch = false;
-            this.shape1.Style.BackgroundColor = System.Drawing.Color.White;
-            this.shape1.Style.Color = System.Drawing.Color.LightGreen;
-            this.shape1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
             // 
             // textBox59
             // 
@@ -1183,6 +1155,30 @@ namespace APTAT.Core.TelerikReports
             this.textBox32.Style.Font.Name = "Segoe UI";
             this.textBox32.Value = "= Fields.TargetsSafetyLevelString";
             // 
+            // shape1
+            // 
+            formattingRule10.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "0"));
+            formattingRule10.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(195)))), ((int)(((byte)(163)))));
+            formattingRule11.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "2"));
+            formattingRule11.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(199)))), ((int)(((byte)(0)))));
+            formattingRule12.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "3"));
+            formattingRule12.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(71)))), ((int)(((byte)(74)))));
+            formattingRule13.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel) ", Telerik.Reporting.FilterOperator.Equal, "4"));
+            formattingRule13.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(197)))), ((int)(((byte)(206)))), ((int)(((byte)(213)))));
+            this.shape1.ConditionalFormatting.AddRange(new Telerik.Reporting.Drawing.FormattingRule[] {
+            formattingRule10,
+            formattingRule11,
+            formattingRule12,
+            formattingRule13});
+            this.shape1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.79999995231628418D), Telerik.Reporting.Drawing.Unit.Cm(1.4022916555404663D));
+            this.shape1.Name = "shape1";
+            this.shape1.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.NS);
+            this.shape1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(0.10000000149011612D), Telerik.Reporting.Drawing.Unit.Cm(9.3577117919921875D));
+            this.shape1.Stretch = false;
+            this.shape1.Style.BackgroundColor = System.Drawing.Color.White;
+            this.shape1.Style.Color = System.Drawing.Color.LightGreen;
+            this.shape1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(4D);
+            // 
             // textBox47
             // 
             this.textBox47.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(33.299999237060547D));
@@ -1276,7 +1272,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.BarSeries barSeries1;
         private Template.Devices devices1;
         private Telerik.Reporting.Panel panel5;
-        private Telerik.Reporting.Shape shape1;
         private Telerik.Reporting.TextBox textBox59;
         private Telerik.Reporting.PictureBox pictureBox2;
         private Telerik.Reporting.TextBox textBox34;
@@ -1355,5 +1350,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.TextBox textBox55;
         private Telerik.Reporting.TextBox textBox40;
         private Telerik.Reporting.TextBox textBox1;
+        private Telerik.Reporting.Shape shape1;
     }
 }
