@@ -1,4 +1,5 @@
-﻿using APTAT.Core.Descent.Apt;
+﻿using APTAT.Application.Models.Apt;
+using APTAT.Core.Descent.Apt;
 using APTAT.DeploymentCore;
 using FAT.Application.Models;
 using System;
@@ -92,7 +93,7 @@ namespace FAT.Application.Tests
             var computer = Mock.Create<IComputer>(Behavior.Strict);
             var file = Mock.Create<IThreatInfoItem>(Behavior.Strict);
             var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
-            var nonstrict = Mock.Create<INonStrictHelper>();
+
             Mock.Arrange(() => computer.Name).Returns(Arg.AnyString);
             Mock.Arrange(() => computer.DnsName).Returns(Arg.AnyString);
             Mock.Arrange(() => computer.IPAddress).Returns(Arg.AnyString);
@@ -115,7 +116,6 @@ namespace FAT.Application.Tests
             Assert.NotNull(target.Items);
             Assert.Single(target.Items);
             Mock.Assert(file);
-            Mock.Assert(nonstrict);
         }
 
         [Theory]
@@ -194,6 +194,52 @@ namespace FAT.Application.Tests
 
             Assert.PropertyChanged(target, propertyName, a);
             Mock.Assert(badFile);
+        }
+
+        [Theory]
+        [InlineData(true, "teststatus", "testreason", true, 1f, APTAT.Valkyrie.ValkyrieVerdict.Malware)]
+        [InlineData(false, "teststatus", "testreason", true, 1f, APTAT.Valkyrie.ValkyrieVerdict.Malware)]
+        public void UpdateFileVerdictTest2(bool hasResult, string status, string reason, bool isWhitelisted, float probability, APTAT.Valkyrie.ValkyrieVerdict verdict)
+        {
+            var context = Mock.Create<IFileVerdictContext>(Behavior.Strict);
+            var result = Mock.Create<APTAT.Valkyrie.IValkyrieAnalysisResult>(Behavior.Strict);
+            var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
+
+            Mock.Arrange(() => badFile.Name).Returns(Arg.AnyString);
+            Mock.Arrange(() => badFile.Size).Returns(Arg.AnyLong);
+            Mock.Arrange(() => badFile.SizeSorting).Returns(Arg.AnyString);
+            Mock.Arrange(() => badFile.FileSizeFormatted).Returns(Arg.AnyString);
+            Mock.Arrange(() => badFile.Product).Returns(Arg.AnyString);
+            Mock.Arrange(() => badFile.Cloud).Returns(Arg.IsAny<CloudVerdict>);
+            Mock.Arrange(() => result.IsWhiteListed).Returns(isWhitelisted);
+            Mock.Arrange(() => result.MalwareProbability).Returns(probability);
+            Mock.Arrange(() => result.OperationStatus).Returns(status);
+            Mock.Arrange(() => result.SkipReason).Returns(reason);
+            Mock.Arrange(() => result.Verdict).Returns(verdict);
+            Mock.Arrange(() => context.ValkyrieAnalysisResult).Returns(hasResult ? result : null);
+            Mock.Arrange(() => context.FlsVerdict).Returns((CloudVerdict?)null);
+
+            ThreatInfoItem target = new ThreatInfoItem(badFile);
+
+            //act
+            target.UpdateFileVerdict(context);
+
+            if (hasResult)
+            {
+                Assert.Equal(status, target.OperationStatus);
+                Assert.Equal(reason, target.SkipReason);
+                Assert.Equal(isWhitelisted, target.IsWhiteListed);
+                Assert.Equal(probability, target.MalwareProbabilityValue);
+                Assert.Equal(verdict, target.ValkyrieVerdict);
+            }
+            else
+            {
+                Assert.NotEqual(status, target.OperationStatus);
+                Assert.NotEqual(reason, target.SkipReason);
+                Assert.NotEqual(isWhitelisted, target.IsWhiteListed);
+                Assert.NotEqual(probability, target.MalwareProbabilityValue);
+                Assert.NotEqual(verdict, target.ValkyrieVerdict);
+            }
         }
     }
 }

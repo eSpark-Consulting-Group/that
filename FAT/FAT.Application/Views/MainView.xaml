@@ -477,9 +477,9 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <ProgressBar VerticalAlignment="Top" IsTabStop="false" DataContext="{Binding PreviousScansViewModel}" Value="{Binding Percentage}" Opacity="{Binding ValkyrieDetailsLinkAvailable, Converter={StaticResource BoolToOpacityConverter}}" Background="#FF18C3A4" FocusVisualStyle="{x:Null}" Margin="0 -6 0 14" />
+                    <ProgressBar VerticalAlignment="Top" IsTabStop="false" DataContext="{Binding PreviousScansViewModel}" Value="{Binding Percentage}" Opacity="{Binding GroupEnabled, Converter={StaticResource BoolToOpacityConverter}}" Background="#FF18C3A4" FocusVisualStyle="{x:Null}" Margin="0 -6 0 14" />
 
-                    <ListBox Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" BorderThickness="0" 
+                    <ListBox Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" BorderThickness="0" 
                      Grid.Row="1" Padding="0" Margin="32, 0,32,20" FocusVisualStyle="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters2}}" >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -489,7 +489,7 @@
                     </ListBox>
 
                     <Button MinWidth="180" MaxWidth="180"  HorizontalContentAlignment="Left"
-                    Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Command="{Binding OpenPreviousScansCommand}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32 0">
+                    Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Command="{Binding OpenPreviousScansCommand}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="32 0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -500,8 +500,8 @@
                         </Grid>
                     </Button>
 
-                    <Button MinWidth="180" MaxWidth="180" Background="#FF91ADBD" BorderBrush="#FF91ADBD" HorizontalContentAlignment="Left"
-                    Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,37,32,20" >
+                    <Button MinWidth="180" MaxWidth="180" Background="#FF91ADBD" BorderBrush="#FF91ADBD" HorizontalContentAlignment="Left" IsEnabled="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable}"
+                    Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}" Height="32" Grid.Row="1" Click="Button_Click2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,37,32,20" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -514,7 +514,7 @@
 
                     <Grid Grid.Row="2" Grid.RowSpan="2" Background="White" Margin="32 0 32 20" />
 
-                    <Grid Grid.Row="2" Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" Margin="32 0">
+                    <Grid Grid.Row="2" Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}" Margin="32 0">
                         <telerik:RadWatermarkTextBox  MaxLength="50" Margin="1 0 0 0"
                                        BorderThickness="1" BorderBrush="#FFD6D4D4"   Padding="30 7 0 0" 
                                      Text="{Binding PreviousScansViewModel.ScanKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="White" >
@@ -530,12 +530,12 @@
                         </Button>
                     </Grid>
 
-                    <Grid Grid.Row="2" Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}" Margin="32 0">
+                    <Grid Grid.Row="2" Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}" Margin="32 0">
                         <Controls:SearchUserControl DataContext="{Binding PreviousScansViewModel}" HorizontalAlignment="Stretch" Margin="0 0 180 0"  Keyword="{Binding Keyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         x:Name="SearchTextBox2" Watermark="{Binding GroupByWatermark}" >
                         </Controls:SearchUserControl>
-                        
-                        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}">
+
+                        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -744,10 +744,10 @@
                 </Grid>
 
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="{Binding CurrentScanAvailable, Converter={converters:BoolToVisibilityConverter2}}">
-                    <TextBlock Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"   Foreground="Black" FontFamily="{StaticResource myriadpro}" Margin="32,0,0,0" FontSize="19">
+                    <TextBlock Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}, ConverterParameter=!}"   Foreground="Black" FontFamily="{StaticResource myriadpro}" Margin="32,0,0,0" FontSize="19">
                         <Run Text="Previous Scans" FontFamily="myriadpro" FontSize="19"/>
                     </TextBlock>
-                    <TextBlock Visibility="{Binding PreviousScansViewModel.ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}"  Foreground="Black" FontFamily="{StaticResource myriadpro}" Margin="32,0,0,0" FontSize="19">
+                    <TextBlock Visibility="{Binding PreviousScansViewModel.GroupEnabled, Converter={converters:BoolToVisibilityConverter2}}"  Foreground="Black" FontFamily="{StaticResource myriadpro}" Margin="32,0,0,0" FontSize="19">
                         <Run Text="{Binding PreviousScansViewModel.Header, Mode=OneWay}" FontFamily="myriadpro" FontSize="19"/> <Run Text="{Binding PreviousScansViewModel.ComputersHeader, Mode=OneWay}" FontFamily="myriadpro" Foreground="#FF457FAD" FontSize="15"/>
                     </TextBlock>
                 </Grid>

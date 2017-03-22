@@ -115,7 +115,7 @@
                 <Grid Grid.Row="1" Margin="0 0 0 100">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="16"
                    FontFamily="{StaticResource myriadpro}" VerticalAlignment="Top" Margin="23,37,0,0">
-                Select Scan Method
+                Select Scan Type
                     </TextBlock>
                     <TextBlock Text="{Binding ComputerName}" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="{StaticResource myriadpro}"  FontSize="22"  Margin="0,12,23,0" SnapsToDevicePixels="True"/>
                     <Border x:Name="pathSelector" Margin="0 42 0 0">

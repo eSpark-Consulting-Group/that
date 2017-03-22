@@ -9,7 +9,7 @@ namespace APTAT.Application.Models.Apt
         string Sha1 { get; }
         CloudVerdict? FlsVerdict { get; }
         DateTime? FlsVerdictModifiedDate { get; }
-        ValkyrieAnalysisResult ValkyrieAnalysisResult { get; }
+        IValkyrieAnalysisResult ValkyrieAnalysisResult { get; }
         DateTime? ValkyrieModifiedDate { get; set; }
     }
 }

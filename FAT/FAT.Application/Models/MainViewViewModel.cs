@@ -491,7 +491,16 @@ namespace FAT.Application.Models
 
         public bool IsQuickScan { get; set; }
 
-        public bool GroupEnabled { get; set; }
+        private bool _groupEnabled;
+        public bool GroupEnabled
+        {
+            get { return _groupEnabled; }
+            set
+            {
+                _groupEnabled = value;
+                RaisePropertyChanged(nameof(GroupEnabled));
+            }
+        }
 
         public bool GroupByFiles
         {
@@ -518,7 +527,7 @@ namespace FAT.Application.Models
             {
                 if (value)
                 {
-                    Set(() => GroupEnabled, true);
+                    GroupEnabled = true;
                     Set(() => Uri, "/Views/Scan/ScanResultsWithComputers.xaml");
 
                     _groupByFiles = !value;
@@ -701,7 +710,7 @@ namespace FAT.Application.Models
 
             Set(() => ScanWasOnceStarted, false);
             Set(() => SelectDiscoveryResults, false);
-            Set(() => GroupEnabled, false);
+            GroupEnabled = false;
             IsScanCancelled = false;
             IsScanFailed = false;
             RaisedHasUnknowns = false;
@@ -938,7 +947,7 @@ namespace FAT.Application.Models
         {
             if (PreviousScansViewModel != null && arg == null)
             {
-                PreviousScansViewModel.ValkyrieDetailsLinkAvailable = false;
+                PreviousScansViewModel.GroupEnabled = false;
                 PreviousScansViewModel.Uri = "/Views/Scan/PreviousScanResults.xaml";
                 RaisePropertyChanged(nameof(PreviousScansViewModel));
                 return;
@@ -959,25 +968,23 @@ namespace FAT.Application.Models
 
         private void DispatcherOperationCompleted(object sender, EventArgs e)
         {
-            var operation = sender as DispatcherOperation;
-            if (operation != null && operation.Status == DispatcherOperationStatus.Completed)
+            if (PreviousScansViewModel == null)
             {
-                if (PreviousScansViewModel == null)
-                {
-                    var model = CompositionHelper.Instance.Resolve<MainViewViewModel>();
-                    model.Uri = "/Views/Scan/PreviousScanResults.xaml";
+                var model = CompositionHelper.Instance.Resolve<MainViewViewModel>();
+                model.Uri = "/Views/Scan/PreviousScanResults.xaml";
 
-                    PreviousScansViewModel = model;
-                    RaisePropertyChanged(nameof(PreviousScansViewModel));
-                    RaisePropertyChanged(nameof(CurrentScanAvailable));
-                }
+                PreviousScansViewModel = model;
+                RaisePropertyChanged(nameof(PreviousScansViewModel));
+                RaisePropertyChanged(nameof(CurrentScanAvailable));
+            }
+            else
+            {
+                var operation = sender as DispatcherOperation;
+
+                if (operation != null && operation.Result != null)
+                    MergeScanOperationResult(operation.Result as IScanOperationResult);
                 else
-                {
-                    if (operation.Result != null)
-                        MergeScanOperationResult(operation.Result as IScanOperationResult);
-                    else
-                        RaisePropertyChanged(nameof(ScanOperations));
-                }
+                    RaisePropertyChanged(nameof(ScanOperations));
             }
 
             IsBusy = false;

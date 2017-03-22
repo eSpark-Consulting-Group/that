@@ -5,7 +5,16 @@ using Valkyrie.WebApiProvider.Enums;
 
 namespace APTAT.Valkyrie
 {
-    public class ValkyrieAnalysisResult
+    public interface IValkyrieAnalysisResult
+    {
+        string OperationStatus { get; }
+        string SkipReason { get; }
+        ValkyrieVerdict Verdict { get; }
+        bool IsWhiteListed { get; }
+        float? MalwareProbability { get; }
+    }
+
+    public class ValkyrieAnalysisResult : IValkyrieAnalysisResult
     {
         public static ValkyrieAnalysisResult Create(BasicInfoResponse basicInfo)
         {

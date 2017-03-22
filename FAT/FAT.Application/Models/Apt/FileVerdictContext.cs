@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using APTAT.Core.Descent.Apt;
 using FlsResult = APTAT.Core.Descent.Apt.CloudVerdict;
 using APTAT.Valkyrie;
 
@@ -14,7 +9,7 @@ namespace APTAT.Application.Models.Apt
         public string Sha1 { get;  }
         public FlsResult? FlsVerdict { get;  }
         public DateTime? FlsVerdictModifiedDate { get;  }
-        public ValkyrieAnalysisResult ValkyrieAnalysisResult { get;  }
+        public IValkyrieAnalysisResult ValkyrieAnalysisResult { get;  }
         public DateTime? ValkyrieModifiedDate { get; set; }
         public FileVerdictContext(string sha1, FlsResult flsVerdict, DateTime modifiedDate)
         {
@@ -23,7 +18,7 @@ namespace APTAT.Application.Models.Apt
             FlsVerdict = flsVerdict;
         }
 
-        public FileVerdictContext(string sha1, ValkyrieAnalysisResult valkyrieAnalysisResult, DateTime modifiedDate)
+        public FileVerdictContext(string sha1, IValkyrieAnalysisResult valkyrieAnalysisResult, DateTime modifiedDate)
         {
             Sha1 = sha1;
             ValkyrieModifiedDate = modifiedDate;

@@ -149,7 +149,7 @@
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
                     CellTemplate="{StaticResource TypeColumn}"   
                     IsFilterable="False"
-                    Header="Scan Type"  
+                    Header="Scan Target"  
                     SortMemberPath="DevicesSourceDescription.Type"
                     TextAlignment="Left"
                     MinWidth="100"/>
@@ -158,7 +158,7 @@
                     CellTemplate="{StaticResource MethodColumn}"   
                     IsFilterable="False"
                     SortMemberPath="ScanMethod"
-                    Header="Scan Method"  
+                    Header="Scan Type"  
                     TextAlignment="Left"
                     MinWidth="110"/>
             </telerik:RadTreeListView.Columns>

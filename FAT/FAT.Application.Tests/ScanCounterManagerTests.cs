@@ -7,11 +7,12 @@ using Telerik.JustMock;
 using Xunit;
 using FAT.Application.Models;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace FAT.Application.Tests
 {
 
-    public class ScanCountersTests
+    public class ScanCounterManagerTests
     {
         [Fact]
         public void ConstructorTest()
@@ -20,8 +21,9 @@ namespace FAT.Application.Tests
             var scanCounterFactory = Mock.Create<IScanCounterFactory>(Behavior.Strict);
 
             Mock.ArrangeSet(() => scanCounterCollection.ExternalEnumerator
-                = Arg.Matches<Func<IEnumerable<IScanCounter>>>(fx => !fx().Any()));
+                = Arg.Matches<Func<IEnumerable<IScanCounter>>>(_ => !_().Any())).MustBeCalled();
 
+            //act
             var scanCounterManager = new ScanCounterManager(scanCounterCollection, scanCounterFactory);
 
             Assert.Same(scanCounterCollection, scanCounterManager.CounterCollection);
@@ -31,6 +33,7 @@ namespace FAT.Application.Tests
             Assert.False(scanCounterManager.HasUnknowns);
             Assert.False(scanCounterManager.HasNotAnalyzed);
             Assert.False(scanCounterManager.HasInProgress);
+            Mock.Assert(scanCounterCollection);
         }
 
         [Theory]
@@ -44,16 +47,20 @@ namespace FAT.Application.Tests
             int notAnalyzedCount, int inProgressCount)
         {
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
-            var scanCounterManager = new ScanCounterManager(new ScanCounterCollection(), new ScanCounterFactory());
+            
+            Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(cleanCount).MustBeCalled();
+            Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(malwaresCount).MustBeCalled();
+            Mock.Arrange(() => scanCounterDiff.UnknownDiff).Returns(unknownCount).MustBeCalled();
+            Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(notAnalyzedCount).MustBeCalled();
+            Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(inProgressCount).MustBeCalled();
 
+            bool addRaised = false;
+            var scanCounterCollection = new ScanCounterCollection();
+            scanCounterCollection.CollectionChanged += (o, e) => addRaised = e.Action == NotifyCollectionChangedAction.Add;
+            var scanCounterManager = new ScanCounterManager(scanCounterCollection, new ScanCounterFactory());
             var total = cleanCount + malwaresCount + unknownCount + notAnalyzedCount + inProgressCount;
 
-            Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(cleanCount);
-            Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(malwaresCount);
-            Mock.Arrange(() => scanCounterDiff.UnknownDiff).Returns(unknownCount);
-            Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(notAnalyzedCount);
-            Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(inProgressCount);
-
+            //act
             scanCounterManager.UpdateCounters(scanCounterDiff);
 
             Assert.NotEmpty(scanCounterManager.CounterCollection);
@@ -63,6 +70,8 @@ namespace FAT.Application.Tests
             Assert.Equal(unknownCount, scanCounterManager.UnknownsCount);
             Assert.Equal(notAnalyzedCount, scanCounterManager.NotAnalyzedCount);
             Assert.Equal(inProgressCount, scanCounterManager.InProgressCount);
+            Assert.True(addRaised);
+            Mock.Assert(scanCounterDiff);
         }
 
         [Theory]
@@ -73,18 +82,18 @@ namespace FAT.Application.Tests
         public void UpdateCountersMultiThreadTest(int cleanCount, int malwaresCount, int unknownCount, int notAnalyzedCount, int inProgressCount, int threadCount)
         {
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
+            
+            Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(cleanCount).OnAllThreads();
+            Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(malwaresCount).OnAllThreads();
+            Mock.Arrange(() => scanCounterDiff.UnknownDiff).Returns(unknownCount).OnAllThreads();
+            Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(notAnalyzedCount).OnAllThreads();
+            Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(inProgressCount).OnAllThreads();
+
             var scanCounterManager = new ScanCounterManager(new ScanCounterCollection(), new ScanCounterFactory());
-
             var total = cleanCount + malwaresCount + unknownCount + notAnalyzedCount + inProgressCount;
-
-            Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(cleanCount);
-            Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(malwaresCount);
-            Mock.Arrange(() => scanCounterDiff.UnknownDiff).Returns(unknownCount);
-            Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(notAnalyzedCount);
-            Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(inProgressCount);
-
             var countdown = new CountdownEvent(threadCount);
 
+            //act
             foreach (var e in Enumerable.Range(1, threadCount))
             {
                 Task.Run(() =>
@@ -104,12 +113,12 @@ namespace FAT.Application.Tests
             Assert.Equal(unknownCount * threadCount, scanCounterManager.UnknownsCount);
             Assert.Equal(notAnalyzedCount * threadCount, scanCounterManager.NotAnalyzedCount);
             Assert.Equal(inProgressCount * threadCount, scanCounterManager.InProgressCount);
+            Mock.Assert(scanCounterDiff);
         }
 
         [Fact]
         public void ClearTest()
         {
-            var scanCounterManager = new ScanCounterManager(new ScanCounterCollection(), new ScanCounterFactory());
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
 
             Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(1);
@@ -118,6 +127,12 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(1);
             Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(1);
 
+            bool resetRaised = false;
+            var scanCounterCollection = new ScanCounterCollection();
+            scanCounterCollection.CollectionChanged += (o, e) => resetRaised = e.Action == NotifyCollectionChangedAction.Reset;
+            var scanCounterManager = new ScanCounterManager(scanCounterCollection, new ScanCounterFactory());
+
+            //act
             scanCounterManager.UpdateCounters(scanCounterDiff);
             scanCounterManager.Clear();
 
@@ -128,12 +143,12 @@ namespace FAT.Application.Tests
             Assert.False(scanCounterManager.HasUnknowns);
             Assert.False(scanCounterManager.HasNotAnalyzed);
             Assert.False(scanCounterManager.HasInProgress);
+            Assert.True(resetRaised);
         }
 
         [Fact]
         public void SelectedOrdersChangedTest()
         {
-            var scanCounterManager = new ScanCounterManager(new ScanCounterCollection(), new ScanCounterFactory());
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
 
             Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(0);
@@ -142,10 +157,12 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => scanCounterDiff.NotAnalyzedDiff).Returns(0);
             Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(0);
 
-            scanCounterManager.UpdateCounters(scanCounterDiff);
-
             var orders = new int[0];
+            var scanCounterManager = new ScanCounterManager(new ScanCounterCollection(), new ScanCounterFactory());
+            scanCounterManager.UpdateCounters(scanCounterDiff);
             scanCounterManager.SelectedOrdersChanged = o => orders = o;
+
+            //act
             scanCounterManager.CounterCollection.First().IsSelected = true;
 
             Assert.NotEmpty(orders);
