@@ -17,6 +17,36 @@ namespace APTAT.Core.Reports
         {
         }
 
+        public override VulnerableDeviceInfoEx[] Top10VulnerableDevicesValkyrie
+        {
+            get
+            {
+                IEnumerable<ScannedTarget> targets = new ScannedTarget[] { };
+                IEnumerable<DetailedBadFile> files;
+                MergeResults(_Targets, ValkyrieAnalysisResult, out targets, out files, out files);
+
+                var top10 = (from target in targets
+                             where target.BadFilesCount > 0
+                             orderby target.BadFilesCount descending
+                             select target).Take(10);
+
+                List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
+                foreach (var scanResult in top10)
+                {
+                    
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.UnknownFilesCount, BadFileType = "Unknown", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Malicious", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Not Analyzed", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                    
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.PendingAnalysisFilesCount, BadFileType = "In Analysis", Name = scanResult.HostName, Uid = scanResult.TargetUid });
+                }
+
+                return devices.ToArray();
+            }
+        }
+
         public override ItemRatingInfo[] FileRatingValkyrie
         {
             get
@@ -533,7 +563,7 @@ namespace APTAT.Core.Reports
             }
         }
 
-        public VulnerableDeviceInfoEx[] Top10VulnerableDevicesValkyrie
+        public virtual VulnerableDeviceInfoEx[] Top10VulnerableDevicesValkyrie
         {
             get
             {
@@ -554,13 +584,7 @@ namespace APTAT.Core.Reports
                     if (scanResult.MalwareFilesCount > 0)
                         devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.MalwareFilesCount, BadFileType = "Infected", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                     if (scanResult.NotAnalyzedFilesCount > 0)
-                        devices.Add(new VulnerableDeviceInfoEx()
-                        {
-                            BadFilesCount = scanResult.NotAnalyzedFilesCount,
-                            BadFileType = "Not Analyzed",
-                            Name = scanResult.HostName,
-                            Uid = scanResult.TargetUid
-                        });
+                        devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.NotAnalyzedFilesCount, BadFileType = "Not Analyzed", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                     if (scanResult.PendingAnalysisFilesCount > 0)
                         devices.Add(new VulnerableDeviceInfoEx() { BadFilesCount = scanResult.PendingAnalysisFilesCount, BadFileType = "Pending", Name = scanResult.HostName, Uid = scanResult.TargetUid });
                 }
