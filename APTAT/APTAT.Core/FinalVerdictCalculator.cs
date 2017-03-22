@@ -73,7 +73,7 @@ namespace APTAT.Core
                 case FinalVerdict.Malware:
                     return "Malware";
                 case FinalVerdict.NotAnalyzed:
-                    return $"Failed ({operationStatus?.Replace(Environment.NewLine, "")})";
+                    return $"Not Analyzed  ({operationStatus?.Replace(Environment.NewLine, "")})";
                 case FinalVerdict.Unknown:
                     return "No Threat Found";
                 default:

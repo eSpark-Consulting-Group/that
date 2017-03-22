@@ -216,7 +216,7 @@ namespace APTAT.Core.Reports
                 if (_calculator == null) return String.Empty;
                 if (!this.FinalVerdict.HasValue) return String.Empty;
 
-                return _calculator.GetVerdictString(this.FinalVerdict.Value);
+                return _calculator.GetVerdictString(this.FinalVerdict.Value, this.OperationStatus);
             }
 
         }
