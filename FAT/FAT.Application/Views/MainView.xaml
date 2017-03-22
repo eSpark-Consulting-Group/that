@@ -610,7 +610,7 @@
 
                         <telerik:RadButton AutomationProperties.AutomationId="PreviousScansButton"
                                   Margin="0,-2,0,-3"  
-                                  Padding="17,20,17,20"
+                                  Padding="10,20,10,20"
                                   FontSize="16"
                                   BorderThickness="0"
                                   FocusVisualStyle="{x:Null}" 
@@ -634,7 +634,7 @@
 
                         <telerik:RadButton AutomationProperties.AutomationId="CurrentScanButton"
                                   Margin="0,-2,0,-3"  
-                                  Padding="17,20,17,20"
+                                  Padding="10,20,10,20"
                                   FontSize="16"
                                   BorderThickness="0"
                                   Visibility="{Binding CurrentScanAvailable, Converter={converters:BoolToVisibilityConverter2}}"
@@ -666,7 +666,7 @@
                                            x:Name="ReportButton"
                                            FocusVisualStyle="{x:Null}" 
                                            FontSize="16"
-                                           Padding="17,20,20,20">
+                                           Padding="10,20,10,20">
                             <telerik:RadDropDownButton.DropDownContent>
                                 <telerik:RadContextMenu AutomationProperties.AutomationId="ReportsContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0">
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveValkyrieReportMenuItem" Margin="-1"
@@ -681,7 +681,7 @@
 
                         <telerik:RadButton AutomationProperties.AutomationId="OptionsButton"
                                   Margin="0,-2,0,-3"  
-                                  Padding="17,20,17,20"
+                                  Padding="10,20,10,20"
                                   FontSize="16"
                                   BorderThickness="0"
                                   FocusVisualStyle="{x:Null}" 
@@ -703,7 +703,7 @@
                         </telerik:RadButton>
 
                         <telerik:RadDropDownButton AutomationProperties.AutomationId="HelpDropDownButton" AutoOpenDelay="0:0:0.0" Content="Help" BorderThickness="0" DropDownIndicatorVisibility="Collapsed"
-                                          FocusVisualStyle="{x:Null}" Margin="0,-2,-5,-3" ContentTemplate="{StaticResource AboutButtonContentTemplate}" x:Name="HelpButton" FontSize="16" Padding="17,20,20,20">
+                                          FocusVisualStyle="{x:Null}" Margin="0,-2,-5,-3" ContentTemplate="{StaticResource AboutButtonContentTemplate}" x:Name="HelpButton" FontSize="16" Padding="10,20,10,20">
                             <telerik:RadDropDownButton.DropDownContent>
                                 <telerik:RadContextMenu AutomationProperties.AutomationId="HelpContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0" >
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="AboutMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="About" Click="AboutClick" Margin="-1" />
