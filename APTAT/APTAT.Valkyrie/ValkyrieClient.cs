@@ -127,7 +127,6 @@ namespace APTAT.Valkyrie
                     ProductVersion = asm.Version.ToString()
                 });
             }
-            _apiKey = regInfo.Key;
             return regInfo;
         }
 
@@ -651,7 +650,8 @@ namespace APTAT.Valkyrie
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
             _filesCount = 0;
-
+            string apiKeyInternal = null;
+            string scanIdInternal = null;
             Task.Factory.StartNew(t =>
             {
                 _isMainScanFinished = false;
@@ -679,7 +679,7 @@ namespace APTAT.Valkyrie
                     var ex = new ValkyrieRegistrationFailedException(regInfo);
                     throw ex;
                 }
-
+                apiKeyInternal = regInfo.Key;
                 _analysisResults = new ConcurrentBag<ValkyrieAnalysisResult>();
                 _pendingItemsResolved.Clear();
                 _login = login;
@@ -689,7 +689,7 @@ namespace APTAT.Valkyrie
                 lock (_aptScanIdLock)
                 {
                     startScanResult = _provider.StartScan(new StartScanRequest(regInfo.Key));
-                    _aptScanId = startScanResult.AptScanId;
+                    scanIdInternal = startScanResult.AptScanId;
                 }
 
                 if (startScanResult.ReturnCode != 0)
@@ -709,6 +709,8 @@ namespace APTAT.Valkyrie
                     var ex = new ValkyrieRegistrationFailedException(resp);
                     throw ex;
                 }
+                _apiKey = apiKeyInternal;
+                _aptScanId = scanIdInternal;
 
                 _progressNotifyTimer.Start();
 
