@@ -51,14 +51,14 @@ namespace APTAT.Core.Reports
         {
             get
             {
-                var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + InAnalysisFilesCount + NotAnalyzedFilesCount;
+                var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + PendingAnalysisFilesCount + NotAnalyzedFilesCount;
                 if (total == 0) return new ItemRatingInfo[0];
                 var itemRatingInfoList = new List<ItemRatingInfo>
                 {
                     new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", total == 0?0: SafeFilesCount / (double) total)},
                     new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Unknown, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", total == 0?0:UnknownFilesFound / (double) total)},
                     new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", total == 0?0:MalwareFilesFound / (double) total)},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.InProgress, Count = InAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , total == 0?0:InAnalysisFilesCount / (double) total )},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.InProgress, Count = PendingAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , total == 0?0:PendingAnalysisFilesCount / (double) total )},
                     new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = string.Format("Not Analyzed ({0:P2})" , total == 0?0:NotAnalyzedFilesCount / (double) total )}
                 };
 
@@ -225,15 +225,7 @@ namespace APTAT.Core.Reports
                 return _noVerdictFileCount;
             }
         }
-
-        public int InAnalysisFilesCount
-        {
-            get
-            {
-                return PendingAnalysisFilesCount + LookupInProgressFilesCount;
-            }
-        }
-
+        
         public int PendingAnalysisFilesCount
         {
             get

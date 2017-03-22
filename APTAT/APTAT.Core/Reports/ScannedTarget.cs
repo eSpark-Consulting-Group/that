@@ -54,6 +54,7 @@ namespace APTAT.Core.Reports
         public int MalwareFilesCount { get; set; }
 
         public int NotAnalyzedFilesCount => FailedToAnalyzeFilesCount + NoVerdictFilesCount;
+        
         public int FailedToAnalyzeFilesCount { get; set; }
         public int NoVerdictFilesCount { get; set; }
         public int RunningProgramsCount { get; set; }
