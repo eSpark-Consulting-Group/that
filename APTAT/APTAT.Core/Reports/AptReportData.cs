@@ -22,14 +22,14 @@ namespace APTAT.Core.Reports
             get
             {
                 var total = SafeFilesCount + UnknownFilesFound + MalwareFilesFound + InAnalysisFilesCount + NotAnalyzedFilesCount;
-
+                if (total == 0) return new ItemRatingInfo[0];
                 var itemRatingInfoList = new List<ItemRatingInfo>
                 {
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", SafeFilesCount / (double) total)},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Unknown, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", UnknownFilesFound / (double) total)},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", MalwareFilesFound / (double) total)},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.InProgress, Count = InAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , InAnalysisFilesCount / (double) total )},
-                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = string.Format("Not Analyzed ({0:P2})" , NotAnalyzedFilesCount / (double) total )}
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Clean, Count = SafeFilesCount, Value = string.Format("Trusted: ({0:P2})", total == 0?0: SafeFilesCount / (double) total)},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Unknown, Count = UnknownFilesFound, Value = string.Format("Unknown  ({0:P2})", total == 0?0:UnknownFilesFound / (double) total)},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.Malware, Count = MalwareFilesFound, Value = string.Format("Malicious ({0:P2})", total == 0?0:MalwareFilesFound / (double) total)},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.InProgress, Count = InAnalysisFilesCount, Value = string.Format("In Analysis ({0:P2})" , total == 0?0:InAnalysisFilesCount / (double) total )},
+                    new FileRatingInfoFAT{ CloudVerdict = (int)FinalVerdict.NotAnalyzed, Count = NotAnalyzedFilesCount, Value = string.Format("Not Analyzed ({0:P2})" , total == 0?0:NotAnalyzedFilesCount / (double) total )}
                 };
 
                 return itemRatingInfoList.ToArray();
