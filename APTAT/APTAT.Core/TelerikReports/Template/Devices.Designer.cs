@@ -10,6 +10,7 @@ namespace APTAT.Core.TelerikReports.Template
         private void InitializeComponent()
         {
             Telerik.Reporting.ReportParameter reportParameter1 = new Telerik.Reporting.ReportParameter();
+            Telerik.Reporting.ReportParameter reportParameter2 = new Telerik.Reporting.ReportParameter();
             Telerik.Reporting.Drawing.StyleRule styleRule1 = new Telerik.Reporting.Drawing.StyleRule();
             this.pageHeaderSection1 = new Telerik.Reporting.PageHeaderSection();
             this.detail = new Telerik.Reporting.DetailSection();
@@ -243,7 +244,10 @@ namespace APTAT.Core.TelerikReports.Template
             reportParameter1.Name = "IsActiveDirectory";
             reportParameter1.Type = Telerik.Reporting.ReportParameterType.Boolean;
             reportParameter1.Value = "False";
+            reportParameter2.AllowBlank = false;
+            reportParameter2.Name = "DataSourceBinding";
             this.ReportParameters.Add(reportParameter1);
+            this.ReportParameters.Add(reportParameter2);
             styleRule1.Selectors.AddRange(new Telerik.Reporting.Drawing.ISelector[] {
             new Telerik.Reporting.Drawing.TypeSelector(typeof(Telerik.Reporting.TextItemBase)),
             new Telerik.Reporting.Drawing.TypeSelector(typeof(Telerik.Reporting.HtmlTextBox))});
@@ -252,6 +256,7 @@ namespace APTAT.Core.TelerikReports.Template
             this.StyleSheet.AddRange(new Telerik.Reporting.Drawing.StyleRule[] {
             styleRule1});
             this.Width = Telerik.Reporting.Drawing.Unit.Cm(15.426454544067383D);
+            this.ItemDataBinding += new System.EventHandler(this.Devices_ItemDataBinding);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
         }
