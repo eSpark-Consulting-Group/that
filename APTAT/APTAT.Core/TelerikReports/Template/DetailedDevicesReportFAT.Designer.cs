@@ -228,7 +228,8 @@ namespace APTAT.Core.TelerikReports
             // 
             // detail
             // 
-            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(48.398540496826172D);
+            this.detail.CanShrink = true;
+            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(47.132289886474609D);
             this.detail.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panel5,
             this.panelCharts,
@@ -818,13 +819,13 @@ namespace APTAT.Core.TelerikReports
             this.textBox44});
             this.panel1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(9.9988508736714721E-05D), Telerik.Reporting.Drawing.Unit.Cm(33.598541259765625D));
             this.panel1.Name = "panel1";
-            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.973443031311035D), Telerik.Reporting.Drawing.Unit.Cm(14.80000114440918D));
+            this.panel1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.973443031311035D), Telerik.Reporting.Drawing.Unit.Cm(13.533744812011719D));
             // 
             // list1
             // 
             this.list1.Bindings.Add(new Telerik.Reporting.Binding("DataSource", "=ReportItem.DataObject.SucceededTargetsWithValkyrie"));
             this.list1.Body.Columns.Add(new Telerik.Reporting.TableBodyColumn(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D)));
-            this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(13.688751220703125D)));
+            this.list1.Body.Rows.Add(new Telerik.Reporting.TableBodyRow(Telerik.Reporting.Drawing.Unit.Cm(12.422493934631348D)));
             this.list1.Body.SetCellContent(0, 0, this.panel6);
             tableGroup1.Name = "ColumnGroup";
             this.list1.ColumnGroups.Add(tableGroup1);
@@ -835,7 +836,7 @@ namespace APTAT.Core.TelerikReports
             tableGroup2.Groupings.Add(new Telerik.Reporting.Grouping(null));
             tableGroup2.Name = "DetailGroup";
             this.list1.RowGroups.Add(tableGroup2);
-            this.list1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(13.688751220703125D));
+            this.list1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(12.422493934631348D));
             // 
             // panel6
             // 
@@ -845,7 +846,7 @@ namespace APTAT.Core.TelerikReports
             this.subReportUknownFiles,
             this.subReportInAnalysis});
             this.panel6.Name = "panel6";
-            this.panel6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(13.688751220703125D));
+            this.panel6.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(12.422493934631348D));
             // 
             // panel19
             // 
