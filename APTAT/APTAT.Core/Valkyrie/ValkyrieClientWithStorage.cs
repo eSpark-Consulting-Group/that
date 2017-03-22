@@ -48,7 +48,7 @@ namespace APTAT.Core.Valkyrie
         public void AnalyzeAsyncCancel(bool cancelledByUser = true)
         {
             _valkyrieClient.AnalyzeAsyncCancel(cancelledByUser);
-            if (!_isValkyrieScanEnded)
+            if (!_isValkyrieScanEnded && _valkyrieScanId.HasValue)
             {
                 _storage.TryFinishValkyrieScan(_valkyrieScanId.Value, cancelledByUser);
                 _isValkyrieScanEnded = true;
@@ -84,7 +84,8 @@ namespace APTAT.Core.Valkyrie
 
         public void SendEndScanAsync()
         {
-            _storage.TryFinishValkyrieScan(_valkyrieScanId.Value, false);
+            if (_valkyrieScanId.HasValue)
+                _storage.TryFinishValkyrieScan(_valkyrieScanId.Value, false);
             _isValkyrieScanEnded = true;
             _valkyrieClient.SendEndScanAsync();
         }
@@ -120,7 +121,7 @@ namespace APTAT.Core.Valkyrie
 
         private void OnAnalyzeProgressChanged(object sender, ValkyrieAnalyzeProgressChangedEventArgs<ValkyrieAnalysisResult> e)
         {
-            if (_valkyrieScanId != null)
+            if (_valkyrieScanId.HasValue)
                 if (e.IsUpdate)
                     _storage.UpdateValkyrieResult(_valkyrieScanId.Value, e.ProgressInfo.Results);
                 else
