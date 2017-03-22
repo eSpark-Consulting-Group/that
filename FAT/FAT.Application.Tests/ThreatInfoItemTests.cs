@@ -1,7 +1,7 @@
-﻿using APTAT.DeploymentCore;
+﻿using APTAT.Core.Descent.Apt;
+using APTAT.DeploymentCore;
 using FAT.Application.Models;
 using System;
-using System.ComponentModel;
 using System.IO;
 using Telerik.JustMock;
 using Xunit;
@@ -102,45 +102,36 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => computer.LdapPath).Returns(Arg.AnyString);
 
             ThreatInfoItem target = new ThreatInfoItem(computer);
-            PropertyChangedEventHandler handler = (sender, args) =>
-            {
-                if (args.PropertyName == propertyName)
-                    nonstrict.Action();
-            };
-            target.PropertyChanged += handler;
 
-            Mock.Arrange(() => nonstrict.Action()).DoNothing().OccursOnce();
             Mock.ArrangeSet(() => file.Parent = Arg.Matches<IThreatInfoItem>(_ => ReferenceEquals(_, target))).MustBeCalled();
             Mock.Arrange(() => file.BadFile).Returns(badFile);
             Mock.Arrange(() => file.IsComputer).Returns(false);
             Mock.Arrange(() => badFile.Sha1).Returns(string.Empty);
 
             //act
-            target.AddFile(file);
+            Action a = () => target.AddFile(file);
 
+            Assert.PropertyChanged(target, propertyName, a);
             Assert.NotNull(target.Items);
             Assert.Single(target.Items);
-            Assert.All(target.Items, _ => Assert.False(_.IsComputer));
             Mock.Assert(file);
             Mock.Assert(nonstrict);
         }
 
         [Theory]
-        [InlineData(1000, 13,32,23,12,10,32.21)]
-        [InlineData(100, 1, 0, 0, 0, 1, 2.21)]
-        [InlineData(1000, 0, 0, 0, 0, 0, 1.21)]
-        [InlineData(1000, 0, 1, 1, 1, 0, 1.21)]
+        [InlineData(1000, 1, 2, 3, 4, 5, 99.99d, "teststatus")]
         public void UpdateCountersTest(int totalFiles, int cleanFilesCount, int malwaresFilesCount, int unknownFilesCount,
-            int noVerdictFilesCount, int failedToAnalyzeFilesCount, double percentage)
+            int noVerdictFilesCount, int failedToAnalyzeFilesCount, double percentage, string message)
         {
             var computer = Mock.Create<IComputer>(Behavior.Strict);
-            var uid = Guid.NewGuid();
-            Mock.Arrange(() => computer.Name).Returns("comp1");
-            Mock.Arrange(() => computer.IPAddress).Returns("10.8.65.171");
-            Mock.Arrange(() => computer.IsOnline).Returns(true);
-            Mock.Arrange(() => computer.IsLocalComputer).Returns(false);
-            Mock.Arrange(() => computer.Uid).Returns(uid);
-            Mock.Arrange(() => computer.LdapPath).Returns(String.Empty);
+            Mock.Arrange(() => computer.Name).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.DnsName).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.IPAddress).Returns(Arg.AnyString);
+            Mock.Arrange(() => computer.IsOnline).Returns(Arg.AnyBool);
+            Mock.Arrange(() => computer.IsLocalComputer).Returns(Arg.AnyBool);
+            Mock.Arrange(() => computer.Uid).Returns(Arg.AnyGuid);
+            Mock.Arrange(() => computer.LdapPath).Returns(Arg.AnyString);
+
             ThreatInfoItem target = new ThreatInfoItem(computer);
             
             var scanResultItem = Mock.Create<IScanResultItem>(Behavior.Strict);
@@ -151,28 +142,58 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => scanResultItem.NoVerdictFilesCount).Returns(noVerdictFilesCount);
             Mock.Arrange(() => scanResultItem.FailedToAnalyzeFilesCount).Returns(failedToAnalyzeFilesCount);
             Mock.Arrange(() => scanResultItem.Percentage).Returns(percentage);
-            Mock.Arrange(() => scanResultItem.StatusMessage).Returns(String.Empty);
+            Mock.Arrange(() => scanResultItem.StatusMessage).Returns(message);
             Mock.Arrange(() => scanResultItem.ScanStage).Returns(ScanStage.ScanInProgress);
 
             var scanCounterDiff = Mock.Create<IScanCounterDiff>(Behavior.Strict);
             Mock.Arrange(() => scanCounterDiff.CleanDiff).Returns(0);
             Mock.Arrange(() => scanCounterDiff.MalwareDiff).Returns(0);
             Mock.Arrange(() => scanCounterDiff.InProgressDiff).Returns(0);
-            Mock.ArrangeSet(() => scanCounterDiff.CleanDiff = cleanFilesCount);
-            Mock.ArrangeSet(() => scanCounterDiff.MalwareDiff =malwaresFilesCount);
-            Mock.ArrangeSet(() => scanCounterDiff.InProgressDiff = (noVerdictFilesCount + 
-                failedToAnalyzeFilesCount + unknownFilesCount));
-            
+            Mock.ArrangeSet(() => scanCounterDiff.CleanDiff = Arg.Matches<int>(_ => scanResultItem.CleanFilesCount == _)).MustBeCalled();
+            Mock.ArrangeSet(() => scanCounterDiff.MalwareDiff = Arg.Matches<int>(_ => scanResultItem.MalwareFilesCount == _)).MustBeCalled();
+            Mock.ArrangeSet(() => scanCounterDiff.InProgressDiff = Arg.Matches<int>(_ => 
+                scanResultItem.UnknownFilesCount + scanResultItem.NoVerdictFilesCount + scanResultItem.FailedToAnalyzeFilesCount == _)).MustBeCalled();
+            Mock.ArrangeSet(() => scanCounterDiff.NotAnalyzedDiff = Arg.AnyInt).OccursNever();
+            Mock.ArrangeSet(() => scanCounterDiff.UnknownDiff = Arg.AnyInt).OccursNever();
 
+            //act
             target.UpdateCounters(scanResultItem, scanCounterDiff);
-            Assert.Equal(totalFiles, target.TotalFilesCount);
-            Assert.Equal(percentage/2, target.TotalProgressPercentage);
+
+            Assert.Equal(totalFiles, target.TotalFilesCount);     
             Assert.Equal(malwaresFilesCount, target.MalwareFilesCount);
             Assert.Equal(cleanFilesCount, target.CleanFilesCount);
-            Assert.Equal((noVerdictFilesCount +
-                failedToAnalyzeFilesCount + unknownFilesCount), target.PendingFilesCount);
+            Assert.Equal((noVerdictFilesCount + failedToAnalyzeFilesCount + unknownFilesCount), target.PendingFilesCount);
+            Assert.Equal(percentage / 2, target.TotalProgressPercentage);
+            Assert.Equal(percentage, target.RemoteScanningPercentage);
             Assert.Equal(ScanStage.ScanInProgress, target.ScanStage);
+            Assert.Equal(message, target.StatusMessageSystem);
+            Mock.Assert(scanCounterDiff);
+        }
 
+        [Theory]
+        [InlineData("VerdictString", CloudVerdict.FailedToAnalyze)]
+        [InlineData("IsMalware", CloudVerdict.FirstSeen)]
+        [InlineData("IsUnknown", CloudVerdict.Malware)]
+        [InlineData("Clean", CloudVerdict.NoVerdict)]
+        [InlineData("Failed", CloudVerdict.Safe)]
+        [InlineData("Pending", CloudVerdict.Unknown)]
+        public void UpdateFileVerdictTest(string propertyName, CloudVerdict verdict)
+        {
+            var badFile = Mock.Create<IBadFileItem>(Behavior.Strict);
+            Mock.Arrange(() => badFile.Name).Returns(Arg.AnyString);
+            Mock.Arrange(() => badFile.Size).Returns(Arg.AnyLong);
+            Mock.Arrange(() => badFile.SizeSorting).Returns(Arg.AnyString);
+            Mock.Arrange(() => badFile.FileSizeFormatted).Returns(Arg.AnyString);
+            Mock.Arrange(() => badFile.Product).Returns(Arg.AnyString);
+            Mock.ArrangeSet(() => badFile.Cloud = Arg.Matches<CloudVerdict>(_ => verdict == _)).MustBeCalled();
+
+            ThreatInfoItem target = new ThreatInfoItem(badFile);
+
+            //act
+            Action a = () => target.UpdateFileVerdict(verdict);
+
+            Assert.PropertyChanged(target, propertyName, a);
+            Mock.Assert(badFile);
         }
     }
 }

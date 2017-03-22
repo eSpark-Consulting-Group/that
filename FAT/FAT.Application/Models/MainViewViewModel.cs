@@ -612,7 +612,8 @@ namespace FAT.Application.Models
                 AppMessages.ScanMessage.Send(MessageTypes.StopScan, InvokeStopScan),
                 o => IsGlobalStopEnabled);
             StopAutoDiscoveryCommand = new DelegateCommand(InvokeStopAutoDiscovery);
-            StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults);
+            StartScanWithDiscoveryResultsCommand = new DelegateCommand(InvokeScanWithDiscoveryResults,
+                o => DiscoveryResults != null && DiscoveryResults.Any());
             SelectCommand = new DelegateCommand(o => { },
                 o => IsDetailsEnabled);
             SubmitEmailCommand = new DelegateCommand(InvokeSubmitEmail,
@@ -717,6 +718,7 @@ namespace FAT.Application.Models
             SelectedDiscoveryResults = new List<IComputer>();
             RaisePropertyChanged(nameof(DiscoveryResults));
             StartScanCommand.InvalidateCanExecute();
+            StartScanWithDiscoveryResultsCommand.InvalidateCanExecute();
 
             Set(() => Uri, "/Views/DiscoveryResults.xaml");
 
@@ -1233,6 +1235,7 @@ namespace FAT.Application.Models
                     _scanCounterManager.AddComputer();
                     if (SelectDiscoveryResults.GetValueOrDefault())
                         Set(() => SelectDiscoveryResults, null);
+                    StartScanWithDiscoveryResultsCommand.InvalidateCanExecute();
                 }
             }
 
