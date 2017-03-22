@@ -17,7 +17,6 @@ namespace APTAT.Core.TelerikReports
             Telerik.Reporting.GraphGroup graphGroup1 = new Telerik.Reporting.GraphGroup();
             Telerik.Reporting.Drawing.ColorPalette colorPalette1 = new Telerik.Reporting.Drawing.ColorPalette();
             Telerik.Reporting.GraphGroup graphGroup4 = new Telerik.Reporting.GraphGroup();
-            Telerik.Reporting.GraphTitle graphTitle1 = new Telerik.Reporting.GraphTitle();
             Telerik.Reporting.NumericalScale numericalScale1 = new Telerik.Reporting.NumericalScale();
             Telerik.Reporting.CategoryScale categoryScale1 = new Telerik.Reporting.CategoryScale();
             Telerik.Reporting.GraphGroup graphGroup2 = new Telerik.Reporting.GraphGroup();
@@ -742,6 +741,7 @@ namespace APTAT.Core.TelerikReports
             colorPalette1.Colors.Add(System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(133)))), ((int)(((byte)(194))))));
             this.graph1.ColorPalette = colorPalette1;
             this.graph1.CoordinateSystems.Add(this.cartesianCoordinateSystem1);
+            this.graph1.Legend.Position = Telerik.Reporting.GraphItemPosition.BottomCenter;
             this.graph1.Legend.Style.LineColor = System.Drawing.Color.LightGray;
             this.graph1.Legend.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
             this.graph1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.052916664630174637D), Telerik.Reporting.Drawing.Unit.Cm(1.4985423088073731D));
@@ -757,12 +757,6 @@ namespace APTAT.Core.TelerikReports
             this.graph1.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graph1.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graph1.Style.Padding.Top = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            graphTitle1.Position = Telerik.Reporting.GraphItemPosition.BottomCenter;
-            graphTitle1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(8D);
-            graphTitle1.Style.LineColor = System.Drawing.Color.LightGray;
-            graphTitle1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Cm(0D);
-            graphTitle1.Text = "Number of Unknown Files/Malicious Files/In Analysis Files ";
-            this.graph1.Titles.Add(graphTitle1);
             // 
             // cartesianCoordinateSystem1
             // 
