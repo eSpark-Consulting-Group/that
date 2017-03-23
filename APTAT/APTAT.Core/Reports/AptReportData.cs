@@ -30,6 +30,7 @@ namespace APTAT.Core.Reports
                              orderby target.BadFilesCount descending
                              select target).Take(10);
 
+                if (top10.All(t => (t.UnknownFilesCount + t.MalwareFilesCount + t.NotAnalyzedFilesCount + t.PendingAnalysisFilesCount) == 0)) return new VulnerableDeviceInfoEx[0];
                 List<VulnerableDeviceInfoEx> devices = new List<VulnerableDeviceInfoEx>();
                 foreach (var scanResult in top10)
                 {
