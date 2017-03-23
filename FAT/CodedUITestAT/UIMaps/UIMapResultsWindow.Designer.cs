@@ -30,16 +30,42 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     {
         
         /// <summary>
-        /// AssertScanningResultsTable - Use 'AssertScanningResultsTableExpectedValues' to pass parameters into this method.
+        /// AssertResolvingComputersTextBlock - Use 'AssertResolvingComputersTextBlockExpectedValues' to pass parameters into this method.
         /// </summary>
-        public void AssertScanningResultsTable()
+        public void AssertResolvingComputersTextBlock()
         {
             #region Variable Declarations
-            WpfTable uIRadTreeListViewTable = this.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable;
+            WpfText uIResolvingComputersText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIResolvingComputersProgressBar.UIResolvingComputersText;
+            #endregion
+
+            // Verify that the 'Exists' property of 'Resolving Computers...' label equals 'True'
+            Assert.AreEqual(this.AssertResolvingComputersTextBlockExpectedValues.UIResolvingComputersTextExists, uIResolvingComputersText.Exists);
+        }
+        
+        /// <summary>
+        /// AssertScanResultsByComputersTable - Use 'AssertScanResultsByComputersTableExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertScanResultsByComputersTable()
+        {
+            #region Variable Declarations
+            WpfTable uIRadTreeListViewTable = this.UIForensicAnalysisToolWindow.UIScanResultsByComputeCustom.UIRadTreeListViewTable;
             #endregion
 
             // Verify that the 'Exists' property of 'RadTreeListView' table equals 'True'
-            Assert.AreEqual(this.AssertScanningResultsTableExpectedValues.UIRadTreeListViewTableExists, uIRadTreeListViewTable.Exists);
+            Assert.AreEqual(this.AssertScanResultsByComputersTableExpectedValues.UIRadTreeListViewTableExists, uIRadTreeListViewTable.Exists);
+        }
+        
+        /// <summary>
+        /// AssertScanResultsByFilesTable - Use 'AssertScanResultsByFilesTableExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertScanResultsByFilesTable()
+        {
+            #region Variable Declarations
+            WpfTable uIRadTreeListViewTable = this.UIForensicAnalysisToolWindow.UIScanResultsByFilesScCustom.UIRadTreeListViewTable;
+            #endregion
+
+            // Verify that the 'Exists' property of 'RadTreeListView' table equals 'True'
+            Assert.AreEqual(this.AssertScanResultsByFilesTableExpectedValues.UIRadTreeListViewTableExists, uIRadTreeListViewTable.Exists);
         }
         
         /// <summary>
@@ -224,29 +250,40 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uIDetailsMenuItem, new Point(48, 9));
         }
         
-        /// <summary>
-        /// AssertResolvingComputersTextBlock - Use 'AssertResolvingComputersTextBlockExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertResolvingComputersTextBlock()
-        {
-            #region Variable Declarations
-            WpfText uIResolvingComputersText = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UIResolvingComputersProgressBar.UIResolvingComputersText;
-            #endregion
-
-            // Verify that the 'Exists' property of 'Resolving Computers...' label equals 'True'
-            Assert.AreEqual(this.AssertResolvingComputersTextBlockExpectedValues.UIResolvingComputersTextExists, uIResolvingComputersText.Exists);
-        }
-        
         #region Properties
-        public virtual AssertScanningResultsTableExpectedValues AssertScanningResultsTableExpectedValues
+        public virtual AssertResolvingComputersTextBlockExpectedValues AssertResolvingComputersTextBlockExpectedValues
         {
             get
             {
-                if ((this.mAssertScanningResultsTableExpectedValues == null))
+                if ((this.mAssertResolvingComputersTextBlockExpectedValues == null))
                 {
-                    this.mAssertScanningResultsTableExpectedValues = new AssertScanningResultsTableExpectedValues();
+                    this.mAssertResolvingComputersTextBlockExpectedValues = new AssertResolvingComputersTextBlockExpectedValues();
                 }
-                return this.mAssertScanningResultsTableExpectedValues;
+                return this.mAssertResolvingComputersTextBlockExpectedValues;
+            }
+        }
+        
+        public virtual AssertScanResultsByComputersTableExpectedValues AssertScanResultsByComputersTableExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertScanResultsByComputersTableExpectedValues == null))
+                {
+                    this.mAssertScanResultsByComputersTableExpectedValues = new AssertScanResultsByComputersTableExpectedValues();
+                }
+                return this.mAssertScanResultsByComputersTableExpectedValues;
+            }
+        }
+        
+        public virtual AssertScanResultsByFilesTableExpectedValues AssertScanResultsByFilesTableExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertScanResultsByFilesTableExpectedValues == null))
+                {
+                    this.mAssertScanResultsByFilesTableExpectedValues = new AssertScanResultsByFilesTableExpectedValues();
+                }
+                return this.mAssertScanResultsByFilesTableExpectedValues;
             }
         }
         
@@ -358,18 +395,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             }
         }
         
-        public virtual AssertResolvingComputersTextBlockExpectedValues AssertResolvingComputersTextBlockExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertResolvingComputersTextBlockExpectedValues == null))
-                {
-                    this.mAssertResolvingComputersTextBlockExpectedValues = new AssertResolvingComputersTextBlockExpectedValues();
-                }
-                return this.mAssertResolvingComputersTextBlockExpectedValues;
-            }
-        }
-        
         public UIUnknownFileHunterWindow UIUnknownFileHunterWindow
         {
             get
@@ -408,7 +433,11 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         #endregion
         
         #region Fields
-        private AssertScanningResultsTableExpectedValues mAssertScanningResultsTableExpectedValues;
+        private AssertResolvingComputersTextBlockExpectedValues mAssertResolvingComputersTextBlockExpectedValues;
+        
+        private AssertScanResultsByComputersTableExpectedValues mAssertScanResultsByComputersTableExpectedValues;
+        
+        private AssertScanResultsByFilesTableExpectedValues mAssertScanResultsByFilesTableExpectedValues;
         
         private AssertSendingFilesTextBlockExpectedValues mAssertSendingFilesTextBlockExpectedValues;
         
@@ -428,8 +457,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         
         private ClickGroupByFilesToggleButtonParams mClickGroupByFilesToggleButtonParams;
         
-        private AssertResolvingComputersTextBlockExpectedValues mAssertResolvingComputersTextBlockExpectedValues;
-        
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
@@ -439,10 +466,40 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
     }
     
     /// <summary>
-    /// Parameters to be passed into 'AssertScanningResultsTable'
+    /// Parameters to be passed into 'AssertResolvingComputersTextBlock'
     /// </summary>
     [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertScanningResultsTableExpectedValues
+    public class AssertResolvingComputersTextBlockExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'Resolving Computers...' label equals 'True'
+        /// </summary>
+        public bool UIResolvingComputersTextExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertScanResultsByComputersTable'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertScanResultsByComputersTableExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Exists' property of 'RadTreeListView' table equals 'True'
+        /// </summary>
+        public bool UIRadTreeListViewTableExists = true;
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertScanResultsByFilesTable'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertScanResultsByFilesTableExpectedValues
     {
         
         #region Fields
@@ -585,21 +642,6 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         /// Set to 'Pressed' state 'GroupByFilesToggleButton' toggle button
         /// </summary>
         public bool UIGroupByFilesToggleBuToggleButtonPressed = true;
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertResolvingComputersTextBlock'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertResolvingComputersTextBlockExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Exists' property of 'Resolving Computers...' label equals 'True'
-        /// </summary>
-        public bool UIResolvingComputersTextExists = true;
         #endregion
     }
     
@@ -2261,10 +2303,38 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIViewsMainViewxamlPane;
             }
         }
+        
+        public UIScanResultsByComputeCustom UIScanResultsByComputeCustom
+        {
+            get
+            {
+                if ((this.mUIScanResultsByComputeCustom == null))
+                {
+                    this.mUIScanResultsByComputeCustom = new UIScanResultsByComputeCustom(this);
+                }
+                return this.mUIScanResultsByComputeCustom;
+            }
+        }
+        
+        public UIScanResultsByFilesScCustom UIScanResultsByFilesScCustom
+        {
+            get
+            {
+                if ((this.mUIScanResultsByFilesScCustom == null))
+                {
+                    this.mUIScanResultsByFilesScCustom = new UIScanResultsByFilesScCustom(this);
+                }
+                return this.mUIScanResultsByFilesScCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIViewsMainViewxamlPane2 mUIViewsMainViewxamlPane;
+        
+        private UIScanResultsByComputeCustom mUIScanResultsByComputeCustom;
+        
+        private UIScanResultsByFilesScCustom mUIScanResultsByFilesScCustom;
         #endregion
     }
     
@@ -2320,6 +2390,80 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private WpfToggleButton mUIGroupByFilesToggleBuToggleButton;
         
         private WpfToggleButton mUIGroupByComputersToggToggleButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIScanResultsByComputeCustom : WpfCustom
+    {
+        
+        public UIScanResultsByComputeCustom(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.ScanResultsWithComputers";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ScanResultsByComputersScreen";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfTable UIRadTreeListViewTable
+        {
+            get
+            {
+                if ((this.mUIRadTreeListViewTable == null))
+                {
+                    this.mUIRadTreeListViewTable = new WpfTable(this);
+                    #region Search Criteria
+                    this.mUIRadTreeListViewTable.SearchProperties[WpfTable.PropertyNames.AutomationId] = "ScanResultsByComputersTree";
+                    this.mUIRadTreeListViewTable.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIRadTreeListViewTable;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfTable mUIRadTreeListViewTable;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIScanResultsByFilesScCustom : WpfCustom
+    {
+        
+        public UIScanResultsByFilesScCustom(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.ScanResultsWithFiles";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ScanResultsByFilesScreen";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfTable UIRadTreeListViewTable
+        {
+            get
+            {
+                if ((this.mUIRadTreeListViewTable == null))
+                {
+                    this.mUIRadTreeListViewTable = new WpfTable(this);
+                    #region Search Criteria
+                    this.mUIRadTreeListViewTable.SearchProperties[WpfTable.PropertyNames.AutomationId] = "ScanResultsByFilesTree";
+                    this.mUIRadTreeListViewTable.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIRadTreeListViewTable;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfTable mUIRadTreeListViewTable;
         #endregion
     }
 }

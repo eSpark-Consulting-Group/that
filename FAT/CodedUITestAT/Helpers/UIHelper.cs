@@ -175,7 +175,7 @@ namespace CodedUITestAT
         internal static string GetRowName(this UITestControl row)
         {
             if (row == null) throw new Exception("The provided row is null!");
-            return row.Name.ToLower();
+            return row.Name;
         }
 
         /// <summary> Gets a given row status. </summary>
@@ -299,7 +299,7 @@ namespace CodedUITestAT
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
             if (useMain.ScanResultsTab().Exists) row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
-            else row = useMain.ScanningResultsTable().GetRow(endpoint.RowName);
+            else row = useMain.ScanResultsByComputersTable().GetRow(endpoint.RowName);
 
             return row.GetScanStatus();
         }
@@ -311,7 +311,7 @@ namespace CodedUITestAT
             UITestControl row;
             CodedUITestMain useMain = new CodedUITestMain();
             if (useMain.ScanResultsTab().Exists) row = useMain.ScanResultsTab().GetRow(endpoint.RowName);
-            else row = useMain.ScanningResultsTable().GetRow(endpoint.RowName);
+            else row = useMain.ScanResultsByComputersTable().GetRow(endpoint.RowName);
 
             return row.GetRowStatus();
         }
@@ -366,46 +366,30 @@ namespace CodedUITestAT
         ///<param name="screen">Set a results screen.</param>
         /// <param name="rowName">Set a unique row name.</param>
         /// <param name="click">Set a mouse click type.</param>
-        private static void ClickRow(ResultsScreen screen, string rowName, MouseClick click)
+        internal static void ClickRow(string rowName, MouseClick click)
         {
-            WpfButton expandRowButton;
+            WpfText wpfText;
             UITestControl[] rows;
             CodedUITestMain useMain = new CodedUITestMain();
 
-            switch (screen)
-            {
-                case ResultsScreen.ScanResults:
-                    if (useMain.ScanResultsTab().Exists)
-                    {
-                        useMain.UIMapResultsWindow.GoToScanResultsTab();
-                        rows = useMain.ScanResultsTab().GetRows();
-                    }
-                    else rows = useMain.ScanningResultsTable().GetRows();                    
-                    break;
-                case ResultsScreen.ValkyrieAnalysis:
-                    useMain.UIMapResultsWindow.GoToValkyrieAnalysisResultsTab();
-                    rows = useMain.ValkyrieAnalysisResultsTab().GetRows();
-                    rowName = Path.GetFileName(rowName);
-                    break;
-                default: throw new Exception(String.Format("Unexpected results screen '{0}'!", screen));
-            }
-
-            if (DataHelper.IsGroupedByFiles) rowName = Path.GetFileName(rowName);
+            if (DataHelper.IsGroupedByFiles) rows = useMain.ScanResultsByFilesTable().GetRows();
+            else rows = useMain.ScanResultsByComputersTable().GetRows();
 
             foreach (var row in rows)
             {
                 if (row.GetRowName().Contains(rowName))
                 {
-                    var button = row.GetChildren().FirstOrDefault(c => c is WpfButton); // First WPF button in the row
-                    expandRowButton = button as WpfButton;
-                    if (expandRowButton == null) throw new Exception("The resulting WPF button is null!");
-                    if (click == MouseClick.DoubleLeft) Mouse.DoubleClick(expandRowButton);
-                    else if (click == MouseClick.Right) Mouse.Click(expandRowButton, MouseButtons.Right);
-                    else Mouse.Click(expandRowButton);
+                    var text = row.GetChildren()[1].GetChildren()[0].GetChildren()[0];
+                    //var text = row.GetChildren().FirstOrDefault(c => c is WpfText); // First WPF text in the row
+                    wpfText = text as WpfText;
+                    if (wpfText == null) throw new Exception("The resulting WPF text is null!");
+                    if (click == MouseClick.DoubleLeft) Mouse.DoubleClick(wpfText);
+                    else if (click == MouseClick.Right) Mouse.Click(wpfText, MouseButtons.Right);
+                    else Mouse.Click(wpfText);
                     return;
                 }
             }
-            throw new UITestControlNotFoundException(String.Format("Row '{0}' not found at screen '{1}'!", rowName, screen));
+            throw new UITestControlNotFoundException(String.Format("Row '{0}' not found at results screen!", rowName));
         }
 
         /// <summary> Clicks a given row at a specified results screen. Starts at Results screen. </summary>
@@ -414,7 +398,7 @@ namespace CodedUITestAT
         /// <param name="click">Set a mouse click type.</param>
         internal static void ClickRow(ResultsScreen screen, IRow row, MouseClick click = MouseClick.Left)
         {
-            ClickRow(screen, row.RowName, click);
+            ClickRow(row.RowName, click);
         }
 
         /// <summary> Looks for a given threat at a provided results screen. The indicated screen should be opened. </summary>

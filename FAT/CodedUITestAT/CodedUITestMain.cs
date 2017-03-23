@@ -288,15 +288,15 @@ namespace CodedUITestAT
         {
             return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList.UIValkyrieanalysisresuTabPage;
         }
-
-        private WpfTabList ResultsTabControl()
-        {
-            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIResultsScreenCustom.UIResultsTabControlTabList;
+        
+        internal WpfTable ScanResultsByComputersTable()
+        {            
+            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIScanResultsByComputeCustom.UIRadTreeListViewTable;
         }
 
-        internal WpfTable ScanningResultsTable()
-        {            
-            return UIMapResultsWindow.UIUnknownFileHunterWindow1.UIScanResultsScreenByCCustom.UIRadTreeListViewTable;
+        internal WpfTable ScanResultsByFilesTable()
+        {
+            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIScanResultsByFilesScCustom.UIRadTreeListViewTable;
         }
 
         private WpfText SendingFilesTextBlock()
