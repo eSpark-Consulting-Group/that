@@ -160,7 +160,8 @@
                     SortMemberPath="ScanMethod"
                     Header="Scan Type"  
                     TextAlignment="Left"
-                    MinWidth="110"/>
+                    MinWidth="110"
+                    Width="140*"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>
