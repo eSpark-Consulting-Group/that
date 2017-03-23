@@ -703,7 +703,7 @@
                         </telerik:RadButton>
 
                         <telerik:RadDropDownButton AutomationProperties.AutomationId="HelpDropDownButton" AutoOpenDelay="0:0:0.0" Content="Help" BorderThickness="0" DropDownIndicatorVisibility="Collapsed"
-                                          FocusVisualStyle="{x:Null}" Margin="0,-2,-5,-3" ContentTemplate="{StaticResource AboutButtonContentTemplate}" x:Name="HelpButton" FontSize="16" Padding="10,20,10,20">
+                                          FocusVisualStyle="{x:Null}" Margin="0,-2,-5,-3" ContentTemplate="{StaticResource AboutButtonContentTemplate}" x:Name="HelpButton" FontSize="16" Padding="10,20,20,20">
                             <telerik:RadDropDownButton.DropDownContent>
                                 <telerik:RadContextMenu AutomationProperties.AutomationId="HelpContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0" >
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="AboutMenuItem" HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="About" Click="AboutClick" Margin="-1" />

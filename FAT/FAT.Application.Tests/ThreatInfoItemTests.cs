@@ -197,9 +197,8 @@ namespace FAT.Application.Tests
         }
 
         [Theory]
-        [InlineData(true, "teststatus", "testreason", true, 1f, APTAT.Valkyrie.ValkyrieVerdict.Malware)]
-        [InlineData(false, "teststatus", "testreason", true, 1f, APTAT.Valkyrie.ValkyrieVerdict.Malware)]
-        public void UpdateFileVerdictTest2(bool hasResult, string status, string reason, bool isWhitelisted, float probability, APTAT.Valkyrie.ValkyrieVerdict verdict)
+        [InlineData("teststatus", "testreason", true, 1f, APTAT.Valkyrie.ValkyrieVerdict.Malware)]
+        public void UpdateFileVerdictTest2(string status, string reason, bool isWhitelisted, float probability, APTAT.Valkyrie.ValkyrieVerdict verdict)
         {
             var context = Mock.Create<IFileVerdictContext>(Behavior.Strict);
             var result = Mock.Create<APTAT.Valkyrie.IValkyrieAnalysisResult>(Behavior.Strict);
@@ -216,7 +215,7 @@ namespace FAT.Application.Tests
             Mock.Arrange(() => result.OperationStatus).Returns(status);
             Mock.Arrange(() => result.SkipReason).Returns(reason);
             Mock.Arrange(() => result.Verdict).Returns(verdict);
-            Mock.Arrange(() => context.ValkyrieAnalysisResult).Returns(hasResult ? result : null);
+            Mock.Arrange(() => context.ValkyrieAnalysisResult).Returns(result);
             Mock.Arrange(() => context.FlsVerdict).Returns((CloudVerdict?)null);
 
             ThreatInfoItem target = new ThreatInfoItem(badFile);
@@ -224,22 +223,11 @@ namespace FAT.Application.Tests
             //act
             target.UpdateFileVerdict(context);
 
-            if (hasResult)
-            {
-                Assert.Equal(status, target.OperationStatus);
-                Assert.Equal(reason, target.SkipReason);
-                Assert.Equal(isWhitelisted, target.IsWhiteListed);
-                Assert.Equal(probability, target.MalwareProbabilityValue);
-                Assert.Equal(verdict, target.ValkyrieVerdict);
-            }
-            else
-            {
-                Assert.NotEqual(status, target.OperationStatus);
-                Assert.NotEqual(reason, target.SkipReason);
-                Assert.NotEqual(isWhitelisted, target.IsWhiteListed);
-                Assert.NotEqual(probability, target.MalwareProbabilityValue);
-                Assert.NotEqual(verdict, target.ValkyrieVerdict);
-            }
+            Assert.Equal(status, target.OperationStatus);
+            Assert.Equal(reason, target.SkipReason);
+            Assert.Equal(isWhitelisted, target.IsWhiteListed);
+            Assert.Equal(probability, target.MalwareProbabilityValue);
+            Assert.Equal(verdict, target.ValkyrieVerdict);
         }
     }
 }
