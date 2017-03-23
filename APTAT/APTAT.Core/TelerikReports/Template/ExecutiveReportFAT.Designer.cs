@@ -605,9 +605,10 @@ namespace APTAT.Core.TelerikReports
             this.textBox13.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.47624999284744263D), Telerik.Reporting.Drawing.Unit.Cm(0.028195952996611595D));
             this.textBox13.Name = "textBox13";
             this.textBox13.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(4.2505245208740234D), Telerik.Reporting.Drawing.Unit.Cm(0.6600000262260437D));
+            this.textBox13.Style.BackgroundColor = System.Drawing.Color.Empty;
             this.textBox13.Style.Color = System.Drawing.Color.DimGray;
             this.textBox13.Style.Font.Name = "Segoe UI";
-            this.textBox13.Value = "Not Analysed:";
+            this.textBox13.Value = "Not Analyzed:";
             // 
             // textBox19
             // 
