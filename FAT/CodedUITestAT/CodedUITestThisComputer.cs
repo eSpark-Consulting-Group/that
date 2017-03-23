@@ -231,31 +231,31 @@ namespace CodedUITestAT
             checkedItems.Add(paths2[3]);
             VerifyCheckedItems(checkedItems, TestContext);
 
-            //UIMapThisComputer.CheckScanCriticalAreasCheckBox();
+            UIMapThisComputer.CheckScanCriticalAreasCheckBox();
             UIMapStartScanWizard.ClickNextButton();
             WaitForScanCompleted(ScanType.Quick);
 
-            //checkedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
+            checkedItems.Add(Path.GetDirectoryName(unknown.Location) + @"\"); // Adds an instance from Quick Scan scope
 
             // Verifies the expected and unexpected files at 'Scan results' screen            
             foreach (var path in checkedItems)
             {
                 var expectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
-                if (UIHelper.IsThereThreatInstance(expectedFile, ResultsScreen.ScanResults))
-                    TestContext.WriteLine(String.Format("Instance '{0}' found at {1} screen.", expectedFile.Location, ResultsScreen.ScanResults));
-                else Assert.Fail(String.Format("Instance '{0}' not found at {1} screen!", expectedFile.Location, ResultsScreen.ScanResults));
+                if (UIHelper.IsThereThreatInstance(expectedFile))
+                    TestContext.WriteLine(String.Format("Instance '{0}' found at the scan results screen.", expectedFile.Location));
+                else Assert.Fail(String.Format("Instance '{0}' not found at the scan results screen!", expectedFile.Location));
             }
 
             foreach (var path in uncheckedItems)
             {
                 var unexpectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
-                if (!UIHelper.IsThereThreatInstance(unexpectedFile, ResultsScreen.ScanResults))
-                    TestContext.WriteLine(String.Format("Instance '{0}' not found at {1} screen.", unexpectedFile.Location, ResultsScreen.ScanResults));
-                else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at {1} screen!", unexpectedFile.Location, ResultsScreen.ScanResults));
+                if (!UIHelper.IsThereThreatInstance(unexpectedFile))
+                    TestContext.WriteLine(String.Format("Instance '{0}' not found at the scan results screen.", unexpectedFile.Location));
+                else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at the scan results screen!", unexpectedFile.Location));
             }
-            
+
             // The second scan
-            UIMapMain.ClickStartScanButton();
+            UIMapResultsWindow.ClickNewCustomScanButton();
             UIHelper.WaitForControl(ThisComputerButton());
             UIMapStartScanWizard.ClickThisComputerButton();
             UIHelper.WaitForControl(CustomScanButton());
@@ -304,17 +304,17 @@ namespace CodedUITestAT
             foreach (var path in checkedItems)
             {
                 var expectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
-                if (UIHelper.IsThereThreatInstance(expectedFile, ResultsScreen.ScanResults))
-                    TestContext.WriteLine(String.Format("Instance '{0}' found at {1} screen.", expectedFile.Location, ResultsScreen.ScanResults));
-                else Assert.Fail(String.Format("Instance '{0}' not found at {1} screen!", expectedFile.Location, ResultsScreen.ScanResults));
+                if (UIHelper.IsThereThreatInstance(expectedFile))
+                    TestContext.WriteLine(String.Format("Instance '{0}' found at the scan results screen.", expectedFile.Location));
+                else Assert.Fail(String.Format("Instance '{0}' not found at the scan results screen!", expectedFile.Location));
             }
 
             foreach (var path in uncheckedItems)
             {
                 var unexpectedFile = new UnknownFile(String.Format("{0}{1}", path, unknown.Name));
-                if (!UIHelper.IsThereThreatInstance(unexpectedFile, ResultsScreen.ScanResults))
-                    TestContext.WriteLine(String.Format("Instance '{0}' not found at {1} screen.", unexpectedFile.Location, ResultsScreen.ScanResults));
-                else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at {1} screen!", unexpectedFile.Location, ResultsScreen.ScanResults));
+                if (!UIHelper.IsThereThreatInstance(unexpectedFile))
+                    TestContext.WriteLine(String.Format("Instance '{0}' not found at the scan results screen.", unexpectedFile.Location));
+                else Assert.Fail(String.Format("Instance '{0}' unexpectedly found at the scan results screen!", unexpectedFile.Location));
             }
 
             // A test cleanup

@@ -366,7 +366,7 @@ namespace CodedUITestAT
         ///<param name="screen">Set a results screen.</param>
         /// <param name="rowName">Set a unique row name.</param>
         /// <param name="click">Set a mouse click type.</param>
-        internal static void ClickRow(string rowName, MouseClick click)
+        private static void ClickRow(string rowName, MouseClick click)
         {
             WpfText wpfText;
             UITestControl[] rows;
@@ -393,10 +393,9 @@ namespace CodedUITestAT
         }
 
         /// <summary> Clicks a given row at a specified results screen. Starts at Results screen. </summary>
-        ///<param name="screen">Set a results screen.</param>
         /// <param name="row">Set a row.</param>
         /// <param name="click">Set a mouse click type.</param>
-        internal static void ClickRow(ResultsScreen screen, IRow row, MouseClick click = MouseClick.Left)
+        internal static void ClickRow(IRow row, MouseClick click = MouseClick.Left)
         {
             ClickRow(row.RowName, click);
         }
@@ -455,8 +454,7 @@ namespace CodedUITestAT
 
         /// <summary> Determines whether there is a given threat instance at a defined results screen. </summary>
         /// <param name="threat">Set a threat.</param>
-        /// <param name="resultsScreen">Set a results screen.</param>
-        internal static bool IsThereThreatInstance(Threat threat, ResultsScreen resultsScreen)
+        internal static bool IsThereThreatInstance(Threat threat)
         {
             CodedUITestMain useMain = new CodedUITestMain();
             UITestControl[] rows = null;
@@ -464,22 +462,10 @@ namespace CodedUITestAT
             GroupByFiles();
             useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
             useMain.UIMapMain.InputTextToSearchBox();
-            ClickRow(resultsScreen, threat);
 
-            switch (resultsScreen)
-            {
-                case ResultsScreen.ScanResults:
-                    {
-                        rows = useMain.ScanResultsTab().GetRows();
-                        break;
-                    }
-                case ResultsScreen.ValkyrieAnalysis:
-                    {
-                        rows = useMain.ValkyrieAnalysisResultsTab().GetRows();
-                        break;
-                    }
-            }
-            
+            if (DataHelper.IsGroupedByFiles) rows = useMain.ScanResultsByFilesTable().GetRows();
+            else rows = useMain.ScanResultsByComputersTable().GetRows();
+
             foreach (var row in rows)
             {
                 string instanceName = row.GetRowStatus().ToLower();

@@ -250,6 +250,32 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
             Mouse.Click(uIDetailsMenuItem, new Point(48, 9));
         }
         
+        /// <summary>
+        /// ClickCloseSummaryWindowButton
+        /// </summary>
+        public void ClickCloseSummaryWindowButton()
+        {
+            #region Variable Declarations
+            WpfButton uICloseCrossButtonButton = this.UIForensicAnalysisToolWindow.UICloseCrossButtonButton;
+            #endregion
+
+            // Click 'CloseCrossButton' button
+            Mouse.Click(uICloseCrossButtonButton, new Point(8, 12));
+        }
+        
+        /// <summary>
+        /// ClickNewCustomScanButton
+        /// </summary>
+        public void ClickNewCustomScanButton()
+        {
+            #region Variable Declarations
+            WpfButton uINewCustomScanButtonButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UINewCustomScanButtonButton;
+            #endregion
+
+            // Click 'NewCustomScanButton' button
+            Mouse.Click(uINewCustomScanButtonButton, new Point(77, 13));
+        }
+        
         #region Properties
         public virtual AssertResolvingComputersTextBlockExpectedValues AssertResolvingComputersTextBlockExpectedValues
         {
@@ -2327,6 +2353,39 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIScanResultsByFilesScCustom;
             }
         }
+        
+        public WpfWindow UIWpfWindow
+        {
+            get
+            {
+                if ((this.mUIWpfWindow == null))
+                {
+                    this.mUIWpfWindow = new WpfWindow(this);
+                    #region Search Criteria
+                    this.mUIWpfWindow.SearchProperties[WpfWindow.PropertyNames.Name] = "Scan Completed";
+                    this.mUIWpfWindow.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+                    this.mUIWpfWindow.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIWpfWindow;
+            }
+        }
+        
+        public WpfButton UICloseCrossButtonButton
+        {
+            get
+            {
+                if ((this.mUICloseCrossButtonButton == null))
+                {
+                    this.mUICloseCrossButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUICloseCrossButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "CloseCrossButton";
+                    this.mUICloseCrossButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICloseCrossButtonButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -2335,6 +2394,10 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
         private UIScanResultsByComputeCustom mUIScanResultsByComputeCustom;
         
         private UIScanResultsByFilesScCustom mUIScanResultsByFilesScCustom;
+        
+        private WpfWindow mUIWpfWindow;
+        
+        private WpfButton mUICloseCrossButtonButton;
         #endregion
     }
     
@@ -2384,12 +2447,62 @@ namespace CodedUITestAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIGroupByComputersToggToggleButton;
             }
         }
+        
+        public UIPleaseWaitProgressBar UIPleaseWaitProgressBar
+        {
+            get
+            {
+                if ((this.mUIPleaseWaitProgressBar == null))
+                {
+                    this.mUIPleaseWaitProgressBar = new UIPleaseWaitProgressBar(this);
+                }
+                return this.mUIPleaseWaitProgressBar;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfToggleButton mUIGroupByFilesToggleBuToggleButton;
         
         private WpfToggleButton mUIGroupByComputersToggToggleButton;
+        
+        private UIPleaseWaitProgressBar mUIPleaseWaitProgressBar;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIPleaseWaitProgressBar : WpfProgressBar
+    {
+        
+        public UIPleaseWaitProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Please Wait...";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UINewCustomScanButtonButton
+        {
+            get
+            {
+                if ((this.mUINewCustomScanButtonButton == null))
+                {
+                    this.mUINewCustomScanButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUINewCustomScanButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "NewCustomScanButton";
+                    this.mUINewCustomScanButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUINewCustomScanButtonButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUINewCustomScanButtonButton;
         #endregion
     }
     

@@ -6,6 +6,7 @@ using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
+using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 
 namespace CodedUITestAT
 {
@@ -79,6 +80,21 @@ namespace CodedUITestAT
         }
         private UIMapDiscovery mapDiscovery;
 
+        /// <summary> UIMap for Results window, UIMapResultsWindow.uitest. </summary>
+        public UIMapResultsWindow UIMapResultsWindow
+        {
+            get
+            {
+                if ((this.mapResultsWindow == null))
+                {
+                    this.mapResultsWindow = new UIMapResultsWindow();
+                }
+
+                return this.mapResultsWindow;
+            }
+        }
+        private UIMapResultsWindow mapResultsWindow;
+
         #endregion
 
         #region Control methods
@@ -98,6 +114,15 @@ namespace CodedUITestAT
         internal WpfText MaliciousFilesCounterTextBlock()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIItem0Text1;
+        }
+
+        #endregion
+
+        #region Results screen
+
+        internal WpfButton CloseSummaryWindowButton()
+        {
+            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UICloseCrossButtonButton;
         }
 
         #endregion
@@ -150,8 +175,9 @@ namespace CodedUITestAT
                 default: throw new Exception(String.Format("Unexpected scan type '{0}'!", scanType));
             }
                         
-            UIHelper.WaitForControl(ReportsButton());
-            UIHelper.WaitForControlIsClickable(ReportsButton(), waitTime);
+            UIHelper.WaitForControl(CloseSummaryWindowButton());
+            UIHelper.WaitForControlIsClickable(CloseSummaryWindowButton(), waitTime);
+            UIMapResultsWindow.ClickCloseSummaryWindowButton();
         }
 
         /// <summary> Waits for no 'Lookup in Progress' files count. </summary>

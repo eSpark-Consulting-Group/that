@@ -86,22 +86,7 @@ namespace CodedUITestAT
             }
         }
         private UIMapCamCredentialsWindow mapCamCredentialsWindow;
-
-        /// <summary> UIMap for Results window, UIMapResultsWindow.uitest. </summary>
-        public UIMapResultsWindow UIMapResultsWindow
-        {
-            get
-            {
-                if ((this.mapResultsWindow == null))
-                {
-                    this.mapResultsWindow = new UIMapResultsWindow();
-                }
-
-                return this.mapResultsWindow;
-            }
-        }
-        private UIMapResultsWindow mapResultsWindow;
-
+        
         /// <summary> UIMap for Details window, UIMapDetailsWindow.uitest. </summary>
         public UIMapDetailsWindow UIMapDetailsWindow
         {
@@ -815,9 +800,9 @@ namespace CodedUITestAT
             // Verifies the scanning result at the Results screen
             UIMapResultsWindow.GoToScanResultsTab();
             UIHelper.GroupByComputers();
-            UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
+            UIHelper.ClickRow(endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Scan results' screen.", endpoint.Name));
-            UIHelper.ClickRow(ResultsScreen.ScanResults, malware, MouseClick.DoubleLeft);
+            UIHelper.ClickRow(malware, MouseClick.DoubleLeft);
             TestContext.WriteLine(String.Format("Malware '{0}' details opened.", malware.Location));
             UIHelper.WaitForControl(CloseDetailsButton());
             UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
@@ -1098,9 +1083,9 @@ namespace CodedUITestAT
             UIHelper.WaitForControlIsClickable(StartScanButton());
 
             // Opens a threat details via context menu
-            UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
-            UIHelper.ClickRow(ResultsScreen.ScanResults, malware);
-            UIHelper.ClickRow(ResultsScreen.ScanResults, malware, MouseClick.Right);
+            UIHelper.ClickRow(endpoint);
+            UIHelper.ClickRow(malware);
+            UIHelper.ClickRow(malware, MouseClick.Right);
             UIMapResultsWindow.SelectDetailsByComputersContextMenuItem();
             UIHelper.WaitForControl(CloseDetailsButton());
 
@@ -1234,9 +1219,9 @@ namespace CodedUITestAT
             UIHelper.GroupByFiles();
             AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
             UIHelper.GroupByComputers();
-            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            UIHelper.ClickRow(endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' expanded at 'Valkyrie analysis results' screen.", endpoint.Name));
-            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, malware, MouseClick.DoubleLeft);
+            UIHelper.ClickRow(malware, MouseClick.DoubleLeft);
             TestContext.WriteLine(String.Format("Malware '{0}' details opened.", malware.Name));
             
             UIMapValkyrieDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
@@ -1695,8 +1680,8 @@ namespace CodedUITestAT
             WaitForValkyrieResults(TestContext);
 
             // Opens a threat details via context menu
-            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
-            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, unknownFile, MouseClick.DoubleLeft);
+            UIHelper.ClickRow(endpoint);
+            UIHelper.ClickRow(unknownFile, MouseClick.DoubleLeft);
             UIHelper.WaitForControl(CloseValkyrieDetailsButton());
 
             // Checks all the threat details
@@ -1821,7 +1806,7 @@ namespace CodedUITestAT
             UIMapResultsWindow.ClickClearFilterButton();
         
             // Failed scan
-            UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
+            UIHelper.ClickRow(endpoint);
             SetStatusFilter(ScanStatus.Failed, TestContext);
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
             UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanResults, TestContext);
@@ -1837,7 +1822,7 @@ namespace CodedUITestAT
             UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
             UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanResults, TestContext);
             UIMapResultsWindow.ClickClearFilterButton();
-            UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
+            UIHelper.ClickRow(endpoint);
             
             // Completed scan
             WaitForScanCompleted(ScanType.Quick);
@@ -1896,13 +1881,13 @@ namespace CodedUITestAT
             //UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scan results
-            UIHelper.ClickRow(ResultsScreen.ScanResults, server);
+            UIHelper.ClickRow(server);
             TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", server.Name));
-            UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
+            UIHelper.ClickRow(endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", endpoint.Name));
-            UIHelper.ClickRow(ResultsScreen.ScanResults, malware);
+            UIHelper.ClickRow(malware);
             TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scan results' screen.", malware.Location));
-            UIHelper.ClickRow(ResultsScreen.ScanResults, unknownFile);
+            UIHelper.ClickRow(unknownFile);
             TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scan results' screen.", unknownFile.Location));
         }
 
@@ -1939,13 +1924,13 @@ namespace CodedUITestAT
             //UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scanning results
-            UIHelper.ClickRow(ResultsScreen.ScanResults, server);
+            UIHelper.ClickRow(server);
             TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", server.Name));
-            UIHelper.ClickRow(ResultsScreen.ScanResults, endpoint);
+            UIHelper.ClickRow(endpoint);
             TestContext.WriteLine(String.Format("Computer '{0}' found at 'Scan results' screen.", endpoint.Name));
-            UIHelper.ClickRow(ResultsScreen.ScanResults, malware);
+            UIHelper.ClickRow(malware);
             TestContext.WriteLine(String.Format("Malware '{0}' found at 'Scan results' screen.", malware.Location));
-            UIHelper.ClickRow(ResultsScreen.ScanResults, unknownFile);
+            UIHelper.ClickRow(unknownFile);
             TestContext.WriteLine(String.Format("Unknown file '{0}' found at 'Scan results' screen.", unknownFile.Location));
         }
 
@@ -1963,7 +1948,7 @@ namespace CodedUITestAT
             //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
-            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            UIHelper.ClickRow(endpoint);
             AssertPanelCountersData(0, 0, 1, TestContext);
             UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(), 
                                                                                                                 TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);
@@ -1980,7 +1965,7 @@ namespace CodedUITestAT
             //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
-            UIHelper.ClickRow(ResultsScreen.ValkyrieAnalysis, endpoint);
+            UIHelper.ClickRow(endpoint);
             AssertPanelCountersData(0, 1, 1, TestContext);
             UIHelper.WaitForCellContent(ResultsScreen.ValkyrieAnalysis, unknown, Settings.ResultsValkyrie.Default.VerdictCellNumber, ValkyrieVerdict.NoThreatFound.ToUi(),
                                                                                                                 TestContext, Settings.WaitingTime.Default.NoThreatFoundVerdictWaitTime);

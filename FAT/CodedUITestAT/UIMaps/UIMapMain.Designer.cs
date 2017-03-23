@@ -100,11 +100,11 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         public void ClickClearSearchTextButton()
         {
             #region Variable Declarations
-            WpfButton uIClearSearchBoxButtonButton = this.UIUnknownFileHunterWindow1.UIViewsMainViewxamlPane.UISearchControlCustom.UIClearSearchBoxButtonButton;
+            WpfButton uIClearSearchBoxButtonButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UISearchControlCustom.UIClearSearchBoxButtonButton;
             #endregion
 
             // Click 'ClearSearchBoxButton' button
-            Mouse.Click(uIClearSearchBoxButtonButton, new Point(1, 3));
+            Mouse.Click(uIClearSearchBoxButtonButton, new Point(7, 2));
         }
         
         /// <summary>
@@ -1522,13 +1522,13 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
             }
         }
         
-        public UISearchControlCustom2 UISearchControlCustom
+        public UISearchControlCustom3 UISearchControlCustom
         {
             get
             {
                 if ((this.mUISearchControlCustom == null))
                 {
-                    this.mUISearchControlCustom = new UISearchControlCustom2(this);
+                    this.mUISearchControlCustom = new UISearchControlCustom3(this);
                 }
                 return this.mUISearchControlCustom;
             }
@@ -1540,7 +1540,7 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
         
         private UIViewsMainViewxamlPane1 mUIViewsMainViewxamlPane;
         
-        private UISearchControlCustom2 mUISearchControlCustom;
+        private UISearchControlCustom3 mUISearchControlCustom;
         #endregion
     }
     
@@ -1570,10 +1570,24 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
                 return this.mUIMainToolBarToolBar;
             }
         }
+        
+        public UISearchControlCustom2 UISearchControlCustom
+        {
+            get
+            {
+                if ((this.mUISearchControlCustom == null))
+                {
+                    this.mUISearchControlCustom = new UISearchControlCustom2(this);
+                }
+                return this.mUISearchControlCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIMainToolBarToolBar mUIMainToolBarToolBar;
+        
+        private UISearchControlCustom2 mUISearchControlCustom;
         #endregion
     }
     
@@ -1618,6 +1632,43 @@ namespace CodedUITestAT.UIMaps.UIMapMainClasses
     {
         
         public UISearchControlCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.SearchUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "SearchControl";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIClearSearchBoxButtonButton
+        {
+            get
+            {
+                if ((this.mUIClearSearchBoxButtonButton == null))
+                {
+                    this.mUIClearSearchBoxButtonButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIClearSearchBoxButtonButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "ClearSearchBoxButton";
+                    this.mUIClearSearchBoxButtonButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIClearSearchBoxButtonButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIClearSearchBoxButtonButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UISearchControlCustom3 : WpfCustom
+    {
+        
+        public UISearchControlCustom3(UITestControl searchLimitContainer) : 
                 base(searchLimitContainer)
         {
             #region Search Criteria
