@@ -68,7 +68,7 @@ namespace FAT.Application.Models
                 CleanCount = dto.FilesScanned - dto.MaliciousCount - dto.UnknownsCount - dto.NotAnalyzedCount - dto.InAnalysisCount,
                 NotAnalyzedCount = dto.NotAnalyzedCount,
                 InAnalysisCount = dto.InAnalysisCount,
-                Started = dto.Started,
+                Started = dto.Started.ToLocalTime(),
                 OperationUid = dto.OperationUid,
                 ComputersScanned = dto.ComputersScanned,
                 TotalComputersScanned = dto.TotalComputersScanned,
