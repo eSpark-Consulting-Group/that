@@ -41,7 +41,7 @@ namespace APTAT.Core.Reports
                     return renderer.Render(new ExecutiveReportFAT(), data);
 
                 case ReportType.DetailedPerDeviceWithValkyrie:
-                    var valkyrieDetailedDevicesReport = new DetailedDevicesReportFAT();
+                    var valkyrieDetailedDevicesReport = new DetailedDeviceReportFAT();
                     var topVulnerableDevicesValk = data.Top10VulnerableDevicesValkyrie.Select(d => d.BadFilesCount).DefaultIfEmpty().Max();
                     if (topVulnerableDevicesValk <= 5)
                     {
