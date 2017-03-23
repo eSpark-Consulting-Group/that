@@ -103,6 +103,7 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // textBox4
             // 
+            this.textBox4.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= IIF(Len(Fields.OrganizationUnit) <> 0, True, False)"));
             this.textBox4.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.026458332315087318D), Telerik.Reporting.Drawing.Unit.Cm(1.8168748617172241D));
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(2.3735418319702148D), Telerik.Reporting.Drawing.Unit.Cm(0.4999997615814209D));
@@ -143,6 +144,7 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // textBox9
             // 
+            this.textBox9.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= IIF(Len(Fields.OrganizationUnit) <> 0, True, False)"));
             this.textBox9.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(2.6193749904632568D), Telerik.Reporting.Drawing.Unit.Cm(1.8168748617172241D));
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.2320911884307861D), Telerik.Reporting.Drawing.Unit.Cm(0.4999997615814209D));
