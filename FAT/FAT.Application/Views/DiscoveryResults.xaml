@@ -38,8 +38,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <CheckBox Background="#FFC8D9E7" Margin="-24 0 0 0" HorizontalAlignment="Left" SnapsToDevicePixels="True" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor,
-                                         AncestorType={x:Type telerik:GridViewCell}}, Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked">
+                        <CheckBox Background="#FFC8D9E7" Margin="-24 0 0 0" HorizontalAlignment="Left" SnapsToDevicePixels="True" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked">
                             <CheckBox.Template>
 
                                 <ControlTemplate TargetType="CheckBox">

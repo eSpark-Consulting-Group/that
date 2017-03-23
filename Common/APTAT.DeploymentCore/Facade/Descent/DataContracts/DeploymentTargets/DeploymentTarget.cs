@@ -1,15 +1,17 @@
 ﻿using System;
 using APTAT.DeploymentCore.Facade.Descent.Commands;
 using APTAT.Common;
+using System.ComponentModel;
 
 namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
 {      
-    public class DeploymentTarget : IComputer
+    public class DeploymentTarget : IComputer, INotifyPropertyChanged
 	{
 		public Guid Uid { get; set; }
 
         private string _name;
-	    public string Name
+
+        public string Name
         {
             get { return (_name == IPAddress && !string.IsNullOrEmpty(DnsName)) ? DnsName : _name; }
             set
@@ -72,5 +74,18 @@ namespace APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets
         {
             get; set;
         }
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

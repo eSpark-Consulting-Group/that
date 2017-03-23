@@ -377,7 +377,7 @@ namespace FAT.Application.Models
 
         public Boolean IsReportEnabled
         {
-            get { return _isReportEnabled; }
+            get { return _isReportEnabled && !CurrentScanAvailable; }
             set
             {
                 _isReportEnabled = value;
@@ -446,8 +446,6 @@ namespace FAT.Application.Models
         public bool? SelectDiscoveryResults { get; set; } = false;
 
         public ObservableCollection<DeploymentTarget> DiscoveryResults { get; set; }
-
-        public List<IComputer> SelectedDiscoveryResults { get; set; }
 
         public ObservableCollection<IThreatInfoItem> Files
         {
@@ -713,6 +711,7 @@ namespace FAT.Application.Models
             GroupEnabled = false;
             IsScanCancelled = false;
             IsScanFailed = false;
+            IsReportEnabled = false;
             RaisedHasUnknowns = false;
             RaisedHasMalwares = false;
             ValkyrieDetailsLinkAvailable = false;
@@ -724,7 +723,6 @@ namespace FAT.Application.Models
             Keyword = null;
 
             DiscoveryResults = new ObservableCollection<DeploymentTarget>();
-            SelectedDiscoveryResults = new List<IComputer>();
             RaisePropertyChanged(nameof(DiscoveryResults));
             StartScanCommand.InvalidateCanExecute();
             StartScanWithDiscoveryResultsCommand.InvalidateCanExecute();
@@ -756,12 +754,12 @@ namespace FAT.Application.Models
 
         private void InvokeScanWithDiscoveryResults(Object arg)
         {
-            if (!SelectedDiscoveryResults.Any())
+            if (!DiscoveryResults.Any(_ => _.IsSelected))
                 Set(() => SelectDiscoveryResults, true);
 
             var model = CompositionHelper.Instance.Resolve<StartScanCredentialsViewModel>();
             model.ViewLoadedCommand.Execute(null);
-            model.CheckIfCanUseCurrentCredentials(SelectedDiscoveryResults);
+            model.CheckIfCanUseCurrentCredentials(DiscoveryResults.Where(_ => _.IsSelected));
 
             SettingsWindow window = new SettingsWindow();
             window.Owner = System.Windows.Application.Current.MainWindow;
@@ -780,7 +778,7 @@ namespace FAT.Application.Models
             {
                 _scanCounterManager.Clear();
 
-                var items = SelectedDiscoveryResults.Select(AddComputer).ToArray();
+                var items = DiscoveryResults.Where(_ => _.IsSelected).Select(AddComputer).ToArray();
                 Set(() => TotalItemsCount, items.Length);
                 ScannedItemsCount = 0;
                 _onlineItems = items.Where(item => item.IsOnline).ToArray();
@@ -839,7 +837,7 @@ namespace FAT.Application.Models
                 }
                 else
                 {
-                    var ipAddressesString = SelectedDiscoveryResults.Select(_ => _.IPAddress).ToArray();
+                    var ipAddressesString = DiscoveryResults.Where(_ => _.IsSelected).Select(_ => _.IPAddress).ToArray();
                     _storage.SetValue(KnownKeys.DevicesSourceDescription,
                     new DevicesSourceDescription()
                     {
@@ -848,7 +846,7 @@ namespace FAT.Application.Models
                     });
                     _lastModifiesComputerDate = null;
                     options = new ScanOptions(_tcpPort, _udpPort, scanKind, Login, Password, true);
-                    _aptService.BeginScan(SelectedDiscoveryResults.ToArray(),
+                    _aptService.BeginScan(DiscoveryResults.Where(_ => _.IsSelected).ToArray(),
                         _storage.GetValue<DevicesSourceDescription>(KnownKeys.DevicesSourceDescription, false), options);
                 }
                 if (!IsScanInProgress.GetValueOrDefault())
@@ -976,6 +974,7 @@ namespace FAT.Application.Models
                 PreviousScansViewModel = model;
                 RaisePropertyChanged(nameof(PreviousScansViewModel));
                 RaisePropertyChanged(nameof(CurrentScanAvailable));
+                RaisePropertyChanged(nameof(IsReportEnabled));
             }
             else
             {
@@ -995,6 +994,7 @@ namespace FAT.Application.Models
             PreviousScansViewModel = null;
             RaisePropertyChanged(nameof(PreviousScansViewModel));
             RaisePropertyChanged(nameof(CurrentScanAvailable));
+            RaisePropertyChanged(nameof(IsReportEnabled));
         }
 
         private void InvokeOpenPreviousScanDetails(Object arg)

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.GridView;
+using System.Linq;
 
 namespace FAT.Application
 {
@@ -23,6 +24,13 @@ namespace FAT.Application
             {
                 BindingOperations.SetBinding(this, SelectAllProperty, new Binding("SelectDiscoveryResults") { Mode = BindingMode.TwoWay });
             }
+        }
+
+        private bool _lockSelections;
+
+        private MainViewViewModel ViewModel
+        {
+            get { return DataContext as MainViewViewModel; }
         }
 
         #region SelectAllProperty (DependencyProperty)
@@ -43,41 +51,42 @@ namespace FAT.Application
             var newValue = e.NewValue as bool?;
             if (newValue.HasValue)
             {
+                control._lockSelections = true;
+
                 if (newValue.Value)
+                {
                     control.treeList.SelectAll();
+                    foreach (var result in control.ViewModel.DiscoveryResults)
+                        result.IsSelected = true;
+
+                }
                 else
+                {
                     control.treeList.UnselectAll();
+                    control.treeList.SelectedItems.Clear();
+                    foreach (var result in control.ViewModel.DiscoveryResults)
+                        result.IsSelected = false;
+                }
+
+                control._lockSelections = false;
             }
         }
 
         #endregion
 
-        private MainViewViewModel ViewModel
-        {
-            get { return DataContext as MainViewViewModel; }
-        }
-
         private void treeList_SelectionChanged(object sender, SelectionChangeEventArgs e)
         {
+            if (_lockSelections)
+                return;
+
             foreach (DeploymentTarget item in e.AddedItems)
-                ViewModel.SelectedDiscoveryResults.Add(item);
+                item.IsSelected = true;
+
             foreach (DeploymentTarget item in e.RemovedItems)
-                ViewModel.SelectedDiscoveryResults.Remove(item);
-            ViewModel.SelectedDiscoveryResults = ViewModel.SelectedDiscoveryResults;
+                item.IsSelected = false;
 
-            if (SelectAll.HasValue)
-            {
-                if (treeList.SelectedItems.Count > 0 && treeList.SelectedItems.Count < treeList.Items.Count)
-                    SelectAll = null;
-            }
-            else
-            {
-                if (treeList.SelectedItems.Count == 0)
-                    SelectAll = false;
-                else if (treeList.SelectedItems.Count == treeList.Items.Count)
-                    SelectAll = true;
-            }
-
+            var selectedCount = ViewModel.DiscoveryResults.Count(_ => _.IsSelected);
+            SelectAll = selectedCount == 0 ? false : (selectedCount == ViewModel.DiscoveryResults.Count ? true : (bool?)null);
             BindingOperations.GetBindingExpression(this, SelectAllProperty).UpdateSource();
         }
 
@@ -87,19 +96,11 @@ namespace FAT.Application
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {     
-            var element = e.OriginalSource as FrameworkElement;
-            var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null && cell.IsSelected && cell.IsMouseOver && !cell.ParentRow.IsSelected)
-                cell.ParentRow.IsSelected = true;
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            var element = e.OriginalSource as FrameworkElement;
+            var element = e.OriginalSource as CheckBox;
             var cell = element.GetVisualParent<GridViewCell>();
-            if (cell != null && !cell.IsSelected && cell.IsMouseOver && cell.ParentRow.IsSelected)
-                cell.ParentRow.IsSelected = false;
+            if (cell != null && cell.IsMouseOver)
+                cell.ParentRow.IsSelected = element.IsChecked.GetValueOrDefault();
         }
     }
 }
