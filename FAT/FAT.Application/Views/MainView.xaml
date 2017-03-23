@@ -679,11 +679,11 @@
                             <telerik:RadDropDownButton.DropDownContent>
                                 <telerik:RadContextMenu AutomationProperties.AutomationId="ReportsContextMenu" IconColumnWidth="0" Width="160" BorderThickness="0">
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveValkyrieReportMenuItem" Margin="-1"
-                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive Valkyrie" Tag="Executive Valkyrie Report" Click="OnExecutiveReportValkyrieClick"   />
+                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive Report" Tag="Executive Report" Click="OnExecutiveReportValkyrieClick"   />
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceValkyrieReportMenuItem" Margin="-1"
-                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Device Valkyrie" Tag="Detailed Per-Device Valkyrie Report" Click="OnPerDeviceReportValkyrieClick" />
+                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Device Report" Tag="Detailed Per-Device Report" Click="OnPerDeviceReportValkyrieClick" />
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="PerProgramValkyrieReportMenuItem" Margin="-1"
-                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Program Valkyrie" Tag="Detailed Per-Program Valkyrie Report" Click="OnPerProgramReportValkyrieClick" />
+                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Program Report" Tag="Detailed Per-Program Report" Click="OnPerProgramReportValkyrieClick" />
                                 </telerik:RadContextMenu>
                             </telerik:RadDropDownButton.DropDownContent>
                         </telerik:RadDropDownButton>
