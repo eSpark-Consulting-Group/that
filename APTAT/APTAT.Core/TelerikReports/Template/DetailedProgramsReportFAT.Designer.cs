@@ -1165,7 +1165,7 @@ namespace APTAT.Core.TelerikReports
             // shape1
             // 
             formattingRule10.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "0"));
-            formattingRule10.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(195)))), ((int)(((byte)(163)))));
+            formattingRule10.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(199)))), ((int)(((byte)(54)))));
             formattingRule11.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "2"));
             formattingRule11.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(199)))), ((int)(((byte)(0)))));
             formattingRule12.Filters.Add(new Telerik.Reporting.Filter("= CInt(Fields.TargetsSafetyLevel)", Telerik.Reporting.FilterOperator.Equal, "3"));
@@ -1183,8 +1183,8 @@ namespace APTAT.Core.TelerikReports
             this.shape1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(0.10000000149011612D), Telerik.Reporting.Drawing.Unit.Cm(10.142929077148438D));
             this.shape1.Stretch = false;
             this.shape1.Style.BackgroundColor = System.Drawing.Color.White;
-            this.shape1.Style.Color = System.Drawing.Color.LightGreen;
-            this.shape1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(4D);
+            this.shape1.Style.Color = System.Drawing.Color.Yellow;
+            this.shape1.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
             // 
             // panel13
             // 
