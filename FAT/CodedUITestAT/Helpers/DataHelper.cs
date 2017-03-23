@@ -25,11 +25,14 @@ namespace CodedUITestAT
         /// <summary> Determines whether 'Group by Files' view is currently selected. </summary>
         internal static bool IsGroupedByFiles = false;
 
-        /// <summary> Indicates whether the application is redirected to FLS staging server. </summary>
+        /// <summary> Indicates whether the product is redirected to FLS staging server. </summary>
         internal static bool IsRedirectedToFlsStaging = false;
 
-        /// <summary> Indicates whether the application is redirected to Valkyrie and CAM staging servers. </summary>
+        /// <summary> Indicates whether the product is redirected to Valkyrie and CAM staging servers. </summary>
         internal static bool IsRedirectedToValkyrieStaging = false;
+
+        /// <summary> Indicates whether the product archive is extracted. </summary>
+        internal static bool IsProductExtracted = false;               
 
         #endregion
 
@@ -43,8 +46,14 @@ namespace CodedUITestAT
 
         internal static readonly string EncryptedPassword = Playback.EncryptText(Password);
                 
-        /// <summary> The application executable name. </summary>
+        /// <summary> The product executable name. </summary>
         internal static readonly string ProductExeName = Environment.GetEnvironmentVariable("_ProductExeName", EnvironmentVariableTarget.Machine);
+
+        /// <summary> The product zip name. </summary>
+        internal static readonly string ProductZipName = Environment.GetEnvironmentVariable("_ProductZipName", EnvironmentVariableTarget.Machine);
+
+        /// <summary> A path to the extracted product archive. </summary>
+        internal static readonly string ExtractedProductPath = Path.Combine(GetWorkingFolder(), ProductZipName.WithoutExtension());
 
         /// <summary> Determines whether the autotests will run using FLS staging server. Gets the data from a local environment variable. </summary>
         internal static bool IsFlsStaging()
@@ -79,9 +88,6 @@ namespace CodedUITestAT
             return Environment.GetEnvironmentVariable("_TargetDir", EnvironmentVariableTarget.Machine);
             //return @"C:\FAT";
         }
-
-        /// <summary> A path to the extracted application SFX archive. </summary>
-        internal static readonly string ExtractedProductPath = Path.Combine(GetWorkingFolder(), ProductExeName.WithoutExtension());
 
         /// <summary> Gets a root directory of endpoint machine in the environment from a local environment variable. </summary>
         /// <param name="IsAdminShare">Determines whether the root should be returned in a form of admin share. </param>        

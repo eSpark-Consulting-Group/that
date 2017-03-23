@@ -20,10 +20,18 @@ namespace CodedUITestAT
     /// <summary> Contains common methods for work with OS, processes, services, etc. </summary>
     internal static class SysHelper
     {
+        #region The product-related methods
+
         /// <summary> Starts the application under test. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
-        internal static void StartApplication(Computer endpoint)
+        internal static void StartProduct(Computer endpoint)
         {
+            if (!DataHelper.IsProductExtracted)
+            {
+                ExtractProduct();
+                DataHelper.IsProductExtracted = true;
+            }
+
             if (DataHelper.IsFlsStaging() && !DataHelper.IsRedirectedToFlsStaging)
             {
                 RedirectToFlsStaging(endpoint);
@@ -36,8 +44,7 @@ namespace CodedUITestAT
                 DataHelper.IsRedirectedToValkyrieStaging = true;
             }
 
-            if (DataHelper.IsRedirectedToValkyrieStaging) StartProcess(DataHelper.ExtractedProductPath, DataHelper.ProductExeName, String.Empty);
-            else StartProcess(DataHelper.GetWorkingFolder(), DataHelper.ProductExeName, String.Empty);
+            StartProcess(DataHelper.ExtractedProductPath, DataHelper.ProductExeName, String.Empty);
 
             CodedUITestEula useEula = new CodedUITestEula();
             UIHelper.WaitForControl(useEula.IAcceptButton(), Settings.WaitingTime.Default.LaunchAppWaitTime);        
@@ -45,7 +52,7 @@ namespace CodedUITestAT
         }
 
         /// <summary> Stops the application under test. </summary>
-        internal static void StopApplication()
+        internal static void StopProduct()
         {
             if (IsThereProcess(DataHelper.ProductExeName.WithoutExtension()))
             { 
@@ -53,6 +60,65 @@ namespace CodedUITestAT
                 Playback.Wait(2000);
             }
         }
+
+        /// <summary> Extracts the product archive for further testing. </summary>
+        private static void ExtractProduct()
+        {
+            string sevenZArgument = String.Format(@"e {0} -o{1}", Path.Combine(DataHelper.GetWorkingFolder(), DataHelper.ProductZipName), DataHelper.ExtractedProductPath);
+            string sevenZPath;
+
+            // Installs 7z
+            Install7z();
+
+            // Uses 7z to dearchive the product archive
+            if (Environment.Is64BitOperatingSystem) sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramW6432%"), Settings.General.Default.SevenZFolder);
+            else sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%"), Settings.General.Default.SevenZFolder);
+            StartProcess(sevenZPath, Settings.General.Default.SevenZExeName, sevenZArgument);
+        }
+
+        /// <summary> Installs 7-zip at the local machine. </summary>
+        private static void Install7z()
+        {
+            string workingFolder = DataHelper.GetWorkingFolder();
+            string argument = @"/S";
+
+            if (Environment.Is64BitOperatingSystem) StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX64, argument);
+            else StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX32, argument);
+        }
+
+        /// <summary> Edits the product configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
+        private static void RedirectToValkyrieStaging()
+        {
+            string configPath = Path.Combine(DataHelper.ExtractedProductPath, Settings.General.Default.ApplicationBinFolder);
+
+            XmlHelper.AddConfigSetting(configPath, Settings.Configuration.Default.CamStagingSettingNameValue, Settings.Configuration.Default.CamStagingSettingValue);
+            XmlHelper.AddConfigSetting(configPath, Settings.Configuration.Default.ValkyrieStagingSettingNameValue, Settings.Configuration.Default.ValkyrieStagingSettingValue);
+        }
+
+        /// <summary> Edits hosts file on the given endpoint and adds FLS staging server address. </summary>
+        /// <param name="endpoint">Set an endpoint.</param>
+        private static void RedirectToFlsStaging(Computer endpoint)
+        {
+            string hostsFilePath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Staging.Default.HostsFile);
+            string address = String.Format("{0} {1}", Settings.Staging.Default.FlsStagingIpAddress, Settings.Staging.Default.FlsProductionServerAddress);
+            string initialFileContent;
+
+            using (var stream = new StreamReader(hostsFilePath, Encoding.Default))
+            {
+                initialFileContent = stream.ReadToEnd();
+                stream.Close();
+            }
+
+            if (!initialFileContent.Contains(address))
+                using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
+                {
+                    stream.WriteLine();
+                    stream.WriteLine(address);
+                    stream.Close();
+                }
+        }
+
+        #endregion
 
         /// <summary> Stops the application scanner at a given computer. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
@@ -332,62 +398,7 @@ namespace CodedUITestAT
                 }
                 catch (Exception) { return false; }
             }
-        }
-
-        /// <summary> Installs 7-zip at the local machine. </summary>
-        private static void Install7z()
-        {
-            string workingFolder = DataHelper.GetWorkingFolder();
-            string argument = @"/S";
-
-            if (Environment.Is64BitOperatingSystem) StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX64, argument);
-            else StartProcess(workingFolder, Settings.General.Default.SevenZInstallerNameX32, argument);
-        }
-
-        /// <summary> Extracts the application SFX archive and edits the application configuration file and adds Valkyrie and CAM staging servers addresses. </summary>
-        /// <returns>Path to the extracted application archive.</returns>
-        private static void RedirectToValkyrieStaging()
-        {
-            string workingFolder = DataHelper.GetWorkingFolder();
-            string extractedSfxPath = DataHelper.ExtractedProductPath;
-            string sevenZArgument = String.Format(@"e {0} -o{1}", Path.Combine(workingFolder, DataHelper.ProductExeName), extractedSfxPath);
-            string sevenZPath;
-
-            // Installs 7z
-            Install7z();
-
-            // Uses 7z to dearchive the application SFX archive
-            if (Environment.Is64BitOperatingSystem) sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramW6432%"), Settings.General.Default.SevenZFolder);
-            else sevenZPath = Path.Combine(Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%"), Settings.General.Default.SevenZFolder);
-            StartProcess(sevenZPath, Settings.General.Default.SevenZExeName, sevenZArgument);
-
-            // Edits the application config file
-            XmlHelper.AddConfigSetting(extractedSfxPath, Settings.Configuration.Default.CamStagingSettingNameValue, Settings.Configuration.Default.CamStagingSettingValue);
-            XmlHelper.AddConfigSetting(extractedSfxPath, Settings.Configuration.Default.ValkyrieStagingSettingNameValue, Settings.Configuration.Default.ValkyrieStagingSettingValue);
-        }
-
-        /// <summary> Edits hosts file on the given endpoint and adds FLS staging server address. </summary>
-        /// <param name="endpoint">Set an endpoint.</param>
-        private static void RedirectToFlsStaging(Computer endpoint)
-        {
-            string hostsFilePath = String.Format(@"\\{0}\{1}\{2}", endpoint.Name, DataHelper.GetEndpointRoot(true), Settings.Staging.Default.HostsFile);
-            string address = String.Format("{0} {1}", Settings.Staging.Default.FlsStagingIpAddress, Settings.Staging.Default.FlsProductionServerAddress);
-            string initialFileContent;
-
-            using (var stream = new StreamReader(hostsFilePath, Encoding.Default)) 
-            {
-                initialFileContent = stream.ReadToEnd();
-                stream.Close();
-            }
-
-            if (!initialFileContent.Contains(address))
-            using (var stream = new StreamWriter(hostsFilePath, true, Encoding.Default))
-            {
-                stream.WriteLine();
-                stream.WriteLine(address);
-                stream.Close();
-            }
-        }
+        }       
 
         #endregion
 

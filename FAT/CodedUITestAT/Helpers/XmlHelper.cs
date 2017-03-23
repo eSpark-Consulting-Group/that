@@ -26,13 +26,13 @@ namespace CodedUITestAT
             configXml.Save(configXmlPath);
         }
 
-        /// <summary> Adds a new setting value to the application configuration file. </summary>
-        /// <param name="pathToApp">Set a path to the application.</param>
+        /// <summary> Adds a new setting value to the product configuration file. </summary>
+        /// <param name="pathToConfig">Set a path to the product config file.</param>
         /// <param name="settingNameAttributeValue">Set a setting name attribute value.</param>
         /// <param name="settingValue">Set a new setting value.</param>
-        internal static void AddConfigSetting(string pathToApp, string settingNameAttributeValue, string settingValue)
+        internal static void AddConfigSetting(string pathToConfig, string settingNameAttributeValue, string settingValue)
         {
-            string configXmlPath = Path.Combine(pathToApp, DataHelper.ProductExeName + ".config");
+            string configXmlPath = Path.Combine(pathToConfig, DataHelper.ProductExeName + ".config");
             XmlDocument configToolXml = new XmlDocument();
             configToolXml.Load(configXmlPath);
 

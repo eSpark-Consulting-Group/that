@@ -24,6 +24,8 @@ set TargetDir=%ServerRoot%:\FAT
 
 set ProductExeName=ForensicAnalysisTool.exe
 
+set ProductZipName=ForensicAnalysisTool.zip
+
 set DataSource=AutotestsData\AT
 
 set MalwaresFolder=Malfolder
@@ -54,13 +56,15 @@ setx _EndpointRoot %EndpointRoot% /m
 
 setx _ProductExeName %ProductExeName% /m
 
+setx _ProductZipName %ProductZipName% /m
+
 setx _MalwaresFolder %MalwaresFolder% /m
 
 
 
 REM Copies files necessary for testing to the server VM
 
-xcopy "%BuildLocation%\%ProductExeName%" "%TargetDir%\" /y
+xcopy "%BuildLocation%\%ProductZipName%" "%TargetDir%\" /y
 
 xcopy "\\esmbuildstorage\%DataSource%\%MalwaresFolder%" "%ServerRoot%:\%MalwaresFolder%\" /e /y
 

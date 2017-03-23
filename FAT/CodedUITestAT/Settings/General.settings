@@ -59,5 +59,8 @@
     <Setting Name="SevenZExeName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">7z.exe</Value>
     </Setting>
+    <Setting Name="ApplicationBinFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">bin</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

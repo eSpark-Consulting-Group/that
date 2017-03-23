@@ -194,5 +194,14 @@ namespace CodedUITestAT.Settings {
                 return ((string)(this["SevenZExeName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("bin")]
+        public string ApplicationBinFolder {
+            get {
+                return ((string)(this["ApplicationBinFolder"]));
+            }
+        }
     }
 }

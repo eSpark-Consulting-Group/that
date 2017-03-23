@@ -38,7 +38,7 @@ namespace CodedUITestAT
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartApplication(DataHelper.GetEndpoint());
+            SysHelper.StartProduct(DataHelper.GetEndpoint());
 
             CodedUITestEula useEula = new CodedUITestEula();
             CodedUITestMain useMain = new CodedUITestMain();
@@ -52,7 +52,7 @@ namespace CodedUITestAT
         {
             Computer endpoint = DataHelper.GetEndpoint();
 
-            SysHelper.StopApplication();
+            SysHelper.StopProduct();
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             SysHelper.StopScanner(endpoint);
         }

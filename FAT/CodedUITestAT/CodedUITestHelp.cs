@@ -38,7 +38,7 @@ namespace CodedUITestAT
         [TestInitialize]
         public void ATTestInitialize()
         {
-            SysHelper.StartApplication(DataHelper.GetEndpoint());
+            SysHelper.StartProduct(DataHelper.GetEndpoint());
 
             CodedUITestEula useEula = new CodedUITestEula();            
             useEula.UIMapEula.ClickIAcceptButton();
@@ -50,7 +50,7 @@ namespace CodedUITestAT
         [TestCleanup]
         public void ATTestCleanup()
         {
-            SysHelper.StopApplication();
+            SysHelper.StopProduct();
         }
 
         #endregion
