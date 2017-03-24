@@ -144,7 +144,8 @@
                     Header="Scan Date"  
                     TextAlignment="Left"
                     SortMemberPath="Started"
-                    MinWidth="90"/>
+                    Width="130"
+                    MinWidth="100"/>
                 <telerik:GridViewColumn 
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
                     CellTemplate="{StaticResource TypeColumn}"   
@@ -152,6 +153,7 @@
                     Header="Scan Target"  
                     SortMemberPath="DevicesSourceDescription.Type"
                     TextAlignment="Left"
+                    Width="145"
                     MinWidth="100"/>
                 <telerik:GridViewColumn 
                     HeaderCellStyle="{StaticResource HeaderCellStyle}"
@@ -160,7 +162,7 @@
                     SortMemberPath="ScanMethod"
                     Header="Scan Type"  
                     TextAlignment="Left"
-                    MinWidth="110"
+                    MinWidth="100"
                     Width="140*"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
