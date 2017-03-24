@@ -63,20 +63,20 @@ namespace APTAT.Core.TelerikReports.Template
             // 
             // groupHeaderSection
             // 
-            this.groupHeaderSection.Height = Telerik.Reporting.Drawing.Unit.Cm(1.2677083015441895D);
+            this.groupHeaderSection.Height = Telerik.Reporting.Drawing.Unit.Cm(0.9677082896232605D);
             this.groupHeaderSection.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.textBox1});
             this.groupHeaderSection.Name = "groupHeaderSection";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(6.3081579959600731E-09D), Telerik.Reporting.Drawing.Unit.Cm(0.16770827770233154D));
+            this.textBox1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(6.3081579959600731E-09D), Telerik.Reporting.Drawing.Unit.Cm(0.0677083358168602D));
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.399996757507324D), Telerik.Reporting.Drawing.Unit.Cm(0.93001633882522583D));
+            this.textBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.399996757507324D), Telerik.Reporting.Drawing.Unit.Cm(0.8300163745880127D));
             this.textBox1.Style.BackgroundColor = System.Drawing.Color.Empty;
             this.textBox1.Style.Color = System.Drawing.Color.DimGray;
             this.textBox1.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(18D);
+            this.textBox1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
             this.textBox1.Value = "= Parameters.Title.Value";
             // 
             // pageHeaderSection1

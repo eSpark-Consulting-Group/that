@@ -201,13 +201,13 @@ namespace APTAT.Core.TelerikReports
             // 
             // textBox51
             // 
-            this.textBox51.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.00010012308484874666D), Telerik.Reporting.Drawing.Unit.Cm(2.0999999046325684D));
+            this.textBox51.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.00010012308484874666D), Telerik.Reporting.Drawing.Unit.Cm(2.152916431427002D));
             this.textBox51.Name = "textBox51";
             this.textBox51.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(7.8076386451721191D), Telerik.Reporting.Drawing.Unit.Cm(0.600000262260437D));
             this.textBox51.Style.Color = System.Drawing.Color.Gray;
             this.textBox51.Style.Font.Name = "Segoe UI";
             this.textBox51.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
-            this.textBox51.Value = "Per-Program Report.";
+            this.textBox51.Value = "Per-Program Report";
             // 
             // textBox1
             // 

@@ -610,7 +610,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox14.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.6587493419647217D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
             this.textBox14.Style.Color = System.Drawing.Color.DimGray;
             this.textBox14.Style.Font.Name = "Segoe UI";
-            this.textBox14.Value = "In Analysis";
+            this.textBox14.Value = "In Analysis:";
             // 
             // textBox31
             // 
@@ -909,7 +909,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox35.Name = "textBox35";
             this.textBox35.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(5.7000002861022949D), Telerik.Reporting.Drawing.Unit.Cm(0.69854319095611572D));
             this.textBox35.Style.Color = System.Drawing.Color.Gray;
-            this.textBox35.Style.Font.Name = "Segoe UI";
+            this.textBox35.Style.Font.Name = "Segoe UI Semibold";
             this.textBox35.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
             this.textBox35.TextWrap = false;
             this.textBox35.Value = "=Fields.HostName";

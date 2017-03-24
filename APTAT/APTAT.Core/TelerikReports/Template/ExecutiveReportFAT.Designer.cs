@@ -520,7 +520,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox14.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(4.2743749618530273D), Telerik.Reporting.Drawing.Unit.Cm(0.599999725818634D));
             this.textBox14.Style.Color = System.Drawing.Color.DimGray;
             this.textBox14.Style.Font.Name = "Segoe UI";
-            this.textBox14.Value = "In Analysis";
+            this.textBox14.Value = "In Analysis:";
             // 
             // textBox31
             // 
