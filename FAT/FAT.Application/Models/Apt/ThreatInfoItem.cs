@@ -554,9 +554,8 @@ namespace FAT.Application.Models
                 return message;
             }
             else
-            {
-                
-                var m =     $"{TotalFilesCount} scanned ({$"{TotalProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. {errorCounterText}";
+            {        
+                var m =     $"{TotalFilesCount} files scanned ({$"{TotalProgressPercentage:0.00}".Replace(".00", string.Empty)}%). Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}. {errorCounterText}";
                 return m;
             }
         }

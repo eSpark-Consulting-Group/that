@@ -163,7 +163,7 @@
                     Header="Scan Type"  
                     TextAlignment="Left"
                     MinWidth="202"
-                    Width="140*"/>
+                    Width="*"/>
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
     </Grid>
