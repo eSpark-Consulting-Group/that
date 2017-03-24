@@ -52,22 +52,20 @@ namespace FAT.Application
             if (newValue.HasValue)
             {
                 control._lockSelections = true;
-
+                control.treeList.SelectedItems.Clear();
                 if (newValue.Value)
-                {
-                    control.treeList.SelectAll();
+                {    
                     foreach (var result in control.ViewModel.DiscoveryResults)
+                    {
                         result.IsSelected = true;
-
+                        control.treeList.SelectedItems.Add(result);
+                    }
                 }
                 else
                 {
-                    control.treeList.UnselectAll();
-                    control.treeList.SelectedItems.Clear();
                     foreach (var result in control.ViewModel.DiscoveryResults)
                         result.IsSelected = false;
                 }
-
                 control._lockSelections = false;
             }
         }
