@@ -681,9 +681,9 @@
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="ExecutiveValkyrieReportMenuItem" Margin="-1"
                                                  HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Executive Report" Tag="Executive Report" Click="OnExecutiveReportValkyrieClick"   />
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="PerDeviceValkyrieReportMenuItem" Margin="-1"
-                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Device Report" Tag="Detailed Per-Device Report" Click="OnPerDeviceReportValkyrieClick" />
+                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Device Report" Tag="Per-Device Report" Click="OnPerDeviceReportValkyrieClick" />
                                     <telerik:RadMenuItem AutomationProperties.AutomationId="PerProgramValkyrieReportMenuItem" Margin="-1"
-                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Program Report" Tag="Detailed Per-Program Report" Click="OnPerProgramReportValkyrieClick" />
+                                                 HeaderTemplate="{StaticResource ReportButtonListBoxItemTemplate}" Header="Per-Program Report" Tag="Per-Program Report" Click="OnPerProgramReportValkyrieClick" />
                                 </telerik:RadContextMenu>
                             </telerik:RadDropDownButton.DropDownContent>
                         </telerik:RadDropDownButton>
