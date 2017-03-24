@@ -149,6 +149,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox18 = new Telerik.Reporting.TextBox();
             this.shape4 = new Telerik.Reporting.Shape();
             this.dsDetailsPerDevices = new Telerik.Reporting.ObjectDataSource();
+            this.panelSpaceBeforeReportSummary = new Telerik.Reporting.Panel();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // pageHeaderSection1
@@ -170,7 +171,7 @@ namespace APTAT.Core.TelerikReports
             this.shape3.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(1.2170833349227905D));
             this.shape3.Name = "shape3";
             this.shape3.ShapeType = new Telerik.Reporting.Drawing.Shapes.LineShape(Telerik.Reporting.Drawing.Shapes.LineDirection.EW);
-            this.shape3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.696250915527344D), Telerik.Reporting.Drawing.Unit.Cm(0.10000000149011612D));
+            this.shape3.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.749794006347656D), Telerik.Reporting.Drawing.Unit.Cm(0.10000000149011612D));
             this.shape3.Style.Color = System.Drawing.Color.LightSlateGray;
             this.shape3.Style.LineColor = System.Drawing.Color.LightSlateGray;
             this.shape3.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(1D);
@@ -240,7 +241,8 @@ namespace APTAT.Core.TelerikReports
             this.detail.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panel5,
             this.panelCharts,
-            this.panel1});
+            this.panel1,
+            this.panelSpaceBeforeReportSummary});
             this.detail.Name = "detail";
             // 
             // panel5
@@ -1372,6 +1374,14 @@ namespace APTAT.Core.TelerikReports
             this.dsDetailsPerDevices.DataSource = typeof(APTAT.Core.Reports.AptReportData);
             this.dsDetailsPerDevices.Name = "dsDetailsPerDevices";
             // 
+            // panelSpaceBeforeReportSummary
+            // 
+            this.panelSpaceBeforeReportSummary.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.Top10VulnerableDevicesValkyrie.Length > 0"));
+            this.panelSpaceBeforeReportSummary.CanShrink = true;
+            this.panelSpaceBeforeReportSummary.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(9.9988508736714721E-05D), Telerik.Reporting.Drawing.Unit.Cm(11.298441886901856D));
+            this.panelSpaceBeforeReportSummary.Name = "panelSpaceBeforeReportSummary";
+            this.panelSpaceBeforeReportSummary.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.815311431884766D), Telerik.Reporting.Drawing.Unit.Cm(2.599900484085083D));
+            // 
             // DetailedDeviceReportFAT
             // 
             this.DataSource = this.dsDetailsPerDevices;
@@ -1389,7 +1399,7 @@ namespace APTAT.Core.TelerikReports
             styleRule1.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Point(2D);
             this.StyleSheet.AddRange(new Telerik.Reporting.Drawing.StyleRule[] {
             styleRule1});
-            this.Width = Telerik.Reporting.Drawing.Unit.Cm(15.920000076293945D);
+            this.Width = Telerik.Reporting.Drawing.Unit.Cm(15.973543167114258D);
             this.ItemDataBinding += new System.EventHandler(this.DetailedDeviceReportFAT_ItemDataBinding);
             this.ItemDataBound += new System.EventHandler(this.DetailedDevicesReportFAT_ItemDataBound);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
@@ -1513,5 +1523,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.TextBox textBox39;
         private Telerik.Reporting.SubReport subReportNotAnalyzed;
         private Telerik.Reporting.SubReport subReportInAnalysis;
+        private Telerik.Reporting.Panel panelSpaceBeforeReportSummary;
     }
 }
