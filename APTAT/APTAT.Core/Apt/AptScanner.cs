@@ -9,7 +9,7 @@ using APTAT.DeploymentCore;
 
 namespace APTAT.Core.Apt
 {
-    internal class AptScanner : IAptScanner
+    internal partial class AptScanner : IAptScanner
     {
         private IAptScanOperationContext _scanOperationContext;
         private readonly IDescentSubSystem _descentSubSystem;
@@ -20,17 +20,20 @@ namespace APTAT.Core.Apt
 
 
         private readonly IScanOptions _options;
+        private IDescentScannerFactory _aptDescentScannerFactory;
 
         public event EventHandler<ScanStartedEventArgs> ScanStarted;
         public event EventHandler<ScanCompletedEventArgs> ScanCompleted;
         public event EventHandler<AptScanInProgressEventArgs> ScanInProgress;
         public event EventHandler<ComputerScanCompletedEventArgs> ComputerScanCompleted; 
         public IAptScanOperationContext ScanOperationContext { get { return _scanOperationContext; } }
-        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<IComputer> targets, IDevicesSourceDescription devicesSourceDescription, IScanOptions options)
+        internal AptScanner(IDescentSubSystem descentSubSystem, IEnumerable<IComputer> targets, 
+            IDevicesSourceDescription devicesSourceDescription, IScanOptions options,
+            IDescentScannerFactory aptDescentFactory)
         {
             _devicesSourceDescription = devicesSourceDescription;
             _descentSubSystem = descentSubSystem;
-
+            _aptDescentScannerFactory = aptDescentFactory;
             _targets = targets;
             _options = options;
         }
@@ -70,10 +73,13 @@ namespace APTAT.Core.Apt
         private void StartScan()
         {
             Guid operationUid;
-            var scanner = new AptDescentScanner(_targets, _options.Login, _options.Password, _devicesSourceDescription, _options);
+            var scanner = _aptDescentScannerFactory.GetScanner(_targets, _options.Login, _options.Password, 
+                _devicesSourceDescription, _options);
+
             _descentSubSystem.StartScan(scanner, out operationUid);
             _operationUid = operationUid;
         }
+
 
         private void BeginScanCallback(IAsyncResult ar)
         {

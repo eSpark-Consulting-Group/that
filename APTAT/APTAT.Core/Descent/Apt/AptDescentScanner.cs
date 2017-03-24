@@ -11,25 +11,28 @@ using APTAT.DeploymentCore.Messages;
 
 namespace APTAT.Core.Descent.Apt
 {
-    public class AptDescentScanner : Scanner
+
+    public partial class AptDescentScanner : Scanner
     {        
         private AptDescentMod _descentMod;
         private readonly IScanOptions _scanOptions;
+        private IContextFactory _contextFactory;
 
         public AptDescentScanner(IEnumerable<IComputer> targets, string login, string password,
-            IDevicesSourceDescription devicesSourceDescription, IScanOptions scanOptions) 
+            IDevicesSourceDescription devicesSourceDescription, IScanOptions scanOptions,
+            IContextFactory contextFactory) 
             : base(targets, login, password, devicesSourceDescription)
         {
             _scanOptions = scanOptions;
+            _contextFactory = contextFactory;
         }
 
         public override IDescentQueryResult ValidateAndGetResult()
         {
-            var result = new AptScanOperationContext(Targets, Targets.Length, DevicesSourceDescription);
-            result.ScanMethod = _scanOptions.ScanKind;
+            var result = _contextFactory.CreateContext(Targets,  DevicesSourceDescription);
+            ((AptScanOperationContext)result).ScanMethod = _scanOptions.ScanKind;
             return result;
-          }
-
+        }
         public override DescentEventArgs GetDescentCompletedEventArgs(IDescentQueryResult result)
         {
             var aptResult = (AptScanOperationContext)result;

@@ -73,8 +73,12 @@
     <Compile Include="Apt\AggregatedAptScanResult.cs" />
     <Compile Include="Apt\AptAtManager.cs" />
     <Compile Include="AptScanInProgressEventArgs.cs" />
+    <Compile Include="Apt\AptDescentScannerFactory.cs" />
     <Compile Include="Apt\AptVerdictContext.cs" />
     <Compile Include="Apt\IAggregatedAptScanResult.cs" />
+    <Compile Include="Apt\IDescentScannerFactory.cs" />
+    <Compile Include="Descent\Apt\ContextFactory.cs" />
+    <Compile Include="Descent\Apt\IContextFactory.cs" />
     <Compile Include="FinalVerdictCalculator.cs" />
     <Compile Include="FLS\IFlsResponse.cs" />
     <Compile Include="IFinalVerdictCalculator.cs" />
@@ -261,7 +265,9 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\DataSources\APTAT.Core.Reports.AptReportData.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.DetailedBadFile.datasource" />
     <None Include="Properties\DataSources\APTAT.Core.Reports.FileRatingInfo.datasource" />

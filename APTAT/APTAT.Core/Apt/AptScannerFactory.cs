@@ -10,11 +10,16 @@ namespace APTAT.Core.Apt
 {
     internal class AptScannerFactory : IAptScannerFactory
     {
+        IDescentScannerFactory _descentScannerFactory;
+        public AptScannerFactory(IDescentScannerFactory descentScannerFactory)
+        {
+            _descentScannerFactory = descentScannerFactory;
+        }
         public IAptScanner CreateAptScanner(IDescentSubSystem descentSubSystem, 
             IEnumerable<IComputer> targets, 
             IDevicesSourceDescription devicesSourceDescription, IScanOptions options)
         {
-            return new AptScanner(descentSubSystem, targets, devicesSourceDescription, options);
+            return new AptScanner(descentSubSystem, targets, devicesSourceDescription, options, _descentScannerFactory);
         }
     }
 }
