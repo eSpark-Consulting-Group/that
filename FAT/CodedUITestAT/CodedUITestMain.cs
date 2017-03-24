@@ -11,7 +11,6 @@ using CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
-using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 

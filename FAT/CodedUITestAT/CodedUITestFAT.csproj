@@ -129,11 +129,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>ResultsValkyrie.settings</DependentUpon>
     </Compile>
-    <Compile Include="Settings\ScanCompleted.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>ScanCompleted.settings</DependentUpon>
-    </Compile>
     <Compile Include="Settings\Scanner.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -269,10 +264,6 @@
     <None Include="Settings\ResultsValkyrie.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>ResultsValkyrie.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Settings\ScanCompleted.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>ScanCompleted.Designer.cs</LastGenOutput>
     </None>
     <None Include="Settings\Scanner.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

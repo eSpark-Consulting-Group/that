@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses;
 
@@ -326,7 +325,7 @@ namespace CodedUITestFAT
         [TestMethod]
         public void QuickScanOfThisComputerTest()
         {
-            Computer endpoint = new Computer();
+            Computer endpoint = new Computer();            
             Malware malware = SysHelper.InfectForScan(endpoint, ScanType.Quick);
             UnknownFile unknownFileQuick = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Quick);
             UnknownFile unknownFileFull = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Full);

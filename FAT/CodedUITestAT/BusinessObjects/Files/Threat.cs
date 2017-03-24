@@ -41,12 +41,6 @@ namespace CodedUITestFAT
         internal string Product { get { return _product; } }
         /// <summary> A threat trusted vendor name. </summary>
         internal string TrustedVendor { get { return _trustedVendor; } }
-        /*
-        /// <summary> A threat malware probability. </summary>
-        internal string MalwareProbability { get { return _malwareProbability; } }
-        */
-        /// <summary> Search word to find the respective data in Scan Statistics. </summary>
-        internal abstract string SearchWord { get; }
         /// <summary> A threat verdict. </summary>
         internal abstract Verdict FileVerdict { get; }
         /// <summary> A threat Valkyrie verdict. </summary>
@@ -62,7 +56,7 @@ namespace CodedUITestFAT
 
             if (String.IsNullOrEmpty(fileLocation)) throw new Exception("The provided file location is either null or empty!");
             else if (!Path.IsPathRooted(fileLocation)) throw new Exception("The provided file location is not rooted!");
-            else _location = fileLocation.ToLower();
+            else _location = fileLocation;
 
             // Formates the path to the threat
             if (machine == null) networkPath = fileLocation;

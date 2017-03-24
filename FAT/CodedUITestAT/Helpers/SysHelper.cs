@@ -54,9 +54,11 @@ namespace CodedUITestFAT
         /// <summary> Stops the application under test. </summary>
         internal static void StopProduct()
         {
-            if (IsThereProcess(DataHelper.ProductExeName.WithoutExtension()))
+            string procName = DataHelper.ProductExeName.WithoutExtension();
+
+            if (IsThereProcess(procName))
             { 
-                KillProcesses(DataHelper.ProductExeName.WithoutExtension());
+                KillProcesses(procName);
                 Playback.Wait(2000);
             }
         }
