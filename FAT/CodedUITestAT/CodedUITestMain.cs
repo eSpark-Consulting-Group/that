@@ -1021,7 +1021,7 @@ namespace CodedUITestFAT
             UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput;
             UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Valkyrie analysis results' tab.");
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, TestContext);
             UIMapMain.ClickClearSearchTextButton();
 
             // Searches with an incorrect input
@@ -1031,7 +1031,7 @@ namespace CodedUITestFAT
             UIMapMain.InputTextToSearchBox();
             try
             {
-                UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext);
+                UIHelper.WaitForResultsRow(endpoint, TestContext);
                 Assert.Fail(String.Format("Endpoint '{0}' is shown at 'Valkyrie analysis results' tab after an incorrect search query!", endpoint.Name));
             }
             catch (UITestControlNotFoundException)
@@ -1040,14 +1040,14 @@ namespace CodedUITestFAT
             }
             UIMapMain.ClickClearSearchTextButton();
             
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ValkyrieAnalysis, TestContext); // The endpoint should appear again
+            UIHelper.WaitForResultsRow(endpoint, TestContext); // The endpoint should appear again
 
             // Searches with a correct input
             UIMapResultsWindow.GoToScanResultsTab();
             UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = partialNameInput;
             UIMapMain.InputTextToSearchBox();
             TestContext.WriteLine("A part of endpoint name is entered to the searchbox at 'Scanning results' tab.");
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, TestContext);
             UIMapMain.ClickClearSearchTextButton();
 
             // Searches with an incorrect input
@@ -1057,7 +1057,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine("An incorrect search query is entered to the searchbox at 'Scan results' tab.");
             try
             {
-                UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
+                UIHelper.WaitForResultsRow(endpoint, TestContext);
                 Assert.Fail(String.Format("Endpoint '{0}' is shown on 'Scan results' tab after an incorrect search query!", endpoint.Name));
             }
             catch (UITestControlNotFoundException)
@@ -1066,7 +1066,7 @@ namespace CodedUITestFAT
             }
             UIMapMain.ClickClearSearchTextButton();
 
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext); // The endpoint should appear again
+            UIHelper.WaitForResultsRow(endpoint, TestContext); // The endpoint should appear again
         }
 
         [TestMethod]
@@ -1523,10 +1523,9 @@ namespace CodedUITestFAT
             StartEndpointScan(endpoint, scanType, TestContext);
             WaitForScanCompleted(scanType);
             TestContext.WriteLine(String.Format("Scan '{0}' completed.", scanType));
-            
-            //UIMapScanCompletedWindow.ClickNoButton();
-            UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
-            UIHelper.FindThreat(unknownFile, ResultsScreen.ScanResults, TestContext);
+                        
+            UIHelper.FindThreat(malware, TestContext);
+            UIHelper.FindThreat(unknownFile, TestContext);
         }
 
         [TestMethod]
@@ -1801,14 +1800,14 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Failed, TestContext);
                         
             SetStatusFilter(ScanStatus.NotAccessible, TestContext);
-            UIHelper.WaitForResultsRow(offlineComputer, ResultsScreen.ScanResults, TestContext);
+            UIHelper.WaitForResultsRow(offlineComputer, TestContext);
             UIHelper.WaitForAbsentResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
             UIMapResultsWindow.ClickClearFilterButton();
         
             // Failed scan
             UIHelper.ClickRow(endpoint);
             SetStatusFilter(ScanStatus.Failed, TestContext);
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, TestContext);
             UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanResults, TestContext);
             UIMapResultsWindow.ClickClearFilterButton();
             
@@ -1819,7 +1818,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(offlineComputer, ScanStatus.NotAccessible, TestContext);
             
             SetStatusFilter(ScanStatus.InProgress, TestContext);
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, TestContext);
             UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanResults, TestContext);
             UIMapResultsWindow.ClickClearFilterButton();
             UIHelper.ClickRow(endpoint);
@@ -1830,7 +1829,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Completed, TestContext);            
             
             SetStatusFilter(ScanStatus.Completed, TestContext);
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, TestContext);
             UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanResults, TestContext);
             UIMapResultsWindow.ClickClearFilterButton();
             
@@ -1843,7 +1842,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForScanStatus(endpoint, ScanStatus.Canceled, TestContext, waitTime);
 
             SetStatusFilter(ScanStatus.Canceled, TestContext);
-            UIHelper.WaitForResultsRow(endpoint, ResultsScreen.ScanResults, TestContext);
+            UIHelper.WaitForResultsRow(endpoint, TestContext);
             UIHelper.WaitForAbsentResultsRow(offlineComputer, ResultsScreen.ScanResults, TestContext);
             UIMapResultsWindow.ClickClearFilterButton();
         }

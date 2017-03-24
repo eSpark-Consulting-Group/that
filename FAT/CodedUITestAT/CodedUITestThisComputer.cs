@@ -334,11 +334,11 @@ namespace CodedUITestFAT
             UIMapThisComputer.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan started at the scanning host...");
             WaitForScanCompleted(ScanType.Quick);
-            TestContext.WriteLine("Quick Scan completed at the scanning host...");            
+            TestContext.WriteLine("Quick Scan completed at the scanning host...");
 
-            UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
-            UIHelper.FindThreat(unknownFileQuick, ResultsScreen.ScanResults, TestContext);
-            UIHelper.VerifyAbsentThreat(unknownFileFull, ResultsScreen.ScanResults, TestContext);
+            UIHelper.FindThreat(malware, TestContext);
+            UIHelper.FindThreat(unknownFileQuick, TestContext);
+            UIHelper.VerifyAbsentThreat(unknownFileFull, TestContext);
 
             // A test cleanup
             File.Delete(unknownFileFull.Location);
@@ -355,10 +355,9 @@ namespace CodedUITestFAT
             TestContext.WriteLine("Full Scan started at the scanning host...");
             WaitForScanCompleted(ScanType.Full);
             TestContext.WriteLine("Full Scan completed at the scanning host...");
-            //UIMapScanCompletedWindow.ClickNoButton();
 
-            UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);            
-            UIHelper.FindThreat(unknownFile, ResultsScreen.ScanResults, TestContext);
+            UIHelper.FindThreat(malware, TestContext);            
+            UIHelper.FindThreat(unknownFile, TestContext);
 
             // A test cleanup
             File.Delete(malware.Location);

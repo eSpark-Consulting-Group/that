@@ -49,49 +49,38 @@ namespace CodedUITestFAT
 
         /// <summary>Waits for a specified row at a given results screen.</summary>
         /// <param name="rowName">Set a row name.</param>
-        /// <param name="resultsScreen">Set results screen.</param>
         /// <param name="testContext"> Set current Test Context.</param>
         /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
-        private static void WaitForResultsRow(string rowName, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds)
+        private static void WaitForResultsRow(string rowName, TestContext testContext, int waitForMilliseconds)
         {
             UITestControl row = null;
             CodedUITestMain useMain = new CodedUITestMain();
             var timer = Stopwatch.StartNew();
             for ( ; ; )
             {
-                Playback.Wait(1000);                
-                switch (resultsScreen)
-                {
-                    case ResultsScreen.ScanResults:
-                        {
-                            row = useMain.ScanResultsTab().GetRow(rowName);
-                            break;
-                        }
-                    case ResultsScreen.ValkyrieAnalysis:
-                        {
-                            row = useMain.ValkyrieAnalysisResultsTab().GetRow(rowName);
-                            break;
-                        }
-                }
+                Playback.Wait(1000);
+
+                if (DataHelper.IsGroupedByFiles) row = useMain.ScanResultsByFilesTable().GetRow(rowName);
+                else row = useMain.ScanResultsByComputersTable().GetRow(rowName);
+                
                 if (row != null)
                 {
-                    testContext.WriteLine(String.Format("The given row '{0}' is found at '{1}'.", rowName, resultsScreen));
+                    testContext.WriteLine(String.Format("The given row '{0}' is found at the results screen.", rowName));
                     break;
                 }
                 if ((int) timer.ElapsedMilliseconds > waitForMilliseconds)
-                    throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found at '{1}' after {2} seconds!", rowName, resultsScreen, waitForMilliseconds / 1000));
+                    throw new UITestControlNotFoundException(String.Format("The given row '{0}' is not found at the results screen after {1} seconds!", rowName, waitForMilliseconds / 1000));
             }
             timer.Stop();
         }
 
         /// <summary>Waits for a specified row at a given results screen.</summary>
         /// <param name="row">Set a row.</param>
-        /// <param name="resultsScreen">Set results screen.</param>
         /// <param name="testContext">Set current test context.</param>
         /// <param name="waitForMilliseconds">Set wait time in milliseconds.</param>
-        internal static void WaitForResultsRow(IRow row, ResultsScreen resultsScreen, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
+        internal static void WaitForResultsRow(IRow row, TestContext testContext, int waitForMilliseconds = DataHelper.DefaultWaitTime)
         {
-            WaitForResultsRow(row.RowName, resultsScreen, testContext, waitForMilliseconds);            
+            WaitForResultsRow(row.RowName, testContext, waitForMilliseconds);            
         }
 
         /// <summary>Waits for a specified row to be absent at a given results screen.</summary>
@@ -402,9 +391,8 @@ namespace CodedUITestFAT
 
         /// <summary> Looks for a given threat at a provided results screen. The indicated screen should be opened. </summary>
         /// <param name="row">Set a threat.</param>
-        /// <param name="resultsScreen">Set a results screen.</param>
         /// <param name="testContext">Set a current TestContext.</param>
-        internal static void FindThreat(Threat threat, ResultsScreen resultsScreen, TestContext testContext)
+        internal static void FindThreat(Threat threat, TestContext testContext)
         {
             CodedUITestMain useMain = new CodedUITestMain();
 
@@ -414,22 +402,21 @@ namespace CodedUITestFAT
 
             try
             {
-                WaitForResultsRow(threat, resultsScreen, testContext);
+                WaitForResultsRow(threat, testContext);
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
             } catch(UITestControlNotFoundException)
             {
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
-                Assert.Fail(String.Format("Row '{0}' not found at screen '{1}'!", threat.RowName, resultsScreen));
+                Assert.Fail(String.Format("Row '{0}' not found at the results screen!", threat.RowName));
             }
         }
 
         /// <summary> Checks whether a given threat is absent at a provided results screen. The indicated screen should be opened. </summary>
-        /// <param name="row">Set a threat.</param>
-        /// <param name="resultsScreen">Set a results screen.</param>
+        /// <param name="row">Set a threat.</param>        
         /// <param name="testContext">Set a current TestContext.</param>
-        internal static void VerifyAbsentThreat(Threat threat, ResultsScreen resultsScreen, TestContext testContext)
+        internal static void VerifyAbsentThreat(Threat threat, TestContext testContext)
         {
             CodedUITestMain useMain = new CodedUITestMain();
 
@@ -439,16 +426,16 @@ namespace CodedUITestFAT
 
             try
             {
-                WaitForResultsRow(threat, resultsScreen, testContext);
+                WaitForResultsRow(threat, testContext);
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
-                Assert.Fail(String.Format("Row '{0}' found at screen '{1}', not expected!", threat.RowName, resultsScreen));
+                Assert.Fail(String.Format("Row '{0}' found at the results screen, not expected!", threat.RowName));
             }
             catch (UITestControlNotFoundException)
             {
                 useMain.UIMapMain.ClickClearSearchTextButton();
                 GroupByComputers();
-                testContext.WriteLine(String.Format("Row '{0}' not found at screen '{1}' as expected.", threat.RowName, resultsScreen));
+                testContext.WriteLine(String.Format("Row '{0}' not found at the results screen as expected.", threat.RowName));
             }
         }
 
