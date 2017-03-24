@@ -120,7 +120,7 @@
                 <DataTemplate x:Key="MethodColumn">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding ScanMethodStr}" FontSize="13" VerticalAlignment="Center"  Margin="3 0" MinWidth="80"/>
-                        <TextBlock Cursor="Hand" ToolTip="{Binding ValkyrieOperationInfo.DetailedLink}" IsEnabled="{Binding ValkyrieDetailsLinkAvailable}">
+                        <TextBlock Cursor="Hand" ToolTip="{Binding ValkyrieOperationInfo.DetailedLink}" Visibility="{Binding ValkyrieDetailsLinkAvailable, Converter={converters:BoolToVisibilityConverter2}}">
                             <Hyperlink NavigateUri="{Binding ValkyrieOperationInfo.DetailedLink}" RequestNavigate="Hyperlink_RequestNavigate"  Foreground="#FF547D98" FontSize="13">Detailed Results</Hyperlink>
                         </TextBlock>
 

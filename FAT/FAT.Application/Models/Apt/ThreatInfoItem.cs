@@ -542,7 +542,7 @@ namespace FAT.Application.Models
             
             if (Math.Abs(TotalProgressPercentage - 100) < 0.1)
             {
-                string message = $"Completed: Total scanned: {TotalFilesCount}. Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}.";
+                string message = $"Completed: Total files scanned: {TotalFilesCount}. Unknown: {UnknownFilesCount}. Malicious: {MalwareFilesCount}.";
                 if (PendingFilesCount > 0)
                 {
                     message += $" In Analysis: {PendingFilesCount}.";
@@ -658,7 +658,7 @@ namespace FAT.Application.Models
         public Int32 TotalFilesCount
         {
             get { return _totalFilesCount; }
-            private set
+            set
             {
                 if (_totalFilesCount == value)
                 {

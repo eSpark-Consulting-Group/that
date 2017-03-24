@@ -1087,6 +1087,7 @@ namespace FAT.Application.Models
                 item.IsLocal = res.IsLocal;
                 item.Name = res.Name;
                 item.IpAddress = res.IpAddress;
+                item.TotalFilesCount = res.TotalFilesCount;
                 item.UnknownFilesCount = res.UnknownFilesCount;
                 item.MalwareFilesCount = res.MalwareFilesCount;
                 item.CleanFilesCount = res.CleanFilesCount;
