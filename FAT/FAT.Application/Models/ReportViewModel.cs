@@ -42,11 +42,11 @@ namespace FAT.Application.Models
 
             if (kind == ReportKind.DetailedPerProgram || kind == ReportKind.DetailedPerProgramWithValkyrie)
             {
-                Header = "Detailed Per-Program Report";
+                Header = "Per-Program Report";
             }
             else if (kind == ReportKind.DetailedPerDevice || kind == ReportKind.DetailedPerDeviceWithValkyrie)
             {
-                Header = "Detailed Per-Device Report";
+                Header = "Per-Device Report";
             }
             else if (kind == ReportKind.Executive || kind == ReportKind.ExecutiveWithValkyrie)
             {
