@@ -137,6 +137,7 @@ namespace APTAT.Core.TelerikReports
             this.pageFooterSection1 = new Telerik.Reporting.PageFooterSection();
             this.textBox18 = new Telerik.Reporting.TextBox();
             this.shape4 = new Telerik.Reporting.Shape();
+            this.panelSpaceBeforeDetailsPerProgram = new Telerik.Reporting.Panel();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // pageHeaderSection1
@@ -224,12 +225,13 @@ namespace APTAT.Core.TelerikReports
             // detail
             // 
             this.detail.CanShrink = true;
-            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(35.53228759765625D);
+            this.detail.Height = Telerik.Reporting.Drawing.Unit.Cm(44.032279968261719D);
             this.detail.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panelCharts,
             this.list1,
             this.panel5,
-            this.textBox47});
+            this.textBox47,
+            this.panelSpaceBeforeDetailsPerProgram});
             this.detail.Name = "detail";
             // 
             // panelCharts
@@ -377,7 +379,7 @@ namespace APTAT.Core.TelerikReports
             this.list1.ColumnGroups.Add(tableGroup1);
             this.list1.Items.AddRange(new Telerik.Reporting.ReportItemBase[] {
             this.panel1});
-            this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(26.000001907348633D));
+            this.list1.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(34.499996185302734D));
             this.list1.Name = "list1";
             tableGroup2.Groupings.Add(new Telerik.Reporting.Grouping(null));
             tableGroup2.Name = "DetailGroup";
@@ -1218,7 +1220,7 @@ namespace APTAT.Core.TelerikReports
             // textBox47
             // 
             this.textBox47.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.AllBadFilesSorted.Length > 0"));
-            this.textBox47.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(25.061250686645508D));
+            this.textBox47.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0.099999949336051941D), Telerik.Reporting.Drawing.Unit.Cm(33.600002288818359D));
             this.textBox47.Multiline = false;
             this.textBox47.Name = "textBox47";
             this.textBox47.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.9146909713745117D), Telerik.Reporting.Drawing.Unit.Cm(0.89990139007568359D));
@@ -1260,6 +1262,14 @@ namespace APTAT.Core.TelerikReports
             this.shape4.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.9197998046875D), Telerik.Reporting.Drawing.Unit.Cm(0.19999989867210388D));
             this.shape4.Style.Color = System.Drawing.Color.LightSlateGray;
             this.shape4.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Point(2D);
+            // 
+            // panelSpaceBeforeDetailsPerProgram
+            // 
+            this.panelSpaceBeforeDetailsPerProgram.Bindings.Add(new Telerik.Reporting.Binding("Visible", "= Fields.AllBadFilesSorted.Length > 0"));
+            this.panelSpaceBeforeDetailsPerProgram.CanShrink = true;
+            this.panelSpaceBeforeDetailsPerProgram.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(24.800197601318359D));
+            this.panelSpaceBeforeDetailsPerProgram.Name = "panelSpaceBeforeDetailsPerProgram";
+            this.panelSpaceBeforeDetailsPerProgram.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(15.90000057220459D), Telerik.Reporting.Drawing.Unit.Cm(8.7996072769165039D));
             // 
             // DetailedProgramsReportFAT
             // 
@@ -1389,5 +1399,6 @@ namespace APTAT.Core.TelerikReports
         private Telerik.Reporting.Panel panel13;
         private Telerik.Reporting.TextBox textBox13;
         private Telerik.Reporting.TextBox textBox19;
+        private Telerik.Reporting.Panel panelSpaceBeforeDetailsPerProgram;
     }
 }
