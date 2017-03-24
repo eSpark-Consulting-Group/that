@@ -334,8 +334,7 @@ namespace CodedUITestAT
             UIMapThisComputer.ClickQuickScanButton();
             TestContext.WriteLine("Quick Scan started at the scanning host...");
             WaitForScanCompleted(ScanType.Quick);
-            TestContext.WriteLine("Quick Scan completed at the scanning host...");
-            //UIMapScanCompletedWindow.ClickNoButton();
+            TestContext.WriteLine("Quick Scan completed at the scanning host...");            
 
             UIHelper.FindThreat(malware, ResultsScreen.ScanResults, TestContext);
             UIHelper.FindThreat(unknownFileQuick, ResultsScreen.ScanResults, TestContext);

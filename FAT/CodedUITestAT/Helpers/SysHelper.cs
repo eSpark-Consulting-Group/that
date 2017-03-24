@@ -64,7 +64,7 @@ namespace CodedUITestAT
         /// <summary> Extracts the product archive for further testing. </summary>
         private static void ExtractProduct()
         {
-            string sevenZArgument = String.Format(@"e {0} -o{1}", Path.Combine(DataHelper.GetWorkingFolder(), DataHelper.ProductZipName), DataHelper.ExtractedProductPath);
+            string sevenZArgument = String.Format(@"x {0} -o{1}", Path.Combine(DataHelper.GetWorkingFolder(), DataHelper.ProductZipName), DataHelper.ExtractedProductPath);
             string sevenZPath;
 
             // Installs 7z
