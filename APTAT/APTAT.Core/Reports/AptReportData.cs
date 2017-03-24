@@ -380,8 +380,8 @@ namespace APTAT.Core.Reports
 
                     scanResults.Add(scanResult);
                 }
-
-                return scanResults.ToArray();
+                var result = scanResults.OrderBy(t => t.SeverityIndex).ToArray();
+                return result;
             }
         }
 

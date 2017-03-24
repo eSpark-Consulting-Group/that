@@ -44,6 +44,28 @@ namespace APTAT.Core.Reports
             }
         }
 
+        public int SeverityIndex
+        {
+            get
+            {
+                switch (TargetVerdict)
+                {
+                    case TargetVerdict.Infected:
+                        return 0;
+                    case TargetVerdict.Vulnerable:
+                        return 1;
+                    case TargetVerdict.Unknown:
+                        return 2;                    
+                    case TargetVerdict.Safe:
+                        return 3;
+                    case TargetVerdict.NotScanned:
+                        return 4;
+                    default:
+                        return 5;                        
+                }
+                
+            }
+        }
         public string TargetVerdictString
         {
             get
