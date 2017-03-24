@@ -216,7 +216,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox51.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(0D), Telerik.Reporting.Drawing.Unit.Cm(2.0999999046325684D));
             this.textBox51.Name = "textBox51";
             this.textBox51.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(7.8076386451721191D), Telerik.Reporting.Drawing.Unit.Cm(0.600000262260437D));
-            this.textBox51.Style.Color = System.Drawing.Color.Gray;
+            this.textBox51.Style.Color = System.Drawing.Color.DimGray;
             this.textBox51.Style.Font.Name = "Segoe UI";
             this.textBox51.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
             this.textBox51.Value = "Per-Device Report";
@@ -227,7 +227,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox1.Multiline = false;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(5.7000002861022949D), Telerik.Reporting.Drawing.Unit.Cm(0.699999988079071D));
-            this.textBox1.Style.Color = System.Drawing.Color.Gray;
+            this.textBox1.Style.Color = System.Drawing.Color.DimGray;
             this.textBox1.Style.Font.Name = "Segoe UI Semibold";
             this.textBox1.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
             this.textBox1.TextWrap = false;
@@ -273,9 +273,9 @@ namespace APTAT.Core.TelerikReports
             this.textBox59.Multiline = false;
             this.textBox59.Name = "textBox59";
             this.textBox59.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.9146909713745117D), Telerik.Reporting.Drawing.Unit.Cm(0.73708349466323853D));
-            this.textBox59.Style.Color = System.Drawing.Color.Gray;
+            this.textBox59.Style.Color = System.Drawing.Color.DimGray;
             this.textBox59.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox59.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
+            this.textBox59.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
             this.textBox59.TextWrap = false;
             this.textBox59.Value = "Report Summary";
             // 
@@ -748,7 +748,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox19.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Cm(1.6821754655893528E-08D), Telerik.Reporting.Drawing.Unit.Cm(0.7985420823097229D));
             this.textBox19.Name = "textBox19";
             this.textBox19.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(7.8076386451721191D), Telerik.Reporting.Drawing.Unit.Cm(0.600000262260437D));
-            this.textBox19.Style.Color = System.Drawing.Color.Gray;
+            this.textBox19.Style.Color = System.Drawing.Color.DimGray;
             this.textBox19.Style.Font.Name = "Segoe UI";
             this.textBox19.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
             this.textBox19.Value = "Top 10 Vulnerable Devices";
@@ -759,7 +759,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox17.Multiline = false;
             this.textBox17.Name = "textBox17";
             this.textBox17.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(3.8999998569488525D), Telerik.Reporting.Drawing.Unit.Cm(0.699999988079071D));
-            this.textBox17.Style.Color = System.Drawing.Color.Gray;
+            this.textBox17.Style.Color = System.Drawing.Color.DimGray;
             this.textBox17.Style.Font.Name = "Segoe UI Semibold";
             this.textBox17.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
             this.textBox17.TextWrap = false;
@@ -908,7 +908,7 @@ namespace APTAT.Core.TelerikReports
             this.textBox35.Multiline = false;
             this.textBox35.Name = "textBox35";
             this.textBox35.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(5.7000002861022949D), Telerik.Reporting.Drawing.Unit.Cm(0.69854319095611572D));
-            this.textBox35.Style.Color = System.Drawing.Color.Gray;
+            this.textBox35.Style.Color = System.Drawing.Color.DimGray;
             this.textBox35.Style.Font.Name = "Segoe UI Semibold";
             this.textBox35.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
             this.textBox35.TextWrap = false;
@@ -1333,9 +1333,9 @@ namespace APTAT.Core.TelerikReports
             this.textBox44.Multiline = false;
             this.textBox44.Name = "textBox44";
             this.textBox44.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Cm(6.9146909713745117D), Telerik.Reporting.Drawing.Unit.Cm(0.73708349466323853D));
-            this.textBox44.Style.Color = System.Drawing.Color.Gray;
+            this.textBox44.Style.Color = System.Drawing.Color.DimGray;
             this.textBox44.Style.Font.Name = "Segoe UI Semibold";
-            this.textBox44.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(14D);
+            this.textBox44.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(13.5D);
             this.textBox44.TextWrap = false;
             this.textBox44.Value = "Details per Device";
             // 
