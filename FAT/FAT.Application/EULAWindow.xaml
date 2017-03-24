@@ -25,7 +25,7 @@
 
                             <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource StrongBrush}" Grid.ColumnSpan="2">
                                 <Grid>
-                                    <TextBlock Text="Forensic Analysis Tool" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
+                                    <TextBlock Text="Forensic Analysis Tool" Foreground="White" FontFamily="{StaticResource myriadpro}"  FontSize="19" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20 0 0 0"  SnapsToDevicePixels="True"/>
                                 </Grid>
                             </Border>
 

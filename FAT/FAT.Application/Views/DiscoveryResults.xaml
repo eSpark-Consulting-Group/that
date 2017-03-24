@@ -138,6 +138,8 @@
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
 
-        <CheckBox VerticalAlignment="Top" IsChecked="{Binding ElementName=this, Path=SelectAll, Mode=TwoWay}" HorizontalAlignment="Left" Margin="12 8 0 0" />
+        <CheckBox VerticalAlignment="Top" IsChecked="{Binding ElementName=this, Path=SelectAll, Mode=TwoWay}" 
+                  Visibility="{Binding ElementName=treeList, Path=HasItems, Converter={converters:BoolToVisibilityConverter2}}" 
+                  HorizontalAlignment="Left" Margin="12 8 0 0" />
     </Grid>
 </UserControl>
