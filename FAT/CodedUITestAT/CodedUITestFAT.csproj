@@ -9,8 +9,8 @@
     <ProjectGuid>{B7F52D86-683C-4339-A09B-FDBC85A5F5A1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CodedUITestAT</RootNamespace>
-    <AssemblyName>CodedUITestAT</AssemblyName>
+    <RootNamespace>CodedUITestFAT</RootNamespace>
+    <AssemblyName>CodedUITestFAT</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

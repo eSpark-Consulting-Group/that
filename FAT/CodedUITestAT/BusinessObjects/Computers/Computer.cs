@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Represents a computer. </summary>
     internal sealed class Computer : IRow

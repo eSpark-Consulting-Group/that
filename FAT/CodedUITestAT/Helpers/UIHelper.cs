@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Contains common methods for work with UI. </summary>
     internal static class UIHelper

@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT
+﻿namespace CodedUITestFAT
 {
     /// <summary> Contains properties necessary for a UI row. </summary>
     internal interface IRow

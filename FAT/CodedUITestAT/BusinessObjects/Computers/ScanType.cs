@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT
+﻿namespace CodedUITestFAT
 {
     /// <summary> Possible Scan types. </summary>
     internal enum ScanType { Quick, Full };

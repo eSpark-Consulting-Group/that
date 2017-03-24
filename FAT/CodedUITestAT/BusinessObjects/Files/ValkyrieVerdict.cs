@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Possible threat types for Valkyrie. </summary>
     internal enum ValkyrieVerdict 

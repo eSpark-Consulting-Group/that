@@ -15,7 +15,7 @@ using Microsoft.Win32;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Contains common methods for work with OS, processes, services, etc. </summary>
     internal static class SysHelper

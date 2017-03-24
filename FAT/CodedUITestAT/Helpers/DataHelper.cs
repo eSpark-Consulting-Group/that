@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UITesting;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Contains the project global constants, variables, and gets the local environment variables stored during a test build deployment process using a batch file (find in the project). </summary>
     internal static class DataHelper

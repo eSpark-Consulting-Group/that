@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Represents a general threat. </summary>
     internal abstract class Threat : IRow

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Represents a report. </summary>
     internal sealed class Report

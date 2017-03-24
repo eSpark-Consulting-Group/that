@@ -1,4 +1,4 @@
-﻿namespace CodedUITestAT
+﻿namespace CodedUITestFAT
 {
     /// <summary> Represents an unknown file. </summary>
     internal sealed class UnknownFile : Threat

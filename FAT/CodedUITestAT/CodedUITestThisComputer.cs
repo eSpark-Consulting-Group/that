@@ -9,7 +9,7 @@ using CodedUITestAT.UIMaps.UIMapMainClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Tests for This Computer branch. </summary>
     [CodedUITest]

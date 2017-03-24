@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Xml;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Contains methods for work with xml-files. </summary>
     internal static class XmlHelper

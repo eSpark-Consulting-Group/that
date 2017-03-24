@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapReportsClasses;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Tests for reports. </summary>
     [CodedUITest]

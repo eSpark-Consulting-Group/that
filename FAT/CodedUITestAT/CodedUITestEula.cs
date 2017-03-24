@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapEulaClasses;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Tests for EULA screen. </summary>
     [CodedUITest]

@@ -8,7 +8,7 @@ using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> A common part for scan-related CodedUI classes. </summary>
     [CodedUITest]

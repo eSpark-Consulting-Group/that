@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapHelpClasses;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Tests for Help and About screens. </summary>
     [CodedUITest]

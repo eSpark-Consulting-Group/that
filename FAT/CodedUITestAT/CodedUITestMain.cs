@@ -15,7 +15,7 @@ using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Tests for the Main screen. </summary>
     [CodedUITest]

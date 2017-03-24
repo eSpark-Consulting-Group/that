@@ -4,7 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UITesting;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Contains methods for manual testing support. To be converted to a separate solution. </summary>
     internal static class Support

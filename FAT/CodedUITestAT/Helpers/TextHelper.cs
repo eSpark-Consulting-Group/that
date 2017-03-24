@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CodedUITestAT
+namespace CodedUITestFAT
 {
     /// <summary> Contains helper methods related to work with strings and texts. </summary>
     internal static class TextHelper
