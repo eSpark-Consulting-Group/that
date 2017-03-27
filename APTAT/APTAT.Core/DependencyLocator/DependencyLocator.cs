@@ -5,6 +5,7 @@ using APTAT.Core.Descent.Apt;
 using APTAT.Core.Reports;
 using APTAT.Core.Storage;
 using APTAT.Core.Valkyrie;
+using APTAT.DeploymentCore.Descent;
 using System;
 
 namespace APTAT.Core.DependencyLocator
@@ -27,11 +28,8 @@ namespace APTAT.Core.DependencyLocator
 
             resolver.RegisterSingleton<IFlsApiProvider, FlsApiProvider>();
             resolver.RegisterSingleton<IValkyrieClientEx, ValkyrieClientWithStorage>();
-
-
-
-
-
+            
+            resolver.RegisterSingleton<IComputerDescentResultFactory, AptComputerDescentResultFactory>();
             resolver.RegisterSingleton<IDistinctFileHelper, DistinctFileHelper>();
             resolver.RegisterSingleton<IStorageSubSystem, IValkyrieStorageSubSystem, StorageSubSystem>();
             resolver.RegisterSingleton<IReportBuilder, ReportBuilder>();

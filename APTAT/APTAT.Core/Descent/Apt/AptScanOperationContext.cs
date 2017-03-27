@@ -11,9 +11,10 @@ namespace APTAT.Core.Descent.Apt
     public class AptScanOperationContext : DescentResult, IAptScanOperationContext
     {
 
-        public AptScanOperationContext(IEnumerable<IComputer> computers, int totalTargetCount,
-            IDevicesSourceDescription devicesSourceDescription)
-            : base(computers, devicesSourceDescription, totalTargetCount, new AptComputerDescentResultFactory())
+        public AptScanOperationContext(IEnumerable<IComputer> computers,
+            IDevicesSourceDescription devicesSourceDescription, IComputerDescentResultFactory computerDescentResultFactory,
+            IDescentWatcherFactory descentWatcherFactory)
+            : base(computers, devicesSourceDescription, computerDescentResultFactory, descentWatcherFactory)
         {
         }
         public DateTime Started { get { return StartTime; } }
@@ -86,14 +87,6 @@ namespace APTAT.Core.Descent.Apt
         private void OnOperationProgressChanged(AptOperationProgressChangedEventArgs args)
         {
             OperationProgressChanged?.Invoke(this,args);
-        }       
-
-        private sealed class AptComputerDescentResultFactory : IComputerDescentResultFactory
-        {
-            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
-            {
-                return new AptScanResult(computer, operationUid, timeStampProvider);
-            }
-        }
+        }    
     }
 }

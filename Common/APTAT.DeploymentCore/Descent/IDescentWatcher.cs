@@ -95,6 +95,7 @@ namespace APTAT.DeploymentCore.Descent
         void Stop()
         {
             _timer.Change(Timeout.Infinite, Timeout.Infinite);
+            Dispose();
         }
 
     }

@@ -6,7 +6,6 @@ using System.Linq;
 using APTAT.Common;
 using APTAT.DeploymentCore.Directory;
 using APTAT.DeploymentCore.Messages;
-using APTAT.DeploymentCore.Properties;
 
 namespace APTAT.DeploymentCore.Descent
 {
@@ -23,21 +22,10 @@ namespace APTAT.DeploymentCore.Descent
 
         private readonly object _sync = new object();
         //protected readonly object ResultUpdatingSync = new object();
-
-        protected DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
-            int totalComputersCount, IComputerDescentResultFactory computerDescentResultFactory = null)
-            : this(computers, devicesSourceDescription, computerDescentResultFactory)
-        {
-            TotalTargetsCount = totalComputersCount;
-        }
-
+        
         public DescentResult(IEnumerable<IComputer> computers, IDevicesSourceDescription devicesSourceDescription,
-            IComputerDescentResultFactory computerDescentResultFactory = null, IDescentWatcherFactory descentWatcherFactory = null)
+            IComputerDescentResultFactory computerDescentResultFactory, IDescentWatcherFactory descentWatcherFactory)
         {
-            if (descentWatcherFactory == null)
-                descentWatcherFactory = new DescentWatcherFactory();
-            if (computerDescentResultFactory == null)
-                computerDescentResultFactory = new ComputerDescentResultFactory();
             _stopWatch.Start();
             _descentWatcher = descentWatcherFactory.CreateDescentWatcher(OnDescentTimeout);
 
@@ -57,32 +45,8 @@ namespace APTAT.DeploymentCore.Descent
             _descentWatcher.Start();
         }
 
-        public interface IDescentWatcherFactory
-        {
-            IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeou);
-        }
-        protected sealed class DescentWatcherFactory : IDescentWatcherFactory
-        {
-            public IDescentWatcher CreateDescentWatcher(Action<Guid> onDescentTimeout)
-            {
-                return new DescentWatcher(Settings.Default.AgentDescentingTimeout, onDescentTimeout);
-            }
 
-        }
-
-        public interface IComputerDescentResultFactory
-        {
-            IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider);
-        }
-
-        protected sealed class ComputerDescentResultFactory : IComputerDescentResultFactory
-        {
-            public IComputerDescentResultInternal CreateComputerDescentResult(IComputer computer, Guid operationUid, ITimeStampProvider timeStampProvider)
-            {
-                return new ComputerDescentResult(computer, operationUid, timeStampProvider);
-            }
-
-        }
+               
 
         protected ConcurrentDictionary<Guid, IComputerDescentResultInternal> ResultsByUid { get; }
             = new ConcurrentDictionary<Guid, IComputerDescentResultInternal>();
@@ -129,19 +93,20 @@ namespace APTAT.DeploymentCore.Descent
 
         }
 
-        private int ProcessResult(Guid uid, IOperationDescentResult operationResult)
+        private int ProcessResult(Guid computerUid, IOperationDescentResult operationResult)
         {
             int count;
-            var result = ResultsByUid[uid];
+            var result = ResultsByUid[computerUid];
+            if (result.Completed)
+                throw new ArgumentException("Already completed", nameof(computerUid));
             result.UpdateStatus(operationResult);
-            ResultsByUid[uid] = result;
 
             if (result.Completed)
                 OnComputerDescentCompleted(result);
 
             lock (_sync)
             {
-                if (result.Completed && !_reportedByUid[uid])
+                if (result.Completed && !_reportedByUid[computerUid])
                 {
                     if (result.Succeeded)
                         SucceededCount++;
@@ -149,8 +114,8 @@ namespace APTAT.DeploymentCore.Descent
                         FailedCount++;
 
                     InProgressCount--;
-                    _reportedByUid[uid] = true;
-                    _descentWatcher.ExcludeIdentity(uid);
+                    _reportedByUid[computerUid] = true;
+                    _descentWatcher.ExcludeIdentity(computerUid);
 
                     CheckCompletion();
                 }
@@ -229,7 +194,7 @@ namespace APTAT.DeploymentCore.Descent
                         {
                             var originalResult = ResultsByUid[progressItem.ComputerUid];
                             if (Math.Abs(progressItem.ProgressPercentage - originalResult.Percentage) > 0.1 ||
-                                originalResult.StatusMessage != progressItem.StatusMessage)
+                                !originalResult.StatusMessage.Equals(progressItem.StatusMessage))
                             {
 
                                 originalResult.UpdateStatus(progressItem);

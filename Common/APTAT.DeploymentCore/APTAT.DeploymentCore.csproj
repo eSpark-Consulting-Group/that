@@ -58,10 +58,12 @@
     <Compile Include="DeploymentTargetResolvingEventArg.cs" />
     <Compile Include="Descent\ActiveDirectorySearcher.cs" />
     <Compile Include="Descent\ComputerDescentResult.cs" />
+    <Compile Include="Descent\ComputerDescentResultFactory.cs" />
     <Compile Include="Descent\DescentEventArgs.cs" />
     <Compile Include="Descent\DescentProgressItem.cs" />
     <Compile Include="Descent\DescentResult.cs" />
     <Compile Include="Descent\DescentSubSystem.cs" />
+    <Compile Include="Descent\DescentWatcherFactory.cs" />
     <Compile Include="Descent\Exceptions\AnotherScanIsInProgressException.cs" />
     <Compile Include="Descent\Exceptions\DescentException.cs" />
     <Compile Include="Descent\Exceptions\NoAvailableTargetsException.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="Descent\IDescentQueryResult.cs" />
     <Compile Include="Descent\IDescentResult.cs" />
     <Compile Include="Descent\IDescentSubSystem.cs" />
-    <Compile Include="Descent\Helpers\Timer.cs" />
     <Compile Include="Descent\IDescentWatcher.cs" />
     <Compile Include="Descent\IOperationDescentResult.cs" />
     <Compile Include="Descent\IScanner.cs" />

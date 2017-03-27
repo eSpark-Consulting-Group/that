@@ -63,8 +63,6 @@ namespace APTAT.Core
                 {
                     result = RequestType0Tcp(hashes);
                 }
-                if (result.Results.All(r => r.IsNotAnalyzed()))
-                    throw new Exception();
                 return result;
             }
             catch (Exception ex)

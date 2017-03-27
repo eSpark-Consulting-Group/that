@@ -10,6 +10,7 @@ namespace APTAT.DeploymentCore
     {
         public void RegisterDependencies(ICompositionHelper resolver)
         {
+            resolver.RegisterSingleton<IDescentWatcherFactory, DescentWatcherFactory>();
             resolver.RegisterSingleton<IDescentSubSystem, DescentSubSystem>();
             resolver.Register<INetworkObserver, NetworkObserver>();
             resolver.Register<IActiveDirectoryObserver, ActiveDirectoryObserver>();

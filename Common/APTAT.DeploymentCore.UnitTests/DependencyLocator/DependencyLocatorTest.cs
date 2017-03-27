@@ -24,6 +24,8 @@ namespace APTAT.DeploymentCore.UnitTests.DependencyLocator
                 .OccursOnce();
             Mock.Arrange(() => dependencyResolver.Register<INetworkBrowser, NetworkBrowser>())
                 .OccursOnce();
+            Mock.Arrange(() => dependencyResolver.RegisterSingleton<IDescentWatcherFactory, DescentWatcherFactory>())
+                .OccursOnce();
             Mock.Arrange(() => dependencyResolver.RegisterSingleton<ICommandFactory, CommandFactory>())
                 .OccursOnce();
             Mock.Arrange(() => dependencyResolver.RegisterSingleton<ITargetsManager, TargetsManager>())

@@ -17,7 +17,6 @@ namespace APTAT.DeploymentCore.Descent
             SystemMessage = systemMessage;
             SystemCode = systemCode;
             IsCanceled = isCanceled;
-
         }
 
         public bool IsCanceled { get; }
