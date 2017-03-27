@@ -330,8 +330,11 @@
                     <Border x:Name="pr1" SnapsToDevicePixels="True" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Left" />
                     <Border x:Name="pr2" SnapsToDevicePixels="True" VerticalAlignment="Top" MinWidth="600" Height="10" Background="White" HorizontalAlignment="Right" />
 
-                    <ListBox Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" x:Name="list" BorderThickness="0" IsHitTestVisible="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
-                     Grid.Row="1" Padding="0" Margin="32, 0,32,20" FocusVisualStyle="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="False" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters}}" >
+                    <ListBox AutomationProperties.AutomationId="AggregatedPanelListBox"
+                             Visibility="{Binding Loaded, Converter={converters:BoolToVisibilityConverter2}}" SelectedIndex="-1" Background="Transparent" 
+                             x:Name="list" BorderThickness="0" IsHitTestVisible="{Binding IsAnyScanInProgress, Converter={StaticResource InverseBooleanConverter}}"
+                             Grid.Row="1" Padding="0" Margin="32, 0,32,20" FocusVisualStyle="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                             Focusable="False" SelectionMode="Multiple"  ItemsSource="{Binding Source={StaticResource SortedCounters}}" >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal"></StackPanel>

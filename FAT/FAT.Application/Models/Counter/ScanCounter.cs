@@ -109,6 +109,11 @@ namespace FAT.Application.Models
         {
             get { return (int)CounterOrder.Clean; }
         }
+
+        public override string ToString()
+        {
+            return "CleanCounterListItem";
+        }
     }
 
     public class MalwareCounter : ScanCounter
@@ -116,6 +121,10 @@ namespace FAT.Application.Models
         public override int Order
         {
             get { return (int)CounterOrder.Malware; }
+        }
+        public override string ToString()
+        {
+            return "MalwareCounterListItem";
         }
     }
 
@@ -125,6 +134,11 @@ namespace FAT.Application.Models
         {
             get { return (int)CounterOrder.Unknown; }
         }
+
+        public override string ToString()
+        {
+            return "UnknownCounterListItem";
+        }
     }
 
     public class NotAnalyzedCounter : ScanCounter
@@ -133,12 +147,22 @@ namespace FAT.Application.Models
         {
             get { return (int)CounterOrder.NotAnalyzed; }
         }
+
+        public override string ToString()
+        {
+            return "NotAnalyzedCounterListItem";
+        }
     }
     public class InProgressCounter : ScanCounter
     {
         public override int Order
         {
             get { return (int)CounterOrder.InProgress; }
+        }
+
+        public override string ToString()
+        {
+            return "InAnalysisCounterListItem";
         }
     }
 }

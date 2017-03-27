@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.UIMapMainClasses;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
@@ -181,7 +181,7 @@ namespace CodedUITestFAT
         }
 
         /// <summary> Waits for no 'Lookup in Progress' files count. </summary>
-        internal void WaitForNoLookupInProgress()
+        internal void WaitForNoInAnalysis()
         {
             int waitTime = Settings.WaitingTime.Default.LookupInProgressWaitTime;
 

@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
+namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -35,11 +35,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickNetworkAddressButton()
         {
             #region Variable Declarations
-            WpfButton uIScancomputersbyspeciButton = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyspeciButton;
+            WpfButton uIScancomputerswithspeButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIScancomputerswithspeButton;
             #endregion
 
-            // Click 'Scan computers by specifying IP addresses or endpo...' button
-            Mouse.Click(uIScancomputersbyspeciButton, new Point(148, 99));
+            // Click 'Scan computers with specified IP addresses or endp...' button
+            Mouse.Click(uIScancomputerswithspeButton, new Point(169, 69));
         }
         
         /// <summary>
@@ -48,11 +48,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickQuickScanButton()
         {
             #region Variable Declarations
-            WpfButton uIQuickScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
+            WpfButton uIQuickScanButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIQuickScanButton;
             #endregion
 
             // Click 'Quick Scan' button
-            Mouse.Click(uIQuickScanButton, new Point(56, 15));
+            Mouse.Click(uIQuickScanButton, new Point(67, 16));
         }
         
         /// <summary>
@@ -61,11 +61,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickWorkgroupButton()
         {
             #region Variable Declarations
-            WpfButton uIScancomputersbyselecButton1 = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyselecButton1;
+            WpfButton uIScancomputersselecteButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIScancomputersselecteButton;
             #endregion
 
-            // Click 'Scan computers by selecting them from Workgroup' button
-            Mouse.Click(uIScancomputersbyselecButton1, new Point(140, 84));
+            // Click 'Scan computers selected from Workgroups' button
+            Mouse.Click(uIScancomputersselecteButton, new Point(228, 124));
         }
         
         /// <summary>
@@ -693,10 +693,24 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUILoadingProgressBar;
             }
         }
+        
+        public UIPleaseWaitProgressBar UIPleaseWaitProgressBar
+        {
+            get
+            {
+                if ((this.mUIPleaseWaitProgressBar == null))
+                {
+                    this.mUIPleaseWaitProgressBar = new UIPleaseWaitProgressBar(this);
+                }
+                return this.mUIPleaseWaitProgressBar;
+            }
+        }
         #endregion
         
         #region Fields
         private UILoadingProgressBar2 mUILoadingProgressBar;
+        
+        private UIPleaseWaitProgressBar mUIPleaseWaitProgressBar;
         #endregion
     }
     
@@ -751,6 +765,78 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         private WpfButton mUIScanThisComputerButton;
         
         private WpfButton mUINextButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIPleaseWaitProgressBar : WpfProgressBar
+    {
+        
+        public UIPleaseWaitProgressBar(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfProgressBar.PropertyNames.Name] = "Please Wait...";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIScancomputerswithspeButton
+        {
+            get
+            {
+                if ((this.mUIScancomputerswithspeButton == null))
+                {
+                    this.mUIScancomputerswithspeButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScancomputerswithspeButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "NetworkAddressesButton";
+                    this.mUIScancomputerswithspeButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIScancomputerswithspeButton;
+            }
+        }
+        
+        public WpfButton UIScancomputersselecteButton
+        {
+            get
+            {
+                if ((this.mUIScancomputersselecteButton == null))
+                {
+                    this.mUIScancomputersselecteButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIScancomputersselecteButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "WorkgroupButton";
+                    this.mUIScancomputersselecteButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIScancomputersselecteButton;
+            }
+        }
+        
+        public WpfButton UIQuickScanButton
+        {
+            get
+            {
+                if ((this.mUIQuickScanButton == null))
+                {
+                    this.mUIQuickScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIQuickScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "QuickScanButton";
+                    this.mUIQuickScanButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIQuickScanButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIScancomputerswithspeButton;
+        
+        private WpfButton mUIScancomputersselecteButton;
+        
+        private WpfButton mUIQuickScanButton;
         #endregion
     }
 }

@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
+namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -61,7 +61,7 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         public void CheckWorkgroup()
         {
             #region Variable Declarations
-            WpfCheckBox uICheckBoxElementCheckBox = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.UICheckBoxElementCheckBox;
+            WpfCheckBox uICheckBoxElementCheckBox = this.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.UICheckBoxElementCheckBox;
             #endregion
 
             // Select 'CheckBoxElement' check box
@@ -100,10 +100,10 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         public void InputWorkgroup()
         {
             #region Variable Declarations
-            WpfEdit uIWorkgroupWatermarkTeEdit = this.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
+            WpfEdit uIWorkgroupWatermarkTeEdit = this.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupWatermarkTeEdit;
             #endregion
 
-            // Type 'workgroup' in 'WorkgroupWatermarkTextBox' text box
+            // Type 'test' in 'WorkgroupWatermarkTextBox' text box
             Keyboard.SendKeys(uIWorkgroupWatermarkTeEdit, this.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys, ModifierKeys.None);
         }
         
@@ -113,7 +113,7 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         public void SelectUseKnownWorkgroupRadioButton()
         {
             #region Variable Declarations
-            WpfRadioButton uIUseKnownWorkgroupNamRadioButton = this.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIUseKnownWorkgroupNamRadioButton;
+            WpfRadioButton uIUseKnownWorkgroupNamRadioButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIWorkgroupViewCustom.UIUseKnownWorkgroupNamRadioButton;
             #endregion
 
             // Select 'Use Known Workgroup Name' radio button
@@ -253,6 +253,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
                 return this.mUIUnknownFileHunterWindow1;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -275,6 +287,8 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -362,9 +376,9 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         
         #region Fields
         /// <summary>
-        /// Type 'workgroup' in 'WorkgroupWatermarkTextBox' text box
+        /// Type 'test' in 'WorkgroupWatermarkTextBox' text box
         /// </summary>
-        public string UIWorkgroupWatermarkTeEditSendKeys = "workgroup";
+        public string UIWorkgroupWatermarkTeEditSendKeys = "test";
         #endregion
     }
     
@@ -961,6 +975,242 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses
         
         #region Fields
         private WpfEdit mUILoginWatermarkTextBoEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIScanningWizardWindowCustom2 UIScanningWizardWindowCustom
+        {
+            get
+            {
+                if ((this.mUIScanningWizardWindowCustom == null))
+                {
+                    this.mUIScanningWizardWindowCustom = new UIScanningWizardWindowCustom2(this);
+                }
+                return this.mUIScanningWizardWindowCustom;
+            }
+        }
+        
+        public UIWorkgroupViewCustom5 UIWorkgroupViewCustom
+        {
+            get
+            {
+                if ((this.mUIWorkgroupViewCustom == null))
+                {
+                    this.mUIWorkgroupViewCustom = new UIWorkgroupViewCustom5(this);
+                }
+                return this.mUIWorkgroupViewCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIScanningWizardWindowCustom2 mUIScanningWizardWindowCustom;
+        
+        private UIWorkgroupViewCustom5 mUIWorkgroupViewCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIScanningWizardWindowCustom2 : WpfCustom
+    {
+        
+        public UIScanningWizardWindowCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "ScanningWizardWindow";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIWorkgroupViewCustom4 UIWorkgroupViewCustom
+        {
+            get
+            {
+                if ((this.mUIWorkgroupViewCustom == null))
+                {
+                    this.mUIWorkgroupViewCustom = new UIWorkgroupViewCustom4(this);
+                }
+                return this.mUIWorkgroupViewCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIWorkgroupViewCustom4 mUIWorkgroupViewCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIWorkgroupViewCustom4 : WpfCustom
+    {
+        
+        public UIWorkgroupViewCustom4(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanByWorkgroupView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "WorkgroupView";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfRadioButton UIUseKnownWorkgroupNamRadioButton
+        {
+            get
+            {
+                if ((this.mUIUseKnownWorkgroupNamRadioButton == null))
+                {
+                    this.mUIUseKnownWorkgroupNamRadioButton = new WpfRadioButton(this);
+                    #region Search Criteria
+                    this.mUIUseKnownWorkgroupNamRadioButton.SearchProperties[WpfRadioButton.PropertyNames.AutomationId] = "UseKnownWorkgroupRadioButton";
+                    this.mUIUseKnownWorkgroupNamRadioButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIUseKnownWorkgroupNamRadioButton;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfRadioButton mUIUseKnownWorkgroupNamRadioButton;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIWorkgroupViewCustom5 : WpfCustom
+    {
+        
+        public UIWorkgroupViewCustom5(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanByWorkgroupView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "WorkgroupView";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfEdit UIWorkgroupWatermarkTeEdit
+        {
+            get
+            {
+                if ((this.mUIWorkgroupWatermarkTeEdit == null))
+                {
+                    this.mUIWorkgroupWatermarkTeEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIWorkgroupWatermarkTeEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "WorkgroupWatermarkTextBox";
+                    this.mUIWorkgroupWatermarkTeEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIWorkgroupWatermarkTeEdit;
+            }
+        }
+        
+        public UIWorkgroupTreeTree1 UIWorkgroupTreeTree
+        {
+            get
+            {
+                if ((this.mUIWorkgroupTreeTree == null))
+                {
+                    this.mUIWorkgroupTreeTree = new UIWorkgroupTreeTree1(this);
+                }
+                return this.mUIWorkgroupTreeTree;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfEdit mUIWorkgroupWatermarkTeEdit;
+        
+        private UIWorkgroupTreeTree1 mUIWorkgroupTreeTree;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIWorkgroupTreeTree1 : WpfTree
+    {
+        
+        public UIWorkgroupTreeTree1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTree.PropertyNames.AutomationId] = "WorkgroupTree";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIWorkgroupTreeItem1 UIWorkgroupTreeItem
+        {
+            get
+            {
+                if ((this.mUIWorkgroupTreeItem == null))
+                {
+                    this.mUIWorkgroupTreeItem = new UIWorkgroupTreeItem1(this);
+                }
+                return this.mUIWorkgroupTreeItem;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIWorkgroupTreeItem1 mUIWorkgroupTreeItem;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIWorkgroupTreeItem1 : WpfTreeItem
+    {
+        
+        public UIWorkgroupTreeItem1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfTreeItem.PropertyNames.Name] = "workgroup";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfCheckBox UICheckBoxElementCheckBox
+        {
+            get
+            {
+                if ((this.mUICheckBoxElementCheckBox == null))
+                {
+                    this.mUICheckBoxElementCheckBox = new WpfCheckBox(this);
+                    #region Search Criteria
+                    this.mUICheckBoxElementCheckBox.SearchProperties[WpfCheckBox.PropertyNames.AutomationId] = "CheckBoxElement";
+                    this.mUICheckBoxElementCheckBox.SearchConfigurations.Add(SearchConfiguration.ExpandWhileSearching);
+                    this.mUICheckBoxElementCheckBox.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUICheckBoxElementCheckBox;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfCheckBox mUICheckBoxElementCheckBox;
         #endregion
     }
 }

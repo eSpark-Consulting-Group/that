@@ -7,12 +7,13 @@ using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
 using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
+using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
 
 namespace CodedUITestFAT
 {
@@ -41,6 +42,7 @@ namespace CodedUITestFAT
         }
         private UIMapNetworkAddresses mapNetworkAddresses;
 
+        
         /// <summary> UIMap for Workgroup Scanning Wizard screen branch, UIMapWorkgroup.uitest. </summary>
         public UIMapWorkgroup UIMapWorkgroup
         {
@@ -128,7 +130,10 @@ namespace CodedUITestFAT
             CodedUITestEula useEula = new CodedUITestEula();            
             useEula.UIMapEula.ClickIAcceptButton();
 
-            UIHelper.WaitForControlIsEnabled(StartScanButton());
+            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+
+            UIHelper.WaitForControl(CustomScanButton());
         }
         
         [TestCleanup]
@@ -142,9 +147,18 @@ namespace CodedUITestFAT
         }
 
         #endregion
-        
+
         #region Control methods
-        
+
+        #region Discovery
+
+        private WpfButton CustomScanButton()
+        {
+            return UIMapDiscovery.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UICustomScanButtonButton;
+        }
+
+        #endregion
+
         #region Main screen
 
         internal WpfWindow MainWindow()
@@ -161,7 +175,7 @@ namespace CodedUITestFAT
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UISendingFilesforAnalyProgressBar.UIStartScanningNowButton;
         }
-
+        
         private WpfButton StopScanButton()
         {
             return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIRadToolBarToolBar.UIStopScanningButtonButton;
@@ -193,12 +207,12 @@ namespace CodedUITestFAT
         }
 
         #endregion
-
+              
         #region Start Scan Wizard
 
         private WpfButton NetworkAddressButton()
         {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyspeciButton;
+            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIScancomputerswithspeButton;
         }
 
         private WpfButton QuickScanButton()
@@ -243,9 +257,9 @@ namespace CodedUITestFAT
 
         private WpfTreeItem WorkgroupTreeItem(string workgroupName)
         {
-            UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name]
+            UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name]
                         = workgroupName;
-            return UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem;
+            return UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem;
         }
 
         #endregion
@@ -605,7 +619,7 @@ namespace CodedUITestFAT
         /// <param name="workgroupName">Set a workgroup name.</param>
         private void CheckWorkgroup(string workgroupName)
         {
-            UIMapWorkgroup.UIUnknownFileHunterWindow1.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] 
+            UIMapWorkgroup.UIForensicAnalysisToolWindow.UIWorkgroupViewCustom.UIWorkgroupTreeTree.UIWorkgroupTreeItem.SearchProperties[WpfTreeItem.PropertyNames.Name] 
                         = workgroupName;
             UIMapWorkgroup.CheckWorkgroup();
         }
@@ -674,7 +688,7 @@ namespace CodedUITestFAT
         /// <param name="password">Set a password to input.</param>
         private void InputPassword(string password)
         {
-            WpfEdit passwordEdit = UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UIPasswordWatermarkTexEdit;
+            WpfEdit passwordEdit = UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UIThisCustom.UIPasswordWatermarkTexEdit;
             if (passwordEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText)
             {                
                 UIMapNetworkAddresses.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = password.Remove(1);
@@ -687,7 +701,7 @@ namespace CodedUITestFAT
         /// <param name="login">Set a login to input.</param>
         private void InputScanLogin(string login)
         {
-            WpfEdit loginEdit = UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit;
+            WpfEdit loginEdit = UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UIThisCustom.UILoginWatermarkTextBoEdit;
             if (loginEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || loginEdit.Text != login) loginEdit.Text = login;
         }
 
@@ -735,7 +749,7 @@ namespace CodedUITestFAT
             else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!", Settings.ScanCompleted.Default.ScanCompletedText));
             */
             // Gets the number of Unknown and Malicious files found at Scan Completed window
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             //UIMapScanCompletedWindow.ClickYesButton();
                         
@@ -781,7 +795,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...", workgroupName));
 
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             //UIMapScanCompletedWindow.ClickYesButton();
             
@@ -1155,7 +1169,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(0, 1, 0, TestContext);
                         
@@ -1164,7 +1178,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(1, 0, 0, TestContext);
                         
@@ -1172,14 +1186,14 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(1, 1, 0, TestContext);
             
             SysHelper.DisinfectForQuickScan(endpoint, TestContext);
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickCloseCrossButton();
             AssertPanelCountersData(0, 0, 0, TestContext);
         }
@@ -1210,7 +1224,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Quick Scan started at endpoint '{0}' from domain '{1}'...", endpoint.Name, domainName));
 
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             int expectedFilesNumber = GetFoundFilesNumber(TestContext);
             //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
@@ -1875,7 +1889,7 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickQuickScanButton();
 
             //UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scan results
@@ -1918,7 +1932,7 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickQuickScanButton();
 
             //UIHelper.WaitForControl(ScanCompletedTextBlock(), Settings.WaitingTime.Default.QuickScanRangeWaitTime);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickNoButton();
 
             // Verifies the scanning results
@@ -1942,7 +1956,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Unknown file '{0}' is copied to the endpoint '{1}'.", unknown.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);
@@ -1959,7 +1973,7 @@ namespace CodedUITestFAT
             TestContext.WriteLine(String.Format("Malware '{0}' is copied to the endpoint '{1}'.", malware.Name, endpoint.Name));
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-            WaitForNoLookupInProgress();
+            WaitForNoInAnalysis();
             //UIMapScanCompletedWindow.ClickYesButton();
             //InputCamCredentials(TestContext);
             WaitForValkyrieResults(TestContext);

@@ -8,7 +8,7 @@
 //  </auto-generated>
 // ------------------------------------------------------------------------------
 
-namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
+namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
 {
     using System;
     using System.CodeDom.Compiler;
@@ -87,10 +87,10 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         public void InputLogin()
         {
             #region Variable Declarations
-            WpfEdit uILoginWatermarkTextBoEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit;
+            WpfEdit uILoginWatermarkTextBoEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UILoginWatermarkTextBoEdit;
             #endregion
 
-            // Type 'login' in 'LoginWatermarkTextBox' text box
+            // Type 'Login' in 'LoginWatermarkTextBox' text box
             Keyboard.SendKeys(uILoginWatermarkTextBoEdit, this.InputLoginParams.UILoginWatermarkTextBoEditSendKeys, ModifierKeys.None);
         }
         
@@ -113,11 +113,11 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         public void InputPassword()
         {
             #region Variable Declarations
-            WpfEdit uIPasswordWatermarkTexEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UIPasswordWatermarkTexEdit;
-            WpfEdit uIPasswordBoxEdit = this.UIUnknownFileHunterWindow1.UIThisCustom.UIPasswordBoxEdit;
+            WpfEdit uIPasswordWatermarkTexEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIPasswordWatermarkTexEdit;
+            WpfEdit uIPasswordBoxEdit = this.UIForensicAnalysisToolWindow.UIThisCustom.UIPasswordBoxEdit;
             #endregion
 
-            // Type '' in 'PasswordWatermarkTextBox' text box
+            // Type 'p' in 'PasswordWatermarkTextBox' text box
             Keyboard.SendKeys(uIPasswordWatermarkTexEdit, this.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys, ModifierKeys.None);
 
             // Type '********' in 'PasswordBox' text box
@@ -208,6 +208,18 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
                 return this.mUIUnknownFileHunterWindow1;
             }
         }
+        
+        public UIForensicAnalysisToolWindow UIForensicAnalysisToolWindow
+        {
+            get
+            {
+                if ((this.mUIForensicAnalysisToolWindow == null))
+                {
+                    this.mUIForensicAnalysisToolWindow = new UIForensicAnalysisToolWindow();
+                }
+                return this.mUIForensicAnalysisToolWindow;
+            }
+        }
         #endregion
         
         #region Fields
@@ -224,6 +236,8 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
         private UIUnknownFileHunterWindow1 mUIUnknownFileHunterWindow1;
+        
+        private UIForensicAnalysisToolWindow mUIForensicAnalysisToolWindow;
         #endregion
     }
     
@@ -266,9 +280,9 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         
         #region Fields
         /// <summary>
-        /// Type 'login' in 'LoginWatermarkTextBox' text box
+        /// Type 'Login' in 'LoginWatermarkTextBox' text box
         /// </summary>
-        public string UILoginWatermarkTextBoEditSendKeys = "login";
+        public string UILoginWatermarkTextBoEditSendKeys = "Login";
         #endregion
     }
     
@@ -296,14 +310,14 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         
         #region Fields
         /// <summary>
-        /// Type '' in 'PasswordWatermarkTextBox' text box
+        /// Type 'p' in 'PasswordWatermarkTextBox' text box
         /// </summary>
-        public string UIPasswordWatermarkTexEditSendKeys = null;
+        public string UIPasswordWatermarkTexEditSendKeys = "p";
         
         /// <summary>
         /// Type '********' in 'PasswordBox' text box
         /// </summary>
-        public string UIPasswordBoxEditSendKeys = "7FdySo24X7mXzc/OrAqorg==";
+        public string UIPasswordBoxEditSendKeys = "rHrIBo04h9/BCeKU73SHcx0hS/DcvONN";
         #endregion
     }
     
@@ -708,6 +722,111 @@ namespace CodedUITestAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
                     #region Search Criteria
                     this.mUIPasswordBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "PasswordBox";
                     this.mUIPasswordBoxEdit.WindowTitles.Add("Unknown File Hunter");
+                    #endregion
+                }
+                return this.mUIPasswordBoxEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfEdit mUILoginWatermarkTextBoEdit;
+        
+        private WpfEdit mUIPasswordWatermarkTexEdit;
+        
+        private WpfEdit mUIPasswordBoxEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIForensicAnalysisToolWindow : WpfWindow
+    {
+        
+        public UIForensicAnalysisToolWindow()
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfWindow.PropertyNames.Name] = "Forensic Analysis Tool";
+            this.SearchProperties.Add(new PropertyExpression(WpfWindow.PropertyNames.ClassName, "HwndWrapper", PropertyExpressionOperator.Contains));
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UIThisCustom1 UIThisCustom
+        {
+            get
+            {
+                if ((this.mUIThisCustom == null))
+                {
+                    this.mUIThisCustom = new UIThisCustom1(this);
+                }
+                return this.mUIThisCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UIThisCustom1 mUIThisCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UIThisCustom1 : WpfCustom
+    {
+        
+        public UIThisCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.LoginPasswordUserControl";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "this";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfEdit UILoginWatermarkTextBoEdit
+        {
+            get
+            {
+                if ((this.mUILoginWatermarkTextBoEdit == null))
+                {
+                    this.mUILoginWatermarkTextBoEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUILoginWatermarkTextBoEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "LoginWatermarkTextBox";
+                    this.mUILoginWatermarkTextBoEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUILoginWatermarkTextBoEdit;
+            }
+        }
+        
+        public WpfEdit UIPasswordWatermarkTexEdit
+        {
+            get
+            {
+                if ((this.mUIPasswordWatermarkTexEdit == null))
+                {
+                    this.mUIPasswordWatermarkTexEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIPasswordWatermarkTexEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "PasswordWatermarkTextBox";
+                    this.mUIPasswordWatermarkTexEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIPasswordWatermarkTexEdit;
+            }
+        }
+        
+        public WpfEdit UIPasswordBoxEdit
+        {
+            get
+            {
+                if ((this.mUIPasswordBoxEdit == null))
+                {
+                    this.mUIPasswordBoxEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUIPasswordBoxEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "PasswordBox";
+                    this.mUIPasswordBoxEdit.WindowTitles.Add("Forensic Analysis Tool");
                     #endregion
                 }
                 return this.mUIPasswordBoxEdit;
