@@ -44,6 +44,7 @@ namespace APTAT.Core.TelerikReports
         internal void ChangeScaleForOne()
         {
             ((NumericalScale) graphAxis1.Scale).LabelStep = 1;
+            ((NumericalScale)graphAxis1.Scale).MajorStep = 1;
         }
 
         private void DetailedDevicesReportFAT_ItemDataBound(object sender, EventArgs e)
