@@ -13,7 +13,6 @@
 //using APTAT.DeploymentCore.Facade.Descent.DataContracts.DeploymentTargets;
 //using APTAT.Common.MachineKey;
 //using APTAT.DeploymentCore;
-//using APTAT.Core.Descent.Apt;
 
 //namespace APTAT.Core.Descent.Wmi
 //{
@@ -139,27 +138,15 @@
 //            public string args;
 //        }
 
-
-//        public override IDescentQueryResult ValidateAndGetResult(IContextFactory ContextFactory)
+//        public override IDescentQueryResult ValidateAndGetResult()
 //        {
-//            var result = ContextFactory.CreateContext(Targets, Targets.Length, DevicesSourceDescription);
+//            var result = new WmiScanOperationContext(Targets, DevicesSourceDescription);
 //            return result;
 //        }
 
-
-//        protected sealed class ContextFactory : IContextFactory
+//        public override void StartScan(IChangeTrackingSubSystem changeTrackingSubSystem, IDescentQueryResult result)
 //        {
-//            public IDescentQueryResult CreateContext(IEnumerable<IComputer> computers,
-//                int? totalTargetsCount, IDevicesSourceDescription deviceSourceDesctiption)
-//            {
-//                var result= new WmiScanOperationContext(computers, deviceSourceDesctiption);
-//                return result;
-//            }
-//        }
-
-//        public override void StartScan(IChangeTrackingSubSystem changeTrackingSubSystem,IDescentQueryResult result)
-//        {
-//            var scanResults = (WmiScanOperationContext) result;
+//            var scanResults = (WmiScanOperationContext)result;
 //            foreach (var computer in Targets)
 //            {
 //                RemoteHostInfo ri = new RemoteHostInfo(computer.Uid,
