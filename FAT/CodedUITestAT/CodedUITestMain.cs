@@ -4,7 +4,6 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
 using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
@@ -20,22 +19,6 @@ namespace CodedUITestFAT
         }
 
         #region UIMap properties
-
-        /// <summary> UIMap for Network Addresses Scanning Wizard screen branch, UIMapNetworkAddresses.uitest. </summary>
-        public UIMapNetworkAddresses UIMapNetworkAddresses
-        {
-            get
-            {
-                if ((this.mapNetworkAddresses == null))
-                {
-                    this.mapNetworkAddresses = new UIMapNetworkAddresses();
-                }
-
-                return this.mapNetworkAddresses;
-            }
-        }
-        private UIMapNetworkAddresses mapNetworkAddresses;
-
         
         /// <summary> UIMap for Workgroup Scanning Wizard screen branch, UIMapWorkgroup.uitest. </summary>
         public UIMapWorkgroup UIMapWorkgroup
@@ -570,28 +553,7 @@ namespace CodedUITestFAT
 
             testContext.WriteLine(String.Format("Scan status '{0}' checked at the results screen filter.", scanStatus));
         }
-
-        /// <summary> Inputs a password. </summary>
-        /// <param name="password">Set a password to input.</param>
-        private void InputPassword(string password)
-        {
-            WpfEdit passwordEdit = UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UIThisCustom.UIPasswordWatermarkTexEdit;
-            if (passwordEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText)
-            {                
-                UIMapNetworkAddresses.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = password.Remove(1);
-                UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(password.Substring(1));
-                UIMapNetworkAddresses.InputPassword();
-            }
-        }
-
-        /// <summary> Inputs a login, if necessary. </summary>
-        /// <param name="login">Set a login to input.</param>
-        private void InputScanLogin(string login)
-        {
-            WpfEdit loginEdit = UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UIThisCustom.UILoginWatermarkTextBoEdit;
-            if (loginEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || loginEdit.Text != login) loginEdit.Text = login;
-        }
-
+        
         /// <summary> Inputs Domain Name, if necessary. </summary>
         /// <param name="domainName">Set a domain name to input.</param>
         private void InputDomainName(string domainName)
