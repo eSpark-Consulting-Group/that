@@ -7,6 +7,8 @@ using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.UIMapStopScanWindowClasses;
 using CodedUITestAT.UIMaps.UIMapDiscoveryClasses;
 using CodedUITestAT.UIMaps.UIMapResultsWindowClasses;
+using CodedUITestAT.UIMaps.Details.UIMapDetailsWindowClasses;
+using CodedUITestAT.UIMaps.Details.UIMapValkyrieDetailsWindowClasses;
 
 namespace CodedUITestFAT
 {
@@ -94,6 +96,36 @@ namespace CodedUITestFAT
             }
         }
         private UIMapResultsWindow mapResultsWindow;
+
+        /// <summary> UIMap for Valkyrie Details window, UIMapValkyrieDetailsWindow.uitest. </summary>
+        public UIMapValkyrieDetailsWindow UIMapValkyrieDetailsWindow
+        {
+            get
+            {
+                if ((this.mapValkyrieDetailsWindow == null))
+                {
+                    this.mapValkyrieDetailsWindow = new UIMapValkyrieDetailsWindow();
+                }
+
+                return this.mapValkyrieDetailsWindow;
+            }
+        }
+        private UIMapValkyrieDetailsWindow mapValkyrieDetailsWindow;
+
+        /// <summary> UIMap for Details window, UIMapDetailsWindow.uitest. </summary>
+        public UIMapDetailsWindow UIMapDetailsWindow
+        {
+            get
+            {
+                if ((this.mapDetailsWindow == null))
+                {
+                    this.mapDetailsWindow = new UIMapDetailsWindow();
+                }
+
+                return this.mapDetailsWindow;
+            }
+        }
+        private UIMapDetailsWindow mapDetailsWindow;
 
         #endregion
 
@@ -196,6 +228,16 @@ namespace CodedUITestFAT
             timer.Stop();
         }
 
-        #endregion
+        /// <summary> Refreshes the results screen using Search box. </summary>
+        internal void RefreshResultsScreen()
+        {
+            UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = Guid.NewGuid().ToString();
+            UIMapMain.InputTextToSearchBox();
+            Playback.Wait(2000);
+            UIMapMain.ClickClearSearchTextButton();
+            Playback.Wait(2000);
+        }
+
+        #endregion       
     }
 }

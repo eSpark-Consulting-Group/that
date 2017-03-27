@@ -23,7 +23,7 @@ namespace CodedUITestFAT
             {
                 UnknownFile unknown = SysHelper.AddUnknownFileForScan(endpoint, ScanType.Quick);
                 unknowns.Add(unknown);
-                Playback.Wait(1000);
+                Playback.Wait(1);
             }
 
             string hashesList = Path.Combine(Path.GetDirectoryName(unknowns[0].Location), @"SHA1_List.txt");

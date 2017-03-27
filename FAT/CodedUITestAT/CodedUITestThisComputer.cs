@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
-using CodedUITestAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
+using CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapThisComputerClasses;
 
 namespace CodedUITestFAT

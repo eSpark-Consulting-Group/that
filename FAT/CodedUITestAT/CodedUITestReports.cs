@@ -9,7 +9,7 @@ namespace CodedUITestFAT
 {
     /// <summary> Tests for reports. </summary>
     [CodedUITest]
-    public class CodedUITestReports
+    public class CodedUITestReports : CodedUITestCommon
     {
         public CodedUITestReports()
         {
@@ -164,9 +164,10 @@ namespace CodedUITestFAT
             SysHelper.InfectForScan(endpoint);
             SysHelper.AddUnknownFileForScan(endpoint);
             CodedUITestMain useMain = new CodedUITestMain();
-            
-            useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-            useMain.WaitForScanCompleted(ScanType.Quick);
+            CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
+
+            useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            WaitForScanCompleted(ScanType.Quick);
             //useMain.UIMapScanCompletedWindow.ClickNoButton();
 
             BasicReportTest(ReportType.Executive, TestContext);
@@ -187,8 +188,9 @@ namespace CodedUITestFAT
             SysHelper.InfectForScan(endpoint);
             SysHelper.AddUnknownFileForScan(endpoint);
             CodedUITestMain useMain = new CodedUITestMain();
+            CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
 
-            useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);
             //useMain.UIMapScanCompletedWindow.ClickNoButton();
 
@@ -210,8 +212,9 @@ namespace CodedUITestFAT
             SysHelper.InfectForScan(endpoint);
             SysHelper.AddUnknownFileForScan(endpoint);
             CodedUITestMain useMain = new CodedUITestMain();
+            CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
 
-            useMain.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
+            useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);
             //useMain.UIMapScanCompletedWindow.ClickNoButton();
 

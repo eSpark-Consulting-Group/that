@@ -91,6 +91,7 @@
     <Compile Include="CodedUITestHelp.cs" />
     <Compile Include="CodedUITestEula.cs" />
     <Compile Include="CodedUITestMain.cs" />
+    <Compile Include="CodedUITestNetworkAddresses.cs" />
     <Compile Include="CodedUITestReports.cs" />
     <Compile Include="CodedUITestThisComputer.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
