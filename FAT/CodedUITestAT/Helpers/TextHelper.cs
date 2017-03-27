@@ -9,7 +9,7 @@ namespace CodedUITestFAT
         /// <summary> Generates a new unique name. </summary>
         internal static string GenerateName()
         {
-            return @"TestName" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            return @"TestName" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
         }
 
         /// <summary> Puts the first letter of each word, separated by spaces, in a given text to upper case. </summary>
