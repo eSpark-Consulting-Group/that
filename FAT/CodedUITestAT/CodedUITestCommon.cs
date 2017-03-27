@@ -202,6 +202,25 @@ namespace CodedUITestFAT
 
         #endregion
 
+        #region Start Scan Wizard
+
+        internal WpfButton NetworkAddressButton()
+        {
+            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIScancomputerswithspeButton;
+        }
+
+        internal WpfButton QuickScanButton()
+        {
+            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
+        }
+
+        internal WpfButton NextButton()
+        {
+            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UILoadingProgressBar.UINextButton;
+        }
+        
+        #endregion
+
         #endregion
 
         #region Helper methods

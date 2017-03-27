@@ -155,22 +155,7 @@ namespace CodedUITestFAT
 
         #endregion
               
-        #region Start Scan Wizard
-
-        private WpfButton NetworkAddressButton()
-        {
-            return UIMapStartScanWizard.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIScancomputerswithspeButton;
-        }
-
-        private WpfButton QuickScanButton()
-        {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
-        }        
-
-        private WpfButton NextButton()
-        {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
-        }
+        #region Start Scan Wizard                
 
         #region Active Directory
 

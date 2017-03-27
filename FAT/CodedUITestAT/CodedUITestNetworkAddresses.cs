@@ -48,7 +48,13 @@ namespace CodedUITestFAT
             CodedUITestEula useEula = new CodedUITestEula();
             useEula.UIMapEula.ClickIAcceptButton();
 
-            
+            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
+            UIMapDiscovery.ClickCustomScanButton();
+            UIHelper.WaitForControl(NetworkAddressButton());
+            UIMapStartScanWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(NextButton());
+            CleanNetworkAddressesList();
         }
 
         [TestCleanup]
@@ -66,22 +72,7 @@ namespace CodedUITestFAT
         #region Control methods       
 
         #region Start Scan Wizard
-
-        private WpfButton NetworkAddressButton()
-        {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow1.UIScanningWizardWindowCustom.UILoadingProgressBar.UIScancomputersbyspeciButton;
-        }
-
-        private WpfButton QuickScanButton()
-        {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIQuickScanButton;
-        }
-
-        private WpfButton NextButton()
-        {
-            return UIMapStartScanWizard.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UINextButton;
-        }
-                
+                        
         #region Network Addresses
 
         private WpfList NetworkAddressesList()
@@ -110,13 +101,6 @@ namespace CodedUITestFAT
         /// <param name="endpoints">Set endpoints.</param>
         private void StartEndpointScan(ScanType scanType, string username, string password, TestContext testContext, params Computer[] endpoints)
         {
-            
-            UIHelper.WaitForControlIsClickable(NetworkAddressButton());
-            testContext.WriteLine("Start Scan Wizard appeared...");
-            UIMapStartScanWizard.ClickNetworkAddressButton();
-
-            UIHelper.WaitForControlIsEnabled(NextButton());
-            CleanNetworkAddressesList();
             foreach (var endpoint in endpoints)
             {
                 UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
@@ -188,28 +172,7 @@ namespace CodedUITestFAT
             */
             return unknownFilesNumber + malwaresNumber;
         }
-
-        /// <summary> Inputs a password. </summary>
-        /// <param name="password">Set a password to input.</param>
-        private void InputPassword(string password)
-        {
-            WpfEdit passwordEdit = UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UIPasswordWatermarkTexEdit;
-            if (passwordEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText)
-            {
-                UIMapNetworkAddresses.InputPasswordParams.UIPasswordWatermarkTexEditSendKeys = password.Remove(1);
-                UIMapNetworkAddresses.InputPasswordParams.UIPasswordBoxEditSendKeys = Playback.EncryptText(password.Substring(1));
-                UIMapNetworkAddresses.InputPassword();
-            }
-        }
-
-        /// <summary> Inputs a login, if necessary. </summary>
-        /// <param name="login">Set a login to input.</param>
-        private void InputScanLogin(string login)
-        {
-            WpfEdit loginEdit = UIMapNetworkAddresses.UIUnknownFileHunterWindow1.UIThisCustom.UILoginWatermarkTextBoEdit;
-            if (loginEdit.Text == Settings.General.Default.EmptyWatermarkTextBoxText || loginEdit.Text != login) loginEdit.Text = login;
-        }
-
+        
         /// <summary> Cleans Network Addresses list. </summary>
         private void CleanNetworkAddressesList()
         {
