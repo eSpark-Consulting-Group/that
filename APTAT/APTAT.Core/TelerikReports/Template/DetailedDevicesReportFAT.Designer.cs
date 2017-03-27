@@ -798,6 +798,7 @@ namespace APTAT.Core.TelerikReports
             this.graph1.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graph1.Style.Padding.Right = Telerik.Reporting.Drawing.Unit.Pixel(10D);
             this.graph1.Style.Padding.Top = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.graph1.ItemDataBinding += new System.EventHandler(this.graph1_ItemDataBinding);
             // 
             // cartesianCoordinateSystem1
             // 
