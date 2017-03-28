@@ -366,7 +366,7 @@ namespace CodedUITestFAT
 
             foreach (var row in rows)
             {
-                if (row.GetRowName().Contains(rowName))
+                if (String.Compare(row.GetRowName(), rowName, true) == 0)
                 {
                     var text = row.GetChildren()[1].GetChildren()[0].GetChildren()[0];
                     //var text = row.GetChildren().FirstOrDefault(c => c is WpfText); // First WPF text in the row

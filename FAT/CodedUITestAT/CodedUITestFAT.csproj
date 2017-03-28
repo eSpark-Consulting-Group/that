@@ -191,12 +191,6 @@
     <Compile Include="UIMaps\UIMapHelp.Designer.cs">
       <DependentUpon>UIMapHelp.uitest</DependentUpon>
     </Compile>
-    <Compile Include="UIMaps\UIMapCamCredentialsWindow.cs">
-      <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
-    </Compile>
-    <Compile Include="UIMaps\UIMapCamCredentialsWindow.Designer.cs">
-      <DependentUpon>UIMapCamCredentialsWindow.uitest</DependentUpon>
-    </Compile>
     <Compile Include="UIMaps\Details\UIMapDetailsWindow.cs">
       <DependentUpon>UIMapDetailsWindow.uitest</DependentUpon>
     </Compile>
@@ -291,7 +285,6 @@
     <None Include="UIMaps\UIMapAggregatedPanel.uitest" />
     <None Include="UIMaps\UIMapDiscovery.uitest" />
     <None Include="UIMaps\UIMapHelp.uitest" />
-    <None Include="UIMaps\UIMapCamCredentialsWindow.uitest" />
     <None Include="UIMaps\Details\UIMapDetailsWindow.uitest" />
     <None Include="UIMaps\UIMapEula.uitest" />
     <None Include="UIMaps\UIMapMain.uitest" />

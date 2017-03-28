@@ -157,22 +157,23 @@ namespace CodedUITestFAT
         public void EndpointQuickScanAndValkyrieUriCheckTest()
         {
             Computer endpoint = DataHelper.GetEndpoint();
-            SysHelper.InfectForScan(endpoint);
-            SysHelper.AddUnknownFileForScan(endpoint);
+            Malware malware = SysHelper.InfectForScan(endpoint);
+            UnknownFile unknownFile = SysHelper.AddUnknownFileForScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
-                        
-            // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found            
+
             UIHelper.GroupByFiles();
-            //AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
-            UIHelper.GroupByComputers();
+            UIHelper.ClickRow(malware);
+            TestContext.WriteLine(String.Format("Malicious file '{0}' found at the results screen.", malware));
+            UIHelper.ClickRow(unknownFile);
+            TestContext.WriteLine(String.Format("Unknown file '{0}' found at the results screen.", unknownFile));
 
             // Clicks Valkyrie link and checks the respective browser window URI
             string expectedValkyrieUri = Settings.General.Default.ValkyrieUri;
-            //UIHelper.WaitForControl(ValkyrieLink());
-            UIMapMain.ClickValkyrieLink();
-            TestContext.WriteLine("Valkyrie link clicked...");
+            UIHelper.WaitForControl(DetailedScanResultsButton());
+            UIMapResultsWindow.ClickDetailedScanResultsButton();
+            TestContext.WriteLine("Detailed Scan Results button clicked...");
             UIHelper.AssertBrowserUri(expectedValkyrieUri, TestContext);
         }
 

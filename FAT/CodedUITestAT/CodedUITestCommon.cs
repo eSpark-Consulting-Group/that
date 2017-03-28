@@ -199,6 +199,11 @@ namespace CodedUITestFAT
             return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIGroupByFilesToggleBuToggleButton;
         }
 
+        internal WpfButton DetailedScanResultsButton()
+        {
+            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIDetailedScanResultsBButton;
+        }
+
         #endregion
 
         #region Stop Scan window

@@ -289,6 +289,19 @@ namespace CodedUITestFAT.UIMaps.UIMapResultsWindowClasses
             uIAggregatedPanelListBList.SelectedItemsAsString = this.ClickInAnalysisCounterListItemParams.UIAggregatedPanelListBListSelectedItemsAsString;
         }
         
+        /// <summary>
+        /// ClickDetailedScanResultsButton
+        /// </summary>
+        public void ClickDetailedScanResultsButton()
+        {
+            #region Variable Declarations
+            WpfButton uIDetailedScanResultsBButton = this.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIPleaseWaitProgressBar.UIDetailedScanResultsBButton;
+            #endregion
+
+            // Click 'DetailedScanResultsButton' button
+            Mouse.Click(uIDetailedScanResultsBButton, new Point(36, 7));
+        }
+        
         #region Properties
         public virtual AssertResolvingComputersTextBlockExpectedValues AssertResolvingComputersTextBlockExpectedValues
         {
@@ -2571,12 +2584,30 @@ namespace CodedUITestFAT.UIMaps.UIMapResultsWindowClasses
                 return this.mUIAggregatedPanelListBList;
             }
         }
+        
+        public WpfButton UIDetailedScanResultsBButton
+        {
+            get
+            {
+                if ((this.mUIDetailedScanResultsBButton == null))
+                {
+                    this.mUIDetailedScanResultsBButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIDetailedScanResultsBButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "DetailedScanResultsButton";
+                    this.mUIDetailedScanResultsBButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIDetailedScanResultsBButton;
+            }
+        }
         #endregion
         
         #region Fields
         private WpfButton mUINewCustomScanButtonButton;
         
         private WpfList mUIAggregatedPanelListBList;
+        
+        private WpfButton mUIDetailedScanResultsBButton;
         #endregion
     }
     

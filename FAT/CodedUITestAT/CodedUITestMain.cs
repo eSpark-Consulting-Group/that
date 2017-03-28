@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITesting.WpfControls;
 using CodedUITestAT.UIMaps.StartScanWizard.UIMapActiveDirectoryClasses;
 using CodedUITestFAT.UIMaps.StartScanWizard.UIMapWorkgroupClasses;
-using CodedUITestAT.UIMaps.UIMapCamCredentialsWindowClasses;
-using CodedUITestFAT.UIMaps.UIMapAggregatedPanelClasses;
-using System.Text.RegularExpressions;
 
 namespace CodedUITestFAT
 {
@@ -51,21 +49,6 @@ namespace CodedUITestFAT
             }
         }
         private UIMapActiveDirectory mapActiveDirectory;
-        
-        /// <summary> UIMap for CAM Credentials window, UIMapCamCredentialsWindow.uitest. </summary>
-        public UIMapCamCredentialsWindow UIMapCamCredentialsWindow
-        {
-            get
-            {
-                if ((this.mapCamCredentialsWindow == null))
-                {
-                    this.mapCamCredentialsWindow = new UIMapCamCredentialsWindow();
-                }
-
-                return this.mapCamCredentialsWindow;
-            }
-        }
-        private UIMapCamCredentialsWindow mapCamCredentialsWindow;        
 
         #endregion
 
@@ -145,11 +128,6 @@ namespace CodedUITestFAT
             return UIMapMain.UIUnknownFileHunterWindow1.UIUnknownFileHunterText;
         }
 
-        private WpfHyperlink ValkyrieLink()
-        {
-            return UIMapMain.UIUnknownFileHunterWindow.UIMainViewxamlPane.UIPleaseclickheretoseeText.UIPleaseclickheretoseeHyperlink;
-        }
-
         private WpfEdit SearchBox()
         {
           return UIMapMain.UIUnknownFileHunterWindow1.UISearchControlCustom.UISearchWatermarkTextBEdit;
@@ -200,15 +178,6 @@ namespace CodedUITestFAT
 
         #endregion
         
-        #region CAM Credentials window
-
-        private WpfEdit CamLoginTextBox()
-        {
-            return UIMapCamCredentialsWindow.UIUnknownFileHunterWindow.UILoginWatermarkTextBoEdit;
-        }
-
-        #endregion
-
         #region Results window
 
         internal WpfTabPage ScanResultsTab()
