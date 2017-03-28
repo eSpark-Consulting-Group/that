@@ -8,6 +8,7 @@ namespace APTAT.Core.TelerikReports
     using System.Windows.Forms;
     using Telerik.Reporting;
     using Telerik.Reporting.Drawing;
+    using APTAT.Core.TelerikReports.Helpers;
 
     /// <summary>
     /// Summary description for ExecutiveReportt.
@@ -91,13 +92,8 @@ namespace APTAT.Core.TelerikReports
         {
             var graph = (Telerik.Reporting.Processing.DataItem)sender;
             var obj = (Reports.AptReportData)graph.DataObject.RawData;
-            var len = obj.Top10VulnerableDevicesValkyrie.Select(t=>t.Uid).Distinct().Count();
-            var spaceSlotCount = (11 - len) * 0.2;
-
-            if (len == 1) spaceSlotCount = 10;
-            if (len == 2) spaceSlotCount = 4;
-            if (len == 3) spaceSlotCount = 2;
-            ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = spaceSlotCount;
+            var len = obj.Top10VulnerableDevicesValkyrie.Select(t=>t.Uid).Distinct().Count();            
+            ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
         }
     }
 }

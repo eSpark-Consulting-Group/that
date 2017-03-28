@@ -322,7 +322,6 @@ namespace APTAT.Core.TelerikReports
             this.graphAxis2.MultiLevelCategoryLabels = true;
             this.graphAxis2.Name = "graphAxis2";
             categoryScale1.PositionMode = Telerik.Reporting.AxisPositionMode.OnTicks;
-            categoryScale1.SpacingSlotCount = 2D;
             this.graphAxis2.Scale = categoryScale1;
             // 
             // barSeries1

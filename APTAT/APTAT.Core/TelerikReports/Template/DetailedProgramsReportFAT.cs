@@ -1,5 +1,6 @@
 namespace APTAT.Core.TelerikReports
 {
+    using APTAT.Core.TelerikReports.Helpers;
     using System;
     using System.ComponentModel;
     using System.Drawing;
@@ -29,12 +30,7 @@ namespace APTAT.Core.TelerikReports
             var graph = (Telerik.Reporting.Processing.DataItem)sender;
             var obj =(Reports.AptReportData)graph.DataObject.RawData;
             var len = obj.Top10PopularBadFiles.Length;
-            var spaceSlotCount = (11 - len) * 0.2;
-
-            if (len == 1) spaceSlotCount = 10;
-            if (len == 2) spaceSlotCount = 4;
-            if (len == 3) spaceSlotCount = 2;
-            ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = spaceSlotCount;
+            ((CategoryScale)graphAxis2.Scale).SpacingSlotCount = ChartHelper.CalculateSpacingSlotCount(len, 8);
         }
     }
 }
