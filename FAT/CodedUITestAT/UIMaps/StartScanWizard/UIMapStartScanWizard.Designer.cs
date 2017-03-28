@@ -74,11 +74,11 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         public void ClickFullScanButton()
         {
             #region Variable Declarations
-            WpfButton uIFullScanButton = this.UIUnknownFileHunterWindow.UIScanningWizardWindowCustom.UIFullScanButton;
+            WpfButton uIFullScanButton = this.UIForensicAnalysisToolWindow.UIScanningWizardWindowCustom.UIPleaseWaitProgressBar.UIFullScanButton;
             #endregion
 
             // Click 'Full Scan' button
-            Mouse.Click(uIFullScanButton, new Point(51, 13));
+            Mouse.Click(uIFullScanButton, new Point(77, 9));
         }
         
         /// <summary>
@@ -829,6 +829,22 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
                 return this.mUIQuickScanButton;
             }
         }
+        
+        public WpfButton UIFullScanButton
+        {
+            get
+            {
+                if ((this.mUIFullScanButton == null))
+                {
+                    this.mUIFullScanButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIFullScanButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "FullScanButton";
+                    this.mUIFullScanButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIFullScanButton;
+            }
+        }
         #endregion
         
         #region Fields
@@ -837,6 +853,8 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapStartScanWizardClasses
         private WpfButton mUIScancomputersselecteButton;
         
         private WpfButton mUIQuickScanButton;
+        
+        private WpfButton mUIFullScanButton;
         #endregion
     }
 }

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Diagnostics;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UITesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UITest.Extension;
@@ -13,7 +12,7 @@ namespace CodedUITestFAT
 {
     /// <summary> Tests for Network Addresses branch. </summary>
     [CodedUITest]
-    public class CodedUITestNetworkAddresses : CodedUITestCommon
+    public sealed class CodedUITestNetworkAddresses : CodedUITestCommon
     {
         public CodedUITestNetworkAddresses()
         {
@@ -54,7 +53,6 @@ namespace CodedUITestFAT
             UIHelper.WaitForControl(NetworkAddressButton());
             UIMapStartScanWizard.ClickNetworkAddressButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
-            CleanNetworkAddressesList();
         }
 
         [TestCleanup]
@@ -77,7 +75,7 @@ namespace CodedUITestFAT
 
         private WpfList NetworkAddressesList()
         {
-            return UIMapNetworkAddresses.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
+            return UIMapNetworkAddresses.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
         }
 
         private WpfText ErrorTextBlock()
@@ -93,7 +91,7 @@ namespace CodedUITestFAT
 
         #region Local helper methods
 
-        /// <summary> Starts a scan of a given type at indicated endpoints via Network Addresses branch using set credentials. Starts at Main screen. </summary>        
+        /// <summary> Starts a scan of a given type at indicated endpoints via Network Addresses branch using set credentials. Starts at Network Addresses. </summary>
         /// <param name="scanType">Set a scan type.</param>
         /// <param name="username">Set a username.</param>
         /// <param name="password">Set a password.</param>
@@ -101,6 +99,8 @@ namespace CodedUITestFAT
         /// <param name="endpoints">Set endpoints.</param>
         private void StartEndpointScan(ScanType scanType, string username, string password, TestContext testContext, params Computer[] endpoints)
         {
+            CleanNetworkAddressesList();
+
             foreach (var endpoint in endpoints)
             {
                 UIMapNetworkAddresses.InputNetworkAddressParams.UINetworkAddressTextBoEditText = endpoint.Name;
@@ -125,7 +125,7 @@ namespace CodedUITestFAT
             foreach (var endpoint in endpoints) testContext.WriteLine(String.Format("'{0}' scan started at endpoint '{1}'...", scanType.ToString(), endpoint.Name));
         }
 
-        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at Main screen. </summary>
+        /// <summary> Starts a scan of a given type at indicated endpoint via Network Addresses branch. Starts at Network Addresses. </summary>
         /// <param name="endpoint">Set an endpoint.</param>
         /// <param name="scanType">Set a scan type.</param>
         /// <param name="testContext">Set a current TestContext.</param>
@@ -133,60 +133,16 @@ namespace CodedUITestFAT
         {
             StartEndpointScan(scanType, DataHelper.Username, DataHelper.Password, testContext, endpoint);
         }
-
-        /// <summary> Gets the number of files of a given type from results panel. </summary>
-        /// <param name="fileType">Set a file type.</param>
-        /// <param name="testContext">Set a current TestContext.</param>
-        private int GetFoundFilesNumber(Verdict fileType, TestContext testContext)
-        {
-            string filesNumberStr;
-            int filesNumber;
-
-            switch (fileType)
-            {
-                case Verdict.Unknown:
-                    filesNumberStr = UnknownFilesCounterTextBlock().DisplayText;
-                    break;
-                case Verdict.Malware:
-                    filesNumberStr = MaliciousFilesCounterTextBlock().DisplayText;
-                    break;
-                default: throw new Exception(String.Format("Unexpected file type '{0}'!", fileType));
-            }
-
-            if (Int32.TryParse(filesNumberStr, out filesNumber))
-                testContext.WriteLine(String.Format("'{0}' files number {1} successfully found at results panel.", fileType, filesNumber));
-            else Assert.Fail(String.Format("'{0}' files number is not found at scan results panel!", fileType));
-
-            return filesNumber;
-        }
                
-        /// <summary> Gets the total number of threats found from results panel. </summary>
-        /// <param name="testContext">Set a current TestContext.</param>
-        private int GetFoundFilesNumber(TestContext testContext)
-        {
-            int unknownFilesNumber = GetFoundFilesNumber(Verdict.Unknown, testContext);
-            int malwaresNumber = GetFoundFilesNumber(Verdict.Malware, testContext);
-            /*
-            if (ScanStatisticsTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.Malware))
-                malwaresNumber = GetFoundFilesNumber(Verdict.Malware, testContext);
-            */
-            return unknownFilesNumber + malwaresNumber;
-        }
-        
         /// <summary> Cleans Network Addresses list. </summary>
         private void CleanNetworkAddressesList()
         {
-            while (NetworkAddressesList().Items.Count > 0)
-            {
-                Mouse.Click(NetworkAddressesList().Items[0]);
-                UIMapNetworkAddresses.ClickRemoveButton();
-            }
+            if (NetworkAddressesList().Items.Count > 0) UIMapNetworkAddresses.ClickRemoveAllButton();
         }
 
         /// <summary> Stops a scan. </summary>
         private void StopScanning(TestContext testContext)
         {
-            //UIHelper.WaitForControlIsClickable(StopScanButton());
             UIMapMain.ClickStopScanButton();
             UIHelper.WaitForControl(YesDialogButton());
             UIMapStopScanWindow.ClickYesButton();
@@ -205,19 +161,9 @@ namespace CodedUITestFAT
             SysHelper.AddUnknownFileForScan(endpoint);
 
             StartEndpointScan(endpoint, ScanType.Quick, TestContext);
-
             WaitForScanCompleted(ScanType.Quick);
-            /*
-            if (ScanCompletedTextBlock().DisplayText.Contains(Settings.ScanCompleted.Default.ScanCompletedText))
-                TestContext.WriteLine(String.Format("Scan Completed window appeared with text containing: '{0}'.", Settings.ScanCompleted.Default.ScanCompletedText));
-            else Assert.Fail(String.Format("Scan Completed window appeared with text, which does not contain: '{0}'!", Settings.ScanCompleted.Default.ScanCompletedText));
-            */
-            // Gets the number of Unknown and Malicious files found at Scan Completed window
-            WaitForNoInAnalysis();
-            int expectedFilesNumber = GetFoundFilesNumber(TestContext);                        
-
-            // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found
-            //WaitForValkyrieResults(TestContext);
+                        
+            // Gets the number of rows in 'Valkyrie analysis results' and compares it with the number of files found            
             UIHelper.GroupByFiles();
             //AssertValkyrieAnalysisResults(expectedFilesNumber, TestContext);
             UIHelper.GroupByComputers();

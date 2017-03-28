@@ -44,7 +44,8 @@ namespace CodedUITestFAT
             CodedUITestMain useMain = new CodedUITestMain();
             useEula.UIMapEula.ClickIAcceptButton();
 
-            UIHelper.WaitForControlIsEnabled(useMain.StartScanButton());
+            UIHelper.WaitForControlIsEnabled(SkipDiscoveryButton());
+            UIMapDiscovery.ClickSkipDiscoveryButton();
         }
 
         [TestCleanup]
@@ -166,6 +167,11 @@ namespace CodedUITestFAT
             CodedUITestMain useMain = new CodedUITestMain();
             CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
 
+            UIMapDiscovery.ClickCustomScanButton();
+            UIHelper.WaitForControl(NetworkAddressButton());
+            UIMapStartScanWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(NextButton());
+
             useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             WaitForScanCompleted(ScanType.Quick);
             //useMain.UIMapScanCompletedWindow.ClickNoButton();
@@ -190,6 +196,11 @@ namespace CodedUITestFAT
             CodedUITestMain useMain = new CodedUITestMain();
             CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
 
+            UIMapDiscovery.ClickCustomScanButton();
+            UIHelper.WaitForControl(NetworkAddressButton());
+            UIMapStartScanWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(NextButton());
+
             useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);
             //useMain.UIMapScanCompletedWindow.ClickNoButton();
@@ -213,6 +224,11 @@ namespace CodedUITestFAT
             SysHelper.AddUnknownFileForScan(endpoint);
             CodedUITestMain useMain = new CodedUITestMain();
             CodedUITestNetworkAddresses useNetworkAddresses = new CodedUITestNetworkAddresses();
+
+            UIMapDiscovery.ClickCustomScanButton();
+            UIHelper.WaitForControl(NetworkAddressButton());
+            UIMapStartScanWizard.ClickNetworkAddressButton();
+            UIHelper.WaitForControlIsEnabled(NextButton());
 
             useNetworkAddresses.StartEndpointScan(endpoint, ScanType.Quick, TestContext);
             useMain.WaitForScanCompleted(ScanType.Quick);

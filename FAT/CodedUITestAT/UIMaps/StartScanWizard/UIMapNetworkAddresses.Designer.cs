@@ -43,29 +43,16 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         }
         
         /// <summary>
-        /// AssertNetworkAddressesListEnabled - Use 'AssertNetworkAddressesListEnabledExpectedValues' to pass parameters into this method.
-        /// </summary>
-        public void AssertNetworkAddressesListEnabled()
-        {
-            #region Variable Declarations
-            WpfList uINetworkAddressItemsLList = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
-            #endregion
-
-            // Verify that the 'Enabled' property of 'NetworkAddressItemsList' list box equals 'True'
-            Assert.AreEqual(this.AssertNetworkAddressesListEnabledExpectedValues.UINetworkAddressItemsLListEnabled, uINetworkAddressItemsLList.Enabled);
-        }
-        
-        /// <summary>
         /// ClickAddButton
         /// </summary>
         public void ClickAddButton()
         {
             #region Variable Declarations
-            WpfButton uIAddButton = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIAddButton;
+            WpfButton uIAddButton = this.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIAddButton;
             #endregion
 
             // Click 'Add' button
-            Mouse.Click(uIAddButton, new Point(64, 9));
+            Mouse.Click(uIAddButton, new Point(57, 5));
         }
         
         /// <summary>
@@ -74,11 +61,11 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         public void ClickRemoveButton()
         {
             #region Variable Declarations
-            WpfButton uIRemoveButton = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIRemoveButton;
+            WpfButton uIRemoveButton = this.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIRemoveButton;
             #endregion
 
             // Click 'Remove' button
-            Mouse.Click(uIRemoveButton, new Point(58, 9));
+            Mouse.Click(uIRemoveButton, new Point(61, 15));
         }
         
         /// <summary>
@@ -100,7 +87,7 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         public void InputNetworkAddress()
         {
             #region Variable Declarations
-            WpfEdit uINetworkAddressTextBoEdit = this.UIUnknownFileHunterWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressTextBoEdit;
+            WpfEdit uINetworkAddressTextBoEdit = this.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressTextBoEdit;
             #endregion
 
             // Type 'address' in 'NetworkAddressTextBox' text box
@@ -124,6 +111,32 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
             Keyboard.SendKeys(uIPasswordBoxEdit, this.InputPasswordParams.UIPasswordBoxEditSendKeys, true);
         }
         
+        /// <summary>
+        /// ClickRemoveAllButton
+        /// </summary>
+        public void ClickRemoveAllButton()
+        {
+            #region Variable Declarations
+            WpfButton uIRemoveAllButton = this.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UIRemoveAllButton;
+            #endregion
+
+            // Click 'Remove All' button
+            Mouse.Click(uIRemoveAllButton, new Point(66, 15));
+        }
+        
+        /// <summary>
+        /// AssertNetworkAddressesListEnabled - Use 'AssertNetworkAddressesListEnabledExpectedValues' to pass parameters into this method.
+        /// </summary>
+        public void AssertNetworkAddressesListEnabled()
+        {
+            #region Variable Declarations
+            WpfList uINetworkAddressItemsLList = this.UIForensicAnalysisToolWindow.UINetworkAddressesViewCustom.UITextEntryListViewCustom.UINetworkAddressItemsLList;
+            #endregion
+
+            // Verify that the 'Enabled' property of 'NetworkAddressItemsList' list box equals 'True'
+            Assert.AreEqual(this.AssertNetworkAddressesListEnabledExpectedValues.UINetworkAddressItemsLListEnabled, uINetworkAddressItemsLList.Enabled);
+        }
+        
         #region Properties
         public virtual AssertLoginTextBoxTextExpectedValues AssertLoginTextBoxTextExpectedValues
         {
@@ -134,18 +147,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
                     this.mAssertLoginTextBoxTextExpectedValues = new AssertLoginTextBoxTextExpectedValues();
                 }
                 return this.mAssertLoginTextBoxTextExpectedValues;
-            }
-        }
-        
-        public virtual AssertNetworkAddressesListEnabledExpectedValues AssertNetworkAddressesListEnabledExpectedValues
-        {
-            get
-            {
-                if ((this.mAssertNetworkAddressesListEnabledExpectedValues == null))
-                {
-                    this.mAssertNetworkAddressesListEnabledExpectedValues = new AssertNetworkAddressesListEnabledExpectedValues();
-                }
-                return this.mAssertNetworkAddressesListEnabledExpectedValues;
             }
         }
         
@@ -182,6 +183,18 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
                     this.mInputPasswordParams = new InputPasswordParams();
                 }
                 return this.mInputPasswordParams;
+            }
+        }
+        
+        public virtual AssertNetworkAddressesListEnabledExpectedValues AssertNetworkAddressesListEnabledExpectedValues
+        {
+            get
+            {
+                if ((this.mAssertNetworkAddressesListEnabledExpectedValues == null))
+                {
+                    this.mAssertNetworkAddressesListEnabledExpectedValues = new AssertNetworkAddressesListEnabledExpectedValues();
+                }
+                return this.mAssertNetworkAddressesListEnabledExpectedValues;
             }
         }
         
@@ -225,13 +238,13 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         #region Fields
         private AssertLoginTextBoxTextExpectedValues mAssertLoginTextBoxTextExpectedValues;
         
-        private AssertNetworkAddressesListEnabledExpectedValues mAssertNetworkAddressesListEnabledExpectedValues;
-        
         private InputLoginParams mInputLoginParams;
         
         private InputNetworkAddressParams mInputNetworkAddressParams;
         
         private InputPasswordParams mInputPasswordParams;
+        
+        private AssertNetworkAddressesListEnabledExpectedValues mAssertNetworkAddressesListEnabledExpectedValues;
         
         private UIUnknownFileHunterWindow mUIUnknownFileHunterWindow;
         
@@ -253,21 +266,6 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         /// Verify that the 'Text' property of 'LoginWatermarkTextBox' text box equals 'administrator'
         /// </summary>
         public string UILoginWatermarkTextBoEditText = "administrator";
-        #endregion
-    }
-    
-    /// <summary>
-    /// Parameters to be passed into 'AssertNetworkAddressesListEnabled'
-    /// </summary>
-    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
-    public class AssertNetworkAddressesListEnabledExpectedValues
-    {
-        
-        #region Fields
-        /// <summary>
-        /// Verify that the 'Enabled' property of 'NetworkAddressItemsList' list box equals 'True'
-        /// </summary>
-        public bool UINetworkAddressItemsLListEnabled = true;
         #endregion
     }
     
@@ -318,6 +316,21 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         /// Type '********' in 'PasswordBox' text box
         /// </summary>
         public string UIPasswordBoxEditSendKeys = "rHrIBo04h9/BCeKU73SHcx0hS/DcvONN";
+        #endregion
+    }
+    
+    /// <summary>
+    /// Parameters to be passed into 'AssertNetworkAddressesListEnabled'
+    /// </summary>
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class AssertNetworkAddressesListEnabledExpectedValues
+    {
+        
+        #region Fields
+        /// <summary>
+        /// Verify that the 'Enabled' property of 'NetworkAddressItemsList' list box equals 'True'
+        /// </summary>
+        public bool UINetworkAddressItemsLListEnabled = true;
         #endregion
     }
     
@@ -763,10 +776,24 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
                 return this.mUIThisCustom;
             }
         }
+        
+        public UINetworkAddressesViewCustom2 UINetworkAddressesViewCustom
+        {
+            get
+            {
+                if ((this.mUINetworkAddressesViewCustom == null))
+                {
+                    this.mUINetworkAddressesViewCustom = new UINetworkAddressesViewCustom2(this);
+                }
+                return this.mUINetworkAddressesViewCustom;
+            }
+        }
         #endregion
         
         #region Fields
         private UIThisCustom1 mUIThisCustom;
+        
+        private UINetworkAddressesViewCustom2 mUINetworkAddressesViewCustom;
         #endregion
     }
     
@@ -840,6 +867,148 @@ namespace CodedUITestFAT.UIMaps.StartScanWizard.UIMapNetworkAddressesClasses
         private WpfEdit mUIPasswordWatermarkTexEdit;
         
         private WpfEdit mUIPasswordBoxEdit;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UINetworkAddressesViewCustom2 : WpfCustom
+    {
+        
+        public UINetworkAddressesViewCustom2(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.StartScanByIpView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "NetworkAddressesView";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public UITextEntryListViewCustom1 UITextEntryListViewCustom
+        {
+            get
+            {
+                if ((this.mUITextEntryListViewCustom == null))
+                {
+                    this.mUITextEntryListViewCustom = new UITextEntryListViewCustom1(this);
+                }
+                return this.mUITextEntryListViewCustom;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private UITextEntryListViewCustom1 mUITextEntryListViewCustom;
+        #endregion
+    }
+    
+    [GeneratedCode("Coded UITest Builder", "14.0.23107.0")]
+    public class UITextEntryListViewCustom1 : WpfCustom
+    {
+        
+        public UITextEntryListViewCustom1(UITestControl searchLimitContainer) : 
+                base(searchLimitContainer)
+        {
+            #region Search Criteria
+            this.SearchProperties[WpfControl.PropertyNames.ClassName] = "Uia.TextEntryListView";
+            this.SearchProperties[WpfControl.PropertyNames.AutomationId] = "TextEntryListView";
+            this.WindowTitles.Add("Forensic Analysis Tool");
+            #endregion
+        }
+        
+        #region Properties
+        public WpfButton UIRemoveButton
+        {
+            get
+            {
+                if ((this.mUIRemoveButton == null))
+                {
+                    this.mUIRemoveButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIRemoveButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "RemoveButton";
+                    this.mUIRemoveButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIRemoveButton;
+            }
+        }
+        
+        public WpfButton UIRemoveAllButton
+        {
+            get
+            {
+                if ((this.mUIRemoveAllButton == null))
+                {
+                    this.mUIRemoveAllButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIRemoveAllButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "RemoveAllButton";
+                    this.mUIRemoveAllButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIRemoveAllButton;
+            }
+        }
+        
+        public WpfList UINetworkAddressItemsLList
+        {
+            get
+            {
+                if ((this.mUINetworkAddressItemsLList == null))
+                {
+                    this.mUINetworkAddressItemsLList = new WpfList(this);
+                    #region Search Criteria
+                    this.mUINetworkAddressItemsLList.SearchProperties[WpfList.PropertyNames.AutomationId] = "NetworkAddressItemsList";
+                    this.mUINetworkAddressItemsLList.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUINetworkAddressItemsLList;
+            }
+        }
+        
+        public WpfButton UIAddButton
+        {
+            get
+            {
+                if ((this.mUIAddButton == null))
+                {
+                    this.mUIAddButton = new WpfButton(this);
+                    #region Search Criteria
+                    this.mUIAddButton.SearchProperties[WpfButton.PropertyNames.AutomationId] = "AddButton";
+                    this.mUIAddButton.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUIAddButton;
+            }
+        }
+        
+        public WpfEdit UINetworkAddressTextBoEdit
+        {
+            get
+            {
+                if ((this.mUINetworkAddressTextBoEdit == null))
+                {
+                    this.mUINetworkAddressTextBoEdit = new WpfEdit(this);
+                    #region Search Criteria
+                    this.mUINetworkAddressTextBoEdit.SearchProperties[WpfEdit.PropertyNames.AutomationId] = "NetworkAddressTextBox";
+                    this.mUINetworkAddressTextBoEdit.WindowTitles.Add("Forensic Analysis Tool");
+                    #endregion
+                }
+                return this.mUINetworkAddressTextBoEdit;
+            }
+        }
+        #endregion
+        
+        #region Fields
+        private WpfButton mUIRemoveButton;
+        
+        private WpfButton mUIRemoveAllButton;
+        
+        private WpfList mUINetworkAddressItemsLList;
+        
+        private WpfButton mUIAddButton;
+        
+        private WpfEdit mUINetworkAddressTextBoEdit;
         #endregion
     }
 }
