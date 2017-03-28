@@ -194,6 +194,11 @@ namespace CodedUITestFAT
             return UIMapResultsWindow.UIForensicAnalysisToolWindow.UICloseCrossButtonButton;
         }
 
+        internal WpfToggleButton GroupByFilesToggleButton()
+        {
+            return UIMapResultsWindow.UIForensicAnalysisToolWindow.UIViewsMainViewxamlPane.UIGroupByFilesToggleBuToggleButton;
+        }
+
         #endregion
 
         #region Stop Scan window

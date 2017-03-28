@@ -601,22 +601,24 @@ namespace CodedUITestFAT
             UIMapStartScanWizard.ClickQuickScanButton();
             TestContext.WriteLine(String.Format("Quick Scan started in Workgroup '{0}'...", workgroupName));
 
-            WaitForScanCompleted(ScanType.Quick);//Stopped here
+            WaitForScanCompleted(ScanType.Quick);
 
             UIHelper.GroupByFiles();
             UIHelper.ClickRow(malware);
-            TestContext.WriteLine(String.Format("Malware file {0} was found on result screen", malware));
+            TestContext.WriteLine(String.Format("Malicious file {0} found at the results screen.", malware));
             UIHelper.ClickRow(unknownFile);
-            TestContext.WriteLine(String.Format("Unknown file {0} was found on result screen", unknownFile));
+            TestContext.WriteLine(String.Format("Unknown file {0} found at the results screen.", unknownFile));
 
             UIHelper.ClickRow(malware, MouseClick.DoubleLeft);
             UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = malware.Name;
             UIMapDetailsWindow.AssertThreatNameTextBlockText();
+            TestContext.WriteLine(String.Format("Malicious file name {0} found at threat Details screen.", malware.Name));
             UIMapDetailsWindow.ClickCloseButton();
 
             UIHelper.ClickRow(unknownFile, MouseClick.DoubleLeft);
             UIMapDetailsWindow.AssertThreatNameTextBlockTextExpectedValues.UIItem91exestealthexeTextDisplayText = unknownFile.Name;
             UIMapDetailsWindow.AssertThreatNameTextBlockText();
+            TestContext.WriteLine(String.Format("Unknown file name {0} found at threat Details screen.", unknownFile.Name));
             UIMapDetailsWindow.ClickCloseButton();
         }
        

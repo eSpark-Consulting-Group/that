@@ -60,7 +60,7 @@ namespace CodedUITestFAT
             {
                 Playback.Wait(1000);
 
-                if (DataHelper.IsGroupedByFiles) row = useMain.ScanResultsByFilesTable().GetRow(rowName);
+                if (IsGroupedByFiles()) row = useMain.ScanResultsByFilesTable().GetRow(rowName);
                 else row = useMain.ScanResultsByComputersTable().GetRow(rowName);
                 
                 if (row != null)
@@ -138,7 +138,7 @@ namespace CodedUITestFAT
             if (tab == null) throw new Exception("The provided WPF tab is null!");
 
             int treeShift = 2;
-            if (DataHelper.IsGroupedByFiles) treeShift++;
+            if (IsGroupedByFiles()) treeShift++;
             
             var table = tab.GetChildren()[treeShift].GetChildren()[0] as WpfTable;
             if (table == null) throw new Exception("The resulting WPF table is null!");
@@ -172,7 +172,7 @@ namespace CodedUITestFAT
         internal static string GetRowStatus(this UITestControl row)
         {
             int statusShift = 1;
-            if (!DataHelper.IsGroupedByFiles) statusShift++;
+            if (!IsGroupedByFiles()) statusShift++;
 
             var cell = row.GetChildren()[1];
             var cellElement = cell.GetChildren()[0];
@@ -361,7 +361,7 @@ namespace CodedUITestFAT
             UITestControl[] rows;
             CodedUITestMain useMain = new CodedUITestMain();
 
-            if (DataHelper.IsGroupedByFiles) rows = useMain.ScanResultsByFilesTable().GetRows();
+            if (IsGroupedByFiles()) rows = useMain.ScanResultsByFilesTable().GetRows();
             else rows = useMain.ScanResultsByComputersTable().GetRows();
 
             foreach (var row in rows)
@@ -450,7 +450,7 @@ namespace CodedUITestFAT
             useMain.UIMapMain.InputTextToSearchBoxParams.UISearchWatermarkTextBEditSendKeys = threat.Name;
             useMain.UIMapMain.InputTextToSearchBox();
 
-            if (DataHelper.IsGroupedByFiles) rows = useMain.ScanResultsByFilesTable().GetRows();
+            if (IsGroupedByFiles()) rows = useMain.ScanResultsByFilesTable().GetRows();
             else rows = useMain.ScanResultsByComputersTable().GetRows();
 
             foreach (var row in rows)
@@ -474,7 +474,6 @@ namespace CodedUITestFAT
         {
             CodedUITestMain useMain = new CodedUITestMain();
             useMain.UIMapResultsWindow.ClickGroupByFilesToggleButton();
-            DataHelper.IsGroupedByFiles = true;
         }
 
         /// <summary> Switches the results screens to 'Group by Computers' view. Starts at Main screen. </summary>
@@ -482,7 +481,13 @@ namespace CodedUITestFAT
         {
             CodedUITestMain useMain = new CodedUITestMain();
             useMain.UIMapResultsWindow.ClickGroupByComputersToggleButton();
-            DataHelper.IsGroupedByFiles = false;
+        }
+
+        /// <summary> Determines whether the results screen data are grouped by files. Starts at the results screen. </summary>        
+        internal static bool IsGroupedByFiles()
+        {
+            CodedUITestMain useMain = new CodedUITestMain();
+            return useMain.GroupByFilesToggleButton().Pressed;
         }
 
         /// <summary> Asserts whether a browser window is opened with a given URI and closes the respective window. </summary>

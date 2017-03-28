@@ -22,9 +22,6 @@ namespace CodedUITestFAT
 
         #region Global variables
 
-        /// <summary> Determines whether 'Group by Files' view is currently selected. </summary>
-        internal static bool IsGroupedByFiles = false;
-
         /// <summary> Indicates whether the product is redirected to FLS staging server. </summary>
         internal static bool IsRedirectedToFlsStaging = false;
 
