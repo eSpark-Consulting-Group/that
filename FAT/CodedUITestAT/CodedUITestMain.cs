@@ -588,9 +588,7 @@ namespace CodedUITestFAT
             UIHelper.WaitForControlIsClickable(NetworkAddressButton());
             UIMapStartScanWizard.ClickWorkgroupButton();
             UIHelper.WaitForControlIsEnabled(NextButton());
-            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();
-            UIMapWorkgroup.InputWorkgroupParams.UIWorkgroupWatermarkTeEditSendKeys = workgroupName;
-            UIMapWorkgroup.InputWorkgroup();
+            UIMapWorkgroup.SelectUseKnownWorkgroupRadioButton();            
             UIMapStartScanWizard.ClickNextButton();
             UIHelper.WaitForControl(WorkgroupTreeItem(workgroupName), Settings.WaitingTime.Default.WorkgroupDiscoveryWaitTime);
             UIHelper.WaitForControlIsEnabled(WorkgroupTreeItem(workgroupName));
